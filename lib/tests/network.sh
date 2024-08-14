@@ -78,6 +78,15 @@ expectFailure() {
 }
 
 # Internal functions
+expectSuccess '(internal._ipv4.split "192.0.2.0").address'              '[192,0,2,0]'
+expectSuccess '(internal._ipv4.split "192.0.2.0").prefixLength'         '32'
+expectSuccess '(internal._ipv4.split "255.255.255.255/1").prefixLength' '1'
+
+expectFailure 'internal._ipv4.split "256.0.0.0"'                        "IPv4 octets should be in range \[0; 255\], instead 256 got"
+expectFailure '(internal._ipv4.split "255.255.255.255/0").prefixLength' "IPv4 subnet should be in range \[1; 32\], got 0"
+expectFailure 'internal._ipv4.split "0.0.0"'                            "is not a valid IPv4 address"
+
+
 expectSuccess '(internal._ipv6.split "0:0:0:0:0:0:0:0").address'                         '[0,0,0,0,0,0,0,0]'
 expectSuccess '(internal._ipv6.split "000a:000b:000c:000d:000e:000f:ffff:aaaa").address' '[10,11,12,13,14,15,65535,43690]'
 expectSuccess '(internal._ipv6.split "::").address'                                      '[0,0,0,0,0,0,0,0]'
@@ -112,6 +121,17 @@ expectFailure '(internal._ipv6.split "::/129").prefixLength' "IPv6 subnet should
 expectFailure '(internal._ipv6.split "/::/").prefixLength'   "is not a valid IPv6 address in CIDR notation"
 
 # Library API
+
+expectSuccess '(ipv4.fromString "192.0.2.0/24").address'        '"192.0.2.0"'
+expectSuccess '(ipv4.fromString "192.0.2.0/24").addressCidr'    '"192.0.2.0/24"'
+expectSuccess '(ipv4.fromString "192.0.2.0").addressCidr'       '"192.0.2.0/32"'
+expectSuccess '(ipv4.fromString "192.0.2.0").url'               '"192.0.2.0"'
+expectSuccess '(ipv4.fromString "192.0.2.0").urlWithPort 80'    '"192.0.2.0:80"'
+
+expectSuccess 'ipv4.isValidIpStr "2001:DB8::ffff/64"' 'false'
+expectSuccess 'ipv4.isValidIpStr "0.0.0.0/12"'        'true'
+
+
 expectSuccess 'ipv6.isValidIpStr "2001:DB8::ffff/64"' 'true'
 expectSuccess 'ipv6.isValidIpStr ":::ffff/64"'        'false'
 

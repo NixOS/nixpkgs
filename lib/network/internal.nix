@@ -15,6 +15,15 @@ let
   inherit (lib) lists strings trivial;
 
   /*
+    IPv4 uses a 32-bit address space which provides 4,294,967,296 unique
+    addresses. Format, known as dotted decimal, is x.x.x.x, where each x can be any
+    value between 0 and 255.
+  */
+  ipv4Bits = 32;
+  ipv4Pieces = 4; # 'x.x.x.x'
+  ipv4PieceBits = 8; # One piece in range from 0 to 255.
+  ipv4PieceMaxValue = 255; # 2^8 - 1
+  /*
     IPv6 addresses are 128-bit identifiers. The preferred form is 'x:x:x:x:x:x:x:x',
     where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of
     the address. See RFC 4291.
@@ -121,6 +130,38 @@ let
 in
 let
   /**
+    Parses an IPv4 address from a string to the internal representation (list
+    of integers).
+
+    # Type: string -> ipv4IR
+
+    # Example:
+
+    ```nix
+    parseIpv4FromString "192.0.2.0"
+    => [192 0 2 0]
+    ```
+  */
+  parseIpv4FromString =
+    addr:
+    let
+      expanded = strings.splitString "." addr;
+    in
+    if length expanded != ipv4Pieces then
+      throw "${addr} is not a valid IPv4 address"
+    else
+      map (
+        piece:
+        let
+          pieceInt = strings.toInt piece;
+        in
+        if pieceInt < 0 || pieceInt > ipv4PieceMaxValue then
+          throw "IPv4 octets should be in range [0; ${toString ipv4PieceMaxValue}], instead ${piece} got"
+        else
+          pieceInt
+      ) expanded;
+
+  /**
     Parses an IPv6 address from a string to the internal representation (list
     of integers).
 
@@ -136,6 +177,26 @@ let
   parseIpv6FromString = addr: parseExpandedIpv6 (expandIpv6 addr);
 
   /**
+    Converts an internal representation of an IPv4 address (i.e, a list
+    of integers) to a string.
+
+    # Type: ipv4IR -> string
+
+    # Example:
+
+    ```nix
+    parseIpv4FromString [192 0 2 0]
+    => "192.0.2.0"
+    ```
+  */
+  toStringFromExpandedIpv4 =
+    pieces:
+    assert lib.assertMsg (
+      length pieces == ipv4Pieces
+    ) "toStringFromExpandedIp4: expected a list with ${ipv4Pieces}";
+    strings.concatMapStringsSep "." (piece: toString piece) pieces;
+
+  /**
     Converts an internal representation of an IPv6 address (i.e, a list
     of integers) to a string. The returned string is not a canonical
     representation as defined in RFC 5952, i.e zeros are not compressed.
@@ -149,14 +210,104 @@ let
     => "2001:db8:0:0:0:0:0:ffff"
     ```
   */
-  toStringFromExpandedIp =
+  toStringFromExpandedIpv6 =
     pieces:
     assert lib.assertMsg (
       length pieces == ipv6Pieces
-    ) "toStringFromExpandedIp: expected a list with ${ipv6Pieces}";
+    ) "toStringFromExpandedIpv6: expected a list with ${ipv6Pieces}";
     (strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces);
 in
 {
+  _ipv4 = {
+    /*
+      Creates ipv4AddrAttrs. The returned attr set contains most of the basic
+      fields that a user wants to get from an address, such as the URL-formatted
+      address, prefix length, etc.
+
+      The returned attrset contains the same values in multiple
+      fields (such as URL and address), this is done to be consistent with
+      `lib.network._ipv6.makeIpv6Type`.
+
+      # Type: ipv4IR -> int -> ipv4AddrAttrs
+
+      # Example:
+
+      ```nix
+      makeIpv4Type [192 0 2 0] 32
+      => {
+        address = "192.0.2.0";
+        addressCidr = "192.0.2.0/32";
+        url = "192.0.2.0";
+        urlWithPort = int -> string;
+        prefixLength = 32;
+        _address = [192 0 2 0];
+      }
+      ```
+    */
+    makeIpv4Type =
+      _address: prefixLength:
+      let
+        address = toStringFromExpandedIpv4 _address;
+        addressCidr = "${address}/${toString prefixLength}";
+        url = "${address}";
+        urlWithPort = port: "${url}:${toString port}";
+      in
+      {
+        inherit
+          address
+          addressCidr
+          prefixLength
+          url
+          urlWithPort
+          _address
+          ;
+      };
+
+    /**
+      Extract an address and subnet prefix length from a string. The subnet
+      prefix length is optional and defaults to 32. The resulting address and
+      prefix length are validated and converted to an internal representation
+      that can be used by other functions.
+
+      # Type: string -> [ {address :: ipv4IR, prefixLength :: int} ]
+
+      # Example:
+
+      ```nix
+      split "192.0.2.0/32"
+      => {
+        address = [192 0 2 0];
+        prefixLength = 32;
+      }
+      ```
+    */
+    split =
+      addr:
+      let
+        splitted = strings.splitString "/" addr;
+        splittedLength = length splitted;
+      in
+      if splittedLength == 1 then # [ ip ]
+        {
+          address = parseIpv4FromString addr;
+          prefixLength = ipv4Bits;
+        }
+      else if splittedLength == 2 then # [ ip subnet ]
+        {
+          address = parseIpv4FromString (head splitted);
+          prefixLength =
+            let
+              n = strings.toInt (lists.last splitted);
+            in
+            if 1 <= n && n <= ipv4Bits then
+              n
+            else
+              throw "${addr} IPv4 subnet should be in range [1; ${toString ipv4Bits}], got ${toString n}";
+        }
+      else
+        throw "${addr} is not a valid IPv4 address in CIDR notation";
+  };
+
   /*
     Internally, an IPv6 address is stored as a list of 16-bit integers with
     8 elements. Wherever you see `ipv6IR` (ipv6 internal representation) in
@@ -181,7 +332,7 @@ in
       makeIpv6Type [65535 0 0 0 0 0 0 0] 32
       => {
         address = "ffff:0:0:0:0:0:0:0";
-        address = "ffff:0:0:0:0:0:0:0/32";
+        addressCidr = "ffff:0:0:0:0:0:0:0/32";
         url = "[2001:db8:0:0:0:0:0:ffff]";
         urlWithPort = int -> string;
         prefixLength = 32;
@@ -192,7 +343,7 @@ in
     makeIpv6Type =
       _address: prefixLength:
       let
-        address = toStringFromExpandedIp _address;
+        address = toStringFromExpandedIpv6 _address;
         addressCidr = "${address}/${toString prefixLength}";
         # RFC 2732 section-2:
         # > To use a literal IPv6 address in a URL, the literal address should be

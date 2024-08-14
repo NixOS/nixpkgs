@@ -61,7 +61,7 @@ let
     boolToString
     ;
 
-  inherit (lib.network) ipv6;
+  inherit (lib.network) ipv4 ipv6;
 
   inherit (lib.modules)
     mergeDefinitions
@@ -773,6 +773,16 @@ rec {
     };
 
     # Network types
+    ipv4Addr =
+      elemType:
+      mkOptionType {
+        name = "ipv4Addr";
+        description = "Valid IPv4 address string";
+        descriptionClass = "noun";
+        check = ipv4.isValidIpStr;
+        merge = mergeEqualOption;
+      };
+
     ipv6Addr =
       elemType:
       mkOptionType {
@@ -782,6 +792,27 @@ rec {
         check = ipv6.isValidIpStr;
         merge = mergeEqualOption;
       };
+
+    ipv4AddrAttrs =
+      elemType:
+      mkOptionType {
+        name = "ipv4AddrAttrs";
+        description = "Attribute set of parsed IPv4 address";
+        descriptionClass = "noun";
+        check =
+          v:
+          isAttrs v
+          && all (el: hasAttr el v) [
+            "address"
+            "addressCidr"
+            "url"
+            "urlWithPort"
+            "prefixLength"
+            "_address"
+          ];
+        merge = mergeEqualOption;
+      };
+
 
     ipv6AddrAttrs =
       elemType:

@@ -1,8 +1,91 @@
 { lib }:
 let
-  inherit (import ./internal.nix { inherit lib; }) _ipv6;
+  inherit (import ./internal.nix { inherit lib; }) _ipv4 _ipv6;
 in
 {
+  ipv4 = {
+    /**
+      Creates an `ipv4AddrAttrs` object from an `ipv4Addr` (valid ip string). If
+      the prefix length is omitted, it defaults to *32*.
+
+      The fields of the returned set may contain errors if an invalid ip string
+      was passed. So, to make sure the parsing completes successfully, you need to
+      deeply evaluate all fields using `builtins.deepSeq`.
+
+      # Type
+
+      ```
+      fromString :: ipv4Addr -> ipv4AddrAttrs
+      ```
+
+      # Examples
+
+      ```nix
+      fromString "192.0.2.0/24"
+      => {
+        address = "192.0.2.0";
+        addressCidr = "192.0.2.0/24";
+        url = "192.0.2.0";
+        urlWithPort = int -> string;
+        prefixLength = 24;
+      }
+      (fromString "192.0.2.0").urlWithPort 80
+      => "192.0.2.0:80";
+      ```
+
+      # Arguments
+
+      addrStr
+      : A string version of IPv4 address with optional prefix length.
+    */
+    fromString =
+      addrStr:
+      let
+        splittedAddr = _ipv4.split addrStr;
+      in
+      _ipv4.makeIpv4Type splittedAddr.address splittedAddr.prefixLength;
+
+    /**
+      Checks whether a string is a valid IPv4 address, which can then be
+      safely parsed by other library functions such as `fromString`.
+
+      This is accomplished by calling `fromString` and deeply evaluating the
+      returned set of attributes to ensure that no field contains an error.
+
+      Used as a type checker for `ipv4Addr`. You probably don't want to call
+      it directly.
+
+      # Type
+
+      ```
+      isValidIpStr :: string -> bool
+      ```
+
+      # Examples
+
+      ```nix
+      isValidIpStr "192.0.2.0/32"
+      => true
+      isValidIpStr "256.0.0.0/64"
+      => false
+      ```
+
+      # Arguments
+
+      addrStr
+      : A string version of IPv6 address with optional prefix length.
+    */
+    isValidIpStr =
+      addrStr:
+      let
+        parsed = lib.network.ipv4.fromString addrStr;
+        # Several fields may contain error(_address, prefixLength), so we need
+        # to deeply evaluate the returned set to make sure the address is valid.
+        isValid = (builtins.tryEval (builtins.deepSeq parsed parsed)).success;
+      in
+      isValid;
+  };
+
   ipv6 = {
     /**
       Creates an `ipv6AddrAttrs` object from an `ipv6Addr` (valid ip string). If

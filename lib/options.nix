@@ -222,7 +222,8 @@ rec {
 
   /**
     Creates an Option attribute set for an option that specifies IP address.
-    The difference with `lib.mkOption` is that the `type` field must be an integer version of the IP address used.
+    The difference with `lib.mkOption` is that the `type` field must be an
+    integer version of the IP address used.
 
     # Examples:
 
