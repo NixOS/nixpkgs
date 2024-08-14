@@ -1276,6 +1276,8 @@ with pkgs;
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
+  mkVersions = callPackage ../build-support/mkversions { };
+
   mokutil = callPackage ../tools/security/mokutil { };
 
   mpsolve = libsForQt5.callPackage ../applications/science/math/mpsolve { };
