@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   version = "4.4.0";
 
   src = fetchFromGitHub {
-    owner = "pavanjadhaw";
+    owner = "betterlockscreen";
     repo = "betterlockscreen";
     rev = "v${version}";
     sha256 = "sha256-59Ct7XIfZqU3yaW9FO7UV8SSMLdcZMPRc7WJangxFPo=";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and sweet looking lockscreen for linux systems with effects!";
-    homepage = "https://github.com/pavanjadhaw/betterlockscreen";
+    homepage = "https://github.com/betterlockscreen/betterlockscreen";
     mainProgram = "betterlockscreen";
     license = licenses.mit;
     platforms = platforms.linux;
