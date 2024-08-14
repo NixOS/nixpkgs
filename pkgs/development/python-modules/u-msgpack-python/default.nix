@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vsergeev/u-msgpack-python";
     changelog = "https://github.com/vsergeev/u-msgpack-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

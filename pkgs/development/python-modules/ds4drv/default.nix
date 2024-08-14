@@ -40,5 +40,6 @@ buildPythonPackage rec {
     mainProgram = "ds4drv";
     homepage = "https://github.com/chrippa/ds4drv";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

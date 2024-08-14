@@ -46,5 +46,6 @@ buildPythonPackage rec {
     description = "Python toolkit for working with and comparing the standardized codes for languages";
     homepage = "https://github.com/georgkrause/langcodes";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

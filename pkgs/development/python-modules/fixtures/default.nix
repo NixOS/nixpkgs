@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/fixtures/";
     changelog = "https://github.com/testing-cabal/fixtures/blob/${version}/NEWS";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

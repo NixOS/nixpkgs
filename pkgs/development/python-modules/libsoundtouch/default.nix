@@ -40,5 +40,6 @@ buildPythonPackage rec {
     description = "Bose Soundtouch Python library";
     homepage = "https://github.com/CharlesBlonde/libsoundtouch";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

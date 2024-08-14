@@ -52,6 +52,7 @@ buildPythonPackage rec {
     mainProgram = "jupyter-qtconsole";
     homepage = "https://qtconsole.readthedocs.io/";
     license = licenses.bsd3;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

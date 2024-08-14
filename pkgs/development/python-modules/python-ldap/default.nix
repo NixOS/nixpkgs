@@ -73,5 +73,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/python-ldap/python-ldap";
     homepage = "https://www.python-ldap.org/";
     license = licenses.psfl;
+    maintainers = [ ];
   };
 }

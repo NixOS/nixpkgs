@@ -110,5 +110,6 @@ buildPythonPackage rec {
     description = "Cross-platform windowing and multimedia library";
     license = licenses.bsd3;
     platforms = platforms.mesaPlatforms;
+    maintainers = [ ];
   };
 }

@@ -19,5 +19,6 @@ buildPythonPackage rec {
     description = "Simple generic functions";
     homepage = "http://cheeseshop.python.org/pypi/simplegeneric";
     license = lib.licenses.zpl21;
+    maintainers = [ ];
   };
 }

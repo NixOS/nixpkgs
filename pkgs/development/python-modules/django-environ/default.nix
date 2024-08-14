@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Utilize environment variables to configure your Django application";
     homepage = "https://github.com/joke2k/django-environ/";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

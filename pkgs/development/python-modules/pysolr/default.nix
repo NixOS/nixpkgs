@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "Lightweight Python wrapper for Apache Solr";
     homepage = "https://github.com/toastdriven/pysolr/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

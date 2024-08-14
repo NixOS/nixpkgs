@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "Thumbnails for Django";
     changelog = "https://github.com/jazzband/sorl-thumbnail/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

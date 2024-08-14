@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

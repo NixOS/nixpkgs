@@ -24,6 +24,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://www.pycrypto.org/";
     description = "Drop-in replacement for pycrypto using pycryptodome";
+    maintainers = [ ];
     platforms = pycryptodome.meta.platforms;
   };
 }

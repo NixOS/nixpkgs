@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "take version numbers from version control";
     homepage = "https://github.com/habnabit/vcversioner";
     license = licenses.isc;
+    maintainers = [ ];
   };
 }

@@ -52,5 +52,6 @@ buildPythonPackage rec {
       lgpl21Plus
       gpl2Plus
     ];
+    maintainers = [ ];
   };
 }

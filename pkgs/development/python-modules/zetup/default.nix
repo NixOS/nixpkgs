@@ -46,6 +46,7 @@ buildPythonPackage rec {
     description = "Zimmermann's Extensible Tools for Unified Project setups";
     homepage = "https://github.com/zimmermanncode/zetup";
     license = licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -28,5 +28,6 @@ buildPythonPackage rec {
     inherit (src.meta) homepage;
     description = "Ctags indexing python bindings";
     license = licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

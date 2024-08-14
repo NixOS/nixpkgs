@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/heinzK1X/pylibconfig2";
     description = "Pure python library for libconfig syntax";
     license = licenses.gpl3;
+    maintainers = [ ];
   };
 }

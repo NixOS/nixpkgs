@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }

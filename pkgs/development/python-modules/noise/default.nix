@@ -18,6 +18,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/caseman/noise";
     description = "Native-code and shader implementations of Perlin noise";
     license = licenses.mit;
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

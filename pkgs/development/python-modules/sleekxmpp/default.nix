@@ -31,6 +31,7 @@ buildPythonPackage rec {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "XMPP library for Python";
     license = licenses.mit;
+    maintainers = [ ];
     homepage = "http://sleekxmpp.com/";
   };
 }

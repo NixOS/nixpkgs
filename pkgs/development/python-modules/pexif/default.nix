@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Module for editing JPEG EXIF data";
     homepage = "http://www.benno.id.au/code/pexif/";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

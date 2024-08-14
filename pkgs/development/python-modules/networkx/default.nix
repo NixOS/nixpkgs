@@ -75,5 +75,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/networkx/networkx";
     description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

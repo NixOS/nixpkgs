@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Monitor TCP ports for bound or unbound states";
     homepage = "https://github.com/jaraco/portend";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

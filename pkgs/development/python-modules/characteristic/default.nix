@@ -22,5 +22,6 @@ buildPythonPackage rec {
   meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://characteristic.readthedocs.org";
+    maintainers = [ ];
   };
 }

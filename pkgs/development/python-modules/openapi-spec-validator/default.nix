@@ -66,5 +66,6 @@ buildPythonPackage rec {
     mainProgram = "openapi-spec-validator";
     homepage = "https://github.com/p1c2u/openapi-spec-validator";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

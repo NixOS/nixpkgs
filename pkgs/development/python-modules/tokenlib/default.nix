@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozilla-services/tokenlib";
     description = "Generic support library for signed-token-based auth schemes";
     license = licenses.mpl20;
+    maintainers = [ ];
   };
 }

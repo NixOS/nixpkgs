@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/FFY00/python-pyproject-metadata";
     changelog = "https://github.com/FFY00/python-pyproject-metadata/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

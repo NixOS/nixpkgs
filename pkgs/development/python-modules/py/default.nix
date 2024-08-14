@@ -26,5 +26,6 @@ buildPythonPackage rec {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";
     homepage = "https://py.readthedocs.io/";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

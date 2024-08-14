@@ -46,5 +46,6 @@ buildPythonPackage rec {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
     license = with licenses; [ asl20 ];
+    maintainers = [ ];
   };
 }

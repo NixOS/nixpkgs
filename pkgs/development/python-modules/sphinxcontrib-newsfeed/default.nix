@@ -26,5 +26,6 @@ buildPythonPackage rec {
     description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
     homepage = "https://github.com/prometheusresearch/sphinxcontrib-newsfeed";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }

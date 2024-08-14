@@ -20,5 +20,6 @@ buildPythonPackage rec {
     homepage = "http://fedorahosted.org/offtrac";
     description = "Trac xmlrpc library";
     license = licenses.gpl2;
+    maintainers = [ ];
   };
 }

@@ -63,5 +63,6 @@ buildPythonPackage rec {
     mainProgram = "coveralls";
     homepage = "https://github.com/coveralls-clients/coveralls-python";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

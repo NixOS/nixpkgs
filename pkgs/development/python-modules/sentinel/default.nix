@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Create sentinel and singleton objects";
     homepage = "https://github.com/eddieantonio/sentinel";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

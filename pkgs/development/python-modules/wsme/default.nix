@@ -70,5 +70,6 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/WSME/";
     changelog = "https://pythonhosted.org/WSME/changes.html";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

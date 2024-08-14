@@ -40,5 +40,6 @@ buildPythonPackage rec {
       not a large parsing framework or a component of some larger system.
     '';
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

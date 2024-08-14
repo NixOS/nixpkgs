@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Utilities for consistent command line tools";
     homepage = "https://github.com/rca/cmdline";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

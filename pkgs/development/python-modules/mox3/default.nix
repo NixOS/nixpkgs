@@ -42,5 +42,6 @@ buildPythonPackage rec {
     description = "Mock object framework for Python";
     homepage = "https://docs.openstack.org/mox3/latest/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

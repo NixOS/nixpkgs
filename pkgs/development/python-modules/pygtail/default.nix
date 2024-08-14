@@ -26,6 +26,7 @@ buildPythonPackage rec {
     description = "Library for reading log file lines that have not been read";
     mainProgram = "pygtail";
     license = licenses.gpl2Plus;
+    maintainers = [ ];
     homepage = "https://github.com/bgreenlee/pygtail";
   };
 }

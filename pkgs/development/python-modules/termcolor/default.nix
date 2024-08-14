@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "ANSI color formatting for output in terminal";
     homepage = "https://github.com/termcolor/termcolor";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

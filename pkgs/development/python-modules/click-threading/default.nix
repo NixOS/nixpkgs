@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/click-contrib/click-threading/";
     description = "Multithreaded Click apps made easy";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

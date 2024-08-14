@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Backport of linecache to older supported Pythons";
     homepage = "https://github.com/testing-cabal/linecache2";
     license = licenses.psfl;
+    maintainers = [ ];
   };
 }

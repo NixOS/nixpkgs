@@ -20,5 +20,6 @@ buildPythonPackage rec {
     description = "Framework that aims at making it easy to provide authentication via OAuth 2.0 within an application stack";
     homepage = "https://github.com/wndhydrnt/python-oauth2";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

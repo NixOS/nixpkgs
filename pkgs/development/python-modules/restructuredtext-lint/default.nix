@@ -33,6 +33,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/twolfson/restructuredtext-lint";
     changelog = "https://github.com/twolfson/restructuredtext-lint/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.unlicense;
+    maintainers = [ ];
     mainProgram = "rst-lint";
   };
 }

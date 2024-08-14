@@ -21,4 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
   buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
+
+  meta = {
+    maintainers = [ ];
+  };
 }

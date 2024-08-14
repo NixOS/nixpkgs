@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting";
     homepage = "https://github.com/bd808/python-iptools";
     license = licenses.bsd0;
+    maintainers = [ ];
   };
 }

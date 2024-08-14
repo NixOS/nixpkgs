@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "Framework for writing webhooks for GitHub";
     homepage = "https://github.com/bloomberg/python-github-webhook";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -50,5 +50,6 @@ buildPythonPackage rec {
     mainProgram = "qtpy";
     homepage = "https://github.com/spyder-ide/qtpy";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

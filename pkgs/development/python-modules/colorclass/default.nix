@@ -20,6 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/Robpol86/colorclass";
     license = licenses.mit;
+    maintainers = [ ];
     description = "Automatic support for console colors";
   };
 }

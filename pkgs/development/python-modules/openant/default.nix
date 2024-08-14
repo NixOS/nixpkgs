@@ -47,5 +47,6 @@ buildPythonPackage rec {
     description = "ANT and ANT-FS Python Library";
     mainProgram = "openant";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

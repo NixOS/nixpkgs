@@ -23,6 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/Diaoul/enzyme";
     license = licenses.mit;
+    maintainers = [ ];
     description = "Python video metadata parser";
   };
 }

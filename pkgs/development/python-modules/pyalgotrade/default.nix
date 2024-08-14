@@ -47,5 +47,6 @@ buildPythonPackage rec {
     description = "Python Algorithmic Trading";
     homepage = "http://gbeced.github.io/pyalgotrade/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

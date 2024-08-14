@@ -55,5 +55,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for testing of Django applications";
     homepage = "https://pytest-django.readthedocs.org/en/latest/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

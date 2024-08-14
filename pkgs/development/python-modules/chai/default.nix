@@ -24,5 +24,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mocking, stubbing and spying framework for python";
+    maintainers = [ ];
   };
 }
