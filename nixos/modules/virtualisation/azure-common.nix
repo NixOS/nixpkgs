@@ -30,6 +30,8 @@ in
       matchConfig.Driver = mlxDrivers;
       linkConfig.Unmanaged = "yes";
     };
+    networking.networkmanager.unmanaged = lib.mkIf cfg.acceleratedNetworking
+      (builtins.map (drv: "driver:${drv}") mlxDrivers);
 
     # Generate a GRUB menu.
     boot.loader.grub.device = "/dev/sda";
