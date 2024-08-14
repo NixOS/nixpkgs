@@ -1,0 +1,32 @@
+{
+  "twentynineteen": {
+    "path": "twentynineteen/2.8",
+    "rev": "223028",
+    "sha256": "0mw74ww2am6gi2m7vvn44g99y3l7scwahhdni6fh0m858r81fx09",
+    "version": "2.8"
+  },
+  "twentytwenty": {
+    "path": "twentytwenty/2.6",
+    "rev": "223029",
+    "sha256": "063jcwb3c4qnwp6m0dw0wfvimxnj25xvfssvibhbjlby4ibdxa6k",
+    "version": "2.6"
+  },
+  "twentytwentyone": {
+    "path": "twentytwentyone/2.2",
+    "rev": "223030",
+    "sha256": "15z84ccabjxy88qpyrjb41f13xvgx27gyg0ivvfh468052jkwna9",
+    "version": "2.2"
+  },
+  "twentytwentythree": {
+    "path": "twentytwentythree/1.4",
+    "rev": "223032",
+    "sha256": "12n50rffvrzl7vmcz3cbgh1i464hsp6yb9dr8p9000nf877pkq7b",
+    "version": "1.4"
+  },
+  "twentytwentytwo": {
+    "path": "twentytwentytwo/1.7",
+    "rev": "223031",
+    "sha256": "1irivpi4asd6gzqjc1fw4fmff7kf8fh2n118pjfr3v8mw5hmfssp",
+    "version": "1.7"
+  }
+}

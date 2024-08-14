@@ -1,0 +1,10 @@
+diff --git a/package.json b/package.json
+index e25221f2..5268d11a 100644
+--- a/package.json
++++ b/package.json
+@@ -1,4 +1,5 @@
+ {
++  "name": "element-call",
+   "version": "0.0.0",
+   "type": "module",
+   "scripts": {
