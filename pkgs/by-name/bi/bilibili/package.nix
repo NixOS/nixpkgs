@@ -62,6 +62,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       jedsek
       kashw2
+      bot-wxt1221
     ];
     platforms = [
       "x86_64-linux"
