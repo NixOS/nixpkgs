@@ -24,16 +24,16 @@ let
 in
 buildRustPackage rec {
   pname = "fedimint";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-0SsIuMCdsZdYSRA1yT1axMe6+p+tIpXyN71V+1B7jYc=";
+    hash = "sha256-udQxFfLkAysDtD6P3TsW0xEcENA77l+GaDUSnkIBGXo=";
   };
 
-  cargoHash = "sha256-nQvEcgNOT04H5OgMHfN1713A4nbEaKK2KDx9E3qxcbM=";
+  cargoHash = "sha256-w1yQOEoumyam4JsDarAQffTs8Ype4VUyGJ0vgJfuHaU=";
 
   nativeBuildInputs = [
     protobuf
@@ -62,13 +62,9 @@ buildRustPackage rec {
     keepPattern=''${keepPattern:1}
     find "$out/bin" -maxdepth 1 -type f | grep -Ev "(''${keepPattern})" | xargs rm -f
 
-    # fix the upstream name
-    mv $out/bin/recoverytool $out/bin/fedimint-recoverytool
-
-
     cp -a $releaseDir/fedimint-cli  $fedimintCli/bin/
     cp -a $releaseDir/fedimint-dbtool  $fedimintCli/bin/
-    cp -a $releaseDir/recoverytool  $fedimintCli/bin/fedimint-recoverytool
+    cp -a $releaseDir/fedimint-recoverytool  $fedimintCli/bin/
 
     cp -a $releaseDir/fedimintd  $fedimint/bin/
 
