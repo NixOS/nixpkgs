@@ -27,7 +27,6 @@ let
   , kernelModuleAttribute
   , extraPatches ? []
   , rev ? "zfs-${version}"
-  , isUnstable ? false
   , latestCompatibleLinuxPackages
   , kernelCompatible ? null
   , maintainers ? (with lib.maintainers; [ amarshall ])
