@@ -1,23 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, buildEnv
-, asio, boost, check, openssl, cmake
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asio,
+  boost,
+  check,
+  openssl,
+  cmake,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.19";
+  version = "26.4.20";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    hash = "sha256-DSYwOMBs7kxskTjEIO1AqXw+oAUeDXzX+qLNBuob0Jg=";
+    hash = "sha256-R2YQtAuqPkOtcvjS5PPcqAqu153N2+0/WjZt96ZSI1A=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ asio boost.dev check openssl ];
+  buildInputs = [
+    asio
+    boost.dev
+    check
+    openssl
+  ];
 
   preConfigure = ''
     # make sure bundled asio cannot be used, but leave behind license, because it gets installed
