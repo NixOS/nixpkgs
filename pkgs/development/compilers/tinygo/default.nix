@@ -123,5 +123,6 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Madouura muscaln ];
+    hydraPlatforms = [ ]; # src with submodules is 6.3G, hydra fails with "Output limit exceeded"
   };
 }
