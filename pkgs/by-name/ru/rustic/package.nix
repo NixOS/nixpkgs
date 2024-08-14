@@ -9,7 +9,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "rustic-rs";
+  pname = "rustic";
   version = "0.7.0";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jUAmboJTzX4oJZy9rFiPRbm94bVpZGa0SaqotoCU/Ss=";
   };
 
-  cargoHash = "sha256-iZuWlYDGGziwb49BfKdt9Ahs6oQ0Ij2iiT0tvL7ZIVk=";
+  cargoHash = "sha256-8YGvxnwD9Vshah2jZ+XxOW0qB4nvWsOyLY1W8k+xQzU=";
 
   # At the time of writing, upstream defaults to "self-update" and "webdav".
   # "self-update" is a self-updater, which we don't want in nixpkgs.
