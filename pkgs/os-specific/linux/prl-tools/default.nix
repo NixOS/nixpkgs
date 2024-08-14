@@ -142,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       install -Dm755 ../../tools/prlfsmountd.sh $out/sbin/prlfsmountd
+      install -Dm755 ../../tools/prlbinfmtconfig.sh $out/sbin/prlbinfmtconfig
       for f in $out/bin/* $out/sbin/*; do
         wrapProgram $f \
           --prefix LD_LIBRARY_PATH ':' "${libPath}" \
