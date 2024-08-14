@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
+  patches = [
+    ./2.4.8-CVE-2024-35235.patch
+  ];
+
   postPatch = ''
     substituteInPlace cups/testfile.c \
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
