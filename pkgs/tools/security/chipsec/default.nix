@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.10.6";
+  version = "1.13.4";
 
   disabled = !stdenv.isLinux;
 
@@ -18,15 +18,10 @@ python3.pkgs.buildPythonApplication rec {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
+    hash = "sha256-MIfWdnVP1p4MrsTXa5phVLYr7fPltaZxspr3mCn1WZQ=";
   };
 
-  patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
-
-  postPatch = ''
-    substituteInPlace tests/software/util.py \
-      --replace-fail "assertRegexpMatches" "assertRegex"
-  '';
+  patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ./fix-setup-copytree.diff ];
 
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -38,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     distro
-    pytestCheckHook
+    unittestCheckHook
   ];
 
   preBuild = lib.optionalString withDriver ''
@@ -56,6 +51,27 @@ python3.pkgs.buildPythonApplication rec {
     mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \
       $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
   '';
+
+  postInstall = ''
+    mv $out/${python3.pkgs.python.sitePackages}/chipsec/library/module_ids.json $out/${python3.pkgs.python.sitePackages}/chipsec/library/module_ids_default.json
+    ln -s /var/lib/chipsec/module_ids.json $out/${python3.pkgs.python.sitePackages}/chipsec/library/module_ids.json
+  '';
+
+  createModuleIdsFile =
+    let
+      module_ids = "/var/lib/chipsec/module_ids.json";
+      module_ids_default = "${placeholder "out"}/${python3.pkgs.python.sitePackages}/chipsec/library/module_ids_default.json";
+    in
+    ''
+    if [ ! -e ${module_ids} ]; then
+    mkdir -p $(dirname ${module_ids})
+    cp ${module_ids_default} ${module_ids}
+    fi
+    '';
+
+  makeWrapperArgs = [
+    ''--run '${createModuleIdsFile}' ''
+  ];
 
   setupPyBuildFlags = [
     "--build-lib=$CHIPSEC_BUILD_LIB"
