@@ -39494,8 +39494,6 @@ with pkgs;
 
   xva-img = callPackage ../tools/virtualization/xva-img { };
 
-  xwiimote = callPackage ../misc/drivers/xwiimote { };
-
   xzoom = callPackage ../tools/X11/xzoom { };
 
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
