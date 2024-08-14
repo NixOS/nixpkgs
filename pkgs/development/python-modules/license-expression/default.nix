@@ -24,9 +24,9 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ boolean-py ];
+  dependencies = [ boolean-py ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
