@@ -717,7 +717,6 @@ let
             buildInputs =
               old.buildInputs ++
               (with pkgs.darwin.apple_sdk.frameworks; [CoreServices Foundation]);
-            dontUnpack = false;
             buildPhase = (old.buildPhase or "") + ''
               cd source
               $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
