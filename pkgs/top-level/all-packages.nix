@@ -1476,8 +1476,6 @@ with pkgs;
 
   abcm2ps = callPackage ../tools/audio/abcm2ps { };
 
-  abcmidi = callPackage ../tools/audio/abcmidi { };
-
   abduco = callPackage ../tools/misc/abduco { };
 
   acct = callPackage ../tools/system/acct { };
@@ -10833,8 +10831,6 @@ with pkgs;
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk { };
 
-  npiet = callPackage ../development/interpreters/npiet { };
-
   npth = callPackage ../development/libraries/npth { };
 
   nmap-formatter = callPackage ../tools/security/nmap-formatter { };
@@ -15481,9 +15477,7 @@ with pkgs;
 
   hop = callPackage ../development/compilers/hop { };
 
-  hop-cli = callPackage ../tools/admin/hop-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-  };
+  hop-cli = throw "hop-cli has been removed as the service has been shut-down"; #Added 2024-08-13
 
   falcon = callPackage ../development/interpreters/falcon {
     stdenv = gcc10Stdenv;
@@ -31692,8 +31686,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  ledger-autosync = callPackage  ../applications/office/ledger-autosync { };
-
   ledger-web = callPackage ../applications/office/ledger-web { };
 
   ledger2beancount = callPackage ../tools/text/ledger2beancount { };
@@ -33056,6 +33048,11 @@ with pkgs;
 
   qemu-utils = qemu.override {
     toolsOnly = true;
+  };
+
+  # variant of qemu building user space emulator only - intended to be used from pkgsStatic
+  qemu-user = qemu.override {
+    userOnly = true;
   };
 
   canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };

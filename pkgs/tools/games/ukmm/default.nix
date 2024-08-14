@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , cmake
@@ -81,6 +82,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     mainProgram = "ukmm";
   };
 }

@@ -4441,6 +4441,12 @@
     githubId = 8081722;
     name = "Daniel Barter";
   };
+  danielbritten = {
+    email = "nixpkgs@danielb.space";
+    github = "Coda-Coda";
+    githubId = 5212453;
+    name = "Daniel Britten";
+  };
   danieldk = {
     email = "me@danieldk.eu";
     github = "danieldk";
@@ -14162,6 +14168,12 @@
     github = "Myrl";
     githubId = 9636071;
     name = "Myrl Hex";
+  };
+  mzacho = {
+    email = "nixpkgs@martinzacho.net";
+    github = "mzacho";
+    githubId = 16916972;
+    name = "Martin Zacho";
   };
   n00b0ss = {
     email = "nixpkgs@n00b0ss.de";

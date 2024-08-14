@@ -18,13 +18,13 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.18";
+  version = "0.11.19";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2tf2Dg6HfJrHQgjNKtJNT7kLoUKMoLe6U2O7VsMg7Vs=";
+    hash = "sha256-ejumGfG98l3N3mA7UX86GYa46hIwxjEB2/jvAW9rv0I=";
   };
 
   cargoLock = {
@@ -75,6 +75,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
-    maintainers = with lib.maintainers; [ lampros ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      lampros
+    ];
   };
 }
