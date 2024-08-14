@@ -23,8 +23,6 @@
   libuv,
   icu,
   bash,
-
-  enableNpm ? true,
 }:
 
 let
@@ -130,7 +128,7 @@ let
       python ? python3,
     }:
     stdenv.mkDerivation (finalAttrs: {
-      pname = if enableNpm then "nodejs" else "nodejs-slim";
+      pname = if (!finalAttrs.slim) then "nodejs" else "nodejs-slim";
       inherit version;
 
       src = fetchurl {
@@ -139,6 +137,9 @@ let
       };
 
       inherit patches;
+
+      # Used via finalAttrs to disable bundled npm and corepack.
+      slim = false;
 
       outputs = [
         "out"
@@ -253,7 +254,10 @@ let
           "--emulator=${emulator}"
         ]
         ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
-        ++ lib.optionals (!enableNpm) [ "--without-npm" ];
+        ++ lib.optionals finalAttrs.slim [
+          "--without-npm"
+          "--without-corepack"
+        ];
 
       configurePlatforms = [ ];
 
@@ -370,16 +374,11 @@ let
           $out/bin/node --completion-bash >node.bash
           installShellCompletion node.bash
         ''
-        + lib.optionalString enableNpm ''
-          mkdir -p $out/share/bash-completion/completions
-          ln -s $out/lib/node_modules/npm/lib/utils/completion.sh \
-            $out/share/bash-completion/completions/npm
-          for dir in "$out/lib/node_modules/npm/man/"*; do
-            mkdir -p $out/share/man/$(basename "$dir")
-            for page in "$dir"/*; do
-              ln -rs $page $out/share/man/$(basename "$dir")
-            done
-          done
+        + lib.optionalString (!finalAttrs.slim) ''
+          installShellCompletion --cmd npm \
+            "$out"/lib/node_modules/npm/lib/utils/completion.fish \
+            --bash "$out"/lib/node_modules/npm/lib/utils/completion.sh
+          installManPage "$out"/lib/node_modules/npm/man/man*/*
         ''
         # Some packages currently use Node.js as v8 library provider because the
         # actual v8 package is extremely outdated. This is wrong and we should
@@ -388,8 +387,8 @@ let
         # libv8 output in Nixpkgs.
         + builtins.readFile ./libv8.sh;
 
-      # Do not use _multioutDevs to avoid accidentally merging files from "$out"
-      # and "$libv8" under "$dev" output.
+      # Do not use _multioutDevs to avoid pre-fixup hook moving stuff from
+      # libv8 output.
       moveToDev = false;
       preFixup = ''
         moveToOutput include/node "''${!outputInclude}"

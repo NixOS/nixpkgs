@@ -9801,13 +9801,13 @@ with pkgs;
   nodejs-slim = nodejs-slim_20;
   corepack = hiPrio corepack_20;
 
-  nodejs-slim_18 = nodejs_18.override { enableNpm = false; };
+  nodejs-slim_18 = nodejs_18.overrideAttrs { slim = true; };
   corepack_18 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_18; });
 
-  nodejs-slim_20 = nodejs_20.override { enableNpm = false; };
+  nodejs-slim_20 = nodejs_20.overrideAttrs { slim = true; };
   corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
 
-  nodejs-slim_22 = nodejs_22.override { enableNpm = false; };
+  nodejs-slim_22 = nodejs_22.overrideAttrs { slim = true; };
   corepack_22 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; });
 
   # Update this when adding the newest nodejs major version!
