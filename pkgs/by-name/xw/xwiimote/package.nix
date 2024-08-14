@@ -1,29 +1,48 @@
-{ lib, stdenv, udev, ncurses, pkg-config, fetchurl, bluez }:
+{
+  lib,
+  stdenv,
+  udev,
+  ncurses,
+  pkg-config,
+  fetchFromGitHub,
+  bluez,
+  autoreconfHook,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xwiimote";
-  version = "2";
+  version = "2-unstable-2024-02-29";
 
-  src = fetchurl {
-    url = "https://github.com/dvdhrm/xwiimote/releases/download/xwiimote-${version}/xwiimote-${version}.tar.xz";
-    sha256 = "1g9cbhblll47l300zr999xr51x2g98y49l222f77fhswd12kjzhd";
+  src = fetchFromGitHub {
+    owner = "xwiimote";
+    repo = "xwiimote";
+    rev = "4df713d9037d814cc0c64197f69e5c78d55caaf1";
+    hash = "sha256-y68bi62H7ErVekcs0RZUXPpW+QJ97sTQP4lajB9PsgU=";
   };
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ncurses bluez ];
 
   configureFlags = [ "--with-doxygen=no" ];
 
-  meta = {
-    homepage = "https://dvdhrm.github.io/xwiimote";
-    description = "Userspace utilities to control connected Nintendo Wii Remotes";
-    mainProgram = "xwiishow";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
-  };
+  buildInputs = [
+    udev
+    ncurses
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
   postInstallPhase = ''
     mkdir -p "$out/etc/X11/xorg.conf.d/"
     cp "res/50-xorg-fix-xwiimote.conf" "$out/etc/X11/xorg.conf.d/50-fix-xwiimote.conf"
   '';
+
+  meta = {
+    homepage = "https://xwiimote.github.io/xwiimote/";
+    description = "Userspace utilities to control connected Nintendo Wii Remotes";
+    mainProgram = "xwiishow";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pyrox0 ];
+  };
 }
