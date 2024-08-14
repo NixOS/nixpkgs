@@ -14,10 +14,14 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Builditluc";
-    repo = pname;
+    repo = "wiki-tui";
     rev = "v${version}";
     hash = "sha256-euyg4wYWYerYT3hKdOCjokx8lJldGN7E3PHimDgQy3U=";
   };
+
+  # Note: bump `time` dependency to be able to build with rust 1.80, should be removed on the next
+  # release (see: https://github.com/NixOS/nixpkgs/issues/332957)
+  cargoPatches = [ ./time.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoHash = "sha256-rKTR7vKt8woWAn7XgNYFiWu4KSiZYhaH+PLEIOfbNIY=";
+  cargoHash = "sha256-XovbT+KC0va7yC5j7kf6t1SnXe1uyy1KI8FRV1AwkS0=";
 
   meta = with lib; {
     description = "Simple and easy to use Wikipedia Text User Interface";
