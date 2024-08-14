@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZQqi1RFb4Ey0A0UVCThuIxM7DoFfkLwaeRAc2z8u9so=";
   };
 
-  sourceRoot = "source/cpp";
+  sourceRoot = "${finalAttrs.src.name}/cpp";
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt

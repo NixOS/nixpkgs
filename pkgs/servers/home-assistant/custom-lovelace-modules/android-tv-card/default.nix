@@ -5,18 +5,18 @@
 
 buildNpmPackage rec {
   pname = "android-tv-card";
-  version = "3.9.3";
+  version = "3.9.4";
 
   src = fetchFromGitHub {
     owner = "Nerwyn";
     repo = "android-tv-card";
     rev = version;
-    hash = "sha256-le9FdGuYQBi9wlnzSmoumIdYJKh06pFanmJo3V1hkJI=";
+    hash = "sha256-I50WNH/OL7O6YrZ0yf+uPJc05STJrjP8DS/wfaSBTHU=";
   };
 
   patches = [ ./dont-call-git.patch ];
 
-  npmDepsHash = "sha256-dUJCmiAESlcK09CQweujtH6fN2HxvGUPmQaG7IQMm5U=";
+  npmDepsHash = "sha256-cuc7+QziclvJWp7MncLjkzfub5UbWYPVoUC/DZfs38g=";
 
   installPhase = ''
     runHook preInstall

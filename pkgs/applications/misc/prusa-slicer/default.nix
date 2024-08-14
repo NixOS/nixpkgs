@@ -2,6 +2,7 @@
 , lib
 , binutils
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapGAppsHook3
@@ -15,6 +16,7 @@
 , expat
 , glew
 , glib
+, glib-networking
 , gmp
 , gtk3
 , hicolor-icon-theme
@@ -64,15 +66,27 @@ let
   });
   openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/master/media-gfx/prusaslicer/files/prusaslicer-2.8.0-missing-includes.patch";
+      hash = "sha256-/R9jv9zSP1lDW6IltZ8V06xyLdxfaYrk3zD6JRFUxHg=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/master/media-gfx/prusaslicer/files/prusaslicer-2.8.0-fixed-linking.patch";
+      hash = "sha256-G1JNdVH+goBelag9aX0NctHFVqtoYFnqjwK/43FVgvM=";
+    })
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.7.4";
+  version = "2.8.0";
+  inherit patches;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-g2I2l6i/8p8werDs4mDI/lGeDQsma4WSB9vT6OB2LGg=";
+    hash = "sha256-A/uxNIEXCchLw3t5erWdhqFAeh6nudcMfASi+RoJkFg=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -93,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     glew
     glib
+    glib-networking
     gmp
     gtk3
     hicolor-icon-theme

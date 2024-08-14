@@ -15,12 +15,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "3.0.2";
+  version = "3.1.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v3.0.2";
-    hash = "sha256-vN3X6vLuD4Fw9wpEUYLf8sboA5GIcdP5EFb41KS6d5s=";
+    rev = "v${version}";
+    hash = "sha256-iKpOExj1xM9rU/rIcOLLKMrZrAfz7y9X2kt2CjfMOOQ=";
     fetchSubmodules = true;
   };
 
@@ -45,16 +45,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  preCheck = ''
-    patchShebangs --build test
-  '';
-  checkTarget = "test";
+  checkTarget = "build_tests";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = src.name;
-    hash = "sha256-4hdM9LgDa47ZYcX30HXvixIRy0xaahG4XBqPiUM+IUM=";
+    hash = "sha256-L+hYYKXSOG4XYdexLMG3wdA7st+A9Wk9muzipSNjxrA=";
   };
   cargoRoot = "./";
   preConfigure = ''

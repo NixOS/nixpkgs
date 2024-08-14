@@ -21,6 +21,7 @@ let
   manifestDir = "/var/lib/rancher/k3s/server/manifests";
   chartDir = "/var/lib/rancher/k3s/server/static/charts";
   imageDir = "/var/lib/rancher/k3s/agent/images";
+  containerdConfigTemplateFile = "/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl";
 
   manifestModule =
     let
@@ -119,6 +120,11 @@ let
     ${builtins.concatStringsSep "\n" (map linkManifestEntry enabledManifests)}
     ${builtins.concatStringsSep "\n" (lib.mapAttrsToList linkChartEntry cfg.charts)}
     ${builtins.concatStringsSep "\n" (map linkImageEntry cfg.images)}
+
+    ${lib.optionalString (cfg.containerdConfigTemplate != null) ''
+      mkdir -p $(dirname ${containerdConfigTemplateFile})
+      ${pkgs.coreutils-full}/bin/ln -sfn ${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate} ${containerdConfigTemplateFile}
+    ''}
   '';
 in
 {
@@ -337,6 +343,26 @@ in
         [k3s Helm controller](https://docs.k3s.io/helm#using-the-helm-controller)
         to deploy the charts. This option only makes sense on server nodes
         (`role = server`).
+      '';
+    };
+
+    containerdConfigTemplate = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = lib.literalExpression ''
+        # Base K3s config
+        {{ template "base" . }}
+
+        # Add a custom runtime
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom"]
+          runtime_type = "io.containerd.runc.v2"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom".options]
+          BinaryName = "/path/to/custom-container-runtime"
+      '';
+      description = ''
+        Config template for containerd, to be placed at
+        `/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl`.
+        See the K3s docs on [configuring containerd](https://docs.k3s.io/advanced#configuring-containerd).
       '';
     };
 

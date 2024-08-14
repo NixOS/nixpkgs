@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "redis";
     repo = "redis-om-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jwFtRnj/jhH+AKjExdOCgUfgEWweFCXVuz6F3qQRcs0=";
+    hash = "sha256-FN39Db94Z7z3luCDKi8b4Ku7bFwxEOXtBT5aXbDGVtw=";
   };
 
   build-system = [

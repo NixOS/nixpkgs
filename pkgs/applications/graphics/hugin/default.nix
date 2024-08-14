@@ -13,7 +13,7 @@
 , fftw
 , flann
 , gettext
-, glew-egl
+, glew
 , ilmbase
 , lcms2
 , lensfun
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     fftw
     flann
     gettext
-    glew-egl
+    glew
     ilmbase
     lcms2
     lensfun

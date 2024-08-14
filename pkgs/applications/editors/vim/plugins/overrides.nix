@@ -1054,6 +1054,10 @@
       '';
     };
 
+  markview-nvim = super.markview-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-web-devicons ];
+  };
+
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs {
     dependencies = with self; [ mason-nvim nvim-lspconfig ];
   };
@@ -2076,6 +2080,10 @@
 
   YankRing-vim = super.YankRing-vim.overrideAttrs {
     sourceRoot = ".";
+  };
+
+  yazi-nvim = super.yazi-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
   };
 
   YouCompleteMe = super.YouCompleteMe.overrideAttrs {

@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.14.5";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,12 +39,12 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Uykj9MIUFcZyTWOBjUhL9+qItbnpwtuTd2Cx5jI7Wtw=";
+    hash = "sha256-59XDh+TA4UYzfLJtbTiMC6Wz7EvUW22ONM4JQw5t/5o=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
   pythonRelaxDeps = [
@@ -62,11 +62,9 @@ buildPythonPackage rec {
     "zeroconf"
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     chacha20poly1305-reuseable
@@ -93,11 +91,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    [
-      # https://github.com/postlund/pyatv/issues/2307
-      "test_zeroconf_service_published"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
+    lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/postlund/pyatv/issues/2365
       "test_simple_dispatch"
     ]

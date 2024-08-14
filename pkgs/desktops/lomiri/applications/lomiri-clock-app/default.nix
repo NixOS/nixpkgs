@@ -27,26 +27,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-clock-app";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-clock-app";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-q/hdnwHO97bhL0W3VsdHwjPvGs6GhWbDiVLCx4NiR50=";
+    hash = "sha256-IWNLMYrebYQe5otNwZtRUs4YGPo/5OFic3Nh2pWxROs=";
   };
 
   patches = [
-    # Fix dispatching to clock app via LUD
-    # Remove when version > 4.0.3
-    (fetchpatch {
-      name = "0001-lomiri-clock-app-Fix-non-click-lomiri-url-dispatcher-support.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/commit/493888b41489b360415d1a0d0e431754afdee2b0.patch";
-      hash = "sha256-sI7YDrWjV0bSAq0vdSvNcWCLhmEEb10T7jd2kYfSfZU=";
-    })
-
     # Fix GNUInstallDirs variables usage
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/merge_requests/215 merged & in release
+    # Remove when version > 4.0.4
     (fetchpatch {
       name = "0002-lomiri-clock-app-Fix-GNUInstallDirs-variable-concatenations-in-CMake.patch";
       url = "https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/commit/33c62d0382f69462de0567628d7a6ef162944e12.patch";
@@ -54,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Fix installation of splash icon
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/merge_requests/216 merged & in release
+    # Remove when version > 4.0.4
     (fetchpatch {
       name = "0003-lomiri-clock-app-Fix-splash-file-installation-in-non-clock-mode.patch";
       url = "https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/commit/97fd6fd91ee787dfe107bd36bc895f2ff234b5e3.patch";
@@ -85,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Don't ignore PATH when looking for qmltestrunner, saves us a patch for hardcoded fallback
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/merge_requests/218 merged & in release
+    # Remove when version > 4.0.4
     (fetchpatch {
       name = "0008-lomiri-clock-app-tests-Drop-NO_DEFAULT_PATH.patch";
       url = "https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/commit/190ef47e2efaaf139920d0556e0522f95479ea95.patch";
@@ -102,10 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Part of 493888b41489b360415d1a0d0e431754afdee2b0 patch, but neither fetchpatch nor fetchpatch2 can handle a rename-only change to a file
-    # Remove when version > 4.0.3
-    mv clock.ubports_clock.url-dispatcher lomiri-clock-app.url-dispatcher
-
     # QT_IMPORTS_DIR returned by qmake -query is broken
     substituteInPlace CMakeLists.txt \
       --replace-fail 'qmake -query QT_INSTALL_QML' 'echo ''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}' \

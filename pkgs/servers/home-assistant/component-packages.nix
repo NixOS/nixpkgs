@@ -1037,7 +1037,8 @@
     "eight_sleep" = ps: with ps; [
     ];
     "electrasmart" = ps: with ps; [
-    ]; # missing inputs: pyElectra
+      pyelectra
+    ];
     "electric_kiwi" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -1071,7 +1072,8 @@
       pyemby
     ];
     "emoncms" = ps: with ps; [
-    ]; # missing inputs: pyemoncms
+      pyemoncms
+    ];
     "emoncms_history" = ps: with ps; [
     ];
     "emonitor" = ps: with ps; [
@@ -1094,7 +1096,8 @@
       sqlalchemy
     ];
     "energenie_power_sockets" = ps: with ps; [
-    ]; # missing inputs: pyegps
+      pyegps
+    ];
     "energie_vanons" = ps: with ps; [
     ];
     "energy" = ps: with ps; [
@@ -3355,7 +3358,8 @@
     "pepco" = ps: with ps; [
     ];
     "permobil" = ps: with ps; [
-    ]; # missing inputs: mypermobil
+      mypermobil
+    ];
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
@@ -5410,6 +5414,7 @@
     "edl21"
     "efergy"
     "eight_sleep"
+    "electrasmart"
     "elgato"
     "elkm1"
     "elmax"
@@ -5417,6 +5422,7 @@
     "emulated_hue"
     "emulated_kasa"
     "emulated_roku"
+    "energenie_power_sockets"
     "energy"
     "energyzero"
     "enigma2"
@@ -5767,6 +5773,7 @@
     "panel_iframe"
     "peco"
     "pegel_online"
+    "permobil"
     "persistent_notification"
     "person"
     "philips_js"

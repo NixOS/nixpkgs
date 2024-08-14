@@ -8,6 +8,7 @@
 , recyclarr
 , git
 , icu
+, openssl
 , testers
 , zlib
 }:
@@ -33,8 +34,8 @@ let
   }."${arch}-${os}_hash";
 
   libPath = {
-    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU zlib]}";
-    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu zlib]}";
+    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU openssl zlib]}";
+    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu openssl zlib]}";
   }."${os}";
 
 in
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = recyclarr;
+      version = "v${version}";
     };
   };
 

@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , gradle
 , jdk17
+, zenity
 
 # for arc
 , SDL2
@@ -17,7 +18,6 @@
 , alsa-lib
 , alsa-plugins
 , glew
-, glew-egl
 
 # for soloud
 , libpulseaudio ? null
@@ -43,8 +43,6 @@ let
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
-
-  selectedGlew = if enableWayland then glew-egl else glew;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
@@ -145,8 +143,8 @@ stdenv.mkDerivation {
 
   buildInputs = lib.optionals enableClient [
     SDL2
-    selectedGlew
     alsa-lib
+    glew
   ];
   nativeBuildInputs = [
     pkg-config
@@ -170,7 +168,7 @@ stdenv.mkDerivation {
     pushd ../Arc
     gradle jnigenBuild
     gradle jnigenJarNativesDesktop
-    glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
@@ -189,6 +187,7 @@ stdenv.mkDerivation {
       mkdir -p $out/bin
       makeWrapper ${jdk}/bin/java $out/bin/mindustry \
         --add-flags "-jar $out/share/mindustry.jar" \
+        ${lib.optionalString stdenv.isLinux "--suffix PATH : ${lib.makeBinPath [zenity]}"} \
         --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
         --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
         --set SDL_VIDEODRIVER wayland \
@@ -201,7 +200,7 @@ stdenv.mkDerivation {
       # This can cause issues.
       # See https://github.com/NixOS/nixpkgs/issues/109798.
       echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-      for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
+      for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
         echo "# $dep" >> $out/bin/mindustry
       done
 

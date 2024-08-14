@@ -24,14 +24,14 @@ let
 in
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.60";
+  version = "1.61";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bw9zq98RJmfp6KoZ43SNsh7vVrhUe6GNzcM4flxPJ60=";
+    hash = "sha256-H3o2IWGuMqLrJTzQ7w636Ito6f57WBtMXpXXzrZ7UD8=";
   };
 
   postPatch = ''

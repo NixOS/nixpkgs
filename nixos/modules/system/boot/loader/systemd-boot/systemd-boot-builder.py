@@ -65,7 +65,7 @@ class Entry:
         # Matching nixos*-generation-$number*.conf
         rex_generation = re.compile(r"^nixos.*-generation-([0-9]+).*\.conf$")
         # Matching nixos*-generation-$number-specialisation-$specialisation_name*.conf
-        rex_specialisation = re.compile(r"^nixos.*-generation-([0-9]+)-specialisation-([a-zA-Z0-9]+).*\.conf$")
+        rex_specialisation = re.compile(r"^nixos.*-generation-([0-9]+)-specialisation-([a-zA-Z0-9_]+).*\.conf$")
         profile = rex_profile.sub(r"\1", filename) if rex_profile.match(filename) else None
         specialisation = rex_specialisation.sub(r"\2", filename) if rex_specialisation.match(filename) else None
         try:
@@ -187,8 +187,7 @@ def system_dir(profile: str | None, generation: int, specialisation: str | None)
 
 def write_loader_conf(profile: str | None) -> None:
     with open(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf.tmp", 'w') as f:
-        if TIMEOUT != "":
-            f.write(f"timeout {TIMEOUT}\n")
+        f.write(f"timeout {TIMEOUT}\n")
         if profile:
             f.write("default nixos-%s-generation-*\n" % profile)
         else:

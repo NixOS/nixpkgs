@@ -181,10 +181,6 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [[ -n "$SUDO_USER" ]]; then
-    useSudo=1
-fi
-
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
     if [ -n "$verboseScript" ]; then
@@ -478,7 +474,7 @@ fi
 
 # Find configuration.nix and open editor instead of building.
 if [ "$action" = edit ]; then
-    if [[ -n $attr || -n $buildFile ]]; then
+    if [[ -z $buildingAttribute ]]; then
         log "error: '--file' and '--attr' are not supported with 'edit'"
         exit 1
     elif [[ -z $flake ]]; then

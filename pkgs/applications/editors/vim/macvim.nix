@@ -21,9 +21,7 @@ let
   perl = perl536;
   # Ruby 3.2
   ruby = ruby_3_2;
-in
 
-let
   # Building requires a few system tools to be in PATH.
   # Some of these we could patch into the relevant source files (such as xcodebuild and
   # qlmanage) but some are used by Xcode itself and we have no choice but to put them in PATH.

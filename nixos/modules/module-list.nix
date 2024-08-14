@@ -543,6 +543,7 @@
   ./services/display-managers/default.nix
   ./services/display-managers/greetd.nix
   ./services/display-managers/sddm.nix
+  ./services/display-managers/ly.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
@@ -673,6 +674,7 @@
   ./services/mail/postfixadmin.nix
   ./services/mail/postgrey.nix
   ./services/mail/postsrsd.nix
+  ./services/mail/protonmail-bridge.nix
   ./services/mail/public-inbox.nix
   ./services/mail/roundcube.nix
   ./services/mail/rspamd.nix
@@ -1046,6 +1048,7 @@
   ./services/networking/harmonia.nix
   ./services/networking/haproxy.nix
   ./services/networking/headscale.nix
+  ./services/networking/hickory-dns.nix
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix
   ./services/networking/https-dns-proxy.nix
@@ -1233,7 +1236,6 @@
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
   ./services/networking/trickster.nix
-  ./services/networking/trust-dns.nix
   ./services/networking/tvheadend.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
@@ -1484,6 +1486,7 @@
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/vikunja.nix
+  ./services/web-apps/weblate.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/wiki-js.nix
   ./services/web-apps/windmill.nix
@@ -1501,7 +1504,6 @@
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/garage.nix
   ./services/web-servers/hitch/default.nix
-  ./services/web-servers/hydron.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/keter
   ./services/web-servers/lighttpd/cgit.nix
@@ -1680,6 +1682,7 @@
   ./virtualisation/ecs-agent.nix
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/incus.nix
+  ./virtualisation/incus-agent.nix
   ./virtualisation/kvmgt.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
