@@ -10,6 +10,7 @@
 , pango
 , stdenv
 , darwin
+, olm
 , conf ? { }
 }:
 
@@ -63,5 +64,6 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ abbe ashkitten ];
     license = licenses.agpl3Only;
     platforms = platforms.all;
+    inherit (olm.meta) knownVulnerabilities;
   };
 }
