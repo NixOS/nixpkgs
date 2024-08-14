@@ -12611,8 +12611,6 @@ self: super: with self; {
 
   pytest-raises = callPackage ../development/python-modules/pytest-raises { };
 
-  pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
-
   pytest-raisin = callPackage ../development/python-modules/pytest-raisin { };
 
   pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
