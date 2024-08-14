@@ -1,4 +1,4 @@
-{ makeSetupHook, tests }:
+{ callPackage, makeSetupHook }:
 
 # See the header comment in ./setup-hook.sh for example usage.
 let
@@ -7,6 +7,6 @@ in
 
 setupHook.overrideAttrs (oldAttrs: {
   passthru = (oldAttrs.passthru or {}) // {
-    tests = tests.install-shell-files;
+    tests = callPackage ./tests { };
   };
 })
