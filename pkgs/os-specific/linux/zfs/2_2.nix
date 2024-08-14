@@ -17,7 +17,7 @@ callPackage ./generic.nix args {
   # check the release notes for compatible kernels
   kernelCompatible = kernel.kernelOlder "6.10";
 
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_9;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
   # this package should point to the latest release.
   version = "2.2.5";
