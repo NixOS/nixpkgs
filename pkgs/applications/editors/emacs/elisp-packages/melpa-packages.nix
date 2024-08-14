@@ -384,26 +384,6 @@ let
           };
         });
 
-        libgit = super.libgit.overrideAttrs(attrs: {
-          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
-          buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
-          dontUseCmakeBuildDir = true;
-          postPatch = ''
-            sed -i s/'add_subdirectory(libgit2)'// CMakeLists.txt
-          '';
-          postBuild = ''
-            pushd working/libgit
-            make
-            popd
-          '';
-          postInstall = (attrs.postInstall or "") + "\n" + ''
-            outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
-            mkdir $outd/build
-            install -m444 -t $outd/build ./source/src/libegit2.so
-            rm -r $outd/src $outd/Makefile $outd/CMakeLists.txt
-          '';
-        });
-
         evil-magit = buildWithGit super.evil-magit;
 
         eopengrok = buildWithGit super.eopengrok;
