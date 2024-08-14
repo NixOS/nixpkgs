@@ -5083,6 +5083,12 @@
     githubId = 265220;
     name = "David Leung";
   };
+  diadatp = {
+    email = "nixpkgs@diadatp.com";
+    github = "diadatp";
+    githubId = 4490283;
+    name = "diadatp";
+  };
   DianaOlympos = {
     github = "DianaOlympos";
     githubId = 15774340;
