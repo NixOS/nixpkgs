@@ -80,7 +80,7 @@ buildPythonPackage rec {
     gumbo
   ];
 
-  propagatedBuildInputs = [ mupdf-cxx-lib ];
+  propagatedBuildInputs = [ (toPythonModule mupdf-cxx-lib) ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
