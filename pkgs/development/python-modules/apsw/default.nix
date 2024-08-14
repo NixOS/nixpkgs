@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.46.0.1";
+  version = "3.46.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "rogerbinns";
     repo = "apsw";
     rev = "refs/tags/${version}";
-    hash = "sha256-GcfHkK4TCHPA2K6ymXtpCwNUCCUq0vq98UjYGGwn588=";
+    hash = "sha256-/MMCwdd2juFbv/lrYwuO2mdWm0+v+YFn6h9CwdQMTpg=";
   };
 
   build-system = [ setuptools ];
