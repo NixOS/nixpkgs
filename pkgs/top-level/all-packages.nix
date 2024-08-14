@@ -23949,8 +23949,6 @@ with pkgs;
 
   subdl = callPackage ../applications/video/subdl { };
 
-  subtitleedit = callPackage ../applications/video/subtitleedit { };
-
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
   subxt = callPackage ../development/tools/subxt { };

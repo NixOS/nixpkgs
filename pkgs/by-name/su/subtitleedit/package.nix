@@ -1,28 +1,31 @@
-{ lib
-, stdenv
-, fetchzip
-, makeDesktopItem
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeDesktopItem,
+  nix-update-script,
 
-, copyDesktopItems
-, icoutils
-, makeWrapper
+  copyDesktopItems,
+  icoutils,
+  makeWrapper,
 
-, ffmpeg
-, gtk2
-, hunspell
-, mono
-, mpv
-, tesseract4
+  ffmpeg,
+  gtk2,
+  hunspell,
+  mono,
+  mpv,
+  tesseract4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
-  version = "4.0.6";
+  version = "4.0.7";
 
   src = fetchzip {
-    url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${lib.replaceStrings [ "." ] [ "" ] version}.zip";
-    hash = "sha256-ipAqnF7rpSXccWkyTysUBrD0/mnv5AEA5GuxMJjW9Dg=";
+    url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }.zip";
+    hash = "sha256-7BTW0wqlxyxtXu4aBVQXMQ1mUdSINn+S6W7XPL5pcSI=";
     stripRoot = false;
   };
 
@@ -74,7 +77,7 @@ stdenv.mkDerivation rec {
       exec = "subtitleedit";
       icon = "subtitleedit";
       comment = meta.description;
-      categories = [ "Video" ];
+      categories = [ "AudioVideo" ];
     })
   ];
 
@@ -92,6 +95,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }
