@@ -32,7 +32,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     # system one. Overriding this pretty bad default behaviour.
     export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
-    echo "jamy-password" | toot login_cli -i "pleroma.nixos.test" -e "jamy@nixos.test"
+    toot --debug login_cli -i "pleroma.nixos.test" -e "jamy@nixos.test" -p "jamy-password"
     echo "Login OK"
 
     # Send a toot then verify it's part of the public timeline
@@ -182,7 +182,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     client = { nodes, pkgs, config, ... }: {
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = [
         pkgs.toot
         send-toot
       ];
@@ -191,7 +191,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
       networking.firewall.enable = false;
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = [
         provision-db
         provision-secrets
         provision-user
@@ -245,10 +245,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
   testScript = { nodes, ... }: ''
     pleroma.wait_for_unit("postgresql.service")
     pleroma.succeed("provision-db")
+    pleroma.wait_for_file("/var/lib/pleroma")
     pleroma.succeed("provision-secrets")
     pleroma.systemctl("restart pleroma.service")
     pleroma.wait_for_unit("pleroma.service")
     pleroma.succeed("provision-user")
     client.succeed("send-toot")
   '';
+
+  meta.timeout = 600;
 })
