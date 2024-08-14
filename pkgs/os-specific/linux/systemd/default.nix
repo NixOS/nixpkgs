@@ -336,6 +336,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   ;
 
+  autoPatchelfFlags = [ "--keep-libc" ];
+
   buildInputs =
     [
       libxcrypt
