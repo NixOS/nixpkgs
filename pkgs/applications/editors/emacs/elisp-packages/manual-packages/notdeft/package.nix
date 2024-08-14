@@ -31,8 +31,8 @@ melpaBuild {
 
   postPatch = ''
     substituteInPlace notdeft-xapian.el \
-      --replace 'defcustom notdeft-xapian-program nil' \
-                "defcustom notdeft-xapian-program \"$out/bin/notdeft-xapian\""
+      --replace-fail 'defcustom notdeft-xapian-program nil' \
+                     "defcustom notdeft-xapian-program \"$out/bin/notdeft-xapian\""
   '';
 
   files = ''
