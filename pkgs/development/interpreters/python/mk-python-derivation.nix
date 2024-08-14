@@ -64,7 +64,10 @@ let
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
     "disabledTestPaths" "outputs" "stdenv"
     "dependencies" "optional-dependencies" "build-system"
+    "separateChecks" "checkArgs"
   ];
+
+  LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
 
 in
 
@@ -145,6 +148,12 @@ in
 
 , meta ? {}
 
+
+# Whether to run tests in a separate passthru.tests derivation.
+# A test derivation will be added to `passthru.tests` when `separateChecks = true`.
+, separateChecks ? false
+, checkArgs ? {}
+
 , doCheck ? true
 
 , disabledTestPaths ? []
@@ -167,6 +176,20 @@ let
       format
     else
       "setuptools";
+
+  nativeInstallCheckInputs =
+    lib.optionals (format' == "setuptools") [
+      # Longer-term we should get rid of this and require
+      # users of this function to set the `installCheckPhase` or
+      # pass in a hook that sets it.
+      setuptoolsCheckHook
+    ]
+    ++ nativeCheckInputs;
+  installCheckInputs = checkInputs;
+
+  unpackHooks =
+    lib.optional (format' == "wheel") wheelUnpackHook
+    ++ lib.optional (format' == "egg") eggUnpackHook;
 
   withDistOutput = withDistOutput' format';
 
@@ -231,6 +254,61 @@ let
     }
     // optionalAttrs (build-system != []) {
       inherit build-system;
+    }
+    // optionalAttrs separateChecks {
+      # Tests built in a separate derivation are added to passthru.tests
+      tests = attrs.passthru.tests or {} // {
+        python = stdenv.mkDerivation ((builtins.removeAttrs checkArgs [ "nativeCheckInputs" "checkInputs" ]) // {
+          name = "${attrs.pname}-tests-${attrs.version}";
+          inherit (self) src;
+
+          propagatedBuildInputs = [ self ];
+          nativeBuildInputs =
+            checkArgs.nativeBuildInputs or []
+            ++ checkArgs.nativeCheckInputs or []
+            ++ [ python ]
+            ++ unpackHooks
+            ++ nativeCheckInputs;
+
+          env = {
+            inherit LANG;
+          } // lib.optionalAttrs (python.pythonAtLeast "3.11") {
+            # Don't prepend . to sys.path.
+            # This is refering to the sources, not the built module.
+            PYTHONSAFEPATH = "1";
+          };
+
+          dontFixup = true;
+          dontConfigure = true;
+          dontBuild = true;
+          doInstallCheck = true;
+
+          installCheckInputs = checkArgs.checkInputs or [] ++ installCheckInputs;
+          nativeInstallCheckInputs = checkArgs.nativeCheckInputs or [] ++ nativeInstallCheckInputs;
+
+          # Future work: When split testing is more adopted it would be great to install coverage reports into $out
+          installPhase = ''
+            runHook preInstall
+            mkdir $out
+            runHook postInstall
+          '';
+
+          inherit (self) meta;
+
+        } // lib.optionalAttrs (attrs ? pname) {
+          pname = attrs.pname + "-tests";
+        } // lib.optionalAttrs (attrs ? version) {
+          inherit (attrs) version;
+        } // (let
+          disabledTestPaths' = checkArgs.disabledTestPaths or disabledTestPaths;
+        in lib.optionalAttrs (disabledTestPaths != disabledTestPaths') {
+          disabledTestPaths = lib.escapeShellArgs disabledTestPaths';
+        }) // lib.optionalAttrs (attrs?checkPhase) {
+          # If given use the specified checkPhase, otherwise use the setup hook.
+          # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+          installCheckPhase = attrs.checkPhase;
+        });
+      };
     };
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
@@ -243,7 +321,7 @@ let
       wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
-    ] ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
+    ] ++ unpackHooks ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
       #
       # 1. When building a package that is also part of the bootstrap chain, we
       #    must ignore conflicts after installation, because there will be one with
@@ -276,10 +354,8 @@ let
         }
       else
         pythonRuntimeDepsCheckHook
-    )] ++ optionals (format' == "wheel") [
-      wheelUnpackHook
-    ] ++ optionals (format' == "egg") [
-      eggUnpackHook eggBuildHook eggInstallHook
+    )] ++ optionals (format' == "egg") [
+      eggBuildHook eggInstallHook
     ] ++ optionals (format' != "other") [(
       if isBootstrapInstallPackage then
         pypaInstallHook.override {
@@ -306,21 +382,13 @@ let
       python
     ]);
 
-    inherit strictDeps;
-
-    LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
+    inherit strictDeps LANG;
 
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
-    doInstallCheck = attrs.doCheck or true;
-    nativeInstallCheckInputs = [
-    ] ++ optionals (format' == "setuptools") [
-      # Longer-term we should get rid of this and require
-      # users of this function to set the `installCheckPhase` or
-      # pass in a hook that sets it.
-      setuptoolsCheckHook
-    ] ++ nativeCheckInputs;
-    installCheckInputs = checkInputs;
+    doInstallCheck =
+      if separateChecks then false
+      else attrs.doCheck or true;
 
     postFixup = optionalString (!dontWrapPythonPrograms) ''
       wrapPythonPrograms
@@ -338,13 +406,19 @@ let
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
     } // meta;
-  } // optionalAttrs (attrs?checkPhase) {
-    # If given use the specified checkPhase, otherwise use the setup hook.
-    # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-    installCheckPhase = attrs.checkPhase;
-  } //  optionalAttrs (disabledTestPaths != []) {
-      disabledTestPaths = escapeShellArgs disabledTestPaths;
-  }));
+
+  } // optionalAttrs (!separateChecks) (
+    {
+      inherit nativeInstallCheckInputs;
+      inherit installCheckInputs;
+    } // optionalAttrs (attrs ? checkPhase) {
+      # If given use the specified checkPhase, otherwise use the setup hook.
+      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+      installCheckPhase = attrs.checkPhase;
+    } // optionalAttrs (disabledTestPaths != []) {
+      disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
+    }
+  )));
 
 in extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")
