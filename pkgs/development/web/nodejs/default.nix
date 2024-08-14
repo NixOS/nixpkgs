@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   callPackage,
-  writeScript,
   runCommand,
   buildPackages,
   testers,
@@ -156,15 +155,21 @@ let
       __structuredAttrs = true;
 
       outputChecks = {
-        out.disallowedReferences = [
-          "include"
-          "dev"
-          "libv8"
-          openssl.dev
-          zlib.dev
-          libuv.dev
-          icu.dev
-        ];
+        out.disallowedReferences =
+          lib.optionals finalAttrs.slim [
+            # Slim build does not have lib/node_modules and hence there should be
+            # no self-references.
+            "out"
+          ]
+          ++ [
+            "include"
+            "dev"
+            "libv8"
+            openssl.dev
+            zlib.dev
+            libuv.dev
+            icu.dev
+          ];
 
         libv8.disallowedReferences = [
           "out"
@@ -227,12 +232,13 @@ let
       # ninja’s setup hook to override default stdenv phases.
       dontUseNinjaBuild = true;
       dontUseNinjaCheck = true;
-      dontUseNinjaInstall = true;
 
+      # Configure script is compatible with autoconf-style output flags.
       setOutputFlags = false;
 
       configureFlags =
         [
+          "--prefix=" # see patches/configure-remove-expanduser.patch
           "--ninja"
           "--shared-openssl"
           "--shared-zlib"
@@ -259,25 +265,13 @@ let
           "--without-corepack"
         ];
 
-      configurePlatforms = [ ];
-
-      dontDisableStatic = true;
-
-      configureScript = writeScript "nodejs-configure" ''
-        exec ${python.executable} configure.py "$@"
+      configurePhase = ''
+        runHook preConfigure
+        ${python.executable} configure.py "''${configureFlags[@]}"
+        runHook postConfigure
       '';
 
       enableParallelBuilding = true;
-
-      # Don't allow enabling content addressed conversion as `nodejs`
-      # checksums it's image before conversion happens and image loading
-      # breaks:
-      #   $ nix build -f. nodejs --arg config '{ contentAddressedByDefault = true; }'
-      #   $ ./result/bin/node
-      #   Check failed: VerifyChecksum(blob).
-      __contentAddressed = false;
-
-      setupHook = ./setup-hook.sh;
 
       __darwinAllowLocalNetworking = true; # for tests
 
@@ -366,15 +360,24 @@ let
           }"
         ];
 
-      postInstall =
+      installFlags = [
+        "--dest-dir=${placeholder "out"}"
+        "--prefix="
+      ];
+
+      installPhase =
         ''
-          HOST_PATH=$out/bin patchShebangs --host $out
+          runHook preInstall
+          ${python.executable} tools/install.py install "''${installFlags[@]}"
         ''
+        # TODO: use emulator to generate node completion if we cannot execute
+        # host platform binaries.
         + lib.optionalString canExecute ''
-          $out/bin/node --completion-bash >node.bash
+          "$out"/bin/node --completion-bash >node.bash
           installShellCompletion node.bash
         ''
         + lib.optionalString (!finalAttrs.slim) ''
+          HOST_PATH=$out/bin patchShebangs --host $out/lib/node_modules
           installShellCompletion --cmd npm \
             "$out"/lib/node_modules/npm/lib/utils/completion.fish \
             --bash "$out"/lib/node_modules/npm/lib/utils/completion.sh
@@ -385,7 +388,10 @@ let
         # instead update v8 package in Nixpkgs.
         # TODO: remove after v8 package is up-to-date and there are no users of
         # libv8 output in Nixpkgs.
-        + builtins.readFile ./libv8.sh;
+        + builtins.readFile ./libv8.sh
+        + ''
+          runHook postInstall
+        '';
 
       # Do not use _multioutDevs to avoid pre-fixup hook moving stuff from
       # libv8 output.
@@ -393,6 +399,8 @@ let
       preFixup = ''
         moveToOutput include/node "''${!outputInclude}"
       '';
+
+      setupHook = ./setup-hook.sh;
 
       passthru.tests = {
         version = testers.testVersion {
@@ -482,6 +490,7 @@ in
     patches = [
       ./patches/configure-emulator-node18.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/configure-remove-expanduser.patch
       ./patches/pkgconf-remove-references.patch
       ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation.patch
@@ -507,6 +516,7 @@ in
       ./patches/configure-emulator.patch
       ./patches/configure-armv6-vfpv2.patch
       ./patches/pkgconf-remove-references.patch
+      ./patches/configure-remove-expanduser.patch
       ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation-node19.patch
       ./patches/bypass-darwin-xcrun-node16.patch
@@ -528,6 +538,7 @@ in
     patches = [
       ./patches/configure-emulator.patch
       ./patches/configure-armv6-vfpv2.patch
+      ./patches/configure-remove-expanduser.patch
       ./patches/pkgconf-remove-references.patch
       ./patches/cause-segfault-optnone.patch
       ./patches/disable-darwin-v8-system-instrumentation-node19.patch

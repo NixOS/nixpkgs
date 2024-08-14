@@ -1,0 +1,16 @@
+Node.js does not use prefix or node_prefix at runtime unless
+--use-prefix-to-find-headers is set when running configure.py, in which
+case node-gyp uses it to find headers. We do not set this flag when
+building Node.js, so we might as well set prefix to an empty string.
+This patch is needed because str(pathlib.Path('')) == '.' in Python.
+
+--- a/configure.py
++++ b/configure.py
+@@ -985,7 +985,4 @@ parser.add_argument('--clang-cl',
+ (options, args) = parser.parse_known_args()
+ 
+-# Expand ~ in the install prefix now, it gets written to multiple files.
+-options.prefix = str(Path(options.prefix or '').expanduser())
+-
+ # set up auto-download list
+ auto_downloads = nodedownload.parse(options.download_list)
