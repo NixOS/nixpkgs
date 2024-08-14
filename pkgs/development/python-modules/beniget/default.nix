@@ -1,25 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   gast,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "beniget";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.4.2.post1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "75554b3b8ad0553ce2f607627dad3d95c60c441189875b98e097528f8e23ac0c";
+  src = fetchFromGitHub {
+    owner = "serge-sans-paille";
+    repo = "beniget";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rNMgCEkI6p9KtLSz/2jVJ9rPeJzxv5rT+Pu6OHM8z70=";
   };
 
-  propagatedBuildInputs = [ gast ];
+  build-system = [ setuptools ];
+
+  dependencies = [ gast ];
+
+  pythonImportsCheck = [ "beniget" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Extract semantic information about static Python code";
     homepage = "https://github.com/serge-sans-paille/beniget";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
   };
 }
