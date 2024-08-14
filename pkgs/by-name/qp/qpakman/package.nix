@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/fhomolka/qpakman";
-    description = "A command-line tool for managing PAK and WAD files from QuakeI/II & Hexen II";
+    description = "command-line tool for managing PAK and WAD files from QuakeI/II & Hexen II";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;
