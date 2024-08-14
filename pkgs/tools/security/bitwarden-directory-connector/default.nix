@@ -44,7 +44,7 @@ let
     ];
 
     nativeBuildInputs = [
-      python3
+      (python3.withPackages (ps: with ps; [ setuptools ]))
       pkg-config
     ];
 
