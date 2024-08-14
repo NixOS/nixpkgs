@@ -33,6 +33,7 @@
 , aardvark-dns
 , netavark
 , passt
+, vfkit
 , testers
 , podman
 }:
@@ -44,6 +45,8 @@ let
     util-linux
     iptables
     iproute2
+  ] ++ lib.optionals stdenv.isDarwin [
+    vfkit
   ] ++ extraPackages);
 
   helpersBin = symlinkJoin {
