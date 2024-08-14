@@ -74,6 +74,8 @@ buildPythonPackage rec {
     })
   ];
 
+  env.OSL_LOCATION = "${osl}";
+
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
     "-DPXR_BUILD_DRACO_PLUGIN=ON"
