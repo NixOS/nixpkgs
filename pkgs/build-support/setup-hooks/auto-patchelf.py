@@ -258,7 +258,8 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             #    valid dependency if that path exists, and nothing needs
             #    to be done. It should be an error if that path does not exist.
             # 2. If a candidate is found in our library dependencies, that
-            #    dependency should be added to rpath.
+            #    dependency should be added to rpath. This search is skipped
+            #    for libc dependencies when keep_libc is False.
             # 3. If a candidate is found in libc, it will be correctly
             #    resolved by the dynamic linker automatically.
             #
@@ -266,6 +267,10 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             # and #3 may both be true. In that case, we still want to
             # add the dependency to rpath, as the original binary
             # presumably had it and this should be preserved.
+            #
+            # The keep_libc flag affects how libc dependencies are handled. If
+            # it's True, the loop will attempt to search for and relink them.
+            # When it's False, they are removed from the rpath.
 
             is_libc = (libc_lib / candidate).is_file()
 
@@ -387,7 +392,7 @@ def main() -> None:
         "--keep-libc",
         dest="keep_libc",
         action="store_true",
-        help="Leave libc in the rpath if it's found",
+        help="Attempt to search for and relink libc dependencies.",
     )
     parser.add_argument(
         "--extra-args",
