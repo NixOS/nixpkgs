@@ -111,13 +111,15 @@ genericBuild ({
   buildPhase = ''
     runHook preBuild
 
-    cd "$NIX_BUILD_TOP"
+    pushd "$NIX_BUILD_TOP"
 
     emacs --batch -Q \
         -L "$NIX_BUILD_TOP/package-build" \
         -l "$melpa2nix" \
         -f melpa2nix-build-package \
         $ename $melpaVersion $commit
+
+    popd
 
     runHook postBuild
     '';
