@@ -5,12 +5,14 @@
 , darwin
 , pkg-config
 , libiconv
+, enableLTO ? true
 , nrxAlias ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nrr";
   version = "0.9.4";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ryanccn";
@@ -31,6 +33,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
   ];
+
+  env = lib.optionalAttrs enableLTO {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   postInstall = lib.optionalString nrxAlias "ln -s $out/bin/nr{r,x}";
 
