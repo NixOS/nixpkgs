@@ -65,12 +65,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-pRjZvpds2yAG1FOC1/+xubjWS8P9PLc8picNdS+n9Eg=";
+    hash = "sha256-pRjZvpds2yAG1FOC1/+xubjWS8P9PLc8picNdS+n9Eg=";
   };
 
-  patches = [ ./0002-Add-Darwin-deps.patch
-              ./0003-Fix-cpp-build.patch
-            ];
+  patches = [
+    ./0002-Add-Darwin-deps.patch
+    ./0003-Fix-cpp-build.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
