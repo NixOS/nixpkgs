@@ -58,23 +58,22 @@ let
           );
           requiredFieldValues = mapAttrs (
             fieldName: fieldOption:
-            builtins.addErrorContext ("while evaluating the field `${fieldName}' of option `${showOption loc}'")
-              (
-                (mergeDefinitions (loc ++ [ fieldName ]) fieldOption.type (
-                  data.${fieldName} or [ ]
-                  ++ (
-                    if fieldOption ? default then
-                      [
-                        {
-                          value = fieldOption.default;
-                          file = "the default value of option ${showOption loc}";
-                        }
-                      ]
-                    else
-                      [ ]
-                  )
-                )).mergedValue
-              )
+            builtins.addErrorContext "while evaluating the field `${fieldName}' of option `${showOption loc}'" (
+              (mergeDefinitions (loc ++ [ fieldName ]) fieldOption.type (
+                data.${fieldName} or [ ]
+                ++ (
+                  if fieldOption ? default then
+                    [
+                      {
+                        value = fieldOption.default;
+                        file = "the default value of option ${showOption loc}";
+                      }
+                    ]
+                  else
+                    [ ]
+                )
+              )).mergedValue
+            )
           ) fields;
           extraData = removeAttrs data (attrNames fields);
         in
@@ -87,12 +86,13 @@ let
           requiredFieldValues
           // mapAttrs (
             fieldName: fieldDefs:
-            builtins.addErrorContext (
+            builtins.addErrorContext
               "while evaluating the wildcard field `${fieldName}' of option `${showOption loc}'"
-            ) ((mergeDefinitions (loc ++ [ fieldName ]) wildcard.type fieldDefs).mergedValue)
+              ((mergeDefinitions (loc ++ [ fieldName ]) wildcard.type fieldDefs).mergedValue)
           ) extraData;
       nestedTypes = fields // {
         # potential collision with `_wildcard` field
+        # TODO: should we prevent fields from having a wildcard?
         _wildcard = wildcard;
       };
     };
