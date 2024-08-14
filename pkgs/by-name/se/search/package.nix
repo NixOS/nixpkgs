@@ -10,18 +10,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   version = "V1.0";
-  pname   = "search";
+  pname = "search";
 
   src = fetchFromGitHub {
-    repo  = "Search";
+    repo = "Search";
     owner = "Vonixxx";
-    rev   = finalAttrs.version;
-    hash  = "sha256-VIxdF3+/3CjPw/L/e44oEDvZ8uPUpXcq8RPo4Eidn7M=";
+    rev = finalAttrs.version;
+    hash = "sha256-VIxdF3+/3CjPw/L/e44oEDvZ8uPUpXcq8RPo4Eidn7M=";
   };
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
     odin
@@ -30,24 +28,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-     patchShebangs build.sh
+    patchShebangs build.sh
   '';
 
   buildPhase = ''
-     runHook preBuild
+    runHook preBuild
 
-     ./build.sh
+    ./build.sh
 
-     runHook postBuild
+    runHook postBuild
   '';
 
   installPhase = ''
-     runHook preInstall
+    runHook preInstall
 
-     install -Dm755 search $out/bin/search
-     wrapProgram $out/bin/search --set-default ODIN_ROOT ${odin}/share
+    install -Dm755 search $out/bin/search
+    wrapProgram $out/bin/search --set-default ODIN_ROOT ${odin}/share
 
-     runHook postInstall
+    runHook postInstall
   '';
 
   meta = {
@@ -55,9 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A Simple Search Utility";
     homepage = "https://github.com/Vonixxx/Search";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
-      vonixxx
-    ];
+    maintainers = with lib.maintainers; [ vonixxx ];
     mainProgram = "search";
   };
 })
