@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, ncurses
-, openssl
-, pkg-config
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  ncurses,
+  openssl,
+  pkg-config,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,16 +24,12 @@ rustPlatform.buildRustPackage rec {
   # release (see: https://github.com/NixOS/nixpkgs/issues/332957)
   cargoPatches = [ ./time.patch ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     ncurses
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cargoHash = "sha256-XovbT+KC0va7yC5j7kf6t1SnXe1uyy1KI8FRV1AwkS0=";
 
@@ -41,7 +38,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/builditluc/wiki-tui";
     changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom builditluc matthiasbeyer ];
+    maintainers = with maintainers; [
+      lom
+      builditluc
+      matthiasbeyer
+    ];
     mainProgram = "wiki-tui";
   };
 }
