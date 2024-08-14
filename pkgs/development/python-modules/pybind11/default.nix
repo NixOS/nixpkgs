@@ -50,14 +50,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.13.1";
+  version = "2.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
     rev = "v${version}";
-    hash = "sha256-sQUq39CmgsDEMfluKMrrnC5fio//pgExcyqJAE00UjU=";
+    hash = "sha256-cpxhrTFihA+gWmX62a+EQF3lccUyvu+d1MU2IC/CN6Q=";
   };
 
   build-system = [
