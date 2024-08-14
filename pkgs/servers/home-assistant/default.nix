@@ -126,17 +126,6 @@ let
         doCheck = false;
       });
 
-      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.1";
-        src = fetchFromGitHub {
-          owner = "ndokter";
-          repo = "dsmr_parser";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-PULrKRHrCuDFZcR+5ha0PjkN438QFgf2CrpYhKIqYTs=";
-        };
-        doCheck = false;
-      });
-
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
         src = fetchFromGitHub {
@@ -273,6 +262,19 @@ let
         };
       });
 
+      pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.5";
+        src = fetchFromGitHub {
+          owner = "ChrisMandich";
+          repo = "PyFlume";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
+        };
+        dependencies = oldAttrs.propagatedBuildInputs or [] ++ [
+          self.pytz
+        ];
+      });
+
       pytibber = super.pytibber.overridePythonAttrs (oldAttrs: rec {
         version = "0.28.2";
         src = fetchFromGitHub {
@@ -306,16 +308,6 @@ let
           repo = "pyoctoprintapi";
           rev = "refs/tags/v${version}";
           hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
-        };
-      });
-
-      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.10";
-        src = fetchFromGitHub {
-          owner = "freekode";
-          repo = "pyopenweathermap";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-wEcE4IYVvxEwW5Hhz+DqDIqbjd5/O1hEr7dGgiuMI00=";
         };
       });
 
@@ -411,16 +403,6 @@ let
         doCheck = false;
       };
 
-      voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.1";
-        src = fetchFromGitHub {
-          owner = "alecthomas";
-          repo = "voluptuous";
-          rev = "refs/tags/${version}";
-          hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -489,7 +471,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.4";
+  hassVersion = "2024.8.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -507,13 +489,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-PHKFQmlwdS0+XpD5Pd+Xwv5KNB2kJKouh9jfBH3aUIU=";
+    hash = "sha256-sbXfvlQJRRVkvSRJ8v/Su8us9WnoJUF4odAJrewryco=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-NJ5gD6k05ahIPCwktJgTz9zczxgnfuLesfjR58fbRL4=";
+    hash = "sha256-VzoH+wrpUAXJRjEZC2x9qjRzTSsiaUm6aI6/uHv6h/4=";
   };
 
   build-system = with python.pkgs; [
@@ -569,7 +551,6 @@ in python.pkgs.buildPythonApplication rec {
     aiodns
     aiohttp
     aiohttp-cors
-    aiohttp-fast-url-dispatcher
     aiohttp-fast-zlib
     aiozoneinfo
     astral
