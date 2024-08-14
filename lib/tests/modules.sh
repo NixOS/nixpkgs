@@ -128,6 +128,14 @@ checkConfigOutput '^2016$' config.people.alice.nixerSince ./declare-record-wildc
 # record wildcard field
 checkConfigOutput '^true$' config.people.alice.mechKeyboard ./declare-record-wildcard.nix ./define-record-alice-prefs.nix
 
+# record definition without corresponding field
+checkConfigError 'A definition for option .people.mike. has an unknown field' config.people.mike.age ./declare-record.nix ./define-record-mike.nix
+# record optional field without definition
+checkConfigError "attribute 'age' in selection path 'config.people.alice.age' not found" config.people.alice.age ./declare-record-optional-field.nix ./define-record-alice.nix
+# record optional field with definition
+checkConfigOutput '^27$' config.people.mike.age ./declare-record-optional-field.nix ./define-record-mike.nix
+
+
 
 if false; then
 
