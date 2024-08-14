@@ -8,19 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.6.1";
+  version = "1.7.0-prerelease-1";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kuxy6lGzImYYujuJwZZdfuu3X7/PJNOJefeZ0hVJaAA=";
+    sha256 = "sha256-eDeGVmh1gI/DhiP6gxJyGH9G9LNH1NHW0+DNuOPUnBY=";
   };
 
   cargoHash =
     if stdenv.isLinux
-    then "sha256-R2lHg+I8Sry3/n8vTfPpDysKCKMDUvxyMKRhEQKDqS0="
-    else "sha256-9CXrOP6SI+sCD9Q94N8TlRB/h+F/l7t3zHbtVDqddS4=";
+    then "sha256-gRJdfvb3Q+G7pXpOyKrgozrZPJJbDajC63Kk5QtgX00="
+    else "sha256-i9eY8dvteOLYmM+ad1nw+fohec2SPGCGqColXNamEBo=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
