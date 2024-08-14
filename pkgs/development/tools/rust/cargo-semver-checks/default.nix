@@ -36,10 +36,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkFlags = [
-    # requires nightly version of cargo-rustdoc
-    "--skip=both_passing_manifest_path_and_directory_works"
-    "--skip=verify_binary_contains_lints"
-
     # requires internet access
     "--skip=detects_target_dependencies"
   ];
