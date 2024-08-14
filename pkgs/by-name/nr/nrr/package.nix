@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, pkg-config
-, libiconv
-, enableLTO ? true
-, nrxAlias ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  pkg-config,
+  libiconv,
+  enableLTO ? true,
+  nrxAlias ? true,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "nrr";
   version = "0.9.4";
@@ -30,9 +30,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   env = lib.optionalAttrs enableLTO {
     CARGO_PROFILE_RELEASE_LTO = "fat";
