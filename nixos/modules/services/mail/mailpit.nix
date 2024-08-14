@@ -59,14 +59,14 @@ in
             '';
           };
           listen = mkOption {
-            default = "0.0.0.0:8025";
+            default = "127.0.0.1:8025";
             type = types.str;
             description = ''
               HTTP bind interface and port for UI.
             '';
           };
           smtp = mkOption {
-            default = "0.0.0.0:1025";
+            default = "127.0.0.1:1025";
             type = types.str;
             description = ''
               SMTP bind interface and port.
