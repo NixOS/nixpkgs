@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libpng
     zlib
