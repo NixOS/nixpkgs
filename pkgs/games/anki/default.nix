@@ -1,41 +1,42 @@
-{ lib
-, stdenv
+{
+  lib,
+  stdenv,
 
-, buildEnv
-, cargo
-, fetchFromGitHub
-, fetchYarnDeps
-, installShellFiles
-, lame
-, mpv-unwrapped
-, ninja
-, nixosTests
-, nodejs
-, nodejs-slim
-, fixup-yarn-lock
-, protobuf
-, python3
-, qt6
-, rsync
-, rustPlatform
-, writeShellScriptBin
-, yarn
+  buildEnv,
+  cargo,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  installShellFiles,
+  lame,
+  mpv-unwrapped,
+  ninja,
+  nixosTests,
+  nodejs,
+  nodejs-slim,
+  fixup-yarn-lock,
+  protobuf,
+  python3,
+  qt6,
+  rsync,
+  rustPlatform,
+  writeShellScriptBin,
+  yarn,
 
-, AVKit
-, CoreAudio
-, swift
+  AVKit,
+  CoreAudio,
+  swift,
 }:
 
 let
   pname = "anki";
-  version = "24.06.2";
-  rev = "33a923797afc9655c3b4f79847e1705a1f998d03";
+  version = "24.06.3";
+  rev = "d678e39350a2d243242a69f4e22f5192b04398f2";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-jn8MxyDPVk36neHyiuvwOQQ+x7x4JPOR8BnNutTRmnY=";
+    hash = "sha256-ap8WFDDSGonk5kgXXIsADwAwd7o6Nsy6Wxsa7r1iUIM=";
     fetchSubmodules = true;
   };
 
@@ -50,12 +51,10 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-wyrVoaDdCkSe5z6C7EAw04G87s6tQ1cfc2d6ygGU0DM=";
+    hash = "sha256-Dbd7RtE0td7li7oqPPfBmAsbXPM8ed9NTAhM5gytpG8=";
   };
 
-  anki-build-python = python3.withPackages (ps: with ps; [
-    mypy-protobuf
-  ]);
+  anki-build-python = python3.withPackages (ps: with ps; [ mypy-protobuf ]);
 
   # anki shells out to git to check its revision, and also to update submodules
   # We don't actually need the submodules, so we stub that out
@@ -122,7 +121,11 @@ in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   inherit src;
 
@@ -130,6 +133,8 @@ python3.pkgs.buildPythonApplication {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
+    # Also remove from anki/sync-server.nix on next update
+    ./patches/Cargo.lock-update-time-for-rust-1.80.patch
   ];
 
   inherit cargoDeps yarnOfflineCache;
@@ -152,67 +157,81 @@ python3.pkgs.buildPythonApplication {
     qt6.qtsvg
   ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    # This rather long list came from running:
-    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
-    #      sort | uniq | grep -v "^#$"
-    # in their repo at the git tag for this version
-    # There's probably a more elegant way, but the above extracted all the
-    # names, without version numbers, of their python dependencies. The hope is
-    # that nixpkgs versions are "close enough"
-    # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
-    attrs
-    beautifulsoup4
-    blinker
-    build
-    certifi
-    charset-normalizer
-    click
-    colorama
-    decorator
-    flask
-    flask-cors
-    google-api-python-client
-    idna
-    importlib-metadata
-    itsdangerous
-    jinja2
-    jsonschema
-    markdown
-    markupsafe
-    orjson
-    packaging
-    pip
-    pip-system-certs
-    pip-tools
-    protobuf
-    pyproject-hooks
-    pyqt6
-    pyqt6-sip
-    pyqt6-webengine
-    pyrsistent
-    pysocks
-    requests
-    send2trash
-    setuptools
-    soupsieve
-    tomli
-    urllib3
-    waitress
-    werkzeug
-    wheel
-    wrapt
-    zipp
-  ] ++ lib.optionals stdenv.isDarwin [
-    AVKit
-    CoreAudio
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      # This rather long list came from running:
+      #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
+      #      sort | uniq | grep -v "^#$"
+      # in their repo at the git tag for this version
+      # There's probably a more elegant way, but the above extracted all the
+      # names, without version numbers, of their python dependencies. The hope is
+      # that nixpkgs versions are "close enough"
+      # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
+      attrs
+      beautifulsoup4
+      blinker
+      build
+      certifi
+      charset-normalizer
+      click
+      colorama
+      decorator
+      flask
+      flask-cors
+      google-api-python-client
+      idna
+      importlib-metadata
+      itsdangerous
+      jinja2
+      jsonschema
+      markdown
+      markupsafe
+      orjson
+      packaging
+      pip
+      pip-system-certs
+      pip-tools
+      protobuf
+      pyproject-hooks
+      pyqt6
+      pyqt6-sip
+      pyqt6-webengine
+      pyrsistent
+      pysocks
+      requests
+      send2trash
+      setuptools
+      soupsieve
+      tomli
+      urllib3
+      waitress
+      werkzeug
+      wheel
+      wrapt
+      zipp
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AVKit
+      CoreAudio
+    ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytest mock astroid ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytest
+    mock
+    astroid
+  ];
 
   # tests fail with to many open files
   # TODO: verify if this is still true (I can't, no mac)
   doCheck = !stdenv.isDarwin;
+
+  checkFlags = [
+    # these two tests are flaky, see https://github.com/ankitects/anki/issues/3353
+    # Also removed from anki-sync-server when removing this.
+    "--skip=media::check::test::unicode_normalization"
+    "--skip=scheduler::answering::test::state_application"
+  ];
 
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
@@ -250,25 +269,29 @@ python3.pkgs.buildPythonApplication {
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
-  checkPhase = let
-    disabledTestsString = lib.pipe [
-      # assumes / is not writeable, somehow fails on nix-portable brwap
-      "test_create_open"
-    ] [
-      (lib.map (test: "not ${test}"))
-      (lib.concatStringsSep " and ")
-      lib.escapeShellArg
-    ];
+  checkPhase =
+    let
+      disabledTestsString =
+        lib.pipe
+          [
+            # assumes / is not writeable, somehow fails on nix-portable brwap
+            "test_create_open"
+          ]
+          [
+            (lib.map (test: "not ${test}"))
+            (lib.concatStringsSep " and ")
+            lib.escapeShellArg
+          ];
 
-  in ''
-    runHook preCheck
-    HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
-      pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
-    HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
-      pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
-    runHook postCheck
-  '';
-
+    in
+    ''
+      runHook preCheck
+      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
+        pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
+      HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
+        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
+      runHook postCheck
+    '';
 
   preInstall = ''
     mkdir dist
@@ -314,7 +337,10 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ euank oxij ];
+    maintainers = with maintainers; [
+      euank
+      oxij
+    ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.isDarwin;
   };

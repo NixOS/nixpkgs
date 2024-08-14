@@ -119,7 +119,7 @@ let
             For more details and a full list of logging drivers, refer to respective backends documentation.
 
             For Docker:
-            [Docker engine documentation](https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver)
+            [Docker engine documentation](https://docs.docker.com/engine/logging/configure/)
 
             For Podman:
             Refer to the docker-run(1) man page.
@@ -154,7 +154,7 @@ let
             Example: `127.0.0.1:1234:1234`
 
             Refer to the
-            [Docker engine documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports) for full details.
+            [Docker engine documentation](https://docs.docker.com/engine/network/#published-ports) for full details.
           '';
           example = literalExpression ''
             [
@@ -184,7 +184,7 @@ let
             would be difficult with an attribute set.  There are
             also a variety of mount options available as a third
             field; please refer to the
-            [docker engine documentation](https://docs.docker.com/engine/reference/run/#volume-shared-filesystems) for details.
+            [docker engine documentation](https://docs.docker.com/engine/storage/volumes/) for details.
           '';
           example = literalExpression ''
             [

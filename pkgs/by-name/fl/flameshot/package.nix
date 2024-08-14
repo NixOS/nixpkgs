@@ -13,13 +13,13 @@
 stdenv.mkDerivation {
   pname = "flameshot";
   # wlr screenshotting is currently only available on unstable version (>12.1.0)
-  version = "12.1.0-unstable-2024-07-02";
+  version = "12.1.0-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
-    rev = "ccb5a27b136a633911b3b1006185530d9beeea5d";
-    hash = "sha256-JIXsdVUR/4183aJ0gvNGYPTyCzX7tCrk8vRtR8bcdhE=";
+    rev = "fd3772e2abb0b852573fcaa549ba13517f13555c";
+    hash = "sha256-WXUxrirlevqJ+dnXZbN1C1l5ibuSI/DBi5fqPx9nOGQ=";
   };
 
   patches = [
