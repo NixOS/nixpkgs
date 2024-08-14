@@ -4302,6 +4302,8 @@ self: super: with self; {
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
+  feather-format = callPackage ../development/python-modules/feather-format { };
+
   feedfinder2 = callPackage ../development/python-modules/feedfinder2 { };
 
   feedgen = callPackage ../development/python-modules/feedgen { };
@@ -9033,6 +9035,8 @@ self: super: with self; {
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
+
+  nemosis = callPackage ../development/python-modules/nemosis { };
 
   nengo = callPackage ../development/python-modules/nengo { };
 
