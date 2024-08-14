@@ -27,5 +27,8 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.matrix.org/matrix-org/olm";
     license = licenses.asl20;
     maintainers = with maintainers; [ tilpner oxzi ];
+    knownVulnerabilities = [
+      "libolm has been deprecated and is affected by various security issues, that will not be fixed: https://soatok.blog/2024/08/14/security-issues-in-matrixs-olm-library/"
+    ];
   };
 }
