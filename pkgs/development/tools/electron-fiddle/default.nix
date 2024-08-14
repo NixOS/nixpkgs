@@ -10,6 +10,7 @@
 , nodejs_18
 , stdenvNoCC
 , util-linux
+, yarn
 , zip
 }:
 
@@ -34,7 +35,6 @@ let
     hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
   };
 
-  inherit (nodejs.pkgs) yarn;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
     hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
