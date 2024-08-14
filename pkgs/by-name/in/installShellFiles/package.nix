@@ -1,4 +1,8 @@
-{ callPackage, makeSetupHook }:
+{
+  lib,
+  callPackage,
+  makeSetupHook,
+}:
 
 # See the header comment in ./setup-hook.sh for example usage.
 let
@@ -6,6 +10,9 @@ let
 in
 setupHook.overrideAttrs (oldAttrs: {
   passthru = (oldAttrs.passthru or { }) // {
-    tests = callPackage ./tests { };
+    tests = lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ./tests;
+    };
   };
 })
