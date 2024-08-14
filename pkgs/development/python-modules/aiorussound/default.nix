@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiorussound";
-  version = "2.2.2";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noahhusby";
     repo = "aiorussound";
-    rev = version;
-    hash = "sha256-X7KdIjfPNZSsSXYN1gVqTpcgM00V1YG3ihxutmYnb6Y=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wFpW+X10dGezMnzjGJsXyWMy6H8PtzhQFRCaf+A2L74=";
   };
 
   build-system = [ setuptools ];

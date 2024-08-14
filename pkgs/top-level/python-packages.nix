@@ -2031,7 +2031,9 @@ self: super: with self; {
 
   cbor = callPackage ../development/python-modules/cbor { };
 
-  cccolutils = callPackage ../development/python-modules/cccolutils { };
+  cccolutils = callPackage ../development/python-modules/cccolutils {
+    krb5-c = pkgs.krb5;
+  };
 
   cdcs = callPackage ../development/python-modules/cdcs { };
 
@@ -4298,6 +4300,8 @@ self: super: with self; {
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
+  feather-format = callPackage ../development/python-modules/feather-format { };
+
   feedfinder2 = callPackage ../development/python-modules/feedfinder2 { };
 
   feedgen = callPackage ../development/python-modules/feedgen { };
@@ -5376,8 +5380,8 @@ self: super: with self; {
   gspread = callPackage ../development/python-modules/gspread { };
 
   gssapi = callPackage ../development/python-modules/gssapi {
-    inherit (pkgs) krb5;
     inherit (pkgs.darwin.apple_sdk.frameworks) GSS;
+    krb5-c = pkgs.krb5;
   };
 
   gst-python = callPackage ../development/python-modules/gst-python {
@@ -6552,7 +6556,8 @@ self: super: with self; {
   k-diffusion = callPackage ../development/python-modules/k-diffusion { };
 
   k5test = callPackage ../development/python-modules/k5test {
-    inherit (pkgs) krb5 findutils;
+    inherit (pkgs) findutils;
+    krb5-c = pkgs.krb5;
   };
 
   kaa-base = callPackage ../development/python-modules/kaa-base { };
@@ -6700,6 +6705,10 @@ self: super: with self; {
   kornia-rs = callPackage ../development/python-modules/kornia-rs { };
 
   krakenex = callPackage ../development/python-modules/krakenex { };
+
+  krb5 = callPackage ../development/python-modules/krb5 {
+    krb5-c = pkgs.krb5;
+  };
 
   krfzf-py = callPackage ../development/python-modules/krfzf-py { };
 
@@ -9024,6 +9033,8 @@ self: super: with self; {
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
+
+  nemosis = callPackage ../development/python-modules/nemosis { };
 
   nengo = callPackage ../development/python-modules/nengo { };
 
@@ -11631,7 +11642,9 @@ self: super: with self; {
 
   pykeepass = callPackage ../development/python-modules/pykeepass { };
 
-  pykerberos = callPackage ../development/python-modules/pykerberos { };
+  pykerberos = callPackage ../development/python-modules/pykerberos {
+    krb5-c = pkgs.krb5;
+  };
 
   pykeyatome = callPackage ../development/python-modules/pykeyatome { };
 
