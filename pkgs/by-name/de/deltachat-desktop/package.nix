@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron
+, electron_30
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -15,12 +15,13 @@
 , roboto
 , sqlcipher
 , stdenv
-, CoreServices
+, darwin
 , testers
 , deltachat-desktop
 }:
 
 let
+  electron = electron_30;
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
       version = "0.19.12";
@@ -59,7 +60,7 @@ buildNpmPackage rec {
   buildInputs = [
     deltachat-rpc-server
   ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   env = {

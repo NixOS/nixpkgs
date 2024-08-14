@@ -3583,11 +3583,6 @@ with pkgs;
 
   dell-command-configure = callPackage ../tools/system/dell-command-configure { };
 
-  deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
-    electron = electron_30;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = with python3Packages; toPythonApplication detect-secrets;
