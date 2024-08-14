@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation {
   pname = "qpakman";
-  version = "unstable-2024-03-07";
+  version = "0-unstable-2024-03-07";
 
   src = fetchFromGitHub {
     owner = "fhomolka";
