@@ -25,10 +25,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0rwd88xngbjamgydj9rg3wvgl53pfzhal2n702s9afa1yp8mjm51";
+      sha256 = "12gicnz857iin9lhbrigyqz4v8fan9lq4sd56rfcb2c7a8azvmz9";
       type = "gem";
     };
-    version = "0.8.7";
+    version = "0.8.8";
   };
   cbor-packed = {
     groups = ["default"];
@@ -45,10 +45,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0kn736pb52j8b9xxq6l8wqp2chs74aa14vfnp0rijjn086m8b4f3";
+      sha256 = "13b4dminf6znfwvj8d61w6dar9zrxnndrmiig19adbliv0haxmlr";
       type = "gem";
     };
-    version = "2.6.3";
+    version = "2.7.2";
   };
   neatjson = {
     groups = ["default"];
