@@ -72,8 +72,8 @@ in stdenv.mkDerivation {
     yarn --immutable-cache || :
 
     # Ensure we don't download any node things
-    sed -i 's:--fallback-to-build:--build-from-source --nodedir=${nodejs}/include/node:g' node_modules/sqlite3/package.json
-    export CPPFLAGS="-I${nodejs}/include/node"
+    sed -i 's:--fallback-to-build:--build-from-source --nodedir=${lib.getInclude nodejs}/include/node:g' node_modules/sqlite3/package.json
+    export CPPFLAGS="-I${lib.getInclude nodejs}/include/node"
 
     # Perform the actual install
     yarn --immutable-cache

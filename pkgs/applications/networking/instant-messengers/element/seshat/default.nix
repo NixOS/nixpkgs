@@ -19,7 +19,7 @@ in rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ nodejs python3 yarn fixup-yarn-lock ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
 
-  npm_config_nodedir = nodejs;
+  env.npm_config_nodedir = lib.getInclude nodejs;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/seshat-node/yarn.lock";

@@ -149,8 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
     # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
     mkdir -p $HOME/.node-gyp/${nodejs.version}
     echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
+    ln -sfv ${lib.getInclude nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${lib.getInclude nodejs}
 
     # use updated node-gyp. fixes the following error on Darwin:
     # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'

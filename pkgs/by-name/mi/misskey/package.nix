@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
 
     # https://github.com/NixOS/nixpkgs/pull/296697/files#r1617595593
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${lib.getInclude nodejs}
     (
       cd node_modules/.pnpm/node_modules/re2
       pnpm run rebuild

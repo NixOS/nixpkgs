@@ -174,7 +174,7 @@ final: prev: {
     # This is important when build nodejs packages in sandbox.
     postInstall = ''
       wrapProgram "$out/bin/node-gyp" \
-        --set npm_config_nodedir ${nodejs}
+        --set npm_config_nodedir ${lib.getInclude nodejs}
     '';
   };
 
