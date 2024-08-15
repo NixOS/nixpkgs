@@ -1,12 +1,12 @@
 {
   "x86_64-linux": {
     "aqua": {
-      "update-channel": "Aqua EAP licensing:EAP",
+      "update-channel": "Aqua RELEASE",
       "url-template": "https://download.jetbrains.com/aqua/aqua-{version}.tar.gz",
-      "version": "2023.3 Public Preview",
-      "sha256": "7fbc5565208acd0f4428c10823778c0d2bfd192e4cfce74ee2788477dacad5e0",
-      "url": "https://download.jetbrains.com/aqua/aqua-233.14475.33.tar.gz",
-      "build_number": "233.14475.33"
+      "version": "2024.2",
+      "sha256": "63a6357cef1bb3772939abd8d13c05e265b5492643b080dd235d170584e0b636",
+      "url": "https://download.jetbrains.com/aqua/aqua-2024.2.tar.gz",
+      "build_number": "242.20224.331"
     },
     "clion": {
       "update-channel": "CLion RELEASE",
@@ -35,10 +35,10 @@
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.tar.gz",
-      "version": "2024.1.2",
-      "sha256": "d0ca5471d4e445ea931b25d1ee55cec0c40bb455de1aec861d5aa5ca0bbc176d",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.1.2.tar.gz",
-      "build_number": "241.17011.87"
+      "version": "2024.2",
+      "sha256": "a397ec10b27ed309ddc7287d43c89f6cddb55f129ea5bd5c298483dd2c33bffb",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.2.tar.gz",
+      "build_number": "242.20224.368"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
@@ -100,10 +100,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.tar.gz",
-      "version": "2024.1.6",
-      "sha256": "e033996e06ca080200f7a96b1b6fd97fc65f9467fbc564ccc44ecabfec9fbe5e",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.1.6.tar.gz",
-      "build_number": "241.19072.26"
+      "version": "2024.2",
+      "sha256": "b68cc7f109347cedb93817cc35a6e1f0089b205e6ae5ae8ce400fbb2ff613c0a",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.2.tar.gz",
+      "build_number": "242.20224.401"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -140,12 +140,12 @@
   },
   "aarch64-linux": {
     "aqua": {
-      "update-channel": "Aqua EAP licensing:EAP",
+      "update-channel": "Aqua RELEASE",
       "url-template": "https://download.jetbrains.com/aqua/aqua-{version}-aarch64.tar.gz",
-      "version": "2023.3 Public Preview",
-      "sha256": "ec54c362cfc0d0f803a48baa761f894d844639cfb438d0f2e0d2b394fdb0bb00",
-      "url": "https://download.jetbrains.com/aqua/aqua-233.14475.33-aarch64.tar.gz",
-      "build_number": "233.14475.33"
+      "version": "2024.2",
+      "sha256": "5a28826c97c2c09988d57eefe1e2c1b0cdb746399844a7a207d289c2c4d4922e",
+      "url": "https://download.jetbrains.com/aqua/aqua-2024.2-aarch64.tar.gz",
+      "build_number": "242.20224.331"
     },
     "clion": {
       "update-channel": "CLion RELEASE",
@@ -174,10 +174,10 @@
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.tar.gz",
-      "version": "2024.1.2",
-      "sha256": "ca3983e280d2184ce806741d47c72fb9d8e3610c89ee7e56940960a8385b473b",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.1.2-aarch64.tar.gz",
-      "build_number": "241.17011.87"
+      "version": "2024.2",
+      "sha256": "b184c5f06755fcd849071da93f2046fec20f8183691663cbac817f52ae418e76",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.2-aarch64.tar.gz",
+      "build_number": "242.20224.368"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
@@ -239,10 +239,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.tar.gz",
-      "version": "2024.1.6",
-      "sha256": "587b480c01cac5e9d983a32322824c484b455e682c91e330643e667945110b4f",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.1.6-aarch64.tar.gz",
-      "build_number": "241.19072.26"
+      "version": "2024.2",
+      "sha256": "27248613777239d43d8377261b860f6b748859045196dcc57327afd126dcb9c5",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.2-aarch64.tar.gz",
+      "build_number": "242.20224.401"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -279,12 +279,12 @@
   },
   "x86_64-darwin": {
     "aqua": {
-      "update-channel": "Aqua EAP licensing:EAP",
+      "update-channel": "Aqua RELEASE",
       "url-template": "https://download.jetbrains.com/aqua/aqua-{version}.dmg",
-      "version": "2023.3 Public Preview",
-      "sha256": "a3edf2990be14b7baefb747b0c1c6c092054183ca1acf492933a59f96a9553a7",
-      "url": "https://download.jetbrains.com/aqua/aqua-233.14475.33.dmg",
-      "build_number": "233.14475.33"
+      "version": "2024.2",
+      "sha256": "0ea9875335a53d60722f91a7059847d1da857788fe3362685bf1e66dfe9aafed",
+      "url": "https://download.jetbrains.com/aqua/aqua-2024.2.dmg",
+      "build_number": "242.20224.331"
     },
     "clion": {
       "update-channel": "CLion RELEASE",
@@ -313,10 +313,10 @@
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.dmg",
-      "version": "2024.1.2",
-      "sha256": "be7e34b5a4a4e28b90c3d90f5761767d3d6e996cdc5846d3f8bd0e05d3ee0f1a",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.1.2.dmg",
-      "build_number": "241.17011.87"
+      "version": "2024.2",
+      "sha256": "630ee3bfb6537c5da26aa7907027788f287d4e42fe24ba1f6eca037eb6afea42",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.2.dmg",
+      "build_number": "242.20224.368"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
@@ -378,10 +378,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.dmg",
-      "version": "2024.1.6",
-      "sha256": "a6d28629ac4393c3d6636a09958de27a095a718d8531e7a7a511d50bf6919b61",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.1.6.dmg",
-      "build_number": "241.19072.26"
+      "version": "2024.2",
+      "sha256": "3baff717a1725ee7bb6864114d9340c50f2853ad0337179c716be38971fef03b",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.2.dmg",
+      "build_number": "242.20224.401"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -418,12 +418,12 @@
   },
   "aarch64-darwin": {
     "aqua": {
-      "update-channel": "Aqua EAP licensing:EAP",
+      "update-channel": "Aqua RELEASE",
       "url-template": "https://download.jetbrains.com/aqua/aqua-{version}-aarch64.dmg",
-      "version": "2023.3 Public Preview",
-      "sha256": "231b5f90de71c0e43c6cc87a1a1fb3b739ecff65f2bc5cb9505218b536f4d0ce",
-      "url": "https://download.jetbrains.com/aqua/aqua-233.14475.33-aarch64.dmg",
-      "build_number": "233.14475.33"
+      "version": "2024.2",
+      "sha256": "2da73b2896cf8c7114291f7ab64730d494ed1adca83542b56702a6fb2fcaa92d",
+      "url": "https://download.jetbrains.com/aqua/aqua-2024.2-aarch64.dmg",
+      "build_number": "242.20224.331"
     },
     "clion": {
       "update-channel": "CLion RELEASE",
@@ -452,10 +452,10 @@
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.dmg",
-      "version": "2024.1.2",
-      "sha256": "70aab722715cb1abbab01e25109b6ca967588bcf3c1cec666986e42b825b0d9d",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.1.2-aarch64.dmg",
-      "build_number": "241.17011.87"
+      "version": "2024.2",
+      "sha256": "a66f93350e9251ba34a1d3cf6061fc9ad5c5351b328a15be906a8706b8be2ded",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2024.2-aarch64.dmg",
+      "build_number": "242.20224.368"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
@@ -517,10 +517,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.dmg",
-      "version": "2024.1.6",
-      "sha256": "22d89aaa841f2ff4b5930a06d44c4efc0dbd9aaee7912c2d12dd103083ecd8c8",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.1.6-aarch64.dmg",
-      "build_number": "241.19072.26"
+      "version": "2024.2",
+      "sha256": "7fb70db8a485f6b1014f28d6bec090a331a18b0ccc749406ade757bee1ab75ad",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2024.2-aarch64.dmg",
+      "build_number": "242.20224.401"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
