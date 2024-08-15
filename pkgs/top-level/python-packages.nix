@@ -15130,6 +15130,8 @@ self: super: with self; {
 
   sqlalchemy-i18n = callPackage ../development/python-modules/sqlalchemy-i18n { };
 
+  sqlalchemy-json = callPackage ../development/python-modules/sqlalchemy-json { };
+
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
   sqlalchemy-mixins = callPackage ../development/python-modules/sqlalchemy-mixins { };
