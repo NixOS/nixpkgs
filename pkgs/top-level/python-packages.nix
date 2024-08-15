@@ -11877,6 +11877,8 @@ self: super: with self; {
 
   pymelcloud = callPackage ../development/python-modules/pymelcloud { };
 
+  pymem = callPackage ../development/python-modules/pymem { };
+
   pymemcache = callPackage ../development/python-modules/pymemcache { };
 
   pymemoize = callPackage ../development/python-modules/pymemoize { };
