@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "http://shapelib.maptools.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; teams.geospatial.members ++ [ ehmry ];
+    changelog = "http://shapelib.maptools.org/release.html";
   };
 }
