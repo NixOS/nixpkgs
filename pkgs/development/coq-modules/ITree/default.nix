@@ -12,6 +12,7 @@ mkCoqDerivation rec {
   release."5.1.1".sha256 = "sha256-VlmPNwaGkdWrH7Z6DGXRosGtjuuQ+FBiGcadN2Hg5pY=";
   release."5.1.0".sha256 = "sha256-ny7Mi1KgWADiFznkNJiRgD7Djc5SUclNgKOmWRxK+eo=";
   release."4.0.0".sha256 = "0h5rhndl8syc24hxq1gch86kj7mpmgr89bxp2hmf28fd7028ijsm";
+  release."3.2.0".sha256 = "sha256-10ckCAqSQ0I3CZKlSllI1obOgWVxDagTd7eyhrl1xpE=";
   releaseRev = v: "${v}";
   propagatedBuildInputs = [ coq-ext-lib paco ];
   meta = {
