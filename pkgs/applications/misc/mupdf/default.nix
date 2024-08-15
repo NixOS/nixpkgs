@@ -101,7 +101,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
     ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
     ++ lib.optionals (enablePython) [ which swig ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.fixDylibReferences
+      fixDarwinDylibNames
+      xcbuild
+    ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
@@ -166,11 +170,7 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-  '' + (lib.optionalString (stdenv.isDarwin) ''
-    for exe in $bin/bin/*; do
-      install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
-    done
-  '') + (lib.optionalString (enableX11 || enableGL) ''
+  '' + (lib.optionalString (enableX11 || enableGL) ''
     mkdir -p $bin/share/icons/hicolor/48x48/apps
     cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
   '') + (if enableGL then ''
