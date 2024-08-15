@@ -77,7 +77,6 @@ melpaBuild {
   checkPhase = ''
     runHook preCheck
 
-    cd "$sourceRoot"
     mkfifo test.log
     cat < test.log &
     HOME=$(mktemp -d) python -m test.test
