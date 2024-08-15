@@ -7798,6 +7798,8 @@ self: super: with self; {
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
+  maseya-z3pr = callPackage ../development/python-modules/maseya-z3pr { };
+
   mashumaro = callPackage ../development/python-modules/mashumaro { };
 
   masky = callPackage ../development/python-modules/masky { };
