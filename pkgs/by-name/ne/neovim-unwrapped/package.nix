@@ -147,7 +147,12 @@ in {
       find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
     '';
     # check that the above patching actually works
-    disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
+    outputChecks = let
+      disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
+    in {
+      out = { inherit disallowedRequisites; };
+      debug = { inherit disallowedRequisites; };
+    };
 
     cmakeFlagsArray = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
