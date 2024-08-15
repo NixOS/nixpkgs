@@ -78,7 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-session" ];
+    ayatana-indicators = {
+      ayatana-indicator-session = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
