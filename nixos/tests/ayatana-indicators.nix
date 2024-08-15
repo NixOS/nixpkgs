@@ -87,9 +87,7 @@ in
         ) nodes.machine.systemd.user.targets."ayatana-indicators".wants
       );
 
-      runCommandOverAllIndicators =
-        runCommandOverServiceList
-          nodes.machine.systemd.user.targets."ayatana-indicators".wants;
+      runCommandOverLomiriIndicators = runCommandOverServiceList nodes.machine.systemd.user.targets.lomiri-indicators.wants;
     in
     ''
       start_all()
@@ -127,7 +125,28 @@ in
 
       # Now check if all indicator services were brought up successfully
     ''
-    + runCommandOverAllIndicators (service: ''
+    + runCommandOverAyatanaIndicators (service: ''
+      machine.wait_for_unit("${service}", "${user}")
+    '')
+    + ''
+      # Stop the target
+      machine.systemctl("stop ayatana-indicators.target", "${user}")
+
+      # Let all indicator services do their shutdowns
+      # Not sure if there's a better way of awaiting this without false-positive potential
+      machine.sleep(10)
+
+      # Lomiri uses a different target, which launches a slightly different set of indicators
+      machine.systemctl("start lomiri-indicators.target", "${user}")
+      machine.wait_for_unit("lomiri-indicators.target", "${user}")
+
+      # Let all indicator services do their startups, potential post-launch crash & restart cycles so we can properly check for failures
+      # Not sure if there's a better way of awaiting this without false-positive potential
+      machine.sleep(10)
+
+      # Now check if all indicator services were brought up successfully
+    ''
+    + runCommandOverLomiriIndicators (service: ''
       machine.wait_for_unit("${service}", "${user}")
     '');
 }
