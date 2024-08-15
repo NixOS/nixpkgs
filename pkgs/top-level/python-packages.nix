@@ -11980,6 +11980,8 @@ self: super: with self; {
 
   pyowm = callPackage ../development/python-modules/pyowm { };
 
+  pypager = callPackage ../development/python-modules/pypager { };
+
   pypamtest = toPythonModule (pkgs.libpam-wrapper.override {
     enablePython = true;
     inherit python;
