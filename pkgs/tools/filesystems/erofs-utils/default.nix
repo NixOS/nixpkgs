@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Userspace utilities for linux-erofs file system";
     changelog = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v${version}";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ ehmry nikstur ];
+    maintainers = with maintainers; [ ehmry nikstur jmbaur ];
     platforms = platforms.unix;
   };
 })
