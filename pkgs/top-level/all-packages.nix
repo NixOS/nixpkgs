@@ -4549,8 +4549,6 @@ with pkgs;
 
   corosync = callPackage ../servers/corosync { };
 
-  cowsay = callPackage ../tools/misc/cowsay { };
-
   fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
 
   chayang = callPackage ../tools/wayland/chayang { };
