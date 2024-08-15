@@ -53,6 +53,7 @@ class Driver:
     race_timer: threading.Timer
     logger: AbstractLogger
     rebuild_cmd: Optional[str]
+    rebuild_exe: Optional[str]
 
     def __init__(
         self,
@@ -64,6 +65,7 @@ class Driver:
         keep_vm_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
         rebuild_cmd: Optional[str] = None,
+        rebuild_exe: Optional[str] = None,
     ):
         self.tests = tests
         self.out_dir = out_dir
@@ -71,6 +73,7 @@ class Driver:
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
         self.rebuild_cmd = rebuild_cmd
+        self.rebuild_exe = rebuild_exe
 
         tmp_dir = get_tmp_dir()
 
@@ -115,7 +118,7 @@ class Driver:
                 except Exception as e:
                     self.logger.error(f"Error during cleanup of vlan{vlan.nr}: {e}")
 
-    def rebuild(self, cmd: Optional[str] = None, exe: str = sys.argv[0]) -> None:
+    def rebuild(self, cmd: Optional[str] = None, exe: Optional[str] = None) -> None:
         """
         Only makes sense when running interactively. Rebuilds the test driver by running `cmd`, or a globally defined `driver.rebuild_cmd`. This should be the same command that built this test driver to begin with. Then uses the new driver at path `exe` to reconfigure this one and redeploy changed machines.
         """
@@ -128,16 +131,30 @@ class Driver:
 
         tmp_dir = get_tmp_dir()
 
-        new_driver_info = subprocess.check_output(
-            [exe, "--internal-print-update-driver-info-and-exit"],
-            text=True,
-        )
-        (
-            start_scripts,
-            vlans_str,
-            testscript,
-            output_directory,
-        ) = new_driver_info.rstrip().split("\n")
+        if exe is None:
+            exe = self.rebuild_exe
+        if exe is None:
+            # TODO: ideally Driver.rebuild_exe this could default to
+            # sys.argv[0], and this would be result/ bin/nixos-test-driver in
+            # the typical case, but propagating argv0 through layers of wrappers
+            # does not work with python scripts. See issues #24525 #60260
+            # #150841
+            self.logger.error(
+                'No executable name to update from. Try passing rebuild(exe="./result/bin/nixos-test-driver")'
+            )
+            return
+
+        with self.logger.nested(f"getting new driver info from {exe}"):
+            new_driver_info = subprocess.check_output(
+                [exe, "--internal-print-update-driver-info-and-exit"],
+                text=True,
+            )
+            (
+                start_scripts,
+                vlans_str,
+                testscript,
+                output_directory,
+            ) = new_driver_info.rstrip().split("\n")
 
         with self.logger.nested("updating machines"):
             start_cmds = [
@@ -148,6 +165,7 @@ class Driver:
             # delete machines that are no longer part of the test
             to_del = []
             for idx, machine in enumerate(self.machines):
+                py_name = pythonize_name(machine.name)
                 if machine.name not in names:
                     if machine.is_up():
                         self.logger.warning(
