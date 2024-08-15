@@ -9,6 +9,8 @@ buildPythonPackage rec {
   version = "0.3.3";
   format = "setuptools";
 
+  # As noted by @WolfangAukang, some check files need to be disabled because of various errors, same with some tests.
+  # After disabling and running the build, no tests are collected.
   doCheck = false;
 
   src = fetchPypi {
