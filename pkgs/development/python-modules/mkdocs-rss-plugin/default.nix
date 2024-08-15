@@ -5,7 +5,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.8.0";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     rev = "refs/tags/${version}";
-    hash = "sha256-rCz1Uk5uqIsnIWw0b1oBsjAO6aK/tpVgqAX/8dVnAGw=";
+    hash = "sha256-sGm6uWlZeW65uorfTK8pk8ZT2AE9nmsZhe+UYVrSr+8=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -26,11 +26,17 @@ python3Packages.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    mkdocs
+    cachecontrol
+    feedparser
     gitpython
+    jsonfeed
+    mkdocs
+    mkdocs-material
+    pytest-cov
+    pytest-cov
+    requests
+    validator-collection
   ];
-
-  doCheck = false;
 
   meta = with lib; {
     description = "Plugin to generate a RSS feeds for created and updated pages";
