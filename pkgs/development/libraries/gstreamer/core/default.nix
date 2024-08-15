@@ -10,7 +10,6 @@
 , glib
 , makeWrapper
 , libcap
-, libunwind
 , elfutils # for libdw
 , bash-completion
 , lib
@@ -19,6 +18,9 @@
 , gobject-introspection
 , rustc
 , testers
+, libunwind
+# darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
+, withLibunwind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform libunwind
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
@@ -70,9 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     bash-completion
   ] ++ lib.optionals stdenv.isLinux [
     libcap
-    libunwind
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
+  ] ++ lib.optionals withLibunwind [
+    libunwind
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreServices
@@ -86,10 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     (lib.mesonEnable "doc" enableDocumentation)
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-    "-Dlibunwind=disabled"
-    "-Dlibdw=disabled"
+    (lib.mesonEnable "libunwind" withLibunwind)
+    (lib.mesonEnable "libdw" withLibunwind)
   ];
 
   postPatch = ''
