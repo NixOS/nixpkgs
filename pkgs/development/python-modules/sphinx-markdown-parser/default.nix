@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   commonmark,
   fetchFromGitHub,
@@ -16,7 +15,7 @@
   yapf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sphinx-markdown-parser";
   version = "0.2.4";
   pyproject = true;
@@ -62,6 +61,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/clayrisser/sphinx-markdown-parser";
     license = licenses.mit;
     maintainers = with maintainers; [ FlorianFranzen ];
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

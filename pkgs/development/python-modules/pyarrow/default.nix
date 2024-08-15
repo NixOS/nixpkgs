@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "apache-arrow-${version}/python";
+  sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
     cmake
@@ -171,7 +171,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "A cross-language development platform for in-memory data";
+    description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
     license = licenses.asl20;
     platforms = platforms.unix;

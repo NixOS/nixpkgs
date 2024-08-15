@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "Bend";
-  version = "0.2.22";
+  version = "0.2.36";
 
   src = fetchFromGitHub {
     owner = "HigherOrderCO";
     repo = "Bend";
     rev = "refs/tags/${version}";
-    hash = "sha256-5qcj3KfgcB5tbVSJUSOVQDAhEpPE8SFoT0g9syHbFCA=";
+    hash = "sha256-j4YMdeSxIbhp7xT42L42/y0ZncFPKBkxTh0LgO/RjkY=";
   };
 
-  cargoHash = "sha256-gSAIidMEYJDZHgIWNgYJVqyhpD7M+CMCD+1mEXGztIk=";
+  cargoHash = "sha256-jPxPx/e6rv5REP+K1ZLg9ffJKKVNLqR/vd33xKs+Ut4=";
 
   nativeBuildInputs = [
     hvm

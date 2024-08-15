@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.ppsspp.org/";
-    description = "A HLE Playstation Portable emulator, written in C++ ("
+    description = "HLE Playstation Portable emulator, written in C++ ("
                   + (if enableQt then "Qt" else "SDL + headless") + ")";
     longDescription = ''
       PPSSPP is a PSP emulator, which means that it can run games and other

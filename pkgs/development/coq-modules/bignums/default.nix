@@ -5,10 +5,11 @@ mkCoqDerivation {
   owner = "coq";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.13" "8.19"; out = "9.0.0+coq${coq.coq-version}"; }
+    { case = range "8.13" "8.20"; out = "9.0.0+coq${coq.coq-version}"; }
     { case = range "8.6" "8.17"; out = "${coq.coq-version}.0"; }
   ] null;
 
+  release."9.0.0+coq8.20".sha256 = "sha256-pkvyDaMXRalc6Uu1eBTuiqTpRauRrzu946c6TavyTKY=";
   release."9.0.0+coq8.19".sha256 = "sha256-02uL+qWbUveHe67zKfc8w3U0iN3X2DKBsvP3pKpW8KQ=";
   release."9.0.0+coq8.18".sha256 = "sha256-vLeJ0GNKl4M84Uj2tAwlrxJOSR6VZoJQvdlDhxJRge8=";
   release."9.0.0+coq8.17".sha256 = "sha256-Mn85LqxJKPDIfpxRef9Uh5POwOKlTQ7jsMVz1wnQwuY=";

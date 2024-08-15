@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.10.1";
 
   src = fetchurl {
-    url = "https://libzip.org/download/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://libzip.org/download/libzip-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-lmmuXf46xbOJdTbchGaodMjPLA47H90I11snOIQpk2M=";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://libzip.org/";
-    description = "A C library for reading, creating and modifying zip archives";
+    description = "C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     pkgConfigModules = [ "libzip" ];
     platforms = platforms.unix;

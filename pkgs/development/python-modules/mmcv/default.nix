@@ -133,7 +133,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mmcv" ];
 
   meta = with lib; {
-    description = "A Foundational Library for Computer Vision Research";
+    description = "Foundational Library for Computer Vision Research";
     homepage = "https://github.com/open-mmlab/mmcv";
     changelog = "https://github.com/open-mmlab/mmcv/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

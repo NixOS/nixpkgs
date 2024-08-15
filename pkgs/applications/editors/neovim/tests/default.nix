@@ -1,6 +1,6 @@
 # run tests by building `neovim.tests`
 { vimUtils, writeText, neovim, vimPlugins
-, lib, neovimUtils, wrapNeovimUnstable
+, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
 , fetchFromGitLab
 , runCommandLocal
@@ -42,6 +42,14 @@ let
       " just a comment
     '';
   };
+
+  nvim-with-luasnip = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
+    plugins = [ {
+        plugin = vimPlugins.luasnip;
+
+      }
+    ];
+  });
 
   nvimAutoDisableWrap = makeNeovimConfig { };
 
@@ -281,4 +289,16 @@ rec {
     export HOME=$TMPDIR
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
+
+  inherit nvim-with-luasnip;
+
+  # check that bringing in one plugin with lua deps makes those deps visible from wrapper
+  # for instance luasnip has a dependency on jsregexp
+  can_require_transitive_deps =
+    runTest nvim-with-luasnip ''
+    export HOME=$TMPDIR
+    cat ${nvim-with-luasnip}/bin/nvim
+    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e
+  '';
+
 })

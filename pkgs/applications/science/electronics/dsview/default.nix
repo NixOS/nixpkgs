@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, cmake, wrapQtAppsHook
-, libzip, boost, fftw, qtbase, qtwayland, qtsvg, libusb1
+, libzip, boost, fftw, libusb1, qtbase, qtsvg, qtwayland
 , python3, desktopToDarwinBundle
 }:
 
 stdenv.mkDerivation rec {
   pname = "dsview";
 
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
       owner = "DreamSourceLab";
       repo = "DSView";
       rev = "v${version}";
-      sha256 = "sha256-LwrlB+Nwq34YjwGmnbUWS3W//ZHr8Do2Wf2te+2oBeI=";
+      sha256 = "sha256-d/TfCuJzAM0WObOiBhgfsTirlvdROrlCm+oL1cqUrIs=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux qtwayland;
 
   meta = with lib; {
-    description = "A GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
+    description = "GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
     mainProgram = "DSView";
     homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;

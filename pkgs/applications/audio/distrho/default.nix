@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
         wolpertinger
     '';
     license = with licenses; [ gpl2Only gpl3Only gpl2Plus lgpl2Plus lgpl3Only mit ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

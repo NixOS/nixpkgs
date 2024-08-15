@@ -7,7 +7,7 @@
   pycrypto,
   ecdsa, # TODO
   mock,
-  can,
+  python-can,
   brotli,
   withOptionalDeps ? true,
   tcpdump,
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   doCheck = false;
   nativeCheckInputs = [
     mock
-    can
+    python-can
     brotli
   ];
   checkPhase = ''
@@ -97,7 +97,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "scapy" ];
 
   meta = with lib; {
-    description = "A Python-based network packet manipulation program and library";
+    description = "Python-based network packet manipulation program and library";
     mainProgram = "scapy";
     longDescription = ''
       Scapy is a powerful Python-based interactive packet manipulation program

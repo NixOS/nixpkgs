@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "commandergenius";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitLab {
     owner = "Dringgstein";
     repo = "Commander-Genius";
     rev = "v${version}";
-    hash = "sha256-w5DP7vkvWOs8qcHqoQaEWHnaBwUoi1I4gnE+Z3haHxE=";
+    hash = "sha256-sWnx2UdnuuLcTxhuXhfG2ssnFvuGi9kOBrpc4jiKgTs=";
   };
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf libGL boost libvorbis zlib curl python3 ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/gerstrong/Commander-Genius";
     maintainers = with maintainers; [ hce ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

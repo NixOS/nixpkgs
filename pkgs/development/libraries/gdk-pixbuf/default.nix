@@ -21,12 +21,11 @@
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
-, fetchpatch
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.42.11";
+  version = "2.42.12";
 
   outputs = [ "out" "dev" "man" ]
     ++ lib.optional withIntrospection "devdoc"
@@ -36,18 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Sdy0AjiHCGR+jDIdVrb7MPIeUeUV0MWpQiaNIwUqLwA=";
+    hash = "sha256-uVBbNEW5p+SM7TR2DDvLc+lm3zrJTJWhSMtmmrdI48c=";
   };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-    # Remove post 2.42.11
-    (fetchpatch {
-      name = "fix-meson.build-typo.patch";
-      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/238893d8cd6f9c2616a05ab521a29651a17a38c2.patch";
-      hash = "sha256-6IhdNH6hhygSXD7EJo/hoBLFeb2lJlBIHNBPTkA3Do0=";
-    })
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -160,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library for image loading and manipulation";
+    description = "Library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;

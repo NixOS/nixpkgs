@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   buildPythonPackage,
   setuptools,
   pythonOlder,
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pluthon";
-  version = "0.4.6";
+  version = "0.5.3";
 
   format = "pyproject";
 
@@ -20,8 +21,17 @@ buildPythonPackage rec {
     owner = "OpShin";
     repo = "pluthon";
     rev = version;
-    hash = "sha256-ZmBkbglSbBfVhA4yP0tJdwpJiFpJ7vX0A321ldQF0lA=";
+    hash = "sha256-pX/XPZJQZaSY06nLLEvhf+1LEqYG3CdgPV/3Q6XOzTs=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "pluthon-bump-uplc.patch";
+      # https://github.com/OpShin/pluthon/pull/21
+      url = "https://github.com/OpShin/pluthon/commit/4b0a40223f253643056cab12231264c5beffc666.patch?full_index=1";
+      hash = "sha256-dO9JaIpkugZFKsr3Hd0cFCy7K+cmf77UfrdkZ+sGQtA=";
+    })
+  ];
 
   propagatedBuildInputs = [
     setuptools

@@ -16,8 +16,7 @@
 }:
 
 let
-  pname = "7kaa";
-  version = "2.15.5";
+  version = "2.15.6";
 
   musicVersion = lib.versions.majorMinor version;
   music = stdenv.mkDerivation {
@@ -37,14 +36,15 @@ let
     meta.license = lib.licenses.unfree;
   };
 in
-gccStdenv.mkDerivation rec {
-  inherit pname version;
+gccStdenv.mkDerivation (finalAttrs: {
+  pname = "7kaa";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "the3dfxdude";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Z6TsR6L6vwpzoKTj6xJ6HKy4DxcUBWmYBFi/a9pQBD8=";
+    repo = "7kaa";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kkM+kFQ+tGHS5NrVPeDMRWFQb7waESt8xOLfFGaGdgo=";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config ];
@@ -73,4 +73,4 @@ gccStdenv.mkDerivation rec {
     platforms = platforms.x86_64 ++ platforms.aarch64;
     maintainers = with maintainers; [ _1000101 ];
   };
-}
+})

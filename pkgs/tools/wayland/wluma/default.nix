@@ -38,9 +38,7 @@ rustPlatform.buildRustPackage rec {
       'ExecStart=/usr/bin/wluma' 'ExecStart=${placeholder "out"}/bin/wluma'
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-BwduYAYIRxc40nn9kloHv+Dt8jLSZViweSYGL5e45YM=";
 
   nativeBuildInputs = [
     makeWrapper

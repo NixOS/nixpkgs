@@ -15,23 +15,24 @@
 , libadwaita
 , dmidecode
 , util-linux
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.3.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-57GsxLxnaQ9o3Dux2fTNWUmhOMs6waYvtV6260CM5fo=";
+    hash = "sha256-uzZCczayJ5C0TZznA2wjGNYF3nB6fh/rrBKvv9s3J5g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "resources-${finalAttrs.version}";
-    hash = "sha256-bHzijXjvbmYltNHevhddz5TCYKg2OMRn+Icb77F18XU=";
+    hash = "sha256-a0VdSNy8E7qen+6yFXuQBmYnDD/DMUgrZqJK6BJja60=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonOption "profile" "default")
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/nokyan/resources/releases/tag/${finalAttrs.version}";

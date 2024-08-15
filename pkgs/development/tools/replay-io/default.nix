@@ -52,7 +52,7 @@ in rec {
     passthru.updateScript = ./update.sh;
 
     meta = with lib; {
-      description = "The Time Travel Debugger for Web Development";
+      description = "Time Travel Debugger for Web Development";
       longDescription = ''
         Replay allows you to record and replay web applications with familiar browser dev tools.
         You can access the browser DevTools at any point of the recording, adding new logger
@@ -128,7 +128,7 @@ in rec {
     '';
 
     meta = with lib; {
-      description = "The Time Travel Debugger for Web Development - Node Command Line";
+      description = "Time Travel Debugger for Web Development - Node Command Line";
       longDescription = ''
         The Replay Node Command Line allows you to record node applications and debug them
         with familiar browser dev tools.

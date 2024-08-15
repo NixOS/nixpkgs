@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Wayland native snapshot editing tool, inspired by Snappy on macOS";
+    description = "Wayland native snapshot editing tool, inspired by Snappy on macOS";
     homepage = "https://github.com/jtheoof/swappy";
     license = licenses.mit;
     mainProgram = "swappy";

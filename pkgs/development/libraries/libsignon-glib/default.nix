@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library for managing single signon credentials which can be used from GLib applications";
+    description = "Library for managing single signon credentials which can be used from GLib applications";
     homepage = "https://gitlab.com/accounts-sso/libsignon-glib";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

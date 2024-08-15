@@ -73,7 +73,11 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     (lib.enableFeature enableDebuginfod "libdebuginfod")
     (lib.enableFeature enableDebuginfod "debuginfod")
-  ];
+  ] ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
+    ++ lib.optionals stdenv.cc.isClang [
+      "CFLAGS=-Wno-unused-private-field"
+      "CXXFLAGS=-Wno-unused-private-field"
+    ];
 
   enableParallelBuilding = true;
 
@@ -96,7 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceware.org/elfutils/";
-    description = "A set of utilities to handle ELF objects";
+    description = "Set of utilities to handle ELF objects";
     platforms = platforms.linux;
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

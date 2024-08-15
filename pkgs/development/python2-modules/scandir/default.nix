@@ -16,7 +16,7 @@ buildPythonPackage rec {
   checkPhase = "${python.interpreter} test/run_tests.py";
 
   meta = with lib; {
-    description = "A better directory iterator and faster os.walk()";
+    description = "Better directory iterator and faster os.walk()";
     homepage = "https://github.com/benhoyt/scandir";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];

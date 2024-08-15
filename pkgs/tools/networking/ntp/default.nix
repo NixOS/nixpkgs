@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ntp";
-  version = "4.2.8p17";
+  version = "4.2.8p18";
 
   src = fetchurl {
     url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
-    hash = "sha256-ED3ScuambFuN8H3OXpoCVV/NbxOXvft4IjcyjonTqGY=";
+    hash = "sha256-z4TF8/saKVKElCYk2CP/+mNBROCWz8T5lprJjvX0aOU=";
   };
 
   configureFlags = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.ntp.org/";
-    description = "An implementation of the Network Time Protocol";
+    description = "Implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";

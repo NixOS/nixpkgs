@@ -3,8 +3,6 @@
 set -eu -o pipefail
 
 nix-update buildbot
-nix-update --version=skip buildbot-worker
-nix-update --version=skip buildbot-plugins.buildbot-pkg
 nix-update --version=skip buildbot-plugins.www
 nix-update --version=skip buildbot-plugins.www-react
 nix-update --version=skip buildbot-plugins.console-view

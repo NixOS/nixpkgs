@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , buildPackages
+, updateAutotoolsGnuConfigScriptsHook
 , ncurses
 , pkg-config
 , abiVersion ? "6"
@@ -10,14 +11,15 @@
 , mouseSupport ? false, gpm
 , unicodeSupport ? true
 , testers
+, binlore
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.4";
+  version = "6.4.20221231";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz";
     hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
-  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && enableStatic) [
       # For static binaries, the point is to have a standalone binary with
       # minimum dependencies. So here we make sure that binaries using this
       # package won't depend on a terminfo database located in the Nix store.
@@ -68,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
     pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
    # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.
@@ -176,6 +179,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
+  '';
+
+  # I'm not very familiar with ncurses, but it looks like most of the
+  # exec here will run hard-coded executables. There's one that is
+  # dynamic, but it looks like it only comes from executing a terminfo
+  # file, so I think it isn't going to be under user control via CLI?
+  # Happy to have someone help nail this down in either direction!
+  # The "capability" is 'iprog', and I could only find 1 real example:
+  # https://invisible-island.net/ncurses/terminfo.ti.html#tic-linux-s
+  passthru.binlore.out = binlore.synthesize ncurses ''
+    execer cannot bin/{reset,tput,tset}
   '';
 
   meta = with lib; {

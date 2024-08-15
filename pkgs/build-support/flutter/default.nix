@@ -10,21 +10,32 @@
 , pkg-config
 , jq
 , yq
-, moreutils
 }:
 
 # absolutely no mac support for now
 
-{ pubGetScript ? "flutter pub get"
+{ pubGetScript ? null
 , flutterBuildFlags ? [ ]
 , targetFlutterPlatform ? "linux"
 , extraWrapProgramArgs ? ""
+, flutterMode ? null
 , ...
 }@args:
 
 let
+  hasEngine = flutter ? engine && flutter.engine != null && flutter.engine.meta.available;
+  flutterMode = args.flutterMode or (if hasEngine then flutter.engine.runtimeMode else "release");
+
+  flutterFlags = lib.optional hasEngine "--local-engine host_${flutterMode}${lib.optionalString (!flutter.engine.isOptimized) "_unopt"}";
+
+  flutterBuildFlags = [
+    "--${flutterMode}"
+  ] ++ (args.flutterBuildFlags or []) ++ flutterFlags;
+
   builderArgs = rec {
     universal = args // {
+      inherit flutterMode flutterFlags flutterBuildFlags;
+
       sdkSetupScript = ''
         # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
         # https://github.com/dart-lang/sdk/blob/3.1.0/runtime/bin/security_context_linux.cc#L48
@@ -47,11 +58,11 @@ let
         ''}/bin/dart"
 
         export HOME="$NIX_BUILD_TOP"
-        flutter config --no-analytics &>/dev/null # mute first-run
-        flutter config --enable-linux-desktop >/dev/null
+        flutter config $flutterFlags --no-analytics &>/dev/null # mute first-run
+        flutter config $flutterFlags --enable-linux-desktop >/dev/null
       '';
 
-      inherit pubGetScript;
+      pubGetScript = args.pubGetScript or "flutter${lib.optionalString hasEngine " --local-engine $flutterMode"} pub get";
 
       sdkSourceBuilders = {
         # https://github.com/dart-lang/pub/blob/68dc2f547d0a264955c1fa551fa0a0e158046494/lib/src/sdk/flutter.dart#L81
@@ -68,16 +79,34 @@ let
             exit 1
           fi
         '';
+        # https://github.com/dart-lang/pub/blob/e1fbda73d1ac597474b82882ee0bf6ecea5df108/lib/src/sdk/dart.dart#L80
+        "dart" = name: runCommand "dart-sdk-${name}" { passthru.packageRoot = "."; } ''
+          for path in '${flutter.dart}/pkg/${name}'; do
+            if [ -d "$path" ]; then
+              ln -s "$path" "$out"
+              break
+            fi
+          done
+
+          if [ ! -e "$out" ]; then
+            echo 1>&2 'The Dart SDK does not contain the requested package: ${name}!'
+            exit 1
+          fi
+        '';
       };
 
       extraPackageConfigSetup = ''
         # https://github.com/flutter/flutter/blob/3.13.8/packages/flutter_tools/lib/src/dart/pub.dart#L755
         if [ "$('${yq}/bin/yq' '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
+          export TEMP_PACKAGES=$(mktemp)
           '${jq}/bin/jq' '.packages |= . + [{
             name: "flutter_gen",
             rootUri: "flutter_gen",
             languageVersion: "2.12",
-          }]' "$out" | '${moreutils}/bin/sponge' "$out"
+          }]' "$out" > "$TEMP_PACKAGES"
+          cp "$TEMP_PACKAGES" "$out"
+          rm "$TEMP_PACKAGES"
+          unset TEMP_PACKAGES
         fi
       '';
     };
@@ -105,7 +134,7 @@ let
 
         mkdir -p build/flutter_assets/fonts
 
-        flutter build linux -v --release --split-debug-info="$debug" ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") flutterBuildFlags)}
+        flutter build linux -v --split-debug-info="$debug" $flutterBuildFlags
 
         runHook postBuild
       '';
@@ -114,7 +143,7 @@ let
       installPhase = universal.installPhase or ''
         runHook preInstall
 
-        built=build/linux/*/release/bundle
+        built=build/linux/*/$flutterMode/bundle
 
         mkdir -p $out/bin
         mv $built $out/app
@@ -156,7 +185,7 @@ let
 
         mkdir -p build/flutter_assets/fonts
 
-        flutter build web -v --release ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") flutterBuildFlags)}
+        flutter build web -v $flutterBuildFlags
 
         runHook postBuild
       '';

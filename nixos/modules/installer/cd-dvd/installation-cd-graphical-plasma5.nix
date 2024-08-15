@@ -23,7 +23,7 @@
 
   environment.systemPackages = with pkgs; [
     # Graphical text editor
-    kate
+    plasma5Packages.kate
   ];
 
   system.activationScripts.installerDesktop = let
@@ -40,7 +40,7 @@
 
     ln -sfT ${manualDesktopFile} ${desktopDir + "nixos-manual.desktop"}
     ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop ${desktopDir + "gparted.desktop"}
-    ln -sfT ${pkgs.konsole}/share/applications/org.kde.konsole.desktop ${desktopDir + "org.kde.konsole.desktop"}
+    ln -sfT ${pkgs.plasma5Packages.konsole}/share/applications/org.kde.konsole.desktop ${desktopDir + "org.kde.konsole.desktop"}
   '';
 
 }

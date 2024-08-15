@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    description = "A simple Gtk wrapper for Adwaita-for-Steam";
+    description = "Simple Gtk wrapper for Adwaita-for-Steam";
     homepage = "https://github.com/Foldex/AdwSteamGtk";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.reedrw ];

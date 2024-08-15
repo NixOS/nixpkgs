@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "reportengine" ];
 
   meta = with lib; {
-    description = "A framework for declarative data analysis";
+    description = "Framework for declarative data analysis";
     homepage = "https://github.com/NNPDF/reportengine/";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ veprbl ];

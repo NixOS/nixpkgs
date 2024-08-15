@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Python3 library to the CoAP protocol compliant with the RFC.";
+    description = "Python3 library to the CoAP protocol compliant with the RFC";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];
   };

@@ -1,34 +1,36 @@
 {
   lib,
-  bokeh,
   buildPythonPackage,
   colorcet,
   fetchPypi,
-  ipython,
-  matplotlib,
-  notebook,
+  hatch-vcs,
+  hatchling,
   numpy,
   pandas,
   panel,
   param,
   pythonOlder,
   pyviz-comms,
-  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.18.3";
-  format = "setuptools";
+  version = "1.19.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V44w6J1ydU+XqD6+CBmP7I6HzH5JslufMew5P5OcpQA=";
+    hash = "sha256-yrFSL3WptGN3+TZLZ1vv15gS4iAFlxRHCljiFHXVMbo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     colorcet
     numpy
     pandas
@@ -47,6 +49,6 @@ buildPythonPackage rec {
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

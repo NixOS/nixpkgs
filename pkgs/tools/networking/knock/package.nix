@@ -27,7 +27,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A simple CLI network reachability tester";
+    description = "Simple CLI network reachability tester";
     homepage = "https://codeberg.org/nat-418/knock";
     license = licenses.bsd0;
     changelog = "https://codeberg.org/nat-418/knock/raw/branch/trunk/CHANGELOG.md";

@@ -586,11 +586,11 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
         after = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
-
+        restartTriggers = [ cfg.keyFile ];
         serviceConfig = {
           User = "oauth2-proxy";
           Restart = "always";
-          ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
+          ExecStart = "${lib.getExe cfg.package} ${configString}";
           EnvironmentFile = lib.mkIf (cfg.keyFile != null) cfg.keyFile;
         };
       };

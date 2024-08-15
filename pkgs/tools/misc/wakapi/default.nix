@@ -27,7 +27,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://wakapi.dev/";
     changelog = "https://github.com/muety/wakapi/releases/tag/${version}";
-    description = "A minimalist self-hosted WakaTime-compatible backend for coding statistics";
+    description = "Minimalist self-hosted WakaTime-compatible backend for coding statistics";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ t4ccer ];
     mainProgram = "wakapi";

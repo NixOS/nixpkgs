@@ -62,7 +62,7 @@ self: super: builtins.intersectAttrs super {
     # This prevents linking issues when running TH splices.
     postInstall = ''
       mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
-      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
+      BOOT_PKGS="ghc-${self.ghc.version} template-haskell-$(ghc-pkg-${self.ghc.version} --global --simple-output field template-haskell version)"
       ${pkgs.buildPackages.gnused}/bin/sed \
         -e "s!@@EXE_DIR@@!$out/bin!" \
         -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
@@ -156,16 +156,16 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      installHledgerExtraFiles = overrideCabal (drv: {
+      installHledgerExtraFiles = manpagePathPrefix: overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
         ];
         postInstall = ''
           for i in $(seq 1 9); do
-            installManPage *.$i
+            installManPage ./${manpagePathPrefix}/*.$i
           done
 
-          install -v -Dm644 *.info* -t "$out/share/info/"
+          install -v -Dm644 ./${manpagePathPrefix}/*.info* -t "$out/share/info/"
 
           if [ -e shell-completion/hledger-completion.bash ]; then
             installShellCompletion --name hledger shell-completion/hledger-completion.bash
@@ -181,25 +181,31 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerExtraFiles super.hledger;
-      hledger-web = installHledgerExtraFiles (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerExtraFiles super.hledger-ui;
+      hledger = installHledgerExtraFiles "" super.hledger;
+      hledger-web = installHledgerExtraFiles "" (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerExtraFiles "" super.hledger-ui;
 
-      hledger_1_30_1 = installHledgerExtraFiles
-        (doDistribute (super.hledger_1_30_1.override {
-          hledger-lib = self.hledger-lib_1_30;
+      hledger_1_34 = installHledgerExtraFiles "embeddedfiles"
+        (doDistribute (super.hledger_1_34.override {
+          hledger-lib = self.hledger-lib_1_34;
         }));
-      hledger-web_1_30 = installHledgerExtraFiles (hledgerWebTestFix
-        (doDistribute (super.hledger-web_1_30.override {
-          hledger = self.hledger_1_30_1;
-          hledger-lib = self.hledger-lib_1_30;
+      hledger-ui_1_34 = installHledgerExtraFiles ""
+        (doDistribute (super.hledger-ui_1_34.override {
+          hledger = self.hledger_1_34;
+          hledger-lib = self.hledger-lib_1_34;
+        }));
+      hledger-web_1_34 = installHledgerExtraFiles "" (hledgerWebTestFix
+        (doDistribute (super.hledger-web_1_34.override {
+          hledger = self.hledger_1_34;
+          hledger-lib = self.hledger-lib_1_34;
         })));
     }
   ) hledger
     hledger-web
     hledger-ui
-    hledger_1_30_1
-    hledger-web_1_30
+    hledger_1_34
+    hledger-ui_1_34
+    hledger-web_1_34
     ;
 
   cufft = overrideCabal (drv: {
@@ -242,6 +248,19 @@ self: super: builtins.intersectAttrs super {
   cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
 
   arbtt = overrideCabal (drv: {
+    buildTools = drv.buildTools or [] ++ [
+      pkgs.buildPackages.installShellFiles
+      pkgs.buildPackages.libxslt
+    ];
+    postBuild = ''
+      xsl=${pkgs.buildPackages.docbook_xsl}/share/xml/docbook-xsl
+      make -C doc man XSLTPROC_MAN_STYLESHEET=$xsl/manpages/profile-docbook.xsl
+    '';
+    postInstall = ''
+      for f in doc/man/man[1-9]/*; do
+        installManPage $f
+      done
+    '';
     # The test suite needs the packages's executables in $PATH to succeed.
     preCheck = ''
       for i in $PWD/dist/build/*; do
@@ -356,6 +375,11 @@ self: super: builtins.intersectAttrs super {
   warp = addTestToolDepend pkgs.curl super.warp;
   warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
+  safe-exceptions = overrideCabal (drv: {
+    # Fix strictDeps build error "could not execute: hspec-discover"
+    testToolDepends = drv.testToolDepends or [] ++ [ self.hspec-discover ];
+  }) super.safe-exceptions;
+
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
   hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;
@@ -443,7 +467,7 @@ self: super: builtins.intersectAttrs super {
   # Tries to run GUI in tests
   leksah = dontCheck (overrideCabal (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
-      gnome.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
+      adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
       wrapGAppsHook3           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
@@ -770,9 +794,12 @@ self: super: builtins.intersectAttrs super {
     preInstall = drv.preInstall or "" + ''
       installTargets="install"
       installFlagsArray+=(
-        "BUILDER=:"
         "PREFIX="
         "DESTDIR=$out"
+        # Prevent Makefile from calling cabal/Setup again
+        "BUILDER=:"
+        # Make Haskell build dependencies available
+        "GHC=${self.buildHaskellPackages.ghc.targetPrefix}ghc -global-package-db -package-db $setupPackageConfDir"
       )
     '';
     installPhase = null;
@@ -973,7 +1000,7 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''
       export HOME=$TMPDIR/home
       export PATH=$PWD/dist/build/ihaskell:$PATH
-      export GHC_PACKAGE_PATH=$PWD/dist/package.conf.inplace/:$GHC_PACKAGE_PATH
+      export NIX_GHC_PACKAGE_PATH_FOR_TEST=$PWD/dist/package.conf.inplace/:$packageConfDir:
     '';
   }) super.ihaskell;
 
@@ -1035,6 +1062,8 @@ self: super: builtins.intersectAttrs super {
         pkgs.buildPackages.makeWrapper
       ];
       postInstall = ''
+        ${drv.postInstall or ""}
+
         wrapProgram $out/bin/cabal2nix \
           --prefix PATH ":" "${
             pkgs.lib.makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]
@@ -1068,6 +1097,14 @@ self: super: builtins.intersectAttrs super {
             pkgs.nix-prefetch-docker
           ]
         }"
+      ''
+      # Prevent erroneous references to other libraries that use Paths_ modules
+      # on aarch64-darwin. Note that references to the data outputs are not removed.
+      + lib.optionalString (with pkgs.stdenv; hostPlatform.isDarwin && hostPlatform.isAarch64) ''
+        remove-references-to -t "${self.shake.out}" "$out/bin/.nvfetcher-wrapped"
+        remove-references-to -t "${self.js-jquery.out}" "$out/bin/.nvfetcher-wrapped"
+        remove-references-to -t "${self.js-flot.out}" "$out/bin/.nvfetcher-wrapped"
+        remove-references-to -t "${self.js-dgtable.out}" "$out/bin/.nvfetcher-wrapped"
       '';
     }) super.nvfetcher);
 
@@ -1186,15 +1223,11 @@ self: super: builtins.intersectAttrs super {
         '';
       });
     in
-
-    {
-      fourmolu = fourmoluTestFix super.fourmolu;
-      fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
-      fourmolu_0_15_0_0 = fourmoluTestFix super.fourmolu_0_15_0_0;
-    })
+      builtins.mapAttrs (_: fourmoluTestFix) super
+    )
     fourmolu
-    fourmolu_0_14_1_0
     fourmolu_0_15_0_0
+    fourmolu_0_16_2_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -1329,18 +1362,20 @@ self: super: builtins.intersectAttrs super {
       gi-javascriptcore
       gi-webkit2webextension
       gi-gtk_4_0_8
-      gi-gdk_4_0_7
+      gi-gdk_4_0_8
       gi-gsk
       gi-adwaita
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
       (addBuildDepend pkgs.xorg.libXtst)
+      (addBuildDepend pkgs.lerc)
       (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
     ];
 
     gi-webkit2 = lib.pipe super.gi-webkit2 [
       (addBuildDepend pkgs.xorg.libXtst)
+      (addBuildDepend pkgs.lerc)
       (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
     ];
 

@@ -1,14 +1,14 @@
 diff --git a/weasyprint/text/ffi.py b/weasyprint/text/ffi.py
-index 09f614aad..cbe9a73dd 100644
+index 3aba3e75..dde0e260 100644
 --- a/weasyprint/text/ffi.py
 +++ b/weasyprint/text/ffi.py
-@@ -415,22 +415,11 @@ def _dlopen(ffi, *names):
+@@ -429,22 +429,11 @@ if hasattr(os, 'add_dll_directory'):  # pragma: no cover
          with suppress((OSError, FileNotFoundError)):
              os.add_dll_directory(dll_directory)
  
 -gobject = _dlopen(
 -    ffi, 'gobject-2.0-0', 'gobject-2.0', 'libgobject-2.0-0',
--    'libgobject-2.0.so.0', 'libgobject-2.0.dylib',  'libgobject-2.0-0.dll')
+-    'libgobject-2.0.so.0', 'libgobject-2.0.dylib', 'libgobject-2.0-0.dll')
 -pango = _dlopen(
 -    ffi, 'pango-1.0-0', 'pango-1.0', 'libpango-1.0-0', 'libpango-1.0.so.0',
 -    'libpango-1.0.dylib', 'libpango-1.0-0.dll')
@@ -29,3 +29,4 @@ index 09f614aad..cbe9a73dd 100644
 +pangoft2 = _dlopen(ffi, '@pangoft2@')
  
  gobject.g_type_init()
+ 

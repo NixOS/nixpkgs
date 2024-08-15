@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jamielinux/bashmount";
-    description = "A menu-driven bash script for the management of removable media with udisks";
+    description = "Menu-driven bash script for the management of removable media with udisks";
     mainProgram = "bashmount";
     maintainers = [ maintainers.koral ];
     license = licenses.gpl2Only;

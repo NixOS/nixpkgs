@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.21.0";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-utJYgbmCLi7rWKsRDZqJDCtEbVijAjnMqpYoALKO+Ho=";
+    sha256 = "sha256-1F/865UgdqwfpITFhXCuL7CmducL7w0lVDyfui9UzjU=";
   };
 
-  cargoHash = "sha256-9rgdpoXNKaw850EnK6jDwT+jba/B/66PqQackx2knuk=";
+  cargoHash = "sha256-szPO1V09EThpo2N03Ll+ZJUpvjp2b+/C/sviOzFfG+k=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
+    description = "Tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";

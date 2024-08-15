@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyter_contrib_nbextensions" ];
 
   meta = with lib; {
-    description = "A collection of various notebook extensions for Jupyter";
+    description = "Collection of various notebook extensions for Jupyter";
     homepage = "https://github.com/ipython-contrib/jupyter_contrib_nbextensions";
     license = licenses.bsd3;
     maintainers = with maintainers; [ GaetanLepage ];

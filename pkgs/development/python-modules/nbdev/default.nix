@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   setuptools,
   ipywidgets,
   fastcore,
@@ -16,17 +15,16 @@
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.3.23";
+  version = "2.3.27";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+HbGHyJ2TX6qnBBPNivFVklrf+Ma2QM3u/2a67NxfIs=";
+    hash = "sha256-vF79mY5dy00xfaGR8L9HPpdxOiEpiJ1AQt42hO9DIMs=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "ipywidgets" ];
 

@@ -15,7 +15,6 @@
   flask-sockets,
   gunicorn,
   moto,
-  numpy,
   pyramid,
   pytest-asyncio,
   pytestCheckHook,
@@ -121,7 +120,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack_bolt" ];
 
   meta = with lib; {
-    description = "A framework to build Slack apps using Python";
+    description = "Framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
     changelog = "https://github.com/slackapi/bolt-python/releases/tag/v${version}";
     license = licenses.mit;

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cross-platform, user-space WireGuard port-forwarder that requires no root-access or system network configurations";
+    description = "Cross-platform, user-space WireGuard port-forwarder that requires no root-access or system network configurations";
     homepage = "https://github.com/aramperes/onetun";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

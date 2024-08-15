@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/andika";
-    description = "A family designed especially for literacy use taking into account the needs of beginning readers";
+    description = "Family designed especially for literacy use taking into account the needs of beginning readers";
     longDescription = ''
       Andika is a sans serif, Unicode-compliant font designed especially for literacy use, taking into account the needs of beginning readers. The focus is on clear, easy-to-perceive letterforms that will not be readily confused with one another.
 

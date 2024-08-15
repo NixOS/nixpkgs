@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Ultimate Oldschool PC Font Pack (TTF Fonts)";
+    description = "Ultimate Oldschool PC Font Pack (TTF Fonts)";
     homepage = "https://int10h.org/oldschool-pc-fonts/";
     changelog = "https://int10h.org/oldschool-pc-fonts/readme/#history";
     license = licenses.cc-by-sa-40;

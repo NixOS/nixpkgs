@@ -66,7 +66,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "web3" ];
 
   meta = with lib; {
-    description = "A python interface for interacting with the Ethereum blockchain and ecosystem";
+    description = "Python interface for interacting with the Ethereum blockchain and ecosystem";
     homepage = "https://web3py.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ hellwolf ];

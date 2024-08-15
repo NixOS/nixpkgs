@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-cim";
-  version = "3.9";
+  version = "3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cim";
     rev = "refs/tags/${version}";
-    hash = "sha256-UZ4mlshaKqZKoysvnGfcaoMOrMwfsN/qOJ8hrpMcQL0=";
+    hash = "sha256-7Mv8yiWEs/mj/JKDrD1BxT75tQr13VgGj0yHdRltcYM=";
   };
 
   build-system = [

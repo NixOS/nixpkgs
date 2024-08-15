@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.22.1";
+  version = "0.22.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "hbldh";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kBKNBVbEq1xHLu/gKUL2SwlA2WKjzqFVC5o4N+qnqLM=";
+    hash = "sha256-O8EvF+saJ0UBZ8MESM5gIRmk2wbA4HUDADiVUtXzXrY=";
   };
 
   postPatch = ''

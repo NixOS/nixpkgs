@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A small XML library";
+    description = "Small XML library";
     homepage = "https://www.msweet.org/mxml/";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

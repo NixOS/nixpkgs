@@ -4,12 +4,12 @@
   buildPythonPackage,
   cachecontrol,
   fetchFromGitHub,
+  fetchpatch,
   importlib-resources,
   mistune,
   mypy,
   mypy-extensions,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   rdflib,
   requests,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.5.20240410123758";
+  version = "8.5.20240503091721";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "schema_salad";
     rev = "refs/tags/${version}";
-    hash = "sha256-AgXqeiA4sP7KBnUpb2uMWq45G0LhJ5uLtORrOG4UuB0=";
+    hash = "sha256-VbEIkWzg6kPnJWqbvlfsD83oS0VQasGQo+pUIPiGjhU=";
   };
 
   postPatch = ''
@@ -56,6 +56,11 @@ buildPythonPackage rec {
     ]
     ++ cachecontrol.optional-dependencies.filecache
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+
+  patches = [ (fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/common-workflow-language/schema_salad/pull/840.patch";
+    hash = "sha256-fke75FCCn23LAMJ5bDWJpuBR6E9XIpjmzzXSbjqpxn8=";
+  } ) ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pycodegen;
 

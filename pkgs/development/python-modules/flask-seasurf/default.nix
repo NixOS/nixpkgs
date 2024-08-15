@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_seasurf" ];
 
   meta = with lib; {
-    description = "A Flask extension for preventing cross-site request forgery";
+    description = "Flask extension for preventing cross-site request forgery";
     homepage = "https://github.com/maxcountryman/flask-seasurf";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zhaofengli ];

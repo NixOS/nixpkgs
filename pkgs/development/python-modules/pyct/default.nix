@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyviz/pyct";
     changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

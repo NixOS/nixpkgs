@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "7.3.3";
+  version = "7.3.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QIvh24ZqnF8uF9HOuY0yt3QT/jHgJ2C916d+rBqezWQ=";
+    hash = "sha256-Ie309I19BhzASrmc3Ws1zV/BySc49AhFPNrNKQhTD0U=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

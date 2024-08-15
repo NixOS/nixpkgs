@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    sha256 = "sha256-Wgm2QdW4rg573soF/8HhDmlyN4S2cA0VWOejow464gU=";
+    hash = "sha256-Wgm2QdW4rg573soF/8HhDmlyN4S2cA0VWOejow464gU=";
   };
 
   depsBuildBuild = [ pkg-config ];

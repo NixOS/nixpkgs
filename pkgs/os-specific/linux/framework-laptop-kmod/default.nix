@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A kernel module that exposes the Framework Laptop (13, 16)'s battery charge limit and LEDs to userspace.";
+    description = "Kernel module that exposes the Framework Laptop (13, 16)'s battery charge limit and LEDs to userspace";
     homepage = "https://github.com/DHowett/framework-laptop-kmod";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ gaykitty ];
     platforms = platforms.linux;
   };

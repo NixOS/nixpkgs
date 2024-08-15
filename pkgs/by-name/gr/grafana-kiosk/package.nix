@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Kiosk Utility for Grafana";
     homepage = "https://github.com/grafana/grafana-kiosk";
+    changelog = "https://github.com/grafana/grafana-kiosk/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marcusramberg ];
     mainProgram = "grafana-kiosk";

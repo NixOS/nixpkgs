@@ -62,8 +62,8 @@ in
 , glib
 , gnum4
 , gtk3
-, icu
 , icu72
+, icu73
 , libGL
 , libGLU
 , libevent
@@ -254,8 +254,21 @@ buildStdenv.mkDerivation {
       hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
     })
   ]
+  ++ lib.optionals (lib.versionOlder version "122") [
+    ./bindgen-0.64-clang-18.patch
+  ]
   ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
     ./122.0-libvpx-mozbz1875201.patch
+  ]
+  ++ lib.optionals (lib.versionOlder version "123") [
+    (fetchpatch {
+      name = "clang-18.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
+      hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
+    })
+  ]
+  ++ lib.optionals (lib.versionOlder version "115.12") [
+    ./rust-1.78.patch
   ]
   ++ extraPatches;
 
@@ -474,7 +487,9 @@ buildStdenv.mkDerivation {
   ]
   # icu73 changed how it follows symlinks which breaks in the firefox sandbox
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
-  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+  # icu74 fails to build on 127 and older
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
+  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
   ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2

@@ -17,7 +17,7 @@
 
 buildDunePackage rec {
   pname = "magic-trace";
-  version = "1.2.1";
+  version = "1.2.3";
 
   minimalOCamlVersion = "4.12";
 
@@ -25,7 +25,7 @@ buildDunePackage rec {
     owner = "janestreet";
     repo = "magic-trace";
     rev = "v${version}";
-    hash = "sha256-/9TDjCG/06mhGyqbjAdUmk6fcaq9fNDqVSw51w5EEy4=";
+    hash = "sha256-cAoaAXZOeWNQh6emm17a9oCis8s4jJxPQMI/NfiUa7g=";
   };
 
   nativeBuildInputs = [

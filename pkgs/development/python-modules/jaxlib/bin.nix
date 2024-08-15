@@ -34,12 +34,12 @@ let
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
     [
-      cuda_cudart.lib # libcudart.so
-      cuda_cupti.lib # libcupti.so
-      cudnn.lib # libcudnn.so
-      libcufft.lib # libcufft.so
-      libcusolver.lib # libcusolver.so
-      libcusparse.lib # libcusparse.so
+      (lib.getLib cuda_cudart) # libcudart.so
+      (lib.getLib cuda_cupti) # libcupti.so
+      (lib.getLib cudnn) # libcudnn.so
+      (lib.getLib libcufft) # libcufft.so
+      (lib.getLib libcusolver) # libcusolver.so
+      (lib.getLib libcusparse) # libcusparse.so
     ]
   );
 
@@ -225,7 +225,7 @@ buildPythonPackage {
   inherit (jaxlib-build) pythonImportsCheck;
 
   meta = with lib; {
-    description = "XLA library for JAX";
+    description = "Prebuilt jaxlib backend from PyPi";
     homepage = "https://github.com/google/jax";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;

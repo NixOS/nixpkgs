@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/jonashaag/bjoern";
-    description = "A screamingly fast Python 2/3 WSGI server written in C";
+    description = "Screamingly fast Python 2/3 WSGI server written in C";
     license = licenses.bsd2;
     maintainers = with maintainers; [ cmcdragonkai ];
   };

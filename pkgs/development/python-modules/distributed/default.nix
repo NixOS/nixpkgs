@@ -11,7 +11,6 @@
   packaging,
   psutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -26,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.5.0";
+  version = "2024.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,17 +34,16 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-9W5BpBQHw1ZXCOWiFPeIlMns/Yys1gtdwQ4Lhd7qjK8=";
+    hash = "sha256-7Z/KKm9C/n4yFKv9KHmGhIUeddwCIZL1A/SBGJKDlbI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "versioneer[toml]==" "versioneer[toml]>=" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer
@@ -76,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "distributed" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
     changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   pythonOlder,
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.3.3";
+  version = "1.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Mako";
     inherit version;
-    hash = "sha256-4WwB2aucEfcpDu8c/vwJP7WkXuSj2gni/sLk0brlTnM=";
+    hash = "sha256-SNvCBWjB0naiaYs22Wj6dhYb8ScZSQfqb8WU+oH5Q7w=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -49,15 +50,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  disabledTests = lib.optionals isPyPy [
-    # https://github.com/sqlalchemy/mako/issues/315
-    "test_alternating_file_names"
-    # https://github.com/sqlalchemy/mako/issues/238
-    "test_file_success"
-    "test_stdin_success"
-    # fails on pypy2.7
-    "test_bytestring_passthru"
-  ];
+  disabledTests =
+    lib.optionals isPyPy [
+      # https://github.com/sqlalchemy/mako/issues/315
+      "test_alternating_file_names"
+      # https://github.com/sqlalchemy/mako/issues/238
+      "test_file_success"
+      "test_stdin_success"
+      # fails on pypy2.7
+      "test_bytestring_passthru"
+    ]
+    # https://github.com/sqlalchemy/mako/issues/408
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "test_future_import";
 
   meta = with lib; {
     description = "Super-fast templating language";

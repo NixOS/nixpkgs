@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib;
     {
-      description = "A Prometheus exporter for MongoDB including sharding, replication and storage engines";
+      description = "Prometheus exporter for MongoDB including sharding, replication and storage engines";
       homepage = "https://github.com/percona/mongodb_exporter";
       license = licenses.asl20;
       maintainers = with maintainers; [ undefined-moe ];

@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
   patches = [
     # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
+    # Avoid leaking the build timestamp
+    # https://sourceforge.net/p/refind/code/merge-requests/53/
+    ./0002-preserve-dates.patch
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -126,7 +129,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A graphical {,U}EFI boot manager";
+    description = "Graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
       computers, such as all Intel-based Macs and recent (most 2011
@@ -143,7 +146,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ AndersonTorres samueldr chewblacka ];
+    maintainers = with maintainers; [ AndersonTorres chewblacka ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };

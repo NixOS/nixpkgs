@@ -32,7 +32,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A simple, distributed, zero-configuration WireGuard mesh provider";
+    description = "Simple, distributed, zero-configuration WireGuard mesh provider";
     homepage = "https://webmeshproj.github.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ bbigras ];

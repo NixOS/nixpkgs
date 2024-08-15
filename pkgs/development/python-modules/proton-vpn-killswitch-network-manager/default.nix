@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Implementation of the proton-vpn-killswitch interface using Network Manager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-killswitch-network-manager";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

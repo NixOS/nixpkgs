@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.1.6";
+  version = "5.1.8";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.zst";
-    hash = "sha256-Ll0T+bgGXYbg/POJmCeDVjkTvaNuR/bxw9hQJJV+CQo=";
+    hash = "sha256-nnYk/nGbNGbl7Y39AueIltYA2fd43Gb1SmQu5VZRycM=";
   };
 
   cmakeFlags = [

@@ -20,9 +20,9 @@ buildPythonPackage rec {
   buildInputs = [ protobuf ];
 
   meta = {
-    description = "StarCraft II - client protocol.";
-    homepage = "https://github.com/Blizzard/sc2client-proto";
+    description = "StarCraft II - client protocol";
+    homepage = "https://github.com/Blizzard/s2client-proto";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

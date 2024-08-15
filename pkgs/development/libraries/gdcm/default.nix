@@ -6,6 +6,7 @@
 , vtk
 , ApplicationServices
 , Cocoa
+, DarwinTools # sw_vers
 , libiconv
 , enablePython ? false
 , python ? null
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.isDarwin DarwinTools;
 
   buildInputs = [
     expat
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     "TestFind"
     "gdcmscu-echo-dicomserver"
     "gdcmscu-find-dicomserver"
-    # seemingly ought to be be disabled when the test data submodule is not present:
+    # seemingly ought to be disabled when the test data submodule is not present:
     "TestvtkGDCMImageReader2_3"
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
   # a number of additional but much slower tests are enabled
 
   meta = with lib; {
-    description = "The grassroots cross-platform DICOM implementation";
+    description = "Grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.

@@ -39,6 +39,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
   dependencies = [
     numpy
     packaging
@@ -57,7 +64,5 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
     license = licenses.bsd3;
-    # Fails at build time
-    broken = stdenv.isDarwin;
   };
 }

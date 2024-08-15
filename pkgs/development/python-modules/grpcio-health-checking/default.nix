@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   fetchPypi,
   grpcio,
   protobuf,
@@ -9,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "grpcio-health-checking";
-  version = "1.62.2";
+  version = "1.65.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pE0eoeFRC1xiJl2toE2GYhuxSR113ph3E8nA6gBcEKg=";
+    pname = "grpcio_health_checking";
+    inherit version;
+    hash = "sha256-HoQfbbBaAFGmLMSNQN0tzJ5xdYS7GQSa1R+2cygbnEo=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,6 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "grpcio" ];
 
   pythonImportsCheck = [ "grpc_health" ];

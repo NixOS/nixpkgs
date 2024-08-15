@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python39 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3 }:
 
 stdenv.mkDerivation {
   pname = "monoid";
@@ -12,9 +12,17 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    (python39.withPackages (pp: with pp; [
+    (python3.withPackages (pp: with pp; [
       fontforge
     ]))
+  ];
+
+  patches = [
+    # port to python 3
+    (fetchpatch {
+      url = "https://salsa.debian.org/fonts-team/fonts-monoid/-/raw/master/debian/patches/0002-fontbuilder.py-Fix-FTBFS-with-non-int-bearing-value.patch";
+      hash = "sha256-IG3KXvOFZfi8dhVuKDYo0onl6ruEe24aFHBgSoMKf9c=";
+    })
   ];
 
   buildPhase = ''

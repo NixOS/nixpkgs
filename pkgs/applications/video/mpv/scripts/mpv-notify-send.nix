@@ -21,7 +21,8 @@ buildLua rec {
   patches = [
     # show title of online videos instead of url
     (fetchpatch {
-      url = "https://github.com/emilazy/mpv-notify-send/pull/6.patch";
+      name = "6.patch"; # https://github.com/emilazy/mpv-notify-send/pull/6
+      url = "https://github.com/emilazy/mpv-notify-send/commit/948347e14890e15e89cd1e069beb1140e2d01dce.patch";
       hash = "sha256-7aXQ8qeqG4yX0Uyn09xCIESnwPZsb6Frd7C49XgbpFw=";
     })
   ];
@@ -36,7 +37,7 @@ buildLua rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A Lua script for mpv to send notifications with notify-send";
+    description = "Lua script for mpv to send notifications with notify-send";
     homepage = "https://github.com/emilazy/mpv-notify-send";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ r3n3gad3p3arl ];

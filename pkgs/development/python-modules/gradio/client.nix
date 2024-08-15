@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   pythonOlder,
-  pythonRelaxDepsHook,
   # pyproject
   hatchling,
   hatch-requirements-txt,
@@ -15,7 +14,6 @@
   httpx,
   huggingface-hub,
   packaging,
-  requests,
   typing-extensions,
   websockets,
   # checkInputs
@@ -29,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "0.16.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,9 +36,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
+    # not to be confused with @gradio/client@${version}
     rev = "refs/tags/gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-SVUm9LrjYG0r3U1yOd3rctxVMYlnAOW+Opqy9c3osnw=";
+    hash = "sha256-l5WHNerSYNXrFGOpAqxxh0JLiFpatxq6a62q83tEavo=";
   };
   prePatch = ''
     cd client/python
@@ -57,7 +56,6 @@ buildPythonPackage rec {
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -97,7 +95,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = gitUpdater { rev-prefix = "@gradio/client@"; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "gradio_client@(.*)" ];
+  };
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";

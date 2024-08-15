@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchPypi,
   buildPythonPackage,
@@ -16,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rQSnQPNYr5SyeNbKoFAbnGb2X/8utrfWLa8gu93hy2w=";
+    hash = "sha256-rQSnQPNYr5SyeNbKoFAbnGb2X/8utrfWLa8gu93hy2w=";
   };
 
   buildInputs = [
@@ -30,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An enterprise-class Certificate Authority";
+    description = "Enterprise-class Certificate Authority";
     homepage = "https://github.com/dogtagpki/pki";
     license = licenses.gpl2;
     maintainers = with maintainers; [ s1341 ];

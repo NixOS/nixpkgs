@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/thombashi/tcolorpy";
-    description = "A library to apply true color for terminal text";
+    description = "Library to apply true color for terminal text";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.mit;
   };

@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
+    description = "Free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = "https://www.freeorion.org/";
-    license = with licenses; [ gpl2 cc-by-sa-30 ];
+    license = with licenses; [ gpl2Only cc-by-sa-30 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tex ];
   };

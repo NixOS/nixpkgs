@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/Nemo2011/bilibili-api/releases/tag/${version}";
-    description = "A python module providing convenient integration for various Bilibili API along with some additional common features";
+    description = "Python module providing convenient integration for various Bilibili API along with some additional common features";
     homepage = "https://nemo2011.github.io/bilibili-api";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ moraxyc ];

@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.openttd.org/";
     changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jcumming fpletz ];
   };

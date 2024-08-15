@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A material you color generation tool";
+    description = "Material you color generation tool";
     homepage = "https://github.com/InioX/matugen";
     changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Only;

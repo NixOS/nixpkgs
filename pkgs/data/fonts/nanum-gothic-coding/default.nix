@@ -20,10 +20,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A contemporary monospaced sans-serif typeface with a warm touch";
+    description = "Contemporary monospaced sans-serif typeface with a warm touch";
     homepage = "https://github.com/naver/nanumfont";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

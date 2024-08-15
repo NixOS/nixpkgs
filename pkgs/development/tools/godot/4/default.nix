@@ -19,7 +19,7 @@
 , alsa-lib
 , libpulseaudio
 , dbus
-, speechd
+, speechd-minimal
 , fontconfig
 , udev
 , withDebug ? false
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withPulseaudio libpulseaudio
   ++ lib.optional withDbus dbus
   ++ lib.optional withDbus dbus.lib
-  ++ lib.optional withSpeechd speechd
+  ++ lib.optional withSpeechd speechd-minimal
   ++ lib.optional withFontconfig fontconfig
   ++ lib.optional withFontconfig fontconfig.lib
   ++ lib.optional withUdev udev;

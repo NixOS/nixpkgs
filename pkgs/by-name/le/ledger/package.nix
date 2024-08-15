@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A double-entry accounting system with a command-line reporting interface";
+    description = "Double-entry accounting system with a command-line reporting interface";
     mainProgram = "ledger";
     homepage = "https://www.ledger-cli.org/";
     changelog = "https://github.com/ledger/ledger/raw/v${version}/NEWS.md";

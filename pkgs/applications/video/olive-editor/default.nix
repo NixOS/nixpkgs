@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     owner = "olive-editor";
     repo = "olive";
     rev = "2036fffffd0e24b7458e724b9084ae99c9507c64";
-    sha256 = "sha256-qee9/WTvTy5jWLowvZJOwAjrqznRhJR+u9dYsnCN/Qs=";
+    hash = "sha256-qee9/WTvTy5jWLowvZJOwAjrqznRhJR+u9dYsnCN/Qs=";
   };
 
   cmakeFlags = [

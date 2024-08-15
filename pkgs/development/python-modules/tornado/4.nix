@@ -35,7 +35,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "A web framework and asynchronous networking library";
+    description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = lib.licenses.asl20;
   };

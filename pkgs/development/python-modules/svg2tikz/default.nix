@@ -7,7 +7,6 @@
   inkex,
   lxml,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     "lxml"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

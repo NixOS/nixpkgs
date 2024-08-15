@@ -7,7 +7,6 @@
   copyDesktopItems,
   SDL2,
   libGL,
-  mesa,
   systemd,
   libpulseaudio,
   libselinux,

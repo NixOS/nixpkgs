@@ -18,6 +18,8 @@ in {
           geoclue2 to determine the current location.
         '';
       };
+      package = mkPackageOption pkgs "localtime" { };
+      geoclue2Package = mkPackageOption pkgs "geoclue2-with-demo-agent" { };
     };
   };
 
@@ -29,14 +31,14 @@ in {
     };
 
     # Install the polkit rules.
-    environment.systemPackages = [ pkgs.localtime ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.localtimed = {
       wantedBy = [ "multi-user.target" ];
       partOf = [ "localtimed-geoclue-agent.service" ];
       after = [ "localtimed-geoclue-agent.service" ];
       serviceConfig = {
-        ExecStart = "${pkgs.localtime}/bin/localtimed";
+        ExecStart = "${cfg.package}/bin/localtimed";
         Restart = "on-failure";
         Type = "exec";
         User = "localtimed";
@@ -48,7 +50,7 @@ in {
       partOf = [ "geoclue.service" ];
       after = [ "geoclue.service" ];
       serviceConfig = {
-        ExecStart = "${pkgs.geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
+        ExecStart = "${cfg.geoclue2Package}/libexec/geoclue-2.0/demos/agent";
         Restart = "on-failure";
         Type = "exec";
         User = "localtimed";

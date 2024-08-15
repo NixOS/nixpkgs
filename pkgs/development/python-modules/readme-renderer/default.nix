@@ -1,6 +1,5 @@
 {
   lib,
-  bleach,
   buildPythonPackage,
   cmarkgfm,
   docutils,

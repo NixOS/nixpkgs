@@ -15,16 +15,17 @@
 
 buildPythonPackage rec {
   pname = "brian2";
-  version = "2.6.0";
-  format = "setuptools";
+  version = "2.7.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "Brian2";
-    inherit version;
-    hash = "sha256-qYeIMn8l2V2Ckpj5AY7TWihFnfZ//JcP5VacUUfYCf4=";
+    inherit pname version;
+    hash = "sha256-d9GDWp8CGIjeprWf4TtchVd36gmo36HBRkBOLaRXbpo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cython
     jinja2
     numpy
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     sympy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-xdist
   ];
@@ -47,7 +48,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A clock-driven simulator for spiking neural networks";
+    description = "Clock-driven simulator for spiking neural networks";
     homepage = "https://briansimulator.org/";
     license = licenses.cecill21;
     maintainers = with maintainers; [ jiegec ];

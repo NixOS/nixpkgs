@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fan-made modernization of the classic visual novel Katawa Shoujo";
+    description = "Fan-made modernization of the classic visual novel Katawa Shoujo";
     homepage = "https://www.fhs.sh/projects";
     license = with lib.licenses; [
       # code

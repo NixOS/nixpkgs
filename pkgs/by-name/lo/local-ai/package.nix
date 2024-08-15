@@ -16,6 +16,7 @@
 , pkg-config
 , buildGoModule
 , makeWrapper
+, ncurses
 
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
@@ -60,7 +61,7 @@ let
     else if with_clblas then "clblas"
     else "";
 
-  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart libcufft;
 
   go-llama = effectiveStdenv.mkDerivation {
     name = "go-llama";
@@ -77,13 +78,12 @@ let
     ];
 
     buildInputs = [ ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
     nativeBuildInputs = [ cmake ]
-      # backward compatiblity with nixos-23.11
-      # use cuda_nvcc after release of nixos-24.05
-      ++ lib.optionals with_cublas [ cudatoolkit ];
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     dontUseCmakeConfigure = true;
 
@@ -94,13 +94,29 @@ let
     '';
   };
 
+  llama-cpp-rpc = (llama-cpp-grpc.overrideAttrs (prev: {
+    name = "llama-cpp-rpc";
+    cmakeFlags = prev.cmakeFlags ++ [
+      (lib.cmakeBool "GGML_AVX" false)
+      (lib.cmakeBool "GGML_AVX2" false)
+      (lib.cmakeBool "GGML_AVX512" false)
+      (lib.cmakeBool "GGML_FMA" false)
+      (lib.cmakeBool "GGML_F16C" false)
+    ];
+  })).override {
+    cudaSupport = false;
+    openclSupport = false;
+    blasSupport = false;
+    rpcSupport = true;
+  };
+
   llama-cpp-grpc = (llama-cpp.overrideAttrs (final: prev: {
     name = "llama-cpp-grpc";
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "c12452c7aec8a02264afc00196a13caa591a13ac";
-      hash = "sha256-Kji8dlz7OfhPeNXnYgBHzpGGMhCsRLJ9d+EFf77Q6Co=";
+      rev = "cb5fad4c6c2cbef92e9b8b63449e1cb7664e4846";
+      hash = "sha256-cIJuDC+MFLd5hkA1kUxuaw2dZagHqn5fi5Q2XKvDEII=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -117,11 +133,11 @@ let
     '';
     cmakeFlags = prev.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_SHARED_LIBS" false)
-      (lib.cmakeBool "LLAMA_AVX" enable_avx)
-      (lib.cmakeBool "LLAMA_AVX2" enable_avx2)
-      (lib.cmakeBool "LLAMA_AVX512" enable_avx512)
-      (lib.cmakeBool "LLAMA_FMA" enable_fma)
-      (lib.cmakeBool "LLAMA_F16C" enable_f16c)
+      (lib.cmakeBool "GGML_AVX" enable_avx)
+      (lib.cmakeBool "GGML_AVX2" enable_avx2)
+      (lib.cmakeBool "GGML_AVX512" enable_avx512)
+      (lib.cmakeBool "GGML_FMA" enable_fma)
+      (lib.cmakeBool "GGML_F16C" enable_f16c)
     ];
     buildInputs = prev.buildInputs ++ [
       protobuf # provides also abseil_cpp as propagated build input
@@ -158,7 +174,7 @@ let
   espeak-ng' = espeak-ng.overrideAttrs (self: {
     name = "espeak-ng'";
     inherit (go-piper) src;
-    sourceRoot = "source/espeak";
+    sourceRoot = "${go-piper.src.name}/espeak";
     patches = [ ];
     nativeBuildInputs = [ cmake ];
     cmakeFlags = (self.cmakeFlags or [ ]) ++ [
@@ -178,7 +194,7 @@ let
   piper-phonemize = stdenv.mkDerivation {
     name = "piper-phonemize";
     inherit (go-piper) src;
-    sourceRoot = "source/piper-phonemize";
+    sourceRoot = "${go-piper.src.name}/piper-phonemize";
     buildInputs = [ espeak-ng' onnxruntime ];
     nativeBuildInputs = [ cmake pkg-config ];
     cmakeFlags = [
@@ -191,7 +207,7 @@ let
   piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
     name = "piper-tts'";
     inherit (go-piper) src;
-    sourceRoot = "source/piper";
+    sourceRoot = "${go-piper.src.name}/piper";
     installPhase = null;
     postInstall = ''
       cp CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
@@ -253,15 +269,15 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "73d13ad19a8c9c4da4f405088a85169b1a171e66";
-      hash = "sha256-7g/J3a3behGgcJXy9ryAYXxgOYnsRMlGmux13re28AY=";
+      rev = "b29b3b29240aac8b71ce8e5a4360c1f1562ad66f";
+      hash = "sha256-vSd+AP9AexbG4wvdkk6wjxYQBZdKWGK2Ix7c86MUfB8=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
       ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     buildInputs = [ ]
-      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas libcufft ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
@@ -285,8 +301,8 @@ let
     src = fetchFromGitHub {
       owner = "go-skynet";
       repo = "go-bert.cpp";
-      rev = "6abe312cded14042f6b7c3cd8edf082713334a4d";
-      hash = "sha256-lh9cvXc032Eq31kysxFOkRd0zPjsCznRl0tzg9P2ygo=";
+      rev = "710044b124545415f555e4260d16b146c725a6e4";
+      hash = "sha256-UNrs3unYjvSzCVaVISFFBDD+s37lmN6/7ajmGNcYgrU=";
       fetchSubmodules = true;
     };
     buildFlags = [ "libgobert.a" ];
@@ -323,7 +339,7 @@ let
   go-tiny-dream-ncnn = ncnn.overrideAttrs (self: {
     name = "go-tiny-dream-ncnn";
     inherit (go-tiny-dream) src;
-    sourceRoot = "source/ncnn";
+    sourceRoot = "${go-tiny-dream.src.name}/ncnn";
     cmakeFlags = self.cmakeFlags ++ [
       (lib.cmakeBool "NCNN_SHARED_LIB" false)
       (lib.cmakeBool "NCNN_OPENMP" false)
@@ -372,18 +388,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.15.0";
+  version = "2.18.1";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-AjNgfZjVxlw0LtPbUTbJuLcUfqJdPzn6vOmUDz/v7Jc=";
+    hash = "sha256-hRrbGUUawQV4fqxAn3eFBvn4/lZ+NrKhxnGHqpljrec=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-+ZPZkOpaTsKrL2HDOEtAr8sT6uqTiQXo/XS+MBNZq5E=";
+    vendorHash = "sha256-uvko1PQWW5P+6cgmwVKocKBm5GndszqCsSbxlXANqJs=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -403,12 +419,23 @@ let
           -e 's;git clone.*go-tiny-dream$;${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream;' \
           -e 's, && git checkout.*,,g' \
           -e '/mod download/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-fallback/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
+
+      '' + lib.optionalString with_cublas ''
+        sed -i Makefile \
+          -e '/^CGO_LDFLAGS_WHISPER?=/ s;$;-L${libcufft}/lib -L${cuda_cudart}/lib;'
       '';
 
     postConfigure = ''
+      shopt -s extglob
       mkdir -p backend-assets/grpc
-      cp ${llama-cpp-grpc}/bin/*grpc-server backend-assets/grpc/llama-cpp
+      cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-avx2
+      cp ${llama-cpp-rpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
+
+      mkdir -p backend-assets/util
+      cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
     '';
 
     buildInputs = [ ]
@@ -423,6 +450,7 @@ let
       protoc-gen-go
       protoc-gen-go-grpc
       makeWrapper
+      ncurses # tput
     ]
     ++ lib.optionals with_cublas [ cuda_nvcc ];
 
@@ -481,7 +509,13 @@ let
     postFixup =
       let
         LD_LIBRARY_PATH = [ ]
-          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_cublas [
+          # driverLink has to be first to avoid loading the stub version of libcuda.so
+          # https://github.com/NixOS/nixpkgs/issues/320145#issuecomment-2190319327
+          addDriverRunpath.driverLink
+          (lib.getLib libcublas)
+          cuda_cudart
+        ]
           ++ lib.optionals with_clblas [ clblast ocl-icd ]
           ++ lib.optionals with_openblas [ openblas ]
           ++ lib.optionals with_tts [ piper-phonemize ];
@@ -496,7 +530,7 @@ let
       inherit
         go-tiny-dream go-rwkv go-bert go-llama gpt4all go-piper
         llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn espeak-ng' piper-phonemize
-        piper-tts';
+        piper-tts' llama-cpp-rpc;
     };
 
     passthru.features = {

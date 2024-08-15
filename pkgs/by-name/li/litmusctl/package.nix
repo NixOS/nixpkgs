@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "litmusctl";
-  version = "1.6.0";
+  version = "1.8.0";
 
   nativeBuildInputs = [
     installShellFiles
@@ -21,15 +21,15 @@ buildGoModule rec {
     owner = "litmuschaos";
     repo = "litmusctl";
     rev = "${version}";
-    hash = "sha256-aJcnK4VhtqVFaSUf0A40qGb0TBKiqlgkwY2nRdfTl2E=";
+    hash = "sha256-gLXRIfdNDauAn+cRsRDTZB0Doq8U0SCC2xz7bf6nOUk=";
   };
 
-  vendorHash = "sha256-U4dp2E2TZ3rds63PS6GzUVhb2qDSv92bf9JCkWpdLew=";
+  vendorHash = "sha256-7FYOQ89aUFPX+5NCPYKg+YGCXstQ6j9DK4V2mCgklu0=";
 
   postInstall = ''
     installShellCompletion --cmd litmusctl \
       --bash <($out/bin/litmusctl completion bash) \
-      --fish <($out/bin/listmusctl completion fish) \
+      --fish <($out/bin/litmusctl completion fish) \
       --zsh <($out/bin/litmusctl completion zsh)
   '';
 

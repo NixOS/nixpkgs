@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchurl
 , system
 , snapshotPath
 , autoPatchelfHook
@@ -137,7 +138,7 @@ let
       inherit pname version snapshot;
       src =
         lib.optionalString (src != "")
-          (builtins.fetchurl
+          (fetchurl
             {
               url = src;
               inherit sha256;

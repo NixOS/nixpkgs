@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec{
   pname = "makima";
-  version = "0.8.4";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "cyber-sushi";
     repo = "makima";
     rev = "v${version}";
-    hash = "sha256-11BSfnfD9JFsIwk7fHp4MM5/7UzZJHCHbOWisyQZS7s=";
+    hash = "sha256-esZCFMeIRoafR7vQbnyf3Mo18trVZdIy9rvAvTHfrLA=";
   };
 
-  cargoHash = "sha256-cvd1sGzCWi269y7k0JubOmyTaNhrALAq3vv3al2Dznc=";
+  cargoHash = "sha256-NXiK+cimQaYpzY3WSHUlYUWcXOLWQ5TwGuZKh+OB+go=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];

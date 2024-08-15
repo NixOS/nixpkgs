@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/alacarte";
-    description = "A menu editor for GNOME using the freedesktop.org menu specification";
+    description = "Menu editor for GNOME using the freedesktop.org menu specification";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     mainProgram = "alacarte";

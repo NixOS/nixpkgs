@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool that aims to expand all partitions in a specified zpool to fill the available space";
+    description = "Tool that aims to expand all partitions in a specified zpool to fill the available space";
     homepage = "https://github.com/DeterminateSystems/zpool-auto-expand-partitions";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;

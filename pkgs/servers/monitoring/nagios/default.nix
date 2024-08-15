@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nagios";
-  version = "4.5.2";
+  version = "4.5.3";
 
   src = fetchFromGitHub {
     owner = "NagiosEnterprises";
     repo = "nagioscore";
     rev = "refs/tags/nagios-${finalAttrs.version}";
-    hash = "sha256-LD572aR6g67pH3QllnLD3g0bnck+vlC/YTN83WamHRs=";
+    hash = "sha256-irr6JVCE3krcD3kScGR8maSbvsNPeQFqWm5oNl9OhQU=";
   };
 
   patches = [ ./nagios.patch ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A host, service and network monitoring program";
+    description = "Host, service and network monitoring program";
     homepage = "https://www.nagios.org/";
     changelog = "https://github.com/NagiosEnterprises/nagioscore/blob/nagios-${finalAttrs.version}/Changelog";
     license = lib.licenses.gpl2Only;

@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://epicsol.org";
-    description = "A IRC client that offers a great ircII interface";
+    description = "IRC client that offers a great ircII interface";
     license = licenses.bsd3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }
 

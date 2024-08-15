@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://ant.apache.org/";
-    description = "A Java-based build tool";
+    description = "Java-based build tool";
     mainProgram = "ant";
 
     longDescription = ''

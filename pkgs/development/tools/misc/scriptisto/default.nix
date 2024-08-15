@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scriptisto";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "igor-petruk";
     repo = "scriptisto";
     rev = "v${version}";
-    hash = "sha256-WQSgN1iX26tPPaJXLtU5Eo8kFahT6g+gZKJEDT6zj1E=";
+    hash = "sha256-iaDdOFmi4kfcJSjXOcGAFG9i1SdB+K5Qz4+NDaVQALY=";
   };
 
-  cargoHash = "sha256-trDf6N7PMjxlum8Rx2TxGePM6UPzMlTU6ATyGzmFoNc=";
+  cargoHash = "sha256-LIOsl9qPKJr/ykbXeaHP6lNHGUMcw3omniSWx2FkF28=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A language-agnostic \"shebang interpreter\" that enables you to write scripts in compiled languages";
+    description = "Language-agnostic \"shebang interpreter\" that enables you to write scripts in compiled languages";
     mainProgram = "scriptisto";
     homepage = "https://github.com/igor-petruk/scriptisto";
     changelog = "https://github.com/igor-petruk/scriptisto/releases/tag/${src.rev}";

@@ -106,7 +106,6 @@ class Driver:
         with self.logger.subtest(name):
             try:
                 yield
-                return True
             except Exception as e:
                 self.logger.error(f'Test "{name}" failed with error: "{e}"')
                 raise e

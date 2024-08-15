@@ -47,3 +47,22 @@ index 7d48491ec89a..c04543585588 100644
  install(TARGETS lldbIntelFeatures
 -  LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX})
 +  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+diff --git a/source/API/CMakeLists.txt b/source/API/CMakeLists.txt
+index 7d48491ec89a..c04543585588 100644
+--- a/source/API/CMakeLists.txt	2024-05-30 18:59:13.449269853 -0700
++++ b/source/API/CMakeLists.txt	2024-05-30 19:00:33.721858164 -0700
+@@ -115,14 +115,6 @@
+   ${option_install_prefix}
+ )
+ 
+-# lib/pythonX.Y/dist-packages/lldb/_lldb.so is a symlink to lib/liblldb.so,
+-# which depends on lib/libLLVM*.so (BUILD_SHARED_LIBS) or lib/libLLVM-10git.so
+-# (LLVM_LINK_LLVM_DYLIB). Add an additional rpath $ORIGIN/../../../../lib so
+-# that _lldb.so can be loaded from Python.
+-if(LLDB_ENABLE_PYTHON AND (BUILD_SHARED_LIBS OR LLVM_LINK_LLVM_DYLIB) AND UNIX AND NOT APPLE)
+-  set_property(TARGET liblldb APPEND PROPERTY INSTALL_RPATH "\$ORIGIN/../../../../lib${LLVM_LIBDIR_SUFFIX}")
+-endif()
+-
+ if(Python3_RPATH)
+   set_property(TARGET liblldb APPEND PROPERTY INSTALL_RPATH "${Python3_RPATH}")
+   set_property(TARGET liblldb APPEND PROPERTY BUILD_RPATH   "${Python3_RPATH}")

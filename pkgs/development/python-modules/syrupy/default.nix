@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Pytest Snapshot Test Utility";
     homepage = "https://github.com/tophat/syrupy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

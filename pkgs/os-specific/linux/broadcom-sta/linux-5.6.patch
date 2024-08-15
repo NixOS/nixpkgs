@@ -1,11 +1,13 @@
-From dd057e40a167f4febb1a7c77dd32b7d36056952c Mon Sep 17 00:00:00 2001
+From 24decccfadc0d95b973e6dd8d476ddde2f0a4b21 Mon Sep 17 00:00:00 2001
 From: Herman van Hazendonk <github.com@herrie.org>
 Date: Tue, 31 Mar 2020 17:09:55 +0200
-Subject: [PATCH] Add fixes for 5.6 kernel
+Subject: [PATCH 10/16] linuxPackages.broadcom_sta: fix build for kernel 5.6+
 
 Use ioremap instead of ioremap_nocache and proc_ops instead of file_operations on Linux kernel 5.6 and above.
 
 Signed-off-by: Herman van Hazendonk <github.com@herrie.org>
+
+Source: https://salsa.debian.org/Herrie82-guest/broadcom-sta/-/commit/247307926e5540ad574a17c062c8da76990d056f
 ---
  src/shared/linux_osl.c |  6 +++++-
  src/wl/sys/wl_linux.c  | 21 ++++++++++++++++++++-
@@ -29,10 +31,10 @@ index 6157d18..dcfc075 100644
  
  void
 diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
-index 0d05100..6d9dd0d 100644
+index 83b8859..646f1d9 100644
 --- a/src/wl/sys/wl_linux.c
 +++ b/src/wl/sys/wl_linux.c
-@@ -582,10 +582,17 @@ wl_attach(uint16 vendor, uint16 device, ulong regs,
+@@ -591,10 +591,17 @@ wl_attach(uint16 vendor, uint16 device, ulong regs,
  	}
  	wl->bcm_bustype = bustype;
  
@@ -41,7 +43,7 @@ index 0d05100..6d9dd0d 100644
 +		WL_ERROR(("wl%d: ioremap() failed\n", unit));
 +		goto fail;
 +	}
-+	#else 
++	#else
  	if ((wl->regsva = ioremap_nocache(dev->base_addr, PCI_BAR0_WINSZ)) == NULL) {
  		WL_ERROR(("wl%d: ioremap() failed\n", unit));
  		goto fail;
@@ -50,7 +52,7 @@ index 0d05100..6d9dd0d 100644
  
  	wl->bar1_addr = bar1_addr;
  	wl->bar1_size = bar1_size;
-@@ -772,8 +779,13 @@ wl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+@@ -781,8 +788,13 @@ wl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  	if ((val & 0x0000ff00) != 0)
  		pci_write_config_dword(pdev, 0x40, val & 0xffff00ff);
  		bar1_size = pci_resource_len(pdev, 2);
@@ -64,7 +66,7 @@ index 0d05100..6d9dd0d 100644
  	wl = wl_attach(pdev->vendor, pdev->device, pci_resource_start(pdev, 0), PCI_BUS, pdev,
  		pdev->irq, bar1_addr, bar1_size);
  
-@@ -3335,12 +3347,19 @@ wl_proc_write(struct file *filp, const char __user *buff, size_t length, loff_t
+@@ -3363,12 +3375,19 @@ wl_proc_write(struct file *filp, const char __user *buff, size_t length, loff_t
  }
  
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 10, 0)
@@ -85,3 +87,6 @@ index 0d05100..6d9dd0d 100644
  
  static int
  wl_reg_proc_entry(wl_info_t *wl)
+-- 
+2.45.1
+

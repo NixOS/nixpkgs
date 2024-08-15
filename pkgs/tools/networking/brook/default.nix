@@ -15,7 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/txthinking/brook";
-    description = "A cross-platform Proxy/VPN software";
+    description = "Cross-platform Proxy/VPN software";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ xrelkd ];
     mainProgram = "brook";

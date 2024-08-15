@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.103";
+  version = "9.2.114";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pmvdAdp/2uAsRMoDnp1naPVh47a0m8NNothbIFcptGI=";
+    hash = "sha256-zXPUuB/UyPabDZH370u0lf3LCf0oJNkrFtc08/O7RrI=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
     substituteInPlace pyvex_c/Makefile \
-      --replace 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
+      --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
   '';
 
   # No tests are available on PyPI, GitHub release has tests

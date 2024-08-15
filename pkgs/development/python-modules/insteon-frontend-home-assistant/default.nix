@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/pyinsteon/insteon-panel/releases/tag/${version}";
-    description = "The Insteon frontend for Home Assistant";
+    description = "Insteon frontend for Home Assistant";
     homepage = "https://github.com/pyinsteon/insteon-panel";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

@@ -51,7 +51,7 @@ let
   # list of packages which are for x86 (only multiPkgs, only for x86_64 hosts)
   multiPaths = multiPkgs pkgsi686Linux;
 
-  # base packages of the chroot
+  # base packages of the fhsenv
   # these match the host's architecture, glibc_multi is used for multilib
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
@@ -84,7 +84,7 @@ let
   '';
 
   etcProfile = writeText "profile" ''
-    export PS1='${name}-chrootenv:\u@\h:\w\$ '
+    export PS1='${name}-fhsenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
     export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
@@ -116,11 +116,15 @@ let
     export PKG_CONFIG_PATH=/usr/lib/pkgconfig
     export ACLOCAL_PATH=/usr/share/aclocal
 
+    # GStreamer searches for plugins relative to its real binary's location
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bd97973ce0f2c5495bcda5cccd4f7ef7dcb7febc
+    export GST_PLUGIN_SYSTEM_PATH_1_0=/usr/lib/gstreamer-1.0:/usr/lib32/gstreamer-1.0
+
     ${profile}
   '';
 
-  # Compose /etc for the chroot environment
-  etcPkg = runCommandLocal "${name}-chrootenv-etc" { } ''
+  # Compose /etc for the fhs environment
+  etcPkg = runCommandLocal "${name}-fhs-etc" { } ''
     mkdir -p $out/etc
     pushd $out/etc
 
@@ -211,7 +215,7 @@ let
                  then setupLibDirsTarget
                  else setupLibDirsMulti;
 
-  # the target profile is the actual profile that will be used for the chroot
+  # the target profile is the actual profile that will be used for the fhs
   setupTargetProfile = ''
     mkdir -m0755 usr
     pushd usr

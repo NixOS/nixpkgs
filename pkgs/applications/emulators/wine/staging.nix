@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, autoconf, hexdump, perl, python3, wineUnstable }:
+{ lib, stdenv, callPackage, autoconf, hexdump, perl, python3, wineUnstable, gitMinimal }:
 
 with callPackage ./util.nix {};
 
@@ -9,7 +9,7 @@ in assert lib.versions.majorMinor wineUnstable.version == lib.versions.majorMino
 
 (wineUnstable.override { wineRelease = "staging"; }).overrideAttrs (self: {
   buildInputs = build-inputs ([ "perl" "autoconf" "gitMinimal" ] ++ lib.optional stdenv.isLinux "util-linux") self.buildInputs;
-  nativeBuildInputs = [ autoconf hexdump perl python3 ] ++ self.nativeBuildInputs;
+  nativeBuildInputs = [ autoconf hexdump perl python3 gitMinimal ] ++ self.nativeBuildInputs;
 
   prePatch = self.prePatch or "" + ''
     patchShebangs tools

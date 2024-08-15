@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
-    description = "A typesetting system";
+    description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
       printed documents. Conceptually, SILE is similar to TeX—from

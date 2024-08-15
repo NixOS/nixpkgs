@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-dihWwGlQclfa2ke+1V5c6coqfFjjuMyI8QRzNdx33zQ=";
+    sha256 = "sha256-Qd3c51LeF04haZA4wK6loNZwX2a3ju+ljwdPYPoUKCQ=";
   };
 
   outputs = [ "out" "doc" "dev" ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   LDFLAGS = lib.optionals enableCuda [
     # Fake libnvidia-ml.so (the real one is deployed impurely)
-    "-L${cudaPackages.cuda_nvml_dev}/lib/stubs"
+    "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
   ];
 
   configureFlags = [

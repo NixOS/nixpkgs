@@ -36,18 +36,21 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "1.4.52";
+  version = "1.4.53";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-3JiPDOI6KDQwtBtISvHi3d+Rdm0pz1d9cnZu3+f4jYE=";
+    hash = "sha256-CpFvL0W/X7/4N/FpufAdud5o11LHBuox8m+8EailqXg=";
   };
 
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=44,<69.3" "setuptools"
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -102,7 +105,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }";
-    description = "The Database Toolkit for Python";
+    description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
     license = licenses.mit;
   };

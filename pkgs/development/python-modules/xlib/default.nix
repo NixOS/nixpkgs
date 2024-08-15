@@ -4,11 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   six,
+  setuptools,
   setuptools-scm,
   xorg,
-  python,
   mock,
-  nose,
   pytestCheckHook,
   util-linux,
 }:
@@ -16,7 +15,9 @@
 buildPythonPackage rec {
   pname = "xlib";
   version = "0.33";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "python-xlib";
@@ -36,10 +37,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-    nose
     util-linux
     xorg.xauth
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   disabledTestPaths = [
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Fully functional X client library for Python programs";
     homepage = "https://github.com/python-xlib/python-xlib";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pipetools" ];
 
   meta = {
-    description = "A library that enables function composition similar to using Unix pipes";
+    description = "Library that enables function composition similar to using Unix pipes";
     homepage = "https://0101.github.io/pipetools/";
     license = lib.licenses.mit;
   };

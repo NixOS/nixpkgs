@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "bitmagnet";
-  version = "0.8.0";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${version}";
-    hash = "sha256-P5GfPRIrwLLMBRgoN6d092HiThMghEj1zcaf6BU+IWU=";
+    hash = "sha256-so9GD9hyGfuqqYq61OD1WJXba22cR4msOPp1wLI5vAU=";
   };
 
-  vendorHash = "sha256-exKQTsyP7LL63WHZ8/WchLh4y0Oj9LC4lxiZTOfWARU=";
+  vendorHash = "sha256-aauXgHPZbSiTW9utuHXzJr7GsWs/2aFiGuukA/B9BRc=";
 
   ldflags = [ "-s" "-w" "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}" ];
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
+    description = "Self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
     longDescription = ''
       A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration.
     '';

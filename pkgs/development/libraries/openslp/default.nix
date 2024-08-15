@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.openslp.org/";
-    description = "An open-source implementation of the IETF Service Location Protocol";
+    description = "Open-source implementation of the IETF Service Location Protocol";
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.bsd3;
     platforms = platforms.all;

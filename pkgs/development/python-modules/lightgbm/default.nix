@@ -34,19 +34,19 @@
   cudaPackages,
 }:
 
-assert gpuSupport -> cudaSupport != true;
-assert cudaSupport -> gpuSupport != true;
+assert gpuSupport -> !cudaSupport;
+assert cudaSupport -> !gpuSupport;
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "4.3.0";
+  version = "4.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AG9XhKm87kPlp+lD3E8C3hui7np68e5fGQ04Pztsnr4=";
+    hash = "sha256-4c17rwMY1OMIomV1pjpGNfCN+GatNiKp2OPXHZY3obo=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +109,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lightgbm" ];
 
   meta = {
-    description = "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
+    description = "Fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
     homepage = "https://github.com/Microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;

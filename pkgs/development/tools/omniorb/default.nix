@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A robust high performance CORBA ORB for C++ and Python";
+    description = "Robust high performance CORBA ORB for C++ and Python";
     longDescription = ''
       omniORB is a robust high performance CORBA ORB for C++ and Python.
       It is freely available under the terms of the GNU Lesser General Public License

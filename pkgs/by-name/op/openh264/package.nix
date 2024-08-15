@@ -39,10 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.openh264.org";
-    description = "A codec library which supports H.264 encoding and decoding";
+    description = "Codec library which supports H.264 encoding and decoding";
     changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    # See meson.build
+    platforms = lib.platforms.windows ++ lib.intersectLists
+      (lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64 ++ lib.platforms.loongarch64)
+      (lib.platforms.linux ++ lib.platforms.darwin);
   };
 })

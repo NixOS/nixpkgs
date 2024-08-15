@@ -65,10 +65,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A logging replacement for Python";
+    description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
     changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

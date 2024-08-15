@@ -5,6 +5,7 @@
 , alsa-lib
 , autoreconfHook
 , avahi
+, curl
 , dbus
 , faad2
 , fetchpatch
@@ -15,6 +16,7 @@
 , freefont_ttf
 , freetype
 , fribidi
+, genericUpdater
 , gnutls
 , libSM
 , libXext
@@ -78,6 +80,7 @@
 , wayland
 , wayland-protocols
 , wrapGAppsHook3
+, writeShellScript
 , xcbutilkeysyms
 , zlib
 
@@ -98,11 +101,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.20";
+  version = "3.0.21";
 
   src = fetchurl {
     url = "https://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rccoW00nIc3fQOtScMraKqoQozTLVG/VWgY1NEe6KbU=";
+    hash = "sha256-JNu+HX367qCZTV3vC73iABdzRxNtv+Vz9bakzuJa+7A=";
   };
 
   nativeBuildInputs = [
@@ -289,11 +292,17 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "vlc-versionLister" ''
+      ${curl}/bin/curl -s https://get.videolan.org/vlc/ | sed -En 's/^.*href="([0-9]+(\.[0-9]+)+)\/".*$/\1/p'
+    '';
+  };
+
   meta = {
     description = "Cross-platform media player and streaming server";
     homepage = "https://www.videolan.org/vlc/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres alois31 ];
     platforms = lib.platforms.linux;
   };
 })

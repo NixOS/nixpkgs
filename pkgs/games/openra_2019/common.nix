@@ -4,6 +4,8 @@
 { lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
 , lua, mono, python3
 , libGL, freetype, openal, SDL2
+# It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
+# rather than having to look to the logs why it is not starting.
 , zenity
 }:
 

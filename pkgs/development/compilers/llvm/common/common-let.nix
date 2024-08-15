@@ -4,7 +4,8 @@
 , gitRelease ? null
 , officialRelease ? null
 , monorepoSrc' ? null
-}:
+, version ? null,
+}@args:
 
 rec {
   llvm_meta = {
@@ -27,11 +28,11 @@ rec {
   releaseInfo =
     if gitRelease != null then rec {
       original = gitRelease;
-      release_version = original.version;
+      release_version = args.version or original.version;
       version = gitRelease.rev-version;
     } else rec {
       original = officialRelease;
-      release_version = original.version;
+      release_version = args.version or original.version;
       version =
         if original ? candidate then
           "${release_version}-${original.candidate}"

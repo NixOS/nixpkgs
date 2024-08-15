@@ -1,25 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  nose,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "0.7.0";
-  format = "setuptools";
   pname = "iptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1sp2v76qqsgqjk0vqfbm2s4sc4mi0gkkpzjnvwih3ymmidilz2hi";
+  src = fetchFromGitHub {
+    owner = "bd808";
+    repo = "python-iptools";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-340Wc4QGwUqEEANM5EQzFaXxIWVf2fDr4qfCuxNEVBQ=";
   };
 
-  buildInputs = [ nose ];
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "iptools" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests/iptools/iptools_test.py" ];
 
   meta = with lib; {
     description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting";
-    homepage = "https://pypi.python.org/pypi/iptools";
+    homepage = "https://github.com/bd808/python-iptools";
     license = licenses.bsd0;
   };
 }

@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "Chatty";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Ywed/8PhOgmzcka+5dyxjmWTcDBPF90LW+C2eeQmyLo=";
+    hash = "sha256-1CHreTkw1C3tc6vOCG+7Y/u4R/xTFOnlI4mcxjY/alY=";
   };
 
   nativeBuildInputs = [

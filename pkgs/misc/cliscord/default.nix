@@ -4,7 +4,6 @@
 , openssl
 , pkg-config
 , fetchFromGitHub
-, fetchpatch
 , Security
 }:
 

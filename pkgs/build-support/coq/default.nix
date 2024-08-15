@@ -138,10 +138,9 @@ stdenv.mkDerivation (removeAttrs ({
   '';
   installPhase = ''
     runHook preInstall
-    dune install ${opam-name} --prefix=$out
-    mv $out/lib/coq $out/lib/TEMPORARY
+    dune install --prefix=$out --libdir $OCAMLFIND_DESTDIR ${opam-name}
     mkdir $out/lib/coq/
-    mv $out/lib/TEMPORARY $out/lib/coq/${coq.coq-version}
+    mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
     runHook postInstall
   '';
 })

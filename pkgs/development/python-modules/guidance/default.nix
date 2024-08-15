@@ -95,7 +95,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A guidance language for controlling large language models";
+    description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
     changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.rev}";
     license = licenses.mit;

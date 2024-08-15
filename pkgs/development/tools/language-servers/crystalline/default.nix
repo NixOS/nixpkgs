@@ -40,7 +40,7 @@ crystal.buildCrystalPackage {
   '';
 
   meta = with lib; {
-    description = "A Language Server Protocol implementation for Crystal";
+    description = "Language Server Protocol implementation for Crystal";
     mainProgram = "crystalline";
     homepage = "https://github.com/elbywan/crystalline";
     license = licenses.mit;

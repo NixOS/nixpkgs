@@ -5,7 +5,7 @@
 , cairo
 , dconf
 , glib
-, gnome
+, gnome-common
 , gtk3
 , libwnck
 , libX11
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    gnome.gnome-common
+    gnome-common
     libxml2 # xmllint
     pkg-config
     vala

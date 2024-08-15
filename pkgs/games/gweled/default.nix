@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Bejeweled clone game";
     mainProgram = "gweled";
     homepage = "https://gweled.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ ];
   };

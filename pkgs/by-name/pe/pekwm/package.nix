@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.pekwm.se/";
-    description = "A lightweight window manager";
+    description = "Lightweight window manager";
     longDescription = ''
       pekwm is a window manager that once upon a time was based on the aewm++
       window manager, but it has evolved enough that it no longer resembles

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
+{ lib, stdenv, fetchurl, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
 , coreutils, python3, makeWrapper, nixosTests }:
 
 let

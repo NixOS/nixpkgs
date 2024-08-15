@@ -1,6 +1,6 @@
 let
   genericBuild =
-  { pkgs, lib, stdenv, fetchFromGitHub, fetchpatch
+  { pkgs, lib, stdenv, fetchFromGitHub
   , autoreconfHook269, util-linux, nukeReferences, coreutils
   , perl
   , configFile ? "all"
@@ -30,7 +30,7 @@ let
   , isUnstable ? false
   , latestCompatibleLinuxPackages
   , kernelCompatible ? null
-  , maintainers ? (with lib.maintainers; [ amarshall adamcstephens ])
+  , maintainers ? (with lib.maintainers; [ amarshall ])
   , tests
   }@innerArgs:
 

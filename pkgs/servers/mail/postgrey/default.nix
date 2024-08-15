@@ -16,7 +16,7 @@ in runCommand name {
     sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
   };
   meta = with lib; {
-    description = "A postfix policy server to provide greylisting";
+    description = "Postfix policy server to provide greylisting";
     homepage = "https://postgrey.schweikert.ch/";
     platforms = postfix.meta.platforms;
     license = licenses.gpl2Plus;

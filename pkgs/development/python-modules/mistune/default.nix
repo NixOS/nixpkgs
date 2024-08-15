@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/lepture/mistune/blob/${src.rev}/docs/changes.rst";
-    description = "A sane Markdown parser with useful plugins and renderers";
+    description = "Sane Markdown parser with useful plugins and renderers";
     homepage = "https://github.com/lepture/mistune";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];

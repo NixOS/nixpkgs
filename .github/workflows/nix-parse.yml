@@ -10,6 +10,7 @@ on:
 
 jobs:
   tests:
+    name: nix-files-parseable-check
     runs-on: ubuntu-latest
     if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
@@ -24,12 +25,12 @@ jobs:
         if [[ -s "$HOME/changed_files" ]]; then
           echo "CHANGED_FILES=$HOME/changed_files" > "$GITHUB_ENV"
         fi
-    - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         # pull_request_target checks out the base branch by default
         ref: refs/pull/${{ github.event.pull_request.number }}/merge
       if: ${{ env.CHANGED_FILES && env.CHANGED_FILES != '' }}
-    - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
+    - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
       with:
         nix_path: nixpkgs=channel:nixpkgs-unstable
     - name: Parse all changed or added nix files

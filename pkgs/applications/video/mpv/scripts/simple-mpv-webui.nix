@@ -24,7 +24,7 @@ buildLua rec {
   passthru.scriptName = "webui";
 
   meta = with lib; {
-    description = "A web based user interface with controls for the mpv mediaplayer";
+    description = "Web based user interface with controls for the mpv mediaplayer";
     homepage = "https://github.com/open-dynaMIX/simple-mpv-webui";
     maintainers = with maintainers; [
       cript0nauta

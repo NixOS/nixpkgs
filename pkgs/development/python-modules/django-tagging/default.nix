@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ django ];
 
   meta = {
-    description = "A generic tagging application for Django projects";
+    description = "Generic tagging application for Django projects";
     homepage = "https://github.com/Fantomas42/django-tagging";
   };
 }

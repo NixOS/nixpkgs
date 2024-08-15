@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  unittestCheckHook,
   click,
 }:
 
@@ -17,11 +17,17 @@ buildPythonPackage rec {
     sha256 = "0np2y4jcir4a4j18wws7yzkz2zj6nqhdhn41rpq8pyskg6wrgfx7";
   };
 
-  buildInputs = [ nose ];
   propagatedBuildInputs = [ click ];
 
+  nativeCheckInputs = [ unittestCheckHook ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-v"
+  ];
+
   meta = with lib; {
-    description = "An Early-Algorithm Context-free grammar Parser";
+    description = "Early-Algorithm Context-free grammar Parser";
     mainProgram = "spark-parser-coverage";
     homepage = "https://github.com/rocky/python-spark";
     license = licenses.mit;

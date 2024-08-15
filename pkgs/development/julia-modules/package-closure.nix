@@ -42,8 +42,9 @@ let
 
   resolveCode1_8 = ''
     import Pkg.API: handle_package_input!
-    import Pkg.Types: PRESERVE_NONE, project_deps_resolve!, registry_resolve!, stdlib_resolve!, ensure_resolved
+    import Pkg.Types: PRESERVE_NONE, UUID, VersionSpec, project_deps_resolve!, registry_resolve!, stdlib_resolve!, ensure_resolved
     import Pkg.Operations: _resolve, assert_can_add, update_package_add
+    import TOML
 
     foreach(handle_package_input!, pkgs)
 
@@ -54,6 +55,18 @@ let
     for pkg in pkgs
       if pkg.name in keys(overrides)
         pkg.path = overrides[pkg.name]
+
+        # Try to read the UUID from $(pkg.path)/Project.toml. If successful, put the package into ctx.env.project.deps.
+        # This is necessary for the ensure_resolved call below to succeed, and will allow us to use an override even
+        # if it does not appear in the registry.
+        # See https://github.com/NixOS/nixpkgs/issues/279853
+        project_toml = joinpath(pkg.path, "Project.toml")
+        if isfile(project_toml)
+          toml_data = TOML.parsefile(project_toml)
+          if haskey(toml_data, "uuid")
+            ctx.env.project.deps[pkg.name] = UUID(toml_data["uuid"])
+          end
+        end
       end
     end
 

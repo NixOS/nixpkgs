@@ -1,31 +1,38 @@
-{ stdenv
-, hare
-, scdoc
-, lib
-, fetchFromGitea
-, nix-update-script
+{
+  fetchFromGitea,
+  fetchpatch,
+  hareHook,
+  lib,
+  nix-update-script,
+  scdoc,
+  stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-toml";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lunacb";
     repo = "hare-toml";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-r8T7Gy9c5polP+R12q0QRy4075nfGssDnNPQ8ARx/0M=";
+    hash = "sha256-MfflJElDMu15UBuewssqhCEsNtzmN/H421H4HV+JCWc=";
   };
+
+  patches = [
+    # Update strconv module functions for 0.24.2
+    (fetchpatch {
+      url = "https://codeberg.org/lunacb/hare-toml/commit/9849908ba1fd3457abd6c708272ecb896954d2bc.patch";
+      hash = "sha256-herJZXJ8uusTO2b7Ddby2chIvDRuAPDFOPEt+wotTA0=";
+    })
+  ];
 
   nativeBuildInputs = [
     scdoc
-    hare
+    hareHook
   ];
 
-  makeFlags = [
-    "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   checkTarget = "check_local";
 
@@ -36,10 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A TOML implementation for Hare";
+    description = "TOML implementation for Hare";
     homepage = "https://codeberg.org/lunacb/hare-toml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza ];
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })

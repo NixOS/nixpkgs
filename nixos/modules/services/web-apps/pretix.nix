@@ -63,7 +63,7 @@ in
   };
 
   options.services.pretix = {
-    enable = mkEnableOption "Pretix, a ticket shop application for conferences, festivals, concerts, etc.";
+    enable = mkEnableOption "Pretix, a ticket shop application for conferences, festivals, concerts, etc";
 
     package = mkPackageOption pkgs "pretix" { };
 
@@ -249,7 +249,7 @@ in
             };
 
             host = mkOption {
-              type = with types; nullOr types.path;
+              type = with types; nullOr path;
               default = if cfg.settings.database.backend == "postgresql" then "/run/postgresql" else null;
               defaultText = literalExpression ''
                 if config.services.pretix.settings..database.backend == "postgresql" then "/run/postgresql"
@@ -310,7 +310,7 @@ in
               type = types.str;
               default = "redis+socket://${config.services.redis.servers.pretix.unixSocket}?virtual_host=1";
               defaultText = literalExpression ''
-                optionalString config.services.pretix.celery.enable "redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=1"
+                redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=1
               '';
               description = ''
                 URI to the celery backend used for the asynchronous job queue.
@@ -321,7 +321,7 @@ in
               type = types.str;
               default = "redis+socket://${config.services.redis.servers.pretix.unixSocket}?virtual_host=2";
               defaultText = literalExpression ''
-                optionalString config.services.pretix.celery.enable "redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=2"
+                redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=2
               '';
               description = ''
                 URI to the celery broker used for the asynchronous job queue.
@@ -535,9 +535,10 @@ in
           fi
         '';
         serviceConfig = {
-          TimeoutStartSec = "5min";
+          TimeoutStartSec = "15min";
           ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
           RuntimeDirectory = "pretix";
+          Restart = "on-failure";
         };
       };
 
@@ -559,7 +560,10 @@ in
           "postgresql.service"
         ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
+        serviceConfig = {
+          ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
+          Restart = "on-failure";
+        };
       };
 
       nginx.serviceConfig.SupplementaryGroups = mkIf cfg.nginx.enable [ "pretix" ];

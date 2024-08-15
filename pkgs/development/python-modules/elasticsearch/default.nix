@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch";
-  version = "8.13.0";
+  version = "8.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5Ovrsi0J8O+DnCa2qpjhnM1ja8t38IwStWKwLKzV50Q=";
+    hash = "sha256-qiSQAp3Zb0AVszPBgnqiH9bApNIjsA37D+kzuNCaURs=";
   };
 
   nativeBuildInputs = [ elastic-transport ];

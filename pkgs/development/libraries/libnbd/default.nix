@@ -4,6 +4,7 @@
 , bash-completion
 , pkg-config
 , perl
+, buildPythonBindings ? false, python3
 , libxml2
 , fuse
 , fuse3
@@ -23,7 +24,8 @@ stdenv.mkDerivation rec {
     bash-completion
     pkg-config
     perl
-  ];
+  ]
+    ++ lib.optionals buildPythonBindings [ python3 ];
 
   buildInputs = [
     fuse
@@ -32,7 +34,15 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  configureFlags = lib.optionals buildPythonBindings [ "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}" ];
+
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
+
+  postInstall = lib.optionalString buildPythonBindings ''
+    LIBNBD_PYTHON_METADATA='${placeholder "out"}/${python3.sitePackages}/nbd-${version}.dist-info/METADATA'
+    install -Dm644 -T ${./libnbd-metadata} $LIBNBD_PYTHON_METADATA
+    substituteAllInPlace $LIBNBD_PYTHON_METADATA
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/nbdkit/libnbd";
@@ -59,5 +69,4 @@ stdenv.mkDerivation rec {
 }
 # TODO: package the 1.6-stable version too
 # TODO: git version needs ocaml
-# TODO: bindings for go, ocaml and python
-
+# TODO: bindings for go and ocaml

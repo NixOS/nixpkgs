@@ -5,6 +5,7 @@
   cmake,
   fetchFromGitHub,
   gtkmm3,
+  libGL,
   libX11,
   libXdmcp,
   libXext,
@@ -31,14 +32,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snes9x" + lib.optionalString withGtk "-gtk";
-  version = "1.62.3-unstable-2024-04-22";
+  version = "1.63";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
-    rev = "582128bce7ccf4e3cf7848ae9f6a729a1ebad4c4";
+    rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-fJ1g/L7oA9bhEawTsWjfLl1dDIKEGI+pcpWQCTutyR8=";
+    hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-avx2"
   ];
 
+  postPatch = ''
+    substituteInPlace external/glad/src/egl.c \
+      --replace-fail libEGL.so.1 "${lib.getLib libGL}/lib/libEGL.so.1"
+    substituteInPlace external/glad/src/glx.c \
+      --replace-fail libGL.so.1 ${lib.getLib libGL}/lib/libGL.so.1
+  '';
+
   preConfigure = ''
     cd ${if withGtk then "gtk" else "unix"}
   '';
@@ -101,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  enableParallelBuilding = true;
 
   meta = let
     interface = if withGtk then "GTK" else "X11";
@@ -124,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
         AndersonTorres
         qknight
         thiagokokada
+        sugar700
       ];
       platforms = lib.platforms.unix;
       broken = (withGtk && stdenv.isDarwin);

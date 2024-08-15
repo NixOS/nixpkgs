@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, libjack2, libsndfile, xorg, freetype
-, libxkbcommon, cairo, glib, gnome, flac, libogg, libvorbis, libopus, cmake
+, libxkbcommon, cairo, glib, zenity, flac, libogg, libvorbis, libopus, cmake
 , pango, pkg-config, catch2
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/G9tvJ4AcBSTmo44xDDKf6et1nSn/FV5m27ztDu10kI=";
+    hash = "sha256-/G9tvJ4AcBSTmo44xDDKf6et1nSn/FV5m27ztDu10kI=";
     fetchSubmodules = true;
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     cairo
     glib
-    gnome.zenity
+    zenity
     freetype
     pango
   ];
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
 
     substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
-      --replace 'zenitypath = "zenity"' 'zenitypath = "${gnome.zenity}/bin/zenity"'
+      --replace 'zenitypath = "zenity"' 'zenitypath = "${zenity}/bin/zenity"'
     substituteInPlace plugins/editor/src/editor/NativeHelpers.cpp \
-      --replace '/usr/bin/zenity' '${gnome.zenity}/bin/zenity'
+      --replace '/usr/bin/zenity' '${zenity}/bin/zenity'
   '';
 
   cmakeFlags = [ "-DSFIZZ_TESTS=ON" ];

@@ -1,10 +1,10 @@
 { appimageTools, fetchurl, lib }:
 let
   pname = "protonup-qt";
-  version = "2.9.2";
+  version = "2.10.2";
   src = fetchurl {
     url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
-    hash = "sha256-d1UjyhU7BezOoQZBnmrk96gD0MbYST0XR+PWVYmvGFQ=";
+    hash = "sha256-WWLAA5FryvqwgEQysnE1w2k9Wq4y7yNJ4Drojg1SKYg=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -24,7 +24,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     homepage = "https://davidotek.github.io/protonup-qt/";
-    description = "Install and manage Proton-GE and Luxtorpeda for Steam and Wine-GE for Lutris with this graphical user interface.";
+    description = "Install and manage Proton-GE and Luxtorpeda for Steam and Wine-GE for Lutris with this graphical user interface";
     license = licenses.gpl3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "protonup-qt";

@@ -43,8 +43,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "A very high level, goal-directed, object-oriented, general purpose applications language";
-    maintainers = with maintainers; [ vrthra ];
+    description = "Very high level, goal-directed, object-oriented, general purpose applications language";
+    maintainers = [ ];
     platforms = platforms.linux;
     license = licenses.gpl2;
     homepage = "http://unicon.org";

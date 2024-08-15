@@ -9,7 +9,6 @@
   oldest-supported-numpy,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   qdldl,
   scipy,
   setuptools-scm,
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     cmake
     oldest-supported-numpy
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "scipy" ];
@@ -67,7 +65,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "The Operator Splitting QP Solver";
+    description = "Operator Splitting QP Solver";
     longDescription = ''
       Numerical optimization package for solving problems in the form
         minimize        0.5 x' P x + q' x

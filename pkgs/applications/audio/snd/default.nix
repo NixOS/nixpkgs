@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snd";
-  version = "24.4";
+  version = "24.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
-    sha256 = "sha256-nP4ngNUQvveSQBEqXlzYdaqD0SGzTDPwIiWhSabRu+8=";
+    sha256 = "sha256-Y497KAlUXtWhkrCd1QrqJkvWGwnzZfYRKaALiEo/7EI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ccrma.stanford.edu/software/snd/";
     platforms = platforms.unix;
     license = licenses.free;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "snd";
   };
 }

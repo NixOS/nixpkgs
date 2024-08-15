@@ -8,15 +8,18 @@
   rustPlatform,
 
   cups,
+  ffmpeg,
   firefox-unwrapped,
   libcanberra-gtk3,
   libglvnd,
   libnotify,
+  libpulseaudio,
   libva,
   mesa,
   nixosTests,
   openssl,
   pciutils,
+  pipewire,
   pkg-config,
   stdenv,
   udev,
@@ -68,11 +71,14 @@ rustPlatform.buildRustPackage rec {
       libs =
         lib.optionals stdenv.isLinux [
           cups
+          ffmpeg
           libglvnd
           libnotify
+          libpulseaudio
           libva
           mesa
           pciutils
+          pipewire
           udev
           xorg.libXScrnSaver
         ]
@@ -120,7 +126,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.firefoxpwa = nixosTests.firefoxpwa;
 
   meta = {
-    description = "A tool to install, manage and use Progressive Web Apps (PWAs) in Mozilla Firefox (native component)";
+    description = "Tool to install, manage and use Progressive Web Apps (PWAs) in Mozilla Firefox (native component)";
     longDescription = ''
       Progressive Web Apps (PWAs) are web apps that use web APIs and features along
       with progressive enhancement strategy to bring a native app-like user experience

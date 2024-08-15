@@ -7,6 +7,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = _: super: {
       pillow = super.pillow.overridePythonAttrs rec {
         version = "9.5.0";
@@ -70,7 +71,7 @@ python.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "textual_paint" ];
 
   meta = with lib; {
-    description = "A TUI image editor inspired by MS Paint";
+    description = "TUI image editor inspired by MS Paint";
     homepage = "https://github.com/1j01/textual-paint";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

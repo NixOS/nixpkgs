@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.17.8";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QHTVNrPglNDT9CUQWwc6oD7ttwEUBq8WIX49DiAXf8s=";
+    hash = "sha256-lZCD8hBe6SKKjTvEKNg/lr7NXrAPqFQoh9iQg0O6jhc=";
   };
 
-  vendorHash = "sha256-6Kj1kHKXbbPMr9thkDTmGYbZvCSW7CvSzASpk6agEpI=";
+  vendorHash = "sha256-FobBn7rbRVfnW8Zd982vkSuKpPj4gGK4b41o9OK/CCY=";
 
   ldflags = [
     "-s"
@@ -44,7 +44,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A bootstrapping and management tool for k0s clusters.";
+    description = "Bootstrapping and management tool for k0s clusters";
     homepage = "https://k0sproject.io/";
     license = licenses.asl20;
     mainProgram = "k0sctl";

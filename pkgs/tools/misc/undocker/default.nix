@@ -28,7 +28,7 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://git.jakstys.lt/motiejus/undocker";
-    description = "A CLI tool to convert a Docker image to a flattened rootfs tarball";
+    description = "CLI tool to convert a Docker image to a flattened rootfs tarball";
     license = licenses.asl20;
     maintainers = with maintainers; [ jordanisaacs motiejus ];
     mainProgram = "undocker";

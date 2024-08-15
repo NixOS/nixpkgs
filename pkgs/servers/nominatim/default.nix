@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     repo = "Nominatim";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-GPMDbvTPl9SLpZi5gyRAPQ84NSTIRoSfGJeqWs1e9Oo=";
+    hash = "sha256-GPMDbvTPl9SLpZi5gyRAPQ84NSTIRoSfGJeqWs1e9Oo=";
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,7 @@ perlPackages.buildPerlPackage rec {
   '';
 
   meta = with lib; {
-    description = "a PostgreSQL clone of `mytop', which in turn is a `top' clone for MySQL";
+    description = "PostgreSQL clone of `mytop', which in turn is a `top' clone for MySQL";
     mainProgram = "pgtop";
     homepage = "https://github.com/cosimo/pgtop";
     changelog = "https://github.com/cosimo/pgtop/releases/tag/v${version}";

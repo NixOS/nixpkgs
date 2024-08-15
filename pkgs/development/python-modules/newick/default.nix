@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "newick" ];
 
   meta = with lib; {
-    description = "A python package to read and write the Newick format";
+    description = "Python package to read and write the Newick format";
     homepage = "https://github.com/dlce-eva/python-newick";
     license = licenses.asl20;
     maintainers = with maintainers; [ alxsimon ];

@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.16.1";
+  version = "0.16.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Wy8d1Eje/OIG7MFumWD+k3jzIwfqH8sMKYwiwU9YyIE=";
+    hash = "sha256-eJmXm0wa26a0/S6GyqP175TE5qsjTLtzBspr/iQ/xN8=";
   };
 
   propagatedBuildInputs = [
@@ -96,6 +96,6 @@ buildPythonPackage rec {
     mainProgram = "datashader";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

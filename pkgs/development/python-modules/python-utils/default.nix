@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   loguru,
@@ -45,8 +44,8 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "_python_utils_tests" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Flaky tests on darwin
+  disabledTests = [
+    # Flaky tests
     "test_timeout_generator"
   ];
 
@@ -55,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WoLpH/python-utils";
     changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

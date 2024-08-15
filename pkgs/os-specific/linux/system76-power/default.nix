@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus libusb1 ];
 
-  cargoSha256 = "sha256-Vps02ZRVmeOQ8jDFZJYAUb502MhqY+2YV2W1/9XGY+0=";
+  cargoHash = "sha256-Vps02ZRVmeOQ8jDFZJYAUb502MhqY+2YV2W1/9XGY+0=";
 
   postInstall = ''
     install -D -m 0644 data/com.system76.PowerDaemon.conf $out/etc/dbus-1/system.d/com.system76.PowerDaemon.conf
@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/system76-power";
     license = licenses.gpl3Plus;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ maintainers.jwoudenberg ];
+    maintainers = [ ];
   };
 }

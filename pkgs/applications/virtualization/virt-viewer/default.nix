@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A viewer for remote virtual machines";
+    description = "Viewer for remote virtual machines";
     maintainers = with maintainers; [ raskin atemu ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;

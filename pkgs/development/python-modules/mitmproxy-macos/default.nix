@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mitmproxy_macos" ];
 
   meta = with lib; {
-    description = "The MacOS Rust bits in mitmproxy";
+    description = "MacOS Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-macos";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
   meta = src.meta // {
-    description = "A FUSE wrapper that puts the littlefs in user-space";
+    description = "FUSE wrapper that puts the littlefs in user-space";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "littlefs-fuse";

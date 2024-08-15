@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 
 , enableWasmEval ? false
@@ -11,14 +12,23 @@ assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm o
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.65.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    hash = "sha256-nf/xQ5744cplTNYkwaUbGv7Dw0BGf52dWTjnTVa9qL8=";
+    hash = "sha256-fx7k6KvL0uy2NXLDLpCnN1ux9MGEO1CbX6TdLweVzag=";
   };
+
+  patches = [
+    # fix tests in 1.22.5
+    # https://github.com/open-policy-agent/opa/pull/6845
+    (fetchpatch {
+      url = "https://github.com/open-policy-agent/opa/commit/956358516c23b1f33f6667961e20aca65b91355b.patch";
+      hash = "sha256-1nfMwJwbYfdLg9j4ppP1IWdDeFq6vhXcDKr6uprP53U=";
+    })
+  ];
 
   vendorHash = null;
 

@@ -1,50 +1,58 @@
-{ lib
-, fetchFromGitLab
-, fetchPypi
-, apksigner
-, buildPythonApplication
-, python3
-, pythonRelaxDepsHook
-, installShellFiles
-, androguard
-, babel
-, clint
-, defusedxml
-, gitpython
-, libcloud
-, mwclient
-, paramiko
-, pillow
-, pyasn1
-, pyasn1-modules
-, python-vagrant
-, pyyaml
-, qrcode
-, requests
-, ruamel-yaml
-, yamllint
+{
+  lib,
+  fetchFromGitLab,
+  fetchPypi,
+  apksigner,
+  appdirs,
+  buildPythonApplication,
+  python3,
+  installShellFiles,
+  androguard,
+  babel,
+  clint,
+  defusedxml,
+  gitpython,
+  libcloud,
+  mwclient,
+  oscrypto,
+  paramiko,
+  pillow,
+  pyasn1,
+  pyasn1-modules,
+  python-vagrant,
+  pyyaml,
+  qrcode,
+  requests,
+  ruamel-yaml,
+  sdkmanager,
+  yamllint,
 }:
 
-buildPythonApplication rec {
+let
+  version = "2.3a1";
+in
+buildPythonApplication {
   pname = "fdroidserver";
-  version = "unstable-2023-10-23";
-  format = "setuptools";
+  inherit version;
+
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = "f4b10cf83935432d19948dac669964384bef0728";
-    hash = "sha256-GmR6Td5pScwEKK9W6m26xQV4XxBdZ7frN2UvwUGY4Dw=";
+    rev = "2.3a1";
+    hash = "sha256-K6P5yGx2ZXHJZ/VyHTbQAObsvcfnOatrpwiW+ixLTuA=";
   };
 
   pythonRelaxDeps = [
+    "androguard"
     "pyasn1"
     "pyasn1-modules"
   ];
 
   postPatch = ''
     substituteInPlace fdroidserver/common.py \
-      --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
+      --replace-fail "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
   '';
 
   preConfigure = ''
@@ -58,22 +66,19 @@ buildPythonApplication rec {
       --bash completion/bash-completion
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    babel
-  ];
+  buildInputs = [ babel ];
 
   propagatedBuildInputs = [
     androguard
+    appdirs
     clint
     defusedxml
     gitpython
     libcloud
     mwclient
+    oscrypto
     paramiko
     pillow
     pyasn1
@@ -89,6 +94,7 @@ buildPythonApplication rec {
         hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
       };
     }))
+    sdkmanager
     yamllint
   ];
 
@@ -102,16 +108,17 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fdroidserver"
-  ];
+  pythonImportsCheck = [ "fdroidserver" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/fdroid/fdroidserver";
     changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ linsui jugendhacker ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      linsui
+      jugendhacker
+    ];
     mainProgram = "fdroid";
   };
 }

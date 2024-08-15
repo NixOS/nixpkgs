@@ -17,7 +17,7 @@
 , libevent
 , libgee
 , libnatpmp
-, libtransmission
+, libtransmission_3
 , libutp
 , miniupnpc
 , openssl
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     libevent
     libgee
     libnatpmp
-    libtransmission
+    libtransmission_3
     libutp
     miniupnpc
     openssl

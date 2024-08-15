@@ -97,7 +97,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/python-trio/trio/blob/v${version}/docs/source/history.rst";
-    description = "An async/await-native I/O library for humans and snake people";
+    description = "Async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [
       mit

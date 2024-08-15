@@ -1,4 +1,7 @@
-{ stdenv, callPackage, lib, fetchpatch, sasl, boost, Security, CoreFoundation, cctools }:
+{ stdenv, callPackage, fetchpatch
+, sasl, boost, Security, CoreFoundation, cctools
+, avxSupport ? stdenv.hostPlatform.avxSupport
+}:
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
@@ -6,8 +9,9 @@ let
   };
 in
 buildMongoDB {
-  version = "6.0.15";
-  sha256 = "sha256-DX1wbrDx1/JrEHbzNaXC4Hqq7MrLqz+JZgG98beyVds=";
+  inherit avxSupport;
+  version = "6.0.16";
+  sha256 = "sha256-DdMWacJTx6sxgIKG2M8DkboSBr0fD2w91M+ZYt75hQI=";
   patches = [
     # Patches a bug that it couldn't build MongoDB 6.0 on gcc 13 because a include in ctype.h was missing
     ./fix-gcc-13-ctype-6_0.patch

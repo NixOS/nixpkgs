@@ -31,7 +31,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "A minimal, portable, and fast API on top of the operating-system's evented I/O API";
+    description = "Minimal, portable, and fast API on top of the operating-system's evented I/O API";
     homepage = "https://github.com/riot-ml/gluon";
     changelog = "https://github.com/riot-ml/gluon/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;

@@ -51,14 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/oh-my-fish/oh-my-fish";
-    description = "The Fish Shell Framework";
+    description = "Fish Shell Framework";
     longDescription = ''
       Oh My Fish provides core infrastructure to allow you to install packages
       which extend or modify the look of your shell. It's fast, extensible and
       easy to use.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "omf-install";
     inherit (fish.meta) platforms;
   };

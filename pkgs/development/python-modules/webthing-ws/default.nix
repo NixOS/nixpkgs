@@ -4,7 +4,6 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
 }:
 

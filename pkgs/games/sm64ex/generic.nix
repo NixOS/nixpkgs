@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       '';
     mainProgram = "sm64ex";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ivar ];
+    maintainers = [ ];
     platforms = platforms.unix;
   } // extraMeta;
 }

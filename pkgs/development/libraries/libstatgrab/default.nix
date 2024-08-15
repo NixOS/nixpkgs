@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.i-scream.org/libstatgrab/";
-    description = "A library that provides cross platforms access to statistics about the running system";
-    maintainers = with maintainers; [ ];
+    description = "Library that provides cross platforms access to statistics about the running system";
+    maintainers = [ ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

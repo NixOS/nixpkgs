@@ -3,6 +3,7 @@
 , bazel-examples
 , bazelTest
 , callPackage
+, cctools
 , darwin
 , distDir
 , extraBazelArgs ? ""
@@ -24,8 +25,8 @@ let
     # Take all the rules_ deps, bazel_ deps and their transitive dependencies,
     # but none of the platform-specific binaries, as they are large and useless.
     requiredDepNamePredicate = name:
-      null == builtins.match ".*(macos|osx|linux|win|apple|android|maven).*" name
-      && null != builtins.match "(platforms|com_google_|protobuf|rules_|bazel_).*" name ;
+      null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name
+      && null != builtins.match "(platforms|com_google_|protobuf|rules_|bazel_|apple_support).*" name;
   };
 
   mergedDistDir = symlinkJoin {
@@ -37,8 +38,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode

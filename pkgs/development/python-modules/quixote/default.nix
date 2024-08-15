@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small and flexible Python Web application framework";
+    description = "Small and flexible Python Web application framework";
     homepage = "https://pypi.org/project/Quixote/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

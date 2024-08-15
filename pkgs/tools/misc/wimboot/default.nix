@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wimboot";
-  version = "2.7.6";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "wimboot";
     rev = "v${version}";
-    sha256 = "sha256-AFPuHxcDM/cdEJ5nRJnVbPk7Deg97NeSMsg/qwytZX4=";
+    sha256 = "sha256-JqdOgcwOXIJDl8O7k/pHdd4MNC/rJ0fWTowtEVpJyx8=";
   };
 
   sourceRoot = "${src.name}/src";

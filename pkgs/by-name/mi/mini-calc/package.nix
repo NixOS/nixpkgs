@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mini-calc";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "coco33920";
     repo = "calc";
     rev = version;
-    hash = "sha256-wROeUi1j5oEUpr7nRge6bRUO0E8W2E34M7DeyK0xmjM=";
+    hash = "sha256-f2xmc6wzZ5MwwBDYQNoxbFmIclZWd/xOOI4/MCmrnEI=";
   };
 
-  cargoHash = "sha256-QPkaSJNoxnheECwcK129+PNeRm6+DFOw1wmwBev6oXc=";
+  cargoHash = "sha256-OiAU94URgOHZ/iNbCF5rE55zfZNkW3bdjPZo05kpIRo=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A fully-featured minimalistic configurable calculator written in Rust";
+    description = "Fully-featured minimalistic configurable calculator written in Rust";
     changelog = "https://github.com/coco33920/calc/blob/${version}/CHANGELOG.md";
     homepage = "https://calc.nwa2coco.fr";
     license = lib.licenses.gpl3Plus;

@@ -7,7 +7,6 @@
 , makeWrapper
 , ncurses
 , python3
-, runCommand
 , zlib
 
 # *NOT* from LLVM 9!
@@ -106,7 +105,7 @@ let
     dontStrip = debug;
 
     meta = with lib; {
-      description = "The Interactive C++ Interpreter";
+      description = "Interactive C++ Interpreter";
       mainProgram = "cling";
       homepage = "https://root.cern/cling/";
       license = with licenses; [ lgpl21 ncsa ];

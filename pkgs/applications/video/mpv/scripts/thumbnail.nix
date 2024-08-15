@@ -8,13 +8,13 @@
 
 buildLua rec {
   pname = "mpv-thumbnail-script";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = "mpv_thumbnail_script";
     rev = version;
-    sha256 = "sha256-J24Rou7BTE7zoiPlBkWuO9dtYJiuzkuwB4FROuzXzag=";
+    sha256 = "sha256-nflavx25skLj9kitneL6Uz3zI2DyMMhQC595npofzbQ=";
   };
   passthru.updateScript = gitUpdater { };
 
@@ -27,7 +27,7 @@ buildLua rec {
   passthru.scriptName = "mpv_thumbnail_script_{client_osc,server}.lua";
 
   meta = with lib; {
-    description = "A lua script to show preview thumbnails in mpv's OSC seekbar";
+    description = "Lua script to show preview thumbnails in mpv's OSC seekbar";
     homepage = "https://github.com/marzzzello/mpv_thumbnail_script";
     changelog = "https://github.com/marzzzello/mpv_thumbnail_script/releases/tag/${version}";
     license = licenses.gpl3Plus;

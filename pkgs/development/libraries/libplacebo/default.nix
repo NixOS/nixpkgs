@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "6.338.2";
+  version = "7.349.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gE6yKnFvsOFh8bFYc7b+bS+zmdDU7jucr0HwhdDeFzU=";
+    hash = "sha256-mIjQvc7SRjE1Orb2BkHK+K1TcRQvzj2oUOCUT4DzIuA=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ primeos tadeokondrak ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.all;
   };
 }

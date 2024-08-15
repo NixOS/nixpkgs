@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-desktop-theme";
-  version = "1.0.9";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-rhbxqKT9yrtW4JJ8jCUSpsIh0JeEIttkS414vBhD9vs=";
+    hash = "sha256-uNeRAsPbgC7IHHBIlczPXhnwZI65Le70D9MsbH+6Fwk=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_mockservers" ];
 
   meta = with lib; {
-    description = "A set of fixtures to test your requests to HTTP/UDP servers";
+    description = "Set of fixtures to test your requests to HTTP/UDP servers";
     homepage = "https://github.com/Gr1N/pytest-mockservers";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

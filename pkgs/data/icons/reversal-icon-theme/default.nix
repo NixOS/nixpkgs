@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A colorful Design Rectangle icon theme";
+    description = "Colorful Design Rectangle icon theme";
     homepage = "https://github.com/yeyushengfan258/Reversal-icon-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

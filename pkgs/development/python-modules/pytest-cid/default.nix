@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ntninja/pytest-cid";
-    description = "A simple wrapper around py-cid for easily writing tests involving CIDs in datastructures";
+    description = "Simple wrapper around py-cid for easily writing tests involving CIDs in datastructures";
     license = licenses.mpl20;
     maintainers = with maintainers; [ Luflosi ];
   };

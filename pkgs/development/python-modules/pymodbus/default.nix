@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.6.8";
+  version = "3.6.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Rt5fbuaeAgbW5KKse1zZIJyq/p2P2MjXGwA7q0C7wA=";
+    hash = "sha256-ScqxDO0hif8p3C6+vvm7FgSEQjCXBwUPOc7Y/3OfkoI=";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ buildPythonPackage rec {
       prompt-toolkit
       pygments
       click
-    ] ++ typer.optional-dependencies.all;
+    ];
     serial = [ pyserial ];
   };
 

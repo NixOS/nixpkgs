@@ -38,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinx_material" ];
 
   meta = with lib; {
-    description = "A material-based, responsive theme inspired by mkdocs-material";
+    description = "Material-based, responsive theme inspired by mkdocs-material";
     homepage = "https://bashtage.github.io/sphinx-material";
     license = licenses.mit;
     maintainers = with maintainers; [ FlorianFranzen ];

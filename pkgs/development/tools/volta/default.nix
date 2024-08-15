@@ -32,14 +32,14 @@ rustPlatform.buildRustPackage rec {
 
   HOME = "$TMPDIR";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd volta \
       --bash <($out/bin/volta completions bash) \
       --fish <($out/bin/volta completions fish) \
       --zsh <($out/bin/volta completions zsh)
   '';
   meta = with lib; {
-    description = "The Hassle-Free JavaScript Tool Manager";
+    description = "Hassle-Free JavaScript Tool Manager";
     longDescription = ''
       With Volta, you can select a Node engine once and then stop worrying
       about it. You can switch between projects and stop having to manually

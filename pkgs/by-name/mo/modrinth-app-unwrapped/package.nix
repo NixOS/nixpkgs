@@ -15,7 +15,8 @@
   jq,
   libsoup,
   moreutils,
-  nodePackages,
+  pnpm_8,
+  nodejs,
   openssl,
   pkg-config,
   webkitgtk,
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage {
       cacert
       jq
       moreutils
-      nodePackages.pnpm
+      pnpm_8
     ];
 
     # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
@@ -77,7 +78,8 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     cargo-tauri
     desktop-file-utils
-    nodePackages.pnpm
+    pnpm_8
+    nodejs
     pkg-config
   ];
 

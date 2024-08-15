@@ -19,6 +19,6 @@ buildGoModule rec {
     mainProgram = "jitsiexporter";
     homepage = "https://git.xsfx.dev/prometheus/jitsiexporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

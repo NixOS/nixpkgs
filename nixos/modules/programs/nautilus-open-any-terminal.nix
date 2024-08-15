@@ -19,7 +19,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      gnome.nautilus-python
+      nautilus-python
       nautilus-open-any-terminal
     ];
     programs.dconf = lib.optionalAttrs (cfg.terminal != null) {

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   env.NIX_LDFLAGS = "-L${guile}/lib -lguile-${guile.effectiveVersion}";
 
   meta = {
-    description = "A library to parse and evaluate symbolic expressions input as text";
+    description = "Library to parse and evaluate symbolic expressions input as text";
     longDescription = ''
       GNU libmatheval is a library (callable from C and Fortran) to parse and evaluate symbolic
       expressions input as text. It supports expressions in any number of variables of arbitrary

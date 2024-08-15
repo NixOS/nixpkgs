@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "rofi-obsidian";
-  version = "0.1.0";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "Nydragon";
     repo = "rofi-obsidian";
-    rev = "c8f34e424a59b8a15bc77152462d59cfff7fc20e";
-    hash = "sha256-t/neFiLdrA37jknLEsHmWhCug5BS40HgQpQ5a1svtQw=";
+    rev = "0.1.5";
+    hash = "sha256-EQ7OGW5FTgfuJ/xJzOhl1eb3XNORUfs0efP17A6yp7g=";
   };
 
-  cargoHash = "sha256-Eikzn7ZMsrujBdzmsiHGSYAJ+kGBgQAaiVJzixHknWM=";
+  cargoHash = "sha256-hAiBSAvnMRchH49bku2oPhoCK3+bcWiZW4YbcMuAiqU=";
 
   meta = {
     description = "Launch your Obsidian vaults from the comfort of rofi";

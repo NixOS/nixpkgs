@@ -2,37 +2,44 @@
   buildPythonPackage,
   lib,
   fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
   numpy,
   scipy,
   attrs,
-  cython,
-  nose,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "iodata";
-  version = "1.0.0a2";
-  format = "setuptools";
+  version = "1.0.0a4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theochem";
     repo = pname;
-    rev = version;
-    hash = "sha256-GFTCYE19Re7WLhV8eU+0i8OMp/Tsms/Xj9DRTcgjcz4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ld6V+/8lg4Du6+mHU5XuXXyMpWwyepXurerScg/bf2Q=";
   };
 
-  nativeBuildInputs = [
-    cython
-    nose
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
     scipy
     attrs
   ];
 
   pythonImportsCheck = [ "iodata" ];
-  doCheck = false; # Requires roberto or nose and a lenghtly setup to find the cython modules
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Python library for reading, writing, and converting computational chemistry file formats and generating input files";

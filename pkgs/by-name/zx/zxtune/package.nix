@@ -25,6 +25,8 @@
 , withQt ? true
 , qt5
 , zip
+, makeDesktopItem
+, copyDesktopItems
 }:
 let
   dlopenBuildInputs = []
@@ -58,7 +60,11 @@ in stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = lib.optionals withQt [ zip qt5.wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals withQt [
+    zip
+    qt5.wrapQtAppsHook
+    copyDesktopItems
+  ];
 
   buildInputs = staticBuildInputs ++ dlopenBuildInputs;
 
@@ -118,6 +124,7 @@ in stdenv.mkDerivation rec {
     install -Dm755 bin/linux/release/zxtune123 -t $out/bin
   '' + lib.optionalString withQt ''
     install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
+    install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
   '' + ''
     runHook postInstall
   '';
@@ -127,6 +134,17 @@ in stdenv.mkDerivation rec {
   preFixup = lib.optionalString withQt ''
     wrapQtApp "$out/bin/zxtune-qt"
   '';
+
+  desktopItems = lib.optionals withQt [(makeDesktopItem {
+    name = "ZXTune";
+    exec = "zxtune-qt";
+    icon = "zxtune";
+    desktopName = "ZXTune";
+    genericName = "ZXTune";
+    comment = meta.description;
+    categories = [ "Audio" ];
+    type = "Application";
+  })];
 
   meta = with lib; {
     description = "Crossplatform chiptunes player";

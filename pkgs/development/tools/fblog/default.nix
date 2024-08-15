@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-8rnQllCne1q1uDpeJkqAdzNKSkEgVp+v9drXL8TaQmM=";
 
   meta = with lib; {
-    description = "A small command-line JSON log viewer";
+    description = "Small command-line JSON log viewer";
     mainProgram = "fblog";
     homepage = "https://github.com/brocode/fblog";
     license = licenses.wtfpl;

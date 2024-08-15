@@ -1,0 +1,67 @@
+From 70d1c34b94baadc3305745cf159ea55f312beacc Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 7 Jun 2024 14:03:15 -0700
+Subject: [PATCH] libnm-systemd-core: Disable sd_dhcp6_client_set_duid_uuid
+ function
+
+When building on musl systems ( with out systemd ), and using LLD linker
+from LLVM project we fail to link with undefined symbols.
+
+This symbol is in sd_id128.c but its disabled, so let disable the functions
+which need this function.
+
+| x86_64-yoe-linux-musl-ld.lld: error: undefined symbol: sd_id128_get_machine_app_specific
+| >>> referenced by sd-dhcp-duid.c:202 (/usr/src/debug/networkmanager/1.48.0/../NetworkManager-1.48.0/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c:202)
+| >>>               libnm-systemd-core.a.p/src_libsystemd-network_sd-dhcp-duid.c.o:(sd_dhcp_duid_set_uuid) in archive src/libnm-systemd-core/libnm-systemd-core.a
+| x86_64-yoe-linux-musl-clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c   | 2 ++
+ .../src/libsystemd-network/sd-dhcp6-client.c                   | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+index e664a4a720..7ba502086f 100644
+--- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
++++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+@@ -193,6 +193,7 @@ int sd_dhcp_duid_set_en(sd_dhcp_duid *duid) {
+         return 0;
+ }
+ 
++#if 0
+ int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
+         sd_id128_t machine_id;
+         int r;
+@@ -209,6 +210,7 @@ int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
+         duid->size = offsetof(struct duid, uuid.uuid) + sizeof(machine_id);
+         return 0;
+ }
++#endif
+ 
+ int dhcp_duid_to_string_internal(uint16_t type, const void *data, size_t data_size, char **ret) {
+         _cleanup_free_ char *p = NULL, *x = NULL;
+diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+index 7c20116409..08c1e96b3c 100644
+--- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
++++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+@@ -244,6 +244,7 @@ int sd_dhcp6_client_set_duid_en(sd_dhcp6_client *client) {
+         return 0;
+ }
+ 
++#if 0
+ int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
+         int r;
+ 
+@@ -256,7 +257,7 @@ int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
+ 
+         return 0;
+ }
+-
++#endif
+ int sd_dhcp6_client_set_duid_raw(sd_dhcp6_client *client, uint16_t duid_type, const uint8_t *duid, size_t duid_len) {
+         int r;
+ 
+-- 
+GitLab
+

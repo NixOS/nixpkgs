@@ -163,7 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RedisInsight/RedisInsight";
     license = lib.licenses.sspl;
     maintainers = with lib.maintainers; [
-      gmemstr
       tomasajt
     ];
     platforms = lib.platforms.linux;

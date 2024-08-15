@@ -6,7 +6,7 @@
 }:
 let
   pname = "asm-lsp";
-  version = "0.6.0";
+  version = "0.7.4";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
     owner = "bergercookie";
     repo = "asm-lsp";
     rev = "v${version}";
-    hash = "sha256-vOkuTJFP2zme8S+u5j1TXt6BXnwtASRVH4Dre9g1dtk=";
+    hash = "sha256-tgwiCAlHuFdeMr1GA4vPg8i94zfRj+uyPMAXYh+Smo4=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
     openssl
   ];
 
-  cargoHash = "sha256-lmOnBcLWfTCuQcPiRmPoFD/QvagfkApFP6/h1ot7atU=";
+  cargoHash = "sha256-UBYD0rs7bEtVZatu/kRgyCwKHvcgYJWRgyfBi3ooPGQ=";
 
   # tests expect ~/.cache/asm-lsp to be writable
   preCheck = ''

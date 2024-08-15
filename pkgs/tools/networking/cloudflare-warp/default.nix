@@ -73,6 +73,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
       --replace "ExecStart=" "ExecStart=$out"
 
+    cat >>$out/lib/systemd/user/warp-taskbar.service <<EOF
+
+    [Service]
+    BindReadOnlyPaths=$out:/usr:
+    EOF
+
     runHook postInstall
   '';
 
@@ -85,9 +91,10 @@ stdenv.mkDerivation rec {
     homepage = "https://pkg.cloudflareclient.com/packages/cloudflare-warp";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    mainProgram = "warp-cli";
     maintainers = with maintainers; [
-      wolfangaukang
       devpikachu
+      marcusramberg
     ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };

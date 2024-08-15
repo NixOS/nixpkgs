@@ -95,10 +95,10 @@ in buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
+    description = "Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tilpner emily ];
+    maintainers = with maintainers; [ tilpner ];
   };
 }

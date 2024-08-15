@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A python module that will check for package updates";
+    description = "Python module that will check for package updates";
     homepage = "https://github.com/bboe/update_checker";
     license = licenses.bsd2;
   };

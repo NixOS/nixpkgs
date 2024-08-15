@@ -4,7 +4,6 @@
 , fetchpatch
 , glib
 , libgudev
-, polkit
 , ppp
 , gettext
 , pkg-config
@@ -12,14 +11,19 @@
 , python3
 , libmbim
 , libqmi
-, systemd
 , bash-completion
 , meson
 , ninja
 , vala
-, gobject-introspection
 , dbus
 , bash
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, polkit
+, withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -51,25 +55,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala
-    gobject-introspection
     gettext
+    glib
     pkg-config
     libxslt
     python3
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
   ];
 
   buildInputs = [
     glib
     libgudev
-    polkit
     ppp
     libmbim
     libqmi
-    systemd
     bash-completion
     dbus
     bash # shebangs in share/ModemManager/fcc-unlock.available.d/
+  ] ++ lib.optionals withPolkit [
+    polkit
+  ] ++ lib.optionals withSystemd [
+    systemd
   ];
 
   nativeInstallCheckInputs = [
@@ -81,9 +89,15 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
     "-Ddbus_policy_dir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "-Dvapi=true"
+    (lib.mesonBool "introspection" withIntrospection)
+    (lib.mesonBool "qrtr" withIntrospection)
+    (lib.mesonBool "vapi" withIntrospection)
+    (lib.mesonBool "systemd_suspend_resume" withSystemd)
+    (lib.mesonBool "systemd_journal" withSystemd)
+    (lib.mesonOption "polkit" (if withPolkit then "strict" else "no"))
   ];
 
   postPatch = ''
@@ -96,7 +110,7 @@ stdenv.mkDerivation rec {
   # load libraries from the install path, which doesn't usually exist
   # when `meson test' is run.  So to work around that, we run it as an
   # install check instead, when those paths will have been created.
-  doInstallCheck = true;
+  doInstallCheck = withIntrospection;
   installCheckPhase = ''
     runHook preInstallCheck
     export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"

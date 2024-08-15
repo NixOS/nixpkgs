@@ -190,7 +190,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The GNU Image Manipulation Program";
+    description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;

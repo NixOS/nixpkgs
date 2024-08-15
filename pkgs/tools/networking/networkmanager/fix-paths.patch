@@ -11,10 +11,10 @@ index 148acade5c..6395fbfbe5 100644
  
  LABEL="nm_drivers_end"
 diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
-index a9e8c08508..875d6cc2cd 100644
+index f3441508ab..7cde8d7d39 100644
 --- a/src/core/devices/nm-device.c
 +++ b/src/core/devices/nm-device.c
-@@ -14645,14 +14645,14 @@ nm_device_start_ip_check(NMDevice *self)
+@@ -14839,14 +14839,14 @@ nm_device_start_ip_check(NMDevice *self)
              gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET);
              if (gw) {
                  nm_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
@@ -32,22 +32,22 @@ index a9e8c08508..875d6cc2cd 100644
              }
          }
 diff --git a/src/libnm-client-impl/meson.build b/src/libnm-client-impl/meson.build
-index 79ac95598a..83f7ab1373 100644
+index 3dd2338a82..de75cc040b 100644
 --- a/src/libnm-client-impl/meson.build
 +++ b/src/libnm-client-impl/meson.build
-@@ -191,7 +191,6 @@ if enable_introspection
+@@ -190,7 +190,6 @@ if enable_introspection
        input: [gen_infos_cmd, libnm_gir[0]] + libnm_core_settings_sources,
        output: 'nm-property-infos-' + name + '.xml',
        command: [
--        python.path(),
+-        python_path,
          gen_infos_cmd,
          name,
          '@OUTPUT@',
-@@ -207,7 +206,6 @@ if enable_introspection
+@@ -206,7 +205,6 @@ if enable_introspection
          'env',
          'GI_TYPELIB_PATH=' + gi_typelib_path,
          'LD_LIBRARY_PATH=' + ld_library_path,
--        python.path(),
+-        python_path,
          gen_gir_cmd,
          '--lib-path', meson.current_build_dir(),
          '--gir', libnm_gir[0],
@@ -89,14 +89,14 @@ index cbe76f5f1c..8515f94994 100644
      oc_argv[oc_argc++] = path;
      oc_argv[oc_argc++] = "--authenticate";
 diff --git a/src/libnmc-setting/meson.build b/src/libnmc-setting/meson.build
-index 7fb460dc33..790a2b75fc 100644
+index 4d5079dfb3..5a15447fde 100644
 --- a/src/libnmc-setting/meson.build
 +++ b/src/libnmc-setting/meson.build
 @@ -9,7 +9,6 @@ if enable_docs
      input: [merge_cmd, nm_settings_docs_xml_gir['nmcli'], nm_property_infos_xml['nmcli']],
      output: 'settings-docs-input.xml',
      command: [
--      python.path(),
+-      python_path,
        merge_cmd,
        '@OUTPUT@',
        nm_property_infos_xml['nmcli'],
@@ -104,19 +104,19 @@ index 7fb460dc33..790a2b75fc 100644
      input: [gen_cmd, settings_docs_input_xml],
      output: 'settings-docs.h',
      command: [
--      python.path(),
+-      python_path,
        gen_cmd,
        '--output', '@OUTPUT@',
        '--xml', settings_docs_input_xml
 diff --git a/src/tests/client/meson.build b/src/tests/client/meson.build
-index 8c36e40559..cfb6649a21 100644
+index 5686a1c174..cfb6649a21 100644
 --- a/src/tests/client/meson.build
 +++ b/src/tests/client/meson.build
 @@ -6,7 +6,6 @@ test(
    args: [
      build_root,
      source_root,
--    python.path(),
+-    python_path,
      '--',
      'TestNmcli',
    ],
@@ -124,7 +124,7 @@ index 8c36e40559..cfb6649a21 100644
      args: [
        build_root,
        source_root,
--      python.path(),
+-      python_path,
        '--',
        'TestNmCloudSetup',
      ],

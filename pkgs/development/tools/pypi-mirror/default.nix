@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "pypi_mirror" ];
 
   meta = with lib; {
-    description = "A script to create a partial PyPI mirror";
+    description = "Script to create a partial PyPI mirror";
     mainProgram = "pypi-mirror";
     homepage = "https://github.com/montag451/pypi-mirror";
     license = licenses.mit;

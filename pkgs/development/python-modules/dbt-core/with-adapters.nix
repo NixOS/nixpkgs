@@ -1,5 +1,5 @@
 {
-  python3,
+  python,
   dbt-bigquery,
   dbt-core,
   dbt-postgres,
@@ -17,7 +17,7 @@ let
   };
 in
 adapterFun:
-(python3.buildEnv.override {
+(python.buildEnv.override {
   extraLibs = [ dbt-core ] ++ (adapterFun adapters);
   ignoreCollisions = true;
 }).overrideAttrs

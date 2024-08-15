@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for libsass to compile Sass/SCSS";
     mainProgram = "pysassc";
     homepage = "https://sass.github.io/libsass-python/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

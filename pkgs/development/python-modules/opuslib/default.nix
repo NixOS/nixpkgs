@@ -4,7 +4,7 @@
   fetchpatch,
   isPy27,
   libopus,
-  pynose,
+  pytestCheckHook,
   lib,
   stdenv,
   substituteAll,
@@ -46,7 +46,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pynose ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [
+    "tests/{decoder,encoder,hl_decoder,hl_encoder}.py"
+  ];
 
   meta = with lib; {
     description = "Python bindings to the libopus, IETF low-delay audio codec";

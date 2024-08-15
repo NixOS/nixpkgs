@@ -5,33 +5,29 @@ let
     let
       p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: { dontWrapPythonPrograms = true; });
     in
-    [
-      ({
-        name = "overridePythonAttrs";
+    {
+      overridePythonAttrs = {
         expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
         expected = true;
-      })
-      ({
-        name = "repeatedOverrides-pname";
+      };
+      repeatedOverrides-pname = {
         expr = repeatedOverrides.pname == "a-better-hello-with-blackjack";
         expected = true;
-      })
-      ({
-        name = "repeatedOverrides-entangled-pname";
+      };
+      repeatedOverrides-entangled-pname = {
         expr = repeatedOverrides.entangled.pname == "a-better-figlet-with-blackjack";
         expected = true;
-      })
-      ({
-        name = "overriding-using-only-attrset";
+      };
+      overriding-using-only-attrset = {
         expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname == "hello-overriden";
         expected = true;
-      })
-      ({
+      };
+      overriding-using-only-attrset-no-final-attrs = {
         name = "overriding-using-only-attrset-no-final-attrs";
         expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
         expected = true;
-      })
-    ];
+      };
+    };
 
   addEntangled = origOverrideAttrs: f:
     origOverrideAttrs (
@@ -62,5 +58,5 @@ stdenvNoCC.mkDerivation {
   passthru = { inherit tests; };
   buildCommand = ''
     touch $out
-  '' + lib.concatMapStringsSep "\n" (t: "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${t.name} success') || (echo '${t.name} fail' && exit 1)") tests;
+  '' + lib.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs (name: t: "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)") tests));
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja, python3, gtk3, gnome }:
+{ lib, stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja, python3, gtk3, gnome, gnome-themes-extra }:
 
 stdenv.mkDerivation rec {
   pname = "yaru-remix";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
-  buildInputs = [ gtk3 gnome.gnome-themes-extra ];
+  buildInputs = [ gtk3 gnome-themes-extra ];
 
   dontDropIconThemeCache = true;
 

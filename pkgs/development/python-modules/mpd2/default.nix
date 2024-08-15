@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/Mic92/python-mpd2/blob/v${version}/doc/changes.rst";
-    description = "A Python client module for the Music Player Daemon";
+    description = "Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [

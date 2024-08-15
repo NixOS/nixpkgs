@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A design system for interactive fiction";
+    description = "Design system for interactive fiction";
     mainProgram = "i7";
     homepage = "http://inform7.com/";
     license = licenses.artistic2;

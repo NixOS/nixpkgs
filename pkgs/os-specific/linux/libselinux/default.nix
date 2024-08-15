@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre2, pkg-config, libsepol
+{ lib, stdenv, fetchurl, buildPackages, pcre2, pkg-config, libsepol
 , enablePython ? !stdenv.hostPlatform.isStatic
 , swig ? null, python3 ? null, python3Packages
 , fts
@@ -8,7 +8,7 @@ assert enablePython -> swig != null && python3 != null;
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "libselinux";
   version = "3.6";
   inherit (libsepol) se_url;
@@ -96,4 +96,6 @@ stdenv.mkDerivation rec {
   meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux core library";
   };
-}
+} // lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") {
+  NIX_LDFLAGS = "--undefined-version";
+})

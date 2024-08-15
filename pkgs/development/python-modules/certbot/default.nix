@@ -12,12 +12,7 @@
   josepy,
   parsedatetime,
   pyrfc3339,
-  pyopenssl,
   pytz,
-  requests,
-  six,
-  zope-component,
-  zope-interface,
   setuptools,
   dialog,
   gnureadline,
@@ -28,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.9.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yYB9Y0wniRgzNk5XatkjKayIPj7ienXsqOboKPwzIfk=";
+    hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
   };
 
   sourceRoot = "${src.name}/${pname}";

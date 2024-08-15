@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.23.0";
+  version = "1.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+NQEGiChwe8ZQwVOSj33rHtD5/KR9kD0PDTp3MSzTfo=";
+    hash = "sha256-FeJwY3WG6rxWdV7l/MgcSL20a6fvfA1bG2QwLQgMxg8=";
   };
 
   postPatch = ''
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Pytest external process plugin";
     homepage = "https://github.com/pytest-dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

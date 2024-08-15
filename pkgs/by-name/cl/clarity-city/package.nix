@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An open source sans-serif typeface";
+    description = "Open source sans-serif typeface";
     homepage = "https://github.com/vmware/clarity-city";
     license = licenses.ofl;
     platforms = platforms.all;

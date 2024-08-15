@@ -7,7 +7,6 @@
 , gtk3
 , json-glib
 , libgee
-, librsvg
 , meson
 , ninja
 , pkg-config
@@ -49,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A small GTK app for presenting keybinding hints";
+    description = "Small GTK app for presenting keybinding hints";
     mainProgram = "remontoire";
     homepage = "https://github.com/regolith-linux/remontoire";
     license = licenses.gpl3Plus;

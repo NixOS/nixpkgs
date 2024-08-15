@@ -1,5 +1,4 @@
 { buildOctavePackage
-, stdenv
 , lib
 , fetchgit
 , automake

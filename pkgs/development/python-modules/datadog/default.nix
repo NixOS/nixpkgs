@@ -9,7 +9,6 @@
   pytest-vcr,
   pytestCheckHook,
   python-dateutil,
-  pythonAtLeast,
   pythonOlder,
   requests,
   vcrpy,
@@ -58,10 +57,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "datadog" ];
 
   meta = with lib; {
-    description = "The Datadog Python library";
+    description = "Datadog Python library";
     homepage = "https://github.com/DataDog/datadogpy";
     changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

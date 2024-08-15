@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.8";
+  version = "6.0.0";
   format = "setuptools";
 
   inherit stdenv;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a+Em4yJUht/yhqj7mgYkalJT9MfFO0depfWsk05kGUw=";
+    hash = "sha256-j6rk8xC22Wn6JsoFRTOLIfc8axXbfEqNk0pUgvqoGPI=";
   };
 
   postPatch = ''
@@ -72,6 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/giampaolo/psutil";
     changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

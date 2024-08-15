@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small utility to compare Rust micro-benchmarks";
+    description = "Small utility to compare Rust micro-benchmarks";
     mainProgram = "cargo-benchcmp";
     homepage = "https://github.com/BurntSushi/cargo-benchcmp";
     license = with licenses; [ mit unlicense ];

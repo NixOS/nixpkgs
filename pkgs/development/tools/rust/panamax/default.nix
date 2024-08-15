@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "panamax";
-  version = "1.0.12";
+  version = "1.0.14";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-nHAsKvNEhGDVrLx8K7xnm7TuCxaZcYwlQ6xjVRvDdSk=";
+    hash = "sha256-gIgw6JMGpHNXE/PZoz3jRdmjIWy4hETYf24Nd7/Jr/g=";
   };
 
-  cargoSha256 = "sha256-ydZ0KM/g9k0ux7Zr4crlxnKCC9N/qPzn1wmzbTIyz7o=";
+  cargoHash = "sha256-doEBlUVmXxbuPkDgliWr+LfG5KAMVEGpvLyQpoCzSTc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   meta = with lib; {

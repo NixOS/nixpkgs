@@ -11,11 +11,11 @@ assert fontconfigSupport -> fontconfig != null;
 
 stdenv.mkDerivation rec {
   pname = "libass";
-  version = "0.17.1";
+  version = "0.17.3";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8NoLv7pHbBauPhz9hiJW0wkVkR96uqGxbOYu5lMZJ4Q=";
+    hash = "sha256-6uQl2lDwAVwh97OpxyYqkQ8CGK9GniLikxRi/tPFCVk=";
   };
 
   outputs = [ "out" "dev" ];

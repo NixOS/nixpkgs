@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "yamale" ];
 
   meta = with lib; {
-    description = "A schema and validator for YAML";
+    description = "Schema and validator for YAML";
     homepage = "https://github.com/23andMe/Yamale";
     changelog = "https://github.com/23andMe/Yamale/releases/tag/${version}";
     license = licenses.mit;

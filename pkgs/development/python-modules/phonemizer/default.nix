@@ -10,8 +10,6 @@
   dlinfo,
   typing-extensions,
   espeak-ng,
-  pytestCheckHook,
-  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -54,6 +52,6 @@ buildPythonPackage rec {
     description = "Simple text to phones converter for multiple languages";
     mainProgram = "phonemize";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

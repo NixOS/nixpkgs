@@ -7,17 +7,17 @@
 }:
 buildNpmPackage rec {
   pname = "gauge-plugin-js";
-  version = "4.0.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge-js";
     rev = "v${version}";
-    hash = "sha256-qCn4EKndd0eM3X0+aLrCwvmEG5fgUfpVm76cg/n7B84=";
+    hash = "sha256-OUjB/ZETv8z3YDf/ftyqL8oKDEqyp1h1pK5IgEcq+rw=";
     fetchSubmodules = true;
   };
 
-  npmDepsHash = "sha256-5XkFwCFqNMe5xc/Tx69uUV7KMtgY7Z3zE7hbtxYqRf0=";
+  npmDepsHash = "sha256-EZlSfFYJvlVFkuXcktHnWuAEAcUmKxO6tzgMqRDcCeY=";
   npmBuildScript = "package";
 
   buildInputs = [ nodejs ];

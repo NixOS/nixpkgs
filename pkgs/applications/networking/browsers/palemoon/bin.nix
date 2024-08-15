@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.1.1";
+  version = "33.2.1";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -158,11 +158,11 @@ stdenv.mkDerivation (finalAttrs: {
     in {
       gtk3 = fetchzip {
         urls = urlRegionVariants "gtk3";
-        hash = "sha256-0i0hXC6mC1SY2V6ANMXHS4LZ/HZk8FUsSDQfQUE14IM=";
+        hash = "sha256-GUizOnsjEq2UuRaBgjmsQLHuqnCt/MHFBb8lTHcwJOM=";
       };
       gtk2 = fetchzip {
         urls = urlRegionVariants "gtk2";
-        hash = "sha256-RnBlCxIsWxm6BbtAS0YKHtix93N6t9jihFItqhtLhRU=";
+        hash = "sha256-RBEqBJNttuyMpeaC5scSY8Q2meZjgdeS2pppQ1n53uY=";
       };
     };
 
@@ -184,17 +184,14 @@ stdenv.mkDerivation (finalAttrs: {
       )"
 
       for variant in gtk3 gtk2; do
-        # The script will not perform an update when the version attribute is up to date from previous platform run
-        # We need to clear it before each run
-        update-source-version palemoon-bin 0 "${lib.fakeHash}" --source-key="sources.$variant"
-        update-source-version palemoon-bin "$version" --source-key="sources.$variant"
+        update-source-version palemoon-bin "$version" --ignore-same-version --source-key="sources.$variant"
       done
     '';
   };
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
-    description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
+    description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.

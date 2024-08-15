@@ -1,5 +1,4 @@
-{ lib
-, makeWrapper
+{ makeWrapper
 , nixosTests
 , symlinkJoin
 

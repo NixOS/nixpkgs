@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A tool environment for safe floating-point code development";
+    description = "Tool environment for safe floating-point code development";
     mainProgram = "sollya";
     homepage = "https://www.sollya.org/";
     license = licenses.cecill-c;

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, cmake
-, anki
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  cmake,
+  anki,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,24 +22,25 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    ./update-to-newer-anki-versions.patch
+    ./fix-beartype-error.patch
     ./replace-deprecated-distutils-with-setuptools.patch
+    ./update-to-newer-anki-versions.patch
   ];
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = with python3Packages; [
-    beartype
-    click
-    colorama
-    git-filter-repo
-    gitpython
-    lark
-    tqdm
-    whatthepatch
-  ] ++ [
-    anki
-  ];
+  propagatedBuildInputs =
+    [ anki ]
+    ++ (with python3Packages; [
+      beartype
+      click
+      colorama
+      git-filter-repo
+      gitpython
+      lark
+      tqdm
+      whatthepatch
+    ]);
 
   nativeCheckInputs = with python3Packages; [
     bitstring

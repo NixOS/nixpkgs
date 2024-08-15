@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
           lib.mkMerge [
             { virtualisation.vlans = [ 1 ];
               networking.defaultGateway =
-                (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
+                (pkgs.lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
               networking.nftables.enable = nftables;
             }
           ];
@@ -61,8 +61,8 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
 
     testScript =
       { nodes, ... }: let
-        routerDummyNoNatClosure = nodes.routerDummyNoNat.config.system.build.toplevel;
-        routerClosure = nodes.router.config.system.build.toplevel;
+        routerDummyNoNatClosure = nodes.routerDummyNoNat.system.build.toplevel;
+        routerClosure = nodes.router.system.build.toplevel;
       in ''
         client.start()
         router.start()
@@ -72,13 +72,13 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
         server.wait_for_unit("network.target")
         server.wait_for_unit("httpd")
         router.wait_for_unit("network.target")
-        router.succeed("curl --fail http://server/ >&2")
+        router.succeed("curl -4 --fail http://server/ >&2")
 
         # The client should be also able to connect via the NAT router.
         router.wait_for_unit("${unit}")
         client.wait_for_unit("network.target")
         client.succeed("curl --fail http://server/ >&2")
-        client.succeed("ping -c 1 server >&2")
+        client.succeed("ping -4 -c 1 server >&2")
 
         # Test whether passive FTP works.
         server.wait_for_unit("vsftpd")
@@ -89,15 +89,15 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
         client.fail("curl -v -P - ftp://server/foo.txt >&2")
 
         # Test ICMP.
-        client.succeed("ping -c 1 router >&2")
-        router.succeed("ping -c 1 client >&2")
+        client.succeed("ping -4 -c 1 router >&2")
+        router.succeed("ping -4 -c 1 client >&2")
 
         # If we turn off NAT, the client shouldn't be able to reach the server.
         router.succeed(
             "${routerDummyNoNatClosure}/bin/switch-to-configuration test 2>&1"
         )
-        client.fail("curl --fail --connect-timeout 5 http://server/ >&2")
-        client.fail("ping -c 1 server >&2")
+        client.fail("curl -4 --fail --connect-timeout 5 http://server/ >&2")
+        client.fail("ping -4 -c 1 server >&2")
 
         # And make sure that reloading the NAT job works.
         router.succeed(
@@ -109,7 +109,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
         ${lib.optionalString (!withFirewall && !nftables) ''
           router.succeed("systemctl start nat.service")
         ''}
-        client.succeed("curl --fail http://server/ >&2")
-        client.succeed("ping -c 1 server >&2")
+        client.succeed("curl -4 --fail http://server/ >&2")
+        client.succeed("ping -4 -c 1 server >&2")
       '';
-  })
+})

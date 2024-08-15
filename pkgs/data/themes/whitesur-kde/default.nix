@@ -7,13 +7,13 @@
 , gitUpdater
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "whitesur-kde";
   version = "unstable-2023-10-06";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = finalAttrs.pname;
+    repo = "whitesur-kde";
     rev = "2b4bcc76168bd8a4a7601188e177fa0ab485cdc8";
     hash = "sha256-+Iooj8a7zfLhEWnjLEVoe/ebD9Vew5HZdz0wpWVZxA8=";
   };
@@ -54,10 +54,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A MacOS big sur like theme for KDE Plasma desktop";
+    description = "MacOS big sur like theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/WhiteSur-kde";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];
   };
-})
+}

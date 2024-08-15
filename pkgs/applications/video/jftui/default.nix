@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Jellyfin Terminal User Interface ";
+    description = "Jellyfin Terminal User Interface";
     homepage = "https://github.com/Aanok/jftui";
     license = licenses.unlicense;
     maintainers = [ maintainers.nyanloutre ];

@@ -10,7 +10,7 @@ let
   cfg = config.programs.bash;
 
   bashAliases = builtins.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "alias -- ${k}=${lib.escapeShellArg v}")
+    lib.mapAttrsToList (k: v: "alias -- ${k}=${lib.escapeShellArg v}")
       (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
@@ -198,7 +198,7 @@ in
 
     users.defaultUserShell = lib.mkDefault pkgs.bashInteractive;
 
-    environment.pathsToLink = lib.optionals cfg.enableCompletion [
+    environment.pathsToLink = lib.optionals cfg.completion.enable [
       "/etc/bash_completion.d"
       "/share/bash-completion"
     ];

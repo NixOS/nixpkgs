@@ -83,7 +83,7 @@ in
       # These assertions can be removed in NixOS 24.11, when all users have been
       # warned once.
       {
-        assertion = (cfg.settings ? replication_factor || cfg.settings ? replication_mode) || lib.versionOlder cfg.package "1.0.0";
+        assertion = (cfg.settings ? replication_factor || cfg.settings ? replication_mode) || lib.versionOlder cfg.package.version "1.0.0";
         message = ''
           Garage 1.0.0 requires an explicit replication factor to be set.
           Please set replication_factor to 1 explicitly to preserve the previous behavior.

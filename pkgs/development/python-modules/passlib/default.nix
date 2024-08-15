@@ -28,6 +28,13 @@ buildPythonPackage rec {
     totp = [ cryptography ];
   };
 
+  # Fix for https://foss.heptapod.net/python-libs/passlib/-/issues/190
+  postPatch = ''
+    substituteInPlace passlib/handlers/bcrypt.py \
+      --replace-fail "version = _bcrypt.__about__.__version__" \
+      "version = getattr(getattr(_bcrypt, '__about__', _bcrypt), '__version__', '<unknown>')"
+  '';
+
   nativeCheckInputs =
     [
       pytestCheckHook
@@ -55,9 +62,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A password hashing library for Python";
+    description = "Password hashing library for Python";
     homepage = "https://foss.heptapod.net/python-libs/passlib";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -16,5 +16,5 @@ mkKdeDerivation rec {
 
   extraNativeBuildInputs = [qttools qtsvg];
 
-  meta.license = [lib.licenses.gpl2];
+  meta.license = [lib.licenses.gpl2Only];
 }

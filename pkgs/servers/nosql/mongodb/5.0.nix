@@ -1,4 +1,7 @@
-{ stdenv, callPackage, lib, sasl, boost, Security, CoreFoundation, cctools }:
+{ stdenv, callPackage, lib, sasl, boost
+, Security, CoreFoundation, cctools
+, avxSupport ? stdenv.hostPlatform.avxSupport
+}:
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
@@ -6,8 +9,8 @@ let
   };
   variants = if stdenv.isLinux then
     {
-      version = "5.0.26";
-      sha256 = "sha256-lVRTrEnwuyKETFL1C8bVqBfrDaYrbQIdmHN42CF8ZIw=";
+      version = "5.0.27";
+      sha256 = "sha256-++Qv3H6iVN8p0Jq3vx44DZCNh90vY5fAWKgP402bLlw=";
       patches = [ ./fix-build-with-boost-1.79-5_0-linux.patch ];
     }
   else lib.optionalAttrs stdenv.isDarwin
@@ -18,6 +21,7 @@ let
     };
 in
 buildMongoDB {
+  inherit avxSupport;
   version = variants.version;
   sha256 = variants.sha256;
   patches = [

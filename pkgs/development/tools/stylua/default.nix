@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = features;
 
   meta = with lib; {
-    description = "An opinionated Lua code formatter";
+    description = "Opinionated Lua code formatter";
     homepage = "https://github.com/johnnymorganz/stylua";
     changelog = "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;

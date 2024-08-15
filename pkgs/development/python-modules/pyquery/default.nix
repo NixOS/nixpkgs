@@ -60,7 +60,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A jquery-like library for Python";
+    description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;

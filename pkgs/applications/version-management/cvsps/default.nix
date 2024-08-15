@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=$(out)" ];
 
   meta = {
-    description = "A tool to generate CVS patch set information";
+    description = "Tool to generate CVS patch set information";
     longDescription = ''
       CVSps is a program for generating `patchset' information from a
       CVS repository.  A patchset in this case is defined as a set of

@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
-  version = "0.5.6";
+  version = "0.5.7";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libproxy";
     repo = "libproxy";
     rev = finalAttrs.version;
-    hash = "sha256-2uDlKjxzrKlyZKV0BSUDzmLSo2voJKDerbZZkamgNYk=";
+    hash = "sha256-VKVazLkmm1BZeGxrQmkpHors27bki0l8US3ZGI6OR0w=";
   };
 
   patches = [
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library that provides automatic proxy configuration management";
+    description = "Library that provides automatic proxy configuration management";
     homepage = "https://libproxy.github.io/libproxy/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;

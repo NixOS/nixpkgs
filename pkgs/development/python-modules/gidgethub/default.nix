@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An async GitHub API library";
+    description = "Async GitHub API library";
     homepage = "https://github.com/brettcannon/gidgethub";
     license = licenses.asl20;
     maintainers = [ ];

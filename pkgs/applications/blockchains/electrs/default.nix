@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, llvmPackages
 , rocksdb_7_10
 , Security
 }:
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An efficient re-implementation of Electrum Server in Rust";
+    description = "Efficient re-implementation of Electrum Server in Rust";
     homepage = "https://github.com/romanz/electrs";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];

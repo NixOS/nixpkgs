@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A point to point color terminal video chat";
+    description = "Point to point color terminal video chat";
     homepage = "https://github.com/mofarrell/p2pvc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ trino ];

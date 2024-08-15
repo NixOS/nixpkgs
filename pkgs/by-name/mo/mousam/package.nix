@@ -12,15 +12,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mousam";
-  version = "1.2.0";
+  version = "1.3.2";
   # built with meson, not a python format
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "amit9838";
     repo = "mousam";
-    rev = "v${version}";
-    hash = "sha256-/mOb4Pgdn5DcxwHjlI8L9kKD/Y6a4vROLbsQBb62VXM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1gFuMh5Poypmgyk2bpi9v6iK7WkO5KHLs+WsoDpJPeg=";
   };
 
   nativeBuildInputs = [

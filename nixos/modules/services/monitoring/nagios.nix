@@ -88,7 +88,7 @@ in
 
   options = {
     services.nagios = {
-      enable = mkEnableOption ''[Nagios](https://www.nagios.org/) to monitor your system or network.'';
+      enable = mkEnableOption ''[Nagios](https://www.nagios.org/) to monitor your system or network'';
 
       objectDefs = mkOption {
         description = ''
@@ -175,7 +175,7 @@ in
 
   config = mkIf cfg.enable {
     users.users.nagios = {
-      description = "Nagios user ";
+      description = "Nagios user";
       uid         = config.ids.uids.nagios;
       home        = nagiosState;
       group       = "nagios";

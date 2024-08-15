@@ -1,7 +1,7 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 let
   pname = "e1s";
-  version = "1.0.36";
+  version = "1.0.38";
 in
 buildGoModule {
   inherit pname version;
@@ -10,10 +10,10 @@ buildGoModule {
     owner = "keidarcy";
     repo = "e1s";
     rev = "refs/tags/v${version}";
-    hash = "sha256-i2XCys/fXNS7aXxpAPVqFpuQGempcsBEbVuphXPpBIc=";
+    hash = "sha256-OFnriW+rerVTyonuXe9qilR78Qok6QUYQvTDbsTi5L0=";
   };
 
-  vendorHash = "sha256-fTrKqhfUg+/4xid9YWkTNkXm3HGaoeeJU0RIMW2mtq8=";
+  vendorHash = "sha256-oQVZ1SNXaXOngZazUVeWLvtZu17XvtIcrx+XC6PvGH0=";
 
   meta = with lib; {
     description = "Easily Manage AWS ECS Resources in Terminal 🐱";

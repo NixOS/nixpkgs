@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
       GUI, many bugfixes, and more.
     '';
 
-    maintainers = [];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     knownVulnerabilities = [ "CVE-2021-42785" ];

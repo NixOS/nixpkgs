@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "CUPS Linux drivers and SDK for DYMO printers";
     homepage = "https://www.dymo.com/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ makefu ];
   };
 }

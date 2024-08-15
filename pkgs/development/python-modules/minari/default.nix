@@ -75,7 +75,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A standard format for offline reinforcement learning datasets, with popular reference datasets and related utilities";
+    description = "Standard format for offline reinforcement learning datasets, with popular reference datasets and related utilities";
     homepage = "https://github.com/Farama-Foundation/Minari";
     changelog = "https://github.com/Farama-Foundation/Minari/releases/tag/v${version}";
     license = with licenses; [

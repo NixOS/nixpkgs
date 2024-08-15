@@ -79,7 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/mpdavis/python-jose/releases/tag/${version}";
     homepage = "https://github.com/mpdavis/python-jose";
-    description = "A JOSE implementation in Python";
+    description = "JOSE implementation in Python";
     license = licenses.mit;
     maintainers = with maintainers; [ jhhuh ];
   };

@@ -8,7 +8,7 @@
   fetchFromGitHub,
   cmake,
   libuuid,
-  gnutls,
+  nixosTests,
   python3,
   xdg-utils,
   installShellFiles,
@@ -16,12 +16,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "3.0.2";
+  version = "3.1.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v3.0.2";
-    hash = "sha256-vN3X6vLuD4Fw9wpEUYLf8sboA5GIcdP5EFb41KS6d5s=";
+    rev = "v${version}";
+    hash = "sha256-iKpOExj1xM9rU/rIcOLLKMrZrAfz7y9X2kt2CjfMOOQ=";
     fetchSubmodules = true;
   };
 
@@ -30,32 +30,31 @@ stdenv.mkDerivation rec {
       --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    libuuid
-    python3
-    installShellFiles
-    corrosion
-    cargo
-    rustc
-    rustPlatform.cargoSetupHook
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin dependencies
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      libuuid
+      python3
+      installShellFiles
+      corrosion
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # darwin dependencies
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   doCheck = true;
-  preCheck = ''
-    patchShebangs --build test
-  '';
-  checkTarget = "test";
+  checkTarget = "build_tests";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = src.name;
-    hash = "sha256-4hdM9LgDa47ZYcX30HXvixIRy0xaahG4XBqPiUM+IUM=";
+    hash = "sha256-L+hYYKXSOG4XYdexLMG3wdA7st+A9Wk9muzipSNjxrA=";
   };
   cargoRoot = "./";
   preConfigure = ''
@@ -77,12 +76,20 @@ stdenv.mkDerivation rec {
     ln -s $out/share/vim-plugins/task $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  passthru.tests.nixos = nixosTests.taskchampion-sync-server;
+
+  meta = {
+    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/blob/${src.rev}/ChangeLog";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [marcweber oxalica mlaradji];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      marcweber
+      oxalica
+      mlaradji
+      doronbehar
+    ];
     mainProgram = "task";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

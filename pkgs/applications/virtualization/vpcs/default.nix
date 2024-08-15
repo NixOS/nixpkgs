@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A simple virtual PC simulator";
+    description = "Simple virtual PC simulator";
     longDescription = ''
       The VPCS (Virtual PC Simulator) can simulate up to 9 PCs. You can
       ping/traceroute them, or ping/traceroute the other hosts/routers from the

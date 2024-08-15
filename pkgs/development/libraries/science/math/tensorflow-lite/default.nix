@@ -1,5 +1,4 @@
 { stdenv
-, bash
 , buildPackages
 , buildBazelPackage
 , fetchFromGitHub
@@ -99,7 +98,7 @@ buildBazelPackage rec {
   configurePlatforms = [];
 
   meta = with lib; {
-    description = "An open source deep learning framework for on-device inference.";
+    description = "Open source deep learning framework for on-device inference";
     homepage = "https://www.tensorflow.org/lite";
     license = licenses.asl20;
     maintainers = with maintainers; [ mschwaig cpcloud ];

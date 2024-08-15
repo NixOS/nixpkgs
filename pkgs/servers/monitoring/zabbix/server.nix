@@ -88,7 +88,7 @@ in
       '';
 
       meta = with lib; {
-        description = "An enterprise-class open source distributed monitoring solution";
+        description = "Enterprise-class open source distributed monitoring solution";
         homepage = "https://www.zabbix.com/";
         license = licenses.gpl2Plus;
         maintainers = with maintainers; [ mmahut psyanticy ];

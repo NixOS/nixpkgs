@@ -1,5 +1,4 @@
-{ pkgs
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
 , buildDotnetModule
@@ -12,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.10.3";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-xaoOfylDf8KBGjS5RxPH156PRfEBFk+sRZ4QTCMSQbY=";
+    hash = "sha256-odlKNp6kjOAYeRIHnLniqkCXTi1UXF3szn8tJtrxzQU=";
   };
 
   buildInputs = [
@@ -55,7 +54,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/mattpannella/pupdate";
-    description = "Pupdate - A thing for updating your Analogue Pocket ";
+    description = "Pupdate - A thing for updating your Analogue Pocket";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-rintz ];

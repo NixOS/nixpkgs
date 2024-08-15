@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-sfJohmsqq5FumUoVE8x3yWv12DiCJJXae62br0j+190=";
+    hash = "sha256-sfJohmsqq5FumUoVE8x3yWv12DiCJJXae62br0j+190=";
     fetchSubmodules = true;
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A lean and efficient Python implementation for microcontrollers and constrained systems";
+    description = "Lean and efficient Python implementation for microcontrollers and constrained systems";
     homepage = "https://micropython.org";
     platforms = platforms.unix;
     license = licenses.mit;

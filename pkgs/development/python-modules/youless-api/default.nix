@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "youless-api";
-  version = "2.0.0";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "gjong";
     repo = "youless-python-bridge";
     rev = "refs/tags/${version}";
-    hash = "sha256-FnbfwjrzorLDUi9GJLY+pt5zSn4VpVC3Umc/FH46Pzo=";
+    hash = "sha256-MvGLIhkBbcGThKeqtlzVZct2o9PBLwcAELmn5pW3R6I=";
   };
 
   build-system = [ setuptools ];

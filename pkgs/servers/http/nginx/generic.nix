@@ -205,12 +205,12 @@ stdenv.mkDerivation {
   };
 
   meta = if meta != null then meta else with lib; {
-    description = "A reverse proxy and lightweight webserver";
+    description = "Reverse proxy and lightweight webserver";
     mainProgram = "nginx";
     homepage    = "http://nginx.org";
     license     = [ licenses.bsd2 ]
       ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members ++ teams.stridtech.members;
   };
 }

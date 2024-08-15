@@ -7,7 +7,7 @@
 , python3
 , giflib
 , darwin
-, ghostscript
+, ghostscript_headless
 , imagemagickBig
 , jbig2enc
 , optipng
@@ -24,19 +24,20 @@
 }:
 
 let
-  version = "2.8.6";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jcy/nds/JuivRV8mRtq2FbBB2L/CGqmoHoG1wVCwHFU=";
+    hash = "sha256-qqOTW7qgaZfNFYgVIDdwVh9KlT3Z6g8EALMOv39aRVc=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
   # https://github.com/NixOS/nixpkgs/issues/298719
   # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
@@ -55,7 +56,7 @@ let
 
 
   path = lib.makeBinPath [
-    ghostscript
+    ghostscript_headless
     imagemagickBig
     jbig2enc
     optipng
@@ -74,7 +75,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-xRUZnFekzWHPtlUbpt0JZmlNjdjS1bBZDz8MmH8DC2U=";
+    npmDepsHash = "sha256-dze03mkWMA2o3v3aoPTrDtUndTdP7Tk4gvFp4nq80po=";
 
     nativeBuildInputs = [
       pkg-config
@@ -138,6 +139,7 @@ python.pkgs.buildPythonApplication rec {
     django-filter
     django-guardian
     django-multiselectfield
+    django-soft-delete
     djangorestframework
     djangorestframework-guardian2
     drf-writable-nested
@@ -153,7 +155,7 @@ python.pkgs.buildPythonApplication rec {
     ocrmypdf
     pathvalidate
     pdf2image
-    psycopg2
+    psycopg
     python-dateutil
     python-dotenv
     python-gnupg
@@ -218,6 +220,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-django
     pytest-env
     pytest-httpx
+    pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
@@ -248,6 +251,8 @@ python.pkgs.buildPythonApplication rec {
     # AssertionError: 10 != 4 (timezone/time issue)
     # Due to getting local time from modification date in test_consumer.py
     "testNormalOperation"
+    # Something broken with new Tesseract and inline RTL/LTR overrides?
+    "test_rtl_language_detection"
   ];
 
   doCheck = !stdenv.isDarwin;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, version, hashes, autoPatchelfHook }:
+{ stdenv, fetchurl, version, hashes }:
 let
   toGoKernel = platform:
     if platform.isDarwin then "darwin"
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     url = "https://go.dev/dl/go${version}.${platform}.tar.gz";
     sha256 = hashes.${platform} or (throw "Missing Go bootstrap hash for platform ${platform}");
   };
-
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   # We must preserve the signature on Darwin
   dontStrip = stdenv.hostPlatform.isDarwin;

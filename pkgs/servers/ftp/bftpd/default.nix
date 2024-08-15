@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcrypt ];
 
+  CFLAGS = "-std=gnu89";
+
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*
   '';
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A minimal ftp server";
+    description = "Minimal ftp server";
     mainProgram = "bftpd";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";

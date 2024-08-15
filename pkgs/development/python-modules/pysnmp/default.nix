@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://snmplabs.com/pysnmp/index.html";
-    description = "A pure-Python SNMPv1/v2c/v3 library";
+    description = "Pure-Python SNMPv1/v2c/v3 library";
     license = licenses.bsd2;
     maintainers = with maintainers; [
       primeos

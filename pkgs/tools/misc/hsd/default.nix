@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , python3
 , unbound
-, darwin
+, cctools
 }:
 
 buildNpmPackage rec {
@@ -23,7 +23,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     python3
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   buildInputs = [

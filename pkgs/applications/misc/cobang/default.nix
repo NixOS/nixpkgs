@@ -24,14 +24,14 @@
 
 buildPythonApplication rec {
   pname = "cobang";
-  version = "0.12.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4INScFnYSwVnGjaohgDL3Sv/NeIwiiyLux8c9/Y/Wq4=";
+    hash = "sha256-/8JtDoXFQGlM7tlwKd+WRIKpnKCD6OnMmbvElg7LbzU=";
   };
 
   postPatch = ''
@@ -94,11 +94,11 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A QR code scanner desktop app for Linux";
+    description = "QR code scanner desktop app for Linux";
     homepage = "https://github.com/hongquan/CoBang";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [ aleksana dvaerum ];
     mainProgram = "cobang";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 }

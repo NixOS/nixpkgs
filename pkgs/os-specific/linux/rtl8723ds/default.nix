@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Linux driver for RTL8723DS.";
+    description = "Linux driver for RTL8723DS";
     homepage = "https://github.com/lwfinger/rtl8723ds";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;

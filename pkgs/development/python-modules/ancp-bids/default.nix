@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ancp-bids";
-  version = "0.2.1";
+  version = "0.2.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ANCPLabOldenburg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Nu9pulVSZysgm/F7jl+VpoqMCiHeysZjQDQ1dT7AnpE=";
+    hash = "sha256-c6X1gCYAezgZQP6xfQPfKW8V35F1cnTdbryEp3sZ4jw=";
   };
 
   patches = [

@@ -37,6 +37,8 @@
     clevisLuksFallback
     clevisZfs
     clevisZfsFallback
+    clevisZfsParentDataset
+    clevisZfsParentDatasetFallback
     gptAutoRoot
     clevisBcachefs
     clevisBcachefsFallback

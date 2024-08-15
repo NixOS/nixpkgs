@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hashrat";
-  version = "1.15";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "ColumPaget";
     repo = "Hashrat";
     rev = "v${version}";
-    hash = "sha256-+3IPCJS++7CE0ZrJb62LCRrAn2J4uCF3a1oOzDoOW0w=";
+    hash = "sha256-mjjK315OUUFVdUY+zcCvm7yeo7XxourR1sghWbeFT7c=";
   };
 
   configureFlags = [ "--enable-xattr" ];

@@ -1,5 +1,4 @@
-{ lib
-, runCommand
+{ runCommand
 , makeWrapper
 , tubekit-unwrapped
 , pname ? "tubekit"

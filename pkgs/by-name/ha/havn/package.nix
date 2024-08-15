@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "havn";
-  version = "0.1.11";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "mrjackwills";
     repo = "havn";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iotSSKId2y3Y7Dh8iSW1/y3xDbXHHPl6RQ3uA/+JdE8=";
+    hash = "sha256-z6505lMqNQ0FpMMRJwpOFodELfDeoIjrjG58mrfSvTY=";
   };
 
-  cargoHash = "sha256-Tec1YeP1zwE8nurQOYxa9hzGBy3uxkjDUFlh0BppUTo=";
+  cargoHash = "sha256-RzfIu2apaFacSJz29UTaCKcC7Y81uxj1EerVyxZB50E=";
 
   checkFlags = [
     # Skip tests that require network access
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/mrjackwills/havn";
-    description = "A fast configurable port scanner with reasonable defaults";
+    description = "Fast configurable port scanner with reasonable defaults";
     changelog = "https://github.com/mrjackwills/havn/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];

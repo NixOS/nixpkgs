@@ -14,10 +14,7 @@
 , gnused
 }:
 
-let
-  mavenJdk17 = maven.override { jdk = jdk17; };
-in
-mavenJdk17.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
   version = "3.5.1.75119";
 
@@ -28,6 +25,7 @@ mavenJdk17.buildMavenPackage rec {
     hash = "sha256-6tbuX0wUpqbTyM44e7PqZHL0/XjN8hTFCgfzV+qc1m0=";
   };
 
+  mvnJdk = jdk17;
   manualMvnArtifacts = [
     "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
     "org.junit.platform:junit-platform-launcher:1.8.2"
@@ -40,7 +38,7 @@ mavenJdk17.buildMavenPackage rec {
 
   # disable node and npm module installation because the need network access
   # for the tests.
-  mvnDepsParameters = "-Dskip.installnodenpm=true -Dskip.npm -DskipTests package";
+  mvnDepsParameters = "-Dskip.installnodenpm=true -Dskip.npm package";
 
   # disable failing tests which either need network access or are flaky
   mvnParameters = lib.escapeShellArgs [
@@ -52,6 +50,8 @@ mavenJdk17.buildMavenPackage rec {
     !ConnectedModeMediumTests,
     !JavaMediumTests"
   ];
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall

@@ -32,7 +32,7 @@ buildGoModule {
   meta = {
     homepage = "https://github.com/gotestyourself/gotestsum";
     changelog = "https://github.com/gotestyourself/gotestsum/releases/tag/v${version}";
-    description = "A human friendly `go test` runner";
+    description = "Human friendly `go test` runner";
     mainProgram = "gotestsum";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;

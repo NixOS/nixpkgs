@@ -71,13 +71,6 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  env = {
-    BOOST_INCLUDEDIR = "${lib.getDev boost182}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost182}/lib";
-  };
-
   mesonFlags = [
     (lib.mesonBool "enable_file_io" true)
     (lib.mesonBool "enable_io_uring" true)
@@ -98,13 +91,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # Skipped test: libpsx
-  # Known issue with no-new-privs disabled in the Nix build environment.
-  checkPhase = ''
-    runHook preCheck
-    meson test --print-errorlogs --no-suite libpsx
-    runHook postCheck
-  '';
+  mesonCheckFlags = [
+    # Skipped test: libpsx
+    # Known issue with no-new-privs disabled in the Nix build environment.
+    "--no-suite" "libpsx"
+  ];
 
   meta = with lib; {
     description = "Lua execution engine";

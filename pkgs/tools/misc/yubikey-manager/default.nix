@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.4.0";
+  version = "5.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     rev = version;
-    hash = "sha256-Rn3iGiiR48EFVAn9BRQ043L8x7WwH7XnazZlVw50IGU=";
+    hash = "sha256-m/B5G83XZROoCNq/ZT0U0MUth2IC99e3LWc8FcOq1ig=";
   };
 
   postPatch = ''
@@ -25,7 +25,6 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
-    pythonRelaxDepsHook
     installShellFiles
   ];
 

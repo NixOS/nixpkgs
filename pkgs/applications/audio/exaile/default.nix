@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub
 , gobject-introspection, makeWrapper, wrapGAppsHook3
 , gtk3, gst_all_1, python3
-, gettext, gnome, help2man, keybinder3, libnotify, librsvg, streamripper, udisks, webkitgtk
-, iconTheme ? gnome.adwaita-icon-theme
+, gettext, adwaita-icon-theme, help2man, keybinder3, libnotify, librsvg, streamripper, udisks, webkitgtk
+, iconTheme ? adwaita-icon-theme
 , deviceDetectionSupport ? true
 , documentationSupport ? true
 , notificationSupport ? true
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     gst-plugins-ugly
     gst-libav
   ]) ++ (with python3.pkgs; [
-    bsddb3
+    berkeleydb
     dbus-python
     mutagen
     pygobject3
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.exaile.org/";
-    description = "A music player with a simple interface and powerful music management capabilities";
+    description = "Music player with a simple interface and powerful music management capabilities";
     mainProgram = "exaile";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ryneeverett ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A solver for Solitaire variants Golf, Black Hole, and All in a Row";
+    description = "Solver for Solitaire variants Golf, Black Hole, and All in a Row";
     mainProgram = "black-hole-solve";
     homepage = "https://www.shlomifish.org/open-source/projects/black-hole-solitaire-solver/";
     license = licenses.mit;

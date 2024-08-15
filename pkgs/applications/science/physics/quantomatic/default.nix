@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A piece of software for reasoning about monoidal theories; in particular, quantum information processing";
+    description = "Piece of software for reasoning about monoidal theories; in particular, quantum information processing";
     mainProgram = "quantomatic";
     license = licenses.gpl3;
     homepage = "https://quantomatic.github.io/";

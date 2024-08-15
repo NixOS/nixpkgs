@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   meta = with lib; {
-    description = "A lightweight xcb based bar";
+    description = "Lightweight xcb based bar";
     homepage = "https://github.com/LemonBoy/bar";
     maintainers = with maintainers; [ meisternu moni ];
     license = licenses.mit;

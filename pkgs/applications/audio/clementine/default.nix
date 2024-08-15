@@ -128,7 +128,7 @@ in mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.clementine-player.org";
-    description = "A multiplatform music player";
+    description = "Multiplatform music player";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ttuegel ];

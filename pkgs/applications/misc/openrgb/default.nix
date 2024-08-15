@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
+    hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
   nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     mainProgram = "openrgb";

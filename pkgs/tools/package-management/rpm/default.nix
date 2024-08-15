@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rpm.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
-    description = "The RPM Package Manager";
+    description = "RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
     # Support for darwin was removed in https://github.com/NixOS/nixpkgs/pull/196350.

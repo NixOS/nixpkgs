@@ -6,7 +6,6 @@
   promise,
   python-socketio,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   websockets,
 }:
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     aiohttp

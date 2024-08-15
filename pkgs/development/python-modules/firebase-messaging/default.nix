@@ -1,5 +1,7 @@
 {
   lib,
+  aiohttp,
+  aioresponses,
   async-timeout,
   buildPythonPackage,
   cryptography,
@@ -9,9 +11,9 @@
   protobuf,
   pytest-asyncio,
   pytest-mock,
+  pytest-socket,
   pytestCheckHook,
   pythonOlder,
-  requests,
   requests-mock,
   sphinx,
   sphinx-autodoc-typehints,
@@ -21,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "firebase-messaging";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +32,7 @@ buildPythonPackage rec {
     owner = "sdb9696";
     repo = "firebase-messaging";
     rev = "refs/tags/${version}";
-    hash = "sha256-8e+S12ZMqAmK7OR7O45QsRa0UKQq6cngeaqz2ugi6iY=";
+    hash = "sha256-pZpnekJ11yx3L8l56vZOa4uS+jJMxUkYODgNAqysVeY=";
   };
 
   outputs = [
@@ -44,10 +46,10 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.docs;
 
   propagatedBuildInputs = [
+    aiohttp
     cryptography
     http-ece
     protobuf
-    requests
   ];
 
   passthru.optional-dependencies = {
@@ -61,10 +63,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "firebase_messaging" ];
 
   nativeCheckInputs = [
+    aioresponses
     async-timeout
     requests-mock
     pytest-asyncio
     pytest-mock
+    pytest-socket
     pytestCheckHook
   ];
 
@@ -73,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdb9696/firebase-messaging";
     changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

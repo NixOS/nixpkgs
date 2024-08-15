@@ -62,11 +62,11 @@ in
               keyfile = mkOption {
                 type    = types.path;
                 description = ''
-                  Name of a file containing the spiped key. As the
-                  daemon runs as the `spiped` user, the
-                  key file must be somewhere owned by that user. By
-                  default, we recommend putting the keys for any spipe
-                  services in `/var/lib/spiped`.
+                  Name of a file containing the spiped key.
+                  As the daemon runs as the `spiped` user,
+                  the key file must be readable by that user.
+                  To securely manage the file within your configuration
+                  consider a tool such as agenix or sops-nix.
                 '';
               };
 
@@ -185,21 +185,11 @@ in
       serviceConfig = {
         Restart   = "always";
         User      = "spiped";
-        PermissionsStartOnly = true;
       };
 
-      preStart  = ''
-        cd /var/lib/spiped
-        chmod -R 0660 *
-        chown -R spiped:spiped *
-      '';
       scriptArgs = "%i";
       script = "exec ${pkgs.spiped}/bin/spiped -F `cat /etc/spiped/$1.spec`";
     };
-
-    systemd.tmpfiles.rules = lib.mkIf (cfg.config != { }) [
-      "d /var/lib/spiped -"
-    ];
 
     # Setup spiped config files
     environment.etc = mapAttrs' (name: cfg: nameValuePair "spiped/${name}.spec"

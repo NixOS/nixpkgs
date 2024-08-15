@@ -20,7 +20,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemq-community";
-    description = "KubeMQ Community is the open-source version of KubeMQ, the Kubernetes native message broker.";
+    description = "KubeMQ Community is the open-source version of KubeMQ, the Kubernetes native message broker";
     mainProgram = "kubemq-community";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brianmcgee ];

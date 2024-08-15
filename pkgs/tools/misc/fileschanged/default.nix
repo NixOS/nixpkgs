@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.nongnu.org/fileschanged/";
-    description = "A command-line utility that reports when files have been altered";
+    description = "Command-line utility that reports when files have been altered";
     license = lib.licenses.gpl3Plus;
 
     longDescription = ''

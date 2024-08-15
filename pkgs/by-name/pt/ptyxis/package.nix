@@ -15,18 +15,19 @@
 }:
 
 let
-  version = "46.2";
+  version = "46.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "ptyxis";
     rev = version;
-    hash = "sha256-/n/S2ws6qsVwTXX96MPa+/ISozDDu8A1wkD1g3dmAtQ=";
+    hash = "sha256-PHjQJEM0W26ZpzW//+gsYCCq0lcikWh0707kDXxryAo=";
   };
 
   vte-gtk4-patched = vte-gtk4.overrideAttrs (prev: {
     patches = (prev.patches or [ ]) ++ [
+      "${src}/build-aux/0001-a11y-implement-GtkAccessibleText.patch"
       "${src}/build-aux/0001-add-notification-and-shell-precmd-preexec.patch"
     ];
   });
@@ -56,7 +57,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A terminal for GNOME with first-class support for containers";
+    description = "Terminal for GNOME with first-class support for containers";
     homepage = "https://gitlab.gnome.org/chergert/ptyxis";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ptyxis";

@@ -22,6 +22,7 @@ export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
+wait "$!"
 
 declare -a remote_sources
 declare -A base_addresses
@@ -55,21 +56,23 @@ for package in *; do
       continue
     fi
 
-    used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
+    # packages in the nix store should have an empty metadata file
+    used_source="$(jq -r 'if has("source") then .source else "" end' "$version"/.nupkg.metadata)"
     found=false
 
-    if [[ -d "$used_source" ]]; then
-        continue
+    if [[ -z "$used_source" || -d "$used_source" ]]; then
+      continue
     fi
 
     for source in "${remote_sources[@]}"; do
       url="${base_addresses[$source]}$package/$version/$package.$version.nupkg"
       if [[ "$source" == "$used_source" ]]; then
-        sha256="$(nix-hash --type sha256 --flat --base32 "$version/$package.$version".nupkg)"
+        hash="$(nix-hash --type sha256 --flat --sri "$version/$package.$version".nupkg)"
         found=true
         break
       else
-        if sha256=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+        if hash=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+          hash="$(nix-hash --to-sri --type sha256 "$hash")"
           # If multiple remote sources are enabled, nuget will try them all
           # concurrently and use the one that responds first. We always use the
           # first source that has the package.
@@ -91,9 +94,9 @@ for package in *; do
     fi
 
     if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; url = \"$url\"; })"
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; url = \"$url\"; })"
     else
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; })"
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; })"
     fi
   done
   cd ..

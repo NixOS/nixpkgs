@@ -1,4 +1,4 @@
-{ stdenv, lib, buildBazelPackage, bazel_6, fetchFromGitHub, darwin }:
+{ stdenv, lib, buildBazelPackage, bazel_6, fetchFromGitHub, cctools }:
 
 buildBazelPackage rec {
   pname = "protoc-gen-js";
@@ -17,7 +17,7 @@ buildBazelPackage rec {
   removeRulesCC = false;
   removeLocalConfigCC = false;
 
-  LIBTOOL = lib.optionalString stdenv.isDarwin "${darwin.cctools}/bin/libtool";
+  LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
   fetchAttrs.sha256 = "sha256-WOBlZ0XNrl5UxIaSDxZeOfzS2a8ZkrKdTLKHBDC9UNQ=";
 
@@ -33,6 +33,6 @@ buildBazelPackage rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = with licenses; [ asl20 bsd3 ];
     sourceProvenance = [ sourceTypes.fromSource ];
-    maintainers = with maintainers; [ Sorixelle ];
+    maintainers = [ ];
   };
 }

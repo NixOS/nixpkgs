@@ -5,7 +5,6 @@
   fetchPypi,
   jmespath,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -25,7 +24,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     cryptography

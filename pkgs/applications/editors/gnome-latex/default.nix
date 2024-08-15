@@ -12,6 +12,7 @@
 , libgedit-gtksourceview
 , libgedit-tepl
 , libgee
+, adwaita-icon-theme
 , gnome
 , glib
 , pkg-config
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/swilmet/gnome-latex";
-    description = "A LaTeX editor for the GNOME desktop";
+    description = "LaTeX editor for the GNOME desktop";
     maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

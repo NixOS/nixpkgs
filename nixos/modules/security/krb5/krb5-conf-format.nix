@@ -7,17 +7,61 @@
 let
   inherit (lib) boolToString concatMapStringsSep concatStringsSep filter
     isAttrs isBool isList mapAttrsToList mkOption singleton splitString;
-  inherit (lib.types) attrsOf bool coercedTo either int listOf oneOf path
-    str submodule;
+  inherit (lib.types) attrsOf bool coercedTo either enum int listOf oneOf
+    path str submodule;
 in
-{ }: {
-  type = let
-    section = attrsOf relation;
-    relation = either (attrsOf value) value;
+{
+  enableKdcACLEntries ? false
+}: rec {
+  sectionType = let
+    relation = oneOf [
+      (listOf (attrsOf value))
+      (attrsOf value)
+      value
+    ];
     value = either (listOf atom) atom;
     atom = oneOf [int str bool];
+  in attrsOf relation;
+
+  type = let
+    aclEntry = submodule {
+      options = {
+        principal = mkOption {
+          type = str;
+          description = "Which principal the rule applies to";
+        };
+        access = mkOption {
+          type = either
+            (listOf (enum ["add" "cpw" "delete" "get" "list" "modify"]))
+            (enum ["all"]);
+          default = "all";
+          description = "The changes the principal is allowed to make.";
+        };
+        target = mkOption {
+          type = str;
+          default = "*";
+          description = "The principals that 'access' applies to.";
+        };
+      };
+    };
+
+    realm = submodule ({ name, ... }: {
+      freeformType = sectionType;
+      options = {
+        acl = mkOption {
+          type = listOf aclEntry;
+          default = [
+            { principal = "*/admin"; access = "all"; }
+            { principal = "admin"; access = "all"; }
+          ];
+          description = ''
+            The privileges granted to a user.
+          '';
+        };
+      };
+    });
   in submodule {
-    freeformType = attrsOf section;
+    freeformType = attrsOf sectionType;
     options = {
       include = mkOption {
         default = [ ];
@@ -40,7 +84,17 @@ in
         '';
         type = coercedTo path singleton (listOf path);
       };
-    };
+
+    }
+    //
+    (lib.optionalAttrs enableKdcACLEntries {
+      realms = mkOption {
+        type = attrsOf realm;
+        description = ''
+          The realm(s) to serve keys for.
+        '';
+      };
+    });
   };
 
   generate = let
@@ -71,6 +125,9 @@ in
         ${name} = {
         ${indent (concatStringsSep "\n" (mapAttrsToList formatValue relation))}
         }''
+      else if isList relation
+      then
+        concatMapStringsSep "\n" (formatRelation name) relation
       else formatValue name relation;
 
     formatValue = name: value:

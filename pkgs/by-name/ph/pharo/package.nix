@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
     homepage = "https://pharo.org";
+    changelog = "https://github.com/pharo-project/pharo/releases/";
     license = lib.licenses.mit;
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source

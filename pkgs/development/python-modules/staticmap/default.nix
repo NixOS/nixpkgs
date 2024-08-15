@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A small, python-based library for creating map images with lines and markers";
+    description = "Small, python-based library for creating map images with lines and markers";
     homepage = "https://pypi.org/project/staticmap/";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ traxys ];

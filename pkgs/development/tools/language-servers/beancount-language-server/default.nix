@@ -1,21 +1,20 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "beancount-language-server";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "polarmutex";
     repo = "beancount-language-server";
     rev = "v${version}";
-    hash = "sha256-C44Z8JaEZvwgocaGjWT3rUAgIBtCRo0xZappMsydR7g=";
+    hash = "sha256-Z8Gc3QbnFGzF1mNjlbazz7OiDpQxY3HcaBKd32XjQCY=";
   };
 
-  cargoHash = "sha256-NMSNCURSO1iIWHH27FI5Y0q7+Ghds8VSxRGBOp+fH6A=";
+  cargoHash = "sha256-WMrh4toFqd+G30ZZxC+kT/Q07gn+3p80oKECASD48wc=";
 
   doInstallCheck = true;
   postInstallCheck = ''
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Language Server Protocol (LSP) for beancount files";
+    description = "Language Server Protocol (LSP) for beancount files";
     mainProgram = "beancount-language-server";
     homepage = "https://github.com/polarmutex/beancount-language-server";
     license = with licenses; [ mit ];

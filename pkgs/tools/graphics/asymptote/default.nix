@@ -1,24 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake, pkg-config
-, freeglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
-, boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
+, libglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
+, boehmgc, libGLU, libGL, ncurses, readline, gsl, libsigsegv
 , python3, qtbase, qtsvg, boost
 , zlib, perl, curl
 , texinfo
-, texlive
 , texliveSmall
 , darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.89";
+  version = "2.90";
   pname = "asymptote";
 
   outputs = [ "out" "man" "info" "doc" "tex" ];
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-9k5itO5PhfGnhkDE8eim+Y6R9U7ayrGXJ8fKvpSlf1s=";
+    hash = "sha256-jGlW+4CL9EqPJJcpW0+muumMQYkrQPPuj8dYqSRwc0A=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     glm
   ] ++ lib.optionals stdenv.isLinux [
-    freeglut libGLU libGL mesa.osmesa
+    libglut libGLU libGL
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);
@@ -127,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelInstalling = false;
 
   meta = with lib; {
-    description =  "A tool for programming graphics intended to replace Metapost";
+    description =  "Tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux ++ platforms.darwin;

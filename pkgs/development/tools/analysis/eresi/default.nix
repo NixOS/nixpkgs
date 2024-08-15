@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
                 ++ lib.optional stdenv.is64bit "install64";
 
   meta = {
-    description = "The ERESI Reverse Engineering Software Interface";
+    description = "ERESI Reverse Engineering Software Interface";
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/thorkill/eresi"; # Formerly http://www.eresi-project.org/
     platforms = lib.platforms.linux;

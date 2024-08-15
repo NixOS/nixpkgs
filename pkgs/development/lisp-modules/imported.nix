@@ -172,11 +172,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd = (build-asdf-system {
     pname = "3bmd";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd";
       asd = "3bmd";
     });
@@ -188,11 +188,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-ext-code-blocks = (build-asdf-system {
     pname = "3bmd-ext-code-blocks";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-ext-code-blocks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-ext-code-blocks";
       asd = "3bmd-ext-code-blocks";
     });
@@ -204,11 +204,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-ext-definition-lists = (build-asdf-system {
     pname = "3bmd-ext-definition-lists";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-ext-definition-lists" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-ext-definition-lists";
       asd = "3bmd-ext-definition-lists";
     });
@@ -220,11 +220,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-ext-math = (build-asdf-system {
     pname = "3bmd-ext-math";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-ext-math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-ext-math";
       asd = "3bmd-ext-math";
     });
@@ -236,11 +236,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-ext-tables = (build-asdf-system {
     pname = "3bmd-ext-tables";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-ext-tables" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-ext-tables";
       asd = "3bmd-ext-tables";
     });
@@ -252,11 +252,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-ext-wiki-links = (build-asdf-system {
     pname = "3bmd-ext-wiki-links";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-ext-wiki-links" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-ext-wiki-links";
       asd = "3bmd-ext-wiki-links";
     });
@@ -268,11 +268,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-tests = (build-asdf-system {
     pname = "3bmd-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-tests";
       asd = "3bmd-tests";
     });
@@ -284,11 +284,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-youtube = (build-asdf-system {
     pname = "3bmd-youtube";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-youtube" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-youtube";
       asd = "3bmd-youtube";
     });
@@ -300,11 +300,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3bmd-youtube-tests = (build-asdf-system {
     pname = "3bmd-youtube-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3bmd-youtube-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3bmd/2023-06-18/3bmd-20230618-git.tgz";
-      sha256 = "1b5ssbahk7a257fllh0c6vfxzjrcmybav1hhcciarv69mpdhm2mj";
+      url = "http://beta.quicklisp.org/archive/3bmd/2023-10-21/3bmd-20231021-git.tgz";
+      sha256 = "12xqih1gnwsn1baqm7bq3kxss73phn06gvd0v1h1vwsjd1xgpq3g";
       system = "3bmd-youtube-tests";
       asd = "3bmd-youtube-tests";
     });
@@ -330,13 +330,45 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  _3d-math = (build-asdf-system {
+    pname = "3d-math";
+    version = "20231021-git";
+    asds = [ "3d-math" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/3d-math/2023-10-21/3d-math-20231021-git.tgz";
+      sha256 = "0fj7dy68qvmcfhz2hvr3kbv5q09nz5v6qwam14cwzcigda86ha5g";
+      system = "3d-math";
+      asd = "3d-math";
+    });
+    systems = [ "3d-math" ];
+    lispLibs = [ (getAttr "documentation-utils" self) (getAttr "type-templates" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  _3d-math-test = (build-asdf-system {
+    pname = "3d-math-test";
+    version = "20231021-git";
+    asds = [ "3d-math-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/3d-math/2023-10-21/3d-math-20231021-git.tgz";
+      sha256 = "0fj7dy68qvmcfhz2hvr3kbv5q09nz5v6qwam14cwzcigda86ha5g";
+      system = "3d-math-test";
+      asd = "3d-math-test";
+    });
+    systems = [ "3d-math-test" ];
+    lispLibs = [ (getAttr "_3d-math" self) (getAttr "parachute" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   _3d-matrices = (build-asdf-system {
     pname = "3d-matrices";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-matrices" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-matrices/2023-06-18/3d-matrices-20230618-git.tgz";
-      sha256 = "1sj7kpn1fnh6dp67x8cdb6p59raacvr3zc4jfp7kw3ffdwd8hq4y";
+      url = "http://beta.quicklisp.org/archive/3d-matrices/2023-10-21/3d-matrices-20231021-git.tgz";
+      sha256 = "0kn68awww0h8gwiqih8a65d2p34q3qh4z5ji2g5ja99vgpr1498q";
       system = "3d-matrices";
       asd = "3d-matrices";
     });
@@ -348,11 +380,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-matrices-test = (build-asdf-system {
     pname = "3d-matrices-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-matrices-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-matrices/2023-06-18/3d-matrices-20230618-git.tgz";
-      sha256 = "1sj7kpn1fnh6dp67x8cdb6p59raacvr3zc4jfp7kw3ffdwd8hq4y";
+      url = "http://beta.quicklisp.org/archive/3d-matrices/2023-10-21/3d-matrices-20231021-git.tgz";
+      sha256 = "0kn68awww0h8gwiqih8a65d2p34q3qh4z5ji2g5ja99vgpr1498q";
       system = "3d-matrices-test";
       asd = "3d-matrices-test";
     });
@@ -364,11 +396,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-quaternions = (build-asdf-system {
     pname = "3d-quaternions";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-quaternions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-quaternions/2023-06-18/3d-quaternions-20230618-git.tgz";
-      sha256 = "16gzg5av8jx1bkbbvyqmxha9r1k4dfd4y2dkv6q0c66wrglyd46r";
+      url = "http://beta.quicklisp.org/archive/3d-quaternions/2023-10-21/3d-quaternions-20231021-git.tgz";
+      sha256 = "1m72g2rn1n5xsqaa50qbj6hcp8b4gk7xsld4qaly788bwscparl8";
       system = "3d-quaternions";
       asd = "3d-quaternions";
     });
@@ -380,11 +412,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-quaternions-test = (build-asdf-system {
     pname = "3d-quaternions-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-quaternions-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-quaternions/2023-06-18/3d-quaternions-20230618-git.tgz";
-      sha256 = "16gzg5av8jx1bkbbvyqmxha9r1k4dfd4y2dkv6q0c66wrglyd46r";
+      url = "http://beta.quicklisp.org/archive/3d-quaternions/2023-10-21/3d-quaternions-20231021-git.tgz";
+      sha256 = "1m72g2rn1n5xsqaa50qbj6hcp8b4gk7xsld4qaly788bwscparl8";
       system = "3d-quaternions-test";
       asd = "3d-quaternions-test";
     });
@@ -396,27 +428,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-spaces = (build-asdf-system {
     pname = "3d-spaces";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-spaces" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-spaces/2023-06-18/3d-spaces-20230618-git.tgz";
-      sha256 = "1igi54c3n6jfqw893pv0py61vmqyslws67xh4wgvj2xfifwv6x0s";
+      url = "http://beta.quicklisp.org/archive/3d-spaces/2023-10-21/3d-spaces-20231021-git.tgz";
+      sha256 = "0jsn8hdg7kghfvgfaawz6cnpn526sf59zrdj5aakglpzk376zyjg";
       system = "3d-spaces";
       asd = "3d-spaces";
     });
     systems = [ "3d-spaces" ];
-    lispLibs = [ (getAttr "_3d-matrices" self) (getAttr "_3d-vectors" self) (getAttr "documentation-utils" self) (getAttr "for" self) (getAttr "trivial-extensible-sequences" self) ];
+    lispLibs = [ (getAttr "_3d-math" self) (getAttr "documentation-utils" self) (getAttr "for" self) (getAttr "trivial-extensible-sequences" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   _3d-spaces-test = (build-asdf-system {
     pname = "3d-spaces-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-spaces-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-spaces/2023-06-18/3d-spaces-20230618-git.tgz";
-      sha256 = "1igi54c3n6jfqw893pv0py61vmqyslws67xh4wgvj2xfifwv6x0s";
+      url = "http://beta.quicklisp.org/archive/3d-spaces/2023-10-21/3d-spaces-20231021-git.tgz";
+      sha256 = "0jsn8hdg7kghfvgfaawz6cnpn526sf59zrdj5aakglpzk376zyjg";
       system = "3d-spaces-test";
       asd = "3d-spaces-test";
     });
@@ -428,11 +460,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-transforms = (build-asdf-system {
     pname = "3d-transforms";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-transforms" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-transforms/2023-06-18/3d-transforms-20230618-git.tgz";
-      sha256 = "0p6nh77f1r24pv1mqsan20ji69pd0kxx9cqllhvgba9i59p9mgqv";
+      url = "http://beta.quicklisp.org/archive/3d-transforms/2023-10-21/3d-transforms-20231021-git.tgz";
+      sha256 = "0876pih289fgn8maclihiz9xl66zbi4nbznpdq2xpfbsr1k4sihy";
       system = "3d-transforms";
       asd = "3d-transforms";
     });
@@ -444,11 +476,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-transforms-test = (build-asdf-system {
     pname = "3d-transforms-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-transforms-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-transforms/2023-06-18/3d-transforms-20230618-git.tgz";
-      sha256 = "0p6nh77f1r24pv1mqsan20ji69pd0kxx9cqllhvgba9i59p9mgqv";
+      url = "http://beta.quicklisp.org/archive/3d-transforms/2023-10-21/3d-transforms-20231021-git.tgz";
+      sha256 = "0876pih289fgn8maclihiz9xl66zbi4nbznpdq2xpfbsr1k4sihy";
       system = "3d-transforms-test";
       asd = "3d-transforms-test";
     });
@@ -460,11 +492,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-vectors = (build-asdf-system {
     pname = "3d-vectors";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-vectors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-vectors/2023-06-18/3d-vectors-20230618-git.tgz";
-      sha256 = "029rv4ip17in1w5piivk78z05z9c6r22hn9ax3badbgl1j9v51yn";
+      url = "http://beta.quicklisp.org/archive/3d-vectors/2023-10-21/3d-vectors-20231021-git.tgz";
+      sha256 = "0y3iwb0bvxf8ixgsbg3idlx91k3lim9na53fasb4scnhlmpsbk28";
       system = "3d-vectors";
       asd = "3d-vectors";
     });
@@ -476,11 +508,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _3d-vectors-test = (build-asdf-system {
     pname = "3d-vectors-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "3d-vectors-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/3d-vectors/2023-06-18/3d-vectors-20230618-git.tgz";
-      sha256 = "029rv4ip17in1w5piivk78z05z9c6r22hn9ax3badbgl1j9v51yn";
+      url = "http://beta.quicklisp.org/archive/3d-vectors/2023-10-21/3d-vectors-20231021-git.tgz";
+      sha256 = "0y3iwb0bvxf8ixgsbg3idlx91k3lim9na53fasb4scnhlmpsbk28";
       system = "3d-vectors-test";
       asd = "3d-vectors-test";
     });
@@ -492,11 +524,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-asdf-system = (build-asdf-system {
     pname = "40ants-asdf-system";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "40ants-asdf-system" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/40ants-asdf-system/2023-02-14/40ants-asdf-system-20230214-git.tgz";
-      sha256 = "02r6frx4xcv7qfkmdks1zpv0b3qamywdcwd6zvznfcnmfa8jbfmy";
+      url = "http://beta.quicklisp.org/archive/40ants-asdf-system/2023-10-21/40ants-asdf-system-20231021-git.tgz";
+      sha256 = "17hfih5b1shw2l0fw3dy3q5dxqra80k3h4jfmlnf0bp3ii0385g5";
       system = "40ants-asdf-system";
       asd = "40ants-asdf-system";
     });
@@ -508,11 +540,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-asdf-system-tests = (build-asdf-system {
     pname = "40ants-asdf-system-tests";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "40ants-asdf-system-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/40ants-asdf-system/2023-02-14/40ants-asdf-system-20230214-git.tgz";
-      sha256 = "02r6frx4xcv7qfkmdks1zpv0b3qamywdcwd6zvznfcnmfa8jbfmy";
+      url = "http://beta.quicklisp.org/archive/40ants-asdf-system/2023-10-21/40ants-asdf-system-20231021-git.tgz";
+      sha256 = "17hfih5b1shw2l0fw3dy3q5dxqra80k3h4jfmlnf0bp3ii0385g5";
       system = "40ants-asdf-system-tests";
       asd = "40ants-asdf-system-tests";
     });
@@ -524,11 +556,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-ci = (build-asdf-system {
     pname = "40ants-ci";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci/2023-06-18/ci-20230618-git.tgz";
-      sha256 = "0i4glf28nn2nwxb64irv6wja7rdadh8378fdhl4lsvmqn5whi5sv";
+      url = "http://beta.quicklisp.org/archive/ci/2023-10-21/ci-20231021-git.tgz";
+      sha256 = "083r8l431jig7631r5rq9gcxcp0kcd9qfy9blxjyjyynm56mlndn";
       system = "40ants-ci";
       asd = "40ants-ci";
     });
@@ -540,11 +572,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-ci-tests = (build-asdf-system {
     pname = "40ants-ci-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-ci-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ci/2023-06-18/ci-20230618-git.tgz";
-      sha256 = "0i4glf28nn2nwxb64irv6wja7rdadh8378fdhl4lsvmqn5whi5sv";
+      url = "http://beta.quicklisp.org/archive/ci/2023-10-21/ci-20231021-git.tgz";
+      sha256 = "083r8l431jig7631r5rq9gcxcp0kcd9qfy9blxjyjyynm56mlndn";
       system = "40ants-ci-tests";
       asd = "40ants-ci-tests";
     });
@@ -556,11 +588,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-doc = (build-asdf-system {
     pname = "40ants-doc";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-doc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/doc/2023-06-18/doc-20230618-git.tgz";
-      sha256 = "0s8ji6gwrq3yz9n7k2hb5q14ab37i3f8pm5cg5h29bpxwvdmv0fx";
+      url = "http://beta.quicklisp.org/archive/doc/2023-10-21/doc-20231021-git.tgz";
+      sha256 = "1vhn3f9j3hs8ra8k2nw4zndaw4d78lkvcmah2nx4jgsmpy9021c1";
       system = "40ants-doc";
       asd = "40ants-doc";
     });
@@ -572,27 +604,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-doc-full = (build-asdf-system {
     pname = "40ants-doc-full";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-doc-full" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/doc/2023-06-18/doc-20230618-git.tgz";
-      sha256 = "0s8ji6gwrq3yz9n7k2hb5q14ab37i3f8pm5cg5h29bpxwvdmv0fx";
+      url = "http://beta.quicklisp.org/archive/doc/2023-10-21/doc-20231021-git.tgz";
+      sha256 = "1vhn3f9j3hs8ra8k2nw4zndaw4d78lkvcmah2nx4jgsmpy9021c1";
       system = "40ants-doc-full";
       asd = "40ants-doc-full";
     });
     systems = [ "40ants-doc-full" ];
-    lispLibs = [ (getAttr "_40ants-doc" self) (getAttr "alexandria" self) (getAttr "babel" self) (getAttr "cl-cookie" self) (getAttr "cl-fad" self) (getAttr "cl-ppcre" self) (getAttr "closer-mop" self) (getAttr "common-doc" self) (getAttr "common-html" self) (getAttr "commondoc-markdown" self) (getAttr "dexador" self) (getAttr "docs-config" self) (getAttr "fare-utils" self) (getAttr "jonathan" self) (getAttr "lass" self) (getAttr "local-time" self) (getAttr "log4cl" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) (getAttr "slynk" self) (getAttr "spinneret" self) (getAttr "stem" self) (getAttr "str" self) (getAttr "swank" self) (getAttr "tmpdir" self) (getAttr "trivial-extract" self) (getAttr "xml-emitter" self) ];
+    lispLibs = [ (getAttr "_40ants-doc" self) (getAttr "alexandria" self) (getAttr "babel" self) (getAttr "cl-fad" self) (getAttr "cl-ppcre" self) (getAttr "closer-mop" self) (getAttr "common-doc" self) (getAttr "common-html" self) (getAttr "commondoc-markdown" self) (getAttr "dexador" self) (getAttr "docs-config" self) (getAttr "fare-utils" self) (getAttr "jonathan" self) (getAttr "lass" self) (getAttr "local-time" self) (getAttr "log4cl" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) (getAttr "slynk" self) (getAttr "spinneret" self) (getAttr "stem" self) (getAttr "str" self) (getAttr "swank" self) (getAttr "tmpdir" self) (getAttr "which" self) (getAttr "xml-emitter" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   _40ants-doc-test = (build-asdf-system {
     pname = "40ants-doc-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-doc-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/doc/2023-06-18/doc-20230618-git.tgz";
-      sha256 = "0s8ji6gwrq3yz9n7k2hb5q14ab37i3f8pm5cg5h29bpxwvdmv0fx";
+      url = "http://beta.quicklisp.org/archive/doc/2023-10-21/doc-20231021-git.tgz";
+      sha256 = "1vhn3f9j3hs8ra8k2nw4zndaw4d78lkvcmah2nx4jgsmpy9021c1";
       system = "40ants-doc-test";
       asd = "40ants-doc-test";
     });
@@ -604,10 +636,10 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-logging = (build-asdf-system {
     pname = "40ants-logging";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-logging" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/logging/2023-06-18/logging-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/logging/2023-10-21/logging-20231021-git.tgz";
       sha256 = "1hd0cfqpxvvp0p3rs8q8mnf0h5dapiw3f5z22nyn6xybngdqgp8z";
       system = "40ants-logging";
       asd = "40ants-logging";
@@ -620,10 +652,10 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-logging-ci = (build-asdf-system {
     pname = "40ants-logging-ci";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-logging-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/logging/2023-06-18/logging-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/logging/2023-10-21/logging-20231021-git.tgz";
       sha256 = "1hd0cfqpxvvp0p3rs8q8mnf0h5dapiw3f5z22nyn6xybngdqgp8z";
       system = "40ants-logging-ci";
       asd = "40ants-logging-ci";
@@ -636,10 +668,10 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-logging-docs = (build-asdf-system {
     pname = "40ants-logging-docs";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-logging-docs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/logging/2023-06-18/logging-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/logging/2023-10-21/logging-20231021-git.tgz";
       sha256 = "1hd0cfqpxvvp0p3rs8q8mnf0h5dapiw3f5z22nyn6xybngdqgp8z";
       system = "40ants-logging-docs";
       asd = "40ants-logging-docs";
@@ -650,12 +682,28 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  _40ants-logging-example = (build-asdf-system {
+    pname = "40ants-logging-example";
+    version = "20231021-git";
+    asds = [ "40ants-logging-example" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/logging/2023-10-21/logging-20231021-git.tgz";
+      sha256 = "1hd0cfqpxvvp0p3rs8q8mnf0h5dapiw3f5z22nyn6xybngdqgp8z";
+      system = "40ants-logging-example";
+      asd = "40ants-logging-example";
+    });
+    systems = [ "40ants-logging-example" ];
+    lispLibs = [ (getAttr "_40ants-logging" self) (getAttr "_40ants-slynk" self) (getAttr "defmain" self) (getAttr "log4cl" self) (getAttr "log4cl-extras" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   _40ants-logging-tests = (build-asdf-system {
     pname = "40ants-logging-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-logging-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/logging/2023-06-18/logging-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/logging/2023-10-21/logging-20231021-git.tgz";
       sha256 = "1hd0cfqpxvvp0p3rs8q8mnf0h5dapiw3f5z22nyn6xybngdqgp8z";
       system = "40ants-logging-tests";
       asd = "40ants-logging-tests";
@@ -668,11 +716,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-slynk = (build-asdf-system {
     pname = "40ants-slynk";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/40ants-slynk/2023-06-18/40ants-slynk-20230618-git.tgz";
-      sha256 = "00sm5l0mqxw7c5gvgsc4fhpnnx8zx31pysyfsrf68dba8rfjd88k";
+      url = "http://beta.quicklisp.org/archive/40ants-slynk/2023-10-21/40ants-slynk-20231021-git.tgz";
+      sha256 = "0jvwd1my5nsf63r4ync9w3pp9z32bazcr3fppha45sa0jwna1jgi";
       system = "40ants-slynk";
       asd = "40ants-slynk";
     });
@@ -684,11 +732,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   _40ants-slynk-ci = (build-asdf-system {
     pname = "40ants-slynk-ci";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-slynk-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/40ants-slynk/2023-06-18/40ants-slynk-20230618-git.tgz";
-      sha256 = "00sm5l0mqxw7c5gvgsc4fhpnnx8zx31pysyfsrf68dba8rfjd88k";
+      url = "http://beta.quicklisp.org/archive/40ants-slynk/2023-10-21/40ants-slynk-20231021-git.tgz";
+      sha256 = "0jvwd1my5nsf63r4ync9w3pp9z32bazcr3fppha45sa0jwna1jgi";
       system = "40ants-slynk-ci";
       asd = "40ants-slynk-ci";
     });
@@ -698,13 +746,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  _40ants-slynk-docs = (build-asdf-system {
+    pname = "40ants-slynk-docs";
+    version = "20231021-git";
+    asds = [ "40ants-slynk-docs" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/40ants-slynk/2023-10-21/40ants-slynk-20231021-git.tgz";
+      sha256 = "0jvwd1my5nsf63r4ync9w3pp9z32bazcr3fppha45sa0jwna1jgi";
+      system = "40ants-slynk-docs";
+      asd = "40ants-slynk-docs";
+    });
+    systems = [ "40ants-slynk-docs" ];
+    lispLibs = [ (getAttr "_40ants-doc" self) (getAttr "_40ants-slynk" self) (getAttr "docs-config" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   _40ants-slynk-tests = (build-asdf-system {
     pname = "40ants-slynk-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "40ants-slynk-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/40ants-slynk/2023-06-18/40ants-slynk-20230618-git.tgz";
-      sha256 = "00sm5l0mqxw7c5gvgsc4fhpnnx8zx31pysyfsrf68dba8rfjd88k";
+      url = "http://beta.quicklisp.org/archive/40ants-slynk/2023-10-21/40ants-slynk-20231021-git.tgz";
+      sha256 = "0jvwd1my5nsf63r4ync9w3pp9z32bazcr3fppha45sa0jwna1jgi";
       system = "40ants-slynk-tests";
       asd = "40ants-slynk-tests";
     });
@@ -952,11 +1016,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   action-list = (build-asdf-system {
     pname = "action-list";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "action-list" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/action-list/2022-11-06/action-list-20221106-git.tgz";
-      sha256 = "0w42wsk077lcv9hw62s8303fj4rpmrrx1xwsv1jachzd9alwnfcl";
+      url = "http://beta.quicklisp.org/archive/action-list/2023-10-21/action-list-20231021-git.tgz";
+      sha256 = "1vb5jqj8glvyzw4c9rjap2sxbmsmvylmk3gfr6yvgy6rg0670nbg";
       system = "action-list";
       asd = "action-list";
     });
@@ -968,11 +1032,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   adhoc = (build-asdf-system {
     pname = "adhoc";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "adhoc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/adhoc/2023-06-18/adhoc-20230618-git.tgz";
-      sha256 = "0ygxfzp10nzn2v599617frlz40lzrcdv2snwgmvm418v7wcamh1y";
+      url = "http://beta.quicklisp.org/archive/adhoc/2023-10-21/adhoc-20231021-git.tgz";
+      sha256 = "1v2a9v821irg630q4d5jk9ljsm5qakg5idaq4p4bii1w8n6smxp7";
       system = "adhoc";
       asd = "adhoc";
     });
@@ -984,11 +1048,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   adhoc-tests = (build-asdf-system {
     pname = "adhoc-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "adhoc-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/adhoc/2023-06-18/adhoc-20230618-git.tgz";
-      sha256 = "0ygxfzp10nzn2v599617frlz40lzrcdv2snwgmvm418v7wcamh1y";
+      url = "http://beta.quicklisp.org/archive/adhoc/2023-10-21/adhoc-20231021-git.tgz";
+      sha256 = "1v2a9v821irg630q4d5jk9ljsm5qakg5idaq4p4bii1w8n6smxp7";
       system = "adhoc-tests";
       asd = "adhoc-tests";
     });
@@ -1080,32 +1144,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   adp = (build-asdf-system {
     pname = "adp";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "adp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/adp/2023-02-14/adp-20230214-git.tgz";
-      sha256 = "1k525gf2q9iyiv8fmk9lgzqz21k164s1asxcdsjxfdlmz6al0svx";
+      url = "http://beta.quicklisp.org/archive/adp/2023-10-21/adp-20231021-git.tgz";
+      sha256 = "1k3jcmh2wiq74hd2crww5zqzcnd4fnirzc02n5xs2f99nm1x97s1";
       system = "adp";
       asd = "adp";
     });
     systems = [ "adp" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "hyperspec" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  advanced = (build-asdf-system {
-    pname = "advanced";
-    version = "version-1.0b26";
-    asds = [ "advanced" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-clon/2023-06-18/cl-clon-version-1.0b26.tgz";
-      sha256 = "1vg2r788vh86i2cnc4yy9w05y5rv6rk0ybxb91wqzjykn0wc4kx3";
-      system = "advanced";
-      asd = "advanced";
-    });
-    systems = [ "advanced" ];
-    lispLibs = [ (getAttr "net_dot_didierverna_dot_clon" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "scribble" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -1254,11 +1302,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   alexandria = (build-asdf-system {
     pname = "alexandria";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "alexandria" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/alexandria/2023-06-18/alexandria-20230618-git.tgz";
-      sha256 = "077zrkb3gjgzfn515hahak30ppnql848f4sgiard9xfmh8b4bdmn";
+      url = "http://beta.quicklisp.org/archive/alexandria/2023-10-21/alexandria-20231021-git.tgz";
+      sha256 = "0pdj779j3nwzn8f1661vf00rrjrbks1xgiq0rvwjw6qyxsfqfnl9";
       system = "alexandria";
       asd = "alexandria";
     });
@@ -1300,11 +1348,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   also-alsa = (build-asdf-system {
     pname = "also-alsa";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "also-alsa" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/also-alsa/2022-07-07/also-alsa-20220707-git.tgz";
-      sha256 = "1az5agb5gmjjsp3sbpqnw20k46yss1d7d5xymy2mi1al5ksxyqmc";
+      url = "http://beta.quicklisp.org/archive/also-alsa/2023-10-21/also-alsa-20231021-git.tgz";
+      sha256 = "17xvq04nnw2kmxvahj56ja5k21d3wg3fzclbfm36fn641lr6l7dx";
       system = "also-alsa";
       asd = "also-alsa";
     });
@@ -1410,11 +1458,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ansi-escape = (build-asdf-system {
     pname = "ansi-escape";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ansi-escape" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2023-06-18/croatoan-20230618-git.tgz";
-      sha256 = "1whbvwc4df7zz0002xy3aczrpf4s3vk6kmyh9wydgwl112h060pd";
+      url = "http://beta.quicklisp.org/archive/croatoan/2023-10-21/croatoan-20231021-git.tgz";
+      sha256 = "0x2rlckyn8kn5mqy0fib8piggz694g3naarz2dvha1hsy4jhb1wg";
       system = "ansi-escape";
       asd = "ansi-escape";
     });
@@ -1426,16 +1474,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ansi-escape-test = (build-asdf-system {
     pname = "ansi-escape-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ansi-escape-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2023-06-18/croatoan-20230618-git.tgz";
-      sha256 = "1whbvwc4df7zz0002xy3aczrpf4s3vk6kmyh9wydgwl112h060pd";
+      url = "http://beta.quicklisp.org/archive/croatoan/2023-10-21/croatoan-20231021-git.tgz";
+      sha256 = "0x2rlckyn8kn5mqy0fib8piggz694g3naarz2dvha1hsy4jhb1wg";
       system = "ansi-escape-test";
       asd = "ansi-escape-test";
     });
     systems = [ "ansi-escape-test" ];
     lispLibs = [ (getAttr "ansi-escape" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  ansi-test-harness = (build-asdf-system {
+    pname = "ansi-test-harness";
+    version = "20231021-git";
+    asds = [ "ansi-test-harness" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/ansi-test-harness/2023-10-21/ansi-test-harness-20231021-git.tgz";
+      sha256 = "168q2358ag5lf7k8378462279q0izllbwqr1axljm0nsn6d4g0yl";
+      system = "ansi-test-harness";
+      asd = "ansi-test-harness";
+    });
+    systems = [ "ansi-test-harness" ];
+    lispLibs = [ (getAttr "alexandria" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -1474,11 +1538,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   anypool = (build-asdf-system {
     pname = "anypool";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "anypool" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/anypool/2021-05-31/anypool-20210531-git.tgz";
-      sha256 = "0dr904m0qb0xf12x0rrhw0ipw3fdqyihwr59l87prqmkv23y7aig";
+      url = "http://beta.quicklisp.org/archive/anypool/2023-10-21/anypool-20231021-git.tgz";
+      sha256 = "07ha0x6qv1qw68iim3bcr5fk2pnxk0knk8lwyylbvm9rqjmd672i";
       system = "anypool";
       asd = "anypool";
     });
@@ -1490,11 +1554,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   aplesque = (build-asdf-system {
     pname = "aplesque";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "aplesque" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "aplesque";
       asd = "aplesque";
     });
@@ -1554,11 +1618,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april = (build-asdf-system {
     pname = "april";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april";
       asd = "april";
     });
@@ -1570,11 +1634,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-demo_dot_cnn = (build-asdf-system {
     pname = "april-demo.cnn";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-demo.cnn" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-demo.cnn";
       asd = "april-demo.cnn";
     });
@@ -1586,11 +1650,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-demo_dot_fnn = (build-asdf-system {
     pname = "april-demo.fnn";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-demo.fnn" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-demo.fnn";
       asd = "april-demo.fnn";
     });
@@ -1602,11 +1666,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-demo_dot_ncurses = (build-asdf-system {
     pname = "april-demo.ncurses";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-demo.ncurses" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-demo.ncurses";
       asd = "april-demo.ncurses";
     });
@@ -1618,11 +1682,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-lib_dot_dfns_dot_array = (build-asdf-system {
     pname = "april-lib.dfns.array";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-lib.dfns.array" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-lib.dfns.array";
       asd = "april-lib.dfns.array";
     });
@@ -1634,11 +1698,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-lib_dot_dfns_dot_graph = (build-asdf-system {
     pname = "april-lib.dfns.graph";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-lib.dfns.graph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-lib.dfns.graph";
       asd = "april-lib.dfns.graph";
     });
@@ -1650,11 +1714,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-lib_dot_dfns_dot_numeric = (build-asdf-system {
     pname = "april-lib.dfns.numeric";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-lib.dfns.numeric" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-lib.dfns.numeric";
       asd = "april-lib.dfns.numeric";
     });
@@ -1666,11 +1730,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-lib_dot_dfns_dot_power = (build-asdf-system {
     pname = "april-lib.dfns.power";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-lib.dfns.power" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-lib.dfns.power";
       asd = "april-lib.dfns.power";
     });
@@ -1682,11 +1746,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-lib_dot_dfns_dot_string = (build-asdf-system {
     pname = "april-lib.dfns.string";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-lib.dfns.string" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-lib.dfns.string";
       asd = "april-lib.dfns.string";
     });
@@ -1698,11 +1762,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-lib_dot_dfns_dot_tree = (build-asdf-system {
     pname = "april-lib.dfns.tree";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-lib.dfns.tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-lib.dfns.tree";
       asd = "april-lib.dfns.tree";
     });
@@ -1714,11 +1778,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   april-xt_dot_uzuki = (build-asdf-system {
     pname = "april-xt.uzuki";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "april-xt.uzuki" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "april-xt.uzuki";
       asd = "april-xt.uzuki";
     });
@@ -1746,11 +1810,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   architecture_dot_builder-protocol = (build-asdf-system {
     pname = "architecture.builder-protocol";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "architecture.builder-protocol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-06-18/architecture.builder-protocol-20230618-git.tgz";
-      sha256 = "0aml33mh40cp1cv4an9v1rn4sdpmxqvbv9nqng0hz3hr3l3ah131";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-10-21/architecture.builder-protocol-20231021-git.tgz";
+      sha256 = "0lim63d70685r7l5xy5zjbjd1qjcvjk2ard92pavl7f6arqrfhfj";
       system = "architecture.builder-protocol";
       asd = "architecture.builder-protocol";
     });
@@ -1762,11 +1826,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   architecture_dot_builder-protocol_dot_inspection = (build-asdf-system {
     pname = "architecture.builder-protocol.inspection";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "architecture.builder-protocol.inspection" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-06-18/architecture.builder-protocol-20230618-git.tgz";
-      sha256 = "0aml33mh40cp1cv4an9v1rn4sdpmxqvbv9nqng0hz3hr3l3ah131";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-10-21/architecture.builder-protocol-20231021-git.tgz";
+      sha256 = "0lim63d70685r7l5xy5zjbjd1qjcvjk2ard92pavl7f6arqrfhfj";
       system = "architecture.builder-protocol.inspection";
       asd = "architecture.builder-protocol.inspection";
     });
@@ -1778,11 +1842,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   architecture_dot_builder-protocol_dot_json = (build-asdf-system {
     pname = "architecture.builder-protocol.json";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "architecture.builder-protocol.json" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-06-18/architecture.builder-protocol-20230618-git.tgz";
-      sha256 = "0aml33mh40cp1cv4an9v1rn4sdpmxqvbv9nqng0hz3hr3l3ah131";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-10-21/architecture.builder-protocol-20231021-git.tgz";
+      sha256 = "0lim63d70685r7l5xy5zjbjd1qjcvjk2ard92pavl7f6arqrfhfj";
       system = "architecture.builder-protocol.json";
       asd = "architecture.builder-protocol.json";
     });
@@ -1794,11 +1858,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   architecture_dot_builder-protocol_dot_print-tree = (build-asdf-system {
     pname = "architecture.builder-protocol.print-tree";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "architecture.builder-protocol.print-tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-06-18/architecture.builder-protocol-20230618-git.tgz";
-      sha256 = "0aml33mh40cp1cv4an9v1rn4sdpmxqvbv9nqng0hz3hr3l3ah131";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-10-21/architecture.builder-protocol-20231021-git.tgz";
+      sha256 = "0lim63d70685r7l5xy5zjbjd1qjcvjk2ard92pavl7f6arqrfhfj";
       system = "architecture.builder-protocol.print-tree";
       asd = "architecture.builder-protocol.print-tree";
     });
@@ -1810,11 +1874,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   architecture_dot_builder-protocol_dot_universal-builder = (build-asdf-system {
     pname = "architecture.builder-protocol.universal-builder";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "architecture.builder-protocol.universal-builder" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-06-18/architecture.builder-protocol-20230618-git.tgz";
-      sha256 = "0aml33mh40cp1cv4an9v1rn4sdpmxqvbv9nqng0hz3hr3l3ah131";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-10-21/architecture.builder-protocol-20231021-git.tgz";
+      sha256 = "0lim63d70685r7l5xy5zjbjd1qjcvjk2ard92pavl7f6arqrfhfj";
       system = "architecture.builder-protocol.universal-builder";
       asd = "architecture.builder-protocol.universal-builder";
     });
@@ -1826,11 +1890,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   architecture_dot_builder-protocol_dot_xpath = (build-asdf-system {
     pname = "architecture.builder-protocol.xpath";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "architecture.builder-protocol.xpath" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-06-18/architecture.builder-protocol-20230618-git.tgz";
-      sha256 = "0aml33mh40cp1cv4an9v1rn4sdpmxqvbv9nqng0hz3hr3l3ah131";
+      url = "http://beta.quicklisp.org/archive/architecture.builder-protocol/2023-10-21/architecture.builder-protocol-20231021-git.tgz";
+      sha256 = "0lim63d70685r7l5xy5zjbjd1qjcvjk2ard92pavl7f6arqrfhfj";
       system = "architecture.builder-protocol.xpath";
       asd = "architecture.builder-protocol.xpath";
     });
@@ -1936,11 +2000,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   array-operations = (build-asdf-system {
     pname = "array-operations";
-    version = "1.0.0";
+    version = "1.2.1";
     asds = [ "array-operations" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/array-operations/2022-07-07/array-operations-1.0.0.tgz";
-      sha256 = "12rmijvz5gpri5f5vi5j49bngiy2c01f5755rl39kxpv1b886gvy";
+      url = "http://beta.quicklisp.org/archive/array-operations/2023-10-21/array-operations-1.2.1.tgz";
+      sha256 = "06zg7ds7c1vi59zxzrd52a9zfpw8x0jsf1hqcdgaz8s3dcfma3mn";
       system = "array-operations";
       asd = "array-operations";
     });
@@ -1950,11 +2014,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   array-utils = (build-asdf-system {
     pname = "array-utils";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "array-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/array-utils/2023-06-18/array-utils-20230618-git.tgz";
-      sha256 = "1d66s2inb9hpw27hdb20x27dychmpn1mn35v0mlsib848qdz87az";
+      url = "http://beta.quicklisp.org/archive/array-utils/2023-10-21/array-utils-20231021-git.tgz";
+      sha256 = "0ldnvmnb4vcwrx1xd1r5av407bky3dqmxcfbgy1h9h9aqm66ax7f";
       system = "array-utils";
       asd = "array-utils";
     });
@@ -1964,11 +2028,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   array-utils-test = (build-asdf-system {
     pname = "array-utils-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "array-utils-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/array-utils/2023-06-18/array-utils-20230618-git.tgz";
-      sha256 = "1d66s2inb9hpw27hdb20x27dychmpn1mn35v0mlsib848qdz87az";
+      url = "http://beta.quicklisp.org/archive/array-utils/2023-10-21/array-utils-20231021-git.tgz";
+      sha256 = "0ldnvmnb4vcwrx1xd1r5av407bky3dqmxcfbgy1h9h9aqm66ax7f";
       system = "array-utils-test";
       asd = "array-utils-test";
     });
@@ -2406,11 +2470,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   async-process = (build-asdf-system {
     pname = "async-process";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "async-process" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/async-process/2023-06-18/async-process-20230618-git.tgz";
-      sha256 = "1arikx6lhnp6mkdw2wd81jrbgvzx5qaxz0vjr5jk6abd7in9fv9h";
+      url = "http://beta.quicklisp.org/archive/async-process/2023-10-21/async-process-20231021-git.tgz";
+      sha256 = "1m2sfgfg6c0gqqy1pqsahsiw3j25y473mfw7sx0akkqbhwhm7mjb";
       system = "async-process";
       asd = "async-process";
     });
@@ -2438,11 +2502,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   atomics = (build-asdf-system {
     pname = "atomics";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "atomics" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/atomics/2023-06-18/atomics-20230618-git.tgz";
-      sha256 = "09qhhyvxk27b81ks90n5gzdnpyqm3ix0g2xfmsy2w7xxc0f6c71i";
+      url = "http://beta.quicklisp.org/archive/atomics/2023-10-21/atomics-20231021-git.tgz";
+      sha256 = "02xiqgmn4kzgsb51szrh73jr6gl9gcjajgiiffvabzzdjiic6l2z";
       system = "atomics";
       asd = "atomics";
     });
@@ -2454,11 +2518,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   atomics-test = (build-asdf-system {
     pname = "atomics-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "atomics-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/atomics/2023-06-18/atomics-20230618-git.tgz";
-      sha256 = "09qhhyvxk27b81ks90n5gzdnpyqm3ix0g2xfmsy2w7xxc0f6c71i";
+      url = "http://beta.quicklisp.org/archive/atomics/2023-10-21/atomics-20231021-git.tgz";
+      sha256 = "02xiqgmn4kzgsb51szrh73jr6gl9gcjajgiiffvabzzdjiic6l2z";
       system = "atomics-test";
       asd = "atomics-test";
     });
@@ -2550,11 +2614,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   automaton = (build-asdf-system {
     pname = "automaton";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "automaton" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "automaton";
       asd = "automaton";
     });
@@ -2770,13 +2834,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  babylon = (build-asdf-system {
+    pname = "babylon";
+    version = "20231021-git";
+    asds = [ "babylon" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/babylon/2023-10-21/babylon-20231021-git.tgz";
+      sha256 = "14k9kvcfyfpn74l5ij5mdc7zlj9vnlnig8piqw0wm5gq9pxmhydg";
+      system = "babylon";
+      asd = "babylon";
+    });
+    systems = [ "babylon" ];
+    lispLibs = [ (getAttr "fare-quasiquote-extras" self) (getAttr "fmcs" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   base = (build-asdf-system {
     pname = "base";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "base" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "base";
       asd = "base";
     });
@@ -2852,11 +2932,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   bdef = (build-asdf-system {
     pname = "bdef";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "bdef" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bdef/2023-06-18/bdef-20230618-git.tgz";
-      sha256 = "16y39qkiygp733bg7pig4smfkm91mkflbdpc6b44slgpr3x37sr1";
+      url = "http://beta.quicklisp.org/archive/bdef/2023-10-21/bdef-20231021-git.tgz";
+      sha256 = "0rx7dm5hj2llp6x6j6dxg0arn8854xf18k3kqvbrm3wk5nz19w98";
       system = "bdef";
       asd = "bdef";
     });
@@ -2996,59 +3076,59 @@ in lib.makeScope pkgs.newScope (self: {
   });
   bike = (build-asdf-system {
     pname = "bike";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "bike" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bike/2022-07-07/bike-20220707-git.tgz";
-      sha256 = "0slzgfi0yw45j238rhjsnw6vh8yvwzzsmz6vmia58fycf8p0vlc4";
+      url = "http://beta.quicklisp.org/archive/bike/2023-10-21/bike-20231021-git.tgz";
+      sha256 = "0z1200blyri0h6dm6p6h4z4icn860nnhgw5x1iyl4rx237ssdwf2";
       system = "bike";
       asd = "bike";
     });
     systems = [ "bike" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bike-internals" self) (getAttr "bordeaux-threads" self) (getAttr "cffi" self) (getAttr "cl-ppcre" self) (getAttr "flexi-streams" self) (getAttr "named-readtables" self) (getAttr "split-sequence" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "bike-internals" self) (getAttr "bordeaux-threads" self) (getAttr "cffi" self) (getAttr "cl-ppcre" self) (getAttr "closer-mop" self) (getAttr "flexi-streams" self) (getAttr "global-vars" self) (getAttr "named-readtables" self) (getAttr "split-sequence" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   bike-examples = (build-asdf-system {
     pname = "bike-examples";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "bike-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bike/2022-07-07/bike-20220707-git.tgz";
-      sha256 = "0slzgfi0yw45j238rhjsnw6vh8yvwzzsmz6vmia58fycf8p0vlc4";
+      url = "http://beta.quicklisp.org/archive/bike/2023-10-21/bike-20231021-git.tgz";
+      sha256 = "0z1200blyri0h6dm6p6h4z4icn860nnhgw5x1iyl4rx237ssdwf2";
       system = "bike-examples";
       asd = "bike-examples";
     });
     systems = [ "bike-examples" ];
-    lispLibs = [ (getAttr "bike" self) ];
+    lispLibs = [ (getAttr "bike" self) (getAttr "float-features" self) (getAttr "trivial-features" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   bike-internals = (build-asdf-system {
     pname = "bike-internals";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "bike-internals" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bike/2022-07-07/bike-20220707-git.tgz";
-      sha256 = "0slzgfi0yw45j238rhjsnw6vh8yvwzzsmz6vmia58fycf8p0vlc4";
+      url = "http://beta.quicklisp.org/archive/bike/2023-10-21/bike-20231021-git.tgz";
+      sha256 = "0z1200blyri0h6dm6p6h4z4icn860nnhgw5x1iyl4rx237ssdwf2";
       system = "bike-internals";
       asd = "bike-internals";
     });
     systems = [ "bike-internals" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cffi" self) (getAttr "cl-ppcre" self) (getAttr "flexi-streams" self) (getAttr "split-sequence" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cffi" self) (getAttr "cl-ppcre" self) (getAttr "flexi-streams" self) (getAttr "global-vars" self) (getAttr "split-sequence" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   bike-tests = (build-asdf-system {
     pname = "bike-tests";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "bike-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bike/2022-07-07/bike-20220707-git.tgz";
-      sha256 = "0slzgfi0yw45j238rhjsnw6vh8yvwzzsmz6vmia58fycf8p0vlc4";
+      url = "http://beta.quicklisp.org/archive/bike/2023-10-21/bike-20231021-git.tgz";
+      sha256 = "0z1200blyri0h6dm6p6h4z4icn860nnhgw5x1iyl4rx237ssdwf2";
       system = "bike-tests";
       asd = "bike-tests";
     });
@@ -3076,11 +3156,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   binary-lass = (build-asdf-system {
     pname = "binary-lass";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "binary-lass" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lass/2023-02-14/lass-20230214-git.tgz";
-      sha256 = "1xwwdcnaicnh16w2291vvwi4pgqbc9iw8cfjg349nmvr0dmf883q";
+      url = "http://beta.quicklisp.org/archive/lass/2023-10-21/lass-20231021-git.tgz";
+      sha256 = "1wax2kykc9ff0sk2linp9v8fcsm5ay6idpq365vivady9fh504r5";
       system = "binary-lass";
       asd = "binary-lass";
     });
@@ -3124,11 +3204,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   binary-structures = (build-asdf-system {
     pname = "binary-structures";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "binary-structures" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/binary-structures/2023-06-18/binary-structures-20230618-git.tgz";
-      sha256 = "18kz2m0k02w2j1px2hjmp49zwcg308p9jakqf9ifrsry1ar7ckja";
+      url = "http://beta.quicklisp.org/archive/binary-structures/2023-10-21/binary-structures-20231021-git.tgz";
+      sha256 = "0agiwvr7asqjlrhxgypmzrlgvy1gjfnrl768vvmg2q7n72km13z3";
       system = "binary-structures";
       asd = "binary-structures";
     });
@@ -3188,11 +3268,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   binding-arrows = (build-asdf-system {
     pname = "binding-arrows";
-    version = "20210630-git";
+    version = "20231021-git";
     asds = [ "binding-arrows" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/binding-arrows/2021-06-30/binding-arrows-20210630-git.tgz";
-      sha256 = "0hqikgzic7kjq2n1d924yldfm30qz67cmsk6gghi9cbmxkwdlwp8";
+      url = "http://beta.quicklisp.org/archive/binding-arrows/2023-10-21/binding-arrows-20231021-git.tgz";
+      sha256 = "05m2p7p8wmy2by51yd467ry0xyl020p9kbyrb86qfglgsl0xzykn";
       system = "binding-arrows";
       asd = "binding-arrows";
     });
@@ -3630,11 +3710,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   blas = (build-asdf-system {
     pname = "blas";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "blas" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "blas";
       asd = "blas";
     });
@@ -3646,11 +3726,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   blas-complex = (build-asdf-system {
     pname = "blas-complex";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "blas-complex" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "blas-complex";
       asd = "blas-complex";
     });
@@ -3662,11 +3742,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   blas-hompack = (build-asdf-system {
     pname = "blas-hompack";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "blas-hompack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "blas-hompack";
       asd = "blas-hompack";
     });
@@ -3678,11 +3758,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   blas-package = (build-asdf-system {
     pname = "blas-package";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "blas-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "blas-package";
       asd = "blas-package";
     });
@@ -3694,11 +3774,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   blas-real = (build-asdf-system {
     pname = "blas-real";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "blas-real" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "blas-real";
       asd = "blas-real";
     });
@@ -4076,38 +4156,6 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  boondoggle = (build-asdf-system {
-    pname = "boondoggle";
-    version = "v1.26.0";
-    asds = [ "boondoggle" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2021-12-09/quilc-v1.26.0.tgz";
-      sha256 = "09qp2d6xgq4cmg6nfsdz0gbs3rvz3ln0kawmry6cls14lxnljjrr";
-      system = "boondoggle";
-      asd = "boondoggle";
-    });
-    systems = [ "boondoggle" ];
-    lispLibs = [ (getAttr "cl-quil" self) (getAttr "command-line-arguments" self) (getAttr "drakma" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  boondoggle-tests = (build-asdf-system {
-    pname = "boondoggle-tests";
-    version = "v1.26.0";
-    asds = [ "boondoggle-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2021-12-09/quilc-v1.26.0.tgz";
-      sha256 = "09qp2d6xgq4cmg6nfsdz0gbs3rvz3ln0kawmry6cls14lxnljjrr";
-      system = "boondoggle-tests";
-      asd = "boondoggle-tests";
-    });
-    systems = [ "boondoggle-tests" ];
-    lispLibs = [ (getAttr "boondoggle" self) (getAttr "cl-quil" self) (getAttr "fiasco" self) (getAttr "sapaclisp" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   bordeaux-fft = (build-asdf-system {
     pname = "bordeaux-fft";
     version = "20150608-http";
@@ -4126,11 +4174,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   bordeaux-threads = (build-asdf-system {
     pname = "bordeaux-threads";
-    version = "v0.9.1";
+    version = "v0.9.3";
     asds = [ "bordeaux-threads" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bordeaux-threads/2023-06-18/bordeaux-threads-v0.9.1.tgz";
-      sha256 = "1jq29g6zqavjjkphi5h5n0zg58arzyy1zrhg5xsqj7nsbn9zxnmp";
+      url = "http://beta.quicklisp.org/archive/bordeaux-threads/2023-10-21/bordeaux-threads-v0.9.3.tgz";
+      sha256 = "06kf639gyysfcls79nrs92z43wdwi97mr9bblfnmdhpi415cwzm9";
       system = "bordeaux-threads";
       asd = "bordeaux-threads";
     });
@@ -4156,11 +4204,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   bp = (build-asdf-system {
     pname = "bp";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "bp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bp/2023-06-18/bp-20230618-git.tgz";
-      sha256 = "1kzby017cfk430vbm0i2zlxwnnz56baxfy443jnab4l0436z7b4l";
+      url = "http://beta.quicklisp.org/archive/bp/2023-10-21/bp-20231021-git.tgz";
+      sha256 = "1l58bf2fq0807id4cs39sajsfw0z7zz4gxb2vpcvfa9nxcbyziqx";
       system = "bp";
       asd = "bp";
     });
@@ -4252,16 +4300,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   bubble-operator-upwards = (build-asdf-system {
     pname = "bubble-operator-upwards";
-    version = "1.0";
+    version = "1.1";
     asds = [ "bubble-operator-upwards" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/bubble-operator-upwards/2012-11-25/bubble-operator-upwards-1.0.tgz";
-      sha256 = "0hni8j17z3aqk67r3my1nkkjafaixvdm3cdmg89hb8hhgv0rm2x7";
+      url = "http://beta.quicklisp.org/archive/bubble-operator-upwards/2023-10-21/bubble-operator-upwards_1.1.tgz";
+      sha256 = "1k6rvhlx4z0xb460dyg6blvqkwxakvqxslky69ld8p2yni1qar5p";
       system = "bubble-operator-upwards";
       asd = "bubble-operator-upwards";
     });
     systems = [ "bubble-operator-upwards" ];
     lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  bubble-operator-upwards__tests = (build-asdf-system {
+    pname = "bubble-operator-upwards_tests";
+    version = "1.1";
+    asds = [ "bubble-operator-upwards_tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/bubble-operator-upwards/2023-10-21/bubble-operator-upwards_1.1.tgz";
+      sha256 = "1k6rvhlx4z0xb460dyg6blvqkwxakvqxslky69ld8p2yni1qar5p";
+      system = "bubble-operator-upwards_tests";
+      asd = "bubble-operator-upwards_tests";
+    });
+    systems = [ "bubble-operator-upwards_tests" ];
+    lispLibs = [ (getAttr "bubble-operator-upwards" self) (getAttr "parachute" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -4456,11 +4520,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   bus = (build-asdf-system {
     pname = "bus";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "bus" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "bus";
       asd = "bus";
     });
@@ -4660,6 +4724,22 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  calm = (build-asdf-system {
+    pname = "calm";
+    version = "20231021-git";
+    asds = [ "calm" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/calm/2023-10-21/calm-20231021-git.tgz";
+      sha256 = "0h45h6clv08mmzp6qgz05hr76sai9kph4jwxhkx2p0hhgkwn7k9c";
+      system = "calm";
+      asd = "calm";
+    });
+    systems = [ "calm" ];
+    lispLibs = [ (getAttr "bt-semaphore" self) (getAttr "cl-cairo2" self) (getAttr "cl-gobject-introspection" self) (getAttr "sdl2" self) (getAttr "sdl2-image" self) (getAttr "sdl2-mixer" self) (getAttr "str" self) (getAttr "swank" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   cambl = (build-asdf-system {
     pname = "cambl";
     version = "20181210-git";
@@ -4838,11 +4918,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cari3s = (build-asdf-system {
     pname = "cari3s";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cari3s" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cari3s/2023-06-18/cari3s-20230618-git.tgz";
-      sha256 = "1flfb606fm61bnng47qhrksjsg70wsgszq1bxac9h8vix7mpc5jk";
+      url = "http://beta.quicklisp.org/archive/cari3s/2023-10-21/cari3s-20231021-git.tgz";
+      sha256 = "1q977ykj4fb095ilr1x4g0nrhqmipcgmdxbxn4gmlksg457sb4lm";
       system = "cari3s";
       asd = "cari3s";
     });
@@ -5110,11 +5190,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cephes = (build-asdf-system {
     pname = "cephes";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cephes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cephes.cl/2022-11-06/cephes.cl-20221106-git.tgz";
-      sha256 = "07krprq23i9ncdkdq69lsvzswshhrfmjds4sk1kgicjxhm37l25h";
+      url = "http://beta.quicklisp.org/archive/cephes.cl/2023-10-21/cephes.cl-20231021-git.tgz";
+      sha256 = "1h115lxlqgw39vp97psx1xy4g668rx1b233zp3nhn18rj6hniadr";
       system = "cephes";
       asd = "cephes";
     });
@@ -5414,11 +5494,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cffi = (build-asdf-system {
     pname = "cffi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2023-06-18/cffi-20230618-git.tgz";
-      sha256 = "0kjcfkpj31qqbnri23rcbp41f3b5m3cdp630prhb37wiyy3ascyz";
+      url = "http://beta.quicklisp.org/archive/cffi/2023-10-21/cffi-20231021-git.tgz";
+      sha256 = "1d4kckxsqpyk3ihjv01c0hhxnswn4fnx4m6257z1dfhwya02s8bk";
       system = "cffi";
       asd = "cffi";
     });
@@ -5444,11 +5524,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cffi-examples = (build-asdf-system {
     pname = "cffi-examples";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cffi-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2023-06-18/cffi-20230618-git.tgz";
-      sha256 = "0kjcfkpj31qqbnri23rcbp41f3b5m3cdp630prhb37wiyy3ascyz";
+      url = "http://beta.quicklisp.org/archive/cffi/2023-10-21/cffi-20231021-git.tgz";
+      sha256 = "1d4kckxsqpyk3ihjv01c0hhxnswn4fnx4m6257z1dfhwya02s8bk";
       system = "cffi-examples";
       asd = "cffi-examples";
     });
@@ -5460,11 +5540,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cffi-grovel = (build-asdf-system {
     pname = "cffi-grovel";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cffi-grovel" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2023-06-18/cffi-20230618-git.tgz";
-      sha256 = "0kjcfkpj31qqbnri23rcbp41f3b5m3cdp630prhb37wiyy3ascyz";
+      url = "http://beta.quicklisp.org/archive/cffi/2023-10-21/cffi-20231021-git.tgz";
+      sha256 = "1d4kckxsqpyk3ihjv01c0hhxnswn4fnx4m6257z1dfhwya02s8bk";
       system = "cffi-grovel";
       asd = "cffi-grovel";
     });
@@ -5474,11 +5554,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cffi-libffi = (build-asdf-system {
     pname = "cffi-libffi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cffi-libffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2023-06-18/cffi-20230618-git.tgz";
-      sha256 = "0kjcfkpj31qqbnri23rcbp41f3b5m3cdp630prhb37wiyy3ascyz";
+      url = "http://beta.quicklisp.org/archive/cffi/2023-10-21/cffi-20231021-git.tgz";
+      sha256 = "1d4kckxsqpyk3ihjv01c0hhxnswn4fnx4m6257z1dfhwya02s8bk";
       system = "cffi-libffi";
       asd = "cffi-libffi";
     });
@@ -5488,13 +5568,61 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  cffi-object = (build-asdf-system {
+    pname = "cffi-object";
+    version = "20231021-git";
+    asds = [ "cffi-object" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cffi-object/2023-10-21/cffi-object-20231021-git.tgz";
+      sha256 = "04wdwp2r5nk74agxbkdwpy9c52f939v03s55fn0f0k5dii056wlz";
+      system = "cffi-object";
+      asd = "cffi-object";
+    });
+    systems = [ "cffi-object" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "trivial-garbage" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cffi-object_dot_ops = (build-asdf-system {
+    pname = "cffi-object.ops";
+    version = "20231021-git";
+    asds = [ "cffi-object.ops" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cffi-object/2023-10-21/cffi-object-20231021-git.tgz";
+      sha256 = "04wdwp2r5nk74agxbkdwpy9c52f939v03s55fn0f0k5dii056wlz";
+      system = "cffi-object.ops";
+      asd = "cffi-object.ops";
+    });
+    systems = [ "cffi-object.ops" ];
+    lispLibs = [ (getAttr "cffi-object" self) (getAttr "cffi-ops" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cffi-ops = (build-asdf-system {
+    pname = "cffi-ops";
+    version = "20231021-git";
+    asds = [ "cffi-ops" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cffi-ops/2023-10-21/cffi-ops-20231021-git.tgz";
+      sha256 = "1bn9dqr3l5i460agiyd7p0vf07k5dx6rnrpvnhsw2ivp2qf2lbas";
+      system = "cffi-ops";
+      asd = "cffi-ops";
+    });
+    systems = [ "cffi-ops" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "arrow-macros" self) (getAttr "cffi" self) (getAttr "trivial-macroexpand-all" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   cffi-tests = (build-asdf-system {
     pname = "cffi-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cffi-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2023-06-18/cffi-20230618-git.tgz";
-      sha256 = "0kjcfkpj31qqbnri23rcbp41f3b5m3cdp630prhb37wiyy3ascyz";
+      url = "http://beta.quicklisp.org/archive/cffi/2023-10-21/cffi-20231021-git.tgz";
+      sha256 = "1d4kckxsqpyk3ihjv01c0hhxnswn4fnx4m6257z1dfhwya02s8bk";
       system = "cffi-tests";
       asd = "cffi-tests";
     });
@@ -5506,11 +5634,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cffi-toolchain = (build-asdf-system {
     pname = "cffi-toolchain";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cffi-toolchain" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2023-06-18/cffi-20230618-git.tgz";
-      sha256 = "0kjcfkpj31qqbnri23rcbp41f3b5m3cdp630prhb37wiyy3ascyz";
+      url = "http://beta.quicklisp.org/archive/cffi/2023-10-21/cffi-20231021-git.tgz";
+      sha256 = "1d4kckxsqpyk3ihjv01c0hhxnswn4fnx4m6257z1dfhwya02s8bk";
       system = "cffi-toolchain";
       asd = "cffi-toolchain";
     });
@@ -5520,11 +5648,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cffi-uffi-compat = (build-asdf-system {
     pname = "cffi-uffi-compat";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cffi-uffi-compat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cffi/2023-06-18/cffi-20230618-git.tgz";
-      sha256 = "0kjcfkpj31qqbnri23rcbp41f3b5m3cdp630prhb37wiyy3ascyz";
+      url = "http://beta.quicklisp.org/archive/cffi/2023-10-21/cffi-20231021-git.tgz";
+      sha256 = "1d4kckxsqpyk3ihjv01c0hhxnswn4fnx4m6257z1dfhwya02s8bk";
       system = "cffi-uffi-compat";
       asd = "cffi-uffi-compat";
     });
@@ -5912,11 +6040,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   chirp = (build-asdf-system {
     pname = "chirp";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "chirp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chirp/2023-06-18/chirp-20230618-git.tgz";
-      sha256 = "0714qqzac0kqhmqx9q9361l48n9hq3wjl15m91vvzy9fn7nghj93";
+      url = "http://beta.quicklisp.org/archive/chirp/2023-10-21/chirp-20231021-git.tgz";
+      sha256 = "00vin2svx54wpk2yv9645y3gfy5pg78pfpr79srqk7jklr1wwa1m";
       system = "chirp";
       asd = "chirp";
     });
@@ -5928,11 +6056,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   chirp-core = (build-asdf-system {
     pname = "chirp-core";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "chirp-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chirp/2023-06-18/chirp-20230618-git.tgz";
-      sha256 = "0714qqzac0kqhmqx9q9361l48n9hq3wjl15m91vvzy9fn7nghj93";
+      url = "http://beta.quicklisp.org/archive/chirp/2023-10-21/chirp-20231021-git.tgz";
+      sha256 = "00vin2svx54wpk2yv9645y3gfy5pg78pfpr79srqk7jklr1wwa1m";
       system = "chirp-core";
       asd = "chirp-core";
     });
@@ -5944,11 +6072,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   chirp-dexador = (build-asdf-system {
     pname = "chirp-dexador";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "chirp-dexador" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chirp/2023-06-18/chirp-20230618-git.tgz";
-      sha256 = "0714qqzac0kqhmqx9q9361l48n9hq3wjl15m91vvzy9fn7nghj93";
+      url = "http://beta.quicklisp.org/archive/chirp/2023-10-21/chirp-20231021-git.tgz";
+      sha256 = "00vin2svx54wpk2yv9645y3gfy5pg78pfpr79srqk7jklr1wwa1m";
       system = "chirp-dexador";
       asd = "chirp-dexador";
     });
@@ -5960,11 +6088,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   chirp-drakma = (build-asdf-system {
     pname = "chirp-drakma";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "chirp-drakma" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chirp/2023-06-18/chirp-20230618-git.tgz";
-      sha256 = "0714qqzac0kqhmqx9q9361l48n9hq3wjl15m91vvzy9fn7nghj93";
+      url = "http://beta.quicklisp.org/archive/chirp/2023-10-21/chirp-20231021-git.tgz";
+      sha256 = "00vin2svx54wpk2yv9645y3gfy5pg78pfpr79srqk7jklr1wwa1m";
       system = "chirp-drakma";
       asd = "chirp-drakma";
     });
@@ -5976,11 +6104,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   chlorophyll = (build-asdf-system {
     pname = "chlorophyll";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "chlorophyll" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chlorophyll/2023-06-18/chlorophyll-20230618-git.tgz";
-      sha256 = "1hgl8sjsmyqx4gs77q4p94b63zgpxk1wi9w9niki8j0213dr1s3y";
+      url = "http://beta.quicklisp.org/archive/chlorophyll/2023-10-21/chlorophyll-20231021-git.tgz";
+      sha256 = "0q681pbcx4vcshrlligd5h07kakbjprb0kpf48z4glswy59vg8mg";
       system = "chlorophyll";
       asd = "chlorophyll";
     });
@@ -5992,11 +6120,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   chlorophyll-test = (build-asdf-system {
     pname = "chlorophyll-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "chlorophyll-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chlorophyll/2023-06-18/chlorophyll-20230618-git.tgz";
-      sha256 = "1hgl8sjsmyqx4gs77q4p94b63zgpxk1wi9w9niki8j0213dr1s3y";
+      url = "http://beta.quicklisp.org/archive/chlorophyll/2023-10-21/chlorophyll-20231021-git.tgz";
+      sha256 = "0q681pbcx4vcshrlligd5h07kakbjprb0kpf48z4glswy59vg8mg";
       system = "chlorophyll-test";
       asd = "chlorophyll-test";
     });
@@ -6072,11 +6200,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   chunga = (build-asdf-system {
     pname = "chunga";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "chunga" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/chunga/2022-11-06/chunga-20221106-git.tgz";
-      sha256 = "117qvvfszi4s6zfcxi7mpwx14dpgamir7n124p4whwyam04b0y1b";
+      url = "http://beta.quicklisp.org/archive/chunga/2023-10-21/chunga-20231021-git.tgz";
+      sha256 = "0vra4srbnd0qgvvmpk17rqm5i4v01fg1wb411d2jdd4gx9cikkfr";
       system = "chunga";
       asd = "chunga";
     });
@@ -6196,11 +6324,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ckr-tables = (build-asdf-system {
     pname = "ckr-tables";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "ckr-tables" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-critic/2022-11-06/lisp-critic-20221106-git.tgz";
-      sha256 = "000vp8jsvpw80by7c7nb5394akfcr6rzzpzw049am67fh5qk89rn";
+      url = "http://beta.quicklisp.org/archive/lisp-critic/2023-10-21/lisp-critic-20231021-git.tgz";
+      sha256 = "15zg05pqfs2dhc5j7gfkwjmxawaizjpyb0p7386mpl4w93l9h84l";
       system = "ckr-tables";
       asd = "ckr-tables";
     });
@@ -6212,11 +6340,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl_plus_ssl = (build-asdf-system {
     pname = "cl+ssl";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl+ssl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl+ssl/2023-06-18/cl+ssl-20230618-git.tgz";
-      sha256 = "0d8sndn278s8c947bv7zp9mblpl6g83vq5wqa7kjk6javyg36a9c";
+      url = "http://beta.quicklisp.org/archive/cl+ssl/2023-10-21/cl+ssl-20231021-git.tgz";
+      sha256 = "0v0kx2m5355jkdshmj0z923c5rlvdl2n11rb3hjbv3kssdfsbs0s";
       system = "cl+ssl";
       asd = "cl+ssl";
     });
@@ -6226,11 +6354,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl_plus_ssl_dot_test = (build-asdf-system {
     pname = "cl+ssl.test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl+ssl.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl+ssl/2023-06-18/cl+ssl-20230618-git.tgz";
-      sha256 = "0d8sndn278s8c947bv7zp9mblpl6g83vq5wqa7kjk6javyg36a9c";
+      url = "http://beta.quicklisp.org/archive/cl+ssl/2023-10-21/cl+ssl-20231021-git.tgz";
+      sha256 = "0v0kx2m5355jkdshmj0z923c5rlvdl2n11rb3hjbv3kssdfsbs0s";
       system = "cl+ssl.test";
       asd = "cl+ssl.test";
     });
@@ -6242,11 +6370,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-6502 = (build-asdf-system {
     pname = "cl-6502";
-    version = "20211020-git";
+    version = "20231021-git";
     asds = [ "cl-6502" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-6502/2021-10-20/cl-6502-20211020-git.tgz";
-      sha256 = "1mzdx141ad1rf0di09glyibxbizbmhzd9l3cqd7r3cvrvf5gkj49";
+      url = "http://beta.quicklisp.org/archive/cl-6502/2023-10-21/cl-6502-20231021-git.tgz";
+      sha256 = "1ma2i6ljky1zfivrwpra3fmhcm7s2ppi4bxxl7sms8n7gkpkv41s";
       system = "cl-6502";
       asd = "cl-6502";
     });
@@ -6384,11 +6512,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-all = (build-asdf-system {
     pname = "cl-all";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-all" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-all/2023-06-18/cl-all-20230618-git.tgz";
-      sha256 = "1nf4jwrws8j1vym3r3a5gyvf73vqx90qj71fsbw7w2hf5sw4wi9p";
+      url = "http://beta.quicklisp.org/archive/cl-all/2023-10-21/cl-all-20231021-git.tgz";
+      sha256 = "1k8mxj35fcczkz8vwl6yxmbdq5a115ilmk2h4c7qn2sz09qd9j1g";
       system = "cl-all";
       asd = "cl-all";
     });
@@ -7640,11 +7768,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-async = (build-asdf-system {
     pname = "cl-async";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-async" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2023-06-18/cl-async-20230618-git.tgz";
-      sha256 = "0xii3kxrbrgf7y9037h1y1x68fa2bvspa3dqsz53rbbs81n51ysj";
+      url = "http://beta.quicklisp.org/archive/cl-async/2023-10-21/cl-async-20231021-git.tgz";
+      sha256 = "0s2ylrwfcnn7c934cd5cv3nswbln0phx2mqviq5ampmghjvjrghy";
       system = "cl-async";
       asd = "cl-async";
     });
@@ -7670,11 +7798,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-async-base = (build-asdf-system {
     pname = "cl-async-base";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-async-base" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2023-06-18/cl-async-20230618-git.tgz";
-      sha256 = "0xii3kxrbrgf7y9037h1y1x68fa2bvspa3dqsz53rbbs81n51ysj";
+      url = "http://beta.quicklisp.org/archive/cl-async/2023-10-21/cl-async-20231021-git.tgz";
+      sha256 = "0s2ylrwfcnn7c934cd5cv3nswbln0phx2mqviq5ampmghjvjrghy";
       system = "cl-async-base";
       asd = "cl-async";
     });
@@ -7700,11 +7828,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-async-repl = (build-asdf-system {
     pname = "cl-async-repl";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-async-repl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2023-06-18/cl-async-20230618-git.tgz";
-      sha256 = "0xii3kxrbrgf7y9037h1y1x68fa2bvspa3dqsz53rbbs81n51ysj";
+      url = "http://beta.quicklisp.org/archive/cl-async/2023-10-21/cl-async-20231021-git.tgz";
+      sha256 = "0s2ylrwfcnn7c934cd5cv3nswbln0phx2mqviq5ampmghjvjrghy";
       system = "cl-async-repl";
       asd = "cl-async-repl";
     });
@@ -7714,11 +7842,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-async-ssl = (build-asdf-system {
     pname = "cl-async-ssl";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-async-ssl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2023-06-18/cl-async-20230618-git.tgz";
-      sha256 = "0xii3kxrbrgf7y9037h1y1x68fa2bvspa3dqsz53rbbs81n51ysj";
+      url = "http://beta.quicklisp.org/archive/cl-async/2023-10-21/cl-async-20231021-git.tgz";
+      sha256 = "0s2ylrwfcnn7c934cd5cv3nswbln0phx2mqviq5ampmghjvjrghy";
       system = "cl-async-ssl";
       asd = "cl-async-ssl";
     });
@@ -7728,11 +7856,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-async-test = (build-asdf-system {
     pname = "cl-async-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-async-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2023-06-18/cl-async-20230618-git.tgz";
-      sha256 = "0xii3kxrbrgf7y9037h1y1x68fa2bvspa3dqsz53rbbs81n51ysj";
+      url = "http://beta.quicklisp.org/archive/cl-async/2023-10-21/cl-async-20231021-git.tgz";
+      sha256 = "0s2ylrwfcnn7c934cd5cv3nswbln0phx2mqviq5ampmghjvjrghy";
       system = "cl-async-test";
       asd = "cl-async-test";
     });
@@ -7744,11 +7872,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-async-util = (build-asdf-system {
     pname = "cl-async-util";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-async-util" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-async/2023-06-18/cl-async-20230618-git.tgz";
-      sha256 = "0xii3kxrbrgf7y9037h1y1x68fa2bvspa3dqsz53rbbs81n51ysj";
+      url = "http://beta.quicklisp.org/archive/cl-async/2023-10-21/cl-async-20231021-git.tgz";
+      sha256 = "0s2ylrwfcnn7c934cd5cv3nswbln0phx2mqviq5ampmghjvjrghy";
       system = "cl-async-util";
       asd = "cl-async";
     });
@@ -7822,11 +7950,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-autowrap = (build-asdf-system {
     pname = "cl-autowrap";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cl-autowrap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-autowrap/2022-11-06/cl-autowrap-20221106-git.tgz";
-      sha256 = "0pbabpmg61bflx6kxllqvhbvxqwjsik3nnynqdhgzzkgzk6jlixv";
+      url = "http://beta.quicklisp.org/archive/cl-autowrap/2023-10-21/cl-autowrap-20231021-git.tgz";
+      sha256 = "063pc7akxbsaayzpgz16dzkh0434s80h61k7mi7xq5isgzfjka2k";
       system = "cl-autowrap";
       asd = "cl-autowrap";
     });
@@ -7838,11 +7966,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-autowrap-test = (build-asdf-system {
     pname = "cl-autowrap-test";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cl-autowrap-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-autowrap/2022-11-06/cl-autowrap-20221106-git.tgz";
-      sha256 = "0pbabpmg61bflx6kxllqvhbvxqwjsik3nnynqdhgzzkgzk6jlixv";
+      url = "http://beta.quicklisp.org/archive/cl-autowrap/2023-10-21/cl-autowrap-20231021-git.tgz";
+      sha256 = "063pc7akxbsaayzpgz16dzkh0434s80h61k7mi7xq5isgzfjka2k";
       system = "cl-autowrap-test";
       asd = "cl-autowrap-test";
     });
@@ -7980,11 +8108,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-bcrypt = (build-asdf-system {
     pname = "cl-bcrypt";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-bcrypt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-bcrypt/2023-02-14/cl-bcrypt-20230214-git.tgz";
-      sha256 = "1rhjxjlh3nwld9vr8d1cjnfwla2is9kracb0q6jds1rvxw9gknwh";
+      url = "http://beta.quicklisp.org/archive/cl-bcrypt/2023-10-21/cl-bcrypt-20231021-git.tgz";
+      sha256 = "0mfs1jwf1xi6za61hfc7dgf1g5lqqsqdclnnspncvdg6l137013n";
       system = "cl-bcrypt";
       asd = "cl-bcrypt";
     });
@@ -7996,11 +8124,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-bcrypt_dot_test = (build-asdf-system {
     pname = "cl-bcrypt.test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-bcrypt.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-bcrypt/2023-02-14/cl-bcrypt-20230214-git.tgz";
-      sha256 = "1rhjxjlh3nwld9vr8d1cjnfwla2is9kracb0q6jds1rvxw9gknwh";
+      url = "http://beta.quicklisp.org/archive/cl-bcrypt/2023-10-21/cl-bcrypt-20231021-git.tgz";
+      sha256 = "0mfs1jwf1xi6za61hfc7dgf1g5lqqsqdclnnspncvdg6l137013n";
       system = "cl-bcrypt.test";
       asd = "cl-bcrypt.test";
     });
@@ -8092,11 +8220,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-bmp = (build-asdf-system {
     pname = "cl-bmp";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-bmp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-bmp/2023-06-18/cl-bmp-20230618-git.tgz";
-      sha256 = "1pkhr4z785skn42pz6lmlv931mrbyh27f97sfgpzrv25fs2cabfm";
+      url = "http://beta.quicklisp.org/archive/cl-bmp/2023-10-21/cl-bmp-20231021-git.tgz";
+      sha256 = "1khicvwhbfpbaywdc0m1lpcqai6lf7cvy4idahaahk5704dlb3l0";
       system = "cl-bmp";
       asd = "cl-bmp";
     });
@@ -8234,34 +8362,50 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  cl-bson = (build-asdf-system {
-    pname = "cl-bson";
-    version = "20170403-git";
-    asds = [ "cl-bson" ];
+  cl-brewer-ci = (build-asdf-system {
+    pname = "cl-brewer-ci";
+    version = "20231021-git";
+    asds = [ "cl-brewer-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-bson/2017-04-03/cl-bson-20170403-git.tgz";
-      sha256 = "107mx5kvqw7f7q9mw3qa120gz1z153fwv8jmn5qi2sbfnglkz2gy";
-      system = "cl-bson";
-      asd = "cl-bson";
+      url = "http://beta.quicklisp.org/archive/cl-brewer/2023-10-21/cl-brewer-20231021-git.tgz";
+      sha256 = "1xpgy3lci0ip9bwrx8sdwbllgq57mq3apzafxbmci5jdsa2rxh9r";
+      system = "cl-brewer-ci";
+      asd = "cl-brewer-ci";
     });
-    systems = [ "cl-bson" ];
-    lispLibs = [ (getAttr "arrow-macros" self) (getAttr "babel" self) (getAttr "cl-intbytes" self) (getAttr "fast-io" self) (getAttr "ieee-floats" self) (getAttr "let-over-lambda" self) (getAttr "local-time" self) (getAttr "named-readtables" self) (getAttr "rutils" self) (getAttr "trivial-shell" self) ];
+    systems = [ "cl-brewer-ci" ];
+    lispLibs = [ (getAttr "_40ants-ci" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
-  cl-bson-test = (build-asdf-system {
-    pname = "cl-bson-test";
-    version = "20170403-git";
-    asds = [ "cl-bson-test" ];
+  cl-brewer-deploy-hooks = (build-asdf-system {
+    pname = "cl-brewer-deploy-hooks";
+    version = "20231021-git";
+    asds = [ "cl-brewer-deploy-hooks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-bson/2017-04-03/cl-bson-20170403-git.tgz";
-      sha256 = "107mx5kvqw7f7q9mw3qa120gz1z153fwv8jmn5qi2sbfnglkz2gy";
-      system = "cl-bson-test";
-      asd = "cl-bson-test";
+      url = "http://beta.quicklisp.org/archive/cl-brewer/2023-10-21/cl-brewer-20231021-git.tgz";
+      sha256 = "1xpgy3lci0ip9bwrx8sdwbllgq57mq3apzafxbmci5jdsa2rxh9r";
+      system = "cl-brewer-deploy-hooks";
+      asd = "cl-brewer-deploy-hooks";
     });
-    systems = [ "cl-bson-test" ];
-    lispLibs = [ (getAttr "cl-bson" self) (getAttr "prove" self) (getAttr "prove-asdf" self) ];
+    systems = [ "cl-brewer-deploy-hooks" ];
+    lispLibs = [ (getAttr "deploy" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-brewer-tests = (build-asdf-system {
+    pname = "cl-brewer-tests";
+    version = "20231021-git";
+    asds = [ "cl-brewer-tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-brewer/2023-10-21/cl-brewer-20231021-git.tgz";
+      sha256 = "1xpgy3lci0ip9bwrx8sdwbllgq57mq3apzafxbmci5jdsa2rxh9r";
+      system = "cl-brewer-tests";
+      asd = "cl-brewer-tests";
+    });
+    systems = [ "cl-brewer-tests" ];
+    lispLibs = [ (getAttr "rove" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -8632,11 +8776,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-change-case = (build-asdf-system {
     pname = "cl-change-case";
-    version = "20210411-git";
+    version = "20231021-git";
     asds = [ "cl-change-case" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-change-case/2021-04-11/cl-change-case-20210411-git.tgz";
-      sha256 = "027qvcx261g0gwjvwn2n4w0biw1xq3c5s41smbb3ppxszyax82dx";
+      url = "http://beta.quicklisp.org/archive/cl-change-case/2023-10-21/cl-change-case-20231021-git.tgz";
+      sha256 = "0g17n80jmaiyqsx8r35v6p0axb03s6j9wywlf8qkvw8rm848pp7s";
       system = "cl-change-case";
       asd = "cl-change-case";
     });
@@ -8820,11 +8964,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-collider = (build-asdf-system {
     pname = "cl-collider";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-collider" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-collider/2023-06-18/cl-collider-20230618-git.tgz";
-      sha256 = "0q6qp5cy7fc98dqb81j5blqg2da6jf22zzp8r8czzvsg5pgjipgz";
+      url = "http://beta.quicklisp.org/archive/cl-collider/2023-10-21/cl-collider-20231021-git.tgz";
+      sha256 = "1fbqic0w27b5al8vm6zvgfhsq6yjl2zl4ppjmxvyx6pl0i0bm281";
       system = "cl-collider";
       asd = "cl-collider";
     });
@@ -8866,11 +9010,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-colors2 = (build-asdf-system {
     pname = "cl-colors2";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-colors2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-colors2/2023-06-18/cl-colors2-20230618-git.tgz";
-      sha256 = "00gaynvc91s4cizpmzkbw94ay77jpdvx0jw2qhx06xa4q4kazv01";
+      url = "http://beta.quicklisp.org/archive/cl-colors2/2023-10-21/cl-colors2-20231021-git.tgz";
+      sha256 = "0vjssnsg589db138kgy6wvgbmff27kn895s3zva55kyq62khgj1p";
       system = "cl-colors2";
       asd = "cl-colors2";
     });
@@ -8960,11 +9104,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-containers = (build-asdf-system {
     pname = "cl-containers";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-containers" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-containers/2023-02-14/cl-containers-20230214-git.tgz";
-      sha256 = "0gz601vdqkh8mbym61jzvp834wphbyrz3rw26f5b1qh5kxidzdwa";
+      url = "http://beta.quicklisp.org/archive/cl-containers/2023-10-21/cl-containers-20231021-git.tgz";
+      sha256 = "1nrql8s1j123v5gscy99lxvhlzp0ijig9x94w30v3lwfa58hf90l";
       system = "cl-containers";
       asd = "cl-containers";
     });
@@ -8974,11 +9118,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-containers-test = (build-asdf-system {
     pname = "cl-containers-test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-containers-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-containers/2023-02-14/cl-containers-20230214-git.tgz";
-      sha256 = "0gz601vdqkh8mbym61jzvp834wphbyrz3rw26f5b1qh5kxidzdwa";
+      url = "http://beta.quicklisp.org/archive/cl-containers/2023-10-21/cl-containers-20231021-git.tgz";
+      sha256 = "1nrql8s1j123v5gscy99lxvhlzp0ijig9x94w30v3lwfa58hf90l";
       system = "cl-containers-test";
       asd = "cl-containers-test";
     });
@@ -9180,11 +9324,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-cron = (build-asdf-system {
     pname = "cl-cron";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cl-cron" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-cron/2022-11-06/cl-cron-20221106-git.tgz";
-      sha256 = "1yl7ajy8b2mf5i9f8x3458s4y00rkkpy70xbzz3fi08l9rp2sp3z";
+      url = "http://beta.quicklisp.org/archive/cl-cron/2023-10-21/cl-cron-20231021-git.tgz";
+      sha256 = "0l1jg2sqdqniaqsaywy0ar49m10gzls8i31gpxmd7c4yzazy4fib";
       system = "cl-cron";
       asd = "cl-cron";
     });
@@ -9396,11 +9540,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-data-structures = (build-asdf-system {
     pname = "cl-data-structures";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-data-structures" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-data-structures/2023-06-18/cl-data-structures-20230618-git.tgz";
-      sha256 = "1z4sgwc6q7r3k2cx04b00a6gql20g5nxa6i7n7s5k6x3px96r5gc";
+      url = "http://beta.quicklisp.org/archive/cl-data-structures/2023-10-21/cl-data-structures-20231021-git.tgz";
+      sha256 = "0bj8758yrvxvinj8lc7rr4ni7i5y3bkx8y4dzy2dayh64xkq30ca";
       system = "cl-data-structures";
       asd = "cl-data-structures";
     });
@@ -9412,11 +9556,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-data-structures-tests = (build-asdf-system {
     pname = "cl-data-structures-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-data-structures-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-data-structures/2023-06-18/cl-data-structures-20230618-git.tgz";
-      sha256 = "1z4sgwc6q7r3k2cx04b00a6gql20g5nxa6i7n7s5k6x3px96r5gc";
+      url = "http://beta.quicklisp.org/archive/cl-data-structures/2023-10-21/cl-data-structures-20231021-git.tgz";
+      sha256 = "0bj8758yrvxvinj8lc7rr4ni7i5y3bkx8y4dzy2dayh64xkq30ca";
       system = "cl-data-structures-tests";
       asd = "cl-data-structures-tests";
     });
@@ -9444,11 +9588,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-dbi = (build-asdf-system {
     pname = "cl-dbi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-06-18/cl-dbi-20230618-git.tgz";
-      sha256 = "0kkhxiz5b7arsp394yk1qrndvg0069p27vap3ba47cv3z4sb0d50";
+      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-10-21/cl-dbi-20231021-git.tgz";
+      sha256 = "1jjm2hh8vvbdblhsms6nrb5gll8ng7pqyv99zj6zk2f5h5a42a2l";
       system = "cl-dbi";
       asd = "cl-dbi";
     });
@@ -9568,11 +9712,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-digraph = (build-asdf-system {
     pname = "cl-digraph";
-    version = "20230214-hg";
+    version = "20231021-hg";
     asds = [ "cl-digraph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-digraph/2023-02-14/cl-digraph-20230214-hg.tgz";
-      sha256 = "12s787nx5ppll581rccblxqalb653iq9z5bzivqm4dnibh5v83f2";
+      url = "http://beta.quicklisp.org/archive/cl-digraph/2023-10-21/cl-digraph-20231021-hg.tgz";
+      sha256 = "0ls4lz5d143d4dnby2cyz8p0yipmfag4jvinblffin520an92x63";
       system = "cl-digraph";
       asd = "cl-digraph";
     });
@@ -9582,32 +9726,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-digraph_dot_dot = (build-asdf-system {
     pname = "cl-digraph.dot";
-    version = "20230214-hg";
+    version = "20231021-hg";
     asds = [ "cl-digraph.dot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-digraph/2023-02-14/cl-digraph-20230214-hg.tgz";
-      sha256 = "12s787nx5ppll581rccblxqalb653iq9z5bzivqm4dnibh5v83f2";
+      url = "http://beta.quicklisp.org/archive/cl-digraph/2023-10-21/cl-digraph-20231021-hg.tgz";
+      sha256 = "0ls4lz5d143d4dnby2cyz8p0yipmfag4jvinblffin520an92x63";
       system = "cl-digraph.dot";
       asd = "cl-digraph.dot";
     });
     systems = [ "cl-digraph.dot" ];
     lispLibs = [ (getAttr "cl-digraph" self) (getAttr "cl-dot" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-digraph_dot_test = (build-asdf-system {
-    pname = "cl-digraph.test";
-    version = "20230214-hg";
-    asds = [ "cl-digraph.test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-digraph/2023-02-14/cl-digraph-20230214-hg.tgz";
-      sha256 = "12s787nx5ppll581rccblxqalb653iq9z5bzivqm4dnibh5v83f2";
-      system = "cl-digraph.test";
-      asd = "cl-digraph.test";
-    });
-    systems = [ "cl-digraph.test" ];
-    lispLibs = [ (getAttr "_1am" self) (getAttr "alexandria" self) (getAttr "cl-digraph" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -10150,32 +10278,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-fast-ecs = (build-asdf-system {
     pname = "cl-fast-ecs";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-fast-ecs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-fast-ecs/2023-06-18/cl-fast-ecs-20230618-git.tgz";
-      sha256 = "00nw5nwzcz8x1x1lycmjik8pcqzxrl896j0xjjl33rjljsmj45sx";
+      url = "http://beta.quicklisp.org/archive/cl-fast-ecs/2023-10-21/cl-fast-ecs-20231021-git.tgz";
+      sha256 = "0p959baqzjw6jkannffrhbv8ab2wf19vh384xbqs66ijr7llgqx9";
       system = "cl-fast-ecs";
       asd = "cl-fast-ecs";
     });
     systems = [ "cl-fast-ecs" ];
     lispLibs = [ (getAttr "alexandria" self) (getAttr "trivial-garbage" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-fastcgi = (build-asdf-system {
-    pname = "cl-fastcgi";
-    version = "20210124-git";
-    asds = [ "cl-fastcgi" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-fastcgi/2021-01-24/cl-fastcgi-20210124-git.tgz";
-      sha256 = "0xgmhx766q4nmrvn5z7ag3ikpr9phlh8ypi8b14azshq9lqbq0m7";
-      system = "cl-fastcgi";
-      asd = "cl-fastcgi";
-    });
-    systems = [ "cl-fastcgi" ];
-    lispLibs = [ (getAttr "cffi" self) (getAttr "usocket" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -10198,11 +10310,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-fbx = (build-asdf-system {
     pname = "cl-fbx";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-fbx" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-fbx/2023-06-18/cl-fbx-20230618-git.tgz";
-      sha256 = "0aki1k91qvgn0qa0s4fj734dc89wqmi348s8ya6491kpbpxcvygf";
+      url = "http://beta.quicklisp.org/archive/cl-fbx/2023-10-21/cl-fbx-20231021-git.tgz";
+      sha256 = "1jzxjb9bf1hfa1d75npapprfvzxn4z939vghwmnkmf9w7q9f1nys";
       system = "cl-fbx";
       asd = "cl-fbx";
     });
@@ -10294,11 +10406,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-flac = (build-asdf-system {
     pname = "cl-flac";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "cl-flac" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-flac/2019-07-10/cl-flac-20190710-git.tgz";
-      sha256 = "1dgr5xqf175hzq3sxpbixxia2k2g3rz0pn6msch4dnvk7a1naqlc";
+      url = "http://beta.quicklisp.org/archive/cl-flac/2023-10-21/cl-flac-20231021-git.tgz";
+      sha256 = "1p6hrg9j58yyml78l82zd6p33apbbnbw24slxw876n2j30qiyc84";
       system = "cl-flac";
       asd = "cl-flac";
     });
@@ -10436,11 +10548,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-forms = (build-asdf-system {
     pname = "cl-forms";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-forms" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2023-06-18/cl-forms-20230618-git.tgz";
-      sha256 = "1mwy1j5m1vb8bis5lzprkf4xgbgb941f39wbzw3viqk6r2v54qzx";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2023-10-21/cl-forms-20231021-git.tgz";
+      sha256 = "1n0hix49jx172xcvjns8lpnxkd44kp0xsvwr5sr65vw6l74323br";
       system = "cl-forms";
       asd = "cl-forms";
     });
@@ -10450,29 +10562,13 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  cl-forms_dot_demo = (build-asdf-system {
-    pname = "cl-forms.demo";
-    version = "20230618-git";
-    asds = [ "cl-forms.demo" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2023-06-18/cl-forms-20230618-git.tgz";
-      sha256 = "1mwy1j5m1vb8bis5lzprkf4xgbgb941f39wbzw3viqk6r2v54qzx";
-      system = "cl-forms.demo";
-      asd = "cl-forms.demo";
-    });
-    systems = [ "cl-forms.demo" ];
-    lispLibs = [ (getAttr "cl-css" self) (getAttr "cl-forms" self) (getAttr "cl-forms_dot_djula" self) (getAttr "cl-forms_dot_test" self) (getAttr "cl-forms_dot_who" self) (getAttr "cl-forms_dot_who_dot_bootstrap" self) (getAttr "cl-who" self) (getAttr "djula" self) (getAttr "hunchentoot" self) (getAttr "trivial-open-browser" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   cl-forms_dot_djula = (build-asdf-system {
     pname = "cl-forms.djula";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-forms.djula" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2023-06-18/cl-forms-20230618-git.tgz";
-      sha256 = "1mwy1j5m1vb8bis5lzprkf4xgbgb941f39wbzw3viqk6r2v54qzx";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2023-10-21/cl-forms-20231021-git.tgz";
+      sha256 = "1n0hix49jx172xcvjns8lpnxkd44kp0xsvwr5sr65vw6l74323br";
       system = "cl-forms.djula";
       asd = "cl-forms.djula";
     });
@@ -10484,11 +10580,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-forms_dot_peppol = (build-asdf-system {
     pname = "cl-forms.peppol";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-forms.peppol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2023-06-18/cl-forms-20230618-git.tgz";
-      sha256 = "1mwy1j5m1vb8bis5lzprkf4xgbgb941f39wbzw3viqk6r2v54qzx";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2023-10-21/cl-forms-20231021-git.tgz";
+      sha256 = "1n0hix49jx172xcvjns8lpnxkd44kp0xsvwr5sr65vw6l74323br";
       system = "cl-forms.peppol";
       asd = "cl-forms.peppol";
     });
@@ -10500,11 +10596,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-forms_dot_test = (build-asdf-system {
     pname = "cl-forms.test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-forms.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2023-06-18/cl-forms-20230618-git.tgz";
-      sha256 = "1mwy1j5m1vb8bis5lzprkf4xgbgb941f39wbzw3viqk6r2v54qzx";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2023-10-21/cl-forms-20231021-git.tgz";
+      sha256 = "1n0hix49jx172xcvjns8lpnxkd44kp0xsvwr5sr65vw6l74323br";
       system = "cl-forms.test";
       asd = "cl-forms.test";
     });
@@ -10516,11 +10612,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-forms_dot_who = (build-asdf-system {
     pname = "cl-forms.who";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-forms.who" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2023-06-18/cl-forms-20230618-git.tgz";
-      sha256 = "1mwy1j5m1vb8bis5lzprkf4xgbgb941f39wbzw3viqk6r2v54qzx";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2023-10-21/cl-forms-20231021-git.tgz";
+      sha256 = "1n0hix49jx172xcvjns8lpnxkd44kp0xsvwr5sr65vw6l74323br";
       system = "cl-forms.who";
       asd = "cl-forms.who";
     });
@@ -10532,11 +10628,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-forms_dot_who_dot_bootstrap = (build-asdf-system {
     pname = "cl-forms.who.bootstrap";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-forms.who.bootstrap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-forms/2023-06-18/cl-forms-20230618-git.tgz";
-      sha256 = "1mwy1j5m1vb8bis5lzprkf4xgbgb941f39wbzw3viqk6r2v54qzx";
+      url = "http://beta.quicklisp.org/archive/cl-forms/2023-10-21/cl-forms-20231021-git.tgz";
+      sha256 = "1n0hix49jx172xcvjns8lpnxkd44kp0xsvwr5sr65vw6l74323br";
       system = "cl-forms.who.bootstrap";
       asd = "cl-forms.who.bootstrap";
     });
@@ -10684,11 +10780,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gamepad = (build-asdf-system {
     pname = "cl-gamepad";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-gamepad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gamepad/2023-06-18/cl-gamepad-20230618-git.tgz";
-      sha256 = "0y6kg9wq92p07i1chm1v7j7p77iqc5c985pdvmmivcip8zmd4hm4";
+      url = "http://beta.quicklisp.org/archive/cl-gamepad/2023-10-21/cl-gamepad-20231021-git.tgz";
+      sha256 = "1kwwrbhp0bw6mrhx9y79zgx3k4m81qyjbgdbr0fks9gs0wbj8kp6";
       system = "cl-gamepad";
       asd = "cl-gamepad";
     });
@@ -11050,11 +11146,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gio = (build-asdf-system {
     pname = "cl-gio";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-gio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-glib/2023-06-18/cl-glib-20230618-git.tgz";
-      sha256 = "0dxa493zdp1p93cahhpp3yaggn3j3kkn90mdw99g4ld7scmiglp4";
+      url = "http://beta.quicklisp.org/archive/cl-glib/2023-10-21/cl-glib-20231021-git.tgz";
+      sha256 = "07y8hpvdl490p8j4k8y47raqqwnpym9scz7jlg2f1jx897dkssjb";
       system = "cl-gio";
       asd = "cl-gio";
     });
@@ -11066,32 +11162,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gists = (build-asdf-system {
     pname = "cl-gists";
-    version = "20180228-git";
+    version = "20231021-git";
     asds = [ "cl-gists" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gists/2018-02-28/cl-gists-20180228-git.tgz";
-      sha256 = "1ipwapb71ls0gy4prg1j9x5ki4frf6l1f9iphjnsis7kdpbm2mi7";
+      url = "http://beta.quicklisp.org/archive/cl-gists/2023-10-21/cl-gists-20231021-git.tgz";
+      sha256 = "0kza5y6jckvydaw9bw8va5kli5d3ybyvil6w2bhf411crd2z15vc";
       system = "cl-gists";
       asd = "cl-gists";
     });
     systems = [ "cl-gists" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "babel" self) (getAttr "cl-syntax" self) (getAttr "cl-syntax-annot" self) (getAttr "dexador" self) (getAttr "jonathan" self) (getAttr "local-time" self) (getAttr "quri" self) (getAttr "trivial-types" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-gists-test = (build-asdf-system {
-    pname = "cl-gists-test";
-    version = "20180228-git";
-    asds = [ "cl-gists-test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gists/2018-02-28/cl-gists-20180228-git.tgz";
-      sha256 = "1ipwapb71ls0gy4prg1j9x5ki4frf6l1f9iphjnsis7kdpbm2mi7";
-      system = "cl-gists-test";
-      asd = "cl-gists-test";
-    });
-    systems = [ "cl-gists-test" ];
-    lispLibs = [ (getAttr "cl-gists" self) (getAttr "closer-mop" self) (getAttr "prove" self) (getAttr "prove-asdf" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "alexandria_plus" self) (getAttr "babel" self) (getAttr "dexador" self) (getAttr "local-time" self) (getAttr "quri" self) (getAttr "yason" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -16746,11 +16826,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-glib = (build-asdf-system {
     pname = "cl-glib";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-glib" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-glib/2023-06-18/cl-glib-20230618-git.tgz";
-      sha256 = "0dxa493zdp1p93cahhpp3yaggn3j3kkn90mdw99g4ld7scmiglp4";
+      url = "http://beta.quicklisp.org/archive/cl-glib/2023-10-21/cl-glib-20231021-git.tgz";
+      sha256 = "07y8hpvdl490p8j4k8y47raqqwnpym9scz7jlg2f1jx897dkssjb";
       system = "cl-glib";
       asd = "cl-glib";
     });
@@ -16762,11 +16842,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gltf = (build-asdf-system {
     pname = "cl-gltf";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-gltf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gltf/2023-06-18/cl-gltf-20230618-git.tgz";
-      sha256 = "1dbp791r0z63dhyclw16q6wzh2yl0mdx3x3abmgbwdqi8vcbyrkz";
+      url = "http://beta.quicklisp.org/archive/cl-gltf/2023-10-21/cl-gltf-20231021-git.tgz";
+      sha256 = "1pn1jqdyai2q8pq7ldgcpc13c8k3amarx4q8g19jpr2rngp92w9a";
       system = "cl-gltf";
       asd = "cl-gltf";
     });
@@ -16826,11 +16906,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gobject = (build-asdf-system {
     pname = "cl-gobject";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-gobject" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-glib/2023-06-18/cl-glib-20230618-git.tgz";
-      sha256 = "0dxa493zdp1p93cahhpp3yaggn3j3kkn90mdw99g4ld7scmiglp4";
+      url = "http://beta.quicklisp.org/archive/cl-glib/2023-10-21/cl-glib-20231021-git.tgz";
+      sha256 = "07y8hpvdl490p8j4k8y47raqqwnpym9scz7jlg2f1jx897dkssjb";
       system = "cl-gobject";
       asd = "cl-gobject";
     });
@@ -16842,11 +16922,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gobject-introspection = (build-asdf-system {
     pname = "cl-gobject-introspection";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-gobject-introspection" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gobject-introspection/2023-06-18/cl-gobject-introspection-20230618-git.tgz";
-      sha256 = "18n4wg93sf6cjmpcpr47bg2rd8mbm9ml9lykmjsxgvsf3nwr5vnw";
+      url = "http://beta.quicklisp.org/archive/cl-gobject-introspection/2023-10-21/cl-gobject-introspection-20231021-git.tgz";
+      sha256 = "0xwmj4b3whz12i474g54krp1v6h0fpvsx8lgwpk6rkli9xc71wc3";
       system = "cl-gobject-introspection";
       asd = "cl-gobject-introspection";
     });
@@ -16856,11 +16936,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gobject-introspection-test = (build-asdf-system {
     pname = "cl-gobject-introspection-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-gobject-introspection-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gobject-introspection/2023-06-18/cl-gobject-introspection-20230618-git.tgz";
-      sha256 = "18n4wg93sf6cjmpcpr47bg2rd8mbm9ml9lykmjsxgvsf3nwr5vnw";
+      url = "http://beta.quicklisp.org/archive/cl-gobject-introspection/2023-10-21/cl-gobject-introspection-20231021-git.tgz";
+      sha256 = "0xwmj4b3whz12i474g54krp1v6h0fpvsx8lgwpk6rkli9xc71wc3";
       system = "cl-gobject-introspection-test";
       asd = "cl-gobject-introspection-test";
     });
@@ -16872,11 +16952,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gobject-introspection-wrapper = (build-asdf-system {
     pname = "cl-gobject-introspection-wrapper";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-gobject-introspection-wrapper" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gobject-introspection-wrapper/2023-06-18/cl-gobject-introspection-wrapper-20230618-git.tgz";
-      sha256 = "05np2zs5806ib6qfz7d6knyaz6llxgwvjqavl1fsz5hcga40296s";
+      url = "http://beta.quicklisp.org/archive/cl-gobject-introspection-wrapper/2023-10-21/cl-gobject-introspection-wrapper-20231021-git.tgz";
+      sha256 = "0x1nryxkv6i0bzn2zmlsgbq0impni4drzawy3wc7zy5nr2qnd1x5";
       system = "cl-gobject-introspection-wrapper";
       asd = "cl-gobject-introspection-wrapper";
     });
@@ -16888,11 +16968,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gopher = (build-asdf-system {
     pname = "cl-gopher";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "cl-gopher" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gopher/2022-03-31/cl-gopher-20220331-git.tgz";
-      sha256 = "1ky4s33m5d0wvdaqji12pxr93qqfl5x62zjp3m4ihbdj0ws3yw2f";
+      url = "http://beta.quicklisp.org/archive/cl-gopher/2023-10-21/cl-gopher-20231021-git.tgz";
+      sha256 = "0x8rj4icrx04rfh9qlh7hp2c0zyk4ii6s4wqwhqjxh5580mwblgb";
       system = "cl-gopher";
       asd = "cl-gopher";
     });
@@ -16904,11 +16984,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-gpio = (build-asdf-system {
     pname = "cl-gpio";
-    version = "20211209-git";
+    version = "20231021-git";
     asds = [ "cl-gpio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gpio/2021-12-09/cl-gpio-20211209-git.tgz";
-      sha256 = "0kc8vi0rb9c3952p3qmc3c23pdb6yfg21bbrg4jrgdar0k0ldz5a";
+      url = "http://beta.quicklisp.org/archive/cl-gpio/2023-10-21/cl-gpio-20231021-git.tgz";
+      sha256 = "0sh40fg9gcz72xsfi17zh1b1wckw4fsyx75kkm2w3757lx69wkmh";
       system = "cl-gpio";
       asd = "cl-gpio";
     });
@@ -17170,11 +17250,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-hash-util = (build-asdf-system {
     pname = "cl-hash-util";
-    version = "20190107-git";
+    version = "20231021-git";
     asds = [ "cl-hash-util" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-hash-util/2019-01-07/cl-hash-util-20190107-git.tgz";
-      sha256 = "0dnd0405d81w25cqq4g8gk2r5wm03cis965c1pmb2f5p4ifwq87a";
+      url = "http://beta.quicklisp.org/archive/cl-hash-util/2023-10-21/cl-hash-util-20231021-git.tgz";
+      sha256 = "1xaqj5nd9qrd8xy8r88j90qq9fl6mhfrdvhfg5qhz42igr7mjnh3";
       system = "cl-hash-util";
       asd = "cl-hash-util";
     });
@@ -17186,11 +17266,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-hash-util-test = (build-asdf-system {
     pname = "cl-hash-util-test";
-    version = "20190107-git";
+    version = "20231021-git";
     asds = [ "cl-hash-util-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-hash-util/2019-01-07/cl-hash-util-20190107-git.tgz";
-      sha256 = "0dnd0405d81w25cqq4g8gk2r5wm03cis965c1pmb2f5p4ifwq87a";
+      url = "http://beta.quicklisp.org/archive/cl-hash-util/2023-10-21/cl-hash-util-20231021-git.tgz";
+      sha256 = "1xaqj5nd9qrd8xy8r88j90qq9fl6mhfrdvhfg5qhz42igr7mjnh3";
       system = "cl-hash-util-test";
       asd = "cl-hash-util-test";
     });
@@ -17292,11 +17372,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-html-parse = (build-asdf-system {
     pname = "cl-html-parse";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "cl-html-parse" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-html-parse/2020-09-25/cl-html-parse-20200925-git.tgz";
-      sha256 = "0d78slyqw6zshh72ppmxc85xdnd0jfhaqkzrf1cn7yjxl6h4lp7s";
+      url = "http://beta.quicklisp.org/archive/cl-html-parse/2023-10-21/cl-html-parse-20231021-git.tgz";
+      sha256 = "1qgjaq45lvqrsw4rrnyy4d5bwlmb7vd45ibdzgbxx5az02x3ahmy";
       system = "cl-html-parse";
       asd = "cl-html-parse";
     });
@@ -17416,11 +17496,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-i18n = (build-asdf-system {
     pname = "cl-i18n";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-i18n" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-i18n/2023-06-18/cl-i18n-20230618-git.tgz";
-      sha256 = "17hglrrwfr28ig7bqkrlkcclcmg4zssi44qra8lsdbkf36imqj83";
+      url = "http://beta.quicklisp.org/archive/cl-i18n/2023-10-21/cl-i18n-20231021-git.tgz";
+      sha256 = "1i372x9kvgj5nx9ygcq7bp6lkbxsfgsdnbg4mjdpg1321q4c9qv4";
       system = "cl-i18n";
       asd = "cl-i18n";
     });
@@ -17798,11 +17878,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-isaac = (build-asdf-system {
     pname = "cl-isaac";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cl-isaac" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-isaac/2022-11-06/cl-isaac-20221106-git.tgz";
-      sha256 = "0ig1mf8iridfr7vci9gy499194h0hda0xki5s6g0y04g85ibnpw9";
+      url = "http://beta.quicklisp.org/archive/cl-isaac/2023-10-21/cl-isaac-20231021-git.tgz";
+      sha256 = "07gjfynhqwwsa839i24h08xd9w7kn5g02rm35x96hq1qrfv1v0fn";
       system = "cl-isaac";
       asd = "cl-isaac";
     });
@@ -18002,11 +18082,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-jsonl = (build-asdf-system {
     pname = "cl-jsonl";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-jsonl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-jsonl/2023-06-18/cl-jsonl-20230618-git.tgz";
-      sha256 = "0q6yrlpa3lyzaia12fnvr3blpm63lb88by63kdhb7sp1dl3h1in6";
+      url = "http://beta.quicklisp.org/archive/cl-jsonl/2023-10-21/cl-jsonl-20231021-git.tgz";
+      sha256 = "0mwszi9r88p21rl6x7gh0cjgmfmzvgs34257h88m6zr7q7h7djw4";
       system = "cl-jsonl";
       asd = "cl-jsonl";
     });
@@ -18112,13 +18192,45 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  cl-jwk = (build-asdf-system {
+    pname = "cl-jwk";
+    version = "20231021-git";
+    asds = [ "cl-jwk" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-jwk/2023-10-21/cl-jwk-20231021-git.tgz";
+      sha256 = "07hphgx40583hpvzj2xnk73lypfp1iq40nfpv3gf3hba4x54c17a";
+      system = "cl-jwk";
+      asd = "cl-jwk";
+    });
+    systems = [ "cl-jwk" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "binascii" self) (getAttr "cl-reexport" self) (getAttr "dexador" self) (getAttr "ironclad" self) (getAttr "jonathan" self) (getAttr "jose" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-jwk_dot_test = (build-asdf-system {
+    pname = "cl-jwk.test";
+    version = "20231021-git";
+    asds = [ "cl-jwk.test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-jwk/2023-10-21/cl-jwk-20231021-git.tgz";
+      sha256 = "07hphgx40583hpvzj2xnk73lypfp1iq40nfpv3gf3hba4x54c17a";
+      system = "cl-jwk.test";
+      asd = "cl-jwk.test";
+    });
+    systems = [ "cl-jwk.test" ];
+    lispLibs = [ (getAttr "cl-jwk" self) (getAttr "rove" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   cl-k8055 = (build-asdf-system {
     pname = "cl-k8055";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "cl-k8055" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-k8055/2019-07-10/cl-k8055-20190710-git.tgz";
-      sha256 = "069j5hrcpcm9vlh2f0myqwggp30inycxn61ivi1ppa97f8f1rrig";
+      url = "http://beta.quicklisp.org/archive/cl-k8055/2023-10-21/cl-k8055-20231021-git.tgz";
+      sha256 = "1qap7pf90l89lqb8asnnnc0qfaabd6p179vmdq1z7n5wxdwsw2b3";
       system = "cl-k8055";
       asd = "cl-k8055";
     });
@@ -18130,11 +18242,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-kanren = (build-asdf-system {
     pname = "cl-kanren";
-    version = "20191007-git";
+    version = "20231021-git";
     asds = [ "cl-kanren" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-kanren/2019-10-07/cl-kanren-20191007-git.tgz";
-      sha256 = "1r0qzvs92d7kgl83fx8c27jmsh17agr7jpb1nmmc56phjvq0z7ll";
+      url = "http://beta.quicklisp.org/archive/cl-kanren/2023-10-21/cl-kanren-20231021-git.tgz";
+      sha256 = "1na3gna16cnwzfw2irb294aiiknhvc283wl7q4vzdngzx5pqfim4";
       system = "cl-kanren";
       asd = "cl-kanren";
     });
@@ -18146,11 +18258,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-kanren-test = (build-asdf-system {
     pname = "cl-kanren-test";
-    version = "20191007-git";
+    version = "20231021-git";
     asds = [ "cl-kanren-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-kanren/2019-10-07/cl-kanren-20191007-git.tgz";
-      sha256 = "1r0qzvs92d7kgl83fx8c27jmsh17agr7jpb1nmmc56phjvq0z7ll";
+      url = "http://beta.quicklisp.org/archive/cl-kanren/2023-10-21/cl-kanren-20231021-git.tgz";
+      sha256 = "1na3gna16cnwzfw2irb294aiiknhvc283wl7q4vzdngzx5pqfim4";
       system = "cl-kanren-test";
       asd = "cl-kanren-test";
     });
@@ -18226,11 +18338,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-ktx = (build-asdf-system {
     pname = "cl-ktx";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-ktx" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-ktx/2023-06-18/cl-ktx-20230618-git.tgz";
-      sha256 = "0zd3xxcxp431kacaa6axnlg8ar7nbcndxpz340b7w9782rqfvvnx";
+      url = "http://beta.quicklisp.org/archive/cl-ktx/2023-10-21/cl-ktx-20231021-git.tgz";
+      sha256 = "1nggg3qixnmv9gisj0aqd369z1rm2qqdf17xnsxcpzz1d9lvxqhq";
       system = "cl-ktx";
       asd = "cl-ktx";
     });
@@ -18430,11 +18542,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-liballegro = (build-asdf-system {
     pname = "cl-liballegro";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-liballegro" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-liballegro/2023-06-18/cl-liballegro-20230618-git.tgz";
-      sha256 = "03rslsr4mqs6dblp92mis3s3vd0nz87i5j12r3vsqqa11aw3ymax";
+      url = "http://beta.quicklisp.org/archive/cl-liballegro/2023-10-21/cl-liballegro-20231021-git.tgz";
+      sha256 = "1w0gf32yds588mgg11gxlc3lzfbw4j7j4nilkv90zp9q8dlkixf7";
       system = "cl-liballegro";
       asd = "cl-liballegro";
     });
@@ -18446,16 +18558,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-liballegro-nuklear = (build-asdf-system {
     pname = "cl-liballegro-nuklear";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-liballegro-nuklear" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-liballegro-nuklear/2023-06-18/cl-liballegro-nuklear-20230618-git.tgz";
-      sha256 = "19wl0fhpqvwgcsr38l6ljid25lcj9676ralw8lwnx8aqh1q1s9yb";
+      url = "http://beta.quicklisp.org/archive/cl-liballegro-nuklear/2023-10-21/cl-liballegro-nuklear-20231021-git.tgz";
+      sha256 = "04v99fgl2kg8f4gsx1nwh7xlw1v2gy2zd5lc99syczz0fqh10jr9";
       system = "cl-liballegro-nuklear";
       asd = "cl-liballegro-nuklear";
     });
     systems = [ "cl-liballegro-nuklear" ];
-    lispLibs = [ (getAttr "cffi" self) (getAttr "cffi-libffi" self) (getAttr "trivial-features" self) ];
+    lispLibs = [ (getAttr "cffi" self) (getAttr "cffi-libffi" self) (getAttr "cl-liballegro" self) (getAttr "trivial-features" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -18728,11 +18840,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-lite = (build-asdf-system {
     pname = "cl-lite";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "cl-lite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "cl-lite";
       asd = "cl-lite";
     });
@@ -18998,11 +19110,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-markless = (build-asdf-system {
     pname = "cl-markless";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-markless" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-markless/2023-06-18/cl-markless-20230618-git.tgz";
-      sha256 = "120d0lf02a9ch1z47mfpsdj313ir5mz483jh3hlgja94ia8qpcw6";
+      url = "http://beta.quicklisp.org/archive/cl-markless/2023-10-21/cl-markless-20231021-git.tgz";
+      sha256 = "1m7hqiwm990aapa1kdwbkgydz44l3syfg2ijrxgrkq5w626l95wd";
       system = "cl-markless";
       asd = "cl-markless";
     });
@@ -19014,11 +19126,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-markless-epub = (build-asdf-system {
     pname = "cl-markless-epub";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-markless-epub" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-markless/2023-06-18/cl-markless-20230618-git.tgz";
-      sha256 = "120d0lf02a9ch1z47mfpsdj313ir5mz483jh3hlgja94ia8qpcw6";
+      url = "http://beta.quicklisp.org/archive/cl-markless/2023-10-21/cl-markless-20231021-git.tgz";
+      sha256 = "1m7hqiwm990aapa1kdwbkgydz44l3syfg2ijrxgrkq5w626l95wd";
       system = "cl-markless-epub";
       asd = "cl-markless-epub";
     });
@@ -19028,13 +19140,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  cl-markless-latex = (build-asdf-system {
+    pname = "cl-markless-latex";
+    version = "20231021-git";
+    asds = [ "cl-markless-latex" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-markless/2023-10-21/cl-markless-20231021-git.tgz";
+      sha256 = "1m7hqiwm990aapa1kdwbkgydz44l3syfg2ijrxgrkq5w626l95wd";
+      system = "cl-markless-latex";
+      asd = "cl-markless-latex";
+    });
+    systems = [ "cl-markless-latex" ];
+    lispLibs = [ (getAttr "cl-markless" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   cl-markless-markdown = (build-asdf-system {
     pname = "cl-markless-markdown";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-markless-markdown" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-markless/2023-06-18/cl-markless-20230618-git.tgz";
-      sha256 = "120d0lf02a9ch1z47mfpsdj313ir5mz483jh3hlgja94ia8qpcw6";
+      url = "http://beta.quicklisp.org/archive/cl-markless/2023-10-21/cl-markless-20231021-git.tgz";
+      sha256 = "1m7hqiwm990aapa1kdwbkgydz44l3syfg2ijrxgrkq5w626l95wd";
       system = "cl-markless-markdown";
       asd = "cl-markless-markdown";
     });
@@ -19046,11 +19174,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-markless-plump = (build-asdf-system {
     pname = "cl-markless-plump";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-markless-plump" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-markless/2023-06-18/cl-markless-20230618-git.tgz";
-      sha256 = "120d0lf02a9ch1z47mfpsdj313ir5mz483jh3hlgja94ia8qpcw6";
+      url = "http://beta.quicklisp.org/archive/cl-markless/2023-10-21/cl-markless-20231021-git.tgz";
+      sha256 = "1m7hqiwm990aapa1kdwbkgydz44l3syfg2ijrxgrkq5w626l95wd";
       system = "cl-markless-plump";
       asd = "cl-markless-plump";
     });
@@ -19062,27 +19190,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-markless-standalone = (build-asdf-system {
     pname = "cl-markless-standalone";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-markless-standalone" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-markless/2023-06-18/cl-markless-20230618-git.tgz";
-      sha256 = "120d0lf02a9ch1z47mfpsdj313ir5mz483jh3hlgja94ia8qpcw6";
+      url = "http://beta.quicklisp.org/archive/cl-markless/2023-10-21/cl-markless-20231021-git.tgz";
+      sha256 = "1m7hqiwm990aapa1kdwbkgydz44l3syfg2ijrxgrkq5w626l95wd";
       system = "cl-markless-standalone";
       asd = "cl-markless-standalone";
     });
     systems = [ "cl-markless-standalone" ];
-    lispLibs = [ (getAttr "cl-markless" self) (getAttr "cl-markless-epub" self) (getAttr "cl-markless-markdown" self) (getAttr "cl-markless-plump" self) (getAttr "command-line-arguments" self) ];
+    lispLibs = [ (getAttr "cl-markless" self) (getAttr "cl-markless-epub" self) (getAttr "cl-markless-latex" self) (getAttr "cl-markless-markdown" self) (getAttr "cl-markless-plump" self) (getAttr "command-line-arguments" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   cl-markless-test = (build-asdf-system {
     pname = "cl-markless-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-markless-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-markless/2023-06-18/cl-markless-20230618-git.tgz";
-      sha256 = "120d0lf02a9ch1z47mfpsdj313ir5mz483jh3hlgja94ia8qpcw6";
+      url = "http://beta.quicklisp.org/archive/cl-markless/2023-10-21/cl-markless-20231021-git.tgz";
+      sha256 = "1m7hqiwm990aapa1kdwbkgydz44l3syfg2ijrxgrkq5w626l95wd";
       system = "cl-markless-test";
       asd = "cl-markless-test";
     });
@@ -19380,11 +19508,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-messagepack = (build-asdf-system {
     pname = "cl-messagepack";
-    version = "20201016-git";
+    version = "20231021-git";
     asds = [ "cl-messagepack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-messagepack/2020-10-16/cl-messagepack-20201016-git.tgz";
-      sha256 = "0lhw8wz45q9jgh7fn5ihj7ccl3wm2c2x3vb4cijgg6vhbrwlw2qh";
+      url = "http://beta.quicklisp.org/archive/cl-messagepack/2023-10-21/cl-messagepack-20231021-git.tgz";
+      sha256 = "1hjd1q18lz46k46afz94ljflp76mfr30d6z4jrsgd26y2lc4gchc";
       system = "cl-messagepack";
       asd = "cl-messagepack";
     });
@@ -19428,11 +19556,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-messagepack-tests = (build-asdf-system {
     pname = "cl-messagepack-tests";
-    version = "20201016-git";
+    version = "20231021-git";
     asds = [ "cl-messagepack-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-messagepack/2020-10-16/cl-messagepack-20201016-git.tgz";
-      sha256 = "0lhw8wz45q9jgh7fn5ihj7ccl3wm2c2x3vb4cijgg6vhbrwlw2qh";
+      url = "http://beta.quicklisp.org/archive/cl-messagepack/2023-10-21/cl-messagepack-20231021-git.tgz";
+      sha256 = "1hjd1q18lz46k46afz94ljflp76mfr30d6z4jrsgd26y2lc4gchc";
       system = "cl-messagepack-tests";
       asd = "cl-messagepack-tests";
     });
@@ -19460,11 +19588,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-migratum = (build-asdf-system {
     pname = "cl-migratum";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-migratum" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-02-14/cl-migratum-20230214-git.tgz";
-      sha256 = "0zfs62rhzj5d0pm6lbc70c0im1da3phaq7swr8rm8chqkgsqil0p";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
       system = "cl-migratum";
       asd = "cl-migratum";
     });
@@ -19476,11 +19604,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-migratum_dot_cli = (build-asdf-system {
     pname = "cl-migratum.cli";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-migratum.cli" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-02-14/cl-migratum-20230214-git.tgz";
-      sha256 = "0zfs62rhzj5d0pm6lbc70c0im1da3phaq7swr8rm8chqkgsqil0p";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
       system = "cl-migratum.cli";
       asd = "cl-migratum.cli";
     });
@@ -19492,11 +19620,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-migratum_dot_driver_dot_dbi = (build-asdf-system {
     pname = "cl-migratum.driver.dbi";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-migratum.driver.dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-02-14/cl-migratum-20230214-git.tgz";
-      sha256 = "0zfs62rhzj5d0pm6lbc70c0im1da3phaq7swr8rm8chqkgsqil0p";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
       system = "cl-migratum.driver.dbi";
       asd = "cl-migratum.driver.dbi";
     });
@@ -19508,11 +19636,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-migratum_dot_driver_dot_mixins = (build-asdf-system {
     pname = "cl-migratum.driver.mixins";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-migratum.driver.mixins" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-02-14/cl-migratum-20230214-git.tgz";
-      sha256 = "0zfs62rhzj5d0pm6lbc70c0im1da3phaq7swr8rm8chqkgsqil0p";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
       system = "cl-migratum.driver.mixins";
       asd = "cl-migratum.driver.mixins";
     });
@@ -19522,13 +19650,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  cl-migratum_dot_driver_dot_postmodern-postgresql = (build-asdf-system {
+    pname = "cl-migratum.driver.postmodern-postgresql";
+    version = "20231021-git";
+    asds = [ "cl-migratum.driver.postmodern-postgresql" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
+      system = "cl-migratum.driver.postmodern-postgresql";
+      asd = "cl-migratum.driver.postmodern-postgresql";
+    });
+    systems = [ "cl-migratum.driver.postmodern-postgresql" ];
+    lispLibs = [ (getAttr "cl-migratum" self) (getAttr "cl-migratum_dot_driver_dot_mixins" self) (getAttr "hu_dot_dwim_dot_logger" self) (getAttr "log4cl" self) (getAttr "postmodern" self) (getAttr "str" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   cl-migratum_dot_driver_dot_rdbms-postgresql = (build-asdf-system {
     pname = "cl-migratum.driver.rdbms-postgresql";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-migratum.driver.rdbms-postgresql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-02-14/cl-migratum-20230214-git.tgz";
-      sha256 = "0zfs62rhzj5d0pm6lbc70c0im1da3phaq7swr8rm8chqkgsqil0p";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
       system = "cl-migratum.driver.rdbms-postgresql";
       asd = "cl-migratum.driver.rdbms-postgresql";
     });
@@ -19540,11 +19684,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-migratum_dot_provider_dot_local-path = (build-asdf-system {
     pname = "cl-migratum.provider.local-path";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-migratum.provider.local-path" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-02-14/cl-migratum-20230214-git.tgz";
-      sha256 = "0zfs62rhzj5d0pm6lbc70c0im1da3phaq7swr8rm8chqkgsqil0p";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
       system = "cl-migratum.provider.local-path";
       asd = "cl-migratum.provider.local-path";
     });
@@ -19556,16 +19700,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-migratum_dot_test = (build-asdf-system {
     pname = "cl-migratum.test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-migratum.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-02-14/cl-migratum-20230214-git.tgz";
-      sha256 = "0zfs62rhzj5d0pm6lbc70c0im1da3phaq7swr8rm8chqkgsqil0p";
+      url = "http://beta.quicklisp.org/archive/cl-migratum/2023-10-21/cl-migratum-20231021-git.tgz";
+      sha256 = "0vykbbrk3bq4lx27qxdj5afizvi7h8vx148x3cb790kljb0qf2vk";
       system = "cl-migratum.test";
       asd = "cl-migratum.test";
     });
     systems = [ "cl-migratum.test" ];
-    lispLibs = [ (getAttr "cl-migratum" self) (getAttr "cl-migratum_dot_driver_dot_dbi" self) (getAttr "cl-migratum_dot_driver_dot_rdbms-postgresql" self) (getAttr "cl-migratum_dot_provider_dot_local-path" self) (getAttr "dbd-sqlite3" self) (getAttr "rove" self) (getAttr "tmpdir" self) ];
+    lispLibs = [ (getAttr "cl-migratum" self) (getAttr "cl-migratum_dot_driver_dot_dbi" self) (getAttr "cl-migratum_dot_driver_dot_postmodern-postgresql" self) (getAttr "cl-migratum_dot_driver_dot_rdbms-postgresql" self) (getAttr "cl-migratum_dot_provider_dot_local-path" self) (getAttr "dbd-sqlite3" self) (getAttr "rove" self) (getAttr "tmpdir" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -19684,11 +19828,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed = (build-asdf-system {
     pname = "cl-mixed";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed";
       asd = "cl-mixed";
     });
@@ -19700,11 +19844,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-aaudio = (build-asdf-system {
     pname = "cl-mixed-aaudio";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-aaudio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-aaudio";
       asd = "cl-mixed-aaudio";
     });
@@ -19716,11 +19860,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-alsa = (build-asdf-system {
     pname = "cl-mixed-alsa";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-alsa" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-alsa";
       asd = "cl-mixed-alsa";
     });
@@ -19732,11 +19876,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-coreaudio = (build-asdf-system {
     pname = "cl-mixed-coreaudio";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-coreaudio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-coreaudio";
       asd = "cl-mixed-coreaudio";
     });
@@ -19748,11 +19892,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-examples = (build-asdf-system {
     pname = "cl-mixed-examples";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-examples";
       asd = "cl-mixed-examples";
     });
@@ -19764,11 +19908,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-flac = (build-asdf-system {
     pname = "cl-mixed-flac";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-flac" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-flac";
       asd = "cl-mixed-flac";
     });
@@ -19780,11 +19924,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-jack = (build-asdf-system {
     pname = "cl-mixed-jack";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-jack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-jack";
       asd = "cl-mixed-jack";
     });
@@ -19796,11 +19940,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-mpg123 = (build-asdf-system {
     pname = "cl-mixed-mpg123";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-mpg123" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-mpg123";
       asd = "cl-mixed-mpg123";
     });
@@ -19812,11 +19956,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-mpt = (build-asdf-system {
     pname = "cl-mixed-mpt";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-mpt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-mpt";
       asd = "cl-mixed-mpt";
     });
@@ -19826,13 +19970,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  cl-mixed-nxau = (build-asdf-system {
+    pname = "cl-mixed-nxau";
+    version = "20231021-git";
+    asds = [ "cl-mixed-nxau" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
+      system = "cl-mixed-nxau";
+      asd = "cl-mixed-nxau";
+    });
+    systems = [ "cl-mixed-nxau" ];
+    lispLibs = [ (getAttr "cffi" self) (getAttr "cl-mixed" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   cl-mixed-opus = (build-asdf-system {
     pname = "cl-mixed-opus";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-opus" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-opus";
       asd = "cl-mixed-opus";
     });
@@ -19844,11 +20004,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-oss = (build-asdf-system {
     pname = "cl-mixed-oss";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-oss" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-oss";
       asd = "cl-mixed-oss";
     });
@@ -19860,11 +20020,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-out123 = (build-asdf-system {
     pname = "cl-mixed-out123";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-out123" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-out123";
       asd = "cl-mixed-out123";
     });
@@ -19876,11 +20036,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-pulse = (build-asdf-system {
     pname = "cl-mixed-pulse";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-pulse" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-pulse";
       asd = "cl-mixed-pulse";
     });
@@ -19892,11 +20052,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-sdl2 = (build-asdf-system {
     pname = "cl-mixed-sdl2";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-sdl2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-sdl2";
       asd = "cl-mixed-sdl2";
     });
@@ -19908,11 +20068,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-vorbis = (build-asdf-system {
     pname = "cl-mixed-vorbis";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-vorbis" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-vorbis";
       asd = "cl-mixed-vorbis";
     });
@@ -19924,11 +20084,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-wasapi = (build-asdf-system {
     pname = "cl-mixed-wasapi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-wasapi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-wasapi";
       asd = "cl-mixed-wasapi";
     });
@@ -19940,11 +20100,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-wav = (build-asdf-system {
     pname = "cl-mixed-wav";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-wav" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-wav";
       asd = "cl-mixed-wav";
     });
@@ -19956,11 +20116,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-winmm = (build-asdf-system {
     pname = "cl-mixed-winmm";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-winmm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-winmm";
       asd = "cl-mixed-winmm";
     });
@@ -19972,11 +20132,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mixed-xaudio2 = (build-asdf-system {
     pname = "cl-mixed-xaudio2";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mixed-xaudio2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-06-18/cl-mixed-20230618-git.tgz";
-      sha256 = "0bd77bxw55mqyqmkb9s53ay0frkq5k6bgxakzkqg5kyjdryli36c";
+      url = "http://beta.quicklisp.org/archive/cl-mixed/2023-10-21/cl-mixed-20231021-git.tgz";
+      sha256 = "0sxq4yrsbxb2sgbijkqcvl9raksrnib2f9j6dm1kak0i9ry48cqc";
       system = "cl-mixed-xaudio2";
       asd = "cl-mixed-xaudio2";
     });
@@ -20052,11 +20212,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-modio = (build-asdf-system {
     pname = "cl-modio";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-modio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-modio/2023-06-18/cl-modio-20230618-git.tgz";
-      sha256 = "0hz87v81pi8kr2c7az30czpdf7v757lkzlsmdcc59p94pipca7m9";
+      url = "http://beta.quicklisp.org/archive/cl-modio/2023-10-21/cl-modio-20231021-git.tgz";
+      sha256 = "1gjjr0x116afm9cap4h765zr3k7xm50ks1yl6d6hz08y5l226lyh";
       system = "cl-modio";
       asd = "cl-modio";
     });
@@ -20084,11 +20244,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-moneris = (build-asdf-system {
     pname = "cl-moneris";
-    version = "20110418-git";
+    version = "20231021-git";
     asds = [ "cl-moneris" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-moneris/2011-04-18/cl-moneris-20110418-git.tgz";
-      sha256 = "1jvzssjb273ijbdcpxpl6ajh02k4h6l5j4vjxkh69cnrq3dcsvfc";
+      url = "http://beta.quicklisp.org/archive/cl-moneris/2023-10-21/cl-moneris-20231021-git.tgz";
+      sha256 = "1ajxqdgqy7cnkq6qz18xayw5z1idz3slzj7nc7pcv4ha7h3ak63k";
       system = "cl-moneris";
       asd = "cl-moneris";
     });
@@ -20100,16 +20260,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-moneris-test = (build-asdf-system {
     pname = "cl-moneris-test";
-    version = "20110418-git";
+    version = "20231021-git";
     asds = [ "cl-moneris-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-moneris/2011-04-18/cl-moneris-20110418-git.tgz";
-      sha256 = "1jvzssjb273ijbdcpxpl6ajh02k4h6l5j4vjxkh69cnrq3dcsvfc";
+      url = "http://beta.quicklisp.org/archive/cl-moneris/2023-10-21/cl-moneris-20231021-git.tgz";
+      sha256 = "1ajxqdgqy7cnkq6qz18xayw5z1idz3slzj7nc7pcv4ha7h3ak63k";
       system = "cl-moneris-test";
       asd = "cl-moneris-test";
     });
     systems = [ "cl-moneris-test" ];
-    lispLibs = [ (getAttr "cl-moneris" self) (getAttr "eos" self) ];
+    lispLibs = [ (getAttr "cl-moneris" self) (getAttr "fiveam" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -20148,11 +20308,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-monitors = (build-asdf-system {
     pname = "cl-monitors";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "cl-monitors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-monitors/2019-07-10/cl-monitors-20190710-git.tgz";
-      sha256 = "0arwj7san3hsjws1fj3l8iqm92fipw0bfl3gzvvx6sa3cmy3m8vj";
+      url = "http://beta.quicklisp.org/archive/cl-monitors/2023-10-21/cl-monitors-20231021-git.tgz";
+      sha256 = "09ddgs7sbqjx91bajpk5qf6716vnx63mfg9yw0biw16mnfjhrg4i";
       system = "cl-monitors";
       asd = "cl-monitors";
     });
@@ -20212,11 +20372,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mount-info = (build-asdf-system {
     pname = "cl-mount-info";
-    version = "20200218-git";
+    version = "20231021-git";
     asds = [ "cl-mount-info" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mount-info/2020-02-18/cl-mount-info-20200218-git.tgz";
-      sha256 = "0vza9gj9q42nzb5v8aj22lmn4aqx9vrddsb5a343nbwfz89hbh9x";
+      url = "http://beta.quicklisp.org/archive/cl-mount-info/2023-10-21/cl-mount-info-20231021-git.tgz";
+      sha256 = "0k23qk10a67xqv2pvj4s0qf5a45xfj2h6hn34q1bnmmvhfw51ivd";
       system = "cl-mount-info";
       asd = "cl-mount-info";
     });
@@ -20228,11 +20388,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mpg123 = (build-asdf-system {
     pname = "cl-mpg123";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mpg123" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mpg123/2023-06-18/cl-mpg123-20230618-git.tgz";
-      sha256 = "0smrgr2i2vcgnzkfafpix9dq1wzfs3yd2q6l5p66cplm4lhd7ni4";
+      url = "http://beta.quicklisp.org/archive/cl-mpg123/2023-10-21/cl-mpg123-20231021-git.tgz";
+      sha256 = "0qgkcyvwak9qwlf0yw0bjm3ba28xjli7m41q5988mkap85y53hs0";
       system = "cl-mpg123";
       asd = "cl-mpg123";
     });
@@ -20244,11 +20404,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-mpg123-example = (build-asdf-system {
     pname = "cl-mpg123-example";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-mpg123-example" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mpg123/2023-06-18/cl-mpg123-20230618-git.tgz";
-      sha256 = "0smrgr2i2vcgnzkfafpix9dq1wzfs3yd2q6l5p66cplm4lhd7ni4";
+      url = "http://beta.quicklisp.org/archive/cl-mpg123/2023-10-21/cl-mpg123-20231021-git.tgz";
+      sha256 = "0qgkcyvwak9qwlf0yw0bjm3ba28xjli7m41q5988mkap85y53hs0";
       system = "cl-mpg123-example";
       asd = "cl-mpg123-example";
     });
@@ -20608,31 +20768,31 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-naive-store = (build-asdf-system {
     pname = "cl-naive-store";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-naive-store" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
       system = "cl-naive-store";
       asd = "cl-naive-store";
     });
     systems = [ "cl-naive-store" ];
-    lispLibs = [ (getAttr "cl-naive-store_dot_document-type-defs" self) (getAttr "cl-naive-store_dot_document-types" self) (getAttr "cl-naive-store_dot_naive-core" self) (getAttr "cl-naive-store_dot_naive-documents" self) (getAttr "cl-naive-store_dot_naive-indexed" self) (getAttr "cl-naive-store_dot_naive-merkle" self) ];
+    lispLibs = [ (getAttr "cl-naive-store_dot_definitions" self) (getAttr "cl-naive-store_dot_document-types" self) (getAttr "cl-naive-store_dot_naive-core" self) (getAttr "cl-naive-store_dot_naive-documents" self) (getAttr "cl-naive-store_dot_naive-indexed" self) (getAttr "cl-naive-store_dot_naive-merkle" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
-  cl-naive-store_dot_document-type-defs = (build-asdf-system {
-    pname = "cl-naive-store.document-type-defs";
-    version = "20230618-git";
-    asds = [ "cl-naive-store.document-type-defs" ];
+  cl-naive-store_dot_definitions = (build-asdf-system {
+    pname = "cl-naive-store.definitions";
+    version = "20231021-git";
+    asds = [ "cl-naive-store.definitions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
-      system = "cl-naive-store.document-type-defs";
-      asd = "cl-naive-store.document-type-defs";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
+      system = "cl-naive-store.definitions";
+      asd = "cl-naive-store.definitions";
     });
-    systems = [ "cl-naive-store.document-type-defs" ];
+    systems = [ "cl-naive-store.definitions" ];
     lispLibs = [ (getAttr "cl-naive-store_dot_document-types" self) (getAttr "cl-naive-store_dot_naive-core" self) ];
     meta = {
       hydraPlatforms = [  ];
@@ -20640,11 +20800,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-naive-store_dot_document-types = (build-asdf-system {
     pname = "cl-naive-store.document-types";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-naive-store.document-types" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
       system = "cl-naive-store.document-types";
       asd = "cl-naive-store.document-types";
     });
@@ -20656,11 +20816,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-naive-store_dot_naive-core = (build-asdf-system {
     pname = "cl-naive-store.naive-core";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-naive-store.naive-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
       system = "cl-naive-store.naive-core";
       asd = "cl-naive-store.naive-core";
     });
@@ -20672,27 +20832,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-naive-store_dot_naive-documents = (build-asdf-system {
     pname = "cl-naive-store.naive-documents";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-naive-store.naive-documents" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
       system = "cl-naive-store.naive-documents";
       asd = "cl-naive-store.naive-documents";
     });
     systems = [ "cl-naive-store.naive-documents" ];
-    lispLibs = [ (getAttr "cl-naive-store_dot_document-type-defs" self) (getAttr "cl-naive-store_dot_document-types" self) (getAttr "cl-naive-store_dot_naive-core" self) (getAttr "cl-naive-store_dot_naive-indexed" self) ];
+    lispLibs = [ (getAttr "cl-naive-store_dot_document-types" self) (getAttr "cl-naive-store_dot_naive-core" self) (getAttr "cl-naive-store_dot_naive-indexed" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   cl-naive-store_dot_naive-indexed = (build-asdf-system {
     pname = "cl-naive-store.naive-indexed";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-naive-store.naive-indexed" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
       system = "cl-naive-store.naive-indexed";
       asd = "cl-naive-store.naive-indexed";
     });
@@ -20704,11 +20864,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-naive-store_dot_naive-merkle = (build-asdf-system {
     pname = "cl-naive-store.naive-merkle";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-naive-store.naive-merkle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
       system = "cl-naive-store.naive-merkle";
       asd = "cl-naive-store.naive-merkle";
     });
@@ -20720,11 +20880,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-naive-store_dot_test = (build-asdf-system {
     pname = "cl-naive-store.test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-naive-store.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-06-18/cl-naive-store-20230618-git.tgz";
-      sha256 = "0z9f1hfm63idnivcymzlimqmrdrr87p88vcajq83nhhhqjr6jc9w";
+      url = "http://beta.quicklisp.org/archive/cl-naive-store/2023-10-21/cl-naive-store-20231021-git.tgz";
+      sha256 = "0f51skknm29lg3miygybbagc9s4w9drfsph5mdmdjm1cks0x6v6k";
       system = "cl-naive-store.test";
       asd = "cl-naive-store.test";
     });
@@ -21264,11 +21424,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-opus = (build-asdf-system {
     pname = "cl-opus";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-opus" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-opus/2023-06-18/cl-opus-20230618-git.tgz";
-      sha256 = "1xclwnmx6vjmiznjwgwdfzh192f3hpfm234lc0j0sjxhk7a547z7";
+      url = "http://beta.quicklisp.org/archive/cl-opus/2023-10-21/cl-opus-20231021-git.tgz";
+      sha256 = "1ss9k50qgbcms9m8bh414jvc6n03zjkxj8577a3s9p4764mbwrqq";
       system = "cl-opus";
       asd = "cl-opus";
     });
@@ -21296,11 +21456,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-out123 = (build-asdf-system {
     pname = "cl-out123";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-out123" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-out123/2023-06-18/cl-out123-20230618-git.tgz";
-      sha256 = "0ahgc5l5lbpl3ini4pn5crh8b7dlr386pxczl0d4h6djhccxzs4w";
+      url = "http://beta.quicklisp.org/archive/cl-out123/2023-10-21/cl-out123-20231021-git.tgz";
+      sha256 = "1h48hfd956799wx9kmkmb9azg01jmjbnj16b6z9ciw9y9k5jlzsh";
       system = "cl-out123";
       asd = "cl-out123";
     });
@@ -21480,11 +21640,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-patterns = (build-asdf-system {
     pname = "cl-patterns";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-patterns" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-patterns/2023-06-18/cl-patterns-20230618-git.tgz";
-      sha256 = "1vra1wbflwzm4d9b1b3id4wk5jhqgi6cypgjkghsj0yw4rkccvhc";
+      url = "http://beta.quicklisp.org/archive/cl-patterns/2023-10-21/cl-patterns-20231021-git.tgz";
+      sha256 = "0h7k46xb069k596z34zj9xgibv4rdlzq8b8kfhy2m6j186zy9vwg";
       system = "cl-patterns";
       asd = "cl-patterns";
     });
@@ -21560,11 +21720,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-pdf = (build-asdf-system {
     pname = "cl-pdf";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-pdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-pdf/2023-02-14/cl-pdf-20230214-git.tgz";
-      sha256 = "0j7hbqv6yzrgx0inqinpw8h22728l53ccciw6iymzz4g92j9fzlq";
+      url = "http://beta.quicklisp.org/archive/cl-pdf/2023-10-21/cl-pdf-20231021-git.tgz";
+      sha256 = "1x88fvk3kxi3k6a84iajb6myw67z8n3plfidq8d4c26ymiz0kvfm";
       system = "cl-pdf";
       asd = "cl-pdf";
     });
@@ -21590,11 +21750,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-pdf-parser = (build-asdf-system {
     pname = "cl-pdf-parser";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-pdf-parser" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-pdf/2023-02-14/cl-pdf-20230214-git.tgz";
-      sha256 = "0j7hbqv6yzrgx0inqinpw8h22728l53ccciw6iymzz4g92j9fzlq";
+      url = "http://beta.quicklisp.org/archive/cl-pdf/2023-10-21/cl-pdf-20231021-git.tgz";
+      sha256 = "1x88fvk3kxi3k6a84iajb6myw67z8n3plfidq8d4c26ymiz0kvfm";
       system = "cl-pdf-parser";
       asd = "cl-pdf-parser";
     });
@@ -21638,27 +21798,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-permutation = (build-asdf-system {
     pname = "cl-permutation";
-    version = "20211209-git";
+    version = "20231021-git";
     asds = [ "cl-permutation" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-permutation/2021-12-09/cl-permutation-20211209-git.tgz";
-      sha256 = "0i932g0k50y24hxizni6zfya4kcw77yk3b0llivm9g50s7fxj9dk";
+      url = "http://beta.quicklisp.org/archive/cl-permutation/2023-10-21/cl-permutation-20231021-git.tgz";
+      sha256 = "1zq7hjfn854jr1sglagvdpn749ihxki0l1wcbg9nd2i7ds1g5h4y";
       system = "cl-permutation";
       asd = "cl-permutation";
     });
     systems = [ "cl-permutation" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-fft" self) (getAttr "cl-algebraic-data-type" self) (getAttr "closer-mop" self) (getAttr "iterate" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-fft" self) (getAttr "cl-algebraic-data-type" self) (getAttr "cl-cont" self) (getAttr "closer-mop" self) (getAttr "iterate" self) (getAttr "priority-queue" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   cl-permutation-examples = (build-asdf-system {
     pname = "cl-permutation-examples";
-    version = "20211209-git";
+    version = "20231021-git";
     asds = [ "cl-permutation-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-permutation/2021-12-09/cl-permutation-20211209-git.tgz";
-      sha256 = "0i932g0k50y24hxizni6zfya4kcw77yk3b0llivm9g50s7fxj9dk";
+      url = "http://beta.quicklisp.org/archive/cl-permutation/2023-10-21/cl-permutation-20231021-git.tgz";
+      sha256 = "1zq7hjfn854jr1sglagvdpn749ihxki0l1wcbg9nd2i7ds1g5h4y";
       system = "cl-permutation-examples";
       asd = "cl-permutation-examples";
     });
@@ -21670,11 +21830,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-permutation-tests = (build-asdf-system {
     pname = "cl-permutation-tests";
-    version = "20211209-git";
+    version = "20231021-git";
     asds = [ "cl-permutation-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-permutation/2021-12-09/cl-permutation-20211209-git.tgz";
-      sha256 = "0i932g0k50y24hxizni6zfya4kcw77yk3b0llivm9g50s7fxj9dk";
+      url = "http://beta.quicklisp.org/archive/cl-permutation/2023-10-21/cl-permutation-20231021-git.tgz";
+      sha256 = "1zq7hjfn854jr1sglagvdpn749ihxki0l1wcbg9nd2i7ds1g5h4y";
       system = "cl-permutation-tests";
       asd = "cl-permutation-tests";
     });
@@ -21766,16 +21926,80 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-plus-c = (build-asdf-system {
     pname = "cl-plus-c";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cl-plus-c" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-autowrap/2022-11-06/cl-autowrap-20221106-git.tgz";
-      sha256 = "0pbabpmg61bflx6kxllqvhbvxqwjsik3nnynqdhgzzkgzk6jlixv";
+      url = "http://beta.quicklisp.org/archive/cl-autowrap/2023-10-21/cl-autowrap-20231021-git.tgz";
+      sha256 = "063pc7akxbsaayzpgz16dzkh0434s80h61k7mi7xq5isgzfjka2k";
       system = "cl-plus-c";
       asd = "cl-plus-c";
     });
     systems = [ "cl-plus-c" ];
     lispLibs = [ (getAttr "cl-autowrap" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-plus-ssl-osx-fix = (build-asdf-system {
+    pname = "cl-plus-ssl-osx-fix";
+    version = "20231021-git";
+    asds = [ "cl-plus-ssl-osx-fix" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-plus-ssl-osx-fix/2023-10-21/cl-plus-ssl-osx-fix-20231021-git.tgz";
+      sha256 = "03bm88jqmkf7mwbqrw4x3zj0r6rjvmhkbhi5ijw1iqiyb451bxq9";
+      system = "cl-plus-ssl-osx-fix";
+      asd = "cl-plus-ssl-osx-fix";
+    });
+    systems = [ "cl-plus-ssl-osx-fix" ];
+    lispLibs = [ (getAttr "_40ants-asdf-system" self) (getAttr "cl_plus_ssl" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-plus-ssl-osx-fix-ci = (build-asdf-system {
+    pname = "cl-plus-ssl-osx-fix-ci";
+    version = "20231021-git";
+    asds = [ "cl-plus-ssl-osx-fix-ci" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-plus-ssl-osx-fix/2023-10-21/cl-plus-ssl-osx-fix-20231021-git.tgz";
+      sha256 = "03bm88jqmkf7mwbqrw4x3zj0r6rjvmhkbhi5ijw1iqiyb451bxq9";
+      system = "cl-plus-ssl-osx-fix-ci";
+      asd = "cl-plus-ssl-osx-fix-ci";
+    });
+    systems = [ "cl-plus-ssl-osx-fix-ci" ];
+    lispLibs = [ (getAttr "_40ants-ci" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-plus-ssl-osx-fix-docs = (build-asdf-system {
+    pname = "cl-plus-ssl-osx-fix-docs";
+    version = "20231021-git";
+    asds = [ "cl-plus-ssl-osx-fix-docs" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-plus-ssl-osx-fix/2023-10-21/cl-plus-ssl-osx-fix-20231021-git.tgz";
+      sha256 = "03bm88jqmkf7mwbqrw4x3zj0r6rjvmhkbhi5ijw1iqiyb451bxq9";
+      system = "cl-plus-ssl-osx-fix-docs";
+      asd = "cl-plus-ssl-osx-fix-docs";
+    });
+    systems = [ "cl-plus-ssl-osx-fix-docs" ];
+    lispLibs = [ (getAttr "_40ants-doc" self) (getAttr "cl-plus-ssl-osx-fix" self) (getAttr "docs-config" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-plus-ssl-osx-fix-tests = (build-asdf-system {
+    pname = "cl-plus-ssl-osx-fix-tests";
+    version = "20231021-git";
+    asds = [ "cl-plus-ssl-osx-fix-tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-plus-ssl-osx-fix/2023-10-21/cl-plus-ssl-osx-fix-20231021-git.tgz";
+      sha256 = "03bm88jqmkf7mwbqrw4x3zj0r6rjvmhkbhi5ijw1iqiyb451bxq9";
+      system = "cl-plus-ssl-osx-fix-tests";
+      asd = "cl-plus-ssl-osx-fix-tests";
+    });
+    systems = [ "cl-plus-ssl-osx-fix-tests" ];
+    lispLibs = [ (getAttr "rove" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -21862,11 +22086,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-postgres = (build-asdf-system {
     pname = "cl-postgres";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-postgres" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2023-02-14/postmodern-20230214-git.tgz";
-      sha256 = "19pk3jinlv70arcz6073lglg4mf972h03rxynn4z9qabqc2gk9kw";
+      url = "http://beta.quicklisp.org/archive/postmodern/2023-10-21/postmodern-20231021-git.tgz";
+      sha256 = "1abb80zmnawzl9g09css57kviwbqw5fcxhp3fjrzw7zc3n1wfr8y";
       system = "cl-postgres";
       asd = "cl-postgres";
     });
@@ -21876,11 +22100,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-postgres_plus_local-time = (build-asdf-system {
     pname = "cl-postgres+local-time";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-postgres+local-time" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/local-time/2023-02-14/local-time-20230214-git.tgz";
-      sha256 = "1dbp33zmkqzzshmf5k76pxqgli285wvy0p0dhcz816fdikpwn2jg";
+      url = "http://beta.quicklisp.org/archive/local-time/2023-10-21/local-time-20231021-git.tgz";
+      sha256 = "05h40dq8bqx7p7ri67c81fkfm4zzbichyicrdj4srs0vvlwxiqpj";
       system = "cl-postgres+local-time";
       asd = "cl-postgres+local-time";
     });
@@ -22074,11 +22298,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-project = (build-asdf-system {
     pname = "cl-project";
-    version = "20200715-git";
+    version = "20231021-git";
     asds = [ "cl-project" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-project/2020-07-15/cl-project-20200715-git.tgz";
-      sha256 = "1rmh6s1ncv8s2yrr14ja9wisgg745sq6xibqwb341ikdicxdp26y";
+      url = "http://beta.quicklisp.org/archive/cl-project/2023-10-21/cl-project-20231021-git.tgz";
+      sha256 = "1m1vxhmc1rx5fk099qh2csgvr87qzfza8h6wk3l16rlyxk8gy4h5";
       system = "cl-project";
       asd = "cl-project";
     });
@@ -22090,11 +22314,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-project-test = (build-asdf-system {
     pname = "cl-project-test";
-    version = "20200715-git";
+    version = "20231021-git";
     asds = [ "cl-project-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-project/2020-07-15/cl-project-20200715-git.tgz";
-      sha256 = "1rmh6s1ncv8s2yrr14ja9wisgg745sq6xibqwb341ikdicxdp26y";
+      url = "http://beta.quicklisp.org/archive/cl-project/2023-10-21/cl-project-20231021-git.tgz";
+      sha256 = "1m1vxhmc1rx5fk099qh2csgvr87qzfza8h6wk3l16rlyxk8gy4h5";
       system = "cl-project-test";
       asd = "cl-project-test";
     });
@@ -22298,11 +22522,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-protobufs_dot_asdf = (build-asdf-system {
     pname = "cl-protobufs.asdf";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-protobufs.asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-protobufs/2023-06-18/cl-protobufs-20230618-git.tgz";
-      sha256 = "13rva5cb2w0a74z28w68pm9gfjcg54lnvifss4rwj2n5zx549c9r";
+      url = "http://beta.quicklisp.org/archive/cl-protobufs/2023-10-21/cl-protobufs-20231021-git.tgz";
+      sha256 = "136lv5g3g8y7fq375p034iqk935z4nkln3f77x2aw2ljzqf0yd3g";
       system = "cl-protobufs.asdf";
       asd = "cl-protobufs.asdf";
     });
@@ -22314,11 +22538,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-pslib = (build-asdf-system {
     pname = "cl-pslib";
-    version = "20201016-git";
+    version = "20231021-git";
     asds = [ "cl-pslib" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-pslib/2020-10-16/cl-pslib-20201016-git.tgz";
-      sha256 = "1l3ig57lrqdbm3kd9kbch3y3az8kryc9bqn896vz3a3w3rnwcv5a";
+      url = "http://beta.quicklisp.org/archive/cl-pslib/2023-10-21/cl-pslib-20231021-git.tgz";
+      sha256 = "0y582j86zgydnf6b12mgj2wv09m8qysqf5fdbzwsbx750hlkw435";
       system = "cl-pslib";
       asd = "cl-pslib";
     });
@@ -22330,11 +22554,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-pslib-barcode = (build-asdf-system {
     pname = "cl-pslib-barcode";
-    version = "20200218-git";
+    version = "20231021-git";
     asds = [ "cl-pslib-barcode" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-pslib-barcode/2020-02-18/cl-pslib-barcode-20200218-git.tgz";
-      sha256 = "10hmvjx03m54xyrjdw92kfpcvch0by0c8lwj899rbgxwfjsbwc49";
+      url = "http://beta.quicklisp.org/archive/cl-pslib-barcode/2023-10-21/cl-pslib-barcode-20231021-git.tgz";
+      sha256 = "0smp878rzcphivhzvw0hwdzgqlbx384if2d9zd133hvz14dz0d1p";
       system = "cl-pslib-barcode";
       asd = "cl-pslib-barcode";
     });
@@ -22432,54 +22656,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "cl-quickcheck" ];
     lispLibs = [  ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-quil = (build-asdf-system {
-    pname = "cl-quil";
-    version = "v1.26.0";
-    asds = [ "cl-quil" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2021-12-09/quilc-v1.26.0.tgz";
-      sha256 = "09qp2d6xgq4cmg6nfsdz0gbs3rvz3ln0kawmry6cls14lxnljjrr";
-      system = "cl-quil";
-      asd = "cl-quil";
-    });
-    systems = [ "cl-quil" ];
-    lispLibs = [ (getAttr "abstract-classes" self) (getAttr "alexa" self) (getAttr "alexandria" self) (getAttr "cl-algebraic-data-type" self) (getAttr "cl-grnm" self) (getAttr "cl-heap" self) (getAttr "cl-permutation" self) (getAttr "closer-mop" self) (getAttr "flexi-streams" self) (getAttr "global-vars" self) (getAttr "magicl" self) (getAttr "optima" self) (getAttr "parse-float" self) (getAttr "queues_dot_priority-queue" self) (getAttr "salza2" self) (getAttr "singleton-classes" self) (getAttr "split-sequence" self) (getAttr "trivial-garbage" self) (getAttr "yacc" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-quil-benchmarking = (build-asdf-system {
-    pname = "cl-quil-benchmarking";
-    version = "v1.26.0";
-    asds = [ "cl-quil-benchmarking" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2021-12-09/quilc-v1.26.0.tgz";
-      sha256 = "09qp2d6xgq4cmg6nfsdz0gbs3rvz3ln0kawmry6cls14lxnljjrr";
-      system = "cl-quil-benchmarking";
-      asd = "cl-quil-benchmarking";
-    });
-    systems = [ "cl-quil-benchmarking" ];
-    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "cl-quil" self) (getAttr "metering" self) (getAttr "qvm-app" self) (getAttr "trivial-benchmark" self) (getAttr "trivial-garbage" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-quil-tests = (build-asdf-system {
-    pname = "cl-quil-tests";
-    version = "v1.26.0";
-    asds = [ "cl-quil-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2021-12-09/quilc-v1.26.0.tgz";
-      sha256 = "09qp2d6xgq4cmg6nfsdz0gbs3rvz3ln0kawmry6cls14lxnljjrr";
-      system = "cl-quil-tests";
-      asd = "cl-quil-tests";
-    });
-    systems = [ "cl-quil-tests" ];
-    lispLibs = [ (getAttr "alexa" self) (getAttr "alexandria" self) (getAttr "cl-permutation" self) (getAttr "cl-ppcre" self) (getAttr "cl-quil" self) (getAttr "fiasco" self) (getAttr "magicl" self) (getAttr "qvm" self) (getAttr "yacc" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -22598,11 +22774,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-readline = (build-asdf-system {
     pname = "cl-readline";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "cl-readline" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-readline/2022-07-07/cl-readline-20220707-git.tgz";
-      sha256 = "0bxvfd7hmj9yvcar3f3kd1cxxx4pqzri6sa28bp9w9bm25g4ddhf";
+      url = "http://beta.quicklisp.org/archive/cl-readline/2023-10-21/cl-readline-20231021-git.tgz";
+      sha256 = "0xjf58vb99j41pndbiin7v4kmm0308a5d7jiin6rsbz47wrjzj52";
       system = "cl-readline";
       asd = "cl-readline";
     });
@@ -22786,11 +22962,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-rfc4251 = (build-asdf-system {
     pname = "cl-rfc4251";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-rfc4251" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-rfc4251/2023-02-14/cl-rfc4251-20230214-git.tgz";
-      sha256 = "0r3ji4l9d6ha6h01isjg4661w0q9f8hnm6sa24xzw8lwxpg2blm0";
+      url = "http://beta.quicklisp.org/archive/cl-rfc4251/2023-10-21/cl-rfc4251-20231021-git.tgz";
+      sha256 = "11xz6w1gvyj5a01yjfy52byfrq6v8k1mzkp3wajhzhg60nkhn4jh";
       system = "cl-rfc4251";
       asd = "cl-rfc4251";
     });
@@ -22802,11 +22978,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-rfc4251_dot_test = (build-asdf-system {
     pname = "cl-rfc4251.test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-rfc4251.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-rfc4251/2023-02-14/cl-rfc4251-20230214-git.tgz";
-      sha256 = "0r3ji4l9d6ha6h01isjg4661w0q9f8hnm6sa24xzw8lwxpg2blm0";
+      url = "http://beta.quicklisp.org/archive/cl-rfc4251/2023-10-21/cl-rfc4251-20231021-git.tgz";
+      sha256 = "11xz6w1gvyj5a01yjfy52byfrq6v8k1mzkp3wajhzhg60nkhn4jh";
       system = "cl-rfc4251.test";
       asd = "cl-rfc4251.test";
     });
@@ -23448,6 +23624,22 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  cl-server-manager = (build-asdf-system {
+    pname = "cl-server-manager";
+    version = "20231021-git";
+    asds = [ "cl-server-manager" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-server-manager/2023-10-21/cl-server-manager-20231021-git.tgz";
+      sha256 = "0vrdn9iiwmx2zg7lrw56dqjaxbb9fvn4107qxgp3n3z8zxhiw03s";
+      system = "cl-server-manager";
+      asd = "cl-server-manager";
+    });
+    systems = [ "cl-server-manager" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "hunchentoot" self) (getAttr "prepl" self) (getAttr "swank" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   cl-ses4 = (build-asdf-system {
     pname = "cl-ses4";
     version = "20221106-git";
@@ -23608,11 +23800,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-skkserv = (build-asdf-system {
     pname = "cl-skkserv";
-    version = "20201220-git";
+    version = "20231021-git";
     asds = [ "cl-skkserv" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-skkserv/2020-12-20/cl-skkserv-20201220-git.tgz";
-      sha256 = "1khbfsvf70dyrrkbwcblzd6bkgx1z6k9ras57inmv2lqqr93m5l4";
+      url = "http://beta.quicklisp.org/archive/cl-skkserv/2023-10-21/cl-skkserv-20231021-git.tgz";
+      sha256 = "1cidiyszsvgyh5s682cg90li7fxc1yfaw67hbln43hb2wrv83gls";
       system = "cl-skkserv";
       asd = "cl-skkserv";
     });
@@ -23778,11 +23970,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-soloud = (build-asdf-system {
     pname = "cl-soloud";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "cl-soloud" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-soloud/2019-07-10/cl-soloud-20190710-git.tgz";
-      sha256 = "1scdnhf052sa77zd4f250mxdqjjny2jcigwhgccrp1gldcs0ks37";
+      url = "http://beta.quicklisp.org/archive/cl-soloud/2023-10-21/cl-soloud-20231021-git.tgz";
+      sha256 = "0r0z365gcgf93vy8g2nbjwgh5r04gv0l645l2knvip420jxqqp1c";
       system = "cl-soloud";
       asd = "cl-soloud";
     });
@@ -23904,11 +24096,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-spidev = (build-asdf-system {
     pname = "cl-spidev";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "cl-spidev" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-spidev/2019-07-10/cl-spidev-20190710-git.tgz";
-      sha256 = "1kif1ygpm7z7bymg86h305171vnp5jsqyq4dz8h3fbi1rzjnqfcy";
+      url = "http://beta.quicklisp.org/archive/cl-spidev/2023-10-21/cl-spidev-20231021-git.tgz";
+      sha256 = "1dhh6hb2myw8p04psdhdjmikl02r66szpg70yapgyqpycb9yg0l3";
       system = "cl-spidev";
       asd = "cl-spidev";
     });
@@ -23952,27 +24144,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-ssh-keys = (build-asdf-system {
     pname = "cl-ssh-keys";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-ssh-keys" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-ssh-keys/2023-02-14/cl-ssh-keys-20230214-git.tgz";
-      sha256 = "04mmsw3zvwf93majl5y3kynifq00mhd1102g8gf9lgps2mqblh2d";
+      url = "http://beta.quicklisp.org/archive/cl-ssh-keys/2023-10-21/cl-ssh-keys-20231021-git.tgz";
+      sha256 = "1nszwlgycbisjdfcvqxjs9zl9gbwkvhk0ccr4hzjr14h30p3m3px";
       system = "cl-ssh-keys";
       asd = "cl-ssh-keys";
     });
     systems = [ "cl-ssh-keys" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "binascii" self) (getAttr "cl-rfc4251" self) (getAttr "ironclad" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-base64" self) (getAttr "cl-rfc4251" self) (getAttr "ironclad" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   cl-ssh-keys_dot_test = (build-asdf-system {
     pname = "cl-ssh-keys.test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-ssh-keys.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-ssh-keys/2023-02-14/cl-ssh-keys-20230214-git.tgz";
-      sha256 = "04mmsw3zvwf93majl5y3kynifq00mhd1102g8gf9lgps2mqblh2d";
+      url = "http://beta.quicklisp.org/archive/cl-ssh-keys/2023-10-21/cl-ssh-keys-20231021-git.tgz";
+      sha256 = "1nszwlgycbisjdfcvqxjs9zl9gbwkvhk0ccr4hzjr14h30p3m3px";
       system = "cl-ssh-keys.test";
       asd = "cl-ssh-keys.test";
     });
@@ -24016,11 +24208,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-steamworks = (build-asdf-system {
     pname = "cl-steamworks";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-steamworks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-steamworks/2023-06-18/cl-steamworks-20230618-git.tgz";
-      sha256 = "1fzj3rlqw1kwdlmh0ga0y71p2n1adflcamzx4yp9kga552c1db5j";
+      url = "http://beta.quicklisp.org/archive/cl-steamworks/2023-10-21/cl-steamworks-20231021-git.tgz";
+      sha256 = "0i1mcgsvy743m0hym3088ixm32as43wji1gfvfg845hbnf5jygmm";
       system = "cl-steamworks";
       asd = "cl-steamworks";
     });
@@ -24032,11 +24224,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-steamworks-generator = (build-asdf-system {
     pname = "cl-steamworks-generator";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-steamworks-generator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-steamworks/2023-06-18/cl-steamworks-20230618-git.tgz";
-      sha256 = "1fzj3rlqw1kwdlmh0ga0y71p2n1adflcamzx4yp9kga552c1db5j";
+      url = "http://beta.quicklisp.org/archive/cl-steamworks/2023-10-21/cl-steamworks-20231021-git.tgz";
+      sha256 = "0i1mcgsvy743m0hym3088ixm32as43wji1gfvfg845hbnf5jygmm";
       system = "cl-steamworks-generator";
       asd = "cl-steamworks-generator";
     });
@@ -24768,11 +24960,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-tiled = (build-asdf-system {
     pname = "cl-tiled";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-tiled" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-tiled/2023-06-18/cl-tiled-20230618-git.tgz";
-      sha256 = "050ylqmwxmdjn8lzhh9al1hf0arjn2jhznfcrl71aiks8q0bx1sm";
+      url = "http://beta.quicklisp.org/archive/cl-tiled/2023-10-21/cl-tiled-20231021-git.tgz";
+      sha256 = "0nbzpirmlg23sy5ds9p87fnd2gb8i2j8np4kvd8w8d6l5hrdqavi";
       system = "cl-tiled";
       asd = "cl-tiled";
     });
@@ -24816,11 +25008,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-tls = (build-asdf-system {
     pname = "cl-tls";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cl-tls" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-tls/2022-11-06/cl-tls-20221106-git.tgz";
-      sha256 = "1j6gwv21ibkk6xd1xxm54wgwp09dzqg60b8z72hivpnq8gwm0ba7";
+      url = "http://beta.quicklisp.org/archive/cl-tls/2023-10-21/cl-tls-20231021-git.tgz";
+      sha256 = "1gq7m5wmsrjmyhrk9xljxz9ickahwzl1anz2fcns5q2nj0j6d9bx";
       system = "cl-tls";
       asd = "cl-tls";
     });
@@ -24906,6 +25098,38 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "cl-tqdm" ];
     lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-transit = (build-asdf-system {
+    pname = "cl-transit";
+    version = "20231021-git";
+    asds = [ "cl-transit" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-transit/2023-10-21/cl-transit-20231021-git.tgz";
+      sha256 = "0s3wlcdaliivi48p6qcwpwfb5rpqcizy7h3ykq01khy49rx6fajm";
+      system = "cl-transit";
+      asd = "cl-transit";
+    });
+    systems = [ "cl-transit" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "bit-smasher" self) (getAttr "cl-messagepack" self) (getAttr "com_dot_inuoe_dot_jzon" self) (getAttr "flexi-streams" self) (getAttr "fset" self) (getAttr "local-time" self) (getAttr "parse-float" self) (getAttr "quri" self) (getAttr "serapeum" self) (getAttr "uuid" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  cl-transit-tests = (build-asdf-system {
+    pname = "cl-transit-tests";
+    version = "20231021-git";
+    asds = [ "cl-transit-tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-transit/2023-10-21/cl-transit-20231021-git.tgz";
+      sha256 = "0s3wlcdaliivi48p6qcwpwfb5rpqcizy7h3ykq01khy49rx6fajm";
+      system = "cl-transit-tests";
+      asd = "cl-transit-tests";
+    });
+    systems = [ "cl-transit-tests" ];
+    lispLibs = [ (getAttr "cl-transit" self) (getAttr "dexador" self) (getAttr "fiveam" self) (getAttr "marshal" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -25382,11 +25606,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-vorbis = (build-asdf-system {
     pname = "cl-vorbis";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-vorbis" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-vorbis/2023-02-14/cl-vorbis-20230214-git.tgz";
-      sha256 = "0713pl5c2khfpf8m3h1l2y0ilack7akf580h70jq6qcrnq3h4b40";
+      url = "http://beta.quicklisp.org/archive/cl-vorbis/2023-10-21/cl-vorbis-20231021-git.tgz";
+      sha256 = "012rh2zbnxhsn9mmvmiid1s1dncah36v5jdpmrmjahhrkm2x6qjh";
       system = "cl-vorbis";
       asd = "cl-vorbis";
     });
@@ -25494,11 +25718,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-wavefront = (build-asdf-system {
     pname = "cl-wavefront";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-wavefront" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-wavefront/2023-06-18/cl-wavefront-20230618-git.tgz";
-      sha256 = "0429bmcrwf2wjy0xlwckj8hbjkk2nyzyxck1y42b8dv1a6np8i7c";
+      url = "http://beta.quicklisp.org/archive/cl-wavefront/2023-10-21/cl-wavefront-20231021-git.tgz";
+      sha256 = "0cz35a4dxvi7x6j5llh3i5ly2f55xzqjm9p43n7qjfngxagrg227";
       system = "cl-wavefront";
       asd = "cl-wavefront";
     });
@@ -25622,11 +25846,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-webkit2 = (build-asdf-system {
     pname = "cl-webkit2";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "cl-webkit2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-webkit/2023-06-18/cl-webkit-20230618-git.tgz";
-      sha256 = "0mqgmq97yaqyz50n6r83g3ndzymr9kqcmfn8x5a7968wz74ixz1z";
+      url = "http://beta.quicklisp.org/archive/cl-webkit/2023-10-21/cl-webkit-20231021-git.tgz";
+      sha256 = "1n04zpsrb70sfl9mnq4kjrwqszij7fg15nfgn0242yhkyh57vw5p";
       system = "cl-webkit2";
       asd = "cl-webkit2";
     });
@@ -25714,11 +25938,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-wol_dot_cli = (build-asdf-system {
     pname = "cl-wol.cli";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-wol.cli" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-wol/2023-02-14/cl-wol-20230214-git.tgz";
-      sha256 = "0nmwcm0wmbsy3fsh1ingm004610ji8z6mzb2p7lsqlvynl1z65r8";
+      url = "http://beta.quicklisp.org/archive/cl-wol/2023-10-21/cl-wol-20231021-git.tgz";
+      sha256 = "1gfrih0899i7280169cjp6bg3zmrx6znrr3i9qjgda0jk4dn5rp4";
       system = "cl-wol.cli";
       asd = "cl-wol.cli";
     });
@@ -25730,11 +25954,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-wol_dot_core = (build-asdf-system {
     pname = "cl-wol.core";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-wol.core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-wol/2023-02-14/cl-wol-20230214-git.tgz";
-      sha256 = "0nmwcm0wmbsy3fsh1ingm004610ji8z6mzb2p7lsqlvynl1z65r8";
+      url = "http://beta.quicklisp.org/archive/cl-wol/2023-10-21/cl-wol-20231021-git.tgz";
+      sha256 = "1gfrih0899i7280169cjp6bg3zmrx6znrr3i9qjgda0jk4dn5rp4";
       system = "cl-wol.core";
       asd = "cl-wol.core";
     });
@@ -25746,11 +25970,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cl-wol_dot_test = (build-asdf-system {
     pname = "cl-wol.test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "cl-wol.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-wol/2023-02-14/cl-wol-20230214-git.tgz";
-      sha256 = "0nmwcm0wmbsy3fsh1ingm004610ji8z6mzb2p7lsqlvynl1z65r8";
+      url = "http://beta.quicklisp.org/archive/cl-wol/2023-10-21/cl-wol-20231021-git.tgz";
+      sha256 = "1gfrih0899i7280169cjp6bg3zmrx6znrr3i9qjgda0jk4dn5rp4";
       system = "cl-wol.test";
       asd = "cl-wol.test";
     });
@@ -26112,11 +26336,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clack = (build-asdf-system {
     pname = "clack";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "clack";
       asd = "clack";
     });
@@ -26172,29 +26396,13 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  clack-handler-fcgi = (build-asdf-system {
-    pname = "clack-handler-fcgi";
-    version = "20230618-git";
-    asds = [ "clack-handler-fcgi" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
-      system = "clack-handler-fcgi";
-      asd = "clack-handler-fcgi";
-    });
-    systems = [ "clack-handler-fcgi" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-fastcgi" self) (getAttr "flexi-streams" self) (getAttr "quri" self) (getAttr "usocket" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   clack-handler-hunchentoot = (build-asdf-system {
     pname = "clack-handler-hunchentoot";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clack-handler-hunchentoot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "clack-handler-hunchentoot";
       asd = "clack-handler-hunchentoot";
     });
@@ -26206,11 +26414,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clack-handler-toot = (build-asdf-system {
     pname = "clack-handler-toot";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clack-handler-toot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "clack-handler-toot";
       asd = "clack-handler-toot";
     });
@@ -26222,11 +26430,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clack-handler-woo = (build-asdf-system {
     pname = "clack-handler-woo";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "clack-handler-woo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/woo/2022-07-07/woo-20220707-git.tgz";
-      sha256 = "0ar7w2nfxhxirlcxxq4j1v4cnmvfkw3ip4i53b853g0pfb84m3kz";
+      url = "http://beta.quicklisp.org/archive/woo/2023-10-21/woo-20231021-git.tgz";
+      sha256 = "0yzphn3c544vxj52z5h5zbvhz4ab3hm5mpsbsa57p0xa1gcm03r5";
       system = "clack-handler-woo";
       asd = "clack-handler-woo";
     });
@@ -26238,11 +26446,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clack-handler-wookie = (build-asdf-system {
     pname = "clack-handler-wookie";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clack-handler-wookie" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "clack-handler-wookie";
       asd = "clack-handler-wookie";
     });
@@ -26270,11 +26478,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clack-socket = (build-asdf-system {
     pname = "clack-socket";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clack-socket" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "clack-socket";
       asd = "clack-socket";
     });
@@ -26332,11 +26540,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clack-test = (build-asdf-system {
     pname = "clack-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clack-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "clack-test";
       asd = "clack-test";
     });
@@ -26428,11 +26636,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   classowary = (build-asdf-system {
     pname = "classowary";
-    version = "20191007-git";
+    version = "20231021-git";
     asds = [ "classowary" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/classowary/2019-10-07/classowary-20191007-git.tgz";
-      sha256 = "099vmnl3lny427c1vzqrxc2mi57lv944cwn0z9hb0fndlr30alkh";
+      url = "http://beta.quicklisp.org/archive/classowary/2023-10-21/classowary-20231021-git.tgz";
+      sha256 = "099zhf41d4frlrm99ldzypqjh03ijrvfn29f2pb0j6664h65bcsm";
       system = "classowary";
       asd = "classowary";
     });
@@ -26442,11 +26650,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   classowary-test = (build-asdf-system {
     pname = "classowary-test";
-    version = "20191007-git";
+    version = "20231021-git";
     asds = [ "classowary-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/classowary/2019-10-07/classowary-20191007-git.tgz";
-      sha256 = "099vmnl3lny427c1vzqrxc2mi57lv944cwn0z9hb0fndlr30alkh";
+      url = "http://beta.quicklisp.org/archive/classowary/2023-10-21/classowary-20231021-git.tgz";
+      sha256 = "099zhf41d4frlrm99ldzypqjh03ijrvfn29f2pb0j6664h65bcsm";
       system = "classowary-test";
       asd = "classowary-test";
     });
@@ -26952,11 +27160,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim = (build-asdf-system {
     pname = "clim";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim";
       asd = "clim";
     });
@@ -26968,11 +27176,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim-core = (build-asdf-system {
     pname = "clim-core";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-core";
       asd = "clim-core";
     });
@@ -26984,11 +27192,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim-debugger = (build-asdf-system {
     pname = "clim-debugger";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-debugger" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-debugger";
       asd = "clim-debugger";
     });
@@ -27000,27 +27208,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim-examples = (build-asdf-system {
     pname = "clim-examples";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-examples";
       asd = "clim-examples";
     });
     systems = [ "clim-examples" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "clim" self) (getAttr "closer-mop" self) (getAttr "lorem-ipsum" self) (getAttr "mcclim" self) (getAttr "mcclim-bezier" self) (getAttr "mcclim-raster-image" self) (getAttr "mcclim-svg" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "clim" self) (getAttr "closer-mop" self) (getAttr "lorem-ipsum" self) (getAttr "mcclim" self) (getAttr "mcclim-raster-image" self) (getAttr "mcclim-svg" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   clim-lisp = (build-asdf-system {
     pname = "clim-lisp";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-lisp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-lisp";
       asd = "clim-lisp";
     });
@@ -27032,11 +27240,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim-listener = (build-asdf-system {
     pname = "clim-listener";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-listener" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-listener";
       asd = "clim-listener";
     });
@@ -27048,11 +27256,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim-pdf = (build-asdf-system {
     pname = "clim-pdf";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-pdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-pdf";
       asd = "clim-pdf";
     });
@@ -27064,11 +27272,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim-postscript = (build-asdf-system {
     pname = "clim-postscript";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-postscript" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-postscript";
       asd = "clim-postscript";
     });
@@ -27080,11 +27288,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clim-postscript-font = (build-asdf-system {
     pname = "clim-postscript-font";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clim-postscript-font" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clim-postscript-font";
       asd = "clim-postscript-font";
     });
@@ -27288,11 +27496,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clingon = (build-asdf-system {
     pname = "clingon";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clingon" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2023-06-18/clingon-20230618-git.tgz";
-      sha256 = "1siq6xiwvp8v66v1w7cwgnvxdazm687cxnkbmn3f3cyjaq2h5r40";
+      url = "http://beta.quicklisp.org/archive/clingon/2023-10-21/clingon-20231021-git.tgz";
+      sha256 = "1hp0g46b0rycwi3amlas1rbii5g2hyschp9grxz3b88q6437f6gc";
       system = "clingon";
       asd = "clingon";
     });
@@ -27304,11 +27512,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clingon_dot_demo = (build-asdf-system {
     pname = "clingon.demo";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clingon.demo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2023-06-18/clingon-20230618-git.tgz";
-      sha256 = "1siq6xiwvp8v66v1w7cwgnvxdazm687cxnkbmn3f3cyjaq2h5r40";
+      url = "http://beta.quicklisp.org/archive/clingon/2023-10-21/clingon-20231021-git.tgz";
+      sha256 = "1hp0g46b0rycwi3amlas1rbii5g2hyschp9grxz3b88q6437f6gc";
       system = "clingon.demo";
       asd = "clingon.demo";
     });
@@ -27320,11 +27528,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clingon_dot_intro = (build-asdf-system {
     pname = "clingon.intro";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clingon.intro" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2023-06-18/clingon-20230618-git.tgz";
-      sha256 = "1siq6xiwvp8v66v1w7cwgnvxdazm687cxnkbmn3f3cyjaq2h5r40";
+      url = "http://beta.quicklisp.org/archive/clingon/2023-10-21/clingon-20231021-git.tgz";
+      sha256 = "1hp0g46b0rycwi3amlas1rbii5g2hyschp9grxz3b88q6437f6gc";
       system = "clingon.intro";
       asd = "clingon.intro";
     });
@@ -27336,11 +27544,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clingon_dot_test = (build-asdf-system {
     pname = "clingon.test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clingon.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clingon/2023-06-18/clingon-20230618-git.tgz";
-      sha256 = "1siq6xiwvp8v66v1w7cwgnvxdazm687cxnkbmn3f3cyjaq2h5r40";
+      url = "http://beta.quicklisp.org/archive/clingon/2023-10-21/clingon-20231021-git.tgz";
+      sha256 = "1hp0g46b0rycwi3amlas1rbii5g2hyschp9grxz3b88q6437f6gc";
       system = "clingon.test";
       asd = "clingon.test";
     });
@@ -27352,11 +27560,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clip = (build-asdf-system {
     pname = "clip";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "clip" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clip/2023-02-14/clip-20230214-git.tgz";
-      sha256 = "0s805cqbv45vnans46942l257j0sywy15q7gds14gr33rawvjy4i";
+      url = "http://beta.quicklisp.org/archive/clip/2023-10-21/clip-20231021-git.tgz";
+      sha256 = "1b9xd52zk5j5c78s7f5ybi22l1imb9wf492xfv591z6yajagqljv";
       system = "clip";
       asd = "clip";
     });
@@ -28057,11 +28265,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clog = (build-asdf-system {
     pname = "clog";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2023-06-18/clog-20230618-git.tgz";
-      sha256 = "068p45l2i45rlgxwdj09wkcgzjk2dlkkc9hkaaiw1bcjn6gxvxsc";
+      url = "http://beta.quicklisp.org/archive/clog/2023-10-21/clog-20231021-git.tgz";
+      sha256 = "1hd59lwvhd8hfgh6nrgpsqrvwsh7jrpvi2rxaig67xr0zp476hak";
       system = "clog";
       asd = "clog";
     });
@@ -28083,6 +28291,22 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "clog-ace" ];
     lispLibs = [ (getAttr "clog" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  clog-collection = (build-asdf-system {
+    pname = "clog-collection";
+    version = "20231021-git";
+    asds = [ "clog-collection" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/clog-collection/2023-10-21/clog-collection-20231021-git.tgz";
+      sha256 = "0jh9lpagspar6hjgq6s0gjv3qy1ykygy2gwb6dfppixz8s56fxri";
+      system = "clog-collection";
+      asd = "clog-collection";
+    });
+    systems = [ "clog-collection" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-ppcre" self) (getAttr "clog" self) (getAttr "iterate" self) (getAttr "literate-lisp" self) (getAttr "yason" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -28115,6 +28339,22 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "clog-terminal" ];
     lispLibs = [ (getAttr "clog" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  clohost = (build-asdf-system {
+    pname = "clohost";
+    version = "20231021-git";
+    asds = [ "clohost" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/clohost/2023-10-21/clohost-20231021-git.tgz";
+      sha256 = "1spz32lrkxshbvfa0fdml0lcyxm0vys8yan5fsi540dqhbkiqxlj";
+      system = "clohost";
+      asd = "clohost";
+    });
+    systems = [ "clohost" ];
+    lispLibs = [ (getAttr "com_dot_inuoe_dot_jzon" self) (getAttr "crypto-shortcuts" self) (getAttr "documentation-utils" self) (getAttr "drakma" self) (getAttr "trivial-mimes" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -28217,11 +28457,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   closer-mop = (build-asdf-system {
     pname = "closer-mop";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "closer-mop" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/closer-mop/2023-06-18/closer-mop-20230618-git.tgz";
-      sha256 = "1s18zp0akln6xbxf3wv7lix86s61ll7b5hxrcnk1bwqmb6h90iay";
+      url = "http://beta.quicklisp.org/archive/closer-mop/2023-10-21/closer-mop-20231021-git.tgz";
+      sha256 = "0vk255xp12y5jvrpnaak52286x33qsdsjyyh2hrgjyhi0155nn1l";
       system = "closer-mop";
       asd = "closer-mop";
     });
@@ -28323,11 +28563,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clouseau = (build-asdf-system {
     pname = "clouseau";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "clouseau" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "clouseau";
       asd = "clouseau";
     });
@@ -28649,11 +28889,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clss = (build-asdf-system {
     pname = "clss";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "clss" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clss/2022-11-06/clss-20221106-git.tgz";
-      sha256 = "1033dchpanhcgxl5qfhr80aw9adbp9bvllhzvvy5p9mrfnidd1fv";
+      url = "http://beta.quicklisp.org/archive/clss/2023-10-21/clss-20231021-git.tgz";
+      sha256 = "1js9flb5nj2z1wcyplbm5zimaan7dmd8bx9qg6nxprd8f2xrw3qy";
       system = "clss";
       asd = "clss";
     });
@@ -28861,11 +29101,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   clunit2 = (build-asdf-system {
     pname = "clunit2";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "clunit2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clunit2/2022-11-06/clunit2-20221106-git.tgz";
-      sha256 = "094bg5r8dslcapkg1kakay5axnqal9nhq8z1cfmhmjsbrvz9vyz4";
+      url = "http://beta.quicklisp.org/archive/clunit2/2023-10-21/clunit2-20231021-git.tgz";
+      sha256 = "06kfnfi1xn7sdvjq0wfbjdb6dv8pyjc2aqckkm2bq3d88k6jzb4f";
       system = "clunit2";
       asd = "clunit2";
     });
@@ -29113,11 +29353,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   codex = (build-asdf-system {
     pname = "codex";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "codex" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/codex/2023-06-18/codex-20230618-git.tgz";
-      sha256 = "08x27s80zw92mglwfhrvhhyx4p0csywhyzbcrshr5065yp6vgbn7";
+      url = "http://beta.quicklisp.org/archive/codex/2023-10-21/codex-20231021-git.tgz";
+      sha256 = "104qrs5nv6kffsdbf9sv4pba6yjssyk5hc6sppf2zxmcr2xwayfz";
       system = "codex";
       asd = "codex";
     });
@@ -29129,27 +29369,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   codex-templates = (build-asdf-system {
     pname = "codex-templates";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "codex-templates" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/codex/2023-06-18/codex-20230618-git.tgz";
-      sha256 = "08x27s80zw92mglwfhrvhhyx4p0csywhyzbcrshr5065yp6vgbn7";
+      url = "http://beta.quicklisp.org/archive/codex/2023-10-21/codex-20231021-git.tgz";
+      sha256 = "104qrs5nv6kffsdbf9sv4pba6yjssyk5hc6sppf2zxmcr2xwayfz";
       system = "codex-templates";
       asd = "codex-templates";
     });
     systems = [ "codex-templates" ];
-    lispLibs = [ (getAttr "common-html" self) (getAttr "djula" self) (getAttr "trivial-types" self) ];
+    lispLibs = [ (getAttr "cl-fad" self) (getAttr "common-html" self) (getAttr "djula" self) (getAttr "trivial-types" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   coleslaw = (build-asdf-system {
     pname = "coleslaw";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "coleslaw" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/coleslaw/2022-11-06/coleslaw-20221106-git.tgz";
-      sha256 = "1w21a272q4x7nlr4kbmwwvkjvb4hpnw869byvy47vv361y7pimws";
+      url = "http://beta.quicklisp.org/archive/coleslaw/2023-10-21/coleslaw-20231021-git.tgz";
+      sha256 = "1iw532pfmxc4d4bdqh4ac19f1n960zrh31c4mv1swcv06px509yw";
       system = "coleslaw";
       asd = "coleslaw";
     });
@@ -29161,11 +29401,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   coleslaw-cli = (build-asdf-system {
     pname = "coleslaw-cli";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "coleslaw-cli" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/coleslaw/2022-11-06/coleslaw-20221106-git.tgz";
-      sha256 = "1w21a272q4x7nlr4kbmwwvkjvb4hpnw869byvy47vv361y7pimws";
+      url = "http://beta.quicklisp.org/archive/coleslaw/2023-10-21/coleslaw-20231021-git.tgz";
+      sha256 = "1iw532pfmxc4d4bdqh4ac19f1n960zrh31c4mv1swcv06px509yw";
       system = "coleslaw-cli";
       asd = "coleslaw-cli";
     });
@@ -29177,11 +29417,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   coleslaw-test = (build-asdf-system {
     pname = "coleslaw-test";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "coleslaw-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/coleslaw/2022-11-06/coleslaw-20221106-git.tgz";
-      sha256 = "1w21a272q4x7nlr4kbmwwvkjvb4hpnw869byvy47vv361y7pimws";
+      url = "http://beta.quicklisp.org/archive/coleslaw/2023-10-21/coleslaw-20231021-git.tgz";
+      sha256 = "1iw532pfmxc4d4bdqh4ac19f1n960zrh31c4mv1swcv06px509yw";
       system = "coleslaw-test";
       asd = "coleslaw-test";
     });
@@ -29255,11 +29495,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   colnew = (build-asdf-system {
     pname = "colnew";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "colnew" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "colnew";
       asd = "colnew";
     });
@@ -29271,11 +29511,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   colored = (build-asdf-system {
     pname = "colored";
-    version = "20211020-git";
+    version = "20231021-git";
     asds = [ "colored" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/colored/2021-10-20/colored-20211020-git.tgz";
-      sha256 = "0mpg91r6yfb9xqccd4r8z3hl2qzjhdj6daswb1cinrm8ffxrvy5k";
+      url = "http://beta.quicklisp.org/archive/colored/2023-10-21/colored-20231021-git.tgz";
+      sha256 = "058984j8waw8my6vfjiccdh5jijn9kn2q7lk481zv0ygapqh373x";
       system = "colored";
       asd = "colored";
     });
@@ -29287,11 +29527,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   colored-test = (build-asdf-system {
     pname = "colored-test";
-    version = "20211020-git";
+    version = "20231021-git";
     asds = [ "colored-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/colored/2021-10-20/colored-20211020-git.tgz";
-      sha256 = "0mpg91r6yfb9xqccd4r8z3hl2qzjhdj6daswb1cinrm8ffxrvy5k";
+      url = "http://beta.quicklisp.org/archive/colored/2023-10-21/colored-20231021-git.tgz";
+      sha256 = "058984j8waw8my6vfjiccdh5jijn9kn2q7lk481zv0ygapqh373x";
       system = "colored-test";
       asd = "colored-test";
     });
@@ -29317,11 +29557,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   com-on = (build-asdf-system {
     pname = "com-on";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "com-on" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/com-on/2023-06-18/com-on-20230618-git.tgz";
-      sha256 = "1nzba73qkiylmfs2mmw83vnx1cwrinnv9yfa3bikrh9zghr9kw8x";
+      url = "http://beta.quicklisp.org/archive/com-on/2023-10-21/com-on-20231021-git.tgz";
+      sha256 = "1mwjhqbrpqq0x4l0zc3cqmrykrv3qjl2lklcnypddjf2l25f9gf6";
       system = "com-on";
       asd = "com-on";
     });
@@ -29333,11 +29573,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   com-on-test = (build-asdf-system {
     pname = "com-on-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "com-on-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/com-on/2023-06-18/com-on-20230618-git.tgz";
-      sha256 = "1nzba73qkiylmfs2mmw83vnx1cwrinnv9yfa3bikrh9zghr9kw8x";
+      url = "http://beta.quicklisp.org/archive/com-on/2023-10-21/com-on-20231021-git.tgz";
+      sha256 = "1mwjhqbrpqq0x4l0zc3cqmrykrv3qjl2lklcnypddjf2l25f9gf6";
       system = "com-on-test";
       asd = "com-on-test";
     });
@@ -29653,27 +29893,25 @@ in lib.makeScope pkgs.newScope (self: {
   });
   com_dot_inuoe_dot_jzon = (build-asdf-system {
     pname = "com.inuoe.jzon";
-    version = "v1.1.1";
+    version = "v1.1.2";
     asds = [ "com.inuoe.jzon" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/jzon/2023-06-18/jzon-v1.1.1.tgz";
-      sha256 = "0lrypz2d36j8bvqp7dxlrnw64xjvq6mvzz6yggpx0gqr18rqfkkr";
+      url = "http://beta.quicklisp.org/archive/jzon/2023-10-21/jzon-v1.1.2.tgz";
+      sha256 = "1m7fcnjp9yd82x334h95192zsjc3y1pl6myvc8w9lzvcxbafvvz2";
       system = "com.inuoe.jzon";
       asd = "com.inuoe.jzon";
     });
     systems = [ "com.inuoe.jzon" ];
     lispLibs = [ (getAttr "closer-mop" self) (getAttr "flexi-streams" self) (getAttr "float-features" self) (getAttr "trivial-gray-streams" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
+    meta = {};
   });
   com_dot_inuoe_dot_jzon-tests = (build-asdf-system {
     pname = "com.inuoe.jzon-tests";
-    version = "v1.1.1";
+    version = "v1.1.2";
     asds = [ "com.inuoe.jzon-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/jzon/2023-06-18/jzon-v1.1.1.tgz";
-      sha256 = "0lrypz2d36j8bvqp7dxlrnw64xjvq6mvzz6yggpx0gqr18rqfkkr";
+      url = "http://beta.quicklisp.org/archive/jzon/2023-10-21/jzon-v1.1.2.tgz";
+      sha256 = "1m7fcnjp9yd82x334h95192zsjc3y1pl6myvc8w9lzvcxbafvvz2";
       system = "com.inuoe.jzon-tests";
       asd = "com.inuoe.jzon-tests";
     });
@@ -29907,16 +30145,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   common-lisp-jupyter = (build-asdf-system {
     pname = "common-lisp-jupyter";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "common-lisp-jupyter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/common-lisp-jupyter/2023-06-18/common-lisp-jupyter-20230618-git.tgz";
-      sha256 = "18ibm2bj5nazhr85knmq2sg4bjh10i0vdan8zs8hzyiysgz8iylv";
+      url = "http://beta.quicklisp.org/archive/common-lisp-jupyter/2023-10-21/common-lisp-jupyter-20231021-git.tgz";
+      sha256 = "0fj3yallizxld8zsxvva4l5mbp1i4rm73r4balp3r8c6lkrapsrm";
       system = "common-lisp-jupyter";
       asd = "common-lisp-jupyter";
     });
     systems = [ "common-lisp-jupyter" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "babel" self) (getAttr "bordeaux-threads" self) (getAttr "cl-base64" self) (getAttr "cl-indentify" self) (getAttr "closer-mop" self) (getAttr "dissect" self) (getAttr "eclector" self) (getAttr "ironclad" self) (getAttr "multilang-documentation" self) (getAttr "puri" self) (getAttr "pzmq" self) (getAttr "shasht" self) (getAttr "static-vectors" self) (getAttr "trivial-do" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) (getAttr "trivial-gray-streams" self) (getAttr "trivial-mimes" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "babel" self) (getAttr "bordeaux-threads" self) (getAttr "cl-base64" self) (getAttr "cl-indentify" self) (getAttr "closer-mop" self) (getAttr "dissect" self) (getAttr "eclector" self) (getAttr "ironclad" self) (getAttr "jupyter-lab-extension" self) (getAttr "multilang-documentation" self) (getAttr "puri" self) (getAttr "pzmq" self) (getAttr "shasht" self) (getAttr "static-vectors" self) (getAttr "trivial-do" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) (getAttr "trivial-gray-streams" self) (getAttr "trivial-mimes" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -30051,11 +30289,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   computable-reals = (build-asdf-system {
     pname = "computable-reals";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "computable-reals" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/computable-reals/2023-06-18/computable-reals-20230618-git.tgz";
-      sha256 = "1rh77x2vl9fdbd8whi431zk7vbm1whkrwkrrsw6wm8013r8xzrmh";
+      url = "http://beta.quicklisp.org/archive/computable-reals/2023-10-21/computable-reals-20231021-git.tgz";
+      sha256 = "1x8kkdyjil0zzg8fq9b76z12kmfrqwhsxnr6qqnlrg0c8c5bzz9c";
       system = "computable-reals";
       asd = "computable-reals";
     });
@@ -30163,11 +30401,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   conditional-commands = (build-asdf-system {
     pname = "conditional-commands";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "conditional-commands" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "conditional-commands";
       asd = "conditional-commands";
     });
@@ -30627,11 +30865,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   croatoan = (build-asdf-system {
     pname = "croatoan";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "croatoan" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2023-06-18/croatoan-20230618-git.tgz";
-      sha256 = "1whbvwc4df7zz0002xy3aczrpf4s3vk6kmyh9wydgwl112h060pd";
+      url = "http://beta.quicklisp.org/archive/croatoan/2023-10-21/croatoan-20231021-git.tgz";
+      sha256 = "0x2rlckyn8kn5mqy0fib8piggz694g3naarz2dvha1hsy4jhb1wg";
       system = "croatoan";
       asd = "croatoan";
     });
@@ -30643,11 +30881,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   croatoan-ncurses = (build-asdf-system {
     pname = "croatoan-ncurses";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "croatoan-ncurses" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2023-06-18/croatoan-20230618-git.tgz";
-      sha256 = "1whbvwc4df7zz0002xy3aczrpf4s3vk6kmyh9wydgwl112h060pd";
+      url = "http://beta.quicklisp.org/archive/croatoan/2023-10-21/croatoan-20231021-git.tgz";
+      sha256 = "0x2rlckyn8kn5mqy0fib8piggz694g3naarz2dvha1hsy4jhb1wg";
       system = "croatoan-ncurses";
       asd = "croatoan-ncurses";
     });
@@ -30659,11 +30897,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   croatoan-test = (build-asdf-system {
     pname = "croatoan-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "croatoan-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/croatoan/2023-06-18/croatoan-20230618-git.tgz";
-      sha256 = "1whbvwc4df7zz0002xy3aczrpf4s3vk6kmyh9wydgwl112h060pd";
+      url = "http://beta.quicklisp.org/archive/croatoan/2023-10-21/croatoan-20231021-git.tgz";
+      sha256 = "0x2rlckyn8kn5mqy0fib8piggz694g3naarz2dvha1hsy4jhb1wg";
       system = "croatoan-test";
       asd = "croatoan-test";
     });
@@ -30707,11 +30945,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   crypto-shortcuts = (build-asdf-system {
     pname = "crypto-shortcuts";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "crypto-shortcuts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/crypto-shortcuts/2023-06-18/crypto-shortcuts-20230618-git.tgz";
-      sha256 = "0igqqlpmk3hkd0kap73m513ssygx66gq1s5yx7719n1d47a84psj";
+      url = "http://beta.quicklisp.org/archive/crypto-shortcuts/2023-10-21/crypto-shortcuts-20231021-git.tgz";
+      sha256 = "0ghih34xlf9vgbh8arsqjbgf8iymvs5s0ys0n2bm73b1z0632ygr";
       system = "crypto-shortcuts";
       asd = "crypto-shortcuts";
     });
@@ -30875,11 +31113,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ctype = (build-asdf-system {
     pname = "ctype";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ctype" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ctype/2023-06-18/ctype-20230618-git.tgz";
-      sha256 = "0bh0jbdz59zw1pamqi4g5xsyjq5p7igs895khn5ihxn1fsfnad9h";
+      url = "http://beta.quicklisp.org/archive/ctype/2023-10-21/ctype-20231021-git.tgz";
+      sha256 = "0ih816l96bxx0w4jm2z4694p1dvpb52yrw6sar63b8bjkiyq79kd";
       system = "ctype";
       asd = "ctype";
     });
@@ -31127,16 +31365,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   cytoscape-clj = (build-asdf-system {
     pname = "cytoscape-clj";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "cytoscape-clj" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cytoscape-clj/2022-11-06/cytoscape-clj-20221106-git.tgz";
-      sha256 = "0212c9aw2qpcijz2sglabbn51h93ljw1l3sj4kbff724xgc96ijh";
+      url = "http://beta.quicklisp.org/archive/cytoscape-clj/2023-10-21/cytoscape-clj-20231021-git.tgz";
+      sha256 = "0xfn8lsfh5qgdriqvb6w57hygjm0p61bky725a9n7fgcny7v8d3x";
       system = "cytoscape-clj";
       asd = "cytoscape-clj";
     });
     systems = [ "cytoscape-clj" ];
-    lispLibs = [ (getAttr "common-lisp-jupyter" self) ];
+    lispLibs = [ (getAttr "common-lisp-jupyter" self) (getAttr "jupyter-lab-extension" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -31223,11 +31461,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   darts_dot_lib_dot_hashtree-test = (build-asdf-system {
     pname = "darts.lib.hashtree-test";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "darts.lib.hashtree-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dartsclhashtree/2021-12-30/dartsclhashtree-20211230-git.tgz";
-      sha256 = "17h3s6n9l1vwllcig7g385qxcrp6f68zjcb2rygs8nhs5g7iqryc";
+      url = "http://beta.quicklisp.org/archive/dartsclhashtree/2023-10-21/dartsclhashtree-20231021-git.tgz";
+      sha256 = "1kbxk7vnpv9zy6pm004cyyp9mbb4n845pfdv4wxngaj96ndi5v6j";
       system = "darts.lib.hashtree-test";
       asd = "darts.lib.hashtree-test";
     });
@@ -31239,11 +31477,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   darts_dot_lib_dot_hashtrie = (build-asdf-system {
     pname = "darts.lib.hashtrie";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "darts.lib.hashtrie" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dartsclhashtree/2021-12-30/dartsclhashtree-20211230-git.tgz";
-      sha256 = "17h3s6n9l1vwllcig7g385qxcrp6f68zjcb2rygs8nhs5g7iqryc";
+      url = "http://beta.quicklisp.org/archive/dartsclhashtree/2023-10-21/dartsclhashtree-20231021-git.tgz";
+      sha256 = "1kbxk7vnpv9zy6pm004cyyp9mbb4n845pfdv4wxngaj96ndi5v6j";
       system = "darts.lib.hashtrie";
       asd = "darts.lib.hashtrie";
     });
@@ -31367,11 +31605,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   darts_dot_lib_dot_wbtree = (build-asdf-system {
     pname = "darts.lib.wbtree";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "darts.lib.wbtree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dartsclhashtree/2021-12-30/dartsclhashtree-20211230-git.tgz";
-      sha256 = "17h3s6n9l1vwllcig7g385qxcrp6f68zjcb2rygs8nhs5g7iqryc";
+      url = "http://beta.quicklisp.org/archive/dartsclhashtree/2023-10-21/dartsclhashtree-20231021-git.tgz";
+      sha256 = "1kbxk7vnpv9zy6pm004cyyp9mbb4n845pfdv4wxngaj96ndi5v6j";
       system = "darts.lib.wbtree";
       asd = "darts.lib.wbtree";
     });
@@ -31399,11 +31637,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   data-frame = (build-asdf-system {
     pname = "data-frame";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "data-frame" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-frame/2022-11-06/data-frame-20221106-git.tgz";
-      sha256 = "0bs1jh66bml25bj1lxdzz8cjhj3g060yyd5ggqsnsr4l2j0zyszv";
+      url = "http://beta.quicklisp.org/archive/data-frame/2023-10-21/data-frame-20231021-git.tgz";
+      sha256 = "12ij1sgg2yxygdxfbm6ijnagkaxijcbrw5jshi8i6pix997pb619";
       system = "data-frame";
       asd = "data-frame";
     });
@@ -31415,11 +31653,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   data-lens = (build-asdf-system {
     pname = "data-lens";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "data-lens" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-lens/2023-06-18/data-lens-20230618-git.tgz";
-      sha256 = "04vqzczqrz153v8v72fmhcrmqxfsjzkjyz734k01hm90d12g13hd";
+      url = "http://beta.quicklisp.org/archive/data-lens/2023-10-21/data-lens-20231021-git.tgz";
+      sha256 = "00rm86rn27bcg544w3qip0890jrbixcvxnmgw7b2gbrvci8f6al8";
       system = "data-lens";
       asd = "data-lens";
     });
@@ -31463,11 +31701,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   data-table = (build-asdf-system {
     pname = "data-table";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "data-table" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-table/2022-11-06/data-table-20221106-git.tgz";
-      sha256 = "0pin7hjsniz1ls3mrsjz6jqvlbbws8s4g7a0ks00dnwdm8nca6l3";
+      url = "http://beta.quicklisp.org/archive/data-table/2023-10-21/data-table-20231021-git.tgz";
+      sha256 = "1x64s3r2p28wgx7ffm205i90am2azfqkl6zlkrnjhppp82xan8yd";
       system = "data-table";
       asd = "data-table";
     });
@@ -31477,11 +31715,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   data-table-clsql = (build-asdf-system {
     pname = "data-table-clsql";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "data-table-clsql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-table/2022-11-06/data-table-20221106-git.tgz";
-      sha256 = "0pin7hjsniz1ls3mrsjz6jqvlbbws8s4g7a0ks00dnwdm8nca6l3";
+      url = "http://beta.quicklisp.org/archive/data-table/2023-10-21/data-table-20231021-git.tgz";
+      sha256 = "1x64s3r2p28wgx7ffm205i90am2azfqkl6zlkrnjhppp82xan8yd";
       system = "data-table-clsql";
       asd = "data-table-clsql";
     });
@@ -31493,11 +31731,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   data-table-test = (build-asdf-system {
     pname = "data-table-test";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "data-table-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/data-table/2022-11-06/data-table-20221106-git.tgz";
-      sha256 = "0pin7hjsniz1ls3mrsjz6jqvlbbws8s4g7a0ks00dnwdm8nca6l3";
+      url = "http://beta.quicklisp.org/archive/data-table/2023-10-21/data-table-20231021-git.tgz";
+      sha256 = "1x64s3r2p28wgx7ffm205i90am2azfqkl6zlkrnjhppp82xan8yd";
       system = "data-table-test";
       asd = "data-table";
     });
@@ -31525,27 +31763,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   datafly = (build-asdf-system {
     pname = "datafly";
-    version = "20200325-git";
+    version = "20231021-git";
     asds = [ "datafly" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/datafly/2020-03-25/datafly-20200325-git.tgz";
-      sha256 = "16b78kzmglp2a4nxlxxl7rpf5zaibsgagn0p3c56fsxvx0c4hszv";
+      url = "http://beta.quicklisp.org/archive/datafly/2023-10-21/datafly-20231021-git.tgz";
+      sha256 = "0hz1cg4gas4888841msnjnx0bnirvcmx4sdayjysvqazzf65giy8";
       system = "datafly";
       asd = "datafly";
     });
     systems = [ "datafly" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "babel" self) (getAttr "cl-syntax-annot" self) (getAttr "closer-mop" self) (getAttr "dbi" self) (getAttr "function-cache" self) (getAttr "iterate" self) (getAttr "jonathan" self) (getAttr "kebab" self) (getAttr "local-time" self) (getAttr "log4cl" self) (getAttr "optima" self) (getAttr "sxql" self) (getAttr "trivial-types" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "babel" self) (getAttr "closer-mop" self) (getAttr "dbi" self) (getAttr "function-cache" self) (getAttr "iterate" self) (getAttr "jonathan" self) (getAttr "kebab" self) (getAttr "local-time" self) (getAttr "log4cl" self) (getAttr "named-readtables" self) (getAttr "optima" self) (getAttr "sxql" self) (getAttr "trivial-types" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   datafly-test = (build-asdf-system {
     pname = "datafly-test";
-    version = "20200325-git";
+    version = "20231021-git";
     asds = [ "datafly-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/datafly/2020-03-25/datafly-20200325-git.tgz";
-      sha256 = "16b78kzmglp2a4nxlxxl7rpf5zaibsgagn0p3c56fsxvx0c4hszv";
+      url = "http://beta.quicklisp.org/archive/datafly/2023-10-21/datafly-20231021-git.tgz";
+      sha256 = "0hz1cg4gas4888841msnjnx0bnirvcmx4sdayjysvqazzf65giy8";
       system = "datafly-test";
       asd = "datafly-test";
     });
@@ -31589,11 +31827,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   datamuse = (build-asdf-system {
     pname = "datamuse";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "datamuse" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/datamuse/2022-11-06/datamuse-20221106-git.tgz";
-      sha256 = "1x37rjf2gyvlq6jlflw628g299qdgzb0bwiv3qxk0nv22an50rp0";
+      url = "http://beta.quicklisp.org/archive/datamuse/2023-10-21/datamuse-20231021-git.tgz";
+      sha256 = "18mminvwv6wql6qh9kxxkhjfbxfz37gr125wy9h6za83vn1rkpwc";
       system = "datamuse";
       asd = "datamuse";
     });
@@ -31653,11 +31891,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dbd-mysql = (build-asdf-system {
     pname = "dbd-mysql";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dbd-mysql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-06-18/cl-dbi-20230618-git.tgz";
-      sha256 = "0kkhxiz5b7arsp394yk1qrndvg0069p27vap3ba47cv3z4sb0d50";
+      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-10-21/cl-dbi-20231021-git.tgz";
+      sha256 = "1jjm2hh8vvbdblhsms6nrb5gll8ng7pqyv99zj6zk2f5h5a42a2l";
       system = "dbd-mysql";
       asd = "dbd-mysql";
     });
@@ -31667,11 +31905,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dbd-postgres = (build-asdf-system {
     pname = "dbd-postgres";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dbd-postgres" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-06-18/cl-dbi-20230618-git.tgz";
-      sha256 = "0kkhxiz5b7arsp394yk1qrndvg0069p27vap3ba47cv3z4sb0d50";
+      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-10-21/cl-dbi-20231021-git.tgz";
+      sha256 = "1jjm2hh8vvbdblhsms6nrb5gll8ng7pqyv99zj6zk2f5h5a42a2l";
       system = "dbd-postgres";
       asd = "dbd-postgres";
     });
@@ -31681,11 +31919,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dbd-sqlite3 = (build-asdf-system {
     pname = "dbd-sqlite3";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dbd-sqlite3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-06-18/cl-dbi-20230618-git.tgz";
-      sha256 = "0kkhxiz5b7arsp394yk1qrndvg0069p27vap3ba47cv3z4sb0d50";
+      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-10-21/cl-dbi-20231021-git.tgz";
+      sha256 = "1jjm2hh8vvbdblhsms6nrb5gll8ng7pqyv99zj6zk2f5h5a42a2l";
       system = "dbd-sqlite3";
       asd = "dbd-sqlite3";
     });
@@ -31695,11 +31933,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dbi = (build-asdf-system {
     pname = "dbi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-06-18/cl-dbi-20230618-git.tgz";
-      sha256 = "0kkhxiz5b7arsp394yk1qrndvg0069p27vap3ba47cv3z4sb0d50";
+      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-10-21/cl-dbi-20231021-git.tgz";
+      sha256 = "1jjm2hh8vvbdblhsms6nrb5gll8ng7pqyv99zj6zk2f5h5a42a2l";
       system = "dbi";
       asd = "dbi";
     });
@@ -31709,11 +31947,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dbi-test = (build-asdf-system {
     pname = "dbi-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dbi-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-06-18/cl-dbi-20230618-git.tgz";
-      sha256 = "0kkhxiz5b7arsp394yk1qrndvg0069p27vap3ba47cv3z4sb0d50";
+      url = "http://beta.quicklisp.org/archive/cl-dbi/2023-10-21/cl-dbi-20231021-git.tgz";
+      sha256 = "1jjm2hh8vvbdblhsms6nrb5gll8ng7pqyv99zj6zk2f5h5a42a2l";
       system = "dbi-test";
       asd = "dbi-test";
     });
@@ -31833,11 +32071,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   deeds = (build-asdf-system {
     pname = "deeds";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "deeds" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/deeds/2023-06-18/deeds-20230618-git.tgz";
-      sha256 = "0p4rvihh4f8879jd20k85pvz7429q62s6brw0zwbg1iykcpm57gz";
+      url = "http://beta.quicklisp.org/archive/deeds/2023-10-21/deeds-20231021-git.tgz";
+      sha256 = "0pd178wydg2zld8pvfm7ss5qvbjh4g8klqbhx2k7h68hn2q1xnn8";
       system = "deeds";
       asd = "deeds";
     });
@@ -31927,11 +32165,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   deferred = (build-asdf-system {
     pname = "deferred";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "deferred" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/deferred/2019-07-10/deferred-20190710-git.tgz";
-      sha256 = "1pcbzvambkqacs4pcww7wc9g7jjv0x7a8iwbk2b16l8x0rc0izx5";
+      url = "http://beta.quicklisp.org/archive/deferred/2023-10-21/deferred-20231021-git.tgz";
+      sha256 = "0npsxxapah8c3sxmfmi0djvw5kw5pj03dk5ia4yh3q2v7mwzpqy2";
       system = "deferred";
       asd = "deferred";
     });
@@ -31975,11 +32213,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   definitions = (build-asdf-system {
     pname = "definitions";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "definitions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/definitions/2021-05-31/definitions-20210531-git.tgz";
-      sha256 = "16dh9iy3v344xj4qllsp47007px3yx26fxxh9gh2cvs8dqgk3kch";
+      url = "http://beta.quicklisp.org/archive/definitions/2023-10-21/definitions-20231021-git.tgz";
+      sha256 = "1gs6w7m26574lan7xqajvnivp2cq5n9iqr76zmbgwqk6pn02kyki";
       system = "definitions";
       asd = "definitions";
     });
@@ -32551,11 +32789,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   deploy = (build-asdf-system {
     pname = "deploy";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "deploy" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/deploy/2023-06-18/deploy-20230618-git.tgz";
-      sha256 = "1yh2arbxph2mvh82jsdbacppzx968hnllmarsmjf79p44vip8j11";
+      url = "http://beta.quicklisp.org/archive/deploy/2023-10-21/deploy-20231021-git.tgz";
+      sha256 = "1jxp75gyqdbladlid0p11d7v39bdc9j2bv5hi0nks4hyjmnw60hp";
       system = "deploy";
       asd = "deploy";
     });
@@ -32567,11 +32805,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   deploy-test = (build-asdf-system {
     pname = "deploy-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "deploy-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/deploy/2023-06-18/deploy-20230618-git.tgz";
-      sha256 = "1yh2arbxph2mvh82jsdbacppzx968hnllmarsmjf79p44vip8j11";
+      url = "http://beta.quicklisp.org/archive/deploy/2023-10-21/deploy-20231021-git.tgz";
+      sha256 = "1jxp75gyqdbladlid0p11d7v39bdc9j2bv5hi0nks4hyjmnw60hp";
       system = "deploy-test";
       asd = "deploy-test";
     });
@@ -32583,11 +32821,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   depot = (build-asdf-system {
     pname = "depot";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "depot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2023-06-18/depot-20230618-git.tgz";
-      sha256 = "1v42pirdwbxy8l8i9a2jmbpri8a62vh0r4vm25xwaak0y4gr71va";
+      url = "http://beta.quicklisp.org/archive/depot/2023-10-21/depot-20231021-git.tgz";
+      sha256 = "0ri70fbjbzg08qnx6jcpq26nclj0mmvlw4an37rs15bcp1vnayci";
       system = "depot";
       asd = "depot";
     });
@@ -32599,11 +32837,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   depot-in-memory = (build-asdf-system {
     pname = "depot-in-memory";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "depot-in-memory" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2023-06-18/depot-20230618-git.tgz";
-      sha256 = "1v42pirdwbxy8l8i9a2jmbpri8a62vh0r4vm25xwaak0y4gr71va";
+      url = "http://beta.quicklisp.org/archive/depot/2023-10-21/depot-20231021-git.tgz";
+      sha256 = "0ri70fbjbzg08qnx6jcpq26nclj0mmvlw4an37rs15bcp1vnayci";
       system = "depot-in-memory";
       asd = "depot-in-memory";
     });
@@ -32615,11 +32853,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   depot-test = (build-asdf-system {
     pname = "depot-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "depot-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2023-06-18/depot-20230618-git.tgz";
-      sha256 = "1v42pirdwbxy8l8i9a2jmbpri8a62vh0r4vm25xwaak0y4gr71va";
+      url = "http://beta.quicklisp.org/archive/depot/2023-10-21/depot-20231021-git.tgz";
+      sha256 = "0ri70fbjbzg08qnx6jcpq26nclj0mmvlw4an37rs15bcp1vnayci";
       system = "depot-test";
       asd = "depot-test";
     });
@@ -32631,11 +32869,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   depot-virtual = (build-asdf-system {
     pname = "depot-virtual";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "depot-virtual" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2023-06-18/depot-20230618-git.tgz";
-      sha256 = "1v42pirdwbxy8l8i9a2jmbpri8a62vh0r4vm25xwaak0y4gr71va";
+      url = "http://beta.quicklisp.org/archive/depot/2023-10-21/depot-20231021-git.tgz";
+      sha256 = "0ri70fbjbzg08qnx6jcpq26nclj0mmvlw4an37rs15bcp1vnayci";
       system = "depot-virtual";
       asd = "depot-virtual";
     });
@@ -32647,16 +32885,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   depot-zip = (build-asdf-system {
     pname = "depot-zip";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "depot-zip" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/depot/2023-06-18/depot-20230618-git.tgz";
-      sha256 = "1v42pirdwbxy8l8i9a2jmbpri8a62vh0r4vm25xwaak0y4gr71va";
+      url = "http://beta.quicklisp.org/archive/depot/2023-10-21/depot-20231021-git.tgz";
+      sha256 = "0ri70fbjbzg08qnx6jcpq26nclj0mmvlw4an37rs15bcp1vnayci";
       system = "depot-zip";
       asd = "depot-zip";
     });
     systems = [ "depot-zip" ];
     lispLibs = [ (getAttr "babel" self) (getAttr "depot" self) (getAttr "zippy" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  deptree = (build-asdf-system {
+    pname = "deptree";
+    version = "20231021-git";
+    asds = [ "deptree" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/deptree/2023-10-21/deptree-20231021-git.tgz";
+      sha256 = "0nfybk203fbaksl3bgrgpqr2l6rl0k80xv9dm2f7712r335hxcwg";
+      system = "deptree";
+      asd = "deptree";
+    });
+    systems = [ "deptree" ];
+    lispLibs = [ (getAttr "tar" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -32743,11 +32997,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dexador = (build-asdf-system {
     pname = "dexador";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dexador" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dexador/2023-06-18/dexador-20230618-git.tgz";
-      sha256 = "15km1sysvhf4jr4sngnh17bwk95jj65n39d07jck7p4zffx9mdjz";
+      url = "http://beta.quicklisp.org/archive/dexador/2023-10-21/dexador-20231021-git.tgz";
+      sha256 = "1505ns3ac9dpp02kf1rm089kdg634g0rv2j4877cjwasc03mksip";
       system = "dexador";
       asd = "dexador";
     });
@@ -32757,11 +33011,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dexador-test = (build-asdf-system {
     pname = "dexador-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dexador-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dexador/2023-06-18/dexador-20230618-git.tgz";
-      sha256 = "15km1sysvhf4jr4sngnh17bwk95jj65n39d07jck7p4zffx9mdjz";
+      url = "http://beta.quicklisp.org/archive/dexador/2023-10-21/dexador-20231021-git.tgz";
+      sha256 = "1505ns3ac9dpp02kf1rm089kdg634g0rv2j4877cjwasc03mksip";
       system = "dexador-test";
       asd = "dexador-test";
     });
@@ -32885,11 +33139,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dissect = (build-asdf-system {
     pname = "dissect";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "dissect" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dissect/2022-11-06/dissect-20221106-git.tgz";
-      sha256 = "10daj37ivvkcghlhl3c4nlg6rf8y968b0zy5qa2fmk8iqd7l67d7";
+      url = "http://beta.quicklisp.org/archive/dissect/2023-10-21/dissect-20231021-git.tgz";
+      sha256 = "0nqmk35r03gggijm8fd0lbk4ghfvqvq5yqkn09dh1j31lmnyws4i";
       system = "dissect";
       asd = "dissect";
     });
@@ -32915,11 +33169,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   djula = (build-asdf-system {
     pname = "djula";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "djula" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/djula/2023-06-18/djula-20230618-git.tgz";
-      sha256 = "14prbrzn837684q15kx07aaxvbw4p9bqn8kl5b4vqmk7kw8h5ak4";
+      url = "http://beta.quicklisp.org/archive/djula/2023-10-21/djula-20231021-git.tgz";
+      sha256 = "0rk6348sz8mf2jfnk4rm6ai479r1bmmcnc2lx8jjjlji0b5sis3b";
       system = "djula";
       asd = "djula";
     });
@@ -32929,11 +33183,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   djula-demo = (build-asdf-system {
     pname = "djula-demo";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "djula-demo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/djula/2023-06-18/djula-20230618-git.tgz";
-      sha256 = "14prbrzn837684q15kx07aaxvbw4p9bqn8kl5b4vqmk7kw8h5ak4";
+      url = "http://beta.quicklisp.org/archive/djula/2023-10-21/djula-20231021-git.tgz";
+      sha256 = "0rk6348sz8mf2jfnk4rm6ai479r1bmmcnc2lx8jjjlji0b5sis3b";
       system = "djula-demo";
       asd = "djula-demo";
     });
@@ -32945,11 +33199,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   djula-gettext = (build-asdf-system {
     pname = "djula-gettext";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "djula-gettext" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/djula/2023-06-18/djula-20230618-git.tgz";
-      sha256 = "14prbrzn837684q15kx07aaxvbw4p9bqn8kl5b4vqmk7kw8h5ak4";
+      url = "http://beta.quicklisp.org/archive/djula/2023-10-21/djula-20231021-git.tgz";
+      sha256 = "0rk6348sz8mf2jfnk4rm6ai479r1bmmcnc2lx8jjjlji0b5sis3b";
       system = "djula-gettext";
       asd = "djula-gettext";
     });
@@ -32961,11 +33215,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   djula-locale = (build-asdf-system {
     pname = "djula-locale";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "djula-locale" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/djula/2023-06-18/djula-20230618-git.tgz";
-      sha256 = "14prbrzn837684q15kx07aaxvbw4p9bqn8kl5b4vqmk7kw8h5ak4";
+      url = "http://beta.quicklisp.org/archive/djula/2023-10-21/djula-20231021-git.tgz";
+      sha256 = "0rk6348sz8mf2jfnk4rm6ai479r1bmmcnc2lx8jjjlji0b5sis3b";
       system = "djula-locale";
       asd = "djula-locale";
     });
@@ -32977,11 +33231,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   djula-test = (build-asdf-system {
     pname = "djula-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "djula-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/djula/2023-06-18/djula-20230618-git.tgz";
-      sha256 = "14prbrzn837684q15kx07aaxvbw4p9bqn8kl5b4vqmk7kw8h5ak4";
+      url = "http://beta.quicklisp.org/archive/djula/2023-10-21/djula-20231021-git.tgz";
+      sha256 = "0rk6348sz8mf2jfnk4rm6ai479r1bmmcnc2lx8jjjlji0b5sis3b";
       system = "djula-test";
       asd = "djula-test";
     });
@@ -32993,11 +33247,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   djula-translate = (build-asdf-system {
     pname = "djula-translate";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "djula-translate" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/djula/2023-06-18/djula-20230618-git.tgz";
-      sha256 = "14prbrzn837684q15kx07aaxvbw4p9bqn8kl5b4vqmk7kw8h5ak4";
+      url = "http://beta.quicklisp.org/archive/djula/2023-10-21/djula-20231021-git.tgz";
+      sha256 = "0rk6348sz8mf2jfnk4rm6ai479r1bmmcnc2lx8jjjlji0b5sis3b";
       system = "djula-translate";
       asd = "djula-translate";
     });
@@ -33041,11 +33295,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dml = (build-asdf-system {
     pname = "dml";
-    version = "20181018-git";
+    version = "20231021-git";
     asds = [ "dml" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dml/2018-10-18/dml-20181018-git.tgz";
-      sha256 = "0bah55srq9n743szcnsq2szhy69ckmwk3gx6xm3g3f6i0hj5gz1r";
+      url = "http://beta.quicklisp.org/archive/dml/2023-10-21/dml-20231021-git.tgz";
+      sha256 = "15yxfgmzxpn3hr3kfmw7iid652v1v1v0fw7ngvs1ig6693kci72h";
       system = "dml";
       asd = "dml";
     });
@@ -33057,11 +33311,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dns-client = (build-asdf-system {
     pname = "dns-client";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dns-client" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dns-client/2023-06-18/dns-client-20230618-git.tgz";
-      sha256 = "1r78h61r89hnlx35zv6ha26xnzcmmw6jfhsnhxp6zxmaa5aprkhp";
+      url = "http://beta.quicklisp.org/archive/dns-client/2023-10-21/dns-client-20231021-git.tgz";
+      sha256 = "01kwm6v7yk7mx3i6vi7rr2iz1gvgnlsjd9piirc9ryzcifj9fy7v";
       system = "dns-client";
       asd = "dns-client";
     });
@@ -33199,11 +33453,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   documentation-utils = (build-asdf-system {
     pname = "documentation-utils";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "documentation-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/documentation-utils/2019-07-10/documentation-utils-20190710-git.tgz";
-      sha256 = "098qhkqskmmrh4wix34mawf7p5c87yql28r51r75yjxj577k5idq";
+      url = "http://beta.quicklisp.org/archive/documentation-utils/2023-10-21/documentation-utils-20231021-git.tgz";
+      sha256 = "0nzkjzvcqi1l2ywiz17h1f54vgvbkywv95in4yww6lyzqjqsqqhy";
       system = "documentation-utils";
       asd = "documentation-utils";
     });
@@ -33245,11 +33499,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dom = (build-asdf-system {
     pname = "dom";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "dom" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "dom";
       asd = "dom";
     });
@@ -33357,11 +33611,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   drakma = (build-asdf-system {
     pname = "drakma";
-    version = "v2.0.9";
+    version = "v2.0.10";
     asds = [ "drakma" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/drakma/2022-07-07/drakma-v2.0.9.tgz";
-      sha256 = "1y5rf9rr8drqwmh0r6k0wb80h4qwwc2jmikfzxn5mrgs860fvamh";
+      url = "http://beta.quicklisp.org/archive/drakma/2023-10-21/drakma-v2.0.10.tgz";
+      sha256 = "0clj7c1hysisdvkidvx7m0702alsksna6iiqlk499hn3hjpafmln";
       system = "drakma";
       asd = "drakma";
     });
@@ -33387,16 +33641,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   drakma-test = (build-asdf-system {
     pname = "drakma-test";
-    version = "v2.0.9";
+    version = "v2.0.10";
     asds = [ "drakma-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/drakma/2022-07-07/drakma-v2.0.9.tgz";
-      sha256 = "1y5rf9rr8drqwmh0r6k0wb80h4qwwc2jmikfzxn5mrgs860fvamh";
+      url = "http://beta.quicklisp.org/archive/drakma/2023-10-21/drakma-v2.0.10.tgz";
+      sha256 = "0clj7c1hysisdvkidvx7m0702alsksna6iiqlk499hn3hjpafmln";
       system = "drakma-test";
       asd = "drakma-test";
     });
     systems = [ "drakma-test" ];
-    lispLibs = [ (getAttr "drakma" self) (getAttr "fiveam" self) ];
+    lispLibs = [ (getAttr "drakma" self) (getAttr "easy-routes" self) (getAttr "fiveam" self) (getAttr "hunchentoot" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -33417,13 +33671,45 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  dref = (build-asdf-system {
+    pname = "dref";
+    version = "20231021-git";
+    asds = [ "dref" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-10-21/mgl-pax-20231021-git.tgz";
+      sha256 = "03if07sjx77x9sdva2sqh920lfj1gvkxbnsrnddk6q79kr2icjyg";
+      system = "dref";
+      asd = "dref";
+    });
+    systems = [ "dref" ];
+    lispLibs = [ (getAttr "mgl-pax-bootstrap" self) (getAttr "mgl-pax_dot_asdf" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  dref-test = (build-asdf-system {
+    pname = "dref-test";
+    version = "20231021-git";
+    asds = [ "dref-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-10-21/mgl-pax-20231021-git.tgz";
+      sha256 = "03if07sjx77x9sdva2sqh920lfj1gvkxbnsrnddk6q79kr2icjyg";
+      system = "dref-test";
+      asd = "dref-test";
+    });
+    systems = [ "dref-test" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "dref" self) (getAttr "mgl-pax" self) (getAttr "mgl-pax_dot_asdf" self) (getAttr "swank" self) (getAttr "try" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   drei-mcclim = (build-asdf-system {
     pname = "drei-mcclim";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "drei-mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "drei-mcclim";
       asd = "drei-mcclim";
     });
@@ -33579,11 +33865,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dynamic-classes = (build-asdf-system {
     pname = "dynamic-classes";
-    version = "20130128-git";
+    version = "20231021-git";
     asds = [ "dynamic-classes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dynamic-classes/2013-01-28/dynamic-classes-20130128-git.tgz";
-      sha256 = "0sawgz6xhsq156jcq5j9px0njs4y3sq1ypccl59zyvz31bxyaaxj";
+      url = "http://beta.quicklisp.org/archive/dynamic-classes/2023-10-21/dynamic-classes-20231021-git.tgz";
+      sha256 = "1k9lkchwyi2xhygp2v8ifq3kg1l3wcnihhzgr06jrivjxgdqpc1a";
       system = "dynamic-classes";
       asd = "dynamic-classes";
     });
@@ -33595,11 +33881,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dynamic-classes-test = (build-asdf-system {
     pname = "dynamic-classes-test";
-    version = "20130128-git";
+    version = "20231021-git";
     asds = [ "dynamic-classes-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/dynamic-classes/2013-01-28/dynamic-classes-20130128-git.tgz";
-      sha256 = "0sawgz6xhsq156jcq5j9px0njs4y3sq1ypccl59zyvz31bxyaaxj";
+      url = "http://beta.quicklisp.org/archive/dynamic-classes/2023-10-21/dynamic-classes-20231021-git.tgz";
+      sha256 = "1k9lkchwyi2xhygp2v8ifq3kg1l3wcnihhzgr06jrivjxgdqpc1a";
       system = "dynamic-classes-test";
       asd = "dynamic-classes-test";
     });
@@ -33643,11 +33929,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   dynamic-mixins-swm = (build-asdf-system {
     pname = "dynamic-mixins-swm";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "dynamic-mixins-swm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stumpwm/2023-06-18/stumpwm-20230618-git.tgz";
-      sha256 = "044l7lda0ws81rgi9z8vm4482sxixb1qnlhq1gbsrbxa1x8wad0s";
+      url = "http://beta.quicklisp.org/archive/stumpwm/2023-10-21/stumpwm-20231021-git.tgz";
+      sha256 = "114kicsziqvm15x15yhc39j8qzv6gxz4wxc40xp968pprzr4a4d1";
       system = "dynamic-mixins-swm";
       asd = "dynamic-mixins-swm";
     });
@@ -33769,11 +34055,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   easter-gauss = (build-asdf-system {
     pname = "easter-gauss";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "easter-gauss" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/easter-gauss/2022-07-07/easter-gauss-20220707-git.tgz";
-      sha256 = "0y3fihv00k6lxmx4pfkhg4nynpffdpvlz9b14s2bl880vj9cxjsw";
+      url = "http://beta.quicklisp.org/archive/easter-gauss/2023-10-21/easter-gauss-20231021-git.tgz";
+      sha256 = "160p8fzj0cl425y018l6gmyjf5xfp8w0zgwk363s9lvs9v7ayl65";
       system = "easter-gauss";
       asd = "easter-gauss";
     });
@@ -33833,11 +34119,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   easy-routes = (build-asdf-system {
     pname = "easy-routes";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "easy-routes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/easy-routes/2022-07-07/easy-routes-20220707-git.tgz";
-      sha256 = "13h3xij5zlviag10y8qjw100i8mjncca10hf08bf30m195wrshmm";
+      url = "http://beta.quicklisp.org/archive/easy-routes/2023-10-21/easy-routes-20231021-git.tgz";
+      sha256 = "1banw54kz2llzb9h5sm47ckfc9l348m7qncm0npsy0w837rxkyzx";
       system = "easy-routes";
       asd = "easy-routes";
     });
@@ -33849,11 +34135,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   easy-routes_plus_djula = (build-asdf-system {
     pname = "easy-routes+djula";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "easy-routes+djula" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/easy-routes/2022-07-07/easy-routes-20220707-git.tgz";
-      sha256 = "13h3xij5zlviag10y8qjw100i8mjncca10hf08bf30m195wrshmm";
+      url = "http://beta.quicklisp.org/archive/easy-routes/2023-10-21/easy-routes-20231021-git.tgz";
+      sha256 = "1banw54kz2llzb9h5sm47ckfc9l348m7qncm0npsy0w837rxkyzx";
       system = "easy-routes+djula";
       asd = "easy-routes+djula";
     });
@@ -33865,11 +34151,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   easy-routes_plus_errors = (build-asdf-system {
     pname = "easy-routes+errors";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "easy-routes+errors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/easy-routes/2022-07-07/easy-routes-20220707-git.tgz";
-      sha256 = "13h3xij5zlviag10y8qjw100i8mjncca10hf08bf30m195wrshmm";
+      url = "http://beta.quicklisp.org/archive/easy-routes/2023-10-21/easy-routes-20231021-git.tgz";
+      sha256 = "1banw54kz2llzb9h5sm47ckfc9l348m7qncm0npsy0w837rxkyzx";
       system = "easy-routes+errors";
       asd = "easy-routes+errors";
     });
@@ -34041,11 +34327,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ecclesia = (build-asdf-system {
     pname = "ecclesia";
-    version = "20201220-git";
+    version = "20231021-git";
     asds = [ "ecclesia" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ecclesia/2020-12-20/ecclesia-20201220-git.tgz";
-      sha256 = "0xxs2hfvqprici6z57wx2z6rjc1f0f5mg0xxls7b8nglzx4saslm";
+      url = "http://beta.quicklisp.org/archive/ecclesia/2023-10-21/ecclesia-20231021-git.tgz";
+      sha256 = "0hamxgkqq833m02wjnghnjq9ny9k8xk3qx1wffm809qsm9ivwah8";
       system = "ecclesia";
       asd = "ecclesia";
     });
@@ -34105,11 +34391,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   eclector = (build-asdf-system {
     pname = "eclector";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "eclector" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/eclector/2023-06-18/eclector-20230618-git.tgz";
-      sha256 = "1llk33dfwd18s29zzfdhir3faa7x7xri8wzhqxx71bgirp916hih";
+      url = "http://beta.quicklisp.org/archive/eclector/2023-10-21/eclector-20231021-git.tgz";
+      sha256 = "0rh1kvm5sqqinqzzhdngfj14jq0raaxn6mlnjvvs92wgsvyfliy8";
       system = "eclector";
       asd = "eclector";
     });
@@ -34121,11 +34407,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   eclector-concrete-syntax-tree = (build-asdf-system {
     pname = "eclector-concrete-syntax-tree";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "eclector-concrete-syntax-tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/eclector/2023-06-18/eclector-20230618-git.tgz";
-      sha256 = "1llk33dfwd18s29zzfdhir3faa7x7xri8wzhqxx71bgirp916hih";
+      url = "http://beta.quicklisp.org/archive/eclector/2023-10-21/eclector-20231021-git.tgz";
+      sha256 = "0rh1kvm5sqqinqzzhdngfj14jq0raaxn6mlnjvvs92wgsvyfliy8";
       system = "eclector-concrete-syntax-tree";
       asd = "eclector-concrete-syntax-tree";
     });
@@ -34375,16 +34661,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   enhanced-eval-when = (build-asdf-system {
     pname = "enhanced-eval-when";
-    version = "1.0";
+    version = "2.0";
     asds = [ "enhanced-eval-when" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/enhanced-eval-when/2012-11-25/enhanced-eval-when-1.0.tgz";
-      sha256 = "1ws1v297plcbqmcvckg7vqzzgnrwfyx5kd7281r1wrhc26998rx2";
+      url = "http://beta.quicklisp.org/archive/enhanced-eval-when/2023-10-21/enhanced-eval-when_2.0.tgz";
+      sha256 = "1l7n04pzcwsxvw6m4pcksmlx525ijbgh5n28h56clpvpwlwnzjs3";
       system = "enhanced-eval-when";
       asd = "enhanced-eval-when";
     });
     systems = [ "enhanced-eval-when" ];
     lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  enhanced-eval-when__tests = (build-asdf-system {
+    pname = "enhanced-eval-when_tests";
+    version = "2.0";
+    asds = [ "enhanced-eval-when_tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/enhanced-eval-when/2023-10-21/enhanced-eval-when_2.0.tgz";
+      sha256 = "1l7n04pzcwsxvw6m4pcksmlx525ijbgh5n28h56clpvpwlwnzjs3";
+      system = "enhanced-eval-when_tests";
+      asd = "enhanced-eval-when_tests";
+    });
+    systems = [ "enhanced-eval-when_tests" ];
+    lispLibs = [ (getAttr "enhanced-eval-when" self) (getAttr "parachute" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -34423,16 +34725,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   enhanced-multiple-value-bind = (build-asdf-system {
     pname = "enhanced-multiple-value-bind";
-    version = "1.0.1";
+    version = "2.0";
     asds = [ "enhanced-multiple-value-bind" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/enhanced-multiple-value-bind/2012-11-25/enhanced-multiple-value-bind-1.0.1.tgz";
-      sha256 = "1hv0g60klqzgl8vdppksrr1z5wayijx5jnmxzk5ivj884d8l2i5n";
+      url = "http://beta.quicklisp.org/archive/enhanced-multiple-value-bind/2023-10-21/enhanced-multiple-value-bind_2.0.tgz";
+      sha256 = "191h0rd3fs5vqc15kvblvvwmvcqddmvj3s8x6xfp78gm69wk9bdq";
       system = "enhanced-multiple-value-bind";
       asd = "enhanced-multiple-value-bind";
     });
     systems = [ "enhanced-multiple-value-bind" ];
     lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  enhanced-multiple-value-bind__tests = (build-asdf-system {
+    pname = "enhanced-multiple-value-bind_tests";
+    version = "2.0";
+    asds = [ "enhanced-multiple-value-bind_tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/enhanced-multiple-value-bind/2023-10-21/enhanced-multiple-value-bind_2.0.tgz";
+      sha256 = "191h0rd3fs5vqc15kvblvvwmvcqddmvj3s8x6xfp78gm69wk9bdq";
+      system = "enhanced-multiple-value-bind_tests";
+      asd = "enhanced-multiple-value-bind_tests";
+    });
+    systems = [ "enhanced-multiple-value-bind_tests" ];
+    lispLibs = [ (getAttr "enhanced-eval-when" self) (getAttr "enhanced-multiple-value-bind" self) (getAttr "parachute" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -34465,6 +34783,38 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "enhanced-typep_tests" ];
     lispLibs = [ (getAttr "enhanced-boolean" self) (getAttr "enhanced-typep" self) (getAttr "parachute" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  enhanced-unwind-protect = (build-asdf-system {
+    pname = "enhanced-unwind-protect";
+    version = "1.0";
+    asds = [ "enhanced-unwind-protect" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/enhanced-unwind-protect/2023-10-21/enhanced-unwind-protect_1.0.tgz";
+      sha256 = "00yak6ga0rsz58r96clmzvqbcmnfxcdxvn3h3ysirrsfr8rayy5m";
+      system = "enhanced-unwind-protect";
+      asd = "enhanced-unwind-protect";
+    });
+    systems = [ "enhanced-unwind-protect" ];
+    lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  enhanced-unwind-protect__tests = (build-asdf-system {
+    pname = "enhanced-unwind-protect_tests";
+    version = "1.0";
+    asds = [ "enhanced-unwind-protect_tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/enhanced-unwind-protect/2023-10-21/enhanced-unwind-protect_1.0.tgz";
+      sha256 = "00yak6ga0rsz58r96clmzvqbcmnfxcdxvn3h3ysirrsfr8rayy5m";
+      system = "enhanced-unwind-protect_tests";
+      asd = "enhanced-unwind-protect_tests";
+    });
+    systems = [ "enhanced-unwind-protect_tests" ];
+    lispLibs = [ (getAttr "enhanced-unwind-protect" self) (getAttr "parachute" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -34631,11 +34981,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   erjoalgo-webutil = (build-asdf-system {
     pname = "erjoalgo-webutil";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "erjoalgo-webutil" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/erjoalgo-webutil/2022-07-07/erjoalgo-webutil-20220707-git.tgz";
-      sha256 = "1bfs540yx12fhsrs6xdcjssr2hc7hn1y2i1m8hqdfni13ax9j3v8";
+      url = "http://beta.quicklisp.org/archive/erjoalgo-webutil/2023-10-21/erjoalgo-webutil-20231021-git.tgz";
+      sha256 = "0zrp88sal627dhk84vkkgiwf388238f6zyw8bwlrpzcy6yffccrs";
       system = "erjoalgo-webutil";
       asd = "erjoalgo-webutil";
     });
@@ -34743,11 +35093,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   esa-mcclim = (build-asdf-system {
     pname = "esa-mcclim";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "esa-mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "esa-mcclim";
       asd = "esa-mcclim";
     });
@@ -35155,11 +35505,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   extensible-compound-types = (build-asdf-system {
     pname = "extensible-compound-types";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "extensible-compound-types" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2023-06-18/extensible-compound-types-20230618-git.tgz";
-      sha256 = "1mvzcnfa9pkaggda14917vy87913fa2cwmryhxdicaf3gkqgvchb";
+      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2023-10-21/extensible-compound-types-20231021-git.tgz";
+      sha256 = "1fbsrp52dx3p27r7mawlia4fhbyyf7n4piplbpnhszv26g483k9m";
       system = "extensible-compound-types";
       asd = "extensible-compound-types";
     });
@@ -35171,11 +35521,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   extensible-compound-types-cl = (build-asdf-system {
     pname = "extensible-compound-types-cl";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "extensible-compound-types-cl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2023-06-18/extensible-compound-types-20230618-git.tgz";
-      sha256 = "1mvzcnfa9pkaggda14917vy87913fa2cwmryhxdicaf3gkqgvchb";
+      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2023-10-21/extensible-compound-types-20231021-git.tgz";
+      sha256 = "1fbsrp52dx3p27r7mawlia4fhbyyf7n4piplbpnhszv26g483k9m";
       system = "extensible-compound-types-cl";
       asd = "extensible-compound-types-cl";
     });
@@ -35187,11 +35537,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   extensible-compound-types-interfaces = (build-asdf-system {
     pname = "extensible-compound-types-interfaces";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "extensible-compound-types-interfaces" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2023-06-18/extensible-compound-types-20230618-git.tgz";
-      sha256 = "1mvzcnfa9pkaggda14917vy87913fa2cwmryhxdicaf3gkqgvchb";
+      url = "http://beta.quicklisp.org/archive/extensible-compound-types/2023-10-21/extensible-compound-types-20231021-git.tgz";
+      sha256 = "1fbsrp52dx3p27r7mawlia4fhbyyf7n4piplbpnhszv26g483k9m";
       system = "extensible-compound-types-interfaces";
       asd = "extensible-compound-types-interfaces";
     });
@@ -35297,11 +35647,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   f2cl = (build-asdf-system {
     pname = "f2cl";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "f2cl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "f2cl";
       asd = "f2cl";
     });
@@ -35313,11 +35663,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   f2cl-asdf = (build-asdf-system {
     pname = "f2cl-asdf";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "f2cl-asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "f2cl-asdf";
       asd = "f2cl-asdf";
     });
@@ -35509,11 +35859,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fare-scripts = (build-asdf-system {
     pname = "fare-scripts";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "fare-scripts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fare-scripts/2021-12-30/fare-scripts-20211230-git.tgz";
-      sha256 = "0i4giia6z2ys9fp5h0ff6r7d74ysynjqar7s9cv5zsiw871rqa1j";
+      url = "http://beta.quicklisp.org/archive/fare-scripts/2023-10-21/fare-scripts-20231021-git.tgz";
+      sha256 = "1lym0k98fxqypka54m98hgzf3a5qicqmvm5hlyarpkdajgz6x5dp";
       system = "fare-scripts";
       asd = "fare-scripts";
     });
@@ -35571,11 +35921,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fast-http = (build-asdf-system {
     pname = "fast-http";
-    version = "20191007-git";
+    version = "20231021-git";
     asds = [ "fast-http" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fast-http/2019-10-07/fast-http-20191007-git.tgz";
-      sha256 = "0al2g7g219jjljsf7b23pbilpgacxy5as5gs2nqf76b5qni396mi";
+      url = "http://beta.quicklisp.org/archive/fast-http/2023-10-21/fast-http-20231021-git.tgz";
+      sha256 = "13cv9kdf3z85b78xkjvs1qmbsn9frsj0n2bbj10rwd7l2glb407g";
       system = "fast-http";
       asd = "fast-http";
     });
@@ -35585,11 +35935,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fast-http-test = (build-asdf-system {
     pname = "fast-http-test";
-    version = "20191007-git";
+    version = "20231021-git";
     asds = [ "fast-http-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fast-http/2019-10-07/fast-http-20191007-git.tgz";
-      sha256 = "0al2g7g219jjljsf7b23pbilpgacxy5as5gs2nqf76b5qni396mi";
+      url = "http://beta.quicklisp.org/archive/fast-http/2023-10-21/fast-http-20231021-git.tgz";
+      sha256 = "13cv9kdf3z85b78xkjvs1qmbsn9frsj0n2bbj10rwd7l2glb407g";
       system = "fast-http-test";
       asd = "fast-http-test";
     });
@@ -35663,11 +36013,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   feeder = (build-asdf-system {
     pname = "feeder";
-    version = "20210228-git";
+    version = "20231021-git";
     asds = [ "feeder" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/feeder/2021-02-28/feeder-20210228-git.tgz";
-      sha256 = "1dpbzhycg50snl3j01c8dh8gdvhfhz0hnfl54xy55a3wbr3m6rp7";
+      url = "http://beta.quicklisp.org/archive/feeder/2023-10-21/feeder-20231021-git.tgz";
+      sha256 = "00j3s98lbh6h2p007s7x48rw0ckd3c1apfwb28y89jxnwqk7sng7";
       system = "feeder";
       asd = "feeder";
     });
@@ -35807,11 +36157,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fftpack5 = (build-asdf-system {
     pname = "fftpack5";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "fftpack5" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "fftpack5";
       asd = "fftpack5";
     });
@@ -35823,11 +36173,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fftpack5-double = (build-asdf-system {
     pname = "fftpack5-double";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "fftpack5-double" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "fftpack5-double";
       asd = "fftpack5-double";
     });
@@ -35869,11 +36219,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   file-attributes = (build-asdf-system {
     pname = "file-attributes";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "file-attributes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/file-attributes/2023-02-14/file-attributes-20230214-git.tgz";
-      sha256 = "15i43i3yilrzz77xq72r4p4zrsxgzbs937sr43s34p03686jb8q9";
+      url = "http://beta.quicklisp.org/archive/file-attributes/2023-10-21/file-attributes-20231021-git.tgz";
+      sha256 = "0ga8m22bsvb4qf6zym40wy5nz6zwjm2agvx7v7ljmrrm4s5mx96l";
       system = "file-attributes";
       asd = "file-attributes";
     });
@@ -35913,13 +36263,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  file-lock = (build-asdf-system {
+    pname = "file-lock";
+    version = "20231021-git";
+    asds = [ "file-lock" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/file-lock/2023-10-21/file-lock-20231021-git.tgz";
+      sha256 = "0n2mn931h83dh2diifsghc78agsz4savlfv5dr9pfmpk16vkwi5b";
+      system = "file-lock";
+      asd = "file-lock";
+    });
+    systems = [ "file-lock" ];
+    lispLibs = [ (getAttr "cffi" self) (getAttr "easy-macros" self) (getAttr "log4cl" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   file-notify = (build-asdf-system {
     pname = "file-notify";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "file-notify" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/file-notify/2022-07-07/file-notify-20220707-git.tgz";
-      sha256 = "0788d98rqm1krl8nbfh8qshvyf6g336i9bqrdhkx06cfvbh0wcny";
+      url = "http://beta.quicklisp.org/archive/file-notify/2023-10-21/file-notify-20231021-git.tgz";
+      sha256 = "0mk730ji4jdkx0x15wrnsianv86n98nh14wd6z8ljvr4k91sc7wl";
       system = "file-notify";
       asd = "file-notify";
     });
@@ -35931,11 +36297,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   file-select = (build-asdf-system {
     pname = "file-select";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "file-select" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/file-select/2023-06-18/file-select-20230618-git.tgz";
-      sha256 = "1qh32ymljw5c98zzbvjfq6jzwlzs4qxi8gh4gw8pixir6y1inxaa";
+      url = "http://beta.quicklisp.org/archive/file-select/2023-10-21/file-select-20231021-git.tgz";
+      sha256 = "1vji1b4p09lvr4zq9qv3z3y5d8m9w0qcnk2ac89i9lgx8xi58aa1";
       system = "file-select";
       asd = "file-select";
     });
@@ -35963,11 +36329,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   filesystem-utils = (build-asdf-system {
     pname = "filesystem-utils";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "filesystem-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/filesystem-utils/2023-06-18/filesystem-utils-20230618-git.tgz";
-      sha256 = "1r4mpqq7xac9lbd1amgmsqa8yjh3m1xvcwhj5yw04f228n1f770q";
+      url = "http://beta.quicklisp.org/archive/filesystem-utils/2023-10-21/filesystem-utils-20231021-git.tgz";
+      sha256 = "0vf81y58wd2p9blfcz80g3c3nqwljzk4v3sz29n7lhg344x81m4z";
       system = "filesystem-utils";
       asd = "filesystem-utils";
     });
@@ -35979,11 +36345,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   filesystem-utils-test = (build-asdf-system {
     pname = "filesystem-utils-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "filesystem-utils-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/filesystem-utils/2023-06-18/filesystem-utils-20230618-git.tgz";
-      sha256 = "1r4mpqq7xac9lbd1amgmsqa8yjh3m1xvcwhj5yw04f228n1f770q";
+      url = "http://beta.quicklisp.org/archive/filesystem-utils/2023-10-21/filesystem-utils-20231021-git.tgz";
+      sha256 = "0vf81y58wd2p9blfcz80g3c3nqwljzk4v3sz29n7lhg344x81m4z";
       system = "filesystem-utils-test";
       asd = "filesystem-utils-test";
     });
@@ -36139,11 +36505,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fishpack = (build-asdf-system {
     pname = "fishpack";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "fishpack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "fishpack";
       asd = "fishpack";
     });
@@ -36155,11 +36521,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fiveam = (build-asdf-system {
     pname = "fiveam";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "fiveam" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fiveam/2022-03-31/fiveam-20220331-git.tgz";
-      sha256 = "085kmrafhmhawjri76l5sc2g8xg8v4fn4xsfzbdgv2q5ffzxxd82";
+      url = "http://beta.quicklisp.org/archive/fiveam/2023-10-21/fiveam-20231021-git.tgz";
+      sha256 = "1g3dsmcxzrsijz4bx5y8ixfb26kh46hsj6q94yrydz0hk5w37skf";
       system = "fiveam";
       asd = "fiveam";
     });
@@ -36185,11 +36551,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   fiveam-matchers = (build-asdf-system {
     pname = "fiveam-matchers";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "fiveam-matchers" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/fiveam-matchers/2023-06-18/fiveam-matchers-20230618-git.tgz";
-      sha256 = "07v680fgairkf08n6xywg7pg82lw127mgr9qvg9z6hb3s11j3hmz";
+      url = "http://beta.quicklisp.org/archive/fiveam-matchers/2023-10-21/fiveam-matchers-20231021-git.tgz";
+      sha256 = "18calv5cc707cdb9gzpy24753icq5lwgy2bhfq28vw1njxmwr74h";
       system = "fiveam-matchers";
       asd = "fiveam-matchers";
     });
@@ -36249,11 +36615,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   flare = (build-asdf-system {
     pname = "flare";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "flare" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/flare/2022-11-06/flare-20221106-git.tgz";
-      sha256 = "12scbnjqkyvaqmawfvih42vxp9nydlqh08nif9glv7nlav6dgvlp";
+      url = "http://beta.quicklisp.org/archive/flare/2023-10-21/flare-20231021-git.tgz";
+      sha256 = "1ws357819rr9lzh5b2hmqid6vrq8zj46a5dzwqa0fdmxxbam75zm";
       system = "flare";
       asd = "flare";
     });
@@ -36265,11 +36631,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   flare-viewer = (build-asdf-system {
     pname = "flare-viewer";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "flare-viewer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/flare/2022-11-06/flare-20221106-git.tgz";
-      sha256 = "12scbnjqkyvaqmawfvih42vxp9nydlqh08nif9glv7nlav6dgvlp";
+      url = "http://beta.quicklisp.org/archive/flare/2023-10-21/flare-20231021-git.tgz";
+      sha256 = "1ws357819rr9lzh5b2hmqid6vrq8zj46a5dzwqa0fdmxxbam75zm";
       system = "flare-viewer";
       asd = "flare-viewer";
     });
@@ -36359,25 +36725,25 @@ in lib.makeScope pkgs.newScope (self: {
   });
   float-features = (build-asdf-system {
     pname = "float-features";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "float-features" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/float-features/2023-06-18/float-features-20230618-git.tgz";
-      sha256 = "1hm7623mmcm9dm6igcnhlx7ahq9fv4gcwyna1mmph41dk9zsc264";
+      url = "http://beta.quicklisp.org/archive/float-features/2023-10-21/float-features-20231021-git.tgz";
+      sha256 = "0871g3g9dlpgfv2v29jcnqbbxss0ih7d79zy4nlvz25krqcvvw0l";
       system = "float-features";
       asd = "float-features";
     });
     systems = [ "float-features" ];
-    lispLibs = [ (getAttr "documentation-utils" self) ];
+    lispLibs = [ (getAttr "documentation-utils" self) (getAttr "trivial-features" self) ];
     meta = {};
   });
   float-features-tests = (build-asdf-system {
     pname = "float-features-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "float-features-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/float-features/2023-06-18/float-features-20230618-git.tgz";
-      sha256 = "1hm7623mmcm9dm6igcnhlx7ahq9fv4gcwyna1mmph41dk9zsc264";
+      url = "http://beta.quicklisp.org/archive/float-features/2023-10-21/float-features-20231021-git.tgz";
+      sha256 = "0871g3g9dlpgfv2v29jcnqbbxss0ih7d79zy4nlvz25krqcvvw0l";
       system = "float-features-tests";
       asd = "float-features-tests";
     });
@@ -36437,11 +36803,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   flow = (build-asdf-system {
     pname = "flow";
-    version = "20200610-git";
+    version = "20231021-git";
     asds = [ "flow" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/flow/2020-06-10/flow-20200610-git.tgz";
-      sha256 = "0ysw1kwiqlf8kzllhnz8v3q40dmvwf83fzq8bfkbmwy5hfjh3pxp";
+      url = "http://beta.quicklisp.org/archive/flow/2023-10-21/flow-20231021-git.tgz";
+      sha256 = "09g88wnz3dflwrjssl45xihy75fsd0l63ggy1z7mh93hc79ficz5";
       system = "flow";
       asd = "flow";
     });
@@ -36451,11 +36817,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   flow-visualizer = (build-asdf-system {
     pname = "flow-visualizer";
-    version = "20200610-git";
+    version = "20231021-git";
     asds = [ "flow-visualizer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/flow/2020-06-10/flow-20200610-git.tgz";
-      sha256 = "0ysw1kwiqlf8kzllhnz8v3q40dmvwf83fzq8bfkbmwy5hfjh3pxp";
+      url = "http://beta.quicklisp.org/archive/flow/2023-10-21/flow-20231021-git.tgz";
+      sha256 = "09g88wnz3dflwrjssl45xihy75fsd0l63ggy1z7mh93hc79ficz5";
       system = "flow-visualizer";
       asd = "flow-visualizer";
     });
@@ -36525,6 +36891,22 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "fmarshal-test" ];
     lispLibs = [ (getAttr "fiveam" self) (getAttr "fmarshal" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  fmcs = (build-asdf-system {
+    pname = "fmcs";
+    version = "20231021-git";
+    asds = [ "fmcs" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/fmcs/2023-10-21/fmcs-20231021-git.tgz";
+      sha256 = "1zp73i68f5sl93z10l2f94nylbkaj601ani6yg3bg7iqhs543651";
+      system = "fmcs";
+      asd = "fmcs";
+    });
+    systems = [ "fmcs" ];
+    lispLibs = [ (getAttr "fare-quasiquote-extras" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -37073,11 +37455,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   font-discovery = (build-asdf-system {
     pname = "font-discovery";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "font-discovery" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/font-discovery/2022-11-06/font-discovery-20221106-git.tgz";
-      sha256 = "1p9wkwc23rnif8vcjaj5ih1fmr5g57sidqjlz08qw6k0z4f6bia1";
+      url = "http://beta.quicklisp.org/archive/font-discovery/2023-10-21/font-discovery-20231021-git.tgz";
+      sha256 = "1kx83564p1w2wka3l6g4rj7zvzi85prvs6yag2qv2a9xh80yv9rz";
       system = "font-discovery";
       asd = "font-discovery";
     });
@@ -37105,11 +37487,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   for = (build-asdf-system {
     pname = "for";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "for" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/for/2023-06-18/for-20230618-git.tgz";
-      sha256 = "1flrns85d18y3fp84x64dyc43fvm4wjsyig5brh7540j58j0ky8d";
+      url = "http://beta.quicklisp.org/archive/for/2023-10-21/for-20231021-git.tgz";
+      sha256 = "07jdwqkyb3qd65mng60cs723z7p0bv2769hhalz4c0mfzn8qrn99";
       system = "for";
       asd = "for";
     });
@@ -37153,11 +37535,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   form-fiddle = (build-asdf-system {
     pname = "form-fiddle";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "form-fiddle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/form-fiddle/2019-07-10/form-fiddle-20190710-git.tgz";
-      sha256 = "041iznc9mpfyrl0sv5893ys9pbb2pvbn9g3clarqi7gsfj483jln";
+      url = "http://beta.quicklisp.org/archive/form-fiddle/2023-10-21/form-fiddle-20231021-git.tgz";
+      sha256 = "0vl28q8xa42i9gr1bch22jdha9jh8sr2hcv6d9kykj4jsqi9kwbg";
       system = "form-fiddle";
       asd = "form-fiddle";
     });
@@ -37517,11 +37899,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   function-cache = (build-asdf-system {
     pname = "function-cache";
-    version = "20181210-git";
+    version = "20231021-git";
     asds = [ "function-cache" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/function-cache/2018-12-10/function-cache-20181210-git.tgz";
-      sha256 = "000vmd3f5rx5hs9nvphfric0gkzaadns31c6mxaslpv0k7pkrmc6";
+      url = "http://beta.quicklisp.org/archive/function-cache/2023-10-21/function-cache-20231021-git.tgz";
+      sha256 = "1sk35fd7zw6kx9zpv18wmzmkksbn0ac4ycjzi6hqdgkbyn3l136w";
       system = "function-cache";
       asd = "function-cache";
     });
@@ -37533,11 +37915,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   function-cache-clsql = (build-asdf-system {
     pname = "function-cache-clsql";
-    version = "20181210-git";
+    version = "20231021-git";
     asds = [ "function-cache-clsql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/function-cache/2018-12-10/function-cache-20181210-git.tgz";
-      sha256 = "000vmd3f5rx5hs9nvphfric0gkzaadns31c6mxaslpv0k7pkrmc6";
+      url = "http://beta.quicklisp.org/archive/function-cache/2023-10-21/function-cache-20231021-git.tgz";
+      sha256 = "1sk35fd7zw6kx9zpv18wmzmkksbn0ac4ycjzi6hqdgkbyn3l136w";
       system = "function-cache-clsql";
       asd = "function-cache-clsql";
     });
@@ -37549,11 +37931,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   functional-geometry = (build-asdf-system {
     pname = "functional-geometry";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "functional-geometry" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "functional-geometry";
       asd = "functional-geometry";
     });
@@ -37565,11 +37947,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   functional-trees = (build-asdf-system {
     pname = "functional-trees";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "functional-trees" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/functional-trees/2023-06-18/functional-trees-20230618-git.tgz";
-      sha256 = "1f1n95f9vnigb0m45p3mm0sacdc72ss1l2cg1m7fc8f996ayvqjw";
+      url = "http://beta.quicklisp.org/archive/functional-trees/2023-10-21/functional-trees-20231021-git.tgz";
+      sha256 = "0pp320fy4vqv723asdp12slljs05lbylzhi6ja1i5zklhpv4pv9l";
       system = "functional-trees";
       asd = "functional-trees";
     });
@@ -37607,6 +37989,22 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "future" ];
     lispLibs = [ (getAttr "alexandria" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  fuzzy-dates = (build-asdf-system {
+    pname = "fuzzy-dates";
+    version = "20231021-git";
+    asds = [ "fuzzy-dates" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/fuzzy-dates/2023-10-21/fuzzy-dates-20231021-git.tgz";
+      sha256 = "09a77i9rn7cf5amw6wsx41hpnbp128vjhdw3vq82ip2gm0y4dv9d";
+      system = "fuzzy-dates";
+      asd = "fuzzy-dates";
+    });
+    systems = [ "fuzzy-dates" ];
+    lispLibs = [ (getAttr "cl-ppcre" self) (getAttr "documentation-utils" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -37741,11 +38139,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   gendl = (build-asdf-system {
     pname = "gendl";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "gendl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "gendl";
       asd = "gendl";
     });
@@ -37757,11 +38155,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   gendl-asdf = (build-asdf-system {
     pname = "gendl-asdf";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "gendl-asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "gendl-asdf";
       asd = "gendl-asdf";
     });
@@ -38299,11 +38697,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   geom-base = (build-asdf-system {
     pname = "geom-base";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "geom-base" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "geom-base";
       asd = "geom-base";
     });
@@ -38425,11 +38823,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   geysr = (build-asdf-system {
     pname = "geysr";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "geysr" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "geysr";
       asd = "geysr";
     });
@@ -38473,11 +38871,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   github-api-cl = (build-asdf-system {
     pname = "github-api-cl";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "github-api-cl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/github-api-cl/2022-11-06/github-api-cl-20221106-git.tgz";
-      sha256 = "1f7hgncmi7d5chvlixhigysx68bchdcr2hh54iwlpfk8p3an7gwz";
+      url = "http://beta.quicklisp.org/archive/github-api-cl/2023-10-21/github-api-cl-20231021-git.tgz";
+      sha256 = "1fxlgppkgg47pbv8mzz9dd1g8axmzixahq0dbglknr1hr8q1n150";
       system = "github-api-cl";
       asd = "github-api-cl";
     });
@@ -38489,11 +38887,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   github-gist-api-cl = (build-asdf-system {
     pname = "github-gist-api-cl";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "github-gist-api-cl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/github-api-cl/2022-11-06/github-api-cl-20221106-git.tgz";
-      sha256 = "1f7hgncmi7d5chvlixhigysx68bchdcr2hh54iwlpfk8p3an7gwz";
+      url = "http://beta.quicklisp.org/archive/github-api-cl/2023-10-21/github-api-cl-20231021-git.tgz";
+      sha256 = "1fxlgppkgg47pbv8mzz9dd1g8axmzixahq0dbglknr1hr8q1n150";
       system = "github-gist-api-cl";
       asd = "github-gist-api-cl";
     });
@@ -38615,6 +39013,22 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  glfw = (build-asdf-system {
+    pname = "glfw";
+    version = "20231021-git";
+    asds = [ "glfw" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/glfw/2023-10-21/glfw-20231021-git.tgz";
+      sha256 = "04sblfcfjgfyfmgy0wrc4qdnxrw0bv020pisv7xvlshbal1rhgv2";
+      system = "glfw";
+      asd = "glfw";
+    });
+    systems = [ "glfw" ];
+    lispLibs = [ (getAttr "cffi" self) (getAttr "documentation-utils" self) (getAttr "float-features" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   glfw-blob = (build-asdf-system {
     pname = "glfw-blob";
     version = "stable-git";
@@ -38649,11 +39063,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   glisp = (build-asdf-system {
     pname = "glisp";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "glisp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "glisp";
       asd = "glisp";
     });
@@ -38849,11 +39263,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   glsl-toolkit = (build-asdf-system {
     pname = "glsl-toolkit";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "glsl-toolkit" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/glsl-toolkit/2023-06-18/glsl-toolkit-20230618-git.tgz";
-      sha256 = "0gp749f407y6s8y7bvscfl8chmc6j623zcbmjagykfg3whzaaybm";
+      url = "http://beta.quicklisp.org/archive/glsl-toolkit/2023-10-21/glsl-toolkit-20231021-git.tgz";
+      sha256 = "1mz99q4l4bjlcj56i291ai2ibjdjkag2v8zm9qawqbvfan8s2g0i";
       system = "glsl-toolkit";
       asd = "glsl-toolkit";
     });
@@ -38945,11 +39359,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   graphs = (build-asdf-system {
     pname = "graphs";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "graphs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "graphs";
       asd = "graphs";
     });
@@ -39151,11 +39565,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   gt = (build-asdf-system {
     pname = "gt";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "gt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-utils/2023-06-18/cl-utils-20230618-git.tgz";
-      sha256 = "0cs19w8z1r21niwhkfgai88miz3akz8wjbr6a3jnq6wmmq41jw2k";
+      url = "http://beta.quicklisp.org/archive/cl-utils/2023-10-21/cl-utils-20231021-git.tgz";
+      sha256 = "14q97p3w1mplhaxy8dam26yvqwr60jp13isgsi4px077w8ny37qq";
       system = "gt";
       asd = "gt";
     });
@@ -39183,11 +39597,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   gtirb-capstone = (build-asdf-system {
     pname = "gtirb-capstone";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "gtirb-capstone" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gtirb-capstone/2023-06-18/gtirb-capstone-20230618-git.tgz";
-      sha256 = "0yb99x3dv19xgap0vjwbgv12k22749zbsxs5ijb2xm65krlwdx64";
+      url = "http://beta.quicklisp.org/archive/gtirb-capstone/2023-10-21/gtirb-capstone-20231021-git.tgz";
+      sha256 = "1i65iay3pkc0q00inqyykjpv38jj0abz7j7dbsm6bamjvrh8n1v8";
       system = "gtirb-capstone";
       asd = "gtirb-capstone";
     });
@@ -39231,32 +39645,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   gtwiwtg = (build-asdf-system {
     pname = "gtwiwtg";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "gtwiwtg" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gtwiwtg/2022-11-06/gtwiwtg-20221106-git.tgz";
-      sha256 = "07wzaizp9jr6x8yvivk3iak2q7yh1ps0mj5mrd6i7y2f614gl8ll";
+      url = "http://beta.quicklisp.org/archive/gtwiwtg/2023-10-21/gtwiwtg-20231021-git.tgz";
+      sha256 = "0pp28s2bydqcd850kyk4jjvjky692lqgld9lc9v64lb96ibxzplk";
       system = "gtwiwtg";
       asd = "gtwiwtg";
     });
     systems = [ "gtwiwtg" ];
-    lispLibs = [ (getAttr "testiere" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  gtwiwtg-test = (build-asdf-system {
-    pname = "gtwiwtg-test";
-    version = "20221106-git";
-    asds = [ "gtwiwtg-test" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gtwiwtg/2022-11-06/gtwiwtg-20221106-git.tgz";
-      sha256 = "07wzaizp9jr6x8yvivk3iak2q7yh1ps0mj5mrd6i7y2f614gl8ll";
-      system = "gtwiwtg-test";
-      asd = "gtwiwtg-test";
-    });
-    systems = [ "gtwiwtg-test" ];
-    lispLibs = [ (getAttr "gtwiwtg" self) ];
+    lispLibs = [  ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -39311,11 +39709,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   gwl = (build-asdf-system {
     pname = "gwl";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "gwl" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "gwl";
       asd = "gwl";
     });
@@ -39327,11 +39725,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   gwl-graphics = (build-asdf-system {
     pname = "gwl-graphics";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "gwl-graphics" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "gwl-graphics";
       asd = "gwl-graphics";
     });
@@ -39391,11 +39789,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   harmony = (build-asdf-system {
     pname = "harmony";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "harmony" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/harmony/2023-06-18/harmony-20230618-git.tgz";
-      sha256 = "1rf6hcq99rj50qdwd63n5zvfgif7qdkhjrd2pqmmyz9dni6brs7w";
+      url = "http://beta.quicklisp.org/archive/harmony/2023-10-21/harmony-20231021-git.tgz";
+      sha256 = "00ch1dn1zpkv8z06a2ymmv2r659lb9vjpkxzdvabxlzic5sxzrzi";
       system = "harmony";
       asd = "harmony";
     });
@@ -39565,11 +39963,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   helambdap = (build-asdf-system {
     pname = "helambdap";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "helambdap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/helambdap/2023-02-14/helambdap-20230214-git.tgz";
-      sha256 = "07824k2cv6ikmbqnqyxx7va1l9a1vcgqd6hc2pq1bgkn0c7plnb6";
+      url = "http://beta.quicklisp.org/archive/helambdap/2023-10-21/helambdap-20231021-git.tgz";
+      sha256 = "1kzapbf9l2bw8i9m9sxv0dfnkksrxq81d5hbn34pm25abk0i937j";
       system = "helambdap";
       asd = "helambdap";
     });
@@ -39581,11 +39979,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   hello-builder = (build-asdf-system {
     pname = "hello-builder";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "hello-builder" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2023-06-18/clog-20230618-git.tgz";
-      sha256 = "068p45l2i45rlgxwdj09wkcgzjk2dlkkc9hkaaiw1bcjn6gxvxsc";
+      url = "http://beta.quicklisp.org/archive/clog/2023-10-21/clog-20231021-git.tgz";
+      sha256 = "1hd59lwvhd8hfgh6nrgpsqrvwsh7jrpvi2rxaig67xr0zp476hak";
       system = "hello-builder";
       asd = "hello-builder";
     });
@@ -39597,16 +39995,64 @@ in lib.makeScope pkgs.newScope (self: {
   });
   hello-clog = (build-asdf-system {
     pname = "hello-clog";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "hello-clog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clog/2023-06-18/clog-20230618-git.tgz";
-      sha256 = "068p45l2i45rlgxwdj09wkcgzjk2dlkkc9hkaaiw1bcjn6gxvxsc";
+      url = "http://beta.quicklisp.org/archive/clog/2023-10-21/clog-20231021-git.tgz";
+      sha256 = "1hd59lwvhd8hfgh6nrgpsqrvwsh7jrpvi2rxaig67xr0zp476hak";
       system = "hello-clog";
       asd = "hello-clog";
     });
     systems = [ "hello-clog" ];
     lispLibs = [ (getAttr "clog" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  hemlock_dot_base = (build-asdf-system {
+    pname = "hemlock.base";
+    version = "20231021-git";
+    asds = [ "hemlock.base" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/hemlock/2023-10-21/hemlock-20231021-git.tgz";
+      sha256 = "0c1lmznz1md7r9jbyg2n22h1svw8pvqjxyp7mvxgvqp34mmbf5ad";
+      system = "hemlock.base";
+      asd = "hemlock.base";
+    });
+    systems = [ "hemlock.base" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cl-ppcre" self) (getAttr "command-line-arguments" self) (getAttr "conium" self) (getAttr "iolib" self) (getAttr "iterate" self) (getAttr "osicat" self) (getAttr "prepl" self) (getAttr "trivial-gray-streams" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  hemlock_dot_clx = (build-asdf-system {
+    pname = "hemlock.clx";
+    version = "20231021-git";
+    asds = [ "hemlock.clx" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/hemlock/2023-10-21/hemlock-20231021-git.tgz";
+      sha256 = "0c1lmznz1md7r9jbyg2n22h1svw8pvqjxyp7mvxgvqp34mmbf5ad";
+      system = "hemlock.clx";
+      asd = "hemlock.clx";
+    });
+    systems = [ "hemlock.clx" ];
+    lispLibs = [ (getAttr "clx" self) (getAttr "hemlock_dot_base" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  hemlock_dot_tty = (build-asdf-system {
+    pname = "hemlock.tty";
+    version = "20231021-git";
+    asds = [ "hemlock.tty" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/hemlock/2023-10-21/hemlock-20231021-git.tgz";
+      sha256 = "0c1lmznz1md7r9jbyg2n22h1svw8pvqjxyp7mvxgvqp34mmbf5ad";
+      system = "hemlock.tty";
+      asd = "hemlock.tty";
+    });
+    systems = [ "hemlock.tty" ];
+    lispLibs = [ (getAttr "hemlock_dot_base" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -39757,11 +40203,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   hompack = (build-asdf-system {
     pname = "hompack";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "hompack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "hompack";
       asd = "hompack";
     });
@@ -41705,11 +42151,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   humbler = (build-asdf-system {
     pname = "humbler";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "humbler" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/humbler/2019-07-10/humbler-20190710-git.tgz";
-      sha256 = "0s7li33q3ww1ka76v6pdjv5pnvwgs695wj9ciijy9cqxxp2x8vx0";
+      url = "http://beta.quicklisp.org/archive/humbler/2023-10-21/humbler-20231021-git.tgz";
+      sha256 = "15fdvlrhdvr58i2rwa87i4is2rgh9xzjag0sqhga8ri7a8i63fgf";
       system = "humbler";
       asd = "humbler";
     });
@@ -41829,11 +42275,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   hunchentoot-errors = (build-asdf-system {
     pname = "hunchentoot-errors";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "hunchentoot-errors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/hunchentoot-errors/2022-11-06/hunchentoot-errors-20221106-git.tgz";
-      sha256 = "1wv4p1wyz40kk9z4dabyk4xqlv78zq3inhvaqnwrhxww2w2cim5z";
+      url = "http://beta.quicklisp.org/archive/hunchentoot-errors/2023-10-21/hunchentoot-errors-20231021-git.tgz";
+      sha256 = "0fab7s8qhhs713cw014qqvzm5z61wmxm2fcbkarhg41cz3li9k1j";
       system = "hunchentoot-errors";
       asd = "hunchentoot-errors";
     });
@@ -41887,6 +42333,22 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "hunchentoot-test" ];
     lispLibs = [ (getAttr "cl-ppcre" self) (getAttr "cl-who" self) (getAttr "drakma" self) (getAttr "hunchentoot" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  hyperlattices = (build-asdf-system {
+    pname = "hyperlattices";
+    version = "20231021-git";
+    asds = [ "hyperlattices" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/hyperlattices/2023-10-21/hyperlattices-20231021-git.tgz";
+      sha256 = "1d0jhy7yv5917bgx1b8r8ch5b94zbg933kx8ak2sbpgsf16pqf2h";
+      system = "hyperlattices";
+      asd = "hyperlattices";
+    });
+    systems = [ "hyperlattices" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "closer-mop" self) (getAttr "serapeum" self) (getAttr "trivial-types" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -41989,11 +42451,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   iclendar = (build-asdf-system {
     pname = "iclendar";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "iclendar" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/iclendar/2023-06-18/iclendar-20230618-git.tgz";
-      sha256 = "0ng6ss9bwnf9xkxkhn7fi624ydn4vbp60v2ddsx1qdil0y7hg72d";
+      url = "http://beta.quicklisp.org/archive/iclendar/2023-10-21/iclendar-20231021-git.tgz";
+      sha256 = "13ic0zlwrlf6k08x7c8v96kjpbh1dmap15q4cv4in7rkx6rn2rsa";
       system = "iclendar";
       asd = "iclendar";
     });
@@ -42193,11 +42655,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   imago = (build-asdf-system {
     pname = "imago";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "imago" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/imago/2023-06-18/imago-20230618-git.tgz";
-      sha256 = "0inp7r8wmvncxrb4vcnb982wf4njgvxyf1ldbrygpm23lp1xnqra";
+      url = "http://beta.quicklisp.org/archive/imago/2023-10-21/imago-20231021-git.tgz";
+      sha256 = "0g4s3vrsg7rfn3hwh2lrfdz9k62w1flbrbibgnw64rvy618pkv41";
       system = "imago";
       asd = "imago";
     });
@@ -42447,11 +42909,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   inkwell = (build-asdf-system {
     pname = "inkwell";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "inkwell" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/inkwell/2019-07-10/inkwell-20190710-git.tgz";
-      sha256 = "0wzd2j7wdi4dxrmvwk47h988l107ajvw3z609f0dg5vh6wad8pnk";
+      url = "http://beta.quicklisp.org/archive/inkwell/2023-10-21/inkwell-20231021-git.tgz";
+      sha256 = "07yxgs2zfnyr158v8q2s4npvzjzmpifx61hg7fc17dsmqgw296yc";
       system = "inkwell";
       asd = "inkwell";
     });
@@ -42783,11 +43245,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   interfaces-test-implementation = (build-asdf-system {
     pname = "interfaces-test-implementation";
-    version = "20210630-git";
+    version = "20231021-git";
     asds = [ "interfaces-test-implementation" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/modularize-interfaces/2021-06-30/modularize-interfaces-20210630-git.tgz";
-      sha256 = "1jl11ffkrah3553wzysmxanhrzv3rnzi5x11ll626baf69im0v7x";
+      url = "http://beta.quicklisp.org/archive/modularize-interfaces/2023-10-21/modularize-interfaces-20231021-git.tgz";
+      sha256 = "0lmq2jbkbr5wrrjl2qb1x64fcvl0lmii0h9301b9bq4d47s4w8sh";
       system = "interfaces-test-implementation";
       asd = "interfaces-test-implementation";
     });
@@ -42963,11 +43425,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ironclad = (build-asdf-system {
     pname = "ironclad";
-    version = "v0.58";
+    version = "v0.59";
     asds = [ "ironclad" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
-      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
+      url = "http://beta.quicklisp.org/archive/ironclad/2023-10-21/ironclad-v0.59.tgz";
+      sha256 = "02abwy59v9hfdl2ya4h6l2hc1xrnvqlxzg9vlk87wmi92azpa8v9";
       system = "ironclad";
       asd = "ironclad";
     });
@@ -42977,11 +43439,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ironclad-text = (build-asdf-system {
     pname = "ironclad-text";
-    version = "v0.58";
+    version = "v0.59";
     asds = [ "ironclad-text" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ironclad/2022-11-06/ironclad-v0.58.tgz";
-      sha256 = "17plga14y1425g7midysj49x12kssqa77l43cr3sm9976zpya8i8";
+      url = "http://beta.quicklisp.org/archive/ironclad/2023-10-21/ironclad-v0.59.tgz";
+      sha256 = "02abwy59v9hfdl2ya4h6l2hc1xrnvqlxzg9vlk87wmi92azpa8v9";
       system = "ironclad-text";
       asd = "ironclad-text";
     });
@@ -43103,11 +43565,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   jingle = (build-asdf-system {
     pname = "jingle";
-    version = "20230215-git";
+    version = "20231021-git";
     asds = [ "jingle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-02-15/cl-jingle-20230215-git.tgz";
-      sha256 = "0hp3hajhxn8g5h7jhwavmpgxgwpzjxly4wq7yzkbbzzmbgpbci0c";
+      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-10-21/cl-jingle-20231021-git.tgz";
+      sha256 = "0g64y9nzkdrb2yjp0lvhfc0qm3595n6w76hk9hd1v0ril78vzybc";
       system = "jingle";
       asd = "jingle";
     });
@@ -43119,11 +43581,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   jingle_dot_demo = (build-asdf-system {
     pname = "jingle.demo";
-    version = "20230215-git";
+    version = "20231021-git";
     asds = [ "jingle.demo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-02-15/cl-jingle-20230215-git.tgz";
-      sha256 = "0hp3hajhxn8g5h7jhwavmpgxgwpzjxly4wq7yzkbbzzmbgpbci0c";
+      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-10-21/cl-jingle-20231021-git.tgz";
+      sha256 = "0g64y9nzkdrb2yjp0lvhfc0qm3595n6w76hk9hd1v0ril78vzybc";
       system = "jingle.demo";
       asd = "jingle.demo";
     });
@@ -43135,11 +43597,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   jingle_dot_demo_dot_test = (build-asdf-system {
     pname = "jingle.demo.test";
-    version = "20230215-git";
+    version = "20231021-git";
     asds = [ "jingle.demo.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-02-15/cl-jingle-20230215-git.tgz";
-      sha256 = "0hp3hajhxn8g5h7jhwavmpgxgwpzjxly4wq7yzkbbzzmbgpbci0c";
+      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-10-21/cl-jingle-20231021-git.tgz";
+      sha256 = "0g64y9nzkdrb2yjp0lvhfc0qm3595n6w76hk9hd1v0ril78vzybc";
       system = "jingle.demo.test";
       asd = "jingle.demo.test";
     });
@@ -43151,11 +43613,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   jingle_dot_test = (build-asdf-system {
     pname = "jingle.test";
-    version = "20230215-git";
+    version = "20231021-git";
     asds = [ "jingle.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-02-15/cl-jingle-20230215-git.tgz";
-      sha256 = "0hp3hajhxn8g5h7jhwavmpgxgwpzjxly4wq7yzkbbzzmbgpbci0c";
+      url = "http://beta.quicklisp.org/archive/cl-jingle/2023-10-21/cl-jingle-20231021-git.tgz";
+      sha256 = "0g64y9nzkdrb2yjp0lvhfc0qm3595n6w76hk9hd1v0ril78vzybc";
       system = "jingle.test";
       asd = "jingle.test";
     });
@@ -43453,11 +43915,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   journal = (build-asdf-system {
     pname = "journal";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "journal" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/journal/2023-06-18/journal-20230618-git.tgz";
-      sha256 = "0wg6kghflmg3vp2hapy255n9y3wa3qdwrvylrf81s78q6fbbc8gy";
+      url = "http://beta.quicklisp.org/archive/journal/2023-10-21/journal-20231021-git.tgz";
+      sha256 = "0h55mi3n0cwsl3gb9v7xsl9jzq0x5fbv2s8a0haby7g9995jr98v";
       system = "journal";
       asd = "journal";
     });
@@ -43593,11 +44055,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   json-mop = (build-asdf-system {
     pname = "json-mop";
-    version = "20210411-git";
+    version = "20231021-git";
     asds = [ "json-mop" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/json-mop/2021-04-11/json-mop-20210411-git.tgz";
-      sha256 = "1d4k1l415iwssn8qyy3qjcfk3cclz6rzq750dgbiisys8ffmgpgp";
+      url = "http://beta.quicklisp.org/archive/json-mop/2023-10-21/json-mop-20231021-git.tgz";
+      sha256 = "0l8sv1lww1ik1lpvwd53xb32qsam7p2b4lh5wb9dijd30bn78vqq";
       system = "json-mop";
       asd = "json-mop";
     });
@@ -43609,11 +44071,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   json-mop-tests = (build-asdf-system {
     pname = "json-mop-tests";
-    version = "20210411-git";
+    version = "20231021-git";
     asds = [ "json-mop-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/json-mop/2021-04-11/json-mop-20210411-git.tgz";
-      sha256 = "1d4k1l415iwssn8qyy3qjcfk3cclz6rzq750dgbiisys8ffmgpgp";
+      url = "http://beta.quicklisp.org/archive/json-mop/2023-10-21/json-mop-20231021-git.tgz";
+      sha256 = "0l8sv1lww1ik1lpvwd53xb32qsam7p2b4lh5wb9dijd30bn78vqq";
       system = "json-mop-tests";
       asd = "json-mop-tests";
     });
@@ -43721,11 +44183,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   jsonrpc = (build-asdf-system {
     pname = "jsonrpc";
-    version = "20230215-git";
+    version = "20231021-git";
     asds = [ "jsonrpc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/jsonrpc/2023-02-15/jsonrpc-20230215-git.tgz";
-      sha256 = "076jm6vy4mgwzicr2lnj06ch1v0h0kmr4b9r53xd819b1j427n24";
+      url = "http://beta.quicklisp.org/archive/jsonrpc/2023-10-21/jsonrpc-20231021-git.tgz";
+      sha256 = "1w75mn8ydw5xk0xc9sv657ia7wjk4030gmqf3m1q12awj3bzfxqr";
       system = "jsonrpc";
       asd = "jsonrpc";
     });
@@ -43777,6 +44239,22 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "jsown-utils" ];
     lispLibs = [ (getAttr "closer-mop" self) (getAttr "jsown" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  jupyter-lab-extension = (build-asdf-system {
+    pname = "jupyter-lab-extension";
+    version = "20231021-git";
+    asds = [ "jupyter-lab-extension" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/common-lisp-jupyter/2023-10-21/common-lisp-jupyter-20231021-git.tgz";
+      sha256 = "0fj3yallizxld8zsxvva4l5mbp1i4rm73r4balp3r8c6lkrapsrm";
+      system = "jupyter-lab-extension";
+      asd = "jupyter-lab-extension";
+    });
+    systems = [ "jupyter-lab-extension" ];
+    lispLibs = [  ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -43943,16 +44421,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   kekule-clj = (build-asdf-system {
     pname = "kekule-clj";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "kekule-clj" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/kekule-clj/2022-11-06/kekule-clj-20221106-git.tgz";
-      sha256 = "12bwymk9vh9bdyi85pfgi79815g0vdlj37y85zld13f9cnf4kl3v";
+      url = "http://beta.quicklisp.org/archive/kekule-clj/2023-10-21/kekule-clj-20231021-git.tgz";
+      sha256 = "1901b11ilknd4gy7r5b00yq6syb6qsh0xalkdw4g0dqzvqqxnfj5";
       system = "kekule-clj";
       asd = "kekule-clj";
     });
     systems = [ "kekule-clj" ];
-    lispLibs = [ (getAttr "common-lisp-jupyter" self) ];
+    lispLibs = [ (getAttr "common-lisp-jupyter" self) (getAttr "jupyter-lab-extension" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -44007,11 +44485,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   khazern = (build-asdf-system {
     pname = "khazern";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "khazern" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/khazern/2023-06-18/khazern-20230618-git.tgz";
-      sha256 = "1xspk5n18imxq081x45b7awznkyb1w1dbq34h7zf012rpcxz6jl9";
+      url = "http://beta.quicklisp.org/archive/khazern/2023-10-21/khazern-20231021-git.tgz";
+      sha256 = "1fn9sggwipard4d3fxfr9dlip1ww4i03djdflchl5dkafp8mgq77";
       system = "khazern";
       asd = "khazern";
     });
@@ -44023,11 +44501,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   khazern-extrinsic = (build-asdf-system {
     pname = "khazern-extrinsic";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "khazern-extrinsic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/khazern/2023-06-18/khazern-20230618-git.tgz";
-      sha256 = "1xspk5n18imxq081x45b7awznkyb1w1dbq34h7zf012rpcxz6jl9";
+      url = "http://beta.quicklisp.org/archive/khazern/2023-10-21/khazern-20231021-git.tgz";
+      sha256 = "1fn9sggwipard4d3fxfr9dlip1ww4i03djdflchl5dkafp8mgq77";
       system = "khazern-extrinsic";
       asd = "khazern-extrinsic";
     });
@@ -44039,11 +44517,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   khazern-intrinsic = (build-asdf-system {
     pname = "khazern-intrinsic";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "khazern-intrinsic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/khazern/2023-06-18/khazern-20230618-git.tgz";
-      sha256 = "1xspk5n18imxq081x45b7awznkyb1w1dbq34h7zf012rpcxz6jl9";
+      url = "http://beta.quicklisp.org/archive/khazern/2023-10-21/khazern-20231021-git.tgz";
+      sha256 = "1fn9sggwipard4d3fxfr9dlip1ww4i03djdflchl5dkafp8mgq77";
       system = "khazern-intrinsic";
       asd = "khazern-intrinsic";
     });
@@ -44055,11 +44533,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   khazern-sequence = (build-asdf-system {
     pname = "khazern-sequence";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "khazern-sequence" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/khazern/2023-06-18/khazern-20230618-git.tgz";
-      sha256 = "1xspk5n18imxq081x45b7awznkyb1w1dbq34h7zf012rpcxz6jl9";
+      url = "http://beta.quicklisp.org/archive/khazern/2023-10-21/khazern-20231021-git.tgz";
+      sha256 = "1fn9sggwipard4d3fxfr9dlip1ww4i03djdflchl5dkafp8mgq77";
       system = "khazern-sequence";
       asd = "khazern-sequence";
     });
@@ -44071,11 +44549,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   khazern-sequence-extrinsic = (build-asdf-system {
     pname = "khazern-sequence-extrinsic";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "khazern-sequence-extrinsic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/khazern/2023-06-18/khazern-20230618-git.tgz";
-      sha256 = "1xspk5n18imxq081x45b7awznkyb1w1dbq34h7zf012rpcxz6jl9";
+      url = "http://beta.quicklisp.org/archive/khazern/2023-10-21/khazern-20231021-git.tgz";
+      sha256 = "1fn9sggwipard4d3fxfr9dlip1ww4i03djdflchl5dkafp8mgq77";
       system = "khazern-sequence-extrinsic";
       asd = "khazern-sequence-extrinsic";
     });
@@ -44087,11 +44565,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   khazern-sequence-intrinsic = (build-asdf-system {
     pname = "khazern-sequence-intrinsic";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "khazern-sequence-intrinsic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/khazern/2023-06-18/khazern-20230618-git.tgz";
-      sha256 = "1xspk5n18imxq081x45b7awznkyb1w1dbq34h7zf012rpcxz6jl9";
+      url = "http://beta.quicklisp.org/archive/khazern/2023-10-21/khazern-20231021-git.tgz";
+      sha256 = "1fn9sggwipard4d3fxfr9dlip1ww4i03djdflchl5dkafp8mgq77";
       system = "khazern-sequence-intrinsic";
       asd = "khazern-sequence-intrinsic";
     });
@@ -44213,11 +44691,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack = (build-asdf-system {
     pname = "lack";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack";
       asd = "lack";
     });
@@ -44227,11 +44705,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-app-directory = (build-asdf-system {
     pname = "lack-app-directory";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-app-directory" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-app-directory";
       asd = "lack-app-directory";
     });
@@ -44243,11 +44721,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-app-file = (build-asdf-system {
     pname = "lack-app-file";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-app-file" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-app-file";
       asd = "lack-app-file";
     });
@@ -44259,11 +44737,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-component = (build-asdf-system {
     pname = "lack-component";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-component" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-component";
       asd = "lack-component";
     });
@@ -44273,11 +44751,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-accesslog = (build-asdf-system {
     pname = "lack-middleware-accesslog";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-accesslog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-middleware-accesslog";
       asd = "lack-middleware-accesslog";
     });
@@ -44289,11 +44767,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-anypool = (build-asdf-system {
     pname = "lack-middleware-anypool";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-anypool" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/anypool/2021-05-31/anypool-20210531-git.tgz";
-      sha256 = "0dr904m0qb0xf12x0rrhw0ipw3fdqyihwr59l87prqmkv23y7aig";
+      url = "http://beta.quicklisp.org/archive/anypool/2023-10-21/anypool-20231021-git.tgz";
+      sha256 = "07ha0x6qv1qw68iim3bcr5fk2pnxk0knk8lwyylbvm9rqjmd672i";
       system = "lack-middleware-anypool";
       asd = "lack-middleware-anypool";
     });
@@ -44305,11 +44783,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-auth-basic = (build-asdf-system {
     pname = "lack-middleware-auth-basic";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-auth-basic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-middleware-auth-basic";
       asd = "lack-middleware-auth-basic";
     });
@@ -44321,11 +44799,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-backtrace = (build-asdf-system {
     pname = "lack-middleware-backtrace";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-backtrace" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-middleware-backtrace";
       asd = "lack-middleware-backtrace";
     });
@@ -44351,11 +44829,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-csrf = (build-asdf-system {
     pname = "lack-middleware-csrf";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-csrf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-middleware-csrf";
       asd = "lack-middleware-csrf";
     });
@@ -44367,11 +44845,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-mito = (build-asdf-system {
     pname = "lack-middleware-mito";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-mito" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2023-02-14/mito-20230214-git.tgz";
-      sha256 = "1s12sbqi3dgxy61q3pq6c6nbi86v59ilz03dslkh1fl2mi9ln6jg";
+      url = "http://beta.quicklisp.org/archive/mito/2023-10-21/mito-20231021-git.tgz";
+      sha256 = "12wx1mb4aprvvh1qv41xrggpr7ffd943mxia0ppz0pkqc8zqrg4z";
       system = "lack-middleware-mito";
       asd = "lack-middleware-mito";
     });
@@ -44383,11 +44861,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-mount = (build-asdf-system {
     pname = "lack-middleware-mount";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-mount" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-middleware-mount";
       asd = "lack-middleware-mount";
     });
@@ -44399,11 +44877,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-session = (build-asdf-system {
     pname = "lack-middleware-session";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-session" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-middleware-session";
       asd = "lack-middleware-session";
     });
@@ -44415,11 +44893,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-middleware-static = (build-asdf-system {
     pname = "lack-middleware-static";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-middleware-static" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-middleware-static";
       asd = "lack-middleware-static";
     });
@@ -44431,11 +44909,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-request = (build-asdf-system {
     pname = "lack-request";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-request" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-request";
       asd = "lack-request";
     });
@@ -44447,11 +44925,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-response = (build-asdf-system {
     pname = "lack-response";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-response" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-response";
       asd = "lack-response";
     });
@@ -44463,11 +44941,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-session-store-dbi = (build-asdf-system {
     pname = "lack-session-store-dbi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-session-store-dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-session-store-dbi";
       asd = "lack-session-store-dbi";
     });
@@ -44479,11 +44957,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-session-store-redis = (build-asdf-system {
     pname = "lack-session-store-redis";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-session-store-redis" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-session-store-redis";
       asd = "lack-session-store-redis";
     });
@@ -44495,11 +44973,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-test = (build-asdf-system {
     pname = "lack-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-test";
       asd = "lack-test";
     });
@@ -44511,25 +44989,25 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lack-util = (build-asdf-system {
     pname = "lack-util";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-util" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-util";
       asd = "lack-util";
     });
     systems = [ "lack-util" ];
-    lispLibs = [ (getAttr "ironclad" self) ];
+    lispLibs = [ (getAttr "cl-isaac" self) ];
     meta = {};
   });
   lack-util-writer-stream = (build-asdf-system {
     pname = "lack-util-writer-stream";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lack-util-writer-stream" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "lack-util-writer-stream";
       asd = "lack-util-writer-stream";
     });
@@ -44589,11 +45067,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lambda-fiddle = (build-asdf-system {
     pname = "lambda-fiddle";
-    version = "20211020-git";
+    version = "20231021-git";
     asds = [ "lambda-fiddle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lambda-fiddle/2021-10-20/lambda-fiddle-20211020-git.tgz";
-      sha256 = "1z4s1sqkvll6rpzc40yqbyzmbn7h8lxkhinvis3c7anaar78bjs7";
+      url = "http://beta.quicklisp.org/archive/lambda-fiddle/2023-10-21/lambda-fiddle-20231021-git.tgz";
+      sha256 = "1hh0192qvymn3zwy9a0rsg98wgb8mnb9z2jzl2a2n1ssvpx61gpj";
       system = "lambda-fiddle";
       asd = "lambda-fiddle";
     });
@@ -44651,11 +45129,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   language-codes = (build-asdf-system {
     pname = "language-codes";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "language-codes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/language-codes/2021-05-31/language-codes-20210531-git.tgz";
-      sha256 = "0bkx5bjfaxlrxkr1yh85xbr5n39g3m9006vy1gh6wybvh95d1xwy";
+      url = "http://beta.quicklisp.org/archive/language-codes/2023-10-21/language-codes-20231021-git.tgz";
+      sha256 = "0qbv0x0w415m48c6gjaw7ncnb1446q9sswr2p3svx7ijiwd19kja";
       system = "language-codes";
       asd = "language-codes";
     });
@@ -44683,11 +45161,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lapack = (build-asdf-system {
     pname = "lapack";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "lapack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "lapack";
       asd = "lapack";
     });
@@ -44699,11 +45177,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lass = (build-asdf-system {
     pname = "lass";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "lass" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lass/2023-02-14/lass-20230214-git.tgz";
-      sha256 = "1xwwdcnaicnh16w2291vvwi4pgqbc9iw8cfjg349nmvr0dmf883q";
+      url = "http://beta.quicklisp.org/archive/lass/2023-10-21/lass-20231021-git.tgz";
+      sha256 = "1wax2kykc9ff0sk2linp9v8fcsm5ay6idpq365vivady9fh504r5";
       system = "lass";
       asd = "lass";
     });
@@ -44827,11 +45305,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ledger = (build-asdf-system {
     pname = "ledger";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "ledger" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "ledger";
       asd = "ledger";
     });
@@ -44859,11 +45337,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   legion = (build-asdf-system {
     pname = "legion";
-    version = "20211020-git";
+    version = "20231021-git";
     asds = [ "legion" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/legion/2021-10-20/legion-20211020-git.tgz";
-      sha256 = "0583pw0mf8bd4dj42w2xrlzcwfkl8q28n1bh8dpxxfg93crx4si6";
+      url = "http://beta.quicklisp.org/archive/legion/2023-10-21/legion-20231021-git.tgz";
+      sha256 = "0mf29w6s45dwkjvvirqk7b87swb5wvaffgb836s6sx74wwdgyyk8";
       system = "legion";
       asd = "legion";
     });
@@ -44875,11 +45353,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   legion-test = (build-asdf-system {
     pname = "legion-test";
-    version = "20211020-git";
+    version = "20231021-git";
     asds = [ "legion-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/legion/2021-10-20/legion-20211020-git.tgz";
-      sha256 = "0583pw0mf8bd4dj42w2xrlzcwfkl8q28n1bh8dpxxfg93crx4si6";
+      url = "http://beta.quicklisp.org/archive/legion/2023-10-21/legion-20231021-git.tgz";
+      sha256 = "0mf29w6s45dwkjvvirqk7b87swb5wvaffgb836s6sx74wwdgyyk8";
       system = "legion-test";
       asd = "legion-test";
     });
@@ -44891,11 +45369,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   legit = (build-asdf-system {
     pname = "legit";
-    version = "20211020-git";
+    version = "20231021-git";
     asds = [ "legit" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/legit/2021-10-20/legit-20211020-git.tgz";
-      sha256 = "0crr7ya7dg15di7glk3w9sgf6j8dmny347gynmxxrdvjj9pa906m";
+      url = "http://beta.quicklisp.org/archive/legit/2023-10-21/legit-20231021-git.tgz";
+      sha256 = "0jy021ywrbnkgbgb63ip6j7kr40m4wz2pz1v5ybn6xkkn6dyprsz";
       system = "legit";
       asd = "legit";
     });
@@ -44919,6 +45397,22 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  lemmy-api = (build-asdf-system {
+    pname = "lemmy-api";
+    version = "20231021-git";
+    asds = [ "lemmy-api" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/lemmy-api/2023-10-21/lemmy-api-20231021-git.tgz";
+      sha256 = "1m8qsxbb20k7x5sjqffjllm66qb5sjy4vj9ra167c7qrahz9cnrn";
+      system = "lemmy-api";
+      asd = "lemmy-api";
+    });
+    systems = [ "lemmy-api" ];
+    lispLibs = [ (getAttr "closer-mop" self) (getAttr "dexador" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   lense = (build-asdf-system {
     pname = "lense";
     version = "20201220-git";
@@ -44937,27 +45431,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   let-over-lambda = (build-asdf-system {
     pname = "let-over-lambda";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "let-over-lambda" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/let-over-lambda/2022-03-31/let-over-lambda-20220331-git.tgz";
-      sha256 = "0kq94jsk6frjwnx8wqnsvss91vmyjs9g9iv603d8fiip0szkwdnn";
+      url = "http://beta.quicklisp.org/archive/let-over-lambda/2023-10-21/let-over-lambda-20231021-git.tgz";
+      sha256 = "0inzbmxlx5cvvx1isv827c2zr4qixcb47n6l6qjvc11gnwihdfjf";
       system = "let-over-lambda";
       asd = "let-over-lambda";
     });
     systems = [ "let-over-lambda" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-ppcre" self) (getAttr "named-readtables" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-ppcre" self) (getAttr "fare-quasiquote-extras" self) (getAttr "named-readtables" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   let-over-lambda-test = (build-asdf-system {
     pname = "let-over-lambda-test";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "let-over-lambda-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/let-over-lambda/2022-03-31/let-over-lambda-20220331-git.tgz";
-      sha256 = "0kq94jsk6frjwnx8wqnsvss91vmyjs9g9iv603d8fiip0szkwdnn";
+      url = "http://beta.quicklisp.org/archive/let-over-lambda/2023-10-21/let-over-lambda-20231021-git.tgz";
+      sha256 = "0inzbmxlx5cvvx1isv827c2zr4qixcb47n6l6qjvc11gnwihdfjf";
       system = "let-over-lambda-test";
       asd = "let-over-lambda-test";
     });
@@ -45015,17 +45509,33 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lev = (build-asdf-system {
     pname = "lev";
-    version = "20150505-git";
+    version = "20231021-git";
     asds = [ "lev" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lev/2015-05-05/lev-20150505-git.tgz";
-      sha256 = "14lfnrvfyg2nnvlwck896p6vgarzc6g4kijmvhi2d8wra7gxzifh";
+      url = "http://beta.quicklisp.org/archive/lev/2023-10-21/lev-20231021-git.tgz";
+      sha256 = "1lr3lzghvl5mbg9cp66carmawbzg64yd8vyivf1df10vllc7ngd6";
       system = "lev";
       asd = "lev";
     });
     systems = [ "lev" ];
-    lispLibs = [ (getAttr "cffi" self) ];
+    lispLibs = [ (getAttr "cffi" self) (getAttr "lev-config" self) ];
     meta = {};
+  });
+  lev-config = (build-asdf-system {
+    pname = "lev-config";
+    version = "20231021-git";
+    asds = [ "lev-config" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/lev/2023-10-21/lev-20231021-git.tgz";
+      sha256 = "1lr3lzghvl5mbg9cp66carmawbzg64yd8vyivf1df10vllc7ngd6";
+      system = "lev-config";
+      asd = "lev-config";
+    });
+    systems = [ "lev-config" ];
+    lispLibs = [ (getAttr "cffi-grovel" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
   });
   leveldb = (build-asdf-system {
     pname = "leveldb";
@@ -45197,11 +45707,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lib-helper = (build-asdf-system {
     pname = "lib-helper";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lib-helper" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2023-06-18/cl-lib-helper-20230618-git.tgz";
-      sha256 = "1v4kfx15bahqaag3zd52gs3ycrxbiicxvi94gq9a7mj3zk9izc6p";
+      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2023-10-21/cl-lib-helper-20231021-git.tgz";
+      sha256 = "0lrshlw8j0lgmzp0syq8i9a3mgn52lv0y56iihlp1nzfp250z23w";
       system = "lib-helper";
       asd = "lib-helper";
     });
@@ -45213,11 +45723,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lib-helper-test-system = (build-asdf-system {
     pname = "lib-helper-test-system";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lib-helper-test-system" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2023-06-18/cl-lib-helper-20230618-git.tgz";
-      sha256 = "1v4kfx15bahqaag3zd52gs3ycrxbiicxvi94gq9a7mj3zk9izc6p";
+      url = "http://beta.quicklisp.org/archive/cl-lib-helper/2023-10-21/cl-lib-helper-20231021-git.tgz";
+      sha256 = "0lrshlw8j0lgmzp0syq8i9a3mgn52lv0y56iihlp1nzfp250z23w";
       system = "lib-helper-test-system";
       asd = "lib-helper-test-system";
     });
@@ -45309,11 +45819,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lichat-ldap = (build-asdf-system {
     pname = "lichat-ldap";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "lichat-ldap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lichat-ldap/2019-07-10/lichat-ldap-20190710-git.tgz";
-      sha256 = "03x60jmgx4s2pkzrgl1j70xrvycfi4yj21nzi64cd0pdprqa88d5";
+      url = "http://beta.quicklisp.org/archive/lichat-ldap/2023-10-21/lichat-ldap-20231021-git.tgz";
+      sha256 = "1jgj5c0sgr4rw9vsjhz71k3ld7hp8fbbmzrn3g11fq8jl4c4iai1";
       system = "lichat-ldap";
       asd = "lichat-ldap";
     });
@@ -45325,11 +45835,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lichat-protocol = (build-asdf-system {
     pname = "lichat-protocol";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "lichat-protocol" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lichat-protocol/2022-07-07/lichat-protocol-20220707-git.tgz";
-      sha256 = "0as5fcafgga8b1gbis4wxk2w8xv5l4sjy04y3m25gqc5my59falv";
+      url = "http://beta.quicklisp.org/archive/lichat-protocol/2023-10-21/lichat-protocol-20231021-git.tgz";
+      sha256 = "0imaa2x6hv93bwhn8j595xspkvjpp53kasdd47v24hzi7qn46m9l";
       system = "lichat-protocol";
       asd = "lichat-protocol";
     });
@@ -45341,11 +45851,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lichat-serverlib = (build-asdf-system {
     pname = "lichat-serverlib";
-    version = "20220220-git";
+    version = "20231021-git";
     asds = [ "lichat-serverlib" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lichat-serverlib/2022-02-20/lichat-serverlib-20220220-git.tgz";
-      sha256 = "122nar4wbjck33nnzfnhzghssarrzrcwddr8i04ynws3v5y1rsdv";
+      url = "http://beta.quicklisp.org/archive/lichat-serverlib/2023-10-21/lichat-serverlib-20231021-git.tgz";
+      sha256 = "04830z49lczgdf8gval4j3s0fp5p6pfgvy783mrkcdfal2dcwacq";
       system = "lichat-serverlib";
       asd = "lichat-serverlib";
     });
@@ -45357,27 +45867,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lichat-tcp-client = (build-asdf-system {
     pname = "lichat-tcp-client";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lichat-tcp-client" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lichat-tcp-client/2023-06-18/lichat-tcp-client-20230618-git.tgz";
-      sha256 = "1rzsbydwxbwlcb8z1s5qfyniw24lc28hwdpwdpr7q2dzhsss7466";
+      url = "http://beta.quicklisp.org/archive/lichat-tcp-client/2023-10-21/lichat-tcp-client-20231021-git.tgz";
+      sha256 = "1l03y6iyw1yrd3nq9281wzssfw09wy32f9k893kzdwd0yvklv0m0";
       system = "lichat-tcp-client";
       asd = "lichat-tcp-client";
     });
     systems = [ "lichat-tcp-client" ];
-    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "documentation-utils" self) (getAttr "lichat-protocol" self) (getAttr "usocket" self) (getAttr "verbose" self) ];
+    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "cl-base64" self) (getAttr "documentation-utils" self) (getAttr "lichat-protocol" self) (getAttr "trivial-mimes" self) (getAttr "usocket" self) (getAttr "verbose" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   lichat-tcp-server = (build-asdf-system {
     pname = "lichat-tcp-server";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lichat-tcp-server" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lichat-tcp-server/2023-06-18/lichat-tcp-server-20230618-git.tgz";
-      sha256 = "0sz6hxw539lzg3glk5dq9a40jrh6w9spakjbzaxiq49i6pc4bk44";
+      url = "http://beta.quicklisp.org/archive/lichat-tcp-server/2023-10-21/lichat-tcp-server-20231021-git.tgz";
+      sha256 = "18dys957iw678y6bqfq9x85m2bnb0ck8gr6l4b61vv3g2yl2w53y";
       system = "lichat-tcp-server";
       asd = "lichat-tcp-server";
     });
@@ -45389,11 +45899,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lichat-ws-server = (build-asdf-system {
     pname = "lichat-ws-server";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lichat-ws-server" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lichat-ws-server/2023-06-18/lichat-ws-server-20230618-git.tgz";
-      sha256 = "0d2rb6vn6xhz6j9wqh2bpplzmw340j6965v5xzpdzjm6ynvz1cgk";
+      url = "http://beta.quicklisp.org/archive/lichat-ws-server/2023-10-21/lichat-ws-server-20231021-git.tgz";
+      sha256 = "05vmc9b8b5igifm6lb5p3fssmny6ils7aimsizql3gay4nycvxgp";
       system = "lichat-ws-server";
       asd = "lichat-ws-server";
     });
@@ -45405,11 +45915,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lift = (build-asdf-system {
     pname = "lift";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "lift" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lift/2023-02-14/lift-20230214-git.tgz";
-      sha256 = "18h7fcf3sgx9zpibcd2dqk6m5zd84vdfvzadhapsfmykjh4g3sgb";
+      url = "http://beta.quicklisp.org/archive/lift/2023-10-21/lift-20231021-git.tgz";
+      sha256 = "1513n46fkqw8rnvz69s7xnwj476qm8ibdlwsr63qj9yh0mib0q6x";
       system = "lift";
       asd = "lift";
     });
@@ -45419,11 +45929,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lift-documentation = (build-asdf-system {
     pname = "lift-documentation";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "lift-documentation" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lift/2023-02-14/lift-20230214-git.tgz";
-      sha256 = "18h7fcf3sgx9zpibcd2dqk6m5zd84vdfvzadhapsfmykjh4g3sgb";
+      url = "http://beta.quicklisp.org/archive/lift/2023-10-21/lift-20231021-git.tgz";
+      sha256 = "1513n46fkqw8rnvz69s7xnwj476qm8ibdlwsr63qj9yh0mib0q6x";
       system = "lift-documentation";
       asd = "lift-documentation";
     });
@@ -45435,11 +45945,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lift-test = (build-asdf-system {
     pname = "lift-test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "lift-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lift/2023-02-14/lift-20230214-git.tgz";
-      sha256 = "18h7fcf3sgx9zpibcd2dqk6m5zd84vdfvzadhapsfmykjh4g3sgb";
+      url = "http://beta.quicklisp.org/archive/lift/2023-10-21/lift-20231021-git.tgz";
+      sha256 = "1513n46fkqw8rnvz69s7xnwj476qm8ibdlwsr63qj9yh0mib0q6x";
       system = "lift-test";
       asd = "lift-test";
     });
@@ -45451,11 +45961,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lil = (build-asdf-system {
     pname = "lil";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "lil" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-interface-library/2021-12-30/lisp-interface-library-20211230-git.tgz";
-      sha256 = "0cd6109pzz9b4z0r0b7ibmmaph802ddpzfkk416snfn1mkrdn0gn";
+      url = "http://beta.quicklisp.org/archive/lisp-interface-library/2023-10-21/lisp-interface-library-20231021-git.tgz";
+      sha256 = "0krh8z696a0p894vmqdw9clzhpqfqff4c4rd7s8d8hd5jwjm40aq";
       system = "lil";
       asd = "lil";
     });
@@ -45675,11 +46185,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lisp-binary = (build-asdf-system {
     pname = "lisp-binary";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "lisp-binary" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-binary/2022-11-06/lisp-binary-20221106-git.tgz";
-      sha256 = "0vn1kjvcch9ky50rq1axg5hixf3zkbb46as99g0aks1b7y250a17";
+      url = "http://beta.quicklisp.org/archive/lisp-binary/2023-10-21/lisp-binary-20231021-git.tgz";
+      sha256 = "141hmgib601dpdvcg2pbfl39wvx7s3g97kzc37fkfs4rllylxpsg";
       system = "lisp-binary";
       asd = "lisp-binary";
     });
@@ -45689,11 +46199,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lisp-binary-test = (build-asdf-system {
     pname = "lisp-binary-test";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "lisp-binary-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-binary/2022-11-06/lisp-binary-20221106-git.tgz";
-      sha256 = "0vn1kjvcch9ky50rq1axg5hixf3zkbb46as99g0aks1b7y250a17";
+      url = "http://beta.quicklisp.org/archive/lisp-binary/2023-10-21/lisp-binary-20231021-git.tgz";
+      sha256 = "141hmgib601dpdvcg2pbfl39wvx7s3g97kzc37fkfs4rllylxpsg";
       system = "lisp-binary-test";
       asd = "lisp-binary-test";
     });
@@ -45721,11 +46231,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lisp-critic = (build-asdf-system {
     pname = "lisp-critic";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "lisp-critic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-critic/2022-11-06/lisp-critic-20221106-git.tgz";
-      sha256 = "000vp8jsvpw80by7c7nb5394akfcr6rzzpzw049am67fh5qk89rn";
+      url = "http://beta.quicklisp.org/archive/lisp-critic/2023-10-21/lisp-critic-20231021-git.tgz";
+      sha256 = "15zg05pqfs2dhc5j7gfkwjmxawaizjpyb0p7386mpl4w93l9h84l";
       system = "lisp-critic";
       asd = "lisp-critic";
     });
@@ -45785,11 +46295,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lisp-interface-library = (build-asdf-system {
     pname = "lisp-interface-library";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "lisp-interface-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-interface-library/2021-12-30/lisp-interface-library-20211230-git.tgz";
-      sha256 = "0cd6109pzz9b4z0r0b7ibmmaph802ddpzfkk416snfn1mkrdn0gn";
+      url = "http://beta.quicklisp.org/archive/lisp-interface-library/2023-10-21/lisp-interface-library-20231021-git.tgz";
+      sha256 = "0krh8z696a0p894vmqdw9clzhpqfqff4c4rd7s8d8hd5jwjm40aq";
       system = "lisp-interface-library";
       asd = "lisp-interface-library";
     });
@@ -45847,11 +46357,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lisp-pay = (build-asdf-system {
     pname = "lisp-pay";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "lisp-pay" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-pay/2023-02-14/lisp-pay-20230214-git.tgz";
-      sha256 = "09r6qy4fipriqa0d6g9qm6dq992lr58vh24g5j0adm19i5fnjavh";
+      url = "http://beta.quicklisp.org/archive/lisp-pay/2023-10-21/lisp-pay-20231021-git.tgz";
+      sha256 = "14d8jvl126vvg2sd5c35jq4kdrl2a9nfl2xh2qk5zslaqvsknwq8";
       system = "lisp-pay";
       asd = "lisp-pay";
     });
@@ -45895,11 +46405,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lisp-stat = (build-asdf-system {
     pname = "lisp-stat";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "lisp-stat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lisp-stat/2022-11-06/lisp-stat-20221106-git.tgz";
-      sha256 = "0qwlxrbwj884mr67sf6aj0zwrndv33aiiid4bqrkji41kjhqfcz5";
+      url = "http://beta.quicklisp.org/archive/lisp-stat/2023-10-21/lisp-stat-20231021-git.tgz";
+      sha256 = "1frl5psjf5l078ml3092wj02r72k7hkx9sbv5cz9nq0i52bggqim";
       system = "lisp-stat";
       asd = "lisp-stat";
     });
@@ -46849,11 +47359,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   local-time = (build-asdf-system {
     pname = "local-time";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "local-time" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/local-time/2023-02-14/local-time-20230214-git.tgz";
-      sha256 = "1dbp33zmkqzzshmf5k76pxqgli285wvy0p0dhcz816fdikpwn2jg";
+      url = "http://beta.quicklisp.org/archive/local-time/2023-10-21/local-time-20231021-git.tgz";
+      sha256 = "05h40dq8bqx7p7ri67c81fkfm4zzbichyicrdj4srs0vvlwxiqpj";
       system = "local-time";
       asd = "local-time";
     });
@@ -47115,11 +47625,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lquery = (build-asdf-system {
     pname = "lquery";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lquery" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lquery/2023-06-18/lquery-20230618-git.tgz";
-      sha256 = "0siis1d3rfh0kkwdrb56ivlwwr3z1wfhfvmnkn13a3kz6ssqfvbi";
+      url = "http://beta.quicklisp.org/archive/lquery/2023-10-21/lquery-20231021-git.tgz";
+      sha256 = "124cjp4a99cicdk18rwz2slcyzvm982saddrvqcr97fi4i2nhnsg";
       system = "lquery";
       asd = "lquery";
     });
@@ -47129,11 +47639,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lquery-test = (build-asdf-system {
     pname = "lquery-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lquery-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lquery/2023-06-18/lquery-20230618-git.tgz";
-      sha256 = "0siis1d3rfh0kkwdrb56ivlwwr3z1wfhfvmnkn13a3kz6ssqfvbi";
+      url = "http://beta.quicklisp.org/archive/lquery/2023-10-21/lquery-20231021-git.tgz";
+      sha256 = "124cjp4a99cicdk18rwz2slcyzvm982saddrvqcr97fi4i2nhnsg";
       system = "lquery-test";
       asd = "lquery-test";
     });
@@ -47177,11 +47687,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lru-cache = (build-asdf-system {
     pname = "lru-cache";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lru-cache" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lru-cache/2023-06-18/lru-cache-20230618-git.tgz";
-      sha256 = "1f8nmqf5mm6mkrlnlf4caic9b65yf1i4r7fhg7y1whssbjbsfgal";
+      url = "http://beta.quicklisp.org/archive/lru-cache/2023-10-21/lru-cache-20231021-git.tgz";
+      sha256 = "1z53q2knbi93ipi6mpfhsjh0slg49g7prxh5sgl95xxbgck0xhm5";
       system = "lru-cache";
       asd = "lru-cache";
     });
@@ -47193,11 +47703,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   lru-cache-test = (build-asdf-system {
     pname = "lru-cache-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "lru-cache-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lru-cache/2023-06-18/lru-cache-20230618-git.tgz";
-      sha256 = "1f8nmqf5mm6mkrlnlf4caic9b65yf1i4r7fhg7y1whssbjbsfgal";
+      url = "http://beta.quicklisp.org/archive/lru-cache/2023-10-21/lru-cache-20231021-git.tgz";
+      sha256 = "1z53q2knbi93ipi6mpfhsjh0slg49g7prxh5sgl95xxbgck0xhm5";
       system = "lru-cache-test";
       asd = "lru-cache-test";
     });
@@ -47287,11 +47797,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   luckless = (build-asdf-system {
     pname = "luckless";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "luckless" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/luckless/2022-11-06/luckless-20221106-git.tgz";
-      sha256 = "0mychj1rfx4hzpgbp9x09qn2y4jhjgfdi5d973mcvaqmcmby6b9p";
+      url = "http://beta.quicklisp.org/archive/luckless/2023-10-21/luckless-20231021-git.tgz";
+      sha256 = "1l2lcm0xy664bpsvin7va03vi9kxfp874axhjq5pq4cfigmr4raj";
       system = "luckless";
       asd = "luckless";
     });
@@ -47303,11 +47813,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   luckless-test = (build-asdf-system {
     pname = "luckless-test";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "luckless-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/luckless/2022-11-06/luckless-20221106-git.tgz";
-      sha256 = "0mychj1rfx4hzpgbp9x09qn2y4jhjgfdi5d973mcvaqmcmby6b9p";
+      url = "http://beta.quicklisp.org/archive/luckless/2023-10-21/luckless-20231021-git.tgz";
+      sha256 = "1l2lcm0xy664bpsvin7va03vi9kxfp874axhjq5pq4cfigmr4raj";
       system = "luckless-test";
       asd = "luckless-test";
     });
@@ -47415,16 +47925,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   macro-level = (build-asdf-system {
     pname = "macro-level";
-    version = "1.0.1";
+    version = "1.1";
     asds = [ "macro-level" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/macro-level/2012-10-13/macro-level-1.0.1.tgz";
-      sha256 = "14wncx6rrlkylm4cn7y8h4pmnvrcfj920nlldsspg5kvysb09g4i";
+      url = "http://beta.quicklisp.org/archive/macro-level/2023-10-21/macro-level_1.1.tgz";
+      sha256 = "1jcidyf4kfzzj5vj4i3l1vw0sbj9njaminb6j1bcq70y9w15qm68";
       system = "macro-level";
       asd = "macro-level";
     });
     systems = [ "macro-level" ];
     lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  macro-level__tests = (build-asdf-system {
+    pname = "macro-level_tests";
+    version = "1.1";
+    asds = [ "macro-level_tests" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/macro-level/2023-10-21/macro-level_1.1.tgz";
+      sha256 = "1jcidyf4kfzzj5vj4i3l1vw0sbj9njaminb6j1bcq70y9w15qm68";
+      system = "macro-level_tests";
+      asd = "macro-level_tests";
+    });
+    systems = [ "macro-level_tests" ];
+    lispLibs = [ (getAttr "macro-level" self) (getAttr "parachute" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -47608,11 +48134,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden = (build-asdf-system {
     pname = "maiden";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden";
       asd = "maiden";
     });
@@ -47624,11 +48150,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-accounts = (build-asdf-system {
     pname = "maiden-accounts";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-accounts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-accounts";
       asd = "maiden-accounts";
     });
@@ -47640,11 +48166,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-activatable = (build-asdf-system {
     pname = "maiden-activatable";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-activatable" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-activatable";
       asd = "maiden-activatable";
     });
@@ -47656,11 +48182,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-api-access = (build-asdf-system {
     pname = "maiden-api-access";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-api-access" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-api-access";
       asd = "maiden-api-access";
     });
@@ -47672,11 +48198,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-blocker = (build-asdf-system {
     pname = "maiden-blocker";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-blocker" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-blocker";
       asd = "maiden-blocker";
     });
@@ -47688,11 +48214,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-channel-relay = (build-asdf-system {
     pname = "maiden-channel-relay";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-channel-relay" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-channel-relay";
       asd = "maiden-channel-relay";
     });
@@ -47704,11 +48230,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-chatlog = (build-asdf-system {
     pname = "maiden-chatlog";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-chatlog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-chatlog";
       asd = "maiden-chatlog";
     });
@@ -47720,11 +48246,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-client-entities = (build-asdf-system {
     pname = "maiden-client-entities";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-client-entities" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-client-entities";
       asd = "maiden-client-entities";
     });
@@ -47736,11 +48262,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-commands = (build-asdf-system {
     pname = "maiden-commands";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-commands" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-commands";
       asd = "maiden-commands";
     });
@@ -47752,11 +48278,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-core-manager = (build-asdf-system {
     pname = "maiden-core-manager";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-core-manager" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-core-manager";
       asd = "maiden-core-manager";
     });
@@ -47768,11 +48294,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-counter = (build-asdf-system {
     pname = "maiden-counter";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-counter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-counter";
       asd = "maiden-counter";
     });
@@ -47784,11 +48310,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-crimes = (build-asdf-system {
     pname = "maiden-crimes";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-crimes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-crimes";
       asd = "maiden-crimes";
     });
@@ -47800,11 +48326,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-dictionary = (build-asdf-system {
     pname = "maiden-dictionary";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-dictionary" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-dictionary";
       asd = "maiden-dictionary";
     });
@@ -47816,11 +48342,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-emoticon = (build-asdf-system {
     pname = "maiden-emoticon";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-emoticon" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-emoticon";
       asd = "maiden-emoticon";
     });
@@ -47832,11 +48358,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-help = (build-asdf-system {
     pname = "maiden-help";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-help" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-help";
       asd = "maiden-help";
     });
@@ -47848,11 +48374,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-irc = (build-asdf-system {
     pname = "maiden-irc";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-irc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-irc";
       asd = "maiden-irc";
     });
@@ -47864,11 +48390,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-lastfm = (build-asdf-system {
     pname = "maiden-lastfm";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-lastfm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-lastfm";
       asd = "maiden-lastfm";
     });
@@ -47880,11 +48406,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-lichat = (build-asdf-system {
     pname = "maiden-lichat";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-lichat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-lichat";
       asd = "maiden-lichat";
     });
@@ -47896,11 +48422,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-location = (build-asdf-system {
     pname = "maiden-location";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-location" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-location";
       asd = "maiden-location";
     });
@@ -47910,29 +48436,13 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  maiden-lookup = (build-asdf-system {
-    pname = "maiden-lookup";
-    version = "20230618-git";
-    asds = [ "maiden-lookup" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
-      system = "maiden-lookup";
-      asd = "maiden-lookup";
-    });
-    systems = [ "maiden-lookup" ];
-    lispLibs = [ (getAttr "cl-ppcre" self) (getAttr "drakma" self) (getAttr "lquery" self) (getAttr "maiden-api-access" self) (getAttr "maiden-client-entities" self) (getAttr "maiden-commands" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   maiden-markov = (build-asdf-system {
     pname = "maiden-markov";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-markov" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-markov";
       asd = "maiden-markov";
     });
@@ -47944,11 +48454,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-medals = (build-asdf-system {
     pname = "maiden-medals";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-medals" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-medals";
       asd = "maiden-medals";
     });
@@ -47960,11 +48470,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-networking = (build-asdf-system {
     pname = "maiden-networking";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-networking" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-networking";
       asd = "maiden-networking";
     });
@@ -47976,11 +48486,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-notify = (build-asdf-system {
     pname = "maiden-notify";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-notify" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-notify";
       asd = "maiden-notify";
     });
@@ -47992,11 +48502,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-permissions = (build-asdf-system {
     pname = "maiden-permissions";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-permissions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-permissions";
       asd = "maiden-permissions";
     });
@@ -48008,11 +48518,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-relay = (build-asdf-system {
     pname = "maiden-relay";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-relay" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-relay";
       asd = "maiden-relay";
     });
@@ -48024,11 +48534,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-serialize = (build-asdf-system {
     pname = "maiden-serialize";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-serialize" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-serialize";
       asd = "maiden-serialize";
     });
@@ -48040,11 +48550,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-silly = (build-asdf-system {
     pname = "maiden-silly";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-silly" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-silly";
       asd = "maiden-silly";
     });
@@ -48056,11 +48566,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-storage = (build-asdf-system {
     pname = "maiden-storage";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-storage" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-storage";
       asd = "maiden-storage";
     });
@@ -48072,11 +48582,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-talk = (build-asdf-system {
     pname = "maiden-talk";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-talk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-talk";
       asd = "maiden-talk";
     });
@@ -48088,11 +48598,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-throttle = (build-asdf-system {
     pname = "maiden-throttle";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-throttle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-throttle";
       asd = "maiden-throttle";
     });
@@ -48104,11 +48614,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-time = (build-asdf-system {
     pname = "maiden-time";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-time" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-time";
       asd = "maiden-time";
     });
@@ -48120,11 +48630,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-trivia = (build-asdf-system {
     pname = "maiden-trivia";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-trivia" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-trivia";
       asd = "maiden-trivia";
     });
@@ -48136,11 +48646,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-twitter = (build-asdf-system {
     pname = "maiden-twitter";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-twitter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-twitter";
       asd = "maiden-twitter";
     });
@@ -48152,11 +48662,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-urlinfo = (build-asdf-system {
     pname = "maiden-urlinfo";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-urlinfo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-urlinfo";
       asd = "maiden-urlinfo";
     });
@@ -48168,11 +48678,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-vote = (build-asdf-system {
     pname = "maiden-vote";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-vote" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-vote";
       asd = "maiden-vote";
     });
@@ -48184,11 +48694,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maiden-weather = (build-asdf-system {
     pname = "maiden-weather";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maiden-weather" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/maiden/2023-06-18/maiden-20230618-git.tgz";
-      sha256 = "1m16qi019cmfpfs6538hc4qsplpb8nl9ly1qlckgfxgjag0z3wdr";
+      url = "http://beta.quicklisp.org/archive/maiden/2023-10-21/maiden-20231021-git.tgz";
+      sha256 = "0srqx84nnar7dqaijwz30alhshiynapka5m0qwxiczqwmps2vzza";
       system = "maiden-weather";
       asd = "maiden-weather";
     });
@@ -48290,6 +48800,38 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "manifest" ];
     lispLibs = [ (getAttr "alexandria" self) (getAttr "closer-mop" self) (getAttr "monkeylib-html" self) (getAttr "puri" self) (getAttr "split-sequence" self) (getAttr "toot" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  manifolds = (build-asdf-system {
+    pname = "manifolds";
+    version = "20231021-git";
+    asds = [ "manifolds" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/manifolds/2023-10-21/manifolds-20231021-git.tgz";
+      sha256 = "17jabz9y0545g3spnpfb0ws6nj4l6zgjslbaq64ic016kfv3l0ny";
+      system = "manifolds";
+      asd = "manifolds";
+    });
+    systems = [ "manifolds" ];
+    lispLibs = [ (getAttr "_3d-math" self) (getAttr "_3d-spaces" self) (getAttr "documentation-utils" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  manifolds-test = (build-asdf-system {
+    pname = "manifolds-test";
+    version = "20231021-git";
+    asds = [ "manifolds-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/manifolds/2023-10-21/manifolds-20231021-git.tgz";
+      sha256 = "17jabz9y0545g3spnpfb0ws6nj4l6zgjslbaq64ic016kfv3l0ny";
+      system = "manifolds-test";
+      asd = "manifolds-test";
+    });
+    systems = [ "manifolds-test" ];
+    lispLibs = [ (getAttr "cl-wavefront" self) (getAttr "manifolds" self) (getAttr "parachute" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -48440,11 +48982,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   marshal = (build-asdf-system {
     pname = "marshal";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "marshal" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-marshal/2022-11-06/cl-marshal-20221106-git.tgz";
-      sha256 = "0pclq0q43f3nlb2np957i10ysmky32qlz78an3hf2adg8if776ys";
+      url = "http://beta.quicklisp.org/archive/cl-marshal/2023-10-21/cl-marshal-20231021-git.tgz";
+      sha256 = "032f7mn0ijhd7xbzwacjbrm6hijmrl9mrpkq2qdyqdjzs2cgn8iy";
       system = "marshal";
       asd = "marshal";
     });
@@ -48454,11 +48996,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   marshal-tests = (build-asdf-system {
     pname = "marshal-tests";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "marshal-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-marshal/2022-11-06/cl-marshal-20221106-git.tgz";
-      sha256 = "0pclq0q43f3nlb2np957i10ysmky32qlz78an3hf2adg8if776ys";
+      url = "http://beta.quicklisp.org/archive/cl-marshal/2023-10-21/cl-marshal-20231021-git.tgz";
+      sha256 = "032f7mn0ijhd7xbzwacjbrm6hijmrl9mrpkq2qdyqdjzs2cgn8iy";
       system = "marshal-tests";
       asd = "marshal-tests";
     });
@@ -48470,11 +49012,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   math = (build-asdf-system {
     pname = "math";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "math" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/math/2023-06-18/math-20230618-git.tgz";
-      sha256 = "0b467rgh3z57mr629xs0b7ggamgfc5x51nhnsiz6w1fgy8qm4ffd";
+      url = "http://beta.quicklisp.org/archive/math/2023-10-21/math-20231021-git.tgz";
+      sha256 = "0b9w6k0w2grahyivpzg7ils7729pfl39pkc4njc797l1jwy6znyy";
       system = "math";
       asd = "math";
     });
@@ -48550,11 +49092,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   maxpc-apache = (build-asdf-system {
     pname = "maxpc-apache";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "maxpc-apache" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "maxpc-apache";
       asd = "maxpc-apache";
     });
@@ -48630,11 +49172,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim = (build-asdf-system {
     pname = "mcclim";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim";
       asd = "mcclim";
     });
@@ -48646,11 +49188,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-backend-common = (build-asdf-system {
     pname = "mcclim-backend-common";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-backend-common" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-backend-common";
       asd = "mcclim-backend-common";
     });
@@ -48662,11 +49204,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-bezier = (build-asdf-system {
     pname = "mcclim-bezier";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-bezier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-bezier";
       asd = "mcclim-bezier";
     });
@@ -48678,11 +49220,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-bitmaps = (build-asdf-system {
     pname = "mcclim-bitmaps";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-bitmaps" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-bitmaps";
       asd = "mcclim-bitmaps";
     });
@@ -48694,11 +49236,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-clx = (build-asdf-system {
     pname = "mcclim-clx";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-clx" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-clx";
       asd = "mcclim-clx";
     });
@@ -48710,11 +49252,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-clx-fb = (build-asdf-system {
     pname = "mcclim-clx-fb";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-clx-fb" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-clx-fb";
       asd = "mcclim-clx-fb";
     });
@@ -48726,11 +49268,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-dot = (build-asdf-system {
     pname = "mcclim-dot";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-dot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-dot";
       asd = "mcclim-dot";
     });
@@ -48742,11 +49284,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-fontconfig = (build-asdf-system {
     pname = "mcclim-fontconfig";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-fontconfig" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-fontconfig";
       asd = "mcclim-fontconfig";
     });
@@ -48758,11 +49300,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-fonts = (build-asdf-system {
     pname = "mcclim-fonts";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-fonts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-fonts";
       asd = "mcclim-fonts";
     });
@@ -48774,11 +49316,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-franz = (build-asdf-system {
     pname = "mcclim-franz";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-franz" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-franz";
       asd = "mcclim-franz";
     });
@@ -48790,11 +49332,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-harfbuzz = (build-asdf-system {
     pname = "mcclim-harfbuzz";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-harfbuzz" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-harfbuzz";
       asd = "mcclim-harfbuzz";
     });
@@ -48806,11 +49348,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-layouts = (build-asdf-system {
     pname = "mcclim-layouts";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-layouts" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-layouts";
       asd = "mcclim-layouts";
     });
@@ -48822,11 +49364,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-null = (build-asdf-system {
     pname = "mcclim-null";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-null" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-null";
       asd = "mcclim-null";
     });
@@ -48838,11 +49380,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-raster-image = (build-asdf-system {
     pname = "mcclim-raster-image";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-raster-image" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-raster-image";
       asd = "mcclim-raster-image";
     });
@@ -48854,11 +49396,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-render = (build-asdf-system {
     pname = "mcclim-render";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-render" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-render";
       asd = "mcclim-render";
     });
@@ -48870,11 +49412,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-svg = (build-asdf-system {
     pname = "mcclim-svg";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-svg" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-svg";
       asd = "mcclim-svg";
     });
@@ -48886,11 +49428,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-tooltips = (build-asdf-system {
     pname = "mcclim-tooltips";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-tooltips" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-tooltips";
       asd = "mcclim-tooltips";
     });
@@ -48902,11 +49444,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mcclim-tree-with-cross-edges = (build-asdf-system {
     pname = "mcclim-tree-with-cross-edges";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mcclim-tree-with-cross-edges" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "mcclim-tree-with-cross-edges";
       asd = "mcclim-tree-with-cross-edges";
     });
@@ -48980,16 +49522,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   memory-regions = (build-asdf-system {
     pname = "memory-regions";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "memory-regions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/memory-regions/2023-06-18/memory-regions-20230618-git.tgz";
-      sha256 = "10vgadcbsdgq4c7gp7gj6smb65m4h6spr7wappihmyyfif3xs69d";
+      url = "http://beta.quicklisp.org/archive/memory-regions/2023-10-21/memory-regions-20231021-git.tgz";
+      sha256 = "1za57sink8gsd9flkw1csvjr4pipzscfcza2c3dm5bc9kmq9ij8p";
       system = "memory-regions";
       asd = "memory-regions";
     });
     systems = [ "memory-regions" ];
-    lispLibs = [ (getAttr "cffi" self) (getAttr "closer-mop" self) (getAttr "documentation-utils" self) (getAttr "mmap" self) (getAttr "trivial-extensible-sequences" self) (getAttr "trivial-gray-streams" self) ];
+    lispLibs = [ (getAttr "cffi" self) (getAttr "closer-mop" self) (getAttr "documentation-utils" self) (getAttr "mmap" self) (getAttr "static-vectors" self) (getAttr "trivial-extensible-sequences" self) (getAttr "trivial-gray-streams" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -49012,11 +49554,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   messagebox = (build-asdf-system {
     pname = "messagebox";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "messagebox" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/messagebox/2023-06-18/messagebox-20230618-git.tgz";
-      sha256 = "16xv1gz6jj64xxkngfd0bnb9dhgqjp8x0vjwchj81am9s6589rbs";
+      url = "http://beta.quicklisp.org/archive/messagebox/2023-10-21/messagebox-20231021-git.tgz";
+      sha256 = "1zzczzqhd6fqvj4rg352chcz9jxc099vgs37b4ba0qmph0a3bazf";
       system = "messagebox";
       asd = "messagebox";
     });
@@ -49422,11 +49964,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mgl-mat = (build-asdf-system {
     pname = "mgl-mat";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mgl-mat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mgl-mat/2023-06-18/mgl-mat-20230618-git.tgz";
-      sha256 = "1lhiwjfrlhhj8bzxzj0knsm45x8zabwf7ccf2vb51mz8rzj3gxd3";
+      url = "http://beta.quicklisp.org/archive/mgl-mat/2023-10-21/mgl-mat-20231021-git.tgz";
+      sha256 = "0pl9ksdjr57sg2w85ql6y9pgbzrxcsz6irb7i0s1q3d08f87il1i";
       system = "mgl-mat";
       asd = "mgl-mat";
     });
@@ -49436,25 +49978,57 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mgl-pax = (build-asdf-system {
     pname = "mgl-pax";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mgl-pax" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-06-18/mgl-pax-20230618-git.tgz";
-      sha256 = "1s2k1vx0mdkv09h8gw9nfccnvvr3p07g8zfv70wp56lsycjsx3b9";
+      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-10-21/mgl-pax-20231021-git.tgz";
+      sha256 = "03if07sjx77x9sdva2sqh920lfj1gvkxbnsrnddk6q79kr2icjyg";
       system = "mgl-pax";
       asd = "mgl-pax";
     });
     systems = [ "mgl-pax" ];
-    lispLibs = [ (getAttr "mgl-pax_dot_asdf" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) ];
+    lispLibs = [ (getAttr "dref" self) (getAttr "mgl-pax-bootstrap" self) (getAttr "mgl-pax_dot_asdf" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) ];
     meta = {};
+  });
+  mgl-pax-bootstrap = (build-asdf-system {
+    pname = "mgl-pax-bootstrap";
+    version = "20231021-git";
+    asds = [ "mgl-pax-bootstrap" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-10-21/mgl-pax-20231021-git.tgz";
+      sha256 = "03if07sjx77x9sdva2sqh920lfj1gvkxbnsrnddk6q79kr2icjyg";
+      system = "mgl-pax-bootstrap";
+      asd = "mgl-pax-bootstrap";
+    });
+    systems = [ "mgl-pax-bootstrap" ];
+    lispLibs = [ (getAttr "mgl-pax_dot_asdf" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  mgl-pax-test = (build-asdf-system {
+    pname = "mgl-pax-test";
+    version = "20231021-git";
+    asds = [ "mgl-pax-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-10-21/mgl-pax-20231021-git.tgz";
+      sha256 = "03if07sjx77x9sdva2sqh920lfj1gvkxbnsrnddk6q79kr2icjyg";
+      system = "mgl-pax-test";
+      asd = "mgl-pax-test";
+    });
+    systems = [ "mgl-pax-test" ];
+    lispLibs = [ (getAttr "_3bmd" self) (getAttr "_3bmd-ext-code-blocks" self) (getAttr "alexandria" self) (getAttr "colorize" self) (getAttr "dref" self) (getAttr "dref-test" self) (getAttr "md5" self) (getAttr "mgl-pax" self) (getAttr "mgl-pax_dot_asdf" self) (getAttr "swank" self) (getAttr "trivial-utf-8" self) (getAttr "try" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
   });
   mgl-pax_dot_asdf = (build-asdf-system {
     pname = "mgl-pax.asdf";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mgl-pax.asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-06-18/mgl-pax-20230618-git.tgz";
-      sha256 = "1s2k1vx0mdkv09h8gw9nfccnvvr3p07g8zfv70wp56lsycjsx3b9";
+      url = "http://beta.quicklisp.org/archive/mgl-pax/2023-10-21/mgl-pax-20231021-git.tgz";
+      sha256 = "03if07sjx77x9sdva2sqh920lfj1gvkxbnsrnddk6q79kr2icjyg";
       system = "mgl-pax.asdf";
       asd = "mgl-pax.asdf";
     });
@@ -49608,11 +50182,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   minpack = (build-asdf-system {
     pname = "minpack";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "minpack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "minpack";
       asd = "minpack";
     });
@@ -49638,11 +50212,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mito = (build-asdf-system {
     pname = "mito";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "mito" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2023-02-14/mito-20230214-git.tgz";
-      sha256 = "1s12sbqi3dgxy61q3pq6c6nbi86v59ilz03dslkh1fl2mi9ln6jg";
+      url = "http://beta.quicklisp.org/archive/mito/2023-10-21/mito-20231021-git.tgz";
+      sha256 = "12wx1mb4aprvvh1qv41xrggpr7ffd943mxia0ppz0pkqc8zqrg4z";
       system = "mito";
       asd = "mito";
     });
@@ -49686,11 +50260,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mito-core = (build-asdf-system {
     pname = "mito-core";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "mito-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2023-02-14/mito-20230214-git.tgz";
-      sha256 = "1s12sbqi3dgxy61q3pq6c6nbi86v59ilz03dslkh1fl2mi9ln6jg";
+      url = "http://beta.quicklisp.org/archive/mito/2023-10-21/mito-20231021-git.tgz";
+      sha256 = "12wx1mb4aprvvh1qv41xrggpr7ffd943mxia0ppz0pkqc8zqrg4z";
       system = "mito-core";
       asd = "mito-core";
     });
@@ -49702,11 +50276,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mito-migration = (build-asdf-system {
     pname = "mito-migration";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "mito-migration" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2023-02-14/mito-20230214-git.tgz";
-      sha256 = "1s12sbqi3dgxy61q3pq6c6nbi86v59ilz03dslkh1fl2mi9ln6jg";
+      url = "http://beta.quicklisp.org/archive/mito/2023-10-21/mito-20231021-git.tgz";
+      sha256 = "12wx1mb4aprvvh1qv41xrggpr7ffd943mxia0ppz0pkqc8zqrg4z";
       system = "mito-migration";
       asd = "mito-migration";
     });
@@ -49718,11 +50292,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mito-test = (build-asdf-system {
     pname = "mito-test";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "mito-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mito/2023-02-14/mito-20230214-git.tgz";
-      sha256 = "1s12sbqi3dgxy61q3pq6c6nbi86v59ilz03dslkh1fl2mi9ln6jg";
+      url = "http://beta.quicklisp.org/archive/mito/2023-10-21/mito-20231021-git.tgz";
+      sha256 = "12wx1mb4aprvvh1qv41xrggpr7ffd943mxia0ppz0pkqc8zqrg4z";
       system = "mito-test";
       asd = "mito-test";
     });
@@ -49892,11 +50466,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mlep = (build-asdf-system {
     pname = "mlep";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mlep" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mlep/2023-06-18/cl-mlep-20230618-git.tgz";
-      sha256 = "1vz0cbr6jqirbn4gyj5479a0xz5mpp0yzp76kyn4fqq7m9hg7xa0";
+      url = "http://beta.quicklisp.org/archive/cl-mlep/2023-10-21/cl-mlep-20231021-git.tgz";
+      sha256 = "0na6hjjp1a3bril14v878h9198zrbymnfw7nybgcll0kwv90815g";
       system = "mlep";
       asd = "mlep";
     });
@@ -49908,11 +50482,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mlep-add = (build-asdf-system {
     pname = "mlep-add";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mlep-add" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-mlep/2023-06-18/cl-mlep-20230618-git.tgz";
-      sha256 = "1vz0cbr6jqirbn4gyj5479a0xz5mpp0yzp76kyn4fqq7m9hg7xa0";
+      url = "http://beta.quicklisp.org/archive/cl-mlep/2023-10-21/cl-mlep-20231021-git.tgz";
+      sha256 = "0na6hjjp1a3bril14v878h9198zrbymnfw7nybgcll0kwv90815g";
       system = "mlep-add";
       asd = "mlep-add";
     });
@@ -49924,11 +50498,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mmap = (build-asdf-system {
     pname = "mmap";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mmap" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mmap/2023-06-18/mmap-20230618-git.tgz";
-      sha256 = "0zq18v6ff4y6ypnvmgfnfab1qw3mqm66068siqc4drva7026jwq4";
+      url = "http://beta.quicklisp.org/archive/mmap/2023-10-21/mmap-20231021-git.tgz";
+      sha256 = "0vn211wjhc50ycsq27dhx8b3lq23sv8cnd5ghj1kg7z0zwpiw5y9";
       system = "mmap";
       asd = "mmap";
     });
@@ -49938,11 +50512,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mmap-test = (build-asdf-system {
     pname = "mmap-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mmap-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mmap/2023-06-18/mmap-20230618-git.tgz";
-      sha256 = "0zq18v6ff4y6ypnvmgfnfab1qw3mqm66068siqc4drva7026jwq4";
+      url = "http://beta.quicklisp.org/archive/mmap/2023-10-21/mmap-20231021-git.tgz";
+      sha256 = "0vn211wjhc50ycsq27dhx8b3lq23sv8cnd5ghj1kg7z0zwpiw5y9";
       system = "mmap-test";
       asd = "mmap-test";
     });
@@ -50002,11 +50576,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mnas-path = (build-asdf-system {
     pname = "mnas-path";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mnas-path" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-path/2023-06-18/mnas-path-20230618-git.tgz";
-      sha256 = "1kg8i912zaknnx397jvpw7sld60fqfllsh5ip814px1h4gnh5qlq";
+      url = "http://beta.quicklisp.org/archive/mnas-path/2023-10-21/mnas-path-20231021-git.tgz";
+      sha256 = "10hijr71nlnl9wf15ahzjgynvq1n1y8446fxk7pkfwcw832x874z";
       system = "mnas-path";
       asd = "mnas-path";
     });
@@ -50018,16 +50592,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mnas-string = (build-asdf-system {
     pname = "mnas-string";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "mnas-string" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mnas-string/2023-06-18/mnas-string-20230618-git.tgz";
-      sha256 = "0w4wmadbvcgbciywjkfak4ljjiixq5zs5ajn2306q4k0vw453jvs";
+      url = "http://beta.quicklisp.org/archive/mnas-string/2023-10-21/mnas-string-20231021-git.tgz";
+      sha256 = "1c606jz1fpw39s0la56hbjcr9cdg2fxy9pdvz08mab2z1nd1533a";
       system = "mnas-string";
       asd = "mnas-string";
     });
     systems = [ "mnas-string" ];
-    lispLibs = [ (getAttr "cl-ppcre" self) ];
+    lispLibs = [ (getAttr "cl-ppcre" self) (getAttr "mnas-hash-table" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -50194,11 +50768,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   modularize = (build-asdf-system {
     pname = "modularize";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "modularize" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/modularize/2023-06-18/modularize-20230618-git.tgz";
-      sha256 = "0alyivw3q3yp3gh6mi3xsmb0shmkrfnwnmwlxd5l56068h7hrra0";
+      url = "http://beta.quicklisp.org/archive/modularize/2023-10-21/modularize-20231021-git.tgz";
+      sha256 = "1i660gpljl97j51sj4mx8pk91v96zddww24rbwz0p20cl9hfp0xj";
       system = "modularize";
       asd = "modularize";
     });
@@ -50210,11 +50784,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   modularize-hooks = (build-asdf-system {
     pname = "modularize-hooks";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "modularize-hooks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/modularize-hooks/2019-07-10/modularize-hooks-20190710-git.tgz";
-      sha256 = "12kjvin8hxidwkzfb7inqv5b6g5qzcssnj9wc497v2ixc56fqdz7";
+      url = "http://beta.quicklisp.org/archive/modularize-hooks/2023-10-21/modularize-hooks-20231021-git.tgz";
+      sha256 = "0f60rk9753vil56wyi54db35ffanjw5fmkyn79jc5hnlab78ffhy";
       system = "modularize-hooks";
       asd = "modularize-hooks";
     });
@@ -50226,11 +50800,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   modularize-interfaces = (build-asdf-system {
     pname = "modularize-interfaces";
-    version = "20210630-git";
+    version = "20231021-git";
     asds = [ "modularize-interfaces" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/modularize-interfaces/2021-06-30/modularize-interfaces-20210630-git.tgz";
-      sha256 = "1jl11ffkrah3553wzysmxanhrzv3rnzi5x11ll626baf69im0v7x";
+      url = "http://beta.quicklisp.org/archive/modularize-interfaces/2023-10-21/modularize-interfaces-20231021-git.tgz";
+      sha256 = "0lmq2jbkbr5wrrjl2qb1x64fcvl0lmii0h9301b9bq4d47s4w8sh";
       system = "modularize-interfaces";
       asd = "modularize-interfaces";
     });
@@ -50242,11 +50816,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   modularize-test-module = (build-asdf-system {
     pname = "modularize-test-module";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "modularize-test-module" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/modularize/2023-06-18/modularize-20230618-git.tgz";
-      sha256 = "0alyivw3q3yp3gh6mi3xsmb0shmkrfnwnmwlxd5l56068h7hrra0";
+      url = "http://beta.quicklisp.org/archive/modularize/2023-10-21/modularize-20231021-git.tgz";
+      sha256 = "1i660gpljl97j51sj4mx8pk91v96zddww24rbwz0p20cl9hfp0xj";
       system = "modularize-test-module";
       asd = "modularize-test-module";
     });
@@ -50410,22 +50984,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "moptilities-test" ];
     lispLibs = [ (getAttr "lift" self) (getAttr "moptilities" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  more-cffi = (build-asdf-system {
-    pname = "more-cffi";
-    version = "20230214-git";
-    asds = [ "more-cffi" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/more-cffi/2023-02-14/more-cffi-20230214-git.tgz";
-      sha256 = "1f0ncvb3qix9yfmw03ald0bwlhn3p41rxawpnrxj39sx1wjwqxq1";
-      system = "more-cffi";
-      asd = "more-cffi";
-    });
-    systems = [ "more-cffi" ];
-    lispLibs = [ (getAttr "adp" self) (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "iterate" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -50604,11 +51162,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   multilang-documentation = (build-asdf-system {
     pname = "multilang-documentation";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "multilang-documentation" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multilang-documentation/2019-07-10/multilang-documentation-20190710-git.tgz";
-      sha256 = "13y5jskx8n2b7kimpfarr8v777w3b7zj5swg1b99nj3hk0843ixw";
+      url = "http://beta.quicklisp.org/archive/multilang-documentation/2023-10-21/multilang-documentation-20231021-git.tgz";
+      sha256 = "1v9sv81lx0ms9djz0hqhwdswg0rmzqv47g57k5jmzkx6lbjsya7z";
       system = "multilang-documentation";
       asd = "multilang-documentation";
     });
@@ -50620,11 +51178,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   multilang-documentation-utils = (build-asdf-system {
     pname = "multilang-documentation-utils";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "multilang-documentation-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/documentation-utils/2019-07-10/documentation-utils-20190710-git.tgz";
-      sha256 = "098qhkqskmmrh4wix34mawf7p5c87yql28r51r75yjxj577k5idq";
+      url = "http://beta.quicklisp.org/archive/documentation-utils/2023-10-21/documentation-utils-20231021-git.tgz";
+      sha256 = "0nzkjzvcqi1l2ywiz17h1f54vgvbkywv95in4yww6lyzqjqsqqhy";
       system = "multilang-documentation-utils";
       asd = "multilang-documentation-utils";
     });
@@ -50652,112 +51210,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   multiposter = (build-asdf-system {
     pname = "multiposter";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "multiposter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2023-02-14/multiposter-20230214-git.tgz";
-      sha256 = "02vwpzhsh07z5n1p1vi3j6wib75gsgvin0jdqllc9n9vmyal1vqd";
+      url = "http://beta.quicklisp.org/archive/multiposter/2023-10-21/multiposter-20231021-git.tgz";
+      sha256 = "1pcj52sjd1cjplcg1b4pf7sdfl1vgqkm19j042fyww8gh61l77xa";
       system = "multiposter";
       asd = "multiposter";
     });
     systems = [ "multiposter" ];
-    lispLibs = [ (getAttr "cl-ppcre" self) (getAttr "documentation-utils" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  multiposter-git = (build-asdf-system {
-    pname = "multiposter-git";
-    version = "20230214-git";
-    asds = [ "multiposter-git" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2023-02-14/multiposter-20230214-git.tgz";
-      sha256 = "02vwpzhsh07z5n1p1vi3j6wib75gsgvin0jdqllc9n9vmyal1vqd";
-      system = "multiposter-git";
-      asd = "multiposter-git";
-    });
-    systems = [ "multiposter-git" ];
-    lispLibs = [ (getAttr "legit" self) (getAttr "multiposter" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  multiposter-lichat = (build-asdf-system {
-    pname = "multiposter-lichat";
-    version = "20230214-git";
-    asds = [ "multiposter-lichat" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2023-02-14/multiposter-20230214-git.tgz";
-      sha256 = "02vwpzhsh07z5n1p1vi3j6wib75gsgvin0jdqllc9n9vmyal1vqd";
-      system = "multiposter-lichat";
-      asd = "multiposter-lichat";
-    });
-    systems = [ "multiposter-lichat" ];
-    lispLibs = [ (getAttr "cl-base64" self) (getAttr "lichat-tcp-client" self) (getAttr "multiposter" self) (getAttr "trivial-mimes" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  multiposter-mastodon = (build-asdf-system {
-    pname = "multiposter-mastodon";
-    version = "20230214-git";
-    asds = [ "multiposter-mastodon" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2023-02-14/multiposter-20230214-git.tgz";
-      sha256 = "02vwpzhsh07z5n1p1vi3j6wib75gsgvin0jdqllc9n9vmyal1vqd";
-      system = "multiposter-mastodon";
-      asd = "multiposter-mastodon";
-    });
-    systems = [ "multiposter-mastodon" ];
-    lispLibs = [ (getAttr "multiposter" self) (getAttr "tooter" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  multiposter-studio = (build-asdf-system {
-    pname = "multiposter-studio";
-    version = "20230214-git";
-    asds = [ "multiposter-studio" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2023-02-14/multiposter-20230214-git.tgz";
-      sha256 = "02vwpzhsh07z5n1p1vi3j6wib75gsgvin0jdqllc9n9vmyal1vqd";
-      system = "multiposter-studio";
-      asd = "multiposter-studio";
-    });
-    systems = [ "multiposter-studio" ];
-    lispLibs = [ (getAttr "multiposter" self) (getAttr "north-dexador" self) (getAttr "studio-client" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  multiposter-tumblr = (build-asdf-system {
-    pname = "multiposter-tumblr";
-    version = "20230214-git";
-    asds = [ "multiposter-tumblr" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2023-02-14/multiposter-20230214-git.tgz";
-      sha256 = "02vwpzhsh07z5n1p1vi3j6wib75gsgvin0jdqllc9n9vmyal1vqd";
-      system = "multiposter-tumblr";
-      asd = "multiposter-tumblr";
-    });
-    systems = [ "multiposter-tumblr" ];
-    lispLibs = [ (getAttr "humbler" self) (getAttr "multiposter" self) (getAttr "north-dexador" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  multiposter-twitter = (build-asdf-system {
-    pname = "multiposter-twitter";
-    version = "20230214-git";
-    asds = [ "multiposter-twitter" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/multiposter/2023-02-14/multiposter-20230214-git.tgz";
-      sha256 = "02vwpzhsh07z5n1p1vi3j6wib75gsgvin0jdqllc9n9vmyal1vqd";
-      system = "multiposter-twitter";
-      asd = "multiposter-twitter";
-    });
-    systems = [ "multiposter-twitter" ];
-    lispLibs = [ (getAttr "chirp" self) (getAttr "multiposter" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-ppcre" self) (getAttr "clohost" self) (getAttr "closer-mop" self) (getAttr "documentation-utils" self) (getAttr "fuzzy-dates" self) (getAttr "humbler" self) (getAttr "lichat-tcp-client" self) (getAttr "lquery" self) (getAttr "north-drakma" self) (getAttr "pathname-utils" self) (getAttr "studio-client" self) (getAttr "tooter" self) (getAttr "trivial-arguments" self) (getAttr "trivial-mimes" self) (getAttr "ubiquitous" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -50812,16 +51274,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   mutility = (build-asdf-system {
     pname = "mutility";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "mutility" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mutility/2023-02-14/mutility-20230214-git.tgz";
-      sha256 = "1501q7rvfj2acjh36smaclxml701grff50faijbdv03ns92pbl09";
+      url = "http://beta.quicklisp.org/archive/mutility/2023-10-21/mutility-20231021-git.tgz";
+      sha256 = "0mli8xb16vz8ki5d3a5c6n7s3zfsk3hzpcd8zmxn3q9w37iz3511";
       system = "mutility";
       asd = "mutility";
     });
     systems = [ "mutility" ];
     lispLibs = [ (getAttr "alexandria" self) (getAttr "closer-mop" self) (getAttr "local-time" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  mutils = (build-asdf-system {
+    pname = "mutils";
+    version = "20231021-git";
+    asds = [ "mutils" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/mutils/2023-10-21/mutils-20231021-git.tgz";
+      sha256 = "02c646rydaw2wslipdivs189yawdysrmkb2hl8yxb5iz7cy8c643";
+      system = "mutils";
+      asd = "mutils";
+    });
+    systems = [ "mutils" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-ppcre" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -50837,6 +51315,38 @@ in lib.makeScope pkgs.newScope (self: {
       asd = "mw-equiv";
     });
     systems = [ "mw-equiv" ];
+    lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  my-cool-system = (build-asdf-system {
+    pname = "my-cool-system";
+    version = "20231021-git";
+    asds = [ "my-cool-system" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/super-loader/2023-10-21/super-loader-20231021-git.tgz";
+      sha256 = "0jicqg3w1yhwkmjfag0lvlhw83w2hpanwav1gzyf4s58sng6cxf4";
+      system = "my-cool-system";
+      asd = "my-cool-system";
+    });
+    systems = [ "my-cool-system" ];
+    lispLibs = [  ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  my-secret-system = (build-asdf-system {
+    pname = "my-secret-system";
+    version = "20231021-git";
+    asds = [ "my-secret-system" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/super-loader/2023-10-21/super-loader-20231021-git.tgz";
+      sha256 = "0jicqg3w1yhwkmjfag0lvlhw83w2hpanwav1gzyf4s58sng6cxf4";
+      system = "my-secret-system";
+      asd = "my-secret-system";
+    });
+    systems = [ "my-secret-system" ];
     lispLibs = [  ];
     meta = {
       hydraPlatforms = [  ];
@@ -51002,22 +51512,6 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  myweb = (build-asdf-system {
-    pname = "myweb";
-    version = "20150608-git";
-    asds = [ "myweb" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/myweb/2015-06-08/myweb-20150608-git.tgz";
-      sha256 = "0yncx40mfw7yxbm5hli9hr3aw4x1lf1912adyvylldfjfh2yxcjy";
-      system = "myweb";
-      asd = "myweb";
-    });
-    systems = [ "myweb" ];
-    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "cl-log" self) (getAttr "local-time" self) (getAttr "trivial-utf-8" self) (getAttr "usocket" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   nail = (build-asdf-system {
     pname = "nail";
     version = "20230214-git";
@@ -51084,17 +51578,33 @@ in lib.makeScope pkgs.newScope (self: {
   });
   named-readtables = (build-asdf-system {
     pname = "named-readtables";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "named-readtables" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/named-readtables/2023-06-18/named-readtables-20230618-git.tgz";
-      sha256 = "1m1gcfl1hsg77c99yl07j7k02gwl56l1lgg6k4cpw9i9j1x0i9wp";
+      url = "http://beta.quicklisp.org/archive/named-readtables/2023-10-21/named-readtables-20231021-git.tgz";
+      sha256 = "0cnxs13qf0y1r05mhhf54jihvv7pqk1a2p3x5jzs4y8ld1in6xzp";
       system = "named-readtables";
       asd = "named-readtables";
     });
     systems = [ "named-readtables" ];
-    lispLibs = [  ];
+    lispLibs = [ (getAttr "mgl-pax-bootstrap" self) ];
     meta = {};
+  });
+  named-readtables-test = (build-asdf-system {
+    pname = "named-readtables-test";
+    version = "20231021-git";
+    asds = [ "named-readtables-test" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/named-readtables/2023-10-21/named-readtables-20231021-git.tgz";
+      sha256 = "0cnxs13qf0y1r05mhhf54jihvv7pqk1a2p3x5jzs4y8ld1in6xzp";
+      system = "named-readtables-test";
+      asd = "named-readtables-test";
+    });
+    systems = [ "named-readtables-test" ];
+    lispLibs = [ (getAttr "named-readtables" self) (getAttr "try" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
   });
   nanovg-blob = (build-asdf-system {
     pname = "nanovg-blob";
@@ -51270,11 +51780,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   net_dot_didierverna_dot_asdf-flv = (build-asdf-system {
     pname = "net.didierverna.asdf-flv";
-    version = "version-2.1";
+    version = "version-2.2";
     asds = [ "net.didierverna.asdf-flv" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/asdf-flv/2016-04-21/asdf-flv-version-2.1.tgz";
-      sha256 = "10094avq2whg8j5dnvla5wzqk5h36bx74lxbdbhdchv0wvn5x0g4";
+      url = "http://beta.quicklisp.org/archive/asdf-flv/2023-10-21/asdf-flv-version-2.2.tgz";
+      sha256 = "1svcjhdlsdayr07qa38kj8n5m40qplklspmlrkmvc5wdhk9jz8sw";
       system = "net.didierverna.asdf-flv";
       asd = "net.didierverna.asdf-flv";
     });
@@ -51284,11 +51794,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   net_dot_didierverna_dot_clon = (build-asdf-system {
     pname = "net.didierverna.clon";
-    version = "version-1.0b26";
+    version = "version-1.0b27";
     asds = [ "net.didierverna.clon" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-clon/2023-06-18/cl-clon-version-1.0b26.tgz";
-      sha256 = "1vg2r788vh86i2cnc4yy9w05y5rv6rk0ybxb91wqzjykn0wc4kx3";
+      url = "http://beta.quicklisp.org/archive/cl-clon/2023-10-21/cl-clon-version-1.0b27.tgz";
+      sha256 = "0cyh5z78r7qhv2rzghkhksgg848d6iy1xv7y87p3aivd23c916b1";
       system = "net.didierverna.clon";
       asd = "net.didierverna.clon";
     });
@@ -51300,11 +51810,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   net_dot_didierverna_dot_clon_dot_core = (build-asdf-system {
     pname = "net.didierverna.clon.core";
-    version = "version-1.0b26";
+    version = "version-1.0b27";
     asds = [ "net.didierverna.clon.core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-clon/2023-06-18/cl-clon-version-1.0b26.tgz";
-      sha256 = "1vg2r788vh86i2cnc4yy9w05y5rv6rk0ybxb91wqzjykn0wc4kx3";
+      url = "http://beta.quicklisp.org/archive/cl-clon/2023-10-21/cl-clon-version-1.0b27.tgz";
+      sha256 = "0cyh5z78r7qhv2rzghkhksgg848d6iy1xv7y87p3aivd23c916b1";
       system = "net.didierverna.clon.core";
       asd = "net.didierverna.clon.core";
     });
@@ -51314,13 +51824,45 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  net_dot_didierverna_dot_clon_dot_demo_dot_advanced = (build-asdf-system {
+    pname = "net.didierverna.clon.demo.advanced";
+    version = "version-1.0b27";
+    asds = [ "net.didierverna.clon.demo.advanced" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-clon/2023-10-21/cl-clon-version-1.0b27.tgz";
+      sha256 = "0cyh5z78r7qhv2rzghkhksgg848d6iy1xv7y87p3aivd23c916b1";
+      system = "net.didierverna.clon.demo.advanced";
+      asd = "net.didierverna.clon.demo.advanced";
+    });
+    systems = [ "net.didierverna.clon.demo.advanced" ];
+    lispLibs = [ (getAttr "net_dot_didierverna_dot_clon" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  net_dot_didierverna_dot_clon_dot_demo_dot_simple = (build-asdf-system {
+    pname = "net.didierverna.clon.demo.simple";
+    version = "version-1.0b27";
+    asds = [ "net.didierverna.clon.demo.simple" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-clon/2023-10-21/cl-clon-version-1.0b27.tgz";
+      sha256 = "0cyh5z78r7qhv2rzghkhksgg848d6iy1xv7y87p3aivd23c916b1";
+      system = "net.didierverna.clon.demo.simple";
+      asd = "net.didierverna.clon.demo.simple";
+    });
+    systems = [ "net.didierverna.clon.demo.simple" ];
+    lispLibs = [ (getAttr "net_dot_didierverna_dot_clon" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   net_dot_didierverna_dot_clon_dot_setup = (build-asdf-system {
     pname = "net.didierverna.clon.setup";
-    version = "version-1.0b26";
+    version = "version-1.0b27";
     asds = [ "net.didierverna.clon.setup" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-clon/2023-06-18/cl-clon-version-1.0b26.tgz";
-      sha256 = "1vg2r788vh86i2cnc4yy9w05y5rv6rk0ybxb91wqzjykn0wc4kx3";
+      url = "http://beta.quicklisp.org/archive/cl-clon/2023-10-21/cl-clon-version-1.0b27.tgz";
+      sha256 = "0cyh5z78r7qhv2rzghkhksgg848d6iy1xv7y87p3aivd23c916b1";
       system = "net.didierverna.clon.setup";
       asd = "net.didierverna.clon.setup";
     });
@@ -51332,11 +51874,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   net_dot_didierverna_dot_clon_dot_termio = (build-asdf-system {
     pname = "net.didierverna.clon.termio";
-    version = "version-1.0b26";
+    version = "version-1.0b27";
     asds = [ "net.didierverna.clon.termio" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-clon/2023-06-18/cl-clon-version-1.0b26.tgz";
-      sha256 = "1vg2r788vh86i2cnc4yy9w05y5rv6rk0ybxb91wqzjykn0wc4kx3";
+      url = "http://beta.quicklisp.org/archive/cl-clon/2023-10-21/cl-clon-version-1.0b27.tgz";
+      sha256 = "0cyh5z78r7qhv2rzghkhksgg848d6iy1xv7y87p3aivd23c916b1";
       system = "net.didierverna.clon.termio";
       asd = "net.didierverna.clon.termio";
     });
@@ -51620,11 +52162,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   nibbles = (build-asdf-system {
     pname = "nibbles";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "nibbles" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nibbles/2022-03-31/nibbles-20220331-git.tgz";
-      sha256 = "1idnscdw39zfk4h11x0jm6yjbj7i7l1wl75pd7p4iygc6zcwdi6l";
+      url = "http://beta.quicklisp.org/archive/nibbles/2023-10-21/nibbles-20231021-git.tgz";
+      sha256 = "12qjich11hp31dhbvbsixyjbddmr6faaajigrivgbxy9kw6d279j";
       system = "nibbles";
       asd = "nibbles";
     });
@@ -51666,32 +52208,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ningle = (build-asdf-system {
     pname = "ningle";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "ningle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ningle/2021-12-30/ningle-20211230-git.tgz";
-      sha256 = "0s9nn8ml1j4839rycvdjcbsynkqnhxw1zmrgpjz48smscwdf1f8p";
+      url = "http://beta.quicklisp.org/archive/ningle/2023-10-21/ningle-20231021-git.tgz";
+      sha256 = "0rplv9c2lwk5k22p7axxkp24934kg79xlbfsvf2i0kc24wnd73b6";
       system = "ningle";
       asd = "ningle";
     });
     systems = [ "ningle" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-syntax-annot" self) (getAttr "lack-component" self) (getAttr "lack-request" self) (getAttr "lack-response" self) (getAttr "myway" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "lack-component" self) (getAttr "lack-request" self) (getAttr "lack-response" self) (getAttr "myway" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   ningle-test = (build-asdf-system {
     pname = "ningle-test";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "ningle-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ningle/2021-12-30/ningle-20211230-git.tgz";
-      sha256 = "0s9nn8ml1j4839rycvdjcbsynkqnhxw1zmrgpjz48smscwdf1f8p";
+      url = "http://beta.quicklisp.org/archive/ningle/2023-10-21/ningle-20231021-git.tgz";
+      sha256 = "0rplv9c2lwk5k22p7axxkp24934kg79xlbfsvf2i0kc24wnd73b6";
       system = "ningle-test";
       asd = "ningle-test";
     });
     systems = [ "ningle-test" ];
-    lispLibs = [ (getAttr "babel" self) (getAttr "clack-test" self) (getAttr "drakma" self) (getAttr "ningle" self) (getAttr "prove" self) (getAttr "yason" self) ];
+    lispLibs = [ (getAttr "babel" self) (getAttr "lack-component" self) (getAttr "lack-test" self) (getAttr "ningle" self) (getAttr "prove" self) (getAttr "yason" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -51714,11 +52256,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   nodgui = (build-asdf-system {
     pname = "nodgui";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "nodgui" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nodgui/2023-06-18/nodgui-20230618-git.tgz";
-      sha256 = "0i8jb4nyc3r76kl3kjdk4ixjiy9qhbmmr2rarviswdv2li4ril0q";
+      url = "http://beta.quicklisp.org/archive/nodgui/2023-10-21/nodgui-20231021-git.tgz";
+      sha256 = "187yf73ipbkirf94mxfmmd4a0q4xdmqghc3skc92534gzdjlyya4";
       system = "nodgui";
       asd = "nodgui";
     });
@@ -51730,11 +52272,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   north = (build-asdf-system {
     pname = "north";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "north" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/north/2023-06-18/north-20230618-git.tgz";
-      sha256 = "0q40rd0jzk69nrl3bjr5bplzqs1lhag683a51k6y3zs44k6srz3m";
+      url = "http://beta.quicklisp.org/archive/north/2023-10-21/north-20231021-git.tgz";
+      sha256 = "00g9m0chigk6szx3i500xri3l70hwdvldky691r74fhhjh1646iv";
       system = "north";
       asd = "north";
     });
@@ -51746,11 +52288,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   north-core = (build-asdf-system {
     pname = "north-core";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "north-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/north/2023-06-18/north-20230618-git.tgz";
-      sha256 = "0q40rd0jzk69nrl3bjr5bplzqs1lhag683a51k6y3zs44k6srz3m";
+      url = "http://beta.quicklisp.org/archive/north/2023-10-21/north-20231021-git.tgz";
+      sha256 = "00g9m0chigk6szx3i500xri3l70hwdvldky691r74fhhjh1646iv";
       system = "north-core";
       asd = "north-core";
     });
@@ -51762,11 +52304,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   north-dexador = (build-asdf-system {
     pname = "north-dexador";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "north-dexador" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/north/2023-06-18/north-20230618-git.tgz";
-      sha256 = "0q40rd0jzk69nrl3bjr5bplzqs1lhag683a51k6y3zs44k6srz3m";
+      url = "http://beta.quicklisp.org/archive/north/2023-10-21/north-20231021-git.tgz";
+      sha256 = "00g9m0chigk6szx3i500xri3l70hwdvldky691r74fhhjh1646iv";
       system = "north-dexador";
       asd = "north-dexador";
     });
@@ -51778,11 +52320,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   north-drakma = (build-asdf-system {
     pname = "north-drakma";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "north-drakma" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/north/2023-06-18/north-20230618-git.tgz";
-      sha256 = "0q40rd0jzk69nrl3bjr5bplzqs1lhag683a51k6y3zs44k6srz3m";
+      url = "http://beta.quicklisp.org/archive/north/2023-10-21/north-20231021-git.tgz";
+      sha256 = "00g9m0chigk6szx3i500xri3l70hwdvldky691r74fhhjh1646iv";
       system = "north-drakma";
       asd = "north-drakma";
     });
@@ -51794,11 +52336,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   north-example = (build-asdf-system {
     pname = "north-example";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "north-example" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/north/2023-06-18/north-20230618-git.tgz";
-      sha256 = "0q40rd0jzk69nrl3bjr5bplzqs1lhag683a51k6y3zs44k6srz3m";
+      url = "http://beta.quicklisp.org/archive/north/2023-10-21/north-20231021-git.tgz";
+      sha256 = "00g9m0chigk6szx3i500xri3l70hwdvldky691r74fhhjh1646iv";
       system = "north-example";
       asd = "north-example";
     });
@@ -52050,11 +52592,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   num-utils = (build-asdf-system {
     pname = "num-utils";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "num-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/numerical-utilities/2023-02-14/numerical-utilities-20230214-git.tgz";
-      sha256 = "1a5vv66fis7d087y1f98y8pw83sq7by4s3msji9b7y2iyq0kp2ll";
+      url = "http://beta.quicklisp.org/archive/numerical-utilities/2023-10-21/numerical-utilities-20231021-git.tgz";
+      sha256 = "1al1wxgpqanq5l51d6xwcbhqc2d8z1rfs7334r5z1468bd7yjw3g";
       system = "num-utils";
       asd = "num-utils";
     });
@@ -52098,11 +52640,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   numpy-file-format = (build-asdf-system {
     pname = "numpy-file-format";
-    version = "20210124-git";
+    version = "20231021-git";
     asds = [ "numpy-file-format" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/numpy-file-format/2021-01-24/numpy-file-format-20210124-git.tgz";
-      sha256 = "0j7jjcf6k3anvgpm4nf81g6gbhff44v0v9rai7kwm2bm3abzsjfd";
+      url = "http://beta.quicklisp.org/archive/numpy-file-format/2023-10-21/numpy-file-format-20231021-git.tgz";
+      sha256 = "1n0nixc44z1cymm20wif0l2100ydv0h69l6i6xz5bmwcb2zc4gqr";
       system = "numpy-file-format";
       asd = "numpy-file-format";
     });
@@ -52162,11 +52704,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   nytpu_dot_lisp-utils = (build-asdf-system {
     pname = "nytpu.lisp-utils";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "nytpu.lisp-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/nytpu.lisp-utils/2023-06-18/nytpu.lisp-utils-20230618-git.tgz";
-      sha256 = "132yz6f8p7f5yqz4kcykf6imfaggygg5p0s0hxlhm5g1wnsass47";
+      url = "http://beta.quicklisp.org/archive/nytpu.lisp-utils/2023-10-21/nytpu.lisp-utils-20231021-git.tgz";
+      sha256 = "001lv374c4lx7fw05mqjzjx15y8rl8p8xn58clghqq12vpsj3vb0";
       system = "nytpu.lisp-utils";
       asd = "nytpu.lisp-utils";
     });
@@ -52274,11 +52816,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   odepack = (build-asdf-system {
     pname = "odepack";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "odepack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "odepack";
       asd = "odepack";
     });
@@ -52354,11 +52896,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   omg = (build-asdf-system {
     pname = "omg";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "omg" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/omglib/2023-06-18/omglib-20230618-git.tgz";
-      sha256 = "0468xrdbf1j06plivr7r6rqqr6crjyhs84lr5nsr6hvm08afspsz";
+      url = "http://beta.quicklisp.org/archive/omglib/2023-10-21/omglib-20231021-git.tgz";
+      sha256 = "0vjncz3p5b3j76dwv8qimils6ybcs6lsx24kzl2h1cssf8m8zrxw";
       system = "omg";
       asd = "omg";
     });
@@ -52370,11 +52912,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   one-more-re-nightmare = (build-asdf-system {
     pname = "one-more-re-nightmare";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "one-more-re-nightmare" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-11-06/one-more-re-nightmare-20221106-git.tgz";
-      sha256 = "0vc0lxvn3anjb63hr26r1l18aw5nbj80w9ja3a32fip6nbwfsrfv";
+      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2023-10-21/one-more-re-nightmare-20231021-git.tgz";
+      sha256 = "0mwgjgnp8dsf2zn0290px5q89z93zs0v4dhvs3rcir4mpiw8rbsn";
       system = "one-more-re-nightmare";
       asd = "one-more-re-nightmare";
     });
@@ -52386,11 +52928,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   one-more-re-nightmare-simd = (build-asdf-system {
     pname = "one-more-re-nightmare-simd";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "one-more-re-nightmare-simd" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-11-06/one-more-re-nightmare-20221106-git.tgz";
-      sha256 = "0vc0lxvn3anjb63hr26r1l18aw5nbj80w9ja3a32fip6nbwfsrfv";
+      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2023-10-21/one-more-re-nightmare-20231021-git.tgz";
+      sha256 = "0mwgjgnp8dsf2zn0290px5q89z93zs0v4dhvs3rcir4mpiw8rbsn";
       system = "one-more-re-nightmare-simd";
       asd = "one-more-re-nightmare-simd";
     });
@@ -52402,11 +52944,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   one-more-re-nightmare-tests = (build-asdf-system {
     pname = "one-more-re-nightmare-tests";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "one-more-re-nightmare-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2022-11-06/one-more-re-nightmare-20221106-git.tgz";
-      sha256 = "0vc0lxvn3anjb63hr26r1l18aw5nbj80w9ja3a32fip6nbwfsrfv";
+      url = "http://beta.quicklisp.org/archive/one-more-re-nightmare/2023-10-21/one-more-re-nightmare-20231021-git.tgz";
+      sha256 = "0mwgjgnp8dsf2zn0290px5q89z93zs0v4dhvs3rcir4mpiw8rbsn";
       system = "one-more-re-nightmare-tests";
       asd = "one-more-re-nightmare-tests";
     });
@@ -52530,11 +53072,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   openapi-generator = (build-asdf-system {
     pname = "openapi-generator";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "openapi-generator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/openapi-generator/2023-06-18/openapi-generator-20230618-git.tgz";
-      sha256 = "102r82ignzaplmlfy74wv558idfhb246lfzcwfznzv4ip05ff4jv";
+      url = "http://beta.quicklisp.org/archive/openapi-generator/2023-10-21/openapi-generator-20231021-git.tgz";
+      sha256 = "00kq91jmlq6086zrlx5bb3pkn2zxny9p5zkzp8bgjqas5k92p23j";
       system = "openapi-generator";
       asd = "openapi-generator";
     });
@@ -52864,11 +53406,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_melusina_dot_atelier = (build-asdf-system {
     pname = "org.melusina.atelier";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.melusina.atelier" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-atelier/2023-06-18/cl-atelier-20230618-git.tgz";
-      sha256 = "0rff5mfh77cmv3z1r9scnql94f00hn17jmaja03v7djbrzj9bbhb";
+      url = "http://beta.quicklisp.org/archive/cl-atelier/2023-10-21/cl-atelier-20231021-git.tgz";
+      sha256 = "0j5m9c3z9xcw6ww3fmqpz897fa7mcih6nl9vy36ggnv1iin6x90g";
       system = "org.melusina.atelier";
       asd = "org.melusina.atelier";
     });
@@ -52880,11 +53422,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_melusina_dot_confidence = (build-asdf-system {
     pname = "org.melusina.confidence";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.melusina.confidence" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-confidence/2023-06-18/cl-confidence-20230618-git.tgz";
-      sha256 = "0g7anqvizcniv7csqrm2v42vzk6ijl1kb2mwbmpsjsc2zjd94mli";
+      url = "http://beta.quicklisp.org/archive/cl-confidence/2023-10-21/cl-confidence-20231021-git.tgz";
+      sha256 = "0i474vyx16whv1jl75d026rhmfpf4xd243pw4vkjln7s85h2z6l3";
       system = "org.melusina.confidence";
       asd = "org.melusina.confidence";
     });
@@ -52896,11 +53438,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_melusina_dot_rashell = (build-asdf-system {
     pname = "org.melusina.rashell";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.melusina.rashell" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-rashell/2023-06-18/cl-rashell-20230618-git.tgz";
-      sha256 = "0kf72s59fm797cihsral51nwdcccxl7jja4iqi93ybf49i5qa1i6";
+      url = "http://beta.quicklisp.org/archive/cl-rashell/2023-10-21/cl-rashell-20231021-git.tgz";
+      sha256 = "0816i17rh56kvj5xma509pq2c1si62ki930nsg2c7asv3yx7724g";
       system = "org.melusina.rashell";
       asd = "org.melusina.rashell";
     });
@@ -52912,11 +53454,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_melusina_dot_webmachine = (build-asdf-system {
     pname = "org.melusina.webmachine";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.melusina.webmachine" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-webmachine/2023-06-18/cl-webmachine-20230618-git.tgz";
-      sha256 = "1mj8w63008wmy6n2an297bmq6fcvwy1vwwycy5dn13l9xsiwfld2";
+      url = "http://beta.quicklisp.org/archive/cl-webmachine/2023-10-21/cl-webmachine-20231021-git.tgz";
+      sha256 = "0rdqk9zwdzgbc4pskq2cv1w8b1y85f1lixrpm9d92b2sbx7hhxib";
       system = "org.melusina.webmachine";
       asd = "org.melusina.webmachine";
     });
@@ -52928,11 +53470,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_conduit-packages = (build-asdf-system {
     pname = "org.tfeb.conduit-packages";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.conduit-packages" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/conduit-packages/2022-11-06/conduit-packages-20221106-git.tgz";
-      sha256 = "16mqbwwgpx4k462cnh59j184530dcsr1cbps0jjh0v0yfamyvnqk";
+      url = "http://beta.quicklisp.org/archive/conduit-packages/2023-10-21/conduit-packages-20231021-git.tgz";
+      sha256 = "1d1hpf4a88492zr87ybcmzj0pjrirwra4kjqg7g18s7nymxmm1kr";
       system = "org.tfeb.conduit-packages";
       asd = "org.tfeb.conduit-packages";
     });
@@ -52960,11 +53502,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax = (build-asdf-system {
     pname = "org.tfeb.hax";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax";
       asd = "org.tfeb.hax";
     });
@@ -52976,11 +53518,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_abstract-classes = (build-asdf-system {
     pname = "org.tfeb.hax.abstract-classes";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.abstract-classes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.abstract-classes";
       asd = "org.tfeb.hax.abstract-classes";
     });
@@ -52992,11 +53534,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_binding = (build-asdf-system {
     pname = "org.tfeb.hax.binding";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.binding" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.binding";
       asd = "org.tfeb.hax.binding";
     });
@@ -53008,11 +53550,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_collecting = (build-asdf-system {
     pname = "org.tfeb.hax.collecting";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.collecting" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.collecting";
       asd = "org.tfeb.hax.collecting";
     });
@@ -53024,11 +53566,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_comment-form = (build-asdf-system {
     pname = "org.tfeb.hax.comment-form";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.comment-form" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.comment-form";
       asd = "org.tfeb.hax.comment-form";
     });
@@ -53040,11 +53582,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_cs-forms = (build-asdf-system {
     pname = "org.tfeb.hax.cs-forms";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.cs-forms" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.cs-forms";
       asd = "org.tfeb.hax.cs-forms";
     });
@@ -53056,11 +53598,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_define-functions = (build-asdf-system {
     pname = "org.tfeb.hax.define-functions";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.define-functions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.define-functions";
       asd = "org.tfeb.hax.define-functions";
     });
@@ -53072,11 +53614,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_dynamic-state = (build-asdf-system {
     pname = "org.tfeb.hax.dynamic-state";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.dynamic-state" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.dynamic-state";
       asd = "org.tfeb.hax.dynamic-state";
     });
@@ -53088,11 +53630,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_iterate = (build-asdf-system {
     pname = "org.tfeb.hax.iterate";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.iterate" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.iterate";
       asd = "org.tfeb.hax.iterate";
     });
@@ -53104,11 +53646,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_memoize = (build-asdf-system {
     pname = "org.tfeb.hax.memoize";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.memoize" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.memoize";
       asd = "org.tfeb.hax.memoize";
     });
@@ -53120,11 +53662,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_metatronic = (build-asdf-system {
     pname = "org.tfeb.hax.metatronic";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.metatronic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.metatronic";
       asd = "org.tfeb.hax.metatronic";
     });
@@ -53136,11 +53678,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_object-accessors = (build-asdf-system {
     pname = "org.tfeb.hax.object-accessors";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.object-accessors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.object-accessors";
       asd = "org.tfeb.hax.object-accessors";
     });
@@ -53152,11 +53694,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_read-package = (build-asdf-system {
     pname = "org.tfeb.hax.read-package";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.read-package" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.read-package";
       asd = "org.tfeb.hax.read-package";
     });
@@ -53168,11 +53710,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_simple-loops = (build-asdf-system {
     pname = "org.tfeb.hax.simple-loops";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.simple-loops" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.simple-loops";
       asd = "org.tfeb.hax.simple-loops";
     });
@@ -53184,11 +53726,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_singleton-classes = (build-asdf-system {
     pname = "org.tfeb.hax.singleton-classes";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.singleton-classes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.singleton-classes";
       asd = "org.tfeb.hax.singleton-classes";
     });
@@ -53200,11 +53742,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_slog = (build-asdf-system {
     pname = "org.tfeb.hax.slog";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.slog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.slog";
       asd = "org.tfeb.hax.slog";
     });
@@ -53216,11 +53758,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_spam = (build-asdf-system {
     pname = "org.tfeb.hax.spam";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.spam" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.spam";
       asd = "org.tfeb.hax.spam";
     });
@@ -53232,11 +53774,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_stringtable = (build-asdf-system {
     pname = "org.tfeb.hax.stringtable";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.stringtable" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.stringtable";
       asd = "org.tfeb.hax.stringtable";
     });
@@ -53248,11 +53790,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_trace-macroexpand = (build-asdf-system {
     pname = "org.tfeb.hax.trace-macroexpand";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.trace-macroexpand" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.trace-macroexpand";
       asd = "org.tfeb.hax.trace-macroexpand";
     });
@@ -53264,11 +53806,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_utilities = (build-asdf-system {
     pname = "org.tfeb.hax.utilities";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.utilities" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.utilities";
       asd = "org.tfeb.hax.utilities";
     });
@@ -53280,11 +53822,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_hax_dot_wrapping-standard = (build-asdf-system {
     pname = "org.tfeb.hax.wrapping-standard";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.hax.wrapping-standard" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-06-18/tfeb-lisp-hax-20230618-git.tgz";
-      sha256 = "00m2y03krlvcng71zmw6hgv8wzs8aiz6wic8lzdd0cqrn50mby8j";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-hax/2023-10-21/tfeb-lisp-hax-20231021-git.tgz";
+      sha256 = "0d7r9ac57cdsw59lnkhknj4avf09fn6vcfp2r86w7j83fqrb651z";
       system = "org.tfeb.hax.wrapping-standard";
       asd = "org.tfeb.hax.wrapping-standard";
     });
@@ -53296,11 +53838,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_tools = (build-asdf-system {
     pname = "org.tfeb.tools";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.tools" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
-      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2023-10-21/tfeb-lisp-tools-20231021-git.tgz";
+      sha256 = "180zg96ln2fp7fzdmf5yiz0dxy36r2ddq0nxl0dkmhbrn03bd4iq";
       system = "org.tfeb.tools";
       asd = "org.tfeb.tools";
     });
@@ -53312,11 +53854,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_tools_dot_asdf-module-sysdcls = (build-asdf-system {
     pname = "org.tfeb.tools.asdf-module-sysdcls";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.tools.asdf-module-sysdcls" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
-      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2023-10-21/tfeb-lisp-tools-20231021-git.tgz";
+      sha256 = "180zg96ln2fp7fzdmf5yiz0dxy36r2ddq0nxl0dkmhbrn03bd4iq";
       system = "org.tfeb.tools.asdf-module-sysdcls";
       asd = "org.tfeb.tools.asdf-module-sysdcls";
     });
@@ -53328,11 +53870,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_tools_dot_build-modules = (build-asdf-system {
     pname = "org.tfeb.tools.build-modules";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.tools.build-modules" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
-      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2023-10-21/tfeb-lisp-tools-20231021-git.tgz";
+      sha256 = "180zg96ln2fp7fzdmf5yiz0dxy36r2ddq0nxl0dkmhbrn03bd4iq";
       system = "org.tfeb.tools.build-modules";
       asd = "org.tfeb.tools.build-modules";
     });
@@ -53344,11 +53886,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_tools_dot_deprecations = (build-asdf-system {
     pname = "org.tfeb.tools.deprecations";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.tools.deprecations" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
-      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2023-10-21/tfeb-lisp-tools-20231021-git.tgz";
+      sha256 = "180zg96ln2fp7fzdmf5yiz0dxy36r2ddq0nxl0dkmhbrn03bd4iq";
       system = "org.tfeb.tools.deprecations";
       asd = "org.tfeb.tools.deprecations";
     });
@@ -53360,11 +53902,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_tools_dot_feature-expressions = (build-asdf-system {
     pname = "org.tfeb.tools.feature-expressions";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.tools.feature-expressions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
-      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2023-10-21/tfeb-lisp-tools-20231021-git.tgz";
+      sha256 = "180zg96ln2fp7fzdmf5yiz0dxy36r2ddq0nxl0dkmhbrn03bd4iq";
       system = "org.tfeb.tools.feature-expressions";
       asd = "org.tfeb.tools.feature-expressions";
     });
@@ -53376,11 +53918,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_tools_dot_install-providers = (build-asdf-system {
     pname = "org.tfeb.tools.install-providers";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.tools.install-providers" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
-      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2023-10-21/tfeb-lisp-tools-20231021-git.tgz";
+      sha256 = "180zg96ln2fp7fzdmf5yiz0dxy36r2ddq0nxl0dkmhbrn03bd4iq";
       system = "org.tfeb.tools.install-providers";
       asd = "org.tfeb.tools.install-providers";
     });
@@ -53392,11 +53934,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   org_dot_tfeb_dot_tools_dot_require-module = (build-asdf-system {
     pname = "org.tfeb.tools.require-module";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "org.tfeb.tools.require-module" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2022-11-06/tfeb-lisp-tools-20221106-git.tgz";
-      sha256 = "0c2fsp6faha741h5ppdm69vhvrwk1lzxlng030jxl1gam846h7c0";
+      url = "http://beta.quicklisp.org/archive/tfeb-lisp-tools/2023-10-21/tfeb-lisp-tools-20231021-git.tgz";
+      sha256 = "180zg96ln2fp7fzdmf5yiz0dxy36r2ddq0nxl0dkmhbrn03bd4iq";
       system = "org.tfeb.tools.require-module";
       asd = "org.tfeb.tools.require-module";
     });
@@ -53440,11 +53982,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   orizuru-orm = (build-asdf-system {
     pname = "orizuru-orm";
-    version = "20210228-git";
+    version = "20231021-git";
     asds = [ "orizuru-orm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/orizuru-orm/2021-02-28/orizuru-orm-20210228-git.tgz";
-      sha256 = "0hx1qny188a1h40ns63sr291bw7fc0nmgic3mka3gnar8l6karbr";
+      url = "http://beta.quicklisp.org/archive/orizuru-orm/2023-10-21/orizuru-orm-20231021-git.tgz";
+      sha256 = "1njd12r04yphz722qnf80561iiggyk6yg0wxy7pbh2xwhfs5pflr";
       system = "orizuru-orm";
       asd = "orizuru-orm";
     });
@@ -53472,11 +54014,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   osicat = (build-asdf-system {
     pname = "osicat";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "osicat" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/osicat/2023-02-14/osicat-20230214-git.tgz";
-      sha256 = "0g7qzh9x1kh7spm0gz9q127kra3wd3d9ns9qzgwig1jjwix55g0w";
+      url = "http://beta.quicklisp.org/archive/osicat/2023-10-21/osicat-20231021-git.tgz";
+      sha256 = "10q1dfkhrvp5ia860q10y4wdm11fmxf7xv8zl4viz2np9xzf5v22";
       system = "osicat";
       asd = "osicat";
     });
@@ -53486,11 +54028,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ospm = (build-asdf-system {
     pname = "ospm";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ospm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ospm/2023-06-18/ospm-20230618-git.tgz";
-      sha256 = "13am2bii3993yhry6wwnpczbvlbbs1ja75jdkiw7ngmysw9lsajd";
+      url = "http://beta.quicklisp.org/archive/ospm/2023-10-21/ospm-20231021-git.tgz";
+      sha256 = "1z2wz2xg7rn7p1lladdhj789iz2f3wfjgpi2hjr08vkf1pkp15xf";
       system = "ospm";
       asd = "ospm";
     });
@@ -53518,11 +54060,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   oxenfurt = (build-asdf-system {
     pname = "oxenfurt";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "oxenfurt" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/oxenfurt/2019-07-10/oxenfurt-20190710-git.tgz";
-      sha256 = "0cd3z3b79q641cnpxva749isxfyk52y6s06l7iqx1lsl06yp19j3";
+      url = "http://beta.quicklisp.org/archive/oxenfurt/2023-10-21/oxenfurt-20231021-git.tgz";
+      sha256 = "1yqw21l19091aghvnfpdp62zs8scspaas4syn2yajm1b55jzxvya";
       system = "oxenfurt";
       asd = "oxenfurt";
     });
@@ -53534,11 +54076,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   oxenfurt-core = (build-asdf-system {
     pname = "oxenfurt-core";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "oxenfurt-core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/oxenfurt/2019-07-10/oxenfurt-20190710-git.tgz";
-      sha256 = "0cd3z3b79q641cnpxva749isxfyk52y6s06l7iqx1lsl06yp19j3";
+      url = "http://beta.quicklisp.org/archive/oxenfurt/2023-10-21/oxenfurt-20231021-git.tgz";
+      sha256 = "1yqw21l19091aghvnfpdp62zs8scspaas4syn2yajm1b55jzxvya";
       system = "oxenfurt-core";
       asd = "oxenfurt-core";
     });
@@ -53550,11 +54092,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   oxenfurt-dexador = (build-asdf-system {
     pname = "oxenfurt-dexador";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "oxenfurt-dexador" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/oxenfurt/2019-07-10/oxenfurt-20190710-git.tgz";
-      sha256 = "0cd3z3b79q641cnpxva749isxfyk52y6s06l7iqx1lsl06yp19j3";
+      url = "http://beta.quicklisp.org/archive/oxenfurt/2023-10-21/oxenfurt-20231021-git.tgz";
+      sha256 = "1yqw21l19091aghvnfpdp62zs8scspaas4syn2yajm1b55jzxvya";
       system = "oxenfurt-dexador";
       asd = "oxenfurt-dexador";
     });
@@ -53566,11 +54108,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   oxenfurt-drakma = (build-asdf-system {
     pname = "oxenfurt-drakma";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "oxenfurt-drakma" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/oxenfurt/2019-07-10/oxenfurt-20190710-git.tgz";
-      sha256 = "0cd3z3b79q641cnpxva749isxfyk52y6s06l7iqx1lsl06yp19j3";
+      url = "http://beta.quicklisp.org/archive/oxenfurt/2023-10-21/oxenfurt-20231021-git.tgz";
+      sha256 = "1yqw21l19091aghvnfpdp62zs8scspaas4syn2yajm1b55jzxvya";
       system = "oxenfurt-drakma";
       asd = "oxenfurt-drakma";
     });
@@ -53710,11 +54252,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   pango-markup = (build-asdf-system {
     pname = "pango-markup";
-    version = "20200325-git";
+    version = "20231021-git";
     asds = [ "pango-markup" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pango-markup/2020-03-25/pango-markup-20200325-git.tgz";
-      sha256 = "0m1hc6lasbzjz5gc5mk9hqmmxgq7mpc9q94fmni109yncpqawxvr";
+      url = "http://beta.quicklisp.org/archive/pango-markup/2023-10-21/pango-markup-20231021-git.tgz";
+      sha256 = "1165z3ycbkgr9g3ni1z59r258c1jd2viyf3mj8a5p72kx6dqb8gf";
       system = "pango-markup";
       asd = "pango-markup";
     });
@@ -53742,11 +54284,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   parachute = (build-asdf-system {
     pname = "parachute";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "parachute" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2023-06-18/parachute-20230618-git.tgz";
-      sha256 = "0svllc00gkhqkw1xhqcsdgx9ap7pyr7mfa4phkvaggxsk7lfknlm";
+      url = "http://beta.quicklisp.org/archive/parachute/2023-10-21/parachute-20231021-git.tgz";
+      sha256 = "1g7zkzcd0k2gjsr91lndarg7mzfdb23rmh8h97i2y3grync9n1h6";
       system = "parachute";
       asd = "parachute";
     });
@@ -53756,11 +54298,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   parachute-fiveam = (build-asdf-system {
     pname = "parachute-fiveam";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "parachute-fiveam" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2023-06-18/parachute-20230618-git.tgz";
-      sha256 = "0svllc00gkhqkw1xhqcsdgx9ap7pyr7mfa4phkvaggxsk7lfknlm";
+      url = "http://beta.quicklisp.org/archive/parachute/2023-10-21/parachute-20231021-git.tgz";
+      sha256 = "1g7zkzcd0k2gjsr91lndarg7mzfdb23rmh8h97i2y3grync9n1h6";
       system = "parachute-fiveam";
       asd = "parachute-fiveam";
     });
@@ -53772,11 +54314,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   parachute-lisp-unit = (build-asdf-system {
     pname = "parachute-lisp-unit";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "parachute-lisp-unit" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2023-06-18/parachute-20230618-git.tgz";
-      sha256 = "0svllc00gkhqkw1xhqcsdgx9ap7pyr7mfa4phkvaggxsk7lfknlm";
+      url = "http://beta.quicklisp.org/archive/parachute/2023-10-21/parachute-20231021-git.tgz";
+      sha256 = "1g7zkzcd0k2gjsr91lndarg7mzfdb23rmh8h97i2y3grync9n1h6";
       system = "parachute-lisp-unit";
       asd = "parachute-lisp-unit";
     });
@@ -53788,11 +54330,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   parachute-prove = (build-asdf-system {
     pname = "parachute-prove";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "parachute-prove" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parachute/2023-06-18/parachute-20230618-git.tgz";
-      sha256 = "0svllc00gkhqkw1xhqcsdgx9ap7pyr7mfa4phkvaggxsk7lfknlm";
+      url = "http://beta.quicklisp.org/archive/parachute/2023-10-21/parachute-20231021-git.tgz";
+      sha256 = "1g7zkzcd0k2gjsr91lndarg7mzfdb23rmh8h97i2y3grync9n1h6";
       system = "parachute-prove";
       asd = "parachute-prove";
     });
@@ -54082,29 +54624,13 @@ in lib.makeScope pkgs.newScope (self: {
     lispLibs = [  ];
     meta = {};
   });
-  parse-number-range = (build-asdf-system {
-    pname = "parse-number-range";
-    version = "1.0";
-    asds = [ "parse-number-range" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parse-number-range/2012-11-25/parse-number-range-1.0.tgz";
-      sha256 = "176j9rabpqdkxd7b1cdy3dk8b8x05bdk0ypnxg2i41zbp9ww2f8d";
-      system = "parse-number-range";
-      asd = "parse-number-range";
-    });
-    systems = [ "parse-number-range" ];
-    lispLibs = [ (getAttr "cartesian-product-switch" self) (getAttr "enhanced-multiple-value-bind" self) (getAttr "map-bind" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   parse-rgb = (build-asdf-system {
     pname = "parse-rgb";
-    version = "20201220-git";
+    version = "20231021-git";
     asds = [ "parse-rgb" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-tcod/2020-12-20/cl-tcod-20201220-git.tgz";
-      sha256 = "145h0dhxm1idblcld456cv7k00vi6p0zyn5rxkky5y4gk85ws8l5";
+      url = "http://beta.quicklisp.org/archive/cl-tcod/2023-10-21/cl-tcod-20231021-git.tgz";
+      sha256 = "1r4ip16dlzr56p94b0grw6nmkykbmgb04jsqdvgl1ypcmbpfr3i1";
       system = "parse-rgb";
       asd = "parse-rgb";
     });
@@ -54132,11 +54658,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   parseq = (build-asdf-system {
     pname = "parseq";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "parseq" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/parseq/2021-05-31/parseq-20210531-git.tgz";
-      sha256 = "0yv9wdziiwv6yqbaiabijd4lcyg8djrml0qbg22jfixkxyqxhxqw";
+      url = "http://beta.quicklisp.org/archive/parseq/2023-10-21/parseq-20231021-git.tgz";
+      sha256 = "13bdv9slnkf4b3py5dfvdnxvyb7zxwf2apcbr2p3s7ij26qslbbw";
       system = "parseq";
       asd = "parseq";
     });
@@ -54350,11 +54876,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   pathname-utils = (build-asdf-system {
     pname = "pathname-utils";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "pathname-utils" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pathname-utils/2023-06-18/pathname-utils-20230618-git.tgz";
-      sha256 = "1cnx5kl6429ny2k9janjs8rxyi6a3n679c468q2899fcic4hlhh6";
+      url = "http://beta.quicklisp.org/archive/pathname-utils/2023-10-21/pathname-utils-20231021-git.tgz";
+      sha256 = "0j358819g2jwrpih84ksqs5ywgg82ykhk7hd6zh33kxpk5rdmm7m";
       system = "pathname-utils";
       asd = "pathname-utils";
     });
@@ -54366,11 +54892,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   pathname-utils-test = (build-asdf-system {
     pname = "pathname-utils-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "pathname-utils-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/pathname-utils/2023-06-18/pathname-utils-20230618-git.tgz";
-      sha256 = "1cnx5kl6429ny2k9janjs8rxyi6a3n679c468q2899fcic4hlhh6";
+      url = "http://beta.quicklisp.org/archive/pathname-utils/2023-10-21/pathname-utils-20231021-git.tgz";
+      sha256 = "0j358819g2jwrpih84ksqs5ywgg82ykhk7hd6zh33kxpk5rdmm7m";
       system = "pathname-utils-test";
       asd = "pathname-utils-test";
     });
@@ -54794,11 +55320,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   persistent = (build-asdf-system {
     pname = "persistent";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "persistent" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "persistent";
       asd = "persistent";
     });
@@ -54858,11 +55384,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   petalisp = (build-asdf-system {
     pname = "petalisp";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp";
       asd = "petalisp";
     });
@@ -54874,27 +55400,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   petalisp_dot_api = (build-asdf-system {
     pname = "petalisp.api";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.api" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.api";
       asd = "petalisp.api";
     });
     systems = [ "petalisp.api" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "petalisp_dot_codegen" self) (getAttr "petalisp_dot_core" self) (getAttr "petalisp_dot_ir" self) (getAttr "petalisp_dot_native-backend" self) (getAttr "petalisp_dot_utilities" self) (getAttr "petalisp_dot_xmas-backend" self) (getAttr "split-sequence" self) (getAttr "trivia" self) (getAttr "trivial-macroexpand-all" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "petalisp_dot_codegen" self) (getAttr "petalisp_dot_core" self) (getAttr "petalisp_dot_ir" self) (getAttr "petalisp_dot_native-backend" self) (getAttr "petalisp_dot_utilities" self) (getAttr "split-sequence" self) (getAttr "trivia" self) (getAttr "trivial-macroexpand-all" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   petalisp_dot_codegen = (build-asdf-system {
     pname = "petalisp.codegen";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.codegen" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.codegen";
       asd = "petalisp.codegen";
     });
@@ -54906,11 +55432,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   petalisp_dot_core = (build-asdf-system {
     pname = "petalisp.core";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.core" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.core";
       asd = "petalisp.core";
     });
@@ -54922,11 +55448,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   petalisp_dot_examples = (build-asdf-system {
     pname = "petalisp.examples";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.examples";
       asd = "petalisp.examples";
     });
@@ -54938,11 +55464,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   petalisp_dot_graphviz = (build-asdf-system {
     pname = "petalisp.graphviz";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.graphviz" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.graphviz";
       asd = "petalisp.graphviz";
     });
@@ -54954,11 +55480,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   petalisp_dot_ir = (build-asdf-system {
     pname = "petalisp.ir";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.ir" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.ir";
       asd = "petalisp.ir";
     });
@@ -54970,64 +55496,48 @@ in lib.makeScope pkgs.newScope (self: {
   });
   petalisp_dot_native-backend = (build-asdf-system {
     pname = "petalisp.native-backend";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.native-backend" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.native-backend";
       asd = "petalisp.native-backend";
     });
     systems = [ "petalisp.native-backend" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "atomics" self) (getAttr "bordeaux-threads" self) (getAttr "cffi" self) (getAttr "lparallel" self) (getAttr "petalisp_dot_codegen" self) (getAttr "petalisp_dot_core" self) (getAttr "petalisp_dot_ir" self) (getAttr "petalisp_dot_utilities" self) (getAttr "static-vectors" self) (getAttr "trivia" self) (getAttr "trivial-garbage" self) (getAttr "typo" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cffi" self) (getAttr "lparallel" self) (getAttr "petalisp_dot_codegen" self) (getAttr "petalisp_dot_core" self) (getAttr "petalisp_dot_ir" self) (getAttr "petalisp_dot_utilities" self) (getAttr "static-vectors" self) (getAttr "trivia" self) (getAttr "trivial-garbage" self) (getAttr "typo" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   petalisp_dot_test-suite = (build-asdf-system {
     pname = "petalisp.test-suite";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.test-suite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.test-suite";
       asd = "petalisp.test-suite";
     });
     systems = [ "petalisp.test-suite" ];
-    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "closer-mop" self) (getAttr "petalisp_dot_examples" self) (getAttr "petalisp_dot_xmas-backend" self) ];
+    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "closer-mop" self) (getAttr "petalisp_dot_api" self) (getAttr "petalisp_dot_examples" self) (getAttr "petalisp_dot_native-backend" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   petalisp_dot_utilities = (build-asdf-system {
     pname = "petalisp.utilities";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "petalisp.utilities" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
+      url = "http://beta.quicklisp.org/archive/petalisp/2023-10-21/petalisp-20231021-git.tgz";
+      sha256 = "05mspnbncszmw75kcdhs54jyz397ij40gbsyspm7s24qhw03iqad";
       system = "petalisp.utilities";
       asd = "petalisp.utilities";
     });
     systems = [ "petalisp.utilities" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "atomics" self) (getAttr "bordeaux-threads" self) (getAttr "queues_dot_priority-queue" self) (getAttr "trivia" self) (getAttr "trivial-garbage" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  petalisp_dot_xmas-backend = (build-asdf-system {
-    pname = "petalisp.xmas-backend";
-    version = "20230618-git";
-    asds = [ "petalisp.xmas-backend" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/petalisp/2023-06-18/petalisp-20230618-git.tgz";
-      sha256 = "0id7q42pr24jj28xamxdi06n0cf9r91ql20wn847d103bva7h3n2";
-      system = "petalisp.xmas-backend";
-      asd = "petalisp.xmas-backend";
-    });
-    systems = [ "petalisp.xmas-backend" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "atomics" self) (getAttr "bordeaux-threads" self) (getAttr "lparallel" self) (getAttr "petalisp_dot_codegen" self) (getAttr "petalisp_dot_core" self) (getAttr "petalisp_dot_ir" self) (getAttr "petalisp_dot_utilities" self) (getAttr "trivia" self) (getAttr "trivial-garbage" self) (getAttr "typo" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "queues_dot_priority-queue" self) (getAttr "trivia" self) (getAttr "trivial-garbage" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -55368,11 +55878,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   piping = (build-asdf-system {
     pname = "piping";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "piping" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/piping/2022-11-06/piping-20221106-git.tgz";
-      sha256 = "0kmjpa3wjinsfiik50n2c9b5g9n39qf7p2piy4237xddx2a0300r";
+      url = "http://beta.quicklisp.org/archive/piping/2023-10-21/piping-20231021-git.tgz";
+      sha256 = "0g0k6w7xa0xyzlr3j5j85b91kazbba4rxwplmqcb5ns3shk8745g";
       system = "piping";
       asd = "piping";
     });
@@ -55528,11 +56038,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plot = (build-asdf-system {
     pname = "plot";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "plot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plot/2023-02-14/plot-20230214-git.tgz";
-      sha256 = "1k0izbqrp1dvb2i301zb28m9wqh986jrk6qrm2hkx7dr4vmlsc68";
+      url = "http://beta.quicklisp.org/archive/plot/2023-10-21/plot-20231021-git.tgz";
+      sha256 = "1cmdpgf9srw8f1ggpkksk3fnw6mxixwl9ia592m0af4y84cqml5k";
       system = "plot";
       asd = "plot";
     });
@@ -55576,11 +56086,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump = (build-asdf-system {
     pname = "plump";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "plump" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2023-06-18/plump-20230618-git.tgz";
-      sha256 = "15fngj5rmh2mbnd504q1cgj9q2hfvjnhnyiksg983s296jazij18";
+      url = "http://beta.quicklisp.org/archive/plump/2023-10-21/plump-20231021-git.tgz";
+      sha256 = "09hhqb3ajvqw8smj4c6b1yqbxhaypf3hz71qrzkynxd0bhq8y6af";
       system = "plump";
       asd = "plump";
     });
@@ -55590,11 +56100,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump-bundle = (build-asdf-system {
     pname = "plump-bundle";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "plump-bundle" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump-bundle/2019-07-10/plump-bundle-20190710-git.tgz";
-      sha256 = "1r9k4fh9vqszvsdsa101m1nqn3wmnb89cis2sj2asbssrmcllgn3";
+      url = "http://beta.quicklisp.org/archive/plump-bundle/2023-10-21/plump-bundle-20231021-git.tgz";
+      sha256 = "0qknmdryyynjk5g0zda2788p4j0s6w4fj27kdca22z0n8r8yfhhk";
       system = "plump-bundle";
       asd = "plump-bundle";
     });
@@ -55606,11 +56116,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump-dom = (build-asdf-system {
     pname = "plump-dom";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "plump-dom" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2023-06-18/plump-20230618-git.tgz";
-      sha256 = "15fngj5rmh2mbnd504q1cgj9q2hfvjnhnyiksg983s296jazij18";
+      url = "http://beta.quicklisp.org/archive/plump/2023-10-21/plump-20231021-git.tgz";
+      sha256 = "09hhqb3ajvqw8smj4c6b1yqbxhaypf3hz71qrzkynxd0bhq8y6af";
       system = "plump-dom";
       asd = "plump-dom";
     });
@@ -55622,11 +56132,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump-lexer = (build-asdf-system {
     pname = "plump-lexer";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "plump-lexer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2023-06-18/plump-20230618-git.tgz";
-      sha256 = "15fngj5rmh2mbnd504q1cgj9q2hfvjnhnyiksg983s296jazij18";
+      url = "http://beta.quicklisp.org/archive/plump/2023-10-21/plump-20231021-git.tgz";
+      sha256 = "09hhqb3ajvqw8smj4c6b1yqbxhaypf3hz71qrzkynxd0bhq8y6af";
       system = "plump-lexer";
       asd = "plump-lexer";
     });
@@ -55638,11 +56148,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump-parser = (build-asdf-system {
     pname = "plump-parser";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "plump-parser" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump/2023-06-18/plump-20230618-git.tgz";
-      sha256 = "15fngj5rmh2mbnd504q1cgj9q2hfvjnhnyiksg983s296jazij18";
+      url = "http://beta.quicklisp.org/archive/plump/2023-10-21/plump-20231021-git.tgz";
+      sha256 = "09hhqb3ajvqw8smj4c6b1yqbxhaypf3hz71qrzkynxd0bhq8y6af";
       system = "plump-parser";
       asd = "plump-parser";
     });
@@ -55654,11 +56164,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump-sexp = (build-asdf-system {
     pname = "plump-sexp";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "plump-sexp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump-sexp/2021-05-31/plump-sexp-20210531-git.tgz";
-      sha256 = "0zm9h0assjb8766z2v6l1k1s60y90y6f8smrl1dczwqlvc8xyln5";
+      url = "http://beta.quicklisp.org/archive/plump-sexp/2023-10-21/plump-sexp-20231021-git.tgz";
+      sha256 = "09m8lkgb3k0dcz2m6w8smvw77b1ajsc3kpy80h5hcxg16wlzzgjh";
       system = "plump-sexp";
       asd = "plump-sexp";
     });
@@ -55670,11 +56180,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump-tex = (build-asdf-system {
     pname = "plump-tex";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "plump-tex" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump-tex/2021-05-31/plump-tex-20210531-git.tgz";
-      sha256 = "1qjiyw0kh8i2rd8rdznfz9vnvklcf9iffdbm8xvp3z1086frzfms";
+      url = "http://beta.quicklisp.org/archive/plump-tex/2023-10-21/plump-tex-20231021-git.tgz";
+      sha256 = "1k0cmk5sbn042bx7nxiw0rvsjmgmj221zim1hg23r0485jbx0r3h";
       system = "plump-tex";
       asd = "plump-tex";
     });
@@ -55686,11 +56196,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   plump-tex-test = (build-asdf-system {
     pname = "plump-tex-test";
-    version = "20210531-git";
+    version = "20231021-git";
     asds = [ "plump-tex-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/plump-tex/2021-05-31/plump-tex-20210531-git.tgz";
-      sha256 = "1qjiyw0kh8i2rd8rdznfz9vnvklcf9iffdbm8xvp3z1086frzfms";
+      url = "http://beta.quicklisp.org/archive/plump-tex/2023-10-21/plump-tex-20231021-git.tgz";
+      sha256 = "1k0cmk5sbn042bx7nxiw0rvsjmgmj221zim1hg23r0485jbx0r3h";
       system = "plump-tex-test";
       asd = "plump-tex-test";
     });
@@ -55814,11 +56324,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   policy-cond = (build-asdf-system {
     pname = "policy-cond";
-    version = "20200427-git";
+    version = "20231021-git";
     asds = [ "policy-cond" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/policy-cond/2020-04-27/policy-cond-20200427-git.tgz";
-      sha256 = "0xj2a6lcg7i7g4038sc4f641din6m8vdiha8c5afz9fik80bshxk";
+      url = "http://beta.quicklisp.org/archive/policy-cond/2023-10-21/policy-cond-20231021-git.tgz";
+      sha256 = "0v4vjy810p5hhg2s2n14v8l7rpciwxr5w9gbh9h8lm7v5fjzclxg";
       system = "policy-cond";
       asd = "policy-cond";
     });
@@ -56006,27 +56516,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   posix-shm = (build-asdf-system {
     pname = "posix-shm";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "posix-shm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/posix-shm/2022-11-06/posix-shm-20221106-git.tgz";
-      sha256 = "057qm9db502a86q60rsp5g7f8n4a997iwsfcid41gqadyd9rcjjz";
+      url = "http://beta.quicklisp.org/archive/posix-shm/2023-10-21/posix-shm-20231021-git.tgz";
+      sha256 = "0ah7xh7dxvdk58slic60gx7k56idjw5x30q5ifg90hxfhd32qz6l";
       system = "posix-shm";
       asd = "posix-shm";
     });
     systems = [ "posix-shm" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "cffi-grovel" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "cffi-grovel" self) (getAttr "trivial-features" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   postmodern = (build-asdf-system {
     pname = "postmodern";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "postmodern" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2023-02-14/postmodern-20230214-git.tgz";
-      sha256 = "19pk3jinlv70arcz6073lglg4mf972h03rxynn4z9qabqc2gk9kw";
+      url = "http://beta.quicklisp.org/archive/postmodern/2023-10-21/postmodern-20231021-git.tgz";
+      sha256 = "1abb80zmnawzl9g09css57kviwbqw5fcxhp3fjrzw7zc3n1wfr8y";
       system = "postmodern";
       asd = "postmodern";
     });
@@ -56132,11 +56642,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ppath = (build-asdf-system {
     pname = "ppath";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ppath" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ppath/2023-06-18/ppath-20230618-git.tgz";
-      sha256 = "1vqs5m76a3bx9isli4wns7zb54rkjfsp3ahaihmh4kbcj80lca6p";
+      url = "http://beta.quicklisp.org/archive/ppath/2023-10-21/ppath-20231021-git.tgz";
+      sha256 = "1xp9igyajj4ndk0gswqx8ynblvhmwkm1lliyp543v0mf1hdq4ayk";
       system = "ppath";
       asd = "ppath";
     });
@@ -56148,11 +56658,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ppath-test = (build-asdf-system {
     pname = "ppath-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ppath-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ppath/2023-06-18/ppath-20230618-git.tgz";
-      sha256 = "1vqs5m76a3bx9isli4wns7zb54rkjfsp3ahaihmh4kbcj80lca6p";
+      url = "http://beta.quicklisp.org/archive/ppath/2023-10-21/ppath-20231021-git.tgz";
+      sha256 = "1xp9igyajj4ndk0gswqx8ynblvhmwkm1lliyp543v0mf1hdq4ayk";
       system = "ppath-test";
       asd = "ppath-test";
     });
@@ -56210,13 +56720,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  prepl = (build-asdf-system {
+    pname = "prepl";
+    version = "20231021-git";
+    asds = [ "prepl" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/prepl/2023-10-21/prepl-20231021-git.tgz";
+      sha256 = "0sbqlqbk9xrl30iklp3vs493zq4bc2nxv6q435cspicwz6igbjdw";
+      system = "prepl";
+      asd = "prepl";
+    });
+    systems = [ "prepl" ];
+    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "closer-mop" self) (getAttr "conium" self) (getAttr "iterate" self) (getAttr "named-readtables" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   prettier-builtins = (build-asdf-system {
     pname = "prettier-builtins";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "prettier-builtins" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/prettier-builtins/2023-06-18/prettier-builtins-20230618-git.tgz";
-      sha256 = "104wqvkb5gv3y2v6yssk4q9gbrkgbly1lyxqfcinri3pqxqkdhg2";
+      url = "http://beta.quicklisp.org/archive/prettier-builtins/2023-10-21/prettier-builtins-20231021-git.tgz";
+      sha256 = "15lbf0zi1vxqpxwsfgkq7dlg5c9m1b2a4hvcfm3qlh9ir7ahggck";
       system = "prettier-builtins";
       asd = "prettier-builtins";
     });
@@ -56786,11 +57312,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   promise = (build-asdf-system {
     pname = "promise";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "promise" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/promise/2023-06-18/promise-20230618-git.tgz";
-      sha256 = "07cvz6vb5y1d9vndcwq7q1cp54aqvyqzv6wk8vmymbz3lawq2wsn";
+      url = "http://beta.quicklisp.org/archive/promise/2023-10-21/promise-20231021-git.tgz";
+      sha256 = "1xm10s89a2f7ydzayjgg94y9plrz1jnyvi6yzhk5v3vrbnmpggh1";
       system = "promise";
       asd = "promise";
     });
@@ -56802,11 +57328,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   promise-test = (build-asdf-system {
     pname = "promise-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "promise-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/promise/2023-06-18/promise-20230618-git.tgz";
-      sha256 = "07cvz6vb5y1d9vndcwq7q1cp54aqvyqzv6wk8vmymbz3lawq2wsn";
+      url = "http://beta.quicklisp.org/archive/promise/2023-10-21/promise-20231021-git.tgz";
+      sha256 = "1xm10s89a2f7ydzayjgg94y9plrz1jnyvi6yzhk5v3vrbnmpggh1";
       system = "promise-test";
       asd = "promise-test";
     });
@@ -57006,11 +57532,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   psychiq = (build-asdf-system {
     pname = "psychiq";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "psychiq" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/psychiq/2020-09-25/psychiq-20200925-git.tgz";
-      sha256 = "1g8m0nglhqn5zf79hcdx3kafa0y9h3f4yqvjn7diddimqckf0fw6";
+      url = "http://beta.quicklisp.org/archive/psychiq/2023-10-21/psychiq-20231021-git.tgz";
+      sha256 = "00w83619c88xl8lzh7pcjw31b92fx1myjbnsypr9zwwbm35zmr7g";
       system = "psychiq";
       asd = "psychiq";
     });
@@ -57022,16 +57548,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   psychiq-test = (build-asdf-system {
     pname = "psychiq-test";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "psychiq-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/psychiq/2020-09-25/psychiq-20200925-git.tgz";
-      sha256 = "1g8m0nglhqn5zf79hcdx3kafa0y9h3f4yqvjn7diddimqckf0fw6";
+      url = "http://beta.quicklisp.org/archive/psychiq/2023-10-21/psychiq-20231021-git.tgz";
+      sha256 = "00w83619c88xl8lzh7pcjw31b92fx1myjbnsypr9zwwbm35zmr7g";
       system = "psychiq-test";
       asd = "psychiq-test";
     });
     systems = [ "psychiq-test" ];
     lispLibs = [ (getAttr "prove" self) (getAttr "prove-asdf" self) (getAttr "psychiq" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  ptc = (build-asdf-system {
+    pname = "ptc";
+    version = "20231021-git";
+    asds = [ "ptc" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/ptc/2023-10-21/ptc-20231021-git.tgz";
+      sha256 = "1r4izrc6dhz3pqpcqn3y0sga4f77s2vzd1xpl8fsr41rfpyiff3x";
+      system = "ptc";
+      asd = "ptc";
+    });
+    systems = [ "ptc" ];
+    lispLibs = [  ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -57052,11 +57594,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   punycode = (build-asdf-system {
     pname = "punycode";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "punycode" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/punycode/2023-06-18/punycode-20230618-git.tgz";
-      sha256 = "058il0jblc3w90ha332g0j3760yx1pcwvp2kcccdcxgb42d80p3n";
+      url = "http://beta.quicklisp.org/archive/punycode/2023-10-21/punycode-20231021-git.tgz";
+      sha256 = "0779aj2bqsz7qb475x5sacr5q254wjar74sab04zfhrlpkgij9xh";
       system = "punycode";
       asd = "punycode";
     });
@@ -57068,11 +57610,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   punycode-test = (build-asdf-system {
     pname = "punycode-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "punycode-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/punycode/2023-06-18/punycode-20230618-git.tgz";
-      sha256 = "058il0jblc3w90ha332g0j3760yx1pcwvp2kcccdcxgb42d80p3n";
+      url = "http://beta.quicklisp.org/archive/punycode/2023-10-21/punycode-20231021-git.tgz";
+      sha256 = "0779aj2bqsz7qb475x5sacr5q254wjar74sab04zfhrlpkgij9xh";
       system = "punycode-test";
       asd = "punycode-test";
     });
@@ -57084,11 +57626,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   purgatory = (build-asdf-system {
     pname = "purgatory";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "purgatory" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/purgatory/2022-07-07/purgatory-20220707-git.tgz";
-      sha256 = "0iy2jdgrwqrq9cph7bwf79d8l4zdsgcd9sfcn0lclzai2v0yizp9";
+      url = "http://beta.quicklisp.org/archive/purgatory/2023-10-21/purgatory-20231021-git.tgz";
+      sha256 = "1qjg31c5a6kmkc97sv91dr2n0n79hcqkw1d8s7a079npkf6zldz9";
       system = "purgatory";
       asd = "purgatory";
     });
@@ -57100,11 +57642,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   purgatory-tests = (build-asdf-system {
     pname = "purgatory-tests";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "purgatory-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/purgatory/2022-07-07/purgatory-20220707-git.tgz";
-      sha256 = "0iy2jdgrwqrq9cph7bwf79d8l4zdsgcd9sfcn0lclzai2v0yizp9";
+      url = "http://beta.quicklisp.org/archive/purgatory/2023-10-21/purgatory-20231021-git.tgz";
+      sha256 = "1qjg31c5a6kmkc97sv91dr2n0n79hcqkw1d8s7a079npkf6zldz9";
       system = "purgatory-tests";
       asd = "purgatory-tests";
     });
@@ -57210,11 +57752,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   py4cl2-cffi = (build-asdf-system {
     pname = "py4cl2-cffi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "py4cl2-cffi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/py4cl2-cffi/2023-06-18/py4cl2-cffi-20230618-git.tgz";
-      sha256 = "0amx1mmaz01ybnwiwh1wc45m67lghphiby6vg0z7rgmnyrvqg3gr";
+      url = "http://beta.quicklisp.org/archive/py4cl2-cffi/2023-10-21/py4cl2-cffi-20231021-git.tgz";
+      sha256 = "104p14qvpx77w1vcd4zwkzxclgfixvgdphk6d01psgwjr8x0zp1q";
       system = "py4cl2-cffi";
       asd = "py4cl2-cffi";
     });
@@ -57376,11 +57918,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   qlot = (build-asdf-system {
     pname = "qlot";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "qlot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qlot/2022-03-31/qlot-20220331-git.tgz";
-      sha256 = "18dzrjy66a4xrzm4ap7kvzbi0xvp2s2nm0l04jjwy7vgizbw29y1";
+      url = "http://beta.quicklisp.org/archive/qlot/2023-10-21/qlot-20231021-git.tgz";
+      sha256 = "0q8nmrd79yb00wg574zi98ydyf67n9f9i63n6pcbfxypibi4i74r";
       system = "qlot";
       asd = "qlot";
     });
@@ -58428,11 +58970,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   quadpack = (build-asdf-system {
     pname = "quadpack";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "quadpack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "quadpack";
       asd = "quadpack";
     });
@@ -58728,16 +59270,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   quickhull = (build-asdf-system {
     pname = "quickhull";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "quickhull" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quickhull/2023-06-18/quickhull-20230618-git.tgz";
-      sha256 = "0af5ca0sjybf0wns0hwrfnv2ga0w2v7bqsbladjhlcxagdvaz7kf";
+      url = "http://beta.quicklisp.org/archive/quickhull/2023-10-21/quickhull-20231021-git.tgz";
+      sha256 = "0ldnkxw64vz2j3zvklpy3w13w8znr72kxm925hqbc5xyz1ydqsqr";
       system = "quickhull";
       asd = "quickhull";
     });
     systems = [ "quickhull" ];
-    lispLibs = [ (getAttr "_3d-vectors" self) (getAttr "documentation-utils" self) ];
+    lispLibs = [ (getAttr "_3d-math" self) (getAttr "documentation-utils" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -58754,6 +59296,22 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "quicklisp-slime-helper" ];
     lispLibs = [ (getAttr "alexandria" self) (getAttr "swank" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  quicklisp-starter = (build-asdf-system {
+    pname = "quicklisp-starter";
+    version = "20231021-git";
+    asds = [ "quicklisp-starter" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-brewer/2023-10-21/cl-brewer-20231021-git.tgz";
+      sha256 = "1xpgy3lci0ip9bwrx8sdwbllgq57mq3apzafxbmci5jdsa2rxh9r";
+      system = "quicklisp-starter";
+      asd = "quicklisp-starter";
+    });
+    systems = [ "quicklisp-starter" ];
+    lispLibs = [  ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -58902,38 +59460,6 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  quilc = (build-asdf-system {
-    pname = "quilc";
-    version = "v1.26.0";
-    asds = [ "quilc" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2021-12-09/quilc-v1.26.0.tgz";
-      sha256 = "09qp2d6xgq4cmg6nfsdz0gbs3rvz3ln0kawmry6cls14lxnljjrr";
-      system = "quilc";
-      asd = "quilc";
-    });
-    systems = [ "quilc" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cl-ppcre" self) (getAttr "cl-quil" self) (getAttr "cl-quil-benchmarking" self) (getAttr "cl-syslog" self) (getAttr "command-line-arguments" self) (getAttr "drakma" self) (getAttr "magicl" self) (getAttr "rpcq" self) (getAttr "split-sequence" self) (getAttr "swank" self) (getAttr "trivial-features" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  quilc-tests = (build-asdf-system {
-    pname = "quilc-tests";
-    version = "v1.26.0";
-    asds = [ "quilc-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2021-12-09/quilc-v1.26.0.tgz";
-      sha256 = "09qp2d6xgq4cmg6nfsdz0gbs3rvz3ln0kawmry6cls14lxnljjrr";
-      system = "quilc-tests";
-      asd = "quilc-tests";
-    });
-    systems = [ "quilc-tests" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "fiasco" self) (getAttr "quilc" self) (getAttr "uuid" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   quine-mccluskey = (build-asdf-system {
     pname = "quine-mccluskey";
     version = "20141217-git";
@@ -59008,134 +59534,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "quux-time" ];
     lispLibs = [  ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm = (build-asdf-system {
-    pname = "qvm";
-    version = "v1.17.2";
-    asds = [ "qvm" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm";
-      asd = "qvm";
-    });
-    systems = [ "qvm" ];
-    lispLibs = [ (getAttr "abstract-classes" self) (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "cffi-grovel" self) (getAttr "cl-quil" self) (getAttr "global-vars" self) (getAttr "ieee-floats" self) (getAttr "lparallel" self) (getAttr "magicl" self) (getAttr "mt19937" self) (getAttr "static-vectors" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-app = (build-asdf-system {
-    pname = "qvm-app";
-    version = "v1.17.2";
-    asds = [ "qvm-app" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm-app";
-      asd = "qvm-app";
-    });
-    systems = [ "qvm-app" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cl-fad" self) (getAttr "cl-ppcre" self) (getAttr "cl-quil" self) (getAttr "cl-syslog" self) (getAttr "command-line-arguments" self) (getAttr "drakma" self) (getAttr "global-vars" self) (getAttr "hunchentoot" self) (getAttr "ieee-floats" self) (getAttr "qvm" self) (getAttr "qvm-benchmarks" self) (getAttr "swank" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-app-ng = (build-asdf-system {
-    pname = "qvm-app-ng";
-    version = "v1.17.2";
-    asds = [ "qvm-app-ng" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm-app-ng";
-      asd = "qvm-app-ng";
-    });
-    systems = [ "qvm-app-ng" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cl-algebraic-data-type" self) (getAttr "cl-quil" self) (getAttr "cl-syslog" self) (getAttr "command-line-arguments" self) (getAttr "global-vars" self) (getAttr "hunchentoot" self) (getAttr "qvm" self) (getAttr "trivial-features" self) (getAttr "uuid" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-app-ng-tests = (build-asdf-system {
-    pname = "qvm-app-ng-tests";
-    version = "v1.17.2";
-    asds = [ "qvm-app-ng-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm-app-ng-tests";
-      asd = "qvm-app-ng-tests";
-    });
-    systems = [ "qvm-app-ng-tests" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "drakma" self) (getAttr "fiasco" self) (getAttr "lparallel" self) (getAttr "qvm-app-ng" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-app-tests = (build-asdf-system {
-    pname = "qvm-app-tests";
-    version = "v1.17.2";
-    asds = [ "qvm-app-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm-app-tests";
-      asd = "qvm-app-tests";
-    });
-    systems = [ "qvm-app-tests" ];
-    lispLibs = [ (getAttr "fiasco" self) (getAttr "qvm-app" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-benchmarks = (build-asdf-system {
-    pname = "qvm-benchmarks";
-    version = "v1.17.2";
-    asds = [ "qvm-benchmarks" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm-benchmarks";
-      asd = "qvm-benchmarks";
-    });
-    systems = [ "qvm-benchmarks" ];
-    lispLibs = [ (getAttr "cl-quil" self) (getAttr "qvm" self) (getAttr "trivial-benchmark" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-examples = (build-asdf-system {
-    pname = "qvm-examples";
-    version = "v1.17.2";
-    asds = [ "qvm-examples" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm-examples";
-      asd = "qvm-examples";
-    });
-    systems = [ "qvm-examples" ];
-    lispLibs = [ (getAttr "cl-grnm" self) (getAttr "cl-quil" self) (getAttr "qvm" self) (getAttr "qvm-app" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-tests = (build-asdf-system {
-    pname = "qvm-tests";
-    version = "v1.17.2";
-    asds = [ "qvm-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2021-06-30/qvm-v1.17.2.tgz";
-      sha256 = "1cvmkqfcy7rv5jlim4kh4dvqhd3jk6mw1kwrphaqghjymrf72yp8";
-      system = "qvm-tests";
-      asd = "qvm-tests";
-    });
-    systems = [ "qvm-tests" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "cl-quil" self) (getAttr "fiasco" self) (getAttr "qvm" self) (getAttr "qvm-examples" self) (getAttr "trivial-garbage" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -59254,11 +59652,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   random-state = (build-asdf-system {
     pname = "random-state";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "random-state" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/random-state/2023-06-18/random-state-20230618-git.tgz";
-      sha256 = "1p82r43drqh29pc28ak92d9a7qqlpg8vbvc9ynxbngavgq1xlnww";
+      url = "http://beta.quicklisp.org/archive/random-state/2023-10-21/random-state-20231021-git.tgz";
+      sha256 = "1hr5a0xhqhajg2qgy65aiy2iwgj77fcijs4jnd7b9zj9004hj0hw";
       system = "random-state";
       asd = "random-state";
     });
@@ -59270,11 +59668,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   random-state-test = (build-asdf-system {
     pname = "random-state-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "random-state-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/random-state/2023-06-18/random-state-20230618-git.tgz";
-      sha256 = "1p82r43drqh29pc28ak92d9a7qqlpg8vbvc9ynxbngavgq1xlnww";
+      url = "http://beta.quicklisp.org/archive/random-state/2023-10-21/random-state-20231021-git.tgz";
+      sha256 = "1hr5a0xhqhajg2qgy65aiy2iwgj77fcijs4jnd7b9zj9004hj0hw";
       system = "random-state-test";
       asd = "random-state-test";
     });
@@ -59286,11 +59684,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   random-state-viewer = (build-asdf-system {
     pname = "random-state-viewer";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "random-state-viewer" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/random-state/2023-06-18/random-state-20230618-git.tgz";
-      sha256 = "1p82r43drqh29pc28ak92d9a7qqlpg8vbvc9ynxbngavgq1xlnww";
+      url = "http://beta.quicklisp.org/archive/random-state/2023-10-21/random-state-20231021-git.tgz";
+      sha256 = "1hr5a0xhqhajg2qgy65aiy2iwgj77fcijs4jnd7b9zj9004hj0hw";
       system = "random-state-viewer";
       asd = "random-state-viewer";
     });
@@ -59366,11 +59764,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ratify = (build-asdf-system {
     pname = "ratify";
-    version = "20191007-git";
+    version = "20231021-git";
     asds = [ "ratify" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ratify/2019-10-07/ratify-20191007-git.tgz";
-      sha256 = "0lhz3g85sc8ral59bs6g32f9nvxvbz126wchr8c3f5jj95xhngma";
+      url = "http://beta.quicklisp.org/archive/ratify/2023-10-21/ratify-20231021-git.tgz";
+      sha256 = "11fsamjjbc77kjhbsh0w9wkwbdq51paa07sxjb2brvcm0ji4hynf";
       system = "ratify";
       asd = "ratify";
     });
@@ -59574,11 +59972,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks = (build-asdf-system {
     pname = "reblocks";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks/2023-06-18/reblocks-20230618-git.tgz";
-      sha256 = "1ikvmmawlp79i7wck5pv75876798504538n7pna3r1ib9xmxcbmd";
+      url = "http://beta.quicklisp.org/archive/reblocks/2023-10-21/reblocks-20231021-git.tgz";
+      sha256 = "1p2lr89f6b7w49210lvxgqa3kgias6r2wrd2w1g77h18rcl2pmlz";
       system = "reblocks";
       asd = "reblocks";
     });
@@ -59590,27 +59988,27 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-auth = (build-asdf-system {
     pname = "reblocks-auth";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-auth" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-06-18/reblocks-auth-20230618-git.tgz";
-      sha256 = "00ih0cvb8fk5mp2wrg7v1nnzi1az7gcyb4119xzz2pfjk7m1illn";
+      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-10-21/reblocks-auth-20231021-git.tgz";
+      sha256 = "0ha1dsnr55m7sp2h59z3a7vi8l2qsx9km6kry24k9za0cjdpgjvi";
       system = "reblocks-auth";
       asd = "reblocks-auth";
     });
     systems = [ "reblocks-auth" ];
-    lispLibs = [ (getAttr "_40ants-asdf-system" self) (getAttr "alexandria" self) (getAttr "cl-strings" self) (getAttr "dexador" self) (getAttr "jonathan" self) (getAttr "log4cl" self) (getAttr "mito" self) (getAttr "quri" self) (getAttr "reblocks" self) (getAttr "secret-values" self) ];
+    lispLibs = [ (getAttr "_40ants-asdf-system" self) (getAttr "alexandria" self) (getAttr "cl-strings" self) (getAttr "dexador" self) (getAttr "jonathan" self) (getAttr "local-time" self) (getAttr "log4cl" self) (getAttr "mailgun" self) (getAttr "mito" self) (getAttr "quri" self) (getAttr "reblocks" self) (getAttr "reblocks-lass" self) (getAttr "reblocks-ui" self) (getAttr "secret-values" self) (getAttr "uuid" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
   });
   reblocks-auth-ci = (build-asdf-system {
     pname = "reblocks-auth-ci";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-auth-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-06-18/reblocks-auth-20230618-git.tgz";
-      sha256 = "00ih0cvb8fk5mp2wrg7v1nnzi1az7gcyb4119xzz2pfjk7m1illn";
+      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-10-21/reblocks-auth-20231021-git.tgz";
+      sha256 = "0ha1dsnr55m7sp2h59z3a7vi8l2qsx9km6kry24k9za0cjdpgjvi";
       system = "reblocks-auth-ci";
       asd = "reblocks-auth-ci";
     });
@@ -59622,11 +60020,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-auth-docs = (build-asdf-system {
     pname = "reblocks-auth-docs";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-auth-docs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-06-18/reblocks-auth-20230618-git.tgz";
-      sha256 = "00ih0cvb8fk5mp2wrg7v1nnzi1az7gcyb4119xzz2pfjk7m1illn";
+      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-10-21/reblocks-auth-20231021-git.tgz";
+      sha256 = "0ha1dsnr55m7sp2h59z3a7vi8l2qsx9km6kry24k9za0cjdpgjvi";
       system = "reblocks-auth-docs";
       asd = "reblocks-auth-docs";
     });
@@ -59636,13 +60034,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  reblocks-auth-example = (build-asdf-system {
+    pname = "reblocks-auth-example";
+    version = "20231021-git";
+    asds = [ "reblocks-auth-example" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-10-21/reblocks-auth-20231021-git.tgz";
+      sha256 = "0ha1dsnr55m7sp2h59z3a7vi8l2qsx9km6kry24k9za0cjdpgjvi";
+      system = "reblocks-auth-example";
+      asd = "reblocks-auth-example";
+    });
+    systems = [ "reblocks-auth-example" ];
+    lispLibs = [ (getAttr "_40ants-asdf-system" self) (getAttr "_40ants-logging" self) (getAttr "_40ants-slynk" self) (getAttr "cl_plus_ssl" self) (getAttr "clack-handler-hunchentoot" self) (getAttr "local-time" self) (getAttr "mito" self) (getAttr "reblocks" self) (getAttr "reblocks-auth" self) (getAttr "reblocks-lass" self) (getAttr "reblocks-navigation-widget" self) (getAttr "reblocks-prometheus" self) (getAttr "reblocks-ui" self) (getAttr "serapeum" self) (getAttr "spinneret" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   reblocks-auth-tests = (build-asdf-system {
     pname = "reblocks-auth-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-auth-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-06-18/reblocks-auth-20230618-git.tgz";
-      sha256 = "00ih0cvb8fk5mp2wrg7v1nnzi1az7gcyb4119xzz2pfjk7m1illn";
+      url = "http://beta.quicklisp.org/archive/reblocks-auth/2023-10-21/reblocks-auth-20231021-git.tgz";
+      sha256 = "0ha1dsnr55m7sp2h59z3a7vi8l2qsx9km6kry24k9za0cjdpgjvi";
       system = "reblocks-auth-tests";
       asd = "reblocks-auth-tests";
     });
@@ -59654,11 +60068,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-docs = (build-asdf-system {
     pname = "reblocks-docs";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-docs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks/2023-06-18/reblocks-20230618-git.tgz";
-      sha256 = "1ikvmmawlp79i7wck5pv75876798504538n7pna3r1ib9xmxcbmd";
+      url = "http://beta.quicklisp.org/archive/reblocks/2023-10-21/reblocks-20231021-git.tgz";
+      sha256 = "1p2lr89f6b7w49210lvxgqa3kgias6r2wrd2w1g77h18rcl2pmlz";
       system = "reblocks-docs";
       asd = "reblocks-docs";
     });
@@ -59926,11 +60340,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-prometheus = (build-asdf-system {
     pname = "reblocks-prometheus";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-prometheus" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-prometheus/2023-06-18/reblocks-prometheus-20230618-git.tgz";
-      sha256 = "1snx2nywmj5f0wkdg8j18fdjip1lk35v3vhkzqrwq1966z8qkl4l";
+      url = "http://beta.quicklisp.org/archive/reblocks-prometheus/2023-10-21/reblocks-prometheus-20231021-git.tgz";
+      sha256 = "11gd6lsdxzz34l41v3n7dz9hzj1x3pn15bpd3hr1sr40a4f32qzm";
       system = "reblocks-prometheus";
       asd = "reblocks-prometheus";
     });
@@ -59942,11 +60356,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-prometheus-ci = (build-asdf-system {
     pname = "reblocks-prometheus-ci";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-prometheus-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-prometheus/2023-06-18/reblocks-prometheus-20230618-git.tgz";
-      sha256 = "1snx2nywmj5f0wkdg8j18fdjip1lk35v3vhkzqrwq1966z8qkl4l";
+      url = "http://beta.quicklisp.org/archive/reblocks-prometheus/2023-10-21/reblocks-prometheus-20231021-git.tgz";
+      sha256 = "11gd6lsdxzz34l41v3n7dz9hzj1x3pn15bpd3hr1sr40a4f32qzm";
       system = "reblocks-prometheus-ci";
       asd = "reblocks-prometheus-ci";
     });
@@ -59956,13 +60370,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  reblocks-prometheus-docs = (build-asdf-system {
+    pname = "reblocks-prometheus-docs";
+    version = "20231021-git";
+    asds = [ "reblocks-prometheus-docs" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/reblocks-prometheus/2023-10-21/reblocks-prometheus-20231021-git.tgz";
+      sha256 = "11gd6lsdxzz34l41v3n7dz9hzj1x3pn15bpd3hr1sr40a4f32qzm";
+      system = "reblocks-prometheus-docs";
+      asd = "reblocks-prometheus-docs";
+    });
+    systems = [ "reblocks-prometheus-docs" ];
+    lispLibs = [ (getAttr "_40ants-doc" self) (getAttr "docs-config" self) (getAttr "named-readtables" self) (getAttr "pythonic-string-reader" self) (getAttr "reblocks-prometheus" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   reblocks-prometheus-tests = (build-asdf-system {
     pname = "reblocks-prometheus-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-prometheus-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-prometheus/2023-06-18/reblocks-prometheus-20230618-git.tgz";
-      sha256 = "1snx2nywmj5f0wkdg8j18fdjip1lk35v3vhkzqrwq1966z8qkl4l";
+      url = "http://beta.quicklisp.org/archive/reblocks-prometheus/2023-10-21/reblocks-prometheus-20231021-git.tgz";
+      sha256 = "11gd6lsdxzz34l41v3n7dz9hzj1x3pn15bpd3hr1sr40a4f32qzm";
       system = "reblocks-prometheus-tests";
       asd = "reblocks-prometheus-tests";
     });
@@ -59974,11 +60404,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-tests = (build-asdf-system {
     pname = "reblocks-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks/2023-06-18/reblocks-20230618-git.tgz";
-      sha256 = "1ikvmmawlp79i7wck5pv75876798504538n7pna3r1ib9xmxcbmd";
+      url = "http://beta.quicklisp.org/archive/reblocks/2023-10-21/reblocks-20231021-git.tgz";
+      sha256 = "1p2lr89f6b7w49210lvxgqa3kgias6r2wrd2w1g77h18rcl2pmlz";
       system = "reblocks-tests";
       asd = "reblocks-tests";
     });
@@ -59990,10 +60420,10 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-typeahead = (build-asdf-system {
     pname = "reblocks-typeahead";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-typeahead" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-06-18/reblocks-typeahead-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-10-21/reblocks-typeahead-20231021-git.tgz";
       sha256 = "1j8ng31gaznhhmd536ch9r1zlmlhyarzpgsvpy1nnjizkagp06ky";
       system = "reblocks-typeahead";
       asd = "reblocks-typeahead";
@@ -60006,10 +60436,10 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-typeahead-ci = (build-asdf-system {
     pname = "reblocks-typeahead-ci";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-typeahead-ci" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-06-18/reblocks-typeahead-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-10-21/reblocks-typeahead-20231021-git.tgz";
       sha256 = "1j8ng31gaznhhmd536ch9r1zlmlhyarzpgsvpy1nnjizkagp06ky";
       system = "reblocks-typeahead-ci";
       asd = "reblocks-typeahead-ci";
@@ -60022,10 +60452,10 @@ in lib.makeScope pkgs.newScope (self: {
   });
   reblocks-typeahead-docs = (build-asdf-system {
     pname = "reblocks-typeahead-docs";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-typeahead-docs" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-06-18/reblocks-typeahead-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-10-21/reblocks-typeahead-20231021-git.tgz";
       sha256 = "1j8ng31gaznhhmd536ch9r1zlmlhyarzpgsvpy1nnjizkagp06ky";
       system = "reblocks-typeahead-docs";
       asd = "reblocks-typeahead-docs";
@@ -60036,12 +60466,28 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  reblocks-typeahead-example = (build-asdf-system {
+    pname = "reblocks-typeahead-example";
+    version = "20231021-git";
+    asds = [ "reblocks-typeahead-example" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-10-21/reblocks-typeahead-20231021-git.tgz";
+      sha256 = "1j8ng31gaznhhmd536ch9r1zlmlhyarzpgsvpy1nnjizkagp06ky";
+      system = "reblocks-typeahead-example";
+      asd = "reblocks-typeahead-example";
+    });
+    systems = [ "reblocks-typeahead-example" ];
+    lispLibs = [ (getAttr "_40ants-asdf-system" self) (getAttr "_40ants-logging" self) (getAttr "_40ants-slynk" self) (getAttr "alexandria" self) (getAttr "clack-handler-hunchentoot" self) (getAttr "mito" self) (getAttr "reblocks" self) (getAttr "reblocks-auth" self) (getAttr "reblocks-lass" self) (getAttr "reblocks-navigation-widget" self) (getAttr "reblocks-prometheus" self) (getAttr "reblocks-typeahead" self) (getAttr "reblocks-ui" self) (getAttr "serapeum" self) (getAttr "spinneret" self) (getAttr "str" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   reblocks-typeahead-tests = (build-asdf-system {
     pname = "reblocks-typeahead-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "reblocks-typeahead-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-06-18/reblocks-typeahead-20230618-git.tgz";
+      url = "http://beta.quicklisp.org/archive/reblocks-typeahead/2023-10-21/reblocks-typeahead-20231021-git.tgz";
       sha256 = "1j8ng31gaznhhmd536ch9r1zlmlhyarzpgsvpy1nnjizkagp06ky";
       system = "reblocks-typeahead-tests";
       asd = "reblocks-typeahead-tests";
@@ -60262,11 +60708,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   redirect-stream = (build-asdf-system {
     pname = "redirect-stream";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "redirect-stream" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/redirect-stream/2019-07-10/redirect-stream-20190710-git.tgz";
-      sha256 = "1l1mwkk3pxbahx2m2v9yw19na45sjdxfy1dv59if738x5mvaqb05";
+      url = "http://beta.quicklisp.org/archive/redirect-stream/2023-10-21/redirect-stream-20231021-git.tgz";
+      sha256 = "1x8m2jk02dmsc2y8kq5h1bkdl51qz3ldg58hdzj6dpyi6ciykj28";
       system = "redirect-stream";
       asd = "redirect-stream";
     });
@@ -60644,11 +61090,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   robot = (build-asdf-system {
     pname = "robot";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "robot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "robot";
       asd = "robot";
     });
@@ -60756,11 +61202,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   rove = (build-asdf-system {
     pname = "rove";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "rove" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/rove/2023-02-14/rove-20230214-git.tgz";
-      sha256 = "1w99c0795ykhn14pfhyhvfzxzz0k1z1bb846xgz3iv19s0j2vykr";
+      url = "http://beta.quicklisp.org/archive/rove/2023-10-21/rove-20231021-git.tgz";
+      sha256 = "04wc8f8y6pb99n1gpdgmrz61wnl18yidiwdbaaws2087lbm67skj";
       system = "rove";
       asd = "rove";
     });
@@ -60770,11 +61216,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   rovers-problem-translator = (build-asdf-system {
     pname = "rovers-problem-translator";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "rovers-problem-translator" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2023-06-18/shop3-20230618-git.tgz";
-      sha256 = "1gvlclqf95gb5j2cwv94yc80jflhnvzr1hsk2ylpbvjigzhphlvn";
+      url = "http://beta.quicklisp.org/archive/shop3/2023-10-21/shop3-20231021-git.tgz";
+      sha256 = "13d3735pw6qpsz66g9p8b8fhhd1givc72jypdglbm99bs0sjcdas";
       system = "rovers-problem-translator";
       asd = "rovers-problem-translator";
     });
@@ -61264,11 +61710,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   s-dot2 = (build-asdf-system {
     pname = "s-dot2";
-    version = "20181018-git";
+    version = "20231021-git";
     asds = [ "s-dot2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/s-dot2/2018-10-18/s-dot2-20181018-git.tgz";
-      sha256 = "0q8293fhdb1i2mgmck5611z92p71g9fcarrm87nsr6s21w29hzrz";
+      url = "http://beta.quicklisp.org/archive/s-dot2/2023-10-21/s-dot2-20231021-git.tgz";
+      sha256 = "0948fi6kwr9d1bnpmxz76ic929plpm56c2qx6r504jxk62gnfwa9";
       system = "s-dot2";
       asd = "s-dot2";
     });
@@ -61328,11 +61774,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   s-sql = (build-asdf-system {
     pname = "s-sql";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "s-sql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2023-02-14/postmodern-20230214-git.tgz";
-      sha256 = "19pk3jinlv70arcz6073lglg4mf972h03rxynn4z9qabqc2gk9kw";
+      url = "http://beta.quicklisp.org/archive/postmodern/2023-10-21/postmodern-20231021-git.tgz";
+      sha256 = "1abb80zmnawzl9g09css57kviwbqw5fcxhp3fjrzw7zc3n1wfr8y";
       system = "s-sql";
       asd = "s-sql";
     });
@@ -61624,11 +62070,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sc-extensions = (build-asdf-system {
     pname = "sc-extensions";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "sc-extensions" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sc-extensions/2023-06-18/sc-extensions-20230618-git.tgz";
-      sha256 = "0i4cclpw3xbks86mjm8ywyd206a0vz021ai0dcngns6q3zssqk3a";
+      url = "http://beta.quicklisp.org/archive/sc-extensions/2023-10-21/sc-extensions-20231021-git.tgz";
+      sha256 = "1hskfsfwym4h1l398v2ia8jqs4r6qi8f4sn4aynikcw4xj75qys9";
       system = "sc-extensions";
       asd = "sc-extensions";
     });
@@ -61640,11 +62086,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sc-osc = (build-asdf-system {
     pname = "sc-osc";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "sc-osc" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-collider/2023-06-18/cl-collider-20230618-git.tgz";
-      sha256 = "0q6qp5cy7fc98dqb81j5blqg2da6jf22zzp8r8czzvsg5pgjipgz";
+      url = "http://beta.quicklisp.org/archive/cl-collider/2023-10-21/cl-collider-20231021-git.tgz";
+      sha256 = "1fbqic0w27b5al8vm6zvgfhsq6yjl2zl4ppjmxvyx6pl0i0bm281";
       system = "sc-osc";
       asd = "sc-osc";
     });
@@ -61704,11 +62150,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   scigraph = (build-asdf-system {
     pname = "scigraph";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "scigraph" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "scigraph";
       asd = "scigraph";
     });
@@ -61800,16 +62246,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   scribble = (build-asdf-system {
     pname = "scribble";
-    version = "20160628-git";
+    version = "20231021-git";
     asds = [ "scribble" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/scribble/2016-06-28/scribble-20160628-git.tgz";
-      sha256 = "056qi6vw9bk19s42mapyg55mimhhvhlwgny080v9mhv4fhnqi196";
+      url = "http://beta.quicklisp.org/archive/scribble/2023-10-21/scribble-20231021-git.tgz";
+      sha256 = "1ng56lzfva5231lkjls18mw7gcfc3vzksyh6habk0x5dff92cwvw";
       system = "scribble";
       asd = "scribble";
     });
     systems = [ "scribble" ];
-    lispLibs = [ (getAttr "fare-memoization" self) (getAttr "fare-quasiquote-readtable" self) (getAttr "fare-utils" self) (getAttr "meta" self) ];
+    lispLibs = [ (getAttr "fare-memoization" self) (getAttr "fare-quasiquote-readtable" self) (getAttr "fare-utils" self) (getAttr "meta" self) (getAttr "ptc" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -61896,11 +62342,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sdl2 = (build-asdf-system {
     pname = "sdl2";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "sdl2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-sdl2/2022-07-07/cl-sdl2-20220707-git.tgz";
-      sha256 = "0kh4k9622aykgz2n3kmqcr9lhk2qh3sw7k70sqksfpz891w5y97j";
+      url = "http://beta.quicklisp.org/archive/cl-sdl2/2023-10-21/cl-sdl2-20231021-git.tgz";
+      sha256 = "189awhgxnqdyvypmw9k39542whb1jcpxx4psy6196qdbrgab8lc7";
       system = "sdl2";
       asd = "sdl2";
     });
@@ -61928,11 +62374,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sdl2-image = (build-asdf-system {
     pname = "sdl2-image";
-    version = "20190202-git";
+    version = "20231021-git";
     asds = [ "sdl2-image" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-sdl2-image/2019-02-02/cl-sdl2-image-20190202-git.tgz";
-      sha256 = "1nr7mdl125q32m15m8rdlza5kwi7m0birh1cq846pyy6zl1sjms7";
+      url = "http://beta.quicklisp.org/archive/cl-sdl2-image/2023-10-21/cl-sdl2-image-20231021-git.tgz";
+      sha256 = "0327l8qhgk79bg6lf4n4jp18z1q39apy8s5i10hnpb3j4yjs8i7y";
       system = "sdl2-image";
       asd = "sdl2-image";
     });
@@ -62168,11 +62614,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   semz_dot_decompress = (build-asdf-system {
     pname = "semz.decompress";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "semz.decompress" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/decompress/2023-06-18/decompress-20230618-git.tgz";
-      sha256 = "0skp094c25hjvjj1qp1mbnjpk5z9wgwbmgrqr72c6sdw0c3j1bmx";
+      url = "http://beta.quicklisp.org/archive/decompress/2023-10-21/decompress-20231021-git.tgz";
+      sha256 = "1p72m70qcl245gb420a6hr37s9qc3sdj6v3aqi3sj6v4qgdw733z";
       system = "semz.decompress";
       asd = "semz.decompress";
     });
@@ -62184,11 +62630,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sendgrid = (build-asdf-system {
     pname = "sendgrid";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "sendgrid" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-sendgrid/2022-11-06/cl-sendgrid-20221106-git.tgz";
-      sha256 = "0safsw9if83mv76y8fiaaa3a6akn7icqc6fmmacfypy3vkykr8i9";
+      url = "http://beta.quicklisp.org/archive/cl-sendgrid/2023-10-21/cl-sendgrid-20231021-git.tgz";
+      sha256 = "1i90smwdw3wmq49qmxzkxvxybi18c222r79xzbhp9qp4isg4aznm";
       system = "sendgrid";
       asd = "sendgrid";
     });
@@ -62200,11 +62646,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sento = (build-asdf-system {
     pname = "sento";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "sento" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-gserver/2023-06-18/cl-gserver-20230618-git.tgz";
-      sha256 = "1r0nrn0y4sbiyf8nmv38fqz0sbhk6xz5r9ydj0v72n70xpw9h5fy";
+      url = "http://beta.quicklisp.org/archive/cl-gserver/2023-10-21/cl-gserver-20231021-git.tgz";
+      sha256 = "05zfa33y93qimnp1i7kamg3yj4msfp8fdhgh0waz3ll5k7v1g0fj";
       system = "sento";
       asd = "sento";
     });
@@ -62296,11 +62742,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   serapeum = (build-asdf-system {
     pname = "serapeum";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "serapeum" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/serapeum/2023-06-18/serapeum-20230618-git.tgz";
-      sha256 = "19x33smn1iff0nm3g42p15v04pa4n71gcvpvcwz72f65y5lyc4w6";
+      url = "http://beta.quicklisp.org/archive/serapeum/2023-10-21/serapeum-20231021-git.tgz";
+      sha256 = "0jbvkxznx7b3nd7apw89lbhhp659a0agj7ibjcqckyqs7pn29s3r";
       system = "serapeum";
       asd = "serapeum";
     });
@@ -62454,11 +62900,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sha3 = (build-asdf-system {
     pname = "sha3";
-    version = "20180228-git";
+    version = "20231021-git";
     asds = [ "sha3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sha3/2018-02-28/sha3-20180228-git.tgz";
-      sha256 = "112pwx8jzraxn0xqssmjlgd7j4sbl19vz6l8ansdq1zd69dryzy6";
+      url = "http://beta.quicklisp.org/archive/sha3/2023-10-21/sha3-20231021-git.tgz";
+      sha256 = "0jl59js4n1gc08j2bcwf0d1gy82lf7g53b639dwh6b0milbqh7gz";
       system = "sha3";
       asd = "sha3";
     });
@@ -62534,11 +62980,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   shasht = (build-asdf-system {
     pname = "shasht";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "shasht" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shasht/2023-06-18/shasht-20230618-git.tgz";
-      sha256 = "0zb0pydljbx2vrvqh8v43rqlzn6zsbi0l8lrxzvqgzlq4j9prkk1";
+      url = "http://beta.quicklisp.org/archive/shasht/2023-10-21/shasht-20231021-git.tgz";
+      sha256 = "1y7qh8kdhk06243vkmxzdk0y9rax4g8pv28bd01j48ix777mpcdc";
       system = "shasht";
       asd = "shasht";
     });
@@ -62646,11 +63092,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   shop3 = (build-asdf-system {
     pname = "shop3";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "shop3" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2023-06-18/shop3-20230618-git.tgz";
-      sha256 = "1gvlclqf95gb5j2cwv94yc80jflhnvzr1hsk2ylpbvjigzhphlvn";
+      url = "http://beta.quicklisp.org/archive/shop3/2023-10-21/shop3-20231021-git.tgz";
+      sha256 = "13d3735pw6qpsz66g9p8b8fhhd1givc72jypdglbm99bs0sjcdas";
       system = "shop3";
       asd = "shop3";
     });
@@ -62662,11 +63108,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   shop3-thmpr-api = (build-asdf-system {
     pname = "shop3-thmpr-api";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "shop3-thmpr-api" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/shop3/2023-06-18/shop3-20230618-git.tgz";
-      sha256 = "1gvlclqf95gb5j2cwv94yc80jflhnvzr1hsk2ylpbvjigzhphlvn";
+      url = "http://beta.quicklisp.org/archive/shop3/2023-10-21/shop3-20231021-git.tgz";
+      sha256 = "13d3735pw6qpsz66g9p8b8fhhd1givc72jypdglbm99bs0sjcdas";
       system = "shop3-thmpr-api";
       asd = "shop3-thmpr-api";
     });
@@ -62710,11 +63156,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   si-kanren = (build-asdf-system {
     pname = "si-kanren";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "si-kanren" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/si-kanren/2023-06-18/si-kanren-20230618-git.tgz";
-      sha256 = "1adj4c7br5sp84f9wb1p8j6mqfsg1cixq29sgmc35szhai9raj6y";
+      url = "http://beta.quicklisp.org/archive/si-kanren/2023-10-21/si-kanren-20231021-git.tgz";
+      sha256 = "0gzi871iap5hma4c3v7lpb4vcrj72sbr5bmc1xzslhxdmb1r26pq";
       system = "si-kanren";
       asd = "si-kanren";
     });
@@ -62736,22 +63182,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "silo" ];
     lispLibs = [  ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  simple = (build-asdf-system {
-    pname = "simple";
-    version = "version-1.0b26";
-    asds = [ "simple" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-clon/2023-06-18/cl-clon-version-1.0b26.tgz";
-      sha256 = "1vg2r788vh86i2cnc4yy9w05y5rv6rk0ybxb91wqzjykn0wc4kx3";
-      system = "simple";
-      asd = "simple";
-    });
-    systems = [ "simple" ];
-    lispLibs = [ (getAttr "net_dot_didierverna_dot_clon" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -62822,11 +63252,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   simple-date = (build-asdf-system {
     pname = "simple-date";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "simple-date" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/postmodern/2023-02-14/postmodern-20230214-git.tgz";
-      sha256 = "19pk3jinlv70arcz6073lglg4mf972h03rxynn4z9qabqc2gk9kw";
+      url = "http://beta.quicklisp.org/archive/postmodern/2023-10-21/postmodern-20231021-git.tgz";
+      sha256 = "1abb80zmnawzl9g09css57kviwbqw5fcxhp3fjrzw7zc3n1wfr8y";
       system = "simple-date";
       asd = "simple-date";
     });
@@ -62914,11 +63344,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   simple-inferiors = (build-asdf-system {
     pname = "simple-inferiors";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "simple-inferiors" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/simple-inferiors/2023-06-18/simple-inferiors-20230618-git.tgz";
-      sha256 = "0jlznixywa1ix19qsdvvwkabxff7cjwqjrhddxbpfpdn2gni8dn8";
+      url = "http://beta.quicklisp.org/archive/simple-inferiors/2023-10-21/simple-inferiors-20231021-git.tgz";
+      sha256 = "1b7y44r2ncpfc5766pw56k07036qjvwqdbycizldfk9rjam2afa6";
       system = "simple-inferiors";
       asd = "simple-inferiors";
     });
@@ -63024,11 +63454,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   simple-tasks = (build-asdf-system {
     pname = "simple-tasks";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "simple-tasks" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/simple-tasks/2023-06-18/simple-tasks-20230618-git.tgz";
-      sha256 = "0rini8i4l7ic463xsv9fmxnvq61wj6ayiirlchn3xvznls9z0pix";
+      url = "http://beta.quicklisp.org/archive/simple-tasks/2023-10-21/simple-tasks-20231021-git.tgz";
+      sha256 = "14j0sbi9zv22rrcp3wvjzmrgk6f75zydhs50cbmspr2r0c9s5c6n";
       system = "simple-tasks";
       asd = "simple-tasks";
     });
@@ -63230,11 +63660,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sketch = (build-asdf-system {
     pname = "sketch";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "sketch" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sketch/2023-02-14/sketch-20230214-git.tgz";
-      sha256 = "07n8pgbfhr9k13jkwn5kzsbq45kf8dmq9mlax5dn7xvpmlpnsild";
+      url = "http://beta.quicklisp.org/archive/sketch/2023-10-21/sketch-20231021-git.tgz";
+      sha256 = "0qpdwpgk1x10isp125ci1pdfcnlix8wygvfjd7fxwjg41lw8wqp4";
       system = "sketch";
       asd = "sketch";
     });
@@ -63246,11 +63676,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sketch-examples = (build-asdf-system {
     pname = "sketch-examples";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "sketch-examples" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sketch/2023-02-14/sketch-20230214-git.tgz";
-      sha256 = "07n8pgbfhr9k13jkwn5kzsbq45kf8dmq9mlax5dn7xvpmlpnsild";
+      url = "http://beta.quicklisp.org/archive/sketch/2023-10-21/sketch-20231021-git.tgz";
+      sha256 = "0qpdwpgk1x10isp125ci1pdfcnlix8wygvfjd7fxwjg41lw8wqp4";
       system = "sketch-examples";
       asd = "sketch-examples";
     });
@@ -63374,11 +63804,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   slim = (build-asdf-system {
     pname = "slim";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "slim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/mcclim/2023-06-18/mcclim-20230618-git.tgz";
-      sha256 = "1p86931mw6glwlmshimn9bf4wbzp0jr1ppszc0r9fy7m6vcjlni6";
+      url = "http://beta.quicklisp.org/archive/mcclim/2023-10-21/mcclim-20231021-git.tgz";
+      sha256 = "09f1067v5bc2zmqj1khslrwi76a9xdkpzh7wx9yrvx7y126ikxlm";
       system = "slim";
       asd = "slim";
     });
@@ -63390,11 +63820,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   slite = (build-asdf-system {
     pname = "slite";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "slite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/slite/2022-11-06/slite-20221106-git.tgz";
-      sha256 = "1l9b3dvmi0hf38ir3sx6005hpaqm1dc3x02hcprn4x6fik5l0zdk";
+      url = "http://beta.quicklisp.org/archive/slite/2023-10-21/slite-20231021-git.tgz";
+      sha256 = "0b4c4vs1zlhcvr9flv8bx76v9hrwc9qmazmp60407q7cghn0k8zk";
       system = "slite";
       asd = "slite";
     });
@@ -63454,11 +63884,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   slynk = (build-asdf-system {
     pname = "slynk";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "slynk" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sly/2023-06-18/sly-20230618-git.tgz";
-      sha256 = "0fk06gy2m036smyq57dsv5hsc9bh1879q114qfmk8ch77h0rd8dj";
+      url = "http://beta.quicklisp.org/archive/sly/2023-10-21/sly-20231021-git.tgz";
+      sha256 = "15nyr02ykkws4q79jcmxcawddg8sgq9v5l8k7jv7gg3hnpzxjlb2";
       system = "slynk";
       asd = "slynk";
     });
@@ -63976,11 +64406,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   softdrink = (build-asdf-system {
     pname = "softdrink";
-    version = "20200427-git";
+    version = "20231021-git";
     asds = [ "softdrink" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/softdrink/2020-04-27/softdrink-20200427-git.tgz";
-      sha256 = "1b0by4ymvk120aaq0viqqjqnbk91g00cd7bipnrb75nfb4ahi2s9";
+      url = "http://beta.quicklisp.org/archive/softdrink/2023-10-21/softdrink-20231021-git.tgz";
+      sha256 = "1454mqpwb2s7m1myhibj2mrlm64wng1jgbv94mhs6hpzj2r2mgdi";
       system = "softdrink";
       asd = "softdrink";
     });
@@ -63992,11 +64422,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   software-evolution-library = (build-asdf-system {
     pname = "software-evolution-library";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "software-evolution-library" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sel/2023-06-18/sel-20230618-git.tgz";
-      sha256 = "0nrw04b466xrcyzlnvd15zyx45ppzxazinlrpfqh3yqf7zsfz7f9";
+      url = "http://beta.quicklisp.org/archive/sel/2023-10-21/sel-20231021-git.tgz";
+      sha256 = "09s1avxc569y0hanrgqw1dkhlv4mmfkwnl3vhb5hyxgljrw11wh0";
       system = "software-evolution-library";
       asd = "software-evolution-library";
     });
@@ -64040,11 +64470,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   south = (build-asdf-system {
     pname = "south";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "south" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/south/2019-07-10/south-20190710-git.tgz";
-      sha256 = "09fyqxsflc107f3g2mzh81wnr3lzbaaz2jj5js0q6rpyaq2yc39p";
+      url = "http://beta.quicklisp.org/archive/south/2023-10-21/south-20231021-git.tgz";
+      sha256 = "0acvi3nwddwphxm92i8bbv1nbb9zzx7gbcza5cr68rs8wydsr8h3";
       system = "south";
       asd = "south";
     });
@@ -64232,11 +64662,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   speechless = (build-asdf-system {
     pname = "speechless";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "speechless" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/speechless/2023-06-18/speechless-20230618-git.tgz";
-      sha256 = "1k0kc2l98jyv04l48xnj38qwpddan80c7m41srjld64jkna0fhas";
+      url = "http://beta.quicklisp.org/archive/speechless/2023-10-21/speechless-20231021-git.tgz";
+      sha256 = "0x1v3gf0f0xpyxs8392r4xaqz214zmd1j89l61x9bg2h30k8ls37";
       system = "speechless";
       asd = "speechless";
     });
@@ -64296,11 +64726,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   spinneret = (build-asdf-system {
     pname = "spinneret";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "spinneret" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/spinneret/2023-06-18/spinneret-20230618-git.tgz";
-      sha256 = "1sgfw5vjpbksdglcznc2b2j3kq1pkr08y4wjwbkbwygm68vvfksl";
+      url = "http://beta.quicklisp.org/archive/spinneret/2023-10-21/spinneret-20231021-git.tgz";
+      sha256 = "0b9wvhgcaa6fqpm2hayd5q2aysy198dwh1c3fapd3sr49vabp806";
       system = "spinneret";
       asd = "spinneret";
     });
@@ -64546,11 +64976,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   staple = (build-asdf-system {
     pname = "staple";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "staple" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2023-06-18/staple-20230618-git.tgz";
-      sha256 = "0qf0if7py3n4rszg25lcavpsqikfz6k5dvcmh5q67y8x5r12i5m7";
+      url = "http://beta.quicklisp.org/archive/staple/2023-10-21/staple-20231021-git.tgz";
+      sha256 = "1k3dgw0i1j8x7kwlgc53w808gfn4gll598ajgngsmrc3jisiw0nx";
       system = "staple";
       asd = "staple";
     });
@@ -64562,11 +64992,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   staple-code-parser = (build-asdf-system {
     pname = "staple-code-parser";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "staple-code-parser" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2023-06-18/staple-20230618-git.tgz";
-      sha256 = "0qf0if7py3n4rszg25lcavpsqikfz6k5dvcmh5q67y8x5r12i5m7";
+      url = "http://beta.quicklisp.org/archive/staple/2023-10-21/staple-20231021-git.tgz";
+      sha256 = "1k3dgw0i1j8x7kwlgc53w808gfn4gll598ajgngsmrc3jisiw0nx";
       system = "staple-code-parser";
       asd = "staple-code-parser";
     });
@@ -64578,11 +65008,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   staple-markdown = (build-asdf-system {
     pname = "staple-markdown";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "staple-markdown" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2023-06-18/staple-20230618-git.tgz";
-      sha256 = "0qf0if7py3n4rszg25lcavpsqikfz6k5dvcmh5q67y8x5r12i5m7";
+      url = "http://beta.quicklisp.org/archive/staple/2023-10-21/staple-20231021-git.tgz";
+      sha256 = "1k3dgw0i1j8x7kwlgc53w808gfn4gll598ajgngsmrc3jisiw0nx";
       system = "staple-markdown";
       asd = "staple-markdown";
     });
@@ -64594,11 +65024,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   staple-markless = (build-asdf-system {
     pname = "staple-markless";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "staple-markless" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2023-06-18/staple-20230618-git.tgz";
-      sha256 = "0qf0if7py3n4rszg25lcavpsqikfz6k5dvcmh5q67y8x5r12i5m7";
+      url = "http://beta.quicklisp.org/archive/staple/2023-10-21/staple-20231021-git.tgz";
+      sha256 = "1k3dgw0i1j8x7kwlgc53w808gfn4gll598ajgngsmrc3jisiw0nx";
       system = "staple-markless";
       asd = "staple-markless";
     });
@@ -64610,11 +65040,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   staple-package-recording = (build-asdf-system {
     pname = "staple-package-recording";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "staple-package-recording" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2023-06-18/staple-20230618-git.tgz";
-      sha256 = "0qf0if7py3n4rszg25lcavpsqikfz6k5dvcmh5q67y8x5r12i5m7";
+      url = "http://beta.quicklisp.org/archive/staple/2023-10-21/staple-20231021-git.tgz";
+      sha256 = "1k3dgw0i1j8x7kwlgc53w808gfn4gll598ajgngsmrc3jisiw0nx";
       system = "staple-package-recording";
       asd = "staple-package-recording";
     });
@@ -64626,11 +65056,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   staple-restructured-text = (build-asdf-system {
     pname = "staple-restructured-text";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "staple-restructured-text" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2023-06-18/staple-20230618-git.tgz";
-      sha256 = "0qf0if7py3n4rszg25lcavpsqikfz6k5dvcmh5q67y8x5r12i5m7";
+      url = "http://beta.quicklisp.org/archive/staple/2023-10-21/staple-20231021-git.tgz";
+      sha256 = "1k3dgw0i1j8x7kwlgc53w808gfn4gll598ajgngsmrc3jisiw0nx";
       system = "staple-restructured-text";
       asd = "staple-restructured-text";
     });
@@ -64642,11 +65072,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   staple-server = (build-asdf-system {
     pname = "staple-server";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "staple-server" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/staple/2023-06-18/staple-20230618-git.tgz";
-      sha256 = "0qf0if7py3n4rszg25lcavpsqikfz6k5dvcmh5q67y8x5r12i5m7";
+      url = "http://beta.quicklisp.org/archive/staple/2023-10-21/staple-20231021-git.tgz";
+      sha256 = "1k3dgw0i1j8x7kwlgc53w808gfn4gll598ajgngsmrc3jisiw0nx";
       system = "staple-server";
       asd = "staple-server";
     });
@@ -64702,11 +65132,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   statistics = (build-asdf-system {
     pname = "statistics";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "statistics" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/statistics/2023-02-14/statistics-20230214-git.tgz";
-      sha256 = "1z3yhb9pqs8xv6xjwc7qsdi07kxx87cryy7a9k8w2fa2kh3l18ns";
+      url = "http://beta.quicklisp.org/archive/statistics/2023-10-21/statistics-20231021-git.tgz";
+      sha256 = "0cx17fraqq3ac2w5mn4rkahfki3pr80flbcnhlrv6crgj8wshz2n";
       system = "statistics";
       asd = "statistics";
     });
@@ -64892,11 +65322,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   stopclock = (build-asdf-system {
     pname = "stopclock";
-    version = "v1.0.1";
+    version = "v1.0.2";
     asds = [ "stopclock" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stopclock/2023-06-18/stopclock-v1.0.1.tgz";
-      sha256 = "0y4rzkc6fh2znfdv5838xaxdgdn1jsdclq4kdg9yvbqkjhj68mf1";
+      url = "http://beta.quicklisp.org/archive/stopclock/2023-10-21/stopclock-v1.0.2.tgz";
+      sha256 = "1p5lygznfasad1sw8whd2bg9bwi3z7nbncr3samd55nsi5yr3hfd";
       system = "stopclock";
       asd = "stopclock";
     });
@@ -64908,11 +65338,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   str = (build-asdf-system {
     pname = "str";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "str" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-str/2023-06-18/cl-str-20230618-git.tgz";
-      sha256 = "0l2b01mr0jxln1igxg0gdwyaxvm2fm9v5a862d2q61mdi1yadddk";
+      url = "http://beta.quicklisp.org/archive/cl-str/2023-10-21/cl-str-20231021-git.tgz";
+      sha256 = "0zq0f6iia4mg755zmbpnjcbbiybi1ckxrvcy097iz4g9ayc0frmq";
       system = "str";
       asd = "str";
     });
@@ -64922,11 +65352,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   str_dot_test = (build-asdf-system {
     pname = "str.test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "str.test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-str/2023-06-18/cl-str-20230618-git.tgz";
-      sha256 = "0l2b01mr0jxln1igxg0gdwyaxvm2fm9v5a862d2q61mdi1yadddk";
+      url = "http://beta.quicklisp.org/archive/cl-str/2023-10-21/cl-str-20231021-git.tgz";
+      sha256 = "0zq0f6iia4mg755zmbpnjcbbiybi1ckxrvcy097iz4g9ayc0frmq";
       system = "str.test";
       asd = "str.test";
     });
@@ -65144,11 +65574,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   studio-client = (build-asdf-system {
     pname = "studio-client";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "studio-client" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/studio-client/2023-06-18/studio-client-20230618-git.tgz";
-      sha256 = "168vb3m9k2ry3lrccs2nkv9xnhhn8b6nzr5aqfp1v8zadqsrsak1";
+      url = "http://beta.quicklisp.org/archive/studio-client/2023-10-21/studio-client-20231021-git.tgz";
+      sha256 = "0wxakd5jd0y6h2ii4690qav7zna6iyamdyksw5zjyz4xmsg4by2l";
       system = "studio-client";
       asd = "studio-client";
     });
@@ -65160,11 +65590,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   stumpwm = (build-asdf-system {
     pname = "stumpwm";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "stumpwm" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stumpwm/2023-06-18/stumpwm-20230618-git.tgz";
-      sha256 = "044l7lda0ws81rgi9z8vm4482sxixb1qnlhq1gbsrbxa1x8wad0s";
+      url = "http://beta.quicklisp.org/archive/stumpwm/2023-10-21/stumpwm-20231021-git.tgz";
+      sha256 = "114kicsziqvm15x15yhc39j8qzv6gxz4wxc40xp968pprzr4a4d1";
       system = "stumpwm";
       asd = "stumpwm";
     });
@@ -65206,11 +65636,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   stumpwm-tests = (build-asdf-system {
     pname = "stumpwm-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "stumpwm-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/stumpwm/2023-06-18/stumpwm-20230618-git.tgz";
-      sha256 = "044l7lda0ws81rgi9z8vm4482sxixb1qnlhq1gbsrbxa1x8wad0s";
+      url = "http://beta.quicklisp.org/archive/stumpwm/2023-10-21/stumpwm-20231021-git.tgz";
+      sha256 = "114kicsziqvm15x15yhc39j8qzv6gxz4wxc40xp968pprzr4a4d1";
       system = "stumpwm-tests";
       asd = "stumpwm-tests";
     });
@@ -65302,11 +65732,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   surf = (build-asdf-system {
     pname = "surf";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "surf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "surf";
       asd = "surf";
     });
@@ -65410,16 +65840,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sxql = (build-asdf-system {
     pname = "sxql";
-    version = "20210630-git";
+    version = "20231021-git";
     asds = [ "sxql" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sxql/2021-06-30/sxql-20210630-git.tgz";
-      sha256 = "011an993amy8q3gl4hyqrgnc93cgny3cv9gbp679rrmyyp8zmywr";
+      url = "http://beta.quicklisp.org/archive/sxql/2023-10-21/sxql-20231021-git.tgz";
+      sha256 = "100war7l253dhld5gl49xmdfpl93kardjaaxb0cka0yzrvz4x0sw";
       system = "sxql";
       asd = "sxql";
     });
     systems = [ "sxql" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-package-locks" self) (getAttr "cl-syntax-annot" self) (getAttr "iterate" self) (getAttr "split-sequence" self) (getAttr "trivia" self) (getAttr "trivial-types" self) ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "cl-annot" self) (getAttr "cl-package-locks" self) (getAttr "iterate" self) (getAttr "named-readtables" self) (getAttr "split-sequence" self) (getAttr "trivia" self) (getAttr "trivial-types" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -65442,11 +65872,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   sxql-test = (build-asdf-system {
     pname = "sxql-test";
-    version = "20210630-git";
+    version = "20231021-git";
     asds = [ "sxql-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/sxql/2021-06-30/sxql-20210630-git.tgz";
-      sha256 = "011an993amy8q3gl4hyqrgnc93cgny3cv9gbp679rrmyyp8zmywr";
+      url = "http://beta.quicklisp.org/archive/sxql/2023-10-21/sxql-20231021-git.tgz";
+      sha256 = "100war7l253dhld5gl49xmdfpl93kardjaaxb0cka0yzrvz4x0sw";
       system = "sxql-test";
       asd = "sxql-test";
     });
@@ -65550,11 +65980,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   system-locale = (build-asdf-system {
     pname = "system-locale";
-    version = "20200610-git";
+    version = "20231021-git";
     asds = [ "system-locale" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/system-locale/2020-06-10/system-locale-20200610-git.tgz";
-      sha256 = "00p5c053kmgq4ks6l9mxsqz6g3bjcybvkvj0bh3r90qgpkaawm1p";
+      url = "http://beta.quicklisp.org/archive/system-locale/2023-10-21/system-locale-20231021-git.tgz";
+      sha256 = "0p68mgmh52mzq66dz3rczakzwavjp9ld27c2anxjx8fzbf033fp9";
       system = "system-locale";
       asd = "system-locale";
     });
@@ -65566,11 +65996,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-clack-handler-fcgi = (build-asdf-system {
     pname = "t-clack-handler-fcgi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-clack-handler-fcgi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "t-clack-handler-fcgi";
       asd = "t-clack-handler-fcgi";
     });
@@ -65582,11 +66012,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-clack-handler-hunchentoot = (build-asdf-system {
     pname = "t-clack-handler-hunchentoot";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-clack-handler-hunchentoot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "t-clack-handler-hunchentoot";
       asd = "t-clack-handler-hunchentoot";
     });
@@ -65598,11 +66028,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-clack-handler-toot = (build-asdf-system {
     pname = "t-clack-handler-toot";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-clack-handler-toot" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "t-clack-handler-toot";
       asd = "t-clack-handler-toot";
     });
@@ -65614,11 +66044,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-clack-handler-wookie = (build-asdf-system {
     pname = "t-clack-handler-wookie";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-clack-handler-wookie" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/clack/2023-06-18/clack-20230618-git.tgz";
-      sha256 = "1xvxgzzd8jv0ig2hwq4yaxsshs5j55v144c34wqyva3c56j3640i";
+      url = "http://beta.quicklisp.org/archive/clack/2023-10-21/clack-20231021-git.tgz";
+      sha256 = "1w6ij1syv68vnm9xwp2q1lmnn92yafpbv7w1fyk012jxyqdsj4sy";
       system = "t-clack-handler-wookie";
       asd = "t-clack-handler-wookie";
     });
@@ -65630,11 +66060,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack = (build-asdf-system {
     pname = "t-lack";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack";
       asd = "t-lack";
     });
@@ -65646,11 +66076,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-component = (build-asdf-system {
     pname = "t-lack-component";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-component" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-component";
       asd = "t-lack-component";
     });
@@ -65662,11 +66092,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-middleware-accesslog = (build-asdf-system {
     pname = "t-lack-middleware-accesslog";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-middleware-accesslog" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-middleware-accesslog";
       asd = "t-lack-middleware-accesslog";
     });
@@ -65678,11 +66108,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-middleware-auth-basic = (build-asdf-system {
     pname = "t-lack-middleware-auth-basic";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-middleware-auth-basic" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-middleware-auth-basic";
       asd = "t-lack-middleware-auth-basic";
     });
@@ -65694,11 +66124,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-middleware-backtrace = (build-asdf-system {
     pname = "t-lack-middleware-backtrace";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-middleware-backtrace" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-middleware-backtrace";
       asd = "t-lack-middleware-backtrace";
     });
@@ -65710,11 +66140,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-middleware-csrf = (build-asdf-system {
     pname = "t-lack-middleware-csrf";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-middleware-csrf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-middleware-csrf";
       asd = "t-lack-middleware-csrf";
     });
@@ -65726,11 +66156,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-middleware-mount = (build-asdf-system {
     pname = "t-lack-middleware-mount";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-middleware-mount" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-middleware-mount";
       asd = "t-lack-middleware-mount";
     });
@@ -65742,11 +66172,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-middleware-session = (build-asdf-system {
     pname = "t-lack-middleware-session";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-middleware-session" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-middleware-session";
       asd = "t-lack-middleware-session";
     });
@@ -65758,11 +66188,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-middleware-static = (build-asdf-system {
     pname = "t-lack-middleware-static";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-middleware-static" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-middleware-static";
       asd = "t-lack-middleware-static";
     });
@@ -65774,11 +66204,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-request = (build-asdf-system {
     pname = "t-lack-request";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-request" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-request";
       asd = "t-lack-request";
     });
@@ -65790,11 +66220,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-session-store-dbi = (build-asdf-system {
     pname = "t-lack-session-store-dbi";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-session-store-dbi" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-session-store-dbi";
       asd = "t-lack-session-store-dbi";
     });
@@ -65806,11 +66236,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-session-store-redis = (build-asdf-system {
     pname = "t-lack-session-store-redis";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-session-store-redis" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-session-store-redis";
       asd = "t-lack-session-store-redis";
     });
@@ -65822,11 +66252,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   t-lack-util = (build-asdf-system {
     pname = "t-lack-util";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "t-lack-util" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/lack/2023-06-18/lack-20230618-git.tgz";
-      sha256 = "01w3ichb705kwkvx2vj95n6b05fcj50rm8qlfqcv3baav5lp4z90";
+      url = "http://beta.quicklisp.org/archive/lack/2023-10-21/lack-20231021-git.tgz";
+      sha256 = "1cmqf9fqjxdkhf73sv2k4jccalrqbli2y6yv5wzq9x6jhpdk77s3";
       system = "t-lack-util";
       asd = "t-lack-util";
     });
@@ -65838,11 +66268,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ta2 = (build-asdf-system {
     pname = "ta2";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "ta2" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "ta2";
       asd = "ta2";
     });
@@ -66046,11 +66476,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   tasty = (build-asdf-system {
     pname = "tasty";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "tasty" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "tasty";
       asd = "tasty";
     });
@@ -66078,11 +66508,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   tcod = (build-asdf-system {
     pname = "tcod";
-    version = "20201220-git";
+    version = "20231021-git";
     asds = [ "tcod" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-tcod/2020-12-20/cl-tcod-20201220-git.tgz";
-      sha256 = "145h0dhxm1idblcld456cv7k00vi6p0zyn5rxkky5y4gk85ws8l5";
+      url = "http://beta.quicklisp.org/archive/cl-tcod/2023-10-21/cl-tcod-20231021-git.tgz";
+      sha256 = "1r4ip16dlzr56p94b0grw6nmkykbmgb04jsqdvgl1ypcmbpfr3i1";
       system = "tcod";
       asd = "tcod";
     });
@@ -66334,11 +66764,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   terrable = (build-asdf-system {
     pname = "terrable";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "terrable" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/terrable/2019-07-10/terrable-20190710-git.tgz";
-      sha256 = "0pnqflgz410zydc1ivwnd8hcl24bgr7x12yjzr7g4lq3ibc8y97b";
+      url = "http://beta.quicklisp.org/archive/terrable/2023-10-21/terrable-20231021-git.tgz";
+      sha256 = "03fjfdffr5lf12llqbf3d07dd87ykfyw525dxnwm6gpyvg49wlgl";
       system = "terrable";
       asd = "terrable";
     });
@@ -66366,11 +66796,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   test-40ants-system = (build-asdf-system {
     pname = "test-40ants-system";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "test-40ants-system" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/40ants-asdf-system/2023-02-14/40ants-asdf-system-20230214-git.tgz";
-      sha256 = "02r6frx4xcv7qfkmdks1zpv0b3qamywdcwd6zvznfcnmfa8jbfmy";
+      url = "http://beta.quicklisp.org/archive/40ants-asdf-system/2023-10-21/40ants-asdf-system-20231021-git.tgz";
+      sha256 = "17hfih5b1shw2l0fw3dy3q5dxqra80k3h4jfmlnf0bp3ii0385g5";
       system = "test-40ants-system";
       asd = "test-40ants-system";
     });
@@ -66510,11 +66940,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   testiere = (build-asdf-system {
     pname = "testiere";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "testiere" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/testiere/2023-02-14/testiere-20230214-git.tgz";
-      sha256 = "0cbdhl5rrmymci0dy2lmc8w7l3vpv1phjl05yahch226wjd2z8fq";
+      url = "http://beta.quicklisp.org/archive/testiere/2023-10-21/testiere-20231021-git.tgz";
+      sha256 = "1kgd9fqp2bkxpzfv4z4jhicivmfi0wnnmg75ip7zh67jdh8m6fhd";
       system = "testiere";
       asd = "testiere";
     });
@@ -66830,16 +67260,32 @@ in lib.makeScope pkgs.newScope (self: {
   });
   tiny-routes = (build-asdf-system {
     pname = "tiny-routes";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "tiny-routes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tiny-routes/2022-03-31/tiny-routes-20220331-git.tgz";
-      sha256 = "1210j7wd9rgh95p8ccwrz5axvganag14wg10giwmj236p08869ww";
+      url = "http://beta.quicklisp.org/archive/tiny-routes/2023-10-21/tiny-routes-20231021-git.tgz";
+      sha256 = "085k0ibfhz5i68mrd1y4pr5dykrpcd4p1iig6bgxa5h7c844sm0i";
       system = "tiny-routes";
       asd = "tiny-routes";
     });
     systems = [ "tiny-routes" ];
     lispLibs = [ (getAttr "cl-ppcre" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  tiny-routes-middleware-cookie = (build-asdf-system {
+    pname = "tiny-routes-middleware-cookie";
+    version = "20231021-git";
+    asds = [ "tiny-routes-middleware-cookie" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/tiny-routes/2023-10-21/tiny-routes-20231021-git.tgz";
+      sha256 = "085k0ibfhz5i68mrd1y4pr5dykrpcd4p1iig6bgxa5h7c844sm0i";
+      system = "tiny-routes-middleware-cookie";
+      asd = "tiny-routes-middleware-cookie";
+    });
+    systems = [ "tiny-routes-middleware-cookie" ];
+    lispLibs = [ (getAttr "cl-cookie" self) (getAttr "tiny-routes" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -66926,11 +67372,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   toms419 = (build-asdf-system {
     pname = "toms419";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "toms419" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "toms419";
       asd = "toms419";
     });
@@ -66942,11 +67388,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   toms715 = (build-asdf-system {
     pname = "toms715";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "toms715" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "toms715";
       asd = "toms715";
     });
@@ -66958,11 +67404,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   toms717 = (build-asdf-system {
     pname = "toms717";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "toms717" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/f2cl/2020-09-25/f2cl-20200925-git.tgz";
-      sha256 = "0kq1lrz0sg4kj64w0ysihnfwi65pami362fs2mvpyf1yhgxmq08y";
+      url = "http://beta.quicklisp.org/archive/f2cl/2023-10-21/f2cl-20231021-git.tgz";
+      sha256 = "0ifwsal8kxsbi4xrn90z2smvbz393babl3j25n33fadjpfan2f1z";
       system = "toms717";
       asd = "toms717";
     });
@@ -66990,11 +67436,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   tooter = (build-asdf-system {
     pname = "tooter";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "tooter" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/tooter/2023-06-18/tooter-20230618-git.tgz";
-      sha256 = "1gq76b8sr7rs3finnmnizql6n3sw108bb2k3va60rvc4zqkzk058";
+      url = "http://beta.quicklisp.org/archive/tooter/2023-10-21/tooter-20231021-git.tgz";
+      sha256 = "1l4jjsb3l1adnd7am8kvgb0vn4czwi6z894222hjmhash904p48l";
       system = "tooter";
       asd = "tooter";
     });
@@ -67116,6 +67562,38 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  transducers = (build-asdf-system {
+    pname = "transducers";
+    version = "20231021-git";
+    asds = [ "transducers" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-transducers/2023-10-21/cl-transducers-20231021-git.tgz";
+      sha256 = "16711ah5cka09ib6lhjbrm2ycwj8m8b5jgp0j87x93z8p0gkmj8y";
+      system = "transducers";
+      asd = "transducers";
+    });
+    systems = [ "transducers" ];
+    lispLibs = [ (getAttr "sycamore" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
+  transducers-jzon = (build-asdf-system {
+    pname = "transducers-jzon";
+    version = "20231021-git";
+    asds = [ "transducers-jzon" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/cl-transducers/2023-10-21/cl-transducers-20231021-git.tgz";
+      sha256 = "16711ah5cka09ib6lhjbrm2ycwj8m8b5jgp0j87x93z8p0gkmj8y";
+      system = "transducers-jzon";
+      asd = "transducers";
+    });
+    systems = [ "transducers-jzon" ];
+    lispLibs = [ (getAttr "com_dot_inuoe_dot_jzon" self) (getAttr "transducers" self) (getAttr "trivia" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   translate = (build-asdf-system {
     pname = "translate";
     version = "20180228-git";
@@ -67150,11 +67628,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   translators = (build-asdf-system {
     pname = "translators";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "translators" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "translators";
       asd = "translators";
     });
@@ -67182,11 +67660,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   tree = (build-asdf-system {
     pname = "tree";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "tree" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "tree";
       asd = "tree";
     });
@@ -67502,11 +67980,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-arguments = (build-asdf-system {
     pname = "trivial-arguments";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trivial-arguments" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-arguments/2023-06-18/trivial-arguments-20230618-git.tgz";
-      sha256 = "0z9kb9pji1np3jd2yp39k8db0sjxaip2vdz27pzvir2cykkxwaf4";
+      url = "http://beta.quicklisp.org/archive/trivial-arguments/2023-10-21/trivial-arguments-20231021-git.tgz";
+      sha256 = "1gfkybbb3xy93gvlr6hzyf65llfhp21mmv3bb92h4wc2mfr8i336";
       system = "trivial-arguments";
       asd = "trivial-arguments";
     });
@@ -67562,11 +68040,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-benchmark = (build-asdf-system {
     pname = "trivial-benchmark";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "trivial-benchmark" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-benchmark/2022-07-07/trivial-benchmark-20220707-git.tgz";
-      sha256 = "1n8p3gjkv1fx8qfjykjvzf1b02mpv1d5s58583c1vyvc5ikjm389";
+      url = "http://beta.quicklisp.org/archive/trivial-benchmark/2023-10-21/trivial-benchmark-20231021-git.tgz";
+      sha256 = "1p48wgpady0n8frdcgp7sbg93b0fbvpx1qk5valmanhwr9j3xh88";
       system = "trivial-benchmark";
       asd = "trivial-benchmark";
     });
@@ -67658,11 +68136,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-clipboard = (build-asdf-system {
     pname = "trivial-clipboard";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trivial-clipboard" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2023-06-18/trivial-clipboard-20230618-git.tgz";
-      sha256 = "0z77mymg1a4phxgxc627pw778wbpsqqpiyxr10vkqjzpqz8f8a2j";
+      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2023-10-21/trivial-clipboard-20231021-git.tgz";
+      sha256 = "029qmx523xfk54p99ndgbmdd20s5i32mzpf77xymngrn4c33v9jk";
       system = "trivial-clipboard";
       asd = "trivial-clipboard";
     });
@@ -67672,11 +68150,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-clipboard-test = (build-asdf-system {
     pname = "trivial-clipboard-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trivial-clipboard-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2023-06-18/trivial-clipboard-20230618-git.tgz";
-      sha256 = "0z77mymg1a4phxgxc627pw778wbpsqqpiyxr10vkqjzpqz8f8a2j";
+      url = "http://beta.quicklisp.org/archive/trivial-clipboard/2023-10-21/trivial-clipboard-20231021-git.tgz";
+      sha256 = "029qmx523xfk54p99ndgbmdd20s5i32mzpf77xymngrn4c33v9jk";
       system = "trivial-clipboard-test";
       asd = "trivial-clipboard-test";
     });
@@ -67766,11 +68244,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-custom-debugger = (build-asdf-system {
     pname = "trivial-custom-debugger";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "trivial-custom-debugger" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-custom-debugger/2020-09-25/trivial-custom-debugger-20200925-git.tgz";
-      sha256 = "1iri5wsp9sc1f5q934cj87zd79r5dc8fda0gl7x1pz95v0wx28yk";
+      url = "http://beta.quicklisp.org/archive/trivial-custom-debugger/2023-10-21/trivial-custom-debugger-20231021-git.tgz";
+      sha256 = "11x0wpnfllazaqlrgv9xx1mb5q62dx6ny08hpwgkq3jpvqbhxs3b";
       system = "trivial-custom-debugger";
       asd = "trivial-custom-debugger";
     });
@@ -67958,11 +68436,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-extensible-sequences = (build-asdf-system {
     pname = "trivial-extensible-sequences";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trivial-extensible-sequences" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-extensible-sequences/2023-06-18/trivial-extensible-sequences-20230618-git.tgz";
-      sha256 = "00g52mf7j13s52hzqmkh1z8j6z9zlwf62y1gp924a5xpqx4vxgnq";
+      url = "http://beta.quicklisp.org/archive/trivial-extensible-sequences/2023-10-21/trivial-extensible-sequences-20231021-git.tgz";
+      sha256 = "1mgfvyvy3dkn8wyjqc49czl990rbbfkz7sfrhz9641dilasmw9s6";
       system = "trivial-extensible-sequences";
       asd = "trivial-extensible-sequences";
     });
@@ -68050,11 +68528,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-garbage = (build-asdf-system {
     pname = "trivial-garbage";
-    version = "20211230-git";
+    version = "20231021-git";
     asds = [ "trivial-garbage" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-garbage/2021-12-30/trivial-garbage-20211230-git.tgz";
-      sha256 = "1kmx5kdl4zfa8cfdjyi75z43fqzxvywavwg1s8fl5zxpflfdj8h8";
+      url = "http://beta.quicklisp.org/archive/trivial-garbage/2023-10-21/trivial-garbage-20231021-git.tgz";
+      sha256 = "0rfwxvwg0kpcaa0hsi035yrkfdfks4bq8d9azmrww2f0rmv9g6sd";
       system = "trivial-garbage";
       asd = "trivial-garbage";
     });
@@ -68064,11 +68542,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-gray-streams = (build-asdf-system {
     pname = "trivial-gray-streams";
-    version = "20210124-git";
+    version = "20231021-git";
     asds = [ "trivial-gray-streams" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-gray-streams/2021-01-24/trivial-gray-streams-20210124-git.tgz";
-      sha256 = "1hipqwwd5ylskybd173rvlsk7ds4w4nq1cmh9952ivm6dgh7pwzn";
+      url = "http://beta.quicklisp.org/archive/trivial-gray-streams/2023-10-21/trivial-gray-streams-20231021-git.tgz";
+      sha256 = "08jfx79cayi27fd2icxyy3salwrypy61i2fm8mbcq424xlm21ida";
       system = "trivial-gray-streams";
       asd = "trivial-gray-streams";
     });
@@ -68078,11 +68556,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-gray-streams-test = (build-asdf-system {
     pname = "trivial-gray-streams-test";
-    version = "20210124-git";
+    version = "20231021-git";
     asds = [ "trivial-gray-streams-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-gray-streams/2021-01-24/trivial-gray-streams-20210124-git.tgz";
-      sha256 = "1hipqwwd5ylskybd173rvlsk7ds4w4nq1cmh9952ivm6dgh7pwzn";
+      url = "http://beta.quicklisp.org/archive/trivial-gray-streams/2023-10-21/trivial-gray-streams-20231021-git.tgz";
+      sha256 = "08jfx79cayi27fd2icxyy3salwrypy61i2fm8mbcq424xlm21ida";
       system = "trivial-gray-streams-test";
       asd = "trivial-gray-streams-test";
     });
@@ -68142,11 +68620,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-indent = (build-asdf-system {
     pname = "trivial-indent";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trivial-indent" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-indent/2023-06-18/trivial-indent-20230618-git.tgz";
-      sha256 = "1zg8cyy1xqpcjrxxqz5zb5xixhwcszkv4p2vq305lb2rka6f3dyx";
+      url = "http://beta.quicklisp.org/archive/trivial-indent/2023-10-21/trivial-indent-20231021-git.tgz";
+      sha256 = "08qgx34zbpafzws96nq68bgpynddf22ibliqni2jnvhwv74lcpiw";
       system = "trivial-indent";
       asd = "trivial-indent";
     });
@@ -68330,11 +68808,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-main-thread = (build-asdf-system {
     pname = "trivial-main-thread";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "trivial-main-thread" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-main-thread/2019-07-10/trivial-main-thread-20190710-git.tgz";
-      sha256 = "0bw1887i7396lqg75qvmgjfzz4xbiq9w5dp8wxdgrcsm0qwlraw7";
+      url = "http://beta.quicklisp.org/archive/trivial-main-thread/2023-10-21/trivial-main-thread-20231021-git.tgz";
+      sha256 = "0l7avhykgg5ssr7jczjkgz71zzdbq0sadi2sikdw6mgysjh9fsqv";
       system = "trivial-main-thread";
       asd = "trivial-main-thread";
     });
@@ -68360,11 +68838,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-mimes = (build-asdf-system {
     pname = "trivial-mimes";
-    version = "20230214-git";
+    version = "20231021-git";
     asds = [ "trivial-mimes" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-mimes/2023-02-14/trivial-mimes-20230214-git.tgz";
-      sha256 = "0sx2f3mi87as64l64pqplh4slylvv1rgvk958z9ggd41h5iz077k";
+      url = "http://beta.quicklisp.org/archive/trivial-mimes/2023-10-21/trivial-mimes-20231021-git.tgz";
+      sha256 = "05cqbg9bh4r9av675vrzgw4p3s1dxb74r2ygvbfkych79kdik871";
       system = "trivial-mimes";
       asd = "trivial-mimes";
     });
@@ -68674,11 +69152,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-sanitize = (build-asdf-system {
     pname = "trivial-sanitize";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "trivial-sanitize" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-sanitize/2022-11-06/trivial-sanitize-20221106-git.tgz";
-      sha256 = "1pv36ywkqcck1vrxdwhlwjw80qkzbr6aqwyrghfng6qfc90r05f6";
+      url = "http://beta.quicklisp.org/archive/trivial-sanitize/2023-10-21/trivial-sanitize-20231021-git.tgz";
+      sha256 = "0m8aq5fczrq8fd825vjdvrgbkwzkz9lrl2xkp5lyps6vacgmp9cw";
       system = "trivial-sanitize";
       asd = "trivial-sanitize";
     });
@@ -68690,11 +69168,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-sanitize-tests = (build-asdf-system {
     pname = "trivial-sanitize-tests";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "trivial-sanitize-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-sanitize/2022-11-06/trivial-sanitize-20221106-git.tgz";
-      sha256 = "1pv36ywkqcck1vrxdwhlwjw80qkzbr6aqwyrghfng6qfc90r05f6";
+      url = "http://beta.quicklisp.org/archive/trivial-sanitize/2023-10-21/trivial-sanitize-20231021-git.tgz";
+      sha256 = "0m8aq5fczrq8fd825vjdvrgbkwzkz9lrl2xkp5lyps6vacgmp9cw";
       system = "trivial-sanitize-tests";
       asd = "trivial-sanitize-tests";
     });
@@ -68848,11 +69326,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-thumbnail = (build-asdf-system {
     pname = "trivial-thumbnail";
-    version = "20190710-git";
+    version = "20231021-git";
     asds = [ "trivial-thumbnail" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-thumbnail/2019-07-10/trivial-thumbnail-20190710-git.tgz";
-      sha256 = "0d1jdfab1wrc3xfzhdbq7bgjwc78qb6gs1llyjsj4cq04yhlc57a";
+      url = "http://beta.quicklisp.org/archive/trivial-thumbnail/2023-10-21/trivial-thumbnail-20231021-git.tgz";
+      sha256 = "1asa8vg8cyfr0kl86xrpywk0cpqym9lzhkhxb829lqr49vr8zfa7";
       system = "trivial-thumbnail";
       asd = "trivial-thumbnail";
     });
@@ -68864,11 +69342,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-timeout = (build-asdf-system {
     pname = "trivial-timeout";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trivial-timeout" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-timeout/2023-06-18/trivial-timeout-20230618-git.tgz";
-      sha256 = "1sgq0rbl7j3dk0cyfibg4h5m4fld5b50vljggw16zzqg4mndw7d2";
+      url = "http://beta.quicklisp.org/archive/trivial-timeout/2023-10-21/trivial-timeout-20231021-git.tgz";
+      sha256 = "0s8z9aj6b3kv21yiyk13cjylzf5zlnw9v86vcff477m1gk9yddjs";
       system = "trivial-timeout";
       asd = "trivial-timeout";
     });
@@ -68926,16 +69404,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trivial-utf-8 = (build-asdf-system {
     pname = "trivial-utf-8";
-    version = "20220220-git";
+    version = "20231021-git";
     asds = [ "trivial-utf-8" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trivial-utf-8/2022-02-20/trivial-utf-8-20220220-git.tgz";
-      sha256 = "0gzgbyzbbhny5y1lq2x82vfy4b4p1snq1sy9lj82hdq7lkyj03ss";
+      url = "http://beta.quicklisp.org/archive/trivial-utf-8/2023-10-21/trivial-utf-8-20231021-git.tgz";
+      sha256 = "0paf7ldw6ffl5xilyri3rfygz1v1npagf186i1z8hyxxjkri4q9s";
       system = "trivial-utf-8";
       asd = "trivial-utf-8";
     });
     systems = [ "trivial-utf-8" ];
-    lispLibs = [  ];
+    lispLibs = [ (getAttr "mgl-pax-bootstrap" self) ];
     meta = {};
   });
   trivial-utilities = (build-asdf-system {
@@ -69146,11 +69624,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trucler = (build-asdf-system {
     pname = "trucler";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trucler" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trucler/2023-06-18/trucler-20230618-git.tgz";
-      sha256 = "1p9dndrvql3b467ava55f5gi56jxsjdp4rjfinfb7y15b6sv8jh2";
+      url = "http://beta.quicklisp.org/archive/trucler/2023-10-21/trucler-20231021-git.tgz";
+      sha256 = "16cxx9pgpn3bkrmazc4lqhmaf20c0rhp1vaj78ms8ldwfqqrgznr";
       system = "trucler";
       asd = "trucler";
     });
@@ -69162,11 +69640,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trucler-base = (build-asdf-system {
     pname = "trucler-base";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trucler-base" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trucler/2023-06-18/trucler-20230618-git.tgz";
-      sha256 = "1p9dndrvql3b467ava55f5gi56jxsjdp4rjfinfb7y15b6sv8jh2";
+      url = "http://beta.quicklisp.org/archive/trucler/2023-10-21/trucler-20231021-git.tgz";
+      sha256 = "16cxx9pgpn3bkrmazc4lqhmaf20c0rhp1vaj78ms8ldwfqqrgznr";
       system = "trucler-base";
       asd = "trucler-base";
     });
@@ -69178,11 +69656,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trucler-native = (build-asdf-system {
     pname = "trucler-native";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trucler-native" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trucler/2023-06-18/trucler-20230618-git.tgz";
-      sha256 = "1p9dndrvql3b467ava55f5gi56jxsjdp4rjfinfb7y15b6sv8jh2";
+      url = "http://beta.quicklisp.org/archive/trucler/2023-10-21/trucler-20231021-git.tgz";
+      sha256 = "16cxx9pgpn3bkrmazc4lqhmaf20c0rhp1vaj78ms8ldwfqqrgznr";
       system = "trucler-native";
       asd = "trucler-native";
     });
@@ -69194,11 +69672,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trucler-native-test = (build-asdf-system {
     pname = "trucler-native-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trucler-native-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trucler/2023-06-18/trucler-20230618-git.tgz";
-      sha256 = "1p9dndrvql3b467ava55f5gi56jxsjdp4rjfinfb7y15b6sv8jh2";
+      url = "http://beta.quicklisp.org/archive/trucler/2023-10-21/trucler-20231021-git.tgz";
+      sha256 = "16cxx9pgpn3bkrmazc4lqhmaf20c0rhp1vaj78ms8ldwfqqrgznr";
       system = "trucler-native-test";
       asd = "trucler-native-test";
     });
@@ -69210,11 +69688,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   trucler-reference = (build-asdf-system {
     pname = "trucler-reference";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "trucler-reference" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/trucler/2023-06-18/trucler-20230618-git.tgz";
-      sha256 = "1p9dndrvql3b467ava55f5gi56jxsjdp4rjfinfb7y15b6sv8jh2";
+      url = "http://beta.quicklisp.org/archive/trucler/2023-10-21/trucler-20231021-git.tgz";
+      sha256 = "16cxx9pgpn3bkrmazc4lqhmaf20c0rhp1vaj78ms8ldwfqqrgznr";
       system = "trucler-reference";
       asd = "trucler-reference";
     });
@@ -69242,11 +69720,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   try = (build-asdf-system {
     pname = "try";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "try" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/try/2023-06-18/try-20230618-git.tgz";
-      sha256 = "142g534ipcq4a55xa4sk2ahdq4x1pj51cs1406dhi3m4sk2dzb6r";
+      url = "http://beta.quicklisp.org/archive/try/2023-10-21/try-20231021-git.tgz";
+      sha256 = "166i3fqwxfv9skz6yf95c95nx0jjqy1ak1131bd0sqmd582gi9mg";
       system = "try";
       asd = "try";
     });
@@ -69258,11 +69736,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   try_dot_asdf = (build-asdf-system {
     pname = "try.asdf";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "try.asdf" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/try/2023-06-18/try-20230618-git.tgz";
-      sha256 = "142g534ipcq4a55xa4sk2ahdq4x1pj51cs1406dhi3m4sk2dzb6r";
+      url = "http://beta.quicklisp.org/archive/try/2023-10-21/try-20231021-git.tgz";
+      sha256 = "166i3fqwxfv9skz6yf95c95nx0jjqy1ak1131bd0sqmd582gi9mg";
       system = "try.asdf";
       asd = "try.asdf";
     });
@@ -69398,13 +69876,29 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
+  type-templates = (build-asdf-system {
+    pname = "type-templates";
+    version = "20231021-git";
+    asds = [ "type-templates" ];
+    src = (createAsd {
+      url = "http://beta.quicklisp.org/archive/type-templates/2023-10-21/type-templates-20231021-git.tgz";
+      sha256 = "1gm9xc3wg7ina7fxh3a2jnn1fm744dk9dx138zl86wrbafwd8wg7";
+      system = "type-templates";
+      asd = "type-templates";
+    });
+    systems = [ "type-templates" ];
+    lispLibs = [ (getAttr "alexandria" self) (getAttr "documentation-utils" self) (getAttr "form-fiddle" self) ];
+    meta = {
+      hydraPlatforms = [  ];
+    };
+  });
   typo = (build-asdf-system {
     pname = "typo";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "typo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/typo/2023-06-18/typo-20230618-git.tgz";
-      sha256 = "1y7flnb6rmxjdf1k9vjsbh4b7xjl6v1zrwwckxg1mdqx571baprx";
+      url = "http://beta.quicklisp.org/archive/typo/2023-10-21/typo-20231021-git.tgz";
+      sha256 = "137i9llr7dzhifa4khcnr1pk0scsplp1bxgp0f0xax4g3wk9gby8";
       system = "typo";
       asd = "typo";
     });
@@ -69416,11 +69910,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   typo_dot_test-suite = (build-asdf-system {
     pname = "typo.test-suite";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "typo.test-suite" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/typo/2023-06-18/typo-20230618-git.tgz";
-      sha256 = "1y7flnb6rmxjdf1k9vjsbh4b7xjl6v1zrwwckxg1mdqx571baprx";
+      url = "http://beta.quicklisp.org/archive/typo/2023-10-21/typo-20231021-git.tgz";
+      sha256 = "137i9llr7dzhifa4khcnr1pk0scsplp1bxgp0f0xax4g3wk9gby8";
       system = "typo.test-suite";
       asd = "typo.test-suite";
     });
@@ -69432,11 +69926,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   uax-14 = (build-asdf-system {
     pname = "uax-14";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "uax-14" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uax-14/2020-09-25/uax-14-20200925-git.tgz";
-      sha256 = "1sb2s58k01yjaggaq8i7kbyfsh6mzyqbiz1vm59smxn9qqwd8apm";
+      url = "http://beta.quicklisp.org/archive/uax-14/2023-10-21/uax-14-20231021-git.tgz";
+      sha256 = "1k9cqs9lb5i2y9b3zgrr1kq2w8bcr3h362105ykz0if5yz8m59fq";
       system = "uax-14";
       asd = "uax-14";
     });
@@ -69448,11 +69942,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   uax-14-test = (build-asdf-system {
     pname = "uax-14-test";
-    version = "20200925-git";
+    version = "20231021-git";
     asds = [ "uax-14-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uax-14/2020-09-25/uax-14-20200925-git.tgz";
-      sha256 = "1sb2s58k01yjaggaq8i7kbyfsh6mzyqbiz1vm59smxn9qqwd8apm";
+      url = "http://beta.quicklisp.org/archive/uax-14/2023-10-21/uax-14-20231021-git.tgz";
+      sha256 = "1k9cqs9lb5i2y9b3zgrr1kq2w8bcr3h362105ykz0if5yz8m59fq";
       system = "uax-14-test";
       asd = "uax-14-test";
     });
@@ -69478,11 +69972,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   uax-9 = (build-asdf-system {
     pname = "uax-9";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "uax-9" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uax-9/2023-06-18/uax-9-20230618-git.tgz";
-      sha256 = "122vaafwvavxjy1hxp3i39n8si57x34f3qi8klss8a1nmycs591h";
+      url = "http://beta.quicklisp.org/archive/uax-9/2023-10-21/uax-9-20231021-git.tgz";
+      sha256 = "1kbq8v45pxhmwqn6is5lfsp51h80kns4s1cqbh9z0xdmxzw63ip1";
       system = "uax-9";
       asd = "uax-9";
     });
@@ -69494,11 +69988,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   uax-9-test = (build-asdf-system {
     pname = "uax-9-test";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "uax-9-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/uax-9/2023-06-18/uax-9-20230618-git.tgz";
-      sha256 = "122vaafwvavxjy1hxp3i39n8si57x34f3qi8klss8a1nmycs591h";
+      url = "http://beta.quicklisp.org/archive/uax-9/2023-10-21/uax-9-20231021-git.tgz";
+      sha256 = "1kbq8v45pxhmwqn6is5lfsp51h80kns4s1cqbh9z0xdmxzw63ip1";
       system = "uax-9-test";
       asd = "uax-9-test";
     });
@@ -69510,11 +70004,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ubiquitous = (build-asdf-system {
     pname = "ubiquitous";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ubiquitous" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ubiquitous/2023-06-18/ubiquitous-20230618-git.tgz";
-      sha256 = "1xr7zqzfl6lgwpld7hb2wnqdw8r1xbl8gk8c11kpzama8caggakd";
+      url = "http://beta.quicklisp.org/archive/ubiquitous/2023-10-21/ubiquitous-20231021-git.tgz";
+      sha256 = "02q6yz9j374q23avi06lddy6gkzza0xn3855n7dqgy34fv1shw1i";
       system = "ubiquitous";
       asd = "ubiquitous";
     });
@@ -69527,11 +70021,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   ubiquitous-concurrent = (build-asdf-system {
     pname = "ubiquitous-concurrent";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "ubiquitous-concurrent" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/ubiquitous/2023-06-18/ubiquitous-20230618-git.tgz";
-      sha256 = "1xr7zqzfl6lgwpld7hb2wnqdw8r1xbl8gk8c11kpzama8caggakd";
+      url = "http://beta.quicklisp.org/archive/ubiquitous/2023-10-21/ubiquitous-20231021-git.tgz";
+      sha256 = "02q6yz9j374q23avi06lddy6gkzza0xn3855n7dqgy34fv1shw1i";
       system = "ubiquitous-concurrent";
       asd = "ubiquitous-concurrent";
     });
@@ -69797,11 +70291,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   unboxables = (build-asdf-system {
     pname = "unboxables";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "unboxables" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/unboxables/2023-06-18/unboxables-20230618-git.tgz";
-      sha256 = "0jzimaq654s5lc5qvlsdw3wpyai8fnw5bxk78ryc4b5p26b711g7";
+      url = "http://beta.quicklisp.org/archive/unboxables/2023-10-21/unboxables-20231021-git.tgz";
+      sha256 = "099qcsc9q9q5cz2qlvkylc2g8g80fqzrxyq4lc072bmw96wy27fs";
       system = "unboxables";
       asd = "unboxables";
     });
@@ -70355,11 +70849,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   varray = (build-asdf-system {
     pname = "varray";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "varray" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "varray";
       asd = "varray";
     });
@@ -70431,11 +70925,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   vellum = (build-asdf-system {
     pname = "vellum";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "vellum" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum/2023-06-18/vellum-20230618-git.tgz";
-      sha256 = "138g1hb02245345y4zdkrfb2mfmx6darymb0kz3fl60mfslc3zrz";
+      url = "http://beta.quicklisp.org/archive/vellum/2023-10-21/vellum-20231021-git.tgz";
+      sha256 = "1i279h8hwhpbjlqc3r34g8pqxn8kxvi2b3mbszjdv9xar3g50w2g";
       system = "vellum";
       asd = "vellum";
     });
@@ -70479,11 +70973,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   vellum-csv = (build-asdf-system {
     pname = "vellum-csv";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "vellum-csv" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum-csv/2022-07-07/vellum-csv-20220707-git.tgz";
-      sha256 = "1spx6hig55056k32s0fysfwqjnwkfr8j63v6zmfv84x2v90ppclj";
+      url = "http://beta.quicklisp.org/archive/vellum-csv/2023-10-21/vellum-csv-20231021-git.tgz";
+      sha256 = "1m5sa73gbjpv0lzmzv3qv5xblh0p1fhldgm9yifqa86fj9fhaa0g";
       system = "vellum-csv";
       asd = "vellum-csv";
     });
@@ -70495,11 +70989,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   vellum-csv-tests = (build-asdf-system {
     pname = "vellum-csv-tests";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "vellum-csv-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum-csv/2022-07-07/vellum-csv-20220707-git.tgz";
-      sha256 = "1spx6hig55056k32s0fysfwqjnwkfr8j63v6zmfv84x2v90ppclj";
+      url = "http://beta.quicklisp.org/archive/vellum-csv/2023-10-21/vellum-csv-20231021-git.tgz";
+      sha256 = "1m5sa73gbjpv0lzmzv3qv5xblh0p1fhldgm9yifqa86fj9fhaa0g";
       system = "vellum-csv-tests";
       asd = "vellum-csv-tests";
     });
@@ -70511,11 +71005,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   vellum-postmodern = (build-asdf-system {
     pname = "vellum-postmodern";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "vellum-postmodern" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum-postmodern/2023-06-18/vellum-postmodern-20230618-git.tgz";
-      sha256 = "10k6hh0110k0lrajky6smm5i7ijgk0cfgy0x24gap522m3pg81n0";
+      url = "http://beta.quicklisp.org/archive/vellum-postmodern/2023-10-21/vellum-postmodern-20231021-git.tgz";
+      sha256 = "17rkmls4c2ghp1wgsnq41mcjqmamphwpycd58fwwn07bj45n6ajx";
       system = "vellum-postmodern";
       asd = "vellum-postmodern";
     });
@@ -70527,11 +71021,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   vellum-tests = (build-asdf-system {
     pname = "vellum-tests";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "vellum-tests" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/vellum/2023-06-18/vellum-20230618-git.tgz";
-      sha256 = "138g1hb02245345y4zdkrfb2mfmx6darymb0kz3fl60mfslc3zrz";
+      url = "http://beta.quicklisp.org/archive/vellum/2023-10-21/vellum-20231021-git.tgz";
+      sha256 = "1i279h8hwhpbjlqc3r34g8pqxn8kxvi2b3mbszjdv9xar3g50w2g";
       system = "vellum-tests";
       asd = "vellum-tests";
     });
@@ -70543,11 +71037,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   veq = (build-asdf-system {
     pname = "veq";
-    version = "v4.5.3";
+    version = "v4.5.5";
     asds = [ "veq" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-veq/2023-06-18/cl-veq-v4.5.3.tgz";
-      sha256 = "0nsc63yh9cypm44qqz1c9w61m8m8rps0bqdzja7df041bz2i0yg8";
+      url = "http://beta.quicklisp.org/archive/cl-veq/2023-10-21/cl-veq-v4.5.5.tgz";
+      sha256 = "0sk6rvqck47ym7ryy0smya1vwgpksxzal1xcwmwl106nxi9l7m34";
       system = "veq";
       asd = "veq";
     });
@@ -70559,11 +71053,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   verbose = (build-asdf-system {
     pname = "verbose";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "verbose" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/verbose/2023-06-18/verbose-20230618-git.tgz";
-      sha256 = "1ig7b9mp2v81y69p7g71xp0wvnhi9r45bvx24lbdzsa3lzbq7x8v";
+      url = "http://beta.quicklisp.org/archive/verbose/2023-10-21/verbose-20231021-git.tgz";
+      sha256 = "16gfxvhx1xxib9iwxw9s6hkr9nb5cywkm9c5gmgxdcif1iglzlm0";
       system = "verbose";
       asd = "verbose";
     });
@@ -70671,11 +71165,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   vex = (build-asdf-system {
     pname = "vex";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "vex" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/april/2023-06-18/april-20230618-git.tgz";
-      sha256 = "0p98kw46c3sd9mdi44mmdzb9zq7b9firxsinwn8f3wgqgdydlfsq";
+      url = "http://beta.quicklisp.org/archive/april/2023-10-21/april-20231021-git.tgz";
+      sha256 = "19f1q7y09mpbs9vw53xnfpdgsvc6y5sqv29fm1jp0rhwb5rl7g34";
       system = "vex";
       asd = "vex";
     });
@@ -70943,16 +71437,16 @@ in lib.makeScope pkgs.newScope (self: {
   });
   voipms = (build-asdf-system {
     pname = "voipms";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "voipms" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-voipms/2022-07-07/cl-voipms-20220707-git.tgz";
-      sha256 = "08ghirkmia8jn03r6z1025v321ygc2xalrwsqfvl3xy377xxrd3d";
+      url = "http://beta.quicklisp.org/archive/cl-voipms/2023-10-21/cl-voipms-20231021-git.tgz";
+      sha256 = "05jrpd9vc95hqxq3nbwv0qpsfj3winwx2n5a5933919gfanxrslk";
       system = "voipms";
       asd = "voipms";
     });
     systems = [ "voipms" ];
-    lispLibs = [ (getAttr "erjoalgo-webutil" self) (getAttr "local-time" self) ];
+    lispLibs = [ (getAttr "cl-date-time-parser" self) (getAttr "erjoalgo-webutil" self) (getAttr "local-time" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -71261,11 +71755,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   websocket-driver = (build-asdf-system {
     pname = "websocket-driver";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "websocket-driver" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/websocket-driver/2022-03-31/websocket-driver-20220331-git.tgz";
-      sha256 = "183jb9m4y5drc4i9l3c03q0sx8rlqn2d2290c7whl4r3dnginnnf";
+      url = "http://beta.quicklisp.org/archive/websocket-driver/2023-10-21/websocket-driver-20231021-git.tgz";
+      sha256 = "107fgcmvpa84b6lld7whgk5dg3pa7l52ca4j2cg5b97bl440cgb3";
       system = "websocket-driver";
       asd = "websocket-driver";
     });
@@ -71277,11 +71771,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   websocket-driver-base = (build-asdf-system {
     pname = "websocket-driver-base";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "websocket-driver-base" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/websocket-driver/2022-03-31/websocket-driver-20220331-git.tgz";
-      sha256 = "183jb9m4y5drc4i9l3c03q0sx8rlqn2d2290c7whl4r3dnginnnf";
+      url = "http://beta.quicklisp.org/archive/websocket-driver/2023-10-21/websocket-driver-20231021-git.tgz";
+      sha256 = "107fgcmvpa84b6lld7whgk5dg3pa7l52ca4j2cg5b97bl440cgb3";
       system = "websocket-driver-base";
       asd = "websocket-driver-base";
     });
@@ -71293,11 +71787,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   websocket-driver-client = (build-asdf-system {
     pname = "websocket-driver-client";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "websocket-driver-client" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/websocket-driver/2022-03-31/websocket-driver-20220331-git.tgz";
-      sha256 = "183jb9m4y5drc4i9l3c03q0sx8rlqn2d2290c7whl4r3dnginnnf";
+      url = "http://beta.quicklisp.org/archive/websocket-driver/2023-10-21/websocket-driver-20231021-git.tgz";
+      sha256 = "107fgcmvpa84b6lld7whgk5dg3pa7l52ca4j2cg5b97bl440cgb3";
       system = "websocket-driver-client";
       asd = "websocket-driver-client";
     });
@@ -71309,11 +71803,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   websocket-driver-server = (build-asdf-system {
     pname = "websocket-driver-server";
-    version = "20220331-git";
+    version = "20231021-git";
     asds = [ "websocket-driver-server" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/websocket-driver/2022-03-31/websocket-driver-20220331-git.tgz";
-      sha256 = "183jb9m4y5drc4i9l3c03q0sx8rlqn2d2290c7whl4r3dnginnnf";
+      url = "http://beta.quicklisp.org/archive/websocket-driver/2023-10-21/websocket-driver-20231021-git.tgz";
+      sha256 = "107fgcmvpa84b6lld7whgk5dg3pa7l52ca4j2cg5b97bl440cgb3";
       system = "websocket-driver-server";
       asd = "websocket-driver-server";
     });
@@ -71531,11 +72025,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   wire-world = (build-asdf-system {
     pname = "wire-world";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "wire-world" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "wire-world";
       asd = "wire-world";
     });
@@ -71723,11 +72217,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   woo = (build-asdf-system {
     pname = "woo";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "woo" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/woo/2022-07-07/woo-20220707-git.tgz";
-      sha256 = "0ar7w2nfxhxirlcxxq4j1v4cnmvfkw3ip4i53b853g0pfb84m3kz";
+      url = "http://beta.quicklisp.org/archive/woo/2023-10-21/woo-20231021-git.tgz";
+      sha256 = "0yzphn3c544vxj52z5h5zbvhz4ab3hm5mpsbsa57p0xa1gcm03r5";
       system = "woo";
       asd = "woo";
     });
@@ -71737,11 +72231,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   woo-test = (build-asdf-system {
     pname = "woo-test";
-    version = "20220707-git";
+    version = "20231021-git";
     asds = [ "woo-test" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/woo/2022-07-07/woo-20220707-git.tgz";
-      sha256 = "0ar7w2nfxhxirlcxxq4j1v4cnmvfkw3ip4i53b853g0pfb84m3kz";
+      url = "http://beta.quicklisp.org/archive/woo/2023-10-21/woo-20231021-git.tgz";
+      sha256 = "0yzphn3c544vxj52z5h5zbvhz4ab3hm5mpsbsa57p0xa1gcm03r5";
       system = "woo-test";
       asd = "woo-test";
     });
@@ -72193,11 +72687,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   xmls = (build-asdf-system {
     pname = "xmls";
-    version = "release-c6ca1b39-git";
+    version = "release-310ba849-git";
     asds = [ "xmls" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/xmls/2022-07-07/xmls-release-c6ca1b39-git.tgz";
-      sha256 = "050c9z0xq8wagga2mbdhjm0j1530m4rz942sll4w6pxr0s6fmg3g";
+      url = "http://beta.quicklisp.org/archive/xmls/2023-10-21/xmls-release-310ba849-git.tgz";
+      sha256 = "0s1acd2r77v6x9f2kmd15njkmvvx3ivivlk509ndgmdhnn2jd776";
       system = "xmls";
       asd = "xmls";
     });
@@ -72329,11 +72823,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   yadd = (build-asdf-system {
     pname = "yadd";
-    version = "master-5b2475f9-git";
+    version = "master-fe503896-git";
     asds = [ "yadd" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/gendl/2023-06-18/gendl-master-5b2475f9-git.tgz";
-      sha256 = "1w8xn2vg527g1s7cfhw669sdgbq1v5i927g00qzsq9di0syxvczg";
+      url = "http://beta.quicklisp.org/archive/gendl/2023-10-21/gendl-master-fe503896-git.tgz";
+      sha256 = "0raymbbp71zfyiq6z2qvdh2h8jab3ilc0slxi2m8i7cz0kj1zw10";
       system = "yadd";
       asd = "yadd";
     });
@@ -72345,11 +72839,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   yah = (build-asdf-system {
     pname = "yah";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "yah" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/yah/2022-11-06/yah-20221106-git.tgz";
-      sha256 = "1bxz8b7fb15yzipkpkaxgqr8yj4kqnbrzjf52zx0s3z1h7fg1vfd";
+      url = "http://beta.quicklisp.org/archive/yah/2023-10-21/yah-20231021-git.tgz";
+      sha256 = "1sklx9ak2rh9h19805i9wbym889pwd1qh3d4c4fsk9cbj2i9yxx5";
       system = "yah";
       asd = "yah";
     });
@@ -72391,11 +72885,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   yxorp = (build-asdf-system {
     pname = "yxorp";
-    version = "20221106-git";
+    version = "20231021-git";
     asds = [ "yxorp" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/cl-yxorp/2022-11-06/cl-yxorp-20221106-git.tgz";
-      sha256 = "0k93xmfpp5j1hr7jwvrxhi7v1h759y5b8kfxfygs0dv2p2801k6y";
+      url = "http://beta.quicklisp.org/archive/cl-yxorp/2023-10-21/cl-yxorp-20231021-git.tgz";
+      sha256 = "0l84icr1d3z2k6rs92lgkghwqm6w3i87d1sz4c8mpfcyfb5shgzn";
       system = "yxorp";
       asd = "yxorp";
     });
@@ -72583,11 +73077,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   zippy = (build-asdf-system {
     pname = "zippy";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "zippy" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/zippy/2023-06-18/zippy-20230618-git.tgz";
-      sha256 = "0hiadc3q89h2p639hsmd0gjml0f5y8pnwj9baza3pvqi9y100vvp";
+      url = "http://beta.quicklisp.org/archive/zippy/2023-10-21/zippy-20231021-git.tgz";
+      sha256 = "1yvkqdpbsgsij6d7l6g5qdmgxpbq4670kjhv436h4iaxb9xdnz34";
       system = "zippy";
       asd = "zippy";
     });
@@ -72599,11 +73093,11 @@ in lib.makeScope pkgs.newScope (self: {
   });
   zippy-dwim = (build-asdf-system {
     pname = "zippy-dwim";
-    version = "20230618-git";
+    version = "20231021-git";
     asds = [ "zippy-dwim" ];
     src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/zippy/2023-06-18/zippy-20230618-git.tgz";
-      sha256 = "0hiadc3q89h2p639hsmd0gjml0f5y8pnwj9baza3pvqi9y100vvp";
+      url = "http://beta.quicklisp.org/archive/zippy/2023-10-21/zippy-20231021-git.tgz";
+      sha256 = "1yvkqdpbsgsij6d7l6g5qdmgxpbq4670kjhv436h4iaxb9xdnz34";
       system = "zippy-dwim";
       asd = "zippy-dwim";
     });

@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , pkg-config
-, flutter
+, flutter319
 , gst_all_1
 , libunwind
 , makeWrapper
@@ -16,7 +16,7 @@
 , flet-client-flutter
 }:
 
-flutter.buildFlutterApplication rec {
+flutter319.buildFlutterApplication rec {
   pname = "flet-client-flutter";
   version = "0.22.1";
 
@@ -70,7 +70,7 @@ flutter.buildFlutterApplication rec {
   };
 
   meta = {
-    description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python. The frontend part";
+    description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python. The frontend part";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;

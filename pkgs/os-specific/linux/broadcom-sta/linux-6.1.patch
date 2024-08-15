@@ -1,18 +1,22 @@
-From a63a5f70e5cf05f6bce4cda2e0dd67462e1d76a5 Mon Sep 17 00:00:00 2001
+From febe94b43294a3155e39e844db4ac4ee81614ad1 Mon Sep 17 00:00:00 2001
 From: Joan Bruguera <joanbrugueram@gmail.com>
 Date: Mon, 29 Aug 2022 00:06:53 +0200
-Subject: [PATCH] Tentative patch for broadcom-wl 6.30.223.271 driver for Linux 6.1-rc1
+Subject: [PATCH 16/16] linuxPackages.broadcom_sta: fix build for kernel 6.1+
+
+Tentative patch for broadcom-wl 6.30.223.271 driver for Linux 6.1-rc1
 
 Applies on top of all the patches applied to broadcom-wl-dkms 6.30.223.271-35 on Arch Linux
+
+Source: https://gist.github.com/joanbm/94323ea99eff1e1d1c51241b5b651549
 ---
  src/wl/sys/wl_cfg80211_hybrid.c | 21 +++++++++++++--------
  1 file changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
-index 4fef22a..50d1e34 100644
+index a6b2ca2..333866c 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c
-@@ -105,20 +105,25 @@ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wd
+@@ -104,20 +104,25 @@ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wd
  static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, s32 *dbm);
  #endif
  
@@ -79,5 +83,5 @@ index 4fef22a..50d1e34 100644
  #else
  static s32
 -- 
-2.37.2
+2.45.1
 

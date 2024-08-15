@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/buchgr/bazel-remote";
-    description = "A remote HTTP/1.1 cache for Bazel";
+    description = "Remote HTTP/1.1 cache for Bazel";
     mainProgram = "bazel-remote";
     changelog = "https://github.com/buchgr/bazel-remote/releases/tag/v${version}";
     license = licenses.asl20;

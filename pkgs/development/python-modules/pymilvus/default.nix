@@ -12,7 +12,6 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   scikit-learn,
   setuptools-scm,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gitpython
-    pythonRelaxDepsHook
     setuptools-scm
     wheel
   ];

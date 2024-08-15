@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://js.wiki/";
-    description = "A modern and powerful wiki app built on Node.js";
+    description = "Modern and powerful wiki app built on Node.js";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ ma27 ];
   };

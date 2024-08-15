@@ -11,7 +11,6 @@
   grpcio,
   skein,
   pytestCheckHook,
-  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -84,6 +83,5 @@ buildPythonPackage rec {
     homepage = "https://yarn.dask.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ illustris ];
-    broken = stdenv.isDarwin;
   };
 }

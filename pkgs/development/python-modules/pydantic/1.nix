@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.14";
+  version = "1.10.16";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tcaHSPZggVwyzCgDmwOgcGqUmUrJOmkdSNudJTFQ3bc=";
+    hash = "sha256-dn/ZsxbkyK2sJxpo6IsoMBRjq1STdu+xuqHXoNG+Kzk=";
   };
 
   nativeBuildInputs = [

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ent-go";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "ent";
     rev = "v${version}";
-    sha256 = "sha256-OEQWNWGVs0QYhPuCGEFgAVaUnfswmvWVt+e0cAdkBKE=";
+    sha256 = "sha256-Jq5txpjv2JxypOXYA8JKT0CNMIaJksMUIdnbwflVMZA=";
   };
 
   vendorHash = "sha256-9KdSGIyi95EVQq9jGoVqK8aq3JXlQXB+Qwlh/Kfz4Oc=";
@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "An entity framework for Go";
+    description = "Entity framework for Go";
     homepage = "https://entgo.io/";
     changelog = "https://github.com/ent/ent/releases/tag/v${version}";
     downloadPage = "https://github.com/ent/ent";

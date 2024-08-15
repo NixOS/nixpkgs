@@ -13,6 +13,7 @@
 , "groupfolders": "agpl3Plus"
 , "impersonate": "agpl3Plus"
 , "integration_openai": "agpl3Only"
+, "integration_paperless": "agpl3Plus"
 , "mail": "agpl3Plus"
 , "maps": "agpl3Plus"
 , "memories": "agpl3Plus"

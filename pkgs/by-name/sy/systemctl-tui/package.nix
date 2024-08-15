@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A simple TUI for interacting with systemd services and their logs";
+    description = "Simple TUI for interacting with systemd services and their logs";
     homepage = "https://crates.io/crates/systemctl-tui";
     license = licenses.mit;
     maintainers = with maintainers; [ siph ];

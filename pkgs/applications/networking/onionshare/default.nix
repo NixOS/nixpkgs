@@ -1,41 +1,26 @@
 { lib
 , stdenv
-, buildPythonApplication
-, colorama
 , fetchFromGitHub
 , fetchpatch
-, flask
-, flask-compress
-, flask-socketio
-, gevent-websocket
+, meek
 , obfs4
-, psutil
-, packaging
-, pycrypto
-, pynacl
-, pyside6
-, pysocks
-, pytestCheckHook
-, qrcode
+, python3
 , qt5
-, requests
 , snowflake
-, stem
 , substituteAll
 , tor
-, unidecode
-, waitress
-, werkzeug
 }:
 
 let
   version = "2.6.2";
+
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
     hash = "sha256-J8Hdriy8eWpHuMCI87a9a/zCR6xafM3A/Tkyom0Ktko=";
   };
+
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
     longDescription = ''
@@ -60,13 +45,9 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bbjubjub ];
   };
-
-  # TODO: package meek https://support.torproject.org/glossary/meek/
-  meek = "/meek-not-available";
-
 in
 rec {
-  onionshare = buildPythonApplication {
+  onionshare = python3.pkgs.buildPythonApplication {
     pname = "onionshare-cli";
     inherit version;
     src = "${src}/cli";
@@ -77,8 +58,17 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+
+      # Remove distutils for Python 3.12 compatibility
+      # https://github.com/onionshare/onionshare/pull/1907
+      (fetchpatch {
+        url = "https://github.com/onionshare/onionshare/commit/1fb1a470df20d8a7576c8cf51213e5928528d59a.patch";
+        includes = [ "onionshare_cli/onion.py" ];
+        stripLen = 1;
+        hash = "sha256-4XkqaEhMhvj6PyMssnLfXRazdP4k+c9mMDveho7pWg8=";
+      })
     ];
-    propagatedBuildInputs = [
+    dependencies = with python3.pkgs; [
       colorama
       flask
       flask-compress
@@ -90,7 +80,6 @@ rec {
       pynacl
       pyside6
       pysocks
-      qrcode
       qrcode
       requests
       stem
@@ -104,7 +93,7 @@ rec {
       tor
     ];
 
-    nativeCheckInputs = [
+    nativeCheckInputs = with python3.pkgs; [
       pytestCheckHook
     ];
 
@@ -129,7 +118,7 @@ rec {
     };
   };
 
-  onionshare-gui = buildPythonApplication {
+  onionshare-gui = python3.pkgs.buildPythonApplication {
     pname = "onionshare";
     inherit version;
     src = "${src}/desktop";
@@ -147,9 +136,18 @@ rec {
         stripLen = 1;
         hash = "sha256-wfIjdPhdUYAvbK5XyE1o2OtFOlJRj0X5mh7QQRjdyP0=";
       })
+
+      # Remove distutils for Python 3.12 compatibility
+      # https://github.com/onionshare/onionshare/pull/1907
+      (fetchpatch {
+        url = "https://github.com/onionshare/onionshare/commit/1fb1a470df20d8a7576c8cf51213e5928528d59a.patch";
+        includes = [ "onionshare/update_checker.py" ];
+        stripLen = 1;
+        hash = "sha256-mRRj9cALZVHw86CgU17sp9EglKhkRRcGfROyQpsXVfU=";
+      })
     ];
 
-    propagatedBuildInputs = [
+    dependencies = with python3.pkgs; [
       onionshare
       pyside6
       qrcode

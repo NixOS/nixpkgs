@@ -29,7 +29,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple IRC web client";
+    description = "Simple IRC web client";
     homepage = "https://git.sr.ht/~emersion/gamja";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [motiejus apfelkuchen6];

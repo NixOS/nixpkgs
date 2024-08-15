@@ -5,7 +5,6 @@
   dissect-btrfs,
   dissect-cim,
   dissect-clfs,
-  dissect-cobaltstrike,
   dissect-cstruct,
   dissect-esedb,
   dissect-etl,
@@ -30,14 +29,13 @@
   dissect-xfs,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.14";
+  version = "3.15";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -46,7 +44,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect";
     rev = "refs/tags/${version}";
-    hash = "sha256-wHLpysvOkJ1t0KKJXwfeRp/7mSom5WvrJ0lyRGoDwJM=";
+    hash = "sha256-9LRF5WBaxCaj2MEa2q90294seAU+89p5t5JBVa3vb5w=";
   };
 
   pythonRelaxDeps = true;
@@ -56,14 +54,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   dependencies = [
     dissect-archive
     dissect-btrfs
     dissect-cim
     dissect-clfs
-    dissect-cobaltstrike
     dissect-cstruct
     dissect-esedb
     dissect-etl

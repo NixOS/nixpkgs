@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A daemon that helps to launch dtk applications faster";
+    description = "Daemon that helps to launch dtk applications faster";
     homepage = "https://github.com/linuxdeepin/deepin-turbo";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

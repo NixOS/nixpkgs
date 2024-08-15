@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A collection of tools to download books from Google Books";
+    description = "Collection of tools to download books from Google Books";
     homepage    = "https://njw.me.uk/getxbook/";
     license     = licenses.isc;
     maintainers = with maintainers; [ obadz ];

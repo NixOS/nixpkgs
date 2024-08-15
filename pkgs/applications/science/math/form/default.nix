@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ gmp zlib ];
 
   meta = with lib; {
-    description = "The FORM project for symbolic manipulation of very big expressions";
+    description = "FORM project for symbolic manipulation of very big expressions";
     homepage = "https://www.nikhef.nl/~form/";
     license = licenses.gpl3;
     maintainers = [ maintainers.veprbl ];

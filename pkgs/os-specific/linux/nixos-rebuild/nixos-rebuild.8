@@ -18,11 +18,18 @@
 .Op Fl -no-build-nix
 .Op Fl -fast
 .Op Fl -rollback
-.Op Fl -builders Ar builder-spec
 .br
+.Op Fl -file | f Ar path
+.Op Fl -attr | A Ar attrPath
 .Op Fl -flake Ar flake-uri
 .Op Fl -no-flake
-.Op Fl -override-input Ar input-name flake-uri
+.Op Fl -recreate-lock-file
+.Op Fl -no-update-lock-file
+.Op Fl -no-write-lock-file
+.Op Fl -no-registries
+.Op Fl -commit-lock-file
+.Op Fl -update-input Ar input-path
+.Op Fl -override-input Ar input-path flake-url
 .br
 .Op Fl -profile-name | p Ar name
 .Op Fl -specialisation | c Ar name
@@ -31,25 +38,41 @@
 .Op Fl -target-host Va host
 .Op Fl -use-remote-sudo
 .br
-.Op Fl -show-trace
-.Op Fl I Va NIX_PATH
 .Op Fl -verbose | v
-.Op Fl -accept-flake-config
-.Op Fl -impure
+.Op Fl -quiet
+.Op Fl -log-format Ar format
+.Op Fl -no-build-output | Q
 .Op Fl -max-jobs | j Va number
-.Op Fl -keep-failed | K
+.Op Fl -cores Va number
 .Op Fl -keep-going | k
+.Op Fl -keep-failed | K
+.Op Fl -fallback
+.Op Fl I Va NIX_PATH
+.Op Fl -option Ar name value
+.Op Fl -repair
+.Op Fl -builders Va builder-spec
+.Op Fl -accept-flake-config
+.Op Fl -print-build-logs | L
+.Op Fl -show-trace
+.Op Fl -refresh
+.Op Fl -impure
+.Op Fl -offline
+.Op Fl -no-net
 .
 .
 .
 .Sh DESCRIPTION
 This command updates the system so that it corresponds to the
 configuration specified in
-.Pa /etc/nixos/configuration.nix
-or
-.Pa /etc/nixos/flake.nix Ns
-\&. Thus, every time you modify the configuration or any other NixOS module, you
-must run
+.Pa /etc/nixos/configuration.nix Ns
+,
+.Pa /etc/nixos/flake.nix
+or the file and attribute specified by the
+.Fl -file
+and/or
+.Fl -attr
+options. Thus, every time you modify the configuration or any other NixOS
+module, you must run
 .Nm
 to make the changes take effect. It builds the new system in
 .Pa /nix/store Ns
@@ -369,6 +392,32 @@ system with
 .Ic sudo Ns
 \&. Setting this option allows deploying as a non-root user.
 .
+.It Fl -file Ar path , Fl f Ar path
+Enable and build the NixOS system from the specified file. The file must
+evaluate to an attribute set, and it must contain a valid NixOS configuration
+at attribute
+.Va attrPath Ns
+\&. This is useful for building a NixOS system from a nix file that is not
+a flake or a NixOS configuration module. Attribute set a with valid NixOS
+configuration can be made using
+.Va nixos
+function in nixpkgs or importing and calling
+.Pa nixos/lib/eval-config.nix
+from nixpkgs. If specified without
+.Fl -attr
+option, builds the configuration from the top-level
+attribute of the file.
+.
+.It Fl -attr Ar attrPath , Fl A Ar attrPath
+Enable and build the NixOS system from nix file and use the specified attribute
+path from file specified by the
+.Fl -file
+option. If specified without
+.Fl -file
+option, uses
+.Pa default.nix
+in current directory.
+.
 .It Fl -flake Va flake-uri Ns Op Va #name
 Build the NixOS system from the specified flake. It defaults to the directory
 containing the target of the symlink
@@ -390,18 +439,57 @@ even if the current NixOS systems uses flakes.
 .Pp
 In addition,
 .Nm
-accepts various Nix-related flags, including
+accepts following options from nix commands that the tool calls:
+.
+.Pp
+flake-related options:
+.Bd -offset indent
+.Fl -recreate-lock-file Ns ,
+.Fl -no-update-lock-file Ns ,
+.Fl -no-write-lock-file Ns ,
+.Fl -no-registries Ns ,
+.Fl -commit-lock-file Ns ,
+.Fl -update-input Ar input-path Ns ,
+.Fl -override-input Ar input-path flake-url Ns
+.Ed
+.
+.Pp
+Builder options:
+.Bd -offset indent
+.Fl -verbose Ns ,
+.Fl v Ns ,
+.Fl -quiet Ns ,
+.Fl -log-format Ns ,
+.Fl -no-build-output Ns ,
+.Fl Q Ns ,
 .Fl -max-jobs Ns ,
 .Fl j Ns ,
-.Fl I Ns ,
-.Fl -accept-flake-config Ns ,
-.Fl -show-trace Ns ,
-.Fl -keep-failed Ns ,
+.Fl -cores Ns ,
 .Fl -keep-going Ns ,
+.Fl k Ns ,
+.Fl -keep-failed Ns ,
+.Fl K Ns ,
+.Fl -fallback Ns ,
+.Fl I Ns ,
+.Fl -option Ns
+.Fl -repair Ns ,
+.Fl -builders Ns ,
+.Fl -accept-flake-config Ns ,
+.Fl -print-build-logs Ns ,
+.Fl L Ns ,
+.Fl -show-trace Ns ,
+.Fl -refresh Ns ,
 .Fl -impure Ns ,
-.Fl -verbose Ns , and
-.Fl v Ns
-\&. See the Nix manual for details.
+.Fl -offline Ns ,
+.Fl -no-net Ns
+.Ed
+.
+.Pp
+See the Nix manual,
+.Ic nix flake lock --help
+or
+.Ic nix-build --help
+for details.
 .
 .
 .

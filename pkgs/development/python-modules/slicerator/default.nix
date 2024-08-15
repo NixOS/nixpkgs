@@ -26,9 +26,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A lazy-loading, fancy-sliceable iterable";
+    description = "Lazy-loading, fancy-sliceable iterable";
     homepage = "https://github.com/soft-matter/slicerator";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -16,14 +16,15 @@
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "4.4.0";
+  version = "4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HRF797QzroJV5ddOcsZgl49Q7oXrYiSMn7Uu9Dw+OBQ=";
+    pname = "python_gitlab";
+    inherit version;
+    hash = "sha256-30TbtunJQefr+5JE5+1KpNuQ9cFkmMstE1uObn8Imho=";
   };
 
   nativeBuildInputs = [ setuptools ];

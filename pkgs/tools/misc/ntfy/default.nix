@@ -13,6 +13,7 @@
 
 let
   python = python39.override {
+    self = python;
     packageOverrides = self: super: {
       ntfy-webpush = self.callPackage ./webpush.nix { };
 
@@ -84,7 +85,7 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A utility for sending notifications, on demand and when commands finish";
+    description = "Utility for sending notifications, on demand and when commands finish";
     homepage = "http://ntfy.rtfd.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kamilchm ];

@@ -19,4 +19,6 @@ mkDerivation {
     mandoc
     groff
   ];
+
+  MK_TESTS = "no";
 }

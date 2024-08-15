@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkg-config, qmake
+{ lib, mkDerivation, fetchFromGitHub, pkg-config, qmake
 , SDL2, fluidsynth, libsndfile, libvorbis, mpg123, qtbase
 }:
 

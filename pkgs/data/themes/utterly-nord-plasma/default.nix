@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/{color-schemes,Kvantum,plasma/look-and-feel,sddm/themes,wallpapers,konsole}
 
     cp -a look-and-feel $out/share/plasma/look-and-feel/Utterly-Nord
-    cp -a look-and-feel-solid $out/share/plasma/look-and-feel/Utterly-Nord-solid
-    cp -a look-and-feel-light $out/share/plasma/look-and-feel/Utterly-Nord-light
-    cp -a look-and-feel-light-solid $out/share/plasma/look-and-feel/Utterly-Nord-light-solid
+    cp -a look-and-feel-solid $out/share/plasma/look-and-feel/Utterly-Nord-Solid
+    cp -a look-and-feel-light $out/share/plasma/look-and-feel/Utterly-Nord-Light
+    cp -a look-and-feel-light-solid $out/share/plasma/look-and-feel/Utterly-Nord-Light-Solid
 
     cp -a *.colors $out/share/color-schemes/
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Plasma theme with Nordic Colors, transparency, blur and round edges for UI elements";
+    description = "Plasma theme with Nordic Colors, transparency, blur and round edges for UI elements";
     homepage = "https://himdek.com/Utterly-Nord-Plasma/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

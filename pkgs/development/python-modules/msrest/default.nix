@@ -74,12 +74,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "msrest" ];
 
   meta = with lib; {
-    description = "The runtime library for AutoRest generated Python clients";
+    description = "Runtime library for AutoRest generated Python clients";
     homepage = "https://github.com/Azure/msrest-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [
       bendlas
-      jonringer
       maxwilson
     ];
   };

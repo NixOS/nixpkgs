@@ -2,7 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pynose,
+  pytestCheckHook,
   setuptools,
   sphinx,
   sphinx-rtd-theme,
@@ -25,22 +25,16 @@ buildPythonPackage rec {
   dependencies = [ sphinx-rtd-theme ];
 
   nativeCheckInputs = [
-    pynose
+    pytestCheckHook
     sphinx
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests tests
-
-    runHook postCheck
-  '';
+  pytestFlagsArray = [ "tests/build.py" ];
 
   pythonImportsCheck = [ "sphinx_rtd_dark_mode" ];
 
   meta = with lib; {
-    description = "Adds a toggleable dark mode to the Read the Docs theme for Sphinx.";
+    description = "Adds a toggleable dark mode to the Read the Docs theme for Sphinx";
     homepage = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode";
     changelog = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode/releases/tag/v${version}";
     maintainers = with maintainers; [ wolfgangwalther ];

@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gaphor/gaphas";
     changelog = "https://github.com/gaphor/gaphas/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

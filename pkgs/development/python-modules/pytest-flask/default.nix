@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pytestFlagsArray = lib.optionals stdenv.isDarwin [ "--ignore=tests/test_live_server.py" ];
 
   meta = with lib; {
-    description = "A set of pytest fixtures to test Flask applications";
+    description = "Set of pytest fixtures to test Flask applications";
     homepage = "https://pytest-flask.readthedocs.io/";
     changelog = "https://github.com/pytest-dev/pytest-flask/blob/${version}/docs/changelog.rst";
     license = licenses.mit;

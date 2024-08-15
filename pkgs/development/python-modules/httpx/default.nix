@@ -108,7 +108,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
-    description = "The next generation HTTP client";
+    description = "Next generation HTTP client";
     mainProgram = "httpx";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;

@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Minimal CLI to control OBS Studio via obs-websocket";
     homepage = "https://github.com/grigio/obs-cmd";
+    changelog = "https://github.com/grigio/obs-cmd/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ ianmjones ];
     mainProgram = "obs-cmd";
