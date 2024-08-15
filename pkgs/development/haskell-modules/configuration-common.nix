@@ -2905,9 +2905,8 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/pull/220972#issuecomment-1484017192
   ffmpeg-light = super.ffmpeg-light.override { ffmpeg = pkgs.ffmpeg_4; };
 
-  # posix-api has had broken tests since 2020 (until at least 2023-01-11)
-  # raehik has a fix pending: https://github.com/andrewthad/posix-api/pull/14
-  posix-api = dontCheck super.posix-api;
+  # 2024-08-15: primitive >=0.9 && <0.10
+  posix-api = doJailbreak super.posix-api;
 
   # bytestring <0.11.0, optparse-applicative <0.13.0
   # https://github.com/kseo/sfnt2woff/issues/1

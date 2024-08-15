@@ -725,7 +725,6 @@ dont-distribute-packages:
  - buster-network
  - butterflies
  - bytable
- - bytelog
  - bytestring-builder-varword
  - bytestring-read
  - bytetrie
@@ -2885,7 +2884,6 @@ dont-distribute-packages:
  - network-stream
  - network-topic-models
  - network-transport-inmemory
- - network-unexceptional
  - network-uri-json
  - network-websocket
  - neural
@@ -3694,7 +3692,6 @@ dont-distribute-packages:
  - soap-tls
  - sock2stream
  - socket-io
- - sockets
  - sockets-and-pipes
  - socketson
  - solga-swagger
@@ -3831,7 +3828,6 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - sys-process
  - syslog
- - systemd-api
  - systemstats
  - systranything
  - t3-client
