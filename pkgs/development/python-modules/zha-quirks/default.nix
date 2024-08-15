@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-LudwIENP1KCX7+HwyklCUdAu5mRLDcnMEZBzbRH2FM0=";
   };
 
+  patches = [
+    # https://github.com/zigpy/zha-device-handlers/pull/3296
+    ./zigpy-0.65.3-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "setuptools-git-versioning<2"' "" \

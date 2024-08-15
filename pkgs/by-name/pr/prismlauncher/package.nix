@@ -4,6 +4,7 @@
   symlinkJoin,
   prismlauncher-unwrapped,
   addDriverRunpath,
+  alsa-lib,
   flite,
   gamemode,
   glfw,
@@ -14,11 +15,13 @@
   jdk21,
   kdePackages,
   libGL,
+  libjack2,
   libpulseaudio,
   libusb1,
   makeWrapper,
   openal,
   pciutils,
+  pipewire,
   udev,
   vulkan-loader,
   xorg,
@@ -102,21 +105,28 @@ symlinkJoin {
       runtimeLibs =
         [
           # lwjgl
-          glfw
-          libpulseaudio
-          libGL
-          openal
           stdenv.cc.cc.lib
+          ## native versions
+          glfw
+          openal
 
-          vulkan-loader # VulkanMod's lwjgl
+          ## openal
+          alsa-lib
+          libjack2
+          libpulseaudio
+          pipewire
 
-          udev # oshi
-
+          ## glfw
+          libGL
           xorg.libX11
           xorg.libXext
           xorg.libXcursor
           xorg.libXrandr
           xorg.libXxf86vm
+
+          udev # oshi
+
+          vulkan-loader # VulkanMod's lwjgl
         ]
         ++ lib.optional textToSpeechSupport flite
         ++ lib.optional gamemodeSupport gamemode.lib

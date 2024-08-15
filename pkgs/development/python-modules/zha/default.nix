@@ -4,6 +4,7 @@
   bellows,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   pyserial,
   pyserial-asyncio,
   pyserial-asyncio-fast,
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.28";
+  version = "0.0.30";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     rev = "refs/tags/${version}";
-    hash = "sha256-qsX62k/KeQ2ZTUHAv2ieZxOFh9dNFnLx0ZZOZCvI3ZE=";
+    hash = "sha256-4Fpe1us/GS2QVJbbnMcI7bziyW5P2kuJ6+p5L9N7lMY=";
   };
 
   postPatch = ''
@@ -45,13 +46,8 @@ buildPythonPackage rec {
   '';
 
   pythonRelaxDeps = [
-    "bellows"
     "pyserial-asyncio-fast"
-    "universal-silabs-flasher"
-    "zha-quirks"
-    "zigpy"
   ];
-
 
   build-system = [
     setuptools
@@ -75,6 +71,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytest-timeout
     pytest-xdist

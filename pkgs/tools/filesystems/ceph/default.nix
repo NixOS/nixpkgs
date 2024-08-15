@@ -4,6 +4,7 @@
 , fetchurl
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 
 # Build time
 , cmake
@@ -318,6 +319,29 @@ in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
+
+    patches = [
+      # Fixes mgr not being able to import `packaging` due to autotools >= 70.
+      # Remove once https://github.com/ceph/ceph/pull/58624 is merged, see
+      # https://github.com/NixOS/nixpkgs/pull/330226#issuecomment-2268421031
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/8da2d857fa8fdfedd7aad0ca90e1780a3ed085c9.patch";
+        name = "ceph-mgr-python-fix-packaging-import.patch";
+        hash = "sha256-3Yl1X6UfTf0XCXJxgRnM/Js9sz8tS+hsqViY6gDExoI=";
+      })
+
+      # Fixes cryptesetup version parsing regex, see
+      # * https://github.com/NixOS/nixpkgs/issues/334227
+      # * https://www.mail-archive.com/ceph-users@ceph.io/msg26309.html
+      # * https://github.com/ceph/ceph/pull/58997
+      # Remove once we're on the next version of Ceph 18, when this should be in:
+      # https://github.com/ceph/ceph/pull/58997
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/6ae874902b63652fa199563b6e7950cd75151304.patch";
+        name = "ceph-reef-ceph-volume-fix-set_dmcrypt_no_workqueue.patch";
+        hash = "sha256-r+7hcCz2WF/rJfgKwTatKY9unJlE8Uw3fmOyaY5jVH0=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace cmake/modules/Finduring.cmake \

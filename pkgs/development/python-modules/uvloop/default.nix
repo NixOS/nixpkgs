@@ -15,7 +15,6 @@
   ApplicationServices,
 
   # tests
-  aiohttp,
   psutil,
   pyopenssl,
   pytestCheckHook,
@@ -48,7 +47,6 @@ buildPythonPackage rec {
     ];
 
   nativeCheckInputs = [
-    aiohttp
     pyopenssl
     pytestCheckHook
     psutil

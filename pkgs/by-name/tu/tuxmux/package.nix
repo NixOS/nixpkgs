@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuxmux";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "edeneast";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HujdIT55NmXpHDa0a4EmB30va8bNdZ/MHu7+SwF9Nvc=";
+    hash = "sha256-WtcEPvNC1GLOfX0ULUnGHtVO8CyHWQYAPCKwsUlKEzc=";
   };
 
-  cargoHash = "sha256-ceXeYa8MGGc0I8Q/r4GVsR71St/hlNc75a20BN0Haas=";
+  cargoHash = "sha256-OBaFBEsFjK7Mf2zqI60q6uSG5JnZiohQg79+Fm++tK4=";
 
   buildInputs = [ libiconv ];
   nativeBuildInputs = [ pkg-config installShellFiles ];

@@ -1,12 +1,13 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
+, hackrf
 , libbladeRF
 , libusb1
+, limesuite
 , ncurses
 , rtl-sdr
-, hackrf
-, limesuite
+, soapysdr-with-plugins
 }:
 
 stdenv.mkDerivation rec {
@@ -23,17 +24,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    hackrf
     libbladeRF
     libusb1
     ncurses
     rtl-sdr
-    hackrf
+    soapysdr-with-plugins
   ] ++ lib.optional stdenv.isLinux limesuite;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
 
-  buildFlags = [ "DUMP1090_VERSION=${version}" "dump1090" "view1090" ];
+  buildFlags = [ "DUMP1090_VERSION=${version}" "showconfig" "dump1090" "view1090" ];
 
   doCheck = true;
 

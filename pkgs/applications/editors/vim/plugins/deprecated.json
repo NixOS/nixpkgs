@@ -7,6 +7,10 @@
         "date": "2021-12-21",
         "new": "cmp-tmux"
     },
+    "taskwarrior": {
+        "date": "2024-08-13",
+        "new": "taskwarrior3 or taskwarrior2"
+    },
     "fern-vim": {
         "date": "2024-05-28",
         "new": "vim-fern"

@@ -160,7 +160,7 @@ in {
       description = "Set of files that have to be linked into the initrd";
       example = literalExpression ''
         {
-          "/etc/hostname".text = "mymachine";
+          "/etc/machine-id".source = /etc/machine-id;
         }
       '';
       default = {};
@@ -443,6 +443,9 @@ in {
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
+
+        # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
+        "/etc/hostname".text = config.networking.hostName;
 
       } // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
         "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;

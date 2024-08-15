@@ -74,7 +74,7 @@
       ];
     };
 
-    system.build.installBootLoader = pkgs.writeScript "install-lxd-sbin-init.sh" ''
+    system.build.installBootLoader = pkgs.writeScript "install-lxc-sbin-init.sh" ''
       #!${pkgs.runtimeShell}
       ${pkgs.coreutils}/bin/ln -fs "$1/${initScript}" /sbin/init
     '';

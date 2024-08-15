@@ -104,6 +104,7 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [
     "trivialautovarinit"
+    "shadowstack"
   ];
 
   nativeBuildInputs = [ cmake ]

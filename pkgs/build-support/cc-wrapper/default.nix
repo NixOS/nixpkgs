@@ -15,7 +15,9 @@
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , nixSupport ? {}
-, isGNU ? false, isClang ? cc.isClang or false, isCcache ? cc.isCcache or false, gnugrep ? null
+, isGNU ? false, isClang ? cc.isClang or false, isZig ? cc.isZig or false
+, isArocc ? cc.isArocc or false, isCcache ? cc.isCcache or false
+, gnugrep ? null
 , expand-response-params
 , libcxx ? null
 
@@ -304,6 +306,9 @@ stdenvNoCC.mkDerivation {
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
+  # Cannot be in "passthru" due to "substituteAll"
+  inherit isArocc;
+
   passthru = {
     inherit targetPrefix suffixSalt;
     # "cc" is the generic name for a C compiler, but there is no one for package
@@ -311,7 +316,7 @@ stdenvNoCC.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang isZig;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -391,6 +396,10 @@ stdenvNoCC.mkDerivation {
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
         export named_cxx=${targetPrefix}clang++
+      elif [ -e $ccPath/arocc ]; then
+        wrap ${targetPrefix}arocc $wrapper $ccPath/arocc
+        ln -s ${targetPrefix}arocc $out/bin/${targetPrefix}cc
+        export named_cc=${targetPrefix}arocc
       fi
 
       if [ -e $ccPath/${targetPrefix}g++ ]; then
@@ -475,7 +484,7 @@ stdenvNoCC.mkDerivation {
     #
     # TODO(@Ericson2314): Remove this after stable release and force
     # everyone to refer to bintools-wrapper directly.
-    + ''
+    + optionalString (!isArocc) ''
       if [[ -f "$bintools/nix-support/dynamic-linker" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker" "$out/nix-support"
       fi
@@ -491,7 +500,7 @@ stdenvNoCC.mkDerivation {
 
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
     ''
-    + optionalString useGccForLibs ''
+    + optionalString (useGccForLibs && !isArocc) ''
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
@@ -517,9 +526,9 @@ stdenvNoCC.mkDerivation {
     ''
     # this ensures that when clang passes -lgcc_s to lld (as it does
     # when building e.g. firefox), lld is able to find libgcc_s.so
-    + concatMapStrings (libgcc: ''
+    + optionals (!isArocc) (concatMapStrings (libgcc: ''
       echo "-L${libgcc}/lib" >> $out/nix-support/cc-ldflags
-    '') (toList (gccForLibs.libgcc or [])))
+    '') (toList (gccForLibs.libgcc or []))))
 
     ##
     ## General libc support
@@ -539,9 +548,10 @@ stdenvNoCC.mkDerivation {
     + optionalString (libc != null) (''
       touch "$out/nix-support/libc-cflags"
       touch "$out/nix-support/libc-ldflags"
+    '' + optionalString (!isArocc) ''
       echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
     '' + optionalString (!(cc.langD or false)) ''
-      echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+      echo "-${if isArocc then "I" else "idirafter"} ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
     '' + optionalString (isGNU && (!(cc.langD or false))) ''
       for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
         echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
@@ -597,7 +607,7 @@ stdenvNoCC.mkDerivation {
     # ${cc_solib}/lib64 (even though it does actually search there...)..
     # This confuses libtool.  So add it to the compiler tool search
     # path explicitly.
-    + optionalString (!nativeTools) ''
+    + optionalString (!nativeTools && !isArocc) ''
       if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
         ccLDFlags+=" -L${cc_solib}/lib64"
         ccCFlags+=" -B${cc_solib}/lib64"
@@ -605,7 +615,7 @@ stdenvNoCC.mkDerivation {
       ccLDFlags+=" -L${cc_solib}/lib"
       ccCFlags+=" -B${cc_solib}/lib"
 
-    '' + optionalString cc.langAda or false ''
+    '' + optionalString (cc.langAda or false && !isArocc) ''
       touch "$out/nix-support/gnat-cflags"
       touch "$out/nix-support/gnat-ldflags"
       basePath=$(echo $cc/lib/*/*/*)
@@ -626,7 +636,7 @@ stdenvNoCC.mkDerivation {
     + optionalString propagateDoc ''
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
-    '' + optionalString (cc.langD or cc.langJava or false) ''
+    '' + optionalString (cc.langD or cc.langJava or false && !isArocc) ''
       echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
@@ -667,7 +677,7 @@ stdenvNoCC.mkDerivation {
       hardening_unsupported_flags+=" stackprotector"
     ''
 
-    + optionalString (libc != null && targetPlatform.isAvr) ''
+    + optionalString (libc != null && targetPlatform.isAvr && !isArocc) ''
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
         echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
       done

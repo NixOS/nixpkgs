@@ -4,6 +4,7 @@
 , rustPlatform
 , nix-update-script
 , polaris-web
+, fetchpatch
 , darwin
 , nixosTests
 }:
@@ -30,7 +31,15 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-+4WN6TTIzVu3Jj0SfPq2jnYh0oWRo/C4qDMeJLrj1kk=";
+  cargoPatches = [
+    (fetchpatch { # https://github.com/agersant/polaris/pull/213
+      name = "bump-time-crate.patch";
+      url = "https://github.com/agersant/polaris/commit/f625c57d203bdd3f2d7fcd99ccce1032f04d9b91.patch";
+      hash = "sha256-ICScYbSv4sCMbfZN2thhZMXGPcDX89xIhZqBJpGOzrY=";
+    })
+  ];
+
+  cargoHash = "sha256-PnNLSL6YIpM6b3+oCh2eNRNPpCKyvnWEW7uNaYTKzAU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.Security
@@ -55,9 +64,7 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = nixosTests.polaris;
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Self-host your music collection, and access it from any computer and mobile device";

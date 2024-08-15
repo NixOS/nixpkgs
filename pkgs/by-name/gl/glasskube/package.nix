@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.14.0";
+  version = "0.16.0";
   gitSrc = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k2PjdPPRPOZBr5AUGR25LJVN4/4jWaeTEX2ILLA3o10=";
+    hash = "sha256-NZ7FQMJyQlJW5ZS8dNzsURhRcu0IQXyTn/6e91eGhEg=";
   };
   web-bundle = buildNpmPackage rec {
     inherit version;
@@ -40,7 +40,7 @@ in buildGoModule rec {
 
   src = gitSrc;
 
-  vendorHash = "sha256-030lHyj3kkcz56S75l2wM3sVxTch7j9sKqUlkebStFo=";
+  vendorHash = "sha256-bh1ZQhd3xYoz4AEe/EZ4baBryQx4WfdacTQDP1Roi2Y=";
 
   CGO_ENABLED = 0;
 

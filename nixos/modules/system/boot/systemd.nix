@@ -107,10 +107,6 @@ let
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
 
-      # Boot counting
-      "boot-complete.target"
-    ] ++ lib.optional config.boot.loader.systemd-boot.bootCounting.enable "systemd-bless-boot.service" ++ [
-
       # Hibernate / suspend.
       "hibernate.target"
       "suspend.target"

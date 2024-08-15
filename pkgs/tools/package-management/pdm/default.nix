@@ -11,14 +11,14 @@
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.15.4";
+  version = "2.17.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WOIlhQVn3K3OQkGNtGOJlt8rE3jNCDDNSK/aG0VdnHI=";
+    hash = "sha256-9JIg8iXscSWMv3FIsUp2yurGEnRb7atn+QYjmOpWp6U=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,7 @@ buildPythonApplication rec {
 
   build-system = [
     pdm-backend
+    pdm-build-locked
   ];
 
   dependencies = [
@@ -102,11 +103,14 @@ buildPythonApplication rec {
     "test_convert_setup_py_project"
     # pythonfinder isn't aware of nix's python infrastructure
     "test_use_wrapper_python"
+    "test_build_with_no_isolation"
+    "test_run_script_with_inline_metadata"
 
     # touches the network
     "test_find_candidates_from_find_links"
     "test_lock_all_with_excluded_groups"
     "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
+    "test_build_distributions"
   ];
 
   __darwinAllowLocalNetworking = true;

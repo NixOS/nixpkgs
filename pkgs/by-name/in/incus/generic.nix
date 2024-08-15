@@ -13,10 +13,8 @@
   buildGoModule,
   fetchFromGitHub,
   writeScript,
-  writeShellScript,
   acl,
   cowsql,
-  hwdata,
   libcap,
   lxc,
   pkg-config,
@@ -37,6 +35,11 @@ buildGoModule rec {
     vendorHash
     version
     ;
+
+  outputs = [
+    "out"
+    "agent_loader"
+  ];
 
   src = fetchFromGitHub {
     owner = "lxc";
@@ -99,6 +102,14 @@ buildGoModule rec {
       --bash <($out/bin/incus completion bash) \
       --fish <($out/bin/incus completion fish) \
       --zsh <($out/bin/incus completion zsh)
+
+    mkdir -p $agent_loader/bin $agent_loader/etc/systemd/system $agent_loader/lib/udev/rules.d
+    cp internal/server/instance/drivers/agent-loader/incus-agent-setup $agent_loader/bin/
+    chmod +x $agent_loader/bin/incus-agent-setup
+    patchShebangs $agent_loader/bin/incus-agent-setup
+    cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
+    cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
+    substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"
   '';
 
   passthru = {

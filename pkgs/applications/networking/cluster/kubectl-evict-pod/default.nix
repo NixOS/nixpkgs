@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubectl-evict-pod";
-  version = "0.0.12";
+  version = "0.0.13";
 
   src = fetchFromGitHub {
     owner = "rajatjindal";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-alU1c1ppn4cQi582kcA/PIAJJt73i3uG02cQvSYij1A=";
+    sha256 = "sha256-yA88GDcu1Sg8d5RCC4yiDPYZPxDSnke/4X7nSBSGf88=";
   };
 
   vendorHash = null;

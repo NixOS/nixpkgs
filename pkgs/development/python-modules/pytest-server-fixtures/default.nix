@@ -12,12 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-server-fixtures";
-  inherit (pytest-fixture-config) version src;
+  inherit (pytest-fixture-config) version src patches;
   pyproject = true;
 
-  sourceRoot = "${src.name}/pytest-server-fixtures";
+  postPatch = ''
+    cd pytest-server-fixtures
+  '';
 
   build-system = [ setuptools ];
 

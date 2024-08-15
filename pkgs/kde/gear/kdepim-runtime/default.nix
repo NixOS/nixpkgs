@@ -9,11 +9,12 @@
   lib,
   libetebase,
   libkgapi,
+  libxslt,
 }:
 mkKdeDerivation {
   pname = "kdepim-runtime";
 
-  extraNativeBuildInputs = [pkg-config shared-mime-info];
+  extraNativeBuildInputs = [pkg-config shared-mime-info libxslt];
   # FIXME: libkolabxml
   extraBuildInputs = [qtnetworkauth qtspeech qtwebengine cyrus_sasl libetebase];
 

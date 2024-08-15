@@ -16,8 +16,8 @@ import ../make-test-python.nix (
       };
     };
 
-    container-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
-    container-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
+    container-image-metadata = releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system};
+    container-image-rootfs = releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system};
   in
   {
     name = "incusd-options";
@@ -87,7 +87,7 @@ import ../make-test-python.nix (
       machine.wait_for_unit("incus-preseed.service")
 
       with subtest("Container image can be imported"):
-          machine.succeed("incus image import ${container-image-metadata}/*/*.tar.xz ${container-image-rootfs}/*/*.tar.xz --alias nixos")
+          machine.succeed("incus image import ${container-image-metadata}/*/*.tar.xz ${container-image-rootfs} --alias nixos")
 
       with subtest("Container can be launched and managed"):
           machine.succeed("incus launch nixos container")

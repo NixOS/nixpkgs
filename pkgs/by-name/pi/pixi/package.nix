@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.26.1";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-N8nNB+FOD8n+W7jFYhq9JoEnLOq6xLMLBC77DiK3RLU=";
+    hash = "sha256-37zVmPKAWCw58xA5lUb+WVAW8rRwPF7DZVXUZ8bwP5E=";
   };
 
   cargoLock = {
@@ -63,6 +63,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=add_functionality_os"
     "--skip=add_functionality_union"
     "--skip=add_pypi_functionality"
+    "--skip=add_with_channel"
     "--skip=test_alias"
     "--skip=test_cwd"
     "--skip=test_compressed_mapping_catch_missing_package"
@@ -70,6 +71,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_dont_record_not_present_package_as_purl"
     "--skip=test_incremental_lock_file"
     "--skip=test_purl_are_added_for_pypi"
+    "--skip=test_purl_are_generated_using_custom_mapping"
+    "--skip=test_purl_are_missing_for_non_conda_forge"
 
     # `/usr/bin/env` is not available during build.
     # Error: /usr/bin/env: No such file or directory

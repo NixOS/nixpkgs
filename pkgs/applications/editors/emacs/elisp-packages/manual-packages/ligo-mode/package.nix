@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   melpaBuild,
   fetchFromGitLab,
@@ -7,13 +8,13 @@
 
 melpaBuild {
   pname = "ligo-mode";
-  version = "1.7.1-unstable-2024-07-17";
+  version = "1.7.0-unstable-2024-08-01";
 
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
-    rev = "09afc3ff3dd9c88b2dfbc563278a78a099b39902";
-    hash = "sha256-AX0zZljZPrfBlpdgCNuiq0JaYpHcVBdHHZ9jM31LlQs=";
+    rev = "454e4a505212b8bd80ac3c75a1432320b9be2604";
+    hash = "sha256-Z7bv+ulGwnczrSWWC1RIUzSI4wAF9AtObdi5bBfYsOs=";
   };
 
   files = ''("tools/emacs/ligo-mode.el")'';
@@ -24,6 +25,7 @@ melpaBuild {
     description = "Major mode for editing LIGO source code";
     homepage = "https://gitlab.com/ligolang/ligo";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    broken = stdenv.isDarwin; # different src hash on darwin
   };
 }

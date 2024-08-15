@@ -30,6 +30,10 @@ rustPlatform.buildRustPackage rec {
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.isDarwin;
 
+  postPatch = ''
+    ln --force -s ${./Cargo.lock} Cargo.lock
+  '';
+
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files
     mkdir -p $BANDWHICH_GEN_DIR

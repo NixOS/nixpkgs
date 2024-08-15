@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-credential-keepassxc";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "git-credential-keepassxc";
     rev = "v${version}";
-    hash = "sha256-AvnnzLiDQEdfAHPns8ufhdiPPn9d23AnI8Aq2DQS+To=";
+    hash = "sha256-qxNzWuuIoK9BJLVcWtrER+MyA5cyd03xAwGljh8DZC4=";
   };
 
-  cargoHash = "sha256-c2YucWs0UzyWDKWS5KebT3ps+XvWzlI0+ziJ8JX6oiQ=";
+  cargoHash = "sha256-jBUp0jes4wtr8cmqceEBb6noqGkJUHbIfYgWOw5KMF4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
 

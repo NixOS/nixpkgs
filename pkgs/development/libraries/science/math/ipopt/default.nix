@@ -6,7 +6,7 @@
 , lapack
 , gfortran
 , enableAMPL ? true, libamplsolver
-, enableMUMPS ? !stdenv.isDarwin, mumps, mpi
+, enableMUMPS ? true, mumps, mpi
 , enableSPRAL ? true, spral
 }:
 

@@ -10,8 +10,8 @@
 , binlore
 , coreutils
 , gmpSupport ? true, gmp
-, aclSupport ? stdenv.isLinux, acl
-, attrSupport ? stdenv.isLinux, attr
+, aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl, acl
+, attrSupport ? lib.meta.availableOn stdenv.hostPlatform attr, attr
 , selinuxSupport ? false, libselinux, libsepol
 # No openssl in default version, so openssl-induced rebuilds aren't too big.
 # It makes *sum functions significantly faster.

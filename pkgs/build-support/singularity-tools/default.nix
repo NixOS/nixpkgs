@@ -20,7 +20,7 @@
 let
   defaultSingularity = singularity;
 in
-rec {
+lib.makeExtensible (final: {
   # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
   shellScript =
     lib.warn
@@ -82,20 +82,28 @@ rec {
               util-linux
             ];
             strictDeps = true;
-            layerClosure = writeClosure contents;
+            layerClosure = writeClosure (
+              [
+                bashInteractive
+                runScriptFile
+              ]
+              ++ contents
+            );
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";
+              # Leaving "$out" for the Singularity/Container image
+              destination = "disk-image";
             };
             inherit memSize;
           }
           ''
-            rm -rf $out
-            mkdir disk
+            rmdir "$out"
+            mkdir workspace
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
-            mount /dev/${vmTools.hd} disk
-            mkdir -p disk/img
-            cd disk/img
+            mount /dev/${vmTools.hd} workspace
+            mkdir -p workspace/img
+            cd workspace/img
             mkdir proc sys dev
 
             # Run root script
@@ -108,14 +116,20 @@ rec {
 
             # Build /bin and copy across closure
             mkdir -p bin ./${builtins.storeDir}
-            for f in $(cat $layerClosure) ; do
-              cp -ar $f ./$f
-            done
+            # Loop over the line-separated paths in $layerClosure
+            while IFS= read -r f; do
+              cp -r "$f" "./$f"
+            done < "$layerClosure"
 
-            for c in ${toString contents} ; do
-              for f in $c/bin/* ; do
-                if [ ! -e bin/$(basename $f) ] ; then
-                  ln -s $f bin/
+            # TODO(@ShamrockLee):
+            # Once vmTools.runInLinuxVMm works with `__structuredAttrs = true` (#334705),
+            # set __structuredAttrs = true and pass contents as an attribute
+            # so that we could loop with `for c in ''${contents[@]}`
+            # instead of expanding all the paths in contents into the Bash string.
+            for c in ${lib.escapeShellArgs contents} ; do
+              for f in "$c"/bin/* ; do
+                if [ ! -e "bin/$(basename "$f")" ] ; then
+                  ln -s "$f" bin/
                 fi
               done
             done
@@ -135,10 +149,10 @@ rec {
             mkdir -p /var/lib/${projectName}/mnt/session
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
             echo > /etc/resolv.conf
-            TMPDIR=$(pwd -P) ${projectName} build $out ./img
+            TMPDIR="$(pwd -P)" ${projectName} build "$out" ./img
           ''
       );
 
     in
     result;
-}
+})

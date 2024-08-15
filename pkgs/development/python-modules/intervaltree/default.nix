@@ -2,30 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
-  pytest,
+  setuptools,
+  pytestCheckHook,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   version = "3.1.0";
-  format = "setuptools";
   pname = "intervaltree";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "902b1b88936918f9b2a19e0e5eb7ccb430ae45cde4f39ea4b36932920d33952d";
   };
 
-  buildInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ sortedcontainers ];
+  dependencies = [ sortedcontainers ];
 
-  checkPhase = ''
-    runHook preCheck
-    rm build -rf
-    ${python.interpreter} nix_run_setup test
-    runHook postCheck
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -rf build
   '';
 
   meta = with lib; {

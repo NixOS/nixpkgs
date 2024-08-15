@@ -6,6 +6,6 @@ for p in "${params[@]}"; do
     esac
 done
 
-if $needsTarget; then
+if $needsTarget && [[ $0 != *cpp ]]; then
     extraBefore+=(-target @defaultTarget@ @machineFlags@)
 fi

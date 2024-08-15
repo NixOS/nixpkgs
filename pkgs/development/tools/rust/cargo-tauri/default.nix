@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, glibc
-, libsoup
-, cairo
-, gtk3
-, webkitgtk
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  glibc,
+  libsoup,
+  cairo,
+  gtk3,
+  webkitgtk,
+  darwin,
 }:
 
 let
@@ -17,30 +18,48 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "1.7.1";
+  version = "2.0.0-rc.2";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
-    repo = pname;
+    repo = "tauri";
     rev = "tauri-v${version}";
-    hash = "sha256-xQsj+NjfWc4nU/MKPzWal6n+YZpruypPoUm926JiI7k=";
+    hash = "sha256-V3Lck5RzEAxXRHPAy0M2elRk9geF8qHWoi01N6wcHc4=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   sourceRoot = "${src.name}/tooling/cli";
 
-  cargoHash = "sha256-xcytn3cV1Tw6O9glihbyCvERuUBA1yioR4PIbL1T53Q=";
+  cargoHash = "sha256-fGnre+vPzWtpp9NLLQtb/Feh06pBQipkCQ2kFCDTC+Y=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isLinux [
+      glibc
+      libsoup
+      cairo
+      gtk3
+      webkitgtk
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+      SystemConfiguration
+    ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     mainProgram = "cargo-tauri";
     homepage = "https://tauri.app/";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dit7ya happysalada ];
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      dit7ya
+      happysalada
+    ];
   };
 }

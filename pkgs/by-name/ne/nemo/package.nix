@@ -14,7 +14,6 @@
 , xapp
 , libexif
 , json-glib
-, gtk-layer-shell
 , exempi
 , intltool
 , shared-mime-info
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.2.7";
+  version = "6.2.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wYzBrFRCgfmvmjSP6X1cCAFU5aFydO2FNl86j5rAfgA=";
+    sha256 = "sha256-1GJLsUlptwXcZUWIOztskV0nHA9BnPmnVeTgUwJ+QDQ=";
   };
 
   patches = [
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
     gvfs
     libgsf
     json-glib
-    gtk-layer-shell
   ];
 
   nativeBuildInputs = [
@@ -68,8 +66,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
-    # enabled by default in Mint packaging (see debian/rules)
-    "-Dgtk_layer_shell=true"
   ];
 
   postInstall = ''

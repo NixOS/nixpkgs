@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flip-link";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-12eVZqW4+ZCDS0oszJI5rTREJY77km/y57LNDFJAwkk=";
+    hash = "sha256-slidPVL0LAUtmCI2rlAwfGVUmB4WRF9bHqQhdgbO2oc=";
   };
 
-  cargoHash = "sha256-75D38+QjEzj7J4CC30iMeuDXwcW4QT9YWgYyCILSv+g=";
+  cargoHash = "sha256-x3JnqztoLol5dNMact/qMveQuvcMTg/jqHxW0lksB7Y=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

@@ -47,7 +47,7 @@ buildPythonApplication rec {
     aiocoap
     awsiotpythonsdk
     bluepy
-    can
+    python-can
     cmd2
     cryptography
     paho-mqtt

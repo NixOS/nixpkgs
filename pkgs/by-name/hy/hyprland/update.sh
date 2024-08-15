@@ -22,9 +22,8 @@ date=${date%T*}
 # update version; otherwise fail
 update-source-version hyprland "$version" --ignore-same-hash
 
-# find hyprland dir
-files="$(fd --full-path /hyprland/ | head -1)"
-dir="${files%/*}"
+# set hyprland dir
+dir="pkgs/by-name/hy/hyprland"
 
 echo -e '{
   "branch": "'"$branch"'",
@@ -32,4 +31,4 @@ echo -e '{
   "commit_message": "'"$commit_message"'",
   "date": "'"$date"'",
   "tag": "'"$tag"'"
-}' >"$dir/info.json"
+}' >"$dir/info.json" || echo "Please run the script in the root of the Nixpkgs repo"

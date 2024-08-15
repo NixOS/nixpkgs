@@ -702,6 +702,8 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
+      SECURITY_DMESG_RESTRICT          = yes;
+
       RANDOM_TRUST_CPU                 = whenOlder "6.2" yes; # allow RDRAND to seed the RNG
       RANDOM_TRUST_BOOTLOADER          = whenOlder "6.2" (whenAtLeast "5.4" yes); # allow the bootloader to seed the RNG
 

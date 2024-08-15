@@ -1,17 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools-scm,
-  kombu,
-  shortuuid,
   celery,
+  fetchFromGitHub,
   funcy,
+  kombu,
   pytest-celery,
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  shortuuid,
 }:
 
 buildPythonPackage rec {
@@ -31,10 +31,10 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    kombu
-    shortuuid
     celery
     funcy
+    kombu
+    shortuuid
   ];
 
   nativeCheckInputs = [
@@ -46,11 +46,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_task" ];
 
+  disabledTests = [
+    # Test is flaky
+    "test_start_already_exists"
+  ];
+
   meta = with lib; {
     description = "Celery task queue used in DVC";
     homepage = "https://github.com/iterative/dvc-task";
     changelog = "https://github.com/iterative/dvc-task/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

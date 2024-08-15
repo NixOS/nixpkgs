@@ -101,6 +101,9 @@ stdenv.mkDerivation {
       "--enable-perl-xs=no"
       "TI_AWK=${getBin gawk}/bin/awk"
     ]
+    ++ optionals (crossBuildTools && lib.versionAtLeast version "7.1") [
+      "texinfo_cv_sys_iconv_converts_euc_cn=yes"
+    ]
     ++ optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];

@@ -10,6 +10,7 @@
 , libxslt
 , pkg-config
 , python3
+, buildPackages
 , publicsuffix-list
 }:
 
@@ -32,7 +33,6 @@ stdenv.mkDerivation rec {
     gtk-doc
     lzip
     pkg-config
-    python3
     libxslt
   ];
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
+    python3
   ];
 
   propagatedBuildInputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+    "PYTHON=${lib.getExe buildPackages.python3}"
   ];
 
   enableParallelBuilding = true;

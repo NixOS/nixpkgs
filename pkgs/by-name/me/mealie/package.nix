@@ -41,22 +41,20 @@ let
   };
 in
 
-pythonpkgs.buildPythonPackage rec {
+pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
 
-  nativeBuildInputs = [
-    pythonpkgs.poetry-core
-    makeWrapper
-  ];
+  build-system = with pythonpkgs; [ poetry-core ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   dontWrapPythonPrograms = true;
 
-  doCheck = false;
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with pythonpkgs; [
+  dependencies = with pythonpkgs; [
     aiofiles
     alembic
     aniso8601
@@ -121,18 +119,26 @@ pythonpkgs.buildPythonPackage rec {
       --replace-fail 'script_location = alembic' 'script_location = ${src}/alembic'
 
     makeWrapper ${start_script} $out/bin/mealie \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
+      --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
       --set LD_LIBRARY_PATH "${crfpp}/lib" \
       --set STATIC_FILES "${frontend}" \
       --set PATH "${lib.makeBinPath [ crfpp ]}"
 
     makeWrapper ${init_db} $out/libexec/init_db \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
+      --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
       --set OUT "$out"
   '';
 
-  checkInputs = with python.pkgs; [
-    pytestCheckHook
+  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # KeyError: 'alembic_version'
+    "tests/unit_tests/services_tests/backup_v2_tests/test_backup_v2.py"
+    "tests/unit_tests/services_tests/backup_v2_tests/test_alchemy_exporter.py"
+    # sqlite3.OperationalError: no such table
+    "tests/unit_tests/services_tests/scheduler/tasks/test_create_timeline_events.py"
+    "tests/unit_tests/test_ingredient_parser.py"
+    "tests/unit_tests/test_security.py"
   ];
 
   passthru.tests = {

@@ -24,7 +24,7 @@ in
       rm "$out/bin/kak"
       makeWrapper "${kakoune}/bin/kak" "$out/bin/kak" \
         --set KAKOUNE_RUNTIME "$out/share/kak" \
-        --set PATH "$PATH:$out/share/kak/bin"
+        --suffix PATH : "$out/share/kak/bin"
 
       # currently kakoune ignores doc files if they are symlinks, so workaround by
       # copying doc files over, so they become regular files...

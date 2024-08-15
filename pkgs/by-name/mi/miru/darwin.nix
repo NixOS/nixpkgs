@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/mac-Miru-${version}-mac.zip";
-    hash = "sha256-6QK9A+xy7Z66YDC9eJ5vFjtW8frjtYy9yoax7z6sWsg=";
+    hash = "sha256-1Qfd5lYcT6tUSQD46yOIus/esOrvAVfn7VeHm9t0OLg=";
   };
 
   sourceRoot = ".";

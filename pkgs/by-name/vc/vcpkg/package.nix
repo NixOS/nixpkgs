@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vcpkg";
-  version = "2024.06.15";
+  version = "2024.07.12";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg";
     rev = finalAttrs.version;
-    hash = "sha256-eDpMGDtC44eh0elLWV0r1H/WbpVdZ5qMedKh7Ct50Cs=";
+    hash = "sha256-HT7IcznN5W+Innzg0aeOvZnpVUTf/uJFlYflE91YJQA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

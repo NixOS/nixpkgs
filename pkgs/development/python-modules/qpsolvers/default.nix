@@ -16,6 +16,7 @@
   osqp,
   quadprog,
   scs,
+  highspy,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     daqp = [ daqp ];
     ecos = [ ecos ];
     gurobi = [ gurobipy ];
-    # highs = [ highspy ];
+    highs = [ highspy ];
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
     # piqp = [ piqp ];
@@ -59,8 +60,9 @@ buildPythonPackage rec {
         clarabel
         cvxopt
         daqp
-        ecos # highs
         osqp # piqp proxqp qpalm
+        ecos
+        highs
         quadprog
         scs
       ];

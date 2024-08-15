@@ -37,6 +37,12 @@ buildPythonPackage rec {
       excludes = [ "poetry.lock" ];
       hash = "sha256-KzagDvljkKoUJT+41o7Jv5OPLpPXQDeGmz3O/HOk1YQ=";
     })
+    # https://github.com/iMicknl/python-overkiz-api/pull/1326
+    (fetchpatch2 {
+      name = "aiohttp-3.10-compat.patch";
+      url = "https://github.com/iMicknl/python-overkiz-api/commit/f745c0a9cd654579135624aa472723f85d301aed.patch";
+      hash = "sha256-FXyWLnbu0Kqe/dWrWdi4cvyttDQqexhHo0nTumfUo4g=";
+    })
   ];
 
   build-system = [ poetry-core ];
