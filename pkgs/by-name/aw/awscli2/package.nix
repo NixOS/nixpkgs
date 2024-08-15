@@ -69,6 +69,14 @@ py.pkgs.buildPythonApplication rec {
     hash = "sha256-HxFtMFeGR6XAMsP5LM0tvJ/ECWVpveIhWRTKvf8uYA0=";
   };
 
+  patches = [
+    # Temporary test fix until https://github.com/aws/aws-cli/pull/8838 is merged upstream
+    (fetchpatch {
+      url = "https://github.com/aws/aws-cli/commit/b5f19fe136ab0752cd5fcab21ff0ab59bddbea99.patch";
+      hash = "sha256-NM+nVlpxGAHVimrlV0m30d4rkFVb11tiH8Y6//2QhMI=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'awscrt>=0.19.18,<=0.20.11' 'awscrt>=0.19.18' \
