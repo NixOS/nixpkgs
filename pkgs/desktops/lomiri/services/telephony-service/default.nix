@@ -205,10 +205,12 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 ../debian/telephony-service."$service".user.service $out/lib/systemd/user/"$service".service
 
       # ofono-setup.service would be provided by ubuntu-touch-session, we don't plan to package it
+      # Doesn't make sense to provide on non-Lomiri
       substituteInPlace $out/lib/systemd/user/"$service".service \
         --replace-fail '/usr' "$out" \
         --replace-warn 'Requires=ofono-setup.service' "" \
-        --replace-warn 'After=ofono-setup.service' ""
+        --replace-warn 'After=ofono-setup.service' "" \
+        --replace-warn 'WantedBy=ayatana-indicators.target' 'WantedBy=lomiri-indicators.target'
     done
 
     # Parses the call & SMS indicator desktop files & tries to find its own executable in PATH
@@ -217,7 +219,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    ayatana-indicators = [ "telephony-service-indicator" ];
+    ayatana-indicators = {
+      telephony-service-indicator = [ "lomiri" ];
+    };
     tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
