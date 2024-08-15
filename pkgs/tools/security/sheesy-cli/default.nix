@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--bin" "sy" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sy \
       --bash <($out/bin/sy completions bash) \
       --fish <($out/bin/sy completions fish) \

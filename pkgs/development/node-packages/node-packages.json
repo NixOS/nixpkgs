@@ -1,7 +1,6 @@
 [
   "@angular/cli"
 , "@antfu/ni"
-, "@astrojs/language-server"
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
@@ -153,7 +152,6 @@
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
-, "node-pre-gyp"
 , "node-red"
 , "node2nix"
 , "np"
@@ -258,5 +256,4 @@
 , "wring"
 , "@yaegassy/coc-nginx"
 , "yalc"
-, "yarn"
 ]

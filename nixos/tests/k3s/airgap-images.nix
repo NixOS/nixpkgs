@@ -31,7 +31,7 @@ import ../make-test-python.nix (
 
       start_all()
       machine.wait_for_unit("k3s")
-      machine.wait_until_succeeds("journalctl -r --no-pager -u k3s | grep \"Imported images from /var/lib/rancher/k3s/agent/images/\"", timeout=60)
+      machine.wait_until_succeeds("journalctl -r --no-pager -u k3s | grep \"Imported images from /var/lib/rancher/k3s/agent/images/\"", timeout=120)
       images = json.loads(machine.succeed("crictl img -o json"))
       image_names = [i["repoTags"][0] for i in images["images"]]
       with open("${k3s.imagesList}") as expected_images:

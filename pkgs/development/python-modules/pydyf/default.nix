@@ -6,6 +6,7 @@
   ghostscript,
   pillow,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
@@ -23,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+      --replace "--isort --flake8" ""
   '';
 
   nativeBuildInputs = [ flit-core ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     ghostscript
     pillow
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "pydyf" ];

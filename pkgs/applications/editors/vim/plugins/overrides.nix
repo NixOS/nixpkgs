@@ -46,7 +46,8 @@
 , statix
 , stylish-haskell
 , tabnine
-, taskwarrior
+, taskwarrior2
+, taskwarrior3
 , tmux
 , tup
 , vim
@@ -1054,6 +1055,10 @@
       '';
     };
 
+  markview-nvim = super.markview-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-web-devicons ];
+  };
+
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs {
     dependencies = with self; [ mason-nvim nvim-lspconfig ];
   };
@@ -1241,7 +1246,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-J9L9j8iyeZQRMjiVqdI7V7BOAkZaiLGOtKDpgq2wyi0=";
+        cargoHash = "sha256-D7KUJ8q521WWgUqBBOgepGJ3NQ4DdKr+Bg/4k3Lf+mw=";
 
         preCheck = ''
           mkdir tests/tmp/
@@ -1577,9 +1582,14 @@
       };
     };
 
-  taskwarrior = buildVimPlugin {
-    inherit (taskwarrior) version pname;
-    src = "${taskwarrior.src}/scripts/vim";
+  taskwarrior3 = buildVimPlugin {
+    inherit (taskwarrior3) version pname;
+    src = "${taskwarrior3.src}/scripts/vim";
+  };
+
+  taskwarrior2 = buildVimPlugin {
+    inherit (taskwarrior2) version pname;
+    src = "${taskwarrior2.src}/scripts/vim";
   };
 
   telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs {
@@ -2076,6 +2086,10 @@
 
   YankRing-vim = super.YankRing-vim.overrideAttrs {
     sourceRoot = ".";
+  };
+
+  yazi-nvim = super.yazi-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
   };
 
   YouCompleteMe = super.YouCompleteMe.overrideAttrs {

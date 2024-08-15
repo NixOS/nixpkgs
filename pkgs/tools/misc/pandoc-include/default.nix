@@ -10,14 +10,14 @@
 
 buildPythonApplication rec {
   pname = "pandoc-include";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DCsunset";
     repo = "pandoc-include";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8gG1xkDuIN007uYSwSWgsDW4IFVIE44v3j7FN0RaZwU=";
+    hash = "sha256-8eTK7jTwxgSjlxEzjFlL5mzt4tBolmS6fSRnbXDWYJc=";
   };
 
   nativeBuildInputs = [

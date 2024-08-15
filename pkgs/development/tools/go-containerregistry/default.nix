@@ -4,13 +4,13 @@ let bins = [ "crane" "gcrane" ]; in
 
 buildGoModule rec {
   pname = "go-containerregistry";
-  version = "0.20.0";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qImLnWDw7G4GPn+hj0gbgKwHAWQtXFdtBnEc9oxGcCw=";
+    sha256 = "sha256-5f5zheFPSKmpUaVmcAfeZgFSDu3rvdtQh8mau9jdqz4=";
   };
   vendorHash = null;
 

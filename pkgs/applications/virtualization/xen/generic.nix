@@ -59,6 +59,7 @@ versionDefinition:
 
   # Documentation
   fig2dev,
+  imagemagick,
   pandoc,
 
   # Scripts
@@ -273,6 +274,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out" # TODO: Split $out in $bin for binaries and $lib for libraries.
     "man" # Manual pages for Xen userspace utilities.
+    "doc" # The full Xen documentation in HTML format.
     "dev" # Development headers.
     "boot" # xen.gz kernel, policy file if Flask is enabled, xen.efi if EFI is enabled.
   ];
@@ -293,6 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
       bison
       cmake
       fig2dev
+      imagemagick # Causes build failures in Hydra related to fig generation if not included.
       flex
       pandoc
       pkg-config
@@ -561,10 +564,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postFixup =
-    # Fix binaries in $out/lib/xen/bin.
+    # Fix binaries in $out/libexec/xen/bin.
     ''
       addAutoPatchelfSearchPath $out/lib
-      autoPatchelf $out/libexec/xen/bin/
+      autoPatchelf $out/libexec/xen/bin
     ''
     # Flask is particularly hard to disable. Even after
     # setting the make flags to `n`, it still gets compiled.
@@ -628,11 +631,11 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription =
       # Starts with the longDescription from ./packages.nix.
       (packageDefinition.meta.longDescription or "")
-      +
-        lib.strings.optionalString (!withInternalQEMU)
-          "\nUse with `qemu_xen_${lib.stringAsChars (x: if x == "." then "_" else x) branch}`"
-      + lib.strings.optionalString latest "or `qemu_xen`"
-      + "."
+      + lib.strings.optionalString (!withInternalQEMU) (
+        "\nUse with `qemu_xen_${lib.stringAsChars (x: if x == "." then "_" else x) branch}`"
+        + lib.strings.optionalString latest " or `qemu_xen`"
+        + ".\n"
+      )
       # Then, if any of the optional with* components are being built, add the "Includes:" string.
       +
         lib.strings.optionalString
@@ -645,22 +648,22 @@ stdenv.mkDerivation (finalAttrs: {
             || withFlask
           )
           (
-            "\nIncludes:\n"
+            "\nIncludes:"
             # Originally, this was a call for the complicated withPrefetchedSources. Since there aren't
             # that many optional components, we just use lib.strings.optionalString, because it's simpler.
             # Optional components that aren't being built are automatically hidden.
-            + lib.strings.optionalString withEFI "* `xen.efi`: Xen's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package.\n"
-            + lib.strings.optionalString withFlask "* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package.\n"
-            + lib.strings.optionalString withInternalQEMU "* `qemu-xen`: Xen's mirror of [QEMU](https://www.qemu.org/).\n"
-            + lib.strings.optionalString withInternalSeaBIOS "* `seabios-xen`: Xen's mirror of [SeaBIOS](https://www.seabios.org/SeaBIOS).\n"
-            + lib.strings.optionalString withInternalOVMF "* `ovmf-xen`: Xen's mirror of [OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF).\n"
-            + lib.strings.optionalString withInternalIPXE "* `ipxe-xen`: Xen's pinned version of [iPXE](https://ipxe.org/).\n"
+            + lib.strings.optionalString withEFI "\n* `xen.efi`: Xen's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+            + lib.strings.optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
+            + lib.strings.optionalString withInternalQEMU "\n* `qemu-xen`: Xen's mirror of [QEMU](https://www.qemu.org/)."
+            + lib.strings.optionalString withInternalSeaBIOS "\n* `seabios-xen`: Xen's mirror of [SeaBIOS](https://www.seabios.org/SeaBIOS)."
+            + lib.strings.optionalString withInternalOVMF "\n* `ovmf-xen`: Xen's mirror of [OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF)."
+            + lib.strings.optionalString withInternalIPXE "\n* `ipxe-xen`: Xen's pinned version of [iPXE](https://ipxe.org/)."
           )
       # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
       # This will hopefully give users the peace of mind that their Xen is secure, without needing
       # to search the source code for the XSA patches.
       + lib.strings.optionalString (writeAdvisoryDescription != [ ]) (
-        "\nThis Xen (${version}) has been patched against the following known security vulnerabilities:\n"
+        "\n\nThis Xen (${version}) has been patched against the following known security vulnerabilities:\n"
         + lib.strings.removeSuffix "\n" (lib.strings.concatLines writeAdvisoryDescription)
       );
     homepage = "https://xenproject.org/";

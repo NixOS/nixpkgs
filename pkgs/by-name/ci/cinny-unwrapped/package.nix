@@ -13,16 +13,16 @@
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.0.3";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-5Tf1CgB/YAyGVpopHERQ8xNGwklB+f2l+yfgCKsR3I8=";
+    hash = "sha256-GC+TvTPfirov4GxkTp0N3tkDQEAEdmPB71NzOBZQiqs=";
   };
 
-  npmDepsHash = "sha256-wtHFqnz5BtMUikdFZyTiLrw+e69WErowYBhu8cnEjkI=";
+  npmDepsHash = "sha256-dP+m/ocGn8szZuakrz8slSReNeepOF4Jf7L0/gnXWGU=";
 
   # Fix error: no member named 'aligned_alloc' in the global namespace
   env.NIX_CFLAGS_COMPILE = lib.optionalString (

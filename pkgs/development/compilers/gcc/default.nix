@@ -8,6 +8,8 @@
 , reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
+, langRust ? false
+, cargo
 , staticCompiler ? false
 , enableShared ? stdenv.targetPlatform.hasSharedLibraries
 , enableLTO ? stdenv.hostPlatform.hasSharedLibraries
@@ -128,6 +130,7 @@ let
       inherit
         binutils
         buildPackages
+        cargo
         cloog
         withoutTargetLibc
         darwin
@@ -153,6 +156,7 @@ let
         langJit
         langObjC
         langObjCpp
+        langRust
         lib
         libcCross
         libmpc
@@ -431,6 +435,13 @@ pipe ((callFile ./common/builder.nix {}) ({
       ) "stackclashprotection"
       ++ optional (!atLeast11) "zerocallusedregs"
       ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
+      ++ optional (!(
+        atLeast8
+        && targetPlatform.isLinux
+        && targetPlatform.isx86_64
+        && targetPlatform.libc == "glibc"
+      )) "shadowstack"
+      ++ optional (!(atLeast9 && targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
       ++ optionals (langFortran) [ "fortify" "format" ];
   };
 

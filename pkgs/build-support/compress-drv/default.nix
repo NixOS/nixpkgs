@@ -4,39 +4,54 @@
   runCommand,
 }:
 /**
-  #  compressDrv compresses files in a given derivation.
+  Compresses files of a given derivation, and returns a new derivation with
+  compressed files
 
-  ## Inputs:
+  # Inputs
 
   `formats` ([String])
 
   : List of file extensions to compress. Example: `["txt" "svg" "xml"]`.
 
-  `compressors` (String -> String)
+  `compressors` ( { ${fileExtension} :: String })
 
   : Map a desired extension (e.g. `gz`) to a compress program.
 
-  The compressor program that will be executed to get the `COMPRESSOR` extension.
-  The program should have a single " {}", which will be the replaced with the
-  target filename.
+    The compressor program that will be executed to get the `COMPRESSOR` extension.
+    The program should have a single " {}", which will be the replaced with the
+    target filename.
 
-  Compressor must:
-  - read symlinks (thus --force is needed to gzip, zstd, xz).
-  - keep the original file in place (--keep).
+    Compressor must:
 
-  Example:
+    - read symlinks (thus --force is needed to gzip, zstd, xz).
+    - keep the original file in place (--keep).
+
+  # Type
 
   ```
-  {
-    xz = "${xz}/bin/xz --force --keep {}";
+  compressDrv :: Derivation -> { formats :: [ String ]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  ```
+
+  # Examples
+  :::{.example}
+  ## `pkgs.compressDrv` usage example
+  ```
+  compressDrv pkgs.spdx-license-list-data.json {
+    formats = ["json"];
+    compressors = {
+      "json" = "${zopfli}/bin/zopfli --keep {}";
+    };
   }
+  =>
+  «derivation /nix/store/...-spdx-license-list-data-3.24.0-compressed.drv»
   ```
 
-  See compressDrvWeb, which is a wrapper on top of compressDrv, for broader use
+  See also pkgs.compressDrvWeb, which is a wrapper on top of compressDrv, for broader usage
   examples.
+  :::
 */
 drv:
-{ formats, compressors, ... }:
+{ formats, compressors }:
 let
   validProg =
     ext: prog:

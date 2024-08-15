@@ -43,6 +43,8 @@ in rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-fCXAFVmKns8uglbzyCznoVFGCU+Veq0t1h8T7i1P5XQ=";
 
+  buildAndTestSubdir = "devenv";
+
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [

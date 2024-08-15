@@ -9,11 +9,11 @@ assert withMysql -> (mysql_jdbc != null);
 lib.warnIf (crowdProperties != null) "Using `crowdProperties` is deprecated!"
 (stdenvNoCC.mkDerivation rec {
   pname = "atlassian-confluence";
-  version = "7.19.14";
+  version = "9.0.1";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/confluence/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Z4a4YZO9UnZSAZYB0FHRsX8QwX0ju3SeISsQquyA+w0=";
+    hash = "sha256-WCshWmJaTfyjRLaXUtkDuXHO5eEhHa/rDCPVFSLd3aU=";
   };
 
   buildPhase = ''
