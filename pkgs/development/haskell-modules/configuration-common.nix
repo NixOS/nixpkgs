@@ -2888,9 +2888,6 @@ self: super: {
   # https://github.com/kseo/sfnt2woff/issues/1
   sfnt2woff = doJailbreak super.sfnt2woff;
 
-  # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
-  diagrams-gtk = doJailbreak super.diagrams-gtk;
-
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
 
