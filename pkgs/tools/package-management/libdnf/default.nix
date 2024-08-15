@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.73.2";
+  version = "0.73.3";
 
   outputs = [ "out" "dev" "py" ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "rpm-software-management";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-tdAbkIb3BAhNKFbjIGHEdVNwh3E1sKFLP+L4MhifsQM=";
+    hash = "sha256-XzPpjnmL2wwLZnLAJLuOQGWXAoCJnij14P6qSXglMhY=";
   };
 
   nativeBuildInputs = [
