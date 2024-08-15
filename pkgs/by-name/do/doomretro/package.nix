@@ -6,9 +6,12 @@
 , SDL2
 , SDL2_image
 , SDL2_mixer
-, Cocoa
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomretro";
   version = "5.4";
