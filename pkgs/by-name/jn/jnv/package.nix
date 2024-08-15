@@ -1,6 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jnv";
@@ -15,11 +18,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xF0sxoSo7z7lxrF3wFAmU7edREoWKBFBnZ6Xq22c8q0=";
 
+  buildInputs = lib.optional stdenv.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      CoreGraphics
+      AppKit
+    ]
+  );
+
   meta = with lib; {
     description = "Interactive JSON filter using jq";
     mainProgram = "jnv";
     homepage = "https://github.com/ynqa/jnv";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ nealfennimore nshalman ];
+    maintainers = with maintainers; [
+      nealfennimore
+      nshalman
+    ];
   };
 }
