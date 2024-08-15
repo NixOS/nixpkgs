@@ -4706,6 +4706,8 @@ self: super: with self; {
 
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
 
+  flask-webtest = callPackage ../development/python-modules/flask-webtest { };
+
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
 
   flatbuffers = callPackage ../development/python-modules/flatbuffers {
