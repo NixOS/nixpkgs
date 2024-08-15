@@ -2374,10 +2374,6 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # 2022-08-30 Too strict bounds on finite-typelits
-  # https://github.com/jumper149/blucontrol/issues/1
-  blucontrol = doJailbreak super.blucontrol;
-
   # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
   # Can't use fetchpatch as it required tweaking the line endings as the .cabal
   # file revision on hackage was gifted CRLF line endings
