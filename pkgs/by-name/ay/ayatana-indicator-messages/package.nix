@@ -138,7 +138,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-messages" ];
+    ayatana-indicators = {
+      ayatana-indicator-messages = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       vm = nixosTests.ayatana-indicators;
