@@ -3,6 +3,7 @@
   lib,
   fetchPypi,
   protobuf,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -17,10 +18,14 @@ buildPythonPackage rec {
 
   buildInputs = [ protobuf ];
 
+  pythonImportsCheck = [ "s2clientprotocol" ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "StarCraft II - client protocol";
     homepage = "https://github.com/Blizzard/s2client-proto";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }
