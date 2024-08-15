@@ -123,7 +123,8 @@ class Driver:
         if cmd is None:
             cmd = self.rebuild_cmd
         if cmd is not None:
-            subprocess.run(cmd, shell=True, check=True)
+            with self.logger.nested(f"rebuilding test with `{cmd}`"):
+                subprocess.run(cmd, shell=True, check=True, stdout=sys.stderr.buffer)
 
         tmp_dir = get_tmp_dir()
 
