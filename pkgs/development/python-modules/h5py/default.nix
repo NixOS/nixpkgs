@@ -1,6 +1,7 @@
 {
   lib,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
   setuptools,
@@ -39,6 +40,11 @@ buildPythonPackage rec {
     # Unlock an overly strict locking of mpi4py version (seems not to be necessary).
     # See also: https://github.com/h5py/h5py/pull/2418/files#r1589372479
     ./mpi4py-requirement.patch
+    # Fix 16-bit float dtype and tests on darwin (remove in next release)
+    (fetchpatch {
+      url = "https://github.com/h5py/h5py/commit/a27a1f49ce92d985e14b8a24fa80d30e5174add2.patch";
+      hash = "sha256-7TcmNSJucknq+Vnv4ViT6S0nWeH1+krarWxq6WXLYEA=";
+    })
   ];
 
   # avoid strict pinning of numpy, can't be replaced with pythonRelaxDepsHook,
@@ -99,9 +105,5 @@ buildPythonPackage rec {
     homepage = "http://www.h5py.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
-    # When importing `h5py` during the build, we get:
-    #
-    # ValueError: Not a datatype (not a datatype)
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
