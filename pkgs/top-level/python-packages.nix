@@ -4361,6 +4361,8 @@ self: super: with self; {
 
   face-recognition-models = callPackage ../development/python-modules/face-recognition/models.nix { };
 
+  factorio-rcon-py = callPackage ../development/python-modules/factorio-rcon-py { };
+
   factory-boy = callPackage ../development/python-modules/factory-boy { };
 
   fairscale = callPackage ../development/python-modules/fairscale { };
