@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ philiptaron ];
+    maintainers = with maintainers; [ lenivaya ];
     description = "CLI QR code generator and reader written in rust";
     license = licenses.mit;
     homepage = "https://github.com/Lenivaya/qrrs";
