@@ -10324,8 +10324,6 @@ with pkgs;
 
   microbin = callPackage ../servers/microbin { };
 
-  microdnf = callPackage ../tools/package-management/microdnf { };
-
   microplane = callPackage ../tools/misc/microplane { };
 
   microserver = callPackage ../servers/microserver { };
@@ -38850,8 +38848,6 @@ with pkgs;
   robo3t = callPackage ../applications/misc/robo3t { };
 
   rucksack = callPackage ../development/tools/rucksack { };
-
-  ruff = callPackage ../development/tools/ruff { };
 
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
