@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "iamb";
-  version = "0.0.9";
+  version = "0.0.9-unstable-2024-08-15";
 
   src = fetchFromGitHub {
     owner = "ulyssa";
     repo = "iamb";
-    rev = "v${version}";
-    hash = "sha256-UYc7iphpzqZPwhOn/ia7XvnnlIUvM7nSFBz67ZkXmNs=";
+    rev = "54cb7991be526e2b8cd45e0a5b7cdb4a6d2e310b";
+    hash = "sha256-CepMojqLh0VUnHkagMKGHnEJfA8/EIoGBVN2rRNyFko=";
   };
 
-  cargoHash = "sha256-982FdK6ej3Bbg4R9e43VSwlni837ZK4rkMkoeYMyW8E=";
+  cargoHash = "sha256-MBi6R/hyIvPvTet4IohgFWgRZQQTnxuS2JV3kfqxoyA=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [
