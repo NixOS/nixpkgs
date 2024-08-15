@@ -24,23 +24,6 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
-## Separating outputs {#sec-nixos-test-separating-outputs}
-
-Logs from the running virtual machines get output in-line and can be disruptive
-while using the python REPL. You can separate these streams by redirecting
-stderr:
-
-```ShellSession
-$ ./result/bin/nixos-test-driver 2>machine_output`
-[...]
-````
-
-and to see the output live in another terminal:
-
-```ShellSession
-$ less -F machine_output
-```
-
 ## Shell access in interactive mode {#sec-nixos-test-shell-access}
 
 The function `<yourmachine>.shell_interact()` grants access to a shell running
@@ -129,7 +112,7 @@ first launched. Then `rebuild()` can be called without arguments.
 ```ShellSession
 $ build_cmd="nix-build . -A nixosTests.login.driverInteractive"
 $ eval $build_cmd
-$ ./result/bin/nixos-test-driver --rebuild-cmd "$build_cmd" 2>machine_output
+$ ./result/bin/nixos-test-driver --rebuild-cmd "$build_cmd"
 >>> start_all()
 [test edited in another window]
 >>> rebuild()
