@@ -265,8 +265,8 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
+      services.gnome.tinysparql.enable = mkDefault true;
       services.gnome.tracker-miners.enable = mkDefault true;
-      services.gnome.tracker.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;
       # TODO: Enable once #177946 is resolved
       # services.packagekit.enable = mkDefault true;

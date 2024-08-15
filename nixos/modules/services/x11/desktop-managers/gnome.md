@@ -39,16 +39,16 @@ Note that this mechanism can only exclude core utilities, games and core develop
 
 ### Disabling GNOME services {#sec-gnome-disabling-services}
 
-It is also possible to disable many of the [core services](https://github.com/NixOS/nixpkgs/blob/b8ec4fd2a4edc4e30d02ba7b1a2cc1358f3db1d5/nixos/modules/services/x11/desktop-managers/gnome.nix#L329-L348). For example, if you do not need indexing files, you can disable Tracker with:
+It is also possible to disable many of the [core services](https://github.com/NixOS/nixpkgs/blob/b8ec4fd2a4edc4e30d02ba7b1a2cc1358f3db1d5/nixos/modules/services/x11/desktop-managers/gnome.nix#L329-L348). For example, if you do not need indexing files, you can disable TinySPARQL with:
 
 ```nix
 {
+  services.gnome.tinysparql.enable = false;
   services.gnome.tracker-miners.enable = false;
-  services.gnome.tracker.enable = false;
 }
 ```
 
-Note, however, that doing so is not supported and might break some applications. Notably, GNOME Music cannot work without Tracker.
+Note, however, that doing so is not supported and might break some applications. Notably, GNOME Music cannot work without TinySPARQL.
 
 ### GNOME games {#sec-gnome-games}
 

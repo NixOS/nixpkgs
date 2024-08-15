@@ -18,7 +18,7 @@
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to enable Tracker miners, indexing services for Tracker
+          Whether to enable Tracker miners, indexing services for TinySPARQL
           search engine and metadata storage system.
         '';
       };
