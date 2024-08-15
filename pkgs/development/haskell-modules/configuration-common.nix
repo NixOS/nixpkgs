@@ -587,9 +587,6 @@ self: super: {
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
 
-  # 2023-04-20: Restrictive bytestring bound in tests.
-  storablevector = doJailbreak super.storablevector;
-
   matterhorn = doJailbreak super.matterhorn;
 
   # Too strict bounds on transformers and resourcet
