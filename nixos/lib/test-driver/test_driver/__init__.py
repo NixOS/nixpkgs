@@ -112,6 +112,13 @@ def main() -> None:
         type=str,
     )
     arg_parser.add_argument(
+        "--rebuild-exe",
+        action=EnvDefault,
+        envvar="rebuildExe",
+        help="When running the driver interactively, rebuild() will execute this to find out new driver information. It should be behind a symlink.",
+        type=str,
+    )
+    arg_parser.add_argument(
         "--internal-print-update-driver-info-and-exit",
         action="store_true",
         # For internal use. Don't print help text.
@@ -150,6 +157,8 @@ def main() -> None:
 
     if args.rebuild_cmd and not args.interactive:
         logger.warning("--rebuild-cmd is not useful outside of interactive mode")
+    if args.rebuild_exe and not args.interactive:
+        logger.warning("--rebuild-exe is not useful outside of interactive mode")
 
     with Driver(
         args.start_scripts,
@@ -160,6 +169,7 @@ def main() -> None:
         args.keep_vm_state,
         args.global_timeout,
         args.rebuild_cmd,
+        args.rebuild_exe,
     ) as driver:
         if args.interactive:
             history_dir = os.getcwd()
