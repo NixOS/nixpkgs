@@ -117,7 +117,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
       --set-default ${vmoptsIDE}_VM_OPTIONS ${vmoptsFile}
 
-    ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname
+    ln -s "$out/$pname/bin/${loName}" $out/bin/$pname
     rm -rf $out/$pname/plugins/remote-dev-server/selfcontained/
     echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
     chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
