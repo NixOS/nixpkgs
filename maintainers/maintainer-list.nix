@@ -2225,6 +2225,12 @@
     githubId = 18467667;
     name = "Alexander Bantyev";
   };
+  bananad3v = {
+    email = "banana@banana.is-cool.dev";
+    github = "BANanaD3V";
+    githubId = 68944906;
+    name = "Nikita";
+  };
   bandresen = {
     email = "bandresen@gmail.com";
     github = "bennyandresen";
@@ -5083,6 +5089,12 @@
     githubId = 265220;
     name = "David Leung";
   };
+  diadatp = {
+    email = "nixpkgs@diadatp.com";
+    github = "diadatp";
+    githubId = 4490283;
+    name = "diadatp";
+  };
   DianaOlympos = {
     github = "DianaOlympos";
     githubId = 15774340;
@@ -7387,6 +7399,12 @@
       { fingerprint = "RoAfvqa6w1l8Vdm3W60TDXurYwJ6h03VEGD+wDNGEwc"; }
       { fingerprint = "MP2UpIRtJpbFFqyucP431H/FPCfn58UhEUTro4lXtRs"; }
     ];
+  };
+  geraldog = {
+    email = "geraldogabriel@gmail.com";
+    github = "geraldog";
+    githubId = 14135816;
+    name = "Geraldo Nascimento";
   };
   gerg-l = {
     email = "gregleyda@proton.me";
@@ -20007,6 +20025,12 @@
     github = "tgharib";
     githubId = 6457015;
     name = "Taha Gharib";
+  };
+  taha-yassine = {
+    email = "taha.yssne@gmail.com";
+    github = "taha-yassine";
+    githubId = 40228615;
+    name = "Taha Yassine";
   };
   taikx4 = {
     email = "taikx4@taikx4szlaj2rsdupcwabg35inbny4jk322ngeb7qwbbhd5i55nf5yyd.onion";

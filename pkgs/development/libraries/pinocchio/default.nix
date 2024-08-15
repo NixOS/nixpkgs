@@ -7,7 +7,7 @@
 , boost
 , eigen
 , example-robot-data
-, casadiSupport ? !stdenv.isDarwin
+, casadiSupport ? true
 , collisionSupport ? true
 , console-bridge
 , jrl-cmakemodules
@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.python
   ];
 
   propagatedBuildInputs = [

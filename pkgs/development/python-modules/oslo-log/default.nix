@@ -14,22 +14,25 @@
   python-dateutil,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "6.0.0";
-  format = "setuptools";
+  version = "6.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    hash = "sha256-ifDW+iy6goH4m1CKf+Sb+5far1XFJ4GH1FowaZceaH8=";
+    hash = "sha256-41oSz+TK0T/7Cu2pn8yiCnBdD2lKhMLvewe0WWD4j7Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     oslo-config
     oslo-context
     oslo-serialization

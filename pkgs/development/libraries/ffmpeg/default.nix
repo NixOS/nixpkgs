@@ -18,8 +18,8 @@ let
     );
 
   v4 = {
-    version = "4.4.4";
-    hash = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
+    version = "4.4.5";
+    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
   };
 
   v6 = {

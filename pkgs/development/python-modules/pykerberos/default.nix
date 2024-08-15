@@ -2,7 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  krb5,
+  krb5-c, # C krb5 library, not PyPI krb5
 }:
 
 buildPythonPackage rec {
@@ -15,12 +15,13 @@ buildPythonPackage rec {
     hash = "sha256-nXAevY/FlsmdMVXVukWBO9WQjSbvg7oK3SUO22IqvtQ=";
   };
 
-  nativeBuildInputs = [ krb5 ]; # for krb5-config
+  nativeBuildInputs = [ krb5-c ]; # for krb5-config
 
-  buildInputs = [ krb5 ];
+  buildInputs = [ krb5-c ];
 
   # there are no tests
   doCheck = false;
+
   pythonImportsCheck = [ "kerberos" ];
 
   meta = with lib; {

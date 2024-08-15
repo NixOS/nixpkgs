@@ -18,7 +18,7 @@
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.12.2";
+  version = "0.13.2";
 in
 
 buildPythonPackage {
@@ -31,7 +31,7 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RESSkMWkmlmYarLOI8pX5mwgcr8xAigbp1mrAQP/QNU=";
+    hash = "sha256-i6bhqfYo+gFTf3dqOBSQqGN4WPqbUR05StdwZvrVckI=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +40,15 @@ buildPythonPackage {
     setuptools
   ];
 
+  pythonRelaxDeps = [ "cryptography" ];
+
   propagatedBuildInputs = [ cryptography ];
 
   pythonImportsCheck = [ "chacha20poly1305_reuseable" ];
 
   preCheck = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
+      --replace-fail "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

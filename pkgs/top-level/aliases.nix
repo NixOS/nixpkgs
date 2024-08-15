@@ -1318,6 +1318,7 @@ mapAliases ({
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
   rustc-wasm32 = rustc; # Added 2023-12-01
+  rustic-rs = rustic; # Added 2024-08-02
   rxvt_unicode = rxvt-unicode-unwrapped; # Added 2020-02-02
   rxvt_unicode-with-plugins = rxvt-unicode; # Added 2020-02-02
 
@@ -1431,6 +1432,7 @@ mapAliases ({
 
   tabula = throw "tabula has been removed from nixpkgs, as it was broken"; # Added 2024-07-15
   tangogps = foxtrotgps; # Added 2020-01-26
+  taskwarrior = lib.warn "taskwarrior was replaced by taskwarrior3, which requires manual transition from taskwarrior 2.6, read upstram's docs: https://taskwarrior.org/docs/upgrade-3/" taskwarrior2;
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
   taro = taproot-assets; # Added 2023-07-04

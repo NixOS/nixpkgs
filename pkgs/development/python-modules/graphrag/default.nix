@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X4mhnKSaQQo0i10EsdaDtMgKwfBxFvOOrkDrkUM2cQI=";
+    hash = "sha256-QPUxDMKO2qxF5qrk+vJCrJxyGwVWv7655YAVCis+XwM=";
   };
 
   build-system = [
@@ -117,6 +117,7 @@ buildPythonPackage rec {
     "test_find"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
+    "test_sort_context_max_tokens"
   ];
 
   meta = {
