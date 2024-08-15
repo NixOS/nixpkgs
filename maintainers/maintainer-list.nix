@@ -7909,6 +7909,12 @@
     name = "Nova Witterick";
     keys = [ { fingerprint = "4304 6B43 8D83 078E 3DF7  10D6 DEB0 E15C 6D2A 5A7C"; } ];
   };
+  heywoodlh = {
+    email = "nixpkgs@heywoodlh.io";
+    github = "heywoodlh";
+    githubId = 18178614;
+    name = "Spencer Heywood";
+  };
   hh = {
     email = "hh@m-labs.hk";
     github = "HarryMakes";
