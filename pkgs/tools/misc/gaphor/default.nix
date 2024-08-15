@@ -28,13 +28,15 @@
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.25.1";
+  version = "2.26.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
+    hash = "sha256-e0K5bfgPqlJh8qrAz40c/w3ANzkfa/6txuqzQDJYXfE=";
   };
+
+  pythonRelaxDeps = [ "defusedxml" ];
 
   nativeBuildInputs = [
     copyDesktopItems

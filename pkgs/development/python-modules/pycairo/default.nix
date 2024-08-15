@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.26.0";
+  version = "1.26.1";
 
   disabled = pythonOlder "3.6";
 
