@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -45,6 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
     "doc"
+  ];
+
+  patches = [
+    # Move to new lomiri-indicators target
+    # Remove when version > 1.0.2
+    (fetchpatch {
+      name = "0001-lomiri-indicator-network-lomiri-indicators-target.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/b1e1f7da4b298964eba3caea37b1dace7a6182e9.patch";
+      hash = "sha256-pZKpEn2OJtB1pG/U+6IjtPGiOchRDhdbBHEZbTW7Lx0=";
+    })
   ];
 
   postPatch = ''
@@ -106,7 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    ayatana-indicators = [ "lomiri-indicator-network" ];
+    ayatana-indicators = {
+      lomiri-indicator-network = [ "lomiri" ];
+    };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       vm = nixosTests.ayatana-indicators;
