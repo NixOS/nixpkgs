@@ -43,8 +43,8 @@ It is also possible to disable many of the [core services](https://github.com/Ni
 
 ```nix
 {
+  services.gnome.localsearch.enable = false;
   services.gnome.tinysparql.enable = false;
-  services.gnome.tracker-miners.enable = false;
 }
 ```
 
