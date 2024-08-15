@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pyttsx3";
-  version = "2.90";
+  version = "2.91";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "a585b6d8cffc19bd92db1e0ccbd8aa9c6528dd2baa5a47045d6fed542a44aa19";
+    sha256 = "sha256-jxkhfE1lpGhw4LgvLn6xVw7CssqAUX++7gleVPdvc+I=";
     dist = "py3";
     python = "py3";
   };
