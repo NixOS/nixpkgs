@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -23,6 +22,8 @@
 , makeHardcodeGsettingsPatch
 , testers
 , gobject-introspection
+, libsystemtap
+, libsysprof-capture
 , mesonEmulatorHook
 , withIntrospection ?
   stdenv.hostPlatform.emulatorAvailable buildPackages &&
@@ -57,24 +58,25 @@ let
                   else if (stdenv.hostPlatform.extensions.library == ".a") then "2.0.a"
                   else if (stdenv.hostPlatform.extensions.library == ".dll") then "2.0-0.dll"
                   else "2.0-0.lib";
+
+  systemtap' = buildPackages.linuxPackages.systemtap.override { withStap = false; };
+  withDtrace =
+    lib.meta.availableOn stdenv.buildPlatform systemtap' &&
+    # dtrace support requires sys/sdt.h header
+    lib.meta.availableOn stdenv.hostPlatform libsystemtap;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.4";
+  version = "2.81.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JOApxd/JtE5Fc2l63zMHipgnxIk4VVAEs7kJb6TqA08=";
+    hash = "sha256-YpNlzecpp7drBi/CGKEJqEu8RmjKDJKrWQ7Mz5afgkw=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-    # FIXME: remove when https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4088 is merged and is in the tagged release
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/9d0988ca62ee96e09aa76abbd65ff192cfce6858.patch";
-      hash = "sha256-JrR3Ba6L+3M0Nt8DgHmPG8uKtx7hOgUp7np08ATIzjA=";
-    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -99,9 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
-    # 1. Tools for desktop environment ($bin)
+    # 1. Tools for desktop environment and introspection ($bin)
     #    * gapplication (non-darwin)
     #    * gdbus
+    #    * gi-compile-repository
+    #    * gi-decompile-typelib
+    #    * gi-inspect-typelib
     #    * gio
     #    * gio-launch-desktop (symlink to $out)
     #    * gsettings
@@ -126,9 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     # and by default meson installs in to $out/share/gdb/auto-load
     # which does not help
     ./gdb_script.patch
-
-    # glib assumes that `RTLD_LOCAL` is defined to `0`, which is true on Linux and FreeBSD but not on Darwin.
-    ./gmodule-rtld_local.patch
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -137,11 +139,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     finalAttrs.setupHook
+    libsysprof-capture
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
+  ] ++ lib.optionals withDtrace [
+    libsystemtap
   ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
@@ -171,12 +176,16 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection'
   ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+  ] ++ lib.optionals withDtrace [
+    systemtap' # for dtrace
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   mesonFlags = [
     "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
+    (lib.mesonEnable "dtrace" withDtrace)
+    (lib.mesonEnable "systemtap" withDtrace) # requires dtrace option to be enabled
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
     (lib.mesonEnable "introspection" withIntrospection)
