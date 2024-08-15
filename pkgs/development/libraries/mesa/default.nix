@@ -139,13 +139,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-
-    # Fixes video corruption / crashes when decoding video on AMD iGPUs
-    # FIXME: remove in the next update
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/8b35da91b23afc65256b78a59d116fd09544cd28.patch";
-      hash = "sha256-z0KKBtot3VxXiS16YcmwZbeg8HSCLzEbvWdufI/fOk8=";
-    })
   ];
 
   postPatch = ''
