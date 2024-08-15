@@ -5,12 +5,16 @@
   setuptools-scm,
   pyyaml,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "saneyaml";
   version = "0.6.1";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,9 +23,9 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ pyyaml ];
+  dependencies = [ pyyaml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
