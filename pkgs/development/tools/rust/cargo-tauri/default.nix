@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
-    repo = pname;
+    repo = "tauri";
     rev = "tauri-v${version}";
     hash = "sha256-V3Lck5RzEAxXRHPAy0M2elRk9geF8qHWoi01N6wcHc4=";
   };
@@ -49,15 +49,15 @@ rustPlatform.buildRustPackage rec {
     ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     mainProgram = "cargo-tauri";
     homepage = "https://tauri.app/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dit7ya
       happysalada
     ];
