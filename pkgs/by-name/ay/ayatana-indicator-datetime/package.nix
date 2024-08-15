@@ -130,7 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-datetime" ];
+    ayatana-indicators = {
+      ayatana-indicator-datetime = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests = {
       inherit (nixosTests) ayatana-indicators;
     };
