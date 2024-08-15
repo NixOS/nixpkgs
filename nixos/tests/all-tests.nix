@@ -928,6 +928,7 @@ in {
   swayfx = handleTest ./swayfx.nix {};
   switchTest = handleTest ./switch-test.nix { ng = false; };
   switchTestNg = handleTest ./switch-test.nix { ng = true; };
+  sx = handleTest ./sx.nix {};
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
   syncthing-no-settings = handleTest ./syncthing-no-settings.nix {};
@@ -996,6 +997,7 @@ in {
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
   tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
+  taskchampion-sync-server = handleTest ./taskchampion-sync-server.nix {};
   tayga = handleTest ./tayga.nix {};
   technitium-dns-server = handleTest ./technitium-dns-server.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
