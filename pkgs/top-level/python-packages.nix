@@ -18195,6 +18195,8 @@ self: super: with self; {
 
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
 
+  zilliandomizer = callPackage ../development/python-modules/zilliandomizer { };
+
   zimports = callPackage ../development/python-modules/zimports { };
 
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
