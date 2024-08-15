@@ -1,46 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, autoPatchelfHook
-, installShellFiles
-, scons
-, vulkan-loader
-, libGL
-, libX11
-, libXcursor
-, libXinerama
-, libXext
-, libXrandr
-, libXrender
-, libXi
-, libXfixes
-, libxkbcommon
-, alsa-lib
-, libpulseaudio
-, dbus
-, speechd-minimal
-, fontconfig
-, udev
-, withDebug ? false
-, withPlatform ? "linuxbsd"
-, withTarget ? "editor"
-, withPrecision ? "single"
-, withPulseaudio ? true
-, withDbus ? true
-, withSpeechd ? true
-, withFontconfig ? true
-, withUdev ? true
-, withTouch ? true
+{
+  alsa-lib,
+  autoPatchelfHook,
+  dbus,
+  fetchFromGitHub,
+  fontconfig,
+  installShellFiles,
+  lib,
+  libGL,
+  libpulseaudio,
+  libX11,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXi,
+  libXinerama,
+  libxkbcommon,
+  libXrandr,
+  libXrender,
+  pkg-config,
+  scons,
+  speechd-minimal,
+  stdenv,
+  udev,
+  vulkan-loader,
+  withDbus ? true,
+  withDebug ? false,
+  withFontconfig ? true,
+  withPlatform ? "linuxbsd",
+  withPrecision ? "single",
+  withPulseaudio ? true,
+  withSpeechd ? true,
+  withTarget ? "editor",
+  withTouch ? true,
+  withUdev ? true,
 }:
 
-assert lib.asserts.assertOneOf "withPrecision" withPrecision [ "single" "double" ];
+assert lib.asserts.assertOneOf "withPrecision" withPrecision [
+  "single"
+  "double"
+];
 
 let
-  mkSconsFlagsFromAttrSet = lib.mapAttrsToList (k: v:
-    if builtins.isString v
-    then "${k}=${v}"
-    else "${k}=${builtins.toJSON v}");
+  mkSconsFlagsFromAttrSet = lib.mapAttrsToList (
+    k: v: if builtins.isString v then "${k}=${v}" else "${k}=${builtins.toJSON v}"
+  );
 in
 stdenv.mkDerivation rec {
   pname = "godot4";
@@ -54,39 +57,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-anJgPEeHIW2qIALMfPduBVgbYYyz1PWCmPsZZxS9oHI=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoPatchelfHook
-    installShellFiles
+  outputs = [
+    "out"
+    "man"
   ];
-
-  buildInputs = [
-    scons
-  ];
-
-  runtimeDependencies = [
-    vulkan-loader
-    libGL
-    libX11
-    libXcursor
-    libXinerama
-    libXext
-    libXrandr
-    libXrender
-    libXi
-    libXfixes
-    libxkbcommon
-    alsa-lib
-  ]
-  ++ lib.optional withPulseaudio libpulseaudio
-  ++ lib.optional withDbus dbus
-  ++ lib.optional withDbus dbus.lib
-  ++ lib.optional withSpeechd speechd-minimal
-  ++ lib.optional withFontconfig fontconfig
-  ++ lib.optional withFontconfig fontconfig.lib
-  ++ lib.optional withUdev udev;
-
-  enableParallelBuilding = true;
 
   # Set the build name which is part of the version. In official downloads, this
   # is set to 'official'. When not specified explicitly, it is set to
@@ -110,26 +84,63 @@ stdenv.mkDerivation rec {
     echo ${commitHash} > .git/HEAD
   '';
 
+  # From: https://github.com/godotengine/godot/blob/4.2.2-stable/SConstruct
   sconsFlags = mkSconsFlagsFromAttrSet {
     # Options from 'SConstruct'
+    precision = withPrecision; # Floating-point precision level
     production = true; # Set defaults to build Godot for use in production
     platform = withPlatform;
     target = withTarget;
-    precision = withPrecision; # Floating-point precision level
     debug_symbols = withDebug;
 
     # Options from 'platform/linuxbsd/detect.py'
-    pulseaudio = withPulseaudio; # Use PulseAudio
     dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
-    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
     fontconfig = withFontconfig; # Use fontconfig for system fonts support
-    udev = withUdev; # Use udev for gamepad connection callbacks
+    pulseaudio = withPulseaudio; # Use PulseAudio
+    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
     touch = withTouch; # Enable touch events
+    udev = withUdev; # Use udev for gamepad connection callbacks
   };
 
-  dontStrip = withDebug;
+  enableParallelBuilding = true;
 
-  outputs = [ "out" "man" ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    installShellFiles
+    pkg-config
+    scons
+  ];
+
+  runtimeDependencies =
+    [
+      alsa-lib
+      libGL
+      libX11
+      libXcursor
+      libXext
+      libXfixes
+      libXi
+      libXinerama
+      libxkbcommon
+      libXrandr
+      libXrender
+      vulkan-loader
+    ]
+    ++ lib.optionals withDbus [
+      dbus
+      dbus.lib
+    ]
+    ++ lib.optionals withFontconfig [
+      fontconfig
+      fontconfig.lib
+    ]
+    ++ lib.optionals withPulseaudio [ libpulseaudio ]
+    ++ lib.optionals withSpeechd [ speechd-minimal ]
+    ++ lib.optionals withUdev [ udev ];
+
+  dontStrip = withDebug;
 
   installPhase = ''
     runHook preInstall
@@ -151,11 +162,19 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://godotengine.org";
+    changelog = "https://github.com/godotengine/godot/releases/tag/${version}";
     description = "Free and Open Source 2D and 3D game engine";
+    homepage = "https://godotengine.org";
     license = lib.licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with lib.maintainers; [ shiryel superherointj ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      shiryel
+      superherointj
+    ];
     mainProgram = "godot4";
   };
 }
