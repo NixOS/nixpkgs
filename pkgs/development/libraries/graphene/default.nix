@@ -11,7 +11,7 @@
 , mutest
 , nixosTests
 , glib
-, withDocumentation ? !stdenv.hostPlatform.isStatic
+, withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform || stdenv.hostPlatform.emulatorAvailable buildPackages
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -65,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     docbook_xsl
     gtk-doc
+  ] ++ lib.optionals (withDocumentation && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
   ];
 
   buildInputs = [
