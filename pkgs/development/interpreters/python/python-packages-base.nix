@@ -61,7 +61,43 @@ let
 
   removePythonPrefix = lib.removePrefix namePrefix;
 
-  # Convert derivation to a Python module.
+  /**
+    A function that takes a Python package and returns a new derivation that can be used as a Python module
+
+    # Inputs
+
+    `drv` (derivation)
+    : The derivation to convert to a python module
+
+    # Type
+    ```
+    derivation -> derivation
+    ```
+
+    # Example
+    :::{.example}
+    ## Using `toPythonModule` to provide `home-assistant` as a library to a python script.
+    ```python
+    # main.py
+    import homeassistant
+
+    print("Hello ", homeassistant)
+    ```
+
+    ```nix
+    pkgs.writers.writePython3Bin "hello-home-assistant" {
+      libraries = [
+        (pkgs.python3Packages.toPythonModule pkgs.home-assistant)
+      ];
+    } ./main.py;
+    ```
+
+    ```bash
+    ./result/bin/hello-home-assistant
+    Hello <module 'homeassistant' from '/nix/store/zzf1q2h482kw82f23qp4vz8gw8s15rr6-python3-3.12.4-env/lib/python3.12/site-packages/homeassistant/__init__.py'>
+    ```
+    :::
+  */
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
