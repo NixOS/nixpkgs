@@ -15802,6 +15802,12 @@
     githubId = 43863;
     name = "Philip Taron";
   };
+  philipwilk = {
+    name = "Philip Wilk";
+    email = "p.wilk@student.reading.ac.uk";
+    github = "philipwilk";
+    githubId = 50517631;
+  };
   philtaken = {
     email = "philipp.herzog@protonmail.com";
     github = "philtaken";
