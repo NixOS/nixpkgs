@@ -1,9 +1,9 @@
-# Tracker daemon.
+# TinySPARQL daemon.
 
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.services.gnome.tracker;
+  cfg = config.services.gnome.tinysparql;
 in
 {
 
@@ -17,19 +17,20 @@ in
       CLI to be extended by external projects, note that tracker-miners (localsearch) now
       provides its own CLI tool.
     '')
+    (lib.mkRenamedOptionModule [ "services" "gnome" "tracker" "enable" ] [ "services" "gnome" "tinysparql" "enable" ])
   ];
 
   ###### interface
 
   options = {
 
-    services.gnome.tracker = {
+    services.gnome.tinysparql = {
 
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to enable Tracker services, a search engine,
+          Whether to enable TinySPARQL services, a search engine,
           search tool and metadata storage system.
         '';
       };
