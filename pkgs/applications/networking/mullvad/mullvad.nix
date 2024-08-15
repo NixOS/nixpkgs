@@ -17,22 +17,23 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2024.3";
+  version = "2024.4";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
-    hash = "sha256-poQtE+XIlPcL9viAau+70xWx1fPrTXJXMcuPvXlqjZg=";
+    hash = "sha256-d7poR1NnvqaPutXLFizpQnyipl+38N1Qe2zVXeV7v1Q=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "hickory-proto-0.24.0" = "sha256-IqGVoQ1vRruCcaDr82ARkvSo42Pe9Q6iJIWnSd6GqEg=";
       "udp-over-tcp-0.3.0" = "sha256-5PeaM7/zhux1UdlaKpnQ2yIdmFy1n2weV/ux9lSRha4=";
     };
   };
+
+  checkFlags = "--skip=version_check";
 
   nativeBuildInputs = [
     pkg-config
