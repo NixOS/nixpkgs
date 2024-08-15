@@ -12,16 +12,16 @@
 
 buildNpmPackage rec {
   pname = "vsce";
-  version = "2.31.1";
+  version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     rev = "v${version}";
-    hash = "sha256-VXZBuaJn0VGpq1sIwsp+OcYErYShTCcU/FnTgDHmf7g=";
+    hash = "sha256-QYSbuTK7ilRl4sw0PZmaQZbcYbEURV7C8wPrSWGx998=";
   };
 
-  npmDepsHash = "sha256-Ftf6m5gRcYnkYfRx9vUys9uax8pwyyjUbfw3am8WriA=";
+  npmDepsHash = "sha256-Ml65YY4vqzntgCP9FoEGpR5rMkYL+alN9pSpbvR28E0=";
 
   postPatch = ''
     substituteInPlace package.json --replace '"version": "0.0.0"' '"version": "${version}"'
