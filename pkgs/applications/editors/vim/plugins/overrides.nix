@@ -1347,13 +1347,6 @@
     '';
   };
 
-  playground = super.playground.overrideAttrs {
-    dependencies = with self; [
-      # we need the 'query' grammer to make
-      (nvim-treesitter.withPlugins (p: [ p.query ]))
-    ];
-  };
-
   plenary-nvim = super.plenary-nvim.overrideAttrs {
     postPatch = ''
       sed -Ei lua/plenary/curl.lua \
