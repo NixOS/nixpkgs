@@ -86,6 +86,7 @@ buildPythonPackage rec {
     "-DPXR_BUILD_TESTS=OFF"
     "-DPXR_BUILD_TUTORIALS=OFF"
     "-DPXR_BUILD_USD_IMAGING=ON"
+    "-DPYSIDE_BIN_DIR=${pyside-tools-uic}/bin"
     (lib.cmakeBool "PXR_BUILD_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
