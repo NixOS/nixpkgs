@@ -1,19 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, itk_5_2, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  itk,
+  Cocoa,
+}:
 
 stdenv.mkDerivation rec {
-  pname   = "c3d";
-  version = "unstable-2021-09-14";
+  pname = "c3d";
+  version = "1.4.1-unstable-2024-08-07";
 
   src = fetchFromGitHub {
     owner = "pyushkevich";
-    repo = pname;
-    rev = "cc06e6e2f04acd3d6faa3d8c9a66b499f02d4388";
-    sha256 = "sha256:1ql1y6694njsmdapywhppb54viyw8wdpaxxr1b3hm2rqhvwmhn52";
+    repo = "c3d";
+    rev = "9e6174153ab87eae014f5b802413478c8fbc9a1a";
+    hash = "sha256-s2/XRyKoiMnF6cRsxxNUSlNtksbOyKSlk8hAGxJELqw=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ itk_5_2 ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
+  buildInputs = [ itk ] ++ lib.optional stdenv.isDarwin Cocoa;
 
   cmakeFlags = [ "-DCONVERT3D_USE_ITK_REMOTE_MODULES=OFF" ];
 
