@@ -1038,11 +1038,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libFS = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libFS";
-    version = "1.0.9";
+    version = "1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libFS-1.0.9.tar.xz";
-      sha256 = "12i0zh1v5zlba617nam8sjhfqi68qqnl7z5hsz3wqhijid1pjwsr";
+      url = "mirror://xorg/individual/lib/libFS-1.0.10.tar.xz";
+      sha256 = "0xrv9x5v6km7ib3d5k9xr704xkhfvigh8i507mb9i706hqybvawv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
