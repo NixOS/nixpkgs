@@ -7848,6 +7848,8 @@ self: super: with self; {
 
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
 
+  mkdocs-include-markdown-plugin = callPackage ../development/python-modules/mkdocs-include-markdown-plugin { };
+
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
