@@ -63,7 +63,6 @@ rec {
     See [`extends`](#function-library-lib.fixedPoints.extends) for an example use case.
     There `self` is also often called `final`.
 
-
     # Inputs
 
     `f`
@@ -90,7 +89,12 @@ rec {
 
     :::
   */
-  fix = f: let x = f x; in x;
+  fix =
+    f:
+    let
+      x = f x;
+    in
+    x;
 
   /**
     A variant of `fix` that records the original recursive attribute set in the
@@ -99,14 +103,20 @@ rec {
     This is useful in combination with the `extends` function to
     implement deep overriding.
 
-
     # Inputs
 
     `f`
 
     : 1\. Function argument
   */
-  fix' = f: let x = f x // { __unfix__ = f; }; in x;
+  fix' =
+    f:
+    let
+      x = f x // {
+        __unfix__ = f;
+      };
+    in
+    x;
 
   /**
     Return the fixpoint that `f` converges to when called iteratively, starting
@@ -116,7 +126,6 @@ rec {
     nix-repl> converge (x: x / 2) 16
     0
     ```
-
 
     # Inputs
 
@@ -134,13 +143,12 @@ rec {
     (a -> a) -> a -> a
     ```
   */
-  converge = f: x:
+  converge =
+    f: x:
     let
       x' = f x;
     in
-      if x' == x
-      then x
-      else converge f x';
+    if x' == x then x else converge f x';
 
   /**
     Extend a function using an overlay.
@@ -148,7 +156,6 @@ rec {
     Overlays allow modifying and extending fixed-point functions, specifically ones returning attribute sets.
     A fixed-point function is a function which is intended to be evaluated by passing the result of itself as the argument.
     This is possible due to Nix's lazy evaluation.
-
 
     A fixed-point function returning an attribute set has the form
 
@@ -257,7 +264,6 @@ rec {
     ```
     :::
 
-
     # Inputs
 
     `overlay`
@@ -299,8 +305,7 @@ rec {
     :::
   */
   extends =
-    overlay:
-    f:
+    overlay: f:
     # The result should be thought of as a function, the argument of that function is not an argument to `extends` itself
     (
       final:
@@ -316,9 +321,11 @@ rec {
   */
   composeExtensions =
     f: g: final: prev:
-      let fApplied = f final prev;
-          prev' = prev // fApplied;
-      in fApplied // g final prev';
+    let
+      fApplied = f final prev;
+      prev' = prev // fApplied;
+    in
+    fApplied // g final prev';
 
   /**
     Composes a list of [`overlays`](#chap-overlays) and returns a single overlay function that combines them.
@@ -341,7 +348,6 @@ rec {
     : Each overlay function takes two arguments, by convention `final` and `prev`, and returns an attribute set.
       - `final` is the result of the fixed-point function, with all overlays applied.
       - `prev` is the result of the previous overlay function.
-
 
     # Type
 
@@ -385,8 +391,7 @@ rec {
     ```
     :::
   */
-  composeManyExtensions =
-    lib.foldr (x: y: composeExtensions x y) (final: prev: {});
+  composeManyExtensions = lib.foldr (x: y: composeExtensions x y) (final: prev: { });
 
   /**
     Create an overridable, recursive attribute set. For example:
@@ -414,7 +419,6 @@ rec {
     Same as `makeExtensible` but the name of the extending attribute is
     customized.
 
-
     # Inputs
 
     `extenderName`
@@ -425,8 +429,13 @@ rec {
 
     : 2\. Function argument
   */
-  makeExtensibleWithCustomName = extenderName: rattrs:
-    fix' (self: (rattrs self) // {
-      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
-    });
+  makeExtensibleWithCustomName =
+    extenderName: rattrs:
+    fix' (
+      self:
+      (rattrs self)
+      // {
+        ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
+      }
+    );
 }
