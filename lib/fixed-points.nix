@@ -311,28 +311,8 @@ rec {
     );
 
   /**
-    Compose two extending functions of the type expected by 'extends'
-    into one where changes made in the first are available in the
-    'super' of the second
-
-
-    # Inputs
-
-    `f`
-
-    : 1\. Function argument
-
-    `g`
-
-    : 2\. Function argument
-
-    `final`
-
-    : 3\. Function argument
-
-    `prev`
-
-    : 4\. Function argument
+    Compose two overlay functions and return a single overlay function that combines them.
+    For more details see: [composeManyExtensions](#function-library-lib.fixedPoints.composeManyExtensions).
   */
   composeExtensions =
     f: g: final: prev:
@@ -341,14 +321,69 @@ rec {
       in fApplied // g final prev';
 
   /**
-    Compose several extending functions of the type expected by 'extends' into
-    one where changes made in preceding functions are made available to
-    subsequent ones.
+    Composes a list of [`overlays`](#chap-overlays) and returns a single overlay function that combines them.
+
+    :::{.note}
+    The result is produced by using the update operator `//`.
+    This means nested values of previous overlays are not merged recursively.
+    In other words, previously defined attributes are replaced, ignoring the previous value, unless referenced by the overlay; for example `final: prev: { foo = final.foo + 1; }`.
+    :::
+
+    # Inputs
+
+    `extensions`
+
+    : A list of overlay functions
+      :::{.note}
+      The order of the overlays in the list is important.
+      :::
+
+    : Each overlay function takes two arguments, by convention `final` and `prev`, and returns an attribute set.
+      - `final` is the result of the fixed-point function, with all overlays applied.
+      - `prev` is the result of the previous overlay function.
+
+
+    # Type
 
     ```
-    composeManyExtensions : [packageSet -> packageSet -> packageSet] -> packageSet -> packageSet -> packageSet
-                              ^final        ^prev         ^overrides     ^final        ^prev         ^overrides
+    # Pseudo code
+    let
+      #               final      prev
+      #                 ↓          ↓
+      OverlayFn :: ( { ... } -> { ... } -> { ... } );
+    in
+      composeManyExtensions :: [ OverlayFn ] -> OverlayFn
     ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fixedPoints.composeManyExtensions` usage example
+
+    ```nix
+    let
+      # The "original function" that is extended by the overlays.
+      # Note that it doesn't have prev: as argument since it can be thought of as the first function.
+      original = final: { a = 1; };
+
+      # Each overlay function has 'final' and 'prev' as arguments.
+      overlayA = final: prev: { b = final.c; c = 3; };
+      overlayB = final: prev: { c = 10; x = prev.c or 5; };
+
+      extensions = composeManyExtensions [ overlayA overlayB ];
+
+      # Caluculate the fixed point of all composed overlays.
+      fixedpoint = lib.fix (lib.extends extensions original );
+
+    in fixedpoint
+    =>
+    {
+      a = 1;
+      b = 10;
+      c = 10;
+      x = 3;
+    }
+    ```
+    :::
   */
   composeManyExtensions =
     lib.foldr (x: y: composeExtensions x y) (final: prev: {});
@@ -357,17 +392,17 @@ rec {
     Create an overridable, recursive attribute set. For example:
 
     ```
-    nix-repl> obj = makeExtensible (self: { })
+    nix-repl> obj = makeExtensible (final: { })
 
     nix-repl> obj
     { __unfix__ = «lambda»; extend = «lambda»; }
 
-    nix-repl> obj = obj.extend (self: super: { foo = "foo"; })
+    nix-repl> obj = obj.extend (final: prev: { foo = "foo"; })
 
     nix-repl> obj
     { __unfix__ = «lambda»; extend = «lambda»; foo = "foo"; }
 
-    nix-repl> obj = obj.extend (self: super: { foo = super.foo + " + "; bar = "bar"; foobar = self.foo + self.bar; })
+    nix-repl> obj = obj.extend (final: prev: { foo = prev.foo + " + "; bar = "bar"; foobar = final.foo + final.bar; })
 
     nix-repl> obj
     { __unfix__ = «lambda»; bar = "bar"; extend = «lambda»; foo = "foo + "; foobar = "foo + bar"; }
