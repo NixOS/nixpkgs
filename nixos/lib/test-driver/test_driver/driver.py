@@ -1,3 +1,4 @@
+import inspect
 import os
 import re
 import signal
@@ -123,6 +124,13 @@ class Driver:
         Only makes sense when running interactively. Rebuilds the test driver by running `cmd`, or a globally defined `driver.rebuild_cmd`. This should be the same command that built this test driver to begin with. Then uses the new driver at path `exe` to reconfigure this one and redeploy changed machines.
         """
 
+        # Get the caller module's global scope. Should be the interactive repl.
+        current_frame = inspect.currentframe()
+        assert current_frame is not None
+        repl_frame = current_frame.f_back
+        assert repl_frame is not None
+        repl_globals = repl_frame.f_globals
+
         if cmd is None:
             cmd = self.rebuild_cmd
         if cmd is not None:
@@ -169,15 +177,16 @@ class Driver:
                 if machine.name not in names:
                     if machine.is_up():
                         self.logger.warning(
-                            f"{machine.name} removed from the test, but it's running so we're not going to shut it down automatically. Call {machine.name}.stop() and re-run rebuild() to remove."
+                            f"{machine.name} removed from the test, but it's running so we're not going to shut it down automatically. Call {py_name}.stop() and re-run rebuild() to remove."
                         )
                     else:
                         to_del.append(idx)
             for idx in sorted(to_del, reverse=True):
+                py_name = pythonize_name(self.machines[idx].name)
                 self.logger.info(
                     f"{self.machines[idx].name} removed from the test. deleting it from the environment"
                 )
-                del globals()[pythonize_name(self.machines[idx].name)]
+                del repl_globals[py_name]
                 del self.machines[idx]
 
             # add and change new machines
@@ -187,12 +196,12 @@ class Driver:
                 ]
                 if len(existing) == 0:
                     machine = self.create_machine(start_cmd._cmd)
-                    name = pythonize_name(machine.name)
-                    globals()[name] = machine
+                    py_name = pythonize_name(machine.name)
+                    repl_globals[py_name] = machine
                     self.machines.append(machine)
 
                     self.logger.info(
-                        f"new machine created {start_cmd.machine_name}. start it with {start_cmd.machine_name}.start()"
+                        f"new machine created {start_cmd.machine_name}. start it with {py_name}.start()"
                     )
                 elif len(existing) == 1:
                     machine = existing[0]
