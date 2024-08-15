@@ -37,16 +37,16 @@
 
 buildGoModule rec {
   pname = "dde-daemon";
-  version = "6.0.34";
+  version = "6.0.43";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-NIFgv6EUSnCqSdPttx6wrr7K1nRV/JIZJy9uS7uu0Sc=";
+    hash = "sha256-3BzFFlcNwNWNcysD3qRYfdyGaX7gW2XJZ4HzdGiK7jU=";
   };
 
-  vendorHash = "sha256-F39QGxY0aD+hHWguHosSrSzcB/ahYbnFW9vVtS5oUnU=";
+  vendorHash = "sha256-3kUAaVXERqNZhBFytzVbWY6/a8M0jIkWrN+QHdWp1HU=";
 
   patches = [
     ./0001-dont-set-PATH.diff
@@ -58,7 +58,6 @@ buildGoModule rec {
       src = ./0003-aviod-use-hardcode-path.diff;
       inherit dbus;
     })
-    ./0004-fix-build-with-ddcutil-2.patch
   ];
 
   postPatch = ''
