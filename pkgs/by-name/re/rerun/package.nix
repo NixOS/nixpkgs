@@ -22,28 +22,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rerun";
-  version = "0.13.0";
-
+  version = "0.18.2";
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     rev = version;
-    hash = "sha256-HgzzuvCpzKgWC8it0PSq62hBjjqpdgYtQQ50SNbr3do=";
+    sha256 = "sha256-mQjjgRKNFSts34Lphfje9H1BLY9nybCrJ2V09nMzVDM=";
   };
-  patches = [
-    # Disables a doctest that depends on a nightly feature
-    ./0001-re_space_view_time_series-utils-patch-out-doctests-w.patch
 
+  cargoHash = "sha256-ZyjRe4M6RabSKhKCLa1ed1fsF6dkUt2a1c8C/1E48+M=";
+  # the crate uses an old rust version (currently 1.76)
+  # nixpkgs only works with the latest rust (currently 1.80)
+  # so we patch this
+  cargoPatches = [ ./rust-version.patch ];
 
-    # "Fix cell size test now that the overhead has shrunk"
-    # https://github.com/rerun-io/rerun/pull/5917
-    (fetchpatch {
-      url = "https://github.com/rerun-io/rerun/commit/933fc5cc1f3ee262a78bd4647257295747671152.patch";
-      hash = "sha256-jCeGfzKt0oYqIea+7bA2V/U9VIjhVvfQzLRrYG4jaHY=";
-    })
-  ];
-
-  cargoHash = "sha256-qvnkOlcjADV4b+JfFAy9yNaZGaf0ZO7hh9HBg5XmPi0=";
+  cargoBuildFlags = [ "--package rerun-cli" ];
+  cargoTestFlags = [ "--package rerun-cli" ];
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "native_viewer" ];
 
   nativeBuildInputs = [
     (lib.getBin binaryen) # wasm-opt
@@ -105,13 +101,8 @@ rustPlatform.buildRustPackage rec {
 
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
-  cargoTestFlags = [
-    "-p"
-    "rerun"
-    "--workspace"
-    "--exclude=crates/rerun/src/lib.rs"
-  ];
-
+  # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
+  patches = [ ./tests.patch ];
   passthru.tests = {
     inherit (python3Packages) rerun-sdk;
   };
@@ -124,7 +115,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ SomeoneSerge ];
+    maintainers = with maintainers; [
+      SomeoneSerge
+      robwalt
+    ];
     mainProgram = "rerun";
   };
 }
