@@ -5,31 +5,26 @@
   pytestCheckHook,
   setuptools-scm,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygmars";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
+    repo = "pygmars";
     rev = "refs/tags/v${version}";
     hash = "sha256-RwAZ1ZLh0zgGshSv7LleBHMotKapDFtD69ptqQnr0EA=";
   };
 
-  postPatch = ''
-    # https://github.com/nexB/pygmars/pull/9
-    substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
-  '';
-
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
