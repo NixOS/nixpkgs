@@ -1516,8 +1516,6 @@ self: super: {
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
-  # 2021-10-04: too strict upper bound on Hakyll
-  hakyll-filestore = doJailbreak super.hakyll-filestore;
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
