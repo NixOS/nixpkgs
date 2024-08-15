@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyGithub/PyGithub";
     changelog = "https://github.com/PyGithub/PyGithub/raw/v${version}/doc/changes.rst";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jhhuh ];
+    maintainers = [ ];
   };
 }
