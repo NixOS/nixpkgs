@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   # e.g. links to man pages, value constraints etc.
   version = "1.9.15p5";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
     hash = "sha256-VY0QuaGZH7O5+n+nsH7EQFt677WzywsIcdvIHjqI5Vg=";
