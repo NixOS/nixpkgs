@@ -19,19 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.76";
+  version = "5.77";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VeLGRZCa2C2DPELOhewgQ04O8AcJQbHqtz+s3SQLvWM=";
+    hash = "sha256-XQMv3B1KCFgTVU9XWR4uH7DOsrNhbuVvaJvADh0VCBI=";
   };
 
   patches = [
-    # hog-lib: Fix passing wrong parameters to bt_uhid_get_report_reply
-    (fetchpatch {
-      url = "https://github.com/bluez/bluez/commit/5ebaeab4164f80539904b9a520d9b7a8307e06e2.patch";
-      hash = "sha256-f1A8DmRPfm+zid4XMj1zsfcLZ0WTEax3YPbydKZF9RE=";
-    })
   ]
     # Disable one failing test with musl libc, also seen by alpine
     # https://github.com/bluez/bluez/issues/726
@@ -58,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     docutils
     pkg-config
     python3.pkgs.wrapPython
+    python3.pkgs.pygments
   ];
 
   outputs = [ "out" "dev" "test" ];
