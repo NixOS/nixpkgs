@@ -1,24 +1,26 @@
-{ fetchurl
-, lib, stdenv
-, perl
-, libxml2
-, postgresql
-, postgresqlTestHook
-, geos
-, proj
-, gdalMinimal
-, json_c
-, pkg-config
-, file
-, protobufc
-, libiconv
-, libxslt
-, docbook_xml_dtd_45
-, cunit
-, pcre2
-, nixosTests
-, jitSupport
-, llvm
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  libxml2,
+  postgresql,
+  postgresqlTestHook,
+  geos,
+  proj,
+  gdalMinimal,
+  json_c,
+  pkg-config,
+  file,
+  protobufc,
+  libiconv,
+  libxslt,
+  docbook_xml_dtd_45,
+  cunit,
+  pcre2,
+  nixosTests,
+  jitSupport,
+  llvm,
 }:
 
 let
@@ -28,19 +30,37 @@ stdenv.mkDerivation rec {
   pname = "postgis";
   version = "3.4.2";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
     sha256 = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
-                ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional jitSupport llvm;
+  buildInputs = [
+    libxml2
+    postgresql
+    geos
+    proj
+    gdal
+    json_c
+    protobufc
+    pcre2.dev
+  ] ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
 
-  nativeCheckInputs = [ postgresqlTestHook cunit libxslt ];
+  nativeCheckInputs = [
+    postgresqlTestHook
+    cunit
+    libxslt
+  ];
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
   failureHook = "postgresqlStop";
@@ -98,7 +118,13 @@ stdenv.mkDerivation rec {
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber wolfgangwalther ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        marcweber
+        wolfgangwalther
+      ];
     inherit (postgresql.meta) platforms;
   };
 }
