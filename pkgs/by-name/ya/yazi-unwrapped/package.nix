@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
       linsui
       eljamm
+      uncenter
     ];
     mainProgram = "yazi";
   };
