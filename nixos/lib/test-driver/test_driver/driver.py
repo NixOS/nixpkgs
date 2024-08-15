@@ -175,9 +175,9 @@ class Driver:
             for idx, machine in enumerate(self.machines):
                 py_name = pythonize_name(machine.name)
                 if machine.name not in names:
-                    if machine.is_up():
+                    if machine.booted:
                         self.logger.warning(
-                            f"{machine.name} removed from the test, but it's running so we're not going to shut it down automatically. Call {py_name}.stop() and re-run rebuild() to remove."
+                            f"skipping removal of {machine.name} from the test, because it's running. Call {py_name}.shutdown() and re-run rebuild() to remove."
                         )
                     else:
                         to_del.append(idx)
