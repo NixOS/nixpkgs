@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, copyDesktopItems
 , makeDesktopItem
 , unzip
 , libsecret
@@ -122,38 +123,38 @@ in
     inherit rev vscodeServer;
   };
 
-  desktopItem = makeDesktopItem {
-    name = executableName;
-    desktopName = longName;
-    comment = "Code Editing. Redefined.";
-    genericName = "Text Editor";
-    exec = "${executableName} %F";
-    icon = "vs${executableName}";
-    startupNotify = true;
-    startupWMClass = shortName;
-    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-    mimeTypes = [ "text/plain" "inode/directory" ];
-    keywords = [ "vscode" ];
-    actions.new-empty-window = {
-      name = "New Empty Window";
-      exec = "${executableName} --new-window %F";
+  desktopItems = [
+    (makeDesktopItem {
+      name = executableName;
+      desktopName = longName;
+      comment = "Code Editing. Redefined.";
+      genericName = "Text Editor";
+      exec = "${executableName} %F";
       icon = "vs${executableName}";
-    };
-  };
-
-  urlHandlerDesktopItem = makeDesktopItem {
-    name = executableName + "-url-handler";
-    desktopName = longName + " - URL Handler";
-    comment = "Code Editing. Redefined.";
-    genericName = "Text Editor";
-    exec = executableName + " --open-url %U";
-    icon = "vs${executableName}";
-    startupNotify = true;
-    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-    mimeTypes = [ "x-scheme-handler/vs${executableName}" ];
-    keywords = [ "vscode" ];
-    noDisplay = true;
-  };
+      startupNotify = true;
+      startupWMClass = shortName;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      keywords = [ "vscode" ];
+      actions.new-empty-window = {
+        name = "New Empty Window";
+        exec = "${executableName} --new-window %F";
+        icon = "vs${executableName}";
+      };
+    })
+    (makeDesktopItem {
+      name = executableName + "-url-handler";
+      desktopName = longName + " - URL Handler";
+      comment = "Code Editing. Redefined.";
+      genericName = "Text Editor";
+      exec = executableName + " --open-url %U";
+      icon = "vs${executableName}";
+      startupNotify = true;
+      categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+      mimeTypes = [ "x-scheme-handler/vs${executableName}" ];
+      keywords = [ "vscode" ];
+      noDisplay = true;
+    })
+  ];
 
   buildInputs = [ libsecret libXScrnSaver libxshmfence ]
     ++ lib.optionals (!stdenv.isDarwin) [ alsa-lib at-spi2-atk libkrb5 mesa nss nspr systemd xorg.libxkbfile ];
@@ -164,6 +165,7 @@ in
     ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
     asar
+    copyDesktopItems
     # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
     (buildPackages.wrapGAppsHook3.override { inherit (buildPackages) makeWrapper; })
   ];
@@ -184,10 +186,6 @@ in
 
     ln -s "$out/lib/vscode/bin/${sourceExecutableName}" "$out/bin/${executableName}"
 
-    mkdir -p "$out/share/applications"
-    ln -s "$desktopItem/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
-    ln -s "$urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
-
     # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
     mkdir -p "$out/share/pixmaps"
     cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/vs${executableName}.png"
@@ -206,6 +204,9 @@ in
 
   preFixup = ''
     gappsWrapperArgs+=(
+        ${ # we cannot use runtimeDependencies otherwise libdbusmenu do not work on kde
+          lib.optionalString stdenv.isLinux
+          "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"}
       # Add gio to PATH so that moving files to the trash works when not using a desktop environment
       --prefix PATH : ${glib.bin}/bin
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

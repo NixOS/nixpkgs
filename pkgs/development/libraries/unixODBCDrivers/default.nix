@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub }:
+{ fetchurl, stdenv, unixODBC, cmake, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub, psqlodbc }:
 
 # Each of these ODBC drivers can be configured in your odbcinst.ini file using
 # the various passthru and meta values. Of note are:
@@ -16,30 +16,7 @@
 # ''
 
 {
-  psql = stdenv.mkDerivation rec {
-    pname = "psqlodbc";
-    version = "10.01.0000";
-
-    src = fetchurl {
-      url = "mirror://postgresql/odbc/versions/src/${pname}-${version}.tar.gz";
-      sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
-    };
-
-    buildInputs = [ unixODBC postgresql ];
-
-    # see the top of the file for an explanation
-    passthru = {
-      fancyName = "PostgreSQL";
-      driver = "lib/psqlodbcw.so";
-    };
-
-    meta = with lib; {
-      description = "Official PostgreSQL ODBC Driver";
-      homepage = "https://odbc.postgresql.org/";
-      license = licenses.lgpl2;
-      platforms = platforms.unix;
-    };
-  };
+  psql = psqlodbc.override { withUnixODBC = true; withLibiodbc = false; };
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";

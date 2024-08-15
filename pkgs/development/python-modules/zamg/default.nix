@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  aresponses,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,

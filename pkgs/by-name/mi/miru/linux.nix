@@ -5,15 +5,21 @@
   pname,
   version,
   meta,
+  passthru,
 }:
 
 appimageTools.wrapType2 rec {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    meta
+    passthru
+    ;
 
   src = fetchurl {
     url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/linux-Miru-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-wnqCKnZKt0Fj8TasdRVzI558W7aIB5FLkcDEiZfz3ZQ=";
+    hash = "sha256-c0Rf+mny6yURfONUw4TmSzgE6i0y7kd+F4T7V+BfJsY=";
   };
 
   extraInstallCommands =

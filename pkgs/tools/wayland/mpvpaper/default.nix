@@ -6,7 +6,7 @@
 , wayland-protocols
 , wayland-scanner
 , egl-wayland
-, glew-egl
+, glew
 , mpv
 , pkg-config
 , fetchFromGitHub
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpvpaper";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "GhostNaN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/A2C6T7gP+VGON3Peaz2Y4rNC63UT+zYr4RNM2gdLUY=";
+    sha256 = "sha256-uBitJM2Z5RFH4nfgdJ6ZbqkcMumu+K+3f6S49G7nEx8=";
   };
 
   strictDeps = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     egl-wayland
-    glew-egl
+    glew
     mpv
   ];
 

@@ -103,7 +103,7 @@ let
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
-    pathsToLink = ["/bin" "/sbin"];
+    pathsToLink = ["/bin"];
     postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
@@ -160,7 +160,7 @@ in {
       description = "Set of files that have to be linked into the initrd";
       example = literalExpression ''
         {
-          "/etc/hostname".text = "mymachine";
+          "/etc/machine-id".source = /etc/machine-id;
         }
       '';
       default = {};
@@ -408,7 +408,7 @@ in {
         fsck = "${cfg.package.util-linux}/bin/fsck";
       };
 
-      managerEnvironment.PATH = "/bin:/sbin";
+      managerEnvironment.PATH = "/bin";
 
       contents = {
         "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
@@ -417,7 +417,7 @@ in {
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin
+          DefaultEnvironment=PATH=/bin
           ${cfg.extraConfig}
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
@@ -432,9 +432,9 @@ in {
         "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then optionalString (!cfg.emergencyAccess) "*" else cfg.emergencyAccess}:::::::";
 
         "/bin".source = "${initrdBinEnv}/bin";
-        "/sbin".source = "${initrdBinEnv}/sbin";
+        "/sbin".source = "${initrdBinEnv}/bin";
 
-        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /bin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
         "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
           ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
@@ -443,6 +443,9 @@ in {
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
+
+        # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
+        "/etc/hostname".text = config.networking.hostName;
 
       } // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
         "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;

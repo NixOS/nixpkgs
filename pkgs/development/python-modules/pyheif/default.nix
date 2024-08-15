@@ -25,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/carsales/pyheif";
     description = "Python interface to libheif library";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

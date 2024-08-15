@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "croniter";
-  version = "2.0.7";
+  version = "3.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EEG5ErSx4DdRoJk1Mb7Pd4Ua5uizNMnHb/7/uPBV9T8=";
+    hash = "sha256-NBF+wXQfEKe9DsOtfY8OuPpFei/rm+MuaiJQ4ViVdmg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kiorky/croniter";
     changelog = "https://github.com/kiorky/croniter/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

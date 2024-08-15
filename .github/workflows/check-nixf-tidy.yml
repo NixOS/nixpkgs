@@ -8,6 +8,7 @@ permissions:
 
 jobs:
   nixos:
+    name: exp-nixf-tidy-check
     runs-on: ubuntu-latest
     if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:

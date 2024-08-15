@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/OmarCastro/cmd-polkit/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ daru-san ];
-    mainProgram = "cmd-polkit";
+    mainProgram = "cmd-polkit-agent";
     platforms = platforms.linux;
   };
 })

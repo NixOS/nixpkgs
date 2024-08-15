@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inducer/pudb";
     changelog = "https://github.com/inducer/pudb/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

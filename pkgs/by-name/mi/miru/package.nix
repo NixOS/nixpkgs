@@ -5,7 +5,7 @@
 }:
 let
   pname = "miru";
-  version = "5.1.6";
+  version = "5.2.14";
   meta = with lib; {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";
@@ -32,8 +32,25 @@ let
       instead of flat out closing MPV.
     '';
   };
+  passthru = {
+    updateScript = ./update.sh;
+  };
 in
 if stdenv.isDarwin then
-  callPackage ./darwin.nix { inherit pname version meta; }
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }
 else
-  callPackage ./linux.nix { inherit pname version meta; }
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }

@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   tests:
+    name: basic-eval-checks
     runs-on: ubuntu-latest
     # we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
     steps:

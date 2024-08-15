@@ -22,7 +22,6 @@
   withSerialPort ? false,
   withTools ? false,
   pkgsBuildTarget,
-  buildPackages,
   dbusSupport ? !stdenv.isDarwin,
 }:
 

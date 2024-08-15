@@ -3,11 +3,15 @@
   fetchFromGitHub,
   melpaBuild,
   prop-menu,
+  gitUpdater,
 }:
 
-melpaBuild rec {
-  pname = "idris2-mode";
+let
   version = "1.1";
+in
+melpaBuild {
+  pname = "idris2-mode";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "idris-community";
@@ -20,10 +24,12 @@ melpaBuild rec {
     prop-menu
   ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     homepage = "https://github.com/idris-community/idris2-mode";
     description = "Emacs mode for editing Idris 2 code";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ wuyoli ];
+    maintainers = with lib.maintainers; [ wuyoli AndersonTorres ];
   };
 }

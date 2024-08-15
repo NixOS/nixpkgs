@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bids-standard/bids-validator";
     changelog = "https://github.com/bids-standard/bids-validator/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

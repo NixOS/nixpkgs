@@ -5,7 +5,6 @@
   sqlalchemy,
   setuptools-scm,
   setuptools,
-  sphinx,
   pytestCheckHook,
   pytest-sugar,
   pymysql,

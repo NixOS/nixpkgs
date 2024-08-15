@@ -6,7 +6,7 @@ mirror://xorg/individual/xcb/xcb-util-image-0.4.1.tar.xz
 mirror://xorg/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz
 mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.10.tar.xz
 mirror://xorg/individual/xcb/xcb-util-wm-0.4.2.tar.xz
-mirror://xorg/individual/app/appres-1.0.6.tar.xz
+mirror://xorg/individual/app/appres-1.0.7.tar.xz
 mirror://xorg/individual/app/bitmap-1.1.1.tar.xz
 mirror://xorg/individual/app/editres-1.0.9.tar.xz
 mirror://xorg/individual/app/fonttosfnt-1.2.3.tar.xz
@@ -28,7 +28,7 @@ mirror://xorg/individual/app/xcalc-1.1.2.tar.xz
 mirror://xorg/individual/app/xclock-1.1.1.tar.xz
 mirror://xorg/individual/app/xcmsdb-1.0.6.tar.xz
 mirror://xorg/individual/app/xcompmgr-1.1.9.tar.xz
-mirror://xorg/individual/app/xconsole-1.0.8.tar.xz
+mirror://xorg/individual/app/xconsole-1.1.0.tar.xz
 mirror://xorg/individual/app/xcursorgen-1.0.8.tar.xz
 mirror://xorg/individual/app/xdm-1.1.16.tar.xz
 mirror://xorg/individual/app/xdpyinfo-1.3.4.tar.xz
@@ -37,7 +37,7 @@ mirror://xorg/individual/app/xev-1.2.6.tar.xz
 mirror://xorg/individual/app/xeyes-1.3.0.tar.xz
 mirror://xorg/individual/app/xfd-1.1.4.tar.xz
 mirror://xorg/individual/app/xfontsel-1.1.1.tar.xz
-mirror://xorg/individual/app/xfs-1.2.1.tar.xz
+mirror://xorg/individual/app/xfs-1.2.2.tar.xz
 mirror://xorg/individual/app/xfsinfo-1.0.7.tar.xz
 mirror://xorg/individual/app/xgamma-1.0.7.tar.xz
 mirror://xorg/individual/app/xgc-1.0.6.tar.xz
@@ -173,7 +173,7 @@ mirror://xorg/individual/lib/libICE-1.1.1.tar.xz
 mirror://xorg/individual/lib/libpciaccess-0.18.1.tar.xz
 mirror://xorg/individual/lib/libSM-1.2.4.tar.xz
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.8.9.tar.xz
+mirror://xorg/individual/lib/libX11-1.8.10.tar.xz
 mirror://xorg/individual/lib/libXau-1.0.11.tar.xz
 mirror://xorg/individual/lib/libXaw-1.0.16.tar.xz
 mirror://xorg/individual/lib/libxcb-1.17.0.tar.xz

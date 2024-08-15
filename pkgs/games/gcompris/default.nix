@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "QML_BOX2D_LIBRARY" "${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1")
-    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules gettext ninja qttools wrapQtAppsHook ];

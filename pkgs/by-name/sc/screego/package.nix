@@ -60,7 +60,7 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    mkdir -p ./ui/build
+    mkdir -p ./ui
     cp -r "${ui}" ./ui/build
   '';
 

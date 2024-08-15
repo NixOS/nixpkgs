@@ -32,7 +32,6 @@ let
             installPhase = ''
               mkdir -p $out
               cp -r * $out/
-              ln -fs ${old.passthru.packages}/* $out/
             '';
           };
         };

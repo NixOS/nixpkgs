@@ -27,7 +27,7 @@ in
       description = "Most Complete All-In-One Mod Library for Minecraft with 100+ Mods, FPS Improvements, and more";
       homepage = "https://client.badlion.net";
       license = with licenses; [ unfree ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
       mainProgram = "badlion-client";
       platforms = [ "x86_64-linux" ];
     };

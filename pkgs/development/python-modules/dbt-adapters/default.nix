@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-adapters";
     changelog = "https://github.com/dbt-labs/dbt-adapters/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

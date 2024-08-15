@@ -24,18 +24,18 @@ cat > $SCRIPT_DIR/default.nix << EOF
 callPackage ./make-brave.nix (removeAttrs args [ "callPackage" ])
   (
     if stdenv.isAarch64 then
-      {
+      rec {
         pname = "brave";
         version = "${latestVersionAarch64}";
-        url = "https://github.com/brave/brave-browser/releases/download/v${latestVersionAarch64}/brave-browser_${latestVersionAmd64}_arm64.deb";
+        url = "https://github.com/brave/brave-browser/releases/download/v\${version}/brave-browser_\${version}_arm64.deb";
         hash = "${hashAarch64}";
         platform = "aarch64-linux";
       }
     else if stdenv.isx86_64 then
-      {
+      rec {
         pname = "brave";
         version = "${latestVersionAmd64}";
-        url = "https://github.com/brave/brave-browser/releases/download/v${latestVersionAmd64}/brave-browser_${latestVersionAmd64}_amd64.deb";
+        url = "https://github.com/brave/brave-browser/releases/download/v\${version}/brave-browser_\${version}_amd64.deb";
         hash = "${hashAmd64}";
         platform = "x86_64-linux";
       }

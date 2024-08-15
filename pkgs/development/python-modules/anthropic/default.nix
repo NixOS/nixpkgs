@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.28.1";
+  version = "0.33.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n5Vmi2frUdSbrmulopwUlIO+blkf7cANoKTaTFZQdjw=";
+    hash = "sha256-Xaj4FPveqiivud6Hi/LlRkM9/8jrvX6IDirO/laad5U=";
   };
 
   build-system = [
@@ -71,6 +71,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Test require network access
     "tests/api_resources"
+    "tests/lib/test_bedrock.py"
   ];
 
   pytestFlagsArray = [

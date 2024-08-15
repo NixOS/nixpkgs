@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromSavannah, flex, bison, python3, autoconf, automake, libtool, bash
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+, help2man
 , fetchzip
 , buildPackages
 , nixosTests
@@ -85,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoconf automake ];
+  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoconf automake help2man ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
     ++ lib.optional doCheck qemu
     ++ lib.optional zfsSupport zfs;

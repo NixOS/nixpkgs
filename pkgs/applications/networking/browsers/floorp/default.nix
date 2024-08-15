@@ -8,7 +8,7 @@
 
 ((buildMozillaMach rec {
   pname = "floorp";
-  packageVersion = "11.15.0";
+  packageVersion = "11.16.0";
   applicationName = "Floorp";
   binaryName = "floorp";
   branding = "browser/branding/official";
@@ -16,14 +16,14 @@
   allowAddonSideload = true;
 
   # Must match the contents of `browser/config/version.txt` in the source tree
-  version = "115.13.0";
+  version = "115.15.0";
 
   src = fetchFromGitHub {
     owner = "Floorp-Projects";
     repo = "Floorp";
     fetchSubmodules = true;
     rev = "v${packageVersion}";
-    hash = "sha256-LRuts3O3Rj5e6rT9gKTTwAIsY0oSziuiZ3rzE7wHa7o=";
+    hash = "sha256-bmB88EIc5S/EYZXiQ5Dc+LjcGB4dlwKRBBV0T0ln88E=";
   };
 
   extraConfigureFlags = [
@@ -38,7 +38,7 @@
     # thus is the full /nix/store/[..] path. To avoid breaking PWAs with each
     # update, rely on `floorp` being in $PATH, as before.
     substituteInPlace floorp/browser/base/content/modules/ssb/LinuxSupport.mjs \
-      --replace-fail 'Services.dirsvc.get("XREExeF",Ci.nsIFile).path' floorp
+      --replace-fail 'Services.dirsvc.get("XREExeF",Ci.nsIFile).path' '"floorp"'
   '';
 
   updateScript = ./update.sh;

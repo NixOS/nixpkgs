@@ -15,7 +15,6 @@
   packaging,
   pillow,
   platformdirs,
-  poetry-core,
   py,
   pydantic,
   pyjwt,

@@ -102,7 +102,7 @@ in
       description = "Batch Image Manipulation Plugin for GIMP";
       homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 

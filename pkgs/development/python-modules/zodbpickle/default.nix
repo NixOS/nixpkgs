@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zodbpickle";
     changelog = "https://github.com/zopefoundation/zodbpickle/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

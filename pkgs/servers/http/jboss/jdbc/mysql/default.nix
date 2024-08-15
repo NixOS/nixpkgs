@@ -17,6 +17,6 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     inherit (mysql_jdbc.meta) description license platforms homepage;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -41,6 +41,6 @@ mkDerivation rec {
     description = "Clock app for plasma mobile";
     homepage = "https://invent.kde.org/plasma-mobile/kclock";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

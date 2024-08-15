@@ -5,6 +5,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       markdown-it-py = prev.markdown-it-py.overridePythonAttrs (_: {
         doCheck = false;

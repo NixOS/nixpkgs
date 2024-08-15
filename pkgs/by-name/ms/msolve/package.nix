@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msolve";
-  version = "0.6.7";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "algebraic-solving";
     repo = "msolve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-w7+7Ef5X+pRUW9+2akXv7By37ROB7nTij6J1Iy8P/eU=";
+    hash = "sha256-f1AtZ0tyHg3fqz44GK7eCsye+wiKeBbpKK9JWXpV/tk=";
   };
 
   postPatch = ''

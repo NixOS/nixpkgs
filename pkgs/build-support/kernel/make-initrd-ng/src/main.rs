@@ -326,7 +326,12 @@ fn main() -> eyre::Result<()> {
     let contents =
         fs::read(&args[1]).wrap_err_with(|| format!("failed to open file {:?}", &args[1]))?;
     let input = serde_json::from_slice::<Vec<StoreInput>>(&contents)
-        .wrap_err_with(|| format!("failed to parse JSON in {:?}", &args[1]))?;
+        .wrap_err_with(|| {
+            let text = String::from_utf8_lossy(&contents);
+            format!("failed to parse JSON '{}' in {:?}",
+                text,
+                &args[1])
+        })?;
     let output = &args[2];
     let out_path = Path::new(output);
 

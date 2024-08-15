@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "WSGI request and response object";
     homepage = "https://webob.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

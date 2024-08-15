@@ -137,7 +137,9 @@ stdenv.mkDerivation {
           ''
             demo_ivfpq_indexing && touch $out
           '';
-    } // lib.optionalAttrs pythonSupport { pytest = pythonPackages.callPackage ./tests.nix { }; };
+      pythonFaiss = pythonPackages.faiss;
+      pytest = pythonPackages.faiss.tests.pytest;
+    };
   };
 
   meta = with lib; {

@@ -37,7 +37,7 @@ buildGoModule rec {
     description = "Easily rename multiple files using your text editor";
     license = licenses.mit;
     homepage = "https://github.com/laurent22/massren";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "massren";
   };
 }

@@ -21,7 +21,6 @@
   pyyaml,
   responses,
   setuptools-scm,
-  setuptools,
   snap-helpers,
 }:
 

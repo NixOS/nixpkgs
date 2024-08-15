@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   ase,
   buildPythonPackage,
   cython,

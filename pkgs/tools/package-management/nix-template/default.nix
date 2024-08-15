@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/nix-template \
       --prefix PATH : ${lib.makeBinPath [ nix ]}
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd nix-template \
       --bash <($out/bin/nix-template completions bash) \
       --fish <($out/bin/nix-template completions fish) \
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonringer/nix-template/";
     changelog = "https://github.com/jonringer/nix-template/releases/tag/v${version}";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "nix-template";
   };
 }

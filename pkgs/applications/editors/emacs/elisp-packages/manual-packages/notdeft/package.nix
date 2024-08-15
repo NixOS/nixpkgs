@@ -16,7 +16,7 @@
   withIvy ? false,
 }:
 
-let
+melpaBuild {
   pname = "notdeft";
   version = "0-unstable-2021-12-04";
 
@@ -27,47 +27,12 @@ let
     hash = "sha256-LMMLJFVpmoE/y3MqrgY2fmsehmzk6TkLsVoHmFUxiSw=";
   };
 
-  # Xapian bindings for NotDeft
-  notdeft-xapian = stdenv.mkDerivation {
-    pname = "notdeft-xapian";
-    inherit version src;
-
-    strictDeps = true;
-
-    nativeBuildInputs = [ pkg-config ];
-
-    buildInputs = [
-      tclap
-      xapian
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      $CXX -std=c++11 -o notdeft-xapian xapian/notdeft-xapian.cc -lxapian
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/bin
-      cp notdeft-xapian $out/bin
-
-      runHook postInstall
-    '';
-  };
-in
-melpaBuild {
-  inherit pname version src;
-
   packageRequires = lib.optional withHydra hydra ++ lib.optional withIvy ivy;
 
   postPatch = ''
     substituteInPlace notdeft-xapian.el \
-      --replace 'defcustom notdeft-xapian-program nil' \
-                "defcustom notdeft-xapian-program \"${notdeft-xapian}/bin/notdeft-xapian\""
+      --replace-fail 'defcustom notdeft-xapian-program nil' \
+                     "defcustom notdeft-xapian-program \"$out/bin/notdeft-xapian\""
   '';
 
   files = ''
@@ -77,8 +42,24 @@ melpaBuild {
      ${lib.optionalString withIvy ''"extras/notdeft-ivy.el"''})
   '';
 
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    tclap
+    xapian
+  ];
+
+  preBuild = ''
+    $CXX -std=c++11 -o notdeft-xapian xapian/notdeft-xapian.cc -lxapian
+  '';
+
+  preInstall = ''
+    install -D --target-directory=$out/bin source/notdeft-xapian
+  '';
+
   passthru = {
-    inherit notdeft-xapian;
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 

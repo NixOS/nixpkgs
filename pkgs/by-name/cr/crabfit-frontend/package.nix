@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jy8BrJSHukRenPbZHw4nPx3cSi7E2GSg//WOXDh90mY=";
   };
 
-  sourceRoot = "source/frontend";
+  sourceRoot = "${finalAttrs.src.name}/frontend";
 
   patches = [
     ./01-localfont.patch
@@ -113,6 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Enter your availability to find a time that works for everyone";
     homepage = "https://github.com/GRA0007/crab.fit";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Degl=${if (x11Support && !stdenv.isDarwin) then "yes" else "no"}"
     "-Dglx=${if x11Support then "yes" else "no"}"
-    "-Dtests=${lib.boolToString finalAttrs.doCheck}"
+    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dx11=${lib.boolToString x11Support}"
   ];
 

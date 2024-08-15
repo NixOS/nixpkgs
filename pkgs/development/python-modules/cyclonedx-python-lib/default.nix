@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "7.5.0";
+  version = "7.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,11 +32,12 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yBBtE9DfHzUNXHMCo3KoUAAsvkBshczmVtMCUTtQ9zg=";
+    hash = "sha256-4778eTsgHxVnbJiFvZdOIXtRUeZ0S3nANEGC3eNlEpU=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "py-serializable" ];
 
+  build-system = [ poetry-core ];
 
   dependencies = [
     importlib-metadata
@@ -51,17 +52,26 @@ buildPythonPackage rec {
     types-toml
   ];
 
+  passthru.optional-dependencies = {
+    validation = [
+      jsonschema
+      lxml
+    ];
+    json-validation = [
+      jsonschema
+    ];
+    xml-validation = [
+      lxml
+    ];
+  };
+
   nativeCheckInputs = [
     ddt
-    jsonschema
-    lxml
     pytestCheckHook
     xmldiff
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclonedx" ];
-
-  pythonRelaxDeps = [ "py-serializable" ];
 
   preCheck = ''
     export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
@@ -81,12 +91,6 @@ buildPythonPackage rec {
     # Test failures seem py-serializable related
     "tests/test_output_xml.py"
   ];
-
-  passthru.optional-dependencies = {
-    validation = [
-      jsonschema
-    ];
-  };
 
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";

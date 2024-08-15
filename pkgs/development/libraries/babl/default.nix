@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dprefix-dev=${placeholder "dev"}"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Docs are opt-out in native but opt-in in cross builds.
+    "-Dwith-docs=true"
+    "-Denable-gir=true"
   ];
 
   postFixup = ''
@@ -52,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Image pixel format conversion library";
     mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
-    changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${lib.replaceStrings [ "." ] [ "_" ] version}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${replaceStrings [ "." ] [ "_" ] finalAttrs.version}/NEWS";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

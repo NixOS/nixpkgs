@@ -160,6 +160,7 @@ in {
   bootspec = handleTestOn ["x86_64-linux"] ./bootspec.nix {};
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
+  borgmatic = handleTest ./borgmatic.nix {};
   botamusique = handleTest ./botamusique.nix {};
   bpf = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bpf.nix {};
   bpftune = handleTest ./bpftune.nix {};
@@ -264,6 +265,7 @@ in {
   docker-rootless = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker-rootless.nix {};
   docker-registry = handleTest ./docker-registry.nix {};
   docker-tools = handleTestOn ["x86_64-linux"] ./docker-tools.nix {};
+  docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
   documize = handleTest ./documize.nix {};
@@ -342,7 +344,8 @@ in {
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
-  forgejo = handleTest ./forgejo.nix { };
+  forgejo = handleTest ./forgejo.nix { forgejoPackage = pkgs.forgejo; };
+  forgejo-lts = handleTest ./forgejo.nix { forgejoPackage = pkgs.forgejo-lts; };
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   freetube = discoverTests (import ./freetube.nix);
@@ -536,18 +539,21 @@ in {
   lxd = pkgs.recurseIntoAttrs (handleTest ./lxd { inherit handleTestOn; });
   lxd-image-server = handleTest ./lxd-image-server.nix {};
   #logstash = handleTest ./logstash.nix {};
-  lomiri = handleTest ./lomiri.nix {};
+  lomiri = discoverTests (import ./lomiri.nix);
   lomiri-calculator-app = runTest ./lomiri-calculator-app.nix;
+  lomiri-camera-app = runTest ./lomiri-camera-app.nix;
   lomiri-clock-app = runTest ./lomiri-clock-app.nix;
   lomiri-filemanager-app = runTest ./lomiri-filemanager-app.nix;
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};
   lorri = handleTest ./lorri/default.nix {};
+  ly = handleTest ./ly.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });
   maestral = handleTest ./maestral.nix {};
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   magnetico = handleTest ./magnetico.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mailhog = handleTest ./mailhog.nix {};
+  mailpit = handleTest ./mailpit.nix {};
   mailman = handleTest ./mailman.nix {};
   man = handleTest ./man.nix {};
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix {};
@@ -579,8 +585,10 @@ in {
   minidlna = handleTest ./minidlna.nix {};
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
+  miracle-wm = runTest ./miracle-wm.nix;
   miriway = handleTest ./miriway.nix {};
   misc = handleTest ./misc.nix {};
+  misskey = handleTest ./misskey.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
   mobilizon = handleTest ./mobilizon.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
@@ -758,6 +766,7 @@ in {
   php81 = handleTest ./php { php = pkgs.php81; };
   php82 = handleTest ./php { php = pkgs.php82; };
   php83 = handleTest ./php { php = pkgs.php83; };
+  php84 = handleTest ./php { php = pkgs.php84; };
   phylactery = handleTest ./web-apps/phylactery.nix {};
   pict-rs = handleTest ./pict-rs.nix {};
   pinnwand = handleTest ./pinnwand.nix {};
@@ -827,6 +836,7 @@ in {
   radicle = runTest ./radicle.nix;
   ragnarwm = handleTest ./ragnarwm.nix {};
   rasdaemon = handleTest ./rasdaemon.nix {};
+  rathole = handleTest ./rathole.nix {};
   readarr = handleTest ./readarr.nix {};
   realm = handleTest ./realm.nix {};
   redis = handleTest ./redis.nix {};
@@ -919,6 +929,7 @@ in {
   swayfx = handleTest ./swayfx.nix {};
   switchTest = handleTest ./switch-test.nix { ng = false; };
   switchTestNg = handleTest ./switch-test.nix { ng = true; };
+  sx = handleTest ./sx.nix {};
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
   syncthing-no-settings = handleTest ./syncthing-no-settings.nix {};
@@ -987,6 +998,7 @@ in {
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix {};
   tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
+  taskchampion-sync-server = handleTest ./taskchampion-sync-server.nix {};
   tayga = handleTest ./tayga.nix {};
   technitium-dns-server = handleTest ./technitium-dns-server.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
@@ -1066,6 +1078,7 @@ in {
   wastebin = handleTest ./wastebin.nix {};
   watchdogd = handleTest ./watchdogd.nix {};
   webhook = runTest ./webhook.nix;
+  weblate = handleTest ./web-apps/weblate.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wine = handleTest ./wine.nix {};
   wireguard = handleTest ./wireguard {};

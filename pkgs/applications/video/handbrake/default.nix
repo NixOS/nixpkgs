@@ -90,14 +90,14 @@
 }:
 
 let
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     # uses version commit for logic in version.txt
-    rev = "5edf59c1da54fe1c9a487d09e8f52561fe49cb2a";
-    hash = "sha256-gr2UhqPY5mZOP8KBvk9yydl4AkTlqE83hYAcLwSv1Is=";
+    rev = "e9ff2bdf1ac670eb9c6d6170e27c999c05535127";
+    hash = "sha256-grbT+oRIyLnyJowhdqw7qGRg11HzWGIU9yTwUQhCWtg=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -105,10 +105,10 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.0";
+  ffmpeg-version = "7.0.1";
   ffmpeg-hb = (ffmpeg_7-full.override {
     version = ffmpeg-version;
-    hash = "sha256-RdDfv+0y90XpgjIRvTjsemKyGunzDbsh4j4WiE9rfyM=";
+    hash = "sha256-HiCT6bvLx4zmJ6ffutoimdz5ENQ55CRF64WBT3HeXMA=";
   }).overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
@@ -133,8 +133,7 @@ let
       "${src}/contrib/ffmpeg/A16-amfenc-HDR-metadata.patch"
       "${src}/contrib/ffmpeg/A17-av1dec-dovi-rpu.patch"
       "${src}/contrib/ffmpeg/A18-avformat-mov-add-support-audio-fallback-track-ref.patch"
-      "${src}/contrib/ffmpeg/A19-mov-ignore-old-infe-box.patch"
-      "${src}/contrib/ffmpeg/A20-mov-free-infe-on-failure.patch"
+      "${src}/contrib/ffmpeg/A19-fix-qsv-on-gcc-14.patch"
     ];
   });
 
@@ -168,8 +167,7 @@ let
 
   inherit (lib) optional optionals optionalString versions;
 
-in
-let
+
   self = stdenv.mkDerivation rec {
     pname = "handbrake";
     inherit version src;

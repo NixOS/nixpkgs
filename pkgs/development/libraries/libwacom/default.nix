@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dtests=${if doCheck then "enabled" else "disabled"}"
+    "--sysconfdir=/etc"
   ];
 
   nativeCheckInputs = [

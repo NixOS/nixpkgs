@@ -104,7 +104,7 @@ in stdenv.mkDerivation rec {
     mainProgram = "pulseeffects";
     homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

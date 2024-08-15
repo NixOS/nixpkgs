@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://libcloud.apache.org/";
     changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

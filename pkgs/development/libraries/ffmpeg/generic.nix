@@ -34,7 +34,7 @@
 
   # Feature flags
 , withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
-, withAom ? withFullDeps # AV1 reference encoder
+, withAom ? withHeadlessDeps # AV1 reference encoder
 , withAppKit ? withHeadlessDeps && stdenv.isDarwin # Apple AppKit framework
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
@@ -45,7 +45,7 @@
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
-, withCelt ? withFullDeps # CELT decoder
+, withCelt ? withHeadlessDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
 , withCoreImage ? withHeadlessDeps && stdenv.isDarwin # Apple CoreImage framework
@@ -88,7 +88,7 @@
 , withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
 , withOpengl ? withFullDeps && !stdenv.isDarwin # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
-, withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
+, withOpenjpeg ? withHeadlessDeps # JPEG 2000 de/encoder
 , withOpenmpt ? withFullDeps # Tracked music files decoder
 , withOpus ? withHeadlessDeps # Opus de/encoder
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
@@ -121,7 +121,7 @@
 , withVpl ? false # Hardware acceleration via intel libvpl
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
 , withVulkan ? withSmallDeps && !stdenv.isDarwin
-, withWebp ? withFullDeps # WebP encoder
+, withWebp ? withHeadlessDeps # WebP encoder
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
 , withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
 , withXavs ? withFullDeps && withGPL # AVS encoder
@@ -129,9 +129,8 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-# Currently only supports gcc and msvc as compiler, the limitation for clang get removed in the next release, but that does not fix building on darwin.
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 && stdenv.cc.isGNU # MPEG-5 EVC encoding
+, withXevd ? withFullDeps && lib.versionAtLeast version "7" && !xevd.meta.broken # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7" && !xeve.meta.broken # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
@@ -403,36 +402,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = []
-    ++ optionals (versionOlder version "5") [
-      (fetchpatch2 {
-        name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
-        hash = "sha256-agJgzIzrBTQBAypuCmGXXFo7vw6Iodw5Ny5O5QCKCn8=";
-      })
-      (fetchpatch2 {
-        # Backport fix for binutils-2.41.
-        name = "binutils-2.41.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
-        hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
-      })
-      # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
-      # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
-      (fetchpatch2 {
-        name = "utils-fix_crash_in_ff_seek_frame_binary.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/ab792634197e364ca1bb194f9abe36836e42f12d";
-        hash = "sha256-vqqVACjbCcGL9Qvmg1QArSKqVmOqr8BEr+OxTBDt6mA=";
-        postFetch = ''
-          substituteInPlace "$out" \
-            --replace libavformat/seek.c libavformat/utils.c \
-            --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
-        '';
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51794.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/50f0f8c53c818f73fe2d752708e2fa9d2a2d8a07";
-        hash = "sha256-5G9lmKjMEa0+vqbA8EEiNIr6QG+PeEoIL+uZP4Hlo28=";
-      })
-    ]
     ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       (fetchpatch2 { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
@@ -485,6 +454,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals (lib.versionAtLeast version "7.0") [
       ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
+
+      # Expose a private API for Chromium / Qt WebEngine.
+      (fetchpatch2 {
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
+        hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
+      })
     ];
 
   configurePlatforms = [];
@@ -907,7 +882,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-    maintainers = with maintainers; [ atemu jopejoe1 ];
+    maintainers = with maintainers; [ atemu jopejoe1 emily ];
     mainProgram = "ffmpeg";
   };
 } // lib.optionalAttrs withCudaLLVM {

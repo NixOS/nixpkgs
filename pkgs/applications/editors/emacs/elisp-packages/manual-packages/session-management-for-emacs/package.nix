@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Small session management for emacs";
     homepage = "https://emacs-session.sourceforge.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

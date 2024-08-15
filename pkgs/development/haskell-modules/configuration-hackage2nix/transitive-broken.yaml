@@ -977,10 +977,14 @@ dont-distribute-packages:
  - copilot-cbmc
  - copilot-frp-sketch
  - copilot-language
+ - copilot-language_3_20
  - copilot-libraries
+ - copilot-libraries_3_20
  - copilot-sbv
  - copilot-theorem
+ - copilot-theorem_3_20
  - copilot-verifier
+ - copilot_3_20
  - corenlp-parser
  - coroutine-enumerator
  - coroutine-iteratee
@@ -1415,7 +1419,6 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - free-category
  - free-functors
  - free-game
  - free-theorems-seq-webui
@@ -1786,7 +1789,6 @@ dont-distribute-packages:
  - groundhog-th
  - grpc-etcd-client
  - grpc-haskell
- - grpc-haskell-core
  - gruff
  - gruff-examples
  - gsc-weighting
@@ -1970,6 +1972,7 @@ dont-distribute-packages:
  - hasloGUI
  - hasmtlib
  - hasql-cursor-query
+ - hasql-interpolate_1_0_0_0
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
@@ -2243,7 +2246,6 @@ dont-distribute-packages:
  - hw-json-lens
  - hw-json-simple-cursor
  - hw-json-standard-cursor
- - hw-kafka-avro
  - hw-polysemy
  - hw-uri
  - hworker-ses
@@ -2493,7 +2495,6 @@ dont-distribute-packages:
  - lang
  - language-Modula2
  - language-ats
- - language-avro
  - language-boogie
  - language-ecmascript-analysis
  - language-eiffel
@@ -2504,7 +2505,6 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - large-anon
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -2550,6 +2550,7 @@ dont-distribute-packages:
  - libraft
  - librarian
  - librato
+ - libriscv
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell
@@ -2773,8 +2774,6 @@ dont-distribute-packages:
  - morloc
  - morpheus-graphql
  - morphisms-functors-inventory
- - moto
- - moto-postgresql
  - motor
  - motor-diagrams
  - mp
@@ -2974,6 +2973,8 @@ dont-distribute-packages:
  - opentracing-zipkin-common
  - opentracing-zipkin-v1
  - opentracing-zipkin-v2
+ - opt-env-conf
+ - opt-env-conf-test
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -3201,12 +3202,10 @@ dont-distribute-packages:
  - proplang
  - prosidyc
  - proto-lens-descriptors
- - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
  - proton
- - psc-ide
  - psql
  - publicsuffixlist
  - puffytools
@@ -3216,9 +3215,7 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purenix
  - purescript-iso
- - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-ccs
@@ -4007,7 +4004,6 @@ dont-distribute-packages:
  - typed-streams
  - typedflow
  - typelevel
- - typesafe-precure
  - typescript-docs
  - typson-beam
  - typson-esqueleto
@@ -4322,7 +4318,6 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
- - zephyr
  - zephyr-copilot
  - zerobin
  - zeromq3-conduit

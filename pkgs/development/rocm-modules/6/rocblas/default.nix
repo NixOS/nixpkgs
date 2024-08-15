@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchpatch
 , rocmUpdateScript
-, runCommand
 , cmake
 , rocm-cmake
 , clr

@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = lib.licenses.unlicense;
-    maintainers = [];
+    maintainers = [ ];
   };
 }
 ```
@@ -642,6 +642,7 @@ builds the `retworkx` Python package. `fetchCargoTarball` and
 buildPythonPackage rec {
   pname = "retworkx";
   version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
@@ -655,8 +656,6 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-heOBK8qi2nuc/Ib+I/vLzZ1fUUD/G/KTw9d7M4Hz5O0=";
   };
-
-  format = "pyproject";
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 

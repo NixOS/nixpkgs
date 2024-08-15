@@ -1,18 +1,11 @@
 { lib
 , python3
-, python311
 , fetchFromGitHub
 }:
 
-let
-  python = if (builtins.tryEval python3.pkgs.nose.outPath).success
-    then python3
-    else python311;
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.41";
+  version = "3.11.42";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -20,7 +13,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZSqkD53fdDnKulVPgM9NWXVFXDR0sZ94mRyV1iKS87o=";
+    hash = "sha256-wDZXSQlIE1qQz463roHp3jepSFMZGSJAPOhKpuXTmG8=";
   };
 
   postPatch = ''
@@ -28,12 +21,12 @@ python.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  build-system = with python.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
     wheel
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
     apscheduler
     beautifulsoup4
@@ -45,6 +38,7 @@ python.pkgs.buildPythonApplication rec {
     jsonschema
     loguru
     psutil
+    pydantic
     pynzb
     pyrss2gen
     python-dateutil

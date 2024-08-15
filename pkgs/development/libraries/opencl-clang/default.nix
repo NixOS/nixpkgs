@@ -2,7 +2,6 @@
 , stdenv
 , applyPatches
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , git
 , llvmPackages_14
@@ -105,7 +104,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/intel/opencl-clang/";
     description = "Clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     # error: invalid value 'CL3.0' in '-cl-std=CL3.0'
     broken = stdenv.isDarwin;

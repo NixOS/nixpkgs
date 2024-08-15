@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Pure Python, pure state-machine WebSocket implementation";
     homepage = "https://github.com/python-hyper/wsproto/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

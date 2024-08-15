@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-common";
     changelog = "https://github.com/dbt-labs/dbt-common/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -16,7 +16,6 @@
   pyyaml,
   requests,
   setuptools,
-  torch-bin,
   typing-extensions,
   sympy,
   jinja2,

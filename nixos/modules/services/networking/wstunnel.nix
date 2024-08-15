@@ -23,14 +23,14 @@ let
   };
 
   commonOptions = {
-    enable = lib.mkEnableOption "this `wstunnel` instance." // {
+    enable = lib.mkEnableOption "this `wstunnel` instance" // {
       default = true;
     };
 
     package = lib.mkPackageOption pkgs "wstunnel" { };
 
     autoStart =
-      lib.mkEnableOption "starting this wstunnel instance automatically." // {
+      lib.mkEnableOption "starting this wstunnel instance automatically" // {
         default = true;
       };
 

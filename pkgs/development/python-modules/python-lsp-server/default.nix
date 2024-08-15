@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   autopep8,
   buildPythonPackage,
   docstring-to-markdown,

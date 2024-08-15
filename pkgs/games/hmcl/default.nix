@@ -7,6 +7,7 @@
 , imagemagick
 , jre
 , xorg
+, glib
 , libGL
 , glfw
 , openal
@@ -18,7 +19,7 @@
 }:
 
 let
-  version = "3.5.8";
+  version = "3.5.9";
   icon = fetchurl {
     url = "https://github.com/huanghongxun/HMCL/raw/release-${version}/HMCLauncher/HMCL/HMCL.ico";
     hash = "sha256-+EYL33VAzKHOMp9iXoJaSGZfv+ymDDYIx6i/1o47Dmc=";
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/huanghongxun/HMCL/releases/download/release-${version}/HMCL-${version}.jar";
-    hash = "sha256-HRTXJhKtRB+pANMAZ9R1kNsSbl/Rr6a8wMhfaPeD/40=";
+    hash = "sha256-iaOg0OiGEdS0E7UTanZkciWDHqeZoAdBM3ghH10Wbd8=";
   };
 
   dontUnpack = true;
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
         libpath = lib.makeLibraryPath ([
           libGL
           glfw
+          glib
           openal
           libglvnd
         ] ++ lib.optionals stdenv.isLinux [

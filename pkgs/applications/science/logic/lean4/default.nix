@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ danielbritten ];
     mainProgram = "lean";
   };
 })

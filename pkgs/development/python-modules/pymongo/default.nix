@@ -2,6 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
+  hatch-requirements-txt,
+  setuptools,
   pythonOlder,
   dnspython,
 
@@ -16,17 +19,24 @@
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "4.7.3";
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Y1SmayKPLNOZvnQpaF+2jgfxkRCjZ5eC7LT9to2gODE=";
+    inherit version;
+    pname = "pymongo";
+    hash = "sha256-RU8ilYdXRNxw8YgeSy65nNrQCKM1dLyKrxIFMPZsDN4=";
   };
 
-  propagatedBuildInputs = [ dnspython ];
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+    setuptools
+  ];
+
+  dependencies = [ dnspython ];
 
   # Tests call a running mongodb instance
   doCheck = false;
@@ -44,10 +54,10 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python driver for MongoDB";
     homepage = "https://github.com/mongodb/mongo-python-driver";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

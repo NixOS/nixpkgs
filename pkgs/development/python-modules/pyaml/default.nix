@@ -30,6 +30,6 @@ buildPythonPackage rec {
     mainProgram = "pyaml";
     homepage = "https://github.com/mk-fg/pretty-yaml";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

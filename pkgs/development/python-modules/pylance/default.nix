@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.13.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gwSpdj3i68QBrIcuvjj/32CsRKYVh9dSf98qNLDpxpc=";
+    hash = "sha256-zJ6zyS9DNhlJ1wbXHZRtNMDytF/Beh9DDHKB8S9HFwk=";
   };
 
   sourceRoot = "${src.name}/python";

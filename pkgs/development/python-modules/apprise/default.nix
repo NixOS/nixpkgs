@@ -1,5 +1,6 @@
 {
   lib,
+  apprise,
   babel,
   buildPythonPackage,
   click,
@@ -17,6 +18,7 @@
   requests,
   requests-oauthlib,
   setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
@@ -60,13 +62,19 @@ buildPythonPackage rec {
     # Nondeterministic. Fails with `assert 0 == 1`
     "test_notify_emoji_general"
     "test_plugin_mqtt_general"
+    # Nondeterministic. Fails with `assert 3 == 2`
+    "test_plugin_matrix_transaction_ids_api_v3"
     # Nondeterministic. Fails with `AssertionError`
     "test_plugin_xbmc_kodi_urls"
+    # Nondeterministic. Fails with `AssertionError`
+    "test_plugin_zulip_urls"
   ];
 
   disabledTestPaths = [
     # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
     "test/test_plugin_bulksms.py"
+    # Nondeterministic. Multiple tests will fail with `AssertionError`
+    "test/test_plugin_workflows.py"
   ];
 
   postInstall = ''
@@ -75,12 +83,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apprise" ];
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion {
+      package = apprise;
+      version = "v${version}";
+    };
+  };
+
+  meta = {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ getchoo ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "apprise";
   };
 }

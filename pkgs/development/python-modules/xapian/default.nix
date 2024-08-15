@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-    hash = "sha256-BoMU/KP1RSRwFJLfQy+lTEhf1OOWE8os0nXhNpZOgak=";
+    hash = "sha256-VQhzVz7gQBGZ+DX+9R3ficp7wm97jRvcylnaZD+zyoE=";
   };
 
   configureFlags = [
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://xapian.org/";
     changelog = "https://xapian.org/docs/xapian-bindings-${version}/NEWS";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

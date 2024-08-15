@@ -98,6 +98,6 @@ buildPythonPackage rec {
     mainProgram = "ansible-runner";
     homepage = "https://github.com/ansible/ansible-runner";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

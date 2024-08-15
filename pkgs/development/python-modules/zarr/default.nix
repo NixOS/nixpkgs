@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zarr-developers/zarr";
     changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

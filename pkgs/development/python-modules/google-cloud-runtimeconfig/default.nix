@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-runtimeconfig";
     changelog = "https://github.com/googleapis/python-runtimeconfig/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

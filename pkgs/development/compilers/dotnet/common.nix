@@ -14,6 +14,9 @@
 , swiftPackages
 , darwin
 , icu
+, lndir
+, substituteAll
+, nugetPackageHook
 }: type: args: stdenv.mkDerivation (finalAttrs: args // {
   doInstallCheck = true;
 
@@ -23,17 +26,16 @@
     $out/bin/dotnet --info
   '';
 
-  # TODO: move this to sdk section?
-  setupHook = writeText "dotnet-setup-hook" (''
-    if [ ! -w "$HOME" ]; then
-      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
-    fi
+  setupHooks = args.setupHooks or [] ++ [
+    ./dotnet-setup-hook.sh
+  ] ++ lib.optional (type == "sdk") (substituteAll {
+    src = ./dotnet-sdk-setup-hook.sh;
+    inherit lndir;
+  });
 
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
-    export DOTNET_NOLOGO=1 # Disables the welcome message
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1 # Skip integrity check on first run, which fails due to read-only directory
-  '' + args.setupHook or "");
+  propagatedBuildInputs =
+    (args.propagatedBuildInputs or [])
+    ++ [ nugetPackageHook ];
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ installShellFiles ];
 
@@ -63,23 +65,22 @@
         }:
         let
           sdk = finalAttrs.finalPackage;
-          built = runCommandWith  {
+          built = stdenv.mkDerivation {
             name = "dotnet-test-${name}";
-            inherit stdenv;
-            derivationArgs = {
-              buildInputs = [ sdk ] ++ buildInputs;
-              # make sure ICU works in a sandbox
-              propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
-            };
-          } (''
-            HOME=$PWD/.home
-            dotnet new nugetconfig
-            dotnet nuget disable source nuget
-          '' + lib.optionalString usePackageSource ''
-            dotnet nuget add source ${sdk.packages}
-          '' + ''
-            dotnet new ${template} -n test -o .
-          '' + build);
+            buildInputs =
+              [ sdk ]
+              ++ buildInputs
+              ++ lib.optional (usePackageSource) sdk.packages;
+            # make sure ICU works in a sandbox
+            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
+            unpackPhase = ''
+              mkdir test
+              cd test
+              dotnet new ${template} -o .
+            '';
+            buildPhase = build;
+            dontPatchELF = true;
+          };
         in
           if run == null
             then built
@@ -87,6 +88,7 @@
             runCommand "${built.name}-run" ({
               src = built;
               nativeBuildInputs = [ built ] ++ runInputs;
+              passthru = { inherit built; };
             } // lib.optionalAttrs (stdenv.isDarwin && runAllowNetworking) {
               sandboxProfile = ''
                 (allow network-inbound (local ip))
@@ -105,9 +107,6 @@
         # yes, older SDKs omit the comma
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
-
-      patchNupkgs = callPackage ./patch-nupkgs.nix {};
-
     in {
       version = testers.testVersion ({
         package = finalAttrs.finalPackage;
@@ -184,8 +183,7 @@
         template = "console";
         usePackageSource = true;
         buildInputs =
-          [ patchNupkgs
-            zlib
+          [ zlib
           ] ++ lib.optional stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
             swiftPackages.swift
             Foundation
@@ -195,7 +193,6 @@
           ]);
         build = ''
           dotnet restore -p:PublishAot=true
-          patch-nupkgs .home/.nuget/packages
           dotnet publish -p:PublishAot=true -o $out/bin
         '';
         runtime = null;

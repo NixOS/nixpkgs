@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://repo2docker.readthedocs.io/";
     changelog = "https://github.com/jupyterhub/repo2docker/blob/${src.rev}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -27,6 +27,7 @@
 , stb
 , wlroots
 , libdecor
+, lcms
 , lib
 , makeBinaryWrapper
 , patchelfUnstable
@@ -44,14 +45,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.24";
+  version = "3.14.29";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+8uojnfx8V8BiYAeUsOaXTXrlcST83z6Eld7qv1oboE=";
+    hash = "sha256-q3HEbFqUeNczKYUlou+quxawCTjpM5JNLrML84tZVYE=";
   };
 
   patches = [
@@ -132,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libcap
     stb
+    lcms
   ]);
 
   postInstall = lib.optionalString enableExecutable ''

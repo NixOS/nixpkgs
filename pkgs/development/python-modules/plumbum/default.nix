@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = " Plumbum: Shell Combinators";
     homepage = " https://github.com/tomerfiliba/plumbum ";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

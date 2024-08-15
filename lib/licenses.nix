@@ -1099,6 +1099,11 @@ lib.mapAttrs mkLicense ({
     url = "https://qwt.sourceforge.io/qwtlicense.html";
   };
 
+  radiance = {
+    fullName = "The Radiance Software License, Version 2.0";
+    url = "https://github.com/LBNL-ETA/Radiance/blob/master/License.txt";
+  };
+
   ruby = {
     spdxId = "Ruby";
     fullName = "Ruby License";

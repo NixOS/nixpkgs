@@ -179,6 +179,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-oDMKf39uNMO9/kyiZ1IuZlj2yIF1q5Z3wewxEBh3yso="
   },
+  "bitwarden": {
+    "hash": "sha256-+zuKZBwoOSp3HIdxmK1FInE33/1D5nX2N7zYBCtRvHA=",
+    "homepage": "https://registry.terraform.io/providers/maxlaverse/bitwarden",
+    "owner": "maxlaverse",
+    "repo": "terraform-provider-bitwarden",
+    "rev": "v0.8.0",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-u9ICJtPZveRrK5BOthvFDGkNcUiA0/Hb39KM0eIhUVI="
+  },
   "brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
     "homepage": "https://registry.terraform.io/providers/brightbox/brightbox",
@@ -1136,6 +1145,15 @@
     "rev": "v1.0.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-8W1PK4T98iK1N6EB6AVjvr1P9Ja51+kSOmYAEosxrh8="
+  },
+  "spacelift": {
+    "hash": "sha256-xDkOngj8wPsqZhyYh0oVA9YVwMY+bRnpXL2yjpkN38M=",
+    "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
+    "owner": "spacelift-io",
+    "repo": "terraform-provider-spacelift",
+    "rev": "v1.14.0",
+    "spdx": "MIT",
+    "vendorHash": "sha256-m/J390su2nUpYMXrrYcOfKSjZb5Y23+g24rroLRss4U="
   },
   "spotinst": {
     "hash": "sha256-SOzaTZIBEC9se942ofYHURH8btw38upJtnlDDWmLcTM=",

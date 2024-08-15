@@ -8,7 +8,7 @@
 , nixosTests
 }:
 
-assert guiSupport -> enableMinimal == false;
+assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";

@@ -1,29 +1,20 @@
 {
   lib,
+  setuptools,
   stdenv,
-  pythonPackages,
   fetchPypi,
   pkg-config,
-  qmake,
-  qtbase,
-  qtsvg,
-  qtwebengine,
-  qtwebchannel,
-  qtdeclarative,
-  wrapQtAppsHook,
+  libsForQt5,
   darwin,
-  buildPackages,
+  buildPythonPackage,
+  python,
+  isPy27,
+  pyqt5,
+  sip,
+  pyqt-builder,
 }:
 
 let
-  inherit (pythonPackages)
-    buildPythonPackage
-    python
-    isPy27
-    pyqt5
-    sip
-    pyqt-builder
-    ;
   inherit (darwin) autoSignDarwinBinariesHook;
 in
 buildPythonPackage (
@@ -53,32 +44,33 @@ buildPythonPackage (
     nativeBuildInputs =
       [
         pkg-config
-        qmake
+        libsForQt5.qmake
+        libsForQt5.wrapQtAppsHook
       ]
       ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ sip ]
       ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
         python.pythonOnBuildForHost.pkgs.sip
       ]
       ++ [
-        qtbase
-        qtsvg
-        qtwebengine
+        libsForQt5.qtbase
+        libsForQt5.qtsvg
+        libsForQt5.qtwebengine
         pyqt-builder
-        pythonPackages.setuptools
+        setuptools
       ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qtdeclarative ]
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ libsForQt5.qtdeclarative ]
       ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
     buildInputs =
       [
         sip
-        qtbase
-        qtsvg
-        qtwebengine
+        libsForQt5.qtbase
+        libsForQt5.qtsvg
+        libsForQt5.qtwebengine
       ]
       ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-        qtwebchannel
-        qtdeclarative
+        libsForQt5.qtwebchannel
+        libsForQt5.qtdeclarative
       ];
 
     propagatedBuildInputs = [ pyqt5 ];
@@ -99,21 +91,21 @@ buildPythonPackage (
     enableParallelBuilding = true;
 
     passthru = {
-      inherit wrapQtAppsHook;
+      inherit (libsForQt5) wrapQtAppsHook;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Python bindings for Qt5";
       homepage = "http://www.riverbankcomputing.co.uk";
-      license = licenses.gpl3;
-      hydraPlatforms = lib.lists.intersectLists qtwebengine.meta.platforms platforms.mesaPlatforms;
+      license = lib.licenses.gpl3;
+      hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms lib.platforms.mesaPlatforms;
     };
   }
   // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
     # TODO: figure out why the env hooks aren't adding these inclusions automatically
     env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-      "-I${lib.getDev qtbase}/include/QtPrintSupport/"
-      "-I${lib.getDev qtwebchannel}/include/QtWebChannel/"
+      "-I${lib.getDev libsForQt5.qtbase}/include/QtPrintSupport/"
+      "-I${lib.getDev libsForQt5.qtwebchannel}/include/QtWebChannel/"
     ];
   }
 )

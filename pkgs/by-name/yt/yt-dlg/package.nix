@@ -5,7 +5,7 @@
   fetchPypi
 }:
 let
-  python3Packages =
+  python3' =
     (python3.override {
       packageOverrides = final: prev: {
         wxpython = prev.wxpython.overrideAttrs rec {
@@ -17,7 +17,10 @@ let
           };
         };
       };
-    }).pkgs;
+    });
+
+  python3Packages = python3'.pkgs;
+
 in
 python3Packages.buildPythonApplication rec {
   pname = "yt-dlg";

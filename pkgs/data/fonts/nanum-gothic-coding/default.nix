@@ -24,6 +24,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/naver/nanumfont";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

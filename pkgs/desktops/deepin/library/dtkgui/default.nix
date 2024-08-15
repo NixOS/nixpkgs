@@ -3,25 +3,22 @@
 , fetchFromGitHub
 , pkg-config
 , cmake
-, qttools
 , doxygen
-, wrapQtAppsHook
-, qtbase
+, libsForQt5
 , dtkcore
-, qtimageformats
 , lxqt
 , librsvg
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.29";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-TSU6sqdwBa86k7HcyNSJeJ6gj+n6EfIMjE8skSG5o0c=";
+    hash = "sha256-F3tuLV1hWoUZle0O66MQ+Ew9LRnP6N++HaqS88xBLRY=";
   };
 
   patches = [
@@ -31,34 +28,34 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
     doxygen
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     lxqt.libqtxdg
     librsvg
   ];
 
   propagatedBuildInputs = [
     dtkcore
-    qtimageformats
+    libsForQt5.qtimageformats
   ];
 
   cmakeFlags = [
     "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${libsForQt5.qtbase.qtDocPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
   outputs = [ "out" "dev" "doc" ];

@@ -7,13 +7,19 @@
   pname,
   version,
   meta,
+  passthru,
 }:
 stdenvNoCC.mkDerivation rec {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    meta
+    passthru
+    ;
 
   src = fetchurl {
     url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/mac-Miru-${version}-mac.zip";
-    hash = "sha256-N4+WDXhu62QUFqdCcPPfYEOd2OImg/Moj+UT0xK2oGE=";
+    hash = "sha256-1Qfd5lYcT6tUSQD46yOIus/esOrvAVfn7VeHm9t0OLg=";
   };
 
   sourceRoot = ".";

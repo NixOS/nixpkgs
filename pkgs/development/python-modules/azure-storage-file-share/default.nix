@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   isodate,
-  msrest,
   pythonOlder,
   setuptools,
   typing-extensions,

@@ -40,13 +40,13 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.3.0";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-69CpRAggx6a1NJq+CA9QliXuUbDgC1ERRuA3y17KVAM=";
+    hash = "sha256-2lPOkpZ9AmgDFoIHKi+Im1AwXnTxSY3LLtyui1ep3Dw=";
     fetchSubmodules = true;
   };
 
@@ -60,11 +60,12 @@ let
     (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
     (preparePatch "03-load_exception.diff" "sha256-NJkT/k8Mf8HcEMb0XkaLmyUNKV3T+384JRPnmwDI/sk=")
     (preparePatch "04-metal.diff" "sha256-bPBCfoT3EjZPjWKfCzh0pnCUbM/fGTj37yOaQr+QxQ4=")
-    (preparePatch "05-default-pretokenizer.diff" "sha256-Mgx+xi59rz3d5yEXp90QPQMiUr9InlA0Wo1mOSuRcec=")
+    (preparePatch "05-default-pretokenizer.diff" "sha256-PQ0DgfzycUQ8t6S6/yjsMHHx/nFJ0w8AH6afv5Po89w=")
     (preparePatch "06-embeddings.diff" "sha256-lqg2SI0OapD9LCoAG6MJW6HIHXEmCTv7P75rE9yq/Mo=")
     (preparePatch "07-clip-unicode.diff" "sha256-1qMJoXhDewxsqPbmi+/7xILQfGaybZDyXc5eH0winL8=")
     (preparePatch "08-pooling.diff" "sha256-7meKWbr06lbVrtxau0AU9BwJ88Z9svwtDXhmHI+hYBk=")
-    (preparePatch "09-lora.diff" "sha256-HVDYiqNkuWO9K7aIiT73iiMj5lxMsJC1oqIG4madAPk=")
+    (preparePatch "09-lora.diff" "sha256-tNtI3WHHjBq+PJZGJCBsXHa15dlNJeJm+IiaUbFC0LE=")
+    (preparePatch "11-phi3-sliding-window.diff" "sha256-VbcR4SLa9UXoh8Jq/bPVBerxfg68JZyWALRs7fz7hEs=")
   ];
 
   preparePatch =
@@ -212,7 +213,6 @@ goBuild (
     passthru.tests =
       {
         inherit ollama;
-        service = nixosTests.ollama;
         version = testers.testVersion {
           inherit version;
           package = ollama;
@@ -220,6 +220,7 @@ goBuild (
       }
       // lib.optionalAttrs stdenv.isLinux {
         inherit ollama-rocm ollama-cuda;
+        service = nixosTests.ollama;
         service-cuda = nixosTests.ollama-cuda;
         service-rocm = nixosTests.ollama-rocm;
       };

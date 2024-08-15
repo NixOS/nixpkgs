@@ -73,6 +73,7 @@
       powerpc64-linux = import ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix;
       powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
       riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
+      s390x-linux = import ./bootstrap-files/s390x-unknown-linux-gnu.nix;
     };
     musl = {
       aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-musl.nix;
@@ -139,14 +140,11 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
-    inherit system bootstrapFiles;
-    extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
-      __contentAddressed = true;
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-    };
-  }) // { passthru.isFromBootstrapFiles = true; };
+  bootstrapTools = import ./bootstrap-tools {
+    inherit (localSystem) libc system;
+    inherit lib bootstrapFiles config;
+    isFromBootstrapFiles = true;
+  };
 
   getLibc = stage: stage.${localSystem.libc};
 

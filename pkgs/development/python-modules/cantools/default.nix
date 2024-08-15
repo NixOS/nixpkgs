@@ -3,7 +3,7 @@
   argparse-addons,
   bitstruct,
   buildPythonPackage,
-  can,
+  python-can,
   crccheck,
   diskcache,
   fetchPypi,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argparse-addons
     bitstruct
-    can
+    python-can
     crccheck
     diskcache
     textparser

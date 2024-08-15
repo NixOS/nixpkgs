@@ -4,6 +4,7 @@
   k3sRepoSha256 = "0wagfh4vbvyi62np6zx7b4p6myn0xavw691y78rnbl32jckiy14f";
   k3sVendorHash = "sha256-o36gf3q7Vv+RoY681cL44rU2QFrdFW3EbRpw3dLcVTI=";
   chartVersions = import ./chart-versions.nix;
+  imagesVersions = builtins.fromJSON (builtins.readFile ./images-versions.json);
   k3sRootVersion = "0.13.0";
   k3sRootSha256 = "1jq5f0lm08abx5ikarf92z56fvx4kjpy2nmzaazblb34lajw87vj";
   k3sCNIVersion = "1.4.0-k3s2";

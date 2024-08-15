@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "Play an image/video in your terminal";
     homepage = "https://jd91mzm2.github.io/termplay/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "termplay";
   };

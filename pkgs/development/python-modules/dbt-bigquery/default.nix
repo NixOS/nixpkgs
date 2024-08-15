@@ -10,7 +10,6 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  urllib3,
 }:
 
 buildPythonPackage rec {

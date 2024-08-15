@@ -12,6 +12,7 @@ let
   nixopsContextBase = this: {
 
     python = python3.override {
+      self = this.python;
       packageOverrides = self: super: {
         nixops = self.callPackage ./unwrapped.nix { };
       } // (this.plugins self super);
