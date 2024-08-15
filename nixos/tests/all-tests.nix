@@ -141,7 +141,7 @@ in {
   authelia = handleTest ./authelia.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
-  ayatana-indicators = handleTest ./ayatana-indicators.nix {};
+  ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = handleTest ./babeld.nix {};
   bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
