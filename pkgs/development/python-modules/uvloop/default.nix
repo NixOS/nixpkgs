@@ -22,17 +22,17 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Akb0/Rvyv3AuBrDUXukWd+5cMSQvOaq06m/gxRrt0P0=";
+    hash = "sha256-RgPKcUp1T8jZsZfjJdslsuoEU4Xoo60F00Y95yX99Gk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython_0
     setuptools
   ];
