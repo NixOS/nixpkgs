@@ -1,6 +1,7 @@
 {
   alsa-lib,
   autoPatchelfHook,
+  buildPackages,
   dbus,
   fetchFromGitHub,
   fontconfig,
@@ -105,6 +106,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   strictDeps = true;
+
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.stdenv.cc
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
