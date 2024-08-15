@@ -1300,9 +1300,15 @@ self: super: {
     '';
   }) super.hpack;
 
-  # Upstream stack-0.15.7 is compiled with hpack-0.36.0, and we make sure to
-  # keep the same hpack version in Nixpkgs.
-  stack = super.stack.override { hpack = self.hpack_0_36_0; };
+  stack = super.stack.overrideScope (lself: lsuper: {
+    # stack-3.1.1 requires the latest versions of these libraries
+    pantry = lself.pantry_0_10_0;
+    tar = lself.tar_0_6_3_0;
+
+    # Upstream stack-3.1.1 is compiled with hpack-0.37.0, and we make sure to
+    # keep the same hpack version in Nixpkgs.
+    hpack = self.hpack_0_37_0;
+  });
 
   # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
