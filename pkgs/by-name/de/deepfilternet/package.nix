@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deepfilternet";
-  version = "0.5.6";
+  version = "0.5.6-unstable-2024-08-15";
 
   src = fetchFromGitHub {
     owner = "Rikorose";
     repo = "DeepFilterNet";
-    rev = "v${version}";
-    hash = "sha256-5bYbfO1kmduNm9YV5niaaPvRIDRmPt4QOX7eKpK+sWY=";
+    rev = "f1d19bffbeccd98a616f23c89903a2386a1d1dba";
+    hash = "sha256-6NR+7FzXy30zamrP9u7HsTnyTqp3J3JG+QndVuL5q/g=";
   };
 
   cargoLock = {
@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage rec {
       "hdf5-0.8.1" = "sha256-qWF2mURVblSLPbt4oZSVxIxI/RO3ZNcZdwCdaOTACYs=";
     };
   };
+
+  postPatch = ''
+    ln --force -s ${./Cargo.lock} Cargo.lock
+  '';
 
   # only the ladspa plugin part has been packaged so far...
 
