@@ -17997,6 +17997,8 @@ self: super: with self; {
 
   xdxf2html = callPackage ../development/python-modules/xdxf2html { };
 
+  xxtea = callPackage ../development/python-modules/xxtea { };
+
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   y-py = callPackage ../development/python-modules/y-py { };
