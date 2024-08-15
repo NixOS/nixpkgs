@@ -1,14 +1,14 @@
 { lib
-, buildPythonPackage
+, python3Packages
 , fetchFromGitHub
 }:
 
-buildPythonPackage {
+python3Packages.buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
   version = "1.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Guts";
@@ -16,12 +16,18 @@ buildPythonPackage {
     rev = "refs/tags/${version}";
     hash = "sha256-rCz1Uk5uqIsnIWw0b1oBsjAO6aK/tpVgqAX/8dVnAGw=";
   };
-  nativeBuildInputs = [
+
+  nativeBuildInputs = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    ...
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    mkdocs
+    gitpython
   ];
 
   doCheck = false;
