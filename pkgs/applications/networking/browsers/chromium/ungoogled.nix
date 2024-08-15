@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitHub
+, fetchzip
 , python3Packages
 , makeWrapper
 , patch
@@ -14,10 +14,12 @@ stdenv.mkDerivation {
 
   version = rev;
 
-  src = fetchFromGitHub {
-    owner = "ungoogled-software";
-    repo = "ungoogled-chromium";
-    inherit rev hash;
+  src = fetchzip {
+    urls = [
+      "https://github.com/ungoogled-software/ungoogled-chromium/archive/${rev}.tar.gz"
+      "https://codeberg.org/ungoogled-software/ungoogled-chromium/archive/${rev}.tar.gz"
+    ];
+    inherit hash;
   };
 
   dontBuild = true;
