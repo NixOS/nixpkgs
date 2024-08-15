@@ -7,15 +7,13 @@
 
 buildPythonPackage rec {
   pname = "s2clientprotocol";
-  version = "3.19.1.58600.0";
-  format = "setuptools";
+  version = "5.0.13.92440.3";
+  format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "02jqwdfj5zpag4c5nf0707qmwk7sqm98yfgrd19rq6pi58zgl74f";
+    inherit pname version format;
+    hash = "sha256-56VjdECnEIrBG1m1oA7F2rbDGH7mucBR2LZpIRnYSnU=";
   };
-
-  patches = [ ./pure-version.patch ];
 
   buildInputs = [ protobuf ];
 
