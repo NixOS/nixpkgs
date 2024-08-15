@@ -88,7 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-power" ];
+    ayatana-indicators = {
+      ayatana-indicator-power = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
