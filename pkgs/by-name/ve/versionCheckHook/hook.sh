@@ -5,6 +5,7 @@ _handleCmdOutput(){
         --argv0="$(basename "$1")" \
         --ignore-environment \
         "$@" 2>&1 \
+        | sed -e 's|@storeDir@/[^/ ]*/|{{storeDir}}/|g' \
         || true)"
     if [[ "$versionOutput" =~ "$version" ]]; then
         echoPrefix="Successfully managed to"
