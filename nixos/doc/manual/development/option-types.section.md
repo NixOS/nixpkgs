@@ -239,9 +239,27 @@ merging is handled.
 :   A string wrapped using `lib.mkLuaInline`. Allows embedding lua expressions
     inline within generated lua. Multiple definitions cannot be merged.
 
-## Submodule types {#sec-option-types-submodule}
+## Record and module types {#sec-option-types-submodule}
 
-Submodules are detailed in [Submodule](#section-option-types-submodule).
+Records and submodules are detailed in [Record](#section-option-types-record) and [Submodule](#section-option-types-submodule) respectively.
+While submodules provide the full power of the module system, records are usually faster to evaluate and may be preferred in many scenarios.
+
+`types.record` { `fields` ? {}, `optionalFields` ? {}, `wildcard` ? null }.
+
+:   A set of sub options, represented as fields. A field can be almost
+    any option, including record or submodule type options.
+    It has parameters:
+
+    -   *`fields`* An attribute set of options that will be merged into
+        the final value.
+
+    -   *`optionalFields`* An attribute set of options that will only be
+        merged into the final value _if_ they are defined.
+
+    -   *`wildcard`* An option-type used to merge unknown field
+        definitions into the final value.
+
+        If null, definitions for unknown fields will throw an error.
 
 `types.submodule` *`o`*
 
@@ -469,6 +487,48 @@ Composed types are types that take a type as parameter. `listOf
     function *`f`* which takes an argument of type *`from`* and return a
     value of type *`to`*. Can be used to preserve backwards compatibility
     of an option if its type was changed.
+
+## Record {#section-option-types-record}
+
+<!-- TODO: Add some examples!! -->
+
+Records are a simpler alternative to [submodules](#section-option-types-submodule).
+Rather than merging fully-fledged modules, a record consists only of "field" sub-options and an optional "wildcard" type, similar to a submodule's `freeformType`.
+
+    ::: {.note}
+    Because records are not implemented using the full module system, they can usually be evaluated significantly faster than submodules.
+    :::
+
+### Record fields
+
+A record's sub-options are declared as `fields`. A field can be almost any option (restrictions listed below).
+You can also use other record or submodule options in a record's fields to implement "nested" options.
+
+#### Restrictions
+
+- Fields must be options (e.g. created using `lib.mkOption`)
+- Fields cannot have an `apply` function
+- Fields cannot be `readOnly`
+
+### Record optional fields
+
+In addition to _required_ fields, a record can contain "optional" fields. Optional fields are similar to wildcard or freeform types, in that they are only merged into the final value when defined.
+This contrasts "required" fields and submodule sub-options, which will still be merged into the final value when undefined as a stub value that throws a "used but not defined" error when read.
+
+Optional fields are a unique feature, not currently supported by submodules.
+
+### Restrictions
+- All the same restrictions for required fields apply
+- Additionally, optional fields cannot have a `default`
+
+### Record wildcard type
+
+Records can optionally be declared with a "wildcard" type, which can be used to allow definitions that do not match the explicitly declared "field" options.
+Any definition that does not match a field option will be checked against the "wildcard" type, for example you could set `wildcard = types.anything`.
+
+    ::: {.info}
+    A wildcard record with no fields can be thought of as equivialent to `types.attrsOf`!
+    :::
 
 ## Submodule {#section-option-types-submodule}
 
