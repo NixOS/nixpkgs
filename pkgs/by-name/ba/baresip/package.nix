@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-0huZP1hopHaN5R1Hki6YutpvoASfIHzHMl/Y4czHHMo=";
   };
-  prePatch = lib.optionalString (!dbusSupport) ''
+  prePatch = ''
+    substituteInPlace cmake/FindGTK3.cmake --replace GTK3_CFLAGS_OTHER ""
+  '' + lib.optionalString (!dbusSupport) ''
     substituteInPlace cmake/modules.cmake --replace 'list(APPEND MODULES ctrl_dbus)' ""
   '';
   nativeBuildInputs = [ cmake pkg-config ];
@@ -109,6 +111,7 @@ stdenv.mkDerivation rec {
     "g711"
     "g722"
     "g726"
+    "gtk"
     "httpd"
     "httpreq"
     "ice"
