@@ -41,8 +41,8 @@ let
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic && lib.versionAtLeast release_version "16";
-  inherit (stdenv.hostPlatform) isMusl isAarch64;
-  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic;
+  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
+  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
