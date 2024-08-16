@@ -864,8 +864,6 @@ with pkgs;
 
   # Dotnet
 
-  csharp-ls = callPackage ../development/tools/language-servers/csharp-ls { };
-
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
   dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
