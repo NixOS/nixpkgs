@@ -25,6 +25,11 @@ stdenv.mkDerivation {
     (lib.enableFeature true "idl")
     (lib.enableFeature true "secure-api")
     (lib.withFeatureAs true "default-msvcrt" crt)
+
+    # Including other architectures causes errors with invalid asm
+    (lib.enableFeature stdenv.hostPlatform.isi686 "lib32")
+    (lib.enableFeature stdenv.hostPlatform.isx86_64 "lib64")
+    (lib.enableFeature stdenv.hostPlatform.isAarch64 "libarm64")
   ];
 
   enableParallelBuilding = true;
