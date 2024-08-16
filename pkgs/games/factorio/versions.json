@@ -1,0 +1,58 @@
+{
+  "x86_64-linux": {
+    "alpha": {
+      "experimental": {
+        "name": "factorio_alpha_x64-1.1.109.tar.xz",
+        "needsAuth": true,
+        "sha256": "1fmgh5b4sq9lcbjz0asvq5zcwf25cqdn5jc2ickind2lnkhd557h",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.109/alpha/linux64",
+        "version": "1.1.109"
+      },
+      "stable": {
+        "name": "factorio_alpha_x64-1.1.109.tar.xz",
+        "needsAuth": true,
+        "sha256": "1fmgh5b4sq9lcbjz0asvq5zcwf25cqdn5jc2ickind2lnkhd557h",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.109/alpha/linux64",
+        "version": "1.1.109"
+      }
+    },
+    "demo": {
+      "experimental": {
+        "name": "factorio_demo_x64-1.1.109.tar.xz",
+        "needsAuth": false,
+        "sha256": "1222jg22dmj4pby9y5axybqv0dmwxh8r9h2507f87za3jsv15fsx",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.109/demo/linux64",
+        "version": "1.1.109"
+      },
+      "stable": {
+        "name": "factorio_demo_x64-1.1.109.tar.xz",
+        "needsAuth": false,
+        "sha256": "1222jg22dmj4pby9y5axybqv0dmwxh8r9h2507f87za3jsv15fsx",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.109/demo/linux64",
+        "version": "1.1.109"
+      }
+    },
+    "headless": {
+      "experimental": {
+        "name": "factorio_headless_x64-1.1.109.tar.xz",
+        "needsAuth": false,
+        "sha256": "0gxzfz074833fjm4s3528y05c5n1jf7zxfdj5xpfcvwi7i9khnhh",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.109/headless/linux64",
+        "version": "1.1.109"
+      },
+      "stable": {
+        "name": "factorio_headless_x64-1.1.109.tar.xz",
+        "needsAuth": false,
+        "sha256": "0gxzfz074833fjm4s3528y05c5n1jf7zxfdj5xpfcvwi7i9khnhh",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.109/headless/linux64",
+        "version": "1.1.109"
+      }
+    }
+  }
+}

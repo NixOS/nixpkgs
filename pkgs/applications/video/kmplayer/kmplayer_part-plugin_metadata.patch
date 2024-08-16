@@ -1,0 +1,11 @@
+--- a/src/kmplayer_part.h
++++ b/src/kmplayer_part.h
+@@ -36,7 +36,7 @@
+ 
+ class KMPlayerFactory : public KPluginFactory {
+     Q_OBJECT
+-    Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory" FILE "")
++    Q_PLUGIN_METADATA(IID "org.kde.KPluginFactory")
+     Q_INTERFACES(KPluginFactory)
+ public:
+     KMPlayerFactory();

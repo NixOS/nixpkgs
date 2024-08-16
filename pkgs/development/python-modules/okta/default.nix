@@ -1,0 +1,88 @@
+{
+  lib,
+  aenum,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  flatdict,
+  jwcrypto,
+  pycryptodome,
+  pycryptodomex,
+  pydash,
+  pyfakefs,
+  pyjwt,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-recording,
+  pytestCheckHook,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  xmltodict,
+  yarl,
+}:
+
+buildPythonPackage rec {
+  pname = "okta";
+  version = "2.9.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-RDnRiPsc4p5yI9jFzOtRI+r00tvska8x4uCSjl+cWvo=";
+  };
+
+  propagatedBuildInputs = [
+    aenum
+    aiohttp
+    flatdict
+    jwcrypto
+    pycryptodome
+    pycryptodomex
+    pydash
+    pyjwt
+    python-jose
+    pyyaml
+    xmltodict
+    yarl
+  ];
+
+  checkInputs = [
+    pyfakefs
+    pytest-asyncio
+    pytest-mock
+    pytest-recording
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "tests/" ];
+
+  disabledTests = [
+    "test_client_raise_exception"
+    # vcr.errors.CannotOverwriteExistingCassetteException: Can't overwrite existing cassette
+    "test_get_org_contact_user"
+    "test_update_org_contact_user"
+    "test_get_role_subscription"
+    "test_subscribe_unsubscribe"
+  ];
+
+  pythonImportsCheck = [
+    "okta"
+    "okta.cache"
+    "okta.client"
+    "okta.exceptions"
+    "okta.http_client"
+    "okta.models"
+    "okta.request_executor"
+  ];
+
+  meta = with lib; {
+    description = "Python SDK for the Okta Management API";
+    homepage = "https://github.com/okta/okta-sdk-python";
+    changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jbgosselin ];
+  };
+}

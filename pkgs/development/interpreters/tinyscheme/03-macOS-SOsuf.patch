@@ -1,0 +1,13 @@
+diff --git a/makefile b/makefile
+index 4c111a1..8d9e02e 100644
+--- a/makefile
++++ b/makefile
+@@ -21,7 +21,7 @@
+ CC := $(CC) -fpic -pedantic
+ DEBUG=-g -Wall -Wno-char-subscripts -O
+ Osuf=o
+-SOsuf=so
++SOsuf=dylib
+ LIBsuf=a
+ EXE_EXT=
+ LIBPREFIX=lib

@@ -1,0 +1,20 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colsole (0.8.2)
+    completely (0.5.2)
+      colsole (~> 0.6)
+      mister_bin (~> 0.7.2)
+    docopt (0.6.1)
+    mister_bin (0.7.3)
+      colsole (~> 0.7)
+      docopt (~> 0.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  completely
+
+BUNDLED WITH
+   2.4.5

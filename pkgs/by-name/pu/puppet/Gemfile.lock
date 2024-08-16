@@ -1,0 +1,37 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    concurrent-ruby (1.2.3)
+    deep_merge (1.2.2)
+    facter (4.7.0)
+      hocon (~> 1.3)
+      thor (>= 1.0.1, < 1.3)
+    fast_gettext (2.3.0)
+    hocon (1.4.0)
+    locale (2.1.4)
+    multi_json (1.15.0)
+    puppet (8.6.0)
+      concurrent-ruby (~> 1.0)
+      deep_merge (~> 1.0)
+      facter (>= 4.3.0, < 5)
+      fast_gettext (>= 2.1, < 3)
+      locale (~> 2.1)
+      multi_json (~> 1.13)
+      puppet-resource_api (~> 1.5)
+      scanf (~> 1.0)
+      semantic_puppet (~> 1.0)
+    puppet-resource_api (1.9.0)
+      hocon (>= 1.0)
+    scanf (1.0.0)
+    semantic_puppet (1.1.0)
+    thor (1.2.2)
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  puppet
+
+BUNDLED WITH
+   2.5.9
