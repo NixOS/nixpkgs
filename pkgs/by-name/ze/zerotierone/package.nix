@@ -35,7 +35,6 @@ in stdenv.mkDerivation {
       "rustfsm-0.1.0" = "sha256-AYMk31QuwB1R/yr1wNl9MSWL52ERJMtkR4aSPf2waWs=";
     };
   };
-  patches = [ ./0001-darwin-disable-link-time-optimization.patch ];
   postPatch = "cp ${./Cargo.lock} Cargo.lock";
 
   preConfigure = ''
@@ -82,7 +81,7 @@ in stdenv.mkDerivation {
       echo "You may need to update MACOSX_DEPLOYMENT_TARGET to match the value in make-mac.mk"
       exit 1
     fi
-    (cd rustybits && MACOSX_DEPLOYMENT_TARGET=10.13 cargo build -p zeroidc --release)
+    (cd rustybits && MACOSX_DEPLOYMENT_TARGET=10.13 cargo build -p zeroidc --release --config profile.release.lto=true)
 
     cp \
       ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
