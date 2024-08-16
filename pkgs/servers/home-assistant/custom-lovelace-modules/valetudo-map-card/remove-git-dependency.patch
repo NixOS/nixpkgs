@@ -1,0 +1,64 @@
+diff --git a/package-lock.json b/package-lock.json
+index cce05ba..36020f8 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "lovelace-valetudo-map-card",
+-  "version": "2022.08.0",
++  "version": "2023.04.0",
+   "lockfileVersion": 2,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "lovelace-valetudo-map-card",
+-      "version": "2022.08.0",
++      "version": "2023.04.0",
+       "license": "MIT",
+       "dependencies": {
+         "custom-card-helpers": "1.9.0"
+@@ -21,7 +21,6 @@
+         "eslint-plugin-jsdoc": "39.3.0",
+         "eslint-plugin-regexp": "1.7.0",
+         "eslint-plugin-sort-keys-fix": "1.1.2",
+-        "eslint-plugin-sort-requires": "git+https://npm@github.com/Hypfer/eslint-plugin-sort-requires.git#2.1.1",
+         "pako": "2.0.4",
+         "rollup": "2.58.0",
+         "rollup-plugin-babel": "4.4.0",
+@@ -1596,12 +1595,6 @@
+         "node": ">=6.0.0"
+       }
+     },
+-    "node_modules/eslint-plugin-sort-requires": {
+-      "version": "2.1.0",
+-      "resolved": "git+https://npm@github.com/Hypfer/eslint-plugin-sort-requires.git#3e216dd9e9589b87671a3e7bf4084a0bd96e920e",
+-      "dev": true,
+-      "license": "MIT"
+-    },
+     "node_modules/eslint-scope": {
+       "version": "7.1.1",
+       "resolved": "https://registry.npmjs.org/eslint-scope/-/eslint-scope-7.1.1.tgz",
+@@ -4358,11 +4351,6 @@
+         }
+       }
+     },
+-    "eslint-plugin-sort-requires": {
+-      "version": "git+https://npm@github.com/Hypfer/eslint-plugin-sort-requires.git#3e216dd9e9589b87671a3e7bf4084a0bd96e920e",
+-      "dev": true,
+-      "from": "eslint-plugin-sort-requires@git+https://npm@github.com/Hypfer/eslint-plugin-sort-requires.git#2.1.1"
+-    },
+     "eslint-scope": {
+       "version": "7.1.1",
+       "resolved": "https://registry.npmjs.org/eslint-scope/-/eslint-scope-7.1.1.tgz",
+diff --git a/package.json b/package.json
+index 85a9d35..d8c6865 100644
+--- a/package.json
++++ b/package.json
+@@ -23,7 +23,6 @@
+     "eslint-plugin-jsdoc": "39.3.0",
+     "eslint-plugin-regexp": "1.7.0",
+     "eslint-plugin-sort-keys-fix": "1.1.2",
+-    "eslint-plugin-sort-requires": "git+https://npm@github.com/Hypfer/eslint-plugin-sort-requires.git#2.1.1",
+     "@typescript-eslint/eslint-plugin": "5.25.0",
+     "@typescript-eslint/experimental-utils": "5.25.0",
+     "@typescript-eslint/parser": "5.25.0",

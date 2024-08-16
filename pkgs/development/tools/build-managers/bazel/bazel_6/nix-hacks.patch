@@ -1,0 +1,40 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+index 25fbdcac9d..49616d37df 100644
+--- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
++++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+@@ -568,22 +568,7 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+       String content;
+       try {
+         content = FileSystemUtils.readContent(markerPath, StandardCharsets.UTF_8);
+-        String markerRuleKey = readMarkerFile(content, markerData);
+-        boolean verified = false;
+-        if (Preconditions.checkNotNull(ruleKey).equals(markerRuleKey)) {
+-          verified = handler.verifyMarkerData(rule, markerData, env);
+-          if (env.valuesMissing()) {
+-            return null;
+-          }
+-        }
+-
+-        if (verified) {
+-          return new Fingerprint().addString(content).digestAndReset();
+-        } else {
+-          // So that we are in a consistent state if something happens while fetching the repository
+-          markerPath.delete();
+-          return null;
+-        }
++        return new Fingerprint().addString(content).digestAndReset();
+       } catch (IOException e) {
+         throw new RepositoryFunctionException(e, Transience.TRANSIENT);
+       }
+diff --git a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+index 1a45b8a3a2..a6b73213f6 100644
+--- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
++++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+@@ -152,7 +152,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
+     ProcessBuilder builder = new ProcessBuilder();
+     builder.command(params.getArgv());
+     if (params.getEnv() != null) {
+-      builder.environment().clear();
+       builder.environment().putAll(params.getEnv());
+     }
+ 

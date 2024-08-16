@@ -1,0 +1,43 @@
+commit 56a60ee50122613d3a356ce74b4bd77b5e7be235
+Author: Tim Kosse <tim.kosse@filezilla-project.org>
+Date:   Sat Aug 26 15:37:30 2017 +0200
+
+    If a wxTopLevelWindow has been instanced, but Create has not been called, calling Destroy on the window results in an assertion in Show(false), at least under wxGTK. Fix this by only hiding a top level window during destruction if it is actually shown.
+
+diff --git a/src/common/toplvcmn.cpp b/src/common/toplvcmn.cpp
+index ef693690c5..8d07812031 100644
+--- a/src/common/toplvcmn.cpp
++++ b/src/common/toplvcmn.cpp
+@@ -122,19 +122,21 @@ bool wxTopLevelWindowBase::Destroy()
+     // any more as no events will be sent to the hidden window and without idle
+     // events we won't prune wxPendingDelete list and the application won't
+     // terminate
+-    for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+-                                     end = wxTopLevelWindows.end();
+-          i != end;
+-          ++i )
+-    {
+-        wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
+-        if ( win != this && win->IsShown() )
++    if ( IsShown() ) {
++        for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
++                                         end = wxTopLevelWindows.end();
++              i != end;
++              ++i )
+         {
+-            // there remains at least one other visible TLW, we can hide this
+-            // one
+-            Hide();
++            wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
++            if ( win != this && win->IsShown() )
++            {
++                // there remains at least one other visible TLW, we can hide this
++                // one
++                Hide();
+ 
+-            break;
++                break;
++            }
+         }
+     }
+ 

@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 9048e45..0fb1f5a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -26,7 +26,6 @@ site/index.html: darkman.1
+ 	mandoc -T html -O style=man-style.css < darkman.1 > site/index.html
+ 
+ install: build
+-	@install -Dm755 darkman 	${DESTDIR}${PREFIX}/bin/darkman
+ 	@install -Dm644 darkman.service	${DESTDIR}${PREFIX}/lib/systemd/user/darkman.service
+ 	@install -Dm644 darkman.1	${DESTDIR}${PREFIX}/share/man/man1/darkman.1
+ 	@install -Dm644 LICENCE 	${DESTDIR}${PREFIX}/share/licenses/darkman/LICENCE

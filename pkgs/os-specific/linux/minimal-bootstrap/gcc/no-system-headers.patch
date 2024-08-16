@@ -1,0 +1,11 @@
+--- a/gcc/Makefile.in
++++ b/gcc/Makefile.in
+@@ -440,7 +440,7 @@ LINKER_PLUGIN_API_H = $(srcdir)/../include/plugin-api.h
+ LTO_SYMTAB_H = $(srcdir)/../include/lto-symtab.h
+ 
+ # Default native SYSTEM_HEADER_DIR, to be overridden by targets.
+-NATIVE_SYSTEM_HEADER_DIR = /usr/include
++# NATIVE_SYSTEM_HEADER_DIR = /usr/include
+ # Default cross SYSTEM_HEADER_DIR, to be overridden by targets.
+ CROSS_SYSTEM_HEADER_DIR = @CROSS_SYSTEM_HEADER_DIR@
+ 

@@ -1,0 +1,23 @@
+getVersion() {
+    local dir="$1"
+    rev=
+    gitDir="$dir/.git"
+    if [ -e "$gitDir" ]; then
+        if [ -z "$(type -P git)" ]; then
+            echo "warning: Git not found; cannot figure out revision of $dir" >&2
+            return
+        fi
+        cd "$dir"
+        rev=$(git --git-dir="$gitDir" rev-parse --short HEAD)
+        if git --git-dir="$gitDir" describe --always --dirty | grep -q dirty; then
+            rev+=M
+        fi
+    fi
+}
+
+if nixpkgs=$(nix-instantiate --find-file nixpkgs "$@"); then
+    getVersion $nixpkgs
+    if [ -n "$rev" ]; then
+        echo ".git.$rev"
+    fi
+fi
