@@ -12,12 +12,15 @@ let
     inherit fetchpatch;
   };
 
-  upstreamPatchList = lib.lists.flatten [
-    upstreamPatches.QUBES_REPRODUCIBLE_BUILDS
-    upstreamPatches.XSA_458
-    upstreamPatches.XSA_460
-    upstreamPatches.XSA_461
-  ];
+  upstreamPatchList = lib.lists.flatten (
+    with upstreamPatches;
+    [
+      QUBES_REPRODUCIBLE_BUILDS
+      XSA_458
+      XSA_460
+      XSA_461
+    ]
+  );
 in
 
 callPackage (import ../generic/default.nix {

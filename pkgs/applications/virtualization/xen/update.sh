@@ -120,11 +120,10 @@ for version in "${supportedVersions[@]}"; do
     echo -e "Found the following patches:\n  \e[1;32mXen\e[0m:     \e[1;33m$discoveredXenPatchesEcho\e[0m\n  \e[1;36mQEMU\e[0m:    \e[1;33m$discoveredQEMUPatchesEcho\e[0m\n  \e[1;36mSeaBIOS\e[0m: \e[1;33m$discoveredSeaBIOSPatchesEcho\e[0m\n  \e[1;36mOVMF\e[0m:    \e[1;33m$discoveredOVMFPatchesEcho\e[0m\n  \e[1;36miPXE\e[0m:    \e[1;33m$discoveredIPXEPatchesEcho\e[0m"
 
     # Prepare patches that are called in ./patches.nix.
-    defaultPatchListInit=("QUBES_REPRODUCIBLE_BUILDS" "XSA_458")
+    defaultPatchListInit=("QUBES_REPRODUCIBLE_BUILDS" "XSA_458" "XSA_460" "XSA_461" )
     read -r -a defaultPatchList -p $'\nWould you like to override the \e[1;34mupstreamPatches\e[0m list for \e[1;32mXen '"$version"$'\e[0m? If no, press \e[1;34menter\e[0m to use the default patch list: [ \e[1;34m'"${defaultPatchListInit[*]}"$' \e[0m]: '
     defaultPatchList=(${defaultPatchList[@]:-${defaultPatchListInit[@]}})
-    spaceSeparatedPatchList=${defaultPatchList[*]}
-    upstreamPatches="upstreamPatches.${spaceSeparatedPatchList// / upstreamPatches.}"
+    upstreamPatches=${defaultPatchList[*]}
 
     # Write and format default.nix file.
     echo -e "\nWriting updated \e[1;34mversionDefinition\e[0m..."
@@ -143,9 +142,9 @@ let
     inherit fetchpatch;
   };
 
-  upstreamPatchList = lib.lists.flatten [
+  upstreamPatchList = lib.lists.flatten (with upstreamPatches; [
     $upstreamPatches
-  ];
+  ]);
 in
 
 callPackage (import ../generic/default.nix {
