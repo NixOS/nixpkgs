@@ -228,9 +228,9 @@ let
   };
 
   # See opencv/cmake/OpenCVDownload.cmake
-  installExtraFiles = extra: with lib; ''
+  installExtraFiles = extra: ''
     mkdir -p "${extra.dst}"
-  '' + concatStrings (flip mapAttrsToList extra.files (name: md5: ''
+  '' + lib.concatStrings (lib.flip lib.mapAttrsToList extra.files (name: md5: ''
     ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
   ''));
   installExtraFile = extra: ''
@@ -332,15 +332,15 @@ effectiveStdenv.mkDerivation {
   ] ++ lib.optionals (enableFfmpeg && effectiveStdenv.isDarwin) [
     bzip2
     VideoDecodeAcceleration
-  ] ++ lib.optionals (enableGStreamer && effectiveStdenv.isLinux) (with gst_all_1; [
+  ] ++ lib.optionals (enableGStreamer && effectiveStdenv.isLinux) [
     elfutils
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
     libunwind
     orc
     zstd
-  ]) ++ lib.optionals enableOvis [
+  ] ++ lib.optionals enableOvis [
     ogre
   ] ++ lib.optionals enableGPhoto2 [
     libgphoto2
@@ -371,21 +371,21 @@ effectiveStdenv.mkDerivation {
   ] ++ lib.optionals enableDocs [
     doxygen
     graphviz-nox
-  ] ++ lib.optionals enableCuda (with cudaPackages; [
-    cuda_cudart
-    cuda_cccl # <thrust/*>
-    libnpp # npp.h
-    nvidia-optical-flow-sdk
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.libnpp # npp.h
+    cudaPackages.nvidia-optical-flow-sdk
   ] ++ lib.optionals enableCublas [
     # May start using the default $out instead once
     # https://github.com/NixOS/nixpkgs/issues/271792
     # has been addressed
-    libcublas # cublas_v2.h
+    cudaPackages.libcublas # cublas_v2.h
   ] ++ lib.optionals enableCudnn [
-    cudnn # cudnn.h
+    cudaPackages.cudnn # cudnn.h
   ] ++ lib.optionals enableCufft [
-    libcufft # cufft.h
-  ]);
+    cudaPackages.libcufft # cufft.h
+  ];
 
   propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
 
@@ -549,11 +549,11 @@ effectiveStdenv.mkDerivation {
     };
   } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
-    license = with licenses; if enableUnfree then unfree else bsd3;
-    maintainers = with maintainers; [ basvandijk ];
-    platforms = with platforms; linux ++ darwin;
+    license = if enableUnfree then lib.licenses.unfree else lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ basvandijk ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
