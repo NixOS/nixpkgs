@@ -1,7 +1,5 @@
 { lib
-# Python 3.12 demonstrates a peculiar segmentation fault with pyqt5. Using
-# pyqt6 with Python 3.12 should work, but this is not released yet.
-, python311Packages
+, python312Packages
 , fetchFromGitHub
 
 , chromaprint
@@ -13,7 +11,7 @@
 }:
 
 let
-  pythonPackages = python311Packages;
+  pythonPackages = python312Packages;
   pyqt5 =
     if enablePlayback then
       pythonPackages.pyqt5-multimedia
