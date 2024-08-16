@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     qt5.wrapQtAppsHook
+    pythonPackages.pytestCheckHook
   ] ++ lib.optionals (pyqt5.multimediaEnabled) [
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -66,6 +67,7 @@ pythonPackages.buildPythonApplication rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+  doCheck = true;
 
   # In order to spare double wrapping, we use:
   preFixup = ''
