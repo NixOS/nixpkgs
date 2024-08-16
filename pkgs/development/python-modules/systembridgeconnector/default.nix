@@ -29,6 +29,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail ">=" " #"
+
     substituteInPlace systembridgeconnector/_version.py \
       --replace-fail ", dev=0" ""
   '';
@@ -37,6 +40,8 @@ buildPythonPackage rec {
     incremental
     setuptools
   ];
+
+  pythonRelaxDeps = [ "incremental" ];
 
   dependencies = [
     aiohttp
