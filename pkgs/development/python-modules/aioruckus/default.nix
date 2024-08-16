@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aioruckus";
-  version = "0.38";
+  version = "0.40";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ms264556";
     repo = "aioruckus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h32EmiCQ6REciGMl0wDV8BSUezsFRo76RqUBeD2+pbY=";
+    hash = "sha256-oEm0+ktEJHJPg4PUPfSmG9SyVRDrxs7kosQ0tIY+bRc=";
   };
 
   postPatch = ''
@@ -30,9 +30,7 @@ buildPythonPackage rec {
       --replace-fail "setuptools>=68.1" "setuptools"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
