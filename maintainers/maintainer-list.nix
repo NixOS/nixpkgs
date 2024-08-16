@@ -15437,6 +15437,12 @@
     github = "OlivierNicole";
     githubId = 14031333;
   };
+  ottoblep = {
+    name = "Severin Lochschmidt";
+    email = "seviron53@gmail.com";
+    github = "ottoblep";
+    githubId = 57066925;
+  };
   otwieracz = {
     email = "slawek@otwiera.cz";
     github = "otwieracz";
