@@ -158,7 +158,7 @@ let
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
-      } // lib.optionalAttrs (engine != null && engine.meta.available) {
+      } // lib.optionalAttrs (engine != null) {
         inherit engine;
       };
 

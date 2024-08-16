@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, glib, libpulseaudio }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libcardiacarrest";
   version = "12.2.8"; # <PA API version>.<version>
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
     moveToOutput $out/lib/cmake $dev
   '';
 
-  meta = src.meta // {
+  meta = with lib; src.meta // {
     description = "Trivial implementation of libpulse PulseAudio library API";
     longDescription = ''
       libcardiacarrest is a trivial implementation of libpulse
