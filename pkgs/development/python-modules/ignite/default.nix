@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.5.0.post2";
+  version = "0.5.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Lg7ASODYwWWhC45X4+Bk50gSlSWwgn2tM4atLXWbQLI=";
+    hash = "sha256-J0xrqAGwH0bAs59T7zA8irMWOGbE2+Zd9kwqxYUYYMA=";
   };
 
   nativeCheckInputs = [
