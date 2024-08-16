@@ -1,29 +1,29 @@
 { lib, stdenv, fetchFromGitLab, python3Packages, texinfo }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pypkgs = python3Packages;
+
+in
+pypkgs.buildPythonApplication rec {
   pname = "rubber";
-  version = "1.6.0";
+  version = "1.6.6";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "latex-rubber";
     repo = "rubber";
     rev = version;
-    hash = "sha256-7sv9N3PES5N41yYyXNWfaZ6IhLW6SqMiCHdamsSPQzg=";
+    hash = "sha256-C26PN3jyV6qwSjgPem54bykZrpKj+n8iHYYUyR+8dgI=";
   };
 
-  # I'm sure there is a better way to pass these parameters to the build script...
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'pdf = True' 'pdf = False' \
-      --replace '$base/info'  'share/info' \
-      --replace '$base/man'   'share/man' \
-      --replace '$base/share' 'share'
+    sed -i -e '/texi2dvi/d' hatch_build.py
 
     substituteInPlace tests/run.sh \
-      --replace /var/tmp /tmp
+      --replace-fail /var/tmp /tmp
   '';
 
-  nativeBuildInputs = [ texinfo ];
+  nativeBuildInputs = [ pypkgs.hatchling texinfo ];
 
   checkPhase = ''
     runHook preCheck
