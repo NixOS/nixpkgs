@@ -51,7 +51,7 @@ buildPythonApplication rec {
     libadwaita
   ];
 
-  build-system = [ python3Packages.poetry-core ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     pycairo
