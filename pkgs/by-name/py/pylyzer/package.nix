@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, git
-, python3
-, makeWrapper
-, writeScriptBin
-, darwin
-, which
-, nix-update-script
-, testers
-, pylyzer
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  git,
+  python3,
+  makeWrapper,
+  writeScriptBin,
+  darwin,
+  which,
+  nix-update-script,
+  testers,
+  pylyzer,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.58";
+  version = "0.0.59";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IhfWl8Txhlddrr/Rny5ZyJaOKLft6R4ghYlwu6iOJsk=";
+    hash = "sha256-8XwNdxPREqrmd3IoD+Z/uTEGs3Qk6+vGa4S+6qje1Ic=";
   };
 
   cargoLock = {
@@ -35,15 +36,9 @@ rustPlatform.buildRustPackage rec {
     git
     python3
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [
-    (writeScriptBin "diskutil" "")
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ (writeScriptBin "diskutil" "") ];
 
-  buildInputs = [
-    python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = [ python3 ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -54,9 +49,7 @@ rustPlatform.buildRustPackage rec {
     cp -r $HOME/.erg/ $out/lib/erg
   '';
 
-  nativeCheckInputs = [
-    which
-  ];
+  nativeCheckInputs = [ which ];
 
   checkFlags = [
     # this test causes stack overflow

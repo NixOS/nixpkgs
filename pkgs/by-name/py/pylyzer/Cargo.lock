@@ -93,9 +93,12 @@ checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
 
 [[package]]
 name = "cc"
-version = "1.1.8"
+version = "1.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "504bdec147f2cc13c8b57ed9401fd8a147cc66b67ad5cb241394244f2c947549"
+checksum = "68064e60dbf1f17005c2fde4d07c16d8baa506fd7ffed8ccab702d93617975c7"
+dependencies = [
+ "shlex",
+]
 
 [[package]]
 name = "cfg-if"
@@ -125,7 +128,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rustc_version",
- "syn 2.0.72",
+ "syn 2.0.74",
 ]
 
 [[package]]
@@ -136,9 +139,9 @@ checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 
 [[package]]
 name = "els"
-version = "0.1.54-nightly.0"
+version = "0.1.54-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fb27dc0754e2490b8984d95f4fe6368258de544eedd37798a314acfeb5ccfc6"
+checksum = "19d774d511ed129b8438a9633b17f3303768fa7a3941372c1650e61a7bc7b00c"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -150,9 +153,9 @@ dependencies = [
 
 [[package]]
 name = "erg_common"
-version = "0.6.42-nightly.0"
+version = "0.6.42-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "415899164e7873f66eecad5ad37683c5fa31c038802033f35ad08f3fa38882dc"
+checksum = "b084d80afdb59d10d300595b2860868e52d1a0a72ad98ac995c9f5abfba9acd8"
 dependencies = [
  "backtrace-on-stack-overflow",
  "erg_proc_macros",
@@ -162,9 +165,9 @@ dependencies = [
 
 [[package]]
 name = "erg_compiler"
-version = "0.6.42-nightly.0"
+version = "0.6.42-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "048b3d74d5ca2c5279e18f15fd5997fe0cdfcad0a8d6ff2e4e238a8b76d86b36"
+checksum = "805b009c668055c8d72d11f8b26853c9a65a2744548909beda8b32bd4058a375"
 dependencies = [
  "erg_common",
  "erg_parser",
@@ -172,9 +175,9 @@ dependencies = [
 
 [[package]]
 name = "erg_parser"
-version = "0.6.42-nightly.0"
+version = "0.6.42-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca774922a3555cb1973ead24f9ad27056057480bbcfff2ccab0b8b3637517054"
+checksum = "4ec4f2cc69904baae639ff154323d1cc0e100ca2785bfb6d8c392c88e0560771"
 dependencies = [
  "erg_common",
  "erg_proc_macros",
@@ -183,9 +186,9 @@ dependencies = [
 
 [[package]]
 name = "erg_proc_macros"
-version = "0.6.42-nightly.0"
+version = "0.6.42-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a7500b1a02978ccf36cef9eecb31f99911a0b56753589e375f0a51b6ff57b750"
+checksum = "6234abaef2fed929391add7520409890b2b7ee7029f2a5dcb9c2f4905bb7556b"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -247,14 +250,14 @@ dependencies = [
 
 [[package]]
 name = "is-macro"
-version = "0.3.5"
+version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59a85abdc13717906baccb5a1e435556ce0df215f242892f721dff62bf25288f"
+checksum = "2069faacbe981460232f880d26bf3c7634e322d49053aa48c27e3ae642f728f1"
 dependencies = [
  "Inflector",
  "proc-macro2",
  "quote",
- "syn 2.0.72",
+ "syn 2.0.74",
 ]
 
 [[package]]
@@ -280,9 +283,9 @@ checksum = "507460a910eb7b32ee961886ff48539633b788a36b65692b95f225b844c82553"
 
 [[package]]
 name = "libc"
-version = "0.2.155"
+version = "0.2.156"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
+checksum = "a5f43f184355eefb8d17fc948dbecf6c13be3c141f20d834ae842193a448c72a"
 
 [[package]]
 name = "libm"
@@ -551,7 +554,7 @@ dependencies = [
 
 [[package]]
 name = "py2erg"
-version = "0.0.58"
+version = "0.0.59"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -561,7 +564,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer"
-version = "0.0.58"
+version = "0.0.59"
 dependencies = [
  "els",
  "erg_common",
@@ -713,29 +716,29 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "serde"
-version = "1.0.205"
+version = "1.0.208"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e33aedb1a7135da52b7c21791455563facbbcc43d0f0f66165b42c21b3dfb150"
+checksum = "cff085d2cb684faa248efb494c39b68e522822ac0de72ccf08109abde717cfb2"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.205"
+version = "1.0.208"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "692d6f5ac90220161d6774db30c662202721e64aed9058d2c394f451261420c1"
+checksum = "24008e81ff7613ed8e5ba0cfaf24e2c2f1e5b8a0495711e44fcd4882fca62bcf"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.72",
+ "syn 2.0.74",
 ]
 
 [[package]]
 name = "serde_json"
-version = "1.0.122"
+version = "1.0.125"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "784b6203951c57ff748476b126ccb5e8e2959a5c19e5c617ab1956be3dbc68da"
+checksum = "83c8e735a073ccf5be70aa8066aa984eaf2fa000db6c8d0100ae605b366d31ed"
 dependencies = [
  "itoa",
  "memchr",
@@ -751,8 +754,14 @@ checksum = "6c64451ba24fc7a6a2d60fc75dd9c83c90903b19028d4eff35e88fc1e86564e9"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.72",
+ "syn 2.0.74",
 ]
+
+[[package]]
+name = "shlex"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
 name = "siphasher"
@@ -785,9 +794,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.72"
+version = "2.0.74"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc4b9b9bf2add8093d3f2c0204471e951b2285580335de42f9d2534f3ae7a8af"
+checksum = "1fceb41e3d546d0bd83421d3409b1460cc7444cd389341a4c880fe7a042cb3d7"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1041,5 +1050,5 @@ checksum = "fa4f8080344d4671fb4e831a13ad1e68092748387dfc4f55e356242fae12ce3e"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.72",
+ "syn 2.0.74",
 ]
