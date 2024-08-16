@@ -21,7 +21,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.6";
+  version = "10.4.7";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-erIIXufD/xwDsCma77JoMQcCJsRJvR6IntiFD11UXjk=";
+    hash = "sha256-77biSeoLPesSy/GpPGnyZrBWJuJbrlFa79Cyc1IQH0c=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -65,16 +65,16 @@ buildGoModule rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = rec {
-      x86_64-linux = "sha256-3CZgs732c6Z64t2sfWjPAmMFKVTzoolv2TwrbjeRCBA=";
+      x86_64-linux = "sha256-mgRHCeqI0KmDETFhNMRwAk8XYep6mxSDLD/J/SZ8kxU=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-NKEajOe9uDZw0MF5leiKBIRH1CHUELRho7gyCa96BO8=";
+      aarch64-darwin = "sha256-fUCgsxgSFoMgKLUGJW2G516o4Nwi1HZ65EHdmByx4mQ=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-3C56ong0jBcN8D6jEOt4+fJRLl/FzaAwfQi5EkDl/cE=";
+  vendorHash = "sha256-ntfRKUKsZEtqDykZloIddG39AbCt5tzWUKI0kpARMUo=";
 
   proxyVendor = true;
 
