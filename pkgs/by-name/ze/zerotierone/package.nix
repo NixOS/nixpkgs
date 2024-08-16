@@ -12,18 +12,17 @@
 , zlib
 , libiconv
 , darwin
-, fetchpatch
 }:
 
 let
   pname = "zerotierone";
-  version = "1.14.0";
+  version = "1.14.0-unstable-2024-07-31";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
-    rev = version;
-    sha256 = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
+    rev = "f176e2539e10e8c0f61eb1d2e1f0e690a267a646";
+    hash = "sha256-pGozwaBy9eMA8izYtGhhmJeHzGjHFLID7WC01977XxQ=";
   };
 
 in stdenv.mkDerivation {
@@ -33,19 +32,11 @@ in stdenv.mkDerivation {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "jwt-0.16.0" = "sha256-P5aJnNlcLe9sBtXZzfqHdRvxNfm6DPBcfcKOVeLZxcM=";
-      "rustfsm-0.1.0" = "sha256-q7J9QgN67iuoNhQC8SDVzUkjCNRXGiNCkE8OsQc5+oI=";
+      "rustfsm-0.1.0" = "sha256-AYMk31QuwB1R/yr1wNl9MSWL52ERJMtkR4aSPf2waWs=";
     };
   };
-  patches = [
-    # https://github.com/zerotier/ZeroTierOne/pull/2314
-    (fetchpatch {
-      url = "https://github.com/zerotier/ZeroTierOne/commit/f9c6ee0181acb1b77605d9a4e4106ac79aaacca3.patch";
-      hash = "sha256-zw7KmaxiCH99Y0wQtOQM4u0ruxiePhvv/birxMQioJU=";
-    })
-    ./0001-darwin-disable-link-time-optimization.patch
-  ];
+  patches = [ ./0001-darwin-disable-link-time-optimization.patch ];
   postPatch = "cp ${./Cargo.lock} Cargo.lock";
-
 
   preConfigure = ''
     cmp ./Cargo.lock ./rustybits/Cargo.lock || {
