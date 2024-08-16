@@ -33,9 +33,9 @@ buildPythonPackage rec {
     hash = "sha256-SeK0CZesGatPQdwjr4u28m+ZIojlM02GCftX/q8Dg4g=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiocoap
     aiohappyeyeballs
     async-interrupt
@@ -76,14 +76,14 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module that implements the HomeKit protocol";
-    mainProgram = "aiohomekitctl";
     longDescription = ''
       This Python library implements the HomeKit protocol for controlling
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
     changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aiohomekitctl";
   };
 }
