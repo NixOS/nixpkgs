@@ -80,7 +80,10 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    LIBGIT2_NO_VENDOR = 1;
+    # vendor libgit2 for now, due to incompatible versions
+    # flip back to nixpkgs libgit2 after the deps bump is released
+    # see: https://github.com/nix-community/nix-init/pull/469
+    #LIBGIT2_NO_VENDOR = 1;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;
