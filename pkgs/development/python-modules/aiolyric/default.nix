@@ -24,7 +24,15 @@ buildPythonPackage rec {
     hash = "sha256-pN/F4Rdov06sm1yfJQEzmWyujWVeVU+bNGGkgnN4jYw=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
+  '';
+
+  build-system = [
+    incremental
+    setuptools
+  ];
 
   dependencies = [
     aiohttp
