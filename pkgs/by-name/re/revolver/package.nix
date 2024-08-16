@@ -12,7 +12,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "revolver";
-  version = "0.2.4-unstable-2020-09-30";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "molovo";
