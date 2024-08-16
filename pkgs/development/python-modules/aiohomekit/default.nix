@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiocoap
     aiohappyeyeballs
     async-interrupt
