@@ -25,9 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-eb1sY5qxH36r5dGK2aIPYu6CocQ1EkqHbP/YA49sJME=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ six ];
+  dependencies = [ six ];
 
   nativeCheckInputs = [
     httplib2
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module that acts as a WSGI application in place of a real URI for testing";
     homepage = "https://github.com/cdent/wsgi-intercept";
+    changelog = "https://github.com/cdent/wsgi-intercept/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mikecm ];
   };
