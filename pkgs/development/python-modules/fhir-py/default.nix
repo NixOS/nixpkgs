@@ -9,6 +9,7 @@
   requests,
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
   responses,
 }:
 
@@ -26,15 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-kYqoRso1ypN5novRxMMzz1h2NGNybbw5lK4+HErG79I=";
   };
 
-  preBuild = ''
-    substituteInPlace pyproject.toml  \
-      --replace "--cov=fhirpy" ""  \
-      --replace "--cov-report=xml" ""
-  '';
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [ flit-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pytz
     requests
@@ -43,6 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
     responses
   ];
 
