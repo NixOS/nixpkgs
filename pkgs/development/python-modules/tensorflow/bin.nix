@@ -95,7 +95,8 @@ buildPythonPackage {
   build-system = [
     distutils
     wheel
-  ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
+  ] ++ lib.optionals cudaSupport ([ addDriverRunpath ]
+    ++ lib.optionals cudaPackages.cudaFlags.isJetsonBuild [ cudaPackages.autoAddCudaCompatRunpath ]);
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
