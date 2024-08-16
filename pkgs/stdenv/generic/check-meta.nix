@@ -452,11 +452,15 @@ let
       { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
     else if unstructuredArrays attrs != [] then
       let
-        variables = builtins.concatStringsSep ", " (unstructuredArrays attrs);
+        quote = s: ''"${s}"'';
+        variables = unstructuredArrays attrs;
+        variablesStr = builtins.concatStringsSep ", " (map quote variables);
+        usePlural = variables != [(builtins.head variables)];
+        plural = optionalString usePlural "s";
       in
       { valid = "warn";
         reason = "unstructured-arrays";
-        errormsg = "The following variables will be misinterpreted as single element bash arrays because __structuredAttrs is not set: ${variables}";
+        errormsg = "The variable${plural} ${variablesStr} will be misinterpreted as single element bash array${plural} because __structuredAttrs is not set";
       }
     # -----
     else validYes;
