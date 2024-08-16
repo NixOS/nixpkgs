@@ -310,6 +310,7 @@ let
     name = "efi-binutils";
     configureFlags = oldAttrs.configureFlags ++ [ "--enable-targets=x86_64-pep" ];
     doInstallCheck = false; # We get a spurious failure otherwise, due to a host/target mismatch.
+    meta.mainProgram = "ld"; # We only really care for `ld`.
   });
 in
 
@@ -405,14 +406,13 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "PREFIX=$(out)"
       "CONFIG_DIR=/etc"
-      "XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files"
       "XEN_SCRIPT_DIR=$(CONFIG_DIR)/xen/scripts"
       "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
     ]
     ++ lib.lists.optionals withEFI [
       "EFI_VENDOR=${efiVendor}"
       "INSTALL_EFI_STRIP=1"
-      "LD=${efiBinutils}/bin/ld" # See the comment in the efiBinutils definition above.
+      "LD=${lib.meta.getExe efiBinutils}" # See the comment in the efiBinutils definition above.
     ]
     # These flags set the CONFIG_* options in /boot/xen.config
     # and define if the default policy file is built. However,
