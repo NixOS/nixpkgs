@@ -21,13 +21,13 @@
 
 let
   common = rec {
-    version = "2.3.1";
+    version = "2.3.2";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       rev = version;
-      hash = "sha256-JmDMcxIQ0220O/vWw/9SyB1dH7MSJaPK/CKY44ViVjM=";
+      hash = "sha256-ffHLKHpqgVlYLGQ/Dc/6hW/inA98QdMJiv/fT2IrH7c=";
     };
 
     nativeBuildInputs = [
