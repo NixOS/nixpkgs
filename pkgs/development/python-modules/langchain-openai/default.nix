@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.1.17";
+  version = "0.1.22";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-ELD1KXCVx3SmiJodagtOHgBGKdjRWiRVCCNYcL63eCY=";
+    hash = "sha256-5UAijSTfQ6nQxdZvKHl2o01wDW6+Jphf38V+dAs7Ffk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -48,7 +48,6 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    langchain
     langchain-core
     openai
     tiktoken
