@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.8.1";
+  version = "2024.8.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -665,6 +665,8 @@
     "compensation" = ps: with ps; [
       numpy_1
     ];
+    "concord232" = ps: with ps; [
+    ]; # missing inputs: concord232
     "coned" = ps: with ps; [
     ];
     "config" = ps: with ps; [
