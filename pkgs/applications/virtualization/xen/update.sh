@@ -1,8 +1,9 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p gitMinimal curl gnupg nix-prefetch-git nixfmt-rfc-style
 # shellcheck disable=SC2206,SC2207 shell=bash
-set -e
-
+set -o errexit
+set -o pipefail
+set -o nounset
 
 # This script expects to be called in an interactive terminal somewhere inside Nixpkgs.
 echo "Preparing..."
