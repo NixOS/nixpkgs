@@ -224,7 +224,7 @@ in {
     };
 
     emergencyAccess = mkOption {
-      type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
+      type = with types; oneOf [ bool (passwdEntry str) ];
       description = ''
         Set to true for unauthenticated emergency access, and false for
         no emergency access.
