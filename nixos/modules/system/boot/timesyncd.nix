@@ -19,8 +19,7 @@ in
         '';
       };
       servers = mkOption {
-        default = config.networking.timeServers;
-        defaultText = literalExpression "config.networking.timeServers";
+        default = null;
         type = nullOr (listOf str);
         description = ''
           The set of NTP servers from which to synchronise.
@@ -28,6 +27,20 @@ in
           Setting this option to an empty list will write `NTP=` to the
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `NTP=` entirely.
+
+          See man:timesyncd.conf(5) for details.
+        '';
+      };
+      fallbackServers = mkOption {
+        default = config.networking.timeServers;
+        defaultText = literalExpression "config.networking.timeServers";
+        type = nullOr (listOf str);
+        description = ''
+          The set of fallback NTP servers from which to synchronise.
+
+          Setting this option to an empty list will write `FallbackNTP=` to the
+          `timesyncd.conf` file as opposed to setting this option to null which
+          will remove `FallbackNTP=` entirely.
 
           See man:timesyncd.conf(5) for details.
         '';
@@ -91,6 +104,9 @@ in
     ''
     + optionalString (cfg.servers != null) ''
       NTP=${concatStringsSep " " cfg.servers}
+    ''
+    + optionalString (cfg.fallbackServers != null) ''
+      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
     ''
     + cfg.extraConfig;
 
