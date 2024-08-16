@@ -1,6 +1,11 @@
 _handleCmdOutput(){
     local versionOutput
-    versionOutput="$(env --chdir=/ --argv0="$(basename "$1")" --ignore-environment "$@" 2>&1 || true)"
+    versionOutput="$(env \
+        --chdir=/ \
+        --argv0="$(basename "$1")" \
+        --ignore-environment \
+        "$@" 2>&1 \
+        || true)"
     if [[ "$versionOutput" =~ "$version" ]]; then
         echoPrefix="Successfully managed to"
     else
