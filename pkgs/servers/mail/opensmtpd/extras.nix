@@ -78,6 +78,6 @@ stdenv.mkDerivation rec {
     description = "Extra plugins for the OpenSMTPD mail server";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ekleog ];
+    maintainers = with maintainers; [ ];
   };
 }

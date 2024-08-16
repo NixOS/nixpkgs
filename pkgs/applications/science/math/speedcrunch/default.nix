@@ -30,7 +30,7 @@ mkDerivation rec {
       precisions, unlimited variable storage, intelligent automatic completion
       full keyboard-friendly and more than 15 built-in math function.
     '';
-    maintainers = with maintainers; [ gebner j0hax ];
+    maintainers = with maintainers; [ ];
     inherit (qtbase.meta) platforms;
     broken = stdenv.isDarwin;
   };
