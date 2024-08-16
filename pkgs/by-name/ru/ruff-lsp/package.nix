@@ -1,9 +1,12 @@
 {
   lib,
-  stdenv,
   python3,
   fetchFromGitHub,
+  stdenv,
   ruff,
+  nix-update-script,
+  testers,
+  ruff-lsp,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -52,6 +55,11 @@ python3.pkgs.buildPythonApplication rec {
     # PYTHONPATH is set in the Python script, which runs after the wrapper.
     "--unset PYTHONPATH"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = ruff-lsp; };
+  };
 
   meta = {
     changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
