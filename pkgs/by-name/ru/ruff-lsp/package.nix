@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, ruff
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  ruff,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     sed -i '/"ruff>=/d' pyproject.toml
   '';
 
-  build-system = with python3.pkgs; [
-    hatchling
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     packaging
@@ -60,6 +59,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/astral-sh/ruff-lsp";
     license = lib.licenses.mit;
     mainProgram = "ruff-lsp";
-    maintainers = with lib.maintainers; [ figsoda kalekseev ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      kalekseev
+    ];
   };
 }
