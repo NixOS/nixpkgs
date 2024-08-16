@@ -55,7 +55,7 @@ let
     "wasm64-wasi" "wasm32-wasi"
 
     # Windows
-    "x86_64-windows" "i686-windows"
+    "aarch64-windows" "x86_64-windows" "i686-windows"
   ];
 
   allParsed = map parse.mkSystemFromString all;
