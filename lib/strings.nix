@@ -1056,7 +1056,7 @@ rec {
     let
       string = toString arg;
     in
-      if match "[[:alnum:],._+:@%/-]*" string == null
+      if match "[[:alnum:],._+:@%/-]+" string == null
       then "'${replaceStrings ["'"] ["'\\''"] string}'"
       else string;
 

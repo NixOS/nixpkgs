@@ -475,6 +475,11 @@ runTests {
     expected = "'esc'\\''ape\nme'";
   };
 
+  testEscapeShellArgEmpty = {
+    expr = strings.escapeShellArg "";
+    expected = "''";
+  };
+
   testEscapeShellArgs = {
     expr = strings.escapeShellArgs ["one" "two three" "four'five"];
     expected = "one 'two three' 'four'\\''five'";
