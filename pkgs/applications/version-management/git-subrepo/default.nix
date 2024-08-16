@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-subrepo";
-  version = "0.4.6";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "ingydotnet";
     repo = "git-subrepo";
     rev = version;
-    sha256 = "sha256-83N0Ek6DawUrOc6s2Utzi8776bX4UTGS/a/OffkV44Y=";
+    sha256 = "sha256-Fwh4haGXVDsLexe/1kjUhY4lF6u5cTrAwivZiOkPig0=";
   };
 
   nativeBuildInputs = [

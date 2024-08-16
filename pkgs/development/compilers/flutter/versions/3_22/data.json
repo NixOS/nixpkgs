@@ -5,8 +5,14 @@
   "engineSwiftShaderRev": "2fa7e9b99ae4e70ea5ae2cc9c8d3afb43391384f",
   "channel": "stable",
   "engineHashes": {
-    "aarch64-linux": "sha256-OPgevqdMwKhXml+PS5Z1DW0wg843NVN57CiLbXve8kE=",
-    "x86_64-linux": "sha256-OPgevqdMwKhXml+PS5Z1DW0wg843NVN57CiLbXve8kE="
+    "aarch64-linux": {
+      "aarch64-linux": "sha256-MiokUhxz23/HANUv8pD4jrJuj3/EAZNbJVpovM9upKI=",
+      "x86_64-linux": "sha256-MiokUhxz23/HANUv8pD4jrJuj3/EAZNbJVpovM9upKI="
+    },
+    "x86_64-linux": {
+      "aarch64-linux": "sha256-UWVjNgF94dYG7nSX+Gu6B9500RAHw1EOxE0+QJhS+Ao=",
+      "x86_64-linux": "sha256-UWVjNgF94dYG7nSX+Gu6B9500RAHw1EOxE0+QJhS+Ao="
+    }
   },
   "dartVersion": "3.4.3",
   "dartHash": {

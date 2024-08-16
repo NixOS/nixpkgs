@@ -864,8 +864,6 @@ with pkgs;
 
   # Dotnet
 
-  csharp-ls = callPackage ../development/tools/language-servers/csharp-ls { };
-
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
   dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
@@ -8272,8 +8270,6 @@ with pkgs;
   goaccess = callPackage ../tools/misc/goaccess { };
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
-
-  godot_4 = callPackage ../development/tools/godot/4 { };
 
   godot3 = callPackage ../development/tools/godot/3 { };
 
@@ -17386,8 +17382,6 @@ with pkgs;
 
   postgres-lsp = callPackage ../development/tools/language-servers/postgres-lsp { };
 
-  pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
-
   ruff-lsp = python3Packages.callPackage ../development/tools/language-servers/ruff-lsp { };
 
   rune-languageserver = callPackage ../development/tools/language-servers/rune-languageserver { };
@@ -20467,12 +20461,21 @@ with pkgs;
   # Only supported on Linux and only on glibc
   glibcLocales =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
-    then callPackage ../development/libraries/glibc/locales.nix { }
-    else null;
+    then callPackage ../development/libraries/glibc/locales.nix {
+      stdenv = if (!stdenv.cc.isGNU) then
+        gccStdenv
+      else stdenv;
+      withLinuxHeaders = !stdenv.cc.isGNU;
+    } else null;
   glibcLocalesUtf8 =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
-    then callPackage ../development/libraries/glibc/locales.nix { allLocales = false; }
-    else null;
+    then callPackage ../development/libraries/glibc/locales.nix {
+      stdenv = if (!stdenv.cc.isGNU) then
+        gccStdenv
+      else stdenv;
+      withLinuxHeaders = !stdenv.cc.isGNU;
+      allLocales = false;
+    } else null;
 
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 
@@ -26872,7 +26875,6 @@ with pkgs;
 
   ocf-resource-agents = callPackage ../os-specific/linux/ocf-resource-agents { };
 
-  open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
   oxtools = callPackage ../os-specific/linux/oxtools { };
@@ -34419,8 +34421,6 @@ with pkgs;
 
   vpv = callPackage ../applications/graphics/vpv { };
 
-  vsce = callPackage ../development/tools/vsce { };
-
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
   vscode-fhs = vscode.fhs;
   vscode-fhsWithPackages = vscode.fhsWithPackages;
@@ -34442,13 +34442,11 @@ with pkgs;
   openvscode-server = callPackage ../servers/openvscode-server {
     nodejs = nodejs_18;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
-    inherit (nodePackages) node-gyp;
   };
 
   code-server = callPackage ../servers/code-server {
     nodejs = nodejs_20;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa CoreServices Security;
-    inherit (nodePackages) node-gyp;
   };
 
   vue = callPackage ../applications/misc/vue { };

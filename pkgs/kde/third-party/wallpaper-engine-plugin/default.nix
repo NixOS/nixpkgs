@@ -13,7 +13,7 @@
 }:
 mkKdeDerivation {
   pname = "wallpaper-engine-kde-plugin";
-  version = "qt6";
+  version = "0.5.5-unstable-2024-06-16";
 
   src = fetchFromGitHub {
     owner = "catsout";
@@ -25,6 +25,11 @@ mkKdeDerivation {
 
   patches = [ ./nix-plugin.patch ];
 
+  extraNativeBuildInputs = [
+    kpackage
+    pkg-config
+  ];
+
   extraBuildInputs = [
     extra-cmake-modules
     full
@@ -34,11 +39,6 @@ mkKdeDerivation {
   ];
 
   extraCmakeFlags = [ "-DUSE_PLASMAPKG=ON" ];
-
-  extraNativeBuildInputs = [
-    kpackage
-    pkg-config
-  ];
 
   postInstall =
     let
@@ -52,9 +52,9 @@ mkKdeDerivation {
     '';
 
   meta = with lib; {
-    description = "A KDE wallpaper plugin integrating Wallpaper Engine";
+    description = "KDE wallpaper plugin integrating Wallpaper Engine";
     homepage = "https://github.com/catsout/wallpaper-engine-kde-plugin";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ macronova ];
   };
 }
