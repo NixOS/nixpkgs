@@ -13,6 +13,7 @@
 , libXdmcp
 , libXrandr
 , spirv-headers
+, spirv-tools
 , vulkan-headers
 , vulkan-utility-libraries
 , wayland
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libffi
     libxcb
+    spirv-tools
     vulkan-headers
     vulkan-utility-libraries
     wayland
