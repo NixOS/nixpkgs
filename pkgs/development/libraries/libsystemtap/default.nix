@@ -16,11 +16,20 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ gettext python3 elfutils ];
+  nativeBuildInputs = [
+    gettext
+    python3
+  ];
+
+  buildInputs = [ elfutils ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp -r includes/* $out/include/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
