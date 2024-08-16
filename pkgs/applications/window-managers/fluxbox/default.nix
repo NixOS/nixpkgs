@@ -4,7 +4,6 @@
 , libXinerama
 , imlib2 }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "fluxbox";
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
       --subst-var-by PREFIX "$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Full-featured, light-resource X window manager";
     longDescription = ''
       Fluxbox is a X window manager based on Blackbox 0.61.1 window

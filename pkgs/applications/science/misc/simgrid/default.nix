@@ -12,8 +12,6 @@
 , withoutBin ? false
 }:
 
-with lib;
-
 let
   optionOnOff = option: if option then "on" else "off";
 in
@@ -32,15 +30,15 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [ cmake perl python3 ]
-    ++ optionals fortranSupport [ gfortran ]
-    ++ optionals buildJavaBindings [ openjdk ]
-    ++ optionals buildPythonBindings [ python3Packages.pybind11 ]
-    ++ optionals buildDocumentation [ fig2dev ghostscript doxygen ]
-    ++ optionals bmfSupport [ eigen ]
-    ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
+    ++ lib.optionals fortranSupport [ gfortran ]
+    ++ lib.optionals buildJavaBindings [ openjdk ]
+    ++ lib.optionals buildPythonBindings [ python3Packages.pybind11 ]
+    ++ lib.optionals buildDocumentation [ fig2dev ghostscript doxygen ]
+    ++ lib.optionals bmfSupport [ eigen ]
+    ++ lib.optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
   outputs = [ "out" ]
-    ++ optionals buildPythonBindings [ "python" ];
+    ++ lib.optionals buildPythonBindings [ "python" ];
 
   # "Release" does not work. non-debug mode is Debug compiled with optimization
   cmakeBuildType = "Debug";
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
-  makeFlags = optional debug "VERBOSE=1";
+  makeFlags = lib.optional debug "VERBOSE=1";
 
   # needed to run tests and to ensure correct shabangs in output scripts
   preBuild = ''
@@ -106,7 +104,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = lib.optionals debug [ "fortify" ];
   dontStrip = debug;
 
-  meta = {
+  meta = with lib; {
     description = "Framework for the simulation of distributed applications";
     longDescription = ''
       SimGrid is a toolkit that provides core functionalities for the

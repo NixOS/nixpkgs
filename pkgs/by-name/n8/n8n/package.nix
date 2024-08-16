@@ -6,7 +6,7 @@
   nodejs,
   pnpm,
   python3,
-  nodePackages,
+  node-gyp,
   cacert,
   xcbuild,
   libkrb5,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pnpm.configHook
     python3 # required to build sqlite3 bindings
-    nodePackages.node-gyp # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
     cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
   ] ++ lib.optional stdenv.isDarwin [ xcbuild ];

@@ -17,8 +17,6 @@
 , wrapGAppsHook3
 }:
 
-with lib;
-
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
   version = "7.2.4";
@@ -61,7 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Client of the Tryton application platform";
     mainProgram = "tryton";
     longDescription = ''

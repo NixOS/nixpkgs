@@ -8,7 +8,7 @@
 , Security
 , AppKit
 , pkg-config
-, nodePackages
+, node-gyp
 , runCommand
 , vscode-js-debug
 , nix-update-script
@@ -29,7 +29,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    nodePackages.node-gyp
+    node-gyp
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   buildInputs =
