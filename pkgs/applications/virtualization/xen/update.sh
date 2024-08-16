@@ -31,7 +31,7 @@ latestVersion=$(echo "$versionList" | tr ' ' '\n' | tail --lines=1)
 branchList=($(echo "$versionList" | tr ' ' '\n' | sed s/\.[0-9]*$//g | awk '!seen[$0]++'))
 
 # Figure out which versions we're actually going to install.
-minSupportedBranch="$(grep "    knownVulnerabilities = lib.lists.optionals (lib.strings.versionOlder version " "$xenPath"/generic/default.nix | sed s/'    knownVulnerabilities = lib.lists.optionals (lib.strings.versionOlder version "'//g | sed s/'") \['//g)"
+minSupportedBranch="$(grep "  minSupportedVersion = " "$xenPath"/generic/default.nix | sed s/'  minSupportedVersion = "'//g | sed s/'";'//g)"
 supportedBranches=($(for version in "${branchList[@]}"; do if [ "$(printf '%s\n' "$minSupportedBranch" "$version" | sort -V | head -n1)" = "$minSupportedBranch" ]; then echo "$version"; fi; done))
 supportedVersions=($(for version in "${supportedBranches[@]}"; do echo "$versionList" | tr ' ' '\n' | grep "$version" | tail --lines=1; done))
 

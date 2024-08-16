@@ -97,11 +97,15 @@ let
     which
   ];
 
+  # Inherit attributes from a versionDefinition.
   inherit (versionDefinition) pname;
   inherit (versionDefinition) branch;
   inherit (versionDefinition) version;
   inherit (versionDefinition) latest;
   inherit (versionDefinition) pkg;
+
+  # Mark versions older than minSupportedVersion as EOL.
+  minSupportedVersion = "4.16";
 
   ## Pre-fetched Source Handling ##
 
@@ -700,11 +704,14 @@ stdenv.mkDerivation (finalAttrs: {
       # Development headers in $dev/include.
       mit
     ];
-    maintainers = with lib.maintainers; [ sigmasquadron ];
+    # This automatically removes maintainers from EOL versions of Xen, so we aren't bothered about versions we don't explictly support.
+    maintainers = lib.lists.optionals (lib.strings.versionAtLeast version minSupportedVersion) (
+      with lib.maintainers; [ sigmasquadron ]
+    );
     mainProgram = "xl";
     # Evaluates to x86_64-linux.
     platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
-    knownVulnerabilities = lib.lists.optionals (lib.strings.versionOlder version "4.16") [
+    knownVulnerabilities = lib.lists.optionals (lib.strings.versionOlder version minSupportedVersion) [
       "Xen ${version} is no longer supported by the Xen Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html"
     ];
   };
