@@ -71,7 +71,7 @@ stdenvNoCC.mkDerivation (finalAttrs: (lib.recursiveUpdate {
         hash=$(nix-prefetch-url --type sha256 $url --unpack)
         sriHash="$(nix hash to-sri --type sha256 $hash)"
 
-        yq -iPoj '. + { "$system": { "url": "$url", "hash": "$sriHash" } }' "$tempfile"
+        yq -iPoj ". + { \"$system\": { \"url\": \"$url\", \"hash\": \"$sriHash\" } }" "$tempfile"
     }
 
     updateSingle() {
@@ -81,7 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: (lib.recursiveUpdate {
         hash=$(nix-prefetch-url --type sha256 $url --unpack)
         sriHash="$(nix hash to-sri --type sha256 $hash)"
 
-        yq -iPoj '. + { "url": "$url", "hash": "$sriHash" }' "$tempfile"
+        yq -iPoj ". + { \"url\": \"$url\", \"hash\": \"$sriHash\" }" "$tempfile"
     }
 
     baseUrl="https://github.com/${repo}/releases/download/$latestTag/${releasePrefix}$latestVersion"
