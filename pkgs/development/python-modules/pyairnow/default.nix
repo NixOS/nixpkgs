@@ -7,7 +7,7 @@
   poetry-core,
   pytest-aiohttp,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     aioresponses
     pytest-asyncio
     pytest-aiohttp
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 
