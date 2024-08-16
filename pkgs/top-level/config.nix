@@ -142,7 +142,7 @@ let
 
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" "unstructured-arrays" ]);
-      default = [];
+      default = [ "unstructured-arrays" ];
       description = ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.
