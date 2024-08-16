@@ -12292,6 +12292,15 @@
     githubId = 401263;
     keys = [ { fingerprint = "1147 43F1 E707 6F3E 6F4B  2C96 B9A8 B592 F126 F8E8"; } ];
   };
+  macronova = {
+    name = "Sicheng Pan";
+    email = "trivial@invariantspace.com";
+    matrix = "@macronova:invariantspace.com";
+    github = "Sicheng-Pan";
+    githubId = 60079945;
+    keys = [ { fingerprint = "49D3 FFDA 4D30 DDEE 68EF  AE84 EBC4 A200 6737 3921"; } ];
+  };
+
   mac-chaffee = {
     name = "Mac Chaffee";
     github = "mac-chaffee";

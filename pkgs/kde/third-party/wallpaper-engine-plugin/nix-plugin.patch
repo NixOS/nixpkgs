@@ -1,0 +1,17 @@
+diff --git a/plugin/contents/pyext.py b/plugin/contents/pyext.py
+old mode 100644
+new mode 100755
+diff --git a/plugin/contents/ui/Pyext.qml b/plugin/contents/ui/Pyext.qml
+index 1a48f5e..8a9c9c9 100644
+--- a/plugin/contents/ui/Pyext.qml
++++ b/plugin/contents/ui/Pyext.qml
+@@ -15,7 +15,8 @@ Item {
+             "[ -f /usr/share/$EXT ] && WKD=/usr/share/$EXT",
+             "[ -f \"$HOME/.local/share/$EXT\" ] && WKD=\"$HOME/.local/share/$EXT\"",
+             "[ -f \"$XDG_DATA_HOME/$EXT\" ] && WKD=\"$XDG_DATA_HOME/$EXT\"", 
+-            `exec python3 "$WKD" "${ws_server.url}"`
++            "[ -f \"NIX_STORE_PACKAGE_PATH/share/$EXT\" ] && WKD=\"NIX_STORE_PACKAGE_PATH/share/$EXT\"", 
++            `"$WKD" "${ws_server.url}"`
+         ].join("\n");
+         return sh;
+     }

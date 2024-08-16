@@ -78,6 +78,7 @@
       phonon-vlc = self.callPackage ./misc/phonon-vlc {};
       polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 {};
       pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt {};
+      wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin {};
     }
   );
 in
