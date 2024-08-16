@@ -2761,6 +2761,14 @@ self: super: {
         lib.pipe
           (super.purescript.overrideScope purescriptOverlay)
           ([
+            # https://github.com/purescript/purescript/pull/4547
+            (appendPatches [
+              (pkgs.fetchpatch {
+                name = "purescript-import-fix";
+                url = "https://github.com/purescript/purescript/commit/c610ec18391139a67dc9dcf19233f57d2c5413f7.patch";
+                hash = "sha256-7s/ygzAFJ1ocZIj3OSd3TbsmGki46WViPIZOU1dfQFg=";
+              })
+            ])
             # PureScript uses nodejs to run tests, so the tests have been disabled
             # for now.  If someone is interested in figuring out how to get this
             # working, it seems like it might be possible.
@@ -2773,7 +2781,24 @@ self: super: {
             (self.generateOptparseApplicativeCompletions [ "purs" ])
           ]);
 
-      purenix = super.purenix.overrideScope purescriptOverlay;
+      purenix =
+        lib.pipe
+          (super.purenix.overrideScope purescriptOverlay)
+          [
+            (appendPatches [
+              # https://github.com/purenix-org/purenix/pull/63
+              (pkgs.fetchpatch {
+                name = "purenix-purescript-0_15_12";
+                url = "https://github.com/purenix-org/purenix/commit/2dae563f887c7c8daf3dd3e292ee3580cb70d528.patch";
+                hash = "sha256-EZXf95BJINyqnRb2t/Ao/9C8ttNp3A27rpKiEKJjO6Y=";
+              })
+              (pkgs.fetchpatch {
+                name = "purenix-import-fix";
+                url = "https://github.com/purenix-org/purenix/commit/f1890690264e7e5ce7f5b0a32d73d910ce2cbd73.patch";
+                hash = "sha256-MRITcNOiaWmzlTd9l7sIz/LhlnpW8T02CXdcc1qQt3c=";
+              })
+            ])
+          ];
     })
     purescript
     purenix
