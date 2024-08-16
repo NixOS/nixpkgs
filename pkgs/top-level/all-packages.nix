@@ -8271,8 +8271,6 @@ with pkgs;
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
-  godot_4 = callPackage ../development/tools/godot/4 { };
-
   godot3 = callPackage ../development/tools/godot/3 { };
 
   godot3-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
