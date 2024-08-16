@@ -7,6 +7,7 @@
   fetchFromGitLab,
   gi-docgen,
   glib,
+  gmobile,
   gobject-introspection,
   gsound,
   gtk-doc,
@@ -17,6 +18,7 @@
   ninja,
   pkg-config,
   stdenv,
+  umockdev,
   vala,
   wrapGAppsHook3,
 }:
@@ -41,12 +43,14 @@ stdenv.mkDerivation {
     docbook-xsl-nons
     docutils # for rst2man
     gi-docgen
+    gmobile
     gobject-introspection
     gtk-doc
     libxslt
     meson
     ninja
     pkg-config
+    umockdev
     vala
     wrapGAppsHook3
   ];
@@ -71,7 +75,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
-    sed "s|/usr/libexec/|$out/libexec/|" < $src/debian/feedbackd.udev > $out/lib/udev/rules.d/90-feedbackd.rules
+    sed "s|/usr/libexec/|$out/libexec/|" < $src/data/90-feedbackd.rules > $out/lib/udev/rules.d/90-feedbackd.rules
     cp ${themes}/data/* $out/share/feedbackd/themes/
   '';
 
