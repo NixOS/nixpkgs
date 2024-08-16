@@ -417,14 +417,6 @@ in {
               hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
               excludes = [ "NEWS" ];
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.4") [
-            # Fix compatibility with libxml2 ≥ 2.13.2
-            # https://github.com/php/php-src/issues/15331
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/8d7365b6f009ba43e305d6459013ac4fbed7c606.diff?full_index=1";
-              hash = "sha256-ct0Ml9kjjcRLryjxMsUQQsDXiDExjpnCnWKf+mYgTsQ=";
-              excludes = [ "NEWS" ];
-            })
           ];
         }
         {
