@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "9.7.4";
+  version = "10.0.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -20,14 +20,15 @@ rustPlatform.buildRustPackage {
     owner = "erebe";
     repo = "wstunnel";
     rev = "v${version}";
-    hash = "sha256-OFm0Jk06Mxzr4F7KrMBGFqcDSuTtrMvBSK99bbOgua4=";
+    hash = "sha256-lahuuVc+fbuWMXaWvt8C6j26Mo/1o5PkBfVH+lemdv4=";
   };
 
-  cargoHash = "sha256-JMRcXuw6AKfwViOgYAgFdSwUeTo04rEkKj+t+W8wjGI=";
+  cargoHash = "sha256-gNx01LHIcAbedO2X/OwwnQWd9d0Qc6ahe84IRUyptcY=";
 
   checkFlags = [
     # Tries to launch a test container
     "--skip=tcp::tests::test_proxy_connection"
+    "--skip=protocols::tcp::server::tests::test_proxy_connection"
   ];
 
   passthru = {
