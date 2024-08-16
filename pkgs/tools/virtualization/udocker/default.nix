@@ -2,37 +2,33 @@
 , fetchFromGitHub
 , singularity
 , python3Packages
-, fetchpatch
+, testers
+, udocker
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "udocker";
-  version = "1.3.1";
+  version = "1.3.16";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "udocker";
-    rev = "v${version}";
-    sha256 = "0dfsjgidsnah8nrclrq10yz3ja859123z81kq4zdifbrhnrn5a2x";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PUbNFvKaF41egGMypdkmVFCt1bWmTCWR5iQNOt/L4+Y=";
   };
 
   # crun patchelf proot runc fakechroot
   # are download statistically linked during runtime
   buildInputs = [
     singularity
-  ] ++ (with python3Packages; [
-    pytest-runner
-    pycurl
-  ]);
+  ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/indigo-dc/udocker/commit/9f7d6c5f9a3925bf87d000603c5b306d73bb0fa3.patch";
-      sha256 = "sha256-fiqvVqfdVIlILbSs6oDWmbWU9piZEI2oiAKUcmecx9Q=";
-    })
+  dependencies = with python3Packages; [
+    pycurl
   ];
 
   nativeCheckInputs = with python3Packages; [
+    pytest-runner
     pytestCheckHook
   ];
 
@@ -47,13 +43,17 @@ python3Packages.buildPythonApplication rec {
     "tests/unit/test_dockerioapi.py"
   ];
 
-  meta = with lib; {
-    description = "basic user tool to execute simple docker containers in user space without root privileges";
-    homepage = "https://indigo-dc.gitbooks.io/udocker";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.linux;
-    mainProgram = "udocker";
+  passthru = {
+    tests.version = testers.testVersion { package = udocker; };
   };
 
+  meta = {
+    description = "basic user tool to execute simple docker containers in user space without root privileges";
+    homepage = "https://indigo-dc.gitbooks.io/udocker";
+    changelog = "https://github.com/indigo-dc/udocker/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bzizou ];
+    platforms = lib.platforms.linux;
+    mainProgram = "udocker";
+  };
 }
