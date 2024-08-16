@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-SeK0CZesGatPQdwjr4u28m+ZIojlM02GCftX/q8Dg4g=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiocoap
