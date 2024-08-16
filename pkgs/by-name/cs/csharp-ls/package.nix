@@ -1,6 +1,8 @@
-{ lib
-, buildDotnetGlobalTool
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetGlobalTool,
+  dotnetCorePackages,
+  nix-update-script,
 }:
 let
   inherit (dotnetCorePackages) sdk_8_0;
@@ -15,13 +17,17 @@ buildDotnetGlobalTool rec {
   dotnet-sdk = sdk_8_0;
   dotnet-runtime = sdk_8_0;
 
-  meta = with lib; {
+  passthru.tests = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Roslyn-based LSP language server for C#";
     mainProgram = "csharp-ls";
     homepage = "https://github.com/razzmatazz/csharp-language-server";
     changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
