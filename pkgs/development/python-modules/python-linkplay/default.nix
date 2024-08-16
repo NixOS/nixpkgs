@@ -1,8 +1,11 @@
 {
+  aiofiles,
   aiohttp,
+  appdirs,
   async-timeout,
   async-upnp-client,
   buildPythonPackage,
+  deprecated,
   fetchFromGitHub,
   lib,
   pytest-asyncio,
@@ -12,22 +15,27 @@
 
 buildPythonPackage rec {
   pname = "python-linkplay";
-  version = "0.0.6";
+  version = "0.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Velleman";
     repo = "python-linkplay";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GUpotQLs+xzsMV3i52YtWYm9IoQLyyw8EY9VhG+uT8o=";
+    hash = "sha256-Ju4fubZPOVreu7YGhAPfSepXzaXDa7ZpvsAxoSHWLqo=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "aiofiles" ];
+
   dependencies = [
+    aiofiles
     aiohttp
+    appdirs
     async-timeout
     async-upnp-client
+    deprecated
   ];
 
   pythonImportsCheck = [ "linkplay" ];
@@ -38,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/Velleman/python-linkplay/releases/tag/v${version}";
     description = "Python Library for Seamless LinkPlay Device Control";
     homepage = "https://github.com/Velleman/python-linkplay";
     license = lib.licenses.mit;
