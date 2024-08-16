@@ -9783,20 +9783,23 @@ with pkgs;
 
   nodenv = callPackage ../development/tools/nodenv { };
 
+  inherit (callPackages ../development/web/nodejs { })
+    nodejs_18
+    nodejs_20
+    nodejs_22
+    ;
+
   nodejs = hiPrio nodejs_20;
   nodejs-slim = nodejs-slim_20;
   corepack = hiPrio corepack_20;
 
-  nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
-  nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix { enableNpm = false; };
+  nodejs-slim_18 = nodejs_18.overrideAttrs { slim = true; };
   corepack_18 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_18; });
 
-  nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
-  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
+  nodejs-slim_20 = nodejs_20.overrideAttrs { slim = true; };
   corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
 
-  nodejs_22 = callPackage ../development/web/nodejs/v22.nix { };
-  nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { enableNpm = false; };
+  nodejs-slim_22 = nodejs_22.overrideAttrs { slim = true; };
   corepack_22 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; });
 
   # Update this when adding the newest nodejs major version!

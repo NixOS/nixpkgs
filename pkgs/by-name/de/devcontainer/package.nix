@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock yarn.lock
 
     # set nodedir to prevent node-gyp from downloading headers
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${lib.getInclude nodejs}
 
     yarn --offline --frozen-lockfile
     yarn --offline --frozen-lockfile compile-prod

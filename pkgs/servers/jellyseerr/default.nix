@@ -41,8 +41,8 @@ mkYarnPackage rec {
       sqlite
     ];
     postInstall = ''
-      export CPPFLAGS="-I${nodejs}/include/node"
-      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node --sqlite=${sqlite.dev}
+      export CPPFLAGS="-I${lib.getInclude nodejs}/include/node"
+      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${lib.getInclude nodejs}/include/node --sqlite=${sqlite.dev}
       rm -r build-tmp-napi-v6
     '';
   };
@@ -53,8 +53,8 @@ mkYarnPackage rec {
       python3
     ];
     postInstall = ''
-      export CPPFLAGS="-I${nodejs}/include/node"
-      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
+      export CPPFLAGS="-I${lib.getInclude nodejs}/include/node"
+      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${lib.getInclude nodejs}/include/node
     '';
   };
 
