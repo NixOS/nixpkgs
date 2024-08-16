@@ -4652,7 +4652,6 @@ broken-packages:
   - posit # failure in job https://hydra.nixos.org/build/233229714 at 2023-09-02
   - positron # failure in job https://hydra.nixos.org/build/233256252 at 2023-09-02
   - posix-acl # failure in job https://hydra.nixos.org/build/233222892 at 2023-09-02
-  - posix-api # failure in job https://hydra.nixos.org/build/233240089 at 2023-09-02
   - posix-filelock # failure in job https://hydra.nixos.org/build/252726822 at 2024-03-16
   - posix-realtime # failure in job https://hydra.nixos.org/build/233191463 at 2023-09-02
   - posix-waitpid # failure in job https://hydra.nixos.org/build/233206551 at 2023-09-02
