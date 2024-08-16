@@ -6740,6 +6740,8 @@ self: super: with self; {
 
   langchain = callPackage ../development/python-modules/langchain { };
 
+  langchain-aws = callPackage ../development/python-modules/langchain-aws { };
+
   langchain-azure-dynamic-sessions = callPackage ../development/python-modules/langchain-azure-dynamic-sessions { };
 
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
