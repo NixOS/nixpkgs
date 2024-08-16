@@ -270,5 +270,5 @@ in
     }) enabledNetworks);
   };
 
-  meta.maintainers = [ numinit ];
+  meta.maintainers = with maintainers; [ numinit ];
 }
