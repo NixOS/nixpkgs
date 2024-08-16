@@ -1816,6 +1816,16 @@ let
          "sha256-qUn8Rot6ME7iTvtNd52iw3ebqMnpLz7kwl/9GoPHD+I=";
       in
      old.torch.overrideAttrs (attrs: {
+       nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [
+         pkgs.autoPatchelfHook
+         pkgs.autoAddDriverRunpath
+       ];
+      buildInputs = attrs.buildInputs or [ ] ++ [
+        "${lib.getLib R}/lib/R" # libR
+        pkgs.zlib
+      ] ++ lib.optionals pkgs.config.cudaSupport [
+        pkgs.cudaPackages.cuda_cudart
+      ];
       src = pkgs.fetchzip {
        url = "https://torch-cdn.mlverse.org/packages/${accel}/0.13.0/src/contrib/torch_0.13.0_R_x86_64-pc-linux-gnu.tar.gz";
        sha256 = binary_sha;
