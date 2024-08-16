@@ -9,14 +9,18 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.27.1";
+  version = "0.29.47";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-7yEsxKUG2jhki1u5CObdjN4JMnEcAYR+SoGPaNJ+9Fs=";
+    hash = "sha256-KdaoOejoM/3P1WwDCjDhChOpKA7c4UulPLK7IOVw3o4=";
   };
+
+  postPatch = ''
+    substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
+  '';
 
   projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
 
@@ -39,7 +43,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ khaneliman ];
+    maintainers = with lib.maintainers; [ khaneliman ] ++ lib.teams.stridtech.members;
     mainProgram = "bicep";
   };
 }

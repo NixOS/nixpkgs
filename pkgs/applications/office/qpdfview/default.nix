@@ -61,7 +61,7 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A tabbed document viewer";
+    description = "Tabbed document viewer";
     mainProgram = "qpdfview";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];

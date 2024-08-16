@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   prefixKey = "--prefix ";
 
   meta = with lib; {
-    description = "A program for proof-tree visualization";
+    description = "Program for proof-tree visualization";
     mainProgram = "prooftree";
     longDescription = ''
       Prooftree is a program for proof-tree visualization during interactive

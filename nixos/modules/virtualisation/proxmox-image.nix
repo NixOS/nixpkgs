@@ -243,18 +243,18 @@ with lib;
         }).overrideAttrs ( super: rec {
           # Check https://github.com/proxmox/pve-qemu/tree/master for the version
           # of qemu and patch to use
-          version = "8.1.5";
+          version = "9.0.0";
           src = pkgs.fetchurl {
             url = "https://download.qemu.org/qemu-${version}.tar.xz";
-            hash = "sha256-l2Ox7+xP1JeWtQgNCINRLXDLY4nq1lxmHMNoalIjKJY=";
+            hash = "sha256-MnCKxmww2MiSYz6paMdxwcdtWX1w3erSGg0izPOG2mk=";
           };
           patches = [
             # Proxmox' VMA tool is published as a particular patch upon QEMU
             "${pkgs.fetchFromGitHub {
               owner = "proxmox";
               repo = "pve-qemu";
-              rev = "71dd2d48f9122e60e4c0a8480122a27aab15dc70";
-              hash = "sha256-Q8AxNv4geDdlbVIWphRO5P3ESo0SGgvUpVPmPJzubJM=";
+              rev = "14afbdd55f04d250bd679ca1ad55d3f47cd9d4c8";
+              hash = "sha256-lSJQA5SHIHfxJvMLIID2drv2H43crTPMNIlIT37w9Nc=";
             }}/debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch"
           ];
 

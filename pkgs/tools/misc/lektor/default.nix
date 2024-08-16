@@ -9,6 +9,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       mistune = super.mistune.overridePythonAttrs (old: rec {
         version = "2.0.5";
@@ -94,7 +95,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "A static content management system";
+    description = "Static content management system";
     homepage = "https://www.getlektor.com/";
     changelog = "https://github.com/lektor/lektor/blob/v${version}/CHANGES.md";
     license = lib.licenses.bsd3;

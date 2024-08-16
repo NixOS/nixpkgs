@@ -116,13 +116,63 @@ It has two modes:
 
 : The `lychee` package to use.
 
+## `shellcheck` {#tester-shellcheck}
+
+Runs files through `shellcheck`, a static analysis tool for shell scripts.
+
+:::{.example #ex-shellcheck}
+# Run `testers.shellcheck`
+
+A single script
+
+```nix
+testers.shellcheck {
+  name = "shellcheck";
+  src = ./script.sh;
+}
+```
+
+Multiple files
+
+```nix
+let
+  inherit (lib) fileset;
+in
+testers.shellcheck {
+  name = "shellcheck";
+  src = fileset.toSource {
+    root = ./.;
+    fileset = fileset.unions [
+      ./lib.sh
+      ./nixbsd-activate
+    ];
+  };
+}
+```
+
+:::
+
+### Inputs {#tester-shellcheck-inputs}
+
+[`src` (path or string)]{#tester-shellcheck-param-src}
+
+: The path to the shell script(s) to check.
+  This can be a single file or a directory containing shell files.
+  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+
+### Return value {#tester-shellcheck-return}
+
+A derivation that runs `shellcheck` on the given script(s).
+The build will fail if `shellcheck` finds any issues.
+
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
 
-Although simplistic, this test assures that the main program can run.
-While there's no substitute for a real test case, it does catch dynamic linking errors and such.
-It also provides some protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
+NOTE: In most cases, [`versionCheckHook`](#versioncheckhook) should be preferred, but this function is provided and documented here anyway. The motivation for adding either tests would be:
+
+- Catch dynamic linking errors and such and missing environment variables that should be added by wrapping.
+- Probable protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
 
 By default, the command to be run will be inferred from the given `package` attribute:
 it will check `meta.mainProgram` first, and fall back to `pname` or `name`.

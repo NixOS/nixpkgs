@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clblast";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "CNugteren";
     repo = "CLBlast";
     rev = version;
-    hash = "sha256-S25g25Il6rzkpU9IqOFDDeEr3uYyt/uewZZAl09YSts=";
+    hash = "sha256-fzenYFCAQ0B2NQgh5OaErv/yNEzjznB6ogRapqfL6P4=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The tuned OpenCL BLAS library";
+    description = "Tuned OpenCL BLAS library";
     homepage = "https://github.com/CNugteren/CLBlast";
     license = licenses.asl20;
     maintainers = with maintainers; [ Tungsten842 ];

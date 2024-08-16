@@ -22,7 +22,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
-    description = "A static analysis tool for finding errors in PHP applications";
+    description = "Static analysis tool for finding errors in PHP applications";
     homepage = "https://github.com/vimeo/psalm";
     license = lib.licenses.mit;
     mainProgram = "psalm";

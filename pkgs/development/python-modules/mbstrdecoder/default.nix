@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/thombashi/mbstrdecoder";
-    description = "A library for decoding multi-byte character strings";
+    description = "Library for decoding multi-byte character strings";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.mit;
   };

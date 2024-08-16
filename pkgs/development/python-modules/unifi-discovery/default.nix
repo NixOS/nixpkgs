@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "unifi-discovery";
-  version = "1.1.8";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "unifi-discovery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gE/2awyhDACrc0nuTvTPOcK2lFbPIZAXDPRnVJtWFco=";
+    hash = "sha256-Ea+zxV2GUAaG/BxO103NhOLzzr/TNJaOsynDad2/2VA=";
   };
 
   postPatch = ''

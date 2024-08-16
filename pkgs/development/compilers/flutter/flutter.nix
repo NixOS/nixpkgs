@@ -1,6 +1,14 @@
-{ version
+{ useNixpkgsEngine ? false
+, version
 , engineVersion
+, engineHashes ? {}
+, engineUrl ? "https://github.com/flutter/engine.git@${engineVersion}"
+, enginePatches ? []
+, engineRuntimeModes ? [ "release" "debug" ]
+, engineSwiftShaderHash
+, engineSwiftShaderRev
 , patches
+, channel
 , dart
 , src
 , pubspecLock
@@ -13,16 +21,35 @@
 , git
 , which
 , jq
-, flutterTools ? callPackage ./flutter-tools.nix {
+, flutterTools ? null
+}@args:
+
+let
+  engine = if args.useNixpkgsEngine or false then
+    callPackage ./engine/default.nix {
+      inherit (args) dart;
+      dartSdkVersion = args.dart.version;
+      flutterVersion = version;
+      swiftshaderRev = engineSwiftShaderRev;
+      swiftshaderHash = engineSwiftShaderHash;
+      version = engineVersion;
+      hashes = engineHashes;
+      url = engineUrl;
+      patches = enginePatches;
+      runtimeModes = engineRuntimeModes;
+    } else null;
+
+  dart = if args.useNixpkgsEngine or false then
+    engine.dart else args.dart;
+
+  flutterTools = args.flutterTools or (callPackage ./flutter-tools.nix {
     inherit dart version;
     flutterSrc = src;
     inherit patches;
     inherit pubspecLock;
     systemPlatform = stdenv.hostPlatform.system;
-  }
-}:
+  });
 
-let
   unwrapped =
     stdenv.mkDerivation {
       name = "flutter-${version}-unwrapped";
@@ -74,7 +101,7 @@ let
           "devToolsVersion": "$(cat "${dart}/bin/resources/devtools/version.json" | jq -r .version)",
           "flutterVersion": "${version}",
           "frameworkVersion": "${version}",
-          "channel": "stable",
+          "channel": "${channel}",
           "repositoryUrl": "https://github.com/flutter/flutter.git",
           "frameworkRevision": "nixpkgs000000000000000000000000000000000",
           "frameworkCommitDate": "1970-01-01 00:00:00",
@@ -124,12 +151,15 @@ let
       '';
 
       passthru = {
-        inherit dart engineVersion artifactHashes;
+        # TODO: rely on engine.version instead of engineVersion
+        inherit dart engineVersion artifactHashes channel;
         tools = flutterTools;
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
+      } // lib.optionalAttrs (engine != null && engine.meta.available) {
+        inherit engine;
       };
 
       meta = with lib; {

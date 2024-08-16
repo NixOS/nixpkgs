@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0.1.0";
+  version = "0-unstable-2024-08-01";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "6eabc3f02fae3683bffab483e614bebfcd476b21";
-    hash = "sha256-wSZjK+rOXn+UQiP1NbdNn5/UW6UcBxjvlqr2wh++MbM=";
+    rev = "e127acbf9a71ebc0c26bc8e28346822e0a6e16ba";
+    hash = "sha256-GJIz4M5HDB948Ex/8cPvbkrNzl/eKUE7/c21JBu4lb8=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +41,13 @@ rustPlatform.buildRustPackage {
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
 
   ATTIC_DISTRIBUTOR = "attic";
+  NIX_INCLUDE_PATH = "${lib.getDev nix}/include";
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     if [[ -f $out/bin/attic ]]; then
       installShellCompletion --cmd attic \
         --bash <($out/bin/attic gen-completions bash) \

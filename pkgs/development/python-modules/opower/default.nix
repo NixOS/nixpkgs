@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.4.6";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tronikos";
     repo = "opower";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q+BycHN83oD2yJz+jsYRjSdswYVHA7fJPwpWtNsmi9M=";
+    hash = "sha256-juN9o1RPLDALND1po5S4WNMDkOWnr4hl38yxWnsoupg=";
   };
 
   build-system = [ setuptools ];

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/rhasspy/unicode-rbnf/blob/v${version}/CHANGELOG.md";
-    description = "A pure Python implementation of ICU's rule-based number format engine";
+    description = "Pure Python implementation of ICU's rule-based number format engine";
     homepage = "https://github.com/rhasspy/unicode-rbnf";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

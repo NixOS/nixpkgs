@@ -3,11 +3,8 @@
 , src
 , patches ? [ ]
 , version
-, coreutils
-, buildPackages
 , bison
 , flex
-, gdb
 , gperf
 , lndir
 , perl
@@ -36,7 +33,6 @@
 , libdatrie
 , lttng-ust
 , libepoxy
-, libiconv
 , dbus
 , fontconfig
 , freetype
@@ -266,7 +262,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao LunNova ];
     platforms = platforms.unix ++ platforms.windows;

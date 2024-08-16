@@ -70,6 +70,7 @@ let
     "systemd-tmpfiles-setup-dev.service"
     "systemd-tmpfiles-setup.service"
     "timers.target"
+    "tpm2.target"
     "umount.target"
     "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
@@ -102,7 +103,7 @@ let
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
-    pathsToLink = ["/bin" "/sbin"];
+    pathsToLink = ["/bin"];
     postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
@@ -111,8 +112,7 @@ let
     inherit (config.boot.initrd) compressor compressorArgs prepend;
     inherit (cfg) strip;
 
-    contents = map (path: { object = path; symlink = ""; }) (subtractLists cfg.suppressedStorePaths cfg.storePaths)
-      ++ mapAttrsToList (_: v: { object = v.source; symlink = v.target; }) (filterAttrs (_: v: v.enable) cfg.contents);
+    contents = lib.filter ({ source, ... }: !lib.elem source cfg.suppressedStorePaths) cfg.storePaths;
   };
 
 in {
@@ -160,7 +160,7 @@ in {
       description = "Set of files that have to be linked into the initrd";
       example = literalExpression ''
         {
-          "/etc/hostname".text = "mymachine";
+          "/etc/machine-id".source = /etc/machine-id;
         }
       '';
       default = {};
@@ -171,7 +171,7 @@ in {
       description = ''
         Store paths to copy into the initrd as well.
       '';
-      type = with types; listOf (oneOf [ singleLineStr package ]);
+      type = utils.systemdUtils.types.initrdStorePath;
       default = [];
     };
 
@@ -344,7 +344,8 @@ in {
     };
 
     enableTpm2 = mkOption {
-      default = true;
+      default = cfg.package.withTpm2Tss;
+      defaultText = "boot.initrd.systemd.package.withTpm2Tss";
       type = types.bool;
       description = ''
         Whether to enable TPM2 support in the initrd.
@@ -407,7 +408,7 @@ in {
         fsck = "${cfg.package.util-linux}/bin/fsck";
       };
 
-      managerEnvironment.PATH = "/bin:/sbin";
+      managerEnvironment.PATH = "/bin";
 
       contents = {
         "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
@@ -416,7 +417,7 @@ in {
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin
+          DefaultEnvironment=PATH=/bin
           ${cfg.extraConfig}
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
@@ -431,9 +432,9 @@ in {
         "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then optionalString (!cfg.emergencyAccess) "*" else cfg.emergencyAccess}:::::::";
 
         "/bin".source = "${initrdBinEnv}/bin";
-        "/sbin".source = "${initrdBinEnv}/sbin";
+        "/sbin".source = "${initrdBinEnv}/bin";
 
-        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /bin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
         "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
           ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
@@ -442,6 +443,9 @@ in {
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
+
+        # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
+        "/etc/hostname".text = config.networking.hostName;
 
       } // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
         "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
@@ -460,6 +464,7 @@ in {
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
         "${cfg.package}/lib/systemd/systemd-bsod"
+        "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
@@ -486,7 +491,8 @@ in {
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"
-      ] ++ jobScripts;
+      ] ++ jobScripts
+      ++ map (c: builtins.removeAttrs c ["text"]) (builtins.attrValues cfg.contents);
 
       targets.initrd.aliases = ["default.target"];
       units =

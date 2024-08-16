@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    unset NUGET_PACKAGES
     # nuget would otherwise try to base itself in /homeless-shelter
     export HOME=$(pwd)/fake-home
 

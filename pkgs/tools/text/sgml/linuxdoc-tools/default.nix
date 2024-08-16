@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "agmartin";
     repo = "linuxdoc-tools";
     rev = version;
-    sha256 = "sha256-1F3MDYJ9UH7ypgTSfYZV59PfLirlTmw6XBMEnz5Jtyk=";
+    hash = "sha256-1F3MDYJ9UH7ypgTSfYZV59PfLirlTmw6XBMEnz5Jtyk=";
   };
 
   outputs = [ "out" "man" "doc" ];

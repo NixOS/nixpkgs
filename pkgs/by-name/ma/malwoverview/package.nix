@@ -5,22 +5,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "malwoverview";
-  version = "5.4.4";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alexandreborges";
     repo = "malwoverview";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eP2xYd/S/c4Z/cdK8IWghEUyF7pSTb5Cpg5pS/tpzUI=";
+    hash = "sha256-qwNWYwMkxnRczqc4QvniuqwDVgpSlNTVOpzbzYcoMFg=";
   };
 
   pythonRemoveDeps = [
     "pathlib"
-  ];
-
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
   ];
 
   build-system  = with python3.pkgs; [

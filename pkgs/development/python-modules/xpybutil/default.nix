@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/BurntSushi/xpybutil";
-    description = "An incomplete xcb-util port plus some extras";
+    description = "Incomplete xcb-util port plus some extras";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ artturin ];
   };

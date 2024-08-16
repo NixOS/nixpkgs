@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -9,7 +8,7 @@
   find-libpython,
   pytestCheckHook,
   swig,
-  verilog,
+  iverilog,
   ghdl,
 }:
 
@@ -45,11 +44,6 @@ buildPythonPackage rec {
 
       # remove circular dependency cocotb-bus from setup.py
       substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
-    ''
-    + lib.optionalString stdenv.isDarwin ''
-      # disable lto on darwin
-      # https://github.com/NixOS/nixpkgs/issues/19098
-      substituteInPlace cocotb_build_libs.py --replace "-flto" ""
     '';
 
   patches = [
@@ -65,7 +59,7 @@ buildPythonPackage rec {
     cocotb-bus
     pytestCheckHook
     swig
-    verilog
+    iverilog
     ghdl
   ];
   preCheck = ''

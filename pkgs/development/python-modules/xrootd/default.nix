@@ -31,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The XRootD central repository";
+    description = "XRootD central repository";
     homepage = "https://github.com/xrootd/xrootd";
     changelog = "https://github.com/xrootd/xrootd/releases/tag/v${version}";
     license = licenses.gpl3Only;

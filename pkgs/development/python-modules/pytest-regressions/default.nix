@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
   matplotlib,
   numpy,
@@ -47,11 +46,6 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  disabledTestPathss = lib.optionals (pythonAtLeast "3.12") [
-    # AttributeError: partially initialized module 'pandas' has no attribute '_pandas_datetime_CAPI' (most likely due to a circular import)
-    "tests/test_num_regression.py"
-  ];
-
   pythonImportsCheck = [
     "pytest_regressions"
     "pytest_regressions.plugin"
@@ -82,6 +76,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

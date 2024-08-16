@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.27";
+  version = "3.0.28";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JLD9qUtz0cmaJ+b9DQi+by582nmi25lcfjx7ixJUutk=";
+    hash = "sha256-vFBvVNuvRHykdMhRytNx5J4rdg2JGcQidAMH+tIqUIc=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ptpython" ];
 
   meta = with lib; {
-    description = "An advanced Python REPL";
+    description = "Advanced Python REPL";
     homepage = "https://github.com/prompt-toolkit/ptpython";
     changelog = "https://github.com/prompt-toolkit/ptpython/blob/${version}/CHANGELOG";
     license = licenses.bsd3;

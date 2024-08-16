@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "sha256-Vyp7asVqvKFkkEb67LXapMkT1AQSburN3+B2dXIPcEU=";
+    hash = "sha256-Vyp7asVqvKFkkEb67LXapMkT1AQSburN3+B2dXIPcEU=";
     fetchSubmodules = true;
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase ];
 
   meta = with lib; {
-    description = "A free EDA software to develop printed circuit boards";
+    description = "Free EDA software to develop printed circuit boards";
     homepage    = "https://librepcb.org/";
     maintainers = with maintainers; [ luz thoughtpolice ];
     license     = licenses.gpl3Plus;

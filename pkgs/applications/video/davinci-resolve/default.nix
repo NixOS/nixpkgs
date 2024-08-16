@@ -5,7 +5,7 @@
 , runCommandLocal
 , unzip
 , appimage-run
-, addOpenGLRunpath
+, addDriverRunpath
 , dbus
 , libGLU
 , xorg
@@ -38,7 +38,7 @@ let
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
-        addOpenGLRunpath
+        addDriverRunpath
         copyDesktopItems
         unzip
       ];
@@ -150,14 +150,14 @@ let
       postFixup = ''
         for program in $out/bin/*; do
           isELF "$program" || continue
-          addOpenGLRunpath "$program"
+          addDriverRunpath "$program"
         done
 
         for program in $out/libs/*; do
           isELF "$program" || continue
           if [[ "$program" != *"libcudnn_cnn_infer"* ]];then
             echo $program
-            addOpenGLRunpath "$program"
+            addDriverRunpath "$program"
           fi
         done
         ln -s $out/libs/libcrypto.so.1.1 $out/libs/libcrypt.so.1
@@ -165,11 +165,11 @@ let
 
       desktopItems = [
         (makeDesktopItem {
-          name = "davinci-resolve";
-          desktopName = "Davinci Resolve";
+          name = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+          desktopName = "Davinci Resolve${lib.optionalString studioVariant " Studio"}";
           genericName = "Video Editor";
-          exec = "resolve";
-          # icon = "DV_Resolve";
+          exec = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+          icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
           comment = "Professional video editing, color, effects and audio post-processing";
           categories = [
             "AudioVideo"
@@ -254,6 +254,12 @@ buildFHSEnv {
     ''
   }";
 
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications $out/share/icons/hicolor/128x128/apps
+    ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
+    ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
+  '';
+
   passthru = {
     inherit davinci;
     updateScript = lib.getExe (writeShellApplication {
@@ -284,6 +290,6 @@ buildFHSEnv {
     maintainers = with maintainers; [ amarshall jshcmpbll orivej ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "davinci-resolve";
+    mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }

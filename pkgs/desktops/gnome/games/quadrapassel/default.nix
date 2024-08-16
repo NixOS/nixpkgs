@@ -5,6 +5,7 @@
   pkg-config,
   gtk3,
   gnome,
+  adwaita-icon-theme,
   gdk-pixbuf,
   librsvg,
   gsound,
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     vala
     desktop-file-utils
     pkg-config
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libxml2
     itstool
     gettext

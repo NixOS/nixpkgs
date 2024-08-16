@@ -51,9 +51,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "graphql_relay" ];
 
   meta = with lib; {
-    description = "A library to help construct a graphql-py server supporting react-relay";
+    description = "Library to help construct a graphql-py server supporting react-relay";
     homepage = "https://github.com/graphql-python/graphql-relay-py/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

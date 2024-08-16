@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ pango ];
 
   meta = with lib; {
-    description = "A port of i3bar for river";
+    description = "Port of i3bar for river";
     homepage = "https://github.com/MaxVerevkin/i3bar-river";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nicegamer7 ];

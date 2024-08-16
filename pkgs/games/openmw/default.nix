@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An unofficial open source engine reimplementation of the game Morrowind";
+    description = "Unofficial open source engine reimplementation of the game Morrowind";
     homepage = "https://openmw.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar marius851000 ];

@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dupe-krill";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2fT9bw5LgJUQ0tm1T/vV5SaDjNH0OGKt7QUQLd7nmOs=";
+    sha256 = "sha256-ceeKG45OQLxiYcwq2Kumbpd+lkyY+W/og1/6Zdpd3zo=";
     postFetch = ''
       cp ${./Cargo.lock} $out/Cargo.lock
     '';
   };
 
-  cargoSha256 = "sha256-JUcIDUVzSLzblb2EbmSfuCAB+S0fyW6wpGF0b/xR+b0=";
+  cargoHash = "sha256-jEMvvFOcFij4lT/5Y5xARaVURT/evV9u1Vkqtm4al+g=";
 
   meta = with lib; {
-    description = "A fast file deduplicator";
+    description = "Fast file deduplicator";
     homepage = "https://github.com/kornelski/dupe-krill";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ urbas ];

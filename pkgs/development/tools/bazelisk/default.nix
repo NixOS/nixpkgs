@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.BazeliskVersion=${version}" ];
 
   meta = with lib; {
-    description = "A user-friendly launcher for Bazel";
+    description = "User-friendly launcher for Bazel";
     mainProgram = "bazelisk";
     longDescription = ''
       BEWARE: This package does not work on NixOS.

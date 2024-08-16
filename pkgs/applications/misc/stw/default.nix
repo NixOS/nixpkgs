@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A simple text widget for X resembling the watch(1) command";
+    description = "Simple text widget for X resembling the watch(1) command";
     license = licenses.mit;
     maintainers = with maintainers; [ somasis ];
     platforms = platforms.unix;

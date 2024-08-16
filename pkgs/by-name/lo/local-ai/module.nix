@@ -5,7 +5,7 @@ let
 in
 {
   options.services.local-ai = {
-    enable = lib.mkEnableOption "Enable service";
+    enable = lib.mkEnableOption "local-ai";
 
     package = lib.mkPackageOption pkgs "local-ai" { };
 

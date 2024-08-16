@@ -101,7 +101,7 @@ in
   config = {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
-    services.getty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
     services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.services."getty@" =
@@ -158,4 +158,5 @@ in
 
   };
 
+  meta.maintainers = with maintainers; [ RossComputerGuy ];
 }

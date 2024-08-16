@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "A three-dimensional finite element mesh generator";
+    description = "Three-dimensional finite element mesh generator";
     mainProgram = "gmsh";
     homepage = "https://gmsh.info/";
     license = lib.licenses.gpl2Plus;

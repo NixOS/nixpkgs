@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse samba glib attr libsecret ];
 
   meta = with lib; {
-    description = "A FUSE FS for mounting Samba shares";
+    description = "FUSE FS for mounting Samba shares";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;

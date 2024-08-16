@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "QML_BOX2D_LIBRARY" "${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1")
-    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules gettext ninja qttools wrapQtAppsHook ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta = with lib; {
-    description = "A high quality educational software suite, including a large number of activities for children aged 2 to 10";
+    description = "High quality educational software suite, including a large number of activities for children aged 2 to 10";
     homepage = "https://gcompris.net/";
     license = licenses.gpl3Plus;
     mainProgram = "gcompris-qt";

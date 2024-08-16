@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://python-quantities.readthedocs.io/";
     changelog = "https://github.com/python-quantities/python-quantities/blob/v${version}/CHANGES.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

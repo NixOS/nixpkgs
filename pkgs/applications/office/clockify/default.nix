@@ -25,7 +25,7 @@ appimageTools.wrapType2 rec {
     description = "Free time tracker and timesheet app that lets you track work hours across projects";
     homepage = "https://clockify.me";
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     mainProgram = "clockify";
     platforms = [ "x86_64-linux" ];
   };

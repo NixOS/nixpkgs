@@ -11,22 +11,22 @@
 }:
 
 let
-  version = "0.54";
+  version = "0.54-unstable-2024-08-11";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
-    rev = "v${version}";
-    hash = "sha256-rhCum59GCIAwdi5QgSaPfrALelAIMncNetu81i53Q8c=";
+    rev = "3e8d001f5c9be10e4bb680a1d409326902c96c10";
+    hash = "sha256-7bgbKYjJX2Tfprb69/imyvhsCsurrmPWBXVVLX+ZMnM=";
   };
 
   meta = with lib; {
-    description = "A modern performant fuzzy picker for Vim and NeoVim";
+    description = "Modern performant fuzzy picker for Vim and NeoVim";
     mainProgram = "maple";
     homepage = "https://github.com/liuchengxu/vim-clap";
     changelog = "https://github.com/liuchengxu/vim-clap/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 
   maple = rustPlatform.buildRustPackage {

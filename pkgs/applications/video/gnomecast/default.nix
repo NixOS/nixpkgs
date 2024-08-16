@@ -37,7 +37,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A native Linux GUI for Chromecasting local files";
+    description = "Native Linux GUI for Chromecasting local files";
     homepage = "https://github.com/keredson/gnomecast";
     license = with licenses; [ gpl3 ];
     broken = stdenv.isDarwin;

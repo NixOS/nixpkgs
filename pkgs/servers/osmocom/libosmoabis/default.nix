@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmoabis";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-abis";
     rev = version;
-    hash = "sha256-B3M6sqFPecMR4/uiJ93C5ZWlq9IVpQwXCu9GZ4twHJw=";
+    hash = "sha256-So1iyxkLaK3Up+6hetY1TultXF3G3Bg0k1WWrfS+3kA=";
   };
 
   configureFlags = [ "enable_dahdi=false" ];
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      janik
       markuskowa
     ];
   };

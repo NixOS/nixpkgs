@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  setuptools,
 }:
 buildPythonPackage rec {
   pname = "bencoder";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A simple bencode decoder/encoder library in pure Python";
+    description = "Simple bencode decoder/encoder library in pure Python";
     homepage = "https://github.com/utdemir/bencoder";
     license = licenses.gpl2;
     maintainers = with maintainers; [ somasis ];

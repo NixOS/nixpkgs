@@ -25,7 +25,7 @@ mkPulumiPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A Pulumi provider to execute commands and scripts either locally or remotely as part of the Pulumi resource model";
+    description = "Pulumi provider to execute commands and scripts either locally or remotely as part of the Pulumi resource model";
     mainProgram = "pulumi-resource-command";
     homepage = "https://github.com/pulumi/pulumi-command";
     license = licenses.asl20;

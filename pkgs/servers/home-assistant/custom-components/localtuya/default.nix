@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
 
   meta = with lib; {
     changelog = "https://github.com/rospogrigio/localtuya/releases/tag/${version}";
-    description = "A Home Assistant custom Integration for local handling of Tuya-based devices";
+    description = "Home Assistant custom Integration for local handling of Tuya-based devices";
     homepage = "https://github.com/rospogrigio/localtuya";
     maintainers = with maintainers; [ rhoriguchi ];
     license = licenses.gpl3Only;

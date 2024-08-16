@@ -1,39 +1,44 @@
 {
   lib,
-  fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
   setuptools,
   versioningit,
+  cffi,
   qcodes,
   packaging,
+  pandas,
   pytestCheckHook,
   pytest-mock,
   pyvisa-sim,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "qcodes-contrib-drivers";
-  version = "0.21.0";
+  version = "0.22.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-  format = "pyproject";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7WkG6Bq4J4PU4eWX52RaupQ8cNzE+sJ7s3PoXFRxG2w=";
+    sha256 = "sha256-/W5oC5iqYifMR3/s7aSQ2yTJNmkemkc0KVxIU0Es3zY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     versioningit
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    cffi
     qcodes
     packaging
+    pandas
   ];
 
   nativeCheckInputs = [
@@ -44,17 +49,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes_contrib_drivers" ];
 
-  # should be fixed starting with 0.19.0, remove at next release
-  disabledTestPaths = [ "qcodes_contrib_drivers/tests/test_Keysight_M3201A.py" ];
+  disabledTests = lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # At index 13 diff: 'sour6:volt 0.29000000000000004' != 'sour6:volt 0.29'
+    "test_stability_diagram_external"
+  ];
 
   postInstall = ''
     export HOME="$TMPDIR"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User contributed drivers for QCoDeS";
     homepage = "https://github.com/QCoDeS/Qcodes_contrib_drivers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evilmav ];
+    changelog = "https://github.com/QCoDeS/Qcodes_contrib_drivers/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evilmav ];
   };
 }

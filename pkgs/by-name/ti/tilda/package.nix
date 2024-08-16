@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/lanoxx/tilda/";
-    description = "A Gtk based drop down terminal for Linux and Unix";
+    description = "Gtk based drop down terminal for Linux and Unix";
     mainProgram = "tilda";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.AndersonTorres ];

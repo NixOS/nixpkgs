@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "mnemonic";
-  version = "0.20";
-  format = "setuptools";
+  version = "0.21";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trezor";
-    repo = "python-${pname}";
+    repo = "python-mnemonic";
     rev = "v${version}";
-    hash = "sha256-YYgWlYfVd1iALOziaUI8uVYjJDCIVk/dXcUmJd2jcvQ=";
+    hash = "sha256-D1mS/JQhefYmwrShfWR9SdiGsBUM+jmuCkfWix9tDOU=";
   };
+
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

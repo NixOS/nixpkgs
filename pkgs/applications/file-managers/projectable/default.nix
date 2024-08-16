@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A TUI file manager built for projects";
+    description = "TUI file manager built for projects";
     homepage = "https://github.com/dzfrias/projectable";
     changelog = "https://github.com/dzfrias/projectable/releases/tag/${src.rev}";
     license = licenses.mit;

@@ -11,7 +11,6 @@
   pyyaml,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -54,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sarif" ];
 
   meta = {
-    description = "A set of command line tools and Python library for working with SARIF files";
+    description = "Set of command line tools and Python library for working with SARIF files";
     homepage = "https://github.com/microsoft/sarif-tools";
     changelog = "https://github.com/microsoft/sarif-tools/releases/tag/v${version}";
     license = lib.licenses.mit;

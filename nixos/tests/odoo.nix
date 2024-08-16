@@ -12,6 +12,8 @@ import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.odoo, ...} : {
       services.odoo = {
         enable = true;
         package = package;
+        autoInit = true;
+        autoInitExtraFlags = [ "--without-demo=all" ];
         domain = "localhost";
       };
     };

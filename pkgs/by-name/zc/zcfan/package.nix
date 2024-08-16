@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A zero-configuration fan daemon for ThinkPads";
+    description = "Zero-configuration fan daemon for ThinkPads";
     mainProgram = "zcfan";
     homepage = "https://github.com/cdown/zcfan";
     changelog = "https://github.com/cdown/zcfan/tags/${finalAttrs.version}";

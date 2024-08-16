@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://keydb.dev";
-    description = "A Multithreaded Fork of Redis";
+    description = "Multithreaded Fork of Redis";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     changelog = "https://github.com/Snapchat/KeyDB/raw/v${finalAttrs.version}/00-RELEASENOTES";

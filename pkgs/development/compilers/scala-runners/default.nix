@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dwijnand/scala-runners";
-    description = "An alternative implementation of the Scala distribution's runners";
+    description = "Alternative implementation of the Scala distribution's runners";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ hrhino ];

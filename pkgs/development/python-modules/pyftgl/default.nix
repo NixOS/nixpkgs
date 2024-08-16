@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
   boost,
   freetype,
   ftgl,
@@ -30,6 +31,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i "s,'boost_python','boost_python${pythonVersion}',g" setup.py
   '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-L${libGL}/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries";
+  };
 
   buildInputs = [
     boost

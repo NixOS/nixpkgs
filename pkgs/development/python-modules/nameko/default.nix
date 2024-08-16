@@ -59,7 +59,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nameko" ];
 
   meta = with lib; {
-    description = "A microservices framework that lets service developers concentrate on application logic and encourages testability";
+    description = "Microservices framework that lets service developers concentrate on application logic and encourages testability";
     mainProgram = "nameko";
     homepage = "https://www.nameko.io/";
     changelog = "https://github.com/nameko/nameko/releases/tag/v${version}";

@@ -26,7 +26,6 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiodns

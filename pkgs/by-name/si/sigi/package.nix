@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-rDVuI+sY7yG9Tni5/klnWM1KHg7iZuPQXFnLz96B0L4=";
+    hash = "sha256-Tsrfan7aejP2oy9x9VoTIq0ba0s0tnx1RTlAB0v6eis=";
   };
 
-  cargoHash = "sha256-QqAcK75BDIWlYggkZkokZ/C1SxCFviZ0t+h1q+dM8I4=";
+  cargoHash = "sha256-jstxl1CcSNv1bQuAY9n2kYmoTYmfeBYUCKJKWCSEuec=";
   nativeBuildInputs = [ installShellFiles ];
 
   # In case anything goes wrong.
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = sigi; };
 
   meta = with lib; {
-    description = "Organizing CLI for people who don't love organizing.";
+    description = "Organizing CLI for people who don't love organizing";
     homepage = "https://github.com/sigi-cli/sigi";
     license = licenses.gpl2;
     maintainers = with maintainers; [ booniepepper ];

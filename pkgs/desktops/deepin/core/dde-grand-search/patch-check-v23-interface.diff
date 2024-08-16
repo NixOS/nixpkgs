@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 76dac13..f43600e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,7 +24,7 @@ endif()
+ 
+ #Indentify the version
+ find_package(DtkCMake REQUIRED)
+-if (${DEEPIN_OS_VERSION} MATCHES "23")
++if (${NIX_DEEPIN_VERSION} MATCHES "23")
+     add_definitions(-DCOMPILE_ON_V23)
+     set(COMPLIE_ON_V23 TRUE)
+     message("COMPILE ON v23")

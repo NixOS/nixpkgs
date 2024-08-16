@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://www.fsarchiver.org/";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "fsarchiver";
   };

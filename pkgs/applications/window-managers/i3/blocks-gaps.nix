@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
+    description = "Flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
     mainProgram = "i3blocks";
     homepage = "https://github.com/Airblader/i3blocks-gaps";
     license = licenses.gpl3;

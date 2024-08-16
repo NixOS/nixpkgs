@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A composite font of IBM Plex Mono, IBM Plex Sans JP and nerd-fonts";
+    description = "Composite font of IBM Plex Mono, IBM Plex Sans JP and nerd-fonts";
     homepage = "https://github.com/yuru7/PlemolJP";
     license = licenses.ofl;
     platforms = platforms.all;

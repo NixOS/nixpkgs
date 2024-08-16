@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "xlsx2csv";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zdJyyC+LMvHO52rq74ey7jVJZh/d+Q9+zyMQlnoW/IQ=";
+    hash = "sha256-bGXVmJ6NPxTdcpbUJdaTpn9RiZ0Mjh7XvL+cyxgiNzQ=";
   };
 
   nativeBuildInputs = [

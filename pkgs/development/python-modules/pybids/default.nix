@@ -14,7 +14,6 @@
   sqlalchemy,
   pytestCheckHook,
   versioneer,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
@@ -71,7 +69,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/bids-standard/pybids";
     changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
     mainProgram = "pybids";
   };
 }

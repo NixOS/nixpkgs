@@ -5,7 +5,7 @@ in
 {
   name = "private-gpt";
   meta = with lib.maintainers; {
-    maintainers = [ drupol ];
+    maintainers = [ ];
   };
 
   nodes = {

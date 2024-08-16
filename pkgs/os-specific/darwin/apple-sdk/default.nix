@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
+{ stdenv, stdenvNoCC, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -163,17 +163,6 @@ let
 
     propagatedBuildInputs = builtins.attrValues deps;
 
-    # don't use pure CF for dylibs that depend on frameworks
-    setupHook = ./framework-setup-hook.sh;
-
-    # Not going to be more specific than this for now
-    __propagatedImpureHostDeps = lib.optionals (name != "Kernel") [
-      # The setup-hook ensures that everyone uses the impure CoreFoundation who uses these SDK frameworks, so let's expose it
-      "/System/Library/Frameworks/CoreFoundation.framework"
-      "/System/Library/Frameworks/${name}.framework"
-      "/System/Library/Frameworks/${name}.framework/${name}"
-    ];
-
     meta = with lib; {
       description = "Apple SDK framework ${name}";
       maintainers = with maintainers; [ copumpkin ];
@@ -262,6 +251,15 @@ in rec {
         cp "${darwin-stubs}/usr/lib/libsandbox.1.tbd" $out/lib
         ln -s libsandbox.1.tbd $out/lib/libsandbox.tbd
       '';
+    };
+
+    simd = stdenvNoCC.mkDerivation {
+      name = "apple-lib-simd";
+
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+
+      buildCommand = "echo 'simd library not available in the 10.12 SDK'; exit 1";
     };
   };
 
@@ -354,7 +352,7 @@ in rec {
 
   objc4 = pkgs.darwin.libobjc;
 
-  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12"; };
+  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12.4"; };
 
   inherit (pkgs.darwin) Libsystem;
 

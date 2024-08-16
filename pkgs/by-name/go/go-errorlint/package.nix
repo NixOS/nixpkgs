@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A source code linter that can be used to find code that will cause problems with Go's error wrapping scheme";
+    description = "Source code linter that can be used to find code that will cause problems with Go's error wrapping scheme";
     homepage = "https://github.com/polyfloyd/go-errorlint";
     changelog = "https://github.com/polyfloyd/go-errorlint/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

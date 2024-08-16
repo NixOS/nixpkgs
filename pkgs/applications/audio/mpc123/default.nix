@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A Musepack (.mpc) audio player";
+    description = "Musepack (.mpc) audio player";
     homepage = "https://github.com/bucciarati/mpc123";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpc123";

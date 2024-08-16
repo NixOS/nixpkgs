@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
 , qtbase, qtmultimedia, qtsvg, qttools, krdc
 , libvncserver, libvirt, pcre, pixman, qtermwidget, spice-gtk, spice-protocol
 , libselinux, libsepol, util-linux
@@ -6,26 +6,18 @@
 
 mkDerivation rec {
   pname = "virt-manager-qt";
-  version = "0.72.97";
+  version = "0.72.99";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
     rev    = version;
-    sha256 = "0b2bx7ah35glcsiv186sc9cqdrkhg1vs9jz036k9byk61np0cb1i";
+    hash   = "sha256-1aXlGlK+YPOe2X51xycWvSu8YC9uCywyL6ItiScFA04=";
   };
 
   cmakeFlags = [
     "-DBUILD_QT_VERSION=5"
     "-DQTERMWIDGET_INCLUDE_DIRS=${qtermwidget}/include/qtermwidget5"
-  ];
-
-  patches = [
-    (fetchpatch {
-      # drop with next update
-      url = "https://github.com/F1ash/qt-virt-manager/commit/0d338b037ef58c376d468c1cd4521a34ea181edd.patch";
-      sha256 = "1wjqyc5wsnxfwwjzgqjr9hcqhd867amwhjd712qyvpvz8x7p2s24";
-    })
   ];
 
   buildInputs = [

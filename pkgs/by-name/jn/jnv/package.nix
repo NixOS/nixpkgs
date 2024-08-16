@@ -1,35 +1,39 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jnv";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "jnv";
     rev = "v${version}";
-    hash = "sha256-5Atop86g/gGgf4MEK/Q2vqpQ+KIS72FB2gXCH8U+L3g=";
+    hash = "sha256-WrvCiZA/aYj0CoTq/kw3Oa3WKTjdtO6OC+IOxBoWjSU=";
   };
 
-  cargoHash = "sha256-qpVRq6RbrDZDSJkLQ5Au9j2mWXp3gn7QBe3nRmIVK8c=";
+  cargoHash = "sha256-xF0sxoSo7z7lxrF3wFAmU7edREoWKBFBnZ6Xq22c8q0=";
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    rustPlatform.bindgenHook
-  ];
+  buildInputs = lib.optional stdenv.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      CoreGraphics
+      AppKit
+    ]
+  );
 
   meta = with lib; {
     description = "Interactive JSON filter using jq";
     mainProgram = "jnv";
     homepage = "https://github.com/ynqa/jnv";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ nealfennimore nshalman ];
+    maintainers = with maintainers; [
+      nealfennimore
+      nshalman
+    ];
   };
 }

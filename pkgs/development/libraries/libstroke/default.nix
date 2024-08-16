@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "A library for simple gesture recognition";
+    description = "Library for simple gesture recognition";
     homepage = "https://web.archive.org/web/20161204100704/http://etla.net/libstroke/";
     license = lib.licenses.gpl2;
 

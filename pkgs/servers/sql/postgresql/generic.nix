@@ -2,7 +2,7 @@ let
 
   generic =
       # dependencies
-      { stdenv, lib, fetchurl, makeWrapper, fetchpatch
+      { stdenv, lib, fetchurl, fetchpatch, makeWrapper
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
@@ -19,7 +19,7 @@ let
       , version, hash, muslPatches ? {}
 
       # for tests
-      , testers, nixosTests
+      , testers
 
       # JIT
       , jitSupport
@@ -62,7 +62,7 @@ let
       zlib
       readline
       openssl
-      libxml2
+      (libxml2.override {enableHttp = true;})
       icu
     ]
       ++ lib.optionals (olderThan "13") [ libxcrypt ]
@@ -119,7 +119,6 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
-
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
@@ -249,10 +248,10 @@ let
 
     meta = with lib; {
       homepage    = "https://www.postgresql.org";
-      description = "A powerful, open source object-relational database system";
+      description = "Powerful, open source object-relational database system";
       license     = licenses.postgresql;
       changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 ];
+      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 wolfgangwalther ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 

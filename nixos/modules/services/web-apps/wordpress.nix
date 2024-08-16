@@ -70,7 +70,7 @@ let
         require_once(ABSPATH . 'wp-settings.php');
       ?>
     '';
-    checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+    checkPhase = "${pkgs.php}/bin/php --syntax-check $target";
   };
 
   mkPhpValue = v: let

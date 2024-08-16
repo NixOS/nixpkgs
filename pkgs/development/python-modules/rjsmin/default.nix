@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Module to minify Javascript";
     homepage = "http://opensource.perlig.de/rjsmin/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

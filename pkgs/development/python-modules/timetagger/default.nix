@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   asgineer,
   bcrypt,
   buildPythonPackage,
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "timetagger";
-  version = "24.4.1";
+  version = "24.07.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "almarklein";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Qt6VKExigzMaEb5ZEEPHCe5DSYdx5KPIfVC0khx7pP4=";
+    hash = "sha256-zm+3vk2ZeaZjciANNVSVxDT5S2LhOAl3B4AE2RgA5Tw=";
   };
 
   propagatedBuildInputs = [

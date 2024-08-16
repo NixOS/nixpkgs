@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytest7CheckHook,
-  pythonRelaxDepsHook,
   setuptools,
   jsonschema,
   pyyaml,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -48,7 +46,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest7CheckHook ];
 
   meta = with lib; {
-    description = "Generator of ANSI C tracers which output CTF data streams ";
+    description = "Generator of ANSI C tracers which output CTF data streams";
     mainProgram = "barectf";
     homepage = "https://github.com/efficios/barectf";
     license = licenses.mit;

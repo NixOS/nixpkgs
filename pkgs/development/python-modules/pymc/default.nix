@@ -1,24 +1,28 @@
 {
   lib,
-  arviz,
   buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  arviz,
   cachetools,
   cloudpickle,
-  fetchFromGitHub,
   numpy,
   pandas,
   pytensor,
-  pythonOlder,
   rich,
   scipy,
-  setuptools,
   threadpoolctl,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.15.1";
+  version = "5.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,7 +31,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wVz/sn9XbbYMAfClRBx6iK9+UKzy5e2oyH5ABGfNCIM=";
+    hash = "sha256-vOU5P45AJPULGWj9lscZKP3JqfSpkPDnq1Fyq9lIawc=";
   };
 
   postPatch = ''

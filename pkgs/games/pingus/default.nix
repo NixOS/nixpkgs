@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A puzzle game with mechanics similar to Lemmings";
+    description = "Puzzle game with mechanics similar to Lemmings";
     mainProgram = "pingus";
     platforms = lib.platforms.linux;
     maintainers = [lib.maintainers.raskin];

@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Classes implementing the SARIF 2.1.0 object model";
     homepage = "https://github.com/microsoft/sarif-python-om";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

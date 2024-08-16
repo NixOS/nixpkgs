@@ -76,7 +76,7 @@ in stdenv.mkDerivation (finalAttrs: {
       value = "${perl.pkgs.DBDSQLite}/${perl.libPrefix}";
     })
   ] ++ lib.optionals atLeast223 [
-    (lib.mesonEnable "tests" finalAttrs.doCheck)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 
   preConfigure = "export NIX_STATE_DIR=$TMPDIR";

@@ -6,19 +6,17 @@
 , installShellFiles
 , git
 , nix-update-script
-, testers
-, git-machete
 }:
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.26.0";
+  version = "3.27.0";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6q0XunfzURfcvce/BLtJhDeI1fPusN+07S1SegLDkwY=";
+    hash = "sha256-37SZhuMrGjRQOzjnAegL6babhcIjAwh9wtAb7RB09dM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.2.0";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-text-splitters==${version}";
-    hash = "sha256-QrgZ0j/YdOgEgLeQNSKjOIwqdr/Izuw9Gh6eKQ/00tQ=";
+    hash = "sha256-SixF3ZkN+gjQ4KYLhGoezdQAOQ1AlGEC6IBzHePF6/o=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
@@ -42,11 +42,11 @@ buildPythonPackage rec {
     inherit (langchain-core) updateScript;
   };
 
-  meta = with lib; {
-    description = "Build context-aware reasoning applications";
+  meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-text-splitters==${version}";
+    description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

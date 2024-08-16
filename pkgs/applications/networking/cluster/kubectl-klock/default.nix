@@ -20,7 +20,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A kubectl plugin to render watch output in a more readable fashion";
+    description = "Kubectl plugin to render watch output in a more readable fashion";
     homepage = "https://github.com/applejag/kubectl-klock";
     changelog = "https://github.com/applejag/kubectl-klock/releases/tag/v${version}";
     license = licenses.gpl3Plus;

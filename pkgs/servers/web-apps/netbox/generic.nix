@@ -92,6 +92,7 @@
       '';
 
       passthru = {
+        python = python3;
         # PYTHONPATH of all dependencies used by the package
         pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
         gunicorn = python3.pkgs.gunicorn;

@@ -6,13 +6,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
-  version = "3.3.0";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-gOjjE++hf3GOimvCxBR0jqqi3JNpbejLcWbLHpz2H4Q=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-7Tq7i6AH6tt9Uyx276rVBwvbxxETRyVKnhhTijW02sU=";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -53,7 +53,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://patroni.readthedocs.io/en/latest/";
-    description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
+    description = "Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = teams.deshaw.members;

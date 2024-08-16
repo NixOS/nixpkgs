@@ -10,24 +10,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fnm";
-  version = "1.36.0";
+  version = "1.37.1";
 
   src = fetchFromGitHub {
     owner = "Schniz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gW/KpoogFbAkOIBnJHTDYyqvxpYeCCabwftCb+T4rnE=";
+    sha256 = "sha256-x6w2g7U/FbJBycMAF4PUyaoIazp/w6imIpy+N7Cf0qk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation Security ];
 
-  cargoHash = "sha256-x66R32vbBakBlrE0eZ+sFJ2/JZ30UTIAvh3goeWkI10=";
+  cargoHash = "sha256-b15m5DjTDNWJBHOaKSEMwkO/o+0mV+JMBDBurml7xOs=";
 
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fnm \
       --bash <($out/bin/fnm completions --shell bash) \
       --fish <($out/bin/fnm completions --shell fish) \

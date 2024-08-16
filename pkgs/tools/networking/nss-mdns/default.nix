@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "The mDNS Name Service Switch (NSS) plug-in";
+    description = "MDNS Name Service Switch (NSS) plug-in";
     longDescription = ''
       `nss-mdns' is a plugin for the GNU Name Service Switch (NSS)
       functionality of the GNU C Library (glibc) providing host name

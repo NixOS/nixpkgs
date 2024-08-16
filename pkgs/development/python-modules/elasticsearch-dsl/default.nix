@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "8.13.1";
+  version = "8.14.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FTMFODQZp+5hulOG9P4iueIHMnmv75c01bWfXKtoL3o=";
+    hash = "sha256-MmxtzPMvH/PUyEiJOIWQd4REuhj3cK3uUvJHIcuXxMc=";
   };
 
   propagatedBuildInputs = [

@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "1.12.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-KfNwBRGDFNMsba+yjwUHiiO2BJbIl4pW1b3cvLBe+lk=";
+    hash = "sha256-Y09tGm3Sje8gd+6tUyBTCt7HjL2CQ/vo/ExLDnywvcQ=";
   };
 
-  npmDepsHash = "sha256-I3cxMw9zOZb9sfP8UUoHc1UJ0RpDqVn9D29arSdNob4=";
+  npmDepsHash = "sha256-WzMFKMW/YyAH3ZoOeIcXIum15cJmPGp96xSYb9QCaWI=";
 
   npmBuildScript = "prepare";
 
@@ -49,6 +49,7 @@ buildNpmPackage rec {
   };
 
   meta = {
+    changelog = "https://redocly.com/docs/cli/changelog/";
     description = "Makes OpenAPI easy. Lint/validate to any standard, generate beautiful docs, and more";
     homepage = "https://github.com/Redocly/redocly-cli";
     license = lib.licenses.mit;

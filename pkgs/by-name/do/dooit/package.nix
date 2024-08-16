@@ -1,11 +1,14 @@
-{ lib
-, fetchFromGitHub
-, dooit
-, python3
-, testers
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  dooit,
+  python311,
+  testers,
+  nix-update-script,
 }:
-
+let
+  python3 = python311;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
   version = "2.2.0";
@@ -18,10 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-GtXRzj+o+FClleh73kqelk0JrSyafZhf847lX1BiS9k=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = [
     "textual"
@@ -50,11 +50,14 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A TUI todo manager";
+    description = "TUI todo manager";
     homepage = "https://github.com/kraanzu/dooit";
     changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ khaneliman wesleyjrz ];
+    maintainers = with maintainers; [
+      khaneliman
+      wesleyjrz
+    ];
     mainProgram = "dooit";
   };
 }

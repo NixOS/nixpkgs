@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "prometheus_api_client" ];
 
   meta = with lib; {
-    description = "A Python wrapper for the Prometheus HTTP API";
+    description = "Python wrapper for the Prometheus HTTP API";
     longDescription = ''
       The prometheus-api-client library consists of multiple modules which
       assist in connecting to a Prometheus host, fetching the required metrics

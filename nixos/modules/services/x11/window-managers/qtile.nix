@@ -7,6 +7,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "qtile" "backend" ] "The qtile package now provides separate display sessions for both X11 and Wayland.")
+  ];
+
   options.services.xserver.windowManager.qtile = {
     enable = mkEnableOption "qtile";
 
@@ -19,14 +23,6 @@ in
       description = ''
           Path to the qtile configuration file.
           If null, $XDG_CONFIG_HOME/qtile/config.py will be used.
-      '';
-    };
-
-    backend = mkOption {
-      type = types.enum [ "x11" "wayland" ];
-      default = "x11";
-      description = ''
-          Backend to use in qtile: `x11` or `wayland`.
       '';
     };
 
@@ -57,25 +53,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.qtile.finalPackage = pkgs.python3.withPackages (p:
-      [ (cfg.package.unwrapped or cfg.package) ] ++ (cfg.extraPackages p)
-    );
+    services = {
+      xserver.windowManager.qtile.finalPackage = pkgs.python3.pkgs.qtile.override { extraPackages = cfg.extraPackages pkgs.python3.pkgs; };
+      displayManager.sessionPackages = [ cfg.finalPackage ];
+    };
 
-    services.xserver.windowManager.session = [{
-      name = "qtile";
-      start = ''
-        ${cfg.finalPackage}/bin/qtile start -b ${cfg.backend} \
-        ${optionalString (cfg.configFile != null)
-        "--config \"${cfg.configFile}\""} &
-        waitPID=$!
-      '';
-    }];
-
-    environment.systemPackages = [
-      # pkgs.qtile is currently a buildenv of qtile and its dependencies.
-      # For userland commands, we want the underlying package so that
-      # packages such as python don't bleed into userland and overwrite intended behavior.
-      (cfg.package.unwrapped or cfg.package)
-    ];
+    environment = {
+      etc."xdg/qtile/config.py" = mkIf (cfg.configFile != null) { source = cfg.configFile; };
+      systemPackages = [ cfg.finalPackage ];
+    };
   };
 }

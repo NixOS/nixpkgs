@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A digital forensics tool for extracting information from file systems";
+    description = "Digital forensics tool for extracting information from file systems";
     longDescription = ''
       bulk_extractor is a C++ program that scans a disk image, a file, or a
       directory of files and extracts useful information without parsing

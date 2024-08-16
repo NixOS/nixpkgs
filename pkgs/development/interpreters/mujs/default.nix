@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mujs";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://mujs.com/downloads/mujs-${version}.tar.gz";
-    hash = "sha256-wBVHWID2o4LnBhaclDcafdbMIgeIMvbghlr4KJwu9Cs=";
+    hash = "sha256-eKMRrkIkQAd0ywnvW6omM8JpcVE/i5MdMiSg64WxPgs=";
   };
 
   buildInputs = [ readline ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://mujs.com/";
-    description = "A lightweight, embeddable Javascript interpreter";
+    description = "Lightweight, embeddable Javascript interpreter";
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
     license = licenses.isc;

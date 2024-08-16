@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pynose,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -21,7 +21,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pynose ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "pytimeparse/tests/testtimeparse.py" ];
 
   pythonImportsCheck = [ "pytimeparse" ];
 
@@ -30,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wroberts/pytimeparse";
     changelog = "https://github.com/wroberts/pytimeparse/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

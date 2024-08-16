@@ -57,6 +57,8 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
               { Table = 30; From = "192.168.1.1"; To = "192.168.1.2"; SourcePort = 666 ; DestinationPort = 667; }
               { Table = 40; IPProtocol = "tcp"; InvertRule = true; }
               { Table = 50; IncomingInterface = "eth1"; Family = "ipv4"; }
+              { Table = 60; FirewallMark = 4; }
+              { Table = 70; FirewallMark = "16/0x1f"; }
             ];
           };
         };
@@ -119,5 +121,9 @@ testScript = ''
     )
     # IPProtocol + InvertRule
     node1.succeed("sudo ip rule | grep 'not from all ipproto tcp lookup 40'")
+    # FirewallMark without a mask
+    node1.succeed("sudo ip rule | grep 'from all fwmark 0x4 lookup 60'")
+    # FirewallMark with a mask
+    node1.succeed("sudo ip rule | grep 'from all fwmark 0x10/0x1f lookup 70'")
 '';
 })

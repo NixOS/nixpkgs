@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     pname = "cargo-wasi-src";
-    sha256 = "sha256-fmQ23BtcBUPNcgZgvNq85iqdY6WRUhqwAp4aIobqMIw=";
+    hash = "sha256-fmQ23BtcBUPNcgZgvNq85iqdY6WRUhqwAp4aIobqMIw=";
   };
 
   cargoHash = "sha256-yXtxznUp2gECq2CvRByiFzbTjYtWvTheDjGoynJWb+o=";
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A lightweight Cargo subcommand to build code for the wasm32-wasi target";
+    description = "Lightweight Cargo subcommand to build code for the wasm32-wasi target";
     mainProgram = "cargo-wasi";
     homepage = "https://bytecodealliance.github.io/cargo-wasi";
     license = licenses.asl20;

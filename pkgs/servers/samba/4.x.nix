@@ -50,23 +50,24 @@
 , enablePam ? (!stdenv.isDarwin), pam
 }:
 
-with lib;
-
 let
   # samba-tool requires libxcrypt-legacy algorithms
   python = python3Packages.python.override {
+    self = python;
     libxcrypt = libxcrypt-legacy;
   };
   wrapPython = python3Packages.wrapPython.override {
     inherit python;
   };
+
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
   version = "4.20.1";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://samba/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
     hash = "sha256-+Tw69SlTQNCBBsfA3PuF5PhQV9/RRYeqiBe+sxr/iPc=";
   };
 
@@ -173,6 +174,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ] ++ optionals stdenv.buildPlatform.is32bit [
     # By default `waf configure` spawns as many as available CPUs. On
     # 32-bit systems with many CPUs (like `i686` chroot on `x86_64`
@@ -197,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Save asn1_compile and compile_et so they are available to run on the build
   # platform when cross-compiling
-  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p "$dev/bin"
     cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';
@@ -253,7 +256,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.samba.org";
-    description = "The standard Windows interoperability suite of programs for Linux and Unix";
+    description = "Standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
     broken = enableGlusterFS;

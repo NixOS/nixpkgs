@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  case,
   psutil,
   pythonOlder,
 }:
@@ -21,7 +20,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    case
     psutil
     pytestCheckHook
   ];
@@ -38,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/celery/billiard";
     changelog = "https://github.com/celery/billiard/blob/v${version}/CHANGES.txt";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

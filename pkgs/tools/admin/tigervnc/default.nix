@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tigervnc.org/";
     license = lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     # Prevent a store collision.
     priority = 4;

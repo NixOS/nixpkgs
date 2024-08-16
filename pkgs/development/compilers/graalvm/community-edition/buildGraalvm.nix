@@ -171,14 +171,10 @@ let
       $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility $extraNativeImageArgs HelloWorld
       ./helloworld | fgrep 'Hello World'
 
-      ${# --static is only available in Linux
+      ${# -H:+StaticExecutableWithDynamicLibC is only available in Linux
       lib.optionalString (stdenv.isLinux && !useMusl) ''
         echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
         $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
-        ./helloworld | fgrep 'Hello World'
-
-        echo "Ahead-Of-Time compilation with --static"
-        $out/bin/native-image $extraNativeImageArgs -march=compatibility --static HelloWorld
         ./helloworld | fgrep 'Hello World'
       ''}
 

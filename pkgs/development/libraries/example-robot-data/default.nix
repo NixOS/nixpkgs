@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pythonSupport ? false
 , python3Packages
@@ -20,8 +21,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  patches = [
+    # Temporary patch for pinocchio v3.0.0 compatibility.
+    # Should be removed on next example-robot-data release
+    (fetchpatch {
+      name = "pin3.patch";
+      url = "https://github.com/Gepetto/example-robot-data/pull/217/commits/a605ceec857005cde153ec5895e227205eb7a5c3.patch";
+      hash = "sha256-cvAWFytrU2XVggo/nCg8cuLcaZBTACXg6LxjL/6YMPs=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.python
   ];
 
   buildInputs = lib.optionals pythonSupport [
@@ -42,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "Set of robot URDFs for benchmarking and developed examples.";
+    description = "Set of robot URDFs for benchmarking and developed examples";
     homepage = "https://github.com/Gepetto/example-robot-data";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nim65s wegank ];

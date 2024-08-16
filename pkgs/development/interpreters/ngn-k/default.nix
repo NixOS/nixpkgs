@@ -61,7 +61,7 @@ useStdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A simple fast vector programming language";
+    description = "Simple fast vector programming language";
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];

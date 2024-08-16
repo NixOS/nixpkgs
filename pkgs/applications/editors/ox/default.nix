@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-VFrN58SRTRGH+RSc59RIdsysR3umnrU2KM5XVCp9u1Q=";
 
   meta = with lib; {
-    description = "An independent Rust text editor that runs in your terminal";
+    description = "Independent Rust text editor that runs in your terminal";
     homepage = "https://github.com/curlpipe/ox";
     changelog = "https://github.com/curlpipe/ox/releases/tag/${version}";
     license = licenses.gpl2Only;

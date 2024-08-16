@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A versatile sans serif font family";
+    description = "Versatile sans serif font family";
     longDescription = ''
       The Encode Sans family is a versatile workhorse. Featuring a huge range of
       weights and widths, it's ready for all kind of typographic challenges. It

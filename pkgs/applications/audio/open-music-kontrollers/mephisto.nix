@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A Just-in-time FAUST embedded in an LV2 plugin";
+    description = "Just-in-time FAUST embedded in an LV2 plugin";
     homepage = "https://git.open-music-kontrollers.ch/~hp/mephisto.lv2";
     license = licenses.artistic2;
     maintainers = [ maintainers.magnetophon ];

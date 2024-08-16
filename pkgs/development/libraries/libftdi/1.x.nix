@@ -21,12 +21,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libftdi";
-  version = "1.5";
+  version = "1.5-unstable-2023-12-21";
 
   src = fetchgit {
     url = "git://developer.intra2net.com/libftdi";
-    rev = "v${version}";
-    sha256 = "0vipg3y0kbbzjhxky6hfyxy42mpqhvwn1r010zr5givcfp8ghq26";
+    rev = "de9f01ece34d2fe6e842e0250a38f4b16eda2429";
+    hash = "sha256-U37M5P7itTF1262oW+txbKxcw2lhYHAwy1ML51SDVMs=";
   };
 
   strictDeps = true;
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library to talk to FTDI chips using libusb";
+    description = "Library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
     license = with licenses; [ lgpl2Only gpl2Only ];
     platforms = platforms.all;

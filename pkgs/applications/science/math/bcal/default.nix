@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jarun/bcal";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

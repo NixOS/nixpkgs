@@ -6,11 +6,8 @@
   fetchFromGitHub,
   msgpack,
   poetry-core,
-  pytest-aiohttp,
-  pytestCheckHook,
   pythonOlder,
   textual,
-  time-machine,
   typing-extensions,
 }:
 
@@ -28,9 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-QnMKVt1WxnwGnZFNb7Gbus7xewGvyG5xJ0hIKKK5hug=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     click
     msgpack
@@ -38,19 +35,17 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytest-aiohttp
-    pytestCheckHook
-    time-machine
-  ];
+  # Tests require a running textual WS server
+  doCheck = false;
 
   pythonImportsCheck = [ "textual_dev" ];
 
   meta = with lib; {
     description = "Development tools for Textual";
-    mainProgram = "textual";
     homepage = "https://github.com/Textualize/textual-dev";
+    changelog = "https://github.com/Textualize/textual-dev/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ yannip ];
+    mainProgram = "textual";
   };
 }

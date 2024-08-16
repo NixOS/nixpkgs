@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "thttp" ];
 
   meta = with lib; {
-    description = "A lightweight wrapper around urllib";
+    description = "Lightweight wrapper around urllib";
     homepage = "https://github.com/sesh/thttp";
     changelog = "https://github.com/sesh/thttp/releases/tag/${version}";
     license = licenses.mit;

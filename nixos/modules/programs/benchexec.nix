@@ -59,14 +59,7 @@ in
         '';
       })
       (builtins.filter builtins.isInt cfg.users)
-    ) ++ [
-      {
-        assertion = config.systemd.enableUnifiedCgroupHierarchy == true;
-        message = ''
-          The BenchExec module `${opt.enable}` only supports control groups 2 (`${options.systemd.enableUnifiedCgroupHierarchy} = true`).
-        '';
-      }
-    ];
+    );
 
     environment.systemPackages = [ cfg.package ];
 

@@ -35,6 +35,8 @@ buildPythonPackage rec {
       --replace "requests~=2.24" "requests"
   '';
 
+  pythonRelaxDeps = [ "requests-oauthlib" ];
+
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
@@ -59,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jabesq/pyatmo";
     changelog = "https://github.com/jabesq/pyatmo/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

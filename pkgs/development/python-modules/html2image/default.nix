@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "html2image" ];
 
   meta = with lib; {
-    description = "A package acting as a wrapper around the headless mode of existing web browsers to generate images from URLs and from HTML+CSS strings or files";
+    description = "Package acting as a wrapper around the headless mode of existing web browsers to generate images from URLs and from HTML+CSS strings or files";
     homepage = "https://github.com/vgalin/html2image";
     changelog = "https://github.com/vgalin/html2image/releases/tag/${version}";
     license = licenses.mit;

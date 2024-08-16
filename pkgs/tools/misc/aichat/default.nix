@@ -4,23 +4,25 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aichat";
-  version = "0.17.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
     rev = "v${version}";
-    hash = "sha256-muRUBBmhXtIbKvMzBISjoHFSOtYci6x9nQI/bUiEHrs=";
+    hash = "sha256-khi5B8nYNK7otWZEs5koCzQaYGZwmGxP3zrMYIt3Ds4=";
   };
 
-  cargoHash = "sha256-RKyZOfjweSE83hAjBIve38CT9R2DomwW3qA8ezw6dCI=";
+  cargoHash = "sha256-IHGl+Lxa9ZKlyXp59mv72QIvC3hkXPFOUKPVYbN50W4=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -28,6 +30,10 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
+
+  postInstall = ''
+    installShellCompletion ./scripts/completions/aichat.{bash,fish,zsh}
+  '';
 
   meta = with lib; {
     description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ratarmount";
-  version = "0.15.0";
+  version = "0.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2slLshH07O+4PIU3dF9vX2ZcXjaUVyTFYc59LL2J5iY=";
+    hash = "sha256-hprXZGgE2fpg8Km3gWO60e7teUB4Age5skNPc4p+wIg=";
   };
 
   propagatedBuildInputs = [

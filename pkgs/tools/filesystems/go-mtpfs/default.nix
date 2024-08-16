@@ -25,10 +25,10 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A simple FUSE filesystem for mounting Android devices as a MTP device";
+    description = "Simple FUSE filesystem for mounting Android devices as a MTP device";
     homepage = "https://github.com/hanwen/go-mtpfs";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = stdenv.isDarwin;
     mainProgram = "go-mtpfs";
   };

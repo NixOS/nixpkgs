@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "1.1.3";
+  version = "1.2.0";
 
   pyproject = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-archives";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZUqMjbOsHwzZyn0NsSTlZTljzagYEirWKEGatXVL43g=";
+    hash = "sha256-4BYRwuBDKFbVvK805e+L4ZR8wtS8GHHYteexH4YZmSE=";
   };
 
   postPatch = ''
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A library for handling archives/repositories in Canonical craft applications";
+    description = "Library for handling archives/repositories in Canonical craft applications";
     homepage = "https://github.com/canonical/craft-archives";
     changelog = "https://github.com/canonical/craft-archives/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

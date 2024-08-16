@@ -41,7 +41,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "A syntax extension for importing declarations from interface files";
+    description = "Syntax extension for importing declarations from interface files";
     license = lib.licenses.mit;
     homepage = "https://github.com/ocaml-ppx/ppx_import";
   };

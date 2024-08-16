@@ -58,16 +58,18 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.24.2";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-bjR8ctS4sohtiQ/+n2dnqe2wLyAViOjDpXLc0I2YUr0=";
+    hash = "sha256-FQ+RTmHcBWALaLiMoQPHzCJxMBWOOJ6p6hWfQFCi67A=";
   };
 
   patches = [
+    # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
+    ./souploader-darwin.diff
     # dlopen libsoup_3 with an absolute path
     (substituteAll {
       src = ./souploader.diff;
@@ -215,6 +217,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

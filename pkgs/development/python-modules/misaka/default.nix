@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A CFFI binding for Hoedown, a markdown parsing library";
+    description = "CFFI binding for Hoedown, a markdown parsing library";
     mainProgram = "misaka";
     homepage = "https://misaka.61924.nl";
     license = licenses.mit;

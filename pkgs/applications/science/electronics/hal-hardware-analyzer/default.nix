@@ -143,7 +143,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
+    description = "Comprehensive reverse engineering and manipulation framework for gate-level netlists";
     mainProgram = "hal";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;

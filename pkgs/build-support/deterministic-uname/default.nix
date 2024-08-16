@@ -5,6 +5,7 @@
 , coreutils
 , getopt
 , modDirVersion ? ""
+, forPlatform ? stdenv.buildPlatform
 }:
 
 substituteAll {
@@ -17,8 +18,8 @@ substituteAll {
 
   inherit coreutils getopt;
 
-  uSystem = if stdenv.buildPlatform.uname.system != null then stdenv.buildPlatform.uname.system else "unknown";
-  inherit (stdenv.buildPlatform.uname) processor;
+  uSystem = if forPlatform.uname.system != null then forPlatform.uname.system else "unknown";
+  inherit (forPlatform.uname) processor;
 
   # uname -o
   # maybe add to lib/systems/default.nix uname attrset
@@ -26,10 +27,12 @@ substituteAll {
   # https://stackoverflow.com/questions/61711186/where-does-host-operating-system-in-uname-c-comes-from
   # https://github.com/coreutils/gnulib/blob/master/m4/host-os.m4
   operatingSystem =
-    if stdenv.buildPlatform.isLinux
+    if forPlatform.isLinux
     then "GNU/Linux"
-    else if stdenv.buildPlatform.isDarwin
+    else if forPlatform.isDarwin
     then "Darwin" # darwin isn't in host-os.m4 so where does this come from?
+    else if stdenv.buildPlatform.isFreeBSD
+    then "FreeBSD"
     else "unknown";
 
   # in os-specific/linux module packages
@@ -42,11 +45,12 @@ substituteAll {
     mainProgram = "uname";
     longDescription = ''
       This package provides a replacement for `uname` whose output depends only
-      on `stdenv.buildPlatform`.  It is meant to be used from within derivations.
-      Many packages' build processes run `uname` at compile time and embed its
-      output into the result of the build.  Since `uname` calls into the kernel,
-      and the Nix sandbox currently does not intercept these calls, builds made
-      on different kernels will produce different results.
+      on `stdenv.buildPlatform`, or a configurable `forPlatform`.  It is meant
+      to be used from within derivations. Many packages' build processes run
+      `uname` at compile time and embed its output into the result of the build.
+      Since `uname` calls into the kernel, and the Nix sandbox currently does
+      not intercept these calls, builds made on different kernels will produce
+      different results.
     '';
     license = [ licenses.mit ];
     maintainers = with maintainers; [ artturin ];

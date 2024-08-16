@@ -20,13 +20,13 @@
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "11.3.6";
+  version = "11.3.14.2";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     rev = "v${version}";
-    hash = "sha256-LH8p14oMjqo648h0TYClutPx19v5cWa9ffUlxuPWX5o=";
+    hash = "sha256-MsCUTXN9lwJ7YvYvrgyqapa1iZ/roMCTz3mqMhhPh14=";
   };
 
   sourceRoot = "${src.name}/Source";
@@ -88,7 +88,7 @@ buildDotnetModule rec {
 
   meta = {
     changelog = "https://github.com/rmcrackan/Libation/releases/tag/${src.rev}";
-    description = "An Audible audiobook manager";
+    description = "Audible audiobook manager";
     homepage = "https://github.com/rmcrackan/Libation";
     license = lib.licenses.gpl3Only;
     mainProgram = "libation";

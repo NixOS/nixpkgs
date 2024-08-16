@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Integration of django builtin scaffold cli (django-admin) into PyScaffold";
     homepage = "https://pypi.org/project/pyscaffoldext-django/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

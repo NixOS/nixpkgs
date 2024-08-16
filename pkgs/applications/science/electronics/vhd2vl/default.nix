@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , bison
 , flex
-, verilog
+, iverilog
 , which
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    verilog
+    iverilog
   ];
 
   # the "translate" target both (a) builds the software and (b) runs

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config
+{ lib, stdenv, fetchurl, fetchpatch2, openssl, pkg-config
 , withPerl ? false, perl
 , withPython ? false, python3
 , withTcl ? false, tcl
@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "https://znc.in/releases/archive/${pname}-${version}.tar.gz";
     sha256 = "03fyi0j44zcanj1rsdx93hkdskwfvhbywjiwd17f9q1a7yp8l8zz";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2024-39844.patch";
+      url = "https://github.com/znc/znc/commit/8cbf8d628174ddf23da680f3f117dc54da0eb06e.patch";
+      hash = "sha256-JeKirXReiCiNDUS9XodI0oHASg2mPDvQYtV6P4L0mHM=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

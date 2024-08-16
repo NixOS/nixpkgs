@@ -4,12 +4,12 @@
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib, xz
 , yasm, glslang
-, linuxPackages
 , nixosTests
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
 , makeself, perl
+, vulkan-loader
 , javaBindings ? true, jdk # Almost doesn't affect closure size
 , pythonBindings ? false, python3
 , extensionPack ? null, fakeroot
@@ -22,9 +22,6 @@
 , extraConfigureFlags ? ""
 }:
 
-# See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
-assert enableKvm -> !enableHardening;
-
 # The web services use Java infrastructure.
 assert enableWebService -> javaBindings;
 
@@ -32,11 +29,11 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.0.14";
-  virtualboxSha256 = "45860d834804a24a163c1bb264a6b1cb802a5bc7ce7e01128072f8d6a4617ca9";
+  virtualboxVersion = "7.0.20";
+  virtualboxSha256 = "5cf5979bef66ebab3fcd495796b215a940e8a07c469d4bc56d064de44222dd02";
 
-  kvmPatchVersion = "20240502";
-  kvmPatchHash = "sha256-KokIrrAoJutHzPg6e5YAJgDGs+nQoVjapmyn9kG5tV0=";
+  kvmPatchVersion = "20240617";
+  kvmPatchHash = "sha256-bOcM9xA1SXB1uTwljpw2vevVeSdHa3omCRon/8DoAUk=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -135,8 +132,6 @@ in stdenv.mkDerivation (finalAttrs: {
     ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
-    ./libxml-2.12.patch
-    ./gcc-13.patch
   ];
 
   postPatch = ''
@@ -266,7 +261,8 @@ in stdenv.mkDerivation (finalAttrs: {
   # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
   # the source code (see postPatch).
   + optionalString (!headless && !enableHardening) ''
-    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
+    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
+       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
   passthru = {

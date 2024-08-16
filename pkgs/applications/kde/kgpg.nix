@@ -19,7 +19,7 @@ mkDerivation {
   '';
   meta = {
     homepage = "https://apps.kde.org/kgpg/";
-    description = "A KDE based interface for GnuPG, a powerful encryption utility";
+    description = "KDE based interface for GnuPG, a powerful encryption utility";
     mainProgram = "kgpg";
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];

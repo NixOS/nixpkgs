@@ -41,7 +41,7 @@ buildPythonPackage rec {
   passthru.skipBulkUpdate = true;
 
   meta = with lib; {
-    description = "An unofficial Dynalite DyNET interface creating devices";
+    description = "Unofficial Dynalite DyNET interface creating devices";
     homepage = "https://github.com/ziv1234/python-dynalite-devices";
     changelog = "https://github.com/ziv1234/python-dynalite-devices/releases/tag/v${version}";
     license = licenses.mit;

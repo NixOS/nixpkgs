@@ -150,14 +150,23 @@ buildPythonPackage rec {
     "test_trans_parallel_env_check"
     "test_trans_serial_env_check"
     "test_transform_env"
+
+    # undeterministic
+    "test_distributed_collector_updatepolicy"
+    "test_timeit"
+
+    # On a 24
+    # assert torch.get_num_threads() == max(1, init_threads - 3)
+    # AssertionError: assert 23 == 21
+    "test_auto_num_threads"
   ];
 
-  meta = with lib; {
-    description = "A modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
+  meta = {
+    description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     # ~3k tests fail with: RuntimeError: internal error
     broken = stdenv.isLinux && stdenv.isAarch64;
   };

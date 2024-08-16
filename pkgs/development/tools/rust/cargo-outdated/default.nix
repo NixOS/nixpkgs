@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-+GPP8Mdoc3LsR2puNu3/pzKg4Umvjd7CxivkHC8YxgM=";
+    hash = "sha256-+GPP8Mdoc3LsR2puNu3/pzKg4Umvjd7CxivkHC8YxgM=";
   };
 
   cargoHash = "sha256-Lkl7F5ZVlYLBeL3tubdMQ4/KbHYd2dD5IJAX9FO0XUg=";
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cargo subcommand for displaying when Rust dependencies are out of date";
+    description = "Cargo subcommand for displaying when Rust dependencies are out of date";
     mainProgram = "cargo-outdated";
     homepage = "https://github.com/kbknapp/cargo-outdated";
     changelog = "https://github.com/kbknapp/cargo-outdated/blob/v${version}/CHANGELOG.md";

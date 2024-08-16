@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "1.5.9";
+  version = "1.5.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mj1MQvFAau203xj69oD2TzLAgP9m9sJgkLpZL1v8Sg8=";
+    hash = "sha256-jb3rEhW8ui+3SNrjH/2xqwCFQMKNE7NwThePNooIcSg=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ftpbench";
   };
 }

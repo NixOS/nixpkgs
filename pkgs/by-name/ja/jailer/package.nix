@@ -12,7 +12,7 @@
   wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "jailer";
+  pname = "jailer";
   version = "16.2";
 
   src = fetchFromGitHub {
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A tool for database subsetting and relational data browsing";
+    description = "Tool for database subsetting and relational data browsing";
     license = lib.licenses.asl20;
     homepage = "https://github.com/Wisser/Jailer";
     changelog = "https://github.com/Wisser/Jailer/releases/tag/${finalAttrs.version}";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gtk2 hamlib ];
 
   meta = with lib; {
-    description = "An amateur radio logging program";
+    description = "Amateur radio logging program";
     longDescription =
       '' Xlog is an amateur radio logging program.
          It supports cabrillo, ADIF, trlog (format also used by tlf),

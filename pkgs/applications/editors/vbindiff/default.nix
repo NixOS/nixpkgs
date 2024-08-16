@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A terminal visual binary diff viewer";
+    description = "Terminal visual binary diff viewer";
     homepage = "https://www.cjmweb.net/vbindiff/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDiscoursePlugin, fetchFromGitHub }:
+{ lib, mkDiscoursePlugin, fetchFromGitHub }:
 
  mkDiscoursePlugin {
   bundlerEnvArgs.gemdir = ./.;

@@ -27,7 +27,7 @@
 , version
 , hash
 , vendorHash
-, extPatches ? null
+, extPatches ? []
 , cargoHash ? null
 , cargoLock ? null
 , yarnHash
@@ -75,10 +75,6 @@ let
     inherit src version;
 
     cargoDeps = rustPlatform.importCargoLock cargoLock;
-
-    RUSTFLAGS = builtins.concatStringsSep " " [
-      "-C linker=lld"
-    ];
 
     nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ] ++
       lib.optional (lib.versionAtLeast version "15") [
@@ -140,6 +136,7 @@ buildGoModule rec {
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
+    ./tsh.patch
   ];
 
   # Reduce closure size for client machines

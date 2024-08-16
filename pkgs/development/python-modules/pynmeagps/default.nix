@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pynmeagps";
-  version = "1.0.36";
+  version = "1.0.38";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
     owner = "semuconsulting";
     repo = "pynmeagps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n7dCr85TeBLxdrD1ZAA7PGJd9+3+xFJ8gjRU/JOFysY=";
+    hash = "sha256-sD33fcYqTGsLLSsz6ULM5FsHHen4uROJzaWGCDrIsFI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report html --cov-fail-under 95" ""
+      --replace-fail "--cov --cov-report html --cov-fail-under 98" ""
   '';
 
   build-system = [ setuptools ];

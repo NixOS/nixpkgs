@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    description = "A new unix shell - Python version";
+    description = "New unix shell - Python version";
     homepage = "https://www.oilshell.org/";
 
     license = with lib.licenses; [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ];
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lheckemann alva melkor333 ];
+    maintainers = with lib.maintainers; [ melkor333 ];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };
 

@@ -10,14 +10,14 @@
 }:
 
 buildGoModule rec {
-  version = "3.0.0";
+  version = "3.1.1";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-2+OST6bKIjuhrXJKA+8vUERKT1/min7tN8oFxKn3L74=";
+    hash = "sha256-QOokLht/nIzQAzXQuJv5M4QTQD0Zhzf9+Q0ILl2Mds0=";
   };
 
   vendorHash = null;
@@ -28,6 +28,7 @@ buildGoModule rec {
     "cmd/loki-canary"
     "clients/cmd/promtail"
     "cmd/logcli"
+    "cmd/lokitool"
   ];
 
   tags = ["promtail_journal_enabled"];

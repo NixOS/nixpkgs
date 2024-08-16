@@ -7,21 +7,19 @@
 , ffmpeg
 , kdePackages
 , kdsingleapplication
-, openssl
 , pipewire
 , taglib
-, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.4.3";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "ludouzi";
     repo = "fooyin";
     rev = "v" + finalAttrs.version;
-    hash = "sha256-S74Y7Q3MmKfxMGyO8un+YDHmCJUYNKY6KqTSPn+CynE=";
+    hash = "sha256-h8unOzDSQ9ME6nbfLxau1EctJeNH8P2VG0IBQoqhwGs=";
   };
 
   buildInputs = [
@@ -43,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     # we need INSTALL_FHS to be true as the various artifacts are otherwise just dumped in the root
     # of $out and the fixupPhase cleans things up anyway
     (lib.cmakeBool "INSTALL_FHS" true)
@@ -52,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.LANG = "C.UTF-8";
 
   meta = with lib; {
-    description = "A customisable music player";
+    description = "Customisable music player";
     mainProgram = "fooyin";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];

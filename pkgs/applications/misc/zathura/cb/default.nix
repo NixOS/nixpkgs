@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-cb/";
-    description = "A zathura CB plugin";
+    description = "Zathura CB plugin";
     longDescription = ''
       The zathura-cb plugin adds comic book support to zathura.
     '';

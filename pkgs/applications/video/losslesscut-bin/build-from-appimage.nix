@@ -1,9 +1,6 @@
-{ lib
-, appimageTools
+{ appimageTools
 , fetchurl
 , makeWrapper
-, gtk3
-, gsettings-desktop-schemas
 , pname
 , version
 , hash

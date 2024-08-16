@@ -35,6 +35,7 @@
 , libxcrypt
 , libyaml
 , luajitPackages
+, lua-language-server
 , mariadb
 , magic-enum
 , mpfr
@@ -62,7 +63,7 @@
 
 final: prev:
 let
-  inherit (prev) luaOlder luaAtLeast lua isLuaJIT;
+  inherit (prev) luaOlder luaAtLeast lua isLuaJIT isLua51;
 in
 {
   argparse = prev.argparse.overrideAttrs(oa: {
@@ -140,15 +141,6 @@ in
         cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
         rockspecFilename="$specDir/${pname}-${version}.rockspec"
       '';
-  });
-
-  fennel = prev.fennel.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs ++ [
-      installShellFiles
-    ];
-    postInstall = ''
-      installManPage fennel.1
-    '';
   });
 
   # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
@@ -246,6 +238,10 @@ in
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
+  llscheck = prev.llscheck.overrideAttrs (oa: {
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ lua-language-server ];
+  });
+
   lmathx = prev.luaLib.overrideLuarocks prev.lmathx (drv:
     if luaAtLeast "5.1" && luaOlder "5.2" then {
       version = "20120430.51-1";
@@ -326,11 +322,15 @@ in
     '';
   });
 
+  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs(oa: {
+    meta = oa.meta // { broken = true; };
+  });
+
   lua-zlib = prev.lua-zlib.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       zlib.dev
     ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta = oa.meta // { broken = luaOlder "5.1" || luaAtLeast "5.4"; };
   });
 
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
@@ -409,6 +409,12 @@ in
     ];
   });
 
+  luaprompt = prev.luaprompt.overrideAttrs (_: {
+    externalDeps = [
+      { name = "READLINE"; dep = readline; }
+      { name = "HISTORY"; dep = readline; }
+    ];
+  });
 
   # As a nix user, use this derivation instead of "luarocks_bootstrap"
   luarocks = prev.luarocks.overrideAttrs (oa: {
@@ -496,6 +502,9 @@ in
 
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
 
+    # ld: symbol(s) not found for architecture arm64
+    # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+    meta.broken = stdenv.isDarwin;
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
@@ -522,6 +531,39 @@ in
       broken = luaOlder "5.1" || (luaAtLeast "5.4");
       platforms = lib.platforms.linux;
     };
+  });
+
+  lz-n  = prev.lz-n.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
+
+  neotest  = prev.neotest.overrideAttrs(oa: {
+    # A few tests fail for strange reasons on darwin
+    doCheck = !stdenv.isDarwin;
+    nativeCheckInputs = oa.nativeCheckInputs ++ [
+      final.nlua final.busted neovim-unwrapped
+    ];
+
+    # stick to neovim's lua version else loading shared libraries fail
+    meta = oa.meta // { broken = !isLua51; };
+
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
+      nvim --headless -i NONE \
+        --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory tests/ {}"
+
+      runHook postCheck
+      '';
   });
 
   haskell-tools-nvim  = prev.haskell-tools-nvim.overrideAttrs(oa: {
@@ -702,6 +744,16 @@ in
     };
   })) {};
 
+  rustaceanvim  = prev.rustaceanvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
 
@@ -748,24 +800,11 @@ in
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
 
-  toml = prev.toml.overrideAttrs (oa: {
-    patches = [ ./toml.patch ];
-
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ tomlplusplus ];
-    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ sol2 ];
-
-    postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}/include/toml++" \
-        --replace-fail "MAGIC_ENUM_SRC" "${magic-enum.src}/include/magic_enum"
-    '';
-  });
-
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
+      hash = "sha256-PLihirhJshcUQI3L1eTcnQiZvocDl29eQHhdBwJQRU8=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin

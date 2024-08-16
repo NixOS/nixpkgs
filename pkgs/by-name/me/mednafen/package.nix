@@ -5,7 +5,7 @@
   alsa-lib,
   fetchurl,
   flac,
-  freeglut,
+  libglut,
   libGL,
   libGLU,
   libX11,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_net
     flac
-    freeglut
+    libglut
     libcdio
     libjack2
     libsamplerate
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://mednafen.github.io/";
-    description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
+    description = "Portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     longDescription = ''
       Mednafen is a portable, utilizing OpenGL and SDL,
       argument(command-line)-driven multi-system emulator. Mednafen has the

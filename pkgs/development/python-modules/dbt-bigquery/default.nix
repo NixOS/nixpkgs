@@ -9,14 +9,12 @@
   google-cloud-storage,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
-  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.7.8";
+  version = "1.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,13 +23,12 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-bigquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Uc842hkrCYDR92ACDtNW+Iqq5l54CSp40D1tOL7wt8o=";
+    hash = "sha256-SYQAFvu7nw54X4jxicEA9+lnvMgj/Yp460xz3BFGYCM=";
   };
 
   pythonRelaxDeps = [ "agate" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

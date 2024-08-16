@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.mirbsd.org/jupp.htm";
     downloadPage = "https://www.mirbsd.org/MirOS/dist/jupp/";
-    description = "A portable fork of Joe's editor";
+    description = "Portable fork of Joe's editor";
     longDescription = ''
       This is the portable version of JOE's Own Editor, which is currently
       developed at sourceforge, licenced under the GNU General Public License,

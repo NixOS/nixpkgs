@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The free, fast, and easy-to-use computer vision solution for the FIRST Robotics Competition";
+    description = "Free, fast, and easy-to-use computer vision solution for the FIRST Robotics Competition";
     homepage = "https://photonvision.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ max-niederman ];

@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NYdV70YEepjGMmeTALTQvlRvK3R7JjA4VJYYjOwO4AA=";
+    hash = "sha256-qZharhEZ16q3Vd2PwVsKQaP/b6bT/okwEPKKwvRl5D8=";
   };
 
   outputs = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library to play Commodore 64 music derived from libsidplay2";
+    description = "Library to play Commodore 64 music derived from libsidplay2";
     longDescription = ''
       libsidplayfp is a C64 music player library which integrates
       the reSID SID chip emulation into a cycle-based emulator

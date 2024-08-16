@@ -1,30 +1,29 @@
-{ lib
-, fetchFromGitHub
-, smassh
-, python3
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  smassh,
+  python311,
+  testers,
 }:
 
+let
+  python3 = python311;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "smassh";
-  version = "3.1.3";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "smassh";
     rev = "v${version}";
-    hash = "sha256-QE7TFf/5hdd2W2EsVbn3gV/FundhJNxHqv0JWV5dYDc=";
+    hash = "sha256-MeLub6zeviY7yyPP2FI9b37nUwHZbxW6onuFXSkmvqk";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "textual"
-  ];
+  pythonRelaxDeps = [ "textual" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     textual
@@ -42,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A TUI based typing test application inspired by MonkeyType";
+    description = "TUI based typing test application inspired by MonkeyType";
     homepage = "https://github.com/kraanzu/smassh";
     changelog = "https://github.com/kraanzu/smassh/blob/main/CHANGELOG.md";
     license = licenses.gpl3Plus;

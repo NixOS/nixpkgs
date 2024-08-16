@@ -3,7 +3,7 @@
 , useSteamRun ? true }:
 
 let
-  rev = "1.0.8";
+  rev = "1.1.0";
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
@@ -13,7 +13,7 @@ in
       owner = "goatcorp";
       repo = "XIVLauncher.Core";
       inherit rev;
-      hash = "sha256-x4W5L4k+u0MYKDWJu82QcXARW0zjmqqwGiueR1IevMk=";
+      hash = "sha256-vf9cGY+JvMBpQliS1LDmbWjtAbXByrIeXThKtJGQrO8=";
       fetchSubmodules = true;
     };
 
@@ -24,6 +24,10 @@ in
     projectFile = "src/XIVLauncher.Core/XIVLauncher.Core.csproj";
     nugetDeps = ./deps.nix; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
+    # please do not unpin these even if they match the defaults, xivlauncher is sensitive to .NET versions
+    dotnet-sdk = dotnetCorePackages.sdk_8_0;
+    dotnet-runtime = dotnetCorePackages.runtime_8_0;
+
     dotnetFlags = [
       "-p:BuildHash=${rev}"
       "-p:PublishSingleFile=false"
@@ -31,7 +35,7 @@ in
 
     postPatch = ''
       substituteInPlace lib/FFXIVQuickLauncher/src/XIVLauncher.Common/Game/Patch/Acquisition/Aria/AriaHttpPatchAcquisition.cs \
-        --replace 'ariaPath = "aria2c"' 'ariaPath = "${aria2}/bin/aria2c"'
+        --replace-fail 'ariaPath = "aria2c"' 'ariaPath = "${aria2}/bin/aria2c"'
     '';
 
     postInstall = ''
@@ -48,7 +52,7 @@ in
       }).run;
     in ''
       substituteInPlace $out/bin/XIVLauncher.Core \
-        --replace 'exec' 'exec ${steam-run}/bin/steam-run'
+        --replace-fail 'exec' 'exec ${steam-run}/bin/steam-run'
     '') + ''
       wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
       # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065

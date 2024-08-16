@@ -466,11 +466,12 @@ rec {
       }
       # cpu-vendor-os
       else if elemAt l 1 == "apple" ||
-              elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
+              elem (elemAt l 2) [ "redox" "mmixware" "ghcjs" "mingw32" ] ||
               hasPrefix "freebsd" (elemAt l 2) ||
               hasPrefix "netbsd" (elemAt l 2) ||
               hasPrefix "openbsd" (elemAt l 2) ||
-              hasPrefix "genode" (elemAt l 2)
+              hasPrefix "genode" (elemAt l 2) ||
+              hasPrefix "wasm32" (elemAt l 0)
       then {
         cpu    = elemAt l 0;
         vendor = elemAt l 1;

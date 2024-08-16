@@ -1,37 +1,37 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-Zz2U5zQWScID7rAE6FmTADecs4zR430KZVen+hsl+KI=";
+      hash_darwin = "sha256-z+08R1CYi53edNEDSvJ303+hc/pqiFvVhUkD+g4q6tE=";
       hash_darwin_aarch64 =
-        "sha256-NhnJdnrzTj8gQiyp4PzmXHx6ltsxUVrz0AL9x8nGibA=";
-      hash_linux = "sha256-iyhxx7KIpGPMYgf/I1hLUK8M49kWmgTy+UOXf5WBEWY=";
-      version = "125.0.6422.141";
+        "sha256-q60NWIka3QzLsWg3X/+qTWby6UTf7wvjCDdZWlUjzPA=";
+      hash_linux = "sha256-6E6LaQCx+2Xd/vjjaiQR3vJgkP7L4MRkA7Bb0jTrakc=";
+      version = "127.0.6533.119";
     };
     deps = {
       gn = {
-        hash = "sha256-lrVAb6La+cvuUCNI90O6M/sheOEVFTjgpfA3O/6Odp0=";
-        rev = "d823fd85da3fb83146f734377da454473b93a2b2";
+        hash = "sha256-vzZu/Mo4/xATSD9KgKcRuBKVg9CoRZC9i0PEajYr4UM=";
+        rev = "b3a0bff47dd81073bfe67a402971bad92e4f2423";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-04-10";
+        version = "2024-06-06";
       };
     };
-    hash = "sha256-8Qe1hgDEjvdAf2ao4CIieC7l2pTSIPLTZb+vdctUEo0=";
-    version = "125.0.6422.141";
+    hash = "sha256-LuUDEpYCJLR/X+zjsF26aum4/Wfu2MNowofPu8iRVxI=";
+    version = "127.0.6533.119";
   };
   ungoogled-chromium = {
     deps = {
       gn = {
-        hash = "sha256-lrVAb6La+cvuUCNI90O6M/sheOEVFTjgpfA3O/6Odp0=";
-        rev = "d823fd85da3fb83146f734377da454473b93a2b2";
+        hash = "sha256-vzZu/Mo4/xATSD9KgKcRuBKVg9CoRZC9i0PEajYr4UM=";
+        rev = "b3a0bff47dd81073bfe67a402971bad92e4f2423";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-04-10";
+        version = "2024-06-06";
       };
       ungoogled-patches = {
-        hash = "sha256-ZYYizL3hFSEQUdDDZIvsEzidq5td+UoaWdertY/pqOc=";
-        rev = "125.0.6422.141-1";
+        hash = "sha256-m1H/7JsSF7Akm5eBlPB/F4mAdFjUPtOQIUoXup09w40=";
+        rev = "127.0.6533.119-1";
       };
     };
-    hash = "sha256-8Qe1hgDEjvdAf2ao4CIieC7l2pTSIPLTZb+vdctUEo0=";
-    version = "125.0.6422.141";
+    hash = "sha256-LuUDEpYCJLR/X+zjsF26aum4/Wfu2MNowofPu8iRVxI=";
+    version = "127.0.6533.119";
   };
 }

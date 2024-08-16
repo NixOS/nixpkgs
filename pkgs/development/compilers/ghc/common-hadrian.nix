@@ -13,6 +13,7 @@
 , pkgsBuildTarget
 , pkgsHostTarget
 , targetPackages
+, fetchpatch
 
 # build-tools
 , bootPkgs
@@ -170,6 +171,13 @@
            then ./docs-sphinx-7-ghc98.patch
            else ./docs-sphinx-7.patch )
         ]
+        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
+          (fetchpatch {
+            name = "fix-fully_static.patch";
+            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1bb24432ff77e11a0340a7d8586e151e15bba2a1.diff";
+            hash = "sha256-MpvTmFFsNiPDoOp9BhZyWeapeibQ77zgEV+xzZ1UAXs=";
+          })
+        ]
         ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
           # Prevent the paths module from emitting symbols that we don't use
           # when building with separate outputs.
@@ -177,7 +185,9 @@
           # These cause problems as they're not eliminated by GHC's dead code
           # elimination on aarch64-darwin. (see
           # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-          ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+          (if lib.versionOlder version "9.10"
+           then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+           else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
         ]
         # Prevents passing --hyperlinked-source to haddock. This is a custom
         # workaround as we wait for this to be configurable via userSettings or
@@ -257,23 +267,42 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
-  # derivation for certain tools depending on the platform.
-  bintoolsFor = {
-    # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-    # part of the bintools wrapper (due to codesigning requirements), but not on
-    # x86_64-darwin.
-    install_name_tool =
-      if stdenv.targetPlatform.isAarch64
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-    # Same goes for strip.
-    strip =
-      # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-      if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-  };
+  # toolPath calculates the absolute path to the name tool associated with a
+  # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
+  # the tool from (cc, cc.bintools, cc.bintools.bintools) and adds the correct
+  # subpath of the tool.
+  toolPath = name: cc:
+    let
+      tools = {
+        "cc" = cc;
+        "c++" = cc;
+        as = cc.bintools.bintools;
+
+        ar = cc.bintools.bintools;
+        ranlib = cc.bintools.bintools;
+        nm = cc.bintools.bintools;
+        readelf = cc.bintools.bintools;
+
+        ld = cc.bintools;
+        "ld.gold" = cc.bintools;
+
+        otool = cc.bintools.bintools;
+
+        # GHC needs install_name_tool on all darwin platforms. The same one can
+        # be used on both platforms. It is safe to use with linker-generated
+        # signatures because it will update the signatures automatically after
+        # modifying the target binary.
+        install_name_tool = cc.bintools.bintools;
+
+        # strip on darwin is wrapped to enable deterministic mode.
+        strip =
+          # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
+          if stdenv.targetPlatform.isDarwin
+          then cc.bintools
+          else cc.bintools.bintools;
+      }.${name};
+    in
+    "${tools}/bin/${tools.targetPrefix}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -319,19 +348,19 @@ stdenv.mkDerivation ({
     done
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
+    export CC="${toolPath "cc" targetCC}"
+    export CXX="${toolPath "c++" targetCC}"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${bintoolsFor.strip}/bin/${bintoolsFor.strip.targetPrefix}strip"
+    export LD="${toolPath "ld${lib.optionalString useLdGold ".gold"}" targetCC}"
+    export AS="${toolPath "as" targetCC}"
+    export AR="${toolPath "ar" targetCC}"
+    export NM="${toolPath "nm" targetCC}"
+    export RANLIB="${toolPath "ranlib" targetCC}"
+    export READELF="${toolPath "readelf" targetCC}"
+    export STRIP="${toolPath "strip" targetCC}"
   '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
-    export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
-    export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
+    export OTOOL="${toolPath "otool" targetCC}"
+    export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
   '' + lib.optionalString useLLVM ''
     export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
     export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
@@ -425,8 +454,8 @@ stdenv.mkDerivation ({
     "--disable-large-address-space"
   ] ++ lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
-    "--with-libdw-includes=${lib.getDev elfutils}/include"
-    "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+    "--with-libdw-includes=${lib.getDev targetPackages.elfutils}/include"
+    "--with-libdw-libraries=${lib.getLib targetPackages.elfutils}/lib"
   ] ++ lib.optionals targetPlatform.isDarwin [
     # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
     # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
@@ -547,16 +576,12 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
-    # https://github.com/NixOS/nixpkgs/issues/208959
-    broken =
-      (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8")
-      && stdenv.targetPlatform.isStatic;
   };
 
   dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

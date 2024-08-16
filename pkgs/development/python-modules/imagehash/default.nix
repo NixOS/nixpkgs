@@ -33,7 +33,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A Python Perceptual Image Hashing Module";
+    description = "Python Perceptual Image Hashing Module";
     mainProgram = "find_similar_images.py";
     homepage = "https://github.com/JohannesBuchner/imagehash";
     license = licenses.bsd2;

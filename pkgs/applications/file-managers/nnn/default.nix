@@ -20,9 +20,9 @@
 }:
 
 # Mutually exclusive options
-assert withIcons -> (withNerdIcons == false && withEmojis == false);
-assert withNerdIcons -> (withIcons == false && withEmojis == false);
-assert withEmojis -> (withIcons == false && withNerdIcons == false);
+assert withIcons -> (!withNerdIcons && !withEmojis);
+assert withNerdIcons -> (!withIcons && !withEmojis);
+assert withEmojis -> (!withIcons && !withNerdIcons);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";

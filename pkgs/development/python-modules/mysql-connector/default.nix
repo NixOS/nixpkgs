@@ -1,8 +1,6 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
-  django,
   dnspython,
   fetchFromGitHub,
   protobuf,
@@ -58,7 +56,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A MySQL driver";
+    description = "MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
       implements the DB API v2.0 specification.
@@ -68,7 +66,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       neosimsim
-      turion
     ];
   };
 }

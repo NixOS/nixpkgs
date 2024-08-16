@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "4.2.0";
+  version = "4.2.1";
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QAxLYujnsudaiz9UepwrBA835Pct5h4VcE9ZrbkwMmg=";
+    hash = "sha256-DT8Q8x+OvrxnoLWwdS/Gv8x5cepJPIF1ZPyOumnwq2E=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -50,7 +50,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       dotlambda
-      wolfangaukang
     ];
   };
 }

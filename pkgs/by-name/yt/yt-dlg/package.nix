@@ -5,7 +5,7 @@
   fetchPypi
 }:
 let
-  python3Packages =
+  python3' =
     (python3.override {
       packageOverrides = final: prev: {
         wxpython = prev.wxpython.overrideAttrs rec {
@@ -17,7 +17,10 @@ let
           };
         };
       };
-    }).pkgs;
+    });
+
+  python3Packages = python3'.pkgs;
+
 in
 python3Packages.buildPythonApplication rec {
   pname = "yt-dlg";
@@ -40,8 +43,13 @@ python3Packages.buildPythonApplication rec {
     wxpython
   ];
 
+  postInstall = ''
+    install -Dm444 yt-dlg.desktop -t $out/share/applications
+    cp -r youtube_dl_gui/data/* $out/share
+  '';
+
   meta = {
-    description = "A cross platform front-end GUI of the popular youtube-dl written in wxPython.";
+    description = "Cross platform front-end GUI of the popular youtube-dl written in wxPython";
     homepage = "https://oleksis.github.io/youtube-dl-gui";
     license = lib.licenses.unlicense;
     mainProgram = "yt-dlg";

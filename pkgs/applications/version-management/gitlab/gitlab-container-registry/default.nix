@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "4.1.0";
+  version = "4.6.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-t+i9IuBH94PpfriIAaqqWYZHxKJJDOedJ3BQXGEPp0A=";
+    hash = "sha256-rFojpy8xUXhlzBFBYFW3+AjDI5efaNWh+Vi3wsqVebI=";
   };
 
-  vendorHash = "sha256-sybppXCoTrc196xLBW1+sUg9Y5uA0GAptlJ7RjhzuGc=";
+  vendorHash = "sha256-xhy0WSqdlri5bckIeS6CSeyZGf3pBNpLElkvsMm6N48=";
 
   postPatch = ''
     # Disable flaky inmemory storage driver test
@@ -26,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The GitLab Docker toolset to pack, ship, store, and deliver content";
+    description = "GitLab Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
     maintainers = with maintainers; [ yayayayaka xanderio ];
     platforms = platforms.unix;

@@ -17,7 +17,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool for converting websites to rss/atom feeds";
+    description = "Tool for converting websites to rss/atom feeds";
     homepage = "https://git.sr.ht/~ghost08/ratt";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];

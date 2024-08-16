@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dsda-doom";
-  version = "0.27.5";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
     rev = "v${version}";
-    hash = "sha256-+rvRj6RbJ/RaKmlDZdB2oBm/U6SuHNxye8TdpEOZwQw=";
+    hash = "sha256-4oVQcZ/GOYc9lXMgb3xMXg9ZNB9rYBosbf09cXge6MI=";
   };
 
   sourceRoot = "${src.name}/prboom2";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/kraflab/dsda-doom";
-    description = "An advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
+    description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
     mainProgram = "dsda-doom";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

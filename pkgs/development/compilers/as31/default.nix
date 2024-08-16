@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";
-    description = "An 8031/8051 assembler";
+    description = "8031/8051 assembler";
     mainProgram = "as31";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];

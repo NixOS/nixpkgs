@@ -73,6 +73,12 @@ buildPythonPackage rec {
       url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
+
+    # https://github.com/twisted/twisted/security/advisories/GHSA-cf56-g6w6-pqq2
+    ./CVE-2024-41671.patch
+
+    # https://github.com/twisted/twisted/security/advisories/GHSA-c8m8-j448-xjx7
+    ./CVE-2024-41810.patch
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -129,6 +135,10 @@ buildPythonPackage rec {
       # fail on Python 3.12
       echo 'WorkerReporterTests.test_addSkipPyunit.skip = "'WorkerReporter' object has no attribute '_testStarted'"' >> src/twisted/trial/_dist/test/test_workerreporter.py
       echo 'LocalWorkerAMPTests.test_runSkip.skip = "twisted.protocols.amp.UnknownRemoteError: Code<UNKNOWN>: Unknown Error"' >> src/twisted/trial/_dist/test/test_worker.py
+
+      # https://github.com/twisted/twisted/issues/12194
+      echo 'FlattenerErrorTests.test_asynchronousFlattenError.skip = "builtins.KeyError: 'root'"' >> src/twisted/web/test/test_flatten.py
+      echo 'FlattenerErrorTests.test_cancel.skip = "builtins.KeyError: 'root'"' >> src/twisted/web/test/test_flatten.py
 
       # not packaged
       substituteInPlace src/twisted/test/test_failure.py \
@@ -222,6 +232,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

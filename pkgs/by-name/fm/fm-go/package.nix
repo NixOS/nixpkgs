@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, stdenv
 }:
 
 let
@@ -20,7 +19,7 @@ let
 
     meta = {
       homepage = "https://github.com/mistakenelf/fm";
-      description = "A terminal based file manager";
+      description = "Terminal based file manager";
       changelog = "https://github.com/mistakenelf/fm/releases/tag/${finalAttrs.src.rev}";
       license = with lib.licenses; [ mit ];
       mainProgram = "fm";

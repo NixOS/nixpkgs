@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A non-interactive software package for producing plots and charts";
+    description = "Non-interactive software package for producing plots and charts";
     longDescription = ''
       Ploticus is a free, GPL'd, non-interactive
       software package for producing plots, charts, and graphics from

@@ -4,28 +4,17 @@
 , coreutils
 , zlib
 , openssl
-, callPackage
 , makeSetupHook
-, makeWrapper
+, zip
+  # Passed from ../default.nix
 , dotnet-sdk
-, disabledTests
-, nuget-source
 , dotnet-runtime
-, runtimeDeps
-, buildType
-, runtimeId
 }:
-assert (builtins.isString runtimeId);
-
-let
-  libraryPath = lib.makeLibraryPath runtimeDeps;
-in
 {
   dotnetConfigureHook = makeSetupHook
     {
       name = "dotnet-configure-hook";
       substitutions = {
-        nugetSource = nuget-source;
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
         libPath = lib.makeLibraryPath [
           stdenv.cc.cc.lib
@@ -34,7 +23,6 @@ in
           zlib
           openssl
         ];
-        inherit runtimeId;
       };
     }
     ./dotnet-configure-hook.sh;
@@ -42,26 +30,12 @@ in
   dotnetBuildHook = makeSetupHook
     {
       name = "dotnet-build-hook";
-      substitutions = {
-        inherit buildType runtimeId;
-      };
     }
     ./dotnet-build-hook.sh;
 
   dotnetCheckHook = makeSetupHook
     {
       name = "dotnet-check-hook";
-      substitutions = {
-        inherit buildType runtimeId libraryPath;
-        disabledTests = lib.optionalString (disabledTests != [ ])
-          (
-            let
-              escapedNames = lib.lists.map (n: lib.replaceStrings [ "," ] [ "%2C" ] n) disabledTests;
-              filters = lib.lists.map (n: "FullyQualifiedName!=${n}") escapedNames;
-            in
-            "${lib.concatStringsSep "&" filters}"
-          );
-      };
     }
     ./dotnet-check-hook.sh;
 
@@ -69,7 +43,7 @@ in
     {
       name = "dotnet-install-hook";
       substitutions = {
-        inherit buildType runtimeId;
+        inherit zip;
       };
     }
     ./dotnet-install-hook.sh;
@@ -79,11 +53,7 @@ in
       name = "dotnet-fixup-hook";
       substitutions = {
         dotnetRuntime = dotnet-runtime;
-        runtimeDeps = libraryPath;
-        shell = stdenv.shell;
-        which = "${which}/bin/which";
-        dirname = "${coreutils}/bin/dirname";
-        realpath = "${coreutils}/bin/realpath";
+        wrapperPath = lib.makeBinPath [ which coreutils ];
       };
     }
     ./dotnet-fixup-hook.sh;

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://engelsystem.de";
     license = licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

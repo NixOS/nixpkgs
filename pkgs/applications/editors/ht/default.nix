@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://hte.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ht";
   };
 }

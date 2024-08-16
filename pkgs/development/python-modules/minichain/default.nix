@@ -9,7 +9,6 @@
   openai,
   pytestCheckHook,
   pythonAtLeast,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     substituteInPlace ./minichain/__init__.py --replace "from .gradio import GradioConf, show" ""
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # Only used in the examples:
@@ -65,7 +63,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A tiny library for coding with large language models";
+    description = "Tiny library for coding with large language models";
     homepage = "https://srush-minichain.hf.space";
     changelog = "https://github.com/srush/MiniChain/releases/tag/v${version}";
     license = licenses.mit;

@@ -7,7 +7,7 @@
 , ninja
 , vala
 , pkg-config
-, gnome
+, adwaita-icon-theme
 , libchamplain
 , gdl
 , wrapGAppsHook3
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdl
     libchamplain
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libxml2
   ];
 

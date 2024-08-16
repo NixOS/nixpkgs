@@ -761,6 +761,7 @@
     "LicenseRef-KDE-Accepted-LGPL"
   ],
   "kcontacts": [
+    "BSD-3-Clause",
     "CC0-1.0",
     "LGPL-2.0-or-later"
   ],
@@ -1754,6 +1755,15 @@
     "CC0-1.0",
     "GPL-2.0-or-later"
   ],
+  "krdp": [
+    "BSD-2-Clause",
+    "CC0-1.0",
+    "GPL-2.0-or-later",
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-only",
+    "LGPL-3.0-only",
+    "LicenseRef-KDE-Accepted-LGPL"
+  ],
   "krecorder": [
     "BSD-3-Clause",
     "CC-BY-4.0",
@@ -2075,7 +2085,10 @@
   "layer-shell-qt": [
     "BSD-3-Clause",
     "CC0-1.0",
+    "LGPL-2.1-only",
+    "LGPL-3.0-only",
     "LGPL-3.0-or-later",
+    "LicenseRef-KDE-Accepted-LGPL",
     "MIT"
   ],
   "libgravatar": [
@@ -2525,6 +2538,7 @@
     "LicenseRef-Qt-Commercial"
   ],
   "plasma-mobile": [
+    "Apache-2.0",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
@@ -2634,9 +2648,11 @@
   ],
   "plasma-workspace-wallpapers": [],
   "plasma5support": [
+    "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
-    "LGPL-2.0-or-later"
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-or-later"
   ],
   "plasmatube": [
     "CC-BY-SA-4.0",
@@ -2666,6 +2682,7 @@
     "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LGPL-2.0-only",
+    "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
@@ -2830,7 +2847,6 @@
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
-    "GPL-3.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.1-or-later",
     "LicenseRef-KDE-Accepted-GPL"

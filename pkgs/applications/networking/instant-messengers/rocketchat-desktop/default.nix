@@ -4,11 +4,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rocketchat-desktop";
-  version = "3.9.15";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/download/${version}/rocketchat-${version}-linux-amd64.deb";
-    hash = "sha256-fMnr7RCNoYVyV+CzKOIqaGd6T6+3fJxMuPjNdFAZdX0=";
+    hash = "sha256-GWU2qGeQB8bou0+Ja6Cs4bQM1stAL+dlKC3QNTA0EIY=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     atk
     pango
     freetype
-    libgnome-keyring3
+    libgnome-keyring
     fontconfig
     gdk-pixbuf
     cairo

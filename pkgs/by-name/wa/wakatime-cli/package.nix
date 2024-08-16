@@ -1,23 +1,23 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   testers,
   wakatime-cli,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "wakatime-cli";
-  version = "1.90.0";
+  version = "1.98.3";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     rev = "v${version}";
-    hash = "sha256-A2YrDrXmMR4BJUOYuo3h3Pa5HqyYSoDr/qdH54INU3w=";
+    hash = "sha256-AoefP/hWdflCOjZtmKyjcjUfst3SXF+EHfJyPcACWPE=";
   };
 
-  vendorHash = "sha256-pejrUFcv9c4ZAE3Cuw7uytc1T2pr7SOZNJ/Wr8K+fas=";
+  vendorHash = "sha256-+9zdEIaKQlLcBwFaY5Fe5mpHWQDqfV+j1TPmDkdRjyk=";
 
   ldflags = [
     "-s"
@@ -47,11 +47,11 @@ buildGo122Module rec {
     command = "HOME=$(mktemp -d) wakatime-cli --version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wakatime.com/";
     description = "WakaTime command line interface";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "wakatime-cli";
   };
 }

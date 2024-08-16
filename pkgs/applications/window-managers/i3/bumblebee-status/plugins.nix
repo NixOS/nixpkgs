@@ -28,7 +28,7 @@ in
   brightness.propagatedBuildInputs = [ ];
   caffeine.propagatedBuildInputs = [ pkgs.xdg-utils pkgs.xdotool pkgs.xorg.xprop pkgs.libnotify ];
   cmus.propagatedBuildInputs = [ pkgs.cmus ];
-  cpu.propagatedBuildInputs = [ py.psutil pkgs.gnome.gnome-system-monitor ];
+  cpu.propagatedBuildInputs = [ py.psutil pkgs.gnome-system-monitor ];
   cpu2.propagatedBuildInputs = [ py.psutil pkgs.lm_sensors ];
   cpu3.propagatedBuildInputs = [ py.psutil pkgs.lm_sensors ];
   currency.propagatedBuildInputs = [ py.requests ];
@@ -85,8 +85,8 @@ in
   # NOTE: Yes, there is also a plugin named `layout-xkbswitch` with a dash.
   layout_xkbswitch.propagatedBuildInputs = [ pkgs.xkb-switch ];
   libvirtvms.propagatedBuildInputs = [ py.libvirt ];
-  load.propagatedBuildInputs = [ pkgs.gnome.gnome-system-monitor ];
-  memory.propagatedBuildInputs = [ pkgs.gnome.gnome-system-monitor ];
+  load.propagatedBuildInputs = [ pkgs.gnome-system-monitor ];
+  memory.propagatedBuildInputs = [ pkgs.gnome-system-monitor ];
   messagereceiver = { };
   mocp.propagatedBuildInputs = [ pkgs.moc ];
   mpd.propagatedBuildInputs = [ pkgs.mpc-cli ];

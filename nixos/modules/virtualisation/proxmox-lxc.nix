@@ -1,9 +1,19 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 {
   options.proxmoxLXC = {
+    enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = "Whether to enable the Proxmox VE LXC module.";
+    };
     privileged = mkOption {
       type = types.bool;
       default = false;
@@ -35,20 +45,36 @@ with lib;
     let
       cfg = config.proxmoxLXC;
     in
-    {
+    mkIf cfg.enable {
       system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
-        storeContents = [{
-          object = config.system.build.toplevel;
-          symlink = "none";
-        }];
+        storeContents = [
+          {
+            object = config.system.build.toplevel;
+            symlink = "none";
+          }
+        ];
 
-        contents = [{
-          source = config.system.build.toplevel + "/init";
-          target = "/sbin/init";
-        }];
+        contents = [
+          {
+            source = config.system.build.toplevel + "/init";
+            target = "/sbin/init";
+          }
+        ];
 
         extraCommands = "mkdir -p root etc/systemd/network";
       };
+
+      boot.postBootCommands = ''
+        # After booting, register the contents of the Nix store in the Nix
+        # database.
+        if [ -f /nix-path-registration ]; then
+          ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration &&
+          rm /nix-path-registration
+        fi
+
+        # nixos-rebuild also requires a "system" profile
+        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+      '';
 
       boot = {
         isContainer = true;
@@ -65,17 +91,36 @@ with lib;
         hostName = mkIf (!cfg.manageHostName) (mkForce "");
       };
 
+      # unprivileged LXCs can't set net.ipv4.ping_group_range
+      security.wrappers.ping = mkIf (!cfg.privileged) {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_net_raw+p";
+        source = "${pkgs.iputils.out}/bin/ping";
+      };
+
       services.openssh = {
         enable = mkDefault true;
         startWhenNeeded = mkDefault true;
       };
 
       systemd = {
-        mounts = mkIf (!cfg.privileged) [{
-          enable = false;
-          where = "/sys/kernel/debug";
-        }];
-        services."getty@".unitConfig.ConditionPathExists = [ "" "/dev/%I" ];
+        mounts = mkIf (!cfg.privileged) [
+          {
+            enable = false;
+            where = "/sys/kernel/debug";
+          }
+        ];
+
+        # By default only starts getty on tty0 but first on LXC is tty1
+        services."autovt@".unitConfig.ConditionPathExists = [
+          ""
+          "/dev/%I"
+        ];
+
+        # These are disabled by `console.enable` but console via tty is the default in Proxmox
+        services."getty@tty1".enable = lib.mkForce true;
+        services."autovt@".enable = lib.mkForce true;
       };
 
     };

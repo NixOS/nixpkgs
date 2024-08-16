@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
+    description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
     maintainers = with maintainers; [ brian-dawn pbsds ];

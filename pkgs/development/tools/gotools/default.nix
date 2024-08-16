@@ -2,25 +2,23 @@
 
 buildGoModule rec {
   pname = "gotools";
-  version = "0.18.0";
+  version = "0.22.0";
 
   # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is to basic to browse
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     rev = "v${version}";
-    hash = "sha256-sOT98DdLYtPXovpcX020BbLSH99ByJSaVQeM10IcKG4=";
+    hash = "sha256-qqzvbHFbm6RlqztBnuj7HvMa9Wff1+YUA0fxiM0cx8o=";
   };
 
   postPatch = ''
     # The gopls folder contains a Go submodule which causes a build failure
     # and lives in its own package named gopls.
     rm -r gopls
-    # getgo is an experimental go installer which adds generic named server and client binaries to $out/bin
-    rm -r cmd/getgo
   '';
 
-  vendorHash = "sha256-gGAEl3yabXy1qbuBJyrpD+TRrKr56cZEOiSaBoBsYc8=";
+  vendorHash = "sha256-eQ/T/Zxmzn6KF0ewjvt9TDd48RSsSbQ3LgVcKgdeVbU=";
 
   doCheck = false;
 

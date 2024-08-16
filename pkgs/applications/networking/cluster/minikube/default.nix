@@ -66,7 +66,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://minikube.sigs.k8s.io";
-    description = "A tool that makes it easy to run Kubernetes locally";
+    description = "Tool that makes it easy to run Kubernetes locally";
     mainProgram = "minikube";
     license = licenses.asl20;
     maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];

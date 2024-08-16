@@ -6,7 +6,6 @@
 , mpv
 , nodejs
 , qmake
-, qtwebchannel
 , qtwebengine
 , wrapQtAppsHook
 }:
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Gky0/HaGm11PeV4twoQV71T99NG2o0mYzQxu/c9x5oE=";
+    hash = "sha256-Gky0/HaGm11PeV4twoQV71T99NG2o0mYzQxu/c9x5oE=";
   };
 
   server = fetchurl {
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     mainProgram = "stremio";
-    description = "A modern media center that gives you the freedom to watch everything you want.";
+    description = "Modern media center that gives you the freedom to watch everything you want";
     homepage = "https://www.stremio.com/";
     # (Server-side) web UI is closed source now, apparently they work on open-sourcing it.
     # server.js appears to be MIT-licensed, but I can't find how they actually build it.

@@ -3,8 +3,10 @@
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-daemon;
   toml = pkgs.formats.toml { };
+  connectionDir = if globalCfg.stateless then "/run" else "/var/lib";
   defaultConfig = {
     general = {
       id = "sd";
@@ -12,16 +14,16 @@ let
       reconnect_to_dispatcher = true;
     };
     path_db = {
-      connection = "/var/lib/scion-daemon/sd.path.db";
+      connection = "${connectionDir}/scion-daemon/sd.path.db";
     };
     trust_db = {
-      connection = "/var/lib/scion-daemon/sd.trust.db";
+      connection = "${connectionDir}/scion-daemon/sd.trust.db";
     };
     log.console = {
       level = "info";
     };
   };
-  configFile = toml.generate "scion-daemon.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-daemon.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-daemon = {
@@ -32,7 +34,7 @@ in
       example = literalExpression ''
         {
           path_db = {
-            connection = "/var/lib/scion-daemon/sd.path.db";
+            connection = "/run/scion-daemon/sd.path.db";
           };
           log.console = {
             level = "info";
@@ -54,10 +56,10 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.scion}/bin/scion-daemon --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-daemon --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        StateDirectory = "scion-daemon";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-daemon";
       };
     };
   };

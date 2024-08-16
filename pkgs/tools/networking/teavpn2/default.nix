@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An open source VPN Software";
+    description = "Open source VPN Software";
     homepage = "https://github.com/TeaInside/teavpn2";
     license = licenses.gpl2Plus;
     mainProgram = "teavpn2";

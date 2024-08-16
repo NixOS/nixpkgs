@@ -5,7 +5,7 @@
 set -eu -o pipefail
 
 version=$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-    curl -s https://api.github.com/repos/nkallen/plasticity/releases/latest | jq -e -r ".tag_name | .[1:]")
+    https://api.github.com/repos/nkallen/plasticity/releases/latest | jq -e -r ".tag_name | .[1:]")
 old_version=$(nix-instantiate --eval -A plasticity.version | jq -e -r)
 
 if [[ $version == "$old_version" ]]; then

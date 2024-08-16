@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, llvmPackages_16, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
+, symlinkJoin, cudaPackages, enableCUDA ? false
 , libffi, libobjc, libpfm, Cocoa, Foundation
 }:
 
@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A low-level counterpart to Lua";
+    description = "Low-level counterpart to Lua";
     homepage = "https://terralang.org/";
     platforms = platforms.all;
     maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];

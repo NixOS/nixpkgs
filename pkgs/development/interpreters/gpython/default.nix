@@ -38,7 +38,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A Python interpreter written in Go";
+    description = "Python interpreter written in Go";
     mainProgram = "gpython";
     homepage = "https://github.com/go-python/gpython";
     changelog = "https://github.com/go-python/gpython/releases/tag/${src.rev}";

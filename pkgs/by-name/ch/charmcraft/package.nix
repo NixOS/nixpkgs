@@ -1,14 +1,37 @@
 {
   lib,
   git,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
+        version = "0.11.2";
+        src = fetchFromGitHub {
+          owner = "NowanIlfideme";
+          repo = "pydantic-yaml";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+        };
+        dependencies = with self; [
+          deprecated
+          importlib-metadata
+          pydantic_1
+          ruamel-yaml
+          types-deprecated
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "2.6.0";
+  version = "3.1.2";
 
   pyproject = true;
 
@@ -16,20 +39,22 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-B0ZcOORW6yaSIpisPLnq5/S/CcqqvHNTXcfP1sKW2KQ=";
+    hash = "sha256-Qi2ZtAYgQlKj77QPovcT3RrPwAlEwaFyoJ0MAq4EETE=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'version=determine_version()' 'version="${version}"'
+    substituteInPlace charmcraft/__init__.py --replace-fail "dev" "${version}"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python.pkgs; [
+    craft-application
     craft-cli
     craft-parts
+    craft-platforms
     craft-providers
     craft-store
     distro
+    docker
     humanize
     jinja2
     jsonschema
@@ -44,23 +69,26 @@ python3Packages.buildPythonApplication rec {
     urllib3
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
+  build-system = with python.pkgs; [
     setuptools
+    setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
-  nativeCheckInputs = with python3Packages; [
-    pyfakefs
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [ git ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      hypothesis
+      pyfakefs
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+    ]
+    ++ [ git ];
 
   preCheck = ''
     mkdir -p check-phase

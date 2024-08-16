@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     pname = "refinery_cli";
     inherit version;
-    sha256 = "sha256-gHW+5WWzk1H2O5B2sWdl6QcOeUbNvbdZZBD10SmE1GA=";
+    hash = "sha256-gHW+5WWzk1H2O5B2sWdl6QcOeUbNvbdZZBD10SmE1GA=";
   };
 
   cargoHash = "sha256-Go7+LZSze/IrNwEl+11Dm5O9RcREyPSkHPjlE9SPO70=";

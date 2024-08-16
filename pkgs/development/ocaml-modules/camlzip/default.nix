@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://cristal.inria.fr/~xleroy/software.html#camlzip";
-    description = "A library for handling ZIP and GZIP files in OCaml";
+    description = "Library for handling ZIP and GZIP files in OCaml";
     longDescription = ''
       This Objective Caml library provides easy access to compressed files in
       ZIP and GZIP format, as well as to Java JAR files.  It provides functions

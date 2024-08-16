@@ -20,8 +20,7 @@ all_versions=$(jq --exit-status --raw-output \
     <<< "$response")
 latest_version=$(sort --version-sort <<< "$all_versions" | tail -n 1)
 for platform in x86_64-linux x86_64-darwin; do
-    update-source-version sauce-connect 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" \
-        --source-key="passthru.sources.$platform"
     update-source-version sauce-connect "$latest_version" \
+        --ignore-same-version \
         --source-key="passthru.sources.$platform"
 done

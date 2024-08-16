@@ -3,7 +3,6 @@
 , root
 , bash
 , fish
-, ksh
 , tcsh
 , zsh
 }: runCommand "test-thisroot"

@@ -30,13 +30,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IErym/Fd8G75NOa+xOyV87UNmEaB31XPvg8GWCSP7k8=";
+    hash = "sha256-IErym/Fd8G75NOa+xOyV87UNmEaB31XPvg8GWCSP7k8=";
   };
 
   patches = [
     # Merged, remove this next release
     (fetchpatch {
-      url = "https://github.com/digital-asset/dazl-client/pull/428.patch";
+      name = "428.patch"; # https://github.com/digital-asset/dazl-client/pull/428
+      url = "https://github.com/digital-asset/dazl-client/commit/a68bad0471d22210f0abf31447a7732477de39d4.patch";
       sha256 = "sha256-Gx9W1XkvMPg8FAOAXijDF5QnMbntk5mR0q5+o5i2KAE=";
     })
   ];

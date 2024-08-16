@@ -29,8 +29,8 @@
 }:
 
 let
-  # FIXME: Compare revision with
-  # https://github.com/radareorg/radare2/blob/master/libr/arch/p/arm/v35/Makefile#L26-L27
+  # NOTE: Check these revision changes when updating the package.
+  # https://github.com/radareorg/radare2/blob/master/libr/arch/p/arm/v35/Makefile#L25-L26
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
@@ -44,15 +44,15 @@ let
     hash = "sha256-YhfgJ7M8ys53jh1clOzj0I2yfJshXQm5zP0L9kMYsmk=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "5.9.0";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
-    rev = "refs/tags/${version}";
-    hash = "sha256-h2IYOGr+yCgCJR1gB4jibcUt1A+8IuNVoTUcJ83lKHw=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-smsjGfTvSTVwd7nhWhptYpkus2fEQ2EVdT5bDt/rHZE=";
   };
 
   preBuild = ''
@@ -66,30 +66,27 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -add_rpath $out/lib $out/lib/libr_io.${version}.dylib
+    install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
 
   mesonFlags = [
+   "-Dr2_gittap=${finalAttrs.version}"
    "-Duse_sys_capstone=true"
-   "-Duse_sys_magic=true"
-   "-Duse_sys_zip=true"
-   "-Duse_sys_xxhash=true"
    "-Duse_sys_lz4=true"
-   "-Dr2_gittap=${version}"
+   "-Duse_sys_magic=true"
+   "-Duse_sys_openssl=true"
+   "-Duse_sys_xxhash=true"
+   "-Duse_sys_zip=true"
   ];
 
-  # TODO: remove when upstream fixes the issue
-  # https://github.com/radareorg/radare2/issues/22793
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-     "-DTHREAD_CONVERT_THREAD_STATE_TO_SELF=1"
-  ]);
-
   enableParallelBuilding = true;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   strictDeps = true;
 
   nativeBuildInputs = [ pkg-config meson ninja python3 ];
+
   buildInputs = [
     capstone
     file
@@ -113,11 +110,27 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "UNIX-like reverse engineering framework and command-line tools";
+    description = "UNIX-like reverse engineering framework and command-line toolset";
+    longDescription = ''
+      r2 is a complete rewrite of radare. It provides a set of libraries, tools
+      and plugins to ease reverse engineering tasks. Distributed mostly under
+      LGPLv3, each plugin can have different licenses.
+
+      The radare project started as a simple command-line hexadecimal editor
+      focused on forensics. Today, r2 is a featureful low-level command-line
+      tool with support for scripting with the embedded JavaScript interpreter
+      or via r2pipe.
+
+      r2 can edit files on local hard drives, view kernel memory, and debug
+      programs locally or via a remote gdb/windbg servers. r2's wide
+      architecture support allows you to analyze, emulate, debug, modify, and
+      disassemble any binary.
+    '';
     homepage = "https://radare.org";
-    changelog = "https://github.com/radareorg/radare2/releases/tag/${version}";
-    license = licenses.gpl2Plus;
+    changelog = "https://github.com/radareorg/radare2/releases/tag/${finalAttrs.version}";
+    license = with licenses; [ gpl3Only lgpl3Only ];
     maintainers = with maintainers; [ azahi raskin makefu mic92 arkivm ];
+    mainProgram = "radare2";
     platforms = platforms.unix;
   };
-}
+})

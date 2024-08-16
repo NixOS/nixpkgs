@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, runtimeShellPackage
 # TODO: links -lsigsegv but loses the reference for some reason
 , withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
 , interactive ? false, readline
@@ -39,7 +40,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ]
     ++ lib.optional (doCheck && stdenv.isLinux) glibcLocales;
 
-  buildInputs = lib.optional withSigsegv libsigsegv
+  buildInputs = [
+    runtimeShellPackage
+  ] ++ lib.optional withSigsegv libsigsegv
     ++ lib.optional interactive readline
     ++ lib.optional stdenv.isDarwin locale;
 

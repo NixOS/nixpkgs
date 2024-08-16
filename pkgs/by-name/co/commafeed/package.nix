@@ -49,14 +49,13 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-YnEDJf4GeyiXxOh8tZZTZdLOJrisG6lmShXU97ueGNE=";
+  mvnHash = "sha256-LDZv3CBc/FpVMKmZ+kqfBdkTbqZcJMRqeXN35t4rwJI=";
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"
     "-Dskip.npm"
     "-Dspotless.check.skip"
     "-Dmaven.gitcommitid.skip"
-    "-DskipTests"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -70,6 +69,8 @@ maven.buildMavenPackage {
 
     runHook postConfigure
   '';
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall

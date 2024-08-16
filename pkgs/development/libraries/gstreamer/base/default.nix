@@ -46,15 +46,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.24.2";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
+
+  separateDebugInfo = true;
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-KC8cyAZcm2Lragog+56DKPjlKW3yRYtyNtqnKcQa52k=";
+    hash = "sha256-8QlDl+qnky8G5X67sHWqM6osduS3VjChawLI1K9Ggy4=";
   };
 
   strictDeps = true;
@@ -172,6 +174,6 @@ stdenv.mkDerivation (finalAttrs: {
       "gstreamer-video-1.0"
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 })

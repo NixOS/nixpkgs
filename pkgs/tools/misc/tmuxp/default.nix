@@ -2,8 +2,8 @@
 
 let
   pname = "tmuxp";
-  version = "1.46.0";
-  hash = "sha256-+aXpsB4mjw9sZLalv3knW8okP+mh2P/nbZCiCwa3UBU=";
+  version = "1.47.0";
+  hash = "sha256-HYY6CEUPpZVvVK9kV4Ehw4wGk5YfIVSkZ0+qqf6Nz4c=";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;

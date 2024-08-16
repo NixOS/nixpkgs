@@ -1,0 +1,22 @@
+diff --git a/lua/preview.lua b/lua/preview.lua
+index 6d9875d..729cc70 100644
+--- a/lua/preview.lua
++++ b/lua/preview.lua
+@@ -28,7 +28,7 @@ local function open_window(file)
+ 	vim.env.MDT_WIDTH = width
+ 
+ 	vim.cmd.vnew()
+-	vim.fn.termopen("mdt " .. file)
++	vim.fn.termopen("@mdt@ " .. file)
+ 
+ 	vim.cmd("setlocal nonumber norelativenumber")
+ 	vim.api.nvim_feedkeys("a", "t", false)
+@@ -49,7 +49,7 @@ end
+ function M.setup()
+ 	-- Check if "mdt" is installed
+ 	if vim.fn.executable("mdt") == 0 then
+-		install()
++		-- install()
+ 	end
+ 
+ 	set_cmd()

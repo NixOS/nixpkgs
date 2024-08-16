@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A simple GIT URL parser";
+    description = "Simple GIT URL parser";
     homepage = "https://github.com/coala/git-url-parse";
     changelog = "https://github.com/coala/git-url-parse/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

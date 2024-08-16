@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "soundtouch";
     repo = "soundtouch";
     rev = version;
-    sha256 = "sha256-imeeTj+3gXxoGTuC/13+BAplwcnQ0wRJdSVt7MPlBxc=";
+    hash = "sha256-imeeTj+3gXxoGTuC/13+BAplwcnQ0wRJdSVt7MPlBxc=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A program and library for changing the tempo, pitch and playback rate of audio";
+    description = "Program and library for changing the tempo, pitch and playback rate of audio";
     homepage = "https://www.surina.net/soundtouch/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ orivej ];

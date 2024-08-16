@@ -13,7 +13,7 @@
   dbus,
   freetype,
   SDL2,
-  gnome,
+  zenity,
 
   builderArgs,
 }:
@@ -126,7 +126,7 @@ buildDubPackage (
     postFixup = ''
       # Add support for `open file` dialog
       makeWrapper $out/share/${pname}/${pname} $out/bin/${pname} \
-          --prefix PATH : ${lib.makeBinPath [ gnome.zenity ]}
+          --prefix PATH : ${lib.makeBinPath [ zenity ]}
     '';
 
     meta = {

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd imdl \
       --bash <($out/bin/imdl completions bash) \
       --fish <($out/bin/imdl completions fish) \

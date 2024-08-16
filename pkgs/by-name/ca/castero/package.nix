@@ -38,9 +38,15 @@ python3.pkgs.buildPythonApplication rec {
     "tests"
   ];
 
-  disabledTests = [ "test_datafile_download" ];
+  # Disable tests that are problematic with pytest
+  # Check NixOS/nixpkgs#333019 for more info about these
+  disabledTests = [
+    "test_datafile_download"
+    "test_display_get_input_str"
+    "test_display_get_y_n"
+  ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "castero"
   ];
 

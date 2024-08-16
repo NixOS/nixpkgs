@@ -10,7 +10,6 @@
   pprintpp,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   wrapt,
 }:
 
@@ -52,7 +51,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     attrs
@@ -80,10 +78,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tbm_utils" ];
 
   meta = with lib; {
-    description = "A commonly-used set of utilities";
+    description = "Commonly-used set of utilities";
     homepage = "https://github.com/thebigmunch/tbm-utils";
     changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

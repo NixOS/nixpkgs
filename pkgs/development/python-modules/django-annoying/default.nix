@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A django application that tries to eliminate annoying things in the Django framework";
+    description = "Django application that tries to eliminate annoying things in the Django framework";
     homepage = "https://skorokithakis.github.io/django-annoying/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ambroisie ];

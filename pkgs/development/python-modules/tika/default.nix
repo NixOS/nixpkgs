@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ pname ];
 
   meta = with lib; {
-    description = "A Python binding to the Apache Tika™ REST services";
+    description = "Python binding to the Apache Tika™ REST services";
     mainProgram = "tika-python";
     homepage = "https://github.com/chrismattmann/tika-python";
     license = licenses.asl20;

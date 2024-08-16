@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.10";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-YHSr2pnk17QEdrIHInXX2eBFN9OGjdleaB41VLaqlnA=";
+    hash = "sha256-j7Cjr5R/fN/1C6hR9400Y/hwgG++qjPvo9PYyetzrx0=";
   };
 
   outputs = [
@@ -177,11 +177,11 @@ stdenv.mkDerivation (finalAttrs: {
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
     license = licenses.gpl3Plus;
-    mainProgram = "ccache";
     maintainers = with maintainers; [
       kira-bruneau
       r-burns
     ];
     platforms = platforms.unix;
+    mainProgram = "ccache";
   };
 })

@@ -12,7 +12,8 @@
 , qemu
 , scribus
 , tigervnc
-, wlroots
+, wlroots_0_17
+, wlroots_0_18
 , xwayland
 
 , gitUpdater
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit cairo qemu scribus tigervnc wlroots xwayland;
+      inherit cairo qemu scribus tigervnc wlroots_0_17 wlroots_0_18 xwayland;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://pixman.org";
-    description = "A low-level library for pixel manipulation";
+    description = "Low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;
     pkgConfigModules = [ "pixman-1" ];

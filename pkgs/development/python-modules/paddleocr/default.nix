@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   attrdict,
   beautifulsoup4,
@@ -29,7 +28,7 @@
 }:
 
 let
-  version = "2.7.1";
+  version = "2.7.5";
 in
 buildPythonPackage {
   pname = "paddleocr";
@@ -39,8 +38,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
-    rev = "v${version}";
-    hash = "sha256-5Dt4UL+7dwJNjcNnCVi3o8bLCt7/m/M6oh1vPu9rza8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8mnSV4ga6G2cbYCX84XJRFiLCoXstTAtqvg9QqVN6GI=";
   };
 
   patches = [
@@ -55,7 +54,6 @@ buildPythonPackage {
     ./remove-import-imaug.patch
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   # trying to relax only pymupdf makes the whole build fail
   pythonRelaxDeps = true;
   pythonRemoveDeps = [

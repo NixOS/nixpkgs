@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.27.1";
+  version = "2.29.1";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     rev = "v${version}";
-    hash = "sha256-miAfEllN7/qDBD8UQZIfUeXSezEhmSwMo6oTDfiw2Bk=";
+    hash = "sha256-6GZtKfPBE9Wl6ccwU1OY+9rq+IZr2qpOB4Vlxidhisw=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ buildGoModule rec {
     rm -rf e2e/
   '';
 
-  vendorHash = "sha256-5HJ4qaPD1pbBFKgAArW0CKNBuP7pjxswZe3rHgjsgLg=";
+  vendorHash = "sha256-CkXCAqHOlSc3jHqVUYovT8YDnlCZewpLv3sC0ADgwL0=";
 
   ldflags = [ "-X github.com/docker/compose/v2/internal.Version=${version}" "-s" "-w" ];
 
@@ -35,6 +35,6 @@ buildGoModule rec {
     mainProgram = "docker-compose";
     homepage = "https://github.com/docker/compose";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

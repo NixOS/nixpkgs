@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ dbus ];
 
   meta = with lib; {
-    description = "Control Google Pixel Buds Pro from the Linux command line.";
+    description = "Control Google Pixel Buds Pro from the Linux command line";
     homepage = "https://github.com/qzed/pbpctrl";
     license = with licenses; [ asl20 mit ];
     maintainers = [ maintainers.vanilla ];

@@ -1,6 +1,19 @@
 --- a/extension.js
 +++ b/extension.js
-@@ -339,9 +339,9 @@ const EEPSIndicator = GObject.registerClass(
+@@ -397,9 +397,9 @@
+                     // String (values are seperated by new line)
+                     keys = listKeyResponse.trim().split('\n');
+                 } else if (appType === 'native') {
+-                    const settings = new Gio.Settings({
+-                        schema_id: 'com.github.wwmm.easyeffects',
+-                    });
++                    const _schema_source = Gio.SettingsSchemaSource.new_from_directory('@easyeffects_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
++                    const _schema = _schema_source.lookup('com.github.wwmm.easyeffects', false);
++                    const settings = new Gio.Settings({settings_schema: _schema});
+                     keys = settings.settings_schema.list_keys();
+                 }
+                 // If key names are invalid, try fallback
+@@ -432,9 +432,9 @@
                      _lastUsedInputPreset = _idata.trim().slice(1, -1);
                  } else if (appType === 'native') {
                      // Get last used presets
@@ -10,6 +23,6 @@
 +                    const _schema_source = Gio.SettingsSchemaSource.new_from_directory('@easyeffects_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
 +                    const _schema = _schema_source.lookup('com.github.wwmm.easyeffects', false);
 +                    const settings = new Gio.Settings({settings_schema: _schema});
-                     _lastUsedOutputPreset = settings.get_string(
-                         'last-used-output-preset'
-                     );
+                     _lastUsedOutputPreset = settings.get_string(lastOutputKeyName);
+                     _lastUsedInputPreset = settings.get_string(lastInputKeyName);
+                 }

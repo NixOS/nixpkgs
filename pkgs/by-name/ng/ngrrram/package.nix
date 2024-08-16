@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A TUI tool to help you type faster and learn new layouts. Includes a free cat";
+    description = "TUI tool to help you type faster and learn new layouts. Includes a free cat";
     homepage = "https://github.com/wintermute-cell/ngrrram";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Guanran928 ];

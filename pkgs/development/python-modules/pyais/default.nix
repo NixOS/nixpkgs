@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "pyais";
-  version = "2.6.5";
+  version = "2.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "M0r13n";
     repo = "pyais";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/I/4ATvX/0ya8xtineXyjSFJBGhDNy/tosh2NdnKLK4=";
+    hash = "sha256-6Bv0YE2zQv0mdXNzHkhq4sOJ18nmyxO884Smzwn2c8I=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   dependencies = [
     attrs

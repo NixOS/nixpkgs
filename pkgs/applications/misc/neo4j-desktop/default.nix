@@ -1,11 +1,11 @@
 { appimageTools, lib, fetchurl }:
 let
   pname = "neo4j-desktop";
-  version = "1.5.8";
+  version = "1.5.9";
 
   src = fetchurl {
     url = "https://s3-eu-west-1.amazonaws.com/dist.neo4j.org/${pname}/linux-offline/${pname}-${version}-x86_64.AppImage";
-    hash = "sha256-RqzR4TuvDasbkj/wKvOOS7r46sXDxvw3B5ydFGZeHX8=";
+    hash = "sha256-04I1p5wtndIflHqS5qQVf3s8F9ORJ+oy4wi/5PQbnWk=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -22,7 +22,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A GUI front-end for Neo4j";
+    description = "GUI front-end for Neo4j";
     homepage = "https://neo4j.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.bobvanderlinden ];

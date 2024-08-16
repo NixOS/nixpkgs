@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://undefined-medium.com/";
-    description = "A pixel grid-based monospace typeface";
+    description = "Pixel grid-based monospace typeface";
     longDescription = ''
       undefined medium is a free and open-source pixel grid-based
       monospace typeface suitable for programming, writing, and

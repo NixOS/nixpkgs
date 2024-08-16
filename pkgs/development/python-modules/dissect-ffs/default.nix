@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-ffs";
-  version = "3.8";
+  version = "3.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ffs";
     rev = "refs/tags/${version}";
-    hash = "sha256-L2LL+Er5nSYpRBW5CO9EBkYY85vnDkuvaOP0kbkH2T4=";
+    hash = "sha256-PRf3w9s0N3Zfcaoo3RtBEYcv7Ocs4h6V+3XshRI2XXI=";
   };
 
   build-system = [

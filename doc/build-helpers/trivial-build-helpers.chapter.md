@@ -241,7 +241,7 @@ Write a text file to the Nix store.
 `allowSubstitutes` (Bool, _optional_)
 
 : Whether to allow substituting from a binary cache.
-  Passed through to [`allowSubsitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
+  Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
 
   It defaults to `false`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
   Set it to true if the `checkPhase` step is expensive.
@@ -453,7 +453,7 @@ writeTextFile {
 
 ### `writeScriptBin` {#trivial-builder-writeScriptBin}
 
-Write a script within a `bin` subirectory of a directory in the Nix store.
+Write a script within a `bin` subdirectory of a directory in the Nix store.
 This is for consistency with the convention of software packages placing executables under `bin`.
 
 `writeScriptBin` takes the following arguments:
@@ -468,7 +468,7 @@ This is for consistency with the convention of software packages placing executa
 
 The created file is marked as executable.
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
+The store path will include the name, and it will be a directory.
 
 ::: {.example #ex-writeScriptBin}
 # Usage of `writeScriptBin`

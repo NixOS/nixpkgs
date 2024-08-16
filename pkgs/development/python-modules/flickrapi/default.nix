@@ -59,7 +59,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flickrapi" ];
 
   meta = with lib; {
-    description = "A Python interface to the Flickr API";
+    description = "Python interface to the Flickr API";
     homepage = "https://stuvel.eu/flickrapi";
     license = licenses.psfl;
     maintainers = with maintainers; [ obadz ];

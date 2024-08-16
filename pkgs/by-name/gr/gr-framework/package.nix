@@ -1,53 +1,51 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
+  cmake,
+  ninja,
+  qt6,
 
-, cairo
-, ffmpeg
-, freetype
-, ghostscript
-, glfw
-, libjpeg
-, libtiff
-, qhull
-, xorg
-, zeromq
+  cairo,
+  ffmpeg,
+  ghostscript,
+  glfw,
+  libtiff,
+  qhull,
+  xercesc,
+  xorg,
+  zeromq,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.73.5";
+  version = "0.73.7";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-9Py2r774GaUXWhF3yO3ceT1rPi/uqMVZVAo0xs9n+I0=";
+    hash = "sha256-Xd1x6RUlre/5oxq0wiVKkIAuGKgtoNY/5aa7dvmn71U=";
   };
-
-  patches = [
-    ./patches/use-the-module-mode-to-search-for-the-LibXml2-package.patch
-  ];
 
   nativeBuildInputs = [
     cmake
-    qt5.wrapQtAppsHook
+    ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     cairo
     ffmpeg
-    freetype
     ghostscript
     glfw
-    libjpeg
     libtiff
     qhull
-    qt5.qtbase
+    qt6.qtbase
+    xercesc
     xorg.libX11
     xorg.libXft
     xorg.libXt
@@ -64,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "GR framework is a graphics library for visualisation applications";
     homepage = "https://gr-framework.org";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ paveloom ];
+    platforms = platforms.unix;
   };
 }

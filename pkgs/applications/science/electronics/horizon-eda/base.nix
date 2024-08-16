@@ -51,7 +51,7 @@ rec {
   CASROOT = opencascade-occt;
 
   meta = with lib; {
-    description = "A free EDA software to develop printed circuit boards";
+    description = "Free EDA software to develop printed circuit boards";
     homepage = "https://horizon-eda.org";
     maintainers = with maintainers; [ guserav jue89 ];
     license = licenses.gpl3Plus;

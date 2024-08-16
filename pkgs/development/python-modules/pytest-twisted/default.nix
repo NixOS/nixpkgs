@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qbGLyfykfSiG+O/j/SeHmoHxwLtJ8cVgZmyedkSRtjI=";
+    hash = "sha256-qbGLyfykfSiG+O/j/SeHmoHxwLtJ8cVgZmyedkSRtjI=";
   };
 
   buildInputs = [ pytest ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_twisted" ];
 
   meta = with lib; {
-    description = "A twisted plugin for py.test";
+    description = "Twisted plugin for py.test";
     homepage = "https://github.com/pytest-dev/pytest-twisted";
     license = licenses.bsd3;
     maintainers = [ ];

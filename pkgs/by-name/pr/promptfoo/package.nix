@@ -19,7 +19,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = with lib; {
-    description = "Test your prompts, models, RAGs. Evaluate and compare LLM outputs, catch regressions, and improve prompt quality.";
+    description = "Test your prompts, models, RAGs. Evaluate and compare LLM outputs, catch regressions, and improve prompt quality";
     mainProgram = "promptfoo";
     homepage = "https://www.promptfoo.dev/";
     changelog = "https://github.com/promptfoo/promptfoo/releases/tag/${version}";

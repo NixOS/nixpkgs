@@ -4,7 +4,6 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  isPy27,
   mock,
   pyparsing,
   pytest-forked,
@@ -71,7 +70,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "httplib2" ];
 
   meta = with lib; {
-    description = "A comprehensive HTTP client library";
+    description = "Comprehensive HTTP client library";
     homepage = "https://github.com/httplib2/httplib2";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

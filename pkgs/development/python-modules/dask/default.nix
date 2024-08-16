@@ -6,7 +6,6 @@
 
   # build-system
   setuptools,
-  wheel,
 
   # dependencies
   click,
@@ -41,7 +40,7 @@
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.5.2";
+    version = "2024.8.0";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -50,13 +49,10 @@ let
       owner = "dask";
       repo = "dask";
       rev = "refs/tags/${version}";
-      hash = "sha256-8U+njWp1g+rmOEuUgh+qz1QyVCZ/gdEPky206cVp7fw=";
+      hash = "sha256-u8rkay2c4gr3IVShGD6z0FfHkIiUvQwDpl8U6B0JsEM=";
     };
 
-    build-system = [
-      setuptools
-      wheel
-    ];
+    build-system = [ setuptools ];
 
     dependencies = [
       click
@@ -69,7 +65,7 @@ let
       toolz
     ];
 
-    passthru.optional-dependencies = lib.fix (self: {
+    optional-dependencies = lib.fix (self: {
       array = [ numpy ];
       complete = [
         pyarrow
@@ -97,8 +93,8 @@ let
         hypothesis
         pytest-asyncio
       ]
-      ++ passthru.optional-dependencies.array
-      ++ passthru.optional-dependencies.dataframe
+      ++ self.optional-dependencies.array
+      ++ self.optional-dependencies.dataframe
       ++ lib.optionals (!arrow-cpp.meta.broken) [
         # support is sparse on aarch64
         pyarrow
@@ -111,15 +107,15 @@ let
       echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
       substituteInPlace setup.py \
-        --replace "import versioneer" "" \
-        --replace "version=versioneer.get_version()," "version='${version}'," \
-        --replace "cmdclass=versioneer.get_cmdclass()," ""
+        --replace-fail "import versioneer" "" \
+        --replace-fail "version=versioneer.get_version()," "version='${version}'," \
+        --replace-fail "cmdclass=versioneer.get_cmdclass()," ""
 
       substituteInPlace pyproject.toml \
-        --replace ', "versioneer[toml]==0.29"' "" \
-        --replace " --durations=10" "" \
-        --replace " --cov-config=pyproject.toml" "" \
-        --replace "\"-v" "\" "
+        --replace-fail ', "versioneer[toml]==0.29"' "" \
+        --replace-fail " --durations=10" "" \
+        --replace-fail " --cov-config=pyproject.toml" "" \
+        --replace-fail "\"-v" "\" "
     '';
 
     pytestFlagsArray = [

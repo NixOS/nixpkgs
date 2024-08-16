@@ -25,7 +25,7 @@ buildDunePackage rec {
   '';
 
   meta = {
-    description = "A documentation generator for OCaml";
+    description = "Documentation generator for OCaml";
     mainProgram = "odoc";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];

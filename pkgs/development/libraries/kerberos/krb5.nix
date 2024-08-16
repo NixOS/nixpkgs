@@ -31,11 +31,11 @@ assert withLdap -> !libOnly;
 
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
-  version = "1.21.2";
+  version = "1.21.3";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    hash = "sha256-lWCUGp2EPAJDpxsXp6xv4xx867W845g9t55Srn6FBJE=";
+    hash = "sha256-t6TNXq1n+wi5gLIavRUP9yF+heoyDJ7QxtrdMEhArTU=";
   };
 
   outputs = [ "out" "dev" ];
@@ -74,6 +74,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace config/shlib.conf \
         --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
+  ''
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  + ''
+    substituteInPlace ./config/config.guess --replace-fail /usr/bin/uname uname
   '';
 
   libFolders = [ "util" "include" "lib" "build-tools" ];

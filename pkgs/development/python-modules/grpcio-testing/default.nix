@@ -5,20 +5,20 @@
   grpcio,
   protobuf,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.62.2";
+  version = "1.65.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dNGeGQnpQbGmvvf71fnvMwWZ9nb7BrsGB8hFDtVVnfI=";
+    pname = "grpcio_testing";
+    inherit version;
+    hash = "sha256-iCbY9Ika+NWuBuFqt+FG+8VZTvQZMj4wMW9NDdBnWcY=";
   };
 
   postPatch = ''
@@ -26,9 +26,13 @@ buildPythonPackage rec {
       --replace-fail '"grpcio>={version}".format(version=grpc_version.VERSION)' '"grpcio"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
     grpcio
     protobuf
   ];

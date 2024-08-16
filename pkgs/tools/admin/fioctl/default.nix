@@ -34,7 +34,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A simple CLI to manage your Foundries Factory";
+    description = "Simple CLI to manage your Foundries Factory";
     homepage = "https://github.com/foundriesio/fioctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ nixinator matthewcroughan ];

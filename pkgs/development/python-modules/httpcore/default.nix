@@ -71,7 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
-    description = "A minimal low-level HTTP client";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];

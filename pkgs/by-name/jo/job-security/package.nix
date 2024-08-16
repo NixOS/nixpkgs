@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "job-security";
-  version = "unstable-0-2024-03-24";
+  version = "0-unstable-2024-04-07";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "job-security";
-    rev = "3881a4a0e66afe19cbdba3f43d0f85732796f977";
-    hash = "sha256-mXmDzBsHdiim0bWrs0SvgtMZmKnYVz/RV9LNqPHHlnk=";
+    rev = "9b621cb0be437c709e398d31934b864a09d2a1d5";
+    hash = "sha256-KPnLVKz10SuVcG0CCFWxWnjhf9gHHPCRZw6AW9/gAmk=";
   };
 
-  cargoHash = "sha256-W5evL36ByUUjvSwa3Nmf4MT2oZYoQ8kmchNOxUwmpuE=";
+  cargoHash = "sha256-YwlI+Z3Zry3i3amz3DufvKzSS1Hrp2kPG76aH5tMJ2g=";
 
   meta = {
     description = "Job control from anywhere";

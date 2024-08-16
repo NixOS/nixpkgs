@@ -7,7 +7,7 @@
   lutok,
   pkg-config,
   sqlite,
-  gitUpdater,
+  unstableGitUpdater,
 }:
 
 let
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "kyua-"; };
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "kyua-"; };
 
   __structuredAttrs = true;
 

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "12.2.0";
+  version = "14.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ePItKdDnKX3283EiK8hOqwFDxi3ULByHEQj9XOKMsWM=";
+    hash = "sha256-BTTmmtmFjYBfzbVf/Fi8PwnpVJBcOOBTdFBmGowGez4=";
   };
 
   build-system = [ setuptools ];
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/approvals/ApprovalTests.Python";
     changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

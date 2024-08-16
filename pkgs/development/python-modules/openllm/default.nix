@@ -6,7 +6,6 @@
   hatchling,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   accelerate,
   bentoml,
   bitsandbytes,
@@ -41,7 +40,7 @@
   tabulate,
   tiktoken,
   transformers,
-  openai-triton,
+  triton,
   xformers,
 }:
 
@@ -54,7 +53,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/openllm-python";
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # remove cuda-python as it has an unfree license
@@ -119,7 +117,7 @@ buildPythonPackage rec {
       # auto-gptq
     ]; # ++ autogptq.optional-dependencies.triton;
     grpc = [ bentoml ] ++ bentoml.optional-dependencies.grpc;
-    mpt = [ openai-triton ];
+    mpt = [ triton ];
     openai = [
       openai
       tiktoken

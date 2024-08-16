@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   isPy3k,
   buildPythonPackage,
@@ -30,8 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "application" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A collection of modules that are useful when building python applications";
+    description = "Collection of modules that are useful when building python applications";
     homepage = "https://github.com/AGProjects/python3-application";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [

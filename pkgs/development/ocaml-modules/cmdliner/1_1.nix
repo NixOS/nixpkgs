@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
+{ lib, stdenv, fetchurl, ocaml }:
 
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "cmdliner 1.1 is not available for OCaml ${ocaml.version}"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://erratique.ch/software/cmdliner";
-    description = "An OCaml module for the declarative definition of command line interfaces";
+    description = "OCaml module for the declarative definition of command line interfaces";
     license = licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];

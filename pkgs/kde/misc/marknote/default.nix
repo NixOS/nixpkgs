@@ -2,27 +2,23 @@
   lib,
   mkKdeDerivation,
   fetchurl,
-  kcrash,
   qtdeclarative,
   qtsvg,
   qtwayland,
-  qqc2-desktop-style
 }:
 mkKdeDerivation rec {
   pname = "marknote";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/marknote/marknote-${version}.tar.xz";
-    hash = "sha256-HzImkm8l8Rqiuyq2QezfdqJ1hxIdLZhiIGVM9xzpyaA=";
+    hash = "sha256-/5lZhBWmzKWQDLTRDStypvOS6v4Hh0tuLrQun3qzvSg=";
   };
 
   extraBuildInputs = [
-    kcrash
     qtdeclarative
     qtsvg
     qtwayland
-    qqc2-desktop-style
   ];
 
   meta.license = [ lib.licenses.gpl2Plus ];

@@ -26,7 +26,7 @@ buildRubyGem rec {
   propagatedBuildInputs = [ deps ];
 
   meta = with lib; {
-    description = "It allows you to search for a key and get the value and the line number where it is located in YAML and JSON files.";
+    description = "It allows you to search for a key and get the value and the line number where it is located in YAML and JSON files";
     homepage = "https://github.com/ceritium/flatito";
     license = licenses.mit;
     maintainers = with maintainers; [ rucadi ];

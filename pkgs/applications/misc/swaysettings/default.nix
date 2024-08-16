@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GUI for configuring your sway desktop";
+    description = "GUI for configuring your sway desktop";
     longDescription = ''
       Sway settings enables easy configuration of a sway desktop environment
       such as selection of application or icon themes.

@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -31,6 +32,14 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch2 {
+      # pytest8 compat
+      url = "https://github.com/davidhalter/jedi/commit/39c8317922f8f0312c12127cad10aea38d0ed7b5.patch";
+      hash = "sha256-wXHWcfoRJUl+ADrNMML0+DYTcRTyLs55Qrs7sDqT8BA=";
+    })
+  ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ parso ];
@@ -55,10 +64,10 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "An autocompletion tool for Python that can be used for text editors";
+    description = "Autocompletion tool for Python that can be used for text editors";
     homepage = "https://github.com/davidhalter/jedi";
     changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

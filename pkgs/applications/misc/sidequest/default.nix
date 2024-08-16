@@ -99,7 +99,7 @@
       inherit pname version;
 
       meta = with lib; {
-        description = "An open app store and side-loading tool for Android-based VR devices such as the Oculus Go, Oculus Quest or Moverio BT 300";
+        description = "Open app store and side-loading tool for Android-based VR devices such as the Oculus Go, Oculus Quest or Moverio BT 300";
         homepage = "https://github.com/SideQuestVR/SideQuest";
         downloadPage = "https://github.com/SideQuestVR/SideQuest/releases";
         sourceProvenance = with sourceTypes; [ binaryNativeCode ];

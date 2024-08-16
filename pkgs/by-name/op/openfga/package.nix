@@ -7,7 +7,7 @@
 
 let
   pname = "openfga";
-  version = "1.5.4";
+  version = "1.5.8";
 in
 
 buildGoModule {
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "openfga";
     repo = "openfga";
     rev = "v${version}";
-    hash = "sha256-0K4z5CPNx+MVJ1PeB8rmO8+6hDGZ3ZALTFBWwR2Xl1k=";
+    hash = "sha256-cogfwd2rFYl/UKjw1pnsL9D77IHn+5ulvMU+7WU2670=";
   };
 
-  vendorHash = "sha256-sihNWuxwptBrVO9sXD2YNP20mgwYU2y4NSb8wqVWmCk=";
+  vendorHash = "sha256-rU45E9yEh7a1MrbnzFFuNeMpfbODO2O7tqEaiv7CA9Y=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -49,7 +49,7 @@ buildGoModule {
   '';
 
   meta = {
-    description = "A high performance and flexible authorization/permission engine built for developers and inspired by Google Zanzibar";
+    description = "High performance and flexible authorization/permission engine built for developers and inspired by Google Zanzibar";
     homepage = "https://openfga.dev/";
     license = lib.licenses.asl20;
     mainProgram = "openfga";

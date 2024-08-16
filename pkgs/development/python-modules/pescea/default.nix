@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   async-timeout,
   buildPythonPackage,
@@ -49,7 +48,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pescea" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Python interface to Escea fireplaces";
     homepage = "https://github.com/lazdavila/pescea";
     license = licenses.gpl3Plus;

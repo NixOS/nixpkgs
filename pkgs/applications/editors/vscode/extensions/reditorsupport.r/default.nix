@@ -33,7 +33,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r/changelog";
-    description = "A Visual Studio Code extension for the R programming language";
+    description = "Visual Studio Code extension for the R programming language";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=REditorSupport.r";
     homepage = "https://github.com/REditorSupport/vscode-R";
     license = lib.licenses.mit;

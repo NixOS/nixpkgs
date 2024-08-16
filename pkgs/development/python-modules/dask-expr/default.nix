@@ -3,19 +3,25 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
   versioneer,
-  wheel,
+
+  # dependencies
   dask,
   pandas,
   pyarrow,
+
+  # checks
   distributed,
   pytestCheckHook,
+  xarray
 }:
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.2";
+  version = "1.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +30,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gvib8fyogIiOllDp4SoVQkGcIPHMo9e9AfJWDaZ5sTU=";
+    hash = "sha256-z/+0d/mcC51rXfSCkVosc2iJ9SKHuKlPO+n/+SisQBg=";
   };
 
   postPatch = ''
@@ -35,7 +41,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     versioneer
-    wheel
   ];
 
   dependencies = [
@@ -49,12 +54,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     distributed
     pytestCheckHook
+    xarray
   ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "A rewrite of Dask DataFrame that includes query optimization and generally improved organization";
+    description = "Rewrite of Dask DataFrame that includes query optimization and generally improved organization";
     homepage = "https://github.com/dask/dask-expr";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];

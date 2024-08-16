@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lwgrp";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "lwgrp";
     rev = "v${version}";
-    hash = "sha256-f0tYn9FbrOz8iMoG8Is8vYDNfYHTfxLKNnyxJA+Msdk=";
+    hash = "sha256-ZpxxcCqK+qdvnCvobeBV6htRF8wThiQgVFYgEigqmIE=";
   };
 
   outputs = [ "out" "dev" ];

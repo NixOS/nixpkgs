@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CsWBS2X/KngfsTlLkaI6ipX3NJK2u49wW67q2C6t1UM=";
+    hash = "sha256-CsWBS2X/KngfsTlLkaI6ipX3NJK2u49wW67q2C6t1UM=";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 ];

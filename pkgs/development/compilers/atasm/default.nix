@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/CycoPH/atasm";
-    description = "A commandline 6502 assembler compatible with Mac/65";
+    description = "Commandline 6502 assembler compatible with Mac/65";
     license = licenses.gpl2Plus;
     changelog = "https://github.com/CycoPH/atasm/releases/tag/V${version}";
     maintainers = with maintainers; [ AndersonTorres ];

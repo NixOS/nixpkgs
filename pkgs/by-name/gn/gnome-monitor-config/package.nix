@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A program to help manage GNOME monitor configuration";
+    description = "Program to help manage GNOME monitor configuration";
     homepage = "https://github.com/jadahl/gnome-monitor-config";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ aveltras ];

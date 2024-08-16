@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , paf
 , cohttp-lwt
 , domain-name
@@ -50,6 +49,6 @@ buildDunePackage {
   __darwinAllowLocalNetworking = true;
 
   meta = paf.meta // {
-    description = "A CoHTTP client with its HTTP/AF implementation";
+    description = "CoHTTP client with its HTTP/AF implementation";
   };
 }

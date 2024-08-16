@@ -27,7 +27,6 @@ with python3.pkgs; buildPythonApplication rec {
 
   nativeBuildInputs = [
     pdm-pep517
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -57,8 +56,8 @@ with python3.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
-    description = "A Python pastebin that tries to keep it simple";
-    homepage = "https://supakeen.com/project/pinnwand/";
+    description = "Python pastebin that tries to keep it simple";
+    homepage = "https://github.com/supakeen/pinnwand";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
     mainProgram = "pinnwand";

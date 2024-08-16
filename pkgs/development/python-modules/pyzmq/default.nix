@@ -5,15 +5,15 @@
   isPyPy,
 
   # build-system
-  cython,
-  setuptools,
-  setuptools-scm,
-  packaging,
   cffi,
+  cython,
+  cmake,
+  ninja,
+  packaging,
+  pathspec,
+  scikit-build-core,
 
-  # dependencies
-
-  py,
+  # checks
   pytestCheckHook,
   python,
   pythonOlder,
@@ -24,25 +24,29 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "25.1.2";
+  version = "26.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k/GqMR6LuRLjTwBM8YZAek6Q7sTw7MDv0mBWv37aAiY=";
+    hash = "sha256-26fZ8uBH36K8o7AfT4SqUkZyUgPWKE43kPLKFfumtAo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    cmake
+    ninja
     packaging
+    pathspec
+    scikit-build-core
   ] ++ (if isPyPy then [ cffi ] else [ cython ]);
+
+  dontUseCmakeConfigure = true;
 
   buildInputs = [ zeromq ];
 
-  propagatedBuildInputs = lib.optionals isPyPy [ cffi ];
+  dependencies = lib.optionals isPyPy [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -84,6 +88,6 @@ buildPythonPackage rec {
       bsd3 # or
       lgpl3Only
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

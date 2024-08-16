@@ -1,6 +1,6 @@
 {
   # If you copy this example out of nixpkgs, use these lines instead of the next.
-  # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
+  # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
   /*nixpkgsSource ? (builtins.fetchTarball {
     name = "nixpkgs-20.09";
     url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";

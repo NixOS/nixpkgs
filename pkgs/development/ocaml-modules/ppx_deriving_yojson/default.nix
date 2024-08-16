@@ -31,7 +31,7 @@ buildDunePackage rec {
   checkInputs = [ ounit ];
 
   meta = {
-    description = "A Yojson codec generator for OCaml >= 4.04";
+    description = "Yojson codec generator for OCaml >= 4.04";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

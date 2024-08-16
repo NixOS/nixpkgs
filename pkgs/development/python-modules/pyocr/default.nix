@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
-    description = "A Python wrapper for Tesseract and Cuneiform";
+    description = "Python wrapper for Tesseract and Cuneiform";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       symphorien

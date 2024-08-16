@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
-    sha256 = "sha256:14pbjih8gkh5cp9cqpbciml4ba7nvq5vmvivyrmhff3xq93cya1f";
+    sha256 = "sha256-qfkjvlj70yZwoX8Lcpsd+ASviC+ldAIWV0HLJuVEDKE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An anti-bikeshedding Kotlin linter with built-in formatter";
+    description = "Anti-bikeshedding Kotlin linter with built-in formatter";
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;

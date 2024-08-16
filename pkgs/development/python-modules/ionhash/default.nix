@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amzn/ion-hash-python";
     license = licenses.asl20;
     maintainers = [ maintainers.terlar ];
+    broken = true; # last successful build 2023-09-28
   };
 }

@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.schema";
     description = "zope.interface extension for defining data schemas";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

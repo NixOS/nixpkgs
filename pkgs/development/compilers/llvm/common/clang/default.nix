@@ -69,7 +69,7 @@ let
       # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
       "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
       "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]);
+    ]) ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "-DCLANG_DEFAULT_CXX_STDLIB=ON";
 
     postPatch = ''
       # Make sure clang passes the correct location of libLTO to ld64
@@ -93,6 +93,8 @@ let
 
       mkdir -p $lib/lib/clang
       mv $lib/lib/17 $lib/lib/clang/17
+    '') + (lib.optionalString (lib.versionAtLeast release_version "19") ''
+      mv $out/lib/clang $lib/lib/clang
     '') + ''
 
       # Move libclang to 'lib' output
@@ -134,20 +136,40 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-    } // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-      hardeningUnsupportedFlags = [
-        "fortify3"
-      ];
       hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
-        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        [ "fortify3" ]
+        ++ lib.optional (
+          (lib.versionOlder release_version "7")
+          || !targetPlatform.isLinux
+          || !targetPlatform.isx86_64
+        ) "shadowstack"
+        ++ lib.optional (
+          (lib.versionOlder release_version "8")
+          || !targetPlatform.isAarch64
+          || !targetPlatform.isLinux
+        ) "pacret"
+        ++ lib.optional (
+          (lib.versionOlder release_version "11")
+          || (targetPlatform.isAarch64 && (lib.versionOlder release_version "18.1"))
+          || (targetPlatform.isFreeBSD && (lib.versionOlder release_version "15"))
+          || !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
+          || !(
+            targetPlatform.isx86
+            || targetPlatform.isPower64
+            || targetPlatform.isS390x
+            || targetPlatform.isAarch64
+          )
+        ) "stackclashprotection"
+        ++ lib.optional (
+          (lib.versionOlder release_version "15")
+          || !(targetPlatform.isx86_64 || targetPlatform.isAarch64)
+        ) "zerocallusedregs"
         ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
-    }) // (lib.optionalAttrs (lib.versionOlder release_version "15") {
-      hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" ];
-    });
+    };
 
     meta = llvm_meta // {
       homepage = "https://clang.llvm.org/";
-      description = "A C language family frontend for LLVM";
+      description = "C language family frontend for LLVM";
       longDescription = ''
         The Clang project provides a language front-end and tooling
         infrastructure for languages in the C language family (C, C++, Objective
@@ -196,7 +218,7 @@ let
       '';
     })
   // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM) {
       # The following warning is triggered with (at least) gcc >=
       # 12, but appears to occur only for cross compiles.
       NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";

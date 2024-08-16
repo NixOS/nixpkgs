@@ -36,6 +36,6 @@ buildGoModule rec {
     license = licenses.mit;
     changelog = "https://gitea.com/gitea/act_runner/releases/tag/v${version}";
     homepage = "https://gitea.com/gitea/act_runner";
-    description = "A runner for Gitea based on act";
+    description = "Runner for Gitea based on act";
   };
 }

@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
   wheel,
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aioqsw";
-  version = "0.3.5";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kSwTHwVSMGyXA0SF74f9gyBN82XhdjdN6DWrQV0PiaU=";
+    hash = "sha256-xXbOIG9gw1rO+iWdXNWWmweM83FpTLMuaDTcRZoMvL8=";
   };
 
   nativeBuildInputs = [

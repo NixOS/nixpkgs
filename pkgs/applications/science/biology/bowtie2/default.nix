@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
+    description = "Ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
     license = licenses.gpl3Plus;
     homepage = "http://bowtie-bio.sf.net/bowtie2";
     changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/${finalAttrs.src.rev}";

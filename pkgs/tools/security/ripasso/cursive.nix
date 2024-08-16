@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple password manager written in Rust";
+    description = "Simple password manager written in Rust";
     mainProgram = "ripasso-cursive";
     homepage = "https://github.com/cortex/ripasso";
     license = licenses.gpl3;

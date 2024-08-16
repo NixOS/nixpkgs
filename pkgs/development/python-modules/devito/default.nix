@@ -3,6 +3,7 @@
   stdenv,
   anytree,
   buildPythonPackage,
+  setuptools,
   cached-property,
   cgen,
   click,
@@ -19,35 +20,35 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   scipy,
   sympy,
 }:
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.6";
-  format = "setuptools";
+  version = "4.8.11";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-unuJLp+zTyGpOk5O78xYbW6Zrzp60WyqgT9mf2YpTG4=";
+    hash = "sha256-c8/b2dRwfH4naSVRaRon6/mBDva7RSDmi/TJUJp26g0=";
   };
 
-  pythonRemoveDeps = [
-    "codecov"
-    "flake8"
-    "pytest-runner"
-    "pytest-cov"
-  ];
+  # packaging.metadata.InvalidMetadata: 'python_version_3.8_' is invalid for 'provides-extra'
+  postPatch = ''
+    substituteInPlace requirements-testing.txt \
+      --replace-fail 'pooch; python_version >= "3.8"' "pooch"
+  '';
+
+  pythonRemoveDeps = [ "pip" ];
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  build-system = [ setuptools ];
 
   dependencies = [
     anytree
@@ -86,14 +87,16 @@ buildPythonPackage rec {
       "test_gs_parallel"
       "test_if_halo_mpi"
       "test_if_parallel"
+      "test_index_derivative"
       "test_init_omp_env_w_mpi"
       "test_loop_bounds_forward"
-      "test_mpi_nocomms"
+      "test_min_max_mpi"
       "test_mpi"
-      "test_index_derivative"
+      "test_mpi_nocomms"
       "test_new_distributor"
       "test_setupWOverQ"
       "test_shortcuts"
+      "test_stability_mpi"
       "test_subdomainset_mpi"
       "test_subdomains_mpi"
     ]
@@ -128,11 +131,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devito" ];
 
-  meta = with lib; {
+  meta = {
     description = "Code generation framework for automated finite difference computation";
     homepage = "https://www.devitoproject.org/";
     changelog = "https://github.com/devitocodes/devito/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

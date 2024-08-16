@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "a generic build tool";
+    description = "Generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
     license = licenses.asl20;
     maintainers = with maintainers; [clkamp];

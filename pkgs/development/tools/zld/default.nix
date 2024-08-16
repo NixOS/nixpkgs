@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A faster version of Apple's linker";
+    description = "Faster version of Apple's linker";
     homepage = "https://github.com/michaeleisel/zld";
     license = licenses.mit;
     maintainers = [ maintainers.rgnns ];

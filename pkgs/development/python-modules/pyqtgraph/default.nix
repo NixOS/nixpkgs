@@ -5,14 +5,13 @@
   fetchFromGitHub,
   scipy,
   numpy,
-  pyqt5,
+  pyqt6,
   pyopengl,
-  qt5,
+  qt6,
   pytestCheckHook,
   freefont_ttf,
   makeFontsConf,
   setuptools,
-  python,
 }:
 
 let
@@ -34,15 +33,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    pyqt5
     scipy
     pyopengl
+  ];
+  buildInputs = [
+    # Not propagating it so that every consumer of this package will be able to
+    # use any of the upstream supported Qt Library, See:
+    # https://pyqtgraph.readthedocs.io/en/pyqtgraph-0.13.7/getting_started/how_to_use.html#pyqt-and-pyside
+    pyqt6
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
-    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
     export FONTCONFIG_FILE=${fontsConf}
@@ -65,13 +69,12 @@ buildPythonPackage rec {
       "test_rescaleData"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "https://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
-    license = licenses.mit;
-    broken = lib.versionAtLeast python.version "3.12";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ koral doronbehar ];
   };
 }

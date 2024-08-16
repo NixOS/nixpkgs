@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -36,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A Piano in your terminal";
+    description = "Piano in your terminal";
     homepage = "https://github.com/eliasdorneles/upiano";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

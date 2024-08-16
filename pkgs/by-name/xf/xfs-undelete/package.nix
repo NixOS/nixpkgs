@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An undelete tool for the XFS filesystem";
+    description = "Undelete tool for the XFS filesystem";
     mainProgram = "xfs_undelete";
     homepage = "https://github.com/ianka/xfs_undelete";
     license = licenses.gpl3;

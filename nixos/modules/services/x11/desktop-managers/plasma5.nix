@@ -327,7 +327,7 @@ in
       };
 
       # Enable GTK applications to load SVG icons
-      services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+      programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
       fonts.packages = with pkgs; [ cfg.notoPackage hack-font ];
       fonts.fontconfig.defaultFonts = {
@@ -373,6 +373,8 @@ in
           script = activationScript;
         };
       };
+
+      xdg.icons.enable = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];

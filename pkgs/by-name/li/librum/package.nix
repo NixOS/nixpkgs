@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An application designed to make reading enjoyable and straightforward";
+    description = "Application designed to make reading enjoyable and straightforward";
     longDescription = ''
       Librum is an application designed to make reading enjoyable
       and straightforward for everyone. It's not just an e-book
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       completely open source.
     '';
     homepage = "https://librumreader.com";
+    changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
     mainProgram = "librum";
     maintainers = with maintainers; [ aleksana oluceps ];

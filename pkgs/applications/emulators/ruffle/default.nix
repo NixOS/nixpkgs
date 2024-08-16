@@ -107,7 +107,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "An Adobe Flash Player emulator written in the Rust programming language";
+    description = "Adobe Flash Player emulator written in the Rust programming language";
     homepage = "https://ruffle.rs/";
     license = with licenses; [
       mit

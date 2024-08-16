@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  can,
+  python-can,
   canmatrix,
   pytestCheckHook,
   pythonOlder,
@@ -11,20 +11,20 @@
 
 buildPythonPackage rec {
   pname = "canopen";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XxhlG5325HabmILpafk0rnc+8kpFqrwzNLWGmCBI0Iw=";
+    hash = "sha256-eSCEqTwTjVsqQG3dLU61ziCPA72P2mD4GtK7jVbGuCc=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
-    can
+    python-can
     canmatrix
   ];
 

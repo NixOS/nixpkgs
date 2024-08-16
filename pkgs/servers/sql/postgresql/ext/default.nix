@@ -74,6 +74,8 @@ self: super: {
 
     smlar = super.callPackage ./smlar.nix { };
 
+    system_stats = super.callPackage ./system_stats.nix { };
+
     temporal_tables = super.callPackage ./temporal_tables.nix { };
 
     timescaledb = super.callPackage ./timescaledb.nix { };

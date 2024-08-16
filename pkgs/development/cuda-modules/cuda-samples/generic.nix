@@ -24,7 +24,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = finalAttrs.pname;
+    repo = "cuda-samples";
     rev = "v${finalAttrs.version}";
     inherit hash;
   };

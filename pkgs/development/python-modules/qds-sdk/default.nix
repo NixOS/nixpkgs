@@ -42,7 +42,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qds_sdk" ];
 
   meta = with lib; {
-    description = "A Python module that provides the tools you need to authenticate with, and use the Qubole Data Service API";
+    description = "Python module that provides the tools you need to authenticate with, and use the Qubole Data Service API";
     homepage = "https://github.com/qubole/qds-sdk-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ shahrukh330 ];

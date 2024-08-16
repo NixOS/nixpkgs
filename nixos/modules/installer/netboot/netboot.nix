@@ -37,11 +37,6 @@ with lib;
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    # !!! Hack - attributes expected by other modules.
-    environment.systemPackages = [ pkgs.grub2_efi ]
-      ++ (lib.optionals (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.syslinux)
-        [pkgs.grub2 pkgs.syslinux]);
-
     fileSystems."/" = mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
@@ -93,8 +88,8 @@ with lib;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
       contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
+        [ { source = config.system.build.squashfsStore;
+            target = "/nix-store.squashfs";
           }
         ];
     };

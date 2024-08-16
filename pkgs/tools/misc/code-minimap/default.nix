@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
-    description = "A high performance code minimap render";
+    description = "High performance code minimap render";
     homepage = "https://github.com/wfxr/code-minimap";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ bsima ];

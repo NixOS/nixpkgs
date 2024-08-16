@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A portable fork of the high-performance regular expression matching library";
+    description = "Portable fork of the high-performance regular expression matching library";
     longDescription = ''
       A fork of Intel's Hyperscan, modified to run on more platforms. Currently
       ARM NEON/ASIMD is 100% functional, and Power VSX are in development.

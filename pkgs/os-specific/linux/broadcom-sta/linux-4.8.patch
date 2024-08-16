@@ -1,18 +1,20 @@
-From d3f93542326a06d920c6eb89b703384290d37b8b Mon Sep 17 00:00:00 2001
+From 8c536235639010135f8dc11a8ec0968f9b200a6e Mon Sep 17 00:00:00 2001
 From: Alberto Milone <alberto.milone@canonical.com>
 Date: Fri, 2 Sep 2016 17:35:34 +0200
-Subject: [PATCH 1/1] Add support for Linux 4.8
+Subject: [PATCH 05/16] linuxPackages.broadcom_sta: fix build for kernel 4.8+
 
-Orginal author: Krzysztof Kolasa
+Original author: Krzysztof Kolasa
+
+Source: https://git.archlinux.org/svntogit/community.git/tree/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms
 ---
  src/wl/sys/wl_cfg80211_hybrid.c | 22 ++++++++++++++++++++++
  1 file changed, 22 insertions(+)
 
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
-index 2fc71fe..ec5e472 100644
+index 3b438ba..84f0068 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c
-@@ -2388,8 +2388,16 @@ wl_bss_connect_done(struct wl_cfg80211_priv *wl, struct net_device *ndev,
+@@ -2386,8 +2386,16 @@ wl_bss_connect_done(struct wl_cfg80211_priv *wl, struct net_device *ndev,
  	s32 err = 0;
  
  	if (wl->scan_request) {
@@ -29,7 +31,7 @@ index 2fc71fe..ec5e472 100644
  		wl->scan_request = NULL;
  	}
  
-@@ -2490,7 +2498,14 @@ wl_notify_scan_status(struct wl_cfg80211_priv *wl, struct net_device *ndev,
+@@ -2488,7 +2496,14 @@ wl_notify_scan_status(struct wl_cfg80211_priv *wl, struct net_device *ndev,
  
  scan_done_out:
  	if (wl->scan_request) {
@@ -44,7 +46,7 @@ index 2fc71fe..ec5e472 100644
  		wl->scan_request = NULL;
  	}
  	rtnl_unlock();
-@@ -2909,7 +2924,14 @@ s32 wl_cfg80211_down(struct net_device *ndev)
+@@ -2913,7 +2928,14 @@ s32 wl_cfg80211_down(struct net_device *ndev)
  	s32 err = 0;
  
  	if (wl->scan_request) {
@@ -60,5 +62,5 @@ index 2fc71fe..ec5e472 100644
  	}
  
 -- 
-2.7.4
+2.45.1
 

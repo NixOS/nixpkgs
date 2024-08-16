@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "graphene-django";
-  version = "3.2.1";
+  version = "3.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wzU9U4mYvBf43qBQi20ewKtmw1eFskQk+nnsdaM7HQM=";
+    hash = "sha256-12ue7Pq7TFMSBAfaj8Si6KrpuKYp5T2EEesJpc8wRho=";
   };
 
   postPatch = ''

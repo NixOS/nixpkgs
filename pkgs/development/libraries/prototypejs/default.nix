@@ -7,7 +7,7 @@ in fetchurl {
   sha256 = "0q43vvrsb22h4jvavs1gk3v4ps61yx9k85b5n6q9mxivhmxprg26";
 
   meta = with lib; {
-    description = "A foundation for ambitious web user interfaces";
+    description = "Foundation for ambitious web user interfaces";
     longDescription = ''
       Prototype takes the complexity out of client-side web
       programming. Built to solve real-world problems, it adds

@@ -2,20 +2,7 @@
 , stdenv
 , vdr
 , fetchFromGitHub
-, graphicsmagick
-, pcre
-, xorgserver
 , ffmpeg
-, libiconv
-, boost
-, libgcrypt
-, perl
-, util-linux
-, groff
-, libva
-, xorg
-, ncurses
-, callPackage
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-markad";

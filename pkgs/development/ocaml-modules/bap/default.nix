@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-everything ${disableIda} ${disableGhidra}" "--with-llvm-config=${llvm.dev}/bin/llvm-config" ];
 
   meta = with lib; {
-    description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";
+    description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
     license = licenses.mit;
     maintainers = [ maintainers.maurer ];

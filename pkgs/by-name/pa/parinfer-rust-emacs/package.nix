@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   lib,
-  llvmPackages,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
@@ -18,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-LmfcY9iR7BGh3dF/raSZTIwburtaQRI3I3XvOZG343M=";
 
   meta = with lib; {
-    description = "An emacs centric fork of parinfer-rust";
+    description = "Emacs centric fork of parinfer-rust";
     mainProgram = "parinfer-rust";
     homepage = "https://github.com/justinbarclay/parinfer-rust-emacs";
     license = licenses.isc;

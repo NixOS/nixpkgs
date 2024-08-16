@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "woodblock" ];
 
   meta = with lib; {
-    description = "A framework to generate file carving test data";
+    description = "Framework to generate file carving test data";
     mainProgram = "woodblock";
     homepage = "https://github.com/fkie-cad/woodblock";
     license = licenses.mit;

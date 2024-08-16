@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "acme_tiny" ];
 
   meta = with lib; {
-    description = "A tiny script to issue and renew TLS certs from Let's Encrypt";
+    description = "Tiny script to issue and renew TLS certs from Let's Encrypt";
     mainProgram = "acme-tiny";
     homepage = "https://github.com/diafygi/acme-tiny";
     license = licenses.mit;

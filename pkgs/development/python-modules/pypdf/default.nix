@@ -27,8 +27,8 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "4.2.0";
-  format = "pyproject";
+  version = "4.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-ksLpxfRxrNVXezF0VjbAqadpF6bv/SAOOnCKabhugo0=";
+    hash = "sha256-wSF20I5WaxRoN0n0jxB5O3mAAIOxP/TclYBTRAUwYHo=";
   };
 
   outputs = [
@@ -55,12 +55,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--disable-socket" ""
+      --replace-fail "--disable-socket" ""
   '';
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     full = crypto ++ image;
     crypto = [ cryptography ];
     image = [ pillow ];
@@ -72,7 +72,7 @@ buildPythonPackage rec {
     (fpdf2.overridePythonAttrs { doCheck = false; }) # avoid reference loop
     pytestCheckHook
     pytest-timeout
-  ] ++ passthru.optional-dependencies.full;
+  ] ++ optional-dependencies.full;
 
   pytestFlagsArray = [
     # don't access the network
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
+    description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;

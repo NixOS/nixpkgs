@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Profile Tensorboard Plugin.";
+    description = "Profile Tensorboard Plugin";
     homepage = "http://tensorflow.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];

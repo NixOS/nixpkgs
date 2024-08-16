@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   git,
   pytestCheckHook,
@@ -33,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pdm-project/pdm-pep517";
-    description = "Yet another PEP 517 backend.";
+    description = "Yet another PEP 517 backend";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

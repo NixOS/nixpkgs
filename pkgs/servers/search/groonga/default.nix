@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "14.0.2";
+  version = "14.0.6";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-o9C6lPOPkb2KCbF4CqLyKtXHfOdB3jAIv5P6SjTJAJc=";
+    hash = "sha256-1caTQAycvpG2PgtbxIn58HrxvWjxKgiczRSC72nWzGw=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://groonga.org/";
-    description = "An open-source fulltext search engine and column store";
+    description = "Open-source fulltext search engine and column store";
     license = licenses.lgpl21;
     maintainers = [ maintainers.ericsagnes ];
     platforms = platforms.all;

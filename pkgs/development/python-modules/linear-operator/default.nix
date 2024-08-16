@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jaxtyping,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   scipy,
   setuptools,
   setuptools-scm,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
@@ -52,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A LinearOperator implementation to wrap the numerical nuts and bolts of GPyTorch";
+    description = "LinearOperator implementation to wrap the numerical nuts and bolts of GPyTorch";
     homepage = "https://github.com/cornellius-gp/linear_operator/";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

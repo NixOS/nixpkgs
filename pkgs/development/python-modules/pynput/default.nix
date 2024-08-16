@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A library to control and monitor input devices";
+    description = "Library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ nickhu ];

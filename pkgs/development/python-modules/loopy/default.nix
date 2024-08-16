@@ -62,7 +62,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A code generator for array-based code on CPUs and GPUs";
+    description = "Code generator for array-based code on CPUs and GPUs";
     homepage = "https://github.com/inducer/loopy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];

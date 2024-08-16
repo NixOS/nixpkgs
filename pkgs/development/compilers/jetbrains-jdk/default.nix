@@ -2,8 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , jetbrains
-, openjdk17
-, openjdk17-bootstrap
+, jdk
 , git
 , autoconf
 , unzip
@@ -37,28 +36,28 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   cpu = stdenv.hostPlatform.parsed.cpu.name;
 in
-openjdk17.overrideAttrs (oldAttrs: rec {
+jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "17.0.11";
-  build = "1207.24";
+  javaVersion = "21.0.3";
+  build = "465.3";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
-  # git reset --hard [revision]
+  # git checkout jbr-release-${javaVersion}b${build}
   # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-17.0.8+7";
+  openjdkTag = "jbr-21.0.2+3";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-a7cJF2iCW/1GK0/GmVbaY5pYcn3YtZy5ngFkyAGRhu0=";
+    hash = "sha256-Pup/XeHExCE6yy2o74wF7VlYU6MI9cg8gb69V3bclIo=";
   };
 
-  BOOT_JDK = openjdk17-bootstrap.home;
+  BOOT_JDK = jdk.home;
   # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-  SOURCE_DATE_EPOCH = 1715809405;
+  SOURCE_DATE_EPOCH = 1717225235;
 
   patches = [ ];
 
@@ -74,7 +73,8 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -e "s/SOURCE_DATE_EPOCH=.*//" \
         -e "s/export SOURCE_DATE_EPOCH//" \
         -i jb/project/tools/common/scripts/common.sh
-    sed -i "s/STATIC_CONF_ARGS/STATIC_CONF_ARGS \$configureFlags/" jb/project/tools/linux/scripts/mkimages_${arch}.sh
+    configureFlags=$(echo $configureFlags | sed 's/--host=[^ ]*//')
+    sed -i "s|STATIC_CONF_ARGS|STATIC_CONF_ARGS \$configureFlags|" jb/project/tools/linux/scripts/mkimages_${arch}.sh
     sed \
         -e "s/create_image_bundle \"jb/#/" \
         -e "s/echo Creating /exit 0 #/" \
@@ -132,7 +132,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
   nativeBuildInputs = [ git autoconf unzip rsync ] ++ oldAttrs.nativeBuildInputs;
 
   meta = with lib; {
-    description = "An OpenJDK fork to better support Jetbrains's products.";
+    description = "OpenJDK fork to better support Jetbrains's products";
     longDescription = ''
       JetBrains Runtime is a runtime environment for running IntelliJ Platform
       based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
@@ -144,7 +144,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
       your own risk.
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
-    inherit (openjdk17.meta) license platforms mainProgram;
+    inherit (jdk.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo ];
 
     broken = stdenv.isDarwin;

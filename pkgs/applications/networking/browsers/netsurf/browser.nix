@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
-    description = "A free, open source, small web browser";
+    description = "Free, open source, small web browser";
     mainProgram = "netsurf-gtk3";
     longDescription = ''
       NetSurf is a free, open source web browser. It is written in C and

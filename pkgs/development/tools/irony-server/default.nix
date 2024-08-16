@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   cmakeDir = "server";
 
   meta = with lib; {
-    description = "The server part of irony";
+    description = "Server part of irony";
     mainProgram = "irony-server";
     homepage = "https://melpa.org/#/irony";
     maintainers = [ maintainers.deepfire ];

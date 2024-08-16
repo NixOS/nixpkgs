@@ -7,7 +7,6 @@
 , gtk3
 , gobject-introspection
 , wrapGAppsHook3
-, python
 }:
 
 buildPythonPackage rec {
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     homepage = "https://kryogenix.org/code/pick/";
     license = licenses.mit;
     platforms = platforms.linux;
-    description = "A colour picker that remembers where you picked colours from";
+    description = "Colour picker that remembers where you picked colours from";
     mainProgram = "pick-colour-picker";
     maintainers = [ maintainers.mkg20001 ];
 

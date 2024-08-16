@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles }:
+{ lib, rustPlatform, fetchCrate, installShellFiles, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "trashy";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preFixup = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd trash \
       --bash <($out/bin/trash completions bash) \
       --fish <($out/bin/trash completions fish) \
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple, fast, and featureful alternative to rm and trash-cli";
+    description = "Simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
     changelog = "https://github.com/oberblastmeister/trashy/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

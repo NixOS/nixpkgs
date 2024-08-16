@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,15 +24,15 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  postInstall = ''
-    installShellCompletion --cmd himalaya \
-      --bash <($out/bin/chara completion --shell bash) \
-      --fish <($out/bin/chara completion --shell fish) \
-      --zsh <($out/bin/chara completion --shell zsh)
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd chara \
+      --bash <($out/bin/chara completions --shell bash) \
+      --fish <($out/bin/chara completions --shell fish) \
+      --zsh <($out/bin/chara completions --shell zsh)
   '';
 
   meta = with lib; {
-    description = "The future of cowsay - Colorful characters saying something";
+    description = "Future of cowsay - Colorful characters saying something";
     homepage = "https://github.com/latipun7/charasay";
     license = licenses.mit;
     maintainers = with maintainers; [ hmajid2301 ];

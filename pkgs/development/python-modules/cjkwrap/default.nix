@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cjkwrap" ];
 
   meta = with lib; {
-    description = "A library for wrapping and filling CJK text";
+    description = "Library for wrapping and filling CJK text";
     homepage = "https://f.gallai.re/cjkwrap";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.kaction ];

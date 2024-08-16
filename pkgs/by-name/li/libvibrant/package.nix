@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
 
   meta = with lib; {
-    description = "A simple library to adjust color saturation of X11 outputs";
+    description = "Simple library to adjust color saturation of X11 outputs";
     homepage = "https://github.com/libvibrant/libvibrant";
     license = licenses.mit;
     platforms = platforms.linux;

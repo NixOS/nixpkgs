@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   hatch-vcs,
@@ -70,7 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/eventlet/eventlet/blob/v${version}/NEWS";
-    description = "A concurrent networking library for Python";
+    description = "Concurrent networking library for Python";
     homepage = "https://github.com/eventlet/eventlet/";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];

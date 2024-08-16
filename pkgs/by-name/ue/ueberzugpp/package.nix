@@ -24,19 +24,20 @@
 , extra-cmake-modules
 , wayland
 , wayland-protocols
+, wayland-scanner
 , enableX11 ? stdenv.isLinux
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.9.5";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-BuVInCYpogkn1CnQ2hqLaTi1KJ0mHEEfRIOrTIg9duY=";
+    hash = "sha256-qo9Rwnx6Oh8DRcCBUMS3JVdNyx1iZSB2Z1qfptUoPFQ=";
   };
 
   strictDeps = true;
@@ -44,6 +45,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optionals enableWayland [
+    wayland-scanner
   ];
 
   buildInputs = [

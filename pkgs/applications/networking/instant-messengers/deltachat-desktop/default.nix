@@ -1,12 +1,12 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_28
+, electron
 , buildGoModule
 , esbuild
 , fetchFromGitHub
 , jq
-, libdeltachat
+, deltachat-rpc-server
 , makeDesktopItem
 , makeWrapper
 , noto-fonts-color-emoji
@@ -23,12 +23,12 @@
 let
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.19.8";
+      version = "0.19.12";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-f13YbgHFQk71g7twwQ2nSOGA0RG0YYM01opv6txRMuw=";
+        hash = "sha256-NQ06esCSU6YPvQ4cMsi3DEFGIQGl8Ff6fhdTxUAyGvo=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
@@ -36,23 +36,16 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.44.1";
+  version = "1.46.2";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-fL+9oPQ5dAgvQREZ7A+hKo2MnZKeVvadQDvDPsDNbnQ=";
+    hash = "sha256-5XGtyfc7Kak7qSQOQAH5gFtSaHeWclRhtsYSGPIQo6w=";
   };
 
-  npmDepsHash = "sha256-rUxJLDsAfp+brecTThYTdHIVIfVkKwZ/W5sHV0hHHIk=";
-
-  postPatch = ''
-    test \
-      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
-      = $(pkg-config --modversion deltachat) \
-      || (echo "error: libdeltachat version does not match jsonrpc-client" && exit 1)
-  '';
+  npmDepsHash = "sha256-4UPDNz0aw4VH3bMT+s/7DE6+ZPNP5w1iGCRpZZMXzPc=";
 
   nativeBuildInputs = [
     jq
@@ -64,7 +57,7 @@ buildNpmPackage rec {
   ];
 
   buildInputs = [
-    libdeltachat
+    deltachat-rpc-server
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
   ];
@@ -77,7 +70,18 @@ buildNpmPackage rec {
   };
 
   preBuild = ''
-    rm -r node_modules/deltachat-node/node/prebuilds
+    test \
+      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
+      = ${deltachat-rpc-server.version} \
+      || (echo "error: deltachat-rpc-server version does not match jsonrpc-client" && exit 1)
+
+    test \
+      $(jq -r '.packages."node_modules/electron".version' package-lock.json | grep -E -o "^[0-9]+") \
+      = ${lib.versions.major electron.version} \
+      || (echo 'error: electron version doesn not match package-lock.json' && exit 1)
+
+    rm node_modules/@deltachat/stdio-rpc-server-*/deltachat-rpc-server
+    ln -s ${lib.getExe deltachat-rpc-server} node_modules/@deltachat/stdio-rpc-server-linux-*
   '';
 
   npmBuildScript = "build4production";
@@ -93,6 +97,9 @@ buildNpmPackage rec {
     awk '!/^#/ && NF' build/packageignore_list \
       | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
 
+    # required for electron to import index.js as a module
+    cp package.json $out/lib/node_modules/deltachat-desktop
+
     install -D build/icon.png \
       $out/share/icons/hicolor/scalable/apps/deltachat.png
 
@@ -103,7 +110,7 @@ buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${lib.getExe electron_28} $out/bin/deltachat \
+    makeWrapper ${lib.getExe electron} $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 

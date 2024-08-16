@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.4.15";
+  version = "0.4.16";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
     rev = "v${version}";
-    hash = "sha256-gw6wbPt1Qy0vNfT0flq7bxpnGU3SgJvPVhk8H0Imvx4=";
+    hash = "sha256-1HOLMbCuV1bxi4DV26QOhi93VsBF3NJymk4SMn2ze4g=";
   };
 
   configureFlags = [ "--with-zlib-dir=${zlib.dev}" ];
@@ -28,7 +28,7 @@ buildPecl {
 
   meta = {
     changelog = "https://github.com/NoiseByNorthwest/php-spx/releases/tag/${version}";
-    description = "A simple & straight-to-the-point PHP profiling extension with its built-in web UI";
+    description = "Simple & straight-to-the-point PHP profiling extension with its built-in web UI";
     homepage = "https://github.com/NoiseByNorthwest/php-spx";
     license = lib.licenses.php301;
     maintainers = with lib.maintainers; [ drupol ];

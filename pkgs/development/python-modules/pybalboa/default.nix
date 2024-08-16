@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pybalboa";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "garbled1";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7vjdRGnEnMf32pZwoKRxX16hxkyf0CXlncpbBJMQtfI=";
+    hash = "sha256-rSY6kU7F9ybpPXcmTM2WBazjb9tI2+8dG56pjrRXcKg=";
   };
 
   nativeBuildInputs = [ poetry-core ];

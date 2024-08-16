@@ -1,9 +1,7 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , wrapGAppsHook3
 , buildGoModule
-, go
 , glib
 , pkg-config
 , cairo
@@ -66,7 +64,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/nwg-piotr/nwg-look";
-    description = "Nwg-look is a GTK3 settings editor, designed to work properly in wlroots-based Wayland environment.";
+    description = "Nwg-look is a GTK3 settings editor, designed to work properly in wlroots-based Wayland environment";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ max-amb ];

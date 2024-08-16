@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, gtk3, intltool
-, gnome, enchant, isocodes, gsettings-desktop-schemas }:
+, gnome, adwaita-icon-theme, enchant, isocodes, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "gtkhtml";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config intltool ];
-  buildInputs = [ gtk3 gnome.adwaita-icon-theme
+  buildInputs = [ gtk3 adwaita-icon-theme
                   gsettings-desktop-schemas ];
 
   propagatedBuildInputs = [ enchant isocodes ];

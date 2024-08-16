@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A simple tool for generating self signed certificates";
+    description = "Simple tool for generating self signed certificates";
     mainProgram = "minica";
     longDescription = ''
       Minica is a simple CA intended for use in situations where the CA operator

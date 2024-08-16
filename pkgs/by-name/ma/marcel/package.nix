@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "marcel";
-  version = "0.27.2";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geophile";
     repo = "marcel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jzb4kSrcN+pLFkWYy0hc7NCCextWgZQuf3P+kiouEfY=";
+    hash = "sha256-hUI5dUqelmRuk65s67rJXrZoPDWAcnNVIHlzxAgRExs=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     '';
 
   meta = with lib; {
-    description = "A modern shell";
+    description = "Modern shell";
     homepage = "https://github.com/geophile/marcel";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kud ];

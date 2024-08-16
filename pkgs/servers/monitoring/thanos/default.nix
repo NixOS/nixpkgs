@@ -37,7 +37,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      inherit (nixosTests) prometheus;
+      inherit (nixosTests) thanos;
       version = testers.testVersion {
         command = "thanos --version";
         package = thanos;

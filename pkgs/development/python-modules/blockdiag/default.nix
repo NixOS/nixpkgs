@@ -5,9 +5,9 @@
   ephem,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   funcparserlib,
   pillow,
-  pynose,
   pytestCheckHook,
   pythonOlder,
   reportlab,
@@ -36,7 +36,20 @@ buildPythonPackage rec {
       url = "https://github.com/blockdiag/blockdiag/commit/20d780cad84e7b010066cb55f848477957870165.patch";
       hash = "sha256-t1zWFzAsLL2EUa0nD4Eui4Y5AhAZLRmp/yC9QpzzeUA=";
     })
+    # https://github.com/blockdiag/blockdiag/pull/175
+    (fetchpatch2 {
+      name = "migrate-to-pytest.patch";
+      url = "https://github.com/blockdiag/blockdiag/commit/4f4f726252084f17ecc6c524592222af09d37da4.patch";
+      hash = "sha256-OkfKJwJtb2DJRXE/8thYnisTFwcfstUFTTJHdM/qBzg=";
+    })
   ];
+
+  postPatch = ''
+    # requires network access the url-based icon
+    # and path-based icon is set to debian logo (/usr/share/pixmaps/debian-logo.png)
+    rm src/blockdiag/tests/diagrams/node_icon.diag
+    # note: this is a postPatch as `seqdiag` uses them directly
+  '';
 
   build-system = [ setuptools ];
 
@@ -50,7 +63,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     ephem
-    pynose
     pytestCheckHook
   ];
 

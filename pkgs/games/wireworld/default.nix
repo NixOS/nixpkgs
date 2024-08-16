@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
     ];
     downloadPage = "https://ldjam.com/events/ludum-dare/53/wireworld";
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
   };
 
 }

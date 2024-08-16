@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.memtest.org/";
-    description = "A tool to detect memory errors";
+    description = "Tool to detect memory errors";
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ lib.maintainers.LunNova ];

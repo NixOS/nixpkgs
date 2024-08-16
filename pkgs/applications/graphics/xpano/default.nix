@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xpano";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "krupkat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "iPGvCJz2iywpSePBZ3c8OiccKfwaGAToGaJfRhruUPk=";
+    sha256 = "sha256-cb6BJg0wdfhqEFLbQ27NpjJU/cc4SZSk94UHzJfzn5U=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A panorama stitching tool";
+    description = "Panorama stitching tool";
     mainProgram = "Xpano";
     homepage = "https://krupkat.github.io/xpano/";
     changelog = "https://github.com/krupkat/xpano/releases/tag/v${version}";

@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Steam Achievement Manager For Linux. Rewritten in C++";
     mainProgram = "samrewritten";
     homepage = "https://github.com/PaulCombal/SamRewritten";
+    changelog = "https://github.com/PaulCombal/SamRewritten/releases";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ludovicopiero ];
     platforms = [ "x86_64-linux" ];

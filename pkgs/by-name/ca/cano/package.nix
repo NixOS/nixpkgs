@@ -5,7 +5,7 @@
 , ncurses
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "cano";
+  pname = "cano";
   version = "0.1.0-alpha";
 
   src = fetchFromGitHub {

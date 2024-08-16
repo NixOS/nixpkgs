@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   meta = with lib; {
-    description = "Ordered Multivalue Dictionary.";
+    description = "Ordered Multivalue Dictionary";
     homepage = "https://github.com/gruns/orderedmultidict";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ vanzef ];

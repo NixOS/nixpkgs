@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wiremock";
-  version = "3.6.0";
+  version = "3.9.1";
 
   src = fetchurl {
     url = "mirror://maven/org/wiremock/wiremock-standalone/${finalAttrs.version}/wiremock-standalone-${finalAttrs.version}.jar";
-    hash = "sha256-tLOiGl5/HuDbhrRyu+xZ6lL408n85MXl63lecGgok9w=";
+    hash = "sha256-cjqIDVDTsKFFrw3wfleMLLhed/6yIx5pkcmhNmkmkSw=";
   };
 
   dontUnpack = true;
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A flexible tool for building mock APIs";
+    description = "Flexible tool for building mock APIs";
     homepage = "https://wiremock.org/";
     changelog = "https://github.com/wiremock/wiremock/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ bobvanderlinden anthonyroussel ];

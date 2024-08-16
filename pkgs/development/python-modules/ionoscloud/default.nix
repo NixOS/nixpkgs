@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python API client for ionoscloud";
     changelog = "https://github.com/ionos-cloud/sdk-python/blob/v${version}/docs/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexchen ];
+    maintainers = [ ];
   };
 }

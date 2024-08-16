@@ -27,7 +27,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.1";
+  version = "7.1.2";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -96,13 +96,13 @@ stdenv'.mkDerivation (finalAttrs: {
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-LNOAT1vm6EEmcKdshMKjYWFfoRoRNbgZgjEpOTacWc8=";
+        hash = "sha256-4ZJs7Xpou0Ek0CCCjbK47Nu/XPpuTpBDU8GJz5AsaUg=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-dznMjSaS2kkyYf7JrNf1Y++Nb5YFOmk/JQP3BBrf5Bk=";
+        hash = "sha256-H+7vH6AjP6HQ1ifXe8qlLSh0FQu8KJkwr+38C5akk/c=";
       };
     };
 
@@ -121,14 +121,13 @@ stdenv'.mkDerivation (finalAttrs: {
           exit 0
       fi
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "yabai" "0" "${lib.fakeHash}" --source-key="sources.$platform"
-        update-source-version "yabai" "$NEW_VERSION" --source-key="sources.$platform"
+        update-source-version "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
 
   meta = {
-    description = "A tiling window manager for macOS based on binary space partitioning";
+    description = "Tiling window manager for macOS based on binary space partitioning";
     longDescription = ''
       yabai is a window management utility that is designed to work as an extension to the built-in
       window manager of macOS. yabai allows you to control your windows, spaces and displays freely
@@ -143,7 +142,6 @@ stdenv'.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       cmacrae
       shardy
-      ivar
       khaneliman
     ];
     sourceProvenance =

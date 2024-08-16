@@ -51,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lilyball ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

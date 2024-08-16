@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libgcrypt yajl curl expat boost libiberty ];
 
   meta = with lib; {
-    description = "A console Google Drive client";
+    description = "Console Google Drive client";
     homepage = "https://github.com/vitalif/grive2";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

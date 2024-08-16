@@ -1,14 +1,13 @@
 { lib
 , stdenv
 , fetchurl
-, qmake
+, cmake
 , qttools
 , qtbase
 , qtdeclarative
 , qtsvg
 , qtwayland
 , qtwebsockets
-, qt5compat
 , makeWrapper
 , wrapQtAppsHook
 , botan2
@@ -21,18 +20,18 @@
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.6.0";
+  version = "24.8.5";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-rgnFqYqiItTd86K8U7O2sI+q3lF/PiJWU/e2C2O5mJI=";
+    hash = "sha256-2aXKb9epApscoxt9I2oL6pl1jnGu6sbHTr9+pz6QJu4=";
   };
 
   nativeBuildInputs = [
-    qmake
+    cmake
     qttools
     wrapQtAppsHook
     pkg-config
@@ -45,12 +44,12 @@ stdenv.mkDerivation {
     qtdeclarative
     qtsvg
     qtwebsockets
-    qt5compat
     botan2
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
-  qmakeFlags = [
-    "USE_SYSTEM_BOTAN=1"
+  cmakeFlags = [
+    "-DQON_QT6_BUILD=ON"
+    "-DBUILD_WITH_SYSTEM_BOTAN=ON"
   ];
 
   postInstall = ''

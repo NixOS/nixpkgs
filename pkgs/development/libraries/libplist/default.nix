@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2.4.0";
+  version = "2.6.0";
 
   outputs = [ "bin" "dev" "out" ] ++ lib.optional enablePython "py";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "libimobiledevice";
     repo = pname;
     rev = version;
-    hash = "sha256-bH40HSp76w56tlxO5M1INAW4wRR7O27AY4H/CyEcp+Y=";
+    hash = "sha256-hitRcOjbF+L9Og9/qajqFqOhKfRn9+iWLoCKmS9dT80=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library to handle Apple Property List format in binary or XML";
+    description = "Library to handle Apple Property List format in binary or XML";
     homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
     maintainers = [ ];

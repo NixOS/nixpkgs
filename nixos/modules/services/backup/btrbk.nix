@@ -204,10 +204,6 @@ in
   };
   config = mkIf (sshEnabled || serviceEnabled) {
 
-    warnings = optional (cfg.extraPackages != []) ''
-      extraPackages option will be deprecated in future releases. Programs required for compression are now automatically selected depending on services.btrbk.instances.<name>.settings.stream_compress option.
-    '';
-
     environment.systemPackages = [ pkgs.btrbk ] ++ cfg.extraPackages;
 
     security.sudo.extraRules = mkIf (sudo_doas == "sudo") [ sudoRule ];

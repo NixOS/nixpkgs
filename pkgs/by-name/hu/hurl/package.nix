@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , installShellFiles
 , libxml2
@@ -21,6 +22,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-dY00xcMnOCWhdRzC+3mTHSIqeYEPUDBJeYd/GiLM/38=";
+
+  patches = [
+    # Fix for rust 1.79, see https://github.com/Orange-OpenSource/hurl/issues/3057
+    # We should be able to remove this at the next hurl version bump
+    (fetchpatch {
+      name = "hurl-fix-rust-1.79";
+      url = "https://github.com/Orange-OpenSource/hurl/commit/d51c275fc63d1ee5bbdc6fc70279ec8dae86a9c1.patch";
+      hash = "sha256-peA4Zq5J8ynL7trvydQ3ZqyHpJWrRmJeFeMKH9XT2n4=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

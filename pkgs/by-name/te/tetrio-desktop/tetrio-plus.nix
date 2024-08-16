@@ -9,7 +9,7 @@
 
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, fixup-yarn-lock
 , nodejs
 , asar
 
@@ -63,7 +63,7 @@ let
     ];
 
     buildPhase = ''
-      HOME=$(mktemp -d) RUSTFLAGS="-C linker=lld" wasm-pack build --target web --release
+      HOME=$(mktemp -d) wasm-pack build --target web --release
     '';
 
     installPhase = ''
@@ -73,7 +73,7 @@ let
     doCheck = false;
 
     meta = {
-      description = "A self contained toolkit for creating, editing, and previewing TPSE files";
+      description = "Self contained toolkit for creating, editing, and previewing TPSE files";
       homepage = "https://gitlab.com/UniQMG/tpsecore";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ huantian wackbyte ];
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    fixup-yarn-lock
     nodejs
     asar
   ];
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror ${offlineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

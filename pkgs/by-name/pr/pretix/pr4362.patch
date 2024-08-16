@@ -1,0 +1,50 @@
+From 5688f3624005d02803f2a434db025f367b4963d3 Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Thu, 1 Aug 2024 02:39:59 +0200
+Subject: [PATCH] Prevent race condition in directory creation
+
+Checking whether a path does not exist before trying to create it does
+not follow the Python paradigm of asking for forgiveness, rather than
+permission, and opens up a time-of-check to time-of-use race.
+---
+ src/pretix/settings.py | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/src/pretix/settings.py b/src/pretix/settings.py
+index 81ff644be..854187f05 100644
+--- a/src/pretix/settings.py
++++ b/src/pretix/settings.py
+@@ -37,6 +37,7 @@ import configparser
+ import logging
+ import os
+ import sys
++from contextlib import suppress
+ from json import loads
+ from urllib.parse import urlparse
+ 
+@@ -70,14 +71,14 @@ MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
+ PROFILE_DIR = os.path.join(DATA_DIR, 'profiles')
+ CACHE_DIR = config.get('pretix', 'cachedir', fallback=os.path.join(DATA_DIR, 'cache'))
+ 
+-if not os.path.exists(DATA_DIR):
+-    os.mkdir(DATA_DIR)
+-if not os.path.exists(LOG_DIR):
+-    os.mkdir(LOG_DIR)
+-if not os.path.exists(MEDIA_ROOT):
+-    os.mkdir(MEDIA_ROOT)
+-if not os.path.exists(CACHE_DIR):
+-    os.mkdir(CACHE_DIR)
++def mkdir(path):
++    with suppress(FileExistsError):
++        os.mkdir(path)
++
++mkdir(DATA_DIR)
++mkdir(LOG_DIR)
++mkdir(MEDIA_ROOT)
++mkdir(CACHE_DIR)
+ 
+ if config.has_option('django', 'secret'):
+     SECRET_KEY = config.get('django', 'secret')
+-- 
+2.45.2
+

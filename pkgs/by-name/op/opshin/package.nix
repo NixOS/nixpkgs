@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "opshin";
-  version = "0.20.0";
+  version = "0.22.0";
 
   format = "pyproject";
 
@@ -13,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "OpShin";
     repo = "opshin";
     rev = version;
-    hash = "sha256-fJlPeVAuEf80FVxdXnaKASLmjMEgz6ysXenUY72+sos=";
+    hash = "sha256-ixA5D7Bm/tjYEFhqaJ4sKkCkqQZpDyrwfD/LgN6Y4Uo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,8 +28,13 @@ python3.pkgs.buildPythonApplication rec {
     ordered-set
   ];
 
+  pythonRelaxDeps = [
+    "pluthon"
+    "uplc"
+  ];
+
   meta = with lib; {
-    description = "A simple pythonic programming language for Smart Contracts on Cardano";
+    description = "Simple pythonic programming language for Smart Contracts on Cardano";
     homepage = "https://opshin.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ t4ccer ];

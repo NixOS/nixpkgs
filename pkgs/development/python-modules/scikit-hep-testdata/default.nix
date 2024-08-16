@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.4.45";
+  version = "0.4.46";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kpn7Z+LJPZ9rNxQLXFtACJvfpRdDs58cy+1QlbbODLA=";
+    hash = "sha256-lihStYseIthw74kMSDHYpYaLCJGIKlx4gb0VqQu8tc4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/scikit-hep-testdata";
-    description = "A common package to provide example files (e.g., ROOT) for testing and developing packages against";
+    description = "Common package to provide example files (e.g., ROOT) for testing and developing packages against";
     changelog = "https://github.com/scikit-hep/scikit-hep-testdata/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];

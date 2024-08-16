@@ -204,7 +204,8 @@ in
           noDmUsed = !(dmConf.gdm.enable
                     || cfg.sddm.enable
                     || dmConf.xpra.enable
-                    || dmConf.lightdm.enable);
+                    || dmConf.lightdm.enable
+                    || cfg.ly.enable);
       in lib.mkIf noDmUsed (lib.mkDefault false);
 
     systemd.services.display-manager = {
@@ -212,9 +213,7 @@ in
       after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
       restartIfChanged = false;
 
-      environment = lib.optionalAttrs config.hardware.opengl.setLdLibraryPath {
-        LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ];
-      } // cfg.environment;
+      environment = cfg.environment;
 
       preStart = cfg.preStart;
       script = lib.mkIf (config.systemd.services.display-manager.enable == true) cfg.execCmd;

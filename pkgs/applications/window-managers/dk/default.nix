@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://bitbucket.org/natemaia/dk";
-    description = "A list based tiling window manager in the vein of dwm, bspwm, and xmonad";
+    description = "List based tiling window manager in the vein of dwm, bspwm, and xmonad";
     license = lib.licenses.x11;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     platforms = lib.platforms.linux;

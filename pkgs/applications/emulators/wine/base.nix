@@ -176,7 +176,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
 
   # https://bugs.winehq.org/show_bug.cgi?id=43530
   # https://github.com/NixOS/nixpkgs/issues/31989
-  hardeningDisable = [ "bindnow" ]
+  hardeningDisable = [ "bindnow" "stackclashprotection" ]
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
     ++ lib.optional (supportFlags.mingwSupport) "format";
 
@@ -193,7 +193,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
       fromSource
       binaryNativeCode  # mono, gecko
     ];
-    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+    description = "Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     inherit badPlatforms platforms;
     maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira reckenrode ];
     inherit mainProgram;

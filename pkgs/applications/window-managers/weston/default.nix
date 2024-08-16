@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "13.0.1";
+  version = "13.0.3";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    hash = "sha256-6hVmq09f/Ofp/U96H8pbMMquTVACO/RZITmUCU4Cspo=";
+    hash = "sha256-J/aNluO5fZjare8TogI1ZSSST6OBQY+mcWuRNu8JkJM=";
   };
 
   postPatch = ''
-    # raise neatvnc version bound to 0.8.0
+    # raise neatvnc version bound to < 0.9.0
     # https://gitlab.freedesktop.org/wayland/weston/-/issues/890
     substituteInPlace libweston/backend-vnc/meson.build \
-      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '<= 0.8.0']"
+      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '< 0.9.0']"
   '';
 
   depsBuildBuild = [ pkg-config ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   passthru.providedSessions = [ "weston" ];
 
   meta = with lib; {
-    description = "A lightweight and functional Wayland compositor";
+    description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
       as a useful environment in and of itself.

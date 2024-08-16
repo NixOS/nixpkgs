@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://sioyek.info/";
-    description = "A PDF viewer designed for research papers and technical books";
+    description = "PDF viewer designed for research papers and technical books";
     mainProgram = "sioyek";
     changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;

@@ -22,15 +22,15 @@
 
 buildPythonPackage rec {
   pname = "libpysal";
-  version = "4.10";
+  version = "4.12.0";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "libpysal";
-    rev = "v${version}";
-    hash = "sha256-jzSkIFSIXc039KR4fS1HOI/Rj0mHwbArn2hD+zfAZDg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m7jcTi51ngAXXWYJGkjMVA3KwAxL2aJysdjiS1pWEIQ=";
   };
 
   build-system = [ setuptools-scm ];
@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   # requires network access
   disabledTestPaths = [
+    "libpysal/graph/tests/test_summary.py"
     "libpysal/cg/tests/test_geoJSON.py"
     "libpysal/examples/tests/test_available.py"
     "libpysal/graph/tests/test_base.py"
@@ -78,7 +79,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "libpysal" ];
 
   meta = {
-    description = "A library of spatial analysis functions";
+    description = "Library of spatial analysis functions";
     homepage = "https://pysal.org/libpysal/";
     license = lib.licenses.bsd3;
     maintainers = lib.teams.geospatial.members;

@@ -77,7 +77,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A Python interface for fplll";
+    description = "Python interface for fplll";
     changelog = "https://github.com/fplll/fpylll/releases/tag/${version}";
     homepage = "https://github.com/fplll/fpylll";
     maintainers = teams.sage.members;

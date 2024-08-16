@@ -26,11 +26,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchurl {
-    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-05-28.tar.gz";
-    hash = "sha256-vwExzekzNdNWcEOHZ22b5F9pADdqZ4XSWscrndfPcsQ=";
+    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-06-20.tar.gz";
+    hash = "sha256-9SlgKNZFuy0/mf7eCjaUWVbrc4YXRDDnXADm+xs0540=";
   };
 
   sourceRoot = ".";
@@ -73,7 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service.";
+    description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service";
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html";
     license = licenses.unfree;
     mainProgram = "dynamodb-local";

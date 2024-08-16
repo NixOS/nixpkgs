@@ -125,7 +125,7 @@ The first steps to all these are the same:
     :::
 
     ```ShellSession
-    $ sudo PATH="$PATH" NIX_PATH="$NIX_PATH" `which nixos-install` --root /mnt
+    $ sudo PATH="$PATH" `which nixos-install` --root /mnt
     ```
 
     Again, please refer to the `nixos-install` step in

@@ -1,12 +1,14 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach }:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach
+, python311
+}:
 
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "126.0.1";
+    version = "129.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "249605c4891ee9271def187d161369bd3ccbd347f5f0e175d0239aced3cb9ae9655d3c134b7705bda80ea1e63c0a2ee8eb4e76db0840019683376c00f20fc7ac";
+      sha512 = "27c463e8277994c62bab85cf0e2f0cea16a9b272694b61fa56a6b3bd7c70d6481774288386094836a54df54c1b1144d61be67f4f5eac418c05479d452221c027";
     };
 
     extraPatches = [
@@ -14,7 +16,7 @@
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
-      description = "A web browser built from Firefox source tree";
+      description = "Web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ lovesegfault hexa ];
       platforms = lib.platforms.unix;
@@ -33,16 +35,16 @@
 
   firefox-beta = buildMozillaMach rec {
     pname = "firefox-beta";
-    version = "127.0b2";
+    version = "130.0b2";
     applicationName = "Mozilla Firefox Beta";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "ce3bb42674fb5c820ce46a1f86d482d9c7631f1e0f31fe63c0813436cb54b3bbae9b53f397dc6cfc48b28682f720bfd042bb68715a3c653046870f2d50e9ed04";
+      sha512 = "bfba17643923ec10686df7d0047e0fcba7716f96a645722869cc472f68bb42415e63ce37905a7d41f1bb3aa139ee7d336ac838bbbff105b3785eb522ebcb7eb0";
     };
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
-      description = "A web browser built from Firefox Beta Release source tree";
+      description = "Web browser built from Firefox Beta Release source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ jopejoe1 ];
       platforms = lib.platforms.unix;
@@ -62,18 +64,18 @@
 
   firefox-devedition = buildMozillaMach rec {
     pname = "firefox-devedition";
-    version = "127.0b2";
+    version = "130.0b2";
     applicationName = "Mozilla Firefox Developer Edition";
     requireSigning = false;
     branding = "browser/branding/aurora";
     src = fetchurl {
       url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "109e834e533db1a815151777170cdc0617a1f725ce8e5af04e63ac9e874edb22a33d51f2d85fcbb0c4132c3884785a54f6ea0ffaf7a0cc764e033fda311c48d6";
+      sha512 = "ef26fa3dad6fdafe8e8e2d9d88101b75244b3f21a499d0b61c4a2c9a0addbcd3184274096a34da958b0ab2489ecf6c3d7684a1f507ed687648b96f9e9e2b123c";
     };
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
-      description = "A web browser built from Firefox Developer Edition source tree";
+      description = "Web browser built from Firefox Developer Edition source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ jopejoe1 ];
       platforms = lib.platforms.unix;
@@ -92,18 +94,47 @@
     };
   };
 
-  firefox-esr-115 = buildMozillaMach rec {
-    pname = "firefox-esr-115";
-    version = "115.11.0esr";
-    applicationName = "Mozilla Firefox ESR";
+  firefox-esr-128 = buildMozillaMach rec {
+    pname = "firefox";
+    version = "128.1.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "0f3a87c99fb008088afd509d9259f893fdd44ea6bf6a5e69806fefb8d355415e81b9e8832a392acb9d0c1c50e4add7f1362a4aaadc35e1d9c2e55baf7136aed8";
+      sha512 = "8055a7f83acf0cab6124ba5809aff1c082e81a0d30ff318ec719f8fd3f4af9aa60e2094c1abd6c981193d751075a9569370176e20e50f3c1959fe27a15511388";
     };
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
-      description = "A web browser built from Firefox Extended Support Release source tree";
+      description = "Web browser built from Firefox source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ hexa ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
+      license = lib.licenses.mpl20;
+      mainProgram = "firefox";
+    };
+    tests = [ nixosTests.firefox-esr-128 ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-128-unwrapped";
+      versionPrefix = "128";
+      versionSuffix = "esr";
+    };
+  };
+
+  firefox-esr-115 = (buildMozillaMach rec {
+    pname = "firefox-esr-115";
+    version = "115.14.0esr";
+    applicationName = "Mozilla Firefox ESR";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "dd40c1fd3cf454dbf33a85d38e47bb0e736ed89b829643653e239f43232441f4e9f3c7876f058ff2e6f19daf2b50a8f2d13274e9a107d8a258a6067d1fc43f54";
+    };
+
+    meta = {
+      changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
+      description = "Web browser built from Firefox Extended Support Release source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ hexa ];
       platforms = lib.platforms.unix;
@@ -119,5 +150,6 @@
       versionPrefix = "115";
       versionSuffix = "esr";
     };
-  };
+  })
+   .override { python3 = python311; };
 }

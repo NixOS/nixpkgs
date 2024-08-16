@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     homepage = "https://poac.pm";
     description = "Package Manager for C++";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     # error: call to 'format' is ambiguous
     broken = true; # last successful build 2023-12-31

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:          # mailman.nix
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -367,7 +367,7 @@ in {
           for more info.
         '';
       }
-      (requirePostfixHash [ "relayDomains" ] "postfix_domains")
+      (requirePostfixHash [ "config" "relay_domains" ] "postfix_domains")
       (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
       (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
     ]);
@@ -445,6 +445,7 @@ in {
           "${removeSuffix "/" cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
+      proxyTimeout = mkDefault "120s";
     };
 
     environment.systemPackages = [ (pkgs.buildEnv {
@@ -646,7 +647,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ];
     doc = ./mailman.md;
   };
 
