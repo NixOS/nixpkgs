@@ -30,7 +30,7 @@
 buildPythonPackage rec {
   pname = "jsonschema";
   version = "4.23.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -43,13 +43,13 @@ buildPythonPackage rec {
     patchShebangs json/bin/jsonschema_suite
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       attrs
       jsonschema-specifications
@@ -93,9 +93,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Implementation of JSON Schema validation";
-    mainProgram = "jsonschema";
     homepage = "https://github.com/python-jsonschema/jsonschema";
+    changelog = "https://github.com/python-jsonschema/jsonschema/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
+    mainProgram = "jsonschema";
   };
 }
