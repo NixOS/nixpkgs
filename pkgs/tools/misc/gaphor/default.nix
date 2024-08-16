@@ -29,7 +29,7 @@
 buildPythonApplication rec {
   pname = "gaphor";
   version = "2.26.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -51,7 +51,9 @@ buildPythonApplication rec {
     libadwaita
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ python3Packages.poetry-core ];
+
+  dependencies = [
     pycairo
     pygobject3
     gaphas
