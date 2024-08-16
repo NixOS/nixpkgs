@@ -192,6 +192,7 @@ in {
   cfssl = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cfssl.nix {};
   cgit = handleTest ./cgit.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
+  chromadb = runTest ./chromadb.nix;
   chromium = (handleTestOn ["aarch64-linux" "x86_64-linux"] ./chromium.nix {}).stable or {};
   chrony = handleTestOn ["aarch64-linux" "x86_64-linux"] ./chrony.nix {};
   chrony-ptp = handleTestOn ["aarch64-linux" "x86_64-linux"] ./chrony-ptp.nix {};
