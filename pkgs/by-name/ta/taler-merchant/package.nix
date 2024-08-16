@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "0.11.3";
+  version = "0.12.0";
 
   taler-wallet-core = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
-    # https://taler.net/fr/news/2024-11.html
-    rev = "v0.11.2";
-    hash = "sha256-GtR87XqmunYubh9EiY3bJIqXiXrT+re3KqWypYK3NCo=";
+    # https://taler.net/en/news/2024-23.html
+    rev = "v0.12.7";
+    hash = "sha256-5fyPPrRCKvHTgipIpKqHX3iH5f+wTuyfsAKgKmvl1nI=";
   };
 in
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     url = "https://git.taler.net/merchant.git";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Rak6p8cuCHPZxrXqrv3YUU3pFFw4GWf8bcd3Ur+o7Wg=";
+    hash = "sha256-BNIVlL+YPqqRZUhHOR/eH38dSHn/kNyCbMyz0ICxAMk=";
   };
 
   postUnpack = ''
