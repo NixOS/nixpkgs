@@ -1,5 +1,5 @@
 { lib, stdenv, fetchzip
-, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
+, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_09
 , ocamlPackages_4_10, ocamlPackages_4_12, ocamlPackages_4_14
 , fetchpatch, makeWrapper, coq2html
 }@args:
@@ -168,7 +168,6 @@ let
     );
   mkCoq = version: callPackage ../applications/science/logic/coq {
     inherit version
-      ocamlPackages_4_05
       ocamlPackages_4_09
       ocamlPackages_4_10
       ocamlPackages_4_12
@@ -189,8 +188,6 @@ in rec {
     let self = lib.makeScope newScope (lib.flip mkCoqPackages' coq); in
     self.filterPackages (! coq.dontFilter or false);
 
-  coq_8_5  = mkCoq "8.5";
-  coq_8_6  = mkCoq "8.6";
   coq_8_7  = mkCoq "8.7";
   coq_8_8  = mkCoq "8.8";
   coq_8_9  = mkCoq "8.9";
@@ -206,8 +203,6 @@ in rec {
   coq_8_19 = mkCoq "8.19";
   coq_8_20 = mkCoq "8.20";
 
-  coqPackages_8_5 = mkCoqPackages coq_8_5;
-  coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
