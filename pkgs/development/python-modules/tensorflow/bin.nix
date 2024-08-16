@@ -140,12 +140,11 @@ buildPythonPackage rec {
   postFixup =
     let
       # rpaths we only need to add if CUDA is enabled.
-      cudapaths = lib.optionals cudaSupport ([
+      cudapaths = lib.optionals cudaSupport [
         cudatoolkit.out
         cudatoolkit.lib
-      ] ++ lib.optionals (!cudaPackages.cudaFlags.isJetsonBuild) [
         cudnn
-      ]);
+      ];
 
       libpaths = [
         stdenv.cc.cc.lib
