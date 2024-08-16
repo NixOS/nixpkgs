@@ -83,5 +83,6 @@ pythonPackages.buildPythonApplication rec {
     mainProgram = "picard";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
