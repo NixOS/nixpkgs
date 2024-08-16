@@ -2417,6 +2417,18 @@ final: prev:
     meta.homepage = "https://github.com/numtostr/comment.nvim/";
   };
 
+  comment-box-nvim = buildVimPlugin {
+    pname = "comment-box.nvim";
+    version = "v1.0.2";
+    src = fetchFromGitHub {
+      owner = "LudoPinelli";
+      repo = "comment-box.nvim";
+      rev = "e04635ed2b423448b87ddb2f35c26d1a7b7b3f1c";
+      sha256 = "sha256-2P8Zyd5ucOvihZdjgSmr7YlV0yuCn+LyHkCj9gPx/CY=";
+    };
+    meta.homepage = "https://github.com/LudoPinelli/comment-box.nvim/";
+  };
+
   committia-vim = buildVimPlugin {
     pname = "committia.vim";
     version = "2023-11-25";
