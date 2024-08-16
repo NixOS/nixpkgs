@@ -4,7 +4,6 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   lib,
   poetry-core,
   pytestCheckHook,
@@ -13,24 +12,15 @@
 
 buildPythonPackage rec {
   pname = "pyseventeentrack";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shaiu";
     repo = "pyseventeentrack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J5pYtJrEvShRXE/NwbYdmcUhCc5dmDZmJWS550NvRD0=";
+    hash = "sha256-AHFJu2z3UWBR6BzwdxAKl3wpqBnsyj8pn16z1rgFVpw=";
   };
-
-  patches = [
-    # https://github.com/shaiu/pyseventeentrack/pull/4
-    (fetchpatch2 {
-      name = "use-poetry-core.patch";
-      url = "https://github.com/shaiu/pyseventeentrack/commit/6feef4fb29544933836de0a9c06bf85e5105c8bf.patch";
-      hash = "sha256-l6lHWRAoRhYouNT43nb7fYA4RMsmC6rCJOKYTJN8vAU=";
-    })
-  ];
 
   build-system = [ poetry-core ];
 
