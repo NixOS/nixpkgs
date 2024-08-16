@@ -6,6 +6,7 @@
   cmake,
   fetchFromGitHub,
   ffmpeg,
+  glib,
   gsm,
   gst_all_1,
   gtk3,
@@ -68,6 +69,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-Dre_DIR=${libre}/include/re"
+    "-DGL_INCLUDE_DIRS=${lib.getDev glib}/include/glib-2.0"
+    "-DGLIB_INCLUDE_DIRS=${glib.out}/lib/glib-2.0/include"
+    "-DGST_INCLUDE_DIRS=${lib.getDev gst_all_1.gstreamer}/include/gstreamer-1.0"
   ];
 
   makeFlags = [
@@ -111,6 +115,7 @@ stdenv.mkDerivation rec {
     "g711"
     "g722"
     "g726"
+    "gst"
     "gtk"
     "httpd"
     "httpreq"
