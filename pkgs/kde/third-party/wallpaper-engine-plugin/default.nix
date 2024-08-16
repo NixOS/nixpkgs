@@ -23,7 +23,7 @@ mkKdeDerivation {
     fetchSubmodules = true;
   };
 
-  patches = [./nix-plugin.patch];
+  patches = [ ./nix-plugin.patch ];
 
   extraBuildInputs = [
     extra-cmake-modules
@@ -33,24 +33,23 @@ mkKdeDerivation {
     mpv
   ];
 
-  extraCmakeFlags = ["-DUSE_PLASMAPKG=ON"];
+  extraCmakeFlags = [ "-DUSE_PLASMAPKG=ON" ];
 
   extraNativeBuildInputs = [
     kpackage
     pkg-config
   ];
 
-  postInstall = let
-    py3-ws = python3.withPackages (ps:
-      with ps; [
-        websockets
-      ]);
-  in ''
-    cd ../plugin
-    PATH=${py3-ws}/bin:$PATH patchShebangs --build ./contents/pyext.py
-    substituteInPlace ./contents/ui/Pyext.qml --replace-fail NIX_STORE_PACKAGE_PATH ${placeholder "out"}
-    kpackagetool6 -i ./ -p $out/share/plasma/wallpapers/
-  '';
+  postInstall =
+    let
+      py3-ws = python3.withPackages (ps: with ps; [ websockets ]);
+    in
+    ''
+      cd ../plugin
+      PATH=${py3-ws}/bin:$PATH patchShebangs --build ./contents/pyext.py
+      substituteInPlace ./contents/ui/Pyext.qml --replace-fail NIX_STORE_PACKAGE_PATH ${placeholder "out"}
+      kpackagetool6 -i ./ -p $out/share/plasma/wallpapers/
+    '';
 
   meta = with lib; {
     description = "A KDE wallpaper plugin integrating Wallpaper Engine";
