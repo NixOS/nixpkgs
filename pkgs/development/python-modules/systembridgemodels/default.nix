@@ -24,6 +24,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail ">=" " #"
+
     substituteInPlace systembridgemodels/_version.py \
       --replace-fail ", dev=0" ""
   '';
@@ -32,6 +35,8 @@ buildPythonPackage rec {
     incremental
     setuptools
   ];
+
+  pythonRelaxDeps = [ "incremental" ];
 
   dependencies = [ incremental ];
 
