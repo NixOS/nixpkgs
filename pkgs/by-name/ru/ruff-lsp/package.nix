@@ -1,24 +1,15 @@
 { lib
 , stdenv
-, pythonOlder
-, buildPythonPackage
+, python3
 , fetchFromGitHub
 , ruff
-, pygls
-, lsprotocol
-, hatchling
-, typing-extensions
-, packaging
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pytest-asyncio
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ruff-lsp";
   version = "0.0.54";
   pyproject = true;
-  disabled = pythonOlder "3.7";
+  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
@@ -32,11 +23,11 @@ buildPythonPackage rec {
     sed -i '/"ruff>=/d' pyproject.toml
   '';
 
-  build-system = [
+  build-system = with python3.pkgs; [
     hatchling
   ];
 
-  dependencies = [
+  dependencies = with python3.pkgs; [
     packaging
     pygls
     lsprotocol
@@ -46,7 +37,7 @@ buildPythonPackage rec {
   # fails in linux sandbox
   doCheck = stdenv.isDarwin;
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-asyncio
     python-lsp-jsonrpc
