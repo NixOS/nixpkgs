@@ -22,9 +22,9 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
-    "--enable-idl"
-    "--enable-secure-api"
-    "--with-default-msvcrt=${crt}"
+    (lib.enableFeature true "idl")
+    (lib.enableFeature true "secure-api")
+    (lib.withFeatureAs true "default-msvcrt" crt)
   ];
 
   enableParallelBuilding = true;
