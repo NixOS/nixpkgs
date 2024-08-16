@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.8.0";
+  version = "5.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "cohere-ai";
     repo = "cohere-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-ejqsiT0hDBusqOjDGaK6Wda3xr3iyZuQPFj0EDugcew=";
+    hash = "sha256-IU+6X2lyH+5SeWSfzogLLj0D5t1rRwkNbb8AyaaIxnA=";
   };
 
   build-system = [ poetry-core ];

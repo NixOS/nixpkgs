@@ -35,13 +35,13 @@ assert withGLES -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.148.0";
+  version = "0.148.1";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fwxKzd2YKGAMbDDJPj4A0MHBRLg8oBc6JZzrbr7BaHM=";
+    hash = "sha256-ed6/QQObmclSA36g+civhii1aFKTBSjqB+LOyp2LUPg=";
     fetchSubmodules = true;
   };
 
@@ -133,6 +133,10 @@ rustPlatform.buildRustPackage rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
     patchelf --add-rpath ${wayland}/lib $out/libexec/*
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isLinux [

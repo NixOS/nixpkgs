@@ -1,38 +1,39 @@
-{ lib, stdenv, perl, fetchFromGitHub, fetchpatch, makeWrapper, nix-update-script, testers }:
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
+  perl,
+  stdenv,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsay";
-  version = "3.7.0";
+  version = "3.8.1";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "cowsay-org";
     repo = "cowsay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-t1grmCPQhRgwS64RjEwkK61F2qxxMBKuv0/DzBTnL3s=";
+    hash = "sha256-4y+k1CzgTFq48g9gCzPTHdQFf3zgGTBm6tZTEXb7uTU=";
   };
 
-  patches = [
-    # Install cowthink as a symlink, not a copy
-    # See https://github.com/cowsay-org/cowsay/pull/18
-    (fetchpatch {
-      url = "https://github.com/cowsay-org/cowsay/commit/9e129fa0933cf1837672c97f5ae5ad4a1a10ec11.patch";
-      hash = "sha256-zAYEUAM5MkyMONAl5BXj8hBHRalQVAOdpxgiM+Ewmlw=";
-    })
-  ];
-
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ perl ];
+
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/cowsay \
       --suffix COWPATH : $out/share/cowsay/cows
   '';
-
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -48,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rob anthonyroussel ];
+    maintainers = with maintainers; [
+      rob
+      anthonyroussel
+    ];
     mainProgram = "cowsay";
   };
 })
