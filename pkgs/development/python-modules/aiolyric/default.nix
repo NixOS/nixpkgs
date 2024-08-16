@@ -6,6 +6,7 @@
   fetchFromGitHub,
   incremental,
   pythonOlder,
+  pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
@@ -41,12 +42,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # AssertionError, https://github.com/timmo001/aiolyric/issues/61
-    "test_priority"
   ];
 
   pythonImportsCheck = [ "aiolyric" ];
