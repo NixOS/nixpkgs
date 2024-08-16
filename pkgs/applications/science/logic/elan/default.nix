@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leanprover/elan";
     changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ gebner ];
+    maintainers = [ ];
     mainProgram = "elan";
   };
 }

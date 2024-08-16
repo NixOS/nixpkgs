@@ -50,6 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/NordicSemiconductor/pc-nrfutil";
     license = lib.licenses.unfreeRedistributable;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = [ ];
   };
 }

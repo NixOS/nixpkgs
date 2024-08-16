@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       the EB, EBG, EBXA, EBXA-C, S-EBXA and EPWING formats.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

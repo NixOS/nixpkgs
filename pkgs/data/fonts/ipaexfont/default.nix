@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation {
     '';
     homepage = "https://moji.or.jp/ipafont/";
     license = licenses.ipa;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = [ ];
   };
 }

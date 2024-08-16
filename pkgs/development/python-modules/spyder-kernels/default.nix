@@ -51,6 +51,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder-kernels/releases";
     changelog = "https://github.com/spyder-ide/spyder-kernels/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = [ ];
   };
 }

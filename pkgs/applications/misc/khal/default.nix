@@ -85,6 +85,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://lostpackets.de/khal/";
     changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = [ ];
   };
 }

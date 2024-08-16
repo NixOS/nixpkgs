@@ -111,7 +111,7 @@ in
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = [ ];
     };
   };
 
@@ -257,7 +257,7 @@ in
       description = "Better print time estimation for OctoPrint";
       homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = [ ];
     };
   };
 
@@ -285,7 +285,7 @@ in
       description = "OctoPrint plugin to control ATX/AUX power supply";
       homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = [ ];
     };
   };
 
@@ -401,7 +401,7 @@ in
       description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
       homepage = "https://github.com/BillyBlaze/OctoPrint-TouchUI";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ gebner ];
+      maintainers = [ ];
     };
   };
 
