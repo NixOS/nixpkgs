@@ -19,6 +19,7 @@
   libvpx,
   mpg123,
   openssl,
+  pipewire,
   pkg-config,
   portaudio,
   spandsp3,
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     libvpx
     mpg123
     openssl
+    pipewire
     portaudio
     spandsp3
     speex
@@ -129,6 +131,7 @@ stdenv.mkDerivation rec {
     "natpmp"
     "netroam"
     "pcp"
+    "pipewire"
     "plc"
     "portaudio"
     "presence"
