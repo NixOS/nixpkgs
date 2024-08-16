@@ -226,12 +226,6 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
 
 fi
 
-# This is outside the DONT_SET_RPATH branch because it's more targeted and we
-# usually want it (on Darwin) even if DONT_SET_RPATH is set.
-if [ -n "${NIX_COREFOUNDATION_RPATH:-}" ]; then
-  extraAfter+=(-rpath $NIX_COREFOUNDATION_RPATH)
-fi
-
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
 #

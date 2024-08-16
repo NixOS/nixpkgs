@@ -2,9 +2,12 @@
   mkKdeDerivation,
   qtdeclarative,
   python3,
+  gettext,
 }:
 mkKdeDerivation {
   pname = "ki18n";
 
-  extraBuildInputs = [qtdeclarative python3];
+  extraNativeBuildInputs = [python3];
+  propagatedNativeBuildInputs = [gettext];
+  extraBuildInputs = [qtdeclarative];
 }

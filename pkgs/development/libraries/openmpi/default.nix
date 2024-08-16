@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to ${lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
+      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
       # from some reason.
       moveToOutput "bin/pcc" "''${!outputDev}"
 

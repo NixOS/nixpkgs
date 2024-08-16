@@ -191,6 +191,7 @@ mapAliases {
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yaml-language-server; # added 2023-09-05
+  inherit (pkgs) yarn; # added 2024-08-13
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }

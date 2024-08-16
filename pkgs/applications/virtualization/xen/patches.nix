@@ -99,7 +99,7 @@ in
     })
   ];
 
-  # Xen Security Advisory #458: (4.16 - 4.19-rc3)
+  # Xen Security Advisory #458: (4.16.6 - 4.19-rc3)
   "XSA_458" = xsaPatch {
     id = "458";
     title = "Double unlock in x86 guest IRQ handling";
@@ -113,5 +113,40 @@ in
     '';
     cve = [ "CVE-2024-31143" ];
     hash = "sha256-yHI9Sp/7Ed40iIYQ/HOOIULlfzAzL0c0MGqdF+GR+AQ=";
+  };
+  # Xen Security Advisory #460: (4.16.6 - 4.19.0)
+  "XSA_460" = xsaPatch {
+    id = "460";
+    title = "Error handling in x86 IOMMU identity mapping";
+    description = ''
+      Certain PCI devices in a system might be assigned Reserved Memory
+      Regions (specified via Reserved Memory Region Reporting, "RMRR") for
+      Intel VT-d or Unity Mapping ranges for AMD-Vi.  These are typically used
+      for platform tasks such as legacy USB emulation.
+      Since the precise purpose of these regions is unknown, once a device
+      associated with such a region is active, the mappings of these regions
+      need to remain continuouly accessible by the device.  In the logic
+      establishing these mappings, error handling was flawed, resulting in
+      such mappings to potentially remain in place when they should have been
+      removed again.  Respective guests would then gain access to memory
+      regions which they aren't supposed to have access to.
+    '';
+    cve = [ "CVE-2024-31145" ];
+    hash = "sha256-3q4nAP2xGEptX6BIpSlALOt2r0kjj1up5pF3xCFp+l0=";
+  };
+  # Xen Security Advisory #461: (4.16.6 - 4.19.0)
+  "XSA_461" = xsaPatch {
+    id = "461";
+    title = "PCI device pass-through with shared resources";
+    description = ''
+      When multiple devices share resources and one of them is to be passed
+      through to a guest, security of the entire system and of respective
+      guests individually cannot really be guaranteed without knowing
+      internals of any of the involved guests.  Therefore such a configuration
+      cannot really be security-supported, yet making that explicit was so far
+      missing.
+    '';
+    cve = [ "CVE-2024-31146" ];
+    hash = "sha256-JQWoqf47hy9WXNkVC/LgmjUhkxN0SBF6w8PF4aFZxhM=";
   };
 }

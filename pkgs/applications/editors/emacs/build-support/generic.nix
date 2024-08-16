@@ -1,11 +1,11 @@
 # generic builder for Emacs packages
 
-{ lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
+{ lib, stdenv, emacs, texinfo, writeText, ... }:
 
 let
-  inherit (lib) optionalAttrs getLib;
-  handledArgs = [ "buildInputs" "packageRequires" "propagatedUserEnvPkgs" "meta" ]
-    ++ lib.optionals (emacs.withNativeCompilation or false) [ "nativeBuildInputs" "postInstall" ];
+  inherit (lib) optionalAttrs;
+  handledArgs = [ "buildInputs" "nativeBuildInputs" "packageRequires" "propagatedUserEnvPkgs" "meta" ]
+    ++ lib.optionals (emacs.withNativeCompilation or false) [ "postInstall" ];
 
   setupHook = writeText "setup-hook.sh" ''
     source ${./emacs-funcs.sh}
@@ -55,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: ({
     esac
   '';
 
-  buildInputs = [emacs texinfo] ++ packageRequires ++ buildInputs;
+  buildInputs = packageRequires ++ buildInputs;
+  nativeBuildInputs = [ emacs texinfo ] ++ nativeBuildInputs;
   propagatedBuildInputs = packageRequires;
   propagatedUserEnvPkgs = packageRequires ++ propagatedUserEnvPkgs;
 
@@ -72,10 +73,6 @@ stdenv.mkDerivation (finalAttrs: ({
 }
 
 // optionalAttrs (emacs.withNativeCompilation or false) {
-
-  LIBRARY_PATH = "${getLib stdenv.cc.libc}/lib";
-
-  nativeBuildInputs = [ gcc ] ++ nativeBuildInputs;
 
   addEmacsNativeLoadPath = true;
 

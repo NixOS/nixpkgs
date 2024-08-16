@@ -89266,22 +89266,4 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  yarn = nodeEnv.buildNodePackage {
-    name = "yarn";
-    packageName = "yarn";
-    version = "1.22.22";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/yarn/-/yarn-1.22.22.tgz";
-      sha512 = "prL3kGtyG7o9Z9Sv8IPfBNrWTDmXB4Qbes8A9rEzt6wkJV8mUvoirjU0Mp3GGAU06Y0XQyA3/2/RQFVuK7MTfg==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "📦🐈 Fast, reliable, and secure dependency management.";
-      homepage = "https://github.com/yarnpkg/yarn#readme";
-      license = "BSD-2-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
 }

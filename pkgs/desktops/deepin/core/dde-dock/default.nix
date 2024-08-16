@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-dock";
-  version = "6.0.35";
+  version = "6.0.37";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ATC/Ze6GyjT92eCgAt9g2FIQbXLVHUMuXuAslNnbkCE=";
+    hash = "sha256-5VowwQ0NoV6jV6DwnoxPKnRi6n28Teh/UQZwRc3URWY=";
   };
 
   postPatch = ''
