@@ -141,7 +141,7 @@ let
     };
 
     showDerivationWarnings = mkOption {
-      type = types.listOf (types.enum [ "maintainerless" ]);
+      type = types.listOf (types.enum [ "maintainerless" "unstructured-arrays" ]);
       default = [];
       description = ''
         Which warnings to display for potentially dangerous
