@@ -252,7 +252,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/109
           CXXFLAGS = "-std=c++17";
 
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config

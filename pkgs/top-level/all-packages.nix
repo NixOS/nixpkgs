@@ -2745,8 +2745,6 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/emulators/tiny8086 { };
 
-  tinyemu = callPackage ../applications/emulators/tinyemu { };
-
   uae = callPackage ../applications/emulators/uae { };
 
   vbam = callPackage ../applications/emulators/vbam { };
@@ -4548,8 +4546,6 @@ with pkgs;
   coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
 
   corosync = callPackage ../servers/corosync { };
-
-  cowsay = callPackage ../tools/misc/cowsay { };
 
   fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
 
@@ -24409,8 +24405,6 @@ with pkgs;
 
   yyjson = callPackage ../development/libraries/yyjson { };
 
-  zchunk = callPackage ../development/libraries/zchunk { };
-
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
   zlib = callPackage ../development/libraries/zlib { };
@@ -24520,8 +24514,6 @@ with pkgs;
   commonsIo = callPackage ../development/libraries/java/commons/io { };
 
   commonsMath = callPackage ../development/libraries/java/commons/math { };
-
-  fastjar = callPackage ../development/tools/java/fastjar { };
 
   httpunit = callPackage ../development/libraries/java/httpunit { };
 
@@ -26155,8 +26147,6 @@ with pkgs;
   acpid = callPackage ../os-specific/linux/acpid { };
 
   acpitool = callPackage ../os-specific/linux/acpitool { };
-
-  aldente = callPackage ../os-specific/darwin/aldente { };
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
@@ -32406,10 +32396,6 @@ with pkgs;
 
   shod = callPackage ../applications/window-managers/shod { };
 
-  shotcut = qt6Packages.callPackage ../applications/video/shotcut {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   shogun = callPackage ../applications/science/machine-learning/shogun {
     protobuf = protobuf_21;
   };
@@ -35409,10 +35395,6 @@ with pkgs;
   dhewm3 = callPackage ../games/doom-ports/dhewm3 { };
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
-
-  doomretro = callPackage ../games/doom-ports/doomretro {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
 

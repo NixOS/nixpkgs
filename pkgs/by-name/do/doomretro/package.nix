@@ -1,23 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, Cocoa
+{
+  lib,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomretro";
-  version = "5.4";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "bradharding";
     repo = "doomretro";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IOv58BmJvJtO7MMbrvf52MPYI0zjmPuRK7mcTwmBEY0=";
+    hash = "sha256-gAMMzHUo0uPXIRqT1NOMWpFNAtE1Pth5uXFa2Dps90E=";
   };
 
   nativeBuildInputs = [
@@ -29,14 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_mixer
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://www.doomretro.com/";
     description = "Classic, refined DOOM source port";
-    mainProgram = "doomretro";
     longDescription = ''
       DOOM Retro is the classic, refined DOOM source port for Windows PC. It
       represents how I like my DOOM to be today, in all its dark and gritty,
@@ -67,8 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
       to no support is provided, DOOM Retro's source code may also be compiled
       and run under Linux and macOS.
     '';
-    changelog = "https://github.com/bradharding/doomretro/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "doomretro";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
