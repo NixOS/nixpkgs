@@ -81,7 +81,7 @@ let
   removePythonPrefix = lib.removePrefix namePrefix;
 
   /**
-    A function that takes a Python package and returns a new derivation that can be used as a Python module
+    A function that takes any derivation and returns a derivation that is a Python module like buildPythonPackage
 
     # Inputs
 
