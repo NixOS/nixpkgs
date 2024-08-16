@@ -3,8 +3,6 @@
 # shellcheck disable=SC2206,SC2207 shell=bash
 set -e
 
-# Set a temporary $HOME in /tmp for GPG.
-HOME=/tmp/xenUpdateScript
 
 # This script expects to be called in an interactive terminal somewhere inside Nixpkgs.
 echo "Preparing..."
@@ -15,8 +13,8 @@ mkdir /tmp/xenUpdateScript
 
 # Import and verify PGP key.
 curl --silent --output /tmp/xenUpdateScript/xen.asc https://keys.openpgp.org/vks/v1/by-fingerprint/23E3222C145F4475FA8060A783FE14C957E82BD9
-gpg --quiet --import /tmp/xenUpdateScript/xen.asc
-fingerprint="$(gpg --with-colons --fingerprint "pgp@xen.org" 2>/dev/null | awk -F: '/^pub:.*/ { getline; print $10}')"
+gpg --homedir /tmp/xenUpdateScript/.gnupg --quiet --import /tmp/xenUpdateScript/xen.asc
+fingerprint="$(gpg --homedir /tmp/xenUpdateScript/.gnupg --with-colons --fingerprint "pgp@xen.org" 2>/dev/null | awk -F: '/^pub:.*/ { getline; print $10}')"
 echo -e "Please ascertain through multiple external sources that the \e[1;32mXen Project PGP Key Fingerprint\e[0m is indeed \e[1;33m$fingerprint\e[0m. If that is not the case, \e[1;31mexit immediately\e[0m."
 read -r -p $'Press \e[1;34menter\e[0m to continue with a pre-filled expected fingerprint, or input an arbitrary PGP fingerprint to match with the key\'s fingerprint: ' userInputFingerprint
 userInputFingerprint=${userInputFingerprint:-"23E3222C145F4475FA8060A783FE14C957E82BD9"}
@@ -51,7 +49,7 @@ for version in "${supportedVersions[@]}"; do
     # Verify PGP key automatically. If the fingerprint matches what the user specified, or the default fingerprint, then we consider it trusted.
     cd /tmp/xenUpdateScript/xen
     if [[ "$fingerprint" = "$userInputFingerprint" ]]; then
-        echo "$fingerprint:6:" | gpg --quiet --import-ownertrust
+        echo "$fingerprint:6:" | gpg --homedir /tmp/xenUpdateScript/.gnupg --quiet --import-ownertrust
         (git verify-tag RELEASE-"$version" 2>/dev/null && echo -e "\n\e[1;32mSuccessfully authenticated Xen $version.\e[0m") || (echo -e "\e[1;31merror:\e[0m Unable to verify tag \e[1;32mRELEASE-$version\e[0m.\n- It is possible that \e[1;33mthis script has broken\e[0m, the Xen Project has \e[1;33mcycled their PGP keys\e[0m, or a \e[1;31msupply chain attack is in progress\e[0m.\n\n\e[1;31mPlease update manually.\e[0m" && exit 1)
     else
         echo -e "\e[1;31merror:\e[0m Unable to verify \e[1;34mpgp@xen.org\e[0m's fingerprint.\n- It is possible that \e[1;33mthis script has broken\e[0m, the Xen Project has \e[1;33mcycled their PGP keys\e[0m, or an \e[1;31mimpersonation attack is in progress\e[0m.\n\n\e[1;31mPlease update manually.\e[0m" && exit 1

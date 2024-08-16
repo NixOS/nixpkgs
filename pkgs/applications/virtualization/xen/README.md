@@ -96,7 +96,7 @@ open a PR fixing the script, and update Xen manually:
    following one-line command is useful for testing this:
 
    ```console
-   xenToEvaluate=xen; echo -e "\033[1m$(nix eval .#"$xenToEvaluate".meta.description 2> /dev/null | tail -c +2 | head -c -2)\033[0m\n\n$(nix eval .#"$xenToEvaluate".meta.longDescription 2> /dev/null | tail -c +2 | head -c -2)"
+   xenToEvaluate=xen; echo -e "\033[1m$(nix eval .#"$xenToEvaluate".meta.description --raw 2> /dev/null)\033[0m\n\n$(nix eval .#"$xenToEvaluate".meta.longDescription --raw 2> /dev/null)"
    ```
 
    Change the value of `xenToEvaluate` to evaluate all relevant Xen packages.
