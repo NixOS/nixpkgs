@@ -3,7 +3,7 @@
   async-timeout,
   async-upnp-client,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
   pytest-asyncio,
   pytestCheckHook,
@@ -15,10 +15,11 @@ buildPythonPackage rec {
   version = "0.0.6";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_linkplay";
-    inherit version;
-    hash = "sha256-mChlhJt2p77KWXWNZztrEA8Z2BmYkPLYPdv9Gw7p5/I=";
+  src = fetchFromGitHub {
+    owner = "Velleman";
+    repo = "python-linkplay";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GUpotQLs+xzsMV3i52YtWYm9IoQLyyw8EY9VhG+uT8o=";
   };
 
   build-system = [ setuptools ];
@@ -35,10 +36,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  # no tests on PyPI, no tags on GitHub
-  # https://github.com/Velleman/python-linkplay/issues/23
-  doCheck = false;
 
   meta = {
     description = "Python Library for Seamless LinkPlay Device Control";
