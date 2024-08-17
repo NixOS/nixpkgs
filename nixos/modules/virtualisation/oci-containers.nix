@@ -8,7 +8,7 @@ let
   defaultBackend = options.virtualisation.oci-containers.backend.default;
 
   containerOptions =
-    { ... }: {
+    { config, ... }: {
 
       options = {
 
@@ -31,6 +31,25 @@ let
             image will be pulled from the registry as usual.
           '';
           example = literalExpression "pkgs.dockerTools.buildImage {...};";
+        };
+
+        imageStream = mkOption {
+          type = with types; nullOr package;
+          default = null;
+          description = lib.mdDoc ''
+            Path to a script that streams the desired image on standard output.
+
+            This option is mainly intended for use with
+            `pkgs.dockerTools.streamLayeredImage` so that the intermediate
+            image archive does not need to be stored in the Nix store.  For
+            larger images this optimization can significantly reduce Nix store
+            churn compared to using the `imageFile` option, because you don't
+            have to store a new copy of the image archive in the Nix store
+            every time you change the image.  Instead, if you stream the image
+            then you only need to build and store the layers that differ from
+            the previous image.
+          '';
+          example = literalExpression "pkgs.dockerTools.streamLayeredImage {...};";
         };
 
         login = {
@@ -251,6 +270,12 @@ let
           '';
         };
       };
+
+      config.assertions = [
+        { assertion = config.imageFile == null || config.imageStream == null;
+          message = "You can only define one of imageFile and imageStream";
+        }
+      ];
     };
 
   isValidLogin = login: login.username != null && login.passwordFile != null && login.registry != null;
@@ -274,6 +299,9 @@ let
         ''}
         ${optionalString (container.imageFile != null) ''
           ${cfg.backend} load -i ${container.imageFile}
+        ''}
+        ${optionalString (container.imageStream != null) ''
+          ${cfg.backend} load < $(${lib.getExe container.imageStream})
         ''}
         ${optionalString (cfg.backend == "podman") ''
           rm -f /run/podman-${escapedName}.ctr-id
