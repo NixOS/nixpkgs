@@ -24,7 +24,10 @@ rustPlatform.buildRustPackage rec {
     description = "Microscopic fetch script in Rust, for NixOS systems";
     homepage = "https://github.com/NotAShelf/microfetch";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ nydragon ];
+    maintainers = with lib.maintainers; [
+      nydragon
+      NotAShelf
+    ];
     mainProgram = "microfetch";
     platforms = lib.platforms.linux;
   };
