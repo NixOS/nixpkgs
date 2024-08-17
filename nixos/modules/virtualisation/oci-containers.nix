@@ -295,7 +295,7 @@ let
           ${cfg.backend} load -i ${container.imageFile}
         ''}
         ${optionalString (container.imageStream != null) ''
-          ${cfg.backend} load < $(${lib.getExe container.imageStream})
+          ${container.imageStream} | ${cfg.backend} load
         ''}
         ${optionalString (cfg.backend == "podman") ''
           rm -f /run/podman-${escapedName}.ctr-id
