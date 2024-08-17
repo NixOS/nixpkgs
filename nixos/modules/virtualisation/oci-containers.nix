@@ -36,7 +36,7 @@ let
         imageStream = mkOption {
           type = with types; nullOr package;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Path to a script that streams the desired image on standard output.
 
             This option is mainly intended for use with
