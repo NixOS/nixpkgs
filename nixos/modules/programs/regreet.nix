@@ -27,7 +27,7 @@ in
     package = lib.mkPackageOption pkgs [ "greetd" "regreet" ] { };
 
     settings = lib.mkOption {
-      type = lib.types.either lib.types.path settingsFormat.type;
+      type = settingsFormat.type;
       default = { };
       description = ''
         ReGreet configuration file. Refer
@@ -160,9 +160,7 @@ in
         else {text = cfg.extraCss;};
 
       "greetd/regreet.toml".source =
-        if lib.isPath cfg.settings
-        then cfg.settings
-        else settingsFormat.generate "regreet.toml" cfg.settings;
+        settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
     systemd.tmpfiles.settings."10-regreet" = let
