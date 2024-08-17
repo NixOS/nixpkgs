@@ -5485,6 +5485,8 @@ self: super: with self; {
 
   hankel = callPackage ../development/python-modules/hankel { };
 
+  hanzidentifier = callPackage ../development/python-modules/hanzidentifier { };
+
   hap-python = callPackage ../development/python-modules/hap-python { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
