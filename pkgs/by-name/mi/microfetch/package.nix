@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "microfetch";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "NotAShelf";
     repo = "microfetch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iBfnui7xrx31euYnQxoJf1xXFYFiJnDMadLRAiRCN04=";
+    hash = "sha256-bRN16Iq9m6HaeT+KWCpeukTu1tnMOvtM6lDHO5OiIS4=";
   };
 
-  cargoHash = "sha256-J+S6XIMUcWj4jXABQinEDx6dRG5Byc2UxJoKj2y1tQU=";
+  cargoHash = "sha256-dGlAiPrOWFI8ogo/1S2ZK/ZPBtKGCyA72B+6B4bp5Mg=";
 
   meta = {
     description = "Microscopic fetch script in Rust, for NixOS systems";
