@@ -1,5 +1,6 @@
 {
   lib,
+  testers,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -86,6 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
     )
   '';
+
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+    };
+  };
 
   meta = {
     description = "Free software that gathers information on CPU, motherboard and more";
