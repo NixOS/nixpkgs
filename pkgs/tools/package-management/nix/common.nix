@@ -5,6 +5,7 @@
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
+, withNixDebugPatch ? null
 , maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
 , self_attribute_name
 }@args:
@@ -71,6 +72,7 @@ in
 , rapidcheck
 , Security
 , sqlite
+, substitute
 , util-linuxMinimal
 , xz
 
@@ -78,6 +80,9 @@ in
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
+# If non-`null`, the string value is what the environment variable `NIX_DEBUG`
+# is set to when building any derivation. See the Nixpkgs manual for more.
+, withNixDebug ? null
 
 , confDir
 , stateDir
@@ -86,14 +91,22 @@ in
   # passthru tests
 , pkgsi686Linux
 , runCommand
-}: let
-self = stdenv.mkDerivation {
+}:
+assert lib.assertMsg ((withNixDebug != null) -> (withNixDebugPatch != null)) "Setting `withNixDebug` means `withNixDebugPatch` patch must be specified.";
+let self = stdenv.mkDerivation {
   pname = "nix";
 
   version = "${version}${suffix}";
   VERSION_SUFFIX = suffix;
 
-  inherit src patches;
+  inherit src;
+
+  patches = patches ++ lib.optionals (withNixDebug != null) [
+    (substitute {
+      src = withNixDebugPatch;
+      substitutions = [ "--subst-var-by" "NIX_DEBUG" (toString withNixDebug) ];
+    })
+  ];
 
   outputs =
     [ "out" "dev" ]

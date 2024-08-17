@@ -1,0 +1,11 @@
+diff --git a/src/libstore/build/local-derivation-goal.cc b/src/libstore/build/local-derivation-goal.cc
+--- a/src/libstore/build/local-derivation-goal.cc
++++ b/src/libstore/build/local-derivation-goal.cc
+@@ -1186,6 +1186,7 @@ void LocalDerivationGoal::initEnv()
+        may change that in the future. So tell the builder which file
+        descriptor to use for that. */
+     env["NIX_LOG_FD"] = "2";
++    env["NIX_DEBUG"] = "@NIX_DEBUG@";
+ 
+     /* Trigger colored output in various tools. */
+     env["TERM"] = "xterm-256color";
