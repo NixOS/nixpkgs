@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/cococry/ragnar/commit/901b4c4abffaf8136f47c2a479ffeafdad7164ac.patch?full_index=1";
       hash = "sha256-Fk9nQ8m9XS8ABvWtf6vdrA1ntLWT8B3SUbUB8vKnf0c=";
     })
+    ./allow_system_wide_config.patch
   ];
 
   buildInputs = [
