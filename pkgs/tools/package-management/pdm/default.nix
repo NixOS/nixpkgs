@@ -1,35 +1,36 @@
 {
   lib,
   python3,
-  fetchPypi,
-  nix-update-script,
+  fetchFromGitHub,
   runtimeShell,
   installShellFiles,
   testers,
   pdm,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pdm";
   version = "2.18.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = python3.pkgs.pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rO9pJHenGQcx7nwfYm6XUW7rdHPk7u7t5P7yvw+3Q+4=";
+  src = fetchFromGitHub {
+    owner = "pdm-project";
+    repo = "pdm";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pCBwt55tu9bEVVHfdPsJ5vaJXVXEZ2+4ft9LathwBt0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [
+  build-system = with python3.pkgs; [
     pdm-backend
     pdm-build-locked
   ];
 
   dependencies =
+    with python3.pkgs;
     [
       blinker
       dep-logic
@@ -48,19 +49,17 @@ buildPythonApplication rec {
       rich
       shellingham
       tomlkit
+      truststore
       unearth
       virtualenv
     ]
-    ++ httpx.optional-dependencies.socks
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-    ++ lib.optionals (pythonAtLeast "3.10") [ truststore ];
+    ++ httpx.optional-dependencies.socks;
 
   makeWrapperArgs = [ "--set PDM_CHECK_UPDATE 0" ];
 
+  # Silence network warning during pypaInstallPhase
+  # by disabling latest version check
   preInstall = ''
-    # Silence network warning during pypaInstallPhase
-    # by disabling latest version check
     export PDM_CHECK_UPDATE=0
   '';
 
@@ -73,7 +72,7 @@ buildPythonApplication rec {
     unset PDM_LOG_DIR
   '';
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     first
     pytestCheckHook
     pytest-mock
@@ -107,8 +106,6 @@ buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion { package = pdm; };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://pdm-project.org";
