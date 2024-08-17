@@ -1,7 +1,8 @@
-{ fetchzip }:
+{ lib, repoRevToNameMaybe, fetchzip }:
 
 # gitweb example, snapshot support is optional in gitweb
-{ repo, rev, name ? "source"
+{ repo, rev
+, name ? repoRevToNameMaybe repo rev "repoorcz"
 , ... # For hash agility
 }@args: fetchzip ({
   inherit name;
