@@ -11,7 +11,6 @@
   procps,
   wrapGAppsHook3,
   nasm,
-  makeWrapper,
   opencl-headers,
   ocl-icd,
   vulkan-headers,
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
     nasm
-    makeWrapper
   ];
 
   buildInputs = [
@@ -80,10 +78,11 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cpu-x \
-      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]} \
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    )
   '';
 
   meta = with lib; {
