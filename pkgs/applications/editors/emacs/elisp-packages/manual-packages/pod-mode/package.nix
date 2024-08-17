@@ -26,6 +26,8 @@ melpaBuild {
     install -Dm644 -t ''${!outputDoc}/share/doc/pod-mode/ $sourceRoot/ChangeLog $sourceRoot/README
   '';
 
+  ignoreCompilationError = false;
+
   meta = {
     homepage = "https://metacpan.org/dist/pod-mode";
     description = "Major mode for editing .pod-files";
