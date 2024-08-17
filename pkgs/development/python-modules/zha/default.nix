@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.30";
+  version = "0.0.31";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     rev = "refs/tags/${version}";
-    hash = "sha256-4Fpe1us/GS2QVJbbnMcI7bziyW5P2kuJ6+p5L9N7lMY=";
+    hash = "sha256-H1VmB20ldUyKIiMRT8YMgiFIno41WN2bY8rhqFsGYcA=";
   };
 
   postPatch = ''

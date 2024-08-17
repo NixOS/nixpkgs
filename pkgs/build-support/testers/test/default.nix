@@ -18,6 +18,29 @@ lib.recurseIntoAttrs {
 
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
 
+  runCommand = lib.recurseIntoAttrs {
+    bork = pkgs.python3Packages.bork.tests.pytest-network;
+
+    dns-resolution = testers.runCommand {
+      name = "runCommand-dns-resolution-test";
+      nativeBuildInputs = [ pkgs.ldns ];
+      script = ''
+        drill example.com
+        touch $out
+      '';
+    };
+
+    nonDefault-hash = testers.runCommand {
+      name = "runCommand-nonDefaultHash-test";
+      script = ''
+        mkdir $out
+        touch $out/empty
+        echo aaaaaaaaaaicjnrkeflncmrlk > $out/keymash
+      '';
+      hash = "sha256-eMy+6bkG+KS75u7Zt4PM3APhtdVd60NxmBRN5GKJrHs=";
+    };
+  };
+
   runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {
     name = "runNixOSTest-test";
     nodes.machine = { pkgs, ... }: {
