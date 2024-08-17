@@ -15,18 +15,15 @@
 , features ? {}
 }:
 
-with lib;
 with lib.kernel;
 with (lib.kernel.whenHelpers version);
 
 let
-
-
   # configuration items have to be part of a subattrs
-  flattenKConf = nested: mapAttrs (name: values: if length values == 1 then head values else throw "duplicate kernel configuration option: ${name}") (zipAttrs (attrValues nested));
+  flattenKConf = nested: lib.mapAttrs (name: values: if lib.length values == 1 then lib.head values else throw "duplicate kernel configuration option: ${name}") (lib.zipAttrs (lib.attrValues nested));
 
   whenPlatformHasEBPFJit =
-    mkIf (stdenv.hostPlatform.isAarch32 ||
+    lib.mkIf (stdenv.hostPlatform.isAarch32 ||
           stdenv.hostPlatform.isAarch64 ||
           stdenv.hostPlatform.isx86_64 ||
           (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) ||
@@ -36,7 +33,7 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = mkMerge [
+      DEBUG_INFO                = lib.mkMerge [
         (whenOlder "5.2" (if (features.debug or false) then yes else no))
         (whenBetween "5.2" "5.18" yes)
       ];
@@ -129,7 +126,7 @@ let
 
       # Enable Pulse-Width-Modulation support, commonly used for fan and backlight.
       PWM                              = yes;
-    } // optionalAttrs (stdenv.hostPlatform.isx86) {
+    } // lib.optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
@@ -170,7 +167,7 @@ let
     };
 
     optimization = {
-      X86_GENERIC = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
+      X86_GENERIC = lib.mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # Optimize with -O2, not -Os
       CC_OPTIMIZE_FOR_SIZE = no;
     };
@@ -188,7 +185,7 @@ let
 
       # Collect ECC errors and retire pages that fail too often
       RAS_CEC                   = yes;
-    } // optionalAttrs (stdenv.is32bit) {
+    } // lib.optionalAttrs (stdenv.is32bit) {
       # Enable access to the full memory range (aka PAE) on 32-bit architectures
       # This check isn't super accurate but it's close enough
       HIGHMEM                   = option yes;
@@ -220,7 +217,7 @@ let
     timer = {
       # Enable Full Dynticks System.
       # NO_HZ_FULL depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT
-      NO_HZ_FULL = mkIf stdenv.is64bit yes;
+      NO_HZ_FULL = lib.mkIf stdenv.is64bit yes;
     };
 
     # Enable NUMA.
@@ -309,7 +306,7 @@ let
       # IPv6: Netfilter Configuration
       NF_TABLES_IPV6              = yes;
       # Bridge Netfilter Configuration
-      NF_TABLES_BRIDGE            = mkMerge [ (whenOlder "5.3" yes)
+      NF_TABLES_BRIDGE            = lib.mkMerge [ (whenOlder "5.3" yes)
                                               (whenAtLeast "5.3" module) ];
       # Expose some debug info
       NF_CONNTRACK_PROCFS         = yes;
@@ -321,11 +318,11 @@ let
 
       # needed for ss
       # Use a lower priority to allow these options to be overridden in hardened/config.nix
-      INET_DIAG         = mkDefault module;
-      INET_TCP_DIAG     = mkDefault module;
-      INET_UDP_DIAG     = mkDefault module;
-      INET_RAW_DIAG     = mkDefault module;
-      INET_DIAG_DESTROY = mkDefault yes;
+      INET_DIAG         = lib.mkDefault module;
+      INET_TCP_DIAG     = lib.mkDefault module;
+      INET_UDP_DIAG     = lib.mkDefault module;
+      INET_RAW_DIAG     = lib.mkDefault module;
+      INET_DIAG_DESTROY = lib.mkDefault yes;
 
       # IPsec over TCP
       INET_ESPINTCP  = whenAtLeast "5.8" yes;
@@ -334,7 +331,7 @@ let
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
-      INET_MPTCP_DIAG = whenAtLeast "5.9" (mkDefault module);
+      INET_MPTCP_DIAG = whenAtLeast "5.9" (lib.mkDefault module);
 
       # Kernel TLS
       TLS         = module;
@@ -348,7 +345,7 @@ let
       # Enable debugfs for wireless drivers
       CFG80211_DEBUGFS = yes;
       MAC80211_DEBUGFS = yes;
-    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Not enabled by default, hides modules behind it
       NET_VENDOR_MEDIATEK = yes;
       # Enable SoC interface for MT7915 module, required for MT798X.
@@ -381,8 +378,8 @@ let
       B43_PHY_HT                  = option yes;
       BCMA_HOST_PCI               = option yes;
       RTW88                       = whenAtLeast "5.2" module;
-      RTW88_8822BE                = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
-      RTW88_8822CE                = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+      RTW88_8822BE                = lib.mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+      RTW88_8822CE                = lib.mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
     };
 
     fb = {
@@ -402,7 +399,7 @@ let
       FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FRAMEBUFFER_CONSOLE_DETECT_PRIMARY = yes;
-      FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
+      FB_GEODE            = lib.mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # Use simplefb on older kernels where we don't have simpledrm (enabled below)
       FB_SIMPLE           = whenOlder "5.15" yes;
       DRM_FBDEV_EMULATION = yes;
@@ -418,7 +415,7 @@ let
     };
 
     video = let
-      whenHasDevicePrivate = mkIf (!stdenv.isx86_32 && versionAtLeast version "5.1");
+      whenHasDevicePrivate = lib.mkIf (!stdenv.isx86_32 && lib.versionAtLeast version "5.1");
     in {
       # compile in DRM so simpledrm can load before initrd if necessary
       AGP = yes;
@@ -477,13 +474,13 @@ let
       # Enable CEC over DisplayPort
       DRM_DP_CEC = whenOlder "6.10" yes;
       DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
-    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = yes;
       DRM_I915_GVT_KVMGT = module;
       # Enable Hyper-V Synthetic DRM Driver
       DRM_HYPERV = whenAtLeast "5.14" module;
-    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
     };
@@ -493,7 +490,7 @@ let
     # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
     #
     # Once Rust in the kernel has more users, we can reconsider enabling it by default.
-    rust = optionalAttrs ((features.rust or false) && versionAtLeast version "6.7") {
+    rust = lib.optionalAttrs ((features.rust or false) && lib.versionAtLeast version "6.7") {
       RUST = yes;
       GCC_PLUGINS = no;
     };
@@ -516,8 +513,8 @@ let
       SND_USB_CAIAQ_INPUT = yes;
       SND_USB_AUDIO_MIDI_V2 = whenAtLeast "6.5" yes;
     # Enable Sound Open Firmware support
-    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
-                        versionAtLeast version "5.5") {
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
+                        lib.versionAtLeast version "5.5") {
       SND_SOC_INTEL_SOUNDWIRE_SOF_MACH       = whenAtLeast "5.10" module;
       SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
       SND_SOC_SOF_INTEL_SOUNDWIRE_LINK = whenBetween "5.10" "5.11" yes; # dep of SOF_MACH
@@ -578,7 +575,7 @@ let
 
       TMPFS           = yes;
       TMPFS_POSIX_ACL = yes;
-      FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else option module;
+      FS_ENCRYPTION   = if (lib.versionAtLeast version "5.1") then yes else option module;
 
       EXT2_FS_XATTR     = yes;
       EXT2_FS_POSIX_ACL = yes;
@@ -685,8 +682,8 @@ let
       RANDOMIZE_BASE                   = option yes;
       STRICT_KERNEL_RWX                = yes;
       STRICT_MODULE_RWX                = yes;
-      STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
-      IO_STRICT_DEVMEM                 = mkDefault yes;
+      STRICT_DEVMEM                    = lib.mkDefault yes; # Filter access to /dev/mem
+      IO_STRICT_DEVMEM                 = lib.mkDefault yes;
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
 
       # Prevent processes from ptracing non-children processes
@@ -739,7 +736,7 @@ let
       # Enable stack smashing protections in schedule()
       # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
       SCHED_STACK_END_CHECK            = yes;
-    } // optionalAttrs stdenv.hostPlatform.isx86_64 {
+    } // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
       # Enable Intel SGX
       X86_SGX     = whenAtLeast "5.11" yes;
       # Allow KVM guests to load SGX enclaves
@@ -761,7 +758,7 @@ let
       MITIGATION_SLS = whenAtLeast "6.9" yes;
 
       DEFAULT_MMAP_MIN_ADDR = freeform "65536";
-    } // optionalAttrs stdenv.hostPlatform.isAarch64 {
+    } // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
       DEFAULT_MMAP_MIN_ADDR = freeform "32768";
     };
 
@@ -840,9 +837,9 @@ let
       KSM = yes;
       VIRT_DRIVERS = yes;
       # We need 64 GB (PAE) support for Xen guest support
-      HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
+      HIGHMEM64G = { optional = true; tristate = lib.mkIf (!stdenv.is64bit) "y";};
 
-      VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
+      VFIO_PCI_VGA = lib.mkIf stdenv.is64bit yes;
 
       UDMABUF = whenAtLeast "4.20" yes;
 
@@ -902,7 +899,7 @@ let
       ZRAM_MULTI_COMP               = whenAtLeast "6.2" yes;
       ZRAM_DEF_COMP_ZSTD            = whenAtLeast "5.11" yes;
       ZSWAP                         = option yes;
-      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (mkOptionDefault yes);
+      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (lib.mkOptionDefault yes);
       ZPOOL                         = yes;
       ZSMALLOC                      = option yes;
     };
@@ -914,7 +911,7 @@ let
     };
 
     # Support x2APIC (which requires IRQ remapping)
-    x2apic = optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+    x2apic = lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       X86_X2APIC = yes;
       IRQ_REMAP  = yes;
     };
@@ -945,18 +942,18 @@ let
 
       # Allows soft-dirty tracking on pages, used by CRIU.
       # See https://docs.kernel.org/admin-guide/mm/soft-dirty.html
-      MEM_SOFT_DIRTY = mkIf (!stdenv.isx86_32) yes;
+      MEM_SOFT_DIRTY = lib.mkIf (!stdenv.isx86_32) yes;
     };
 
     misc = let
       # Use zstd for kernel compression if 64-bit and newer than 5.9, otherwise xz.
       # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
-      useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
+      useZstd = stdenv.buildPlatform.is64bit && lib.versionAtLeast version "5.9";
     in {
       # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
-      KERNEL_UNCOMPRESSED  = mkIf stdenv.hostPlatform.isRiscV yes;
-      KERNEL_XZ            = mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
-      KERNEL_ZSTD          = mkIf (!stdenv.hostPlatform.isRiscV && useZstd) yes;
+      KERNEL_UNCOMPRESSED  = lib.mkIf stdenv.hostPlatform.isRiscV yes;
+      KERNEL_XZ            = lib.mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
+      KERNEL_ZSTD          = lib.mkIf (!stdenv.hostPlatform.isRiscV && useZstd) yes;
 
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
@@ -1058,7 +1055,7 @@ let
       # Generic compression support for EFI payloads
       # Add new platforms only after they have been verified to build and boot.
       # This is unsupported on x86 due to a custom decompression mechanism.
-      EFI_ZBOOT = mkIf stdenv.hostPlatform.isAarch64 (whenAtLeast "6.1" yes);
+      EFI_ZBOOT = lib.mkIf stdenv.hostPlatform.isAarch64 (whenAtLeast "6.1" yes);
 
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
@@ -1092,7 +1089,7 @@ let
 
       NVME_MULTIPATH = yes;
 
-      NVME_AUTH = mkMerge [
+      NVME_AUTH = lib.mkMerge [
         (whenBetween "6.0" "6.7" yes)
         (whenAtLeast "6.7" module)
       ];
@@ -1105,7 +1102,7 @@ let
       NVME_TARGET_AUTH = whenAtLeast "6.0" yes;
       NVME_TARGET_TCP_TLS = whenAtLeast "6.7" yes;
 
-      PCI_P2PDMA = mkIf (stdenv.hostPlatform.is64bit && versionAtLeast version "4.20") yes;
+      PCI_P2PDMA = lib.mkIf (stdenv.hostPlatform.is64bit && lib.versionAtLeast version "4.20") yes;
 
       PSI = whenAtLeast "4.20" yes;
 
@@ -1171,8 +1168,8 @@ let
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
       # Enable AMD's ROCm GPU compute stack
-      HSA_AMD =     mkIf stdenv.hostPlatform.is64bit (whenAtLeast "4.20" yes);
-      ZONE_DEVICE = mkIf stdenv.hostPlatform.is64bit (whenAtLeast "5.3" yes);
+      HSA_AMD =     lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "4.20" yes);
+      ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "5.3" yes);
       HMM_MIRROR = whenAtLeast "5.3" yes;
       DRM_AMDGPU_USERPTR = whenAtLeast "5.3" yes;
 
@@ -1190,7 +1187,7 @@ let
       LRU_GEN = whenAtLeast "6.1"  yes;
       LRU_GEN_ENABLED =  whenAtLeast "6.1" yes;
 
-      FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
+      FSL_MC_UAPI_SUPPORT = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 
       ASHMEM =                 { optional = true; tristate = whenBetween "5.0" "5.18" "y";};
       ANDROID =                { optional = true; tristate = whenBetween "5.0" "5.19" "y";};
@@ -1219,7 +1216,7 @@ let
       # Enable generic kernel watch queues
       # See https://docs.kernel.org/core-api/watch_queue.html
       WATCH_QUEUE = whenAtLeast "5.8" yes;
-    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot
       ACPI_HOTPLUG_CPU = yes;
@@ -1236,7 +1233,7 @@ let
 
       # Enable LEDS to display link-state status of PHY devices (i.e. eth lan/wan interfaces)
       LED_TRIGGER_PHY = whenAtLeast "4.10" yes;
-    } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = yes;
 
@@ -1262,7 +1259,7 @@ let
       #  This is the default on armv7l, anyway, but it is explicitly
       #  enabled here for the sake of providing context for the
       #  aarch64 compat option which follows.
-      ALIGNMENT_TRAP = mkIf (stdenv.hostPlatform.system == "armv7l-linux") yes;
+      ALIGNMENT_TRAP = lib.mkIf (stdenv.hostPlatform.system == "armv7l-linux") yes;
 
       # https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220701135322.3025321-1-ardb@kernel.org/
       # tldr:
@@ -1274,8 +1271,8 @@ let
       #  This minimizes the potential for aarch32 userspace to behave
       #  differently when run under aarch64 kernels compared to when
       #  it is run under an aarch32 kernel.
-      COMPAT_ALIGNMENT_FIXUPS = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "6.1" yes);
-    } // optionalAttrs (versionAtLeast version "5.4" && (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")) {
+      COMPAT_ALIGNMENT_FIXUPS = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "6.1" yes);
+    } // lib.optionalAttrs (lib.versionAtLeast version "5.4" && (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")) {
       # Required for various hardware features on Chrome OS devices
       CHROME_PLATFORMS = yes;
       CHROMEOS_TBMC = module;
@@ -1290,10 +1287,10 @@ let
       CROS_KBD_LED_BACKLIGHT = module;
 
       TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
-    } // optionalAttrs (versionAtLeast version "5.4" && stdenv.hostPlatform.system == "x86_64-linux") {
+    } // lib.optionalAttrs (lib.versionAtLeast version "5.4" && stdenv.hostPlatform.system == "x86_64-linux") {
       CHROMEOS_LAPTOP = module;
       CHROMEOS_PSTORE = module;
-    } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Enable x86 resource control
       X86_CPU_RESCTRL = whenAtLeast "5.0" yes;
 

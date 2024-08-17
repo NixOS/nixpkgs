@@ -150,7 +150,6 @@
 , "multi-file-swagger"
 , "neovim"
 , "nijs"
-, "node-gyp"
 , "node-gyp-build"
 , "node-red"
 , "node2nix"

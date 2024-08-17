@@ -2,8 +2,6 @@
 , zlib, bzip2, xz, libgcrypt
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "cygwin-setup";
   version = "20131101";
@@ -18,9 +16,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool flex bison pkg-config ];
 
   buildInputs = let
-    mkStatic = flip overrideDerivation (o: {
+    mkStatic = lib.flip lib.overrideDerivation (o: {
       dontDisableStatic = true;
-      configureFlags = toList (o.configureFlags or []) ++ [ "--enable-static" ];
+      configureFlags = lib.toList (o.configureFlags or []) ++ [ "--enable-static" ];
       buildInputs = map mkStatic (o.buildInputs or []);
       propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or []);
     });
@@ -41,6 +39,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sourceware.org/cygwin-apps/setup.html";
     description = "Tool for installing Cygwin";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

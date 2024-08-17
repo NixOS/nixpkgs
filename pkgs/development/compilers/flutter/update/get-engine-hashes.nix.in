@@ -1,6 +1,7 @@
 { callPackage, symlinkJoin, lib }:
 let
   nixpkgsRoot = "@nixpkgs_root@";
+  version = "@flutter_version@";
   engineVersion = "@engine_version@";
 
   systemPlatforms = [
@@ -8,14 +9,26 @@ let
     "aarch64-linux"
   ];
 
-  derivations = builtins.map
-    (systemPlatform: callPackage "${nixpkgsRoot}/pkgs/development/compilers/flutter/engine/source.nix" {
-      targetPlatform = lib.systems.elaborate systemPlatform;
-      version = engineVersion;
-      url = "https://github.com/flutter/engine.git@${engineVersion}";
-      hashes."${systemPlatform}" = lib.fakeSha256;
-    })
-    systemPlatforms;
+  derivations =
+    lib.foldl'
+      (
+        acc: buildPlatform:
+          acc
+          ++ (map
+            (targetPlatform:
+              callPackage "${nixpkgsRoot}/pkgs/development/compilers/flutter/engine/source.nix" {
+                targetPlatform = lib.systems.elaborate targetPlatform;
+                hostPlatform = lib.systems.elaborate buildPlatform;
+                buildPlatform = lib.systems.elaborate buildPlatform;
+
+                flutterVersion = version;
+                version = engineVersion;
+                url = "https://github.com/flutter/engine.git@${engineVersion}";
+                hashes."${buildPlatform}"."${targetPlatform}" = lib.fakeSha256;
+              })
+            systemPlatforms)
+      ) [ ]
+      systemPlatforms;
 in
 symlinkJoin {
   name = "evaluate-derivations";

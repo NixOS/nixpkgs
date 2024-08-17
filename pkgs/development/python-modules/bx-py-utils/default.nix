@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "94";
+  version = "95";
 
   disabled = pythonOlder "3.10";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IvmH0D3544zBukDQN6mea/nI1G4qZL+8KbIcF1Pehc8=";
+    hash = "sha256-OClJjttOb21NnukOapEtXn/XNw9p6SUe3MY68FR9GWc=";
   };
 
   postPatch = ''

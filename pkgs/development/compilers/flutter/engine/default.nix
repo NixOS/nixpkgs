@@ -9,7 +9,7 @@
   url,
   patches,
   runtimeModes,
-  isOptimized ? true,
+  isOptimized ? null,
   lib,
   stdenv,
   dart,
@@ -33,8 +33,8 @@ let
         url
         patches
         runtimeMode
-        isOptimized
         ;
+      isOptimized = args.isOptimized or runtimeMode != "debug";
     }
   );
 in

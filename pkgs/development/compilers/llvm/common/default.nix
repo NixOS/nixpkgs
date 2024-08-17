@@ -74,7 +74,232 @@ let
       p:
       builtins.path {
         name = builtins.baseNameOf p;
-        path = "${metadata.versionDir}/${p}";
+        path =
+          let
+            patches = {
+              "clang/gnu-install-dirs.patch" = [
+                {
+                  before = "14";
+                  path = ../12;
+                }
+                {
+                  after = "19";
+                  path = ../19;
+                }
+              ];
+              "clang/purity.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  before = "17";
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  before = "16";
+                  path = ../12;
+                }
+              ];
+              "lld/add-table-base.patch" = [
+                {
+                  after = "16";
+                  path = ../16;
+                }
+              ];
+              "lld/gnu-install-dirs.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  before = "14";
+                  path = ../12;
+                }
+              ];
+              "llvm/gnu-install-dirs.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+              ];
+              "llvm/gnu-install-dirs-polly.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  before = "18";
+                  after = "14";
+                  path = ../14;
+                }
+              ];
+              "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
+                {
+                  before = "17";
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  after = "17";
+                  path = ../17;
+                }
+              ];
+              "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  after = "16";
+                  before = "18";
+                  path = ../16;
+                }
+              ];
+              "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
+                {
+                  after = "15";
+                  path = ../15;
+                }
+              ];
+              "libcxx/0001-darwin-10.12-mbstate_t-fix.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+              ];
+              "libunwind/gnu-install-dirs.patch" = [
+                {
+                  before = "17";
+                  after = "15";
+                  path = ../15;
+                }
+              ];
+              "compiler-rt/X86-support-extension.patch" = [
+                {
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  before = "15";
+                  path = ../12;
+                }
+              ];
+              "compiler-rt/armv7l.patch" = [
+                {
+                  before = "15";
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "compiler-rt/gnu-install-dirs.patch" = [
+                {
+                  before = "14";
+                  path = ../12;
+                }
+                {
+                  after = "13";
+                  before = "15";
+                  path = ../14;
+                }
+                {
+                  after = "15";
+                  before = "17";
+                  path = ../15;
+                }
+                {
+                  after = "16";
+                  path = ../17;
+                }
+              ];
+              "compiler-rt/darwin-targetconditionals.patch" = [
+                {
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "compiler-rt/codesign.patch" = [
+                {
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "compiler-rt/normalize-var.patch" = [
+                {
+                  after = "16";
+                  path = ../16;
+                }
+                {
+                  before = "16";
+                  path = ../12;
+                }
+              ];
+              "lldb/procfs.patch" = [
+                {
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  before = "15";
+                  path = ../12;
+                }
+              ];
+              "lldb/cpu_subtype_arm64e_replacement.patch" = [
+                {
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "lldb/resource-dir.patch" = [
+                {
+                  before = "16";
+                  path = ../12;
+                }
+              ];
+              "openmp/fix-find-tool.patch" = [
+                {
+                  after = "17";
+                  path = ../17;
+                }
+              ];
+              "openmp/run-lit-directly.patch" = [
+                {
+                  after = "16";
+                  path = ../16;
+                }
+                {
+                  after = "14";
+                  before = "16";
+                  path = ../14;
+                }
+              ];
+            };
+
+            constraints = patches."${p}" or null;
+            matchConstraint =
+              {
+                before ? null,
+                after ? null,
+                path,
+              }:
+              let
+                check = fn: value: if value == null then true else fn release_version value;
+                matchBefore = check lib.versionOlder before;
+                matchAfter = check lib.versionAtLeast after;
+              in
+              matchBefore && matchAfter;
+
+            patchDir =
+              toString
+                (
+                  if constraints == null then
+                    { path = metadata.versionDir; }
+                  else
+                    (lib.findFirst matchConstraint { path = metadata.versionDir; } constraints)
+                ).path;
+          in
+          "${patchDir}/${p}";
       };
   };
 
@@ -89,9 +314,7 @@ let
         }
       );
     in
-    {
-      llef = callPackage ./lldb-plugins/llef.nix { };
-    }
+    lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
   );
 
   tools = lib.makeExtensible (
