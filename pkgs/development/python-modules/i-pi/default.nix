@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gfortran,
   makeWrapper,
+  setuptools,
   numpy,
   pytest,
   mock,
@@ -13,21 +14,23 @@
 buildPythonPackage rec {
   pname = "i-pi";
   version = "3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-SJ0qTwwdIOR1nXs9MV6O1oxJPR6/6H86wscDy/sLc/g=";
+    hash = "sha256-SJ0qTwwdIOR1nXs9MV6O1oxJPR6/6H86wscDy/sLc/g=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     gfortran
     makeWrapper
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytest
