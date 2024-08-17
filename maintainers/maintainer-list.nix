@@ -11502,6 +11502,12 @@
     githubId = 31388299;
     name = "Leonardo Eugênio";
   };
+  lenivaya = {
+    name = "Danylo Osipchuk";
+    email = "danylo.osipchuk@proton.me";
+    github = "lenivaya";
+    githubId = 49302467;
+  };
   leo248 = {
     github = "leo248";
     githubId = 95365184;
