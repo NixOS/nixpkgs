@@ -1,78 +1,89 @@
-{ stdenv
-, callPackage
-, lib
-, fetchRepoProject
-, writeScript
-, cmake
-, directx-shader-compiler
-, glslang
-, ninja
-, patchelf
-, perl
-, pkg-config
-, python3
-, expat
-, libdrm
-, ncurses
-, openssl
-, wayland
-, xorg
-, zlib
+{
+  stdenv,
+  callPackage,
+  lib,
+  fetchRepoProject,
+  writeScript,
+  cmake,
+  directx-shader-compiler,
+  glslang,
+  ninja,
+  patchelf,
+  perl,
+  pkg-config,
+  python3,
+  expat,
+  libdrm,
+  ncurses,
+  openssl,
+  wayland,
+  xorg,
+  zlib,
 }:
 let
 
   suffix = if stdenv.system == "x86_64-linux" then "64" else "32";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "amdvlk";
   version = "2024.Q3.1";
 
   src = fetchRepoProject {
-    name = "${pname}-src";
+    name = "amdvlk-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
-    rev = "refs/tags/v-${version}";
+    rev = "refs/tags/v-${finalAttrs.version}";
     sha256 = "IZYv9ZfpIllYUhJ3f7AOFmSl7OfWWY8doaG8pe3GE+4=";
   };
 
-  buildInputs = [
-    expat
-    libdrm
-    ncurses
-    openssl
-    wayland
-    xorg.libX11
-    xorg.libxcb
-    xorg.xcbproto
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXft
-    xorg.libxshmfence
-    zlib
-  ];
+  buildInputs =
+    [
+      expat
+      libdrm
+      ncurses
+      openssl
+      wayland
+      zlib
+    ]
+    ++ (with xorg; [
+      libX11
+      libxcb
+      xcbproto
+      libXext
+      libXrandr
+      libXft
+      libxshmfence
+    ]);
 
-  nativeBuildInputs = [
-    cmake
-    directx-shader-compiler
-    glslang
-    ninja
-    patchelf
-    perl
-    pkg-config
-    python3
-  ] ++ (with python3.pkgs; [
-    jinja2
-    ruamel-yaml
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      directx-shader-compiler
+      glslang
+      ninja
+      patchelf
+      perl
+      pkg-config
+      python3
+    ]
+    ++ (with python3.pkgs; [
+      jinja2
+      ruamel-yaml
+    ]);
 
-  rpath = lib.makeLibraryPath [
-    libdrm
-    openssl
-    stdenv.cc.cc.lib
-    xorg.libX11
-    xorg.libxcb
-    xorg.libxshmfence
-    zlib
-  ];
+  rpath = lib.makeLibraryPath (
+    [
+      libdrm
+      openssl
+      stdenv.cc.cc.lib
+      zlib
+    ]
+    ++ (with xorg; [
+      libX11
+      libxcb
+      libxshmfence
+    ])
+  );
 
   cmakeDir = "../drivers/xgl";
 
@@ -107,14 +118,19 @@ in stdenv.mkDerivation rec {
     setHash "$hash"
   '';
 
-  passthru.impureTests = { amdvlk = callPackage ./test.nix {}; };
+  passthru.impureTests = {
+    amdvlk = callPackage ./test.nix { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "AMD Open Source Driver For Vulkan";
     homepage = "https://github.com/GPUOpen-Drivers/AMDVLK";
-    changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ Flakebi ];
+    changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
-}
+})
