@@ -1213,6 +1213,23 @@ let
         meta.license = lib.licenses.mit;
       };
 
+      databricks.databricks = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "databricks";
+          publisher = "databricks";
+          version = "2.3.1";
+          hash = "sha256-Qa839ygG8Z3aD/ZSshe2hg0ee3ZFU8xRrJ5E0cUjfCU=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
+          description = "Databricks extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=databricks.databricks";
+          homepage = "https://github.com/databricks/databricks-vscode";
+          license = lib.licenses.databricks-license;
+          maintainers = [ lib.maintainers.softinio ];
+        };
+      };
+
       davidanson.vscode-markdownlint = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-markdownlint";

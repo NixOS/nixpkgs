@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.17.0-unstable-2024-08-12";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "dandavison";
-    repo = pname;
-    rev = "a01141b72001f4c630d77cf5274267d7638851e4";
-    hash = "sha256-My51pQw5a2Y2VTu39MmnjGfmCavg8pFqOmOntUildS0=";
+    repo = "delta";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1UOVRAceZ4QlwrHWqN7YI2bMyuhwLnxJWpfyaHNNLYg=";
   };
 
-  cargoHash = "sha256-Rlc3Bc6Jh89KLLEWBWQB5GjoeIuHnwIVZN/MVFMjY24=";
+  cargoHash = "sha256-/h7djtaTm799gjNrC6vKulwwuvrTHjlsEXbK2lDH+rc=";
 
   nativeBuildInputs = [
     installShellFiles

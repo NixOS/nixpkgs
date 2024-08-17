@@ -1,30 +1,25 @@
-{ lib
-, stdenv
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, ruff
-, pygls
-, lsprotocol
-, hatchling
-, typing-extensions
-, packaging
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pytest-asyncio
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  stdenv,
+  ruff,
+  nix-update-script,
+  testers,
+  ruff-lsp,
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ruff-lsp";
-  version = "0.0.54";
+  version = "0.0.55";
   pyproject = true;
-  disabled = pythonOlder "3.7";
+  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VSuEjrRiHWA78DWQgbj0D+GFjhXrREUOHUcQpFqflcw=";
+    hash = "sha256-FFIZ8fDAPK03tnkjd2AUrz7iL8S9FziJQJKOxAisu48=";
   };
 
   postPatch = ''
@@ -32,11 +27,9 @@ buildPythonPackage rec {
     sed -i '/"ruff>=/d' pyproject.toml
   '';
 
-  build-system = [
-    hatchling
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
 
-  dependencies = [
+  dependencies = with python3.pkgs; [
     packaging
     pygls
     lsprotocol
@@ -46,7 +39,7 @@ buildPythonPackage rec {
   # fails in linux sandbox
   doCheck = stdenv.isDarwin;
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-asyncio
     python-lsp-jsonrpc
@@ -63,12 +56,20 @@ buildPythonPackage rec {
     "--unset PYTHONPATH"
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = ruff-lsp; };
+  };
+
   meta = {
     changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     description = "Language Server Protocol implementation for Ruff";
     homepage = "https://github.com/astral-sh/ruff-lsp";
     license = lib.licenses.mit;
     mainProgram = "ruff-lsp";
-    maintainers = with lib.maintainers; [ figsoda kalekseev ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      kalekseev
+    ];
   };
 }
