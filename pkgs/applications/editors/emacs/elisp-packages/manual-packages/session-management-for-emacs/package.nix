@@ -14,7 +14,7 @@ melpaBuild rec {
     hash = "sha256-lc6NIX+lx97qCs5JqG7x0iVE6ki09Gy7DEQuPW2c+7s=";
   };
 
-  meta = with lib; {
+  meta = {
     /*
       installation: add to your ~/.emacs
       (require 'session)
@@ -22,7 +22,6 @@ melpaBuild rec {
     */
     description = "Small session management for emacs";
     homepage = "https://emacs-session.sourceforge.net/";
-    license = licenses.gpl2;
-    maintainers = [ ];
+    license = lib.licenses.gpl2;
   };
 }
