@@ -978,6 +978,12 @@
     githubId = 173595;
     name = "Caleb Maclennan";
   };
+  alex = {
+    email = "alexander.cinnamon927@passmail.net";
+    github = "alexanderjkslfj";
+    githubId = 117545308;
+    name = "Alex";
+  };
   ALEX11BR = {
     email = "alexioanpopa11@gmail.com";
     github = "ALEX11BR";
