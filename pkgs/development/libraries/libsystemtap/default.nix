@@ -36,7 +36,8 @@ stdenv.mkDerivation {
     description = "Statically defined probes development files";
     homepage = "https://sourceware.org/systemtap/";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = elfutils.meta.platforms or platforms.unix;
+    badPlatforms = elfutils.meta.badPlatforms or [ ];
     maintainers = [ lib.maintainers.farlion ];
   };
 }
