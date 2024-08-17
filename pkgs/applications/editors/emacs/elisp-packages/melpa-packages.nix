@@ -321,8 +321,7 @@ let
           '';
           dontUseCmakeBuildDir = true;
           doCheck = pkgs.stdenv.isLinux;
-          packageRequires = [ self.emacs ];
-          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang self.emacs ];
+          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang ];
           nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
