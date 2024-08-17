@@ -1,15 +1,5 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, fixDarwinDylibNames
-, unzip
-, _7zz
-, libaio
-, makeWrapper
-, odbcSupport ? true
-, unixODBC
-}:
+{ lib, stdenv, fetchurl, autoPatchelfHook, fixDarwinDylibNames, unzip, _7zz
+, libaio, makeWrapper, odbcSupport ? true, unixODBC }:
 
 assert odbcSupport -> unixODBC != null;
 
@@ -19,7 +9,8 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   # assemble list of components
-  components = [ "basic" "sdk" "sqlplus" "tools" ] ++ optional odbcSupport "odbc";
+  components = [ "basic" "sdk" "sqlplus" "tools" ]
+    ++ optional odbcSupport "odbc";
 
   # determine the version number, there might be different ones per architecture
   version = {
@@ -69,15 +60,12 @@ let
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   # rels per component and architecture, optional
-  rels =
-    {
-      aarch64-darwin = {
-        basic = "1";
-        tools = "1";
-      };
-    }
-    .${stdenv.hostPlatform.system}
-    or {};
+  rels = {
+    aarch64-darwin = {
+      basic = "1";
+      tools = "1";
+    };
+  }.${stdenv.hostPlatform.system} or { };
 
   # convert platform to oracle architecture names
   arch = {
@@ -96,45 +84,44 @@ let
 
   # calculate the filename of a single zip file
   srcFilename = component: arch: version: rel:
-    "instantclient-${component}-${arch}-${version}" +
-    (optionalString (rel != "") "-${rel}") +
-    (optionalString (arch == "macos.arm64") ".dmg") +
-    (optionalString (arch != "macos.arm64") "dbru.zip");
+    "instantclient-${component}-${arch}-${version}"
+    + (optionalString (rel != "") "-${rel}")
+    + (optionalString (arch == "macos.arm64") ".dmg")
+    + (optionalString (arch != "macos.arm64") "dbru.zip");
 
   # fetcher for the non clickthrough artifacts
-  fetcher = srcFilename: hash: fetchurl {
-    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/${directory}/${srcFilename}";
-    sha256 = hash;
-  };
+  fetcher = srcFilename: hash:
+    fetchurl {
+      url =
+        "https://download.oracle.com/otn_software/${shortArch}/instantclient/${directory}/${srcFilename}";
+      sha256 = hash;
+    };
 
   # assemble srcs
-  srcs = map
-    (component:
-      (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
-    components;
+  srcs = map (component:
+    (fetcher (srcFilename component arch version rels.${component} or "")
+      hashes.${component} or "")) components;
 
   pname = "oracle-instantclient";
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version srcs;
 
-  buildInputs = [ stdenv.cc.cc.lib ]
-    ++ optional stdenv.isLinux libaio
+  buildInputs = [ stdenv.cc.cc.lib ] ++ optional stdenv.isLinux libaio
     ++ optional odbcSupport unixODBC;
 
-  nativeBuildInputs = [makeWrapper]
-    ++ optional stdenv.isLinux autoPatchelfHook
-    ++ optional stdenv.isDarwin fixDarwinDylibNames
-    ++ optional (arch != "macos.arm64") [unzip]
-    ++ optional (arch == "macos.arm64") [_7zz];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional stdenv.isLinux [ autoPatchelfHook ]
+    ++ optional stdenv.isDarwin [ fixDarwinDylibNames ]
+    ++ optional (arch != "macos.arm64") [ unzip ]
+    ++ optional (arch == "macos.arm64") [ _7zz ];
 
   outputs = [ "out" "dev" "lib" ];
 
-  unpackCmd =
-    if (arch == "macos.arm64")
-    then "7zz x $curSrc -aoa -oinstantclient"
-    else "unzip $curSrc";
+  unpackCmd = if (arch == "macos.arm64") then
+    "7zz x $curSrc -aoa -oinstantclient"
+  else
+    "unzip $curSrc";
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
@@ -168,7 +155,8 @@ stdenv.mkDerivation {
     '';
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+    platforms =
+      [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ dylanmtaylor ];
     hydraPlatforms = [ ];
   };
