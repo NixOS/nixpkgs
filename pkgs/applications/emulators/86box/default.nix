@@ -49,27 +49,34 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAllInPlace src/qt/qt_platform.cpp
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeWrapper
-    qt5.wrapQtAppsHook
-  ] ++ lib.optionals enableWayland [ extra-cmake-modules wayland-scanner ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      makeWrapper
+      qt5.wrapQtAppsHook
+    ]
+    ++ lib.optionals enableWayland [
+      extra-cmake-modules
+      wayland-scanner
+    ];
 
-  buildInputs = [
-    freetype
-    fluidsynth
-    SDL2
-    glib
-    openal
-    rtmidi
-    pcre2
-    jack2
-    libpcap
-    libslirp
-    qt5.qtbase
-    qt5.qttools
-  ] ++ lib.optional stdenv.isLinux alsa-lib
+  buildInputs =
+    [
+      freetype
+      fluidsynth
+      SDL2
+      glib
+      openal
+      rtmidi
+      pcre2
+      jack2
+      libpcap
+      libslirp
+      qt5.qtbase
+      qt5.qttools
+    ]
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
     ++ lib.optional enableVncRenderer libvncserver
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.libs.xpc;
@@ -120,7 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Emulator of x86-based machines based on PCem";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
-    license = with lib.licenses; [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
+    license =
+      with lib.licenses;
+      [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
     maintainers = with lib.maintainers; [ jchw ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
