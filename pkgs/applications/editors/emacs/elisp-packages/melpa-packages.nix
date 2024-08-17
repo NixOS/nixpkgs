@@ -322,8 +322,8 @@ let
           dontUseCmakeBuildDir = true;
           doCheck = pkgs.stdenv.isLinux;
           packageRequires = [ self.emacs ];
-          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
+          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang self.emacs ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
