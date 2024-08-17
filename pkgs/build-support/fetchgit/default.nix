@@ -97,7 +97,7 @@ stdenvNoCC.mkDerivation {
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ netrcImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
+    "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "NIX_SSL_CERT_FILE" "SOCKS_SERVER"
   ];
 
 
