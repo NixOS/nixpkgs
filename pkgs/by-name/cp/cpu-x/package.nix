@@ -1,12 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses
-, libcpuid, pciutils, procps, wrapGAppsHook3, nasm, makeWrapper
-, opencl-headers, ocl-icd
-, vulkan-headers, vulkan-loader, glfw
-, libXdmcp, pcre, util-linux
-, libselinux, libsepol
-, libthai, libdatrie, libxkbcommon, libepoxy
-, dbus, at-spi2-core
-, libXtst
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  gtk3,
+  ncurses,
+  libcpuid,
+  pciutils,
+  procps,
+  wrapGAppsHook3,
+  nasm,
+  makeWrapper,
+  opencl-headers,
+  ocl-icd,
+  vulkan-headers,
+  vulkan-loader,
+  glfw,
+  libXdmcp,
+  pcre,
+  util-linux,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  libxkbcommon,
+  libepoxy,
+  dbus,
+  at-spi2-core,
+  libXtst,
 }:
 
 # Known issues:
@@ -25,15 +47,36 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8jJP0gxH3B6qLrhKNa4P9ZfSjxaXTeBB1+UuadflLQo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 nasm makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+    nasm
+    makeWrapper
+  ];
+
   buildInputs = [
-    gtk3 ncurses libcpuid pciutils procps
-    vulkan-headers vulkan-loader glfw
-    opencl-headers ocl-icd
-    libXdmcp pcre util-linux
-    libselinux libsepol
-    libthai libdatrie libxkbcommon libepoxy
-    dbus at-spi2-core
+    gtk3
+    ncurses
+    libcpuid
+    pciutils
+    procps
+    vulkan-headers
+    vulkan-loader
+    glfw
+    opencl-headers
+    ocl-icd
+    libXdmcp
+    pcre
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    libxkbcommon
+    libepoxy
+    dbus
+    at-spi2-core
     libXtst
   ];
 
