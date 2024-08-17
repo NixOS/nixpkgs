@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gss/gss-${version}.tar.gz";
     hash = "sha256-7M6r3vTK4/znIYsuy4PrQifbpEtTthuMKy6IrgJBnHM=";
   };
-
-  # krb5context test uses certificates that expired on 2024-07-11.
-  # Reported to bug-gss@gnu.org with Message-ID: <87cyngavtt.fsf@alyssa.is>.
+  # This test crashes now.  Most likely triggered by expiration on 20240711.
   postPatch = ''
     rm tests/krb5context.c
   '';
@@ -30,6 +28,10 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--${if withShishi then "enable" else "disable"}-kerberos5"
   ];
+
+  # krb5context test uses certificates that expired on 2024-07-11.
+  # Reported to bug-gss@gnu.org with Message-ID: <87cyngavtt.fsf@alyssa.is>.
+  doCheck = !withShishi;
 
   # Fixup .la files
   postInstall = lib.optionalString withShishi ''
