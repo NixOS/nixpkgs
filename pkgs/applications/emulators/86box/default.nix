@@ -130,7 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     license =
       with lib.licenses;
       [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
-    maintainers = with lib.maintainers; [ jchw ];
+    maintainers = with lib.maintainers; [
+      jchw
+      matteopacini
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
