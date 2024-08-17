@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-randr";
     rev = "epoch-${version}";
     hash = "sha256-g9zoqjPHRv6Tw/Xn8VtFS3H/66tfHSl/DR2lH3Z2ysA=";
   };
