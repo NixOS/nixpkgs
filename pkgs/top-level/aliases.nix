@@ -1746,6 +1746,7 @@ mapAliases {
   rabbit = throw "'rabbit' has been renamed to/replaced by 'rabbit-ng'"; # Added 2026-02-18
   radiance = throw "'radiance' has been removed as it was broken for a long time"; # Added 2026-01-02
   radicale3 = throw "'radicale3' has been renamed to/replaced by 'radicale'"; # Converted to throw 2025-10-27
+  ragnarwm = throw "'ragnarwm' has been removed as it was broken"; # Added 2026-04-21
   railway-travel = throw "'railway-travel' has been renamed to/replaced by 'diebahn'"; # Converted to throw 2025-10-27
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
