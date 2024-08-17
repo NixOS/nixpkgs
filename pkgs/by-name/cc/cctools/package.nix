@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPackages,
-  darwin,
   ld64,
   llvm,
   memstreamHook,
@@ -127,13 +126,10 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  buildInputs =
-    [
-      ld64
-      llvm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.objc4 ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
+  buildInputs = [
+    ld64
+    llvm
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
 
   mesonBuildType = "release";
 
