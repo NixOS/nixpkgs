@@ -18822,6 +18822,8 @@ self: super: with self; {
 
   zha-quirks = callPackage ../development/python-modules/zha-quirks { };
 
+  zhon = callPackage ../development/python-modules/zhon { };
+
   ziafont = callPackage ../development/python-modules/ziafont { };
 
   ziamath = callPackage ../development/python-modules/ziamath { };
