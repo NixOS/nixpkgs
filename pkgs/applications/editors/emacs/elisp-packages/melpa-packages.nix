@@ -545,7 +545,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
-          nativeBuildInputs = [ pkgs.pkg-config ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
           postPatch = ''
             substituteInPlace telega-customize.el \
