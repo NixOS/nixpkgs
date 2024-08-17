@@ -1,4 +1,8 @@
-{ melpaBuild, fetchzip, lib }:
+{
+  melpaBuild,
+  fetchzip,
+  lib,
+}:
 
 melpaBuild rec {
   pname = "session-management-for-emacs";
@@ -11,7 +15,8 @@ melpaBuild rec {
   };
 
   meta = with lib; {
-    /* installation: add to your ~/.emacs
+    /*
+      installation: add to your ~/.emacs
       (require 'session)
       (add-hook 'after-init-hook 'session-initialize)
     */
