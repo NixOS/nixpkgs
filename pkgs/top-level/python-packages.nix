@@ -5870,6 +5870,8 @@ self: super: with self; {
 
   handy-archives = callPackage ../development/python-modules/handy-archives { };
 
+  hanzidentifier = callPackage ../development/python-modules/hanzidentifier { };
+
   hap-python = callPackage ../development/python-modules/hap-python { };
 
   harlequin-bigquery = callPackage ../development/python-modules/harlequin-bigquery { };
