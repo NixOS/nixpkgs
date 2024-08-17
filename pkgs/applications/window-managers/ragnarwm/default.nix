@@ -1,60 +1,65 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeText
-, fontconfig
-, libX11
-, libXft
-, libXcursor
-, libXcomposite
-, conf ? null
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  libGL,
+  libX11,
+  libxcb,
+  xcb-util-cursor,
+  xcbutil,
+  xcbutilwm,
+  xorgproto,
+  xcbutilkeysyms,
+  mesa,
+  libconfig,
+  nixosTests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ragnarwm";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "cococry";
     repo = "Ragnar";
     rev = finalAttrs.version;
-    hash = "sha256-OZhIwrKEhTfkw9K8nZIwGZzxXBObseWS92Y+85HmdNs=";
+    hash = "sha256-c6MBdDujrSleXpvwTyne1AhCQD2TD4eWOr30SU4UwnA=";
   };
 
-  prePatch = ''
-    substituteInPlace Makefile \
-      --replace '/usr/bin' "$out/bin" \
-      --replace '/usr/share' "$out/share"
-  '';
-
-  postPatch =
-    let
-      configFile =
-        if lib.isDerivation conf || builtins.isPath conf
-        then conf else writeText "config.h" conf;
-    in
-    lib.optionalString (conf != null) "cp ${configFile} config.h";
-
-  buildInputs = [
-    fontconfig
-    libX11
-    libXft
-    libXcursor
-    libXcomposite
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/cococry/ragnar/commit/901b4c4abffaf8136f47c2a479ffeafdad7164ac.patch?full_index=1";
+      hash = "sha256-Fk9nQ8m9XS8ABvWtf6vdrA1ntLWT8B3SUbUB8vKnf0c=";
+    })
   ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildInputs = [
+    libGL
+    libX11
+    libxcb
+    xcbutil
+    xcbutilwm
+    xorgproto
+    xcb-util-cursor
+    xcbutilkeysyms
+    mesa
+    libconfig
+  ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=${placeholder "out"}"
+  ];
+
   enableParallelBuilding = true;
 
   preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/applications
+    mkdir -p $out/{bin,share/{applications,xsessions}}
   '';
 
-  postInstall = ''
-    install -Dm644 $out/share/applications/ragnar.desktop $out/share/xsessions/ragnar.desktop
-  '';
+  # ragnarstart is a demo script
+  postInstall = "rm $out/bin/ragnarstart";
 
   passthru = {
     tests.ragnarwm = nixosTests.ragnarwm;
@@ -63,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Minimal, flexible & user-friendly X tiling window manager";
-    homepage = "https://ragnar-website.vercel.app";
+    homepage = "https://ragnarwm.org";
     changelog = "https://github.com/cococry/Ragnar/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sigmanificient ];
