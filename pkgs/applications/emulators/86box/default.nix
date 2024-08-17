@@ -1,5 +1,6 @@
 {
   stdenv,
+  darwin,
   lib,
   fetchFromGitHub,
   cmake,
@@ -42,6 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ioE0EVIXv/biXXvLqwhmtZ/RJM0nLqcE+i+CU+WXBY4=";
   };
 
+  patches = [ ./darwin.patch ];
+
+  postPatch = ''
+    substituteAllInPlace src/qt/qt_platform.cpp
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -64,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
   ] ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
-    ++ lib.optional enableVncRenderer libvncserver;
+    ++ lib.optional enableVncRenderer libvncserver
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.libs.xpc;
 
   cmakeFlags =
     lib.optional stdenv.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
@@ -114,6 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://86box.net/";
     license = with licenses; [ gpl2Only ] ++ optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
     maintainers = [ maintainers.jchw ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })
