@@ -419,15 +419,13 @@ in {
       assertions =
         let
           toAssertion = _: { imageFile, imageStream, ... }:
-            { assertion =
-                config.imageFile == null || config.imageStream == null;
+            { assertion = imageFile == null || imageStream == null;
 
-              message =
-                "You can only define one of imageFile and imageStream";
+              message = "You can only define one of imageFile and imageStream";
             };
 
         in
-          lib.mapAttrsToList toAssertion config.virtualisation.oci-containers;
+          lib.mapAttrsToList toAssertion cfg.containers;
     }
     (lib.mkIf (cfg.backend == "podman") {
       virtualisation.podman.enable = true;
