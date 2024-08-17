@@ -28,7 +28,7 @@ let
   cfg = config.hardware.gpgSmartcards;
 in {
   options.hardware.gpgSmartcards = {
-    enable = mkEnableOption "udev rules for gnupg smart cards";
+    enable = mkEnableOption "udev rules for gnupg smart cards (to use them with user service scdaemon)";
   };
 
   config = mkIf cfg.enable {
