@@ -1012,6 +1012,7 @@ mapAliases ({
   neoload = throw "'neoload' has been removed as it is broken and unmaintained"; # Added 2024-03-02
   nitrokey-udev-rules = libnitrokey; # Added 2023-03-25
   nix-direnv-flakes = nix-direnv;
+  nix-ld-rs = nix-ld; # Added 2024-08-17
   nix-repl = throw (
     # Added 2018-08-26
     "nix-repl has been removed because it's not maintained anymore, " +
