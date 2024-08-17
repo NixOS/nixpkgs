@@ -25,26 +25,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ekUFLZGWTsiJZFv3nHoxuV057zoOtWBIkt+VdtzlaU4=";
+    hash = "sha256-2h0wwtuhvFz5IExR/Fu0l+/nTAlDpMREVRjgrhbEghw=";
   };
 
   strictDeps = true;
   outputs = [ "out" "lib" "dev" ];
-
-  patches = [
-    # fixes composefs-info tests, remove in next release
-    # https://github.com/containers/composefs/pull/291
-    (fetchpatch {
-      url = "https://github.com/containers/composefs/commit/f7465b3a57935d96451b392b07aa3a1dafb56e7b.patch";
-      hash = "sha256-OO3IfqLf3dQGjEgKx3Bo630KALmLAWwgdACuyZm2Ujc=";
-    })
-  ];
 
   postPatch = lib.optionalString installExperimentalTools ''
     sed -i "s/noinst_PROGRAMS +\?=/bin_PROGRAMS +=/g" tools/Makefile.am
@@ -73,9 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     patchShebangs --build tests/*dir tests/*.sh
-    substituteInPlace tests/*.sh \
-      --replace-quiet " /tmp" " $TMPDIR" \
-      --replace-quiet " /var/tmp" " $TMPDIR"
   '';
 
   passthru = {
