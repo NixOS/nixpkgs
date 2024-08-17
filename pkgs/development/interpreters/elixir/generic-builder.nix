@@ -15,6 +15,7 @@
   lib,
   makeWrapper,
   nix-update-script,
+  pkgsBuildHost,
   stdenv,
 }:
 
@@ -31,16 +32,21 @@ let
     versionOlder
     ;
 
+  otpVersion = getVersion erlang;
+
   compatibilityMsg = ''
     Unsupported elixir and erlang OTP combination.
 
     elixir ${version}
-    erlang OTP ${getVersion erlang} is not >= ${minimumOTPVersion} ${
+    erlang OTP ${otpVersion} is not >= ${minimumOTPVersion} ${
       optionalString (maximumOTPVersion != null) "and <= ${maximumOTPVersion}"
     }
 
     See https://hexdocs.pm/elixir/${version}/compatibility-and-deprecations.html
   '';
+
+  erlBuilder = pkgsBuildHost.beam_minimal.interpreters."erlang_${versions.major otpVersion}";
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
   maxShiftMajor = toString ((toInt (versions.major maximumOTPVersion)) + 1);
   maxAssert =
@@ -80,7 +86,13 @@ else
 
     inherit version debugInfo;
 
-    nativeBuildInputs = [ makeWrapper ];
+    strictDeps = true;
+
+    nativeBuildInputs = [
+      makeWrapper
+    ]
+    ++ (optionals isCross [ erlBuilder ])
+    ++ (optionals (!isCross) [ erlang ]);
     buildInputs = [ erlang ];
 
     env = {
