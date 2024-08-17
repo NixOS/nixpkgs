@@ -33185,8 +33185,6 @@ with pkgs;
 
   qxw = callPackage ../applications/editors/qxw { };
 
-  rabbitvcs = callPackage ../applications/version-management/rabbitvcs { };
-
   rakarrack = callPackage ../applications/audio/rakarrack {
     fltk = fltk13;
   };
