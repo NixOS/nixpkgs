@@ -34,9 +34,4 @@ with lib;
   services.logrotate.enable = mkDefault false;
 
   services.udisks2.enable = mkDefault false;
-
-  xdg.autostart.enable = mkDefault false;
-  xdg.icons.enable = mkDefault false;
-  xdg.mime.enable = mkDefault false;
-  xdg.sounds.enable = mkDefault false;
 }
