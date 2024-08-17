@@ -87,6 +87,8 @@ buildPythonPackage rec {
     makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
   '';
 
+  pythonImportsCheck = [ "pwn" ];
+
   meta = with lib; {
     description = "CTF framework and exploit development library";
     homepage = "https://pwntools.com";
