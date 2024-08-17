@@ -10,6 +10,10 @@
   pkg-config,
   python3,
   qtbase,
+  qtmultimedia,
+  qtwebchannel,
+  qtwebengine,
+  qtwebsockets,
 }:
 mkKdeDerivation {
   pname = "wallpaper-engine-kde-plugin";
@@ -38,6 +42,14 @@ mkKdeDerivation {
   ];
 
   extraCmakeFlags = [
+    "-DQML2_CMAKE_PATH=${
+      lib.makeSearchPath "lib/qt-6/qml" [
+        qtmultimedia
+        qtwebchannel
+        qtwebengine
+        qtwebsockets
+      ]
+    }"
     "-DQt6_DIR=${qtbase}/lib/cmake/Qt6"
     "-DUSE_PLASMAPKG=ON"
   ];

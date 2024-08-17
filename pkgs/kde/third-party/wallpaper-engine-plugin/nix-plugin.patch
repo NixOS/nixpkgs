@@ -1,3 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e1298ba..1c9ddec 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,7 @@ set(KF_MIN_VERSION "5.68.0")
+ project("WallpaperEngineKde")
+ 
+ 
++add_definitions(-DQML2_CMAKE_PATH="${QML2_CMAKE_PATH}")
+ set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ if(NOT OpenGL_GL_PREFERENCE)
 diff --git a/plugin/contents/pyext.py b/plugin/contents/pyext.py
 old mode 100644
 new mode 100755
@@ -15,3 +27,26 @@ index 1a48f5e..8a9c9c9 100644
          ].join("\n");
          return sh;
      }
+diff --git a/src/plugin.cpp b/src/plugin.cpp
+index 5e8a7e2..1709a27 100644
+--- a/src/plugin.cpp
++++ b/src/plugin.cpp
+@@ -13,6 +13,18 @@ class Port : public QQmlExtensionPlugin {
+     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
+ 
+ public:
++    void initializeEngine(QQmlEngine *engine, const char *uri) override {
++        if (strcmp(uri, "com.github.catsout.wallpaperEngineKde") != 0) return;
++        if (!engine) return;
++
++        QString pathList = QML2_CMAKE_PATH;
++        QStringList paths = pathList.split(':', Qt::SkipEmptyParts);
++        for (const QString &path : paths) {
++            engine->addImportPath(path);
++        }
++
++        QQmlExtensionPlugin::initializeEngine(engine, uri);
++    }
+     void registerTypes(const char* uri) override {
+         if (strcmp(uri, "com.github.catsout.wallpaperEngineKde") != 0) return;
+         qmlRegisterType<wekde::PluginInfo>(uri, WPVer[0], WPVer[1], "PluginInfo");

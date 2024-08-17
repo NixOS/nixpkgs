@@ -77,6 +77,7 @@
       phonon-vlc = self.callPackage ./misc/phonon-vlc {};
       polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 {};
       pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt {};
+
       applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 {};
       karousel = self.callPackage ./third-party/karousel {};
       kzones = self.callPackage ./third-party/kzones {};
