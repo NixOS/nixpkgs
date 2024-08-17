@@ -4,8 +4,6 @@ declare -a cargoTestFlags
 cargoCheckHook() {
     echo "Executing cargoCheckHook"
 
-    runHook preCheck
-
     if [[ -n "${buildAndTestSubdir-}" ]]; then
         pushd "${buildAndTestSubdir}"
     fi
@@ -46,10 +44,20 @@ cargoCheckHook() {
     fi
 
     echo "Finished cargoCheckHook"
+}
+
+cargoCheckPhase() {
+    runHook preCheck
+
+    cargoCheckHook
 
     runHook postCheck
 }
 
-if [ -z "${dontCargoCheck-}" ] && [ -z "${checkPhase-}" ]; then
-  checkPhase=cargoCheckHook
+if [ -z "${dontCargoCheck-}" ]; then
+    if [ -z "${checkPhase-}" ]; then
+        checkPhase=cargoCheckPhase
+    else
+        preCheckHooks+=(cargoCheckHook)
+    fi
 fi
