@@ -11256,6 +11256,18 @@ final: prev:
     meta.homepage = "https://github.com/levouh/tint.nvim/";
   };
 
+  tiny-inline-diagnostic-nvim = buildVimPlugin {
+    pname = "tiny-inline-diagnostic.nvim";
+    version = "2024-08-10";
+    src = fetchFromGitHub {
+      owner = "rachartier";
+      repo = "tiny-inline-diagnostic.nvim";
+      rev = "7b212b214aed37d8ae1a26ac6ca9593223a23ddb";
+      sha256 = "0zf3l8fx7vbq352ip3lrvvhrkkwp8n7n5i2lh5ps8j0jqaxswr33";
+    };
+    meta.homepage = "https://github.com/rachartier/tiny-inline-diagnostic.nvim/";
+  };
+
   tlib_vim = buildVimPlugin {
     pname = "tlib_vim";
     version = "2022-07-22";
