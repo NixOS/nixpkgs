@@ -112,7 +112,10 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      natsukium
+    ];
     mainProgram = "pdm";
   };
 }
