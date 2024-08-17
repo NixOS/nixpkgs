@@ -22035,8 +22035,6 @@ with pkgs;
 
   libmp3splt = callPackage ../development/libraries/libmp3splt { };
 
-  libmrss = callPackage ../development/libraries/libmrss { };
-
   libmspack = callPackage ../development/libraries/libmspack { };
 
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
@@ -22072,8 +22070,6 @@ with pkgs;
   libnftnl = callPackage ../development/libraries/libnftnl { };
 
   libnova = callPackage ../development/libraries/science/astronomy/libnova { };
-
-  libnxml = callPackage ../development/libraries/libnxml { };
 
   libodfgen = callPackage ../development/libraries/libodfgen { };
 
