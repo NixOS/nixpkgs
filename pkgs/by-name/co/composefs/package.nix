@@ -3,13 +3,13 @@
 , fetchFromGitHub
 , fetchpatch
 
-, autoreconfHook
+, meson
+, ninja
 , go-md2man
 , pkg-config
 , openssl
 , fuse3
 , libcap
-, libseccomp
 , python3
 , which
 , valgrind
@@ -38,21 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "lib" "dev" ];
 
   postPatch = lib.optionalString installExperimentalTools ''
-    sed -i "s/noinst_PROGRAMS +\?=/bin_PROGRAMS +=/g" tools/Makefile.am
+    sed -i "s/install : false/install : true/g" tools/meson.build
   '';
 
-  configureFlags = [
-    (lib.enableFeature true "man")
-    (lib.enableFeature enableValgrindCheck "valgrind-test")
-  ];
-
-  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config ];
+  nativeBuildInputs = [ meson ninja go-md2man pkg-config ];
   buildInputs = [ openssl ]
     ++ lib.optional fuseSupport fuse3
     ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
     [
       libcap
-      libseccomp
     ]
   );
 
@@ -62,8 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional fuseSupport fuse3
     ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [ erofs-utils fsverity-utils ];
 
+  mesonCheckFlags = lib.optionals enableValgrindCheck "--setup=valgrind";
+
   preCheck = ''
-    patchShebangs --build tests/*dir tests/*.sh
+    patchShebangs --build ../tests/*dir ../tests/*.sh
   '';
 
   passthru = {
