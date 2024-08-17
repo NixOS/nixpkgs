@@ -60,6 +60,7 @@
     system.build.squashfs = pkgs.callPackage ../../lib/make-squashfs.nix {
       fileName = "nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}";
 
+      hydraBuildProduct = true;
       noStrip = true; # keep directory structure
       comp = "zstd -Xcompression-level 6";
 
