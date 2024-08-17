@@ -3249,7 +3249,6 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purenix
  - purescript-iso
  - purescript-tsd-gen
  - pursuit-client
