@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonImportsCheck = [ "better-exceptions" ]
+
   # As noted by @WolfangAukang, some check files need to be disabled because of various errors, same with some tests.
   # After disabling and running the build, no tests are collected.
   doCheck = false;
@@ -26,5 +28,6 @@ buildPythonPackage rec {
     description = "Pretty and more helpful exceptions in Python, automatically.";
     homepage = "https://github.com/qix-/better-exceptions";
     license = lib.licenses.mit;
+    maintainers = lib.maintainers.alex-nt;
   };
 }
