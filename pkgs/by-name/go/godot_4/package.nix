@@ -7,6 +7,7 @@
   fontconfig,
   installShellFiles,
   lib,
+  libdecor,
   libGL,
   libpulseaudio,
   libX11,
@@ -24,6 +25,8 @@
   stdenv,
   udev,
   vulkan-loader,
+  wayland,
+  wayland-scanner,
   withDbus ? true,
   withDebug ? false,
   withFontconfig ? true,
@@ -34,13 +37,15 @@
   withTarget ? "editor",
   withTouch ? true,
   withUdev ? true,
+  # Wayland in Godot requires X11 until upstream fix is merged
+  # https://github.com/godotengine/godot/pull/73504
+  withWayland ? true,
+  withX11 ? true,
 }:
-
 assert lib.asserts.assertOneOf "withPrecision" withPrecision [
   "single"
   "double"
 ];
-
 let
   mkSconsFlagsFromAttrSet = lib.mapAttrsToList (
     k: v: if builtins.isString v then "${k}=${v}" else "${k}=${builtins.toJSON v}"
@@ -101,6 +106,8 @@ stdenv.mkDerivation rec {
     speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
     touch = withTouch; # Enable touch events
     udev = withUdev; # Use udev for gamepad connection callbacks
+    wayland = withWayland; # Compile with Wayland support
+    x11 = withX11; # Compile with X11 support
   };
 
   enableParallelBuilding = true;
@@ -117,12 +124,15 @@ stdenv.mkDerivation rec {
     installShellFiles
     pkg-config
     scons
-  ];
+  ] ++ lib.optionals withWayland [ wayland-scanner ];
 
   runtimeDependencies =
     [
       alsa-lib
       libGL
+      vulkan-loader
+    ]
+    ++ lib.optionals withX11 [
       libX11
       libXcursor
       libXext
@@ -132,7 +142,10 @@ stdenv.mkDerivation rec {
       libxkbcommon
       libXrandr
       libXrender
-      vulkan-loader
+    ]
+    ++ lib.optionals withWayland [
+      libdecor
+      wayland
     ]
     ++ lib.optionals withDbus [
       dbus
