@@ -6,7 +6,7 @@
   dbus,
   glib,
   libphonenumber,
-  libsoup,
+  libsoup_3,
   meson,
   mobile-broadband-provider-info,
   modemmanager,
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmsd-tng";
-  version = "1.12.1";
+  version = "2.6.1";
 
   src = fetchFromGitLab {
     owner = "kop316";
     repo = "mmsd";
     rev = finalAttrs.version;
-    hash = "sha256-fhbiTJWmQwJpuMaVX2qWyWwJ/2Y/Vczo//+0T0b6jhA=";
+    hash = "sha256-XornJvKudVeibc40GOQpX/4hINoJTqj3M3WeBEqdLe4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
     libphonenumber
-    libsoup
+    libsoup_3
     mobile-broadband-provider-info
     modemmanager
     protobuf
