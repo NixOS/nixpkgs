@@ -4,24 +4,27 @@
   buildPythonPackage,
   debugger,
   fetchPypi,
-  mako,
-  packaging,
-  pysocks,
-  pygments,
-  ropgadget,
   capstone,
   colored-traceback,
+  intervaltree,
+  mako,
+  packaging,
   paramiko,
-  pip,
   psutil,
   pyelftools,
+  pygments,
   pyserial,
+  pysocks,
   python-dateutil,
   requests,
+  ropgadget,
   rpyc,
-  tox,
+  setuptools,
+  six,
+  sortedcontainers,
   unicorn,
-  intervaltree,
+  unix-ar,
+  zstandard,
   installShellFiles,
 }:
 
@@ -31,7 +34,7 @@ in
 buildPythonPackage rec {
   pname = "pwntools";
   version = "4.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -46,25 +49,31 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [ "pip" ];
+
   propagatedBuildInputs = [
-    mako
-    packaging
-    pysocks
-    pygments
-    ropgadget
     capstone
     colored-traceback
+    intervaltree
+    mako
+    packaging
     paramiko
-    pip
     psutil
     pyelftools
+    pygments
     pyserial
+    pysocks
     python-dateutil
     requests
+    ropgadget
     rpyc
-    tox
+    six
+    sortedcontainers
     unicorn
-    intervaltree
+    unix-ar
+    zstandard
   ];
 
   doCheck = false; # no setuptools tests for the package
