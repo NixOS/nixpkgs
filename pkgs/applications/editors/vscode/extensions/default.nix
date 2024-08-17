@@ -3106,6 +3106,8 @@ let
         };
       };
 
+      mongodb.mongodb-vscode = callPackage ./mongodb.mongodb-vscode { };
+
       moshfeu.compare-folders = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "compare-folders";
