@@ -90,14 +90,14 @@
 }:
 
 let
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     # uses version commit for logic in version.txt
-    rev = "e9ff2bdf1ac670eb9c6d6170e27c999c05535127";
-    hash = "sha256-grbT+oRIyLnyJowhdqw7qGRg11HzWGIU9yTwUQhCWtg=";
+    rev = "77f199ab02ff2e3bca4ca653e922e9fef67dec43";
+    hash = "sha256-vxvmyo03NcO2Nbjg76JLZqmYw7RiK4FehiB+iE3CgOw=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -105,10 +105,10 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.0.1";
+  ffmpeg-version = "7.0.2";
   ffmpeg-hb = (ffmpeg_7-full.override {
     version = ffmpeg-version;
-    hash = "sha256-HiCT6bvLx4zmJ6ffutoimdz5ENQ55CRF64WBT3HeXMA=";
+    hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
   }).overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
@@ -133,7 +133,6 @@ let
       "${src}/contrib/ffmpeg/A16-amfenc-HDR-metadata.patch"
       "${src}/contrib/ffmpeg/A17-av1dec-dovi-rpu.patch"
       "${src}/contrib/ffmpeg/A18-avformat-mov-add-support-audio-fallback-track-ref.patch"
-      "${src}/contrib/ffmpeg/A19-fix-qsv-on-gcc-14.patch"
     ];
   });
 
