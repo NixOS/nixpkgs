@@ -3,7 +3,7 @@
 , rustPlatform
 , fetchFromGitHub
 , boost
-, nix
+, nixVersions
 , pkg-config
 # Whether to build the nix-doc plugin for Nix
 , withPlugin ? true
@@ -24,9 +24,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   doCheck = true;
-  buildInputs = lib.optionals withPlugin [ boost nix ];
+  buildInputs = lib.optionals withPlugin [ boost nixVersions.nix_2_18 ];
 
-  nativeBuildInputs = lib.optionals withPlugin [ pkg-config nix ];
+  nativeBuildInputs = lib.optionals withPlugin [ pkg-config nixVersions.nix_2_18 ];
 
   cargoBuildFlags = packageFlags;
   cargoTestFlags = packageFlags;
