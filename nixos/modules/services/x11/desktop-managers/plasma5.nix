@@ -377,8 +377,6 @@ in
         };
       };
 
-      xdg.icons.enable = true;
-
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
       xdg.portal.configPackages = mkDefault [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];

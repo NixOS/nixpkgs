@@ -298,10 +298,6 @@ in
       services.upower.enable = config.powerManagement.enable;
       services.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
-      # Explicitly enabled since GNOME will be severely broken without these.
-      xdg.mime.enable = true;
-      xdg.icons.enable = true;
-
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-gnome

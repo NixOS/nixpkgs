@@ -73,9 +73,6 @@ in
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
     fonts.packages = with pkgs; [ noto-fonts ];
-    xdg.mime.enable = true;
-    xdg.menus.enable = true;
-    xdg.icons.enable = true;
     xdg.portal.enable = mkDefault true;
     xdg.portal.extraPortals = mkDefault [
       pkgs.xdg-desktop-portal-gtk
