@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   rustPlatform,
   fetchFromGitHub,
   darwin,
@@ -45,6 +46,11 @@ rustPlatform.buildRustPackage rec {
         SystemConfiguration
       ]
     );
+
+  passthru = {
+    # See ./doc/hooks/tauri.section.md
+    hook = callPackage ./hook.nix { };
+  };
 
   meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
