@@ -5484,6 +5484,12 @@
     githubId = 252042;
     keys = [ { fingerprint = "85F3 72DF 4AF3 EF13 ED34  72A3 0AAF 2901 E804 0715"; } ];
   };
+  DrymarchonShaun = {
+    name = "Shaun";
+    email = "drymarchonshaun@protonmail.com";
+    github = "DrymarchonShaun";
+    githubId = 40149778;
+  };
   dsalaza4 = {
     email = "podany270895@gmail.com";
     github = "dsalaza4";
