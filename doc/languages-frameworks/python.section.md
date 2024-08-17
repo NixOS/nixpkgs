@@ -693,7 +693,7 @@ We've now seen how to create an ad-hoc temporary shell session, and how to
 create a single script with Python dependencies, but in the course of normal
 development we're usually working in an entire package repository.
 
-As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
+As explained [in the `nix-shell` section](https://nix.dev/manual/nix/latest/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
 Say we want to have Python 3.11, `numpy` and `toolz`, like before,
 in an environment. We can add a `shell.nix` file describing our dependencies:
 

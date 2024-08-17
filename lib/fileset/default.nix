@@ -60,7 +60,7 @@
 
   # Implicit coercion from paths to file sets {#sec-fileset-path-coercion}
 
-  All functions accepting file sets as arguments can also accept [paths](https://nixos.org/manual/nix/stable/language/values.html#type-path) as arguments.
+  All functions accepting file sets as arguments can also accept [paths](https://nix.dev/manual/nix/latest/language/values.html#type-path) as arguments.
   Such path arguments are implicitly coerced to file sets containing all files under that path:
   - A path to a file turns into a file set containing that single file.
   - A path to a directory turns into a file set containing all files _recursively_ in that directory.
@@ -75,7 +75,7 @@
   :::{.note}
   File set coercion does _not_ add any of the files under the coerced paths to the store.
   Only the [`toSource`](#function-library-lib.fileset.toSource) function adds files to the Nix store, and only those files contained in the `fileset` argument.
-  This is in contrast to using [paths in string interpolation](https://nixos.org/manual/nix/stable/language/values.html#type-path), which does add the entire referenced path to the store.
+  This is in contrast to using [paths in string interpolation](https://nix.dev/manual/nix/latest/language/values.html#type-path), which does add the entire referenced path to the store.
   :::
 
   ## Example {#sec-fileset-path-coercion-example}
@@ -321,7 +321,7 @@ in {
       actualFileset;
 
   /**
-    Add the local files contained in `fileset` to the store as a single [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) rooted at `root`.
+    Add the local files contained in `fileset` to the store as a single [store path](https://nix.dev/manual/nix/latest/glossary#gloss-store-path) rooted at `root`.
 
     The result is the store path as a string-like value, making it usable e.g. as the `src` of a derivation, or in string interpolation:
     ```nix
@@ -339,8 +339,8 @@ in {
 
     `root` (Path; _required_)
 
-    : The local directory [path](https://nixos.org/manual/nix/stable/language/values.html#type-path) that will correspond to the root of the resulting store path.
-      Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
+    : The local directory [path](https://nix.dev/manual/nix/latest/language/values.html#type-path) that will correspond to the root of the resulting store path.
+      Paths in [strings](https://nix.dev/manual/nix/latest/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
       `root` has to be a directory.
 
       :::{.note}
@@ -778,7 +778,7 @@ in {
       - `name` (String): The name of the file
 
       - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
-        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+        This matches result of calling [`builtins.readFileType`](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-readFileType) on the file's path.
 
       - `hasExt` (String -> Bool): Whether the file has a certain file extension.
         `hasExt ext` is true only if `hasSuffix ".${ext}" name`.
@@ -942,7 +942,7 @@ in {
 
     `path`
 
-    : The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+    : The [path](https://nix.dev/manual/nix/latest/language/values#type-path) to the working directory of a local Git repository.
       This directory must contain a `.git` file or subdirectory.
 
     # Type
@@ -979,7 +979,7 @@ in {
     The first argument allows configuration with an attribute set,
     while the second argument is the path to the Git working tree.
 
-    `gitTrackedWith` does not perform any filtering when the path is a [Nix store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path) and not a repository.
+    `gitTrackedWith` does not perform any filtering when the path is a [Nix store path](https://nix.dev/manual/nix/latest/store/store-path.html#store-path) and not a repository.
     In this way, it accommodates the use case where the expression that makes the `gitTracked` call does not reside in an actual git repository anymore,
     and has presumably already been fetched in a way that excludes untracked files.
     Fetchers with such equivalent behavior include `builtins.fetchGit`, `builtins.fetchTree` (experimental), and `pkgs.fetchgit` when used without `leaveDotGit`.
@@ -991,7 +991,7 @@ in {
     (which uses [`--cached`](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt--c) by default).
 
     :::{.warning}
-    Currently this function is based on [`builtins.fetchGit`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchGit)
+    Currently this function is based on [`builtins.fetchGit`](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-fetchGit)
     As such, this function causes all Git-tracked files to be unnecessarily added to the Nix store,
     without being re-usable by [`toSource`](#function-library-lib.fileset.toSource).
 
@@ -1007,7 +1007,7 @@ in {
         If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
 
       `path`
-      : The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+      : The [path](https://nix.dev/manual/nix/latest/language/values#type-path) to the working directory of a local Git repository.
         This directory must contain a `.git` file or subdirectory.
 
     # Type

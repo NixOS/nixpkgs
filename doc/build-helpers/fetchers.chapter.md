@@ -3,14 +3,14 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 To this end, we use functions that we call _fetchers_, which obtain remote sources via various protocols and services.
 
-Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball).
+Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-fetchTarball).
 Nixpkgs provides its own fetchers, which work differently:
 
-- A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path).
-  A Nixpkgs fetcher will create a ([fixed-output](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation)) [derivation](https://nixos.org/manual/nix/stable/glossary#gloss-derivation), and files are downloaded at build time.
-- Built-in fetchers will invalidate their cache after [`tarball-ttl`](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-tarball-ttl) expires, and will require network activity to check if the cache entry is up to date.
+- A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nix.dev/manual/nix/latest/glossary#gloss-store-path).
+  A Nixpkgs fetcher will create a ([fixed-output](https://nix.dev/manual/nix/latest/glossary#gloss-fixed-output-derivation)) [derivation](https://nix.dev/manual/nix/latest/glossary#gloss-derivation), and files are downloaded at build time.
+- Built-in fetchers will invalidate their cache after [`tarball-ttl`](https://nix.dev/manual/nix/latest/command-ref/conf-file#conf-tarball-ttl) expires, and will require network activity to check if the cache entry is up to date.
   Nixpkgs fetchers only re-download if the specified hash changes or the store object is not available.
-- Built-in fetchers do not use [substituters](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters).
+- Built-in fetchers do not use [substituters](https://nix.dev/manual/nix/latest/command-ref/conf-file#conf-substituters).
   Derivations produced by Nixpkgs fetchers will use any configured binary cache transparently.
 
 This significantly reduces the time needed to evaluate Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain and re-distribute sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
@@ -30,7 +30,7 @@ The following table summarises the differences:
 
 ## Caveats {#chap-pkgs-fetchers-caveats}
 
-Because Nixpkgs fetchers are fixed-output derivations, an [output hash](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) has to be specified, usually indirectly through a `hash` attribute.
+Because Nixpkgs fetchers are fixed-output derivations, an [output hash](https://nix.dev/manual/nix/latest/language/advanced-attributes#adv-attr-outputHash) has to be specified, usually indirectly through a `hash` attribute.
 This hash refers to the derivation output, which can be different from the remote source itself!
 
 This has the following implications that you should be aware of:
@@ -135,7 +135,7 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    Fetchers understand both formats.
    Nixpkgs does not standardise on any one format.
 
-   You can convert between hash formats with [`nix-hash`](https://nixos.org/manual/nix/stable/command-ref/nix-hash).
+   You can convert between hash formats with [`nix-hash`](https://nix.dev/manual/nix/latest/command-ref/nix-hash).
 
 5. Extract the hash from a local source archive with `sha256sum`.
    Use `nix-prefetch-url file:///path/to/archive` if you want the custom Nix `base32` hash.
@@ -160,13 +160,13 @@ Here are security considerations for this scenario:
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
-`fetchurl` returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads content from a given URL and stores the unaltered contents within the Nix store.
+`fetchurl` returns a [fixed-output derivation](https://nix.dev/manual/nix/latest/glossary.html#gloss-fixed-output-derivation) which downloads content from a given URL and stores the unaltered contents within the Nix store.
 
 It uses {manpage}`curl(1)` internally, and allows its behaviour to be modified by specifying a few attributes in the argument to `fetchurl` (see the documentation for attributes `curlOpts`, `curlOptsList`, and `netrcPhase`).
 
-The resulting [store path](https://nixos.org/manual/nix/stable/store/store-path) is determined by the hash given to `fetchurl`, and also the `name` (or `pname` and `version`) values.
+The resulting [store path](https://nix.dev/manual/nix/latest/store/store-path) is determined by the hash given to `fetchurl`, and also the `name` (or `pname` and `version`) values.
 
-If neither `name` nor `pname` and `version` are specified when calling `fetchurl`, it will default to using the [basename](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-baseNameOf) of `url` or the first element of `urls`.
+If neither `name` nor `pname` and `version` are specified when calling `fetchurl`, it will default to using the [basename](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-baseNameOf) of `url` or the first element of `urls`.
 If `pname` and `version` are specified, `fetchurl` will use those values and will ignore `name`, even if it is also specified.
 
 ### Inputs {#sec-pkgs-fetchers-fetchurl-inputs}
@@ -209,7 +209,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `outputHash` (String; _optional_)
 : Hash of the derivation output of `fetchurl` in the format expected by Nix.
-  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+  See [the documentation on the Nix manual](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
   It is recommended that you use the `hash` attribute instead.
@@ -221,7 +221,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `outputHashAlgo` (String; _optional_)
 : Algorithm used to generate the value specified in `outputHash`.
-  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHashAlgo) for more information about the values it supports.
+  See [the documentation on the Nix manual](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-outputHashAlgo) for more information about the values it supports.
 
   :::{.note}
   It is recommended that you use the `hash` attribute instead.
@@ -233,7 +233,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `sha1` (String; _optional_)
 : SHA-1 hash of the derivation output of `fetchurl` in the format expected by Nix.
-  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+  See [the documentation on the Nix manual](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
   It is recommended that you use the `hash` attribute instead.
@@ -243,7 +243,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `sha256` (String; _optional_)
 : SHA-256 hash of the derivation output of `fetchurl` in the format expected by Nix.
-  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+  See [the documentation on the Nix manual](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
   It is recommended that you use the `hash` attribute instead.
@@ -253,7 +253,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `sha512` (String; _optional_)
 : SHA-512 hash of the derivation output of `fetchurl` in the format expected by Nix.
-  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
+  See [the documentation on the Nix manual](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-outputHash) for more information about its format.
 
   :::{.note}
   It is recommended that you use the `hash` attribute instead.
@@ -285,7 +285,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 `recursiveHash` (Boolean; _optional_) []{#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash}
 : If set to `true`, will signal to Nix that the hash given to `fetchurl` was calculated using the `"recursive"` mode.
-  See [the documentation on the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-outputHashMode) for more information about the existing modes.
+  See [the documentation on the Nix manual](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-outputHashMode) for more information about the existing modes.
 
   By default, `fetchurl` uses `"recursive"` mode when the `executable` attribute is set to `true`, so you don't need to specify `recursiveHash` in this case.
 
@@ -331,7 +331,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   _Default value_: `null`.
 
 `netrcImpureEnvVars` (List of String; _optional_)
-: If specified, `fetchurl` will add these environment variable names to the list of [impure environment variables](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-impureEnvVars), which will be passed from the environment of the calling user to the builder running the `fetchurl` code.
+: If specified, `fetchurl` will add these environment variable names to the list of [impure environment variables](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-impureEnvVars), which will be passed from the environment of the calling user to the builder running the `fetchurl` code.
 
   This is useful when used with `netrcPhase` to hide any secrets that are used in it, because the script in `netrcPhase` only needs to reference the environment variables with the secrets in them instead.
   However, note that these are called _impure_ variables for a reason:
@@ -372,7 +372,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   _Default value:_ `{}`.
 
 `preferLocalBuild` (Boolean; _optional_)
-: This is the same attribute as [defined in the Nix manual](https://nixos.org/manual/nix/stable/language/advanced-attributes.html#adv-attr-preferLocalBuild).
+: This is the same attribute as [defined in the Nix manual](https://nix.dev/manual/nix/latest/language/advanced-attributes.html#adv-attr-preferLocalBuild).
   It is `true` by default because making a remote machine download the content just duplicates network traffic (since the local machine might download the results from the derivation anyway), but this could be useful in cases where network access is restricted on local machines.
 
   _Default value:_ `true`.
@@ -519,7 +519,7 @@ See [](#chap-pkgs-fetchers-caveats) for more details on how to work with the `ha
 
 ## `fetchzip` {#sec-pkgs-fetchers-fetchzip}
 
-Returns a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation) which downloads an archive from a given URL and decompresses it.
+Returns a [fixed-output derivation](https://nix.dev/manual/nix/latest/glossary.html#gloss-fixed-output-derivation) which downloads an archive from a given URL and decompresses it.
 
 Despite its name, `fetchzip` is not limited to `.zip` files but can also be used with [various compressed tarball formats](#tar-files) by default.
 This can extended by specifying additional attributes, see [](#ex-fetchers-fetchzip-rar-archive) to understand how to do that.

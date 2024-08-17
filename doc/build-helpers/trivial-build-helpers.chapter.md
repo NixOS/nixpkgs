@@ -67,10 +67,10 @@ Nixpkgs provides the following functions for producing derivations which write t
 They are useful for creating files from Nix expression, and are all implemented as convenience wrappers around `writeTextFile`.
 
 Each of these functions will cause a derivation to be produced.
-When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`builtins.toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
+When you coerce the result of each of these functions to a string with [string interpolation](https://nix.dev/manual/nix/latest/language/string-interpolation) or [`builtins.toString`](https://nix.dev/manual/nix/latest/language/builtins#builtins-toString), it will evaluate to the [store path](https://nix.dev/manual/nix/latest/store/store-path) of this derivation.
 
 :::: {.note}
-Some of these functions will put the resulting files within a directory inside the [derivation output](https://nixos.org/manual/nix/stable/language/derivations#attr-outputs).
+Some of these functions will put the resulting files within a directory inside the [derivation output](https://nix.dev/manual/nix/latest/language/derivations#attr-outputs).
 If you need to refer to the resulting files somewhere else in a Nix expression, append their path to the derivation's store path.
 
 For example, if the file destination is a directory:
@@ -241,7 +241,7 @@ Write a text file to the Nix store.
 `allowSubstitutes` (Bool, _optional_)
 
 : Whether to allow substituting from a binary cache.
-  Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
+  Passed through to [`allowSubstitutes`](https://nix.dev/manual/nix/latest/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
 
   It defaults to `false`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
   Set it to true if the `checkPhase` step is expensive.
@@ -250,9 +250,9 @@ Write a text file to the Nix store.
 
 `preferLocalBuild` (Bool, _optional_)
 
-: Whether to prefer building locally, even if faster [remote build machines](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters) are available.
+: Whether to prefer building locally, even if faster [remote build machines](https://nix.dev/manual/nix/latest/command-ref/conf-file#conf-substituters) are available.
 
-  Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `builtins.derivation`.
+  Passed through to [`preferLocalBuild`](https://nix.dev/manual/nix/latest/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `builtins.derivation`.
 
   It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
@@ -664,7 +664,7 @@ Deprecated. Use [`writeClosure`](#trivial-builder-writeClosure) instead.
 
 ## `writeClosure` {#trivial-builder-writeClosure}
 
-Given a list of [store paths](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) (or string-like expressions coercible to store paths), write their collective [closure](https://nixos.org/manual/nix/stable/glossary#gloss-closure) to a text file.
+Given a list of [store paths](https://nix.dev/manual/nix/latest/glossary#gloss-store-path) (or string-like expressions coercible to store paths), write their collective [closure](https://nix.dev/manual/nix/latest/glossary#gloss-closure) to a text file.
 
 The result is equivalent to the output of `nix-store -q --requisites`.
 

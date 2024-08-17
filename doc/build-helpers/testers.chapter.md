@@ -69,7 +69,7 @@ It has two modes:
 
 - Build the returned derivation; its build process will check that internal hyperlinks are correct. This runs in the sandbox, so it will not check external hyperlinks, but it is quick and reliable.
 
-- Invoke the `.online` attribute with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and checks that both internal and external hyperlinks are correct.
+- Invoke the `.online` attribute with [`nix run`](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-run) ([experimental](https://nix.dev/manual/nix/latest/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and checks that both internal and external hyperlinks are correct.
   Example:
 
   ```shell

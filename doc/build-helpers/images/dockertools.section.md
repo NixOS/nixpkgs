@@ -100,7 +100,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   See [](#ex-dockerTools-buildImage-runAsRoot) for how to work with this attribute.
 
   :::{.caution}
-  Using this attribute requires the `kvm` device to be available, see [`system-features`](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-system-features).
+  Using this attribute requires the `kvm` device to be available, see [`system-features`](https://nix.dev/manual/nix/latest/command-ref/conf-file.html#conf-system-features).
   If the `kvm` device isn't available, you should consider using [`buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage) or [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage) instead.
   Those functions allow scripts to be run as root without access to the `kvm` device.
   :::
@@ -438,7 +438,7 @@ This means that `streamLayeredImage` does not output an image into the Nix store
 You can load the result of this function in Docker with `docker image load`.
 See [](#ex-dockerTools-streamLayeredImage-hello) to see how to do that.
 
-For this function, you specify a [store path](https://nixos.org/manual/nix/stable/store/store-path) or a list of store paths to be added to the image, and the functions will automatically include any dependencies of those paths in the image.
+For this function, you specify a [store path](https://nix.dev/manual/nix/latest/store/store-path.html) or a list of store paths to be added to the image, and the functions will automatically include any dependencies of those paths in the image.
 The function will attempt to create one layer per object in the Nix store that needs to be added to the image.
 In case there are more objects to include than available layers, the function will put the most ["popular"](https://github.com/NixOS/nixpkgs/tree/release-23.11/pkgs/build-support/references-by-popularity) objects in their own layers, and group all remaining objects into a single layer.
 
@@ -802,7 +802,7 @@ See [](#ex-dockerTools-pullImage-nixprefetchdocker) for a tool that can help gat
 `sha256` (String)
 
 : The hash of the image after it is downloaded.
-  Internally, this is passed to the [`outputHash`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) attribute of the resulting derivation.
+  Internally, this is passed to the [`outputHash`](https://nix.dev/manual/nix/latest/language/advanced-attributes#adv-attr-outputHash) attribute of the resulting derivation.
   This is needed to provide a guarantee to Nix that the contents of the image haven't changed, because Nix doesn't support the value in `imageDigest`.
 
 `finalImageName` (String; _optional_)
@@ -932,7 +932,7 @@ See [](#ex-dockerTools-exportImage-importingDocker) to understand how to do that
 
 :::{.caution}
 `exportImage` works by unpacking the given image inside a VM.
-Because of this, using this function requires the `kvm` device to be available, see [`system-features`](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-system-features).
+Because of this, using this function requires the `kvm` device to be available, see [`system-features`](https://nix.dev/manual/nix/latest/command-ref/conf-file.html#conf-system-features).
 :::
 
 ### Inputs {#ssec-pkgs-dockerTools-exportImage-inputs}
@@ -1449,7 +1449,7 @@ The environment in the image doesn't match `nix-shell` or `nix-build` exactly, a
 
 : The path to the `bash` binary to use as the shell.
   This shell is started when running the image.
-  This can be seen as an equivalent of the `NIX_BUILD_SHELL` [environment variable](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html#environment-variables) for {manpage}`nix-shell(1)`.
+  This can be seen as an equivalent of the `NIX_BUILD_SHELL` [environment variable](https://nix.dev/manual/nix/latest/command-ref/nix-shell.html#environment-variables) for {manpage}`nix-shell(1)`.
 
   _Default value:_ the `bash` binary from the `bashInteractive` package.
 

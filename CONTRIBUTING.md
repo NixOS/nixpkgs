@@ -52,7 +52,7 @@ This section describes in some detail how changes can be made and proposed with 
 
    To avoid having to download and build potentially many derivations, at the expense of using a potentially outdated version, you can base the branch off a specific [Git commit](https://www.git-scm.com/docs/gitglossary#def_commit) instead:
    - The commit of the latest `nixpkgs-unstable` channel, available [here](https://channels.nixos.org/nixpkgs-unstable/git-revision).
-   - The commit of a local Nixpkgs downloaded using [nix-channel](https://nixos.org/manual/nix/stable/command-ref/nix-channel), available using `nix-instantiate --eval --expr '(import <nixpkgs/lib>).trivial.revisionWithDefault null'`
+   - The commit of a local Nixpkgs downloaded using [nix-channel](https://nix.dev/manual/nix/latest/command-ref/nix-channel), available using `nix-instantiate --eval --expr '(import <nixpkgs/lib>).trivial.revisionWithDefault null'`
    - If you're using NixOS, the commit of your NixOS installation, available with `nixos-version --revision`.
 
    Once you have an appropriate commit you can use it instead of `upstream/master` in the above command:
@@ -132,7 +132,7 @@ When a PR is created, it will be pre-populated with some checkboxes detailed bel
 When sandbox builds are enabled, Nix will set up an isolated environment for each build process.
 It is used to remove further hidden dependencies set by the build environment to improve reproducibility.
 This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store.
-Depending on the operating system, access to other resources is blocked as well (e.g., inter-process communication is isolated on Linux); see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
+Depending on the operating system, access to other resources is blocked as well (e.g., inter-process communication is isolated on Linux); see [sandbox](https://nix.dev/manual/nix/latest/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
 
 In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
 

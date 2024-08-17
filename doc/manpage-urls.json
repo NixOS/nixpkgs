@@ -2,7 +2,7 @@
   "gnunet.conf(5)": "https://docs.gnunet.org/latest/users/configuration.html",
   "mpd(1)": "https://mpd.readthedocs.io/en/latest/mpd.1.html",
   "mpd.conf(5)": "https://mpd.readthedocs.io/en/latest/mpd.conf.5.html",
-  "nix.conf(5)": "https://nixos.org/manual/nix/stable/command-ref/conf-file.html",
+  "nix.conf(5)": "https://nix.dev/manual/nix/latest/command-ref/conf-file.html",
 
   "portals.conf(5)": "https://github.com/flatpak/xdg-desktop-portal/blob/1.18.1/doc/portals.conf.rst.in",
 
@@ -319,7 +319,7 @@
   "group(5)": "https://man.archlinux.org/man/group.5",
   "login.defs(5)": "https://man.archlinux.org/man/login.defs.5",
   "unshare(1)": "https://man.archlinux.org/man/unshare.1.en",
-  "nix-shell(1)": "https://nixos.org/manual/nix/stable/command-ref/nix-shell.html",
+  "nix-shell(1)": "https://nix.dev/manual/nix/latest/command-ref/nix-shell.html",
   "mksquashfs(1)": "https://man.archlinux.org/man/extra/squashfs-tools/mksquashfs.1.en",
   "curl(1)": "https://curl.se/docs/manpage.html",
   "netrc(5)": "https://man.cx/netrc"

@@ -11,7 +11,7 @@
 , curl
 # This test checks that the behavior of autoPatchelfHook is correct whether
 # __structuredAttrs
-# (https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-structuredAttrs)
+# (https://nix.dev/manual/nix/latest/language/advanced-attributes#adv-attr-structuredAttrs)
 # is set or not. Hence __structuredAttrs is provided as a parameter.
 , __structuredAttrs
 }:

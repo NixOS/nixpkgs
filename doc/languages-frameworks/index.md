@@ -8,7 +8,7 @@ Each supported language or software ecosystem has its own package set named `<la
 
   For example, search for [`haskellPackages`](https://search.nixos.org/packages?query=haskellPackages) or [`rubyPackages`](https://search.nixos.org/packages?query=rubyPackages).
 
-- Navigate attribute sets with [`nix repl`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-repl).
+- Navigate attribute sets with [`nix repl`](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl).
 
   This technique is generally useful to inspect Nix language data structures.
 
@@ -26,15 +26,15 @@ Each supported language or software ecosystem has its own package set named `<la
   ```
   :::
 
-- List all derivations on the command line with [`nix-env --query`](https://nixos.org/manual/nix/stable/command-ref/nix-env/query).
+- List all derivations on the command line with [`nix-env --query`](https://nix.dev/manual/nix/latest/command-ref/nix-env/query).
 
-  `nix-env` is the only convenient way to do that, as it will skip attributes that fail [assertions](https://nixos.org/manual/nix/stable/language/constructs#assertions), such as when a package is [marked as broken](#var-meta-broken), rather than failing the entire evaluation.
+  `nix-env` is the only convenient way to do that, as it will skip attributes that fail [assertions](https://nix.dev/manual/nix/latest/language/constructs#assertions), such as when a package is [marked as broken](#var-meta-broken), rather than failing the entire evaluation.
 
   :::{.example #example-list-haskellPackages}
 
   # List all Python packages in Nixpkgs
 
-  The following command lists all [derivations names](https://nixos.org/manual/nix/stable/language/derivations#attr-name) with their attribute path from the latest Nixpkgs rolling release (`nixpkgs-unstable`).
+  The following command lists all [derivations names](https://nix.dev/manual/nix/latest/language/derivations#attr-name) with their attribute path from the latest Nixpkgs rolling release (`nixpkgs-unstable`).
 
   ```shell-session
   $ nix-env -qaP -f '<nixpkgs>' -A pythonPackages -I nixpkgs=channel:nixpkgs-unstable

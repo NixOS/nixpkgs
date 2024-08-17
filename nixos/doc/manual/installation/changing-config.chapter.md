@@ -61,7 +61,7 @@ A repl, or read-eval-print loop, is also available. You can inspect your configu
 # nixos-rebuild repl
 ```
 
-Your configuration is loaded into the `config` variable. Use tab for autocompletion, use the `:r` command to reload the configuration files. See `:?` or [`nix repl` in the Nix manual](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-repl.html) to learn more.
+Your configuration is loaded into the `config` variable. Use tab for autocompletion, use the `:r` command to reload the configuration files. See `:?` or [`nix repl` in the Nix manual](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-repl.html) to learn more.
 
 Finally, you can do
 

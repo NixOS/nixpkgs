@@ -55,7 +55,7 @@ rec {
 
 
   /**
-    Change the [symbolic name of a derivation](https://nixos.org/manual/nix/stable/language/derivations.html#attr-name).
+    Change the [symbolic name of a derivation](https://nix.dev/manual/nix/latest/language/derivations.html#attr-name).
 
     :::{.warning}
     Dependent derivations will be rebuilt when the symbolic name is changed.

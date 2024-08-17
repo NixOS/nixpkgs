@@ -340,7 +340,7 @@ rec {
     This function is strict in the result of the predicate function for each element.
     This function has O(n) complexity.
 
-    Also see [`builtins.filter`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-filter) (available as `lib.lists.filter`),
+    Also see [`builtins.filter`](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-filter) (available as `lib.lists.filter`),
     which can be used instead when the index isn't needed.
 
     # Inputs

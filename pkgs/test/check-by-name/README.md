@@ -27,5 +27,5 @@ Why not just build the tooling right from the PRs Nixpkgs version?
 - Because it allows CI to check all PRs, even if they would break the CI tooling.
 - Because it makes the CI check very fast, since no Nix builds need to be done, even for mass rebuilds.
 - Because it improves security, since we don't have to build potentially untrusted code from PRs.
-  The tool only needs a very minimal Nix evaluation at runtime, which can work with [readonly-mode](https://nixos.org/manual/nix/stable/command-ref/opt-common.html#opt-readonly-mode) and [restrict-eval](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-restrict-eval).
+  The tool only needs a very minimal Nix evaluation at runtime, which can work with [readonly-mode](https://nix.dev/manual/nix/latest/command-ref/opt-common.html#opt-readonly-mode) and [restrict-eval](https://nix.dev/manual/nix/latest/command-ref/conf-file.html#conf-restrict-eval).
 

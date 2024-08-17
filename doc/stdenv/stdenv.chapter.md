@@ -498,7 +498,7 @@ See also the section about [`passthru.tests`](#var-passthru-tests).
 
 ## Phases {#sec-stdenv-phases}
 
-`stdenv.mkDerivation` sets the Nix [derivation](https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
+`stdenv.mkDerivation` sets the Nix [derivation](https://nix.dev/manual/nix/latest/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
 
 This generic command either invokes a script at *buildCommandPath*, or a *buildCommand*, or a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
 

@@ -15,7 +15,7 @@ The Nixpkgs configuration for a NixOS system is set by the {option}`nixpkgs.conf
 
 :::{.note}
 This only allows unfree software in the given NixOS configuration.
-For users invoking Nix commands such as [`nix-build`](https://nixos.org/manual/nix/stable/command-ref/nix-build), Nixpkgs is configured independently.
+For users invoking Nix commands such as [`nix-build`](https://nix.dev/manual/nix/latest/command-ref/nix-build), Nixpkgs is configured independently.
 See the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig) for details.
 :::
 ::::

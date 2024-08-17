@@ -97,7 +97,7 @@ The name of the main binary for the package. This affects the binary `nix run` e
 
 ### `priority` {#var-meta-priority}
 
-The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the [manual page for `nix-env`](https://nixos.org/manual/nix/stable/command-ref/nix-env) for details. Example: `"10"` (a low-priority package).
+The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the [manual page for `nix-env`](https://nix.dev/manual/nix/latest/command-ref/nix-env) for details. Example: `"10"` (a low-priority package).
 
 ### `platforms` {#var-meta-platforms}
 

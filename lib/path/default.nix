@@ -131,7 +131,7 @@ let
   # Type: [ String ] -> Bool
   #
   # Whether path components have a store path as a prefix, according to
-  # https://nixos.org/manual/nix/stable/store/store-path.html#store-path.
+  # https://nix.dev/manual/nix/latest/store/store-path.html#store-path.
   componentsHaveStorePathPrefix = components:
     # path starts with the store directory (typically /nix/store)
     listHasPrefix storeDirComponents components
@@ -151,7 +151,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
     Append a subpath string to a path.
 
     Like `path + ("/" + string)` but safer, because it errors instead of returning potentially surprising results.
-    More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path"),
+    More specifically, it checks that the first argument is a [path value type](https://nix.dev/manual/nix/latest/language/values.html#type-path"),
     and that the second argument is a [valid subpath string](#function-library-lib.path.subpath.isValid).
 
     Laws:
@@ -299,7 +299,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
         joinRelPath components;
 
   /*
-    Split the filesystem root from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
+    Split the filesystem root from a [path](https://nix.dev/manual/nix/latest/language/values.html#type-path).
     The result is an attribute set with these attributes:
     - `root`: The filesystem root of the path, meaning that this directory has no parent directory.
     - `subpath`: The [normalised subpath string](#function-library-lib.path.subpath.normalise) that when [appended](#function-library-lib.path.append) to `root` returns the original path.
@@ -312,7 +312,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
               (splitRoot p).root
               (splitRoot p).subpath
 
-    - Trying to get the parent directory of `root` using [`readDir`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readDir) returns `root` itself:
+    - Trying to get the parent directory of `root` using [`readDir`](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-readDir) returns `root` itself:
 
           dirOf (splitRoot p).root == (splitRoot p).root
 
@@ -347,8 +347,8 @@ in /* No rec! Add dependencies on this file at the top. */ {
     };
 
   /*
-    Whether a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path)
-    has a [store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path)
+    Whether a [path](https://nix.dev/manual/nix/latest/language/values.html#type-path)
+    has a [store path](https://nix.dev/manual/nix/latest/store/store-path.html#store-path)
     as a prefix.
 
     :::{.note}
