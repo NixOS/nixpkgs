@@ -27,8 +27,8 @@
         version = "2024-06-06";
       };
       ungoogled-patches = {
-        hash = "sha256-m1H/7JsSF7Akm5eBlPB/F4mAdFjUPtOQIUoXup09w40=";
-        rev = "127.0.6533.119-1";
+        hash = "sha256-m7x7tPrJfddPER9uiSp983xGn3YSH+Bq01l14vOlwrU=";
+        rev = "127.0.6533.119-2";
       };
     };
     hash = "sha256-LuUDEpYCJLR/X+zjsF26aum4/Wfu2MNowofPu8iRVxI=";
