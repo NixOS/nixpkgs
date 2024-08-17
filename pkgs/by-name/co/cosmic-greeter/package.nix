@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-greeter";
     rev = "epoch-${version}";
     sha256 = "sha256-dc+VV7eIEUKoio/bQieXcDVZCepf4HtQrIKRslym31Y=";
   };
