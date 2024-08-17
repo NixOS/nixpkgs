@@ -67,7 +67,7 @@
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      if output=$(${command} 2>&1); then
+      if output=$(${command} 2>&1 | sed -e 's|${builtins.storeDir}/[^/ ]*/|{{storeDir}}/|g'); then
         if grep -Fw -- "${version}" - <<< "$output"; then
           touch $out
         else
