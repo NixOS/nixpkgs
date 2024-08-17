@@ -50,6 +50,10 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     # See ./doc/hooks/tauri.section.md
     hook = callPackage ./hook.nix { };
+
+    tests = {
+      setupHooks = callPackage ./test-app.nix { };
+    };
   };
 
   meta = {
