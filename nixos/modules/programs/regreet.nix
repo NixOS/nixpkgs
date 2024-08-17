@@ -141,7 +141,7 @@ in
 
     fonts.packages = [ cfg.font.package ];
 
-    programs.regreet.settings = {
+    programs.regreet.settings.GTK = {
       cursor_theme_name = cfg.cursorTheme.name;
       font_name = "${cfg.font.name} ${toString cfg.font.size}";
       icon_theme_name = cfg.iconTheme.name;
