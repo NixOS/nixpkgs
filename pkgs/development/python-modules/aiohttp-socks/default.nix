@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-socks";
-  version = "0.8.4";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "aiohttp_socks";
-    hash = "sha256-a2EdTOg46c8sL+1eDbpEfMhIJKbLqV3FdHYGIB2kbLQ=";
+    hash = "sha256-IhWaGvAmsinP5eoAfgZbs/5WOFqVGoJiOm9FiKZ1gAM=";
   };
 
   nativeBuildInputs = [ setuptools ];
