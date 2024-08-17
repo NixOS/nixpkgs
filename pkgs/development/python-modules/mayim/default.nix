@@ -11,6 +11,7 @@
 
   # test
   pytest-asyncio,
+  pytest-cov-stub,
 
   pytestCheckHook,
 }:
@@ -27,15 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-nb0E9kMEJUihaCp8RnqGh0nSyDQo50eL1C4K5lBPlPQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=src --cov-append --cov-report term-missing" ""
-  '';
 
   passthru.optional-dependencies = {
     postgres = [ psycopg ] ++ psycopg.optional-dependencies.pool;
@@ -47,6 +43,7 @@ buildPythonPackage rec {
     [
       pytestCheckHook
       pytest-asyncio
+      pytest-cov-stub
     ]
     ++ (with passthru.optional-dependencies; [
       postgres
