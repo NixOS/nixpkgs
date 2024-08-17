@@ -270,12 +270,6 @@ let
           '';
         };
       };
-
-      config.assertions = [
-        { assertion = config.imageFile == null || config.imageStream == null;
-          message = "You can only define one of imageFile and imageStream";
-        }
-      ];
     };
 
   isValidLogin = login: login.username != null && login.passwordFile != null && login.registry != null;
@@ -421,6 +415,19 @@ in {
   config = lib.mkIf (cfg.containers != {}) (lib.mkMerge [
     {
       systemd.services = mapAttrs' (n: v: nameValuePair "${cfg.backend}-${n}" (mkService n v)) cfg.containers;
+
+      assertions =
+        let
+          toAssertion = _: { imageFile, imageStream, ... }:
+            { assertion =
+                config.imageFile == null || config.imageStream == null;
+
+              message =
+                "You can only define one of imageFile and imageStream";
+            };
+
+        in
+          lib.mapAttrsToList toAssertion config.virtualisation.oci-containers;
     }
     (lib.mkIf (cfg.backend == "podman") {
       virtualisation.podman.enable = true;
