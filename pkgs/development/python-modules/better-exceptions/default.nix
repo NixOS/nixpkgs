@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonImportsCheck = [ "better-exceptions" ]
+  pythonImportsCheck = [ "better-exceptions" ];
 
   # As noted by @WolfangAukang, some check files need to be disabled because of various errors, same with some tests.
   # After disabling and running the build, no tests are collected.
