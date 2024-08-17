@@ -52,8 +52,6 @@ in
 
           services.displayManager.sessionPackages = [ finalPackage ];
 
-          xdg.icons.enable = true;
-
           xdg.portal = {
             enable = lib.mkDefault true;
             wlr.enable = lib.mkDefault true;
