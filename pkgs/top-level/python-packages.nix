@@ -7067,6 +7067,8 @@ self: super: with self; {
     inherit (pkgs) libvirt;
   };
 
+  lifxlan = callPackage ../development/python-modules/lifxlan { };
+
   libxml2 = (toPythonModule (pkgs.libxml2.override {
     pythonSupport = true;
     inherit python;
