@@ -6,9 +6,11 @@
   makeWrapper,
   setuptools,
   numpy,
-  pytest,
+  distutils,
+  pytestCheckHook,
   mock,
   pytest-mock,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -33,10 +35,12 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     mock
     pytest-mock
-  ];
+  ] ++ lib.optional (pythonAtLeast "3.12") distutils;
+
+  pytestFlagsArray = [ "ipi_tests/unit_tests" ];
 
   postFixup = ''
     wrapProgram $out/bin/i-pi \
