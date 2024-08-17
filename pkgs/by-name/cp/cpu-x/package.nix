@@ -28,6 +28,7 @@
   dbus,
   at-spi2-core,
   libXtst,
+  gtkmm3,
 }:
 
 # Known issues:
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
+    gtkmm3
     ncurses
     libcpuid
     pciutils
