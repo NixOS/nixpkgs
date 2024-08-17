@@ -7866,8 +7866,6 @@ with pkgs;
 
   flintlock = callPackage ../applications/virtualization/flintlock { };
 
-  flip-link = callPackage ../development/tools/flip-link { };
-
   flips = callPackage ../tools/compression/flips { };
 
   flowblade = callPackage ../applications/video/flowblade { };
