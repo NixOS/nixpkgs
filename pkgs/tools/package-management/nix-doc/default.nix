@@ -6,7 +6,7 @@
 , nix
 , pkg-config
 # Whether to build the nix-doc plugin for Nix
-, withPlugin ? true
+, withPlugin ? false # no longer needed for nix 2.24
 }:
 
 let
