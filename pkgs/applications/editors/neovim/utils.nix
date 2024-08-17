@@ -226,23 +226,6 @@ let
       ''
         mkdir -p "$out/parser"
         ln -s "${grammar}/parser" "$out/parser/${name}.so"
-
-        mkdir -p "$out/queries/${name}"
-        if [ -d "${grammar}/queries/${name}" ]; then
-          echo "moving queries from neovim queries dir"
-          for file in "${grammar}/queries/${name}"*; do
-            ln -s "$file" "$out/queries/${name}/$(basename "$file")"
-          done
-        else
-          if [ -d "${grammar}/queries" ]; then
-            echo "moving queries from standard queries dir"
-            for file in "${grammar}/queries/"*; do
-              ln -s "$file" "$out/queries/${name}/$(basename "$file")"
-            done
-          else
-            echo "missing queries for ${name}"
-          fi
-        fi
       '');
 
   /*
