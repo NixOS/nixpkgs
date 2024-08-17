@@ -156,7 +156,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Port of Facebook's LLaMA model in C/C++";
+    description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
     homepage = "https://github.com/ggerganov/llama.cpp/";
     license = licenses.mit;
     mainProgram = "llama";
