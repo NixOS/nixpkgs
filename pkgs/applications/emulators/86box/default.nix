@@ -116,12 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapperArgs+=(--prefix ${libPathVar} : "${libPath}")
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Emulator of x86-based machines based on PCem";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
-    license = with licenses; [ gpl2Only ] ++ optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
-    maintainers = [ maintainers.jchw ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = with lib.licenses; [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
+    maintainers = with lib.maintainers; [ jchw ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
