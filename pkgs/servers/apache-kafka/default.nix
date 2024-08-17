@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps }:
+{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps, nixosTests }:
 
 let
   versionMap = {
@@ -7,12 +7,14 @@ let
       scalaVersion = "2.13";
       sha256 = "sha256-YqyuShQ92YPcfrSATVdEugxQsZm1CPWZ7wAQIOJVj8k=";
       jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.kafka_3_7;
     };
     "3_6" = {
       kafkaVersion = "3.6.2";
       scalaVersion = "2.13";
       sha256 = "sha256-wxfkf3cUHTFG6VY9nLodZIbIHmcLIR7OasRqn3Lkqqw=";
       jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.kafka_3_6;
     };
   };
 
@@ -54,6 +56,7 @@ let
 
     passthru = {
       inherit jre; # Used by the NixOS module to select the supported jre
+      tests.nixos = versionInfo.nixosTest;
     };
 
     meta = with lib; {

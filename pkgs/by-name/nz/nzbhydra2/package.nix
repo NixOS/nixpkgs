@@ -6,6 +6,7 @@
   openjdk17,
   python3,
   unzip,
+  nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
@@ -36,6 +37,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nzbhydra2;
+  };
 
   meta = {
     description = "Usenet meta search";
