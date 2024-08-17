@@ -27,9 +27,7 @@ in
 
   options.xdg.portal = {
     enable =
-      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)'' // {
-        default = false;
-      };
+      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)'';
 
     extraPortals = mkOption {
       type = types.listOf types.package;
