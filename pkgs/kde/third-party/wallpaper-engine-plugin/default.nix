@@ -1,7 +1,6 @@
 {
   extra-cmake-modules,
   fetchFromGitHub,
-  full,
   kpackage,
   libplasma,
   lib,
@@ -10,6 +9,7 @@
   mpv,
   pkg-config,
   python3,
+  qtbase,
 }:
 mkKdeDerivation {
   pname = "wallpaper-engine-kde-plugin";
@@ -32,13 +32,15 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     extra-cmake-modules
-    full
     libplasma
     lz4
     mpv
   ];
 
-  extraCmakeFlags = [ "-DUSE_PLASMAPKG=ON" ];
+  extraCmakeFlags = [
+    "-DQt6_DIR=${qtbase}/lib/cmake/Qt6"
+    "-DUSE_PLASMAPKG=ON"
+  ];
 
   postInstall =
     let
