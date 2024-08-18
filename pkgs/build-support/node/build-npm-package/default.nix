@@ -55,6 +55,8 @@
 , npmBuildHook ? null
   # Custom npmInstallHook
 , npmInstallHook ? null
+  # Custom npmFixupHook
+, npmFixupHook ? null
 , ...
 } @ args:
 
@@ -74,6 +76,7 @@ stdenv.mkDerivation (args // {
       (if npmConfigHook != null then npmConfigHook else npmHooks.npmConfigHook)
       (if npmBuildHook != null then npmBuildHook else npmHooks.npmBuildHook)
       (if npmInstallHook != null then npmInstallHook else npmHooks.npmInstallHook)
+      (if npmFixupHook != null then npmFixupHook else npmHooks.npmFixupHook)
       nodejs.python
     ]
     ++ lib.optionals stdenv.isDarwin [ cctools ];

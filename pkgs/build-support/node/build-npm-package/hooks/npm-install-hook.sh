@@ -43,21 +43,6 @@ npmInstallHook() {
     local -r nodeModulesPath="$packageOut/node_modules"
 
     if [ ! -d "$nodeModulesPath" ]; then
-        if [ -z "${dontNpmPrune-}" ]; then
-            if ! npm prune --omit=dev --no-save ${npmWorkspace+--workspace=$npmWorkspace} $npmPruneFlags "${npmPruneFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
-              echo
-              echo
-              echo "ERROR: npm prune step failed"
-              echo
-              echo 'If npm tried to download additional dependencies above, try setting `dontNpmPrune = true`.'
-              echo
-
-              exit 1
-            fi
-        fi
-
-        find node_modules -maxdepth 1 -type d -empty -delete
-
         cp -r node_modules "$nodeModulesPath"
     fi
 

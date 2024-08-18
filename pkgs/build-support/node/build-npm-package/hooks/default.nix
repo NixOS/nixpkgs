@@ -45,4 +45,12 @@
         jq = "${jq}/bin/jq";
       };
     } ./npm-install-hook.sh;
+
+  npmFixupHook = makeSetupHook
+    {
+      name = "npm-fixup-hook";
+      substitutions = {
+        jq = "${jq}/bin/jq";
+      };
+    } ./npm-fixup-hook.sh;
 }
