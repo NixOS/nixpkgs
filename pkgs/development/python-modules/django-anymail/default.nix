@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-gJrGrezaRY0htS+ouNj1sOBR7jMYvQC1oqn/smzExtc=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     requests
     urllib3
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     responses
-  ] ++ passthru.optional-dependencies.amazon-ses;
+  ] ++ optional-dependencies.amazon-ses;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     amazon-ses = [ boto3 ];
   };
 
