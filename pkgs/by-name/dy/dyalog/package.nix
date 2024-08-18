@@ -51,14 +51,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "19.0.48958";
+  version = "19.0.49960";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
     fetchurl {
       url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/linux_64_${finalAttrs.version}_unicode.x86_64.deb";
-      hash = "sha256-+L9XI7Knt91sG/0E3GFSeqjD9Zs+1n72MDfvsXnr77M=";
+      hash = "sha256-WeIrwF6msiQGS6ltYWn6TN+v+aXK1cbJ1e11B6f0+2A=";
     };
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc";
@@ -143,8 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Register some undeclared runtime dependencies to be patched in by autoPatchelfHook
+  # Note: dyalog.rt is used internally to run child APL processes in
   preFixup = ''
-    patchelf ${dyalogHome}/dyalog --add-needed libncurses.so
+    for exec in "dyalog" "dyalog.rt"; do
+        patchelf ${dyalogHome}/$exec --add-needed libncurses.so
+    done
   ''
   + lib.optionalString htmlRendererSupport ''
     patchelf ${dyalogHome}/libcef.so --add-needed libudev.so --add-needed libGL.so
