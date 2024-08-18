@@ -20,13 +20,13 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-E6QKh4FFr6sLAByU5n6sLppFwPHSKtKffhQ7FfdXAu4=";
 
   nativeBuildInputs = [
+    rustPlatform.bindgenHook
     llvmPackages.clang
     pkg-config
   ];
 
   buildInputs = [ xen-slim ];
 
-  env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postFixup = ''
     patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib
