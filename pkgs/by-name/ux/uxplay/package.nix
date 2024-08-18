@@ -32,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    openssl
-    libplist
     pkg-config
     wrapGAppsHook3
   ];
@@ -47,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+    openssl
+    libplist
   ];
 
   passthru.updateScript = nix-update-script { };
