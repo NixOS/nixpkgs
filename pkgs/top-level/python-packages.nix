@@ -17146,6 +17146,8 @@ self: super: with self; {
 
   usb-devices = callPackage ../development/python-modules/usb-devices { };
 
+  usb-monitor = callPackage ../development/python-modules/usb-monitor { };
+
   usbrelay-py = callPackage ../os-specific/linux/usbrelay/python.nix { };
 
   usbtmc = callPackage ../development/python-modules/usbtmc { };
