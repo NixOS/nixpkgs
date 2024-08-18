@@ -4873,7 +4873,6 @@ broken-packages:
   - quickcheck-property-monad # failure in job https://hydra.nixos.org/build/233228775 at 2023-09-02
   - quickcheck-rematch # failure in job https://hydra.nixos.org/build/233205449 at 2023-09-02
   - quickcheck-report # failure in job https://hydra.nixos.org/build/233214523 at 2023-09-02
-  - quickcheck-state-machine # failure in job https://hydra.nixos.org/build/252730381 at 2024-03-16
   - QuickCheckVariant # failure in job https://hydra.nixos.org/build/233239276 at 2023-09-02
   - quickcheck-webdriver # failure in job https://hydra.nixos.org/build/233228000 at 2023-09-02
   - quickjs-hs # failure in job https://hydra.nixos.org/build/233248440 at 2023-09-02

@@ -3091,4 +3091,14 @@ self: super: {
     safe-coloured-text-terminfo = unmarkBroken self.safe-coloured-text-terminfo_0_3_0_0;
   })));
 
+  quickcheck-state-machine = overrideCabal (drv: {
+    # 2024-08-18: Remove a test which fails to build due to API changes.
+    #   This is fixed in quickcheck-state-machine-0.10.0.
+    postPatch = assert drv.version == "0.8.0"; ''
+      sed -i '/SQLite/d' quickcheck-state-machine.cabal
+      sed -i -e '/import.*SQLite/d' -e 's/\[.*prop_parallel_sqlite/[/' test/Spec.hs
+      ${drv.postPatch or ""}
+     '';
+  }) super.quickcheck-state-machine;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
