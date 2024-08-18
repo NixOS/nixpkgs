@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, stdenv
-, nix-update
-, writeScript
-, git
-, python312
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  stdenv,
+  nix-update,
+  writeScript,
+  git,
+  python312,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,7 +48,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/spade-lang/spade";
     changelog = "https://gitlab.com/spade-lang/spade/-/blob/${src.rev}/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
-    license = with licenses; [ eupl12 asl20 mit ];
+    license = with licenses; [
+      eupl12
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "spade";
   };
