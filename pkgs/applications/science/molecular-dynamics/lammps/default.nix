@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/vim-plugins/lammps $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classical Molecular Dynamics simulation code";
     longDescription = ''
       LAMMPS is a classical molecular dynamics simulation code designed to
@@ -109,13 +109,16 @@ stdenv.mkDerivation (finalAttrs: {
       under the terms of the GNU Public License (GPL).
       '';
     homepage = "https://www.lammps.org";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     # compiling lammps with 64 bit support blas and lapack might cause runtime
     # segfaults. In anycase both blas and lapack should have the same #bits
     # support.
     broken = (blas.isILP64 && lapack.isILP64);
-    maintainers = [ maintainers.costrouc maintainers.doronbehar ];
+    maintainers = with lib.maintainers; [
+      costrouc
+      doronbehar
+    ];
     mainProgram = "lmp";
   };
 })
