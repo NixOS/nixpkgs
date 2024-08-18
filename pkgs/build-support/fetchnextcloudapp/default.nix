@@ -4,7 +4,7 @@
 , sha256 ? ""
 , appName ? null
 , appVersion ? null
-, license
+, licenses
 , patches ? [ ]
 , description ? null
 , homepage ? null
@@ -15,7 +15,7 @@ applyPatches ({
   src = (if unpack then fetchzip else fetchurl) {
     inherit url hash sha256;
     meta = {
-      license = lib.licenses.${license};
+      license = map (license: lib.licenses.${license}) licenses;
       longDescription = description;
       inherit homepage;
     } // lib.optionalAttrs (description != null) {
