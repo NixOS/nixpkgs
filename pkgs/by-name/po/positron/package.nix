@@ -1,8 +1,10 @@
 {
   stdenv,
   lib,
+  autoPatchelfHook,
   dpkg,
-  fetchurl,
+  pkgs,
+  fetchurl
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +23,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-8LckYQ++uv8fOHOBLaPAJfcJM0/Fc6YMKhAsXHFI/nY=";
   };
 
-  nativeBuildInputs = [ dpkg ];
+  buildInputs = with pkgs; [
+    stdenv.cc.cc
+    libkrb5 xorg.libX11
+    xorg.libxkbfile
+    xorg.libXcomposite
+    xorg.libXdamage
+    libxkbcommon
+    libdrm
+    gtk3
+    nss
+    mesa
+    alsa-lib
+    musl
+    expat
+    pango
+    cairo
+    openssl
+    xorg.libXfixes
+    xorg.libXrandr
+  ];
+
+  nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
   unpackPhase = "
     runHook preUnpack
