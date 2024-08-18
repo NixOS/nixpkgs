@@ -13,8 +13,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.120.0";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
@@ -92,6 +90,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     filelock
     flaky
+    jaraco-text
     parameterized
     psutil
     pytest-timeout
