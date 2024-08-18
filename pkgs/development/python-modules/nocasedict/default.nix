@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "nocasedict";
-  version = "2.0.3";
+  version = "2.0.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HJImx/WoqXrVHcsK4xV6cg4/fLnEVo0i6joF4/hWWKk=";
+    hash = "sha256-TKk09l31exDQ/KtfDDnp3MuTV3/58ivvmCZd2/EvivE=";
   };
 
   propagatedBuildInputs = [ six ];
