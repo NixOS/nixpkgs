@@ -6,6 +6,7 @@
 , libgtop
 , gtk4
 , libadwaita
+, pango
 , pcre2
 , vte-gtk4
 , desktop-file-utils
@@ -18,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  version = "46.0";
+  version = "47.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-FhnOcBdzssDJA3GPVHaMGS6lB0UU1VoXdKkslyMdbD4=";
+    hash = "sha256-4BEW9fRrHBjku++V5l2295culA9T1AmibBxhTW36zrE=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     libgtop
     gtk4
     libadwaita
+    pango
     pcre2
     vte-gtk4
   ];
