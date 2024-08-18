@@ -4,6 +4,7 @@
 , python3
 , cargo
 , git
+, ps
 , uv
 }:
 
@@ -50,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest-mock
     pytest-xdist
     setuptools
-  ]);
+  ]) ++ lib.optionals stdenv.isDarwin [ ps ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
