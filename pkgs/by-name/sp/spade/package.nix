@@ -5,6 +5,7 @@
 , nix-update
 , writeScript
 , git
+, python312
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,6 +40,8 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
+  env.NIX_CFLAGS_LINK = lib.optionals stdenv.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
+
   meta = with lib; {
     description = "Better hardware description language";
     homepage = "https://gitlab.com/spade-lang/spade";
@@ -47,6 +50,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ eupl12 asl20 mit ];
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "spade";
-    broken = stdenv.isDarwin; # ld: symbol(s) not found for architecture ${system}
   };
 }
