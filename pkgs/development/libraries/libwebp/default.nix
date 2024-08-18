@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
-  libtool,
+  cmake,
   threadingSupport ? true, # multi-threading
   openglSupport ? false,
   libglut,
@@ -17,12 +16,8 @@
   libtiff, # TIFF image format
   gifSupport ? true,
   giflib, # GIF image format
-  alignedSupport ? false, # Force aligned memory operations
   swap16bitcspSupport ? false, # Byte swap for 16bit color spaces
-  experimentalSupport ? false, # Experimental code
   libwebpmuxSupport ? true, # Build libwebpmux
-  libwebpdemuxSupport ? true, # Build libwebpdemux
-  libwebpdecoderSupport ? true, # Build libwebpdecoder
 
   # for passthru.tests
   gd,
@@ -47,25 +42,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-OR/VzKNn3mnwjf+G+RkEGAaaKrhVlAu1e2oTRwdsPj8=";
   };
 
-  configureFlags = [
-    (lib.enableFeature threadingSupport "threading")
-    (lib.enableFeature openglSupport "gl")
-    (lib.enableFeature pngSupport "png")
-    (lib.enableFeature jpegSupport "jpeg")
-    (lib.enableFeature tiffSupport "tiff")
-    (lib.enableFeature gifSupport "gif")
-    (lib.enableFeature alignedSupport "aligned")
-    (lib.enableFeature swap16bitcspSupport "swap-16bit-csp")
-    (lib.enableFeature experimentalSupport "experimental")
-    (lib.enableFeature libwebpmuxSupport "libwebpmux")
-    (lib.enableFeature libwebpdemuxSupport "libwebpdemux")
-    (lib.enableFeature libwebpdecoderSupport "libwebpdecoder")
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeBool "WEBP_USE_THREAD" threadingSupport)
+    (lib.cmakeBool "WEBP_BUILD_VWEBP" openglSupport)
+    (lib.cmakeBool "WEBP_BUILD_IMG2WEBP" (pngSupport || jpegSupport || tiffSupport))
+    (lib.cmakeBool "WEBP_BUILD_GIF2WEBP" gifSupport)
+    (lib.cmakeBool "WEBP_BUILD_ANIM_UTILS" false) # Not installed
+    (lib.cmakeBool "WEBP_BUILD_EXTRAS" false) # Not installed
+    (lib.cmakeBool "WEBP_ENABLE_SWAP_16BIT_CSP" swap16bitcspSupport)
+    (lib.cmakeBool "WEBP_BUILD_LIBWEBPMUX" libwebpmuxSupport)
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    libtool
-  ];
+  nativeBuildInputs = [ cmake ];
   buildInputs =
     [ ]
     ++ lib.optionals openglSupport [
@@ -77,8 +66,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals jpegSupport [ libjpeg ]
     ++ lib.optionals tiffSupport [ libtiff ]
     ++ lib.optionals gifSupport [ giflib ];
-
-  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit
