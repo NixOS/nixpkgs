@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libusb1
     gcc.cc.lib
     nlohmann_json
-  ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
     ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
 
@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [
