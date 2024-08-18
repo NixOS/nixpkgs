@@ -4883,7 +4883,6 @@ broken-packages:
   - quickset # failure in job https://hydra.nixos.org/build/233236904 at 2023-09-02
   - Quickson # failure in job https://hydra.nixos.org/build/233195101 at 2023-09-02
   - quickson # failure in job https://hydra.nixos.org/build/233216697 at 2023-09-02
-  - quickspec # failure in job https://hydra.nixos.org/build/233196573 at 2023-09-02
   - quickwebapp # failure in job https://hydra.nixos.org/build/233208251 at 2023-09-02
   - quipper-core # failure in job https://hydra.nixos.org/build/233200962 at 2023-09-02
   - quiver # failure in job https://hydra.nixos.org/build/233230395 at 2023-09-02
