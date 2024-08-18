@@ -43,6 +43,27 @@
       substitutions = {
         hostNode = "${nodejs}/bin/node";
         jq = "${jq}/bin/jq";
+        prunePart = /* bash */ ''
+          if [ -z "''${dontNpmPrune-}" ]; then
+              if ! npm prune \
+                --omit=dev \
+                --no-save \
+                ''${npmWorkspace+--workspace=$npmWorkspace} \
+                $npmPruneFlags \
+                "''${npmPruneFlagsArray[@]}" \
+                $npmFlags \
+                "''${npmFlagsArray[@]}"; then
+                echo
+                echo
+                echo "ERROR: npm prune step failed"
+                echo
+                echo 'If npm tried to download additional dependencies above, try setting `dontNpmPrune = true`.'
+                echo
+
+                exit 1
+              fi
+          fi
+        '';
       };
     } ./npm-install-hook.sh;
 }
