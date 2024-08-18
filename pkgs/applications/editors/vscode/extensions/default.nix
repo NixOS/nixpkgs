@@ -3106,6 +3106,8 @@ let
         };
       };
 
+      mongodb.mongodb-vscode = callPackage ./mongodb.mongodb-vscode { };
+
       moshfeu.compare-folders = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "compare-folders";
@@ -4832,8 +4834,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.44";
-          hash = "sha256-lumK7gcj/NIhiZKT6F++ZsTFKWw7ZVaKZgIsQvZAGs4=";
+          version = "0.0.52";
+          hash = "sha256-zFtu3AYnDxb/aMtkpiaItQtwLpynTVbSRGuqKv3SueM=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
