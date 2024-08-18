@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     target=${name}.desktop
     cp ${package}/share/applications/${srcPrefix}${name}.desktop $target
     ${lib.optionalString (prependExtraArgs != [] || appendExtraArgs != []) ''
-      sed -i -r "s/(Exec=)([^ ]*) (.*)/\1\2 ${prependArgs}\3${appendArgs}/" $target
+      sed -i -r "s/(Exec=)([^ \n]*) *(.*)/\1\2 ${prependArgs}\3${appendArgs}/" $target
     ''}
     chmod +rw $target
     echo "X-KDE-autostart-phase=${phase}" >> $target
