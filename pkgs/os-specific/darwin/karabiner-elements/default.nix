@@ -56,11 +56,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
-    description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Sierra (10.12) or later";
+  meta = {
+    changelog = "https://github.com/pqrs-org/Karabiner-Elements/releases/tag/v${version}";
+    description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Ventura (13) or later";
     homepage = "https://karabiner-elements.pqrs.org/";
-    platforms = platforms.darwin;
+    license = lib.licenses.unlicense;
     maintainers = [ ];
-    license = licenses.unlicense;
+    platforms = lib.platforms.darwin;
   };
 }
