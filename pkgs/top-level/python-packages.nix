@@ -15152,6 +15152,8 @@ self: super: with self; {
 
   strct = callPackage ../development/python-modules/strct { };
 
+  streamcontroller-plugin-tools = callPackage ../development/python-modules/streamcontroller-plugin-tools { };
+
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
