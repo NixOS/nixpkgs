@@ -540,10 +540,10 @@
         "src": {
             "owner": "libretro",
             "repo": "mupen64plus-libretro-nx",
-            "rev": "c7cd8edcd015ddcbd4a2e984573c9c1d1ddd0b6e",
-            "hash": "sha256-QSGPfl29darzo5p8TiJbSMvezYkfRxon/XiObh5PULY="
+            "rev": "af797557b0e6d339d047b43f73d0ade021da1637",
+            "hash": "sha256-P/AqgijQ8rHTMM3X/9ZjDG5/1NGS51dZYlLy4cEYbng="
         },
-        "version": "unstable-2024-07-19"
+        "version": "unstable-2024-08-13"
     },
     "neocd": {
         "fetcher": "fetchFromGitHub",
