@@ -4911,6 +4911,8 @@ self: super: with self; {
 
   geopandas = callPackage ../development/python-modules/geopandas { };
 
+  geoparquet = callPackage  ../development/python-modules/geoparquet { };
+
   geopy = callPackage ../development/python-modules/geopy { };
 
   georss-client = callPackage ../development/python-modules/georss-client { };
@@ -12555,6 +12557,8 @@ self: super: with self; {
   pytest-describe = callPackage ../development/python-modules/pytest-describe { };
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
+
+  pytest-docker-tools = callPackage ../development/python-modules/pytest-docker-tools { };
 
   pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
 

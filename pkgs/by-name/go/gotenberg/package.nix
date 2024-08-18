@@ -12,6 +12,7 @@
   makeFontsConf,
   liberation_ttf_v2,
   exiftool,
+  nixosTests,
   nix-update-script,
 }:
 let
@@ -81,6 +82,9 @@ buildGoModule rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests) gotenberg;
+  };
 
   meta = {
     description = "Converts numerous document formats into PDF files";

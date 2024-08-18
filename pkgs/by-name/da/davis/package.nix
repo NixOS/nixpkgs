@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   php,
+  nixosTests,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -24,6 +25,10 @@ php.buildComposerProject (finalAttrs: {
     mv $out/share/php/${finalAttrs.pname}/.env $out/env-upstream
     rm -rf "$out/share"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) davis;
+  };
 
   meta = {
     changelog = "https://github.com/tchapi/davis/releases/tag/v${finalAttrs.version}";

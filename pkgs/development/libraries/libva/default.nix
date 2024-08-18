@@ -38,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
 
+  env = lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") {
+    NIX_LDFLAGS = "--undefined-version";
+  } // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+    NIX_CFLAGS_COMPILE = "-DHAVE_SECURE_GETENV";
+  };
+
   passthru.tests = {
     # other drivers depending on libva and selected application users.
     # Please get a confirmation from the maintainer before adding more applications.
@@ -66,8 +72,4 @@ stdenv.mkDerivation (finalAttrs: {
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-} // lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") {
-  NIX_LDFLAGS = "--undefined-version";
-} // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
-  NIX_CFLAGS_COMPILE = "-DHAVE_SECURE_GETENV";
 })
