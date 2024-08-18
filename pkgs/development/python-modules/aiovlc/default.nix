@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiovlc";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiovlc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wUtoL3e22ufyzB7MJH0EuxE4WyxKQXEgThAOw23AwLM=";
+    hash = "sha256-6oAnij92lR/sbU80j4WIBCvScPvoVLTMRYlT5zHnVnk=";
   };
 
   build-system = [ poetry-core ];
