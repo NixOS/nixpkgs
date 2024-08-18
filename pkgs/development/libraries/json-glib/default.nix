@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+, docutils
 , glib
 , meson
+, mesonEmulatorHook
 , ninja
 , nixosTests
 , pkg-config
@@ -18,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.8.0";
+  version = "1.9.2";
 
   outputs = [ "out" "dev" "installedTests" ]
     ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "l+9euSyoEQOa1Qpl8GYz8armR5J4kwe+cXB5XYsxlFQ=";
+    sha256 = "j58E4ARb2oKv/UZO5XV5ZgD+KQFLgXOSo7cs6y0QxZU=";
   };
 
   patches = [
@@ -40,6 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
     meson
     ninja
     pkg-config
@@ -51,6 +54,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
     gi-docgen
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   propagatedBuildInputs = [
@@ -60,17 +65,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
     (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "gtk_doc" withIntrospection)
+    (lib.mesonEnable "documentation" withIntrospection)
   ];
-
-  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
-  # it should be a build-time dep for build
-  # TODO: send upstream
-  postPatch = ''
-    substituteInPlace doc/meson.build \
-      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
-  '';
 
   doCheck = true;
 
