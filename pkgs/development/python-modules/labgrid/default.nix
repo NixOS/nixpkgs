@@ -89,7 +89,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Embedded control & testing library";
-    homepage = "https://labgrid.org";
+    homepage = "https://github.com/labgrid-project/labgrid";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
