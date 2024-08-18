@@ -8,6 +8,7 @@
 , findutils
 , systemd
 , python3
+, nixosTests
 # makes the package unfree via pynvml
 , withAtopgpu ? false
 }:
@@ -78,6 +79,8 @@ stdenv.mkDerivation rec {
   '' else ''
     rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
   '');
+
+  passthru.tests = { inherit (nixosTests) atop; };
 
   meta = with lib; {
     platforms = platforms.linux;

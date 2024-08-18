@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , go
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -31,6 +32,8 @@ buildGoModule rec {
 
   # Tests are broken.
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) trickster; };
 
   meta = with lib; {
     description = "Reverse proxy cache and time series dashboard accelerator";
