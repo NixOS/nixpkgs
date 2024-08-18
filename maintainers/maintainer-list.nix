@@ -10097,6 +10097,12 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  jovandeginste = {
+    email = "jo.vandeginste@gmail.com";
+    github = "jovandeginste";
+    githubId = 3170771;
+    name = "Jo Vandeginste";
+  };
   jpagex = {
     name = "Jérémy Pagé";
     email = "contact@jeremypage.me";
