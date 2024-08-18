@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage {
   });
 
   nativeBuildInputs = [
-    cargo-tauri
+    cargo-tauri.hook
     desktop-file-utils
     pnpm_8
     nodejs
@@ -100,14 +100,6 @@ rustPlatform.buildRustPackage {
     );
 
   env = {
-    tauriBundle =
-      {
-        Linux = "deb";
-        Darwin = "app";
-      }
-      .${stdenv.hostPlatform.uname.system}
-      or (builtins.throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
-
     ESBUILD_BINARY_PATH = lib.getExe (
       esbuild.override {
         buildGoModule = args: buildGoModule (args // rec {
@@ -137,26 +129,12 @@ rustPlatform.buildRustPackage {
     popd
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    cargo tauri build --bundles "$tauriBundle"
-
-    runHook postBuild
-  '';
-
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out"/bin
-      cp -r target/release/bundle/macos "$out"/Applications
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       mv "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App "$out"/bin/modrinth-app
       ln -s "$out"/bin/modrinth-app "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp -r target/release/bundle/"$tauriBundle"/*/data/usr "$out"
       desktop-file-edit \
         --set-comment "Modrinth's game launcher" \
         --set-key="StartupNotify" --set-value="true" \
@@ -164,9 +142,6 @@ rustPlatform.buildRustPackage {
         --set-key="Keywords" --set-value="game;minecraft;mc;" \
         --set-key="StartupWMClass" --set-value="ModrinthApp" \
         $out/share/applications/modrinth-app.desktop
-    ''
-    + ''
-      runHook postInstall
     '';
 
   passthru = {
