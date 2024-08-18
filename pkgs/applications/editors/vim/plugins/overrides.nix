@@ -1467,6 +1467,10 @@
     dependencies = [ self.skim ];
   };
 
+  smart-open-nvim = super.smart-open-nvim.overrideAttrs {
+    dependencies = with self; [ telescope-nvim sqlite-lua ];
+  };
+
   sniprun =
     let
       version = "1.3.15";

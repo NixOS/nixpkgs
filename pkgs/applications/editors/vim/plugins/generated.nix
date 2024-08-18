@@ -10135,6 +10135,18 @@ final: prev:
     meta.homepage = "https://github.com/kovisoft/slimv/";
   };
 
+  smart-open-nvim = buildVimPlugin {
+    pname = "smart-open.nvim";
+    version = "2024-08-17";
+    src = fetchFromGitHub {
+      owner = "danielfalk";
+      repo = "smart-open.nvim";
+      rev = "87626ee8748b9bba22093adec7bb58c63e7214f0";
+      sha256 = "sha256-ro4qFdEAnE5u8wt7NyIc7OHobvjRotVX+LZ0P5as8EU=";
+    };
+    meta.homepage = "https://github.com/danielfalk/smart-open.nvim/";
+  };
+
   smart-splits-nvim = buildVimPlugin {
     pname = "smart-splits.nvim";
     version = "2024-08-02";
