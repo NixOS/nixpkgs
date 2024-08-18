@@ -8,7 +8,6 @@
   lib,
   mock,
   openssh,
-  packaging,
   pexpect,
   psutil,
   pyserial,
@@ -21,13 +20,13 @@
   requests,
   setuptools,
   setuptools-scm,
-  wheel,
   xmodem,
 }:
 
 buildPythonPackage rec {
   pname = "labgrid";
   version = "24.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
@@ -36,20 +35,16 @@ buildPythonPackage rec {
     hash = "sha256-XlndAmLkDjb4S2BD85noTMJCeqa5srZocjgg1x6Ry/g=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  pyproject = true;
-
-  propagatedBuildInputs = [
+  dependencies = [
     ansicolors
     attrs
     autobahn
     jinja2
-    packaging
     pexpect
     pyserial
     pyudev
@@ -59,19 +54,9 @@ buildPythonPackage rec {
     xmodem
   ];
 
-  pythonRelaxDeps = [
-    "attrs"
-    "autobahn"
-    "jinja2"
-    "packaging"
-    "pexpect"
-    "pytest"
-    "pyudev"
-    "requests"
-    "xmodem"
-  ];
-
   pythonRemoveDeps = [ "pyserial-labgrid" ];
+
+  pythonImportsCheck = [ "labgrid" ];
 
   nativeCheckInputs = [
     mock
