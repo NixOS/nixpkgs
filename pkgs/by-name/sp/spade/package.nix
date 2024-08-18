@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ python312 ];
   env.NIX_CFLAGS_LINK = lib.optionals stdenv.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
 
   meta = with lib; {
