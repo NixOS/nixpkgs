@@ -115,7 +115,7 @@ in
       type = lib.types.enum [ "default" "locked" "user" "clear" ];
       default = "locked";
       description = ''
-        The status of `firefox.preferences`.
+        The status of {option}`programs.firefox.preferences`.
 
         `status` can assume the following values:
         - `"default"`: Preferences appear as default.
