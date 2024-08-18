@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -82,12 +87,8 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "lubelogger") {
-      lubelogger = { };
-    };
+    users.groups = mkIf (cfg.group == "lubelogger") { lubelogger = { }; };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 }
