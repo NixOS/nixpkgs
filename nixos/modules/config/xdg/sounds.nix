@@ -9,7 +9,7 @@ with lib;
   options = {
     xdg.sounds.enable = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether to install files to support the
         [XDG Sound Theme specification](https://www.freedesktop.org/wiki/Specifications/sound-theme-spec/).

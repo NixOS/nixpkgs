@@ -19,8 +19,6 @@
     xwayland.enable = lib.mkDefault enableXWayland;
   };
 
-  xdg.icons.enable = true;
-
   xdg.portal.wlr.enable = enableWlrPortal;
 
   # Window manager only sessions (unlike DEs) don't handle XDG
