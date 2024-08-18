@@ -4,15 +4,15 @@
 , lzmaSupport ? false
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "erofs-utils";
-  version = "1.8.1";
+  version = "1.7.1";
   outputs = [ "out" "man" ];
 
   src = fetchurl {
     url =
-      "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/erofs-utils-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Xb97SS92gkYrl6dxIdQ8p2Cc2Q5l+MlpMa78ggpvDaM=";
+      "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/erofs-utils-${version}.tar.gz";
+    hash = "sha256-GWCD1j5eIx+1eZ586GqUS7ylZNqrzj3pIlqKyp3K/xU=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ ehmry nikstur ];
     platforms = platforms.unix;
   };
-})
+}
