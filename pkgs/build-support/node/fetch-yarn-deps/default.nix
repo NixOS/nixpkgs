@@ -13,6 +13,9 @@
   cacert,
   callPackage,
   nix,
+  installShellFiles,
+  jq,
+  nodejs,
 }:
 
 let
@@ -175,4 +178,46 @@ in
       description = "Run yarn build in buildPhase";
     };
   } ./yarn-build-hook.sh;
+
+  yarnInstallHook = makeSetupHook {
+    name = "yarn-install-hook";
+    propagatedBuildInputs = [
+      installShellFiles
+      makeWrapper
+    ];
+    substitutions = {
+      hostNode = "${nodejs}/bin/node";
+      jq = "${jq}/bin/jq";
+      prunePart = ''
+        if [ -z "''${yarnKeepDevDeps-}" ]; then
+            # Yarn has a 'prune' command, but it's only a stub that instructs
+            # you to use `yarn install`. The goal of this prunePart is to
+            # remove the development dependencies from the resulted
+            # node_modules directory. Running yarn install here (again - after
+            # we ran it inyarnConfigHook), with the --production=true flag,
+            # should do the same thing.
+            if ! yarn install \
+                --frozen-lockfile \
+                --force \
+                --production=true \
+                --ignore-engines \
+                --ignore-platform \
+                --ignore-scripts \
+                --no-progress \
+                --non-interactive \
+                --offline
+            then
+              echo
+              echo
+              echo "ERROR: yarn install --production=true step failed"
+              echo
+              echo 'If yarn tried to download additional dependencies above, try setting `yarnKeepDevDeps = true`.'
+              echo
+
+              exit 1
+            fi
+        fi
+      '';
+    };
+  } ../build-npm-package/hooks/npm-install-hook.sh;
 }
