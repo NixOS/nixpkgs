@@ -45,9 +45,13 @@ rec {
 
   php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
 
+  inherit (lib) mkOptionType;
+  inherit (lib.types) nullOr oneOf coercedTo listOf nonEmptyListOf attrsOf either;
+  inherit (lib.types) bool int float str path;
+
   json = {}: {
 
-    type = with lib.types; let
+    type = let
       valueType = nullOr (oneOf [
         bool
         int
@@ -83,7 +87,7 @@ rec {
       json2yaml "$valuePath" "$out"
     '') {};
 
-    type = with lib.types; let
+    type = let
       valueType = nullOr (oneOf [
         bool
         int
@@ -102,10 +106,10 @@ rec {
   # the ini formats share a lot of code
   inherit (
     let
-      singleIniAtom = with lib.types; nullOr (oneOf [ bool int float str ]) // {
+      singleIniAtom = nullOr (oneOf [ bool int float str ]) // {
         description = "INI atom (null, bool, int, float or string)";
       };
-      iniAtom = with lib.types; { listsAsDuplicateKeys, listToValue }:
+      iniAtom = { listsAsDuplicateKeys, listToValue }:
         if listsAsDuplicateKeys then
           coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
@@ -116,7 +120,7 @@ rec {
           }
         else
           singleIniAtom;
-      iniSection = with lib.types; { listsAsDuplicateKeys, listToValue }@args:
+      iniSection = { listsAsDuplicateKeys, listToValue }@args:
         attrsOf (iniAtom args) // {
           description = "section of an INI file (attrs of " + (iniAtom args).description + ")";
         };
@@ -183,7 +187,7 @@ rec {
             listsAsDuplicateKeys = listsAsDuplicateKeys;
             listToValue = null;
           };
-        in with lib.types; attrsOf (attrsOf (either atom (attrsOf atom)));
+        in attrsOf (attrsOf (either atom (attrsOf atom)));
 
         generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
       };
@@ -215,7 +219,7 @@ rec {
     assert listsAsDuplicateKeys -> listToValue == null;
     {
 
-    type = with lib.types; let
+    type = let
 
       singleAtom = nullOr (oneOf [
         bool
@@ -254,7 +258,7 @@ rec {
   };
 
   toml = {}: json {} // {
-    type = with lib.types; let
+    type = let
       valueType = oneOf [
         bool
         int
@@ -312,18 +316,18 @@ rec {
     [Tuple]: <https://hexdocs.pm/elixir/Tuple.html>
   */
   elixirConf = { elixir ? pkgs.elixir }:
-    with lib; let
-      toElixir = value: with builtins;
+    let
+      toElixir = value:
         if value == null then "nil" else
         if value == true then "true" else
         if value == false then "false" else
-        if isInt value || isFloat value then toString value else
-        if isString value then string value else
-        if isAttrs value then attrs value else
-        if isList value then list value else
+        if lib.isInt value || lib.isFloat value then toString value else
+        if lib.isString value then string value else
+        if lib.isAttrs value then attrs value else
+        if lib.isList value then list value else
         abort "formats.elixirConf: should never happen (value = ${value})";
 
-      escapeElixir = escape [ "\\" "#" "\"" ];
+      escapeElixir = lib.escape [ "\\" "#" "\"" ];
       string = value: "\"${escapeElixir value}\"";
 
       attrs = set:
@@ -331,11 +335,11 @@ rec {
         else
           let
             toKeyword = name: value: "${name}: ${toElixir value}";
-            keywordList = concatStringsSep ", " (mapAttrsToList toKeyword set);
+            keywordList = lib.concatStringsSep ", " (lib.mapAttrsToList toKeyword set);
           in
           "[" + keywordList + "]";
 
-      listContent = values: concatStringsSep ", " (map toElixir values);
+      listContent = values: lib.concatStringsSep ", " (map toElixir values);
 
       list = values: "[" + (listContent values) + "]";
 
@@ -349,7 +353,7 @@ rec {
       elixirMap = set:
         let
           toEntry = name: value: "${toElixir name} => ${toElixir value}";
-          entries = concatStringsSep ", " (mapAttrsToList toEntry set);
+          entries = lib.concatStringsSep ", " (lib.mapAttrsToList toEntry set);
         in
         "%{${entries}}";
 
@@ -359,17 +363,17 @@ rec {
         let
           keyConfig = rootKey: key: value:
             "config ${rootKey}, ${key}, ${toElixir value}";
-          keyConfigs = rootKey: values: mapAttrsToList (keyConfig rootKey) values;
-          rootConfigs = flatten (mapAttrsToList keyConfigs values);
+          keyConfigs = rootKey: values: lib.mapAttrsToList (keyConfig rootKey) values;
+          rootConfigs = lib.flatten (lib.mapAttrsToList keyConfigs values);
         in
         ''
           import Config
 
-          ${concatStringsSep "\n" rootConfigs}
+          ${lib.concatStringsSep "\n" rootConfigs}
         '';
     in
     {
-      type = with lib.types; let
+      type = let
         valueType = nullOr
           (oneOf [
             bool
@@ -429,7 +433,7 @@ rec {
              It also reexports standard types, wrapping them so that they can
              also be raw Elixir.
           */
-          types = with lib.types; let
+          types = let
             isElixirType = type: x: (x._elixirType or "") == type;
 
             rawElixir = mkOptionType {
@@ -480,7 +484,7 @@ rec {
   # Outputs a succession of Python variable assignments
   # Useful for many Django-based services
   pythonVars = {}: {
-    type = with lib.types; let
+    type = let
       valueType = nullOr(oneOf [
         bool
         float

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline gettext ncurses ];
 
-  env.NIX_CFLAGS_COMPILE = with lib; toString ((optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString ((lib.optionals stdenv.cc.isGNU [
     # Needed with GCC 8
     "-Wno-error=int-in-bool-context"
     "-Wno-error=class-memaccess"
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=nonnull"
     "-Wno-error=stringop-overflow"
     "-Wno-error=use-after-free"
-   ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
+   ]) ++ lib.optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
