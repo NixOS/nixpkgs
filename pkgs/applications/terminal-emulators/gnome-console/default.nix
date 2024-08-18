@@ -6,6 +6,7 @@
 , libgtop
 , gtk4
 , libadwaita
+, pango
 , pcre2
 , vte-gtk4
 , desktop-file-utils
@@ -18,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  version = "46.0";
+  version = "47.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-FhnOcBdzssDJA3GPVHaMGS6lB0UU1VoXdKkslyMdbD4=";
+    hash = "sha256-4BEW9fRrHBjku++V5l2295culA9T1AmibBxhTW36zrE=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +39,16 @@ stdenv.mkDerivation rec {
     libgtop
     gtk4
     libadwaita
+    pango
     pcre2
     vte-gtk4
   ];
+
+  preFixup = ''
+    # FIXME: properly address https://github.com/NixOS/nixpkgs/pull/333911#issuecomment-2362710334
+    # and https://gitlab.gnome.org/GNOME/console/-/commit/c81801c82f186f20
+    gappsWrapperArgs+=(--set "TERM" "xterm-256color")
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
