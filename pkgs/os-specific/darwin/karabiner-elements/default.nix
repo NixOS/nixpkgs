@@ -5,6 +5,7 @@
   cpio,
   xar,
   undmg,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/pqrs-org/Karabiner-Elements/releases/tag/v${version}";
