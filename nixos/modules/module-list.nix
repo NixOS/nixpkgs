@@ -310,6 +310,7 @@
   ./programs/wayland/miracle-wm.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
+  ./programs/wayland/uwsm.nix
   ./programs/wayland/waybar.nix
   ./programs/wayland/wayfire.nix
   ./programs/weylus.nix
