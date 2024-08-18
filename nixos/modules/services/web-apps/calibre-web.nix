@@ -32,9 +32,9 @@ in
 
       dataDir = mkOption {
         type = types.str;
-        default = "calibre-web";
+        default = "/var/lib/calibre-web";
         description = ''
-          The directory below {file}`/var/lib` where Calibre-Web stores its data.
+          The directory where Calibre-Web stores its data.
         '';
       };
 
@@ -108,8 +108,8 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.calibre-web = let
-      appDb = "/var/lib/${cfg.dataDir}/app.db";
-      gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
+      appDb = "${cfg.dataDir}/app.db";
+      gdriveDb = "${cfg.dataDir}/gdrive.db";
       calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
       settings = concatStringsSep ", " (
