@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/QDiskInfo \
-      --prefix PATH : ${smartmontools}/bin
+      --suffix PATH : ${smartmontools}/bin
   '';
 
   meta = {
