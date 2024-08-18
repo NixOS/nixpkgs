@@ -6,26 +6,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.1.8";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     rev = "refs/tags/${version}";
-    hash = "sha256-2ssbczUa4pTA5Fai+sK1hES8skJMIHxa/R2hNIiEVLs=";
+    hash = "sha256-Ekh31MXqxY6iSyQRX0YZ0Tl7DFhYqGtOepYS/VObZc0=";
   };
 
   postPatch = ''
     # Remove code coverage checking
     substituteInPlace pyproject.toml \
-      --replace "--cov --cov-report=xml" ""
+      --replace-fail "--cov --cov-report=xml" ""
   '';
 
   pythonRelaxDeps = true;
 
   build-system = with python3.pkgs; [ setuptools ];
-
 
   dependencies =
     with python3.pkgs;
@@ -41,10 +40,12 @@ python3.pkgs.buildPythonApplication rec {
       httpcore
       httpx
       httpx-ntlm
+      humanize
       loguru
       mako
       markupsafe
       mitmproxy
+      prance
       pyasn1
       six
       sqlalchemy
@@ -52,7 +53,8 @@ python3.pkgs.buildPythonApplication rec {
       yaswfp
     ]
     ++ httpx.optional-dependencies.brotli
-    ++ httpx.optional-dependencies.socks;
+    ++ httpx.optional-dependencies.socks
+    ++ prance.optional-dependencies.osv;
 
   __darwinAllowLocalNetworking = true;
 
@@ -103,6 +105,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_save_and_restore_state"
     "test_script"
     "test_ssrf"
+    "test_swagger_parser"
     "test_tag_name_escape"
     "test_timeout"
     "test_title_false_positive"
@@ -124,6 +127,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_cookies"
     "test_fallback_to_html_injection"
     "test_loknop_lfi_to_rce"
+    "test_open_redirect"
     "test_redirect"
     "test_timesql"
     "test_xss_inside_href_link"
