@@ -84,6 +84,7 @@ in
           DNS server address. The first match of an IPv4 regex is used.
           IPv4 only, because let's be real, it's a captive portal.
         '';
+        defaultText = "(if configured, asks NetworkManager, dhcpd, systemd-networkd; uses udhcpc otherwise)";
       };
 
       socks5-addr = mkOption {
@@ -114,6 +115,7 @@ in
       captive-browser-configured
     ];
 
+    # documented as default above
     programs.captive-browser.dhcp-dns =
       let
         iface = prefixes:
