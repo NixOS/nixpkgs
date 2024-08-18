@@ -37,7 +37,11 @@ rustPlatform.buildRustPackage rec {
   postPatch = let
     cinny' =
       assert lib.assertMsg (cinny.version == version) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
-      cinny;
+      cinny.override {
+        conf = {
+          hashRouter.enabled = true;
+        };
+      };
   in ''
     substituteInPlace tauri.conf.json \
       --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
