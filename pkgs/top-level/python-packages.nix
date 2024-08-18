@@ -11474,6 +11474,8 @@ self: super: with self; {
 
   pyfume = callPackage ../development/python-modules/pyfume { };
 
+  pyfunctional = callPackage ../development/python-modules/pyfunctional { };
+
   pyfuse3 = callPackage ../development/python-modules/pyfuse3 { };
 
   pyfwup = callPackage ../development/python-modules/pyfwup {

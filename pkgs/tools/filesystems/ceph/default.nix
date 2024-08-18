@@ -138,11 +138,11 @@ let
     none = [ ];
   };
 
-  getMeta = description: with lib; {
+  getMeta = description: {
      homepage = "https://ceph.io/en/";
      inherit description;
-     license = with licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
-     maintainers = with maintainers; [ adev ak johanot krav ];
+     license = with lib.licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
+     maintainers = with lib.maintainers; [ adev ak johanot krav ];
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 

@@ -4,7 +4,7 @@
 , majorVersion ? null
 }:
 
-let allVersions = with lib; flip map
+let allVersions = lib.flip map
   # N.B. Versions in this list should be ordered from newest to oldest.
   [
     {

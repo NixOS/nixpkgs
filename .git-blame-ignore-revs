@@ -162,3 +162,6 @@ fc7a83f8b62e90de5679e993d4d49ca014ea013d
 
 # darwin.stdenv: format with nixfmt-rfc-style (#333962)
 93c10ac9e561c6594d3baaeaff2341907390d9b8
+
+# nrr: format with nixfmt-rfc-style (#334578)
+cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
