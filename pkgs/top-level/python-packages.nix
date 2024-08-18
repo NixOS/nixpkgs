@@ -6766,6 +6766,8 @@ self: super: with self; {
 
   langgraph = callPackage ../development/python-modules/langgraph { };
 
+  langgraph-checkpoint-sqlite = callPackage ../development/python-modules/langgraph-checkpoint-sqlite { };
+
   langgraph-cli = callPackage ../development/python-modules/langgraph-cli { };
 
   langgraph-sdk = callPackage ../development/python-modules/langgraph-sdk { };
