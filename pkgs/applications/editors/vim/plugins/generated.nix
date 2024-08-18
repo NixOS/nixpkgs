@@ -4917,6 +4917,18 @@ final: prev:
     meta.homepage = "https://github.com/3rd/image.nvim/";
   };
 
+  img-clip-nvim = buildVimPlugin {
+    pname = "img-clip.nvim";
+    version = "2024-06-05";
+    src = fetchFromGitHub {
+      owner = "HakonHarnes";
+      repo = "img-clip.nvim";
+      rev = "1924e20ab19afec9779109d083b6e5f8bee8fb17";
+      sha256 = "0q4bv6bca8bhkc98gc4lmlp3b2nrh6bj7yyb99bk3lnccr0jmj6g";
+    };
+    meta.homepage = "https://github.com/HakonHarnes/img-clip.nvim/";
+  };
+
   impatient-nvim = buildVimPlugin {
     pname = "impatient.nvim";
     version = "2023-05-05";
