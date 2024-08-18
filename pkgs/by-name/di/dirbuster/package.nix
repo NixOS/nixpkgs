@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r lib/ $out/share/java/lib/
 
     # Copy wordlists
-    mkdir -p $out/share/{dirbuster,wordlists}
+    mkdir -p $out/share/wordlists/
     for f in *.txt; do
-      cp $f $out/share/dirbuster/
       cp $f $out/share/wordlists/
     done
+    ln -s $out/share/wordlists/ $out/share/dirbuster
 
     # Extract embedded desktop icon
     mkdir -p $out/share/pixmaps
