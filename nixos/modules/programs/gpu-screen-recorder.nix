@@ -34,6 +34,8 @@ in {
       capabilities = "cap_sys_nice+ep";
       source = "${package}/bin/gpu-screen-recorder";
     };
+
+    environment.etc."modprobe.d/gsr-nvidia.conf".source = "${package}/lib/modprobe.d/gsr-nvidia.conf";
   };
 
   meta.maintainers = with lib.maintainers; [ timschumi ];

@@ -1,0 +1,34 @@
+From 884edb24a7b1b5c9e1614f042ff2c66bed1b5cbc Mon Sep 17 00:00:00 2001
+From: Tim Schumacher <timschumi@gmx.de>
+Date: Thu, 4 Jul 2024 16:26:36 +0200
+Subject: [PATCH] Don't install files using absolute paths
+
+Also, move gsr-nvidia.conf to /lib/modprobe.d, which is the intended
+location for installed packages.
+---
+ meson.build | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index f1c93da..dcf1313 100644
+--- a/meson.build
++++ b/meson.build
+@@ -72,7 +72,7 @@ executable('gsr-kms-server', 'kms/server/kms_server.c', dependencies : dependenc
+ executable('gpu-screen-recorder', src, dependencies : dep, install : true)
+ 
+ if get_option('systemd') == true
+-    install_data(files('extra/gpu-screen-recorder.service'), install_dir : '/usr/lib/systemd/user')
++    install_data(files('extra/gpu-screen-recorder.service'), install_dir : 'lib/systemd/user')
+ endif
+ 
+ if get_option('capabilities') == true
+@@ -80,5 +80,5 @@ if get_option('capabilities') == true
+ endif
+ 
+ if get_option('nvidia_suspend_fix') == true
+-    install_data(files('extra/gsr-nvidia.conf'), install_dir : '/etc/modprobe.d')
++    install_data(files('extra/gsr-nvidia.conf'), install_dir : 'lib/modprobe.d')
+ endif
+-- 
+2.45.2
+
