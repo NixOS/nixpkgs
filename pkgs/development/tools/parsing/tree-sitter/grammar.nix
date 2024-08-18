@@ -52,7 +52,7 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
     mkdir $out
-    mv parser $out/
+    mv parser $out/parser.so
     if [[ -d queries ]]; then
       cp -r queries $out
     fi
