@@ -27,10 +27,18 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ xen-slim ];
 
+  postInstall =
+    # Install the sample systemd service.
+    ''
+      mkdir --parents $out/lib/systemd/system
+      cp $src/startup/xen-guest-agent.service $out/lib/systemd/system
+      substituteInPlace $out/lib/systemd/system/xen-guest-agent.service \
+        --replace-fail "/usr/sbin/xen-guest-agent" "$out/bin/xen-guest-agent"
+    '';
 
-  postFixup = ''
-    patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib
-  '';
+  postFixup =
+    # Add the Xen libraries in the runpath so the guest agent can find libxenstore.
+    "patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib";
 
   meta = {
     description = "Xen agent running in Linux/BSDs (POSIX) VMs";
