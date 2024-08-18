@@ -4,6 +4,7 @@
   fetchPypi,
   libGL,
   libX11,
+  setuptools,
   glcontext,
   pythonOlder,
 }:
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "moderngl";
   version = "5.11.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,12 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-rEVNXqhDHy9/DJXijaIEPb0wNTjChH/uBXA55AfdGRE=";
   };
 
+  build-system = [ setuptools ];
+
   buildInputs = [
     libGL
     libX11
   ];
 
-  propagatedBuildInputs = [ glcontext ];
+  dependencies = [ glcontext ];
 
   # Tests need a display to run.
   doCheck = false;
