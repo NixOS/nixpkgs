@@ -1,11 +1,12 @@
-{ lib
-, python3
-, fetchFromGitHub
-, git
-, testers
-, aws-sam-cli
-, nix-update-script
-, enableTelemetry ? false
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  git,
+  testers,
+  aws-sam-cli,
+  nix-update-script,
+  enableTelemetry ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,9 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-XFVh7e9ooIBhWRkVovPdrSuyosBMQ84PDRjV2o0x9ns=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   pythonRelaxDeps = [
     "aws-lambda-builders"
@@ -41,44 +40,47 @@ python3.pkgs.buildPythonApplication rec {
     "watchdog"
   ];
 
-  dependencies = with python3.pkgs; [
-    aws-lambda-builders
-    aws-sam-translator
-    boto3
-    boto3-stubs
-    cfn-lint
-    chevron
-    click
-    cookiecutter
-    dateparser
-    docker
-    flask
-    jsonschema
-    pyopenssl
-    pyyaml
-    requests
-    rich
-    ruamel-yaml
-    tomlkit
-    typing-extensions
-    tzlocal
-    watchdog
-  ] ++ (with python3.pkgs.boto3-stubs.optional-dependencies; [
-    apigateway
-    cloudformation
-    ecr
-    iam
-    kinesis
-    lambda
-    s3
-    schemas
-    secretsmanager
-    signer
-    sqs
-    stepfunctions
-    sts
-    xray
-  ]);
+  dependencies =
+    with python3.pkgs;
+    [
+      aws-lambda-builders
+      aws-sam-translator
+      boto3
+      boto3-stubs
+      cfn-lint
+      chevron
+      click
+      cookiecutter
+      dateparser
+      docker
+      flask
+      jsonschema
+      pyopenssl
+      pyyaml
+      requests
+      rich
+      ruamel-yaml
+      tomlkit
+      typing-extensions
+      tzlocal
+      watchdog
+    ]
+    ++ (with python3.pkgs.boto3-stubs.optional-dependencies; [
+      apigateway
+      cloudformation
+      ecr
+      iam
+      kinesis
+      lambda
+      s3
+      schemas
+      secretsmanager
+      signer
+      sqs
+      stepfunctions
+      sts
+      xray
+    ]);
 
   postFixup = ''
     # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
@@ -132,9 +134,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_import_should_succeed_for_a_defined_hidden_package_540_pkg_resources_py2_warn"
   ];
 
-  pythonImportsCheck = [
-    "samcli"
-  ];
+  pythonImportsCheck = [ "samcli" ];
 
   passthru = {
     tests.version = testers.testVersion {
@@ -142,7 +142,10 @@ python3.pkgs.buildPythonApplication rec {
       command = "sam --version";
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "^v([0-9.]+)$" ];
+      extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
+      ];
     };
   };
 
@@ -154,6 +157,9 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "sam";
-    maintainers = with maintainers; [ lo1tuma anthonyroussel ];
+    maintainers = with maintainers; [
+      lo1tuma
+      anthonyroussel
+    ];
   };
 }
