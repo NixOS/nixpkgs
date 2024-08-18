@@ -70,6 +70,7 @@
 , withGsm ? withFullDeps # GSM de/encoder
 , withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
+, withIlbc ? withFullDeps # iLBC de/encoding
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
@@ -257,6 +258,7 @@
 , libGL
 , libGLU
 , libiconv
+, libilbc
 , libjack2
 , libjxl
 , libmodplug
@@ -592,6 +594,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withHarfbuzz "libharfbuzz")
   ] ++ [
     (enableFeature withIconv "iconv")
+    (enableFeature withIlbc "libilbc")
     (enableFeature withJack "libjack")
   ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
     (enableFeature withJxl "libjxl")
@@ -750,6 +753,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withGsm [ gsm ]
   ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
+  ++ optionals withIlbc [ libilbc ]
   ++ optionals withJack [ libjack2 ]
   ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
