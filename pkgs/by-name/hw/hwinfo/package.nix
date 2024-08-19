@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "lex isdn_cdb.lex" "flex isdn_cdb.lex"
     substituteInPlace hwinfo.pc.in \
       --replace-fail "prefix=/usr" "prefix=$out"
+    substituteInPlace src/isdn/cdb/cdb_hwdb.h \
+      --replace-fail "/usr/share" "$out/share"
 
     # replace absolute paths with relative, we will prefix PATH later
     substituteInPlace src/hd/hd_int.h \
