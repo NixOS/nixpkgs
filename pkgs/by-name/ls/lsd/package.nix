@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = lsd; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lsd-rs/lsd";
     description = "Next gen ls command";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       zowoq
       SuperSandro2000
     ];
