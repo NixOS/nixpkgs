@@ -1,19 +1,25 @@
-{ lib, mkDerivation, backintime-common, python3, polkit, which, su, coreutils, util-linux }:
+{ lib, stdenv, backintime-common, python3, polkit, which, su, coreutils, util-linux,
+wrapQtAppsHook, qtbase, qtwayland }:
 
 let
-  python' = python3.withPackages (ps: with ps; [ pyqt5 backintime-common packaging ]);
+  python' = python3.withPackages (ps: with ps; [ pyqt6 backintime-common packaging ]);
 in
-mkDerivation {
+stdenv.mkDerivation {
   inherit (backintime-common)
-    version src installFlags meta dontAddPrefix nativeBuildInputs;
+    version src installFlags meta dontAddPrefix;
 
   pname = "backintime-qt";
 
-  buildInputs = [ python' backintime-common ];
+  buildInputs = [ python' backintime-common qtbase qtwayland ];
+
+  nativeBuildInputs = backintime-common.nativeBuildInputs or [ ] ++ [
+    wrapQtAppsHook
+  ];
 
   configureFlags = [ "--python=${lib.getExe python'}" ];
 
   preConfigure = ''
+    patchShebangs --build updateversion.sh
     cd qt
     substituteInPlace qttools_path.py \
       --replace "__file__, os.pardir, os.pardir" '"${backintime-common}/${python'.sitePackages}/backintime"'

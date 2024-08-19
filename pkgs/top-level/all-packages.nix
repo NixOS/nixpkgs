@@ -29415,7 +29415,7 @@ with pkgs;
 
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
-  backintime-qt = libsForQt5.callPackage ../applications/networking/sync/backintime/qt.nix { };
+  backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
 
   backintime = backintime-qt;
 
