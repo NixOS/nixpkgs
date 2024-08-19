@@ -8,6 +8,7 @@
   perl,
   kmod,
   systemdMinimal,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installFlags = [ "DESTDIR=$(out)" ];
+
+  passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
     description = "Hardware detection tool from openSUSE";
