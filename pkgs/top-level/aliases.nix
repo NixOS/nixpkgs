@@ -718,7 +718,7 @@ mapAliases ({
   keepassx = throw "KeePassX is no longer actively developed. Please consider KeePassXC as a maintained alternative."; # Added 2023-02-17
   keepassx2 = throw "KeePassX is no longer actively developed. Please consider KeePassXC as a maintained alternative."; # Added 2023-02-17
   keepkey_agent = keepkey-agent; # added 2024-01-06
-  kerberos = libkrb5; # moved from top-level 2021-03-14
+  kerberos = krb5; # moved from top-level 2021-03-14
   kexectools = kexec-tools; # Added 2021-09-03
   keysmith = libsForQt5.kdeGear.keysmith; # Added 2021-07-14
   kfctl = throw "kfctl is broken and has been archived by upstream"; # Added 2023-08-21
