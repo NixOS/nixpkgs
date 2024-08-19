@@ -1,11 +1,11 @@
 # builder for Emacs packages built for packages.el
 # using MELPA package-build.el
 
-{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
+{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText }:
 
 let
   handledArgs = [ "meta" "preUnpack" "postUnpack" ];
-  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
+  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText; };
 
   packageBuild = stdenv.mkDerivation {
     name = "package-build";

@@ -11,6 +11,7 @@
   cython,
   setuptools,
   # install_requires
+  aiohappyeyeballs,
   attrs,
   multidict,
   async-timeout,
@@ -22,6 +23,7 @@
   # tests_require
   freezegun,
   gunicorn,
+  proxy-py,
   pytest-mock,
   pytest7CheckHook,
   python-on-whales,
@@ -31,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.9.5";
+  version = "3.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +42,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FRtirmwgU8v+ee3db7rOFsmy0rNW8A7+yRZC5d6uYNA=";
+    hash = "sha256-jetgFHFD9l2hW7FWbGESM6Tqeav+2rM8C2TCV0bPJwU=";
   };
 
   patches = [
@@ -69,6 +71,7 @@ buildPythonPackage rec {
   '';
 
   dependencies = [
+    aiohappyeyeballs
     attrs
     multidict
     async-timeout
@@ -85,20 +88,16 @@ buildPythonPackage rec {
   '';
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
-  nativeCheckInputs =
-    [
-      freezegun
-      gunicorn
-      pytest-mock
-      pytest7CheckHook
-      python-on-whales
-      re-assert
-    ]
-    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
-      # Optional test dependency. Depends indirectly on pyopenssl, which is
-      # broken on aarch64-darwin.
-      trustme
-    ];
+  nativeCheckInputs = [
+    freezegun
+    gunicorn
+    proxy-py
+    pytest-mock
+    pytest7CheckHook
+    python-on-whales
+    re-assert
+    trustme
+  ];
 
   disabledTests =
     [
@@ -115,17 +114,15 @@ buildPythonPackage rec {
       "test_close"
     ];
 
-  disabledTestPaths = [
-    "tests/test_proxy_functional.py" # FIXME package proxy.py
-  ];
-
   __darwinAllowLocalNetworking = true;
 
-  # aiohttp in current folder shadows installed version
   preCheck =
     ''
+      # aiohttp in current folder shadows installed version
       rm -r aiohttp
       touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
+
+      export HOME=$(mktemp -d)
     ''
     + lib.optionalString stdenv.isDarwin ''
       # Work around "OSError: AF_UNIX path too long"

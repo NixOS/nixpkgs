@@ -14,10 +14,7 @@
 
 let
 
-  sweetExec = with lib;
-    m: "sweethome3d-"
-    + removeSuffix "libraryeditor" (toLower m)
-    + "-editor";
+  sweetExec = m: "sweethome3d-" + lib.removeSuffix "libraryeditor" (lib.toLower m) + "-editor";
 
   mkEditorProject =
   { pname, module, version, src, license, description, desktopName }:

@@ -63,6 +63,8 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
     "-W"
     "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
   ];
 
   pythonImportsCheck = [ "starlette" ];

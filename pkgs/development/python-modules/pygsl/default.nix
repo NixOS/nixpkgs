@@ -20,6 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-7agGgfDUgY6mRry7d38vGGNLJC4dFUniy2M/cnejDDs=";
   };
 
+  # error: no member named 'n' in 'gsl_bspline_workspace'
+  postPatch = lib.optionalString (lib.versionAtLeast gsl.version "2.8") ''
+    substituteInPlace src/bspline/bspline.ic \
+      --replace-fail "self->w->n" "self->w->ncontrol"
+    substituteInPlace swig_src/bspline_wrap.c \
+      --replace-fail "self->w->n;" "self->w->ncontrol;"
+  '';
+
   nativeBuildInputs = [
     gsl.dev
     swig

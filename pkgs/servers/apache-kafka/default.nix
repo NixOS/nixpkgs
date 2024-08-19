@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps }:
+{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps, nixosTests }:
 
 let
   versionMap = {
@@ -7,26 +7,28 @@ let
       scalaVersion = "2.13";
       sha256 = "sha256-YqyuShQ92YPcfrSATVdEugxQsZm1CPWZ7wAQIOJVj8k=";
       jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.kafka_3_7;
     };
     "3_6" = {
       kafkaVersion = "3.6.2";
       scalaVersion = "2.13";
       sha256 = "sha256-wxfkf3cUHTFG6VY9nLodZIbIHmcLIR7OasRqn3Lkqqw=";
       jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.kafka_3_6;
     };
   };
 
-  build = versionInfo: with versionInfo; stdenv.mkDerivation rec {
-    version = "${scalaVersion}-${kafkaVersion}";
+  build = versionInfo: stdenv.mkDerivation rec {
+    version = "${versionInfo.scalaVersion}-${versionInfo.kafkaVersion}";
     pname = "apache-kafka";
 
     src = fetchurl {
-      url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";
-      inherit sha256;
+      url = "mirror://apache/kafka/${versionInfo.kafkaVersion}/kafka_${version}.tgz";
+      inherit (versionInfo) sha256;
     };
 
     nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ jre bash gnugrep gnused coreutils ps ];
+    buildInputs = [ versionInfo.jre bash gnugrep gnused coreutils ps ];
 
     installPhase = ''
       mkdir -p $out
@@ -45,7 +47,7 @@ let
 
       for p in $out/bin\/*.sh; do
         wrapProgram $p \
-          --set JAVA_HOME "${jre}" \
+          --set JAVA_HOME "${versionInfo.jre}" \
           --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
           --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
       done
@@ -53,18 +55,19 @@ let
     '';
 
     passthru = {
-      inherit jre; # Used by the NixOS module to select the supported jre
+      inherit (versionInfo) jre; # Used by the NixOS module to select the supported JRE
+      tests.nixos = versionInfo.nixosTest;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://kafka.apache.org";
       description = "High-throughput distributed messaging system";
-      license = licenses.asl20;
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      maintainers = [ maintainers.ragge ];
-      platforms = platforms.unix;
+      license = lib.licenses.asl20;
+      sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+      maintainers = [ lib.maintainers.ragge ];
+      platforms = lib.platforms.unix;
     };
   };
-in with lib; mapAttrs'
-  (majorVersion: versionInfo: nameValuePair "apacheKafka_${majorVersion}" (build versionInfo))
+in lib.mapAttrs'
+  (majorVersion: versionInfo: lib.nameValuePair "apacheKafka_${majorVersion}" (build versionInfo))
   versionMap

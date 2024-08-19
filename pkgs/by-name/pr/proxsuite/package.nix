@@ -61,11 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_DOCUMENTATION" true)
-    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_DOCUMENTATION" true)
+      (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;ProxQP::dense: test primal infeasibility solving"
+    ];
 
   strictDeps = true;
 

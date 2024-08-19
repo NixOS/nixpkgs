@@ -1,13 +1,15 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
+  cssselect,
   fetchFromGitHub,
+  html5lib,
   lxml,
+  pdm-backend,
   pyright,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  setuptools-scm,
   typeguard,
   types-beautifulsoup4,
   typing-extensions,
@@ -15,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2024.02.09";
+  version = "2024.08.07";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,20 +26,20 @@ buildPythonPackage rec {
     owner = "abelcheung";
     repo = "types-lxml";
     rev = "refs/tags/${version}";
-    hash = "sha256-vmRbzfwlGGxd64KX8j4B3O9c7kg7hXSsCEYq3WAFdmk=";
+    hash = "sha256-odllaOqqVGI/k84cro5YXkhDlUx+BRSe5WWwYWXhCY0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    cssselect
     types-beautifulsoup4
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    beautifulsoup4
+    html5lib
     lxml
     pyright
     pytestCheckHook

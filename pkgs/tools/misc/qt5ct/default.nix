@@ -26,7 +26,7 @@ mkDerivation rec {
     homepage = "https://sourceforge.net/projects/qt5ct/";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ralith ];
+    maintainers = [ ];
     mainProgram = "qt5ct";
   };
 }

@@ -1,14 +1,10 @@
-{ config, lib, extendModules, noUserModules, ... }:
+{ config, lib, pkgs, extendModules, noUserModules, ... }:
 
 let
   inherit (lib)
-    attrNames
     concatStringsSep
-    filter
-    length
     mapAttrs
     mapAttrsToList
-    match
     mkOption
     types
     ;
@@ -77,19 +73,6 @@ in
   };
 
   config = {
-    assertions = [(
-      let
-        invalidNames = filter (name: match "[[:alnum:]_]+" name == null) (attrNames config.specialisation);
-      in
-      {
-        assertion = length invalidNames == 0;
-        message = ''
-          Specialisation names can only contain alphanumeric characters and underscores
-          Invalid specialisation names: ${concatStringsSep ", " invalidNames}
-        '';
-      }
-    )];
-
     system.systemBuilderCommands = ''
       mkdir $out/specialisation
       ${concatStringsSep "\n"
