@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154,SC2086
+# shellcheck shell=bash
 
 # shellcheck disable=SC2034
 readonly zigDefaultFlagsArray=(@zig_default_flags@)
@@ -53,6 +53,7 @@ function zigInstallPhase {
     runHook postInstall
 }
 
+# shellcheck disable=SC2154
 addEnvHooks "$targetOffset" zigSetGlobalCacheDir
 
 if [ -z "${dontUseZigBuild-}" ] && [ -z "${buildPhase-}" ]; then
