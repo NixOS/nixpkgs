@@ -24295,6 +24295,8 @@ with pkgs;
 
   xlslib = callPackage ../development/libraries/xlslib { };
 
+  xtensa-esp-elf-gdb = callPackage ../by-name/es/esp-idf/xtensa-esp-elf-gdb.nix { };
+
   xtensor = callPackage ../development/libraries/xtensor { };
 
   xtl = callPackage ../development/libraries/xtl { };
