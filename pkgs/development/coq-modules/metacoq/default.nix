@@ -1,6 +1,6 @@
-{ lib, fetchzip,
+{ lib,
   mkCoqDerivation, single ? false,
-  coqPackages, coq, equations, version ? null }@args:
+  coq, equations, version ? null }@args:
 
 let
   repo  = "metacoq";

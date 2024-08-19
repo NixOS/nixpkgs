@@ -19,7 +19,7 @@ let
   stateDir = "/var/lib/mediawiki";
 
   # https://www.mediawiki.org/wiki/Compatibility
-  php = pkgs.php81;
+  php = pkgs.php82;
 
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";

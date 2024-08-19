@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Standards-compliant Python build backend to package Odoo addons";
     homepage = "https://github.com/sbidoul/whool";
-    changelog = "https://github.com/sbidoul/whool/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sbidoul/whool/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.yajo ];
   };

@@ -78,6 +78,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
@@ -101,11 +102,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "273";
+  version = "275";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-TccR/Vxq6Zf9tEvknLWewPVvJqo8pVSIi1+KxKMASq4=";
+    hash = "sha256-mVbCsOPR0gm+93AG2p/W/TIOZItHSTOs40Q9uTiokEY=";
   };
 
   outputs = [
@@ -270,8 +271,6 @@ python.pkgs.buildPythonApplication rec {
 
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
-      # Fails ever since an update to imagemagick
-      "test_has_visuals"
     ]
     ++ lib.optionals stdenv.isDarwin [
       # Disable flaky tests on Darwin

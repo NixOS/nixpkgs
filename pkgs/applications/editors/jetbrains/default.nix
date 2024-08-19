@@ -100,6 +100,8 @@ in
 rec {
   # Sorted alphabetically
 
+  aqua = mkJetBrainsProduct { pname = "aqua"; extraBuildInputs = [ stdenv.cc.cc lldb ]; };
+
   clion = (mkJetBrainsProduct {
     pname = "clion";
     extraBuildInputs = lib.optionals (stdenv.isLinux) [

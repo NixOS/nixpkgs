@@ -1,61 +1,48 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
-  wheel,
-
-  # propagates
   aiofiles,
+  aioquic,
+  beautifulsoup4,
+  buildPythonPackage,
+  doCheck ? !stdenv.isDarwin, # on Darwin, tests fail but pkg still works
+  fetchFromGitHub,
+  gunicorn,
   html5tagger,
   httptools,
   multidict,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
   sanic-routing,
+  sanic-testing,
+  setuptools,
   tracerite,
   typing-extensions,
   ujson,
+  uvicorn,
   uvloop,
   websockets,
-
-  # optionals
-  aioquic,
-
-  # tests
-  doCheck ? !stdenv.isDarwin, # on Darwin, tests fail but pkg still works
-
-  beautifulsoup4,
-  gunicorn,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  sanic-testing,
-  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "23.12.1";
-  format = "pyproject";
+  version = "24.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
-    repo = pname;
+    repo = "sanic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TizjibqoLNMX0m5oPyncKgFnltXOLZUIPSzVIeKU25w=";
+    hash = "sha256-AviYqdr+r5ya4mFJKGUatBsaMMmCQGqE3YtDJwTuaY0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     httptools
     html5tagger
@@ -115,16 +102,19 @@ buildPythonPackage rec {
       # Server mode mismatch (debug vs production)
       "test_num_workers"
       # Racy tests
+      "test_custom_cert_loader"
       "test_keep_alive_client_timeout"
       "test_keep_alive_server_timeout"
+      "test_logger_vhosts"
+      "test_ssl_in_multiprocess_mode"
       "test_zero_downtime"
       # sanic.exceptions.SanicException: Cannot setup Sanic Simple Server without a path to a directory
       "test_load_app_simple"
-      # create defunct python processes
+      # Tests create defunct Python processes
       "test_reloader_live"
       "test_reloader_live_with_dir"
       "test_reload_listeners"
-      # crash the python interpreter
+      # Tests crash the Python interpreter
       "test_host_port_localhost"
       "test_host_port"
       "test_server_run"
@@ -156,7 +146,7 @@ buildPythonPackage rec {
     "test_multiprocessing.py"
   ];
 
-  # avoid usage of nixpkgs-review in darwin since tests will compete usage
+  # Avoid usage of nixpkgs-review in darwin since tests will compete usage
   # for the same local port
   __darwinAllowLocalNetworking = true;
 
@@ -164,10 +154,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Web server and web framework";
-    mainProgram = "sanic";
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
+    mainProgram = "sanic";
   };
 }

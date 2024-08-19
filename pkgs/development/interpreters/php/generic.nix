@@ -313,7 +313,11 @@ let
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
-          patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+          patches = lib.optionals (lib.versionOlder version "8.4")  [
+            ./fix-paths-php7.patch
+          ] ++ lib.optionals (lib.versionAtLeast version "8.4") [
+            ./fix-paths-php84.patch
+          ] ++ extraPatches;
 
           separateDebugInfo = true;
 

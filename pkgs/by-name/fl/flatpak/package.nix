@@ -54,11 +54,12 @@
   xorg,
   xz,
   zstd,
+  withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.14.8";
+  version = "1.14.10";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EBa3Mn96+HiW+VRl9+WBN1DTtwSaN0ChpN3LX6jFNI4=";
+    hash = "sha256-a73HkIEnNQrYWkpH1wKSyi9MRul3sysf0jHCpxnYIc0=";
   };
 
   patches = [
@@ -147,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libcap
     libseccomp
+    libxml2
     xz
     zstd
     polkit
@@ -157,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
-  ];
+  ] ++ lib.optionals withGtkDoc [ gtk-doc ];
 
   # Required by flatpak.pc
   propagatedBuildInputs = [
@@ -169,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # TODO: some issues with temporary files
   doCheck = false;
+  strictDeps = true;
 
   NIX_LDFLAGS = "-lpthread";
 
@@ -182,8 +185,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-profile-dir=${placeholder "out"}/etc/profile.d"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--enable-gtk-doc"
+    "--enable-gtk-doc=${if withGtkDoc then "yes" else "no"}"
     "--enable-installed-tests"
+    "--enable-selinux-module=no"
   ];
 
   makeFlags = [
@@ -193,12 +197,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      vsc-py = python3.withPackages (pp: [ pp.pyparsing ]);
+      vsc-py = python3.pythonOnBuildForHost.withPackages (pp: [ pp.pyparsing ]);
     in
     ''
       patchShebangs buildutil
       patchShebangs tests
       PATH=${lib.makeBinPath [ vsc-py ]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+
+      substituteInPlace configure.ac \
+        --replace-fail '$BWRAP --version' 'echo ${bubblewrap.version}' \
+        --replace-fail '$DBUS_PROXY --version' 'echo ${xdg-dbus-proxy.version}'
     '';
 
   passthru = {

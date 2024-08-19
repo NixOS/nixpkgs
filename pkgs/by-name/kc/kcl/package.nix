@@ -11,16 +11,16 @@
 }:
 buildGoModule rec {
   pname = "kcl";
-  version = "0.9.3";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-QUVTRlzG8hT+iQx5dSycbRDAyeknjwGOWynCRw3oxlo=";
+    hash = "sha256-s8pFnItmw3+l9GKqdqX0Rxsy47h6vO+yUtVNCuyn/m8=";
   };
 
-  vendorHash = "sha256-AP1MOlnoTnD7luNR+1QtAdMiJL8tEEwJocT+9wBRgAo=";
+  vendorHash = "sha256-DGYYH5sKhpcWHYoUim4NyflzqsXFc4MCOqIw5jIfIiM=";
 
   # By default, libs and bins are stripped. KCL will crash on darwin if they are.
   dontStrip = stdenv.isDarwin;

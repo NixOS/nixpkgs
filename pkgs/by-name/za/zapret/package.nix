@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation {
   pname = "zapret";
-  version = "0-unstable-2024-07-16";
+  version = "0-unstable-2024-08-01";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
-    rev = "9fcd8f830ebde2491719a5c698e22d1d5210e0fb";
+    rev = "9cf72b7c68f6a7c80dfddc6c1cf6d6db32718376";
     sha256 = "sha256-8cqKCNYLLkZXlwrybKUPG6fLd7gmf8zV9tjWoTxAwIY=";
   };
 
@@ -46,8 +46,9 @@ stdenv.mkDerivation {
     cp $src/init.d/sysv/zapret $out/usr/share/zapret/init.d/sysv/init.d
 
     substituteInPlace $out/usr/share/zapret/init.d/sysv/functions \
-      --replace "ZAPRET_BASE=\$(readlink -f \"\$EXEDIR/../..\")" "ZAPRET_BASE=$out/usr/share/zapret" \
-      --replace ". \"\$ZAPRET_BASE/config\"" ""
+      --replace "ZAPRET_BASE=\$(readlink -f \"\$EXEDIR/../..\")" "ZAPRET_BASE=$out/usr/share/zapret"
+
+    touch $out/usr/share/zapret/config
 
     cp -r $src/docs/* $out/usr/share/docs
 

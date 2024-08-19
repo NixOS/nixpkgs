@@ -15,13 +15,13 @@ assert !blas.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "simple-dftd3";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "dftd3";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dfXiKKCGJ69aExSKpVC3Bp//COy256R9PDyxCNmDsfo=";
+    hash = "sha256-XeLf5v/GraDGcTsVIEBnS4AL8tMeO11YTuPHlNt5Ap8=";
   };
 
   nativeBuildInputs = [ gfortran meson ninja pkg-config ];

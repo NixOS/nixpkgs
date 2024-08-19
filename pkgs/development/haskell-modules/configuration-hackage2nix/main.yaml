@@ -79,6 +79,7 @@ extra-packages:
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
+  - hpack == 0.36.0                     # 2024-07-27: required for stack-2.15.7 to match upstream stack release
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
@@ -104,7 +105,6 @@ extra-packages:
   - ormolu == 0.7.4.0                   # 2024-07-07: for ghc 9.8 compat
   - primitive-unlifted == 0.1.3.1       # 2024-03-16: Needed for hls on ghc 9.2
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
-  - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
   - sbv == 7.13                         # required for pkgs.petrinizer
   - stylish-haskell == 0.14.4.0         # 2022-09-19: needed for hls on ghc 9.2
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
@@ -129,6 +129,7 @@ extra-packages:
   - th-desugar == 1.16                  # 2024-06-28: preserve for GHC 9.8
   - singletons-th == 3.3                # 2024-06-28: preserve for GHC 9.8
   - singletons-base == 3.3              # 2024-06-28: preserve for GHC 9.8
+  - tls < 2.1.0                         # 2024-07-19: requested by darcs == 2.18.3
 
 package-maintainers:
   abbradar:
@@ -662,6 +663,7 @@ package-maintainers:
     - typerep-map
     - minio-hs
     - smtp-mail
+    - pdftotext
 
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
@@ -778,6 +780,7 @@ unsupported-platforms:
   xmobar:                                       [ platforms.darwin ]
   xmonad-extras:                                [ platforms.darwin ]
   xmonad-volume:                                [ platforms.darwin ]
+  kmonad:                                       [ platforms.darwin ]
 
 supported-platforms:
   AWin32Console:                                [ platforms.windows ]

@@ -24,19 +24,20 @@
 }:
 
 let
-  version = "2.11.0";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lKPjvWc6FcEOwDgIUW8Eki8h8C19G618o1rhXnrlw/E=";
+    hash = "sha256-qqOTW7qgaZfNFYgVIDdwVh9KlT3Z6g8EALMOv39aRVc=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
   # https://github.com/NixOS/nixpkgs/issues/298719
   # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
@@ -74,7 +75,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-gbHavMUmsZaRSfBkdrrNpTO0R8zacb8110U8n5Y09oU=";
+    npmDepsHash = "sha256-dze03mkWMA2o3v3aoPTrDtUndTdP7Tk4gvFp4nq80po=";
 
     nativeBuildInputs = [
       pkg-config

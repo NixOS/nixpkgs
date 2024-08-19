@@ -10,6 +10,7 @@
   fetchNpmDeps,
   testers,
   mailpit,
+  nixosTests,
 }:
 
 let
@@ -78,9 +79,12 @@ buildGoModule {
     cp -r ${ui} server/ui/dist
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = mailpit;
-    command = "mailpit version";
+  passthru.tests = {
+    inherit (nixosTests) mailpit;
+    version = testers.testVersion {
+      package = mailpit;
+      command = "mailpit version";
+    };
   };
 
   passthru.updateScript = {

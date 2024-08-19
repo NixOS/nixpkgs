@@ -33,9 +33,9 @@ tcl.mkTclDerivation rec {
     # Pango and Cairo Perl modules.
     substituteInPlace scripts/tkremind \
       --replace-fail "exec wish" "exec ${lib.getExe' tk "wish"}" \
-      --replace-fail 'set Remind "remind"' 'set Remind "$out/bin/remind"' \
-      --replace-fail 'set Rem2PS "rem2ps"' 'set Rem2PS "$out/bin/rem2ps"' \
-      --replace-fail 'set Rem2PDF "rem2pdf"' 'set Rem2PDF "$out/bin/rem2pdf"'
+      --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
+      --replace-fail 'set Rem2PS "rem2ps"' "set Rem2PS \"$out/bin/rem2ps\"" \
+      --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [

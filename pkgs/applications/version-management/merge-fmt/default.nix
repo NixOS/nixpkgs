@@ -15,6 +15,9 @@ buildDunePackage rec {
 
   buildInputs = [ cmdliner base stdio ];
 
+  # core v0.17 compatibility, obtained by `git diff -r 3e37827~2..3e37827`
+  patches = [ ./merge-fmt.patch ];
+
   meta = with lib; {
     description = "Git mergetool leveraging code formatters";
     homepage = "https://github.com/hhugo/merge-fmt";

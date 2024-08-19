@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "await";
-  version = "0.999";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
     rev = "v${version}";
-    hash = "sha256-z178TKA0x6UnpBQaA8dig2FLeJKGxPndfvwtmylAD90=";
+    hash = "sha256-qvSRuRLZnUptXYknyRn4GgmYtj9BnI8flN6EhadbKMw=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
     runHook preBuild
@@ -23,6 +30,7 @@ stdenv.mkDerivation rec {
     install -Dm755 await -t $out/bin
     install -Dm444 LICENSE -t $out/share/licenses/await
     install -Dm444 README.md -t $out/share/doc/await
+    installShellCompletion --cmd await autocomplete.{bash,fish,zsh}
 
     runHook postInstall
   '';

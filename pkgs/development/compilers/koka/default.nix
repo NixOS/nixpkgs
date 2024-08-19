@@ -2,7 +2,6 @@
 , pkgsHostTarget
 , cmake
 , makeWrapper
-, fetchpatch
 , mkDerivation
 , fetchFromGitHub
 , alex

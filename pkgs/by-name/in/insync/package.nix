@@ -8,6 +8,8 @@
   dpkg,
   nss,
   alsa-lib,
+  lz4,
+  libgcrypt,
   xkeyboard_config,
   libthai,
   libsForQt5,
@@ -16,7 +18,7 @@
 let
   pname = "insync";
   # Find a binary from https://www.insynchq.com/downloads/linux
-  version = "3.9.1.60010";
+  version = "3.9.3.60019";
   ubuntu-dist = "trixie_amd64";
   insync-pkg = stdenvNoCC.mkDerivation {
     pname = "${pname}-pkg";
@@ -25,9 +27,9 @@ let
     src = fetchurl rec {
       urls = [
         "https://cdn.insynchq.com/builds/linux/${version}/insync_${version}-${ubuntu-dist}.deb"
-        "https://web.archive.org/web/20240622110117/${builtins.elemAt urls 0}"
+        "https://web.archive.org/web/20240731170718/${builtins.elemAt urls 0}"
       ];
-      hash = "sha256-8gT2xLZa/zrM3X3AXTOvHelO0tF2w/3/qOyw2wB98uY=";
+      hash = "sha256-jexbcKU2N4esl6UHxre6C+0o8GD3DcdRJW2YYT5fUZs=";
     };
 
     nativeBuildInputs = [
@@ -39,6 +41,8 @@ let
     buildInputs = [
       alsa-lib
       nss
+      lz4
+      libgcrypt
       libthai
     ] ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
 

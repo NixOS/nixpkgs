@@ -10,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.9.12";
+  version = "0.9.12-unstable-2024-07-31";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-HMLbNAB6Ze2x8OeAwVXMMn5P9GYK9hCa61Ic5yqblUA=";
+    rev = "7585ff7c0709bae13f2ad25f421450d493b02c1a";
+    hash = "sha256-HvjS+74ZjyhF3h2IaKq4T+aGB5/XJRR3TxLSxp0rEYk=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "compiletest_rs-0.10.2" = "sha256-n1OxKal1B+WNshfMgtiA5Th+FQyDalOdB4PAo6mUzwQ=";
+      "compiletest_rs-0.10.2" = "sha256-JTfVfMW0bCbFjQxeAFu3Aex9QmGnx0wp6weGrNlQieA=";
     };
   };
 

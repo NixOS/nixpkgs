@@ -11,8 +11,9 @@ let
   optPam = shouldUsePkg pam;
   optLibidn = shouldUsePkg libidn;
   optGnutls = shouldUsePkg gnutls;
+
+  inherit (lib) enableFeature withFeature optionalString;
 in
-with lib;
 stdenv.mkDerivation rec {
   pname = "shishi";
   version = "1.0.2";
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
       -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage    = "https://www.gnu.org/software/shishi/";
     description = "Implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;

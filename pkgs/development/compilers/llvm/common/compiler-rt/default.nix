@@ -162,7 +162,13 @@ stdenv.mkDerivation ({
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
       --replace "#include <assert.h>" ""
-  ''));
+  '')) + lib.optionalString (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14") ''
+    # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
+    # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
+    substituteInPlace ../libcxx/utils/merge_archives.py \
+      --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
+      --replace-fail "distutils.spawn." ""
+  '';
 
   # Hack around weird upsream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''

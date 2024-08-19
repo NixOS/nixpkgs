@@ -1,5 +1,5 @@
 { lib, mkCoqDerivation
-, coq, flocq, compcert
+, coq, flocq
 , ocamlPackages, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
 , version ? null

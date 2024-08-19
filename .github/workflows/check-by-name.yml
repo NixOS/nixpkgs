@@ -27,6 +27,7 @@ permissions: {}
 
 jobs:
   check:
+    name: pkgs-by-name-check
     # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases
     runs-on: ubuntu-latest
     # This should take 1 minute at most, but let's be generous.

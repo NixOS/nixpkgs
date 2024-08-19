@@ -53,7 +53,6 @@ let
       "debug-shell.service"
 
       # Udev.
-      "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
@@ -106,10 +105,6 @@ let
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
-
-      # Boot counting
-      "boot-complete.target"
-    ] ++ lib.optional config.boot.loader.systemd-boot.bootCounting.enable "systemd-bless-boot.service" ++ [
 
       # Hibernate / suspend.
       "hibernate.target"
@@ -338,14 +333,6 @@ in
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting; see {manpage}`cgroups(7)`.
-      '';
-    };
-
-    enableUnifiedCgroupHierarchy = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable the unified cgroup hierarchy (cgroupsv2); see {manpage}`cgroups(7)`.
       '';
     };
 
@@ -694,12 +681,6 @@ in
     # https://github.com/systemd/systemd/pull/12226
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
 
-    boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
-
-    # Avoid potentially degraded system state due to
-    # "Userspace Out-Of-Memory (OOM) Killer was skipped because of a failed condition check (ConditionControlGroupController=v2)."
-    systemd.oomd.enable = mkIf (!cfg.enableUnifiedCgroupHierarchy) false;
-
     services.logrotate.settings = {
       "/var/log/btmp" = mapAttrs (_: mkDefault) {
         frequency = "monthly";
@@ -723,5 +704,10 @@ in
       (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
       (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
       (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
+      (mkRemovedOptionModule ["systemd" "enableUnifiedCgroupHierarchy"] ''
+          In 256 support for cgroup v1 ('legacy' and 'hybrid' hierarchies) is now considered obsolete and systemd by default will refuse to boot under it.
+          To forcibly reenable cgroup v1 support, you can set boot.kernelParams = [ "systemd.unified_cgroup_hierachy=0" "SYSTEMD_CGROUP_ENABLE_LEGACY_FORCE=1" ].
+          NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
+      '')
     ];
 }

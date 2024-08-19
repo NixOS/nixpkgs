@@ -24,6 +24,8 @@ ocamlPackages.buildDunePackage rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./make-compatible-with-linol-0_6.patch ];
+
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 

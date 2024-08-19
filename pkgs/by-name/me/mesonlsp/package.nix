@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mesonlsp";
-  version = "4.3.1";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "JCWasmx86";
     repo = "mesonlsp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-L2aPjdKljPyyZBGqMB67nLnwB+B+XSlgbwuJENE9Mu4=";
+    hash = "sha256-6p+IufgUCZj21ylkZiYS8kVAdFgDZpOST5Lgb0mXDhQ=";
   };
 
   patches = [ ./disable-tests-that-require-network-access.patch ];

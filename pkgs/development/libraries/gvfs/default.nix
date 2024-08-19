@@ -41,7 +41,6 @@
 , libgdata
 , libmsgraph
 , python3
-, python3Packages
 , gsettings-desktop-schemas
 }:
 
@@ -137,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = finalAttrs.doCheck;
+  doInstallCheck = finalAttrs.finalPackage.doCheck;
 
   separateDebugInfo = true;
 

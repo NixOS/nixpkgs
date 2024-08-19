@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:          # mailman.nix
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -367,7 +367,7 @@ in {
           for more info.
         '';
       }
-      (requirePostfixHash [ "relayDomains" ] "postfix_domains")
+      (requirePostfixHash [ "config" "relay_domains" ] "postfix_domains")
       (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
       (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
     ]);

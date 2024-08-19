@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchurl
 , gettext
 , itstool
@@ -15,6 +16,7 @@
 , gnome
 , adwaita-icon-theme
 , gsettings-desktop-schemas
+, desktopToDarwinBundle
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook3
     gtk3 # for gtk-update-icon-cache
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     gtk3

@@ -1,4 +1,5 @@
 {
+  _experimental-update-script-combinators,
   fetchFromSourcehut,
   gitUpdater,
   lib,
@@ -52,7 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = _experimental-update-script-combinators.sequence (
+      builtins.map (item: item.command) [
+        (gitUpdater {
+          attrPath = "harec";
+          ignoredVersions = [ "-rc[0-9]{1,}" ];
+        })
+        (gitUpdater {
+          attrPath = "hare";
+          url = "https://git.sr.ht/~sircmpwn/hare";
+          ignoredVersions = [ "-rc[0-9]{1,}" ];
+        })
+      ]
+    );
     # To be kept in sync with the hare package.
     inherit qbe;
   };

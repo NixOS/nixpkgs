@@ -42,7 +42,7 @@ php.buildComposerProject (finalAttrs: {
     description = "Federated image sharing platform";
     license = licenses.agpl3Only;
     homepage = "https://pixelfed.org/";
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = [ ];
     platforms = php.meta.platforms;
   };
 })

@@ -9,6 +9,7 @@
   etcd_3_4,
   mock,
   pyopenssl,
+  stdenv,
 }:
 
 buildPythonPackage {
@@ -36,6 +37,9 @@ buildPythonPackage {
     mock
     pyopenssl
   ];
+
+  # arm64 is an unsupported platform on etcd 3.4. should be able to be removed on >= etcd 3.5
+  doCheck = !stdenv.isAarch64;
 
   preCheck = ''
     for file in "test_auth" "integration/test_simple"; do

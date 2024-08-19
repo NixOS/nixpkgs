@@ -177,7 +177,7 @@ stdenv.mkDerivation {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
     mainProgram = "perf";
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ tobim ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5";
   };

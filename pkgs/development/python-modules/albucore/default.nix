@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.12";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albucore";
     rev = "refs/tags/${version}";
-    hash = "sha256-TJTIIshMUcHTGSo0lRA3hVkqMqKsfj0EuiV+SSsP5Q4=";
+    hash = "sha256-TqEOey6PxVesk1Xs9YvnFto8LrSVsfTMq+MqP/mwYCA=";
   };
 
   pythonRemoveDeps = [ "opencv-python" ];

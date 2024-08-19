@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, cmake, codec2 }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, cmake }:
 
 let
   dataVersion = "191005_v1.0";

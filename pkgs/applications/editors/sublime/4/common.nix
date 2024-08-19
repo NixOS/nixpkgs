@@ -61,8 +61,7 @@ let
   ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
     sqlite
   ];
-in
-let
+
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;

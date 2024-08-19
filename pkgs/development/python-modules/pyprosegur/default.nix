@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyprosegur";
-  version = "0.0.10";
+  version = "0.0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = "pyprosegur";
     rev = "refs/tags/${version}";
-    hash = "sha256-OHFJhufymD181FODHlIu+O5xh9dfKwEIVQX/zTOC6ks=";
+    hash = "sha256-DBr/MtomB7MlZlK8YBvtY1MIstLxotOkv07zZNNuRtM=";
   };
 
   nativeBuildInputs = [ setuptools ];

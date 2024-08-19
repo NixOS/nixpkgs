@@ -2,6 +2,7 @@
 , cmake, pkg-config, qttools
 , libxcb, libXau, pam, qtbase, qtdeclarative
 , qtquickcontrols2 ? null, systemd, xkeyboardconfig
+, nixosTests
 }:
 let
   isQt6 = lib.versions.major qtbase.version == "6";
@@ -75,6 +76,8 @@ in stdenv.mkDerivation(finalAttrs: {
         --replace 'background=' "background=$(dirname $f)/"
     done
   '';
+
+  passthru.tests = { inherit (nixosTests) sddm; };
 
   meta = with lib; {
     description = "QML based X11 display manager";

@@ -1,34 +1,52 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, perl, CoreServices, Security, SystemConfiguration }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  replaceVars,
+  perl,
+  stdenv,
+  CoreServices,
+  Security,
+  SystemConfiguration,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kakoune-lsp";
-  version = "16.0.0";
+  version = "17.1.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "kakoune-lsp";
+    repo = "kakoune-lsp";
     rev = "v${version}";
-    sha256 = "sha256-d4Tc6iYp20uOKMd+T2LhWgXWZzvzq1E+VWqjhhiIiHE=";
+    sha256 = "sha256-NZDp98Ne6z7DlJ2vZiqGzw5ukusOkEjb+eyvmxB+IKI=";
   };
 
-  cargoHash = "sha256-kV8d0PwIWS6gyfCtv70iv8MrL91ZOZbwYznhc3lUw0U=";
+  patches = [ (replaceVars ./Hardcode-perl.patch { inherit perl; }) ];
 
-  buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
+  cargoHash = "sha256-QonOqdcdp1vbxzLnF46X0DLVay2Up1LvHZ/ZZ04LqlE=";
 
-  patches = [
-    ./Use-full-Perl-path.patch
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    Security
+    SystemConfiguration
   ];
 
-  postPatch = ''
-    substituteInPlace rc/lsp.kak \
-      --subst-var-by perlPath ${lib.getBin perl}
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Kakoune Language Server Protocol Client";
     homepage = "https://github.com/kakoune-lsp/kakoune-lsp";
-    license = with licenses; [ unlicense /* or */ mit ];
-    maintainers = with maintainers; [ spacekookie poweredbypie ];
+
+    # See https://github.com/kakoune-lsp/kakoune-lsp/commit/55dfc83409b9b7d3556bacda8ef8b71fc33b58cd
+    license = with lib.licenses; [
+      unlicense
+      mit
+    ];
+
+    maintainers = with lib.maintainers; [
+      philiptaron
+      spacekookie
+      poweredbypie
+    ];
+
     mainProgram = "kak-lsp";
   };
 }

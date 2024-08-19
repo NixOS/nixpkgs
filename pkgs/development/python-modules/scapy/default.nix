@@ -7,7 +7,7 @@
   pycrypto,
   ecdsa, # TODO
   mock,
-  can,
+  python-can,
   brotli,
   withOptionalDeps ? true,
   tcpdump,
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   doCheck = false;
   nativeCheckInputs = [
     mock
-    can
+    python-can
     brotli
   ];
   checkPhase = ''

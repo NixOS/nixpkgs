@@ -13,15 +13,15 @@ let
   srcHashes = {
     # Upstream info: It's intended to stay like this in further releases
     # https://github.com/NixOS/nixpkgs/pull/326152#discussion_r1679558135
-    universal-darwin = "sha256-JfZwHFp0aZtHcbP7tyG7uqFs2w+LWKfnfyuxxpxDJZ8=";
-    x86_64-linux = "sha256-En5vkTHYtwN6GMgbtyhzsPqknOPRO9KlTqZfbBFaIFQ=";
+    universal-darwin = "sha256-6b+CNCvrkIA1CvSohSJZq/veZZNsA3lyhVv5SsBlJlw=";
+    x86_64-linux = "sha256-v8ufnQQEqTT5cr7fq8Fozje/NDlBzaCeKIzE6yU/biE=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "protonmail-desktop";
   # Upstream info: "v"-prefix got dropped
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchurl {
     url =

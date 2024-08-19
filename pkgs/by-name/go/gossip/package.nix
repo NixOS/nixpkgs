@@ -18,29 +18,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gossip";
-  version = "0.9";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
-    hash = "sha256-m0bIpalH12GK7ORcIk+UXwmBORMKXN5AUtdEogtkTRM=";
     owner = "mikedilger";
     repo = "gossip";
-    rev = version;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZDpPoGLcI6ModRq0JEcibHerOrPOA3je1uE5yXsLeeg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ecolor-0.23.0" = "sha256-Jg1oqxt6YNRbkoKqJoQ4uMhO9ncLUK18BGG0fa+7Bow=";
-      "egui-video-0.1.0" = "sha256-3483FErslfafCDVYx5qD6+amSkfVenMGMlEpPDnTT1M=";
-      "ffmpeg-next-6.0.0" = "sha256-EkzwR5alMjAubskPDGMP95YqB0CaC/HsKiGVRpKqUOE=";
-      "ffmpeg-sys-next-6.0.1" = "sha256-UiVKhrgVkROc25VSawxQymaJ0bAZ/dL0xMQErsP4KUU=";
-      "gossip-relay-picker-0.2.0-unstable" = "sha256-3rbjtpxNN168Al/5TM0caRLRd5mxLZun/qVhsGwS7wY=";
-      "heed-0.20.0-alpha.6" = "sha256-TFUC6SXNzNXfX18/RHFx7fq7O2le+wKcQl69Uv+CQkY=";
-      "nip44-0.1.0" = "sha256-of1bG7JuSdR19nXVTggHRUnyVDMlUrkqioyN237o3Oo=";
-      "nostr-types-0.7.0-unstable" = "sha256-B+hOZ4TRDSWgzyAc/yPiTWeU0fFCBPJG1XOHyoXfuQc=";
+      "ecolor-0.26.2" = "sha256-Ih1JbiuUZwK6rYWRSQcP1AJA8NesJJp+EeBtG0azlw0=";
+      "egui-video-0.1.0" = "sha256-X75gtYMfD/Ogepe0uEulzxAOY1YpkBW6OPhgovv/uCQ=";
+      "ffmpeg-next-7.0.2" = "sha256-LVdaCbPHHEolcrXk9tPxUJiPNCma7qRl53TPKFijhFA=";
+      "gossip-relay-picker-0.2.0-unstable" = "sha256-FUhB6ql+H+E6UffWmpwRFzP8N6x+dOX4vdtYdKItjz4=";
+      "lightning-0.0.123-beta" = "sha256-gngH0mOC9USzwUGP4bjb1foZAvg6QHuzODv7LG49MsA=";
+      "musig2-0.1.0" = "sha256-++1x7uHHR7KEhl8LF3VywooULiTzKeDu3e+0/c/8p9Y=";
+      "nip44-0.1.0" = "sha256-u2ALoHQrPVNoX0wjJmQ+BYRzIKsi0G5xPbYjgsNZZ7A=";
+      "nostr-types-0.8.0-unstable" = "sha256-HGXPJrI6+HT/oyAV3bELA0LPu4O0DmmJVr0mDtDVfr4=";
       "qrcode-0.12.0" = "sha256-onnoQuMf7faDa9wTGWo688xWbmujgE9RraBialyhyPw=";
-      "sdl2-0.35.2" = "sha256-qPId64Y6UkVkZJ+8xK645at5fv3mFcYaiInb0rGUfL4=";
-      "speedy-0.8.6" = "sha256-ltJQud1kEYkw7L2sZgPnD/teeXl2+FKgyX9kk2IC2Xg=";
+      "sdl2-0.36.0" = "sha256-dfXrD9LLBGeYyOLE3PruuGGBZ3WaPBfWlwBqP2pp+NY=";
     };
   };
 

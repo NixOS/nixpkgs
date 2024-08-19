@@ -17,7 +17,7 @@
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, tzdata
+, dbus, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch

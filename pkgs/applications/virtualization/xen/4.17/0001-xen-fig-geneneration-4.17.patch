@@ -1,0 +1,16 @@
+Remove a pipe that was causing SIGPIPE
+issues on overloaded Hydra machines.
+
+diff --git a/docs/figs/Makefile b/docs/figs/Makefile
+index e128a4364f..943f745dda 100644
+--- a/docs/figs/Makefile
++++ b/docs/figs/Makefile
+@@ -8,7 +8,7 @@ TARGETS= network-bridge.png network-basic.png
+ all: $(TARGETS)
+ 
+ %.png:	%.fig
+-	$(FIG2DEV) -L png $< >$@.tmp
++	$(FIG2DEV) -L png $< $@.tmp
+ 	mv -f $@.tmp $@
+ 
+ clean:

@@ -489,6 +489,18 @@ let
         package = mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
           pkgsText = "pkgs.plasma5Packages";
         };
+
+        forceRun = mkEnableOption null // {
+          description = ''
+            The `force_run` option is used to tell the PAM module for KWallet
+            to forcefully run even if no graphical session (such as a GUI
+            display manager) is detected. This is useful for when you are
+            starting an X Session or a Wayland Session from a TTY. If you
+            intend to log-in from a TTY, it is recommended that you enable
+            this option **and** ensure that `plasma-kwallet-pam.service` is
+            started by `graphical-session.target`.
+          '';
+        };
       };
 
       sssdStrictAccess = mkOption {
@@ -854,14 +866,14 @@ let
           { name = "limits"; enable = cfg.limits != []; control = "required"; modulePath = "${package}/lib/security/pam_limits.so"; settings = {
             conf = "${makeLimitsConf cfg.limits}";
           }; }
-          { name = "motd"; enable = cfg.showMotd && (config.users.motd != null || config.users.motdFile != null); control = "optional"; modulePath = "${package}/lib/security/pam_motd.so"; settings = {
+          { name = "motd"; enable = cfg.showMotd && (config.users.motd != "" || config.users.motdFile != null); control = "optional"; modulePath = "${package}/lib/security/pam_motd.so"; settings = {
             inherit motd;
           }; }
           { name = "apparmor"; enable = cfg.enableAppArmor && config.security.apparmor.enable; control = "optional"; modulePath = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so"; settings = {
             order = "user,group,default";
             debug = true;
           }; }
-          { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
+          { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; settings = lib.mkIf cfg.kwallet.forceRun { force_run = true; }; }
           { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
             auto_start = true;
           }; }
@@ -1466,9 +1478,9 @@ in
     '';
 
     users.motd = mkOption {
-      default = null;
+      default = "";
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
-      type = types.nullOr types.lines;
+      type = types.lines;
       description = "Message of the day shown to users when they log in.";
     };
 
@@ -1486,7 +1498,7 @@ in
   config = {
     assertions = [
       {
-        assertion = config.users.motd == null || config.users.motdFile == null;
+        assertion = config.users.motd == "" || config.users.motdFile == null;
         message = ''
           Only one of users.motd and users.motdFile can be set.
         '';

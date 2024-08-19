@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gearlever";
-  version = "2.0.1";
+  version = "2.0.6";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
     rev = version;
-    hash = "sha256-f4rQXenJCZiDC9MRQkjy0mOiNkWzOPSS05GXHXlhUao=";
+    hash = "sha256-+JuF0SL+2yVgkKPItt9Vq6SLcnxaMSWxIeVhY9XLX28=";
   };
 
   postPatch =
@@ -36,14 +36,6 @@ python3Packages.buildPythonApplication rec {
     ''
       substituteInPlace build-aux/meson/postinstall.py \
         --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
-    ''
-    # Some attempts to overcome flatpak assumptions
-    + ''
-      substituteInPlace src/lib/utils.py \
-        --replace-fail '/run/host/os-release' '/etc/os-release'
-
-      substituteInPlace src/lib/terminal.py \
-        --replace-fail "cmd = ['flatpak-spawn', '--host', *command]" "cmd = [*command]"
     ''
     # Use gtk4 instead of gtk3 to get smaller closure size
     + ''

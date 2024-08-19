@@ -14,7 +14,6 @@
   requests-toolbelt,
   setuptools,
   rich,
-  pysocks,
   pip,
   pytest-httpbin,
   pytest-lazy-fixture,

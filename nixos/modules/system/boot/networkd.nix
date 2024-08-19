@@ -778,8 +778,7 @@ let
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
-        (assertInt "FirewallMark")
-        (assertRange "FirewallMark" 1 4294967295)
+        (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
         (assertInt "Priority")
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
@@ -1018,6 +1017,7 @@ let
           "BootServerAddress"
           "BootServerName"
           "BootFilename"
+          "IPv6OnlyPreferredSec"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)

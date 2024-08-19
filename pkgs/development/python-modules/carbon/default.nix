@@ -7,6 +7,7 @@
   txamqp,
   cachetools,
   urllib3,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,10 @@ buildPythonPackage rec {
     cachetools
     urllib3
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) graphite;
+  };
 
   meta = with lib; {
     homepage = "http://graphiteapp.org/";

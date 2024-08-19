@@ -5,7 +5,6 @@
 , ninja
 , gdk-pixbuf
 , gd
-, libjpeg
 , pkg-config
 }:
 stdenv.mkDerivation rec {

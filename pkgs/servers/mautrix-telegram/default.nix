@@ -7,6 +7,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
         version = "1.37.0a1";

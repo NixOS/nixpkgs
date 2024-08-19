@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioazuredevops = super.aioazuredevops.overridePythonAttrs (old: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          owner = "timmo001";
+          repo = "aioazuredevops";
+          rev = "refs/tags/${version}";
+          hash = "sha256-rnvWjsTRBoojsuNG3uSdBlyycE4XSrhgjmb77jy7fxY=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -113,17 +123,6 @@ let
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
         # tests are deadlocking too often
         # https://github.com/NixOS/nixpkgs/issues/262000
-        doCheck = false;
-      });
-
-      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.1";
-        src = fetchFromGitHub {
-          owner = "ndokter";
-          repo = "dsmr_parser";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-PULrKRHrCuDFZcR+5ha0PjkN438QFgf2CrpYhKIqYTs=";
-        };
         doCheck = false;
       });
 
@@ -263,6 +262,19 @@ let
         };
       });
 
+      pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.5";
+        src = fetchFromGitHub {
+          owner = "ChrisMandich";
+          repo = "PyFlume";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
+        };
+        dependencies = oldAttrs.propagatedBuildInputs or [] ++ [
+          self.pytz
+        ];
+      });
+
       pytibber = super.pytibber.overridePythonAttrs (oldAttrs: rec {
         version = "0.28.2";
         src = fetchFromGitHub {
@@ -391,16 +403,6 @@ let
         doCheck = false;
       };
 
-      voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.1";
-        src = fetchFromGitHub {
-          owner = "alecthomas";
-          repo = "voluptuous";
-          rev = "refs/tags/${version}";
-          hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -451,6 +453,7 @@ let
   ];
 
   python = python312.override {
+    self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -468,7 +471,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.4";
+  hassVersion = "2024.8.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -486,13 +489,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-PHKFQmlwdS0+XpD5Pd+Xwv5KNB2kJKouh9jfBH3aUIU=";
+    hash = "sha256-tOh6pCnRTU+JLcog6cEeeCyLOQuX9KPVdWeJfMc8G78=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-NJ5gD6k05ahIPCwktJgTz9zczxgnfuLesfjR58fbRL4=";
+    hash = "sha256-qEJXO7R+NxZaxpPCJs+SKgZdcB0ZUBKy7nsq9JQ9z1Q=";
   };
 
   build-system = with python.pkgs; [
@@ -548,7 +551,6 @@ in python.pkgs.buildPythonApplication rec {
     aiodns
     aiohttp
     aiohttp-cors
-    aiohttp-fast-url-dispatcher
     aiohttp-fast-zlib
     aiozoneinfo
     astral
