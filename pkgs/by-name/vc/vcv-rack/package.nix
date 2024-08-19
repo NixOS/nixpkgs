@@ -2,6 +2,7 @@
 , cmake
 , copyDesktopItems
 , curl
+, darwin
 , fetchFromBitbucket
 , fetchFromGitHub
 , ghc_filesystem
@@ -22,6 +23,7 @@
 , makeWrapper
 , pkg-config
 , rtmidi
+, rsync
 , speexdsp
 , stdenv
 , wrapGAppsHook3
@@ -100,13 +102,17 @@ let
 
     nativeBuildInputs = [ cmake pkg-config ];
 
-    buildInputs = [ alsa-lib libjack2 libpulseaudio ];
+    buildInputs = lib.optionals stdenv.isLinux [
+      alsa-lib libjack2 libpulseaudio
+    ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      AVFoundation CoreAudio
+    ]);
 
     cmakeFlags = [
-      (lib.cmakeBool "RTAUDIO_API_ALSA" true)
-      (lib.cmakeBool "RTAUDIO_API_PULSE" true)
-      (lib.cmakeBool "RTAUDIO_API_JACK" true)
-      (lib.cmakeBool "RTAUDIO_API_CORE" false)
+      (lib.cmakeBool "RTAUDIO_API_ALSA" stdenv.isLinux)
+      (lib.cmakeBool "RTAUDIO_API_PULSE" stdenv.isLinux)
+      (lib.cmakeBool "RTAUDIO_API_JACK" stdenv.isLinux)
+      (lib.cmakeBool "RTAUDIO_API_CORE" stdenv.isDarwin)
     ];
   };
 in
@@ -170,7 +176,24 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
         "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Darwin needs to build the dist target, which builds the .app container,
+    # yet we want to exclude the documentation from dist target.
+    substituteInPlace Makefile \
+      --replace-fail 'DIST_HTML :=' '#DIST_HTML :='
 
+    # To support macOS drag & drop a custom glfw patch is needed
+    # (see https://github.com/glfw/glfw/pull/1579 for details).
+    # Since the patch does not apply cleanly on the current glfw contained in nixpkgs
+    # disable drag & drop functionality for the time being.
+    substituteInPlace adapters/standalone.cpp \
+      --replace-fail 'glfwGetOpenedFilenames()' 'NULL'
+
+    # The next version of VCV-Rack should contain a patch that
+    # makes the following substituteInPlace obsolete.
+    substituteInPlace compile.mk \
+      --replace-fail '$(CC) $(CXXFLAGS)' '$(CXX) $(CXXFLAGS)'
+  '' + lib.optionalString stdenv.isLinux ''
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
       --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
@@ -184,38 +207,42 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wrapGAppsHook3
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ rsync ];
+
   buildInputs = [
-    alsa-lib
     curl
     ghc_filesystem
     glew
     glfw
-    zenity
     gtk3-x11
     jansson
     libarchive
-    libjack2
-    libpulseaudio
     libsamplerate
     rtmidi
     speexdsp
     vcv-rtaudio
     zstd
-  ];
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    libjack2
+    libpulseaudio
+    zenity
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    AVFoundation CoreAudio
+  ]);
 
-  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  enableParallelBuilding = true;
+
+  makeFlags = [
+    "all" "plugins"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ] ++ [
-    "all"
-    "plugins"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "CODESIGN=" "SED=sed -i" "dist" ];
 
-  installPhase = ''
+  installPhase = lib.optionalString stdenv.isLinux ''
     runHook preInstall
-
-    install -D -m755 -t $out/bin Rack
-    install -D -m755 -t $out/lib libRack.so
+    install -Dm555 -t $out/bin Rack
+    install -Dm555 -t $out/lib libRack${stdenv.hostPlatform.extensions.sharedLibrary}
 
     mkdir -p $out/share/vcv-rack
     cp -r res cacert.pem Core.json template.vcv LICENSE-GPLv3.txt $out/share/vcv-rack
@@ -229,14 +256,19 @@ stdenv.mkDerivation (finalAttrs: {
       if [ ! -e icon_"$size"x"$size"x32.png ] ; then
         convert -resize "$size"x"$size" icon_1024x1024x32.png icon_"$size"x"$size"x32.png
       fi
-      install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
+      install -Dm444 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
     done;
-
+    runHook postInstall
+  '' + lib.optionalString stdenv.isDarwin ''
+    runHook preInstall
+    mkdir -p $out/Applications
+    find dist
+    mv dist/"VCV Rack ${lib.versions.major finalAttrs.version} Free.app" $out/Applications
     runHook postInstall
   '';
 
   dontWrapGApps = true;
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # Wrap gApp and override the default global resource file directory
     wrapProgram $out/bin/Rack \
         "''${gappsWrapperArgs[@]}" \
@@ -251,6 +283,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ gpl3Plus cc-by-nc-40 unfreeRedistributable ];
     maintainers = with maintainers; [ nathyong jpotier ddelabru ];
     mainProgram = "Rack";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})
