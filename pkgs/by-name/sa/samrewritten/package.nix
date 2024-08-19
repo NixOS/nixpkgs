@@ -34,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     yajl
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/applications/samrewritten.desktop \
+      --replace-fail "Exec=/usr/bin/samrewritten" "Exec=samrewritten"
+  '';
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
