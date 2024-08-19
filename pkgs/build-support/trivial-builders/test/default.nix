@@ -17,6 +17,7 @@ let
   references = callPackage ./references {};
 in
 recurseIntoAttrs {
+  applyPatches = callPackage ./apply-patches.nix {};
   concat = callPackage ./concat-test.nix {};
   linkFarm = callPackage ./link-farm.nix {};
   overriding = callPackage ../test-overriding.nix {};
