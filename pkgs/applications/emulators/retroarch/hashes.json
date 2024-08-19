@@ -307,11 +307,11 @@
         "src": {
             "owner": "flyinghead",
             "repo": "flycast",
-            "rev": "45bf218df428123f739714ef4e65e1b96c0959b7",
-            "hash": "sha256-TB8cSwvwyfG3tNsMf2qXDZGMTuwnNeRlhyH8fzDnvQM=",
+            "rev": "6061d402bdbd1a07d0ba43fe6db272365a309e9f",
+            "hash": "sha256-2kLhb4biq4rokI44/PWr1jmMNSsUG+3aoBgQfZyyL+8=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-07-29"
+        "version": "unstable-2024-08-17"
     },
     "fmsx": {
         "fetcher": "fetchFromGitHub",
@@ -652,22 +652,22 @@
         "src": {
             "owner": "jpd002",
             "repo": "Play-",
-            "rev": "d1c28b63e0c684025886787c39c4b7f92014d79e",
-            "hash": "sha256-zNcrCIsRVP0AFzFs0S7i4Cuon0JIyFzPrK26hJFqijQ=",
+            "rev": "92a11bf45c192300415e14d95da7a442ffc1f71c",
+            "hash": "sha256-5bErkTiFIFkRqk+NLLujPgGLkPjX2hgHarO4K3fIrKM=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-08-09"
+        "version": "unstable-2024-08-16"
     },
     "ppsspp": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "hrydgard",
             "repo": "ppsspp",
-            "rev": "169736dff64cb426d8eba559f76475d2f762e368",
-            "hash": "sha256-93rZl2vec6NSlJ2WGJvn/M1nsA+bJgfOxiPESYv6oK8=",
+            "rev": "8f300cf5bb715038489f91f371e06cefdd3e3cdc",
+            "hash": "sha256-bUj6Xa4k5EwjhFWOrHodLWgwLFrJcsHjsu3zdd/gqJQ=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-08-09"
+        "version": "unstable-2024-08-15"
     },
     "prboom": {
         "fetcher": "fetchFromGitHub",
@@ -794,10 +794,10 @@
         "src": {
             "owner": "stella-emu",
             "repo": "stella",
-            "rev": "8e9149a233fa66e894261bef18d20afb575902b1",
-            "hash": "sha256-agMd0/FiMQ3tvNg8imEz55a4AqjyRu085eYL42cNBfI="
+            "rev": "d64ff2e5b7cb202155b2782b55c8d359c2a9c8ce",
+            "hash": "sha256-aKqOLmFpWLxHeXVq/YP/xinnpKhDPFlgA2FEnSZjftU="
         },
-        "version": "unstable-2024-08-10"
+        "version": "unstable-2024-08-16"
     },
     "stella2014": {
         "fetcher": "fetchFromGitHub",

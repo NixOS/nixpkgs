@@ -10250,8 +10250,6 @@ with pkgs;
 
   mars-mips = callPackage ../development/tools/mars-mips { };
 
-  maui-shell = libsForQt5.callPackage ../applications/window-managers/maui-shell { };
-
   mawk = callPackage ../tools/text/mawk { };
 
   mb2md = callPackage ../tools/text/mb2md { };
@@ -38730,8 +38728,6 @@ with pkgs;
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nix-serve-ng = haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
-
-  nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
   nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
 

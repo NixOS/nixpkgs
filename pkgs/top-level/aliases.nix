@@ -935,6 +935,7 @@ mapAliases ({
   matrixcli = throw "'matrixcli' has been removed due to being unmaintained and broken functionality. Recommend 'matrix-commander' as an alternative"; # Added 2024-03-09
   matrix-recorder = throw "matrix-recorder has been removed due to being unmaintained"; # Added 2023-05-21
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
+  maui-shell = throw "maui-shell has been removed from nixpkgs, it was broken"; # Added 2024-07-15
   mbox = throw "'mbox' has been removed, as it was broken and unmaintained"; # Added 2023-12-21
   mcomix3 = mcomix; # Added 2022-06-05
   meme = meme-image-generator; # Added 2021-04-21
@@ -1019,6 +1020,7 @@ mapAliases ({
     "use `nix repl` instead. Also see https://github.com/NixOS/nixpkgs/pull/44903"
   );
   nix-review = throw "'nix-review' has been renamed to/replaced by 'nixpkgs-review'"; # Converted to throw 2023-09-10
+  nix-simple-deploy = throw "'nix-simple-deploy' has been removed as it is broken and unmaintained"; # Added 2024-08-17
   nix-template-rpm = throw "'nix-template-rpm' has been removed as it is broken and unmaintained"; # Added 2023-11-20
   nix-universal-prefetch = throw "The nix-universal-prefetch package was dropped since it was unmaintained."; # Added 2024-06-21
   nixFlakes = nixVersions.stable; # Added 2021-05-21
