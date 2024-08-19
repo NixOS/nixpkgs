@@ -236,7 +236,7 @@ Finally, there are some plugins that are also packaged in nodePackages because t
 
 Some plugins require specific configuration to work. We choose not to
 patch those plugins but expose the necessary configuration under
-`PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim`
+`PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
 needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
 
 
