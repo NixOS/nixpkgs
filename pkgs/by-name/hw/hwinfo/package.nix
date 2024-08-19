@@ -13,6 +13,7 @@
   writeText,
   runCommand,
   validatePkgConfig,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,20 +65,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
-    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-    no-usr = testers.testEqualContents {
-      assertion = "There should be no /usr/ paths in the binaries";
-      # There is a bash script that refers to lshal, which is deprecated and not available in Nixpkgs.
-      # We'll allow this line, but nothing else.
-      expected = writeText "expected" ''
-        if [ -x /usr/bin/lshal ] ; then
-      '';
-      actual = runCommand "actual" { nativeBuildInputs = [ binutils ]; } ''
-        strings ${finalAttrs.finalPackage}/bin/* | grep /usr/ > $out
-      '';
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+      no-usr = testers.testEqualContents {
+        assertion = "There should be no /usr/ paths in the binaries";
+        # There is a bash script that refers to lshal, which is deprecated and not available in Nixpkgs.
+        # We'll allow this line, but nothing else.
+        expected = writeText "expected" ''
+          if [ -x /usr/bin/lshal ] ; then
+        '';
+        actual = runCommand "actual" { nativeBuildInputs = [ binutils ]; } ''
+          strings ${finalAttrs.finalPackage}/bin/* | grep /usr/ > $out
+        '';
+      };
     };
+    updateScript = gitUpdater { };
   };
 
   meta = with lib; {
