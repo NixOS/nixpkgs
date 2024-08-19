@@ -19,6 +19,7 @@
   udev,
   wayland,
   wayland-protocols,
+  wayland-scanner,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
@@ -30,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-1RYuBS/CQhtyIeXrLDvGWJhuVG1kiQMG+aYaBkoGnEU=";
   };
+
+  # https://github.com/hyprwm/aquamarine/pull/55
+  patches = [ ./CMakeLists-wayland.xml-is-in-wayland-scanner-pkgdata.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -51,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
+    wayland-scanner
   ];
 
   strictDeps = true;
