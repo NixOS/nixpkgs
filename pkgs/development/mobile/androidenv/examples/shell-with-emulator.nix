@@ -26,9 +26,9 @@ let
   # Declaration of versions for everything. This is useful since these
   # versions may be used in multiple places in this Nix expression.
   android = {
-    platforms = [ "34" ];
+    platforms = [ "35" ];
     systemImageTypes = [ "google_apis" ];
-    abis = [ "arm64-v8a" "x86_64" ];
+    abis = [ "x86_64" ];
   };
 
   # If you copy this example out of nixpkgs, something like this will work:
@@ -116,10 +116,9 @@ pkgs.mkShell rec {
       echo "installed_packages_section: ''${installed_packages_section}"
 
       packages=(
-        "build-tools;34.0.0" "cmdline-tools;11.0" \
-        "emulator" "patcher;v4" "platform-tools" "platforms;android-34" \
-        "system-images;android-34;google_apis;arm64-v8a" \
-        "system-images;android-34;google_apis;x86_64"
+        "build-tools;35.0.0" "cmdline-tools;13.0" \
+        "emulator" "patcher;v4" "platform-tools" "platforms;android-35" \
+        "system-images;android-35;google_apis;x86_64"
       )
 
       for package in "''${packages[@]}"; do
@@ -142,7 +141,7 @@ pkgs.mkShell rec {
       excluded_packages=(
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
-        "platforms;android-31" "platforms;android-32" "platforms;android-33" \
+        "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-34" \
         "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
         "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
         "sources;android-31" "sources;android-32" "sources;android-33" "sources;android-34" \
@@ -169,7 +168,7 @@ pkgs.mkShell rec {
       nativeBuildInputs = [ androidSdk androidEmulator jdk ];
     } ''
       avdmanager delete avd -n testAVD || true
-      echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-34;google_apis;x86_64'
+      echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-35;google_apis;x86_64'
       result=$(avdmanager list avd)
 
       if [[ ! $result =~ "Name: testAVD" ]]; then

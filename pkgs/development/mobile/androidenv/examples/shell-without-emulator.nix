@@ -26,11 +26,11 @@ let
   # versions may be used in multiple places in this Nix expression.
   android = {
     versions = {
-      cmdLineToolsVersion = "11.0";
-      platformTools = "34.0.5";
-      buildTools = "34.0.0";
+      cmdLineToolsVersion = "13.0";
+      platformTools = "35.0.2";
+      buildTools = "35.0.0";
     };
-    platforms = [ "34" ];
+    platforms = [ "35" ];
   };
 
   # If you copy this example out of nixpkgs, something like this will work:
@@ -113,8 +113,8 @@ pkgs.mkShell rec {
       echo "installed_packages_section: ''${installed_packages_section}"
 
       packages=(
-        "build-tools;34.0.0" "cmdline-tools;11.0" \
-        "patcher;v4" "platform-tools" "platforms;android-34"
+        "build-tools;35.0.0" "cmdline-tools;13.0" \
+        "patcher;v4" "platform-tools" "platforms;android-35"
       )
 
       for package in "''${packages[@]}"; do
