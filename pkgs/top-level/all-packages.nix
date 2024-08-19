@@ -27063,6 +27063,8 @@ with pkgs;
 
   riscv-pk = callPackage ../misc/riscv-pk { };
 
+  riscv32-esp-elf-gdb = callPackage ../by-name/es/esp-idf/riscv32-esp-elf-gdb.nix { };
+
   ristate = callPackage ../tools/misc/ristate { };
 
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
