@@ -39,5 +39,6 @@ mkDerivation rec {
     license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ncfavier ];
+    broken = true;
   };
 }
