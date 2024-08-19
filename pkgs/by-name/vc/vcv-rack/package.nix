@@ -37,65 +37,65 @@ let
     owner = "jpommier";
     repo = "pffft";
     rev = "fbc4058602803f40dc554b8a5d2bcc694c005f2f";
-    sha256 = "16biji3115232cr1j975hpxw68lfybajlspnhfjcwg8jz2d8ybrf";
+    hash = "sha256-Li+PmvgSPc6kg/ZqKtXyjiLD+4XlJBkyE0OUEEaUcZk=";
   };
   fuzzysearchdatabase-source = fetchFromBitbucket {
     owner = "j_norberg";
     repo = "fuzzysearchdatabase";
     rev = "23122d1ff60d936fd766361a30210c954e0c5449";
-    sha256 = "1s88blx1rn2racmb8n5g0kh1ym7v21573l5m42c4nz266vmrvrvz";
+    hash = "sha256-f+ed6zZGfEuYILXQcUoQ+1Qf4ASvWLQqU1nYHDpdCOk=";
   };
   nanovg-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "nanovg";
     rev = "0bebdb314aff9cfa28fde4744bcb037a2b3fd756";
-    sha256 = "HmQhCE/zIKc3f+Zld229s5i5MWzRrBMF9gYrn8JVQzg=";
+    hash = "sha256-HmQhCE/zIKc3f+Zld229s5i5MWzRrBMF9gYrn8JVQzg=";
   };
   nanosvg-source = fetchFromGitHub {
     owner = "memononen";
     repo = "nanosvg";
     rev = "9da543e8329fdd81b64eb48742d8ccb09377aed1";
-    sha256 = "1pkzv75kavkhrbdd2kvq755jyr0vamgrfr7lc33dq3ipkzmqvs2l";
+    hash = "sha256-VOiN6583DtzGYPRkl19VG2QvSzl4T9HaynBuNcvZf94=";
   };
   osdialog-source = fetchFromGitHub {
     owner = "AndrewBelt";
     repo = "osdialog";
     rev = "d0f64f0798c2e47f61d90a5505910ff2d63ca049";
-    sha256 = "1d3058x6wgzw7b0wai792flk7s6ffw0z4n9sl016v91yjwv7ds3a";
+    hash = "sha256-auh2Npc+pG0CoDpZ8gF3zugzqRPpRMXBOvw/bjoqYLQ=";
   };
   oui-blendish-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "oui-blendish";
     rev = "2fc6405883f8451944ed080547d073c8f9f31898";
-    sha256 = "1bs0654312555vm7nzswsmky4l8759bjdk17pl22p49rw9k4a1px";
+    hash = "sha256-/QZFZuI5kSsEvSfMJlcqB1HiZ9Vcf3vqLqWIMEgxQK8=";
   };
   simde-source = fetchFromGitHub {
     owner = "simd-everywhere";
     repo = "simde";
     rev = "416091ebdb9e901b29d026633e73167d6353a0b0";
-    sha256 = "064ygc6c737yjx04rydwwhkr4n4s4rbvj27swxwyzvp1h8nka6xf";
+    hash = "sha256-rhs1LYLh7u955/oIuVcmmliSJ+S8+UxAl/6Mwwx7nhg=";
   };
   tinyexpr-source = fetchFromGitHub {
     owner = "codeplea";
     repo = "tinyexpr";
     rev = "9907207e5def0fabdb60c443517b0d9e9d521393";
-    sha256 = "0xbpd09zvrk2ppm1qm1skk6p50mqr9mzjixv3s0biqq6jpabs88l";
+    hash = "sha256-FCG91JUG47iAHrtH+WvKuIJyzZw6VBzqvWLm/RNod3U=";
   };
   fundamental-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Fundamental";
     rev = "5ed79544161e0fa9a55faa7c0a5f299e828e12ab"; # tip of branch v2
-    sha256 = "0c6qpigyr0ppvra20hcy1fdcmqa212jckb9wkx4f6fgdby7565wv";
+    hash = "sha256-mxdTjl/tOeNInzytyaQIQuHKmgueQSBU3veC7F+82DA=";
   };
-  vcv-rtaudio = stdenv.mkDerivation rec {
+  vcv-rtaudio = stdenv.mkDerivation {
     pname = "vcv-rtaudio";
-    version = "unstable-2020-01-30";
+    version = "5.1.0-unstable-2020-01-30";
 
     src = fetchFromGitHub {
       owner = "VCVRack";
       repo = "rtaudio";
       rev = "ece277bd839603648c80c8a5f145678e13bc23f3"; # tip of master branch
-      sha256 = "11gpl0ak757ilrq4fi0brj0chmlcr1hihc32yd7qza4fxjw2yx2v";
+      hash = "sha256-W3QvuOyOqI9P82IwGGHIjFbIgMwLREdwpvGUMxWg94U=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ];
@@ -103,21 +103,21 @@ let
     buildInputs = [ alsa-lib libjack2 libpulseaudio ];
 
     cmakeFlags = [
-      "-DRTAUDIO_API_ALSA=ON"
-      "-DRTAUDIO_API_PULSE=ON"
-      "-DRTAUDIO_API_JACK=ON"
-      "-DRTAUDIO_API_CORE=OFF"
+      (lib.cmakeBool "RTAUDIO_API_ALSA" true)
+      (lib.cmakeBool "RTAUDIO_API_PULSE" true)
+      (lib.cmakeBool "RTAUDIO_API_JACK" true)
+      (lib.cmakeBool "RTAUDIO_API_CORE" false)
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcv-rack";
   version = "2.5.1";
 
   desktopItems = [
     (makeDesktopItem {
       type = "Application";
-      name = pname;
+      name = "vcv-rack";
       desktopName = "VCV Rack";
       genericName = "Eurorack simulator";
       comment = "Create music by patching together virtual synthesizer modules";
@@ -131,8 +131,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Rack";
-    rev = "v${version}";
-    sha256 = "1q2bwjfn6crk9lyd6m3py0v754arw1xgpv5kkj6ka1bc2yz839qh";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-EKeBvhdsBTWNnLPs+3rgWZFyNvB3VNM8TTMzY53kS+A=";
   };
 
   patches = [
@@ -165,15 +165,15 @@ stdenv.mkDerivation rec {
     # Build and dist the Fundamental plugins
     cp -r ${fundamental-source} plugins/Fundamental/
     chmod -R +rw plugins/Fundamental # will be used as build dir
-    substituteInPlace plugin.mk --replace ":= all" ":= dist"
+    substituteInPlace plugin.mk --replace-fail ":= all" ":= dist"
     substituteInPlace plugins/Fundamental/src/Logic.cpp \
-      --replace \
+      --replace-fail \
         "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
         "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
+      --replace-fail 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe zenity}"'
   '';
 
   nativeBuildInputs = [
