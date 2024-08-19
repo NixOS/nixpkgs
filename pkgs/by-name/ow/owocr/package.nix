@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication {
     psutil
     pywinctl
     # extra optional libs for OCR engines
+    azure-ai-vision-imageanalysis
     easyocr
     pyjson5 # Google Lens
     google-cloud-vision
