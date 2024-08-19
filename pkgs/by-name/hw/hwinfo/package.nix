@@ -30,9 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace "/sbin" "/bin" --replace "/usr/" "/"
-    substituteInPlace src/isdn/cdb/Makefile --replace "lex isdn_cdb.lex" "flex isdn_cdb.lex"
-    substituteInPlace hwinfo.pc.in --replace "prefix=/usr" "prefix=$out"
+    substituteInPlace Makefile \
+      --replace-fail "/sbin" "/bin" \
+      --replace-fail "/usr/" "/"
+    substituteInPlace src/isdn/cdb/Makefile \
+      --replace-fail "lex isdn_cdb.lex" "flex isdn_cdb.lex"
+    substituteInPlace hwinfo.pc.in \
+      --replace-fail "prefix=/usr" "prefix=$out"
 
     # replace absolute paths with relative, we will prefix PATH later
     substituteInPlace src/hd/hd_int.h \
