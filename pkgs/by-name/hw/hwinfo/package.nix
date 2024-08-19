@@ -9,6 +9,9 @@
   kmod,
   systemdMinimal,
   testers,
+  binutils,
+  writeText,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,13 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/sbin/rmmod" "${kmod}/bin/rmmod" \
       --replace-fail "/usr/bin/udevinfo" "${systemdMinimal}/bin/udevinfo" \
       --replace-fail "/usr/bin/udevadm" "${systemdMinimal}/bin/udevadm"
-
-    # check for leftover references to FHS binaries.
-    if grep /sbin /usr/bin src/hd/hd_int.h
-    then
-      echo "Santity check failed. The above lines should be replaced in src/hd/hd_int.h"
-      exit 1
-    fi
   '';
 
   makeFlags = [
@@ -63,6 +59,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
+    no-usr = testers.testEqualContents {
+      assertion = "There should be no /usr/ paths in the binaries";
+      # There is a bash script that refers to lshal, which is deprecated and not available in Nixpkgs.
+      # We'll allow this line, but nothing else.
+      expected = writeText "expected" ''
+        if [ -x /usr/bin/lshal ] ; then
+      '';
+      actual = runCommand "actual" { nativeBuildInputs = [ binutils ]; } ''
+        strings ${finalAttrs.finalPackage}/bin/* | grep /usr/ > $out
+      '';
+    };
   };
 
   meta = with lib; {
