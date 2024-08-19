@@ -45,10 +45,20 @@ buildGoModule ({
 
   preConfigure = ''
     mkdir -p _build/bin
-    cp -r ${auxBins}/bin/* _build/bin
+
+    pushd _build/bin
+    cp -r ${auxBins}/bin/* .
+    cp -r ${git}/bin/* .
+
+    # git binary names are expected to start with "gitaly-"
+    # https://gitlab.com/gitlab-org/gitaly/-/merge_requests/7035
+    for file in git-*; do mv "$file" "gitaly-$file"; done
+    popd
   '';
 
   outputs = [ "out" ];
+
+  buildInputs = [ git ];
 
   passthru = {
     inherit git;
