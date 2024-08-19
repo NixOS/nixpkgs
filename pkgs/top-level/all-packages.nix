@@ -29731,6 +29731,8 @@ with pkgs;
 
   errbot = callPackage ../applications/networking/errbot { };
 
+  esp-clang = callPackage ../by-name/es/esp-idf/esp-clang.nix { };
+
   espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak-ng = callPackage ../applications/audio/espeak-ng {
