@@ -23,17 +23,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1RYuBS/CQhtyIeXrLDvGWJhuVG1kiQMG+aYaBkoGnEU=";
+    hash = "sha256-zushuLkBblDZGVo2qbiMTJ51LSkqYJpje/R2dvfec1U=";
   };
-
-  # https://github.com/hyprwm/aquamarine/pull/55
-  patches = [ ./CMakeLists-wayland.xml-is-in-wayland-scanner-pkgdata.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -70,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/hyprwm/aquamarine/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/hyprwm/aquamarine/releases/tag/v${finalAttrs.version}";
     description = "A very light linux rendering backend library";
     homepage = "https://github.com/hyprwm/aquamarine";
     license = lib.licenses.bsd3;
