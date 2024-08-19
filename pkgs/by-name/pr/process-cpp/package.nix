@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "process-cpp";
-  version = "3.0.1-unstable-2024-03-14";
+  version = "3.0.2-unstable-2024-08-16";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
-    rev = "7b0a829abcbcdd25d949e5f9e2c26bb985a58b31";
-    hash = "sha256-Az+lSJ7uVR4pAWvOeah5vFtIPb12eKp0nAFF1qsHZXA=";
+    rev = "450d2f6ea0c05b7dcb3126c4f42b22725dc6ffad";
+    hash = "sha256-UCNmD5Ea2wnEwG9gkt88TaX0vfS4SCaIOPRMeNFx80Y=";
   };
 
   outputs = [
