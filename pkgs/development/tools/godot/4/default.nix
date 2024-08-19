@@ -32,15 +32,18 @@
 , withFontconfig ? true
 , withUdev ? true
 , withTouch ? true
+,
 }:
 
-assert lib.asserts.assertOneOf "withPrecision" withPrecision [ "single" "double" ];
+assert lib.asserts.assertOneOf "withPrecision" withPrecision [
+  "single"
+  "double"
+];
 
 let
-  mkSconsFlagsFromAttrSet = lib.mapAttrsToList (k: v:
-    if builtins.isString v
-    then "${k}=${v}"
-    else "${k}=${builtins.toJSON v}");
+  mkSconsFlagsFromAttrSet = lib.mapAttrsToList (
+    k: v: if builtins.isString v then "${k}=${v}" else "${k}=${builtins.toJSON v}"
+  );
 in
 stdenv.mkDerivation rec {
   pname = "godot4";
@@ -60,31 +63,30 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    scons
-  ];
+  buildInputs = [ scons ];
 
-  runtimeDependencies = [
-    vulkan-loader
-    libGL
-    libX11
-    libXcursor
-    libXinerama
-    libXext
-    libXrandr
-    libXrender
-    libXi
-    libXfixes
-    libxkbcommon
-    alsa-lib
-  ]
-  ++ lib.optional withPulseaudio libpulseaudio
-  ++ lib.optional withDbus dbus
-  ++ lib.optional withDbus dbus.lib
-  ++ lib.optional withSpeechd speechd
-  ++ lib.optional withFontconfig fontconfig
-  ++ lib.optional withFontconfig fontconfig.lib
-  ++ lib.optional withUdev udev;
+  runtimeDependencies =
+    [
+      vulkan-loader
+      libGL
+      libX11
+      libXcursor
+      libXinerama
+      libXext
+      libXrandr
+      libXrender
+      libXi
+      libXfixes
+      libxkbcommon
+      alsa-lib
+    ]
+    ++ lib.optional withPulseaudio libpulseaudio
+    ++ lib.optional withDbus dbus
+    ++ lib.optional withDbus dbus.lib
+    ++ lib.optional withSpeechd speechd
+    ++ lib.optional withFontconfig fontconfig
+    ++ lib.optional withFontconfig fontconfig.lib
+    ++ lib.optional withUdev udev;
 
   enableParallelBuilding = true;
 
@@ -129,7 +131,10 @@ stdenv.mkDerivation rec {
 
   dontStrip = withDebug;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -154,8 +159,15 @@ stdenv.mkDerivation rec {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license = lib.licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with lib.maintainers; [ shiryel superherointj ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      shiryel
+      superherointj
+    ];
     mainProgram = "godot4";
   };
 }
