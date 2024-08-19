@@ -164,13 +164,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    description = "A way to run various GGML and GGUF models";
+    changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
+    description = "Way to run various GGML and GGUF models";
     license = lib.licenses.agpl3Only;
+    mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
       donteatoreo
     ];
-    mainProgram = "koboldcpp";
     platforms = lib.platforms.unix;
   };
 })
