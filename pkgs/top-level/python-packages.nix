@@ -11846,6 +11846,8 @@ self: super: with self; {
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
+  pymonctl = callPackage ../development/python-modules/pymonctl { };
+
   pymongo = callPackage ../development/python-modules/pymongo { };
 
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
