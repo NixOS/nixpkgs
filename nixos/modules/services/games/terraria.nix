@@ -1,24 +1,71 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
-  cfg   = config.services.terraria;
-  opt   = options.services.terraria;
-  worldSizeMap = { small = 1; medium = 2; large = 3; };
-  valFlag = name: val: optionalString (val != null) "-${name} \"${escape ["\\" "\""] (toString val)}\"";
-  boolFlag = name: val: optionalString val "-${name}";
-  flags = [
-    (valFlag "port" cfg.port)
-    (valFlag "maxPlayers" cfg.maxPlayers)
-    (valFlag "password" cfg.password)
-    (valFlag "motd" cfg.messageOfTheDay)
-    (valFlag "world" cfg.worldPath)
-    (valFlag "autocreate" (builtins.getAttr cfg.autoCreatedWorldSize worldSizeMap))
-    (valFlag "banlist" cfg.banListPath)
-    (boolFlag "secure" cfg.secure)
-    (boolFlag "noupnp" cfg.noUPnP)
+  cfg = config.services.terraria;
+  opt = options.services.terraria;
+
+  inherit (lib) mkOption types;
+
+  worldSizeMap = {
+    small = 1;
+    medium = 2;
+    large = 3;
+  };
+
+  difficultyMap = {
+    normal = 0;
+    expert = 1;
+    master = 2;
+    journey = 3;
+  };
+
+  mkLine = name: val: (lib.optionalString (val == null) "# ") + "${name}=${toString val}";
+  mkTodo = name: "# ${name}= # TODO: add option";
+
+  # Based on https://terraria.wiki.gg/wiki/Server#Server_config_file
+  configLines = [
+    (mkLine "world" cfg.worldPath)
+    (mkLine "autocreate" (builtins.getAttr cfg.autoCreatedWorldSize worldSizeMap))
+    (mkLine "seed" cfg.autoCreatedWorldSeed)
+    (mkTodo "worldname")
+    (mkLine "difficulty" (builtins.getAttr cfg.autoCreatedWorldDifficulty difficultyMap))
+    (mkLine "maxplayers" cfg.maxPlayers)
+    (mkLine "port" cfg.port)
+    (mkLine "password" cfg.password)
+    (mkLine "motd" cfg.messageOfTheDay)
+    (mkTodo "worldpath")
+    (mkLine "banlist" cfg.banListPath)
+    (mkLine "secure" (if cfg.secure then "1" else "0"))
+    (mkLine "upnp" (if cfg.noUPnP then "0" else "1")) # should probably be inverted in the option name instead
+    (mkTodo "npcstream")
+    (mkTodo "priority")
+    (mkTodo "journeypermission_time_setfrozen")
+    (mkTodo "journeypermission_time_setdawn")
+    (mkTodo "journeypermission_time_setnoon")
+    (mkTodo "journeypermission_time_setdusk")
+    (mkTodo "journeypermission_time_setmidnight")
+    (mkTodo "journeypermission_godmode")
+    (mkTodo "journeypermission_wind_setstrength")
+    (mkTodo "journeypermission_rain_setstrength")
+    (mkTodo "journeypermission_time_setspeed")
+    (mkTodo "journeypermission_rain_setfrozen")
+    (mkTodo "journeypermission_wind_setfrozen")
+    (mkTodo "journeypermission_increaseplacementrange")
+    (mkTodo "journeypermission_setdifficulty")
+    (mkTodo "journeypermission_biomespread_setfrozen")
+    (mkTodo "journeypermission_setspawnrate")
   ];
+
+  configFile = pkgs.writeText "serverconfig.txt" ''
+    # This file was created by the services.terraria NixOS module
+    ${lib.concatStringsSep "\n" configLines}
+  '';
 
   tmuxCmd = "${lib.getExe pkgs.tmux} -S ${lib.escapeShellArg cfg.dataDir}/terraria.sock";
 
@@ -47,8 +94,8 @@ in
   options = {
     services.terraria = {
       enable = mkOption {
-        type        = types.bool;
-        default     = false;
+        type = types.bool;
+        default = false;
         description = ''
           If enabled, starts a Terraria server. The server can be connected to via `tmux -S ''${config.${opt.dataDir}}/terraria.sock attach`
           for administration by users who are a part of the `terraria` group (use `C-b d` shortcut to detach again).
@@ -56,40 +103,40 @@ in
       };
 
       port = mkOption {
-        type        = types.port;
-        default     = 7777;
+        type = types.port;
+        default = 7777;
         description = ''
           Specifies the port to listen on.
         '';
       };
 
       maxPlayers = mkOption {
-        type        = types.ints.u8;
-        default     = 255;
+        type = types.ints.u8;
+        default = 255;
         description = ''
           Sets the max number of players (between 1 and 255).
         '';
       };
 
       password = mkOption {
-        type        = types.nullOr types.str;
-        default     = null;
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Sets the server password. Leave `null` for no password.
         '';
       };
 
       messageOfTheDay = mkOption {
-        type        = types.nullOr types.str;
-        default     = null;
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           Set the server message of the day text.
         '';
       };
 
       worldPath = mkOption {
-        type        = types.nullOr types.path;
-        default     = null;
+        type = types.nullOr types.path;
+        default = null;
         description = ''
           The path to the world file (`.wld`) which should be loaded.
           If no world exists at this path, one will be created with the size
@@ -98,8 +145,12 @@ in
       };
 
       autoCreatedWorldSize = mkOption {
-        type        = types.enum [ "small" "medium" "large" ];
-        default     = "medium";
+        type = types.enum [
+          "small"
+          "medium"
+          "large"
+        ];
+        default = "medium";
         description = ''
           Specifies the size of the auto-created world if `worldPath` does not
           point to an existing world.
@@ -107,22 +158,22 @@ in
       };
 
       banListPath = mkOption {
-        type        = types.nullOr types.path;
-        default     = null;
+        type = types.nullOr types.path;
+        default = null;
         description = ''
           The path to the ban list.
         '';
       };
 
       secure = mkOption {
-        type        = types.bool;
-        default     = false;
+        type = types.bool;
+        default = false;
         description = "Adds additional cheat protection to the server.";
       };
 
       noUPnP = mkOption {
-        type        = types.bool;
-        default     = false;
+        type = types.bool;
+        default = false;
         description = "Disables automatic Universal Plug and Play.";
       };
 
@@ -133,21 +184,21 @@ in
       };
 
       dataDir = mkOption {
-        type        = types.str;
-        default     = "/var/lib/terraria";
-        example     = "/srv/terraria";
+        type = types.str;
+        default = "/var/lib/terraria";
+        example = "/srv/terraria";
         description = "Path to variable state data directory for terraria.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.terraria = {
       description = "Terraria server service user";
-      group       = "terraria";
-      home        = cfg.dataDir;
-      createHome  = true;
-      uid         = config.ids.uids.terraria;
+      group = "terraria";
+      home = cfg.dataDir;
+      createHome = true;
+      uid = config.ids.uids.terraria;
     };
 
     users.groups.terraria = {
@@ -155,22 +206,22 @@ in
     };
 
     systemd.services.terraria = {
-      description   = "Terraria Server Service";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Terraria Server Service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
-        User    = "terraria";
+        User = "terraria";
         Group = "terraria";
         Type = "forking";
         GuessMainPID = true;
-        UMask = 007;
-        ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
+        UMask = "007";
+        ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${configFile}";
         ExecStop = "${stopScript} $MAINPID";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
       allowedUDPPorts = [ cfg.port ];
     };
