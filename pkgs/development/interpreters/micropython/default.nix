@@ -15,9 +15,20 @@ stdenv.mkDerivation rec {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-sdok17HvKub/sI+8cAIIDaLD/3mu8yXXqrTOej8/UfU=";
+    sha256 = "sha256-7AA9n6UQchY6POkOp1VWAOAo87uRJSeCBhgvVXLoE04=";
     fetchSubmodules = true;
+
+    # remove unused libaries from rp2 port's SDK. we leave this and the other
+    # ports around for users who want to override makeFlags flags to build them.
+    # https://github.com/micropython/micropython/blob/a61c446c0b34e82aeb54b9770250d267656f2b7f/ports/rp2/CMakeLists.txt#L17-L22
+    #
+    # shrinks uncompressed NAR by ~2.4G (though it is still large). there
+    # doesn't seem to be a way to avoid fetching them in the first place.
+    postFetch = ''
+      rm -rf $out/lib/pico-sdk/lib/{tinyusb,lwip,btstack}
+    '';
   };
+
 
   nativeBuildInputs = [ pkg-config python3 ];
 
