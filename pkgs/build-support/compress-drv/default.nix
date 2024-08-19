@@ -84,8 +84,7 @@ runCommand "${drv.name}-compressed"
   ''
     mkdir $out
 
-    # cannot use lndir here, because it also symlinks directories,
-    # which we do not need; we only need to symlink files.
+    # cannot use lndir here, because it stop recursing at symlinks that point to directories
     (cd ${drv}; find -L -type d -exec mkdir -p $out/{} ';')
     (cd ${drv}; find -L -type f -exec ln -s ${drv}/{} $out/{} ';')
 
