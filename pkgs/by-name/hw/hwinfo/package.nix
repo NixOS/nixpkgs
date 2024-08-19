@@ -12,6 +12,7 @@
   binutils,
   writeText,
   runCommand,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YAhsnE1DJ5UlYAuhDxS/5IpfIJB6DrhCT3E0YiKENjU=";
   };
 
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [
+    flex
+    validatePkgConfig
+  ];
 
   buildInputs = [
     libuuid
@@ -62,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     no-usr = testers.testEqualContents {
       assertion = "There should be no /usr/ paths in the binaries";
       # There is a bash script that refers to lshal, which is deprecated and not available in Nixpkgs.
@@ -82,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ bobvanderlinden ];
     platforms = platforms.linux;
     mainProgram = "hwinfo";
+    pkgConfigModules = [ "hwinfo" ];
   };
 })
