@@ -30,11 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # VERSION and changelog are usually generated using Git
-    # unless HWINFO_VERSION is defined (see Makefile)
-    export HWINFO_VERSION="${finalAttrs.version}"
-    sed -i 's|^\(TARGETS\s*=.*\)\<changelog\>\(.*\)$|\1\2|g' Makefile
-
     substituteInPlace Makefile --replace "/sbin" "/bin" --replace "/usr/" "/"
     substituteInPlace src/isdn/cdb/Makefile --replace "lex isdn_cdb.lex" "flex isdn_cdb.lex"
     substituteInPlace hwinfo.pc.in --replace "prefix=/usr" "prefix=$out"
@@ -54,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
-  makeFlags = [ "LIBDIR=/lib" ];
+  makeFlags = [
+    "LIBDIR=/lib"
+    "HWINFO_VERSION=${finalAttrs.version}"
+  ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 
