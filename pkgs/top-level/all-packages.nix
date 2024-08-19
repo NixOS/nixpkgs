@@ -37659,8 +37659,6 @@ with pkgs;
 
   bitwuzla = callPackage ../applications/science/logic/bitwuzla { };
 
-  symbiyosys = callPackage ../applications/science/logic/symbiyosys { };
-
   symfpu = callPackage ../applications/science/logic/symfpu { };
 
   uhdm = callPackage ../applications/science/logic/uhdm { };
