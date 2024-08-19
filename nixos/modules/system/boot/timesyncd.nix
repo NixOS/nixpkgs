@@ -2,6 +2,9 @@
 
 with lib;
 
+let
+  cfg = config.services.timesyncd;
+in
 {
 
   options = {
@@ -41,7 +44,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.timesyncd.enable {
+  config = mkIf cfg.enable {
 
     systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
 
@@ -82,8 +85,8 @@ with lib;
 
     environment.etc."systemd/timesyncd.conf".text = ''
       [Time]
-      NTP=${concatStringsSep " " config.services.timesyncd.servers}
-      ${config.services.timesyncd.extraConfig}
+      NTP=${concatStringsSep " " cfg.servers}
+      ${cfg.extraConfig}
     '';
 
     users.users.systemd-timesync = {
