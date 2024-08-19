@@ -458,6 +458,7 @@
   ./services/continuous-integration/woodpecker/server.nix
   ./services/databases/aerospike.nix
   ./services/databases/cassandra.nix
+  ./services/databases/chromadb.nix
   ./services/databases/clickhouse.nix
   ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
