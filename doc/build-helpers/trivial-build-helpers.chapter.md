@@ -8,9 +8,13 @@ Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers cre
 
 The function `runCommandWith` returns a derivation built using the specified command(s), in a specified environment.
 
-It is the underlying base function of  all `runCommand*` variants. 
-The general behavior is controlled via a single attribute set passed 
+It is the underlying base function of  all [`runCommand*` variants].
+The general behavior is controlled via a single attribute set passed
 as the first argument, and allows specifying `stdenv` freely.
+
+The following [`runCommand*` variants] exist: `runCommand`, `runCommandCC`, and `runCommandLocal`.
+
+[`runCommand*` variants]: #trivial-builder-runCommand
 
 ### Type {#trivial-builder-runCommandWith-Type}
 
