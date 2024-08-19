@@ -1,12 +1,16 @@
 { lib
-, stdenv
 , fetchFromGitHub
-, bash
-, btrfs-progs
-, coreutils
-, python3Packages
-, util-linux
+, makeWrapper
 , nixosTests
+
+, stdenv
+# Build inputs
+, btrfs-progs
+, util-linux
+, python3Packages
+# bees-service-wrapper
+, bash
+, coreutils
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    makeWrapper
     python3Packages.markdown # documentation build
   ];
 
@@ -38,12 +43,10 @@ stdenv.mkDerivation rec {
     unset -f git
   '';
 
-  inherit bash bees coreutils;
-  utillinux = util-linux;
-  btrfsProgs = btrfs-progs;
   postInstall = ''
-    substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
-    chmod +x "$out"/bin/bees-service-wrapper
+    makeWrapper ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper \
+      --prefix PATH : ${lib.makeBinPath [ bash coreutils util-linux btrfs-progs ]} \
+      --set beesd_bin "$out"/lib/bees/bees
   '';
 
   buildFlags = [
