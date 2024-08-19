@@ -11,7 +11,7 @@ in
     environment.systemPackages = with pkgs; [ jq ];
     services.octoprint = {
       enable = true;
-      extraConfig = {
+      settings = {
         server = {
           firstRun = false;
         };
