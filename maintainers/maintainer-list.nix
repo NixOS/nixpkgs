@@ -963,6 +963,12 @@
     matrix = "@alexshpilkin:matrix.org";
     name = "Alexander Shpilkin";
   };
+  AlexSKaye = {
+    email = "AlexSKaye@proton.me";
+    github = "AlexSKaye";
+    githubId = 3017212;
+    name = "Alex S. Kaye";
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";
@@ -10097,6 +10103,12 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  jovandeginste = {
+    email = "jo.vandeginste@gmail.com";
+    github = "jovandeginste";
+    githubId = 3170771;
+    name = "Jo Vandeginste";
+  };
   jpagex = {
     name = "Jérémy Pagé";
     email = "contact@jeremypage.me";
@@ -14429,6 +14441,12 @@
     githubId = 2287221;
     name = "Andreas Zweili";
   };
+  nebunebu = {
+    email = "neb.nebuchadnezzar@gmail.com";
+    github = "nebunebu";
+    githubId = 87451010;
+    name = "nebu";
+  };
   Necior = {
     email = "adrian@sadlocha.eu";
     github = "Necior";
@@ -15210,6 +15228,12 @@
     githubId = 7397786;
     name = "Odysseas Georgoudis";
   };
+  ofalvai = {
+    email = "ofalvai@gmail.com";
+    github = "ofalvai";
+    githubId = 1694986;
+    name = "Olivér Falvai";
+  };
   ofek = {
     email = "oss@ofek.dev";
     github = "ofek";
@@ -15462,6 +15486,12 @@
     email = "olivier@chnik.fr";
     github = "OlivierNicole";
     githubId = 14031333;
+  };
+  ottoblep = {
+    name = "Severin Lochschmidt";
+    email = "seviron53@gmail.com";
+    github = "ottoblep";
+    githubId = 57066925;
   };
   otwieracz = {
     email = "slawek@otwiera.cz";

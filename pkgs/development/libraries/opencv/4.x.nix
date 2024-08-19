@@ -375,7 +375,7 @@ effectiveStdenv.mkDerivation {
     cudaPackages.cuda_cudart
     cudaPackages.cuda_cccl # <thrust/*>
     cudaPackages.libnpp # npp.h
-    cudaPackages.nvidia-optical-flow-sdk
+    nvidia-optical-flow-sdk
   ] ++ lib.optionals enableCublas [
     # May start using the default $out instead once
     # https://github.com/NixOS/nixpkgs/issues/271792

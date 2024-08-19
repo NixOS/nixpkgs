@@ -9,6 +9,12 @@
 
   : List of file extensions to compress. Example: `["txt" "svg" "xml"]`.
 
+  `extraFindOperands` (String)
+
+  : Extra command line parameters to pass to the find command.
+    This can be used to exclude certain files.
+    For example: `-not -iregex ".*(\/apps\/.*\/l10n\/).*"`
+
   `compressors` ( { ${fileExtension} :: String })
 
   : Map a desired extension (e.g. `gz`) to a compress program.
@@ -47,7 +53,11 @@
   :::
 */
 drv:
-{ formats, compressors }:
+{
+  formats,
+  compressors,
+  extraFindOperands ? "",
+}:
 let
   validProg =
     ext: prog:
@@ -61,18 +71,22 @@ let
     ext: prog:
     assert validProg ext prog;
     ''
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' -print0 \
+      find -L $out -type f -regextype posix-extended -iregex '.*\.(${formatsPipe})' ${extraFindOperands} -print0 \
         | xargs -0 -P$NIX_BUILD_CORES -I{} ${prog}
     '';
-  formatsPipe = builtins.concatStringsSep "|" formats;
+  formatsPipe = lib.concatStringsSep "|" formats;
 in
-runCommand "${drv.name}-compressed" { } ''
-  mkdir $out
+runCommand "${drv.name}-compressed"
+  (
+    (lib.optionalAttrs (drv ? pname) { inherit (drv) pname; })
+    // (lib.optionalAttrs (drv ? version) { inherit (drv) version; })
+  )
+  ''
+    mkdir $out
 
-  # cannot use lndir here, because it also symlinks directories,
-  # which we do not need; we only need to symlink files.
-  (cd ${drv}; find -L -type d -exec mkdir -p $out/{} ';')
-  (cd ${drv}; find -L -type f -exec ln -s ${drv}/{} $out/{} ';')
+    # cannot use lndir here, because it stop recursing at symlinks that point to directories
+    (cd ${drv}; find -L -type d -exec mkdir -p $out/{} ';')
+    (cd ${drv}; find -L -type f -exec ln -s ${drv}/{} $out/{} ';')
 
-  ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
-''
+    ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
+  ''

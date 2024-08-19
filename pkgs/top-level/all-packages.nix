@@ -3499,8 +3499,6 @@ with pkgs;
 
   fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
 
-  ccextractor = callPackage ../applications/video/ccextractor { };
-
   cconv = callPackage ../tools/text/cconv { };
 
   go-check = callPackage ../development/tools/check { };
@@ -19421,8 +19419,6 @@ with pkgs;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
 
-  amdvlk = callPackage ../development/libraries/amdvlk { };
-
   amf-headers = callPackage ../development/libraries/amf-headers { };
 
   aml = callPackage ../development/libraries/aml { };
@@ -19594,6 +19590,7 @@ with pkgs;
     boost183
     boost184
     boost185
+    boost186
   ;
 
   boost = boost181;
@@ -20875,6 +20872,7 @@ with pkgs;
     icu72
     icu73
     icu74
+    icu75
   ;
 
   icu = icu74;

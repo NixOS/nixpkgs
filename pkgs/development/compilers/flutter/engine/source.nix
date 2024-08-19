@@ -99,7 +99,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
     python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
     find $out -name '.git' -exec rm -rf {} \; || true
 
-    rm -rf $out/src/buildtools/
+    rm -rf $out/src/{buildtools,fuchsia}
     rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
     rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja}
     rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}

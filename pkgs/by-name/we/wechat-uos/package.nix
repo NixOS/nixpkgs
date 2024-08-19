@@ -63,6 +63,11 @@
   uosLicense ? null
 }:
 let
+  # zerocallusedregs hardening breaks WeChat
+  glibcWithoutHardening = stdenv.cc.libc.overrideAttrs (old: {
+    hardeningDisable = (old.hardeningDisable or [ ]) ++ [ "zerocallusedregs" ];
+  });
+
   wechat-uos-env = stdenvNoCC.mkDerivation {
     meta.priority = 1;
     name = "wechat-uos-env";
@@ -108,6 +113,9 @@ let
   };
 
   wechat-uos-runtime = with xorg; [
+    # Make sure our glibc without hardening gets picked up first
+    (lib.hiPrio glibcWithoutHardening)
+
     stdenv.cc.cc
     stdenv.cc.libc
     pango
@@ -240,7 +248,7 @@ let
         license = licenses.unfree;
         platforms = [ "x86_64-linux" "aarch64-linux" "loongarch64-linux" ];
         sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        maintainers = with maintainers; [ pokon548 ];
+        maintainers = with maintainers; [ pokon548 xddxdd ];
         mainProgram = "wechat-uos";
       };
     };
