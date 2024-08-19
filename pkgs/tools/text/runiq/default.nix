@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+  doCheck = false; # jen / bson don't build yet with Rust 1.80.0, needed for the tests
+
   meta = with lib; {
     description = "Efficient way to filter duplicate lines from input, à la uniq";
     mainProgram = "runiq";
