@@ -9,6 +9,7 @@
   ordered-set,
   pymemcache,
   pymongo,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   version = "3.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
@@ -33,15 +34,14 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-
     # flask-restful is unmaintained and breaks regularly, don't depend on it
-    sed -i "/import flask_restful/d" tests/test_views.py
+    substituteInPlace tests/test_views.py \
+      --replace-fail "import flask_restful" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     limits
     ordered-set
@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     asgiref
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     hiro
