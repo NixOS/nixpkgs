@@ -6,6 +6,9 @@
 , gnused
 , autoPatchelfHook
 , wrapGAppsHook3
+, gtk3
+, glib
+, swt
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -46,7 +49,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r * $out/opt/dbeaver
     makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
       --prefix PATH : "${openjdk17}/bin" \
-      --set JAVA_HOME "${openjdk17.home}"
+      --set JAVA_HOME "${openjdk17.home}" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          swt
+          gtk3
+          glib
+        ]
+      }"
+
 
     mkdir -p $out/share/icons/hicolor/256x256/apps
     ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
