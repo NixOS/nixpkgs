@@ -142,10 +142,10 @@ in
     fonts.packages = [ cfg.font.package ];
 
     programs.regreet.settings.GTK = {
-      cursor_theme_name = cfg.cursorTheme.name;
-      font_name = "${cfg.font.name} ${toString cfg.font.size}";
-      icon_theme_name = cfg.iconTheme.name;
-      theme_name = cfg.theme.name;
+      cursor_theme_name = lib.mkDefault cfg.cursorTheme.name;
+      font_name = lib.mkDefault "${cfg.font.name} ${toString cfg.font.size}";
+      icon_theme_name = lib.mkDefault cfg.iconTheme.name;
+      theme_name = lib.mkDefault cfg.theme.name;
     };
 
     services.greetd = {
