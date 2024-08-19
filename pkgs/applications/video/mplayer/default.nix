@@ -86,38 +86,37 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
-  buildInputs = with lib;
-    [ freetype ffmpeg_6 ]
-    ++ optional aalibSupport aalib
-    ++ optional fontconfigSupport fontconfig
-    ++ optional fribidiSupport fribidi
-    ++ optionals x11Support [ libX11 libXext libGLU libGL ]
-    ++ optional alsaSupport alsa-lib
-    ++ optional xvSupport libXv
-    ++ optional theoraSupport libtheora
-    ++ optional cacaSupport libcaca
-    ++ optional xineramaSupport libXinerama
-    ++ optional dvdnavSupport libdvdnav
-    ++ optional dvdreadSupport libdvdread
-    ++ optional bluraySupport libbluray
-    ++ optional cddaSupport cdparanoia
-    ++ optional jackaudioSupport libjack2
-    ++ optionals amrSupport [ amrnb amrwb ]
-    ++ optional x264Support x264
-    ++ optional pulseSupport libpulseaudio
-    ++ optional screenSaverSupport libXScrnSaver
-    ++ optional lameSupport lame
-    ++ optional vdpauSupport libvdpau
-    ++ optional speexSupport speex
-    ++ optional libpngSupport libpng
-    ++ optional libjpegSupport libjpeg
-    ++ optional bs2bSupport libbs2b
-    ++ optional v4lSupport libv4l
-    ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
+  buildInputs = [ freetype ffmpeg_6 ]
+    ++ lib.optional aalibSupport aalib
+    ++ lib.optional fontconfigSupport fontconfig
+    ++ lib.optional fribidiSupport fribidi
+    ++ lib.optionals x11Support [ libX11 libXext libGLU libGL ]
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional xvSupport libXv
+    ++ lib.optional theoraSupport libtheora
+    ++ lib.optional cacaSupport libcaca
+    ++ lib.optional xineramaSupport libXinerama
+    ++ lib.optional dvdnavSupport libdvdnav
+    ++ lib.optional dvdreadSupport libdvdread
+    ++ lib.optional bluraySupport libbluray
+    ++ lib.optional cddaSupport cdparanoia
+    ++ lib.optional jackaudioSupport libjack2
+    ++ lib.optionals amrSupport [ amrnb amrwb ]
+    ++ lib.optional x264Support x264
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional screenSaverSupport libXScrnSaver
+    ++ lib.optional lameSupport lame
+    ++ lib.optional vdpauSupport libvdpau
+    ++ lib.optional speexSupport speex
+    ++ lib.optional libpngSupport libpng
+    ++ lib.optional libjpegSupport libjpeg
+    ++ lib.optional bs2bSupport libbs2b
+    ++ lib.optional v4lSupport libv4l
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa darwin.apple_sdk.frameworks.OpenGL ]
     ;
 
   configurePlatforms = [ ];
-  configureFlags = with lib; [
+  configureFlags = [
     "--enable-freetype"
     (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
     (if x11Support then "--enable-x11 --enable-gl" else "--disable-x11 --disable-gl")
@@ -143,18 +142,14 @@ stdenv.mkDerivation rec {
     "--disable-ossaudio"
     "--disable-ffmpeg_a"
     "--yasm=${buildPackages.yasm}/bin/yasm"
-    # Note, the `target` vs `host` confusion is intensional.
+    # Note, the `target` vs `host` confusion is intentional.
     "--target=${stdenv.hostPlatform.config}"
-  ] ++ optional
-         (useUnfreeCodecs && codecs != null && !crossBuild)
-         "--codecsdir=${codecs}"
-    ++ optional
-         (stdenv.hostPlatform.isx86 && !crossBuild)
-         "--enable-runtime-cpudetection"
-    ++ optional fribidiSupport "--enable-fribidi"
-    ++ optional (stdenv.isLinux && !stdenv.isAarch64) "--enable-vidix"
-    ++ optional stdenv.isLinux "--enable-fbdev"
-    ++ optionals (crossBuild) [
+  ] ++ lib.optional (useUnfreeCodecs && codecs != null && !crossBuild) "--codecsdir=${codecs}"
+    ++ lib.optional (stdenv.hostPlatform.isx86 && !crossBuild) "--enable-runtime-cpudetection"
+    ++ lib.optional fribidiSupport "--enable-fribidi"
+    ++ lib.optional (stdenv.isLinux && !stdenv.isAarch64) "--enable-vidix"
+    ++ lib.optional stdenv.isLinux "--enable-fbdev"
+    ++ lib.optionals (crossBuild) [
     "--enable-cross-compile"
     "--disable-vidix-pcidb"
     "--with-vidix-drivers=no"
@@ -179,11 +174,11 @@ stdenv.mkDerivation rec {
   # Fixes compilation with newer versions of clang that make these warnings errors by default.
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion -Wno-incompatible-function-pointer-types";
 
-  NIX_LDFLAGS = with lib; toString (
-       optional  fontconfigSupport "-lfontconfig"
-    ++ optional  fribidiSupport "-lfribidi"
-    ++ optionals x11Support [ "-lX11" "-lXext" ]
-    ++ optional  x264Support "-lx264"
+  NIX_LDFLAGS = toString (
+       lib.optional  fontconfigSupport "-lfontconfig"
+    ++ lib.optional  fribidiSupport "-lfribidi"
+    ++ lib.optionals x11Support [ "-lX11" "-lXext" ]
+    ++ lib.optional  x264Support "-lx264"
     ++ [ "-lfreetype" ]
   );
 
