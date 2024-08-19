@@ -13854,6 +13854,8 @@ self: super: with self; {
 
   pywilight = callPackage ../development/python-modules/pywilight { };
 
+  pywinbox = callPackage ../development/python-modules/pywinbox { };
+
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
