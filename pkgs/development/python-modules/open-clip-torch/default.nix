@@ -69,6 +69,11 @@ buildPythonPackage rec {
       "test_inference_with_data"
       "test_pretrained_text_encoder"
       "test_training_mt5"
+      # fails after webdataset update to 0.2.96
+      "test_single_source"
+      "test_two_sources"
+      "test_two_sources_same_weights"
+      "test_two_sources_with_upsampling"
       # fails due to type errors
       "test_num_shards"
     ]
