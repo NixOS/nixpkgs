@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace configure \
       --replace-fail "/.." "" \
       --replace-fail "share/backintime" "${python'.sitePackages}/backintime"
-    substituteInPlace "backintime" \
+    substituteInPlace "backintime" "backintime-askpass" \
       --replace-fail "share" "${python'.sitePackages}"
   '';
 
