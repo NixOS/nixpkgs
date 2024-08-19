@@ -740,6 +740,7 @@ unsupported-platforms:
   mptcp-pm:                                     [ platforms.darwin ]
   nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
+  network-unexceptional:                        [ platforms.darwin ] # depends on posix-api
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
   oculus:                                       [ platforms.darwin ]
   ostree-pin:                                   [ platforms.darwin ] # depends on gi-ostree
@@ -764,6 +765,7 @@ unsupported-platforms:
   sdl2-ttf:                                     [ platforms.darwin ]
   sdr:                                          [ platforms.darwin ] # depends on rtlsdr
   sensei:                                       [ platforms.darwin ]
+  sockets:                                      [ platforms.darwin ] # depends on posix-api
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
