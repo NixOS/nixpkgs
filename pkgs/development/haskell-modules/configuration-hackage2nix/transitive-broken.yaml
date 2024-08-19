@@ -462,7 +462,6 @@ dont-distribute-packages:
  - aivika-distributed
  - alg
  - algebra-checkers
- - algebra-driven-design
  - algebra-sql
  - algebraic
  - algebraic-graphs-io
@@ -3314,7 +3313,6 @@ dont-distribute-packages:
  - reddit
  - redis-io
  - rediscaching-haxl
- - reduce-equations
  - refh
  - reflex-animation
  - reflex-backend-wai
