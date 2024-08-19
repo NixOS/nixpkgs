@@ -12029,6 +12029,8 @@ self: super: with self; {
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
 
+  pyperclipfix = callPackage ../development/python-modules/pyperclipfix { };
+
   pyperscan = callPackage ../development/python-modules/pyperscan { };
 
   pyperf = callPackage ../development/python-modules/pyperf { };
