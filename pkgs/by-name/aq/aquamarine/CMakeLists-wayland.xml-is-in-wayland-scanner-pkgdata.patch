@@ -1,0 +1,37 @@
+From 735130758ee6fca74115ca4ec89c6d0dd26777eb Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Mon, 19 Aug 2024 14:17:37 +0300
+Subject: [PATCH] CMakeLists: wayland.xml is in wayland-scanner pkgdatadir
+
+See https://gitlab.freedesktop.org/wayland/wayland/-/blob/6c4a695045155583a99f3fbce7bb745f79c2e726/meson.build#L129-136
+---
+ CMakeLists.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fc4db31..a61e375 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -71,8 +71,8 @@ endif()
+ # Protocols
+ pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
+ message(STATUS "Found wayland-protocols at ${WAYLAND_PROTOCOLS_DIR}")
+-pkg_get_variable(WAYLAND_CLIENT_DIR wayland-client pkgdatadir)
+-message(STATUS "Found wayland-client at ${WAYLAND_CLIENT_DIR}")
++pkg_get_variable(WAYLAND_SCANNER_PKGDATA_DIR wayland-scanner pkgdatadir)
++message(STATUS "Found wayland-scanner pkgdatadir at ${WAYLAND_SCANNER_PKGDATA_DIR}")
+ 
+ function(protocolNew protoPath protoName external)
+   if(external)
+@@ -94,7 +94,7 @@ function(protocolWayland)
+     OUTPUT ${CMAKE_SOURCE_DIR}/protocols/wayland.cpp
+            ${CMAKE_SOURCE_DIR}/protocols/wayland.hpp
+     COMMAND hyprwayland-scanner --wayland-enums --client
+-            ${WAYLAND_CLIENT_DIR}/wayland.xml ${CMAKE_SOURCE_DIR}/protocols/
++            ${WAYLAND_SCANNER_PKGDATA_DIR}/wayland.xml ${CMAKE_SOURCE_DIR}/protocols/
+     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+   target_sources(aquamarine PRIVATE protocols/wayland.cpp protocols/wayland.hpp)
+ endfunction()
+-- 
+2.45.2
+
