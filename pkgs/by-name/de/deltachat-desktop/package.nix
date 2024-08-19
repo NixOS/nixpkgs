@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron
+, electron_30
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -15,12 +15,13 @@
 , roboto
 , sqlcipher
 , stdenv
-, CoreServices
+, darwin
 , testers
 , deltachat-desktop
 }:
 
 let
+  electron = electron_30;
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
       version = "0.19.12";
@@ -36,16 +37,16 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.46.2";
+  version = "1.46.5";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-5XGtyfc7Kak7qSQOQAH5gFtSaHeWclRhtsYSGPIQo6w=";
+    hash = "sha256-u/2/lCQpUf5bxKPseHz6SFmiW0m9SywuA5Ng3BBnX88=";
   };
 
-  npmDepsHash = "sha256-4UPDNz0aw4VH3bMT+s/7DE6+ZPNP5w1iGCRpZZMXzPc=";
+  npmDepsHash = "sha256-jnuSL0yr6E8P0Tev9rMsfCLs59WStaH19DhZe0zthmw=";
 
   nativeBuildInputs = [
     jq
@@ -59,7 +60,7 @@ buildNpmPackage rec {
   buildInputs = [
     deltachat-rpc-server
   ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   env = {

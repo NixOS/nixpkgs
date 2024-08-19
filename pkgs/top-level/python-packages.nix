@@ -3029,6 +3029,8 @@ self: super: with self; {
 
   deltachat = callPackage ../development/python-modules/deltachat { };
 
+  deltachat-rpc-client = callPackage ../development/python-modules/deltachat-rpc-client { };
+
   deltachat2 = callPackage ../development/python-modules/deltachat2 { };
 
   deltalake = callPackage ../development/python-modules/deltalake { };

@@ -14,9 +14,7 @@
 , sqlcipher
 , sqlite
 , fixDarwinDylibNames
-, CoreFoundation
-, Security
-, SystemConfiguration
+, darwin
 , libiconv
 }:
 
@@ -31,13 +29,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.142.1";
+  version = "1.142.7";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-ea0OKQWZareqgE1C8lYem3BKaNmqJgYLItOHdPWqz6M=";
+    hash = "sha256-Wj7fmhp67a3OtzxPbfqOpZCzM9WokzKiaWNQS9qYyCo=";
   };
 
   patches = [
@@ -61,9 +59,9 @@ in stdenv.mkDerivation rec {
     sqlcipher
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    Security
-    SystemConfiguration
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv
   ];
 
