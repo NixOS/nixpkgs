@@ -67,8 +67,6 @@ let
     "systemd-poweroff.service"
     "systemd-reboot.service"
     "systemd-sysctl.service"
-    "systemd-tmpfiles-setup-dev.service"
-    "systemd-tmpfiles-setup.service"
     "timers.target"
     "tpm2.target"
     "umount.target"
@@ -518,8 +516,6 @@ in {
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
-      # make sure all the /dev nodes are set up
-      services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
 
       services.initrd-nixos-activation = {
         after = [ "initrd-fs.target" ];
