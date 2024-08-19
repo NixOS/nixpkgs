@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.12.0";
+  version = "3.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-EH2/75tcKuS11XKuo4lCQrFe4/XJZpcWhuGlSuhIk18=";
+    hash = "sha256-y5iMx+AC52ZgGvAvThRaeKFqCGkwmukyZsJ+nzR2AFM=";
   };
 
   patches = [
