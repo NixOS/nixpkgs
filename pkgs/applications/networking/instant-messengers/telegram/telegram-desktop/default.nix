@@ -81,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./scheme.patch
   ];
 
+  enableParallelBuilding = true;
+
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'

@@ -41,6 +41,8 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  enableParallelBuilding = true;
+
   outputs = [
     "out"
     "dev"
