@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, jre_headless }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  jre_headless,
+}:
 
 stdenv.mkDerivation rec {
   pname = "maestro";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   dontUnpack = true;
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase = ''
     mkdir $out
