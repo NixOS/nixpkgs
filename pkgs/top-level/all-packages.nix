@@ -18595,6 +18595,8 @@ with pkgs;
 
   openocd = callPackage ../development/embedded/openocd { };
 
+  openocd-esp32 = callPackage ../by-name/es/esp-idf/openocd-esp32.nix { };
+
   openocd-rp2040 = openocd.overrideAttrs (old: {
     pname = "openocd-rp2040";
     src = fetchFromGitHub {
