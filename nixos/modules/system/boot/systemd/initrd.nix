@@ -67,8 +67,6 @@ let
     "systemd-poweroff.service"
     "systemd-reboot.service"
     "systemd-sysctl.service"
-    "systemd-tmpfiles-setup-dev.service"
-    "systemd-tmpfiles-setup.service"
     "timers.target"
     "tpm2.target"
     "umount.target"
@@ -235,8 +233,8 @@ in {
     emergencyAccess = mkOption {
       type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
       description = ''
-        Set to true for unauthenticated emergency access, and false for
-        no emergency access.
+        Set to true for unauthenticated emergency access, and false or
+        null for no emergency access.
 
         Can also be set to a hashed super user password to allow
         authenticated access to the emergency mode.
@@ -438,7 +436,12 @@ in {
         # We can use either ! or * to lock the root account in the
         # console, but some software like OpenSSH won't even allow you
         # to log in with an SSH key if you use ! so we use * instead
-        "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then optionalString (!cfg.emergencyAccess) "*" else cfg.emergencyAccess}:::::::";
+        "/etc/shadow".text = let
+          ea = cfg.emergencyAccess;
+          access = ea != null && !(isBool ea && !ea);
+          passwd = if isString ea then ea else "";
+        in
+          "root:${if access then passwd else "*"}:::::::";
 
         "/bin".source = "${initrdBinEnv}/bin";
         "/sbin".source = "${initrdBinEnv}/sbin";
@@ -518,8 +521,6 @@ in {
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
-      # make sure all the /dev nodes are set up
-      services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
 
       services.initrd-nixos-activation = {
         after = [ "initrd-fs.target" ];

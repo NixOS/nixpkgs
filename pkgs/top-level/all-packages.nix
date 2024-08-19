@@ -19592,6 +19592,7 @@ with pkgs;
     boost183
     boost184
     boost185
+    boost186
   ;
 
   boost = boost181;
@@ -20873,6 +20874,7 @@ with pkgs;
     icu72
     icu73
     icu74
+    icu75
   ;
 
   icu = icu74;

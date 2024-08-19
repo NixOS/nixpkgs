@@ -49,6 +49,12 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    redis = limits.optional-dependencies.redis;
+    memcached = limits.optional-dependencies.memcached;
+    mongodb = limits.optional-dependencies.mongodb;
+  };
+
   nativeCheckInputs = [
     asgiref
     pytest-mock
