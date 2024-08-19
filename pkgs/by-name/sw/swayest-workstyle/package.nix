@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Lyr-7D1h/swayest_workstyle";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ miangraham ];
+    maintainers = with maintainers; [ ];
     mainProgram = "sworkstyle";
   };
 }
