@@ -34206,8 +34206,6 @@ with pkgs;
 
   vcs = callPackage ../applications/video/vcs { };
 
-  vcv-rack = callPackage ../applications/audio/vcv-rack { };
-
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
