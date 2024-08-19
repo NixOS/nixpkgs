@@ -46,7 +46,10 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  outputs = [ "out" "demos" ] ++ lib.optionals pythonSupport [ "dist" ];
+  outputs = [
+    "out"
+    "demos"
+  ] ++ lib.optionals pythonSupport [ "dist" ];
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
