@@ -29735,6 +29735,8 @@ with pkgs;
 
   esp-rom-elfs = callPackage ../by-name/es/esp-idf/esp-rom-elfs.nix { };
 
+  esp32ulp-elf = callPackage ../by-name/es/esp-idf/esp32ulp-elf.nix { };
+
   espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak-ng = callPackage ../applications/audio/espeak-ng {
