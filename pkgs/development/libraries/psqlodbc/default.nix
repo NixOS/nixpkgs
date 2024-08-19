@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "16.00.0000";
 
   src = fetchurl {
-    url = "https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-${version}.tar.gz";
+    url = "https://ftp.postgresql.org/pub/odbc/versions.old/src/${pname}-${version}.tar.gz";
     hash = "sha256-r9iS+J0uzujT87IxTxvVvy0CIBhyxuNDHlwxCW7KTIs=";
   };
 
