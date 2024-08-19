@@ -32969,6 +32969,8 @@ with pkgs;
     userOnly = true;
   };
 
+  qemu-riscv32 = callPackage ../by-name/es/esp-idf/qemu-riscv32.nix { };
+
   canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
