@@ -29,16 +29,16 @@ stdenv.mkDerivation rec {
     sed -i "s@pkg_get_variable(POLKIT_ACTION_DIR.*@set(POLKIT_ACTION_DIR $POLKIT_ACTION_DIR)@" CMakeLists.txt
   '';
 
-  cmakeFlags = with lib;
+  cmakeFlags =
     [ "-DSYSTEMD_SERVICE_DIR=${placeholder "out"}/lib/systemd/system"
       "-DDBUS_CONFIG_DIR=${placeholder "out"}/etc/dbus-1/system.d"
       # systemd.pc has prefix=${systemd.out}
       "-DMODULE_LOAD_DIR=${placeholder "out"}/lib/modules-load.d"
-    ] ++ optional enableDdc        "-DENABLE_DDC=1"
-      ++ optional enableDpms       "-DENABLE_DPMS=1"
-      ++ optional enableGamma      "-DENABLE_GAMMA=1"
-      ++ optional enableScreen     "-DENABLE_SCREEN=1"
-      ++ optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
+    ] ++ lib.optional enableDdc        "-DENABLE_DDC=1"
+      ++ lib.optional enableDpms       "-DENABLE_DPMS=1"
+      ++ lib.optional enableGamma      "-DENABLE_GAMMA=1"
+      ++ lib.optional enableScreen     "-DENABLE_SCREEN=1"
+      ++ lib.optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
 
   nativeBuildInputs = [
     dbus
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = with lib; [
+  buildInputs = [
     glib
     udev
     polkit
@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
     libXdmcp
     util-linux
     libpthreadstubs
-  ] ++ optionals enableDdc [ ddcutil ]
-    ++ optionals enableDpms [ libXext ]
-    ++ optionals enableGamma [ libXrandr ]
-    ++ optionals (enableDpms || enableGamma || enableScreen) [ libdrm wayland ];
+  ] ++ lib.optionals enableDdc [ ddcutil ]
+    ++ lib.optionals enableDpms [ libXext ]
+    ++ lib.optionals enableGamma [ libXrandr ]
+    ++ lib.optionals (enableDpms || enableGamma || enableScreen) [ libdrm wayland ];
 
   postInstall = ''
     mkdir -p $out/bin

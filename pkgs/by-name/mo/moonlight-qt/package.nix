@@ -20,6 +20,7 @@
   libvdpau,
   libxkbcommon,
   wayland,
+  libdrm,
   nix-update-script,
 }:
 
@@ -80,6 +81,7 @@ stdenv'.mkDerivation rec {
       libxkbcommon
       qt6.qtwayland
       wayland
+      libdrm
     ]
     ++ lib.optionals stdenv.isDarwin [
       AVFoundation

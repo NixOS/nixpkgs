@@ -12,7 +12,7 @@ with lib;
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc "Whether to enable the Proxmox VE LXC module.";
+      description = "Whether to enable the Proxmox VE LXC module.";
     };
     privileged = mkOption {
       type = types.bool;

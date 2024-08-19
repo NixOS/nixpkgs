@@ -4,6 +4,7 @@
 , rustPlatform
 , pkg-config
 , openssl
+, nixosTests
 , CoreServices
 }:
 
@@ -33,6 +34,8 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   doCheck = false; # https://github.com/rapiz1/rathole/issues/222
+
+  passthru.tests = { inherit (nixosTests) rathole; };
 
   meta = with lib; {
     description = "Reverse proxy for NAT traversal";

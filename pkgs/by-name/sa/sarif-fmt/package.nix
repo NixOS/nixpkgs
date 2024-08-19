@@ -8,14 +8,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sarif-fmt";
-  version = "0.6.0";
+  version = "0.6.5";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-2B0ylCTRaCglS+iTvM0L5RSAObS8k40g7hqKPo/7Zqc=";
+    hash = "sha256-Zflwjj5ArNmE/7Im/O09kG07ZekCyz5jU2S3vpnlXT8=";
   };
 
-  cargoHash = "sha256-oYLMCuAln9jkOHOjW5zuD7ZUKju8KkZw/A2sV1MZuC4=";
+  cargoHash = "sha256-hCtVfGutgvncb05zt+lSNdlrDO+UruSUahzrxaERjFE=";
 
   # `test_clippy` (the only test we enable) is broken on Darwin
   # because `--enable-profiler` is not enabled in rustc on Darwin

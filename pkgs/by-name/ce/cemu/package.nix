@@ -48,13 +48,13 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.0-91";
+  version = "2.0-92";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4Z2cTunYQ9KEx1VQRiPSqGOLn0eAqcXF+A32KjQDga8=";
+    hash = "sha256-bjt+2RzmG8iKcdyka4HsHM5NEzCwGah4s9eiywSHXbw=";
   };
 
   patches = [
@@ -69,7 +69,6 @@ in stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath
     wrapGAppsHook3
     cmake
-    glslang
     nasm
     ninja
     pkg-config
@@ -83,6 +82,7 @@ in stdenv.mkDerivation (finalAttrs: {
     curl
     fmt_9
     glm
+    glslang
     gtk3
     hidapi
     imgui'

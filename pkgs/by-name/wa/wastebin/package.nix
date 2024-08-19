@@ -6,6 +6,7 @@
 , zstd
 , stdenv
 , darwin
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,6 +35,10 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) wastebin;
   };
 
   meta = with lib; {

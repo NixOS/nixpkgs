@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -17,6 +18,10 @@ buildGoModule rec {
   };
 
   deleteVendor = true;
+
+  passthru.tests = {
+    inherit (nixosTests) birdwatcher;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/alice-lg/birdwatcher";

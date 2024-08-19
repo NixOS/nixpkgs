@@ -125,6 +125,8 @@ in
           Graphical session to pre-select in the session chooser (only effective for GDM, LightDM and SDDM).
 
           On GDM, LightDM and SDDM, it will also be used as a session for auto-login.
+
+          Set this option to empty string to get an error with a list of currently available sessions.
         '';
       };
 

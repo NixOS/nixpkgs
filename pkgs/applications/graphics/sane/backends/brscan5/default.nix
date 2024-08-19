@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests }:
 let
-  myPatchElf = file: with lib; ''
+  myPatchElf = file: ''
     patchelf --set-interpreter \
-      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${lib.optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
   system = stdenv.hostPlatform.system;
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=${toString patchOffsetBytes} conv=notrunc
     '';
 
-  installPhase = with lib; ''
+  installPhase = ''
     runHook preInstall
     PATH_TO_BRSCAN5="opt/brother/scanner/brscan5"
     mkdir -p $out/$PATH_TO_BRSCAN5

@@ -1,6 +1,7 @@
 { stdenv, callPackage, lib, sasl, boost
 , Security, CoreFoundation, cctools
 , avxSupport ? stdenv.hostPlatform.avxSupport
+, nixosTests
 }:
 
 let
@@ -29,4 +30,5 @@ buildMongoDB {
     ./asio-no-experimental-string-view-4-4.patch
     ./fix-gcc-Wno-exceptions-5.0.patch
   ] ++ variants.patches;
+  passthru.tests = { inherit (nixosTests) mongodb; };
 }

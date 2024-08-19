@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.7.2";
+  version = "4.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "testcontainers";
     repo = "testcontainers-python";
     rev = "refs/tags/testcontainers-v${version}";
-    hash = "sha256-cmMuX3tKVGe4F+dQlOqQSTS/e49oWuudOekeL/j0YFw=";
+    hash = "sha256-4PYtWn3NqGYe4BrYTG/CwPAdPVFkdUyFuAxwGQvd6y8=";
   };
 
   postPatch = ''

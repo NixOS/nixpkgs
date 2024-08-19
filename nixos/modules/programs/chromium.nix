@@ -19,8 +19,6 @@ in
     programs.chromium = {
       enable = lib.mkEnableOption "{command}`chromium` policies";
 
-      package = lib.mkPackageOption pkgs "chromium" { };
-
       enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 
       plasmaBrowserIntegrationPackage = lib.mkPackageOption pkgs [ "plasma5Packages" "plasma-browser-integration" ] { };
@@ -121,9 +119,8 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    environment.etc = {
+  config = {
+    environment.etc = lib.mkIf cfg.enable {
       # for chromium
       "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" = lib.mkIf cfg.enablePlasmaBrowserIntegration
         { source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json"; };

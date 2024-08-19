@@ -3,25 +3,20 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, qttools
 , doxygen
-, wrapQtAppsHook
-, qtbase
+, libsForQt5
 , dtkgui
-, qtdeclarative
-, qtquickcontrols2
-, qtgraphicaleffects
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkdeclarative";
-  version = "5.6.29";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-7pAC7NHsmQudAO2KvEgI5BbnsgjqxaJY5v9GNfKBm1U=";
+    hash = "sha256-MOiNpuvYwJi9rNKx6TuUuWnlGhmZrRbL48EFapy442M=";
   };
 
   patches = [
@@ -33,15 +28,15 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     doxygen
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
     dtkgui
-    qtdeclarative
-    qtquickcontrols2
-    qtgraphicaleffects
+    libsForQt5.qtdeclarative
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qtgraphicaleffects
   ];
 
   cmakeFlags = [
@@ -49,15 +44,15 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOCS=ON"
     "-DBUILD_EXAMPLES=ON"
     "-DMKSPECS_INSTALL_DIR=${placeholder "dev"}/mkspecs/modules"
-    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
-    "-DQML_INSTALL_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${libsForQt5.qtbase.qtDocPrefix}"
+    "-DQML_INSTALL_DIR=${placeholder "out"}/${libsForQt5.qtbase.qtQmlPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${qtdeclarative.bin}/${qtbase.qtQmlPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
+    export QML2_IMPORT_PATH=${libsForQt5.qtdeclarative.bin}/${libsForQt5.qtbase.qtQmlPrefix}
   '';
 
   outputs = [ "out" "dev" "doc" ];

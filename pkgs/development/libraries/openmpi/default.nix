@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.3";
+  version = "5.0.5";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-mQWC8gazqzLpOKoxu/B8Y5No5EBdyhlvq+fw927tqQs=";
+    sha256 = "sha256-ZYjVfApL0pmiQQP04ZYFGynotV+9pJ4R1bPTIDCjJ3Y=";
   };
 
   postPatch = ''
@@ -116,8 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
-    "--with-pmix=${if stdenv.isLinux then (lib.getDev pmix) else "internal"}"
-    (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
     (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
@@ -212,7 +212,12 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.pipe wrapperDataFileNames [
         (lib.mapCartesianProduct (
           { part1, part2 }:
-          ''
+          # From some reason the Darwin build doesn't include some of these
+          # wrapperDataSubstitutions strings and even some of the files. Hence
+          # we currently don't perform these substitutions on other platforms,
+          # until a Darwin user will care enough about this cross platform
+          # related substitution.
+          lib.optionalString stdenv.isLinux ''
             substituteInPlace "''${!outputDev}/share/openmpi/${part1}${part2}-wrapper-data.txt" \
               --replace-fail \
                 compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 0} \
@@ -221,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to ${lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
+      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
       # from some reason.
       moveToOutput "bin/pcc" "''${!outputDev}"
 
@@ -263,7 +268,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.open-mpi.org/";
     description = "Open source MPI-3 implementation";
     longDescription = "The Open MPI Project is an open source MPI-3 implementation that is developed and maintained by a consortium of academic, research, and industry partners. Open MPI is therefore able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers.";
-    maintainers = with lib.maintainers; [ markuskowa ];
+    maintainers = with lib.maintainers; [
+      markuskowa
+      doronbehar
+    ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };

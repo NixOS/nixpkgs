@@ -72,14 +72,14 @@ self: let
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";
 
-        nativeBuildInputs = [
+        nativeBuildInputs = old.nativeBuildInputs ++ [
           buildPackages.gnat
           buildPackages.gprbuild
           buildPackages.dos2unix
           buildPackages.re2c
         ];
 
-        buildInputs = [
+        buildInputs = old.buildInputs ++ [
           pkgs.gnatPackages.gnatcoll-xref
         ];
 

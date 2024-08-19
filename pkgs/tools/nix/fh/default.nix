@@ -6,28 +6,32 @@
 , darwin
 , gcc
 , libcxx
+, cacert
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.10";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-fRaKydMSwd1zl6ptBKvn5ej2pqtI8xi9dioFmR8QA+g=";
+    hash = "sha256-HC/PNdBOm4mR2p6qI2P+aS+lFabKWSiPhiBSJUsmcv4=";
   };
 
-  cargoHash = "sha256-iOP5llFtySG8Z2Mj7stt6fYpQWqiQqJuftuYBrbkmyU=";
+  cargoHash = "sha256-pWPFiDRF9avZSSUtxDaTfl9ZVUEcnO/CY0VWByaGimo=";
 
   nativeBuildInputs = [
     installShellFiles
     rustPlatform.bindgenHook
   ];
 
+  checkInputs = [ cacert ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
     gcc.cc.lib
   ];
 

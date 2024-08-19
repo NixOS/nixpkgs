@@ -60,8 +60,7 @@ let
     "/usr/bin/pkexec=${pkexecPath}"
     "/bin/true=${coreutils}/bin/true"
   ];
-in
-let
+
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;

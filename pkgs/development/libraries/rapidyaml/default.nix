@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidyaml";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "biojppm";
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-VpREG75d+Rmfu8B2VTWueJtfEZwKxGUFb8E3OwVy1L4=";
+    hash = "sha256-NUPx/1DkhSeCTt3Y5WpsN3wX7pMNOeku7eHdmFv/OWw=";
   };
 
   nativeBuildInputs = [ cmake git ];

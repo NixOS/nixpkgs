@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "eiciel";
-  version = "0.10.0";
+  version = "0.10.1";
 
   outputs = [ "out" "nautilusExtension" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "rofirrim";
     repo = "eiciel";
     rev = version;
-    sha256 = "0lhnrxhbg80pqjy9f8yiqi7x48rb6m2cmkffv25ssjynsmdnar0s";
+    sha256 = "sha256-gpuxx1Ts9HCO+3C+Z3k1tVA+1Mip8/Bd+FvWisVdsVY=";
   };
 
   nativeBuildInputs = [

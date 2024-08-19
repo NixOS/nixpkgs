@@ -187,7 +187,7 @@ rustPlatform.buildRustPackage {
       unfreeRedistributable
     ];
     maintainers = with lib.maintainers; [ getchoo ];
-    platforms = with lib; platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # this builds on architectures like aarch64, but the launcher itself does not support them yet
     broken = !stdenv.isx86_64;
   };

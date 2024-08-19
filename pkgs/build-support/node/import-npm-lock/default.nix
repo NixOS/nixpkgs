@@ -17,6 +17,7 @@ let
   fetchModule =
     { module
     , npmRoot ? null
+    , fetcherOpts
     }: (
       if module ? "resolved" then
         (
@@ -34,16 +35,16 @@ let
               )
             else if (scheme == "http" || scheme == "https") then
               (
-                fetchurl {
+                fetchurl ({
                   url = module.resolved;
                   hash = module.integrity;
-                }
+                } // fetcherOpts )
               )
             else if lib.hasPrefix "git" module.resolved then
               (
-                builtins.fetchGit {
+                builtins.fetchGit ({
                   url = module.resolved;
-                }
+                }  // fetcherOpts )
               )
             else throw "Unsupported URL scheme: ${scheme}"
           )
@@ -62,6 +63,10 @@ in
     , packageLock ? importJSON (npmRoot + "/package-lock.json")
     , pname ? getName package
     , version ? getVersion package
+    # A map of additional fetcher options forwarded to the fetcher used to download the package.
+    # Example: { "node_modules/axios" = { curlOptsList = [ "--verbose" ]; }; }
+    # This will download the axios package with curl's verbose option.
+    , fetcherOpts ?  {}
     }:
     let
       mapLockDependencies =
@@ -82,10 +87,11 @@ in
       packageLock' = packageLock // {
         packages =
           mapAttrs
-            (_: module:
+            (modulePath: module:
               let
                 src = fetchModule {
                   inherit module npmRoot;
+                  fetcherOpts = fetcherOpts.${modulePath} or {};
                 };
               in
               (removeAttrs module [

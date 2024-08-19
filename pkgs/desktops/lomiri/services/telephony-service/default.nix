@@ -67,8 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
+    # Patch out failure if QMake is not found, since we don't use it
     substituteInPlace CMakeLists.txt \
-      --replace "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
+      --replace "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}" \
+      --replace-fail 'QMAKE_EXECUTABLE STREQUAL "QMAKE_EXECUTABLE-NOTFOUND"' 'FALSE'
 
   '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     substituteInPlace tests/common/dbus-services/CMakeLists.txt \

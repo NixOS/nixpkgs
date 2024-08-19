@@ -33,6 +33,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     nodes = {
       node = {...}: {
         environment.systemPackages = with pkgs; [
+          # remember to update mongodb.passthru.tests if you change this
           mongodb-5_0
         ];
       };

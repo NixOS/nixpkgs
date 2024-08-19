@@ -67,8 +67,8 @@ in stdenv.mkDerivation rec {
       -i src/lib/ffmpeg-4.0/swscale.pas
   '';
 
-  preBuild = with lib;
-    let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
+  preBuild =
+    let items = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
     in ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';

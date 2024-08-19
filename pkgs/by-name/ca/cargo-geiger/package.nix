@@ -20,7 +20,13 @@ rustPlatform.buildRustPackage rec {
     rev = "cargo-geiger@v${version}";
     hash = "sha256-/5yuayqneZV6aVQ6YFgqNS2XY3W6yETRQ0kE5ovc7p8=";
   };
-  cargoHash = "sha256-lhojo3dhsM9y1SxpVMH93yv+JeNfTL7VLsbTp9ErgIQ=";
+
+  cargoPatches = [
+    # https://github.com/geiger-rs/cargo-geiger/pull/528
+    ./fix-build-with-rust-1.80.patch
+  ];
+
+  cargoHash = "sha256-511KeTykHw3xbnsuwIt2QmBK3mG9yK23z0yrS3eIY74=";
 
   patches = [
     ./allow-warnings.patch

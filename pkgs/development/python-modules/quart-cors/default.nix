@@ -14,6 +14,7 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail " ""
-  '';
-
   propagatedBuildInputs = [ quart ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   pythonImportsCheck = [ "quart_cors" ];
@@ -42,6 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   meta = with lib; {

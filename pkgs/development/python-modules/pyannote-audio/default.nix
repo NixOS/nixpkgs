@@ -1,36 +1,40 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
   asteroid-filterbanks,
+  buildPythonPackage,
   einops,
+  fetchFromGitHub,
   huggingface-hub,
-  pytorch-lightning,
+  hydra-core,
+  numpy,
   omegaconf,
   pyannote-core,
   pyannote-database,
   pyannote-metrics,
   pyannote-pipeline,
+  pyscaffold,
+  pythonOlder,
+  pytorch-lightning,
   pytorch-metric-learning,
   rich,
   semver,
+  setuptools,
   soundfile,
   speechbrain,
   tensorboardx,
-  torch,
   torch-audiomentations,
+  torch,
   torchaudio,
   torchmetrics,
-  numpy,
-  pyscaffold,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pyannote-audio";
   version = "3.3.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyannote";
@@ -40,20 +44,21 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "torchaudio" ];
+
+  build-system = [
     pyscaffold
     setuptools
-    wheel
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pyscaffold>=3.2a0,<3.3a0" "pyscaffold"
+      --replace-fail "pyscaffold>=3.2a0,<3.3a0" "pyscaffold"
     substituteInPlace requirements.txt \
-      --replace "lightning" "pytorch-lightning"
+      --replace-fail "lightning" "pytorch-lightning"
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     asteroid-filterbanks
     einops
     huggingface-hub
@@ -75,6 +80,13 @@ buildPythonPackage rec {
     numpy
     pytorch-lightning
   ];
+
+  optional-dependencies = {
+    cli = [
+      hydra-core
+      typer
+    ];
+  };
 
   pythonImportsCheck = [ "pyannote.audio" ];
 

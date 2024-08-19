@@ -8,7 +8,8 @@
   ffmpeg-full,
   util-linux,
   python3,
-  getopt
+  getopt,
+  nixosTests,
 }:
 
 let
@@ -28,7 +29,7 @@ let
     pname = "${pname}-client";
     inherit (source) version;
 
-    src = runCommand "cp-source" {} ''
+    src = runCommand "cp-source" { } ''
       cp -r ${src}/client $out
     '';
 
@@ -41,12 +42,27 @@ let
   };
 
   wrapper = import ./wrapper.nix {
-    inherit stdenv ffmpeg-full pname nodejs getopt;
+    inherit
+      stdenv
+      ffmpeg-full
+      pname
+      nodejs
+      getopt
+      ;
   };
 
-in buildNpmPackage {
+in
+buildNpmPackage {
   inherit pname src;
   inherit (source) version;
+
+  postPatch = ''
+    # Always skip version checks of the binary manager.
+    # We provide our own binaries, and don't want to trigger downloads.
+    substituteInPlace server/managers/BinaryManager.js --replace-fail \
+      'if (!this.validVersions.length) return true' \
+      'return true'
+  '';
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
@@ -67,15 +83,21 @@ in buildNpmPackage {
     chmod +x $out/bin/${pname}
   '';
 
-  passthru.updateScript = ./update.nu;
+  passthru = {
+    tests.basic = nixosTests.audiobookshelf;
+    updateScript = ./update.nu;
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.audiobookshelf.org/";
     description = "Self-hosted audiobook and podcast server";
     changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${source.version}";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.jvanbruegge maintainers.adamcstephens ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      jvanbruegge
+      adamcstephens
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";
   };
 }

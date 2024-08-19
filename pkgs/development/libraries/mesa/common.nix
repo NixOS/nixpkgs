@@ -5,14 +5,14 @@
 # nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
-  version = "24.1.4";
+  version = "24.1.5";
 
   src = fetchurl {
     urls = [
       "https://archive.mesa3d.org/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    hash = "sha256-fPfG9mUmOtASKInB1LB2ZUwe7ep6LzjGnIxRV5k3reE=";
+    hash = "sha256-AnYf/ZZd1kuVQh6/yhGR1zckq6APMANACSN1ZPNM+XY=";
   };
 
   meta = {

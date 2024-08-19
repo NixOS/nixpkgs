@@ -3,17 +3,18 @@
   mkHyprlandPlugin,
   fetchFromGitHub,
   hyprland,
+  unstableGitUpdater,
 }:
 
 mkHyprlandPlugin hyprland {
   pluginName = "hypr-dynamic-cursors";
-  version = "0-unstable-2024-07-06";
+  version = "0-unstable-2024-08-01";
 
   src = fetchFromGitHub {
     owner = "VirtCode";
     repo = "hypr-dynamic-cursors";
-    rev = "85423b074e112f28e84f6276d31d1548906a625e";
-    hash = "sha256-lCAZ/7xtOE6P7uPIX2uQgC0nDOBZefWYO3O3izRx19E=";
+    rev = "ed2ff68862ae02e04dd06488eb7228e4412f5c33";
+    hash = "sha256-02G/SPd/X7zSIFF3V6dkh8mGGWoO0/m6/Yld7HyPmJs=";
   };
 
   dontUseCmakeConfigure = true;
@@ -26,6 +27,8 @@ mkHyprlandPlugin hyprland {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Plugin to make your Hyprland cursor more realistic";

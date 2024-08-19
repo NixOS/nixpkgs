@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
-  wrapperPath = with lib; makeBinPath ([
+  wrapperPath = lib.makeBinPath ([
     coreutils
     findutils
     getopt
@@ -89,11 +89,11 @@ stdenv.mkDerivation rec {
     openssh
     procps
     qrencode
-  ] ++ optional stdenv.isDarwin openssl
-    ++ optional x11Support xclip
-    ++ optional waylandSupport wl-clipboard
-    ++ optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
-    ++ optionals (x11Support && dmenuSupport) [ xdotool dmenu ]
+  ] ++ lib.optional stdenv.isDarwin openssl
+    ++ lib.optional x11Support xclip
+    ++ lib.optional waylandSupport wl-clipboard
+    ++ lib.optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
+    ++ lib.optionals (x11Support && dmenuSupport) [ xdotool dmenu ]
   );
 
   postFixup = ''

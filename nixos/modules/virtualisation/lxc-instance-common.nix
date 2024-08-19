@@ -1,6 +1,10 @@
 {lib, ...}:
 
 {
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   imports = [
     ./lxc-image-metadata.nix
 

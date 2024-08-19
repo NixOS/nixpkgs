@@ -1,4 +1,4 @@
-{ lib, fetchurl, callPackage, luajit }:
+{ lib, fetchurl, callPackage, luajit, nixosTests }:
 
 callPackage (import ./common.nix rec {
   pname = "cgit";
@@ -18,6 +18,8 @@ callPackage (import ./common.nix rec {
   };
 
   buildInputs = [ luajit ];
+
+  passthru.tests = { inherit (nixosTests) cgit; };
 
   homepage = "https://git.zx2c4.com/cgit/about/";
   description = "Web frontend for git repositories";

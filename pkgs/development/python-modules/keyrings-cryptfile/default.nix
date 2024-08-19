@@ -3,16 +3,18 @@
   argon2-cffi,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   keyring,
   pycryptodome,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "keyrings-cryptfile";
   version = "1.3.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -22,12 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-fCpFPKuZhUJrjCH3rVSlfkn/joGboY4INAvYgBrPAJE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "-s --cov=keyrings/cryptfile" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argon2-cffi
     keyring
     pycryptodome
@@ -35,7 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keyrings.cryptfile" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/...

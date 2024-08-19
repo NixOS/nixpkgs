@@ -34,8 +34,8 @@
   cudaPackages,
 }:
 
-assert gpuSupport -> cudaSupport != true;
-assert cudaSupport -> gpuSupport != true;
+assert gpuSupport -> !cudaSupport;
+assert cudaSupport -> !gpuSupport;
 
 buildPythonPackage rec {
   pname = "lightgbm";

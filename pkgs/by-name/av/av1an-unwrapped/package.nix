@@ -21,7 +21,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-A4/1UdM8N5CHP44PBNB+ZH2Gcl84rcpUBwQRSnubBGc=";
   };
 
-  cargoHash = "sha256-ahoiCAUREtXgXLNrWVQ2Gc65bWMo4pIJXP9xjnQAlaI=";
+  cargoPatches = [
+    # TODO: Remove next release
+    # Updates the `time` crate to work around
+    # https://github.com/NixOS/nixpkgs/issues/332957
+    ./rust-1.80.0.patch
+  ];
+
+  cargoHash = "sha256-Obq4oRXZ7IHDT+B9gKrVflq/FDzoN7ttZi8Aj2uOGxM=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

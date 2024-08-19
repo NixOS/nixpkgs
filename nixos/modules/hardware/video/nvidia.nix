@@ -572,11 +572,16 @@ in
           boot = {
             extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
             # nvidia-uvm is required by CUDA applications.
-            kernelModules = lib.optionals config.services.xserver.enable [
-              "nvidia"
-              "nvidia_modeset"
-              "nvidia_drm"
-            ];
+            kernelModules =
+              lib.optionals config.services.xserver.enable [
+                "nvidia"
+                "nvidia_modeset"
+                "nvidia_drm"
+              ]
+              # With the open driver, nvidia-uvm does not automatically load as
+              # a softdep of the nvidia module, so we explicitly load it for now.
+              # See https://github.com/NixOS/nixpkgs/issues/334180
+              ++ lib.optionals (config.services.xserver.enable && cfg.open) [ "nvidia_uvm" ];
 
             # If requested enable modesetting via kernel parameters.
             kernelParams =

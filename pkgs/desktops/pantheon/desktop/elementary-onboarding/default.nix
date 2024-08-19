@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "7.2.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-5vEKQUGg5KQSheM6tSK8uieEfCqlY6pABfPb/333FHU=";
+    sha256 = "sha256-oG6L2t99BWeu8C6kE6IKgyc57Q8D1O9fdEMLnRA6AWY=";
   };
 
   nativeBuildInputs = [

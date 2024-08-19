@@ -35,7 +35,7 @@
 import ./generic.nix (
   rec {
     pname = "pillow";
-    version = "10.3.0";
+    version = "10.4.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -43,7 +43,7 @@ import ./generic.nix (
     src = fetchPypi {
       pname = "pillow";
       inherit version;
-      hash = "sha256-nSRV+/RMkUhAx5PomqgtDhdjoUJToAB0NxmuWUaBSy0=";
+      hash = "sha256-Fmwc1NJDCbMNYfefSpEUt7IxPXRQkSJ3hV/139fNSgY=";
     };
 
     passthru.tests = {

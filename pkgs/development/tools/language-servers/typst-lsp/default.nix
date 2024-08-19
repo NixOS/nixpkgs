@@ -44,12 +44,15 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
     mainProgram = "typst-lsp";
     changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda GaetanLepage ];
+    license = with lib.licenses; [ asl20 mit ];
+    maintainers = with lib.maintainers; [ figsoda GaetanLepage ];
+    # Incompatible with Rust >= 1.80
+    # Fix to be merged upstream: https://github.com/nvarner/typst-lsp/pull/515
+    broken = true;
   };
 }

@@ -32,6 +32,8 @@ let
         ''
           makeWrapper '${ghidra}/bin/ghidra' "$out/bin/ghidra" \
             --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
+          makeWrapper '${ghidra}/bin/ghidra-analyzeHeadless' "$out/bin/ghidra-analyzeHeadless" \
+            --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
           ln -s ${ghidra}/share $out/share
         ''
         + lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -19,7 +19,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "c3lang";
     repo = "c3c";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-iOljE1BRVc92NJZj+nr1G6KkBTCwJEUOadXHUDNoPGk=";
+    hash = "sha256-PKeQOVByNvhUq7QBhnNsl3LfR48MWhRC2rhiD58fVHY=";
   };
 
   postPatch = ''

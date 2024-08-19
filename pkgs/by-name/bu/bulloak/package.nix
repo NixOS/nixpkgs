@@ -31,16 +31,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "bulloak";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "alexfertel";
     repo = "bulloak";
     rev = "v${version}";
-    hash = "sha256-0pzn0gXlhdndCpsrVRNxl1ylIE/S9A0l8VjNn5wDVvw=";
+    hash = "sha256-OAjy8SXaD+2/C5jLNIezv/KdrPHlwJC5L1LwGhqBWQs=";
   };
 
-  cargoHash = "sha256-IlDbys5uluLm418UkGf+FIM1AfR2IBAZQ4Atqlybajw=";
+  cargoHash = "sha256-lj/wmLu4cBjDjzMD8DlIz+6Rnag0h+zWiE7lfcTC7lY=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 

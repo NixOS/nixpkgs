@@ -18,7 +18,7 @@ let
   inherit (cudaPackages) backendStdenv;
 
   pname = "torchvision";
-  version = "0.18.1";
+  version = "0.19.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -27,7 +27,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aFm6CyoMA8HtpOAVF5Q35n3JRaOXYswWEqfooORUKsw=";
+    hash = "sha256-OVwdEqKEoZR1jtcg4ODyvIZvP9UQPodPv8qnTqbA/pc=";
   };
 
   nativeBuildInputs = [
@@ -76,6 +76,7 @@ buildPythonPackage {
   meta = {
     description = "PyTorch vision library";
     homepage = "https://pytorch.org/";
+    changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with lib.maintainers; [ ericsagnes ];

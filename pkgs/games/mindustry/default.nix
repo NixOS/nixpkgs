@@ -18,7 +18,6 @@
 , alsa-lib
 , alsa-plugins
 , glew
-, glew-egl
 
 # for soloud
 , libpulseaudio ? null
@@ -44,8 +43,6 @@ let
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
-
-  selectedGlew = if enableWayland then glew-egl else glew;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
@@ -146,8 +143,8 @@ stdenv.mkDerivation {
 
   buildInputs = lib.optionals enableClient [
     SDL2
-    selectedGlew
     alsa-lib
+    glew
   ];
   nativeBuildInputs = [
     pkg-config
@@ -165,13 +162,13 @@ stdenv.mkDerivation {
 
   gradleFlags = [ "-Pbuildversion=${buildVersion}" "-Dorg.gradle.java.home=${jdk}" ];
 
-  buildPhase = with lib; optionalString enableServer ''
+  buildPhase = lib.optionalString enableServer ''
     gradle server:dist
-  '' + optionalString enableClient ''
+  '' + lib.optionalString enableClient ''
     pushd ../Arc
     gradle jnigenBuild
     gradle jnigenJarNativesDesktop
-    glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
@@ -184,7 +181,7 @@ stdenv.mkDerivation {
     gradle desktop:dist
   '';
 
-  installPhase = with lib; let
+  installPhase = let
     installClient = ''
       install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
       mkdir -p $out/bin
@@ -192,7 +189,7 @@ stdenv.mkDerivation {
         --add-flags "-jar $out/share/mindustry.jar" \
         ${lib.optionalString stdenv.isLinux "--suffix PATH : ${lib.makeBinPath [zenity]}"} \
         --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
+        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + lib.optionalString enableWayland '' \
         --set SDL_VIDEODRIVER wayland \
         --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
       '' + ''
@@ -203,7 +200,7 @@ stdenv.mkDerivation {
       # This can cause issues.
       # See https://github.com/NixOS/nixpkgs/issues/109798.
       echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-      for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
+      for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
         echo "# $dep" >> $out/bin/mindustry
       done
 
@@ -217,8 +214,8 @@ stdenv.mkDerivation {
     '';
   in ''
     runHook preInstall
-  '' + optionalString enableClient installClient
-     + optionalString enableServer installServer
+  '' + lib.optionalString enableClient installClient
+     + lib.optionalString enableServer installServer
      + ''
     runHook postInstall
   '';
@@ -231,17 +228,17 @@ stdenv.mkDerivation {
 
   passthru.tests.nixosTest = nixosTests.mindustry;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
     description = "Sandbox tower defense game";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode  # deps
     ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chkno fgaz thekostins ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ chkno fgaz thekostins ];
+    platforms = lib.platforms.all;
     # TODO alsa-lib is linux-only, figure out what dependencies are required on Darwin
     broken = enableClient && stdenv.isDarwin;
   };

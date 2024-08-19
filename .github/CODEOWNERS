@@ -325,7 +325,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Forgejo
 nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
-pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @corngood
@@ -369,16 +369,13 @@ nixos/modules/services/web-apps/pretalx.nix @mweinelt
 nixos/tests/web-apps/pretix.nix @mweinelt
 nixos/tests/web-apps/pretalx.nix @mweinelt
 
-# incus/lxc/lxd
-nixos/maintainers/scripts/lxd/          @adamcstephens
+# incus/lxc
+nixos/maintainers/scripts/incus/        @adamcstephens
 nixos/modules/virtualisation/incus.nix  @adamcstephens
 nixos/modules/virtualisation/lxc*       @adamcstephens
-nixos/modules/virtualisation/lxd*       @adamcstephens
 nixos/tests/incus/                      @adamcstephens
-nixos/tests/lxd/                        @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
-pkgs/by-name/lx/lxd*                    @adamcstephens
 
 # ExpidusOS, Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy

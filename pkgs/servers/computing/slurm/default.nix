@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableX11 [ xorg.xauth ]
   ++ lib.optionals enableGtk2 [ gtk2 ];
 
-  configureFlags = with lib;
-    [ "--with-freeipmi=${freeipmi}"
+  configureFlags = [
+      "--with-freeipmi=${freeipmi}"
       "--with-http-parser=${http-parser}"
       "--with-hwloc=${lib.getDev hwloc}"
       "--with-json=${lib.getDev json_c}"
@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
       "--with-pmix=${lib.getDev pmix}"
       "--with-bpf=${libbpf}"
       "--without-rpath" # Required for configure to pick up the right dlopen path
-    ] ++ (optional enableGtk2  "--disable-gtktest")
-      ++ (optional (!enableX11) "--disable-x11");
+    ] ++ (lib.optional enableGtk2  "--disable-gtktest")
+      ++ (lib.optional (!enableX11) "--disable-x11");
 
 
   preConfigure = ''

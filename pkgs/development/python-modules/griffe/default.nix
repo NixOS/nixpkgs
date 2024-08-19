@@ -6,6 +6,7 @@
   fetchFromGitHub,
   git,
   jsonschema,
+  mkdocstrings,
   pdm-backend,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.47.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,12 +23,15 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "griffe";
     rev = "refs/tags/${version}";
-    hash = "sha256-NkS8cD0G/nbquQfMVcdbTLnJx26PQnqWB8UnBTNIBdE=";
+    hash = "sha256-GRj60qL+gXjUUAxhyTN7f1Jkuucl0+MstbDEqGVx3zs=";
   };
 
   build-system = [ pdm-backend ];
 
-  dependencies = [ colorama ];
+  dependencies = [
+    colorama
+    mkdocstrings
+  ];
 
   nativeCheckInputs = [
     git

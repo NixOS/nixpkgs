@@ -13,9 +13,9 @@
   python-ironicclient,
   python-keystoneclient,
   python-manilaclient,
-  python-novaclient,
   python-openstackclient,
   requests-mock,
+  requests,
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "6.6.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u+8e00gpxBBSsuyiZIDinKH3K+BY0UMNpTQexExPKVw=";
+    hash = "sha256-1HDjWYySnZI/12j9+Gb1G9NKkb+xfrcMoTY/q7aL0uA=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pbr
     python-cinderclient
     python-keystoneclient
-    python-novaclient
+    requests
   ];
 
   nativeCheckInputs = [

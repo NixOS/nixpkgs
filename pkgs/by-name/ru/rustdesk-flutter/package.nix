@@ -25,7 +25,7 @@
 
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.2.6/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.2.7/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -43,27 +43,26 @@
 
 in flutter316.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.2.6";
+  version = "1.2.7";
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     rev = version;
-    hash = "sha256-dEHWMtNmYeg2FSocNnzYbcW0f07zhC09G2uSC0yMZcY=";
+    hash = "sha256-o4YFixxKTCtL0umIkO64Etn3JnXIro3RYWcyV0RBJyg=";
   };
 
   strictDeps = true;
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.2.6/flutter/pubspec.lock | yq
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.2.7/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {
     dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
-    desktop_multi_window = "sha256-YXIvTuMDj1Tx8NGtOD2Tpxy1fiQw0p5fbOMZYfKUkXQ=";
+    desktop_multi_window = "sha256-6nbOUmGTmJQx3Dr4MI6cKWwB1jEgUFUeHx24gpCkWY0=";
     dynamic_layouts = "sha256-eFp1YVI6vI2HRgtE5nTqGZIylB226H0O8kuxy9ypuf8=";
     flutter_gpu_texture_renderer = "sha256-0znIHlZ0ashRTev2kAXU179eq/V1RJC9Hp4jAfiPh5Q=";
     flutter_improved_scrolling = "sha256-fKs1+JmhDVVfjyhr6Fl17pc6n++mCTjBo1PT3l/DUnc=";
-    uni_links_desktop = "sha256-h3wlo31XnHELCCPlk7OSLglm9Xn/969yT1lp5UkGY98=";
     window_manager = "sha256-CUTcSl+W7Wz/Og5k9ujOdAlhKWv/gIYe58wurf9CJH4=";
     window_size = "sha256-+lqY46ZURT0qcqPvHFXUnd83Uvfq79Xr+rw1AHqrpak=";
   };
@@ -76,18 +75,19 @@ in flutter316.buildFlutterApplication rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
     "android-wakelock-0.1.0" = "sha256-09EH/U1BBs3l4galQOrTKmPUYBgryUjfc/rqPZhdYc4=";
-    "arboard-3.3.1" = "sha256-Pj111rxyed4/UPtB2w2yDs4R1oZktgGkbEog4o1g5IQ=";
+    "arboard-3.4.0" = "sha256-bFpxyJ9Ykx2Y8iFr/JG9DFbf3FL9RzcM+vUfZ4mQ+1o=";
     "cacao-0.4.0-beta2" = "sha256-U5tCLeVxjmZCm7ti1u71+i116xmozPaR69pCsA4pxrM=";
+    "clipboard-master-4.0.0-beta.6" = "sha256-FddUlvOuG2ClcDDAaVcVXZQlQ1CACeCHuudULUC0F00=";
     "confy-0.4.0-2" = "sha256-V7BCKISrkJIxWC3WT5+B5Vav86YTQvdO9TO6A++47FU=";
     "core-foundation-0.9.3" = "sha256-iB4OVmWZhuWbs9RFWvNc+RNut6rip2/50o5ZM6c0c3g=";
     "evdev-0.11.5" = "sha256-aoPmjGi/PftnH6ClEWXHvIj0X3oh15ZC1q7wPC1XPr0=";
-    "hwcodec-0.4.18" = "sha256-RTo83aWx6ZKgWCDic1IFneZZ2TC+ZCfanULeHTfOiec=";
+    "hwcodec-0.6.0" = "sha256-pnpowWQRjeoS6RapTXsqU6ybKA2N+xzleTl82gh+u0s=";
     "impersonate_system-0.1.0" = "sha256-pIV7s2qGoCIUrhaRovBDCJaGQ/pMdJacDXJmeBpkcyI=";
-    "keepawake-0.4.3" = "sha256-wDLjjhKWbCeaWbA896a5E5UMB0B/xI/84QRCUYNKX7I=";
+    "keepawake-0.4.3" = "sha256-cqSpkq/PCz+5+ZUyPy5hF6rP3fBzuZDywyxMUQ50Rk4=";
     "machine-uid-0.3.0" = "sha256-rEOyNThg6p5oqE9URnxSkPtzyW8D4zKzLi9pAnzTElE=";
     "magnum-opus-0.4.0" = "sha256-T4qaYOl8lCK1h9jWa9KqGvnVfDViT9Ob5R+YgnSw2tg=";
-    "mouce-0.2.1" = "sha256-3PtNEmVMXgqKV4r3KiKTkk4oyCt4BKynniJREE+RyFk=";
-    "pam-0.7.0" = "sha256-aF3TkRkYuRpBcgg8RyherSfcspKNotvvxRhlg9yGwjk=";
+    "mouce-0.2.1" = "sha256-0+k5dQeM4CCeYcvG8PzJ3YVjMZresmUPmVaPYvTV4gY=";
+    "pam-0.7.0" = "sha256-o47tVoFlW9RiL7O8Lvuwz7rMYQHO+5TG27XxkAdHEOE=";
     "pam-sys-1.0.0-alpha4" = "sha256-5HIErVWnanLo5054NgU+DEKC2wwyiJ8AHvbx0BGbyWo=";
     "parity-tokio-ipc-0.7.3-4" = "sha256-PKw2Twd2ap+tRrQxqg8T1FvpoeKn0hvBqn1Z44F1LcY=";
     "rdev-0.5.0-2" = "sha256-KrzNa4sKyuVw3EV/Ec9VBNRyJy7QFR2Gu4c2WkltwUw=";
@@ -98,7 +98,7 @@ in flutter316.buildFlutterApplication rec {
     "tao-0.25.0" = "sha256-kLmx1z9Ybn/hDt2OcszEjtZytQIE+NKTIn9zNr9oEQk=";
     "tfc-0.6.1" = "sha256-ukxJl7Z+pUXCjvTsG5Q0RiXocPERWGsnAyh3SIWm0HU=";
     "tokio-socks-0.5.2-1" = "sha256-i1dfNatqN4dinMcyAdLhj9hJWVsT10OWpCXsxl7pifI=";
-    "tray-icon-0.11.3" = "sha256-pzvrqv+R2AD8fOsTyYItLaJLa19w+lWDa8vNVGczZdY=";
+    "tray-icon-0.14.3" = "sha256-dSX7LucZaLplRrh6zLwmFzyZN4ZtwIXzAEdZzlu3gQg=";
     "wallpaper-3.2.0" = "sha256-p9NRmusdA0wvF6onp1UTL0/4t7XnEAc19sqyGDnfg/Q=";
     "webm-1.1.0" = "sha256-p4BMej7yvb8c/dJynRWZmwo2hxAAY96Qx6Qx2DbT8hE=";
     "x11-2.19.0" = "sha256-GDCeKzUtvaLeBDmPQdyr499EjEfT6y4diBMzZVEptzc=";
@@ -112,7 +112,6 @@ in flutter316.buildFlutterApplication rec {
     "flutter"
     "hwcodec"
     "linux-pkg-config"
-    "unix-file-copy-paste"
   ];
 
   nativeBuildInputs = [
@@ -149,7 +148,7 @@ in flutter316.buildFlutterApplication rec {
   patchFlags = [ "-p1" "-d" ".." ];
 
   postPatch = ''
-    substituteInPlace ../Cargo.toml --replace ", \"staticlib\", \"rlib\"" ""
+    substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""
     # The supplied Cargo.lock doesn't work with our fetcher so copy over the fixed version
     cp ${./Cargo.lock} ../Cargo.lock
     chmod +w ../Cargo.lock

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-common";
-  version = "1.17.2";
+  version = "1.17.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "snakemake";
     repo = "snakemake-interface-common";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N8mSS+gABAgXm01BcsMk89a3HsIsc3RHxCAi3GlxtRg=";
+    hash = "sha256-91Sh6JNpCEWPRkrEwoJeycZS1D4lXWA4IJLVcxBYLnI=";
   };
 
   build-system = [ poetry-core ];

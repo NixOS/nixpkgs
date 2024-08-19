@@ -59,19 +59,17 @@
 , acceptLicense ? config.nvidia.acceptLicense or false
 }:
 
-with lib;
-
 assert !libsOnly -> kernel != null;
-assert versionOlder version "391" -> sha256_32bit != null;
+assert lib.versionOlder version "391" -> sha256_32bit != null;
 assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
 assert useFabricmanager -> fabricmanagerSha256 != null;
 assert useFabricmanager -> !useSettings;
 
 let
-  nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
-  pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
-  i686bundled = versionAtLeast version "391" && !disable32Bit;
+  nameSuffix = lib.optionalString (!libsOnly) "-${kernel.version}";
+  pkgSuffix = lib.optionalString (lib.versionOlder version "304") "-pkg0";
+  i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
 
   libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
     libdrm
@@ -153,15 +151,15 @@ let
     inherit i686bundled;
 
     outputs = [ "out" ]
-      ++ optional i686bundled "lib32"
-      ++ optional (!libsOnly) "bin"
-      ++ optional (!libsOnly && firmware) "firmware";
+      ++ lib.optional i686bundled "lib32"
+      ++ lib.optional (!libsOnly) "bin"
+      ++ lib.optional (!libsOnly && firmware) "firmware";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
-    makeFlags = optionals (!libsOnly) (kernel.makeFlags ++ [
+    makeFlags = lib.optionals (!libsOnly) (kernel.makeFlags ++ [
       "IGNORE_PREEMPT_RT_PRESENCE=1"
       "NV_BUILD_SUPPORTS_HMM=1"
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
@@ -174,12 +172,12 @@ let
     dontPatchELF = true;
 
     libPath = libPathFor pkgs;
-    libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
+    libPath32 = lib.optionalString i686bundled (libPathFor pkgsi686Linux);
 
     nativeBuildInputs = [ perl nukeReferences which libarchive jq ]
-      ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
+      ++ lib.optionals (!libsOnly) kernel.moduleBuildDependencies;
 
-    disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
+    disallowedReferences = lib.optionals (!libsOnly) [ kernel.dev ];
 
     passthru =
       let
@@ -199,7 +197,7 @@ let
           });
       in
       {
-        open = mapNullable
+        open = lib.mapNullable
           (hash: callPackage ./open.nix {
             inherit hash;
             nvidia_x11 = self;
@@ -216,7 +214,7 @@ let
               } else { };
         persistenced =
           if usePersistenced then
-            mapNullable
+            lib.mapNullable
               (hash: callPackage (import ./persistenced.nix self hash) {
                 fetchFromGitHub = fetchFromGithubOrNvidia;
               })
@@ -224,12 +222,12 @@ let
           else { };
         fabricmanager =
           if useFabricmanager then
-            mapNullable (hash: callPackage (import ./fabricmanager.nix self hash) { }) fabricmanagerSha256
+            lib.mapNullable (hash: callPackage (import ./fabricmanager.nix self hash) { }) fabricmanagerSha256
           else { };
         inherit persistencedVersion settingsVersion;
         compressFirmware = false;
         ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
-      } // optionalAttrs (!i686bundled) {
+      } // lib.optionalAttrs (!i686bundled) {
         inherit lib32;
       };
 
@@ -238,8 +236,8 @@ let
       description = "${if useFabricmanager then "Data Center" else "X.org"} driver and kernel module for NVIDIA cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ]
-        ++ optionals (sha256_32bit != null) [ "i686-linux" ]
-        ++ optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
+        ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
+        ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
       maintainers = with maintainers; [ kiskae edwtjo ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;

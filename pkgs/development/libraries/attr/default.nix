@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
     platforms = platforms.linux;
+    badPlatforms = platforms.microblaze;
     license = licenses.gpl2Plus;
   };
 }

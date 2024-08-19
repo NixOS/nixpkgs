@@ -87,14 +87,14 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
     pname = "kodi";
-    version = "21.0";
+    version = "21.1";
     kodiReleaseName = "Omega";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo  = "xbmc";
       rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash  = "sha256-xrFWqgwTkurEwt3/+/e4SCM6Uk9nxuW62SrCFWWqZO0=";
+      hash  = "sha256-NjId1T1cw9dl0Fx1QDsijiN1VUpuQ/EFl1kxWSESCR4=";
     };
 
     patches = [

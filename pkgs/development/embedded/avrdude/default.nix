@@ -1,5 +1,5 @@
 { lib, callPackage, stdenv, fetchFromGitHub, cmake, bison, flex, libusb1, elfutils
-, libftdi1, readline, hidapi, libserialport
+, libftdi1, readline, hidapi, libserialport, libusb-compat-0_1
 # Documentation building doesn't work on Darwin. It fails with:
 #   Undefined subroutine &Locale::Messages::dgettext called in ... texi2html
 #
@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libftdi1
     libserialport
     readline
+    libusb-compat-0_1
   ];
 
   postPatch = lib.optionalString (!useElfutils) ''

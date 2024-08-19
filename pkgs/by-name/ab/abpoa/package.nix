@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString enablePython "py"}abpoa";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "yangao07";
     repo = "abPOA";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-nPMzkWkjUI+vZExNEvJa24KrR0pWGk89Mvp7TCyka/w=";
+    hash = "sha256-gS0PO7K4hN+3k2NF8enri1FzM80H2I+a3MNaKsm74xM=";
   };
 
   patches = [ ./simd-arch.patch ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optionals enablePython (
     with python3Packages;
     [
-      cython
+      cython_0
       pypaBuildHook
       pypaInstallHook
       pythonImportsCheckHook

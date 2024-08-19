@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  can,
+  python-can,
   canmatrix,
   pytestCheckHook,
   pythonOlder,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
-    can
+    python-can
     canmatrix
   ];
 

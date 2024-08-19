@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.85";
+  version = "0.1.99";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IPbamCfaurikFAqKnvMp8+x5ULCeQ61d5oZFO9+s4SQ=";
+    hash = "sha256-aN5HiQAXX7ZlVBzkit4DAw+7KQHI3ck1DLvBPDSKVhM=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -78,6 +78,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # due to circular import
     "tests/integration_tests/test_client.py"
+    "tests/integration_tests/test_prompts.py"
     "tests/unit_tests/test_client.py"
     # Tests require a Langsmith API key
     "tests/evaluation/test_evaluation.py"

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "30.3.0";
+  version = "30.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = "license-expression";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nHqfnetVyz4W2Q6onH0mU/4x9e/vD4rbl9DF4TYqWzs=";
+    hash = "sha256-+hINYDfUrNsCmXOIa4XO/ML1fJoB8/n6iQ4UGdw5ClE=";
   };
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ boolean-py ];
+  dependencies = [ boolean-py ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

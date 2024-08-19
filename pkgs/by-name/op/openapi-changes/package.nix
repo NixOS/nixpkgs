@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "openapi-changes";
-  version = "0.0.66";
+  version = "0.0.67";
 
   src = fetchFromGitHub {
     owner = "pb33f";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KacN/j6mc6eUovFfKLgu86pZBde5zRjhjuJyny6IjZU=";
+    hash = "sha256-SNH11z/0DeaYfGwBKW3iIeCVdlpcoZ1elIlgl+quWIY=";
   };
 
   # this test requires the `.git` of the project to be present

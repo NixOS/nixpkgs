@@ -1,0 +1,27 @@
+From 41bb032ef3e8332115ed9ebdaeed5d47b9c56098 Mon Sep 17 00:00:00 2001
+From: Robert Ancell <robert.ancell@canonical.com>
+Date: Fri, 25 Aug 2023 16:46:52 +1200
+Subject: [PATCH] Fix building on Pango 1.49.4
+
+This version added the autoptr macros which we no longer need to define.
+
+https://github.com/flutter/flutter/issues/132881
+---
+ shell/platform/linux/fl_accessible_text_field.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/shell/platform/linux/fl_accessible_text_field.cc b/shell/platform/linux/fl_accessible_text_field.cc
+index 9a6052d4777ec..9dcc7f64fb820 100644
+--- a/shell/platform/linux/fl_accessible_text_field.cc
++++ b/shell/platform/linux/fl_accessible_text_field.cc
+@@ -7,7 +7,11 @@
+ #include "flutter/shell/platform/linux/public/flutter_linux/fl_value.h"
+ 
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC(PangoContext, g_object_unref)
++// PangoLayout g_autoptr macro weren't added until 1.49.4. Add them manually.
++// https://gitlab.gnome.org/GNOME/pango/-/commit/0b84e14
++#if !PANGO_VERSION_CHECK(1, 49, 4)
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC(PangoLayout, g_object_unref)
++#endif
+ 
+ typedef bool (*FlTextBoundaryCallback)(const PangoLogAttr* attr);

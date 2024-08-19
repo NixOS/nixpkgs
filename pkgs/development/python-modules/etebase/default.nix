@@ -13,6 +13,7 @@
   Security,
   msgpack,
   fetchpatch,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -69,6 +70,10 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "etebase" ];
+
+  passthru.tests = {
+    inherit (nixosTests) etebase-server;
+  };
 
   meta = with lib; {
     broken = stdenv.isDarwin;

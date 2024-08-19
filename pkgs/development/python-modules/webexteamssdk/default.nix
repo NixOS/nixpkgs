@@ -2,41 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
   pyjwt,
   pythonOlder,
   requests,
   requests-toolbelt,
-  setuptools,
-  versioneer,
+  poetry-core,
+  poetry-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "webexteamssdk";
-  version = "1.6.1";
+  version = "2.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "CiscoDevNet";
     repo = "webexteamssdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
+    hash = "sha256-ENAUUicVO/Br7k+RFHCGzQ7BIG0CP7jTYM3tzs5EAZQ=";
   };
 
-  postPatch = ''
-    # Remove vendorized versioneer
-    rm versioneer.py
-  '';
-
   build-system = [
-    setuptools
-    versioneer
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
   dependencies = [
-    future
     pyjwt
     requests
     requests-toolbelt
@@ -45,13 +38,13 @@ buildPythonPackage rec {
   # Tests require a Webex Teams test domain
   doCheck = false;
 
-  pythonImportsCheck = [ "webexteamssdk" ];
+  pythonImportsCheck = [ "webexpythonsdk" ];
 
   meta = with lib; {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/CiscoDevNet/webexteamssdk";
     changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

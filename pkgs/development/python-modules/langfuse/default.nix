@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  anyio,
   backoff,
   httpx,
   idna,
@@ -16,22 +17,22 @@
 
 buildPythonPackage rec {
   pname = "langfuse";
-  version = "2.36.2";
+  version = "2.43.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7snmEjRRciYaxUm0wUwQn5HKTvQOPVH5rXVUGZ+BXgk=";
+    hash = "sha256-pS3JF+9AfPkK3EmQOipVs5SJs0fWsZhudg4uNPH+6p8=";
   };
 
   build-system = [ poetry-core ];
 
-
   pythonRelaxDeps = [ "packaging" ];
 
   dependencies = [
+    anyio
     backoff
     httpx
     idna

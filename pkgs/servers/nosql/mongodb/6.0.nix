@@ -22,4 +22,5 @@ buildMongoDB {
       sha256 = "sha256-gWlE2b/NyGe2243iNCXzjcERIY8/4ZWI4Gjh5SF0tYA=";
     })
   ];
+  # passthru.tests = { inherit (nixosTests) mongodb; }; # currently tests mongodb-5_0
 }

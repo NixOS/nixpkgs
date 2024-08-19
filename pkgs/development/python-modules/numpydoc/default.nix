@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = isPy27;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname;
     inherit version;
-    hash = "sha256-hm5a5bZQnc+HP8Y4ESD1wxrPE7E1Y2wagdaMFmqV+SE=";
+    hash = "sha256-AiOQq3RkpE+HN/efizHOHTz6S0r3nMqhqsXoNo21h/s=";
   };
 
   postPatch = ''

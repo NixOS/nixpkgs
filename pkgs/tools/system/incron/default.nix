@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bash }:
+{ lib, stdenv, fetchFromGitHub, bash, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "incron";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     # just manually install the binaries instead
     cp incrond incrontab $out/bin/
   '';
+
+  passthru.tests = { inherit (nixosTests) incron; };
 
   meta = with lib; {
     description = "Cron-like daemon which handles filesystem events";

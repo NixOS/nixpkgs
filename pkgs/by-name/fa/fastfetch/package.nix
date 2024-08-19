@@ -47,13 +47,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.21.0";
+  version = "2.21.2";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-1bWWwMzbzECWARhl3ULMVF5QhbvrV5ShVT382BnRGg8=";
+    hash = "sha256-wh8k/+2Wj5XhYvBD+s7IHLGi7v7gxn6rxLHlZTvw+Rk=";
   };
 
   outputs = [

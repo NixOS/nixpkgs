@@ -728,6 +728,12 @@ lib.mapAttrs mkLicense ({
     redistributable = false;
   };
 
+  databricks-license = {
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
+    free = false;
+  };
+
   fair = {
     fullName = "Fair License";
     spdxId = "Fair";

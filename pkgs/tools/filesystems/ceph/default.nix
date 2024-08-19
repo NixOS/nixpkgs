@@ -4,6 +4,7 @@
 , fetchurl
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 
 # Build time
 , cmake
@@ -137,11 +138,11 @@ let
     none = [ ];
   };
 
-  getMeta = description: with lib; {
+  getMeta = description: {
      homepage = "https://ceph.io/en/";
      inherit description;
-     license = with licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
-     maintainers = with maintainers; [ adev ak johanot krav ];
+     license = with lib.licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
+     maintainers = with lib.maintainers; [ adev ak johanot krav nh2 ];
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
@@ -171,12 +172,18 @@ let
   python = python311.override {
     self = python;
     packageOverrides = self: super: let
-      cryptographyOverrideVersion = "40.0.1";
       bcryptOverrideVersion = "4.0.1";
     in {
-      # Ceph does not support `bcrypt` > 4.0 yet:
+      # Ceph does not support the following yet:
+      # * `bcrypt` > 4.0
+      # * `cryptography` > 40
+      # See:
+      # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
       # * Upstream issue: https://tracker.ceph.com/issues/63529
       #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
+      # * Moved to issue: https://tracker.ceph.com/issues/64213
+      #   > MGR modules incompatible with later PyO3 versions - PyO3 modules may only be initialized once per interpreter process
+
       bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
         pname = "bcrypt";
         version = bcryptOverrideVersion;
@@ -192,44 +199,12 @@ let
           hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
         };
       });
-      # Ceph does not support `cryptography` > 40 yet:
-      # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-      # * Upstream issue: https://tracker.ceph.com/issues/63529
-      #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
-      #
+
       # We pin the older `cryptography` 40 here;
       # this also forces us to pin an older `pyopenssl` because the current one
       # is not compatible with older `cryptography`, see:
       #     https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
-      cryptography = super.cryptography.overridePythonAttrs (old: rec {
-        version = cryptographyOverrideVersion;
-
-        src = fetchPypi {
-          inherit (old) pname;
-          version = cryptographyOverrideVersion;
-          hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = let cargoRoot = "src/rust"; in "${old.pname}-${cryptographyOverrideVersion}/${cargoRoot}";
-          name = "${old.pname}-${cryptographyOverrideVersion}";
-          hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
-        };
-
-        # Not using the normal `(old.patches or []) ++` pattern here to use
-        # the overridden package's patches, because current nixpkgs's `cryptography`
-        # has patches that do not apply on this old version.
-        patches = [
-          # Fix https://nvd.nist.gov/vuln/detail/CVE-2023-49083 which has no upstream backport.
-          # See https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a#diff-f5134bf8f3cf0a5cc8601df55e50697acc866c603a38caff98802bd8e17976c5R1893
-          ./python-cryptography-Cherry-pick-fix-for-CVE-2023-49083-on-cryptography-40.patch
-        ];
-
-        # Tests would require overriding `cryptography-vectors`, which is not currently
-        # possible/desired, see: https://github.com/NixOS/nixpkgs/pull/281858#pullrequestreview-1841421866
-        doCheck = false;
-      });
+      cryptography = self.callPackage ./old-python-packages/cryptography.nix {};
 
       # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
       # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
@@ -246,6 +221,14 @@ let
         propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
           self.flaky
         ];
+      });
+
+
+      fastapi = super.fastapi.overridePythonAttrs (old: rec {
+        # Flaky test:
+        #     ResourceWarning: Unclosed <MemoryObjectSendStream>
+        # Unclear whether it's flaky in general or only in this overridden package set.
+        doCheck = false;
       });
 
       # Ceph does not support `kubernetes` >= 19, see:
@@ -318,6 +301,29 @@ in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
+
+    patches = [
+      # Fixes mgr not being able to import `packaging` due to autotools >= 70.
+      # Remove once https://github.com/ceph/ceph/pull/58624 is merged, see
+      # https://github.com/NixOS/nixpkgs/pull/330226#issuecomment-2268421031
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/8da2d857fa8fdfedd7aad0ca90e1780a3ed085c9.patch";
+        name = "ceph-mgr-python-fix-packaging-import.patch";
+        hash = "sha256-3Yl1X6UfTf0XCXJxgRnM/Js9sz8tS+hsqViY6gDExoI=";
+      })
+
+      # Fixes cryptesetup version parsing regex, see
+      # * https://github.com/NixOS/nixpkgs/issues/334227
+      # * https://www.mail-archive.com/ceph-users@ceph.io/msg26309.html
+      # * https://github.com/ceph/ceph/pull/58997
+      # Remove once we're on the next version of Ceph 18, when this should be in:
+      # https://github.com/ceph/ceph/pull/58997
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/6ae874902b63652fa199563b6e7950cd75151304.patch";
+        name = "ceph-reef-ceph-volume-fix-set_dmcrypt_no_workqueue.patch";
+        hash = "sha256-r+7hcCz2WF/rJfgKwTatKY9unJlE8Uw3fmOyaY5jVH0=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace cmake/modules/Finduring.cmake \
@@ -476,6 +482,7 @@ in rec {
 
     passthru = {
       inherit version;
+      inherit python; # to be able to test our overridden packages above individually with `nix-build -A`
       tests = {
         inherit (nixosTests)
           ceph-multi-node

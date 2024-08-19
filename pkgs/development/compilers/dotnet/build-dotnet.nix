@@ -161,9 +161,7 @@ mkCommon type rec {
 
     updateScript =
       let
-        majorVersion =
-          with lib;
-          concatStringsSep "." (take 2 (splitVersion version));
+        majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
       in
       writeShellScript "update-dotnet-${majorVersion}" ''
         pushd pkgs/development/compilers/dotnet

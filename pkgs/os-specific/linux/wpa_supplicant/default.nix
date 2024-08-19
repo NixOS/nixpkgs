@@ -5,7 +5,6 @@
 , withPcsclite ? !stdenv.hostPlatform.isStatic, pcsclite
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   version = "2.11";
 
@@ -70,12 +69,12 @@ stdenv.mkDerivation rec {
     CONFIG_WPS_NFS=y
     CONFIG_SUITEB=y
     CONFIG_SUITEB192=y
-  '' + optionalString withPcsclite ''
+  '' + lib.optionalString withPcsclite ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString dbusSupport ''
+  '' + lib.optionalString dbusSupport ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
@@ -84,7 +83,7 @@ stdenv.mkDerivation rec {
     # not =n, as one may expect, but undefine.
     #
     # This config is sourced into makefile.
-    + optionalString (!dbusSupport) ''
+    + lib.optionalString (!dbusSupport) ''
     undefine CONFIG_CTRL_IFACE_DBUS
     undefine CONFIG_CTRL_IFACE_DBUS_NEW
     undefine CONFIG_CTRL_IFACE_DBUS_INTRO
@@ -105,13 +104,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
       -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
-      ${optionalString withPcsclite "-I${lib.getDev pcsclite}/include/PCSC/"}"
+      ${lib.optionalString withPcsclite "-I${lib.getDev pcsclite}/include/PCSC/"}"
   '';
 
   buildInputs = [ openssl libnl ]
-    ++ optional dbusSupport dbus
-    ++ optional withReadline readline
-    ++ optional withPcsclite pcsclite;
+    ++ lib.optional dbusSupport dbus
+    ++ lib.optional withReadline readline
+    ++ lib.optional withPcsclite pcsclite;
 
   nativeBuildInputs = [ pkg-config ];
 

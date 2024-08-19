@@ -13,12 +13,43 @@ set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
 
 # https://stackoverflow.com/a/246128/6605742
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 cd "$DIR"/modules
 
 pass=0
 fail=0
+
+# loc
+#   prints the location of the call of to the function that calls it
+# loc n
+#   prints the location n levels up the call stack
+loc() {
+    local caller depth
+    depth=1
+    if [[ $# -gt 0 ]]; then
+        depth=$1
+    fi
+    # ( lineno fnname file ) of the caller
+    caller=( $(caller $depth) )
+    echo "${caller[2]}:${caller[0]}"
+}
+
+line() {
+    echo "----------------------------------------"
+}
+logStartFailure() {
+    line
+}
+logEndFailure() {
+    line
+    echo
+}
+
+logFailure() {
+    # bold red
+    printf '\033[1;31mTEST FAILED\033[0m at %s\n' "$(loc 2)"
+}
 
 evalConfig() {
     local attr=$1
@@ -31,7 +62,7 @@ reportFailure() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
+    echo "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
     evalConfig "$attr" "$@" || true
     ((++fail))
 }
@@ -42,8 +73,12 @@ checkConfigOutput() {
     if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
-        echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
+        logStartFailure
+        echo "ACTUAL:"
         reportFailure "$@"
+        echo "EXPECTED: result matching '$outputContains'"
+        logFailure
+        logEndFailure
     fi
 }
 
@@ -52,14 +87,22 @@ checkConfigError() {
     local err=""
     shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
-        echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
+        logStartFailure
+        echo "ACTUAL: exit code 0, output:"
         reportFailure "$@"
+        echo "EXPECTED: non-zero exit code"
+        logFailure
+        logEndFailure
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
-            echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
+            logStartFailure
+            echo "ACTUAL:"
             reportFailure "$@"
+            echo "EXPECTED: error matching '$errorContains'"
+            logFailure
+            logEndFailure
         fi
     fi
 }

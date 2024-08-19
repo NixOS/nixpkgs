@@ -31,22 +31,24 @@ buildPythonPackage rec {
     hash = "sha256-5DuqM7MgntV/3WquR+0Cr/vIwYL35ZVpGlNZPj92jJ4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "timeout = 20" "timeout = 300" \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail "timeout = 20" "timeout = 300" \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     coloredlogs
     jsonschema
     voluptuous
     zigpy
   ];
+
+  doCheck = false; # tests are not compatible with zigpy 0.65.3
 
   nativeCheckInputs = [
     pytest-asyncio

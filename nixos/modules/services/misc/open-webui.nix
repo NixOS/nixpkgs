@@ -54,7 +54,10 @@ in
             WEBUI_AUTH = "False";
           }
         '';
-        description = "Extra environment variables for Open-WebUI";
+        description = ''
+          Extra environment variables for Open-WebUI.
+          For more details see https://docs.openwebui.com/getting-started/env-configuration/
+        '';
       };
 
       openFirewall = lib.mkOption {

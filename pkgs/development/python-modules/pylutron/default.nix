@@ -29,7 +29,10 @@ buildPythonPackage rec {
     description = "Python library for controlling a Lutron RadioRA 2 system";
     homepage = "https://github.com/thecynic/pylutron";
     changelog = "https://github.com/thecynic/pylutron/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = with licenses; [
+      mit
+      psfl
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

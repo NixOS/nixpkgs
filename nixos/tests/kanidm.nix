@@ -9,9 +9,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
   in
   {
     name = "kanidm";
-    meta.maintainers = with pkgs.lib.maintainers; [ erictapen Flakebi ];
+    meta.maintainers = with pkgs.lib.maintainers; [ erictapen Flakebi oddlama ];
 
-    nodes.server = { config, pkgs, lib, ... }: {
+    nodes.server = { pkgs, ... }: {
       services.kanidm = {
         enableServer = true;
         serverSettings = {
@@ -34,7 +34,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       environment.systemPackages = with pkgs; [ kanidm openldap ripgrep ];
     };
 
-    nodes.client = { pkgs, nodes, ... }: {
+    nodes.client = { nodes, ... }: {
       services.kanidm = {
         enableClient = true;
         clientSettings = {
@@ -62,10 +62,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
           (pkgs.lib.filterAttrsRecursive (_: v: v != null))
           nodes.server.services.kanidm.serverSettings;
         serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
-
       in
       ''
-        start_all()
+        server.start()
+        client.start()
         server.wait_for_unit("kanidm.service")
         client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
@@ -122,5 +122,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
             client.wait_until_succeeds("systemctl is-active user@$(id -u testuser).service")
             client.send_chars("touch done\n")
             client.wait_for_file("/home/testuser@${serverDomain}/done")
+
+        server.shutdown()
+        client.shutdown()
       '';
   })

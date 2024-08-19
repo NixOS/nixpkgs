@@ -4,6 +4,7 @@
 , fetchpatch
 , python3
 , installShellFiles
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -86,6 +87,8 @@ python3.pkgs.buildPythonApplication rec {
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/usr"
     '';
+
+  passthru.tests = { inherit (nixosTests) fail2ban; };
 
   meta = with lib; {
     homepage = "https://www.fail2ban.org/";
