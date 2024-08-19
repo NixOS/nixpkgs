@@ -23,12 +23,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libffi readline ];
 
-  buildPhase = ''
-    runHook preBuild
-    make -C mpy-cross
-    make -C ports/unix
-    runHook postBuild
-  '';
+  makeFlags = [ "-C" "ports/unix" ]; # also builds mpy-cross
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 
