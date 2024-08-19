@@ -16,13 +16,13 @@ with lib;
         '';
       };
       servers = mkOption {
-        default = config.networking.timeServers;
-        defaultText = literalExpression "config.networking.timeServers";
+        default = [ ];
+        defaultText = literalExpression "[]";
         type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.
-          Note if this is set to an empty list, the defaults systemd itself is
-          compiled with ({0..4}.nixos.pool.ntp.org) apply,
+          In case this is set to an empty list (the default), the time servers
+          systemd itself is compiled with ({0..4}.nixos.pool.ntp.org) apply.
           In case you want to disable timesyncd altogether, use the `enable` option.
         '';
       };
