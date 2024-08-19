@@ -156,6 +156,44 @@ runCommandWith {
 ```
 :::
 
+## `applyPatches` {#trivial-builder-applyPatches}
+
+Applies a list of patches to a source directory like [`patchPhase`](#ssec-patch-phase).
+
+`src :: Path | Derivation`
+:   The path to the source directory to patch.
+
+`name :: String` (optional)
+:   The name that Nix will append to the store path in the same way that
+    `stdenv.mkDerivation` uses its `name` attribute. If not set, default is
+    computed from the [basename](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-baseNameOf)
+    of the `src` if it is a path or `src.name` if `src` has `name` attribute.
+
+`patches :: [Path | Derivation]`
+:   The list of patches to apply like [`patches`](#var-stdenv-patches) argument
+    of `stdenv.mkDerivation`.
+
+`prePatch :: String` (optional)
+:   Shell commands to run before applying patches.
+
+`postPatch :: String` (optional)
+:   Shell commands to run after applying patches.
+
+::: {.example #ex-applypatches-nixpkgs}
+# Patching Nixpkgs with `applyPatches`
+
+```nix
+applyPatches {
+  src = pkgs.path;
+  patches = [
+    (pkgs.fetchpatch {
+      url = "https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch";
+      hash = "sha256-uXrn1hWfI72QQ8oSTOUps9UZwqF2QwzmkiMPH07on9o=";
+    })
+  ];
+}
+```
+:::
 
 ## Writing text files {#trivial-builder-text-writing}
 
