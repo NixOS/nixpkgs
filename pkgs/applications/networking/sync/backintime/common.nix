@@ -26,10 +26,10 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     cd common
     substituteInPlace configure \
-      --replace "/.." "" \
-      --replace "share/backintime" "${python'.sitePackages}/backintime"
+      --replace-fail "/.." "" \
+      --replace-fail "share/backintime" "${python'.sitePackages}/backintime"
     substituteInPlace "backintime" \
-      --replace "share" "${python'.sitePackages}"
+      --replace-fail "share" "${python'.sitePackages}"
   '';
 
   dontAddPrefix = true;
@@ -44,10 +44,11 @@ in stdenv.mkDerivation rec {
     description = "Simple backup tool for Linux";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ stephen-huan ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
+    mainProgram = "backintime";
     longDescription = ''
       Back In Time is a simple backup tool (on top of rsync) for Linux
-      inspired from “flyback project” and “TimeVault”. The backup is
+      inspired from "flyback project" and "TimeVault". The backup is
       done by taking snapshots of a specified set of directories.
     '';
   };
