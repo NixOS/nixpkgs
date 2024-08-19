@@ -269,7 +269,7 @@ in
     '';
   };
 
-  memtest86 = makeTest {
+  memtest86 = pkgs.lib.mkIf (system == "x86_64-linux") (makeTest {
     name = "systemd-boot-memtest86";
     meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
@@ -282,7 +282,7 @@ in
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
-  };
+  });
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";
