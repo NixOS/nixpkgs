@@ -230,5 +230,6 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ zhaofengli ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "darling";
+    hydraPlatforms = [ ]; # src with submodules is 3.3G, hydra fails with "Output limit exceeded"
   };
 }
