@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-YAhsnE1DJ5UlYAuhDxS/5IpfIJB6DrhCT3E0YiKENjU=";
   };
 
-  nativeBuildInputs = [
-    flex
-  ];
+  nativeBuildInputs = [ flex ];
 
   buildInputs = [
     libuuid
