@@ -29733,6 +29733,8 @@ with pkgs;
 
   esp-clang = callPackage ../by-name/es/esp-idf/esp-clang.nix { };
 
+  esp-rom-elfs = callPackage ../by-name/es/esp-idf/esp-rom-elfs.nix { };
+
   espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak-ng = callPackage ../applications/audio/espeak-ng {
