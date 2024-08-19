@@ -963,6 +963,12 @@
     matrix = "@alexshpilkin:matrix.org";
     name = "Alexander Shpilkin";
   };
+  AlexSKaye = {
+    email = "AlexSKaye@proton.me";
+    github = "AlexSKaye";
+    githubId = 3017212;
+    name = "Alex S. Kaye";
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";
