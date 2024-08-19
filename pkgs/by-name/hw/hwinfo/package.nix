@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Replace /usr paths with Nix store paths
     substituteInPlace Makefile \
       --replace-fail "/sbin" "/bin" \
       --replace-fail "/usr/" "/"
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/isdn/cdb/cdb_hwdb.h \
       --replace-fail "/usr/share" "$out/share"
 
-    # replace absolute paths with relative, we will prefix PATH later
+    # Replace /sbin and /usr/bin paths with Nix store paths
     substituteInPlace src/hd/hd_int.h \
       --replace-fail "/sbin/modprobe" "${kmod}/bin/modprobe" \
       --replace-fail "/sbin/rmmod" "${kmod}/bin/rmmod" \
