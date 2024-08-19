@@ -6,3 +6,4 @@ build/
 *.kdev4
 *.qmlc
 .vscode/
+**/__pycache__/
