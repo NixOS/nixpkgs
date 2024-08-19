@@ -15222,6 +15222,12 @@
     githubId = 7397786;
     name = "Odysseas Georgoudis";
   };
+  ofalvai = {
+    email = "ofalvai@gmail.com";
+    github = "ofalvai";
+    githubId = 1694986;
+    name = "Olivér Falvai";
+  };
   ofek = {
     email = "oss@ofek.dev";
     github = "ofek";
