@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/openSUSE/hwinfo";
     maintainers = with maintainers; [ bobvanderlinden ];
     platforms = platforms.linux;
+    mainProgram = "hwinfo";
   };
 })
