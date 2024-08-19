@@ -14,10 +14,13 @@ import subprocess
 import re
 
 import gettext
-_ = gettext.translation("calamares-python",
-                        localedir=libcalamares.utils.gettext_path(),
-                        languages=libcalamares.utils.gettext_languages(),
-                        fallback=True).gettext
+
+_ = gettext.translation(
+    "calamares-python",
+    localedir=libcalamares.utils.gettext_path(),
+    languages=libcalamares.utils.gettext_languages(),
+    fallback=True,
+).gettext
 
 
 # The following strings contain pieces of a nix-configuration file.
@@ -358,6 +361,7 @@ def catenate(d, key, *values):
 
     d[key] = "".join(values)
 
+
 def run():
     """NixOS Configuration."""
 
@@ -374,15 +378,18 @@ def run():
     root_mount_point = gs.value("rootMountPoint")
     config = os.path.join(root_mount_point, "etc/nixos/configuration.nix")
     fw_type = gs.value("firmwareType")
-    bootdev = "nodev" if gs.value("bootLoader") is None else gs.value(
-        "bootLoader")['installPath']
+    bootdev = (
+        "nodev"
+        if gs.value("bootLoader") is None
+        else gs.value("bootLoader")["installPath"]
+    )
 
     # Pick config parts and prepare substitution
 
     # Check bootloader
-    if (fw_type == "efi"):
+    if fw_type == "efi":
         cfg += cfgbootefi
-    elif (bootdev != "nodev"):
+    elif bootdev != "nodev":
         cfg += cfgbootbios
         catenate(variables, "bootdev", bootdev)
     else:
@@ -390,9 +397,15 @@ def run():
 
     # Setup encrypted swap devices. nixos-generate-config doesn't seem to notice them.
     for part in gs.value("partitions"):
-        if part["claimed"] == True and (part["fsName"] == "luks" or part["fsName"] == "luks2") and part["device"] is not None and part["fs"] == "linuxswap":
+        if (
+            part["claimed"] is True
+            and (part["fsName"] == "luks" or part["fsName"] == "luks2")
+            and part["device"] is not None
+            and part["fs"] == "linuxswap"
+        ):
             cfg += """  boot.initrd.luks.devices."{}".device = "/dev/disk/by-uuid/{}";\n""".format(
-                part["luksMapperName"], part["uuid"])
+                part["luksMapperName"], part["uuid"]
+            )
 
     # Check partitions
     root_is_encrypted = False
@@ -407,39 +420,95 @@ def run():
             boot_is_encrypted = part["fsName"] in ["luks", "luks2"]
 
     # Setup keys in /boot/crypto_keyfile if using BIOS and Grub cryptodisk
-    if fw_type != "efi" and ((boot_is_partition and boot_is_encrypted) or (root_is_encrypted and not boot_is_partition)):
+    if fw_type != "efi" and (
+        (boot_is_partition and boot_is_encrypted)
+        or (root_is_encrypted and not boot_is_partition)
+    ):
         cfg += cfgbootgrubcrypt
         status = _("Setting up LUKS")
         libcalamares.job.setprogress(0.15)
         try:
             libcalamares.utils.host_env_process_output(
-                ["mkdir", "-p", root_mount_point+"/boot"], None)
+                ["mkdir", "-p", root_mount_point + "/boot"], None
+            )
             libcalamares.utils.host_env_process_output(
-                ["chmod", "0700", root_mount_point+"/boot"], None)
+                ["chmod", "0700", root_mount_point + "/boot"], None
+            )
             # Create /boot/crypto_keyfile.bin
             libcalamares.utils.host_env_process_output(
-                ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/boot/crypto_keyfile.bin", "iflag=fullblock"], None)
+                [
+                    "dd",
+                    "bs=512",
+                    "count=4",
+                    "if=/dev/random",
+                    "of=" + root_mount_point + "/boot/crypto_keyfile.bin",
+                    "iflag=fullblock",
+                ],
+                None,
+            )
             libcalamares.utils.host_env_process_output(
-                ["chmod", "600", root_mount_point+"/boot/crypto_keyfile.bin"], None)
+                ["chmod", "600", root_mount_point + "/boot/crypto_keyfile.bin"], None
+            )
         except subprocess.CalledProcessError:
-            libcalamares.utils.error(
-                "Failed to create /boot/crypto_keyfile.bin")
-            return (_("Failed to create /boot/crypto_keyfile.bin"), _("Check if you have enough free space on your partition."))
+            libcalamares.utils.error("Failed to create /boot/crypto_keyfile.bin")
+            return (
+                _("Failed to create /boot/crypto_keyfile.bin"),
+                _("Check if you have enough free space on your partition."),
+            )
 
         for part in gs.value("partitions"):
-            if part["claimed"] == True and (part["fsName"] == "luks" or part["fsName"] == "luks2") and part["device"] is not None:
-                cfg += """  boot.initrd.luks.devices."{}".keyFile = "/boot/crypto_keyfile.bin";\n""".format(part["luksMapperName"])
+            if (
+                part["claimed"] is True
+                and (part["fsName"] == "luks" or part["fsName"] == "luks2")
+                and part["device"] is not None
+            ):
+                cfg += """  boot.initrd.luks.devices."{}".keyFile = "/boot/crypto_keyfile.bin";\n""".format(
+                    part["luksMapperName"]
+                )
                 try:
                     # Grub currently only supports pbkdf2 for luks2
                     libcalamares.utils.host_env_process_output(
-                        ["cryptsetup", "luksConvertKey", "--hash", "sha256", "--pbkdf", "pbkdf2", part["device"]], None, part["luksPassphrase"])
+                        [
+                            "cryptsetup",
+                            "luksConvertKey",
+                            "--hash",
+                            "sha256",
+                            "--pbkdf",
+                            "pbkdf2",
+                            part["device"],
+                        ],
+                        None,
+                        part["luksPassphrase"],
+                    )
                     # Add luks drives to /boot/crypto_keyfile.bin
                     libcalamares.utils.host_env_process_output(
-                        ["cryptsetup", "luksAddKey", "--hash", "sha256", "--pbkdf", "pbkdf2", part["device"], root_mount_point+"/boot/crypto_keyfile.bin"], None, part["luksPassphrase"])
+                        [
+                            "cryptsetup",
+                            "luksAddKey",
+                            "--hash",
+                            "sha256",
+                            "--pbkdf",
+                            "pbkdf2",
+                            part["device"],
+                            root_mount_point + "/boot/crypto_keyfile.bin",
+                        ],
+                        None,
+                        part["luksPassphrase"],
+                    )
                 except subprocess.CalledProcessError:
                     libcalamares.utils.error(
-                        "Failed to add {} to /boot/crypto_keyfile.bin".format(part["luksMapperName"]))
-                    return (_("cryptsetup failed"), _("Failed to add {} to /boot/crypto_keyfile.bin".format(part["luksMapperName"])))
+                        "Failed to add {} to /boot/crypto_keyfile.bin".format(
+                            part["luksMapperName"]
+                        )
+                    )
+                    return (
+                        _("cryptsetup failed"),
+                        _(
+                            "Failed to add {} to /boot/crypto_keyfile.bin".format(
+                                part["luksMapperName"]
+                            )
+                        ),
+                    )
 
     status = _("Configuring NixOS")
     libcalamares.job.setprogress(0.18)
@@ -450,25 +519,37 @@ def run():
     else:
         cfg += cfgnetworkmanager
 
-    if (gs.value("packagechooser_packagechooser") == "mate") | (gs.value("packagechooser_packagechooser") == "lxqt") | (gs.value("packagechooser_packagechooser") == "lumina"):
+    if (
+        (gs.value("packagechooser_packagechooser") == "mate")
+        | (gs.value("packagechooser_packagechooser") == "lxqt")
+        | (gs.value("packagechooser_packagechooser") == "lumina")
+    ):
         cfg += cfgnmapplet
 
-    if (gs.value("hostname") is None):
+    if gs.value("hostname") is None:
         catenate(variables, "hostname", "nixos")
     else:
         catenate(variables, "hostname", gs.value("hostname"))
 
-    if (gs.value("locationRegion") is not None and gs.value("locationZone") is not None):
+    if gs.value("locationRegion") is not None and gs.value("locationZone") is not None:
         cfg += cfgtime
-        catenate(variables, "timezone", gs.value(
-            "locationRegion"), "/", gs.value("locationZone"))
+        catenate(
+            variables,
+            "timezone",
+            gs.value("locationRegion"),
+            "/",
+            gs.value("locationZone"),
+        )
 
-    if (gs.value("localeConf") is not None):
+    if gs.value("localeConf") is not None:
         localeconf = gs.value("localeConf")
         locale = localeconf.pop("LANG").split("/")[0]
         cfg += cfglocale
         catenate(variables, "LANG", locale)
-        if (len(set(localeconf.values())) != 1 or list(set(localeconf.values()))[0] != locale):
+        if (
+            len(set(localeconf.values())) != 1
+            or list(set(localeconf.values()))[0] != locale
+        ):
             cfg += cfglocaleextra
             for conf in localeconf:
                 catenate(variables, conf, localeconf.get(conf).split("/")[0])
@@ -499,25 +580,35 @@ def run():
     elif gs.value("packagechooser_packagechooser") == "deepin":
         cfg += cfgdeepin
 
-    if (gs.value("keyboardLayout") is not None and gs.value("keyboardVariant") is not None):
+    if (
+        gs.value("keyboardLayout") is not None
+        and gs.value("keyboardVariant") is not None
+    ):
         cfg += cfgkeymap
         catenate(variables, "kblayout", gs.value("keyboardLayout"))
         catenate(variables, "kbvariant", gs.value("keyboardVariant"))
 
-        if (gs.value("keyboardVConsoleKeymap") is not None):
+        if gs.value("keyboardVConsoleKeymap") is not None:
             try:
-                subprocess.check_output(["pkexec", "loadkeys", gs.value(
-                    "keyboardVConsoleKeymap").strip()], stderr=subprocess.STDOUT)
+                subprocess.check_output(
+                    ["pkexec", "loadkeys", gs.value("keyboardVConsoleKeymap").strip()],
+                    stderr=subprocess.STDOUT,
+                )
                 cfg += cfgconsole
-                catenate(variables, "vconsole", gs.value(
-                    "keyboardVConsoleKeymap").strip())
+                catenate(
+                    variables, "vconsole", gs.value("keyboardVConsoleKeymap").strip()
+                )
             except subprocess.CalledProcessError as e:
                 libcalamares.utils.error("loadkeys: {}".format(e.output))
-                libcalamares.utils.error("Setting vconsole keymap to {} will fail, using default".format(
-                    gs.value("keyboardVConsoleKeymap").strip()))
+                libcalamares.utils.error(
+                    "Setting vconsole keymap to {} will fail, using default".format(
+                        gs.value("keyboardVConsoleKeymap").strip()
+                    )
+                )
         else:
             kbdmodelmap = open(
-                "/run/current-system/sw/share/systemd/kbd-model-map", 'r')
+                "/run/current-system/sw/share/systemd/kbd-model-map", "r"
+            )
             kbd = kbdmodelmap.readlines()
             out = []
             for line in kbd:
@@ -546,33 +637,42 @@ def run():
             if vconsole != "" and vconsole != "us" and vconsole is not None:
                 try:
                     subprocess.check_output(
-                        ["pkexec", "loadkeys", vconsole], stderr=subprocess.STDOUT)
+                        ["pkexec", "loadkeys", vconsole], stderr=subprocess.STDOUT
+                    )
                     cfg += cfgconsole
                     catenate(variables, "vconsole", vconsole)
                 except subprocess.CalledProcessError as e:
                     libcalamares.utils.error("loadkeys: {}".format(e.output))
+                    libcalamares.utils.error("vconsole value: {}".format(vconsole))
                     libcalamares.utils.error(
-                        "vconsole value: {}".format(vconsole))
-                    libcalamares.utils.error("Setting vconsole keymap to {} will fail, using default".format(
-                        gs.value("keyboardVConsoleKeymap")))
+                        "Setting vconsole keymap to {} will fail, using default".format(
+                            gs.value("keyboardVConsoleKeymap")
+                        )
+                    )
 
-    if gs.value("packagechooser_packagechooser") is not None and gs.value("packagechooser_packagechooser") != "":
+    if (
+        gs.value("packagechooser_packagechooser") is not None
+        and gs.value("packagechooser_packagechooser") != ""
+    ):
         cfg += cfgmisc
 
-    if (gs.value("username") is not None):
+    if gs.value("username") is not None:
         fullname = gs.value("fullname")
         groups = ["networkmanager", "wheel"]
 
         cfg += cfgusers
         catenate(variables, "username", gs.value("username"))
         catenate(variables, "fullname", fullname)
-        catenate(variables, "groups", (" ").join(
-            ["\"" + s + "\"" for s in groups]))
-        if (gs.value("autoLoginUser") is not None and gs.value("packagechooser_packagechooser") is not None and gs.value("packagechooser_packagechooser") != ""):
+        catenate(variables, "groups", (" ").join(['"' + s + '"' for s in groups]))
+        if (
+            gs.value("autoLoginUser") is not None
+            and gs.value("packagechooser_packagechooser") is not None
+            and gs.value("packagechooser_packagechooser") != ""
+        ):
             cfg += cfgautologin
-            if (gs.value("packagechooser_packagechooser") == "gnome"):
+            if gs.value("packagechooser_packagechooser") == "gnome":
                 cfg += cfgautologingdm
-        elif (gs.value("autoLoginUser") is not None):
+        elif gs.value("autoLoginUser") is not None:
             cfg += cfgautologintty
 
     if gs.value("packagechooser_packagechooser") != "":
@@ -590,31 +690,32 @@ def run():
     if gs.value("packagechooser_packagechooser") == "plasma5":
         catenate(variables, "pkgs", "\n      kate\n    #  thunderbird\n    ")
     elif gs.value("packagechooser_packagechooser") == "plasma6":
-        catenate(variables, "pkgs", "\n      kdePackages.kate\n    #  thunderbird\n    ")
+        catenate(
+            variables, "pkgs", "\n      kdePackages.kate\n    #  thunderbird\n    "
+        )
     elif gs.value("packagechooser_packagechooser") != "":
         catenate(variables, "pkgs", "\n    #  thunderbird\n    ")
     else:
         catenate(variables, "pkgs", "")
 
     cfg += cfgtail
-    version = ".".join(subprocess.getoutput(
-        ["nixos-version"]).split(".")[:2])[:5]
+    version = ".".join(subprocess.getoutput(["nixos-version"]).split(".")[:2])[:5]
     catenate(variables, "nixosversion", version)
 
     # Check that all variables are used
     for key in variables.keys():
         pattern = "@@{key}@@".format(key=key)
-        if not pattern in cfg:
-            libcalamares.utils.warning(
-                "Variable '{key}' is not used.".format(key=key))
+        if pattern not in cfg:
+            libcalamares.utils.warning("Variable '{key}' is not used.".format(key=key))
 
     # Check that all patterns exist
-    variable_pattern = re.compile("@@\w+@@")
+    variable_pattern = re.compile(r"@@\w+@@")
     for match in variable_pattern.finditer(cfg):
-        variable_name = cfg[match.start()+2:match.end()-2]
-        if not variable_name in variables:
+        variable_name = cfg[match.start() + 2 : match.end() - 2]
+        if variable_name not in variables:
             libcalamares.utils.warning(
-                "Variable '{key}' is used but not defined.".format(key=variable_name))
+                "Variable '{key}' is used but not defined.".format(key=variable_name)
+            )
 
     # Do the substitutions
     for key in variables.keys():
@@ -627,16 +728,18 @@ def run():
     try:
         # Generate hardware.nix with mounted swap device
         subprocess.check_output(
-            ["pkexec", "nixos-generate-config", "--root", root_mount_point], stderr=subprocess.STDOUT)
+            ["pkexec", "nixos-generate-config", "--root", root_mount_point],
+            stderr=subprocess.STDOUT,
+        )
     except subprocess.CalledProcessError as e:
-        if e.output != None:
+        if e.output is not None:
             libcalamares.utils.error(e.output.decode("utf8"))
         return (_("nixos-generate-config failed"), _(e.output.decode("utf8")))
 
     # Check for unfree stuff in hardware-configuration.nix
     hf = open(root_mount_point + "/etc/nixos/hardware-configuration.nix", "r")
     htxt = hf.read()
-    search = re.search("boot\.extraModulePackages = \[ (.*) \];", htxt)
+    search = re.search(r"boot\.extraModulePackages = \[ (.*) \];", htxt)
 
     # Check if any extraModulePackages are defined, and remove if only free packages are allowed
     if search is not None and free:
@@ -644,21 +747,46 @@ def run():
         for pkg in expkgs:
             p = ".".join(pkg.split(".")[3:])
             # Check package p is unfree
-            isunfree = subprocess.check_output(["nix-instantiate", "--eval", "--strict", "-E",
-                                               "with import <nixpkgs> {{}}; pkgs.linuxKernel.packageAliases.linux_default.{}.meta.unfree".format(p), "--json"], stderr=subprocess.STDOUT)
-            if isunfree == b'true':
+            isunfree = subprocess.check_output(
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--strict",
+                    "-E",
+                    "with import <nixpkgs> {{}}; pkgs.linuxKernel.packageAliases.linux_default.{}.meta.unfree".format(
+                        p
+                    ),
+                    "--json",
+                ],
+                stderr=subprocess.STDOUT,
+            )
+            if isunfree == b"true":
                 libcalamares.utils.warning(
-                    "{} is marked as unfree, removing from hardware-configuration.nix".format(p))
+                    "{} is marked as unfree, removing from hardware-configuration.nix".format(
+                        p
+                    )
+                )
                 expkgs.remove(pkg)
         hardwareout = re.sub(
-            "boot\.extraModulePackages = \[ (.*) \];", "boot.extraModulePackages = [ {}];".format("".join(map(lambda x: x+" ", expkgs))), htxt)
+            r"boot\.extraModulePackages = \[ (.*) \];",
+            "boot.extraModulePackages = [ {}];".format(
+                "".join(map(lambda x: x + " ", expkgs))
+            ),
+            htxt,
+        )
         # Write the hardware-configuration.nix file
-        libcalamares.utils.host_env_process_output(["cp", "/dev/stdin",
-                                                    root_mount_point+"/etc/nixos/hardware-configuration.nix"], None, hardwareout)
+        libcalamares.utils.host_env_process_output(
+            [
+                "cp",
+                "/dev/stdin",
+                root_mount_point + "/etc/nixos/hardware-configuration.nix",
+            ],
+            None,
+            hardwareout,
+        )
 
     # Write the configuration.nix file
-    libcalamares.utils.host_env_process_output(
-        ["cp", "/dev/stdin", config], None, cfg)
+    libcalamares.utils.host_env_process_output(["cp", "/dev/stdin", config], None, cfg)
 
     status = _("Installing NixOS")
     libcalamares.job.setprogress(0.3)
@@ -666,7 +794,11 @@ def run():
     # Install customizations
     try:
         output = ""
-        proc = subprocess.Popen(["pkexec", "nixos-install", "--no-root-passwd", "--root", root_mount_point], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(
+            ["pkexec", "nixos-install", "--no-root-passwd", "--root", root_mount_point],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
         while True:
             line = proc.stdout.readline().decode("utf-8")
             output += line
