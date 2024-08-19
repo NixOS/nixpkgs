@@ -10,14 +10,14 @@
   systemdMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hwinfo";
   version = "23.2";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YAhsnE1DJ5UlYAuhDxS/5IpfIJB6DrhCT3E0YiKENjU=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # VERSION and changelog are usually generated using Git
     # unless HWINFO_VERSION is defined (see Makefile)
-    export HWINFO_VERSION="${version}"
+    export HWINFO_VERSION="${finalAttrs.version}"
     sed -i 's|^\(TARGETS\s*=.*\)\<changelog\>\(.*\)$|\1\2|g' Makefile
 
     substituteInPlace Makefile --replace "/sbin" "/bin" --replace "/usr/" "/"
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bobvanderlinden ];
     platforms = platforms.linux;
   };
-}
+})
