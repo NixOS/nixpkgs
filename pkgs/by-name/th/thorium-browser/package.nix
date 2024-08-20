@@ -4,7 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   dpkg,
-  wrapGAppsHook,
+  wrapGAppsHook4,
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -41,7 +41,7 @@
   systemd,
   udev,
   _7zz,
-  vaapiVdpau,
+  libva-vdpau-driver,
   vulkan-loader,
   wayland,
   wget,
@@ -51,17 +51,17 @@
 }:
 stdenv.mkDerivation rec {
   pname = "thorium-browser";
-  version = "120.0.6099.235";
+  version = "126.0.6478.231";
 
   src = fetchurl {
-    url = "https://github.com/Alex313031/thorium/releases/download/M${version}/thorium-browser_${version}_amd64.deb";
-    hash = "sha256-UQqYXlkjXuZ3Vkcie0SNp4AMnBjemavW2G7dKGTxVAc=";
+    url = "https://github.com/Alex313031/thorium/releases/download/M${version}/thorium-browser_${version}_SSE3.deb";
+    hash = "sha256-Xc6jw1CLn+a0mQ2GYyVPajM6Wk/gZEqfhs7KWldESic=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook
+    wrapGAppsHook4
     qt6.wrapQtAppsHook
   ];
 
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     speechd
     udev
     _7zz
-    vaapiVdpau
+    libva-vdpau-driver
     vulkan-loader
     wayland
     wget
