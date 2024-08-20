@@ -2027,8 +2027,6 @@ self: super: with self; {
 
   cattrs = callPackage ../development/python-modules/cattrs { };
 
-  cbeams = callPackage ../misc/cbeams { };
-
   cbor2 = callPackage ../development/python-modules/cbor2 { };
 
   cbor = callPackage ../development/python-modules/cbor { };

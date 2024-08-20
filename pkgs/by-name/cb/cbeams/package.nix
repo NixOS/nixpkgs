@@ -1,9 +1,9 @@
-{ lib, buildPythonApplication, fetchPypi, isPy3k, blessed, docopt }:
+{ lib, python3Packages, fetchPypi }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cbeams";
   version = "1.0.3";
-  disabled = !isPy3k;
+  disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +15,7 @@ buildPythonApplication rec {
       --replace-fail "blessings" "blessed"
   '';
 
-  propagatedBuildInputs = [ blessed docopt ];
+  propagatedBuildInputs = with python3Packages; [ blessed docopt ];
 
   meta = with lib; {
     homepage = "https://github.com/tartley/cbeams";
