@@ -1,5 +1,6 @@
 {
   lib,
+  go_1_23,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,15 +10,19 @@
   resticprofile,
 }:
 
-buildGoModule rec {
+let
+  # can be removed when the default go version is at least 1.23
+  buildGoModule' = buildGoModule.override { go = go_1_23; };
+in
+buildGoModule' rec {
   pname = "resticprofile";
-  version = "0.27.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HHFeWsEO1KUzL5Y6Iwy7MylA//JYzY3h1EwKrUHfXpY=";
+    hash = "sha256-Ab+XesAw/GkNEGwAp1ERUlfDlI9Kxmd0UnS52v+nWIs=";
   };
 
   postPatch = ''
@@ -32,7 +37,7 @@ buildGoModule rec {
 
   '';
 
-  vendorHash = "sha256-t2R5uNsliSn+rIvRM0vT6lQJY62DhhozXnONiCJ9CMc=";
+  vendorHash = "sha256-LLFdVB4n07Sq/QH1C7rutdpzfhkJvM9lvRg5exyYixM=";
 
   ldflags = [
     "-X main.commit=${src.rev}"
