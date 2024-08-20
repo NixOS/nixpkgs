@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-hqmX64arwllviwG7ySvdwA8IYzWoLjP2MyhT389UZXw=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.2/bookmarks-14.2.2.tar.gz",
-    "version": "14.2.2",
+    "hash": "sha256-jByO7cJ9oQ4lQopzXCii11wqhg9tIlm/AFFViH+P3O0=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.4/bookmarks-14.2.4.tar.gz",
+    "version": "14.2.4",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users and via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-qToUgtGGwr8h5me95TxxCk3o/rsYD0yasqV4Kz/pbCA=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.14/calendar-v4.7.14.tar.gz",
-    "version": "4.7.14",
+    "hash": "sha256-AcPONkfFTDRd7CQC5d0C7Fr3pKRsQXl8+GhaNlqpgiY=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.15/calendar-v4.7.15.tar.gz",
+    "version": "4.7.15",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-x9T/JoNJl6LxaPzF9IpKaGrz321nbMSAN3gfZbSapGE=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v17.0.1/groupfolders-v17.0.1.tar.gz",
-    "version": "17.0.1",
+    "hash": "sha256-cWWlvuUTO4B89CDZzfJLN8MRmQwPMwj0OwFqhIUxAsQ=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v17.0.2/groupfolders-v17.0.2.tar.gz",
+    "version": "17.0.2",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-tK3RkfREo9bwocO5xfeRGfeOSdXrZzINZEgHjsWe044=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.6/mail-v3.7.6.tar.gz",
-    "version": "3.7.6",
+    "hash": "sha256-oXdwApzy67tCsUNsPTdsE3HIs89g46I2W+cCVCPkRow=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.7/mail-v3.7.7.tar.gz",
+    "version": "3.7.7",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-Lya2mkgOIG68owLws561/tdR3WWrj0RI5ZP5FTX7FdI=",
-    "url": "https://github.com/nextcloud/polls/releases/download/v7.1.4/polls.tar.gz",
-    "version": "7.1.4",
+    "hash": "sha256-6vYcZvI0F+imCMRO1XwBcyLmNJR+1miOkR2mpPpYAJE=",
+    "url": "https://github.com/nextcloud/polls/releases/download/v7.2.0/polls.tar.gz",
+    "version": "7.2.0",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -260,9 +260,9 @@
     ]
   },
   "tasks": {
-    "hash": "sha256-HitYQcdURUHujRNMF0jKQzvSO93bItisI0emq0yw8p4=",
-    "url": "https://github.com/nextcloud/tasks/releases/download/v0.16.0/tasks.tar.gz",
-    "version": "0.16.0",
+    "hash": "sha256-Upa3dl+b97UV3KXLlcxeS6OzFBTIW+e3U/T9QJT6Pmw=",
+    "url": "https://github.com/nextcloud/tasks/releases/download/v0.16.1/tasks.tar.gz",
+    "version": "0.16.1",
     "description": "Once enabled, a new Tasks menu will appear in your Nextcloud apps menu. From there you can add and delete tasks, edit their title, description, start and due dates and mark them as important. Tasks can be shared between users. Tasks can be synchronized using CalDav (each task list is linked to an Nextcloud calendar, to sync it to your local client: Thunderbird, Evolution, KDE Kontact, iCal … - just add the calendar as a remote calendar in your client). You can download your tasks as ICS files using the download button for each calendar.",
     "homepage": "https://github.com/nextcloud/tasks/",
     "licenses": [
@@ -270,9 +270,9 @@
     ]
   },
   "twofactor_nextcloud_notification": {
-    "hash": "sha256-P1yomRZJV0p01qXlSbiA9TvV7OuIUNVw/fHNWAdkfTg=",
-    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.10.0/twofactor_nextcloud_notification-v3.10.0.tar.gz",
-    "version": "3.10.0",
+    "hash": "sha256-4fXWgDeiup5/Gm9hdZDj/u07rp/Nzwly53aLUT/d0IU=",
+    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.9.0/twofactor_nextcloud_notification-v3.9.0.tar.gz",
+    "version": "3.9.0",
     "description": "Allows using any of your logged in devices as second factor",
     "homepage": "https://github.com/nextcloud/twofactor_nextcloud_notification",
     "licenses": [
