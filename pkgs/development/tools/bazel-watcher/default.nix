@@ -4,6 +4,7 @@
 , git
 , go_1_21
 , python3
+, xcbuild
 , lib, stdenv
 }:
 
@@ -38,7 +39,7 @@ buildBazelPackage rec {
     hash = "sha256-lreGKA0DZiOd1bJq8NNQ+80cyDwiughoXCkKu1RaZmc=";
   };
 
-  nativeBuildInputs = [ go_1_21 git python3 ];
+  nativeBuildInputs = [ go_1_21 git python3 ] ++ lib.optionals stdenv.targetPlatform.isDarwin [ xcbuild ];
   removeRulesCC = false;
 
   bazel = bazel_5;

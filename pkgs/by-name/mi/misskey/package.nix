@@ -11,6 +11,7 @@
   jemalloc,
   ffmpeg-headless,
   writeShellScript,
+  xcbuild,
   ...
 }:
 
@@ -26,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-nKf+SfuF6MQtNO53E6vN9CMDvQzKMv3PrD6gs9Qa86w=";
     fetchSubmodules = true;
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+      xcbuild.xcrun
+  ];
 
   nativeBuildInputs = [
     nodejs
