@@ -8934,8 +8934,6 @@ self: super: with self; {
 
   myuplink = callPackage ../development/python-modules/myuplink { };
 
-  n3fit = callPackage ../development/python-modules/n3fit { };
-
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
