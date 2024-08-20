@@ -10779,8 +10779,6 @@ with pkgs;
 
   noisetorch = callPackage ../applications/audio/noisetorch { };
 
-  notation = callPackage ../tools/security/notation { };
-
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
   notes = qt6Packages.callPackage ../applications/office/notes {
