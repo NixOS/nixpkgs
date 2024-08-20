@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     nodejs
     makeWrapper
-    python3
+    (python3.withPackages (ps: [ ps.setuptools ]))
     nest-cli
     libsass
     pkg-config
