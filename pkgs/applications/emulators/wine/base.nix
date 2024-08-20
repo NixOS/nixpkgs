@@ -106,7 +106,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
     libX11 libXcomposite libXcursor libXext libXfixes libXi libXrandr libXrender libXxf86vm
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
-     wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
+     wayland wayland-scanner libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
      mesa # for libgbm
   ])));
 
