@@ -4,7 +4,6 @@
   click,
   fetchFromGitHub,
   poetry-core,
-  pydantic,
   pytestCheckHook,
   pythonOlder,
   toml,
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbatten5";
@@ -24,15 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-1hsnSYDoCO5swWm3B4R5eXs0Mn4s8arlCQKfsS1OWRk=";
   };
 
-  pythonRelaxDeps = [ "pydantic" ];
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [
     click
-    pydantic
     toml
   ];
 
