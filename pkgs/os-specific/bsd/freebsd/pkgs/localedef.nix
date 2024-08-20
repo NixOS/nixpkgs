@@ -35,5 +35,4 @@ mkDerivation (
 
     MK_TESTS = "no";
   }
-  // lib.optionalAttrs (!stdenv.hostPlatform.isFreeBSD) { BOOTSTRAPPING = 1; }
 )

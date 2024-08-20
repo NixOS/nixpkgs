@@ -23,6 +23,4 @@ mkDerivation {
     install
     m4
   ];
-
-  BOOTSTRAPPING = !stdenv.hostPlatform.isFreeBSD;
 }
