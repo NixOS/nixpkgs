@@ -2865,10 +2865,6 @@ self: super: {
     editedCabalFile = null;
   }) super.true-name);
 
-  # ffmpeg-light works against the ffmpeg-4 API, but the default ffmpeg in nixpkgs is ffmpeg-5.
-  # https://github.com/NixOS/nixpkgs/pull/220972#issuecomment-1484017192
-  ffmpeg-light = super.ffmpeg-light.override { ffmpeg = pkgs.ffmpeg_4; };
-
   # 2024-08-15: primitive >=0.9 && <0.10
   posix-api = doJailbreak super.posix-api;
 
