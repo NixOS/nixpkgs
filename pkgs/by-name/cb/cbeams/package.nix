@@ -1,26 +1,44 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "cbeams";
   version = "1.0.3";
+  pyproject = true;
+
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1agcjg6kmcyvk834xd2j60mi349qi9iw3dc2vwpd7pqwq1daq3gi";
+    hash = "sha256-8Q2sWsAc39Mu34K1wWOKOJERKzBStE4GmtuzOs2T7Kk=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   postPatch = ''
     substituteInPlace cbeams/terminal.py \
       --replace-fail "blessings" "blessed"
   '';
 
-  propagatedBuildInputs = with python3Packages; [ blessed docopt ];
+  pythonRemoveDeps = [ "blessings" ];
 
-  meta = with lib; {
+  dependencies = with python3Packages; [
+    blessed
+    docopt
+  ];
+
+  doCheck = false; # no tests
+
+  meta = {
     homepage = "https://github.com/tartley/cbeams";
     description = "Command-line program to draw animated colored circles in the terminal";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      oxzi
+      sigmanificient
+    ];
   };
 }
