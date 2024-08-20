@@ -7640,6 +7640,12 @@
     githubId = 1621335;
     name = "Andrew Trachenko";
   };
+  gordon-bp = {
+    email = "gordy@hanakano.com";
+    github = "Gordon-BP";
+    githubId = 77560236;
+    name = "Gordon Clark";
+  };
   gotcha = {
     email = "gotcha@bubblenet.be";
     github = "gotcha";
