@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D target/${pname}-${version}.jar $out/share/java/${pname}-${version}.jar
+    install -D target/jnr-posix-${version}.jar $out/share/java/jnr-posix-${version}.jar
 
     runHook postInstall
   '';
