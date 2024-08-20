@@ -101,6 +101,8 @@ self: super: with self; {
 
   aeppl = callPackage ../development/python-modules/aeppl { };
 
+  aerosandbox = callPackage ../development/python-modules/aerosandbox { };
+
   aesara = callPackage ../development/python-modules/aesara { };
 
   aesedb = callPackage ../development/python-modules/aesedb { };
@@ -9095,6 +9097,8 @@ self: super: with self; {
   netutils = callPackage ../development/python-modules/netutils { };
 
   networkx = callPackage ../development/python-modules/networkx { };
+
+  neuralfoil = callPackage ../development/python-modules/neuralfoil { };
 
   neuron-full = pkgs.neuron-full.override { python3 = python; };
 
