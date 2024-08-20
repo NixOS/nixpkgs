@@ -68,7 +68,7 @@
       (with python3Packages; [
         oras
         oschmod
-      ])
+      ]);
     meta.maintainers = with lib.maintainers; [ gordon-bp ];
   };
   storage-preview = mkAzExtension rec {
