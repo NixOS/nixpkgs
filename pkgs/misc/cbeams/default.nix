@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, isPy3k, blessings, docopt }:
+{ lib, buildPythonApplication, fetchPypi, isPy3k, blessed, docopt }:
 
 buildPythonApplication rec {
   pname = "cbeams";
@@ -10,7 +10,12 @@ buildPythonApplication rec {
     sha256 = "1agcjg6kmcyvk834xd2j60mi349qi9iw3dc2vwpd7pqwq1daq3gi";
   };
 
-  propagatedBuildInputs = [ blessings docopt ];
+  postPatch = ''
+    substituteInPlace cbeams/terminal.py \
+      --replace-fail "blessings" "blessed"
+  '';
+
+  propagatedBuildInputs = [ blessed docopt ];
 
   meta = with lib; {
     homepage = "https://github.com/tartley/cbeams";
