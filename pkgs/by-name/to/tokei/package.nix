@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner sigmanificient ];
     mainProgram = "tokei";
   };
 }
