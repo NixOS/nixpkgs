@@ -28,12 +28,10 @@ in {
       capabilities = "cap_sys_admin+ep";
       source = "${package}/bin/gsr-kms-server";
     };
-    security.wrappers."gpu-screen-recorder" = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_sys_nice+ep";
-      source = "${package}/bin/gpu-screen-recorder";
-    };
+
+    # The `cap_sys_nice` wrapper for `gpu-screen-recorder` is currently removed due to an upstream issue.
+    # See the following link for more details:
+    # https://git.dec05eba.com/gpu-screen-recorder/tree/extra/meson_post_install.sh?id=78e4620d9c87493509ff5bda2de11b7c36320287#n7
 
     environment.etc."modprobe.d/gsr-nvidia.conf".source = "${package}/lib/modprobe.d/gsr-nvidia.conf";
   };
