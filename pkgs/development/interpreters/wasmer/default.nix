@@ -5,6 +5,7 @@
 , llvmPackages
 , libffi
 , libxml2
+, fetchpatch
 , CoreFoundation
 , SystemConfiguration
 , Security
@@ -24,6 +25,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-EpHM8YaT2Ty9IBX/gXEa9n8006A9Y5/fq/ueODxHlnc=";
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-38358.patch";
+      url = "https://github.com/wasmerio/wasmer/commit/ad4c9cd13de658114cb306262b717a6cb10b8263.patch";
+      hash = "sha256-2B/u5lvTxY8Ip6h4CDq31vhfIn5dqCmMMnSVA2XdTY8=";
+    })
+  ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
