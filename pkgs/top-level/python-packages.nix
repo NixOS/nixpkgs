@@ -9122,6 +9122,8 @@ self: super: with self; {
 
   nextdns = callPackage ../development/python-modules/nextdns { };
 
+  nexusformat = callPackage ../development/python-modules/nexusformat { };
+
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
   nftables = callPackage ../os-specific/linux/nftables/python.nix {
