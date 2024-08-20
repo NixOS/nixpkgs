@@ -91,7 +91,7 @@ To obtain the hash without external tools, set `vendorHash = lib.fakeHash;` and 
 }
 ```
 
-### Overriding `goModules` (#buildGoModule-goModules-override)
+### Overriding `goModules` {#buildGoModule-goModules-override}
 
 Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation. Alternatively, the primary derivation provides an overridable `passthru.overrideModAttrs` function to store the attribute overlay implicitly taken by `goModules.overrideAttrs`. Here's an example usage of `overrideModAttrs`:
 
