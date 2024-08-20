@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-08-10";
+  version = "0-unstable-2024-08-17";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "c7165dc7e28752b49be4ca81ab5db35019d6fcd0";
-    hash = "sha256-P8NgWooRMFl1iuFKQlWDJwMlZ/CIwvf2ctkqvRXt6SA=";
+    rev = "cbdef71520845c638774e0129fa124ad4df6db2f";
+    hash = "sha256-XTiiV+o+fgwMz7eBQDwNiESIkV28KQ1JK7urEb+Z9OA=";
   };
 
   postPatch = ''
@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"
+    "PREFIX="
   ];
 
   # populate version info used by `syshud -v`:
