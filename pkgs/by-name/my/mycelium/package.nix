@@ -5,6 +5,7 @@
 , openssl
 , darwin
 , nixosTests
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,7 +39,10 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_DIR = "${lib.getDev openssl}";
   };
 
-  passthru.tests = { inherit (nixosTests) mycelium; };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) mycelium; };
+  };
 
   meta = with lib; {
     description = "End-2-end encrypted IPv6 overlay network";
