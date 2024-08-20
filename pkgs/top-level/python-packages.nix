@@ -6744,6 +6744,10 @@ self: super: with self; {
 
   lakeside = callPackage ../development/python-modules/lakeside { };
 
+  lammps = callPackage ../development/python-modules/lammps {
+    inherit (pkgs) lammps;
+  };
+
   lancedb = callPackage ../development/python-modules/lancedb { };
 
   langchain = callPackage ../development/python-modules/langchain { };
