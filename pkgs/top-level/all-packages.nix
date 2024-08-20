@@ -13294,10 +13294,6 @@ with pkgs;
 
   toilet = callPackage ../tools/misc/toilet { };
 
-  tokei = callPackage ../development/tools/misc/tokei {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   tokio-console = callPackage ../development/tools/tokio-console { };
 
   toml2json = callPackage ../development/tools/toml2json { };
