@@ -24,9 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-4gxJwe8v4trTysGBNORX7C54EUzFIPwpVLfKSNxJ8y4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     garth
     lxml
     python-dotenv
@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Synchronisation of Withings weight";
-    mainProgram = "withings-sync";
     homepage = "https://github.com/jaroslawhartman/withings-sync";
     changelog = "https://github.com/jaroslawhartman/withings-sync/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "withings-sync";
   };
 }
