@@ -24,7 +24,10 @@ buildGoModule rec {
     description = "Modern watch command";
     homepage = "https://github.com/sachaos/viddy";
     license = licenses.mit;
-    maintainers = with maintainers; [ j-hui ];
+    maintainers = with maintainers; [
+      j-hui
+      phanirithvij
+    ];
     mainProgram = "viddy";
   };
 }
