@@ -24,6 +24,7 @@
       drv = stdenv.mkDerivation (attrs // {
         name = lib.warnIf (attrs ? vimprefix) "The 'vimprefix' is now hardcoded in toVimPlugin" name;
 
+        __structuredAttrs = true;
         inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
         installPhase = ''
