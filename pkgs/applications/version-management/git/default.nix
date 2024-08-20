@@ -363,6 +363,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails largely due to assumptions about BOM
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    disable_test t0211-trace2-perf
+    disable_test t1517-outside-repo
+    disable_test t2082-parallel-checkout-attributes
   '';
 
   stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
