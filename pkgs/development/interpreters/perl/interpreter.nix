@@ -28,7 +28,7 @@
 assert (enableCrypt -> (libxcrypt != null));
 
 let
-  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
+  crossCompiling = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
@@ -99,12 +99,31 @@ stdenv.mkDerivation (rec {
   # Miniperl needs -lm. perl needs -lrt.
   configureFlags =
     (if crossCompiling
-    then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
-    else [ "-de" "-Dcc=cc" ])
+    then [
+      "-Dlibpth=\"\""
+      "-Dglibpth=\"\""
+      "-Ddefault_inc_excludes_dot"
+    ]
+    else [
+      "-de"
+      "-Dprefix=${placeholder "out"}"
+      "-Dman1dir=${placeholder "out"}/share/man/man1"
+      "-Dman3dir=${placeholder "out"}/share/man/man3"
+    ]) ++
+    (if stdenv.hostPlatform.isStatic
+    then [
+      "-Dcc=${stdenv.cc.targetPrefix}cc"
+      "-Dnm=${stdenv.cc.targetPrefix}nm"
+      "-Dar=${stdenv.cc.targetPrefix}ar"
+      "-Uusedl"
+    ]
+    else [
+      "-Dcc=cc"
+      "-Duseshrplib"
+    ])
     ++ [
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
-    ] ++ lib.optional (!crossCompiling) "-Duseshrplib" ++ [
       "-Dlocincpth=${libcInc}/include"
       "-Dloclibpth=${libcLib}/lib"
     ]
@@ -112,12 +131,6 @@ stdenv.mkDerivation (rec {
     ++ lib.optional stdenv.isSunOS "-Dcc=gcc"
     ++ lib.optional enableThreading "-Dusethreads"
     ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--all-static"
-    ++ lib.optionals (!crossCompiling) [
-      "-Dprefix=${placeholder "out"}"
-      "-Dman1dir=${placeholder "out"}/share/man/man1"
-      "-Dman3dir=${placeholder "out"}/share/man/man3"
-    ]
     ++ lib.optionals (stdenv.isFreeBSD && crossCompiling && enableCrypt) [
       # https://github.com/Perl/perl5/issues/22295
       # configure cannot figure out that we have crypt automatically, but we really do
@@ -125,6 +138,11 @@ stdenv.mkDerivation (rec {
     ];
 
   configureScript = lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
+
+  postConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace Makefile \
+      --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar"
+  '';
 
   dontAddStaticConfigureFlags = true;
 
@@ -246,7 +264,7 @@ stdenv.mkDerivation (rec {
     priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     mainProgram = "perl";
   };
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
+} // lib.optionalAttrs crossCompiling rec {
   crossVersion = "1.6";
 
   perl-cross-src = fetchFromGitHub {
