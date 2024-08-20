@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
-    rev = "${pname}-v${version}";
+    rev = "srgn-v${version}";
     hash = "sha256-d53aSo1gzINC8WdMzjCHzU/8+9kvrrGglV4WsiCt+rM=";
   };
 
