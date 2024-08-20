@@ -7,8 +7,8 @@ let
       hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
     };
     matomo_5 = {
-      version = "5.1.0";
-      hash = "sha256-AVfuqVdsEFL2up/8FCxAPlfmOXl+KSGwzCNrkPssoho=";
+      version = "5.1.1";
+      hash = "sha256-xi6R9O/pOxBgga6+wwqziwDKK7Q1Ispldvxg+0mpdeQ=";
     };
     matomo-beta = {
       version = "5.0.0";
