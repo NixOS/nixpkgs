@@ -60,6 +60,20 @@
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
 
+  ssh = mkAzExtension rec {
+    pname = "ssh";
+    version = "2.0.5";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
+    sha256 = "80c98b10d7bf1ce4005b7694aedd05c47355456775ba6125308be65fb0fefc93";
+    description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
+    propagatedBuildInputs =
+      (with python3Packages; [
+        oras
+        oschmod
+      ]);
+    meta.maintainers = with lib.maintainers; [ gordon-bp ];
+  };
+
   # Removed extensions
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
   vm-repair = throw "The 'vm-repair' extension for azure-cli was deprecated upstream"; # Added 2024-08-06
