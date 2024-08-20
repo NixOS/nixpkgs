@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
   setuptools,
 }:
@@ -10,10 +10,11 @@ buildPythonPackage rec {
   version = "1.0.3";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "prayer_times_calculator_offline";
-    inherit version;
-    hash = "sha256-vmy1hYZXuDvdjjBN5YivzP+lcwfE86Z9toBzj+kyj14=";
+  src = fetchFromGitHub {
+    owner = "cpfair";
+    repo = "prayer-times-calculator-offline";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sVEdjtwxwGa354YimeaNqjqZ9yEecNXg8kk6Pafvvd4=";
   };
 
   build-system = [ setuptools ];
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/cpfair/prayer-times-calculator-offline/releases/tag/v${version}";
     description = "Prayer Times Calculator - Offline";
     homepage = "https://github.com/cpfair/prayer-times-calculator-offline";
     license = lib.licenses.mit;
