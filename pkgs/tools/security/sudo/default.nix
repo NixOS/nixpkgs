@@ -39,16 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
     "--enable-tmpfiles.d=no"
+    "--with-passprompt=[sudo] password for %p: " # intentional trailing space
   ] ++ lib.optionals withInsults [
     "--with-insults"
     "--with-all-insults"
   ] ++ lib.optionals withSssd [
     "--with-sssd"
     "--with-sssd-lib=${sssd}/lib"
-  ];
-
-  configureFlagsArray = [
-    "--with-passprompt=[sudo] password for %p: " # intentional trailing space
   ];
 
   postConfigure =

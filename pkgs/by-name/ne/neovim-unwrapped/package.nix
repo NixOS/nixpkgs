@@ -154,7 +154,7 @@ in {
       debug = { inherit disallowedRequisites; };
     };
 
-    cmakeFlagsArray = [
+    cmakeFlags = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
       # can spot that cmake says this option was "not used by the project".
       # That's because all dependencies were found and
@@ -162,15 +162,13 @@ in {
       "-DUSE_BUNDLED=OFF"
     ]
     ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
-    ;
+    ++ lib.optionals lua.pkgs.isLuaJIT [
+      "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
+      "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+      "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
+    ];
 
-    preConfigure = lib.optionalString lua.pkgs.isLuaJIT ''
-      cmakeFlagsArray+=(
-        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
-        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
-        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
-      )
-    '' + lib.optionalString stdenv.isDarwin ''
+    preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '' + ''
       mkdir -p $out/lib/nvim/parser
