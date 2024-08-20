@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   '' + (if buildNativeImage then ''
     mv dbqn $out/bin
   '' else ''
-    mkdir -p $out/share/${pname}
-    mv BQN.jar $out/share/${pname}/
+    mkdir -p $out/share/dbqn
+    mv BQN.jar $out/share/dbqn/
 
     makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dbqn" \
-      --add-flags "-jar $out/share/${pname}/BQN.jar"
+      --add-flags "-jar $out/share/dbqn/BQN.jar"
   '') + ''
     ln -s $out/bin/dbqn $out/bin/bqn
 
