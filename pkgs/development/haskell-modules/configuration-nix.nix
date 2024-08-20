@@ -685,9 +685,6 @@ self: super: builtins.intersectAttrs super {
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
-  # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend pkgs.opencv3 super.opencv-extra;
-
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
