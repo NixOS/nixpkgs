@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Quantum chemistry program for large-scale self-consistent field calculations";
+    mainProgram = "ergo";
     homepage = "http://www.ergoscf.org";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.markuskowa ];

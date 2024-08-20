@@ -7,7 +7,7 @@
 , vala
 , glib
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , libsoup
 , json-glib
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     vala
     glib
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/louis77/tuner";
-    description = "An app to discover and play internet radio stations";
+    description = "App to discover and play internet radio stations";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "com.github.louis77.tuner";

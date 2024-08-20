@@ -14,7 +14,7 @@ let
   qtnproperty = mkDerivation {
     name = "qtnproperty";
     inherit src;
-    sourceRoot = "AwesomeBump/Sources/utils/QtnProperty";
+    sourceRoot = "${src.name}/Sources/utils/QtnProperty";
     patches = [ ./qtnproperty-parallel-building.patch ];
     buildInputs = [ qtscript qtbase qtdeclarative ];
     nativeBuildInputs = [ qmake flex bison ];
@@ -55,9 +55,10 @@ in mkDerivation {
 
   meta = {
     homepage = "https://github.com/kmkolasinski/AwesomeBump";
-    description = "A program to generate normal, height, specular or ambient occlusion textures from a single image";
+    description = "Program to generate normal, height, specular or ambient occlusion textures from a single image";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
+    mainProgram = "AwesomeBump";
   };
 }

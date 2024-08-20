@@ -17,11 +17,11 @@ index 196abf6..613d0e5 100644
  		return TRUE;
  
  	if (variant[0])
--		commandline = g_strdup_printf ("gkbd-keyboard-display -l \"%s\t%s\"", layout, variant);
-+		commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l \"%s\t%s\"", layout, variant);
+-		commandline = g_strdup_printf ("tecla \"%s+%s\"", layout, variant);
++		commandline = g_strdup_printf ("@tecla@/bin/tecla \"%s+%s\"", layout, variant);
  	else
--		commandline = g_strdup_printf ("gkbd-keyboard-display -l %s", layout);
-+		commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l %s", layout);
+-		commandline = g_strdup_printf ("tecla %s", layout);
++		commandline = g_strdup_printf ("@tecla@/bin/tecla %s", layout);
  	g_spawn_command_line_async (commandline, NULL);
  	g_free (commandline);
  
@@ -38,15 +38,6 @@ diff --git a/gnome-initial-setup/pages/timezone/tz.h b/gnome-initial-setup/pages
 index a2376f8..5cb7bc9 100644
 --- a/gnome-initial-setup/pages/timezone/tz.h
 +++ b/gnome-initial-setup/pages/timezone/tz.h
-@@ -4,7 +4,7 @@
-  * Copyright (C) 2000-2001 Ximian, Inc.
-  *
-  * Authors: Hans Petter Jansson <hpj@ximian.com>
-- * 
-+ *
-  * Largely based on Michael Fulbright's work on Anaconda.
-  *
-  * This program is free software; you can redistribute it and/or modify
 @@ -28,7 +28,7 @@
  G_BEGIN_DECLS
  

@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, fetchpatch, python, mpv, requests, python-mpv-jsonipc, pystray, tkinter
-, wrapGAppsHook, gobject-introspection, mpv-shim-default-shaders }:
+, wrapGAppsHook3, gobject-introspection, mpv-shim-default-shaders }:
 
 buildPythonApplication rec {
   pname = "plex-mpv-shim";
@@ -21,7 +21,7 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -47,5 +47,6 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ devusb ];
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "plex-mpv-shim";
   };
 }

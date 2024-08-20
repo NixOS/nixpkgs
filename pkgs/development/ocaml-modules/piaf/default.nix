@@ -6,12 +6,9 @@
 , gluten-lwt-unix
 , lib
 , logs
-, lwt_ssl
 , magic-mime
 , mrmime
-, pecu
 , psq
-, ssl
 , uri
 }:
 
@@ -50,7 +47,7 @@ buildDunePackage rec {
   doCheck = false;
 
   meta = {
-    description = "An HTTP library with HTTP/2 support written entirely in OCaml";
+    description = "HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ anmonteiro ];

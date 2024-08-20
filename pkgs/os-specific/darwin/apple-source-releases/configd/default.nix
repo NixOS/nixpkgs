@@ -1,11 +1,35 @@
-{ lib, stdenv, appleDerivation', launchd, bootstrap_cmds, xnu, xpc, ppp, IOKit, eap8021x, Security
+{ lib, stdenv, stdenvNoCC, appleDerivation', launchd, bootstrap_cmds, swift-corelibs-foundation, xnu, xpc, ppp, IOKit, eap8021x, Security
 , headersOnly ? false }:
 
+let
+  # Copy the headers out of CF instead of building it to avoid an infinite recursion.
+  privateHeaders = stdenvNoCC.mkDerivation {
+    pname = "swift-corelibs-foundation-private";
+    inherit (swift-corelibs-foundation) version src;
+
+    buildCommand = ''
+      unpackFile "$src"
+
+      mkdir -p "$out/include/CoreFoundation"
+
+      declare -a privateHeaders=(
+        Base.subproj/CFRuntime.h
+        PlugIn.subproj/CFBundlePriv.h
+        RunLoop.subproj/CFRunLoop.h
+        String.subproj/CFStringDefaultEncoding.h
+      )
+
+      for header in "''${privateHeaders[@]}"; do
+        cp source/CoreFoundation/$header $out/include/CoreFoundation
+      done
+    '';
+  };
+in
 appleDerivation' stdenv {
   meta.broken = stdenv.cc.nativeLibc;
 
   nativeBuildInputs = lib.optionals (!headersOnly) [ bootstrap_cmds ];
-  buildInputs = lib.optionals (!headersOnly) [ launchd ppp xpc IOKit eap8021x ];
+  buildInputs = lib.optionals (!headersOnly) [ privateHeaders launchd ppp xpc IOKit eap8021x ];
 
   propagatedBuildInputs = lib.optionals (!headersOnly) [ Security ];
 
@@ -13,7 +37,6 @@ appleDerivation' stdenv {
     NIX_CFLAGS_COMPILE = toString [
       "-ISystemConfiguration.framework/Headers"
       "-I${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders"
-      "-D_DNS_SD_LIBDISPATCH" # Needed for DNSServiceSetDispatchQueue to be available
     ];
   };
 
@@ -23,11 +46,6 @@ appleDerivation' stdenv {
 
     substituteInPlace SystemConfiguration.fproj/SCNetworkReachability.c \
       --replace ''$'#define\tHAVE_VPN_STATUS' ""
-
-    # Our neutered CoreFoundation doesn't have this function, but I think we'll live...
-    substituteInPlace SystemConfiguration.fproj/SCNetworkConnectionPrivate.c \
-      --replace 'CFPreferencesAppValueIsForced(serviceID, USER_PREFERENCES_APPLICATION_ID)' 'FALSE' \
-      --replace 'CFPreferencesAppValueIsForced(userPrivate->serviceID, USER_PREFERENCES_APPLICATION_ID)' 'FALSE'
   '';
 
   dontBuild = headersOnly;

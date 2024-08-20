@@ -1,56 +1,70 @@
-{ lib
-, buildPythonPackage
-, convertdate
-, fetchFromGitHub
-, hijri-converter
-, korean-lunar-calendar
-, polib
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  chameleon,
+  fetchFromGitHub,
+  importlib-metadata,
+  lingva,
+  polib,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.32";
-  format = "setuptools";
+  version = "0.54";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "dr-prodigy";
+    owner = "vacanza";
     repo = "python-holidays";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-YAh5gR4KcUgXzeXy3xyGeokDFsyd9FqRQ5j1TC6wCQY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/mpbNuCnADuguI1v8cpYUdhBN8DjhjklCDVmMOsRvkM=";
   };
 
-  propagatedBuildInputs = [
-    convertdate
-    python-dateutil
-    hijri-converter
-    korean-lunar-calendar
+  build-system = [
+    setuptools
+
+    # l10n
+    lingva
+    chameleon
+    polib
   ];
 
+  postPatch = ''
+    patchShebangs scripts/l10n/*.py
+  '';
+
+  preBuild = ''
+    # make l10n
+    ./scripts/l10n/generate_po_files.py
+    ./scripts/l10n/generate_mo_files.py
+  '';
+
+  dependencies = [ python-dateutil ];
+
+  doCheck = false;
+
   nativeCheckInputs = [
+    importlib-metadata
     polib
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "holidays"
-  ];
-
-  disabledTests = [
-    # Failure starting with 0.24
-    "test_l10n"
-  ];
+  pythonImportsCheck = [ "holidays" ];
 
   meta = with lib; {
     description = "Generate and work with holidays in Python";
-    homepage = "https://github.com/dr-prodigy/python-holidays";
-    changelog = "https://github.com/dr-prodigy/python-holidays/releases/tag/v.${version}";
+    homepage = "https://github.com/vacanza/python-holidays";
+    changelog = "https://github.com/vacanza/python-holidays/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [
+      fab
+      jluttine
+    ];
   };
 }
-

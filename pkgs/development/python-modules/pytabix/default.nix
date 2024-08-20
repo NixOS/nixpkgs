@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pytabix";
   version = "0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

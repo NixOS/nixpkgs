@@ -1,20 +1,21 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiowaqi";
-  version = "2.1.0";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -22,19 +23,17 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-waqi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wwpktevEh/ukb9ByV660BePyqYU49/W+lIcgXuEBcuQ=";
+    hash = "sha256-YWTGEOSSkZ0XbZUE3k+Dn9qg8Pmwip9wCp8e/j1D9io=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov" ""
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     yarl
   ];
@@ -46,9 +45,14 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "aiowaqi"
+  pythonImportsCheck = [ "aiowaqi" ];
+
+  disabledTests = [
+    # Upstream mocking fails
+    "test_search"
   ];
+
+  pytestFlagsArray = [ "--snapshot-update" ];
 
   meta = with lib; {
     description = "Module to interact with the WAQI API";

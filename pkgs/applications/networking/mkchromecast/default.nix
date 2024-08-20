@@ -70,11 +70,11 @@ python3Packages.buildPythonApplication {
   ];
 
   postInstall = ''
-    substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/video.py \
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
       --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
   '' + lib.optionalString stdenv.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
-    substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/audio_devices.py \
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 

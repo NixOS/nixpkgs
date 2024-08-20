@@ -1,45 +1,19 @@
-From 3d0ce353cf62efea11aa88f814aa23bf8c04acc9 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <milan@petabyte.dev>
-Date: Mon, 11 Jan 2021 15:13:10 +0100
-Subject: [PATCH] configs/rpi: allow for bigger kernels
-
----
- include/configs/rpi.h | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/include/configs/rpi.h b/include/configs/rpi.h
-index 834f1cd..10ab1e7 100644
---- a/include/configs/rpi.h
-+++ b/include/configs/rpi.h
-@@ -153,20 +153,20 @@
-  * more than ~700M away from the start of the kernel image but this number can
-  * be larger OR smaller depending on e.g. the 'vmalloc=xxxM' command line
-  * parameter given to the kernel. So reserving memory from low to high
-- * satisfies this constraint again. Reserving 1M at 0x02600000-0x02700000 for
-- * the DTB leaves rest of the free RAM to the initrd starting at 0x02700000.
-+ * satisfies this constraint again. Reserving 1M at 0x04700000-0x04800000 for
-+ * the DTB leaves rest of the free RAM to the initrd starting at 0x04800000.
-  * Even with the smallest possible CPU-GPU memory split of the CPU getting
-- * only 64M, the remaining 25M starting at 0x02700000 should allow quite
-- * large initrds before they start colliding with U-Boot.
-+ * only 64M, the remaining 8M starting at 0x04800000 should allow reasonably
-+ * sized initrds before they start colliding with U-Boot.
-  */
- #define ENV_MEM_LAYOUT_SETTINGS \
- 	"fdt_high=" FDT_HIGH "\0" \
- 	"initrd_high=" INITRD_HIGH "\0" \
- 	"kernel_addr_r=0x00080000\0" \
--	"scriptaddr=0x02400000\0" \
--	"pxefile_addr_r=0x02500000\0" \
--	"fdt_addr_r=0x02600000\0" \
--	"ramdisk_addr_r=0x02700000\0"
-+	"scriptaddr=0x04500000\0" \
-+	"pxefile_addr_r=0x04600000\0" \
-+	"fdt_addr_r=0x04700000\0" \
-+	"ramdisk_addr_r=0x04800000\0"
+diff --git a/board/raspberrypi/rpi/rpi.env b/board/raspberrypi/rpi/rpi.env
+index 30228285ed..0327ef74fa 100644
+--- a/board/raspberrypi/rpi/rpi.env
++++ b/board/raspberrypi/rpi/rpi.env
+@@ -69,9 +69,9 @@ fdt_high=ffffffff
+ initrd_high=ffffffff
+ #endif
+ kernel_addr_r=0x00080000
+-scriptaddr=0x02400000
+-pxefile_addr_r=0x02500000
+-fdt_addr_r=0x02600000
+-ramdisk_addr_r=0x02700000
++scriptaddr=0x05500000
++pxefile_addr_r=0x05600000
++fdt_addr_r=0x05700000
++ramdisk_addr_r=0x05800000
  
- #if CONFIG_IS_ENABLED(CMD_MMC)
- 	#define BOOT_TARGET_MMC(func) \
--- 
-2.29.2
+ boot_targets=mmc usb pxe dhcp
 

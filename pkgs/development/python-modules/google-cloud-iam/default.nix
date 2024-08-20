@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  libcst,
+  mock,
+  proto-plus,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iam";
-  version = "2.12.1";
+  version = "2.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/lBwhUR+z0Ydr9LNS4AWxYmeWOUgvQS1G7Orb2sI+v8=";
+    hash = "sha256-6TgaGCPlFi9owoBI/xowe6Og5Tja9getfUHP47dWpvA=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +33,11 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # unmaintained, reference wrong import path for google.cloud.iam.v1
+    "tests/unit/gapic/iam_admin_v1/test_iam.py"
   ];
 
   pythonImportsCheck = [

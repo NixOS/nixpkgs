@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5, taskwarrior }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5, taskwarrior2 }:
 
 stdenv.mkDerivation rec {
   version = "2020-12-17";
@@ -39,14 +39,15 @@ stdenv.mkDerivation rec {
 
     DESTDIR=$out PREFIX= MANPREFIX=/share/man make install
 
-    wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior}/bin
+    wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior2}/bin
   '';
 
 
   meta = with lib; {
     homepage = "https://github.com/lharding/tasknc";
-    description = "A ncurses wrapper around taskwarrior";
-    maintainers = with maintainers; [ matthiasbeyer infinisil ];
+    description = "Ncurses wrapper around taskwarrior";
+    mainProgram = "tasknc";
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux; # Cannot test others
     license = licenses.mit;
   };

@@ -34,99 +34,95 @@ in
 {
   options = {
     services.crowd = {
-      enable = mkEnableOption (lib.mdDoc "Atlassian Crowd service");
+      enable = mkEnableOption "Atlassian Crowd service";
 
       user = mkOption {
         type = types.str;
         default = "crowd";
-        description = lib.mdDoc "User which runs Crowd.";
+        description = "User which runs Crowd.";
       };
 
       group = mkOption {
         type = types.str;
         default = "crowd";
-        description = lib.mdDoc "Group which runs Crowd.";
+        description = "Group which runs Crowd.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/crowd";
-        description = lib.mdDoc "Home directory of the Crowd instance.";
+        description = "Home directory of the Crowd instance.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "Address to listen on.";
+        description = "Address to listen on.";
       };
 
       listenPort = mkOption {
         type = types.port;
         default = 8092;
-        description = lib.mdDoc "Port to listen on.";
+        description = "Port to listen on.";
       };
 
       openidPassword = mkOption {
         type = types.str;
         default = "WILL_NEVER_BE_SET";
-        description = lib.mdDoc "Application password for OpenID server.";
+        description = "Application password for OpenID server.";
       };
 
       openidPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "Path to the file containing the application password for OpenID server.";
+        description = "Path to the file containing the application password for OpenID server.";
       };
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-Xms1024m" "-Xmx2048m" ];
-        description = lib.mdDoc "Java options to pass to catalina/tomcat.";
+        description = "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
-        enable = mkEnableOption (lib.mdDoc "reverse proxy support");
+        enable = mkEnableOption "reverse proxy support";
 
         name = mkOption {
           type = types.str;
           example = "crowd.example.com";
-          description = lib.mdDoc "Virtual hostname at the proxy";
+          description = "Virtual hostname at the proxy";
         };
 
         port = mkOption {
           type = types.port;
           default = 443;
           example = 80;
-          description = lib.mdDoc "Port used at the proxy";
+          description = "Port used at the proxy";
         };
 
         scheme = mkOption {
           type = types.str;
           default = "https";
           example = "http";
-          description = lib.mdDoc "Protocol used at the proxy.";
+          description = "Protocol used at the proxy.";
         };
 
         secure = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc "Whether the connections to the proxy should be considered secure.";
+          description = "Whether the connections to the proxy should be considered secure.";
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atlassian-crowd;
-        defaultText = literalExpression "pkgs.atlassian-crowd";
-        description = lib.mdDoc "Atlassian Crowd package to use.";
-      };
+      package = mkPackageOption pkgs "atlassian-crowd" { };
 
-      jrePackage = mkOption {
-        type = types.package;
-        default = pkgs.oraclejre8;
-        defaultText = literalExpression "pkgs.oraclejre8";
-        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+      jrePackage = mkPackageOption pkgs "oraclejre8" {
+        extraDescription = ''
+        ::: {.note }
+        Atlassian only supports the Oracle JRE (JRASERVER-46152).
+        :::
+        '';
       };
     };
   };

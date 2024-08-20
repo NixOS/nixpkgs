@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycognito
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycognito,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2023.9.1";
-  format = "pyproject";
+  version = "2024.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,28 +21,22 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pyschlage";
     rev = "refs/tags/${version}";
-    hash = "sha256-HFgQXMUmjWW5syBwtCunQ/TeulPwtF48Nesy9iZ3hlU=";
+    hash = "sha256-40WNvpFNBhjg2+1H5PRBlziKrcSjl1fppUk4HOmDRDk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pycognito
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyschlage"
-  ];
+  pythonImportsCheck = [ "pyschlage" ];
 
   meta = with lib; {
     description = "Library for interacting with Schlage Encode WiFi locks";

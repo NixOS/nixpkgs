@@ -1,19 +1,20 @@
-{ lib
-, blinker
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, typing-extensions
+{
+  lib,
+  blinker,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-env,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "5.5.0";
+  version = "6.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,30 +23,24 @@ buildPythonPackage rec {
     owner = "pynamodb";
     repo = "PynamoDB";
     rev = "refs/tags/${version}";
-    hash = "sha256-sbGrFTpupBP0VQWR9gUVoCiw6D61s6GsmBvjgD1u99g=";
+    hash = "sha256-Ag/ivZ2SDYX0kwXbExt3kE/pMJgfoGc6gWoy+Rr6GTw=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-    botocore
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    signal = [
-      blinker
-    ];
+  dependencies = [ botocore ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+
+  optional-dependencies = {
+    signal = [ blinker ];
   };
 
   nativeCheckInputs = [
+    pytest-env
     pytest-mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.signal;
+  ] ++ optional-dependencies.signal;
 
-  pythonImportsCheck = [
-    "pynamodb"
-  ];
+  pythonImportsCheck = [ "pynamodb" ];
 
   disabledTests = [
     # Tests requires credentials or network access
@@ -57,6 +52,9 @@ buildPythonPackage rec {
     "test_sign_request"
     "test_table_integration"
     "test_transact"
+    # require a local dynamodb instance
+    "test_create_table"
+    "test_create_table__incompatible_indexes"
   ];
 
   meta = with lib; {
@@ -68,6 +66,6 @@ buildPythonPackage rec {
     homepage = "http://jlafon.io/pynamodb.html";
     changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

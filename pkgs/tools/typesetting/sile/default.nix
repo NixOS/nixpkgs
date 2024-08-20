@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.12";
+  version = "0.14.17";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-iyxNi4Y2zaeR6HUf/IVW1M7mB0WhM2yxOqDkb1oAkHg=";
+    sha256 = "sha256-f4m+3s7au1FoJQrZ3YDAntKJyOiMPQ11bS0dku4GXgQ=";
   };
 
   configureFlags = [
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
-    description = "A typesetting system";
+    description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
       printed documents. Conceptually, SILE is similar to TeX—from
@@ -137,5 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
+    mainProgram = "sile";
   };
 })

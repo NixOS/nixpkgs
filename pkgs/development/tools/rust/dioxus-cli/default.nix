@@ -3,6 +3,7 @@
 , fetchCrate
 , rustPlatform
 , pkg-config
+, rustfmt
 , cacert
 , openssl
 , darwin
@@ -12,21 +13,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.4.1";
+  version = "0.5.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-h2l6SHty06nLNbdlnSzH7I4XY53yyxNbx663cHYmPG0=";
+    hash = "sha256-cOd8OGkmebUYw6fNLO/kja81qKwqBuVpJqCix1Izf64=";
   };
 
-  cargoHash = "sha256-3pFkEC1GAJmTqXAymX4WRIq7EEtY17u1TCg+OhqL3bA=";
+  cargoHash = "sha256-shllaNdg9g6fD8qRyCKpN47keFUTu0g96MzVX4BrhXI=";
 
   nativeBuildInputs = [ pkg-config cacert ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   OPENSSL_NO_VENDOR = 1;
+
+  nativeCheckInputs = [ rustfmt ];
 
   checkFlags = [
     # requires network access

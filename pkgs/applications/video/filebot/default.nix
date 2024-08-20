@@ -10,11 +10,11 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.1.1";
+  version = "5.1.4";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-BCsZBRtT2Ka7WZw7WFnagwoJwIO1L3qpFk/6nlGdpmQ=";
+    hash = "sha256-UEgG3bQT5GPMfh/nxC1aXGsb8HKE5Ov5ax0ULjLr73U=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -52,7 +52,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The ultimate TV and Movie Renamer";
+    description = "Ultimate TV and Movie Renamer";
     longDescription = ''
       FileBot is the ultimate tool for organizing and renaming your Movies, TV
       Shows and Anime as well as fetching subtitles and artwork. It's smart and
@@ -67,5 +67,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ gleber felschr ];
     platforms = platforms.linux;
+    mainProgram = "filebot";
   };
 })

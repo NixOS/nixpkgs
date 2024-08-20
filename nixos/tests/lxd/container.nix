@@ -18,10 +18,6 @@ let
 in {
   name = "lxd-container";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ patryk27 adamcstephens ];
-  };
-
   nodes.machine = { lib, ... }: {
     virtualisation = {
       diskSize = 6144;

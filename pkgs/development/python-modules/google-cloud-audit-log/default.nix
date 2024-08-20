@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, googleapis-common-protos
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  googleapis-common-protos,
+  protobuf,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,20 +19,21 @@ buildPythonPackage rec {
     hash = "sha256-huL6ujODrcj9BKW9f9T5YLPkrtqn7ZUPL4kc4WkC62s=";
   };
 
-  propagatedBuildInputs = [ googleapis-common-protos protobuf ];
+  propagatedBuildInputs = [
+    googleapis-common-protos
+    protobuf
+  ];
 
   # tests are a bit wonky to setup and are not very deep either
   doCheck = false;
 
-  pythonImportsCheck = [
-    "google.cloud.audit"
-  ];
+  pythonImportsCheck = [ "google.cloud.audit" ];
 
   meta = with lib; {
     description = "Google Cloud Audit Protos";
     homepage = "https://github.com/googleapis/python-audit-log";
     changelog = "https://github.com/googleapis/python-audit-log/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

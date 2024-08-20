@@ -1,0 +1,60 @@
+diff --git a/Makefile b/Makefile
+index 5769d2a1..f505dd81 100644
+--- a/Makefile
++++ b/Makefile
+@@ -71,7 +71,7 @@ vendor/llhttp/node_modules: vendor/llhttp/package.json
+ generate-llhttp: .llhttp-gen
+ 
+ .PHONY: cythonize
+-cythonize: .install-cython $(PYXS:.pyx=.c)
++cythonize: $(PYXS:.pyx=.c)
+ 
+ .install-deps: .install-cython $(PYXS:.pyx=.c) $(call to-hash,$(CYS) $(REQS))
+ 	@python -m pip install -r requirements/dev.txt -c requirements/constraints.txt
+diff --git a/aiohttp/_cparser.pxd b/aiohttp/_cparser.pxd
+index 165dd61d..bc6bf86d 100644
+--- a/aiohttp/_cparser.pxd
++++ b/aiohttp/_cparser.pxd
+@@ -10,7 +10,7 @@ from libc.stdint cimport (
+ )
+ 
+ 
+-cdef extern from "../vendor/llhttp/build/llhttp.h":
++cdef extern from "@llhttpDev@/include/llhttp.h":
+ 
+     struct llhttp__internal_s:
+         int32_t _index
+diff --git a/setup.py b/setup.py
+index 4d59a022..d87d5b69 100644
+--- a/setup.py
++++ b/setup.py
+@@ -17,13 +17,6 @@ if sys.implementation.name != "cpython":
+     NO_EXTENSIONS = True
+ 
+ 
+-if IS_GIT_REPO and not (HERE / "vendor/llhttp/README.md").exists():
+-    print("Install submodules when building from git clone", file=sys.stderr)
+-    print("Hint:", file=sys.stderr)
+-    print("  git submodule update --init", file=sys.stderr)
+-    sys.exit(2)
+-
+-
+ # NOTE: makefile cythonizes all Cython modules
+ 
+ extensions = [
+@@ -33,12 +26,11 @@ extensions = [
+         [
+             "aiohttp/_http_parser.c",
+             "aiohttp/_find_header.c",
+-            "vendor/llhttp/build/c/llhttp.c",
+-            "vendor/llhttp/src/native/api.c",
+-            "vendor/llhttp/src/native/http.c",
+         ],
+         define_macros=[("LLHTTP_STRICT_MODE", 0)],
+-        include_dirs=["vendor/llhttp/build"],
++        include_dirs=["@llhttpDev@/include"],
++        library_dirs=["@llhttpLib@/lib"],
++        libraries=["llhttp"],
+     ),
+     Extension("aiohttp._helpers", ["aiohttp/_helpers.c"]),
+     Extension("aiohttp._http_writer", ["aiohttp/_http_writer.c"]),

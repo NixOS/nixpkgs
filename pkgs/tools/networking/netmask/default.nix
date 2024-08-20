@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/tlby/netmask";
-    description = "An IP address formatting tool ";
-    license = licenses.gpl2;
+    description = "IP address formatting tool";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.jensbin ];
+    mainProgram = "netmask";
   };
 }

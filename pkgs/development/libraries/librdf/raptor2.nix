@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , libxml2
+, curl
 , libxslt
 , pkg-config
 , cmake
@@ -45,10 +46,15 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config cmake perl bison flex ];
-  buildInputs = [ libxml2 libxslt ];
+  buildInputs = [
+    curl
+    libxml2
+    libxslt
+  ];
 
   meta = {
-    description = "The RDF Parser Toolkit";
+    description = "RDF Parser Toolkit";
+    mainProgram = "rapper";
     homepage = "https://librdf.org/raptor";
     license = with lib.licenses; [ lgpl21 asl20 ];
     maintainers = with lib.maintainers; [ marcweber ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://octobanana.com/software/fltrdr";
-    description = "A TUI text reader for the terminal";
+    description = "TUI text reader for the terminal";
 
     longDescription = ''
       Fltrdr, or flat-reader, is an interactive text reader for the terminal. It
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux; # can only test linux
     license     = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];
+    mainProgram = "fltrdr";
   };
 }

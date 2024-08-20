@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-common
-, azure-mgmt-core
-, isodate
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  azure-common,
+  azure-mgmt-core,
+  isodate,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.mgmt.appcontainers"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.appcontainers" ];
 
   meta = with lib; {
     description = "Microsoft Azure Appcontainers Management Client Library for Python";

@@ -14,18 +14,18 @@
 , config
 , enableCuda ? config.cudaSupport
 , cudaPackages
-, addOpenGLRunpath
+, addDriverRunpath
 }:
 
 stdenv.mkDerivation rec {
   pname = "openmm";
-  version = "8.0.0";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = pname;
     rev = version;
-    hash = "sha256-89ngeZHdjyL/OoGuQ+F5eaXE1/od0EEfIgw9eKdLtL8=";
+    hash = "sha256-2UFccB+xXAw3uRw0G1TKlqTVl9tUl1sRPFG4H05vq04=";
   };
 
   # "This test is stochastic and may occassionally fail". It does.
@@ -42,13 +42,18 @@ stdenv.mkDerivation rec {
     swig
     doxygen
     python3Packages.python
-  ] ++ lib.optional enableCuda addOpenGLRunpath;
+  ] ++ lib.optionals enablePython [
+    python3Packages.build
+    python3Packages.installer
+    python3Packages.wheel
+  ] ++ lib.optional enableCuda addDriverRunpath;
 
   buildInputs = [ fftwSinglePrec ]
     ++ lib.optionals enableOpencl [ ocl-icd opencl-headers ]
     ++ lib.optional enableCuda cudaPackages.cudatoolkit;
 
   propagatedBuildInputs = lib.optionals enablePython (with python3Packages; [
+    setuptools
     python
     numpy
     cython
@@ -83,13 +88,13 @@ stdenv.mkDerivation rec {
       export OPENMM_LIB_PATH=$out/lib
       export OPENMM_INCLUDE_PATH=$out/include
       cd python
-      ${python3Packages.python.pythonForBuild.interpreter} setup.py build
-      ${python3Packages.python.pythonForBuild.interpreter} setup.py install --prefix=$out
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} -m build --no-isolation --outdir dist/ --wheel
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} -m installer --prefix $out dist/*.whl
     '';
 
   postFixup = ''
     for lib in $out/lib/plugins/*CUDA.so $out/lib/plugins/*Cuda*.so; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 
@@ -98,6 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Toolkit for molecular simulation using high performance GPU code";
+    mainProgram = "TestReferenceHarmonicBondForce";
     homepage = "https://openmm.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus mit ];
     platforms = platforms.linux;

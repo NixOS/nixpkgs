@@ -1,17 +1,18 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, fetchpatch
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, six
-, ujson
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  fetchpatch,
+  pycryptodome,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  six,
+  ujson,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     "tests/test_historical_klines.py"
   ];
 
-  pythonImportsCheck = [
-    "binance"
-  ];
+  pythonImportsCheck = [ "binance" ];
 
   meta = with lib; {
     description = "Binance Exchange API python implementation for automated trading";

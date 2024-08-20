@@ -1,19 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, geopy
-, pythonOlder
-, requests
-, setuptools
-, urllib3
-, wheel
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geopy,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
-  version = "0.4.5";
-  format = "pyproject";
+  version = "0.5.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -21,27 +19,20 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "AEMET-OpenData";
     rev = "refs/tags/${version}";
-    hash = "sha256-rjHiDn8//zjFR27RTGGWZCxKI6pDXu47DFINV8Tq7ZM=";
+    hash = "sha256-iy1ptkxc4dh/fwWSi/GgPX5KRulyG0zwWTbCNBirsCo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     geopy
-    requests
-    urllib3
   ];
 
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aemet_opendata.interface"
-  ];
+  pythonImportsCheck = [ "aemet_opendata.interface" ];
 
   meta = with lib; {
     description = "Python client for AEMET OpenData Rest API";

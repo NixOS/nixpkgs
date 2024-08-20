@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
+{ config, lib, stdenv, fetchFromGitHub, ncurses, pkg-config
 , libiconv, CoreAudio, AudioUnit, VideoToolbox
 
 , alsaSupport ? stdenv.isLinux, alsa-lib ? null
@@ -8,12 +8,12 @@
 , samplerateSupport ? jackSupport, libsamplerate ? null
 , ossSupport ? false, alsa-oss ? null
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
+, sndioSupport ? false, sndio ? null
 , mprisSupport ? stdenv.isLinux, systemd ? null
 
 # TODO: add these
 #, artsSupport
 #, roarSupport
-#, sndioSupport
 #, sunSupport
 #, waveoutSupport
 
@@ -59,11 +59,11 @@ let
     (mkFlag samplerateSupport "CONFIG_SAMPLERATE=y" libsamplerate)
     (mkFlag ossSupport        "CONFIG_OSS=y"        alsa-oss)
     (mkFlag pulseaudioSupport "CONFIG_PULSE=y"      libpulseaudio)
+    (mkFlag sndioSupport      "CONFIG_SNDIO=y"      sndio)
     (mkFlag mprisSupport      "CONFIG_MPRIS=y"      systemd)
 
     #(mkFlag artsSupport      "CONFIG_ARTS=y")
     #(mkFlag roarSupport      "CONFIG_ROAR=y")
-    #(mkFlag sndioSupport     "CONFIG_SNDIO=y")
     #(mkFlag sunSupport       "CONFIG_SUN=y")
     #(mkFlag waveoutSupport   "CONFIG_WAVEOUT=y")
 
@@ -92,16 +92,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "sha256-Ha0bIh3SYMhA28YXQ//Loaz9J1lTJAzjTx8eK3AqUjM=";
+    hash   = "sha256-kUJC+ORLkYD57mPL/1p5VCm9yiNzVdOZhxp7sVP6oMw=";
   };
-
-  patches = [ ./option-debugging.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]

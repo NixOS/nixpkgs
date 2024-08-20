@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-NPifyZJZLICzmnCeE27c9B6hfyS6Mer4SjFKAsi5vO8=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   patches = [
     # Deprecation warning using collections.abc, https://gitlab.com/ericvsmith/namedlist/-/merge_requests/1
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     substituteInPlace test/test_namedlist.py --replace "unittest.main()" ""
   '';
 
-  pythonImportsCheck = [
-    "namedlist"
-  ];
+  pythonImportsCheck = [ "namedlist" ];
 
   disabledTests = [
     # AttributeError: module 'collections' has no attribute 'Container'

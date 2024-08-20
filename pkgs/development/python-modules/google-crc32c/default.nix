@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cffi, crc32c, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cffi,
+  crc32c,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "google-crc32c";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googleapis";
@@ -18,7 +26,10 @@ buildPythonPackage rec {
   LDFLAGS = "-L${crc32c}/lib";
   CFLAGS = "-I${crc32c}/include";
 
-  nativeCheckInputs = [ pytestCheckHook crc32c ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    crc32c
+  ];
 
   pythonImportsCheck = [ "google_crc32c" ];
 

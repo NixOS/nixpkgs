@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A fast production-ready static web server";
+    description = "Fast production-ready static web server";
     homepage = "https://github.com/mufeedvh/binserve";
     longDescription = ''
       A fast production-ready static web server with TLS
@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ snapdgn ];
     platforms = platforms.unix;
+    mainProgram = "binserve";
   };
 }

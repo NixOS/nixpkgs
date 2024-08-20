@@ -6,27 +6,28 @@
 , glib
 , pkg-config
 , rustc
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "popsicle";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "popsicle";
     rev = version;
-    hash = "sha256-2RkptzUX0G17HJMTHVqjbRHIIc8+NcSRUvE+S9nmtLs=";
+    hash = "sha256-sWQNav7odvX+peDglLHd7Jrmvhm5ddFBLBla0WK7wcE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "dbus-udisks2-0.3.0" = "sha256-VtwUUXVPyqvcOtphBH42CkRmW5jI+br9oDJ9wY40hsE=";
-      "iso9660-0.1.1" = "sha256-amegb0ULjYHGTHJoyXlqkyhky10JjmoR1iR4grKzyHY=";
+      "iso9660-0.1.1" = "sha256-CXgvQvNbUWuNDpw92djkK1PZ2GbGj5KSNzkjAsNEDrU=";
+      "pbr-1.1.1" = "sha256-KfzPhDiFj6jm1GASXnSoppkHrzoHst7v7cSNTDC/2FM=";
     };
   };
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustc
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

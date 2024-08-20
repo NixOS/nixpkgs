@@ -29,15 +29,16 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = with python3.pkgs; [ mutagen wxPython_4_2 pillow six ];
+  propagatedBuildInputs = with python3.pkgs; [ mutagen wxpython pillow six ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "a graphical mass renaming program for files and folders";
+    description = "Graphical mass renaming program for files and folders";
     homepage    = "https://github.com/timinaust/metamorphose2";
     license     = with licenses; gpl3Plus;
     maintainers = with maintainers; [ ramkromberg ];
     platforms   = with platforms; linux;
+    mainProgram = "metamorphose2";
   };
 }

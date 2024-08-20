@@ -5,24 +5,18 @@
 
 buildGoModule rec {
   pname = "cel-go";
-  version = "0.18.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cel-go";
     rev = "v${version}";
-    hash = "sha256-eXltZkg5QjdCrL9sk2ngVtirSnjBBqk+OdNLY4QtVx4=";
+    hash = "sha256-t451e3Pkkt4pmBvS0DBSHOVg7P8ipJd28XyiQ6P/QIQ=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-kalTHpyMYrKZHayxNKLc8vtogiDKyyQLExOQhqp1MUY=";
-
-  patches = [
-    # repl/go.mod and repl/go.sum are outdated
-    # ran `go mod tidy` in the repl directory
-    ./go-mod-tidy.patch
-  ];
+  vendorHash = "sha256-t/GEbpnqpLQ79ETqS9TAgy+2z9FoifAmkHbfKUxDBZA=";
 
   subPackages = [
     "main"
@@ -36,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
+    mainProgram = "cel-go";
     homepage = "https://github.com/google/cel-go";
     changelog = "https://github.com/google/cel-go/releases/tag/${src.rev}";
     license = licenses.asl20;

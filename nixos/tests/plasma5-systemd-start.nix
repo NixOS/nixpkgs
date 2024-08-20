@@ -12,11 +12,14 @@ import ./make-test-python.nix ({ pkgs, ...} :
     imports = [ ./common/user-account.nix ];
     services.xserver = {
       enable = true;
-      displayManager.sddm.enable = true;
-      displayManager.defaultSession = "plasma";
       desktopManager.plasma5.enable = true;
       desktopManager.plasma5.runUsingSystemd = true;
-      displayManager.autoLogin = {
+    };
+
+    services.displayManager = {
+      sddm.enable = true;
+      defaultSession = "plasma";
+      autoLogin = {
         enable = true;
         user = "alice";
       };

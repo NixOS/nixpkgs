@@ -22,20 +22,26 @@
 , makeWrapper
 , pam
 , perlPackages
+, xorg
 , pkg-config
 , systemd
-, forceInstallAllHacks ? false
+, forceInstallAllHacks ? true
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, nixosTests
+, substituteAll
+, wrapperPrefix ? "/run/wrappers/bin"
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.06";
+  version = "6.09";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-9TT6uFqDbeW4vo6R/CG4DKfWpO2ThuviB9S+ek50mac=";
+    hash = "sha256-9GZ3Ba24zEP9LzlzqIobVLFvIBkK/pOyHiIfL1cyCwU=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     intltool
@@ -65,7 +71,20 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.MozillaCA
     perlPackages.perl
   ]
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optionals withSystemd [ systemd ];
+
+  postPatch = ''
+    pushd hacks
+    patchShebangs check-configs.pl munge-ad.pl xml2man.pl
+    popd
+  '';
+
+  patches = [
+    (substituteAll {
+      src = ./xscreensaver-wrapper-prefix.patch;
+      inherit wrapperPrefix;
+    })
+  ];
 
   preConfigure = ''
     # Fix installation paths for GTK resources.
@@ -84,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH : "$out/libexec/xscreensaver" \
-        --prefix PATH : "${lib.makeBinPath [ coreutils perlPackages.perl ]}" \
+        --prefix PATH : "${lib.makeBinPath [ coreutils perlPackages.perl xorg.appres ]}" \
         --prefix PERL5LIB ':' $PERL5LIB
     done
   ''
@@ -97,9 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -f $(find hacks -type f -perm -111 "!" -name "*.*" ) "$out/libexec/xscreensaver"
   '';
 
+  passthru.tests = {
+    xscreensaver = nixosTests.xscreensaver;
+  };
+
   meta = {
     homepage = "https://www.jwz.org/xscreensaver/";
-    description = "A set of screensavers";
+    description = "Set of screensavers";
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin AndersonTorres ];

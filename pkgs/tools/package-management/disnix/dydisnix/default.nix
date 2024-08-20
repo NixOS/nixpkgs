@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A toolset enabling self-adaptive redeployment on top of Disnix";
+    description = "Toolset enabling self-adaptive redeployment on top of Disnix";
     longDescription = ''
       Dynamic Disnix is a (very experimental!) prototype extension framework for Disnix supporting dynamic (re)deployment of service-oriented systems.
     '';

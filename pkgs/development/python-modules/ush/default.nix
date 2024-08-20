@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "ush";
   version = "3.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tarruda";
@@ -30,6 +32,6 @@ buildPythonPackage rec {
     description = "Powerful API for invoking with external commands";
     homepage = "https://github.com/tarruda/python-ush";
     license = licenses.mit;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
   };
 }

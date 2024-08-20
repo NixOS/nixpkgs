@@ -1,48 +1,55 @@
-{ lib
-, authlib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, tqdm
-, validators
+{
+  lib,
+  authlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  grpcio,
+  grpcio-health-checking,
+  grpcio-tools,
+  httpx,
+  pydantic,
+  pythonOlder,
+  setuptools-scm,
+  tqdm,
+  validators,
 }:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "3.24.1";
-  format = "setuptools";
+  version = "4.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4HM1DCG9TcpcDqxd1dlftHQnjHFaryBB44LYa7dRisg=";
+  src = fetchFromGitHub {
+    owner = "weaviate";
+    repo = "weaviate-python-client";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JgnasbhAcdJwa3lpdID+B3Iwuc9peRQZBAC7tBBm54c=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "validators>=0.18.2,<=0.21.0" "validators>=0.18.2" \
-      --replace "requests>=2.28.0,<2.29.0" "requests>=2.28.0"
-  '';
-
-  nativeBuildInputs = [
-    setuptools-scm
+  pythonRelaxDeps = [
+    "httpx"
+    "validators"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+
+  dependencies = [
     authlib
+    grpcio
+    grpcio-health-checking
+    grpcio-tools
+    httpx
+    pydantic
     tqdm
     validators
   ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "weaviate"
-  ];
+  pythonImportsCheck = [ "weaviate" ];
 
   meta = with lib; {
     description = "Python native client for easy interaction with a Weaviate instance";

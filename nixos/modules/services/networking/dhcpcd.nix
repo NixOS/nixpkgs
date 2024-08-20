@@ -13,6 +13,8 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
+  enableNTPService = (config.services.ntp.enable || config.services.ntpd-rs.enable || config.services.openntpd.enable || config.services.chrony.enable);
+
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
@@ -89,20 +91,22 @@ let
       ${cfg.extraConfig}
     '';
 
-  exitHook = pkgs.writeText "dhcpcd.exit-hook"
-    ''
+  exitHook = pkgs.writeText "dhcpcd.exit-hook" ''
+    ${optionalString enableNTPService ''
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-          # Restart ntpd.  We need to restart it to make sure that it
-          # will actually do something: if ntpd cannot resolve the
-          # server hostnames in its config file, then it will never do
-          # anything ever again ("couldn't resolve ..., giving up on
-          # it"), so we silently lose time synchronisation. This also
-          # applies to openntpd.
-          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
+        # Restart ntpd. We need to restart it to make sure that it will actually do something:
+        # if ntpd cannot resolve the server hostnames in its config file, then it will never do
+        # anything ever again ("couldn't resolve ..., giving up on it"), so we silently lose
+        # time synchronisation. This also applies to openntpd.
+        ${optionalString config.services.ntp.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service || true"}
+        ${optionalString config.services.ntpd-rs.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd-rs.service || true"}
+        ${optionalString config.services.openntpd.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart openntpd.service || true"}
+        ${optionalString config.services.chrony.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart chronyd.service || true"}
       fi
+    ''}
 
-      ${cfg.runHook}
-    '';
+    ${cfg.runHook}
+  '';
 
 in
 
@@ -115,7 +119,7 @@ in
     networking.dhcpcd.enable = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable dhcpcd for device configuration. This is mainly to
         explicitly disable dhcpcd (for example when using networkd).
       '';
@@ -124,7 +128,7 @@ in
     networking.dhcpcd.persistent = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
           Whenever to leave interfaces configured on dhcpcd daemon
           shutdown. Set to true if you have your root or store mounted
           over the network or this machine accepts SSH connections
@@ -136,7 +140,7 @@ in
     networking.dhcpcd.denyInterfaces = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
          Disable the DHCP client for any interface whose name matches
          any of the shell glob patterns in this list. The purpose of
          this option is to blacklist virtual interfaces such as those
@@ -147,7 +151,7 @@ in
     networking.dhcpcd.allowInterfaces = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
          Enable the DHCP client for any interface whose name matches
          any of the shell glob patterns in this list. Any interface not
          explicitly matched by this pattern will be denied. This pattern only
@@ -158,7 +162,7 @@ in
     networking.dhcpcd.extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
          Literal string to append to the config file generated for dhcpcd.
       '';
     };
@@ -166,7 +170,7 @@ in
     networking.dhcpcd.IPv6rs = mkOption {
       type = types.nullOr types.bool;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Force enable or disable solicitation and receipt of IPv6 Router Advertisements.
         This is required, for example, when using a static unique local IPv6 address (ULA)
         and global IPv6 address auto-configuration with SLAAC.
@@ -177,7 +181,7 @@ in
       type = types.lines;
       default = "";
       example = "if [[ $reason =~ BOUND ]]; then echo $interface: Routers are $new_routers - were $old_routers; fi";
-      description = lib.mdDoc ''
+      description = ''
          Shell code that will be run after all other hooks. See
          `man dhcpcd-run-hooks` for details on what is possible.
       '';
@@ -186,7 +190,7 @@ in
     networking.dhcpcd.wait = mkOption {
       type = types.enum [ "background" "any" "ipv4" "ipv6" "both" "if-carrier-up" ];
       default = "any";
-      description = lib.mdDoc ''
+      description = ''
         This option specifies when the dhcpcd service will fork to background.
         If set to "background", dhcpcd will fork to background immediately.
         If set to "ipv4" or "ipv6", dhcpcd will wait for the corresponding IP
@@ -219,6 +223,8 @@ in
       '';
     } ];
 
+    environment.etc."dhcpcd.conf".source = dhcpcdConf;
+
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
@@ -230,7 +236,7 @@ in
         wants = [ "network.target" ];
         before = [ "network-online.target" ];
 
-        restartTriggers = [ exitHook ];
+        restartTriggers = optional (enableNTPService || cfg.runHook != "") [ exitHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -259,7 +265,9 @@ in
 
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc."dhcpcd.exit-hook".source = exitHook;
+    environment.etc."dhcpcd.exit-hook" = mkIf (enableNTPService || cfg.runHook != "") {
+      source = exitHook;
+    };
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''

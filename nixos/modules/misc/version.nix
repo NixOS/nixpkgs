@@ -5,32 +5,39 @@ let
   opt = options.system.nixos;
 
   inherit (lib)
-    concatStringsSep mapAttrsToList toLower
+    concatStringsSep mapAttrsToList toLower optionalString
     literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
 
   needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
   escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
   attrsToText = attrs:
-    concatStringsSep "\n" (
-      mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs
-    ) + "\n";
+    concatStringsSep "\n"
+      (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
+    + "\n";
 
-  osReleaseContents = {
-    NAME = "${cfg.distroName}";
-    ID = "${cfg.distroId}";
-    VERSION = "${cfg.release} (${cfg.codeName})";
-    VERSION_CODENAME = toLower cfg.codeName;
-    VERSION_ID = cfg.release;
-    BUILD_ID = cfg.version;
-    PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
-    LOGO = "nix-snowflake";
-    HOME_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/";
-    DOCUMENTATION_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/learn.html";
-    SUPPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/community.html";
-    BUG_REPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://github.com/NixOS/nixpkgs/issues";
-  } // lib.optionalAttrs (cfg.variant_id != null) {
-    VARIANT_ID = cfg.variant_id;
-  };
+  osReleaseContents =
+    let
+      isNixos = cfg.distroId == "nixos";
+    in
+    {
+      NAME = "${cfg.distroName}";
+      ID = "${cfg.distroId}";
+      VERSION = "${cfg.release} (${cfg.codeName})";
+      VERSION_CODENAME = toLower cfg.codeName;
+      VERSION_ID = cfg.release;
+      BUILD_ID = cfg.version;
+      PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
+      LOGO = "nix-snowflake";
+      HOME_URL = optionalString isNixos "https://nixos.org/";
+      DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
+      SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
+      BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
+      ANSI_COLOR = optionalString isNixos "1;34";
+      IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
+      IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
+    } // lib.optionalAttrs (cfg.variant_id != null) {
+      VARIANT_ID = cfg.variant_id;
+    };
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
@@ -54,60 +61,93 @@ in
   };
 
   options.system = {
+    nixos = {
+      version = mkOption {
+        internal = true;
+        type = types.str;
+        description = "The full NixOS version (e.g. `16.03.1160.f2d4ee1`).";
+      };
 
-    nixos.version = mkOption {
-      internal = true;
-      type = types.str;
-      description = lib.mdDoc "The full NixOS version (e.g. `16.03.1160.f2d4ee1`).";
+      release = mkOption {
+        readOnly = true;
+        type = types.str;
+        default = trivial.release;
+        description = "The NixOS release (e.g. `16.03`).";
+      };
+
+      versionSuffix = mkOption {
+        internal = true;
+        type = types.str;
+        default = trivial.versionSuffix;
+        description = "The NixOS version suffix (e.g. `1160.f2d4ee1`).";
+      };
+
+      revision = mkOption {
+        internal = true;
+        type = types.nullOr types.str;
+        default = trivial.revisionWithDefault null;
+        description = "The Git revision from which this NixOS configuration was built.";
+      };
+
+      codeName = mkOption {
+        readOnly = true;
+        type = types.str;
+        default = trivial.codeName;
+        description = "The NixOS release code name (e.g. `Emu`).";
+      };
+
+      distroId = mkOption {
+        internal = true;
+        type = types.str;
+        default = "nixos";
+        description = "The id of the operating system";
+      };
+
+      distroName = mkOption {
+        internal = true;
+        type = types.str;
+        default = "NixOS";
+        description = "The name of the operating system";
+      };
+
+      variant_id = mkOption {
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        default = null;
+        description = "A lower-case string identifying a specific variant or edition of the operating system";
+        example = "installer";
+      };
     };
 
-    nixos.release = mkOption {
-      readOnly = true;
-      type = types.str;
-      default = trivial.release;
-      description = lib.mdDoc "The NixOS release (e.g. `16.03`).";
-    };
+    image = {
 
-    nixos.versionSuffix = mkOption {
-      internal = true;
-      type = types.str;
-      default = trivial.versionSuffix;
-      description = lib.mdDoc "The NixOS version suffix (e.g. `1160.f2d4ee1`).";
-    };
+      id = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Image identifier.
 
-    nixos.revision = mkOption {
-      internal = true;
-      type = types.nullOr types.str;
-      default = trivial.revisionWithDefault null;
-      description = lib.mdDoc "The Git revision from which this NixOS configuration was built.";
-    };
+          This corresponds to the IMAGE_ID field in os-release. See the
+          upstream docs for more details on valid characters for this field:
+          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=
 
-    nixos.codeName = mkOption {
-      readOnly = true;
-      type = types.str;
-      default = trivial.codeName;
-      description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
-    };
+          You would only want to set this option if you're build NixOS appliance images.
+        '';
+      };
 
-    nixos.distroId = mkOption {
-      internal = true;
-      type = types.str;
-      default = "nixos";
-      description = lib.mdDoc "The id of the operating system";
-    };
+      version = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Image version.
 
-    nixos.distroName = mkOption {
-      internal = true;
-      type = types.str;
-      default = "NixOS";
-      description = lib.mdDoc "The name of the operating system";
-    };
+          This corresponds to the IMAGE_VERSION field in os-release. See the
+          upstream docs for more details on valid characters for this field:
+          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=
 
-    nixos.variant_id = mkOption {
-      type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
-      default = null;
-      description = lib.mdDoc "A lower-case string identifying a specific variant or edition of the operating system";
-      example = "installer";
+          You would only want to set this option if you're build NixOS appliance images.
+        '';
+      };
+
     };
 
     stateVersion = mkOption {
@@ -120,30 +160,40 @@ in
           v;
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
-      description = lib.mdDoc ''
-        Every once in a while, a new NixOS release may change
-        configuration defaults in a way incompatible with stateful
-        data. For instance, if the default version of PostgreSQL
-        changes, the new version will probably be unable to read your
-        existing databases. To prevent such breakage, you should set the
-        value of this option to the NixOS release with which you want
-        to be compatible. The effect is that NixOS will use
-        defaults corresponding to the specified release (such as using
-        an older version of PostgreSQL).
-        It’s perfectly fine and recommended to leave this value at the
-        release version of the first install of this system.
-        Changing this option will not upgrade your system. In fact it
-        is meant to stay constant exactly when you upgrade your system.
-        You should only bump this option, if you are sure that you can
-        or have migrated all state on your system which is affected
-        by this option.
+      description = ''
+        This option defines the first version of NixOS you have installed on this particular machine,
+        and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+
+        For example, if NixOS version XX.YY ships with AwesomeDB version N by default, and is then
+        upgraded to version XX.YY+1, which ships AwesomeDB version N+1, the existing databases
+        may no longer be compatible, causing applications to fail, or even leading to data loss.
+
+        The `stateVersion` mechanism avoids this situation by making the default version of such packages
+        conditional on the first version of NixOS you've installed (encoded in `stateVersion`), instead of
+        simply always using the latest one.
+
+        Note that this generally only affects applications that can't upgrade their data automatically -
+        applications and services supporting automatic migrations will remain on latest versions when
+        you upgrade.
+
+        Most users should **never** change this value after the initial install, for any reason,
+        even if you've upgraded your system to a new NixOS release.
+
+        This value does **not** affect the Nixpkgs version your packages and OS are pulled from,
+        so changing it will **not** upgrade your system.
+
+        This value being lower than the current NixOS release does **not** mean your system is
+        out of date, out of support, or vulnerable.
+
+        Do **not** change this value unless you have manually inspected all the changes it would
+        make to your configuration, and migrated your data accordingly.
       '';
     };
 
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "The Git revision of the top-level flake from which this configuration was built.";
+      description = "The Git revision of the top-level flake from which this configuration was built.";
     };
 
   };

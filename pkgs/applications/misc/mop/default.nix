@@ -25,5 +25,6 @@ buildGoModule rec {
     description = "Simple stock tracker implemented in go";
     homepage = "https://github.com/mop-tracker/mop";
     license = licenses.mit;
+    mainProgram = "mop";
   };
 }

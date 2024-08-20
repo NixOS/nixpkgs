@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical network monitoring and documentation tool";
+    mainProgram = "jnetmap";
     homepage = "http://www.rakudave.ch/jnetmap/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Plus;

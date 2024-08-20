@@ -11,23 +11,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "convco";
-  version = "0.4.3";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qf04mtxBqZy9kpFsqz8lVtyUzNtCYE8cNiVJVQ+sCn0=";
+    hash = "sha256-S5k0d29tuR0VkJrqCiWg1v+W2n9TrQCfMOInII4jxg0=";
   };
 
-  cargoHash = "sha256-A1z8ccdsaBC9gY4rD/0NnuQHm7x4eVlMPBvkMKGHK54=";
+  cargoHash = "sha256-cYb3syf+k4V0pCpekQ2tY73Gl6rDc9YMCXs3TKRtgpo=";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
-    description = "A Conventional commit cli";
+    description = "Conventional commit cli";
+    mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ hoverbear cafkafk ];

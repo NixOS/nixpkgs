@@ -17,28 +17,28 @@ let
       name = mkOption {
         type = types.str;
         default = name;
-        description = lib.mdDoc "Name of the zone.";
+        description = "Name of the zone.";
       };
       master = mkOption {
-        description = lib.mdDoc "Master=false means slave server";
+        description = "Master=false means slave server";
         type = types.bool;
       };
       file = mkOption {
         type = types.either types.str types.path;
-        description = lib.mdDoc "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
+        description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
       };
       masters = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc "List of servers for inclusion in stub and secondary zones.";
+        description = "List of servers for inclusion in stub and secondary zones.";
       };
       slaves = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc "Addresses who may request zone transfers.";
+        description = "Addresses who may request zone transfers.";
         default = [ ];
       };
       allowQuery = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of address ranges allowed to query this zone. Instead of the address(es), this may instead
           contain the single string "any".
 
@@ -49,7 +49,7 @@ let
       };
       extraConfig = mkOption {
         type = types.str;
-        description = lib.mdDoc "Extra zone config to be appended at the end of the zone section.";
+        description = "Extra zone config to be appended at the end of the zone section.";
         default = "";
       };
     };
@@ -115,20 +115,15 @@ in
 
     services.bind = {
 
-      enable = mkEnableOption (lib.mdDoc "BIND domain name server");
+      enable = mkEnableOption "BIND domain name server";
 
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bind;
-        defaultText = literalExpression "pkgs.bind";
-        description = lib.mdDoc "The BIND package to use.";
-      };
+      package = mkPackageOption pkgs "bind" { };
 
       cacheNetworks = mkOption {
-        default = [ "127.0.0.0/24" ];
+        default = [ "127.0.0.0/24" "::1/128" ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           What networks are allowed to use us as a resolver.  Note
           that this is for recursive queries -- all networks are
           allowed to query zones configured with the `zones` option
@@ -142,7 +137,7 @@ in
       blockedNetworks = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           What networks are just blocked.
         '';
       };
@@ -150,7 +145,7 @@ in
       ipv4Only = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Only use ipv4, even if the host supports ipv6.
         '';
       };
@@ -159,7 +154,7 @@ in
         default = config.networking.nameservers;
         defaultText = literalExpression "config.networking.nameservers";
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of servers we should forward requests to.
         '';
       };
@@ -167,7 +162,7 @@ in
       forward = mkOption {
         default = "first";
         type = types.enum ["first" "only"];
-        description = lib.mdDoc ''
+        description = ''
           Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
         '';
       };
@@ -175,7 +170,7 @@ in
       listenOn = mkOption {
         default = [ "any" ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           Interfaces to listen on.
         '';
       };
@@ -183,7 +178,7 @@ in
       listenOnIpv6 = mkOption {
         default = [ "any" ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           Ipv6 interfaces to listen on.
         '';
       };
@@ -191,13 +186,13 @@ in
       directory = mkOption {
         type = types.str;
         default = "/run/named";
-        description = lib.mdDoc "Working directory of BIND.";
+        description = "Working directory of BIND.";
       };
 
       zones = mkOption {
         default = [ ];
         type = with types; coercedTo (listOf attrs) bindZoneCoerce (attrsOf (types.submodule bindZoneOptions));
-        description = lib.mdDoc ''
+        description = ''
           List of zones we claim authority over.
         '';
         example = {
@@ -214,7 +209,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the generated named configuration file.
         '';
       };
@@ -222,7 +217,7 @@ in
       extraOptions = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the options section of the
           generated named configuration file.
         '';
@@ -232,7 +227,7 @@ in
         type = types.path;
         default = confFile;
         defaultText = literalExpression "confFile";
-        description = lib.mdDoc ''
+        description = ''
           Overridable config file to use for named. By default, that
           generated by nixos.
         '';
@@ -276,7 +271,8 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+        Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
+        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
         ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
         ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
       };

@@ -24,19 +24,20 @@
 , bash-completion ? null
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.2.5.1pre";
+  version = "1.3.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "30bb82da8d4161330a6d7a20c9989149303421a1";
-    sha256 = "k2osc2v0OuGrNjwxdqn785RsbHEJP3p79PG9YqnVE3U=";
+    rev = "v${version}";
+    hash = "sha256-MYZFI1Q90F/AXVSJJBhmw+E7IMLXrdwmSuFJwv5D/z4=";
   };
 
   buildInputs = [
@@ -91,6 +92,10 @@ stdenv.mkDerivation rec {
     substituteInPlace data/meson.build \
       --replace "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
   '';
+
+  passthru.tests = {
+    nixos-test = nixosTests.packagekit;
+  };
 
   meta = with lib; {
     description = "System to facilitate installing and updating packages";

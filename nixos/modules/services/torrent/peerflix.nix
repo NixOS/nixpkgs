@@ -19,19 +19,19 @@ in {
 
   options.services.peerflix = {
     enable = mkOption {
-      description = lib.mdDoc "Whether to enable peerflix service.";
+      description = "Whether to enable peerflix service.";
       default = false;
       type = types.bool;
     };
 
     stateDir = mkOption {
-      description = lib.mdDoc "Peerflix state directory.";
+      description = "Peerflix state directory.";
       default = "/var/lib/peerflix";
       type = types.path;
     };
 
     downloadDir = mkOption {
-      description = lib.mdDoc "Peerflix temporary download directory.";
+      description = "Peerflix temporary download directory.";
       default = "${cfg.stateDir}/torrents";
       defaultText = literalExpression ''"''${config.${opt.stateDir}}/torrents"'';
       type = types.path;

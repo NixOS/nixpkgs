@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, libiconv, texlive, xercesc }:
+{ fetchFromGitHub, lib, stdenv, libiconv, texliveFull, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "blahtexml";
@@ -11,9 +11,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-DL5DyfARHHbwWBVHSa/VwHzNaAx/v7EDdnw1GLOk+y0=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace makefile \
+      --replace "\$(CXX)" "\$(CXX) -std=c++98"
+  '' +
+  # fix the doc build on TeX Live 2023
+  ''
+    substituteInPlace Documentation/manual.tex \
+      --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
+  '';
+
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ texlive.combined.scheme-full ]; # scheme-full needed for ucs package
+  nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   buildFlags =
@@ -29,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://gva.noekeon.org/blahtexml/";
-    description = "A TeX to MathML converter";
+    description = "TeX to MathML converter";
     longDescription = ''
       Blahtex is a program written in C++, which converts an equation given in
       a syntax close to TeX into MathML. It is designed by David Harvey and is

@@ -9,7 +9,7 @@ buildGoModule rec {
     repo = "NoiseTorch";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-gOPSMPH99Upi/30OnAdwSb7SaMV0i/uHB051cclfz6A=";
+    hash = "sha256-gOPSMPH99Upi/30OnAdwSb7SaMV0i/uHB051cclfz6A=";
   };
 
   vendorHash = null;
@@ -37,5 +37,6 @@ buildGoModule rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ panaeon lom ];
+    mainProgram = "noisetorch";
   };
 }

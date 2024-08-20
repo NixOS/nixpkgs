@@ -5,8 +5,11 @@
 # build time
 , autoreconfHook
 , pkg-config
+, python3Packages
 
 # runtime
+, withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
+, withPostgres ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
 , boost
 , libmysqlclient
 , log4cplus
@@ -20,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "2.4.0"; # only even minor versions are stable
+  version = "2.6.1"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-OjPNCNwzGf9UTmu/LAQpBCEG9AUevhFdwbsmJclQA/c=";
+    hash = "sha256-0s4UqRwuJIrSh24pFS1ke8xeQzvGja+tDuluwWb8+tE=";
   };
 
   patches = [
@@ -48,9 +51,10 @@ stdenv.mkDerivation rec {
     "--enable-shell"
     "--localstatedir=/var"
     "--with-openssl=${lib.getDev openssl}"
-    "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
-    "--with-pgsql=${postgresql}/bin/pg_config"
-  ];
+  ]
+  ++ lib.optional withPostgres "--with-pgsql=${postgresql}/bin/pg_config"
+  ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
+
   postConfigure = ''
     # Mangle embedded paths to dev-only inputs.
     sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
@@ -59,7 +63,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ (with python3.pkgs; [
+  ] ++ (with python3Packages; [
     sphinxHook
     sphinx-rtd-theme
   ]);
@@ -83,7 +87,6 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
-    prometheus-exporter = nixosTests.prometheus-exporters.kea;
     networking-scripted = lib.recurseIntoAttrs { inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf; };
     networking-networkd = lib.recurseIntoAttrs { inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf; };
   };

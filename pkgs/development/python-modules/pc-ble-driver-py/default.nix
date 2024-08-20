@@ -1,22 +1,23 @@
-{ lib
-, boost
-, buildPythonPackage
-, cmake
-, cryptography
-, fetchFromGitHub
-, git
-, pc-ble-driver
-, pythonAtLeast
-, pythonOlder
-, scikit-build
-, setuptools
-, swig
-, wrapt
+{
+  lib,
+  boost,
+  buildPythonPackage,
+  cmake,
+  cryptography,
+  fetchFromGitHub,
+  git,
+  pc-ble-driver,
+  pythonOlder,
+  scikit-build,
+  setuptools,
+  swig,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
   version = "0.17.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -50,9 +51,7 @@ buildPythonPackage rec {
   # doCheck tries to write to the global python directory to install things
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pc_ble_driver_py"
-  ];
+  pythonImportsCheck = [ "pc_ble_driver_py" ];
 
   meta = with lib; {
     description = "Bluetooth Low Energy nRF5 SoftDevice serialization";

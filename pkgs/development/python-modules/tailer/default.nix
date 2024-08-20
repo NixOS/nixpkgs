@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "tailer";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "six8";
@@ -25,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation implementation of GNU tail and head";
+    mainProgram = "pytail";
     homepage = "https://github.com/six8/pytailer";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

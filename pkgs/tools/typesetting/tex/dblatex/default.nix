@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, python3, libxslt, texlive
+{ lib, stdenv, fetchurl, python311, libxslt, texliveBasic
 , enableAllFeatures ? false, imagemagick, fig2dev, inkscape, fontconfig, ghostscript
 
-, tex ? texlive.combine { # satisfy all packages that ./configure mentions
-    inherit (texlive) scheme-basic epstopdf anysize appendix changebar
-      fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
-      multirow overpic pdfpages pdflscape graphics stmaryrd subfigure titlesec wasysym
-      # pkgs below don't seem requested by dblatex, but our manual fails without them
-      ec zapfding symbol eepic times rsfs cs tex4ht courier helvetic ly1;
-  }
+, tex ? texliveBasic.withPackages (ps: with ps; [ # satisfy all packages that ./configure mentions
+    epstopdf anysize appendix changebar
+    fancybox fancyvrb float footmisc listings jknapltx/*for mathrsfs.sty*/
+    multirow overpic pdfpages pdflscape graphics stmaryrd subfigure titlesec wasysym
+    # pkgs below don't seem requested by dblatex, but our manual fails without them
+    ec zapfding symbol eepic times rsfs cs tex4ht courier helvetic ly1
+  ])
 }:
 
 # NOTE: enableAllFeatures just purifies the expression, it doesn't actually
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yd09nypswy3q4scri1dg7dr99d7gd6r2dwx0xm81l9f4y32gs0n";
   };
 
-  buildInputs = [ python3 libxslt tex ]
+  buildInputs = [ python311 libxslt tex ]
     ++ lib.optionals enableAllFeatures [ imagemagick fig2dev ];
 
   # TODO: dblatex tries to execute texindy command, but nixpkgs doesn't have
@@ -52,13 +52,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    ${python3.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
+    ${python311.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
   '';
 
   passthru = { inherit tex; };
 
   meta = {
-    description = "A program to convert DocBook to DVI, PostScript or PDF via LaTeX or ConTeXt";
+    description = "Program to convert DocBook to DVI, PostScript or PDF via LaTeX or ConTeXt";
+    mainProgram = "dblatex";
     homepage = "https://dblatex.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

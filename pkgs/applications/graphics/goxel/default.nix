@@ -1,33 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, scons, pkg-config, wrapGAppsHook
-, glfw3, gtk3, libpng12 }:
+{ lib, stdenv, fetchFromGitHub, scons, pkg-config, wrapGAppsHook3
+, glfw3, gtk3, libpng }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goxel";
-  version = "0.12.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
-    rev = "v${version}";
-    hash = "sha256-taDe5xJU6ijikHaSMDYs/XE2O66X3J7jOKWzbj7hrN0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mNSkQisWL3wXb+IsClWFTMbpeiRC4xteePXNP+GkUnU=";
   };
 
-  nativeBuildInputs = [ scons pkg-config wrapGAppsHook ];
-  buildInputs = [ glfw3 gtk3 libpng12 ];
+  nativeBuildInputs = [ scons pkg-config wrapGAppsHook3 ];
+  buildInputs = [ glfw3 gtk3 libpng ];
 
-  buildPhase = ''
-    make release
-  '';
+  dontUseSconsBuild = true;
+  dontUseSconsInstall = true;
 
-  installPhase = ''
-    install -D ./goxel $out/bin/goxel
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  buildFlags = [ "release" ];
 
   meta = with lib; {
     description = "Open Source 3D voxel editor";
+    mainProgram = "goxel";
     homepage = "https://guillaumechereau.github.io/goxel/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tilpner fgaz ];
   };
-}
+})

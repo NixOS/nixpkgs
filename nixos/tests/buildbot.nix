@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           "steps.ShellCommand(command=['bash', 'fakerepo.sh'])"
         ];
         changeSource = [
-          "changes.GitPoller('git://gitrepo/fakerepo.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+          "changes.GitPoller('git://gitrepo/fakerepo.git', workdir='gitpoller-workdir', branch='master', pollInterval=300)"
         ];
       };
       networking.firewall.allowedTCPPorts = [ 8010 8011 9989 ];
@@ -71,6 +71,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     gitrepo.wait_for_unit("multi-user.target")
 
     with subtest("Repo is accessible via git daemon"):
+        bbmaster.systemctl("start network-online.target")
         bbmaster.wait_for_unit("network-online.target")
         bbmaster.succeed("rm -rfv /tmp/fakerepo")
         bbmaster.succeed("git clone git://gitrepo/fakerepo /tmp/fakerepo")
@@ -78,6 +79,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("Master service and worker successfully connect"):
         bbmaster.wait_for_unit("buildbot-master.service")
         bbmaster.wait_until_succeeds("curl --fail -s --head http://bbmaster:8010")
+        bbworker.systemctl("start network-online.target")
         bbworker.wait_for_unit("network-online.target")
         bbworker.succeed("nc -z bbmaster 8010")
         bbworker.succeed("nc -z bbmaster 9989")
@@ -104,5 +106,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         bbworker.fail("nc -z bbmaster 8011")
   '';
 
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = pkgs.lib.teams.buildbot.members;
 })

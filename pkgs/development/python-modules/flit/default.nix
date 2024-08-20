@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, docutils
-, requests
-, pytestCheckHook
-, testpath
-, responses
-, flit-core
-, tomli-w
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  docutils,
+  requests,
+  pytestCheckHook,
+  testpath,
+  responses,
+  flit-core,
+  tomli-w,
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-yl2+PcKr7xRW4oIBWl+gzh/nKhSNu5GH9fWKRGgaNHU=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     docutils
@@ -38,7 +37,11 @@ buildPythonPackage rec {
     tomli-w
   ];
 
-  nativeCheckInputs = [ pytestCheckHook testpath responses ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    testpath
+    responses
+  ];
 
   disabledTests = [
     # needs some ini file.
@@ -52,9 +55,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
-    description = "A simple packaging tool for simple packages";
+    description = "Simple packaging tool for simple packages";
+    mainProgram = "flit";
     homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

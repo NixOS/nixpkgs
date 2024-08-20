@@ -12,6 +12,8 @@
 
   # Additional registries to pull sources from
   #   { "https://<registry index URL>" = "https://<registry download URL>"; }
+  #   or if the registry is using the new sparse protocol
+  #   { "sparse+https://<registry download URL>" = "https://<registry download URL>"; }
   # where:
   # - "index URL" is the "index" value of the configuration entry for that registry
   #   https://doc.rust-lang.org/cargo/reference/registries.html#using-an-alternate-registry
@@ -117,7 +119,8 @@ let
       gitParts = parseGit pkg.source;
       registryIndexUrl = lib.removePrefix "registry+" pkg.source;
     in
-      if lib.hasPrefix "registry+" pkg.source && builtins.hasAttr registryIndexUrl registries then
+      if (lib.hasPrefix "registry+" pkg.source || lib.hasPrefix "sparse+" pkg.source)
+        && builtins.hasAttr registryIndexUrl registries then
       let
         crateTarball = fetchCrate pkg registries.${registryIndexUrl};
       in runCommand "${pkg.name}-${pkg.version}" {} ''
@@ -193,7 +196,7 @@ let
 
         if grep -q workspace "$out/Cargo.toml"; then
           chmod u+w "$out/Cargo.toml"
-          ${replaceWorkspaceValues} "$out/Cargo.toml" "${tree}/Cargo.toml"
+          ${replaceWorkspaceValues} "$out/Cargo.toml" "$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $crateCargoTOML | ${jq}/bin/jq -r .workspace_root)/Cargo.toml"
         fi
 
         # Cargo is happy with empty metadata.

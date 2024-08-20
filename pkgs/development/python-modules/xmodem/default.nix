@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest, which, lrzsz }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  which,
+  lrzsz,
+}:
 
 buildPythonPackage rec {
   pname = "xmodem";
   version = "0.4.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tehmaze";
@@ -11,7 +19,11 @@ buildPythonPackage rec {
     sha256 = "sha256-kwPA/lYiv6IJSKGRuH13tBofZwp19vebwQniHK7A/i8=";
   };
 
-  nativeCheckInputs = [ pytest which lrzsz ];
+  nativeCheckInputs = [
+    pytest
+    which
+    lrzsz
+  ];
 
   checkPhase = ''
     pytest

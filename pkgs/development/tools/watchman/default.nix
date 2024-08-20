@@ -9,6 +9,7 @@
 , fb303
 , fbthrift
 , fetchFromGitHub
+, fetchpatch
 , fizz
 , fmt_8
 , folly
@@ -34,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "watchman";
-  version = "2023.08.14.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    hash = "sha256-41bBPFlLYFHySyX4/GUllT1pNywSRcH7x/pnb5iN/1o=";
+    hash = "sha256-cD8mIYCc+8Z2p3rwKVRFcW9sOBbpb5KHU5VpbXHMpeg=";
   };
 
   cmakeFlags = [
@@ -90,6 +91,14 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
   };
+
+  patches = [
+    # fix build with rustc >=1.79
+    (fetchpatch {
+      url = "https://github.com/facebook/watchman/commit/c3536143cab534cdd9696eb3e2d03c4ac1e2f883.patch";
+      hash = "sha256-lpGr5H28gfVXkWNdfDo4SCbF/p5jB4SNlHj6km/rfw4=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .

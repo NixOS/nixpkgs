@@ -5,19 +5,20 @@
 , qttools
 , fio
 , cmake
-, kauth
+, polkit-qt
 , extra-cmake-modules
 , fetchFromGitHub
 }:
 stdenv.mkDerivation rec {
-  name = "kdiskmark";
-  version = "3.0.0";
+  pname = "kdiskmark";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
     rev = version;
-    sha256 = "sha256-fDimH0BX0zxGuOMNLhNbMGMr2pS+qbZhflSpoLFK+Ng=";
+    hash = "sha256-JueY7zw9PIo9ETi7pQLpw8FGRhNXYXeXEvTzZGz9lbw=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
@@ -26,13 +27,12 @@ stdenv.mkDerivation rec {
     qtbase
     qttools
     extra-cmake-modules
-    kauth
+    polkit-qt
   ];
 
-  postInstall = ''
-    # so that kdiskmark can be used as unpriviledged user even on non-kde
-    # (where kauth is not in environment.systemPackages)
-    ln -s ${kauth}/share/dbus-1/system.d/org.kde.kf5auth.conf $out/share/dbus-1/system.d/00-kdiskmark-needs-org.kde.kf5auth.conf
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt \
+      --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
   '';
 
   qtWrapperArgs =
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.symphorien ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    mainProgram = "kdiskmark";
   };
 }
 

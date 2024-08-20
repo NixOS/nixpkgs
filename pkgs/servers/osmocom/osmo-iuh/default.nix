@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-iuh";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-iuh";
     rev = version;
-    hash = "sha256-AwLLfG+5JgvFSBddzyUQdPDFZOX1uQyDSyr4O/wTlgs=";
+    hash = "sha256-1G5N74N3BH+XP4hr+w0a1wc2DaE/GXpSu3JiPo8UBhI=";
   };
 
   prePatch = ''
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom IuH library";
     homepage = "https://osmocom.org/projects/osmohnbgw/wiki";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

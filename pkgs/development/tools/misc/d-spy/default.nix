@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "d-spy";
-  version = "1.6.0";
+  version = "1.10.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-spy/${lib.versions.majorMinor version}/d-spy-${version}.tar.xz";
-    sha256 = "otCiEFE7tGRw0A40VEeRIIMwFT9Ms0+FhxcpEaxPiv0=";
+    hash = "sha256-VVgSucZUBVHaWZ7oFHiArTkVuTyH4XV7bRz9kKDgXlM=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +43,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "d-spy";
+      versionPolicy = "odd-unstable";
     };
   };
 
   meta = with lib; {
     description = "D-Bus exploration tool";
+    mainProgram = "d-spy";
     homepage = "https://gitlab.gnome.org/GNOME/d-spy";
     license = with licenses; [
       lgpl3Plus # library

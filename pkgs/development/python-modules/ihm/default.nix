@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, swig
-, wheel
-, msgpack
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  swig,
+  wheel,
+  msgpack,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ihm";
-  version = "0.41";
+  version = "1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-ihm";
     rev = "refs/tags/${version}";
-    hash = "sha256-weeOizVWFcOxD45QsvEaoknTofZjglCvidyvXpyRKwc=";
+    hash = "sha256-ywZdhumFFeImODeFn8VYD0CR1DZMlAg52wMNRjEItec=";
   };
 
   nativeBuildInputs = [
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    msgpack
-  ];
+  propagatedBuildInputs = [ msgpack ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # requires network access

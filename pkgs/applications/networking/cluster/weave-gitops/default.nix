@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "weave-gitops";
-  version = "0.34.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W7Q5rsmNEDUGofQumbs9HaByQEb7sj4tOT7ZpIe98E4=";
+    sha256 = "sha256-Gm4DIQK8T+dTwB5swdrD+SjGgy/wFQ/fJYdSqNDSy9c=";
   };
 
   ldflags = [ "-s" "-w" "-X github.com/weaveworks/weave-gitops/cmd/gitops/version.Version=${version}" ];
 
-  vendorHash = "sha256-+UxrhtwYP+ctn+y7IxKKLO5RVoiUSl4ky0xprXr98Jc=";
+  vendorHash = "sha256-RiPBlpEQ69fhVf3B0qHQ+zEtPIet/Y/Jp/HfaTrIssE=";
 
   subPackages = [ "cmd/gitops" ];
 
@@ -31,7 +31,7 @@ buildGoModule rec {
     description = "Weave Gitops CLI";
     license = licenses.mpl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nullx76 ];
+    maintainers = [ ];
     mainProgram = "gitops";
   };
 }

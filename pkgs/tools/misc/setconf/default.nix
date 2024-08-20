@@ -17,8 +17,9 @@ buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/xyproto/setconf";
-    description = "A small utility for changing settings in configuration textfiles";
+    description = "Small utility for changing settings in configuration textfiles";
     changelog = "https://github.com/xyproto/setconf/releases/tag/${version}";
     maintainers = [ lib.maintainers.AndersonTorres ];
+    mainProgram = "setconf";
   };
 }

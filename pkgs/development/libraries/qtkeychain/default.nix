@@ -12,19 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.14.1";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
     rev = version;
-    sha256 = "sha256-LclYOuIYn+jYCvg69uHFlV3VcZ2KWdr8lFyCSBIB7Kw=";
+    sha256 = "sha256-+1WX3ARH+jWeDiaJnX+ZlRMj+l3qvgBwcGKjB9QEJNI=";
   };
 
   dontWrapQtApps = true;
-
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the sandbox profile from `qtbase`
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
 
   cmakeFlags = [
     "-DBUILD_WITH_QT6=${if lib.versions.major qtbase.version == "6" then "ON" else "OFF"}"

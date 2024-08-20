@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "webdav";
@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/hacdias/webdav";
     license = licenses.mit;
     maintainers = with maintainers; [ pmy ];
+    mainProgram = "webdav";
   };
 }

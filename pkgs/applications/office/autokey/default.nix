@@ -1,28 +1,30 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtksourceview3
 , libappindicator-gtk3
 , libnotify
+, zenity
+, wmctrl
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "autokey";
-  version = "0.95.10";
+  version = "0.96.0";
 
   src = fetchFromGitHub {
     owner = "autokey";
     repo = "autokey";
     rev = "v${version}";
-    sha256 = "0f0cqfnb49wwdy7zl2f2ypcnd5pc8r8n7z7ssxkq20d4xfxlgamr";
+    hash = "sha256-d1WJLqkdC7QgzuYdnxYhajD3DtCpgceWCAxGrk0KKew=";
   };
 
   # Tests appear to be broken with import errors within the project structure
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [
     gtksourceview3
@@ -35,7 +37,19 @@ python3Packages.buildPythonApplication rec {
     pyinotify
     xlib
     pygobject3
+    packaging
   ];
+
+  runtimeDeps = [
+    zenity
+    wmctrl
+  ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${ lib.makeBinPath runtimeDeps })
+  '';
 
   postInstall = ''
     # remove Qt version which we currently do not support

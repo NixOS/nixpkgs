@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fascinating electronics logic puzzles, game where you'll learn how to build clocks, diodes, and logic gates";
+    mainProgram = "Wireworld";
     license = with licenses; [
       mit
       ofl
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
     ];
     downloadPage = "https://ldjam.com/events/ludum-dare/53/wireworld";
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
   };
 
 }

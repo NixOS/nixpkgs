@@ -17,18 +17,16 @@
 , libadwaita
 , librsvg
 , rustc
-, rust
-, writeText
 , cargo
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-tour";
-  version = "44.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Bt52d90cWQ0OozoDLJzPTDfGK8ViFbgjyHnkLuYwwrY=";
+    hash = "sha256-8yZSqp1+8GQ3YM5jkyCCz9NkHnczt2xCm3jQl4O3xGo=";
   };
 
   cargoVendorDir = "vendor";
@@ -60,16 +58,6 @@ stdenv.mkDerivation rec {
     librsvg
   ];
 
-  mesonFlags =
-    let
-      # ERROR: 'rust' compiler binary not defined in cross or native file
-      crossFile = writeText "cross-file.conf" ''
-        [binaries]
-        rust = [ 'rustc', '--target', '${rust.toRustTargetSpec stdenv.hostPlatform}' ]
-      '';
-    in
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -79,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
     description = "GNOME Greeter & Tour";
+    mainProgram = "gnome-tour";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

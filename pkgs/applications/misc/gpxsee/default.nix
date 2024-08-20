@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.9";
+  version = "13.23";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = finalAttrs.version;
-    hash = "sha256-vzbZN+0lDSmvZnQCuvNJCYHTYKqErFhW4RI5Mfbgr6o=";
+    hash = "sha256-GC1Csxhr2uh9oLgC+mFxJZiwCO7TMI2ljv6GMdEiuZQ=";
   };
 
   buildInputs = [
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = isQt6 && stdenv.isDarwin;
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     description = "GPS log file viewer and analyzer";
+    mainProgram = "gpxsee";
     homepage = "https://www.gpxsee.org/";
     license = lib.licenses.gpl3Only;
     longDescription = ''

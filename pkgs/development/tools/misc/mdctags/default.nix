@@ -11,12 +11,13 @@ rustPlatform.buildRustPackage {
     sha256 = "14gryhgh9czlkfk75ml0620c6v8r74i6h3ykkkmc7gx2z8h1jxrb";
   };
 
-  cargoSha256 = "1kdbrcpvxiq91m5vq33vzjhsp4j3flzrpbj5hmxf0k3al1a7qk1g";
+  cargoHash = "sha256-L0x8VKBqTOB6hUWumz91Q5Krofx7DLxLDQnHvi/Lq80=";
 
   meta = {
     description = "tags for markdown file";
     homepage = "https://github.com/wsdjeg/mdctags.rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pacien ];
+    mainProgram = "mdctags";
   };
 }

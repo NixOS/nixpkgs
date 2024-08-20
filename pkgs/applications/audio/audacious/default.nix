@@ -1,26 +1,28 @@
 { lib
 , stdenv
 , audacious-plugins
-, fetchurl
-, gettext
+, fetchFromGitHub
 , meson
 , ninja
 , pkg-config
 , qtbase
+, qtsvg
+, qtwayland
 , wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "audacious";
-  version = "4.3.1";
+  version = "4.4";
 
-  src = fetchurl {
-    url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "sha256-heniaEFQW1HjQu5yotBfGb74lPVnoCnrs/Pgwa20IEI=";
+  src = fetchFromGitHub {
+    owner = "audacious-media-player";
+    repo = "audacious";
+    rev = "${pname}-${version}";
+    hash = "sha256-qAJztvNI3uGmQfECJJ7tJ/xLLgMU5OiW0O3ZSJhvt0k=";
   };
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
     pkg-config
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
+    qtsvg
+    qtwayland
   ];
 
   mesonFlags = [
@@ -38,14 +42,17 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString (audacious-plugins != null) ''
     ln -s ${audacious-plugins}/lib/audacious $out/lib
+    ln -s ${audacious-plugins}/share/audacious/Skins $out/share/audacious/
   '';
 
-  meta = with lib; {
-    description = "A lightweight and versatile audio player";
-    homepage = "https://audacious-media-player.org/";
-    maintainers = with maintainers; [ eelco ramkromberg ttuegel thiagokokada ];
-    platforms = with platforms; linux;
-    license = with licenses; [
+  meta = {
+    description = "Lightweight and versatile audio player";
+    homepage = "https://audacious-media-player.org";
+    downloadPage = "https://github.com/audacious-media-player/audacious";
+    mainProgram = "audacious";
+    maintainers = with lib.maintainers; [ eelco ramkromberg ttuegel thiagokokada ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       bsd2
       bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
       gpl2

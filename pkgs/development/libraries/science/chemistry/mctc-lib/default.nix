@@ -2,9 +2,11 @@
 , lib
 , fetchFromGitHub
 , gfortran
+, meson
+, ninja
 , pkg-config
+, python3
 , json-fortran
-, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -18,19 +20,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-AXjg/ZsitdDf9fNoGVmVal1iZ4/sxjJb7A9W4yye/rg=";
   };
 
-  nativeBuildInputs = [ gfortran pkg-config cmake ];
+  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
 
   buildInputs = [ json-fortran ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}/" ""
-  '';
+  outputs = [ "out" "dev" ];
 
   doCheck = true;
 
+  postPatch = ''
+    patchShebangs --build config/install-mod.py
+  '';
+
   meta = with lib; {
     description = "Modular computation tool chain library";
+    mainProgram = "mctc-convert";
     homepage = "https://github.com/grimme-lab/mctc-lib";
     license = licenses.asl20;
     platforms = platforms.linux;

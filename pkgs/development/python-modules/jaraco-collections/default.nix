@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, jaraco-classes
-, jaraco-text
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  jaraco-classes,
+  jaraco-text,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-collections";
-  version = "4.3.0";
+  version = "5.0.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jaraco.collections";
     inherit version;
-    hash = "sha256-dP/CP8z+5N4KLr9VajNnW2o8AD1jNZR9MSKgvIgiyOQ=";
+    hash = "sha256-gIYxsXS4Sk4qWSSQ1i9i38FdgEeg9xVyYJjcQ7gabPo=";
   };
 
   postPatch = ''
@@ -27,8 +28,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     jaraco-classes
@@ -46,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/jaraco.collections";
     changelog = "https://github.com/jaraco/jaraco.collections/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

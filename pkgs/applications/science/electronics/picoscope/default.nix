@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, dpkg, makeWrapper , mono, gtk-sharp-3_0
-, glib, libusb1 , zlib, gtk3-x11, callPackage
+, glib, libusb1 , zlib, gtk3-x11, callPackage, writeTextDir
 , scopes ? [
   "picocv"
   "ps2000"
@@ -15,13 +15,12 @@
 ] }:
 
 let
-  shared_meta = lib:
-    with lib; {
-      homepage = "https://www.picotech.com/downloads/linux";
-      maintainers = with maintainers; [ expipiplus1 wirew0rm ] ++ teams.lumiguide.members;
-      platforms = [ "x86_64-linux" ];
-      license = licenses.unfree;
-    };
+  shared_meta = lib: {
+    homepage = "https://www.picotech.com/downloads/linux";
+    maintainers = with lib.maintainers; [ expipiplus1 wirew0rm ] ++ lib.teams.lumiguide.members;
+    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.unfree;
+  };
 
   libpicoipp = callPackage ({ stdenv, lib, fetchurl, autoPatchelfHook, dpkg }:
     stdenv.mkDerivation rec {
@@ -39,17 +38,16 @@ let
         install -Dt $out/usr/share/doc/libpicoipp usr/share/doc/libpicoipp/copyright
         runHook postInstall
       '';
-      meta = with lib;
-        shared_meta lib // {
-          sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-          description = "library for picotech oscilloscope software";
-        };
+      meta = shared_meta lib // {
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        description = "library for picotech oscilloscope software";
+      };
     }) { };
 
   # If we don't have a platform available, put a dummy version here, so at
   # least evaluation succeeds.
   sources =
-    (lib.importJSON ./sources.json).${stdenv.system} or { picoscope.version = "unknown"; };
+    (lib.importJSON ./sources.json).${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   scopePkg = name:
     { url, version, sha256 }:
@@ -114,7 +112,7 @@ in stdenv.mkDerivation rec {
   # services.udev.packages = [ pkgs.picoscope.rules ];
   # users.groups.pico = {};
   # users.users.you.extraGroups = [ "pico" ];
-  passthru.rules = lib.writeTextDir "lib/udev/rules.d/95-pico.rules" ''
+  passthru.rules = writeTextDir "lib/udev/rules.d/95-pico.rules" ''
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="0ce9", MODE="664",GROUP="pico"
   '';
 

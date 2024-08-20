@@ -1,25 +1,30 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "aioeagle";
   version = "1.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = version;
-    sha256 = "117nb50cxwrixif2r6fxmr9v0jxkcamm816v48hbhyc660w6xvk4";
+    repo = "aioeagle";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZO5uODCGebggItsEVKtis0uwU67dmSxc7DHzzkBZ9oQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     xmltodict
   ];

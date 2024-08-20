@@ -1,37 +1,37 @@
-{ lib
-, asgiref
-, buildPythonPackage
-, certifi
-, charset-normalizer
-, cvss
-, deepl
-, django
-, fetchFromGitHub
-, gql
-, idna
-, markdown-it-py
-, mdurl
-, pygments
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, reptor
-, requests
-, rich
-, setuptools
-, sqlparse
-, termcolor
-, toml
-, tomli-w
-, urllib3
-, xmltodict
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  certifi,
+  charset-normalizer,
+  cvss,
+  deepl,
+  django,
+  fetchFromGitHub,
+  gql,
+  idna,
+  markdown-it-py,
+  mdurl,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  sqlparse,
+  termcolor,
+  tomli,
+  tomli-w,
+  tomlkit,
+  urllib3,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.5";
-  format = "pyproject";
+  version = "0.21";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -39,14 +39,15 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-TN4ti860bMegxsCMhSxVQwiTLCB9nl+CJ+xDzJQcRuE=";
+    hash = "sha256-XJCysRGCg5V3ftSsu611mS8btbdebs1EOPTp1Z/6PJ0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+
+  dependencies = [
     asgiref
     certifi
     charset-normalizer
@@ -61,19 +62,16 @@ buildPythonPackage rec {
     rich
     sqlparse
     termcolor
-    toml
+    tomli
+    tomlkit
     tomli-w
     urllib3
     xmltodict
   ];
 
   passthru.optional-dependencies = {
-    ghostwriter = [
-      gql
-    ] ++ gql.optional-dependencies.aiohttp;
-    translate = [
-      deepl
-    ];
+    ghostwriter = [ gql ] ++ gql.optional-dependencies.aiohttp;
+    translate = [ deepl ];
   };
 
   nativeCheckInputs = [
@@ -85,9 +83,7 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "reptor"
-  ];
+  pythonImportsCheck = [ "reptor" ];
 
   disabledTestPaths = [
     # Tests want to use pip install dependencies
@@ -98,11 +94,11 @@ buildPythonPackage rec {
     # Tests need network access
     "TestDummy"
     "TestIntegration"
-
   ];
 
   meta = with lib; {
     description = "Module to do automated pentest reporting with SysReptor";
+    mainProgram = "reptor";
     homepage = "https://github.com/Syslifters/reptor";
     changelog = "https://github.com/Syslifters/reptor/releases/tag/${version}";
     license = licenses.mit;

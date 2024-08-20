@@ -5,13 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "5.6";
+  version = "5.9";
+  outputs = [ "out" "tools" ];
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    sha256 = "sha256-QXs42HY2h/s2cT1pG2QjSV2HVAjpo2WSymXEYGgF8rI=";
+    sha256 = "sha256-YFQcqRZenJUdTnlYM7gPnIxU47dytSHk5ALdbpSf5Ms=";
   };
 
   preConfigure = "cd src";
@@ -43,8 +44,16 @@ stdenv.mkDerivation rec {
     nfs-utils
   ];
 
+  postPatch = ''
+    substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
+  '';
+
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
+  '';
+
+  postInstall = ''
+    install -Dm755 $src/src/tools/mount.9P $tools/bin/mount.9P
   '';
 
   meta = with lib; {
@@ -53,5 +62,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
+    mainProgram = "ganesha.nfsd";
+    outputsToInstall = [ "out" "tools" ];
   };
 }

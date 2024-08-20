@@ -11,10 +11,10 @@ Subject: [PATCH] hostnamed, localed, timedated: disable methods that change
  3 files changed, 25 insertions(+)
 
 diff --git a/src/hostname/hostnamed.c b/src/hostname/hostnamed.c
-index 9ef45f8e75..99b1ec2e36 100644
+index 82d08803fa..8e40b77eba 100644
 --- a/src/hostname/hostnamed.c
 +++ b/src/hostname/hostnamed.c
-@@ -1053,6 +1053,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
+@@ -1116,6 +1116,9 @@ static int method_set_static_hostname(sd_bus_message *m, void *userdata, sd_bus_
          if (r < 0)
                  return r;
  
@@ -24,7 +24,7 @@ index 9ef45f8e75..99b1ec2e36 100644
          name = empty_to_null(name);
  
          context_read_etc_hostname(c);
-@@ -1116,6 +1119,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
+@@ -1178,6 +1181,9 @@ static int set_machine_info(Context *c, sd_bus_message *m, int prop, sd_bus_mess
          if (r < 0)
                  return r;
  
@@ -35,10 +35,10 @@ index 9ef45f8e75..99b1ec2e36 100644
  
          context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index f544a73580..ce00c262cc 100644
+index c0d104578d..51a714ee23 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
-@@ -229,6 +229,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
+@@ -226,6 +226,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
  
          use_localegen = locale_gen_check_available();
  
@@ -48,7 +48,7 @@ index f544a73580..ce00c262cc 100644
          /* If single locale without variable name is provided, then we assume it is LANG=. */
          if (strv_length(l) == 1 && !strchr(l[0], '=')) {
                  if (!locale_is_valid(l[0]))
-@@ -347,6 +350,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
+@@ -343,6 +346,9 @@ static int method_set_vc_keyboard(sd_bus_message *m, void *userdata, sd_bus_erro
          if (r < 0)
                  return bus_log_parse_error(r);
  
@@ -58,7 +58,7 @@ index f544a73580..ce00c262cc 100644
          vc_context_empty_to_null(&in);
  
          r = vc_context_verify_and_warn(&in, LOG_ERR, error);
-@@ -465,6 +471,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
+@@ -460,6 +466,9 @@ static int method_set_x11_keyboard(sd_bus_message *m, void *userdata, sd_bus_err
          if (r < 0)
                  return bus_log_parse_error(r);
  
@@ -69,10 +69,10 @@ index f544a73580..ce00c262cc 100644
  
          r = x11_context_verify_and_warn(&in, LOG_ERR, error);
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index ad1d492d6b..331af34505 100644
+index e3b4367ec0..448aa7e94d 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
-@@ -665,6 +665,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
+@@ -673,6 +673,10 @@ static int method_set_timezone(sd_bus_message *m, void *userdata, sd_bus_error *
          if (r < 0)
                  return r;
  
@@ -83,7 +83,7 @@ index ad1d492d6b..331af34505 100644
          if (!timezone_is_valid(z, LOG_DEBUG))
                  return sd_bus_error_setf(error, SD_BUS_ERROR_INVALID_ARGS, "Invalid or not installed time zone '%s'", z);
  
-@@ -743,6 +747,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
+@@ -750,6 +754,9 @@ static int method_set_local_rtc(sd_bus_message *m, void *userdata, sd_bus_error
          if (r < 0)
                  return r;
  
@@ -93,7 +93,7 @@ index ad1d492d6b..331af34505 100644
          if (lrtc == c->local_rtc && !fix_system)
                  return sd_bus_reply_method_return(m, NULL);
  
-@@ -923,6 +930,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
+@@ -928,6 +935,9 @@ static int method_set_ntp(sd_bus_message *m, void *userdata, sd_bus_error *error
          if (r < 0)
                  return r;
  

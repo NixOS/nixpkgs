@@ -1,20 +1,22 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  unittestCheckHook,
+  mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname = "cron_descriptor";
-  version = "1.2.35";
+  pname = "cron-descriptor";
+  version = "1.4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-m+h91cddmEPHCeUWWNpTvb89mFwm8ty8tTnw3YDjCFo=";
+    hash = "sha256-Bvg2diheQihhiCVJjHqdFxbatb/gXS/aRogpzhIproE=";
   };
 
   # remove tests_require, as we don't do linting anyways
@@ -22,13 +24,12 @@ buildPythonPackage rec {
     sed -i "/'pep8\|flake8\|pep8-naming',/d" setup.py
   '';
 
-  checkInputs = [
-    mock
-  ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  nativeCheckInputs = [
+    mock
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "cron_descriptor" ];
 

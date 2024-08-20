@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/example/unpfs";
 
-  cargoSha256 = "sha256-v8hbxKuxux0oYglEIK5dM9q0oBQzjyYDP1JB1cYR/T0=";
+  cargoHash = "sha256-v8hbxKuxux0oYglEIK5dM9q0oBQzjyYDP1JB1cYR/T0=";
 
   RUSTC_BOOTSTRAP = 1;
 
@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
 
     # macOS build fails: https://github.com/pfpacket/rust-9p/issues/7
     platforms = with platforms; linux;
+    mainProgram = "unpfs";
   };
 }

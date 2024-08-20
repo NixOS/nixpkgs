@@ -1,14 +1,15 @@
 diff --git a/src/thumbnailer.js b/src/thumbnailer.js
 old mode 100644
 new mode 100755
-index ed6350ea..83d832cb
+index 4f7a2840..55c20199
 --- a/src/thumbnailer.js
 +++ b/src/thumbnailer.js
-@@ -1,3 +1,4 @@
+@@ -1,3 +1,5 @@
 +#!/usr/bin/env gjs --module
- import Cairo from 'cairo';
- import Gdk from 'gi://Gdk?version=3.0';
- import Gio from 'gi://Gio';
++
+ // SPDX-FileCopyrightText: 2019 daronion <stefanosdimos.98@gmail.com>
+ // SPDX-FileCopyrightText: 2019 Florian Müllner <fmuellner@gnome.org>
+ //
 diff --git a/src/urlPreview.js b/src/urlPreview.js
 index 5f7931e4..d2282900 100644
 --- a/src/urlPreview.js

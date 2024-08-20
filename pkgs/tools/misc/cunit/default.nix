@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A Unit Testing Framework for C";
+    description = "Unit Testing Framework for C";
 
     longDescription = ''
       CUnit is a lightweight system for writing, administering, and running

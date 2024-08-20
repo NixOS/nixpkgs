@@ -4,7 +4,8 @@
   qtwebengine,
   kcmutils, kcrash, kdbusaddons, kparts, kwindowsystem,
   akonadi, grantleetheme, kontactinterface, kpimtextedit,
-  mailcommon, libkdepim, pimcommon
+  mailcommon, libkdepim, pimcommon,
+  akregator, kaddressbook, kmail, knotes, korganizer, zanshin
 }:
 
 mkDerivation {
@@ -12,6 +13,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kontact/";
     description = "Personal information manager";
+    mainProgram = "kontact";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
@@ -21,5 +23,6 @@ mkDerivation {
     kcmutils kcrash kdbusaddons kparts kwindowsystem
     akonadi grantleetheme kontactinterface kpimtextedit
     mailcommon libkdepim pimcommon
+    akregator kaddressbook kmail knotes korganizer zanshin
   ];
 }

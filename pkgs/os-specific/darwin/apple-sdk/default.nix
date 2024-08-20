@@ -1,9 +1,6 @@
-{ stdenv, fetchurl, libxml2, xar, cpio, pkgs, python3Minimal, pbzx, lib, darwin-stubs, print-reexports }:
+{ stdenv, stdenvNoCC, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
 
 let
-  xarMinimal = xar.override {
-    libxml2 = libxml2.override { pythonSupport = false; };
-  };
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     pname = "MacOS_SDK";
@@ -19,27 +16,23 @@ let
       sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
-    nativeBuildInputs = [ xarMinimal cpio python3Minimal pbzx ];
+    nativeBuildInputs = [ cpio pbzx ];
 
     outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
-      xar -x -f $src
+      pbzx $src | cpio -idm
     '';
 
+    sourceRoot = ".";
+
     installPhase = ''
-      start="$(pwd)"
       mkdir -p $out
-      cd $out
-      pbzx -n $start/Payload | cpio -idm
 
-      mv usr/* .
-      rmdir usr
+      cp -R System/Library $out
+      cp -R usr/* $out
 
-      mv System/* .
-      rmdir System
-
-      pushd lib
+      pushd $out/lib
       cp ${darwin-stubs}/usr/lib/libcups*.tbd .
       ln -s libcups.2.tbd      libcups.tbd
       ln -s libcupscgi.1.tbd   libcupscgi.tbd
@@ -170,17 +163,6 @@ let
 
     propagatedBuildInputs = builtins.attrValues deps;
 
-    # don't use pure CF for dylibs that depend on frameworks
-    setupHook = ./framework-setup-hook.sh;
-
-    # Not going to be more specific than this for now
-    __propagatedImpureHostDeps = lib.optionals (name != "Kernel") [
-      # The setup-hook ensures that everyone uses the impure CoreFoundation who uses these SDK frameworks, so let's expose it
-      "/System/Library/Frameworks/CoreFoundation.framework"
-      "/System/Library/Frameworks/${name}.framework"
-      "/System/Library/Frameworks/${name}.framework/${name}"
-    ];
-
     meta = with lib; {
       description = "Apple SDK framework ${name}";
       maintainers = with maintainers; [ copumpkin ];
@@ -270,6 +252,15 @@ in rec {
         ln -s libsandbox.1.tbd $out/lib/libsandbox.tbd
       '';
     };
+
+    simd = stdenvNoCC.mkDerivation {
+      name = "apple-lib-simd";
+
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+
+      buildCommand = "echo 'simd library not available in the 10.12 SDK'; exit 1";
+    };
   };
 
   overrides = super: {
@@ -356,6 +347,14 @@ in rec {
   });
 
   frameworks = bareFrameworks // overrides bareFrameworks;
+
+  inherit darwin-stubs;
+
+  objc4 = pkgs.darwin.libobjc;
+
+  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12.4"; };
+
+  inherit (pkgs.darwin) Libsystem;
 
   inherit sdk;
 }

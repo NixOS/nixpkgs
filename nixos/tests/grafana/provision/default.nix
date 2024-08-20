@@ -1,7 +1,7 @@
 import ../../make-test-python.nix ({ lib, pkgs, ... }:
 
 let
-  inherit (lib) mkMerge nameValuePair maintainers;
+  inherit (lib) mkMerge maintainers;
 
   baseGrafanaConf = {
     services.grafana = {
@@ -11,7 +11,7 @@ let
         analytics.reporting_enabled = false;
 
         server = {
-          http_addr = "localhost";
+          http_addr = "::1";
           domain = "localhost";
         };
 
@@ -22,47 +22,17 @@ let
       };
     };
 
-    system.activationScripts.setup-grafana = {
-      deps = [ "users" ];
-      text = ''
-        mkdir -p /var/lib/grafana/dashboards
-        chown -R grafana:grafana /var/lib/grafana
-        chmod 0700 -R /var/lib/grafana/dashboards
-        cp ${pkgs.writeText "test.json" (builtins.readFile ./test_dashboard.json)} /var/lib/grafana/dashboards/
-      '';
-    };
+    systemd.tmpfiles.rules =
+      let
+        dashboard = pkgs.writeText "test.json" (builtins.readFile ./test_dashboard.json);
+      in
+      [
+        "d /var/lib/grafana/dashboards 0700 grafana grafana -"
+        "C+ /var/lib/grafana/dashboards/test.json - - - - ${dashboard}"
+      ];
   };
 
   extraNodeConfs = {
-    provisionLegacyNotifiers = {
-      services.grafana.provision = {
-        datasources.settings = {
-          apiVersion = 1;
-          datasources = [{
-            name = "Test Datasource";
-            type = "testdata";
-            access = "proxy";
-            uid = "test_datasource";
-          }];
-        };
-        dashboards.settings = {
-          apiVersion = 1;
-          providers = [{
-            name = "default";
-            options.path = "/var/lib/grafana/dashboards";
-          }];
-        };
-        notifiers = [{
-          uid = "test_notifiers";
-          name = "Test Notifiers";
-          type = "email";
-          settings = {
-            singleEmail = true;
-            addresses = "test@test.com";
-          };
-        }];
-      };
-    };
     provisionNix = {
       services.grafana.provision = {
         datasources.settings = {
@@ -207,51 +177,41 @@ in {
     for description, machine in [nodeNix, nodeYaml, nodeYamlDir]:
         with subtest(f"Should start provision node: {description}"):
             machine.wait_for_unit("grafana.service")
-            machine.wait_for_open_port(3000)
+            machine.wait_for_open_port(3000, addr="::1")
 
         with subtest(f"Successful datasource provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/datasources/uid/test_datasource | grep Test\ Datasource"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/datasources/uid/test_datasource | grep Test\ Datasource"
             )
 
         with subtest(f"Successful dashboard provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/dashboards/uid/test_dashboard | grep Test\ Dashboard"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/dashboards/uid/test_dashboard | grep Test\ Dashboard"
             )
 
         with subtest(f"Successful rule provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/alert-rules/test_rule | grep Test\ Rule"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/alert-rules/test_rule | grep Test\ Rule"
             )
 
         with subtest(f"Successful contact point provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/contact-points | grep Test\ Contact\ Point"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/contact-points | grep Test\ Contact\ Point"
             )
 
         with subtest(f"Successful policy provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/policies | grep Test\ Contact\ Point"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/policies | grep Test\ Contact\ Point"
             )
 
         with subtest(f"Successful template provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/templates | grep Test\ Template"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/templates | grep Test\ Template"
             )
 
         with subtest("Successful mute timings provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
             )
-
-    with subtest("Successful notifiers provision"):
-        provisionLegacyNotifiers.wait_for_unit("grafana.service")
-        provisionLegacyNotifiers.wait_for_open_port(3000)
-        print(provisionLegacyNotifiers.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/alert-notifications/uid/test_notifiers"
-        ))
-        provisionLegacyNotifiers.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/alert-notifications/uid/test_notifiers | grep Test\ Notifiers"
-        )
   '';
 })

@@ -79,6 +79,11 @@ if [ "$nonFlagArgs" = 0 ]; then
     dontLink=1
 fi
 
+# Arocc does not link
+if [ "@isArocc@" = 1 ]; then
+    dontLink=1
+fi
+
 # Optionally filter out paths not refering to the store.
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     kept=()
@@ -246,7 +251,7 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
 fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    responseFile=$(mktemp --tmpdir cc-params.XXXXXX)
+    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
     trap 'rm -f -- "$responseFile"' EXIT
     printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \

@@ -38,11 +38,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
+    description = "Tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
     homepage = "https://github.com/bbonev/dhcpdump";
     changelog = "https://github.com/bbonev/dhcpdump/releases/tag/v${version}";
     platforms = platforms.linux;
     maintainers = with maintainers; [ nickcao ];
     license = licenses.bsd2;
+    mainProgram = "dhcpdump";
   };
 }

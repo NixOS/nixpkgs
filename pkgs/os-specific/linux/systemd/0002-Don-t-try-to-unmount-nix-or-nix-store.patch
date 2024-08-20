@@ -14,10 +14,10 @@ Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
  2 files changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
-index 4ffec25c75..b99031c54e 100644
+index eac5bb8d3b..d8187bfa99 100644
 --- a/src/shared/fstab-util.c
 +++ b/src/shared/fstab-util.c
-@@ -43,6 +43,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
+@@ -66,6 +66,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
          /* Don't bother with the OS data itself */
          if (PATH_IN_SET(mount,
                          "/",
@@ -27,7 +27,7 @@ index 4ffec25c75..b99031c54e 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 1586c2e214..fcae95f824 100644
+index ca6d36e054..0a9227c9a8 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
 @@ -170,8 +170,10 @@ int mount_points_list_get(const char *mountinfo, MountPoint **head) {

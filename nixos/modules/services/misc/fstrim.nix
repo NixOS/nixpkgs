@@ -11,12 +11,12 @@ in {
   options = {
 
     services.fstrim = {
-      enable = mkEnableOption (lib.mdDoc "periodic SSD TRIM of mounted partitions in background");
+      enable = mkEnableOption "periodic SSD TRIM of mounted partitions in background";
 
       interval = mkOption {
         type = types.str;
         default = "weekly";
-        description = lib.mdDoc ''
+        description = ''
           How often we run fstrim. For most desktop and server systems
           a sufficient trimming frequency is once a week.
 
@@ -41,5 +41,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = [ ];
 }

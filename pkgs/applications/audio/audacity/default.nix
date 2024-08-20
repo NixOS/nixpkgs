@@ -1,10 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , python3
 , gettext
@@ -15,6 +14,8 @@
 , lv2
 , lilv
 , mpg123
+, opusfile
+, rapidjson
 , serd
 , sord
 , sqlite
@@ -29,7 +30,7 @@
 , libid3tag
 , libopus
 , libuuid
-, ffmpeg_4
+, ffmpeg_7
 , soundtouch
 , pcre
 , portaudio # given up fighting their portaudio.patch?
@@ -61,13 +62,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.3.3";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "audacity";
+    repo = "audacity";
     rev = "Audacity-${version}";
-    hash = "sha256-m38Awdv2ew+MKqd68x/ZsRBwidM2KJ3BRykIKgnFSx4=";
+    hash = "sha256-MZ/u4wUUhDo1Mm9jxOY4MtzeV2797meT4HjYi5bCSM0=";
   };
 
   postPatch = ''
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11.0") ''
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 
@@ -87,14 +88,14 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
 
   buildInputs = [
     expat
-    ffmpeg_4
+    ffmpeg_7
     file
     flac
     gtk3
@@ -109,8 +110,10 @@ stdenv.mkDerivation rec {
     lilv
     lv2
     mpg123
+    opusfile
     pcre
     portmidi
+    rapidjson
     serd
     sord
     soundtouch
@@ -168,12 +171,15 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # Test fails
 
+  dontWrapGApps = true;
+
   # Replace audacity's wrapper, to:
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram "$out/bin/audacity" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_4 ]} \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_7 ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
   '' + lib.optionalString stdenv.isDarwin ''
@@ -184,6 +190,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sound editor with graphical UI";
+    mainProgram = "audacity";
     homepage = "https://www.audacityteam.org";
     changelog = "https://github.com/audacity/audacity/releases";
     license = with licenses; [
@@ -195,7 +202,7 @@ stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [ lheckemann veprbl wegank ];
+    maintainers = with maintainers; [ veprbl wegank ];
     platforms = platforms.unix;
   };
 }

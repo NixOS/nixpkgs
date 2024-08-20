@@ -58,15 +58,7 @@ in
       # Hyper-V support.
       "hv_storvsc"
     ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
-      # Most of the following falls into two categories:
-      #  - early KMS / early display
-      #  - early storage (e.g. USB) support
-
-      # Allows using framebuffer configured by the initial boot firmware
-      "simplefb"
-
       # Allwinner support
-
       # Required for early KMS
       "sun4i-drm"
       "sun8i-mixer" # Audio, but required for kms
@@ -75,7 +67,6 @@ in
       "pwm-sun4i"
 
       # Broadcom
-
       "vc4"
     ] ++ lib.optionals pkgs.stdenv.isAarch64 [
       # Most of the following falls into two categories:

@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tessen";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchFromSourcehut {
     owner = "~ayushnix";
     repo  = pname;
     rev = "v${version}";
-    sha256  = "sha256-8hhYOd5h55kl7ChqdyRzsaxzWLpX41aqG8LfznmbFWw=";
+    sha256  = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles scdoc ];
@@ -44,9 +44,10 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sr.ht/~ayushnix/tessen";
-    description = "An interactive menu to autotype and copy Pass and GoPass data";
+    description = "Interactive menu to autotype and copy Pass and GoPass data";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ monaaraj ];
+    mainProgram = "tessen";
   };
 }

@@ -1,17 +1,17 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{ lib, buildNpmPackage, fetchFromGitHub, mystmd, testers, nix-update-script }:
 
 buildNpmPackage rec {
   pname = "mystmd";
-  version = "1.1.22";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mystmd";
     rev = "mystmd@${version}";
-    hash = "sha256-jx/UCC/Cl5kqAbMzeikTmrx9xWS02OCp3rn0pvtIAPY=";
+    hash = "sha256-aZUDIQs4n2s842tq23pU/ZUW+1fF4XXEmgnapdZH8wQ=";
   };
 
-  npmDepsHash = "sha256-1qQ19iB7N+KvO1uUdEMU1iN91FMQs4wzfTCdv6wfn30=";
+  npmDepsHash = "sha256-IXdmzuQaBEbwjXssYaDLvxyTl+i2U/JTalg8lSGvuR0=";
 
   dontNpmInstall = true;
 
@@ -23,12 +23,20 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = mystmd;
+      version = "v${version}";
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Command line tools for working with MyST Markdown";
     homepage = "https://github.com/executablebooks/mystmd";
     changelog = "https://github.com/executablebooks/mystmd/blob/${src.rev}/packages/myst-cli/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "myst";
   };
 }

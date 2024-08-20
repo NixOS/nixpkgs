@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cbmc";
-  version = "5.91.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-7DzhGEDS9T6WIjGoxOw9Gf/q+tYNFJDPbQUBV3tbn/I=";
+    sha256 = "sha256-7syRpCNL7TRZoJaNrmAdahNy7IyovyniYyOwD/lzhuw=";
   };
 
   nativeBuildInputs = [
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.unix;
-    # https://github.com/diffblue/cbmc/issues/7423
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    # error: no member named 'aligned_alloc' in the global namespace
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

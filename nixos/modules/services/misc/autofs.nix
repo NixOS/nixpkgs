@@ -21,7 +21,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Mount filesystems on demand. Unmount them automatically.
           You may also be interested in afuse.
         '';
@@ -46,7 +46,7 @@ in
             /auto file:''${mapConf}
           '''
         '';
-        description = lib.mdDoc ''
+        description = ''
           Contents of `/etc/auto.master` file. See {command}`auto.master(5)` and {command}`autofs(5)`.
         '';
       };
@@ -54,13 +54,13 @@ in
       timeout = mkOption {
         type = types.int;
         default = 600;
-        description = lib.mdDoc "Set the global minimum timeout, in seconds, until directories are unmounted";
+        description = "Set the global minimum timeout, in seconds, until directories are unmounted";
       };
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Pass -d and -7 to automount and write log to the system journal.
         '';
       };
@@ -74,7 +74,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules = [ "autofs4" ];
+    boot.kernelModules = [ "autofs" ];
 
     systemd.services.autofs =
       { description = "Automounts filesystems on demand";

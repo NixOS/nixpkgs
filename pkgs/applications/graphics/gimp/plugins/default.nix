@@ -2,10 +2,10 @@
 # If you just want a subset of plug-ins, you can specify them explicitly:
 # `gimp-with-plugins.override { plugins = with gimpPlugins; [ gap ]; }`.
 
-{ config, lib, pkgs }:
+{ lib, pkgs }:
 
 let
-  inherit (pkgs) stdenv fetchurl fetchpatch pkg-config intltool glib fetchFromGitHub;
+  inherit (pkgs) stdenv fetchurl fetchpatch fetchpatch2 pkg-config intltool glib fetchFromGitHub fetchFromGitLab;
 in
 
 lib.makeScope pkgs.newScope (self:
@@ -102,7 +102,7 @@ in
       description = "Batch Image Manipulation Plugin for GIMP";
       homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -111,12 +111,34 @@ in
        Video
     */
     pname = "gap";
-    version = "2.6.0";
+    version = "2.6.0-unstable-2023-05-20";
 
-    src = fetchurl {
-      url = "https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2";
-      sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
+    src = fetchFromGitLab {
+      domain = "gitlab.gnome.org";
+      owner = "Archive";
+      repo = "gimp-gap";
+      rev = "b2aa06cc7ee4ae1938f14640fe46b75ef5b15982";
+      hash = "sha256-q5TgCy0+iIfxyqJRXsKxiFrWMFSzBqC0SA9MBGTHXcA=";
     };
+
+    nativeBuildInputs = with pkgs; [autoreconfHook];
+
+    postUnpack = ''
+      tar -xf $sourceRoot/extern_libs/ffmpeg.tar.gz -C $sourceRoot/extern_libs
+    '';
+
+    postPatch = let
+      ffmpegPatch = fetchpatch2 {
+        name = "fix-ffmpeg-binutil-2.41.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+        hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
+      };
+    in ''
+      patch -Np1 -i ${ffmpegPatch} -d extern_libs/ffmpeg
+      ffmpegSrc=$(realpath extern_libs/ffmpeg)
+    '';
+
+    configureFlags = ["--with-ffmpegsrcdir=${placeholder "ffmpegSrc"}"];
 
     hardeningDisable = [ "format" ];
 
@@ -125,7 +147,7 @@ in
     };
 
     meta = with lib; {
-      description = "The GIMP Animation Package";
+      description = "GIMP Animation Package";
       homepage = "https://www.gimp.org";
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".

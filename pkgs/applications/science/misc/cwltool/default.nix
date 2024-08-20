@@ -7,32 +7,40 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20230213100550";
-  format = "setuptools";
+  version = "3.1.20240708091337";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
-    repo = pname;
+    repo = "cwltool";
     rev = "refs/tags/${version}";
-    hash = "sha256-BtHkIVadcccnYYX8lRqiCzO+/qFeBaZfdUuu6qrjysk=";
+    hash = "sha256-Umxh8sRBy7fC6+GrcN1q4iO0KVpmUhGPtnqZZK/6c9M=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "ruamel.yaml >= 0.15, < 0.17.22" "ruamel.yaml" \
+      --replace "ruamel.yaml >= 0.16, < 0.19" "ruamel.yaml" \
       --replace "prov == 1.5.1" "prov" \
-      --replace "setup_requires=PYTEST_RUNNER," ""
+      --replace '"schema-salad >= 8.4.20230426093816, < 9",' "" \
+      --replace "PYTEST_RUNNER + " ""
+    substituteInPlace pyproject.toml \
+      --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml" \
+      --replace "mypy==1.10.0" "mypy==1.10.*"
   '';
 
   nativeBuildInputs = [
     git
-  ];
+  ] ++ (with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ]);
 
   propagatedBuildInputs = with python3.pkgs; [
     argcomplete
     bagit
     coloredlogs
     cwl-utils
+    mypy
     mypy-extensions
     prov
     psutil
@@ -42,6 +50,10 @@ python3.pkgs.buildPythonApplication rec {
     ruamel-yaml
     schema-salad
     shellescape
+    spython
+    toml
+    types-psutil
+    types-requests
     typing-extensions
   ];
 
@@ -72,6 +84,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Common Workflow Language reference implementation";
+    mainProgram = "cwltool";
     homepage = "https://www.commonwl.org";
     changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
     license = with licenses; [ asl20 ];

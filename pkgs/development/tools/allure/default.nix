@@ -1,39 +1,48 @@
-{ lib, stdenv, makeWrapper, fetchurl, jre }:
+{ lib
+, stdenv
+, makeWrapper
+, fetchurl
+, jre
+}:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "allure";
-  version = "2.24.1";
-in
-stdenv.mkDerivation rec {
-  inherit pname version;
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = [ jre ];
+  version = "2.30.0";
 
   src = fetchurl {
-    url = "https://github.com/allure-framework/allure2/releases/download/${version}/allure-${version}.tgz";
-    sha256 = "sha256-pUNHE1bJclo8fsHBj6FUHqp6SZtC+RCrmICgn9/PL9c=";
+    url = "https://github.com/allure-framework/allure2/releases/download/${finalAttrs.version}/allure-${finalAttrs.version}.tgz";
+    hash = "sha256-jYdinK7it2MDwrWZmxPHR5YqZhhVIo2vMZDCX38+igU=";
   };
+
   dontConfigure = true;
   dontBuild = true;
 
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
+
   installPhase = ''
-    mkdir -p "$out/share"
+    runHook preInstall
+
+    mkdir -p $out/{bin,share}
     cd "$out/share"
     tar xvzf $src
-    mkdir -p "$out/bin"
-    makeWrapper $out/share/${pname}-${version}/bin/allure $out/bin/${pname} \
+    makeWrapper $out/share/${finalAttrs.meta.mainProgram}-${finalAttrs.version}/bin/allure $out/bin/${finalAttrs.meta.mainProgram} \
       --prefix PATH : "${jre}/bin"
+
+    runHook postInstall
   '';
 
-  dontCheck = true;
-
-  meta = with lib; {
+  meta =  {
     homepage = "https://docs.qameta.io/allure/";
-    description = "Allure Report is a flexible, lightweight multi-language test reporting tool.";
-    longDescription = "Allure Report is a flexible, lightweight multi-language test reporting tool. It provides clear graphical reports and allows everyone involved in the development process to extract the maximum of information from the everyday testing process";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    description = "Allure Report is a flexible, lightweight multi-language test reporting tool";
+    longDescription = ''
+      Allure Report is a flexible, lightweight multi-language test reporting
+      tool providing clear graphical reports and allowing everyone involved
+      in the development process to extract the maximum of information from
+      the everyday testing process.
+      '';
+    license = lib.licenses.asl20;
+    mainProgram = "allure";
+    maintainers = with lib.maintainers; [ happysalada ];
   };
-}
-
+})

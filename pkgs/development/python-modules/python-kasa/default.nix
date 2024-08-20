@@ -1,71 +1,76 @@
-{ lib
-, anyio
-, async-timeout
-, asyncclick
-, buildPythonPackage
-, fetchFromGitHub
-, kasa-crypt
-, orjson
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  asyncclick,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  kasa-crypt,
+  orjson,
+  poetry-core,
+  ptpython,
+  pydantic,
+  pytest-asyncio,
+  pytest-freezer,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.5.3";
-  format = "pyproject";
+  version = "0.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "python-kasa";
+    repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-7GJnkT7FOYzytQyOCP8zU5hUk4SbeC7gc1qkhl5eXGo=";
+    hash = "sha256-ASS84thd54R1Z7+J7nMfUOPmQtJoybWis7C2US/mORs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    anyio
+  dependencies = [
+    aiohttp
     async-timeout
     asyncclick
+    cryptography
     pydantic
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-freezer
     pytest-mock
     pytestCheckHook
     voluptuous
   ];
 
   passthru.optional-dependencies = {
-    speedup = [
+    shell = [
+      ptpython
+      rich
+    ];
+    speedups = [
       kasa-crypt
       orjson
     ];
   };
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   disabledTestPaths = [
     # Skip the examples tests
     "kasa/tests/test_readme_examples.py"
   ];
 
-  pythonImportsCheck = [
-    "kasa"
-  ];
+  pythonImportsCheck = [ "kasa" ];
 
   meta = with lib; {
     description = "Python API for TP-Link Kasa Smarthome products";
@@ -73,5 +78,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kasa";
   };
 }

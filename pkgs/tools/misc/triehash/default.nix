@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = with licenses; mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = perlPackages.perl.meta.platforms;
+    mainProgram = "triehash";
   };
 }

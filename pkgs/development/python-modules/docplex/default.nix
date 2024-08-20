@@ -1,21 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, futures ? null
-, docloud
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  setuptools,
+  futures ? null,
+  docloud,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.25.236";
+  version = "2.27.239";
+  pyproject = true;
 
   # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JWkUtMAROk4cePMuogx9dtyO/ihv6JAnDnXPrVD+UQ8=";
+    hash = "sha256-Ug5+jDBBbamqd0JebzHvjLZoTRRPYWQiJl6g8BK0aMQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=68.2.2" "setuptools>=68.2.2"
+  '';
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     docloud

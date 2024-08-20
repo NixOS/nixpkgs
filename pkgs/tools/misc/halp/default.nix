@@ -5,7 +5,6 @@
 , stdenv
 , darwin
 , unixtools
-, rust
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,7 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/helper/args/mod.rs \
-      --subst-var-by releaseDir target/${rust.toRustTargetSpec stdenv.hostPlatform}/$cargoCheckType
+      --subst-var-by releaseDir target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType
   '';
 
   preCheck = ''
@@ -71,10 +70,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI tool to get help with CLI tools";
+    description = "CLI tool to get help with CLI tools";
     homepage = "https://github.com/orhun/halp";
     changelog = "https://github.com/orhun/halp/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "halp";
   };
 }

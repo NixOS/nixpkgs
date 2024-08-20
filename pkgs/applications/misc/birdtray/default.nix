@@ -31,9 +31,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Mail system tray notification icon for Thunderbird";
+    mainProgram = "birdtray";
     homepage = "https://github.com/gyunaev/birdtray";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Flakebi oxalica ];
+    maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;
   };
 }

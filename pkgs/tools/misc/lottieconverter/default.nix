@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "sot-tech";
-    repo = finalAttrs.pname;
+    repo = "lottieconverter";
     rev = "r${finalAttrs.version}";
     hash = "sha256-oCFQsOQbWzmzClaTOeuEtGo7uXoKYtaJuSLLgqAQP1M=";
   };
@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ CRTified nickcao ];
+    mainProgram = "lottieconverter";
   };
 })

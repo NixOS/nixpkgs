@@ -1,25 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "types-pillow";
-  version = "10.0.0.3";
+  version = "10.2.0.20240520";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "types-Pillow";
-    hash = "sha256-rgyHfTY9o0m7uCxUY8nngDcpDMB9NxTLDOr10vf1yCU=";
+    hash = "sha256-EwuXkZVGX6HhZ22OgcnHwwMZ6OlbEvrpRejw1SUhMQc=";
   };
 
   # Modules doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PIL-stubs"
-  ];
+  pythonImportsCheck = [ "PIL-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for Pillow";

@@ -9,14 +9,14 @@
 }:
 buildGoModule rec {
   pname = "openshift";
-  version = "4.13.0";
-  gitCommit = "e561d37";
+  version = "4.16.0";
+  gitCommit = "fa84651";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "oc";
-    rev = "e561d37285c8bde273ce00d086bea599a9cdd3be";
-    hash = "sha256-/ar96N+MSy0DPdza3UWiyolg1EZPBR6LCku4GV+HppM=";
+    rev = "fa846511dbeb7e08cf77265056397283c6c896f9";
+    hash = "sha256-mGItCpZQqQOKoNm2amwpHrEIcZdVNirQFa7DGvmnR9s=";
   };
 
   vendorHash = null;
@@ -62,6 +62,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ offline bachp moretea stehessel ];
     mainProgram = "oc";
-    platforms = platforms.unix;
   };
 }

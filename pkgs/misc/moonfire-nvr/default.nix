@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , buildNpmPackage
 , fetchFromGitHub
@@ -7,6 +8,7 @@
 , sqlite
 , testers
 , moonfire-nvr
+, darwin
 }:
 
 let
@@ -52,7 +54,9 @@ in rustPlatform.buildRustPackage {
   buildInputs = [
     ncurses
     sqlite
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Security
+  ]);
 
   postInstall = ''
     mkdir -p $out/lib/ui
@@ -76,5 +80,6 @@ in rustPlatform.buildRustPackage {
     changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ gaelreyrol ];
+    mainProgram = "moonfire-nvr";
   };
 }

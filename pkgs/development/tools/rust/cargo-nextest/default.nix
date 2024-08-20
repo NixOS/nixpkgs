@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.61";
+  version = "0.9.72";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    hash = "sha256-kVADlW5XqKAuQ2n0lmEin67CXGkhTVWgJaPMKpvS5Gs=";
+    hash = "sha256-FQM1SVzGgmu6HHijP9kKEJPhhzSLs/jo36b4qnx0lb4=";
   };
 
-  cargoHash = "sha256-IU2oW00VzEV8p3BpqIJZwXvdcaeweAF9nGHwtX+98vY=";
+  cargoHash = "sha256-2ttG9lPIkLRzDPcDNZjROOIIDhcEHfBvs/DTniZtQUY=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Next-generation test runner for Rust projects";
+    mainProgram = "cargo-nextest";
     homepage = "https://github.com/nextest-rs/nextest";
     changelog = "https://nexte.st/CHANGELOG.html";
     license = with licenses; [ mit asl20 ];

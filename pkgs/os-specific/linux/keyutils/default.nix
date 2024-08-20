@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = lib.optionals stdenv.hostPlatform.isStatic "NO_SOLIB=1";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [ "out" "lib" "dev" "man" ];
 
   postPatch = ''
     # https://github.com/archlinux/svntogit-packages/blob/packages/keyutils/trunk/reproducible.patch

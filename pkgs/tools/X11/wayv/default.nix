@@ -32,10 +32,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A gesture control for X11";
+    description = "Gesture control for X11";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/mikemb/wayV";
+    mainProgram = "wayv";
   };
 }

@@ -12,16 +12,18 @@
 , docbook_xml_dtd_42
 , cmocka
 , wafHook
+, buildPackages
 , libxcrypt
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldb";
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchurl {
-    url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
-    hash = "sha256-NY3KEPzScgeshXoNf0NaRtvGzR98ENu4QMGTG/GWXwg=";
+    url = "mirror://samba/ldb/ldb-${finalAttrs.version}.tar.gz";
+    hash = "sha256-yV5Nwy3qiGS3mJnuNAyf3yi0hvRku8OLqZFRoItJP5s=";
   };
 
   outputs = [ "out" "dev" ];
@@ -61,6 +63,9 @@ stdenv.mkDerivation rec {
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
     "--without-ldb-lmdb"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
@@ -70,11 +75,16 @@ stdenv.mkDerivation rec {
 
   stripDebugList = [ "bin" "lib" "modules" ];
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A LDAP-like embedded database";
+    description = "LDAP-like embedded database";
     homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;
+    pkgConfigModules = [ "ldb" ];
     platforms = platforms.all;
   };
-}
+})

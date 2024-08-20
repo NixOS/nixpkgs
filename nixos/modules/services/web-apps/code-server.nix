@@ -7,9 +7,9 @@ let
 in {
   options = {
     services.code-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "code-server");
+      enable = lib.mkEnableOption "code-server";
 
-      package = lib.mkPackageOptionMD pkgs "code-server" {
+      package = lib.mkPackageOption pkgs "code-server" {
         example = ''
           pkgs.vscode-with-extensions.override {
             vscode = pkgs.code-server;
@@ -23,7 +23,7 @@ in {
 
       extraPackages = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional packages to add to the code-server {env}`PATH`.
         '';
         example = lib.literalExpression "[ pkgs.go ]";
@@ -32,7 +32,7 @@ in {
 
       extraEnvironment = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           Additional environment variables to pass to code-server.
         '';
         default = { };
@@ -41,7 +41,7 @@ in {
 
       extraArguments = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional arguments to pass to code-server.
         '';
         example = lib.literalExpression ''[ "--log=info" ]'';
@@ -50,7 +50,7 @@ in {
 
       host = lib.mkOption {
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The host name or IP address the server should listen to.
         '';
         type = lib.types.str;
@@ -58,7 +58,7 @@ in {
 
       port = lib.mkOption {
         default = 4444;
-        description = lib.mdDoc ''
+        description = ''
           The port the server should listen to.
         '';
         type = lib.types.port;
@@ -66,7 +66,7 @@ in {
 
       auth = lib.mkOption {
         default = "password";
-        description = lib.mdDoc ''
+        description = ''
           The type of authentication to use.
         '';
         type = lib.types.enum [ "none" "password" ];
@@ -74,7 +74,7 @@ in {
 
       hashedPassword = lib.mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Create the password with: `echo -n 'thisismypassword' | npx argon2-cli -e`.
         '';
         type = lib.types.str;
@@ -83,7 +83,7 @@ in {
       user = lib.mkOption {
         default = defaultUser;
         example = "yourUser";
-        description = lib.mdDoc ''
+        description = ''
           The user to run code-server as.
           By default, a user named `${defaultUser}` will be created.
         '';
@@ -93,7 +93,7 @@ in {
       group = lib.mkOption {
         default = defaultGroup;
         example = "yourGroup";
-        description = lib.mdDoc ''
+        description = ''
           The group to run code-server under.
           By default, a group named `${defaultGroup}` will be created.
         '';
@@ -102,7 +102,7 @@ in {
 
       extraGroups = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           An array of additional groups for the `${defaultUser}` user.
         '';
         example = [ "docker" ];
@@ -112,7 +112,7 @@ in {
       socket = lib.mkOption {
         default = null;
         example = "/run/code-server/socket";
-        description = lib.mdDoc ''
+        description = ''
           Path to a socket (bind-addr will be ignored).
         '';
         type = lib.types.nullOr lib.types.str;
@@ -120,7 +120,7 @@ in {
 
       socketMode = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
            File mode of the socket.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -128,7 +128,7 @@ in {
 
       userDataDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to the user data directory.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -136,7 +136,7 @@ in {
 
       extensionsDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to the extensions directory.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -145,7 +145,7 @@ in {
       proxyDomain = lib.mkOption {
         default = null;
         example = "code-server.lan";
-        description = lib.mdDoc ''
+        description = ''
           Domain used for proxying ports.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -154,7 +154,7 @@ in {
       disableTelemetry = lib.mkOption {
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Disable telemetry.
         '';
         type = lib.types.bool;
@@ -163,7 +163,7 @@ in {
       disableUpdateCheck = lib.mkOption {
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Disable update check.
           Without this flag, code-server checks every 6 hours against the latest github release and
           then notifies you once every week that a new release is available.
@@ -174,7 +174,7 @@ in {
       disableFileDownloads = lib.mkOption {
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Disable file downloads from Code.
         '';
         type = lib.types.bool;
@@ -183,7 +183,7 @@ in {
       disableWorkspaceTrust = lib.mkOption {
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Disable Workspace Trust feature.
         '';
         type = lib.types.bool;
@@ -192,7 +192,7 @@ in {
       disableGettingStartedOverride = lib.mkOption {
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Disable the coder/coder override in the Help: Getting Started page.
         '';
         type = lib.types.bool;
@@ -205,6 +205,7 @@ in {
     systemd.services.code-server = {
       description = "Code server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;
       environment = {

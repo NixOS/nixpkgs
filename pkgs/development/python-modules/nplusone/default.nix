@@ -1,23 +1,25 @@
-{ lib
-, blinker
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, flake8
-, flask-sqlalchemy
-, isPy27
-, mock
-, peewee
-, pytest-django
-, pytestCheckHook
-, six
-, sqlalchemy
-, webtest
+{
+  lib,
+  blinker,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  flake8,
+  flask-sqlalchemy,
+  isPy27,
+  mock,
+  peewee,
+  pytest-django,
+  pytestCheckHook,
+  six,
+  sqlalchemy,
+  webtest,
 }:
 
 buildPythonPackage rec {
   pname = "nplusone";
   version = "1.0.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

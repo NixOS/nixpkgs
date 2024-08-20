@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , rustPlatform
 , Security
 , SystemConfiguration
@@ -11,7 +12,6 @@
 , libssh2
 , libgit2
 , zstd
-, fetchpatch
 , installShellFiles
 , nix-update-script
 , testers
@@ -20,20 +20,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.10.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    hash = "sha256-LJW4Px3K5cz6RJ4sUbwUXsp2+rzEW5wowi+DALHajYA=";
+    hash = "sha256-1lONtpataRi0yE6LpN6oNnC3OAW918v8GFCUwinYJWI=";
   };
 
-  cargoHash = "sha256-fs1cWhBFp2u3HiEx/mMnbwvgwKo97KmftA/sr4dGsiM=";
+  cargoPatches = [
+    # cargo: bump `git2` to 0.19.0
+    (fetchpatch2 {
+      url = "https://github.com/martinvonz/jj/commit/38f6ee89183d886e432472c5888908c9900c9c18.patch?full_index=1";
+      hash = "sha256-BVcak7uIEhwoO0f9hf0GVKKSVmp/ueKD5C9F8J0iL3w=";
+    })
+  ];
+
+  cargoHash = "sha256-FxcvLT0YnXcjDCKxuyijYsVSMLjx1glDzmFH5ctSx6s=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
-  useNextest = true; # nextest is the upstream integration framework
+  useNextest = false; # nextest is the upstream integration framework, but is problematic for test skipping
   ZSTD_SYS_USE_PKG_CONFIG = "1";    # disable vendored zlib
+  LIBGIT2_NO_VENDOR = "1"; # disable vendored libgit2
   LIBSSH2_SYS_USE_PKG_CONFIG = "1"; # disable vendored libssh2
 
   nativeBuildInputs = [
@@ -53,15 +62,20 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/jj util mangen > ./jj.1
     installManPage ./jj.1
 
     installShellCompletion --cmd jj \
-      --bash <($out/bin/jj util completion --bash) \
-      --fish <($out/bin/jj util completion --fish) \
-      --zsh <($out/bin/jj util completion --zsh)
+      --bash <($out/bin/jj util completion bash) \
+      --fish <($out/bin/jj util completion fish) \
+      --zsh <($out/bin/jj util completion zsh)
   '';
+
+  checkFlags = [
+    # signing tests spin up an ssh-agent and do git checkouts
+    "--skip=test_ssh_signing"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -74,7 +88,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A Git-compatible DVCS that is both simple and powerful";
+    description = "Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/martinvonz/jj";
     changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

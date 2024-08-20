@@ -1,27 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliche
-, marshmallow
-, pytestCheckHook
-, recline
-, requests
-, requests-toolbelt
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  cliche,
+  fetchPypi,
+  marshmallow,
+  pythonOlder,
+  recline,
+  requests,
+  requests-toolbelt,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "netapp-ontap";
-  version = "9.13.1.0";
-  format = "setuptools";
+  version = "9.15.1.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;
-    sha256 = "sha256-jPKfPJXtzARRlSuwkfJeZueQouwaaa0D6rZ+BcpILq0=";
+    hash = "sha256-rzME9JdaaXW1JOtfcjb5mlwSl4dy7lofnKOB6X6kWuM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     marshmallow
     requests
     requests-toolbelt
@@ -31,15 +37,16 @@ buildPythonPackage rec {
     recline
   ];
 
-  # no tests in sdist and no other download available
+  # No tests in sdist and no other download available
   doCheck = false;
 
   pythonImportsCheck = [ "netapp_ontap" ];
 
   meta = with lib; {
-    description = "A library for working with ONTAP's REST APIs simply in Python";
+    description = "Library for working with ONTAP's REST APIs simply in Python";
     homepage = "https://devnet.netapp.com/restapi.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "ontap-cli";
   };
 }

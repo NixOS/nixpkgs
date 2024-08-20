@@ -1,34 +1,22 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , glibcLocales
 , installShellFiles
 , jq
 , python3
-, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.3.2";
+  version = "4.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dxyI9ypZZBouTUF72wzvi7j+CeoQ9JNSiXrVeV7ForY=";
+    hash = "sha256-5tQaNT6QVN9mxa9t6OvMux4ZGy4flUqszTAwet2QL0w=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "disable-broken-urwid-test.patch";
-      url = "https://github.com/pimutils/todoman/commit/7ff0d2e2e69e24df5d66fecc58f8cd0b4e5ced6d.patch";
-      hash = "sha256-MMNnnIthNqobexd8GaA6lYxzv5gr1l0e9YK+Ygeje2w=";
-    })
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
@@ -57,14 +45,14 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     pytestCheckHook
     glibcLocales
-    pytest-cov
+    pytest-cov-stub
   ];
 
   LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
-    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${lib.getExe jq} "
     installShellCompletion --zsh contrib/completion/zsh/_todo
   '';
 
@@ -85,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
     "todoman"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
@@ -99,9 +87,9 @@ python3.pkgs.buildPythonApplication rec {
       now.
       Unsupported fields may not be shown but are never deleted or altered.
     '';
-    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
-    license = licenses.isc;
-    maintainers = with maintainers; [ leenaars antonmosich ];
+    changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${builtins.replaceStrings ["."] ["-"] version}";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ leenaars antonmosich ];
     mainProgram = "todo";
   };
 }

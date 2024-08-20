@@ -125,11 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://muon.build/";
-    description = "An implementation of Meson build system in C99";
+    description = "Implementation of Meson build system in C99";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # typical `ar failure`
+    mainProgram = "muon";
   };
 })
 # TODO LIST:

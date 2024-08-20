@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
     cp -v ${driverdb} drivedb.h
   '';
 
-  configureFlags = [ "--with-scriptpath=${scriptPath}" ];
+  configureFlags = [
+    "--with-scriptpath=${scriptPath}"
+    # does not work on NixOS
+    "--without-update-smart-drivedb"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];

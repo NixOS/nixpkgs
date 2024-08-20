@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cyclonedx";
-  version = "0.3.8";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-rust-cargo";
     rev = "${pname}-${version}";
-    hash = "sha256-6XW8aCXepbVnTubbM4sfRIC87uYSCEbuj+jJcPayEEU=";
+    hash = "sha256-H/CFEz1+rFHiTEP8JBFH9W9OTHjRdIBOov9c0JO69xE=";
   };
 
-  cargoHash = "sha256-BG/vfa5L6Iibfon3A5TP8/K8jbJsWqc+axdvIXc7GmM=";
+  cargoHash = "sha256-OhkC8R/+mdjFI6WRisFYZk5PKxje3W9X5p9tGCgKQOw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Rust (Cargo) projects";
+    mainProgram = "cargo-cyclonedx";
     longDescription = ''
       The CycloneDX module for Rust (Cargo) creates a valid CycloneDX Software
       Bill-of-Material (SBOM) containing an aggregate of all project

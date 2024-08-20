@@ -1,30 +1,43 @@
-{ buildPythonPackage, fetchPypi, libmysqlclient, lib, pythonOlder }:
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  libmysqlclient,
+  lib,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "mariadb";
-  version = "1.1.4";
+  version = "1.1.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c6CsvSrOOB7BvPxhztenmlGeZsAsJOEq5tJ7qgNxeHY=";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = "mariadb-corporation";
+    repo = "mariadb-connector-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YpA65J8ozKJfpOc4hZLdgCcT3j/lqRiNeX7k8U/aYkE=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
-    libmysqlclient
+    libmysqlclient # for mariadb_config
   ];
+
+  buildInputs = [ libmysqlclient ];
 
   # Requires a running MariaDB instance
   doCheck = false;
 
   pythonImportsCheck = [ "mariadb" ];
 
-  meta = with lib; {
+  meta = {
     description = "MariaDB Connector/Python";
     homepage = "https://github.com/mariadb-corporation/mariadb-connector-python";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ vanilla ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
 }

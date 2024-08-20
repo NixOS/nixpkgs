@@ -1,4 +1,4 @@
-{ addOpenGLRunpath
+{ addDriverRunpath
 , autoPatchelfHook
 , lib
 , makeWrapper
@@ -56,7 +56,9 @@ let cudaEnv = symlinkJoin {
         cuda_cudart cuda_nvcc libcublas libcufft libcurand libcusparse
       ];
       postBuild = ''
-        ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
+        if [ ! -e $out/lib/libcuda.so ]; then
+            ln -s ${addDriverRunpath.driverLink}/lib/libcuda.so $out/lib
+        fi
         ln -s lib $out/lib64
       '';
     };
@@ -67,7 +69,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
-  ] ++ lib.optional cudaSupport addOpenGLRunpath;
+  ] ++ lib.optional cudaSupport addDriverRunpath;
 
   buildInputs = [
     alsa-lib
@@ -119,7 +121,11 @@ in stdenv.mkDerivation {
   ]) ++ lib.optional cudaSupport cudaEnv;
 
   wrapProgramFlags = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib zlib ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+      dbus
+      gcc-unwrapped.lib
+      zlib
+    ]}"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
     # Fix libQt errors - #96490
     "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"
@@ -130,8 +136,8 @@ in stdenv.mkDerivation {
     "--set QT_QPA_PLATFORM wayland;xcb"
   ] ++ lib.optionals cudaSupport [
     "--set CUDA_PATH ${cudaEnv}"
-    "--set NVIDIA_DRIVER_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libnvidia-tls.so"
-    "--set CUDA_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libcuda.so"
+    "--set NVIDIA_DRIVER_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib/libnvidia-tls.so"
+    "--set CUDA_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib/libcuda.so"
   ];
 
   unpackPhase = ''
@@ -158,9 +164,10 @@ in stdenv.mkDerivation {
 
     # Remove PATH restriction, root and avahi daemon checks, and hostname call
     sed -i '
-      s/^PATH=/# &/
+      s/^\s*PATH=/# &/
       s/isRoot="false"/# &/
-      s/^checkAvahiDaemon$/# &/
+      s/^\s*checkAvahiDaemon$/:/
+      s/^\s*installBundledInstall$/:/
       s/`hostname`/""/
     ' MathInstaller
 

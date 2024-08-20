@@ -1,10 +1,14 @@
-{ buildPythonPackage, lib, fetchFromBitbucket
-, parse
+{
+  buildPythonPackage,
+  lib,
+  fetchFromBitbucket,
+  parse,
 }:
 
 buildPythonPackage rec {
   pname = "pyparser";
   version = "1.0";
+  format = "setuptools";
 
   # Missing tests on Pypi
   src = fetchFromBitbucket {

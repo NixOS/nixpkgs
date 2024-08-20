@@ -52,7 +52,14 @@ stdenv.mkDerivation {
     })
   ];
 
-  configurePhase = generated.configure;
+  configurePhase = generated.configure + ''
+    swiftpmMakeMutable swift-tools-support-core
+    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${fetchpatch {
+      url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
+      hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
+      includes = [ "Sources/TSCBasic/FileSystem.swift" ];
+    }}
+  '';
 
   # TODO: Tests depend on indexstore-db being provided by an existing Swift
   # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.
@@ -72,6 +79,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-driver";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
   };
 }

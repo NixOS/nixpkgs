@@ -1,30 +1,44 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, six
-, requests
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  version = "4.5.1";
   pname = "azure-cosmos";
+  version = "4.7.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xK2oOBMG7sQTwBvFCneOJk3D9Pr6nWlvnfhDYUjSrqg=";
+    hash = "sha256-ctcUAzE0ZWMCouiVfEuTWQZzvSiLDKYMsSPjSK6ZokE=";
   };
 
-  propagatedBuildInputs = [ six requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    azure-core
+    typing-extensions
+  ];
 
   pythonNamespaces = [ "azure" ];
 
-  # requires an active Azure Cosmos service
+  # Requires an active Azure Cosmos service
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.cosmos" ];
 
   meta = with lib; {
     description = "Azure Cosmos DB API";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/cosmos/azure-cosmos";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-cosmos_${version}/sdk/cosmos/azure-cosmos/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

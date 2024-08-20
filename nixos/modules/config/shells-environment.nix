@@ -35,20 +35,22 @@ in
     environment.variables = mkOption {
       default = {};
       example = { EDITOR = "nvim"; VISUAL = "nvim"; };
-      description = lib.mdDoc ''
+      description = ''
         A set of environment variables used in the global environment.
         These variables will be set on shell initialisation (e.g. in /etc/profile).
         The value of each variable can be either a string or a list of
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with types; attrsOf (oneOf [ (listOf str) str path ]);
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else "${v}");
+      type = with types; attrsOf (oneOf [ (listOf (oneOf [ int str path ])) int str path ]);
+      apply = let
+        toStr = v: if isPath v then "${v}" else toString v;
+      in mapAttrs (n: v: if isList v then concatMapStringsSep ":" toStr v else toStr v);
     };
 
     environment.profiles = mkOption {
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         A list of profiles used to setup the global environment.
       '';
       type = types.listOf types.str;
@@ -57,7 +59,7 @@ in
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
       example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
-      description = lib.mdDoc ''
+      description = ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
         of {option}`environment.profiles` to form the content of the
@@ -68,7 +70,7 @@ in
     # !!! isn't there a better way?
     environment.extraInit = mkOption {
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Shell script code called during global environment initialisation
         after all variables and profileVariables have been set.
         This code is assumed to be shell-independent, which means you should
@@ -79,7 +81,7 @@ in
 
     environment.shellInit = mkOption {
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Shell script code called during shell initialisation.
         This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
@@ -89,7 +91,7 @@ in
 
     environment.loginShellInit = mkOption {
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Shell script code called during login shell initialisation.
         This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
@@ -99,7 +101,7 @@ in
 
     environment.interactiveShellInit = mkOption {
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Shell script code called during interactive shell initialisation.
         This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
@@ -109,7 +111,7 @@ in
 
     environment.shellAliases = mkOption {
       example = { l = null; ll = "ls -l"; };
-      description = lib.mdDoc ''
+      description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
@@ -119,7 +121,7 @@ in
     };
 
     environment.homeBinInPath = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Include ~/bin/ in $PATH.
       '';
       default = false;
@@ -127,7 +129,7 @@ in
     };
 
     environment.localBinInPath = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Add ~/.local/bin/ to $PATH
       '';
       default = false;
@@ -140,7 +142,7 @@ in
       example = literalExpression ''"''${pkgs.dash}/bin/dash"'';
       type = types.path;
       visible = false;
-      description = lib.mdDoc ''
+      description = ''
         The shell executable that is linked system-wide to
         `/bin/sh`. Please note that NixOS assumes all
         over the place that shell to be Bash, so override the default
@@ -151,7 +153,7 @@ in
     environment.shells = mkOption {
       default = [];
       example = literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
-      description = lib.mdDoc ''
+      description = ''
         A list of permissible login shells for user accounts.
         No need to mention `/bin/sh`
         here, it is placed into this list implicitly.
@@ -214,7 +216,8 @@ in
       ''
         # Create the required /bin/sh symlink; otherwise lots of things
         # (notably the system() function) won't work.
-        mkdir -m 0755 -p /bin
+        mkdir -p /bin
+        chmod 0755 /bin
         ln -sfn "${cfg.binsh}" /bin/.sh.tmp
         mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
       '';

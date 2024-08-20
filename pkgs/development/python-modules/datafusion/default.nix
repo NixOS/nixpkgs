@@ -1,14 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, pytestCheckHook
-, libiconv
-, numpy
-, protobuf
-, pyarrow
-, Security
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  pytestCheckHook,
+  libiconv,
+  numpy,
+  protobuf,
+  pyarrow,
+  Security,
+  SystemConfiguration,
 }:
 
 let
@@ -31,21 +33,21 @@ in
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "25.0.0";
-  format = "pyproject";
+  version = "38.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     name = "datafusion-source";
     owner = "apache";
     repo = "arrow-datafusion-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-oC+fp41a9rsdobpvShZ7sDdtYPJQQ7JLg6MFL+4Pksg=";
+    hash = "sha256-rBS6i2HqpdhnhZZfO0ywL/e4a+rnUZkHzezKd8PuG80=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "datafusion-cargo-deps";
     inherit src pname version;
-    hash = "sha256-0e0ZRgwcS/46mi4c2loAnBA2bsaD+/RiMh7oNg3EvHY=";
+    hash = "sha256-M2ZNAFWdsnN9C4+YbqFxZVH9fHR10Bimf1Xzrd9oy9E=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -53,13 +55,25 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs =
+    [ protobuf ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+      SystemConfiguration
+    ];
 
   propagatedBuildInputs = [ pyarrow ];
 
-  nativeCheckInputs = [ pytestCheckHook numpy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+  ];
   pythonImportsCheck = [ "datafusion" ];
-  pytestFlagsArray = [ "--pyargs" pname ];
+  pytestFlagsArray = [
+    "--pyargs"
+    pname
+  ];
 
   preCheck = ''
     pushd $TMPDIR

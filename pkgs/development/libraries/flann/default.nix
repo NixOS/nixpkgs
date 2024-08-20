@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch";
       sha256 = "qt8h576Gn8uR7+T9u9bEBIRz6e6AoTKpa1JfdZVvW9s=";
     })
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # Fix build with Clang 16.
+    (fetchpatch {
+      url = "https://github.com/flann-lib/flann/commit/be80cefa69b314a3d9e1ab971715e84145863ebb.patch";
+      hash = "sha256-4SUKzQCm0Sx8N43Z6ShuMbgbbe7q8b2Ibk3WgkB0qa4=";
+    })
   ];
 
   cmakeFlags = [
@@ -67,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flann-lib/flann";
     license = lib.licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

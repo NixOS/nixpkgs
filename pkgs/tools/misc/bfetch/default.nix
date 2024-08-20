@@ -20,10 +20,11 @@ stdenvNoCC.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A SuperB general-purpose fetch displayer written in portable sh";
+    description = "SuperB general-purpose fetch displayer written in portable sh";
     homepage = "https://github.com/NNBnh/bfetch";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
+    mainProgram = "bfetch";
   };
 }

@@ -5,19 +5,20 @@
 
 buildGoModule rec {
   pname = "hcledit";
-  version = "0.2.10";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rXmbRbM6U1JtV3t8C0LlLAdYpxd4UjxrbrPVHdqiCJ8=";
+    hash = "sha256-AKNvbvRfy5QpbR1WLBlf4YcbTdX9rTGS/bovDWQXYZo=";
   };
 
-  vendorHash = "sha256-9ND/vDPDn3rn213Jn1UPMmYAkMI86gYx9QLcV/oFGh4=";
+  vendorHash = "sha256-G6jmdosQHBA+n7MgVAlzdSTqPYb5d+k4b4EzAI384FQ=";
 
   meta = with lib; {
-    description = "A command line editor for HCL";
+    description = "Command line editor for HCL";
+    mainProgram = "hcledit";
     homepage = "https://github.com/minamijoyo/hcledit";
     license = licenses.mit;
     maintainers = with maintainers; [ aleksana ];

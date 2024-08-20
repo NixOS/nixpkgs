@@ -28,13 +28,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "2023.06.15";
+    version = "2024.02.12";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
-      repo   = pname;
+      repo   = "bat-extras";
       rev    = "v${version}";
-      sha256 = "sha256-dBrnUIG3EuEgDZBbzrspP5UReiUKjrMSYIe5QtZ0/tU=";
+      hash   = "sha256-EPDGQkwwxYFTJPJtwSkVrpBf27+VlMd/nqEkJupHlyA=";
       fetchSubmodules = true;
     };
 
@@ -86,7 +86,7 @@ let
       description = "Bash scripts that integrate bat with various command line tools";
       homepage    = "https://github.com/eth-p/bat-extras";
       license     = with licenses; [ mit ];
-      maintainers = with maintainers; [ bbigras lilyball ];
+      maintainers = with maintainers; [ bbigras ];
       platforms   = platforms.all;
     };
   };
@@ -94,7 +94,7 @@ let
     name: # the name of the script
     dependencies: # the tools we need to prefix onto PATH
     stdenv.mkDerivation {
-      pname = "${core.pname}-${name}";
+      pname = name;
       inherit (core) version;
 
       src = core;
@@ -133,7 +133,9 @@ let
       # We already patched
       dontPatchShebangs = true;
 
-      inherit (core) meta;
+      meta = core.meta // {
+        mainProgram = name;
+      };
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;

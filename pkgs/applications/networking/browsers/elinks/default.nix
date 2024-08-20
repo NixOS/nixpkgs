@@ -5,7 +5,6 @@
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
 , enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
-, fetchpatch
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 
@@ -14,23 +13,14 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.16.1.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "rkd77";
-    repo = "felinks";
+    repo = "elinks";
     rev = "v${version}";
-    sha256 = "sha256-u6QGhfi+uWeIzSUFuYHAH3Xu0Fky0yw2h4NOKgYFLsM=";
+    hash = "sha256-JeUiMHAqSZxxBe8DplzmzHzsY6KqoBqba0y8GDwaR0Y=";
   };
-
-  patches = [
-    # Fix build bug with perl 5.38.0. Backport of https://github.com/rkd77/elinks/pull/243 by gentoo:
-    # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=dfefaa456bd69bc14e3a1c2c6c1b0cc19c6b0869
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/elinks/files/elinks-0.16.1.1-perl-5.38.patch?id=dfefaa456bd69bc14e3a1c2c6c1b0cc19c6b0869";
-      hash = "sha256-bHP9bc/l7VEw7oXlkSUQhhuq8rT2QTahh9SM7ZJgK5w=";
-    })
-  ];
 
   buildInputs = [
     ncurses libX11 bzip2 zlib brotli zstd xz
@@ -64,8 +54,9 @@ stdenv.mkDerivation rec {
     ;
 
   meta = with lib; {
-    description = "Full-featured text-mode web browser (package based on the fork felinks)";
-    homepage = "https://github.com/rkd77/felinks";
+    description = "Full-featured text-mode web browser";
+    mainProgram = "elinks";
+    homepage = "https://github.com/rkd77/elinks";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ iblech gebner ];

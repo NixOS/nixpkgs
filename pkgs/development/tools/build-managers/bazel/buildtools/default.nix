@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "bazel-buildtools";
-  version = "6.3.3";
+  version = "7.1.2";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = "v${version}";
-    hash = "sha256-eGX1W3Nc26aw31dWm1hvcUzFh1efL4Vd86dK6Hs2BJc=";
+    hash = "sha256-Ax7UKkClYsoqxaR+tsQnTv6BFafl9SkY7MC4kYJNmwY=";
   };
 
   vendorHash = "sha256-DigTREfI6I48wxRpGp/bfH1NbUZ4E1B5UTQXpI0LY1A=";
@@ -31,7 +31,7 @@ buildGoModule rec {
     changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers;
-      [ elasticdog uri-canva marsam ]
+      [ elasticdog uri-canva ]
       ++ lib.teams.bazel.members;
   };
 }

@@ -148,17 +148,23 @@ in
   makeScopeWithSplicing' = lib.makeScopeWithSplicing' { inherit splicePackages; inherit (pkgs) newScope; };
 
   # generate 'otherSplices' for 'makeScopeWithSplicing'
-  generateSplicesForMkScope = attr:
+  generateSplicesForMkScope = attrs:
     let
-      split = X: lib.splitString "." "${X}.${attr}";
+      split = X: [ X ] ++ (
+        if builtins.isList attrs
+          then attrs
+        else if builtins.isString attrs
+          then lib.splitString "." attrs
+        else throw "generateSplicesForMkScope must be passed a list of string or string"
+      );
+      bad = throw "attribute should be found";
     in
     {
-      # nulls should never be reached
-      selfBuildBuild = lib.attrByPath (split "pkgsBuildBuild") null pkgs;
-      selfBuildHost = lib.attrByPath (split "pkgsBuildHost") null pkgs;
-      selfBuildTarget = lib.attrByPath (split "pkgsBuildTarget") null pkgs;
-      selfHostHost = lib.attrByPath (split "pkgsHostHost") null pkgs;
-      selfHostTarget = lib.attrByPath (split "pkgsHostTarget") null pkgs;
+      selfBuildBuild = lib.attrByPath (split "pkgsBuildBuild") bad pkgs;
+      selfBuildHost = lib.attrByPath (split "pkgsBuildHost") bad pkgs;
+      selfBuildTarget = lib.attrByPath (split "pkgsBuildTarget") bad pkgs;
+      selfHostHost = lib.attrByPath (split "pkgsHostHost") bad pkgs;
+      selfHostTarget = lib.attrByPath (split "pkgsHostTarget") bad pkgs;
       selfTargetTarget = lib.attrByPath (split "pkgsTargetTarget") { } pkgs;
     };
 

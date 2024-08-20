@@ -9,7 +9,7 @@ let
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
-      ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
+      ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
   });
 
   # Provides a fake "docker" binary mapping to podman
@@ -48,7 +48,7 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This option enables Podman, a daemonless container engine for
           developing, managing, and running OCI Containers on your Linux System.
 
@@ -59,7 +59,7 @@ in
     dockerSocket.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Make the Podman socket available in place of the Docker socket, so
         Docker tools can find the Podman socket.
 
@@ -73,7 +73,7 @@ in
     dockerCompat = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Create an alias mapping {command}`docker` to {command}`podman`.
       '';
     };
@@ -81,7 +81,9 @@ in
     enableNvidia = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
+        **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
+
         Enable use of NVidia GPUs from within podman containers.
       '';
     };
@@ -94,7 +96,7 @@ in
           pkgs.gvisor
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed in the Podman wrapper.
       '';
     };
@@ -103,7 +105,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to periodically prune Podman resources. If enabled, a
           systemd timer will run `podman system prune -f`
           as specified by the `dates` option.
@@ -114,7 +116,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--all" ];
-        description = lib.mdDoc ''
+        description = ''
           Any additional flags passed to {command}`podman system prune`.
         '';
       };
@@ -122,7 +124,7 @@ in
       dates = mkOption {
         default = "weekly";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at
           which the prune will occur.
@@ -134,7 +136,7 @@ in
       type = types.package;
       default = podmanPackage;
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The final Podman package (including extra packages).
       '';
     };
@@ -143,32 +145,45 @@ in
       type = json.type;
       default = { };
       example = lib.literalExpression "{ dns_enabled = true; }";
-      description = lib.mdDoc ''
+      description = ''
         Settings for podman's default network.
       '';
     };
 
   };
 
-  config = lib.mkIf cfg.enable
-    {
+  config =
+    let
+      networkConfig = ({
+        dns_enabled = false;
+        driver = "bridge";
+        id = "0000000000000000000000000000000000000000000000000000000000000000";
+        internal = false;
+        ipam_options = { driver = "host-local"; };
+        ipv6_enabled = false;
+        name = "podman";
+        network_interface = "podman0";
+        subnets = [{ gateway = "10.88.0.1"; subnet = "10.88.0.0/16"; }];
+      } // cfg.defaultNetwork.settings);
+      inherit (networkConfig) dns_enabled network_interface;
+    in
+    lib.mkIf cfg.enable {
+      warnings = lib.optionals cfg.enableNvidia [
+        ''
+          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+        ''
+      ];
+
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
       # https://github.com/containers/podman/blob/097cc6eb6dd8e598c0e8676d21267b4edb11e144/docs/tutorials/basic_networking.md#default-network
       environment.etc."containers/networks/podman.json" = lib.mkIf (cfg.defaultNetwork.settings != { }) {
-        source = json.generate "podman.json" ({
-          dns_enabled = false;
-          driver = "bridge";
-          id = "0000000000000000000000000000000000000000000000000000000000000000";
-          internal = false;
-          ipam_options = { driver = "host-local"; };
-          ipv6_enabled = false;
-          name = "podman";
-          network_interface = "podman0";
-          subnets = [{ gateway = "10.88.0.1"; subnet = "10.88.0.0/16"; }];
-        } // cfg.defaultNetwork.settings);
+        source = json.generate "podman.json" networkConfig;
       };
+
+      # containers cannot reach aardvark-dns otherwise
+      networking.firewall.interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
@@ -201,9 +216,16 @@ in
         requires = [ "podman.service" ];
       };
 
+      systemd.services.podman.environment = config.networking.proxy.envVars;
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
+      # Podman does not support multiple sockets, as of podman 5.0.2, so we use
+      # a symlink. Unfortunately this does not let us use an alternate group,
+      # such as `docker`.
+      systemd.sockets.podman.socketConfig.Symlinks =
+        lib.mkIf cfg.dockerSocket.enable [ "/run/docker.sock" ];
 
+      systemd.user.services.podman.environment = config.networking.proxy.envVars;
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
       systemd.timers.podman-prune.timerConfig = lib.mkIf cfg.autoPrune.enable {
@@ -221,11 +243,6 @@ in
             >$out/lib/tmpfiles.d/podman.conf
         '')
       ];
-
-      systemd.tmpfiles.rules =
-        lib.optionals cfg.dockerSocket.enable [
-          "L! /run/docker.sock - - - - /run/podman/podman.sock"
-        ];
 
       users.groups.podman = { };
 

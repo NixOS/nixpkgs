@@ -1,30 +1,28 @@
-{ stdenv
-, lib, fetchPypi, buildPythonPackage
-, pytest
-, numpy
-, cython
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytest,
+  numpy,
+  cython,
 }:
 
 buildPythonPackage rec {
   pname = "imagecodecs-lite";
   version = "2019.12.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "0s4xb17qd7vimc46rafbjnibj4sf0lnv8cwl22k1h6zb7jhqmlcm";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   checkPhase = ''
     pytest

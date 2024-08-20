@@ -1,25 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, trivy
+{
+  lib,
+  stdenv,
+  buildPackages,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  trivy,
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.46.0";
+  version = "0.54.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "trivy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hthVpiiTRrBdEL5QsL8NiOYNRXybCAfAnCn5w3JfNn4=";
+    hash = "sha256-lzLwIa+JCqQQSpA0AFyikpODb6u9oSaEqGGx0ckL+V8=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-2Aig/udgLQzNmVJ0m1C7wfqlNefpexQOrh2HCPBK9Mc=";
+  vendorHash = "sha256-TSnwCulL4aI/SgL+WKoLwAnmKrUAfXgl+EV/HFt4j1U=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -29,8 +33,25 @@ buildGoModule rec {
     "-X=github.com/aquasecurity/trivy/pkg/version.ver=v${version}"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   # Tests require network access
   doCheck = false;
+
+  postInstall =
+    let
+      trivy =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.trivy;
+    in
+    ''
+      installShellCompletion --cmd trivy \
+        --bash <(${trivy}/bin/trivy completion bash) \
+        --fish <(${trivy}/bin/trivy completion fish) \
+        --zsh <(${trivy}/bin/trivy completion zsh)
+    '';
 
   doInstallCheck = true;
 
@@ -43,7 +64,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/aquasecurity/trivy";
     changelog = "https://github.com/aquasecurity/trivy/releases/tag/v${version}";
-    description = "A simple and comprehensive vulnerability scanner for containers, suitable for CI";
+    description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     longDescription = ''
       Trivy is a simple and comprehensive vulnerability scanner for containers
       and other artifacts. A software vulnerability is a glitch, flaw, or
@@ -51,7 +72,11 @@ buildGoModule rec {
       vulnerabilities of OS packages (Alpine, RHEL, CentOS, etc.) and
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
+    mainProgram = "trivy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
   };
 }

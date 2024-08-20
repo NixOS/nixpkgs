@@ -1,23 +1,25 @@
-{ lib
-, asyncpg
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, numpy
-, peewee
-, postgresql
-, postgresqlTestHook
-, psycopg
-, psycopg2
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
+{
+  lib,
+  asyncpg,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  numpy,
+  peewee,
+  postgresql,
+  postgresqlTestHook,
+  psycopg,
+  psycopg2,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  sqlmodel,
 }:
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.2.2";
+  version = "0.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,12 +28,10 @@ buildPythonPackage rec {
     owner = "pgvector";
     repo = "pgvector-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qvLDFnrTYibdhjSeeIFI4YdpPRsvNBnQ23uqsLCblEo=";
+    hash = "sha256-XKoaEwLW59pV4Dwis7p2L65XoO2zUEa1kXxz6Lgs2d8=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     asyncpg
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     sqlalchemy
+    sqlmodel
   ];
 
   env = {

@@ -11,6 +11,8 @@ let
   data = lib.importJSON ./pin.json;
 in
 mkYarnPackage rec {
+  inherit nodejs;
+
   pname = "matrix-appservice-slack";
   version = data.version;
 
@@ -46,7 +48,8 @@ mkYarnPackage rec {
   doDist = false;
 
   meta = with lib; {
-    description = "A Matrix <--> Slack bridge";
+    description = "Matrix <--> Slack bridge";
+    mainProgram = "matrix-appservice-slack";
     maintainers = with maintainers; [ beardhatcode chvp ];
     license = licenses.asl20;
   };

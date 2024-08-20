@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "phlare";
@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-y8IWS5OQkDYRTt5xOzzbjb1ya6AiFtvAc0YNH99KZBA=";
+  vendorHash = "sha256-l7+iDT9GAP9BX+xKvnx57iVF8wCM1YyHwq6dD9PbTDI=";
 
   ldflags = let
     prefix = "github.com/grafana/phlare/pkg/util/build";
@@ -32,8 +32,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Grafana Phlare is an open source database that provides fast, scalable, highly available, and efficient storage and querying of profiling data.";
-    license = licenses.agpl3;
+    description = "Grafana Phlare is an open source database that provides fast, scalable, highly available, and efficient storage and querying of profiling data";
+    license = licenses.agpl3Only;
     homepage = "https://grafana.com/oss/phlare";
     maintainers = with maintainers; [ cathalmullan ];
   };

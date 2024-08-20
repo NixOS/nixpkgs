@@ -122,6 +122,13 @@ stdenv.mkDerivation rec {
     "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'snprintf' was not declared in this scope
+    "-include cstdio"
+    # GCC 13: error: 'runtime_error' is not a member of 'std'
+    "-include stdexcept"
+  ];
+
   # Extract binary from built app bundle
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/bin
@@ -137,7 +144,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Free 3D kart racing game";
+    description = "Free 3D kart racing game";
+    mainProgram = "supertuxkart";
     longDescription = ''
       SuperTuxKart is a Free 3D kart racing game, with many tracks,
       characters and items for you to try, similar in spirit to Mario

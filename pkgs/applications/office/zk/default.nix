@@ -1,30 +1,31 @@
-{ lib, fetchFromGitHub, buildGoModule, icu }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "zk";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
-    owner = "mickael-menu";
+    owner = "zk-org";
     repo = "zk";
     rev = "v${version}";
-    sha256 = "sha256-c0Grk5Bs9MOzuvWYbp+Y6cHouljUWoM3i7vFmQRFR18=";
+    sha256 = "sha256-PbF2k7b03Oo3fIWIN4BHUZJ625HUeX+htT9FTINowIs=";
   };
 
-  vendorHash = "sha256-23m0fHYJl3X2uHCFnMYID9umTjZvGFoOKTtRrerlWKg=";
+  vendorHash = "sha256-UZsJa5hmMQwe9lhrp4ey8GGTkWUF8xJW+LPWMR0qfoo=";
 
   doCheck = false;
 
   CGO_ENABLED = 1;
 
-  ldflags = [ "-s" "-w" "-X=main.Build=${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.Build=${version}" "-X=main.Version=${version}"];
 
   tags = [ "fts5" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ pinpox ];
     license = licenses.gpl3;
-    description = "A zettelkasten plain text note-taking assistant";
+    description = "Zettelkasten plain text note-taking assistant";
     homepage = "https://github.com/mickael-menu/zk";
+    mainProgram = "zk";
   };
 }

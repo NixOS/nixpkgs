@@ -8,6 +8,8 @@
 , fetchFromGitHub
 , qt5
 , wrapQtAppsHook
+, testers
+, gns3-gui
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     inherit hash;
     owner = "GNS3";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -31,8 +33,10 @@ python3.pkgs.buildPythonApplication rec {
     psutil
     sentry-sdk
     setuptools
-    sip_4 (pyqt5.override { withWebSockets = true; })
+    sip
+    (pyqt5.override { withWebSockets = true; })
     truststore
+    qt5.qtwayland
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
@@ -55,6 +59,11 @@ python3.pkgs.buildPythonApplication rec {
     export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
     export QT_QPA_PLATFORM=offscreen
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = gns3-gui;
+    command = "${lib.getExe gns3-gui} --version";
+  };
 
   meta = with lib; {
     description = "Graphical Network Simulator 3 GUI (${channel} release)";

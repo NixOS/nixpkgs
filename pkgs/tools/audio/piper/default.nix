@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "piper";
-  version = "2023.9.27-1";
+  version = "2023.11.14-2";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-U7yOiqNvE0WqZB8qaKf3U7gnTJ6q+9W5lviW79b6h/o=";
+    hash = "sha256-3ynWyNcdf1ffU3VoDqrEMrm5Jo5Zc5YJcVqwLreRCsI=";
   };
 
   nativeBuildInputs = [
@@ -66,9 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://github.com/rhasspy/piper/releases/tag/v${finalAttrs.version}";
-    description = "A fast, local neural text to speech system";
+    description = "Fast, local neural text to speech system";
     homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "piper";
   };
 })

@@ -1,8 +1,9 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, libdbusmenu
+, libdbusmenu-lxqt
+, libdbusmenu ? null
 , libfm-qt
 , libqtxdg
 , lxqt-build-tools
@@ -10,38 +11,42 @@
 , qtbase
 , qtsvg
 , qttools
-, qtx11extras
+, wrapQtAppsHook
+, version ? "2.0.0"
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-qtplugin";
-  version = "1.3.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "/phBrpSru/4m+mcAkn4C6hKm5H2BAXNkbTgU2HmoyBg=";
+    hash = {
+      "1.4.1" = "sha256-sp/LvQNfodMYQ4kNbBv4PTNfs38XjYLezuxRltZd4kc=";
+      "2.0.0" = "sha256-o5iD4VzsbN81lwDZJuFj8Ugg1RP752M4unu3J5/h8g8=";
+    }."${version}";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    libdbusmenu
+    (if lib.versionAtLeast version "2.0.0" then libdbusmenu-lxqt else libdbusmenu)
     libfm-qt
     libqtxdg
     qtbase
     qtsvg
-    qttools
-    qtx11extras
   ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
+      --replace-fail "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
   '';
 
   passthru.updateScript = gitUpdater { };

@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, enum-compat
-, fetchFromGitHub
-, pytestCheckHook
-, unicodecsv
-, six
+{
+  lib,
+  buildPythonPackage,
+  enum-compat,
+  fetchFromGitHub,
+  pytestCheckHook,
+  unicodecsv,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "python-registry";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
@@ -28,13 +30,9 @@ buildPythonPackage rec {
     six
   ];
 
-  disabledTestPaths = [
-    "samples"
-  ];
+  disabledTestPaths = [ "samples" ];
 
-  pythonImportsCheck = [
-    "Registry"
-  ];
+  pythonImportsCheck = [ "Registry" ];
 
   meta = with lib; {
     description = "Pure Python parser for Windows Registry hives";

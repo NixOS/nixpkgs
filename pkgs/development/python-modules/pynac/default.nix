@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
 }:
 
 buildPythonPackage {
   pname = "pynac";
   version = "0.2";
+  format = "setuptools";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pynac/pynac/pynac-0.2/pynac-0.2.tar.gz";
@@ -14,8 +16,7 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://github.com/se-esss-litterbox/Pynac";
-    description = "A Python wrapper around the Dynac charged particle simulator";
+    description = "Python wrapper around the Dynac charged particle simulator";
     license = licenses.gpl3;
   };
-
 }

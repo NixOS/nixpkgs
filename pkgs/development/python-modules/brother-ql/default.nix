@@ -1,20 +1,20 @@
-{ stdenv
-, fetchPypi
-, buildPythonPackage
-, future
-, packbits
-, pillow
-, pyusb
-, pytest
-, mock
-, click
-, attrs
-, lib
+{
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  future,
+  packbits,
+  pillow,
+  pyusb,
+  click,
+  attrs,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "brother-ql";
   version = "0.9.4";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "brother_ql";
@@ -22,7 +22,23 @@ buildPythonPackage rec {
     hash = "sha256-H1xXoDnwEsnCBDl/RwAB9267dINCHr3phdDLPGFOhmA=";
   };
 
-  propagatedBuildInputs = [ future packbits pillow pyusb click attrs ];
+  propagatedBuildInputs = [
+    future
+    packbits
+    pillow
+    pyusb
+    click
+    attrs
+  ];
+
+  patches = [
+    (fetchpatch {
+      # Make compatible with Pillow>=10.0; https://github.com/pklaus/brother_ql/pull/143
+      name = "brother-ql-pillow10-compat.patch";
+      url = "https://github.com/pklaus/brother_ql/commit/a7e1b94b41f3a6e0f8b365598bc34fb47ca95a6d.patch";
+      hash = "sha256-v3YhmsUWBwE/Vli1SbTQO8q1zbtWYI9iMlVFvz5sxmg=";
+    })
+  ];
 
   meta = with lib; {
     description = "Python package for the raster language protocol of the Brother QL series label printers";

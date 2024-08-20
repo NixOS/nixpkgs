@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchurl, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , curl, openssl, zlib, zstd
 , libiconv
 , version, hash, ...
 }:
 
-with lib;
-
 let
-  isVer33 = versionAtLeast version "3.3";
+  isVer33 = lib.versionAtLeast version "3.3";
 
 in stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
 
-  src = fetchurl {
-    url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
+  src = fetchFromGitHub {
+    owner = "mariadb-corporation";
+    repo = "mariadb-connector-c";
+    rev = "v${version}";
     inherit hash;
   };
 
@@ -44,12 +44,12 @@ in stdenv.mkDerivation {
   '';
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
-  preConfigure = optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
   '';
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ curl openssl zlib ] ++ optional isVer33 zstd;
+  propagatedBuildInputs = [ curl openssl zlib ] ++ lib.optional isVer33 zstd;
   buildInputs = [ libiconv ];
 
   postInstall = ''
@@ -65,7 +65,7 @@ in stdenv.mkDerivation {
     install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Client library that can be used to connect to MySQL or MariaDB";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ globin ];

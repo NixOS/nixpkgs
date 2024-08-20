@@ -34,7 +34,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An unofficial client of Evernote";
+    description = "Unofficial client of Evernote";
     homepage = "http://www.nixnote.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ htr ];

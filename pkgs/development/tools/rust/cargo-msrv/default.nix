@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-rmWPkxxrpVamYHII0xkZq62ubL3/jrcqXUvFH9VuNtg=";
   };
 
-  cargoSha256 = "sha256-/Bspy94uIP/e4uJY8qo+UPK1tnPjglxiMWeYWx2qoHk=";
+  cargoHash = "sha256-/Bspy94uIP/e4uJY8qo+UPK1tnPjglxiMWeYWx2qoHk=";
 
   passthru = {
     updateScript = gitUpdater {
@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";
+    mainProgram = "cargo-msrv";
     homepage = "https://github.com/foresterre/cargo-msrv";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ otavio matthiasbeyer ];

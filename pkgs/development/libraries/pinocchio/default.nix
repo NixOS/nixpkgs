@@ -1,10 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
+, casadi
 , cmake
 , boost
 , eigen
-, collisionSupport ? !stdenv.isDarwin
+, example-robot-data
+, casadiSupport ? true
+, collisionSupport ? true
+, console-bridge
+, jrl-cmakemodules
 , hpp-fcl
 , urdfdom
 , pythonSupport ? false
@@ -13,29 +19,58 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "2.6.20";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
-    repo = finalAttrs.pname;
+    repo = "pinocchio";
     rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-Pu/trCpqdue7sQKDbLhyxTfgj/+xRiVcG7Luz6ZQXtM=";
+    hash = "sha256-WgMqb+NHnaxW9/qSZ0UGI4zGxGjh12a5DwtdX9byBiw=";
   };
 
-  # error: use of undeclared identifier '__sincos'
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    substituteInPlace src/math/sincos.hpp \
-      --replace "__APPLE__" "0"
+  # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
+  prePatch = lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
+    substituteInPlace unittest/algorithm/utils/CMakeLists.txt \
+      --replace-fail "add_pinocchio_unit_test(force)" ""
+  '';
+
+  patches = [
+    # fix urdf & collision support on aarch64-darwin
+    (fetchpatch {
+      name = "static-pointer_cast.patch";
+      url = "https://github.com/stack-of-tasks/pinocchio/pull/2339/commits/ead869e8f3cce757851b9a011c4a2f55fb66582b.patch";
+      hash = "sha256-CkrWQJP/pPNs6B3a1FclfM7JWwkmsPzRumS46KQHv0s=";
+    })
+  ];
+
+  postPatch = ''
+    # example-robot-data models are used in checks.
+    # Upstream provide them as git submodule, but we can use our own version instead.
+    rmdir models/example-robot-data
+    ln -s ${example-robot-data.src} models/example-robot-data
+
+    # allow package:// uri use in examples
+    export ROS_PACKAGE_PATH=${example-robot-data}/share
+  '';
+
+  # CMAKE_BUILD_TYPE defaults to Release in this package,
+  # which enable -O3, which break some tests
+  # ref. https://github.com/stack-of-tasks/pinocchio/issues/2304#issuecomment-2231018300
+  postConfigure = ''
+    substituteInPlace CMakeCache.txt --replace-fail '-O3' '-O2'
   '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.python
   ];
 
   propagatedBuildInputs = [
+    console-bridge
+    jrl-cmakemodules
     urdfdom
   ] ++ lib.optionals (!pythonSupport) [
     boost
@@ -47,17 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.eigenpy
   ] ++ lib.optionals (pythonSupport && collisionSupport) [
     python3Packages.hpp-fcl
+  ] ++ lib.optionals (!pythonSupport && casadiSupport) [
+    casadi
+  ] ++ lib.optionals (pythonSupport && casadiSupport) [
+    python3Packages.casadi
   ];
 
-  cmakeFlags = lib.optionals collisionSupport [
-    "-DBUILD_WITH_COLLISION_SUPPORT=ON"
-  ] ++ lib.optionals pythonSupport [
-    "-DBUILD_WITH_LIBPYTHON=ON"
-  ] ++ lib.optionals (pythonSupport && stdenv.isDarwin) [
-    # AssertionError: '.' != '/tmp/nix-build-pinocchio-2.6.20.drv/sou[84 chars].dae'
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;test-py-bindings_geometry_model_urdf'"
-  ] ++ lib.optionals (!pythonSupport) [
-    "-DBUILD_PYTHON_INTERFACE=OFF"
+  checkInputs = lib.optionals (pythonSupport && casadiSupport) [ python3Packages.matplotlib ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
+    (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+    (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
   ];
 
   doCheck = true;
@@ -66,11 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     "pinocchio"
   ];
 
-  meta = with lib; {
-    description = "A fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
+  meta = {
+    description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
     homepage = "https://github.com/stack-of-tasks/pinocchio";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ nim65s wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nim65s wegank ];
+    platforms = lib.platforms.unix;
   };
 })

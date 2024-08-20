@@ -1,43 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, beautifulsoup4
-, pillow
-, django
+  # dependencies
+  django,
+
+  # tests
+  beautifulsoup4,
+  pillow,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap5";
-  version = "23.3";
-  format = "pyproject";
+  version = "24.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap5";
     rev = "v${version}";
-    hash = "sha256-FIwDyZ5I/FSaEiQKRfanzAGij86u8y85Wal0B4TrI7c=";
+    hash = "sha256-JbmwEPkj34tsK3tUtb56FPjU0emwERVXEc4fzlepdXY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    django
+  nativeCheckInputs = [
     beautifulsoup4
+    (django.override { withGdal = true; })
     pillow
+    pytest-django
+    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "django_bootstrap5"
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.app.settings
+  '';
+
+  disabledTests = [
+    # urllib.error.URLError: <urlopen error [Errno -3] Temporary failure in name resolution>
+    "test_get_bootstrap_setting"
   ];
+
+  pythonImportsCheck = [ "django_bootstrap5" ];
 
   meta = with lib; {
     description = "Bootstrap 5 integration with Django";

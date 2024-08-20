@@ -9,14 +9,14 @@ in
 {
   options = {
     services.alice-lg = {
-      enable = mkEnableOption (lib.mdDoc "Alice Looking Glass");
+      enable = mkEnableOption "Alice Looking Glass";
 
-      package = mkPackageOptionMD pkgs "alice-lg" { };
+      package = mkPackageOption pkgs "alice-lg" { };
 
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           alice-lg configuration, for configuration options see the example on [github](https://github.com/alice-lg/alice-lg/blob/main/etc/alice-lg/alice.example.conf)
         '';
         example = literalExpression ''

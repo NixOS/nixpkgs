@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, darwin, libtiff
+{ lib, stdenv, fetchsvn, cctools, libtiff
 , libpng, zlib, libwebp, libraw, openexr, openjpeg
 , libjpeg, jxrlib, pkg-config
 , fixDarwinDylibNames, autoSignDarwinBinariesHook }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
     fixDarwinDylibNames
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
@@ -72,7 +72,21 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open Source library for accessing popular graphics image file formats";
     homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
-    maintainers = with lib.maintainers; [viric l-as];
+    knownVulnerabilities = [
+      "CVE-2021-33367"
+      "CVE-2021-40262"
+      "CVE-2021-40263"
+      "CVE-2021-40264"
+      "CVE-2021-40265"
+      "CVE-2021-40266"
+
+      "CVE-2023-47992"
+      "CVE-2023-47993"
+      "CVE-2023-47994"
+      "CVE-2023-47995"
+      "CVE-2023-47996"
+    ];
+    maintainers = with lib.maintainers; [ l-as ];
     platforms = with lib.platforms; unix;
   };
 })

@@ -1,10 +1,10 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch2
 , meson
 , ninja
 , pkg-config
+, substituteAll
 , gettext
 , dbus
 , glib
@@ -28,10 +28,10 @@
 , libmtp
 , gnomeSupport ? false
 , gnome
-, gcr
+, gcr_4
 , glib-networking
 , gnome-online-accounts
-, wrapGAppsHook
+, wrapGAppsHook3
 , libimobiledevice
 , libbluray
 , libcdio-paranoia
@@ -39,34 +39,29 @@
 , openssh
 , libsecret
 , libgdata
+, libmsgraph
 , python3
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.50.6";
+  version = "1.54.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
-    hash = "sha256-xPbhH8TqqZM/TbjHo0R14GaM6tK//tloZ9Bhvj053aU=";
+    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VJCPThC18cIx6QMwyMFbfyHyu2EPGUwDSzOON5xQjjw=";
   };
 
   patches = [
-    # Hardcode the ssh path again.
-    # https://gitlab.gnome.org/GNOME/gvfs/-/issues/465
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/gvfs/-/commit/8327383e262e1e7f32750a8a2d3dd708195b0f53.patch";
-      hash = "sha256-ReD7qkezGeiJHyo9jTqEQNBjECqGhV9nSD+dYYGZWJ8=";
-      revert = true;
+    (substituteAll {
+      src = ./hardcode-ssh-path.patch;
+      ssh_program = "${lib.getBin openssh}/bin/ssh";
     })
   ];
 
   postPatch = ''
-    # patchShebangs requires executable file
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-    patchShebangs test test-driver
+    patchShebangs test
   '';
 
   nativeBuildInputs = [
@@ -75,8 +70,7 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
     gettext
-    wrapGAppsHook
-    libxml2
+    wrapGAppsHook3
     libxslt
     docbook_xsl
     docbook_xml_dtd_42
@@ -92,7 +86,7 @@ stdenv.mkDerivation rec {
     libimobiledevice
     libbluray
     libnfs
-    openssh
+    libxml2
     gsettings-desktop-schemas
     libsoup_3
   ] ++ lib.optionals udevSupport [
@@ -106,11 +100,12 @@ stdenv.mkDerivation rec {
     polkit
     libcdio-paranoia
   ] ++ lib.optionals gnomeSupport [
-    gcr
+    gcr_4
     glib-networking # TLS support
     gnome-online-accounts
     libsecret
     libgdata
+    libmsgraph
   ];
 
   mesonFlags = [
@@ -132,6 +127,7 @@ stdenv.mkDerivation rec {
     "-Dgoa=false"
     "-Dkeyring=false"
     "-Dgoogle=false"
+    "-Donedrive=false"
   ] ++ lib.optionals (avahi == null) [
     "-Ddnssd=false"
   ] ++ lib.optionals (samba == null) [
@@ -140,13 +136,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.finalPackage.doCheck;
 
   separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gvfs";
       versionPolicy = "odd-unstable";
     };
   };
@@ -157,4 +153,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
-}
+})

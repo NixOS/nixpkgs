@@ -19,18 +19,18 @@
 , pkg-config
 , polkit
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.47.1";
+  version = "3.52.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2PbixllmjHffgsPdlboE/O+MQMIo4sImBfmhepFh7IM=";
+    hash = "sha256-nim6iHPN5A1AwpNKRk+PQ7ousbUisZFEfKon3XhTxdQ=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -99,7 +99,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Component of Gnome Flashback that provides panels and default applets for the desktop";
-    homepage = "https://wiki.gnome.org/Projects/GnomePanel";
+    mainProgram = "gnome-panel";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-panel";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

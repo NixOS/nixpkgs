@@ -9,46 +9,46 @@ let
 in {
   options = {
     services.zfs.autoReplication = {
-      enable = mkEnableOption (lib.mdDoc "ZFS snapshot replication");
+      enable = mkEnableOption "ZFS snapshot replication";
 
       followDelete = mkOption {
-        description = lib.mdDoc "Remove remote snapshots that don't have a local correspondent.";
+        description = "Remove remote snapshots that don't have a local correspondent.";
         default = true;
         type = types.bool;
       };
 
       host = mkOption {
-        description = lib.mdDoc "Remote host where snapshots should be sent. `lz4` is expected to be installed on this host.";
+        description = "Remote host where snapshots should be sent. `lz4` is expected to be installed on this host.";
         example = "example.com";
         type = types.str;
       };
 
       identityFilePath = mkOption {
-        description = lib.mdDoc "Path to SSH key used to login to host.";
+        description = "Path to SSH key used to login to host.";
         example = "/home/username/.ssh/id_rsa";
         type = types.path;
       };
 
       localFilesystem = mkOption {
-        description = lib.mdDoc "Local ZFS filesystem from which snapshots should be sent.  Defaults to the attribute name.";
+        description = "Local ZFS filesystem from which snapshots should be sent.  Defaults to the attribute name.";
         example = "pool/file/path";
         type = types.str;
       };
 
       remoteFilesystem = mkOption {
-        description = lib.mdDoc "Remote ZFS filesystem where snapshots should be sent.";
+        description = "Remote ZFS filesystem where snapshots should be sent.";
         example = "pool/file/path";
         type = types.str;
       };
 
       recursive = mkOption {
-        description = lib.mdDoc "Recursively discover snapshots to send.";
+        description = "Recursively discover snapshots to send.";
         default = true;
         type = types.bool;
       };
 
       username = mkOption {
-        description = lib.mdDoc "Username used by SSH to login to remote host.";
+        description = "Username used by SSH to login to remote host.";
         example = "username";
         type = types.str;
       };

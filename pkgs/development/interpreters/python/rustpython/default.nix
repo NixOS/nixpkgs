@@ -4,34 +4,26 @@
 , fetchFromGitHub
 , SystemConfiguration
 , python3
-, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustpython";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "RustPython";
     repo = "RustPython";
-    rev = "v${version}";
-    hash = "sha256-RNUOBBbq4ca9yEKNj5TZTOQW0hruWOIm/G+YCHoJ19U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AtIaWwE1pEIP1SJN9dYgHRP1GX4LTmetIPztHbsBXto=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rustpython-doc-0.1.0" = "sha256-4xBiV1FcYA05cWs9fQV+OklZEU1VZunhCo9deOSWPe8=";
+      "rustpython-ast-0.3.1" = "sha256-dT0x4E8k/FcSP/q0uwwBWniT1n9HGmFF/HV6hAE6bGU=";
+      "rustpython-doc-0.3.0" = "sha256-34ERuLFKzUD9Xmf1zlafe42GLWZfUlw17ejf/NN6yH4=";
     };
   };
-
-  patches = [
-    # Fix aarch64 compatibility for sqlite. Remove with the next release. https://github.com/RustPython/RustPython/pull/4499
-    (fetchpatch {
-      url = "https://github.com/RustPython/RustPython/commit/9cac89347e2276fcb309f108561e99f4be5baff2.patch";
-      hash = "sha256-vUPQI/5ec6/36Vdtt7/B2unPDsVrGh5iEiSMBRatxWU=";
-    })
-  ];
 
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = [ "--features=freeze-stdlib" ];
@@ -45,5 +37,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://rustpython.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
+    #   = note: Undefined symbols for architecture x86_64:
+    #       "_utimensat", referenced from:
+    #           rustpython_vm::function::builtin::IntoPyNativeFn::into_func::... in
+    #           rustpython-10386d81555652a7.rustpython_vm-f0b5bedfcf056d0b.rustpython_vm.7926b68e665728ca-cgu.08.rcgu.o.rcgu.o
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

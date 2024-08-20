@@ -4,8 +4,10 @@
 , fetchFromGitHub
 , meson
 , mesonEmulatorHook
+, appstream
 , ninja
 , pkg-config
+, cmake
 , gettext
 , xmlto
 , docbook-xsl-nons
@@ -23,20 +25,27 @@
 , gperf
 , vala
 , curl
+, cairo
+, gdk-pixbuf
+, pango
+, librsvg
+, systemd
 , nixosTests
+, testers
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "0.15.5";
+  version = "1.0.3";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "ximion";
     repo = "appstream";
-    rev = "v${version}";
-    sha256 = "sha256-KVZCtu1w5FMgXZMiSW55rbrI6W/A9zWWKKvACtk/jjk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-pniZq+rR9wW86QqfRw4WZiBo1F16aSAb1J2RjI4aqE0=";
   };
 
   patches = [
@@ -60,6 +69,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    cmake
     gettext
     libxslt
     xmlto
@@ -71,6 +81,7 @@ stdenv.mkDerivation rec {
     gperf
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+    appstream
   ];
 
   buildInputs = [
@@ -82,6 +93,12 @@ stdenv.mkDerivation rec {
     libxmlb
     libyaml
     curl
+    cairo
+    gdk-pixbuf
+    pango
+    librsvg
+  ] ++ lib.optionals withSystemd [
+    systemd
   ];
 
   mesonFlags = [
@@ -89,11 +106,15 @@ stdenv.mkDerivation rec {
     "-Ddocs=false"
     "-Dvapi=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dcompose=true"
+  ] ++ lib.optionals (!withSystemd) [
+    "-Dsystemd=false"
   ];
 
-  passthru = {
-    tests = {
-      installed-tests = nixosTests.installed-tests.appstream;
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.appstream;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
@@ -109,5 +130,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     mainProgram = "appstreamcli";
     platforms = platforms.unix;
+    pkgConfigModules = [ "appstream" ];
   };
-}
+})

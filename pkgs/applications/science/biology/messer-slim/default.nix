@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, gcc, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.1";
+  version = "4.2.2";
   pname = "messer-slim";
 
   src = fetchFromGitHub {
     owner = "MesserLab";
     repo = "SLiM";
     rev = "v${version}";
-    sha256 = "sha256-KC9MbIJi//ZYreoRS+DED8eQW7e4IPvGT+rLI+f7Zrk=";
+    sha256 = "sha256-TlB7Hj4pVN4p4VanACWjQBeTxP9/DvRvdCdgelrXx60=";
   };
 
   nativeBuildInputs = [ cmake gcc gcc-unwrapped ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
                  "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib" ];
 
   meta = {
-     description = "An evolutionary simulation framework";
+     description = "Evolutionary simulation framework";
      homepage = "https://messerlab.org/slim/";
      license = with lib.licenses; [ gpl3 ];
      maintainers = with lib.maintainers; [ bzizou ];

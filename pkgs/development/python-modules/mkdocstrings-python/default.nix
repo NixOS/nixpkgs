@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, griffe
-, mkdocs-material
-, mkdocstrings
-, pdm-backend
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  griffe,
+  mkdocs-material,
+  mkdocstrings,
+  pdm-backend,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "1.7.3";
-  format = "pyproject";
+  version = "1.10.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,14 +21,12 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = "refs/tags/${version}";
-    hash = "sha256-r/N2ZGqA1cYFkP4Ai8p6utIw/m+FiNBVbpL4Y0EO2ds=";
+    hash = "sha256-3fXT2cV9jXkBNqK0LhKh8V11YLz+ulR3yAtq3GVOkTU=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     griffe
     mkdocstrings
   ];
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mkdocstrings_handlers"
-  ];
+  pythonImportsCheck = [ "mkdocstrings_handlers" ];
 
   meta = with lib; {
     description = "Python handler for mkdocstrings";

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  nose,
 }:
 
 buildPythonPackage rec {
   pname = "blessings";
   version = "1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,9 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/erikrose/blessings";
-    description = "A thin, practical wrapper around terminal coloring, styling, and positioning";
+    description = "Thin, practical wrapper around terminal coloring, styling, and positioning";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

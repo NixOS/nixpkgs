@@ -1,21 +1,22 @@
-{ lib
-, bazel_6
-, bazel-gazelle
-, buildBazelPackage
-, fetchFromGitHub
-, stdenv
-, cmake
-, gn
-, go
-, jdk
-, ninja
-, patchelf
-, python3
-, linuxHeaders
-, nixosTests
+{
+  lib,
+  bazel_6,
+  bazel-gazelle,
+  buildBazelPackage,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  gn,
+  go,
+  jdk,
+  ninja,
+  patchelf,
+  python3,
+  linuxHeaders,
+  nixosTests,
 
-# v8 (upstream default), wavm, wamr, wasmtime, disabled
-, wasmRuntime ? "wamr"
+  # v8 (upstream default), wavm, wamr, wasmtime, disabled
+  wasmRuntime ? "wamr",
 }:
 
 let
@@ -24,19 +25,27 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.27.1";
-    rev = "6b9db09c69965d5bfb37bdd29693f8b7f9e9e9ec";
+    version = "1.31.0";
+    rev = "7b8baff1758f0a584dcc3cb657b5032000bcb3d7";
+    hash = "sha256-pKERyXABcpMpKMRRvqJavp2jYGXTxwFLDPERqDT6jnY=";
   };
+
+  # these need to be updated for any changes to fetchAttrs
+  depsHash =
+    {
+      x86_64-linux = "sha256-33yu2oxP2zgKs01qn6RIyZx6zHJ1NuCNxolgk0/uWpM=";
+      aarch64-linux = "sha256-ox7CJPqNbwucMDORQvx8SFs4oXR/WKixwJ6uK+l4NJc=";
+    }
+    .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "envoy";
   inherit (srcVer) version;
   bazel = bazel_6;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev;
-    hash = "sha256-eZ3UCVqQbtK2GbawUVef5+BMSQbqe+owtwH+b887mQE=";
+    inherit (srcVer) hash rev;
 
     postFetch = ''
       chmod -R +w $out
@@ -49,8 +58,6 @@ buildBazelPackage rec {
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
-
-    cp ${./protobuf.patch} bazel/protobuf.patch
   '';
 
   patches = [
@@ -74,18 +81,10 @@ buildBazelPackage rec {
     patchelf
   ];
 
-  buildInputs = [
-    linuxHeaders
-  ];
-
-  # external/com_github_grpc_grpc/src/core/ext/transport/binder/transport/binder_transport.cc:756:29: error: format not a string literal and no format arguments [-Werror=format-security]
-  hardeningDisable = [ "format" ];
+  buildInputs = [ linuxHeaders ];
 
   fetchAttrs = {
-    sha256 = {
-      x86_64-linux = "sha256-bBi+3sAwtj5qu1npFpNMK2C99Q0ZI3zaSmMsTcreD8Y=";
-      aarch64-linux = "sha256-piIekotpxB02COglAon9w7a+1jXlHX29/VkrgKFsQ3c=";
-    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+    sha256 = depsHash;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -111,6 +110,9 @@ buildBazelPackage rec {
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
+
+      # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
+      sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
     '';
   };
   buildAttrs = {
@@ -147,28 +149,45 @@ buildBazelPackage rec {
   removeLocalConfigCc = true;
   removeLocal = false;
   bazelTargets = [ "//source/exe:envoy-static" ];
-  bazelBuildFlags = [
-    "-c opt"
-    "--spawn_strategy=standalone"
-    "--noexperimental_strict_action_env"
-    "--cxxopt=-Wno-error"
-    "--linkopt=-Wl,-z,noexecstack"
+  bazelBuildFlags =
+    [
+      "-c opt"
+      "--spawn_strategy=standalone"
+      "--noexperimental_strict_action_env"
+      "--cxxopt=-Wno-error"
+      "--linkopt=-Wl,-z,noexecstack"
 
-    # Force use of system Java.
-    "--extra_toolchains=@local_jdk//:all"
-    "--java_runtime_version=local_jdk"
-    "--tool_java_runtime_version=local_jdk"
+      # Force use of system Java.
+      "--extra_toolchains=@local_jdk//:all"
+      "--java_runtime_version=local_jdk"
+      "--tool_java_runtime_version=local_jdk"
 
-    "--define=wasm=${wasmRuntime}"
-  ] ++ (lib.optionals stdenv.isAarch64 [
-    # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
-    #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
-    #       |         ^
-    "--define=tcmalloc=disabled"
-  ]);
+      # undefined reference to 'grpc_core::*Metadata*::*Memento*
+      #
+      # During linking of the final binary, we see undefined references to grpc_core related symbols.
+      # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+      # "ParseMemento" and "MementoToValue" are only implemented for some types
+      # and appear unused and unimplemented for the undefined cases reported by the linker.
+      "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
+
+      "--define=wasm=${wasmRuntime}"
+    ]
+    ++ (lib.optionals stdenv.isAarch64 [
+      # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
+      #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
+      #       |         ^
+      "--define=tcmalloc=disabled"
+    ]);
+
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
+
+    # https://github.com/bazelbuild/rules_go/issues/3844
+    "--repo_env=GOPROXY=https://proxy.golang.org,direct"
+    "--repo_env=GOSUMDB=sum.golang.org"
   ];
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.tests = {
     envoy = nixosTests.envoy;
@@ -178,9 +197,14 @@ buildBazelPackage rec {
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
+    changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
+    mainProgram = "envoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

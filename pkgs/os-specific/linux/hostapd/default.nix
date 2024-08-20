@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, libnl, openssl, sqlite ? null }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libnl,
+  openssl,
+  nixosTests,
+  sqlite ? null,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IG58eZtnhXLC49EgMCOHhLxKn4IyOwFWtMlGbxSYkV0=";
+    sha256 = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -62,6 +71,8 @@ stdenv.mkDerivation rec {
 
     # Misc
     CONFIG_RADIUS_SERVER=y
+    CONFIG_MACSEC=y
+    CONFIG_DRIVER_MACSEC_LINUX=y
     CONFIG_FULL_DYNAMIC_VLAN=y
     CONFIG_VLAN_NETLINK=y
     CONFIG_GETRANDOM=y
@@ -78,6 +89,7 @@ stdenv.mkDerivation rec {
     CONFIG_IEEE80211N=y
     CONFIG_IEEE80211AC=y
     CONFIG_IEEE80211AX=y
+    CONFIG_IEEE80211BE=y
   '' + lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
@@ -99,11 +111,15 @@ stdenv.mkDerivation rec {
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) wpa_supplicant;
+  };
+
   meta = with lib; {
     homepage = "https://w1.fi/hostapd/";
-    description = "A user space daemon for access point and authentication servers";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ninjatrappeur hexa ];
+    description = "User space daemon for access point and authentication servers";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ oddlama ];
     platforms = platforms.linux;
   };
 }

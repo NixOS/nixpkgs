@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
+    hash = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
   };
 
-  cargoSha256 = "sha256-Xk+iH90Nb2koCdGmVSiRl8Nq26LlFdJBuKmvcbgnkgs=";
+  cargoHash = "sha256-Xk+iH90Nb2koCdGmVSiRl8Nq26LlFdJBuKmvcbgnkgs=";
 
   buildInputs = [ libxml2 ncurses zlib ];
 
@@ -34,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A small programming language for writing short programs processing textual data";
+    description = "Small programming language for writing short programs processing textual data";
+    mainProgram = "frawk";
     homepage = "https://github.com/ezrosent/frawk";
     changelog = "https://github.com/ezrosent/frawk/releases/tag/v${version}";
     license = with licenses; [ mit /* or */ asl20 ];

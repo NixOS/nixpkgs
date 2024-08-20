@@ -1,24 +1,23 @@
 { lib, appimageTools, fetchurl }:
 
 let
-  version = "1.7.7";
+  version = "2.0.4";
   pname = "lunatask";
 
   src = fetchurl {
     url = "https://lunatask.app/download/Lunatask-${version}.AppImage";
-    sha256 = "sha256-3WiJR+gwudeLs6Mn75SJP4BZ6utwxvvRLOHe/W+1Pfs=";
+    sha256 = "sha256-U+yelFSulAhgsn5xt45mxC7qGpQwmb3m3lt9nEW6MHU=";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
 
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
@@ -26,7 +25,7 @@ in appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "An all-in-one encrypted todo list, notebook, habit and mood tracker, pomodoro timer, and journaling app";
+    description = "All-in-one encrypted todo list, notebook, habit and mood tracker, pomodoro timer, and journaling app";
     longDescription = ''
       Lunatask is an all-in-one encrypted todo list, notebook, habit and mood tracker, pomodoro timer, and journaling app. It remembers stuff for you and keeps track of your mental health.
     '';
@@ -36,5 +35,6 @@ in appimageTools.wrapType2 rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ henkery ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "lunatask";
   };
 }

@@ -7,16 +7,16 @@ in
 {
   options = {
     programs.nano = {
-      enable = lib.mkEnableOption (lib.mdDoc "nano") // {
+      enable = lib.mkEnableOption "nano, a small user-friendly console text editor" // {
         default = true;
       };
 
-      package = lib.mkPackageOptionMD pkgs "nano" { };
+      package = lib.mkPackageOption pkgs "nano" { };
 
       nanorc = lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           The system-wide nano configuration.
           See {manpage}`nanorc(5)`.
         '';
@@ -30,7 +30,7 @@ in
       syntaxHighlight = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Whether to enable syntax highlight for various languages.";
+        description = "Whether to enable syntax highlight for various languages.";
       };
     };
   };
@@ -43,6 +43,7 @@ in
         include "${cfg.package}/share/nano/extra/*.nanorc"
       '') + cfg.nanorc;
       systemPackages = [ cfg.package ];
+      pathsToLink = [ "/share/nano" ];
     };
   };
 }

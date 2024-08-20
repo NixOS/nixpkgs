@@ -36,10 +36,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple music player for YouTube and Reddit";
+    description = "Simple music player for YouTube and Reddit";
     homepage = "https://headsetapp.co/";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ muscaln ];
+    mainProgram = "headset";
   };
 }

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libabigail";
-  version = "2.1";
+  version = "2.5";
 
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SmKX1B0V0ZNiVhFxFr1hKW5rm+4j1UoMr40/WrjdzEw=";
+    url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-fPxOmwCuONh/sMY76rsyucv5zkEOUs7rWtWzxb6xEfM=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
     license = licenses.asl20-llvm;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

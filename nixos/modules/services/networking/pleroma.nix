@@ -4,37 +4,32 @@ let
 in {
   options = {
     services.pleroma = with lib; {
-      enable = mkEnableOption (lib.mdDoc "pleroma");
+      enable = mkEnableOption "pleroma";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.pleroma;
-        defaultText = literalExpression "pkgs.pleroma";
-        description = lib.mdDoc "Pleroma package to use.";
-      };
+      package = mkPackageOption pkgs "pleroma" { };
 
       user = mkOption {
         type = types.str;
         default = "pleroma";
-        description = lib.mdDoc "User account under which pleroma runs.";
+        description = "User account under which pleroma runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "pleroma";
-        description = lib.mdDoc "Group account under which pleroma runs.";
+        description = "Group account under which pleroma runs.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/pleroma";
         readOnly = true;
-        description = lib.mdDoc "Directory where the pleroma service will save the uploads and static files.";
+        description = "Directory where the pleroma service will save the uploads and static files.";
       };
 
       configs = mkOption {
         type = with types; listOf str;
-        description = lib.mdDoc ''
+        description = ''
           Pleroma public configuration.
 
           This list gets appended from left to
@@ -59,7 +54,7 @@ in {
       secretConfigFile = mkOption {
         type = types.str;
         default = "/var/lib/pleroma/secrets.exs";
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing your secret pleroma configuration.
 
           *DO NOT POINT THIS OPTION TO THE NIX
@@ -97,6 +92,7 @@ in {
 
     systemd.services.pleroma = {
       description = "Pleroma social network";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
@@ -146,6 +142,6 @@ in {
     };
 
   };
-  meta.maintainers = with lib.maintainers; [ ninjatrappeur ];
+  meta.maintainers = with lib.maintainers; [ picnoir ];
   meta.doc = ./pleroma.md;
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, fetchFromGitHub, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
@@ -8,6 +8,8 @@
 , reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
+, langRust ? false
+, cargo
 , staticCompiler ? false
 , enableShared ? stdenv.targetPlatform.hasSharedLibraries
 , enableLTO ? stdenv.hostPlatform.hasSharedLibraries
@@ -29,10 +31,12 @@
 , buildPackages
 , pkgsBuildTarget
 , libxcrypt
-, disableGdbPlugin ? !enablePlugin
+, disableGdbPlugin ? !enablePlugin || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , nukeReferences
 , callPackage
 , majorMinorVersion
+, cctools
+, darwin
 
 # only for gcc<=6.x
 , langJava ? false
@@ -47,29 +51,39 @@
 }:
 
 let
-  version = {
-    "13" = "13.2.0";
-    "12" = "12.3.0";
-    "11" = "11.4.0";
-    "10" = "10.5.0";
-    "9"  =  "9.5.0";
-    "8"  =  "8.5.0";
-    "7"  =  "7.5.0";
-    "6"  =  "6.5.0";
-    "4.9"=  "4.9.4";
-    "4.8"=  "4.8.5";
-  }."${majorMinorVersion}";
+  inherit (lib)
+    callPackageWith
+    filter
+    getBin
+    maintainers
+    makeLibraryPath
+    makeSearchPathOutput
+    mapAttrs
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    pipe
+    platforms
+    versionAtLeast
+    versions
+    ;
 
-  majorVersion = lib.versions.major version;
-  atLeast13 = lib.versionAtLeast version "13";
-  atLeast12 = lib.versionAtLeast version "12";
-  atLeast11 = lib.versionAtLeast version "11";
-  atLeast10 = lib.versionAtLeast version "10";
-  atLeast9  = lib.versionAtLeast version  "9";
-  atLeast8  = lib.versionAtLeast version  "8";
-  atLeast7  = lib.versionAtLeast version  "7";
-  atLeast6  = lib.versionAtLeast version  "6";
-  atLeast49 = lib.versionAtLeast version  "4.9";
+  gccVersions = import ./versions.nix;
+  version = gccVersions.fromMajorMinor majorMinorVersion;
+
+  majorVersion = versions.major version;
+  atLeast14 = versionAtLeast version "14";
+  atLeast13 = versionAtLeast version "13";
+  atLeast12 = versionAtLeast version "12";
+  atLeast11 = versionAtLeast version "11";
+  atLeast10 = versionAtLeast version "10";
+  atLeast9  = versionAtLeast version  "9";
+  atLeast8  = versionAtLeast version  "8";
+  atLeast7  = versionAtLeast version  "7";
+  atLeast6  = versionAtLeast version  "6";
+  atLeast49 = versionAtLeast version  "4.9";
+  is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
@@ -78,54 +92,27 @@ let
   is8  = majorVersion == "8";
   is7  = majorVersion == "7";
   is6  = majorVersion == "6";
-  is49 = majorVersion == "4" && lib.versions.minor version == "9";
-  is48 = majorVersion == "4" && lib.versions.minor version == "8";
-in
+  is49 = majorVersion == "4" && versions.minor version == "9";
+  is48 = majorVersion == "4" && versions.minor version == "8";
 
-# We enable the isl cloog backend.
-assert !atLeast6 -> (cloog != null -> isl != null);
-
-assert langJava -> !atLeast7 && zip != null && unzip != null && zlib != null && boehmgc != null && perl != null;  # for `--enable-java-home'
-
-# Make sure we get GNU sed.
-assert stdenv.buildPlatform.isDarwin -> gnused != null;
-
-# The go frontend is written in c++
-assert langGo -> langCC;
-assert (atLeast6 && !is7 && !is8) -> (langAda -> gnat-bootstrap != null);
-
-# TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
-#   error: GDC is required to build d
-assert atLeast12 -> !langD;
-
-# threadsCross is just for MinGW
-assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
-
-# profiledCompiler builds inject non-determinism in one of the compilation stages.
-# If turned on, we can't provide reproducible builds anymore
-assert reproducibleBuild -> profiledCompiler == false;
-
-with lib;
-with builtins;
-
-let inherit version;
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+    targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
     patches = callFile ./patches {};
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
-    stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
-    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
+    stageNameAddon = optionalString withoutTargetLibc "-nolibc";
+    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}${stageNameAddon}-";
 
     javaAwtGtk = langJava && x11Support;
     xlibs = [
       libX11 libXt libSM libICE libXtst libXrender libXrandr libXi
       xorgproto
     ];
-    callFile = lib.callPackageWith ({
+    callFile = callPackageWith ({
       # lets
       inherit
         majorVersion
@@ -133,6 +120,7 @@ let inherit version;
         buildPlatform
         hostPlatform
         targetPlatform
+        targetConfig
         patches
         crossMingw
         stageNameAddon
@@ -142,8 +130,10 @@ let inherit version;
       inherit
         binutils
         buildPackages
+        cargo
         cloog
         withoutTargetLibc
+        darwin
         disableBootstrap
         disableGdbPlugin
         enableLTO
@@ -166,6 +156,7 @@ let inherit version;
         langJit
         langObjC
         langObjCpp
+        langRust
         lib
         libcCross
         libmpc
@@ -189,7 +180,7 @@ let inherit version;
         zip
         zlib
       ;
-    } // lib.optionalAttrs (!atLeast7) {
+    } // optionalAttrs (!atLeast7) {
       inherit
         boehmgc
         flex
@@ -232,10 +223,33 @@ let inherit version;
 
 in
 
+# We enable the isl cloog backend.
+assert !atLeast6 -> (cloog != null -> isl != null);
+
+assert langJava -> !atLeast7 && zip != null && unzip != null && zlib != null && boehmgc != null && perl != null;  # for `--enable-java-home'
+
+# Make sure we get GNU sed.
+assert stdenv.buildPlatform.isDarwin -> gnused != null;
+
+# The go frontend is written in c++
+assert langGo -> langCC;
+assert (atLeast6 && !is7 && !is8) -> (langAda -> gnat-bootstrap != null);
+
+# TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
+#   error: GDC is required to build d
+assert atLeast12 -> !langD;
+
+# threadsCross is just for MinGW
+assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
+
+# profiledCompiler builds inject non-determinism in one of the compilation stages.
+# If turned on, we can't provide reproducible builds anymore
+assert reproducibleBuild -> profiledCompiler == false;
+
 # We need all these X libraries when building AWT with GTK.
 assert !atLeast7 -> (x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == []);
 
-lib.pipe ((callFile ./common/builder.nix {}) ({
+pipe ((callFile ./common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -255,37 +269,26 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
           else if atLeast6
           then "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz"
           else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    ${if is10 || is11 || is13 then "hash" else "sha256"} = {
-      "13.2.0" = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
-      "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
-      "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
-      "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
-      "9.5.0"  = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
-      "8.5.0"  = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
-      "7.5.0"  = "0qg6kqc5l72hpnj4vr6l0p69qav0rh4anlkk3y55540zy3klc6dq";
-      "6.5.0"  = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
-      "4.9.4"  = "14l06m7nvcvb0igkbip58x59w3nq6315k6jcz3wr9ch1rn9d44bc";
-      "4.8.5"  = "08yggr18v373a1ihj0rg2vd6psnic42b518xcgp3r9k81xz1xyr2";
-    }."${version}";
+    ${if is10 || is11 || is13 then "hash" else "sha256"} =
+      gccVersions.srcHashForVersion version;
   };
 
   inherit patches;
 
   outputs =
     if atLeast7
-    then [ "out" "man" "info" ] ++ lib.optional (!langJit) "lib"
+    then [ "out" "man" "info" ] ++ optional (!langJit) "lib"
     else if atLeast49 && (langJava || langGo || (if atLeast6 then langJit else targetPlatform.isDarwin)) then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
 
   setOutputFlags = false;
-  NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" "pie" ]
-  ++ lib.optionals (is11 && langAda) [ "fortify3" ];
+  hardeningDisable = [ "format" "pie" "stackclashprotection" ]
+  ++ optionals (is11 && langAda) [ "fortify3" ];
 
-  postPatch = lib.optionalString atLeast7 ''
+  postPatch = optionalString atLeast7 ''
     configureScripts=$(find . -name configure)
     for configureScript in $configureScripts; do
       patchShebangs $configureScript
@@ -293,8 +296,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   ''
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
-  + lib.optionalString (atLeast6 && hostPlatform.isDarwin) ''
-    substituteInPlace gcc/config/darwin-c.c${lib.optionalString atLeast12 "c"} \
+  + optionalString (atLeast6 && hostPlatform.isDarwin) ''
+    substituteInPlace gcc/config/darwin-c.c${optionalString atLeast12 "c"} \
       --replace 'if (stdinc)' 'if (0)'
 
     substituteInPlace libgcc/config/t-slibgcc-darwin \
@@ -304,7 +307,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
   ''
   + (
-    lib.optionalString (targetPlatform != hostPlatform || stdenv.cc.libc != null)
+    optionalString (targetPlatform != hostPlatform || stdenv.cc.libc != null)
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       (let
@@ -314,18 +317,18 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
         '' echo "fixing the {GLIBC,UCLIBC,MUSL}_DYNAMIC_LINKER macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
            do
-             grep -q ${lib.optionalString (!atLeast6) "LIBC"}_DYNAMIC_LINKER "$header" || continue
+             grep -q ${optionalString (!atLeast6) "LIBC"}_DYNAMIC_LINKER "$header" || continue
              echo "  fixing $header..."
              sed -i "$header" \
                  -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
                  -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
              done
-        '' + lib.optionalString (atLeast6 && targetPlatform.libc == "musl") ''
+        '' + optionalString (atLeast6 && targetPlatform.libc == "musl") ''
            sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
     ))
-      + lib.optionalString (atLeast7 && targetPlatform.isAvr) (''
+      + optionalString (atLeast7 && targetPlatform.isAvr) (''
             makeFlagsArray+=(
                '-s' # workaround for hitting hydra log limit
                'LIMITS_H_TEST=false'
@@ -337,7 +340,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   inherit (callFile ./common/dependencies.nix { }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
-  preConfigure = (callFile ./common/pre-configure.nix { }) + lib.optionalString atLeast10 ''
+  preConfigure = (callFile ./common/pre-configure.nix { }) + optionalString atLeast10 ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
 
@@ -349,16 +352,16 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
     ++ optional (is7 && targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
     ++ optional (is7 && targetPlatform.isNetBSD) "--disable-libcilkrts";
 
-  targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
+  inherit targetConfig;
 
   buildFlags =
     # we do not yet have Nix-driven profiling
     assert atLeast12 -> (profiledCompiler -> !disableBootstrap);
     if atLeast11
     then let target =
-               lib.optionalString (profiledCompiler) "profiled" +
-               lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
-         in lib.optional (target != "") target
+               optionalString (profiledCompiler) "profiled" +
+               optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+         in optional (target != "") target
     else
       optional
         (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
@@ -372,47 +375,74 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   # https://gcc.gnu.org/PR109898
   enableParallelInstalling = false;
 
-  # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
+  env = mapAttrs (_: v: toString v) ({
 
-  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-  # library headers and binaries, regarless of the language being compiled.
-  #
-  # Note: When building the Java AWT GTK peer, the build system doesn't honor
-  # `--with-gmp' et al., e.g., when building
-  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
-  # them to $CPATH and $LIBRARY_PATH in this case.
-  #
-  # Likewise, the LTO code doesn't find zlib.
-  #
-  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
-  # compiler (after the specs for the cross-gcc are created). Having
-  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+    NIX_NO_SELF_RPATH = true;
 
-  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
-    ++ optional (zlib != null) zlib
-    ++ optional langJava boehmgc
-    ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ]
-  ));
+    # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+    ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
-    optional (zlib != null) zlib
-    ++ optional langJava boehmgc
-    ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ]
-  ));
+    # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+    # library headers and binaries, regarless of the language being compiled.
+    #
+    # Note: When building the Java AWT GTK peer, the build system doesn't honor
+    # `--with-gmp' et al., e.g., when building
+    # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
+    # them to $CPATH and $LIBRARY_PATH in this case.
+    #
+    # Likewise, the LTO code doesn't find zlib.
+    #
+    # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+    # compiler (after the specs for the cross-gcc are created). Having
+    # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-  inherit (callFile ./common/extra-target-flags.nix { })
-    EXTRA_FLAGS_FOR_TARGET
-    EXTRA_LDFLAGS_FOR_TARGET
-    ;
+    CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+      ++ optional (zlib != null) zlib
+      ++ optional langJava boehmgc
+      ++ optionals javaAwtGtk xlibs
+      ++ optionals javaAwtGtk [ gmp mpfr ]
+    ));
+
+    LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
+      optional (zlib != null) zlib
+      ++ optional langJava boehmgc
+      ++ optionals javaAwtGtk xlibs
+      ++ optionals javaAwtGtk [ gmp mpfr ]
+    ));
+
+    inherit (callFile ./common/extra-target-flags.nix { })
+      EXTRA_FLAGS_FOR_TARGET
+      EXTRA_LDFLAGS_FOR_TARGET
+      ;
+  } // optionalAttrs is7 {
+    NIX_CFLAGS_COMPILE = optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument"
+      # Downgrade register storage class specifier errors to warnings when building a cross compiler from a clang stdenv.
+      + optionalString (stdenv.cc.isClang && targetPlatform != hostPlatform) " -Wno-register";
+  } // optionalAttrs (!is7 && !atLeast12 && stdenv.cc.isClang && targetPlatform != hostPlatform) {
+    NIX_CFLAGS_COMPILE = "-Wno-register";
+  } // optionalAttrs (!atLeast7) {
+    inherit langJava;
+  } // optionalAttrs atLeast6 {
+    NIX_LDFLAGS = optionalString hostPlatform.isSunOS "-lm";
+  });
 
   passthru = {
-    inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
+    inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD langJava version;
     isGNU = true;
-  } // lib.optionalAttrs (!atLeast12) {
-    hardeningUnsupportedFlags = lib.optionals is48 [ "stackprotector" ] ++ [ "fortify3" ];
+    hardeningUnsupportedFlags = optional is48 "stackprotector"
+      ++ optional (
+        (targetPlatform.isAarch64 && !atLeast9) || !atLeast8
+      ) "stackclashprotection"
+      ++ optional (!atLeast11) "zerocallusedregs"
+      ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
+      ++ optional (!(
+        atLeast8
+        && targetPlatform.isLinux
+        && targetPlatform.isx86_64
+        && targetPlatform.libc == "glibc"
+      )) "shadowstack"
+      ++ optional (!(atLeast9 && targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
+      ++ optionals (langFortran) [ "fortify" "format" ];
   };
 
   enableParallelBuilding = true;
@@ -427,15 +457,20 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       platforms
       maintainers
     ;
-  } // lib.optionalAttrs (!atLeast11) {
-    badPlatforms = if !is49 then [ "aarch64-darwin" ] else lib.platforms.darwin;
+  } // optionalAttrs (!atLeast11) {
+    badPlatforms =
+      # avr-gcc8 is maintained for the `qmk` package
+      if (is8 && targetPlatform.isAvr) then []
+      else if !(is48 || is49 || is6) then [ "aarch64-darwin" ]
+      else platforms.darwin;
+  } // optionalAttrs is10 {
+    badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
   };
-} // optionalAttrs is7 {
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
-} // optionalAttrs (!atLeast7) {
-  env.langJava = langJava;
-} // optionalAttrs atLeast6 {
-  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
+} // optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
+  # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.
+  preBuild = ''
+    makeFlagsArray+=('STRIP=${getBin cctools}/bin/${stdenv.cc.targetPrefix}strip')
+  '';
 } // optionalAttrs (!atLeast8) {
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 } // optionalAttrs enableMultilib {

@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
+, doxygen
 , boost
 , eigen
 , assimp
@@ -14,20 +14,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpp-fcl";
-  version = "2.3.6";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "humanoid-path-planner";
-    repo = finalAttrs.pname;
+    repo = "hpp-fcl";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Y6ATYXsV8hH22XiXyvacuUhHTuNCzObPlxNX2vZGghM=";
+    hash = "sha256-0OORdtT7vMpvK3BPJvtvuLcz0+bfu1+nVvzs3y+LyQw=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    doxygen
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.numpy
   ];
 
   propagatedBuildInputs = [
@@ -44,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DHPP_FCL_HAS_QHULL=ON"
+    "-DINSTALL_DOCUMENTATION=ON"
   ] ++ lib.optionals (!pythonSupport) [
     "-DBUILD_PYTHON_INTERFACE=OFF"
   ];
@@ -53,8 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
     "hppfcl"
   ];
 
+  outputs = [ "dev" "out" "doc" ];
+  postFixup = ''
+    moveToOutput share/ament_index "$dev"
+    moveToOutput share/${finalAttrs.pname} "$dev"
+  '';
+
+
   meta = with lib; {
-    description = "An extension of the Flexible Collision Library";
+    description = "Extension of the Flexible Collision Library";
     homepage = "https://github.com/humanoid-path-planner/hpp-fcl";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nim65s ];

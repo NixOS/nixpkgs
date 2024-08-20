@@ -23,9 +23,9 @@ in
 {
 
   options.services.opensearch = {
-    enable = mkEnableOption (lib.mdDoc "OpenSearch");
+    enable = mkEnableOption "OpenSearch";
 
-    package = lib.mkPackageOptionMD pkgs "OpenSearch" {
+    package = lib.mkPackageOption pkgs "OpenSearch" {
       default = [ "opensearch" ];
     };
 
@@ -36,7 +36,7 @@ in
         options."network.host" = lib.mkOption {
           type = lib.types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc ''
+          description = ''
             Which port this service should listen on.
           '';
         };
@@ -44,7 +44,7 @@ in
         options."cluster.name" = lib.mkOption {
           type = lib.types.str;
           default = "opensearch";
-          description = lib.mdDoc ''
+          description = ''
             The name of the cluster.
           '';
         };
@@ -52,7 +52,7 @@ in
         options."discovery.type" = lib.mkOption {
           type = lib.types.str;
           default = "single-node";
-          description = lib.mdDoc ''
+          description = ''
             The type of discovery to use.
           '';
         };
@@ -60,7 +60,7 @@ in
         options."http.port" = lib.mkOption {
           type = lib.types.port;
           default = 9200;
-          description = lib.mdDoc ''
+          description = ''
             The port to listen on for HTTP traffic.
           '';
         };
@@ -68,21 +68,33 @@ in
         options."transport.port" = lib.mkOption {
           type = lib.types.port;
           default = 9300;
-          description = lib.mdDoc ''
+          description = ''
             The port to listen on for transport traffic.
+          '';
+        };
+
+        options."plugins.security.disabled" = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Whether to enable the security plugin,
+            `plugins.security.ssl.transport.keystore_filepath` or
+            `plugins.security.ssl.transport.server.pemcert_filepath` and
+            `plugins.security.ssl.transport.client.pemcert_filepath`
+            must be set for this plugin to be enabled.
           '';
         };
       };
 
       default = {};
 
-      description = lib.mdDoc ''
+      description = ''
         OpenSearch configuration.
       '';
     };
 
     logging = lib.mkOption {
-      description = lib.mdDoc "opensearch logging configuration.";
+      description = "opensearch logging configuration.";
 
       default = ''
         logger.action.name = org.opensearch.action
@@ -103,7 +115,7 @@ in
       type = lib.types.path;
       default = "/var/lib/opensearch";
       apply = converge (removeSuffix "/");
-      description = lib.mdDoc ''
+      description = ''
         Data directory for OpenSearch. If you change this, you need to
         manually create the directory. You also need to create the
         `opensearch` user and group, or change
@@ -116,7 +128,7 @@ in
     user = lib.mkOption {
       type = lib.types.str;
       default = "opensearch";
-      description = lib.mdDoc ''
+      description = ''
         The user OpenSearch runs as. Should be left at default unless
         you have very specific needs.
       '';
@@ -125,20 +137,20 @@ in
     group = lib.mkOption {
       type = lib.types.str;
       default = "opensearch";
-      description = lib.mdDoc ''
+      description = ''
         The group OpenSearch runs as. Should be left at default unless
         you have very specific needs.
       '';
     };
 
     extraCmdLineOptions = lib.mkOption {
-      description = lib.mdDoc "Extra command line options for the OpenSearch launcher.";
+      description = "Extra command line options for the OpenSearch launcher.";
       default = [ ];
       type = lib.types.listOf lib.types.str;
     };
 
     extraJavaOptions = lib.mkOption {
-      description = lib.mdDoc "Extra command line options for Java.";
+      description = "Extra command line options for Java.";
       default = [ ];
       type = lib.types.listOf lib.types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
@@ -146,7 +158,7 @@ in
 
     restartIfChanged = lib.mkOption {
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Automatically restart the service on config change.
         This can be set to false to defer restarts on a server or cluster.
         Please consider the security implications of inadvertently running an older version,
@@ -186,6 +198,13 @@ in
               shopt -s inherit_errexit
 
               # Install plugins
+
+              # remove plugins directory if it is empty.
+              if [[ -d ${cfg.dataDir}/plugins && -z "$(ls -A ${cfg.dataDir}/plugins)" ]]; then
+                rm -r "${cfg.dataDir}/plugins"
+              fi
+
+              ln -sfT "${cfg.package}/plugins" "${cfg.dataDir}/plugins"
               ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
               ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
 

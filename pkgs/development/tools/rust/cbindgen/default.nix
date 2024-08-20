@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gyNZAuxpeOjuC+Rh9jAyHSBQRRYUlYoIrBKuCFg3Hao=";
   };
 
-  cargoSha256 = "sha256-pdTxhECAZzBx5C01Yx7y/OGwhhAdlEDpqLBdvQcb8bc=";
+  cargoHash = "sha256-pdTxhECAZzBx5C01Yx7y/OGwhhAdlEDpqLBdvQcb8bc=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
-    description = "A project for generating C bindings from Rust code";
+    description = "Project for generating C bindings from Rust code";
+    mainProgram = "cbindgen";
     homepage = "https://github.com/mozilla/cbindgen";
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa ];

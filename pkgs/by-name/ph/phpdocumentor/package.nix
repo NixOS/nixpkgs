@@ -1,20 +1,26 @@
 { lib
 , php
 , fetchFromGitHub
+, makeBinaryWrapper
 }:
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.4.1";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fNjix3pJDRCTWM3Xtn+AtZe4RJfgQ60kiJB9J9tC5t4=";
+    hash = "sha256-zpAKygpxyKYfefa5ag76saTSQNLon/v3rYkl0Nj2+FM=";
   };
 
-  vendorHash = "sha256-rsBg2EHbvYLVr6haN1brHZFVjLDaxqdkNWf0HL3Eoy0=";
+  vendorHash = "sha256-VNlAzWueF7ZXBpr9RrJghMPrAUof7f1DCh1osFIwFfs=";
+
+  # Needed because of the unbound version constraint on phpdocumentor/json-path
+  composerStrictValidation = false;
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall

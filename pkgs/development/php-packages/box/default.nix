@@ -1,24 +1,28 @@
-{ lib, php, fetchFromGitHub }:
+{
+  lib,
+  php82,
+  fetchFromGitHub,
+}:
 
-php.buildComposerProject (finalAttrs: {
+php82.buildComposerProject (finalAttrs: {
   pname = "box";
-  version = "4.3.8";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "box-project";
     repo = "box";
     rev = finalAttrs.version;
-    hash = "sha256-v1J84nqaX36DrLLH5kld+8NIymqtt5/5nJWJNCBVFRE=";
+    hash = "sha256-gYIAP9pTjahNkpNNXx0c8sQm+9Kaq6/IAo/xI5bNy7Y=";
   };
 
-  vendorHash = "sha256-LWggAUBMKljxa7HNdJMqOD/sx3IWCOQSqbYEnGntjN0=";
+  vendorHash = "sha256-HCbjW4HdyQNWDEHXj9U1t3S3EKcrPV1z/9I1ClFsMsc=";
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";
-    description = "An application for building and managing Phars";
-    license = lib.licenses.mit;
+    description = "Application for building and managing Phars";
     homepage = "https://github.com/box-project/box";
-    maintainers = lib.teams.php.members;
+    license = lib.licenses.mit;
     mainProgram = "box";
+    maintainers = lib.teams.php.members;
   };
 })

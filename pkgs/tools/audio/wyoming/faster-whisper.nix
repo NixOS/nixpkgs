@@ -1,34 +1,31 @@
 { lib
-, python3
-, fetchPypi
-, fetchpatch
+, python3Packages
+, fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wyoming-faster-whisper";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "wyoming_faster_whisper";
-    inherit version;
-    hash = "sha256-wo62m8gIP9hXihkd8j2haVvz3TlJv3m5WWthTPFwesk=";
+  src = fetchFromGitHub {
+    owner = "rhasspy";
+    repo = "wyoming-faster-whisper";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zWa872YkPh8B7dE//leth+ixIa1wHSRcjkvH2lXzolc=";
   };
 
-  patches = [
-    ./faster-whisper-entrypoint.patch
-
-    # fix model retrieval on python3.11+
-    (fetchpatch {
-      url = "https://github.com/rhasspy/rhasspy3/commit/ea55a309e55384e6fd8c9f19534622968f8ed95b.patch";
-      hash = "sha256-V9WXKE3+34KGubBS23vELTHjqU2RCTk3sX8GTjmH+AA=";
-      stripLen = 4;
-    })
+  nativeBuildInputs = with python3Packages; [
+    setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    ctranslate2
-    tokenizers
+  pythonRelaxDeps = [
+    "faster-whisper"
+    "wyoming"
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    faster-whisper
     wyoming
   ];
 
@@ -40,8 +37,9 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/rhasspy/wyoming-faster-whisper/releases/tag/v${version}";
     description = "Wyoming Server for Faster Whisper";
-    homepage = "https://pypi.org/project/wyoming-faster-whisper/";
+    homepage = "https://github.com/rhasspy/wyoming-faster-whisper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

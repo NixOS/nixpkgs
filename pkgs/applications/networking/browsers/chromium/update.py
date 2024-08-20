@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3 nix nixfmt nix-prefetch-git
+#! nix-shell -i python -p python3Packages.looseversion nix nixfmt-classic nix-prefetch-git
 
 """This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
 via upstream-info.nix."""
@@ -15,12 +15,11 @@ import sys
 from codecs import iterdecode
 from collections import OrderedDict
 from datetime import datetime
-from distutils.version import LooseVersion
+from looseversion import LooseVersion
 from os.path import abspath, dirname
 from urllib.request import urlopen
 
 RELEASES_URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/all/versions/all/releases'
-DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 
 PIN_PATH = dirname(abspath(__file__)) + '/upstream-info.nix'
 UNGOOGLED_FLAGS_PATH = dirname(abspath(__file__)) + '/ungoogled-flags.toml'
@@ -78,6 +77,12 @@ def get_file_revision(revision, file_path):
         resp = http_response.read()
         return base64.b64decode(resp)
 
+def get_ungoogled_file_revision(revision, file_path):
+    """Fetches the requested Git revision of the given Chromium file."""
+    url = f'https://raw.githubusercontent.com/ungoogled-software/ungoogled-chromium/{revision}/{file_path}'
+    with urlopen(url) as http_response:
+        resp = http_response.read()
+        return resp.decode("utf-8")
 
 def get_chromedriver(channel):
     """Get the latest chromedriver builds given a channel"""
@@ -137,7 +142,16 @@ def get_latest_ungoogled_chromium_build(linux_stable_versions):
     return {
         'name': 'chrome/platforms/linux/channels/ungoogled-chromium/versions/',
         'version': version,
-        'ungoogled_tag': tag
+        'ungoogled_rev': tag
+    }
+
+def get_ungoogled_chromium_build_by_ref(ungoogled_chromium_ref):
+    """Returns a dictionary for an ungoogled-chromium build referenced by a ref in the ungoogled-chromium repository."""
+    version = get_ungoogled_file_revision(ungoogled_chromium_ref, "chromium_version.txt").strip("\n ")
+    return {
+        'name': 'chrome/platforms/linux/channels/ungoogled-chromium/versions/',
+        'version': version,
+        'ungoogled_rev': ungoogled_chromium_ref
     }
 
 
@@ -151,10 +165,6 @@ def channel_name_to_attr_name(channel_name):
     """Maps a channel name to the corresponding main Nixpkgs attribute name."""
     if channel_name == 'stable':
         return 'chromium'
-    if channel_name == 'beta':
-        return 'chromiumBeta'
-    if channel_name == 'dev':
-        return 'chromiumDev'
     if channel_name == 'ungoogled-chromium':
         return 'ungoogled-chromium'
     print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
@@ -190,20 +200,29 @@ def print_updates(channels_old, channels_new):
 channels = {}
 last_channels = load_as_json(PIN_PATH)
 
+src_hash_cache = {}
+
 
 print(f'GET {RELEASES_URL}', file=sys.stderr)
 with urlopen(RELEASES_URL) as resp:
     releases = json.load(resp)['releases']
 
-    linux_stable_versions = [release['version'] for release in releases if release['name'].startswith('chrome/platforms/linux/channels/stable/versions/')]
-    releases.append(get_latest_ungoogled_chromium_build(linux_stable_versions))
+    if len(sys.argv) == 3 and sys.argv[1] == 'ungoogled-rev':
+        releases.append(get_ungoogled_chromium_build_by_ref(sys.argv[2]))
+    else:
+        linux_stable_versions = [release['version'] for release in releases if release['name'].startswith('chrome/platforms/linux/channels/stable/versions/')]
+        releases.append(get_latest_ungoogled_chromium_build(linux_stable_versions))
 
     for release in releases:
-        channel_name = re.findall("chrome\/platforms\/linux\/channels\/(.*)\/versions\/", release['name'])[0]
+        channel_name = re.findall("chrome/platforms/linux/channels/(.*)/versions/", release['name'])[0]
 
         # If we've already found a newer release for this channel, we're
         # no longer interested in it.
         if channel_name in channels:
+            continue
+
+        # We only look for channels that are listed in our version pin file.
+        if channel_name not in last_channels:
             continue
 
         # If we're back at the last release we used, we don't need to
@@ -222,13 +241,23 @@ with urlopen(RELEASES_URL) as resp:
             google_chrome_suffix = channel_name
 
         try:
-            channel['hash'] = prefetch_src_sri_hash(
-                channel_name_to_attr_name(channel_name),
-                release["version"]
-            )
-            channel['hash_deb_amd64'] = nix_prefetch_url(
-                f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
-                f'google-chrome-{google_chrome_suffix}_{release["version"]}-1_amd64.deb')
+            version = release["version"]
+            existing_releases = dict(map(lambda channel: (channel[1]['version'], channel[1]['hash']), last_channels.items()))
+
+            if version in src_hash_cache:
+                print(f'Already got hash {src_hash_cache[version]} for {version}, skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
+
+                channel["hash"] = src_hash_cache[version]
+            elif version in existing_releases:
+                print(f'Already got hash {existing_releases[version]} for {version} (from upstream-info.nix), skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
+
+                channel["hash"] = existing_releases[version]
+            else:
+                channel["hash"] = prefetch_src_sri_hash(
+                    channel_name_to_attr_name(channel_name),
+                    version
+                )
+                src_hash_cache[version] = channel["hash"]
         except subprocess.CalledProcessError:
             # This release isn't actually available yet.  Continue to
             # the next one.
@@ -240,11 +269,11 @@ with urlopen(RELEASES_URL) as resp:
         elif channel_name == 'ungoogled-chromium':
             ungoogled_repo_url = 'https://github.com/ungoogled-software/ungoogled-chromium.git'
             channel['deps']['ungoogled-patches'] = {
-                'rev': release['ungoogled_tag'],
-                'hash': nix_prefetch_git(ungoogled_repo_url, release['ungoogled_tag'])['hash']
+                'rev': release['ungoogled_rev'],
+                'hash': nix_prefetch_git(ungoogled_repo_url, release['ungoogled_rev'])['hash']
             }
             with open(UNGOOGLED_FLAGS_PATH, 'w') as out:
-                out.write(get_ungoogled_chromium_gn_flags(release['ungoogled_tag']))
+                out.write(get_ungoogled_chromium_gn_flags(release['ungoogled_rev']))
 
         channels[channel_name] = channel
 

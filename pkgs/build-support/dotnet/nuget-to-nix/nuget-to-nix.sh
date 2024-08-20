@@ -22,36 +22,57 @@ export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
+wait "$!"
 
+declare -a remote_sources
 declare -A base_addresses
 
 for index in "${sources[@]}"; do
-  base_addresses[$index]=$(
+    if [[ -d "$index" ]]; then
+        continue
+    fi
+
+    remote_sources+=($index)
+
+    base_address=$(
     curl --compressed --netrc -fsL "$index" | \
       jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')
+    if [[ ! "$base_address" == */ ]]; then
+      base_address="$base_address/"
+    fi
+    base_addresses[$index]="$base_address"
 done
 
 echo "{ fetchNuGet }: ["
 
 cd "$pkgs"
 for package in *; do
+  [[ -d "$package" ]] || continue
   cd "$package"
   for version in *; do
-    id=$(xq -r .package.metadata.id "$version/$package".nuspec)
+    id=$(xq -r .package.metadata.id "$version"/*.nuspec)
 
     if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
       continue
     fi
 
-    used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
-    for source in "${sources[@]}"; do
+    # packages in the nix store should have an empty metadata file
+    used_source="$(jq -r 'if has("source") then .source else "" end' "$version"/.nupkg.metadata)"
+    found=false
+
+    if [[ -z "$used_source" || -d "$used_source" ]]; then
+      continue
+    fi
+
+    for source in "${remote_sources[@]}"; do
       url="${base_addresses[$source]}$package/$version/$package.$version.nupkg"
       if [[ "$source" == "$used_source" ]]; then
-        sha256="$(nix-hash --type sha256 --flat --base32 "$version/$package.$version".nupkg)"
+        hash="$(nix-hash --type sha256 --flat --sri "$version/$package.$version".nupkg)"
         found=true
         break
       else
-        if sha256=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+        if hash=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+          hash="$(nix-hash --to-sri --type sha256 "$hash")"
           # If multiple remote sources are enabled, nuget will try them all
           # concurrently and use the one that responds first. We always use the
           # first source that has the package.
@@ -67,15 +88,15 @@ for package in *; do
       fi
     done
 
-    if ! ${found-false}; then
+    if [[ $found = false ]]; then
       echo "couldn't find $package $version" >&2
       exit 1
     fi
 
     if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; url = \"$url\"; })"
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; url = \"$url\"; })"
     else
-      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; })"
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; hash = \"$hash\"; })"
     fi
   done
   cd ..

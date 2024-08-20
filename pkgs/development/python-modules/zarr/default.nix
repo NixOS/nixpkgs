@@ -1,51 +1,47 @@
-{ lib
-, asciitree
-, buildPythonPackage
-, fasteners
-, fetchPypi
-, numcodecs
-, numpy
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  asciitree,
+  buildPythonPackage,
+  fasteners,
+  fetchPypi,
+  numcodecs,
+  msgpack,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.16.1";
+  version = "2.18.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QnbPS0plNDEELNU/8igrxNKSpoQkEeiFKZZFBPsHMoY=";
+    hash = "sha256-m7OTuKCjj7Eh27kTsEfXXbKN6YkPbWRKIXpzz0rnT0c=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     asciitree
     numpy
     fasteners
     numcodecs
-  ];
+  ] ++ numcodecs.optional-dependencies.msgpack;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "zarr"
-  ];
+  pythonImportsCheck = [ "zarr" ];
 
   meta = with lib; {
-    description = "An implementation of chunked, compressed, N-dimensional arrays for Python";
+    description = "Implementation of chunked, compressed, N-dimensional arrays for Python";
     homepage = "https://github.com/zarr-developers/zarr";
     changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

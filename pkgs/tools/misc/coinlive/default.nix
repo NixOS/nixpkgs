@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-llw97jjfPsDd4nYi6lb9ug6sApPoD54WlzpJswvdbRs=";
   };
 
-  cargoSha256 = "sha256-T1TgwnohUDvfpn6GXNP4xJGHM3aenMK+ORxE3z3PPA4=";
+  cargoHash = "sha256-T1TgwnohUDvfpn6GXNP4xJGHM3aenMK+ORxE3z3PPA4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mayeranalytics/coinlive";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "coinlive";
   };
 }

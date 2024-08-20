@@ -12,6 +12,15 @@ const fixupYarnLock = async (lockContents, verbose) => {
 	const fixedData = Object.fromEntries(
 		Object.entries(lockData.object)
 		.map(([dep, pkg]) => {
+			if (pkg.resolved === undefined) {
+				console.warn(`no resolved URL for package ${dep}`)
+				var maybeFile = dep.split("@", 2)[1]
+				if (maybeFile.startsWith("file:")) {
+					console.log(`Rewriting URL for local file dependency ${dep}`)
+					pkg.resolved = maybeFile
+				}
+				return [dep, pkg]
+			}
 			const [ url, hash ] = pkg.resolved.split("#", 2)
 
 			if (hash || url.startsWith("https://codeload.github.com")) {
@@ -21,6 +30,8 @@ const fixupYarnLock = async (lockContents, verbose) => {
 
 			if (verbose) console.log(`Rewriting URL ${url} for dependency ${dep}`)
 			pkg.resolved = urlToName(url)
+			if (hash)
+				pkg.resolved += `#${hash}`
 
 			return [dep, pkg]
 		})

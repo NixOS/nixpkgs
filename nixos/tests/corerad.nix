@@ -56,6 +56,8 @@ import ./make-test-python.nix (
 
       with subtest("Wait for CoreRAD and network ready"):
           # Ensure networking is online and CoreRAD is ready.
+          router.systemctl("start network-online.target")
+          client.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
           client.wait_for_unit("network-online.target")
           router.wait_for_unit("corerad.service")

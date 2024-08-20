@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.13.0";
+  version = "1.15.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UdQ3J+KhxFRMf9DuR3hvRD458TiK2nNaUJrUrwokWco=";
+    hash = "sha256-q6qxMY0h0mLs5Bb7inEy+pN0vaifb6UrhqmKL1cSth4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Yubico/libfido2";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill prusnak ];
+    maintainers = with maintainers; [ prusnak ];
     platforms = platforms.unix;
   };
 }

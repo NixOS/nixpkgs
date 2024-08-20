@@ -3,25 +3,23 @@
 , fetchCrate
 , rustPlatform
 , pkg-config
-, rustfmt
 , openssl
 , CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-pdf";
-  version = "0.1.7";
+  version = "0.1.10";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-3hyvLLBcS7MLAL707tkvW8LGue/x9DudOYhJDDqAdRg=";
+    hash = "sha256-zRoO84ij7zF1I8ijXS/oApMKfS3e04+5/CgahAemqCA=";
   };
 
-  cargoHash = "sha256-ecIaKSrkqUsQWchkm9uCTXLuQabzGmEz1UqDR13vX8Y=";
+  cargoHash = "sha256-eay3tl4edeM05D+0iIu8Zw4L1N2Bk1csLo0AwNdyCdA=";
 
   nativeBuildInputs = [
     pkg-config
-    rustfmt
   ];
 
   buildInputs = [
@@ -32,21 +30,20 @@ rustPlatform.buildRustPackage rec {
 
   # Stop downloading from the Internet to
   # generate the Chrome Devtools Protocol
-  DOCS_RS=true;
+  env.DOCS_RS = true;
 
-  # # Stop formating with rustfmt, pending version update for
-  # # https://github.com/mdrokz/auto_generate_cdp/pull/8
-  # # to remove rustfmt dependency
-  # DO_NOT_FORMAT=true;
+  # Stop formatting with rustfmt
+  env.DO_NOT_FORMAT = true;
 
   # No test.
   doCheck = false;
 
   meta = with lib; {
-    description = "A backend for mdBook written in Rust for generating PDF";
+    description = "Backend for mdBook written in Rust for generating PDF";
+    mainProgram = "mdbook-pdf";
     homepage = "https://github.com/HollowMan6/mdbook-pdf";
     changelog = "https://github.com/HollowMan6/mdbook-pdf/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hollowman6 ];
+    maintainers = with maintainers; [ hollowman6 matthiasbeyer ];
   };
 }

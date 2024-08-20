@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "tuyaha";
   version = "0.0.11";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "weaviate";
-  version = "1.21.1";
+  version = "1.25.9";
 
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate";
     rev = "v${version}";
-    hash = "sha256-rWoVuWzfRJhhYDwOBcmSIJXh0WwvZFYM2GPOMvP98xM=";
+    hash = "sha256-liy3mw0+KJsac7AH1PEU6vk+MLo+ybEVCBeSU7MkoY0=";
   };
 
-  vendorHash = "sha256-HUfkwmAIwTPDZsgRLte7tu/0QKT82WriTqJ14iiKKOs=";
+  vendorHash = "sha256-5kfXX+VqGY2ka/w79sdtVHS/0XlF7DyHcq5hvFFIHK0=";
 
   subPackages = [ "cmd/weaviate-server" ];
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The ML-first vector search engine";
+    description = "ML-first vector search engine";
     homepage = "https://github.com/semi-technologies/weaviate";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dit7ya ];

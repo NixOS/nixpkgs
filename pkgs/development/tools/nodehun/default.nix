@@ -1,8 +1,9 @@
 { buildNpmPackage
+, cctools
 , darwin
 , fetchFromGitHub
 , lib
-, nodePackages
+, node-gyp
 , nodejs
 , python3
 , stdenv
@@ -30,8 +31,8 @@ buildNpmPackage {
   npmDepsHash = "sha256-mV6rWNf2p2w4H0ESUT0/Ybtx9YEdvO5l2gCvlWFXK+U=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
-  nativeBuildInputs = [ nodePackages.node-gyp python3 ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
+  nativeBuildInputs = [ node-gyp python3 ]
+    ++ lib.optionals stdenv.isDarwin [ cctools ];
 
   postInstall = ''
     # Only keep the necessary parts of build/Release to reduce closure size
@@ -56,7 +57,7 @@ buildNpmPackage {
   disallowedReferences = [ nodejs ];
 
   meta = with lib; {
-    description = "The Hunspell binding for NodeJS that exposes as much of Hunspell as possible and also adds new features";
+    description = "Hunspell binding for NodeJS that exposes as much of Hunspell as possible and also adds new features";
     homepage = "https://github.com/Wulf/nodehun";
     license = licenses.mit;
     maintainers = [ maintainers.thomasjm ];

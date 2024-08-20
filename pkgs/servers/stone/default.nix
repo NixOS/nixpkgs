@@ -24,10 +24,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A TCP/IP repeater in the application layer";
+    description = "TCP/IP repeater in the application layer";
     homepage = "http://www.gcd.org/sengoku/stone/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ corngood ];
+    mainProgram = "stone";
   };
 }

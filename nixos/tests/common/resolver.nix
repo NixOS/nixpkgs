@@ -10,7 +10,7 @@
     type = lib.types.bool;
     default = true;
     internal = true;
-    description = lib.mdDoc ''
+    description = ''
       Whether to enable the resolver that automatically discovers zone in the
       test network.
 

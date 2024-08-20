@@ -2,6 +2,8 @@
 , stdenv
 , fetchurl
 , buildPackages
+, updateAutotoolsGnuConfigScriptsHook
+, ncurses
 , pkg-config
 , abiVersion ? "6"
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -9,14 +11,15 @@
 , mouseSupport ? false, gpm
 , unicodeSupport ? true
 , testers
+, binlore
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.4";
+  version = "6.4.20221231";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz";
     hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
@@ -38,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
-  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && enableStatic) [
       # For static binaries, the point is to have a standalone binary with
       # minimum dependencies. So here we make sure that binaries using this
       # package won't depend on a terminfo database located in the Nix store.
@@ -48,20 +51,30 @@ stdenv.mkDerivation (finalAttrs: {
         "/usr/share/terminfo" # upstream default, probably all FHS-based distros
         "/run/current-system/sw/share/terminfo" # NixOS
       ]}"
-  ];
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "--with-build-cc=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+  ] ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
+      # lld17+ passes `--no-undefined-version` by default and makes this a hard
+      # error; ncurses' `resulting.map` version script references symbols that
+      # aren't present.
+      #
+      # See: https://lists.gnu.org/archive/html/bug-ncurses/2024-05/msg00086.html
+      #
+      # For now we allow this with `--undefined-version`:
+      "LDFLAGS=-Wl,--undefined-version"
+  ]);
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
   strictDeps = true;
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
 
   nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
     pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    buildPackages.ncurses
+   # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.
+    ncurses
   ];
 
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
@@ -88,14 +101,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  # When building a wide-character (Unicode) build, create backward
-  # compatibility links from the the "normal" libraries to the
-  # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postFixup = let
     abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
   ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
+  ''
+  # When building a wide-character (Unicode) build, create backward
+  # compatibility links from the the "normal" libraries to the
+  # wide-character libraries (e.g. libncurses.so to libncursesw.so).
+  + lib.optionalString unicodeSupport ''
     libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
     suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
 
@@ -138,10 +153,13 @@ stdenv.mkDerivation (finalAttrs: {
         ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
       done
     done
+    ''
+    # Unconditional patches. Leading newline is to avoid mass rebuilds.
+    + ''
 
     # add pkg-config aliases for libraries that are built-in to libncurses(w)
     for library in tinfo tic; do
-      for suffix in "" w; do
+      for suffix in "" ${lib.optionalString unicodeSupport "w"}; do
         ln -svf ncurses$suffix.pc $dev/lib/pkgconfig/$library$suffix.pc
       done
     done
@@ -161,6 +179,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
+  '';
+
+  # I'm not very familiar with ncurses, but it looks like most of the
+  # exec here will run hard-coded executables. There's one that is
+  # dynamic, but it looks like it only comes from executing a terminfo
+  # file, so I think it isn't going to be under user control via CLI?
+  # Happy to have someone help nail this down in either direction!
+  # The "capability" is 'iprog', and I could only find 1 real example:
+  # https://invisible-island.net/ncurses/terminfo.ti.html#tic-linux-s
+  passthru.binlore.out = binlore.synthesize ncurses ''
+    execer cannot bin/{reset,tput,tset}
   '';
 
   meta = with lib; {

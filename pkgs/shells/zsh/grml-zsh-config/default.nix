@@ -1,23 +1,19 @@
-{ stdenv, fetchFromGitHub, lib
-, zsh, coreutils, inetutils, procps, txt2tags }:
-
-with lib;
-
+{ stdenv, fetchFromGitHub, lib, zsh, coreutils, inetutils, procps, txt2tags }:
 stdenv.mkDerivation rec {
   pname = "grml-zsh-config";
-  version = "0.19.6";
+  version = "0.19.7";
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
-    sha256 = "sha256-31BD5jUA54oLSsL4NzGaGAiOXMcZwy7uX65pD+jtE4M=";
+    sha256 = "sha256-XHuoafb1Wc8dUPrk/7jwYhlRQm76qcbQy2vHECm0Iuo=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [ txt2tags ];
   buildInputs = [ zsh coreutils procps ]
-    ++ optional stdenv.isLinux inetutils;
+    ++ lib.optional stdenv.isLinux inetutils;
 
   buildPhase = ''
     cd doc
@@ -36,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "grml's zsh setup";
     homepage = "https://grml.org/zsh/";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Plus gpl2Only ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ msteen rvolosatovs ];
   };

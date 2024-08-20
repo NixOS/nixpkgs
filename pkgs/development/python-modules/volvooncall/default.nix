@@ -1,18 +1,17 @@
-{ lib
-, aiohttp
-, amqtt
-, buildPythonPackage
-, certifi
-, docopt
-, fetchFromGitHub
-, fetchpatch
-, geopy
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, websockets
+{
+  lib,
+  aiohttp,
+  amqtt,
+  buildPythonPackage,
+  certifi,
+  docopt,
+  fetchFromGitHub,
+  fetchpatch,
+  geopy,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   passthru.optional-dependencies = {
     console = [
@@ -60,9 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.mqtt;
 
-  pythonImportsCheck = [
-    "volvooncall"
-  ];
+  pythonImportsCheck = [ "volvooncall" ];
 
   meta = with lib; {
     description = "Retrieve information from the Volvo On Call web service";

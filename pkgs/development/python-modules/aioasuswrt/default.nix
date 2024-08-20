@@ -1,26 +1,38 @@
-{ lib
-, asyncssh
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  asyncssh,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioasuswrt";
   version = "1.4.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
-    repo = pname;
-    rev = "V${version}";
-    sha256 = "1iv9f22v834g8wrjcynjn2azpzk8gsczv71jf7dw8aix0n04h325";
+    repo = "aioasuswrt";
+    rev = "refs/tags/V${version}";
+    hash = "sha256-RQxIgAU9KsTbcTKc/Zl+aP77lbDSeiYzR48MtIVwacc=";
   };
 
-  propagatedBuildInputs = [
-    asyncssh
-  ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov-report html" "" \
+      --replace-fail "--cov-report term-missing" ""
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ asyncssh ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -28,19 +40,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report html" "" \
-      --replace "--cov-report term-missing" ""
-  '';
-
-  pythonImportsCheck = [
-    "aioasuswrt"
-  ];
+  pythonImportsCheck = [ "aioasuswrt" ];
 
   meta = with lib; {
     description = "Python module for Asuswrt";
     homepage = "https://github.com/kennedyshead/aioasuswrt";
+    changelog = "https://github.com/kennedyshead/aioasuswrt/releases/tag/V${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

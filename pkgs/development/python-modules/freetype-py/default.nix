@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, setuptools-scm
-, freetype
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  setuptools-scm,
+  freetype,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "freetype-py";
   version = "2.1.0.post1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,11 +34,9 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck =  [ "freetype" ];
+  pythonImportsCheck = [ "freetype" ];
 
   meta = with lib; {
     homepage = "https://github.com/rougier/freetype-py";

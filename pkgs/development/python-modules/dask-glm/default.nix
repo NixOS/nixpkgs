@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, dask
-, distributed
-, fetchPypi
-, multipledispatch
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, setuptools-scm
-, sparse
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  dask,
+  distributed,
+  fetchPypi,
+  multipledispatch,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools-scm,
+  sparse,
 }:
 
 buildPythonPackage rec {
   pname = "dask-glm";
-  version = "0.3.0";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ddaYNBUlvsMzrku7fKrlozRmjshVbQ9yrYIlaRBQCp4=";
+    hash = "sha256-yUelZoZmmKAdeZeK5zIzy16DitXq1ghRQ1gsXpMLmko=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     cloudpickle
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "dask_glm"
-  ];
+  pythonImportsCheck = [ "dask_glm" ];
 
   disabledTestPaths = [
     # Circular dependency with dask-ml
@@ -59,10 +56,12 @@ buildPythonPackage rec {
     "test_determinism_distributed"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Generalized Linear Models with Dask";
     homepage = "https://github.com/dask/dask-glm/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

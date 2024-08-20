@@ -1,21 +1,23 @@
 # auto-generated file -- DO NOT EDIT!
-{ rust, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
-  arch = rust.toRustTarget stdenv.hostPlatform;
   fetch_librusty_v8 = args: fetchurl {
     name = "librusty_v8-${args.version}";
-    url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${arch}.a";
+    url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${stdenv.hostPlatform.rust.rustcTarget}.a.gz";
     sha256 = args.shas.${stdenv.hostPlatform.system};
-    meta = { inherit (args) version; };
+    meta = {
+      inherit (args) version;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    };
   };
 in
 fetch_librusty_v8 {
-  version = "0.79.2";
+  version = "0.99.0";
   shas = {
-    x86_64-linux = "sha256-efpB4BayPvB7KrP9v+U/jlS+Vs7QeURmPm5dnGmDD8Q=";
-    aarch64-linux = "sha256-agtWSohMkkhxfKU+BQvHXomZSxVQLafma4IfiDO7vvo=";
-    x86_64-darwin = "sha256-UWZAm7punliDUOOdD+vqZXpChyMXw5AMw8kgJ6nclzs=";
-    aarch64-darwin = "sha256-p8lulv3E9A48nMH1KdROSY0L3Q/hqPVtTp9qIpUl1SM=";
+    x86_64-linux = "sha256-rXAxKDTDB7tU5T6tf7XQUEAbDD2PXfzU+0bgA6WOsOQ=";
+    aarch64-linux = "sha256-4V3EtxH+rGsJzam57OByLlB0D1xtnSz+1P34EfaIry4=";
+    x86_64-darwin = "sha256-fYo8B9uMS6ElPA+4A3wLQvuLH2dqar6hGhpOTvnKK7s=";
+    aarch64-darwin = "sha256-vh/fitDe3s0AoncO9nlJPNTMLQhWuJnYzFHsYdmERrU=";
   };
 }

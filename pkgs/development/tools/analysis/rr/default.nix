@@ -1,32 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config, which, makeWrapper
-, libpfm, zlib, python3Packages, procps, gdb, capnproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  capnproto,
+  cmake,
+  gdb,
+  libpfm,
+  makeWrapper,
+  pkg-config,
+  procps,
+  python3,
+  which,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
-  version = "5.6.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.8.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
-    rev = version;
-    sha256 = "H39HPkAQGubXVQV3jCpH4Pz+7Q9n03PrS70utk7Tt2k=";
+    rev = finalAttrs.version;
+    hash = "sha256-FudAAkWIe6gv4NYFoe9E0hlgTM70lymBE5Fw/vbehps=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-flexible-array-member.patch";
-      url = "https://github.com/rr-debugger/rr/commit/2979c60ef8bbf7c940afd90172ddc5d8863f766e.diff";
-      sha256 = "cmdCJetQr3ELPOyWl37h1fGfG/xvaiJpywxIAnqb5YY=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
-    sed '7i#include <math.h>' -i src/Scheduler.cc
-    sed '1i#include <ctime>' -i src/test-monitor/test-monitor.cc
-    patchShebangs .
+    patchShebangs src
   '';
 
   # With LTO enabled, linking fails with the following message:
@@ -37,15 +39,34 @@ stdenv.mkDerivation rec {
   # collect2: error: ld returned 1 exit status
   #
   # See also https://github.com/NixOS/nixpkgs/pull/110846
-  preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "-flto" ""
+  '';
 
-  nativeBuildInputs = [ cmake pkg-config which makeWrapper ];
-  buildInputs = [
-    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
-    libpfm zlib python3Packages.python python3Packages.pexpect procps capnproto
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    capnproto
+    cmake
+    makeWrapper
+    pkg-config
+    python3.pythonOnBuildForHost
+    which
   ];
+
+  buildInputs = [
+    bash
+    capnproto
+    gdb
+    libpfm
+    procps
+    python3
+    zlib
+  ];
+
   cmakeFlags = [
-    "-Ddisable32bit=ON"
+    (lib.cmakeBool "disable32bit" true)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # we turn on additional warnings due to hardening
@@ -54,16 +75,14 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   # FIXME
-  #doCheck = true;
+  doCheck = false;
 
   preCheck = "export HOME=$TMPDIR";
 
   # needs GDB to replay programs at runtime
   preFixup = ''
     wrapProgram "$out/bin/rr" \
-      --prefix PATH ":" "${lib.makeBinPath [
-        gdb
-      ]}";
+      --prefix PATH ":" "${lib.makeBinPath [ gdb ]}";
   '';
 
   meta = {
@@ -76,8 +95,18 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = with lib.licenses; [ mit bsd2 ];
-    maintainers = with lib.maintainers; [ pierron thoughtpolice ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    license = with lib.licenses; [
+      mit
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [
+      pierron
+      thoughtpolice
+    ];
+    platforms = [
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
-}
+})

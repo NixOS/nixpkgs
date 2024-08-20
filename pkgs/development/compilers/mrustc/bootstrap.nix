@@ -2,9 +2,7 @@
 , fetchurl
 , mrustc
 , mrustc-minicargo
-, rust
 , llvm_12
-, llvmPackages_12
 , libffi
 , cmake
 , python3
@@ -74,7 +72,7 @@ stdenv.mkDerivation rec {
     "MRUSTC=${mrustc}/bin/mrustc"
     #"MINICARGO=${mrustc-minicargo}/bin/minicargo"  # FIXME: we need to rebuild minicargo locally so --manifest-overrides is applied
     "LLVM_CONFIG=${llvm_12.dev}/bin/llvm-config"
-    "RUSTC_TARGET=${rust.toRustTarget stdenv.targetPlatform}"
+    "RUSTC_TARGET=${stdenv.targetPlatform.rust.rustcTarget}"
   ];
 
   buildPhase = ''
@@ -129,13 +127,13 @@ stdenv.mkDerivation rec {
     cp run_rustc/${outputDir}/prefix/bin/rustc_binary $out/bin/rustc
 
     cp -r run_rustc/${outputDir}/prefix/lib/* $out/lib/
-    cp $out/lib/rustlib/${rust.toRustTarget stdenv.targetPlatform}/lib/*.so $out/lib/
+    cp $out/lib/rustlib/${stdenv.targetPlatform.rust.rustcTarget}/lib/*.so $out/lib/
     runHook postInstall
   '';
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A minimal build of Rust";
+    description = "Minimal build of Rust";
     longDescription = ''
       A minimal build of Rust, built from source using mrustc.
       This is useful for bootstrapping the main Rust compiler without
@@ -146,4 +144,3 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
   };
 }
-

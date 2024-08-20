@@ -1,38 +1,37 @@
 { lib
+, stdenv
 , fetchFromGitLab
-, mkDerivation
 , breeze-icons
-, breeze-qt5
+, breeze
 , cmake
 , extra-cmake-modules
-, ffmpeg-full
+, ffmpeg-headless
 , kconfig
 , kcoreaddons
 , kfilemetadata
 , ki18n
 , kiconthemes
 , kio
-, kirigami2
+, kirigami
 , kxmlgui
 , kdoctools
-, mpv
+, mpvqt
 , pkg-config
 , wrapQtAppsHook
 , qqc2-desktop-style
 , qtbase
-, qtquickcontrols2
 , yt-dlp
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "haruna";
-  version = "0.12.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-x3tgH2eoLVELQKbgNLvJPGQsay8iOfMY/BGLOEov3OM=";
+    hash = "sha256-PjELW0evn53gIbScrM2bYEpb9U/TE/lOCD2DiJ1aodo=";
     domain = "invent.kde.org";
   };
 
@@ -43,23 +42,22 @@ mkDerivation rec {
 
   buildInputs = [
     breeze-icons
-    breeze-qt5
+    breeze
     qqc2-desktop-style
     yt-dlp
 
-    ffmpeg-full
+    ffmpeg-headless
     kconfig
     kcoreaddons
     kfilemetadata
     ki18n
     kiconthemes
     kio
-    kirigami2
+    kirigami
     kxmlgui
     kdoctools
-    mpv
+    mpvqt
     qtbase
-    qtquickcontrols2
   ];
 
   nativeBuildInputs = [
@@ -74,5 +72,6 @@ mkDerivation rec {
     description = "Open source video player built with Qt/QML and libmpv";
     license = with licenses; [ bsd3 cc-by-40 cc-by-sa-40 cc0 gpl2Plus gpl3Plus wtfpl ];
     maintainers = with maintainers; [ jojosch kashw2 ];
+    mainProgram = "haruna";
   };
 }

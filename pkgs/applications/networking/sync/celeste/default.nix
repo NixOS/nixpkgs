@@ -2,18 +2,17 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, substituteAll
+, darwin
 , just
 , pkg-config
 , wrapGAppsHook4
 , cairo
+, dbus
 , gdk-pixbuf
 , glib
 , graphene
-, gtk3
 , gtk4
 , libadwaita
-, libappindicator-gtk3
 , librclone
 , pango
 , rclone
@@ -21,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.7.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-fqPAQCbuPnFyn3wioWDETmcXu53808nvnlEzcdUevI4=";
+    hash = "sha256-Yj2PvAlAkwLaSE27KnzEmiRAD5K/YVGbF4+N3uhDVT8=";
   };
 
-  cargoHash = "sha256-mVl7CsCX7HMlGC2EIKEfHnPNjmrexjsrpDK/Uq/GwpY=";
+  cargoHash = "sha256-nlYkFgm5r6nAbJvtrXW2VxzVYq1GrSs8bzHYWOglL1c=";
 
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys
@@ -48,11 +47,6 @@ rustPlatform.buildRustPackage rec {
     sed -i "#/bin/celeste#d" justfile
   '';
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo update --offline
-  '';
-
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
@@ -64,19 +58,25 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     cairo
+    dbus
     gdk-pixbuf
     glib
     graphene
-    gtk3
     gtk4
     libadwaita
     librclone
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.Security
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=incompatible-function-pointer-types"
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator-gtk3 ]}"
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
   '';
@@ -88,6 +88,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     changelog = "https://github.com/hwittenborn/celeste/blob/${src.rev}/CHANGELOG.md";
     description = "GUI file synchronization client that can sync with any cloud provider";
+    mainProgram = "celeste";
     homepage = "https://github.com/hwittenborn/celeste";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];

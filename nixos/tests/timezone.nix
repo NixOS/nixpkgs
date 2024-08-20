@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "timezone";
-  meta.maintainers = with pkgs.lib.maintainers; [ lheckemann ];
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
 
   nodes = {
     node_eutz = { pkgs, ... }: {

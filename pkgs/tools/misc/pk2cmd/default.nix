@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.microchip.com/pickit2";
     license = lib.licenses.unfree; #MicroChip-PK2
     description = "Microchip PIC programming software for the PICKit2 programmer";
+    mainProgram = "pk2cmd";
   };
 }

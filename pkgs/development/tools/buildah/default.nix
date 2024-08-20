@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.32.1";
+  version = "1.37.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-imhl8CezFoSi0M0nMxIFL/ZVa8eDAA4s/ZVIMr/QUJ4=";
+    hash = "sha256-43p2sD6mpcoMukr7mY2GTsti4FVC7Blq0ZozuIJlC30=";
   };
 
   outputs = [ "out" "man" ];
@@ -62,13 +62,19 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = buildah;
+    command = ''
+      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
+      buildah --version
+    '';
   };
 
   meta = with lib; {
-    description = "A tool which facilitates building OCI images";
+    description = "Tool which facilitates building OCI images";
+    mainProgram = "buildah";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }
+

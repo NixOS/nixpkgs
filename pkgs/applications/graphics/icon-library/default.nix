@@ -1,22 +1,55 @@
-{ lib, stdenv, fetchurl, fetchpatch, wrapGAppsHook4
-, cargo, desktop-file-utils, meson, ninja, pkg-config, rustc
-, gdk-pixbuf, glib, gtk4, gtksourceview5, libadwaita, darwin
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook4
+, buildPackages
+, cargo
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, rustc
+, gettext
+, gdk-pixbuf
+, glib
+, gtk4
+, gtksourceview5
+, libadwaita
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "icon-library";
-  version = "0.0.16";
+  version = "0.0.19";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/5dd3d97acfdbaf69c7dc6b2f7bbf4cae/icon-library-${version}.tar.xz";
-    hash = "sha256-EO67foD/uRoeF+zmJyEia5Nr3eW+Se9bVjDxipMw75E=";
+    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/7725604ce39be278abe7c47288085919/icon-library-${version}.tar.xz";
+    hash = "sha256-nWGTYoSa0/fxnD0Mb2132LkeB1oa/gj/oIXBbI+FDw8=";
+  };
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Set the location to gettext to ensure the nixpkgs one on Darwin instead of the vendored one.
+    # The vendored gettext does not build with clang 16.
+    GETTEXT_BIN_DIR = "${lib.getBin buildPackages.gettext}/bin";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config rustc wrapGAppsHook4
+    cargo
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    rustc
+    wrapGAppsHook4
   ];
   buildInputs = [
-    gdk-pixbuf glib gtk4 gtksourceview5 libadwaita
+    gdk-pixbuf
+    glib
+    gtk4
+    gtksourceview5
+    libadwaita
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
@@ -24,6 +57,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
     description = "Symbolic icons for your apps";
+    mainProgram = "icon-library";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

@@ -1,16 +1,18 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  lib,
 
-# pythonPackages
-, coverage
-, pytest
+  # pythonPackages
+  coverage,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "pyhcl";
   version = "0.4.4";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -37,10 +39,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HCL is a configuration language. pyhcl is a python parser for it";
+    mainProgram = "hcltool";
     homepage = "https://github.com/virtuald/pyhcl";
     license = licenses.mpl20;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

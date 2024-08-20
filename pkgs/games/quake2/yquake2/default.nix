@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildEnv, makeWrapper
+{ stdenv, lib, fetchFromGitHub, buildEnv, makeWrapper, copyDesktopItems, makeDesktopItem
 , SDL2, libGL, curl
 , openalSupport ? true, openal
 , Cocoa, OpenAL
@@ -9,17 +9,17 @@ let
 
   games = import ./games.nix { inherit stdenv lib fetchFromGitHub; };
 
-  wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2; };
+  wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2 copyDesktopItems makeDesktopItem; };
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "8.20";
+    version = "8.40";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "sha256-x1mk6qo03b438ZBS16/f7pzMCfugtQvaRcV+hg7Zc/w=";
+      sha256 = "sha256-licz659DFS56/5P/hmPSE0YuVPTp1r4yrzS7FIg4Okc=";
     };
 
     postPatch = ''
@@ -40,9 +40,12 @@ let
       "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
     ];
 
+    nativeBuildInputs = [ copyDesktopItems ];
+
     enableParallelBuilding = true;
 
     installPhase = ''
+      runHook preInstall
       # Yamagi Quake II expects all binaries (executables and libs) to be in the
       # same directory.
       mkdir -p $out/bin $out/lib/yquake2 $out/share/games/quake2/baseq2
@@ -50,12 +53,23 @@ let
       ln -s $out/lib/yquake2/quake2 $out/bin/yquake2
       ln -s $out/lib/yquake2/q2ded $out/bin/yq2ded
       cp $src/stuff/yq2.cfg $out/share/games/quake2/baseq2
+      install -Dm644 stuff/icon/Quake2.png $out/share/pixmaps/yamagi-quake2.png;
+      runHook postInstall
     '';
+
+    desktopItems = [ (makeDesktopItem {
+      name = "yquake2";
+      exec = "yquake2";
+      icon = "yamagi-quake2";
+      desktopName = "yquake2";
+      comment = "Yamagi Quake II client";
+      categories = [ "Game" "Shooter" ];
+    })];
 
     meta = with lib; {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = platforms.unix;
       maintainers = with maintainers; [ tadfisher ];
     };

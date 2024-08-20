@@ -5,16 +5,19 @@
 , lua5_3
 }:
 
+let
+  version = "0.2.0";
+in
 stdenvNoCC.mkDerivation {
-  pname = "lunarml";
+  inherit version;
 
-  version = "unstable-2023-09-21";
+  pname = "lunarml";
 
   src = fetchFromGitHub {
     owner = "minoki";
     repo = "LunarML";
-    rev = "c6e23ae68149bda550ddb75c0df9f422aa379b3a";
-    sha256 = "DY4gOCXfGV1OVdGXd6GGvbHlQdWWxMg5TZzkceeOu9o=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-w0DWvFegAdpJTab60cDLA+tketmMYeKApx1rCNr27i4=";
   };
 
   outputs = [ "out" "doc" ];
@@ -46,6 +49,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Standard ML compiler that produces Lua/JavaScript";
+    mainProgram = "lunarml";
     homepage = "https://github.com/minoki/LunarML";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ toastal ratsclub ];

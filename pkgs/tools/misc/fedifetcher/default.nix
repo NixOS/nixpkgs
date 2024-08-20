@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fedifetcher";
-  version = "7.0.1";
+  version = "7.1.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "nanos";
     repo = "FediFetcher";
-    rev = "v${version}";
-    hash = "sha256-/Au6a93na3meb2j0eR8UCCg+TVW/UqWz3/TkASB94Eg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lnBiGBoG5ykKSP+F4NOqJKnvxaLU9oiV3KfbVnjgkgQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A tool for Mastodon that automatically fetches missing replies and posts from other fediverse instances";
+    description = "Tool for Mastodon that automatically fetches missing replies and posts from other fediverse instances";
     longDescription = ''
       FediFetcher is a tool for Mastodon that automatically fetches missing
       replies and posts from other fediverse instances, and adds them to your
@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://blog.thms.uk/fedifetcher";
     license = licenses.mit;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = teams.c3d2.members;
+    mainProgram = "fedifetcher";
   };
 }

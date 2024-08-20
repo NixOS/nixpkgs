@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , autoreconfHook
 , pkg-config
 , installShellFiles
@@ -33,15 +34,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "25.1";
+  version = "27.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "bec2a598d8dfa8c2365b77f13012a733ec84b8c30386343b7ac1996e901198c9";
+    sha256 = "0c1051fd921b8fae912f5c2dfd86b085ab45baa05cd7be4585b10b4d1818f3da";
   };
+
+  patches = [
+    # upnp: fix build with miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/bitcoin/bitcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
+      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
+    })
+  ];
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config installShellFiles ]
@@ -51,13 +60,15 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ db48 sqlite ]
+    ++ lib.optionals withWallet [ sqlite ]
+    # building with db48 (for legacy descriptor wallet support) is broken on Darwin
+    ++ lib.optionals (withWallet && !stdenv.isDarwin) [ db48 ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   postInstall = ''
-    installShellCompletion --cmd bitcoin-cli --bash contrib/completions/bash/bitcoin-cli.bash-completion
-    installShellCompletion --cmd bitcoind --bash contrib/completions/bash/bitcoind.bash-completion
-    installShellCompletion --cmd bitcoin-tx --bash contrib/completions/bash/bitcoin-tx.bash-completion
+    installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoind.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
 
     installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
     installShellCompletion --fish contrib/completions/fish/bitcoind.fish
@@ -70,6 +81,10 @@ stdenv.mkDerivation rec {
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
     substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
     install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
+  '';
+
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    export MACOSX_DEPLOYMENT_TARGET=10.13
   '';
 
   configureFlags = [

@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple command line interface for backup rotation";
+    mainProgram = "rotate-backups";
     homepage = "https://github.com/xolox/python-rotate-backups";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
-  version = "1.24";
+  version = "1.26";
 
   src = fetchgit {
     url = "https://salsa.debian.org/debian/${pname}.git";
     rev = "debian/${version}";
-    sha256 = "1nh433yx4y4djp0bs6aawqbwk7miq7fsbs9wpjlyh2k9dvil2lrm";
+    hash = "sha256-CVy5mOX3jNM1cNIn8HhVs8Mhh70pkz9pG08muFuPNfk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,8 +37,9 @@ stdenv.mkDerivation rec {
       gettimeofday and clock_gettime system calls.
     '';
     homepage = "https://packages.qa.debian.org/d/datefudge.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];
+    mainProgram = "datefudge";
   };
 }

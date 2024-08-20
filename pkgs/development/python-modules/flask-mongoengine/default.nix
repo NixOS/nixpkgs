@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, email-validator
-, fetchFromGitHub
-, flask
-, flask-wtf
-, markupsafe
-, mongoengine
-, pythonOlder
-, setuptools
-, setuptools-scm
-, typing-extensions
-, wtforms
+{
+  lib,
+  buildPythonPackage,
+  email-validator,
+  fetchFromGitHub,
+  flask,
+  flask-wtf,
+  markupsafe,
+  mongoengine,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
+  wtforms,
 }:
 
 buildPythonPackage rec {
   pname = "flask-mongoengine";
-  version = "1.0.0";
+  version = "1.0.0-unstable-2022-08-16";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,9 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YqEtW02VvEeUsLIHLz6+V6juMtWPEIk2tLoKTUdY6YE=";
+    rev = "d4526139cb1e2e94111ab7de96bb629d574c1690";
+    hash = "sha256-oMQU9Z8boc0q+0KzIQAZ8qSyxiITDY0M9FCg75S9MEY=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "1.0.0";
 
   nativeBuildInputs = [
     setuptools
@@ -37,9 +40,7 @@ buildPythonPackage rec {
     flask
     flask-wtf
     mongoengine
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   passthru.optional-dependencies = {
     wtf = [
@@ -49,23 +50,19 @@ buildPythonPackage rec {
     # toolbar = [
     #   flask-debugtoolbar
     # ];
-    legacy = [
-      markupsafe
-    ];
+    legacy = [ markupsafe ];
   };
 
   # Tests require working mongodb connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flask_mongoengine"
-  ];
+  pythonImportsCheck = [ "flask_mongoengine" ];
 
   meta = with lib; {
     description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

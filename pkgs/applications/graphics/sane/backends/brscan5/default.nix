@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests }:
+{ stdenv, lib, fetchurl, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests }:
 let
-  myPatchElf = file: with lib; ''
+  myPatchElf = file: ''
     patchelf --set-interpreter \
-      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${lib.optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
   system = stdenv.hostPlatform.system;
@@ -10,15 +10,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "brscan5";
-  version = "1.2.9-0";
+  version = "1.3.1-0";
   src = {
     "i686-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
-      sha256 = "ac23c9a435818955e7882ab06380adf346203ff4e45f384b40e84b8b29642f07";
+      hash = "sha256-BgS64vwsKESJBDz9H2MDwcGiresROSNFP1b+7+zlE5c=";
     };
     "x86_64-linux" = fetchurl {
       url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
-      sha256 = "4ec23ff4b457323ae778e871a0f1abcc1848ea105af17850b57f7dcaddcfd96d";
+      hash = "sha256-0UMbXMBlyiZI90WG5FWEP2mIZEBsxXd11dtgtyuSDnY=";
     };
   }."${system}" or (throw "Unsupported system: ${system}");
 
@@ -33,9 +33,12 @@ stdenv.mkDerivation rec {
 
   postPatch =
     let
+      # Download .deb for both amd64 and i386, then unpack like unpackPhase
+      # to get the offset, run:
+      # strings -n 10 --radix=d opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 | grep "/opt/brother/scanner/brscan5/models"
       patchOffsetBytes =
-        if system == "x86_64-linux" then 84632
-        else if system == "i686-linux" then 77396
+        if system == "x86_64-linux" then 86592
+        else if system == "i686-linux" then 79236
         else throw "Unsupported system: ${system}";
     in
     ''
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
       printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=${toString patchOffsetBytes} conv=notrunc
     '';
 
-  installPhase = with lib; ''
+  installPhase = ''
     runHook preInstall
     PATH_TO_BRSCAN5="opt/brother/scanner/brscan5"
     mkdir -p $out/$PATH_TO_BRSCAN5

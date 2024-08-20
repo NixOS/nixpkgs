@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, readline, bison }:
+{ lib, stdenv, fetchpatch, fetchurl, readline, bison }:
 
 stdenv.mkDerivation rec {
 
@@ -17,6 +17,15 @@ stdenv.mkDerivation rec {
     sourceRoot=.
   '';
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/wryun/es-shell/pull/101
+      name = "new-compiler-issues.patch";
+      url = "https://github.com/wryun/es-shell/commit/1eafb5fc4be735e59c9a091cc30adbca8f86fd96.patch";
+      hash = "sha256-0CV1seEiH6PsUnq0akPLiRMy+kIb9qnAK7Ta4I47i60=";
+    })
+  ];
+
   strictDeps = true;
   nativeBuildInputs = [ bison ];
   buildInputs = [ readline ];
@@ -24,7 +33,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-readline" ];
 
   meta = with lib; {
-    description = "An extensible shell with higher order functions";
+    description = "Extensible shell with higher order functions";
+    mainProgram = "es";
     longDescription =
       ''
         Es is an extensible shell. The language was derived

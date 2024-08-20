@@ -9,14 +9,16 @@
 , gtk3
 , glib
 , gjs
+, enableWebkit2gtk ? stdenv.isLinux
 , webkitgtk_4_1
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , libxml2
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , gnome
+, adwaita-icon-theme
 , gdk-pixbuf
 , libxslt
 , gsettings-desktop-schemas
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     docbook-xsl-nons
     docbook_xml_dtd_42
     libxslt
@@ -49,13 +51,18 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     gjs
-    webkitgtk_4_1
     libxml2
     python3
     python3.pkgs.pygobject3
     gsettings-desktop-schemas
     gdk-pixbuf
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
+  ] ++ lib.optionals enableWebkit2gtk [
+    webkitgtk_4_1
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "webkit2gtk" enableWebkit2gtk)
   ];
 
   postPatch = ''
@@ -70,10 +77,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Glade";
+    homepage = "https://gitlab.gnome.org/GNOME/glade";
     description = "User interface designer for GTK applications";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

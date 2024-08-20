@@ -24,5 +24,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/behindthefirewalls/Parsero";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ emilytrau fab ];
+    mainProgram = "parsero";
   };
 }

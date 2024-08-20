@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaykbdd";
-  version = "1.2";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swaykbdd";
     rev = "v${version}";
-    sha256 = "sha256-QHNUIFJb5XYjUC07NQo96oD57nU8jd8sUW32iJSW+SU=";
+    sha256 = "sha256-FtXmn5Lf0PhL99xGl/SHWNaE6vAMOF2Ok4xVJT2Bf/s=";
   };
 
   strictDeps = true;
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ivankovnatsky ];
     platforms = platforms.linux;
+    mainProgram = "swaykbdd";
   };
 }

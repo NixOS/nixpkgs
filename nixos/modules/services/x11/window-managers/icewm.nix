@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.icewm.enable = mkEnableOption (lib.mdDoc "icewm");
+    services.xserver.windowManager.icewm.enable = mkEnableOption "icewm";
   };
 
   ###### implementation
@@ -17,7 +17,7 @@ in
       { name = "icewm";
         start =
           ''
-            ${pkgs.icewm}/bin/icewm &
+            ${pkgs.icewm}/bin/icewm-session &
             waitPID=$!
           '';
       };

@@ -1,26 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dill
-, dnslib
-, dnspython
-, plux
-, pyaes
-, python-jose
-, requests
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dill,
+  dnslib,
+  dnspython,
+  plux,
+  pyaes,
+  python-jose,
+  requests,
+  tabulate,
 
-# Sensitive downstream dependencies
-, localstack
+  # Sensitive downstream dependencies
+  localstack,
 }:
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "2.2.0";
+  version = "3.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BLK41TRaYNtpeeDeGZhlvnvkQwWo0uGB19g34waRqFk=";
+    pname = "localstack_ext";
+    inherit version;
+    hash = "sha256-tJNgNqCzlebbDOOgkScOKaf04bLTVIjP+BaFiDLo/Gs=";
   };
 
   postPatch = ''
@@ -61,6 +64,6 @@ buildPythonPackage rec {
     description = "Extensions for LocalStack";
     homepage = "https://github.com/localstack/localstack";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchzip
-, tex
+, texliveMedium
 , buildDocs ? false
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "doc" "man" ];
 
-  nativeBuildInputs = lib.optionals buildDocs [ tex ];
+  nativeBuildInputs = lib.optionals buildDocs [ texliveMedium ];
 
   postPatch = lib.optionalString (!buildDocs) ''
     substituteInPlace Makefile --replace "all: binaries docs" "all: binaries"

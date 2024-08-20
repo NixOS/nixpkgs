@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "snac2";
-  version = "2.42";
+  version = "2.57";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "grunfink";
     repo = pname;
     rev = version;
-    hash = "sha256-cLSbmEZj5lyMtZMM2vaWqdrXFk1/VPws9yBPhSUka2E=";
+    hash = "sha256-ZszPHGEIcZEzFWSJ7jioQvLn5dwn9yjOvMMskMQKv8Y=";
   };
 
   buildInputs = [ curl openssl ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://codeberg.org/grunfink/snac2";
-    description = "A simple, minimalistic ActivityPub instance (2.x, C)";
+    description = "Simple, minimalistic ActivityPub instance (2.x, C)";
     changelog = "https://codeberg.org/grunfink/snac2/src/tag/${version}/RELEASE_NOTES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ misuzu ];

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "2.4";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    hash = "sha256-vnhvVVfEDnmEIdIkfTRoiLB7dZ1rJV3U4PmUUoaxTUs=";
+    hash = "sha256-8vxalIHA4DRQuI18PRmzrlyG1XHcbKPkZgVB5Yqq9EU=";
   };
 
   mesonFlags = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ mic92 vifino ];
     mainProgram = "nvme";
   };
 }

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-TOcK+l65iKON1kgBE4DYV/BXACnvqPCshavnVdpnGH4=";
   };
 
-  cargoSha256 = "sha256-tOY3aLpU08Tg/IT+usS2DNO0Q1aD0bvURmNJmHcJkgI=";
+  cargoHash = "sha256-tOY3aLpU08Tg/IT+usS2DNO0Q1aD0bvURmNJmHcJkgI=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ erictapen ];
     broken = stdenv.isDarwin;
+    mainProgram = "sub-batch";
   };
 }

@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Udev helper for naming devices per BIOS names";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = ["x86_64-linux" "i686-linux"];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "biosdevname";
   };
 }

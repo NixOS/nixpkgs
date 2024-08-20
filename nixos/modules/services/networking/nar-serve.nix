@@ -6,16 +6,18 @@ let
 in
 {
   meta = {
-    maintainers = [ maintainers.rizary ];
+    maintainers = [ maintainers.rizary maintainers.zimbatm ];
   };
   options = {
     services.nar-serve = {
-      enable = mkEnableOption (lib.mdDoc "serving NAR file contents via HTTP");
+      enable = mkEnableOption "serving NAR file contents via HTTP";
+
+      package = mkPackageOption pkgs "nar-serve" { };
 
       port = mkOption {
         type = types.port;
         default = 8383;
-        description = lib.mdDoc ''
+        description = ''
           Port number where nar-serve will listen on.
         '';
       };
@@ -23,13 +25,24 @@ in
       cacheURL = mkOption {
         type = types.str;
         default = "https://cache.nixos.org/";
-        description = lib.mdDoc ''
+        description = ''
           Binary cache URL to connect to.
 
           The URL format is compatible with the nix remote url style, such as:
           - http://, https:// for binary caches via HTTP or HTTPS
           - s3:// for binary caches stored in Amazon S3
           - gs:// for binary caches stored in Google Cloud Storage
+        '';
+      };
+
+      domain = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          When set, enables the feature of serving <nar-hash>.<domain>
+          on top of <domain>/nix/store/<nar-hash>-<pname>.
+
+          Useful to preview static websites where paths are absolute.
         '';
       };
     };
@@ -47,7 +60,7 @@ in
       serviceConfig = {
         Restart = "always";
         RestartSec = "5s";
-        ExecStart = "${pkgs.nar-serve}/bin/nar-serve";
+        ExecStart = lib.getExe cfg.package;
         DynamicUser = true;
       };
     };

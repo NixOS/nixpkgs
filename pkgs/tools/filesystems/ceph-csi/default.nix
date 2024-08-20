@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ceph-csi";
-  version = "3.9.0";
+  version = "3.11.0";
 
   nativeBuildInputs = [ go ];
   buildInputs = [ ceph ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "ceph";
     repo = "ceph-csi";
     rev = "v${version}";
-    sha256 = "sha256-dKn79EIveepeMzFPweQ3BE3YMCg7mj8EycMbBH8J8PQ=";
+    sha256 = "sha256-EgHl74kJ6lTS3pqz/Hxh/2tpc1xiDNcJxzERwKops+A=";
   };
 
   preConfigure = ''
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://ceph.com/";
     description = "Container Storage Interface (CSI) driver for Ceph RBD and CephFS";
+    mainProgram = "cephcsi";
     license = [ licenses.asl20 ];
     maintainers = with maintainers; [ johanot ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

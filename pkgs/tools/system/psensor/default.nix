@@ -9,7 +9,7 @@
 , libnotify
 , udisks2
 , libXNVCtrl
-, wrapGAppsHook
+, wrapGAppsHook3
 , libappindicator
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ark901va79gfq5p8h8dqypjgm3f8crmj37520q3slwz2rfphkq8";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
     lm_sensors
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wpitchoune.net/psensor/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "psensor";
   };
 }

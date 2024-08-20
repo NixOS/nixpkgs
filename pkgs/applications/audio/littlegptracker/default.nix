@@ -6,9 +6,9 @@
 , Foundation
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "littlegptracker";
-  version = "unstable-2020-11-26";
+  version = "0-unstable-2020-11-26";
 
   src = fetchFromGitHub {
     owner = "Mdashdotdashn";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A music tracker similar to lsdj optimised to run on portable game consoles";
+    description = "Music tracker similar to lsdj optimised to run on portable game consoles";
     longDescription = ''
       LittleGPTracker (a.k.a 'The piggy', 'lgpt') is a music tracker optimised
       to run on portable game consoles. It is currently running on Game Park's
@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     # https://github.com/NixOS/nixpkgs/pull/91766#issuecomment-688751821
     broken = stdenv.isDarwin;
+    mainProgram = "lgpt";
   };
 }

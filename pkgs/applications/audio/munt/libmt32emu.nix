@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmt32emu";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     rev = "${pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
+    sha256 = "sha256-zY1AFcm8uvFkrKUZHsqtKY2CYTY4bWmkTJ7bZPqXoxk=";
   };
 
   outputs = [ "out" "dev" ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://munt.sourceforge.net/";
-    description = "A library to emulate Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
+    description = "Library to emulate Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.unix; # Not tested on ReactOS yet :)

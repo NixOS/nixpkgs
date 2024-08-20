@@ -2,11 +2,11 @@
 , lib
 , fetchFromGitHub
 , makeWrapper
-, strip-nondeterminism
+, stripJavaArchivesHook
 , meson
 , ninja
 , pkg-config
-, gradle_7
+, gradle_8
 , curl
 , cryptopp
 , fontconfig
@@ -20,48 +20,19 @@
 
 let
   pname = "cie-middleware-linux";
-  version = "1.4.4.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = pname;
-    rev = "${version}-podofo";
-    sha256 = "sha256-Kyr9OTiY6roJ/wVJS/1aWfrrzDNQbuRTJQqo0akbMUU=";
+    rev = version;
+    sha256 = "sha256-M3Xwg3G2ZZhPRV7uhFVXQPyvuuY4zI5Z+D/Dt26KVM0=";
   };
 
-  gradle = gradle_7;
+  gradle = gradle_8;
 
   # Shared libraries needed by the Java application
   libraries = lib.makeLibraryPath [ ghostscript ];
-
-  # Fixed-output derivation that fetches the Java dependencies
-  javaDeps = stdenv.mkDerivation {
-    pname = "cie-java-deps";
-    inherit src version;
-
-    nativeBuildInputs = [ gradle ];
-
-    buildPhase = ''
-      # Run the fetchDeps task
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon -b cie-java/build.gradle fetchDeps
-    '';
-
-    installPhase = ''
-      # Build a tree compatible with the maven repository format
-      pushd "$GRADLE_USER_HOME/caches/modules-2/files-2.1"
-      find -type f | awk -F/ -v OFS=/ -v out="$out" '{
-        infile = $0
-        gsub(/\./, "/", $2)
-        system("install -m644 -D "infile" "out"/"$2"/"$3"/"$4"/"$6)
-      }'
-      popd
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-WzT5vYF9yCMU2A7EkLZyjgWrN3gD7pnkPXc3hDFqpD8=";
-  };
 
 in
 
@@ -70,15 +41,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "dev" ];
-
   nativeBuildInputs = [
     makeWrapper
+    stripJavaArchivesHook
     meson
     ninja
     pkg-config
     gradle
-    strip-nondeterminism
   ];
 
   buildInputs = [
@@ -91,6 +60,8 @@ stdenv.mkDerivation {
     libxml2
   ];
 
+  patches = [ ./use-system-podofo.patch ];
+
   postPatch = ''
     # substitute the cieid command with this $out/bin/cieid
     substituteInPlace libs/pkcs11/src/CSP/AbilitaCIE.cpp \
@@ -101,26 +72,40 @@ stdenv.mkDerivation {
   # libraries and the Java application builds.
   preConfigure = "pushd libs";
 
-  postBuild = ''
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jre}"
+    "--build-file" "cie-java/build.gradle"
+  ];
+
+  gradleBuildTask = "standalone";
+
+  buildPhase = ''
+    runHook preBuild
+
+    ninjaBuildPhase
+    pushd ../..
+    gradleBuildPhase
     popd
 
-    # Use the packages in javaDeps for both plugins and dependencies
-    localRepo="maven { url uri('${javaDeps}') }"
-    sed -i cie-java/settings.gradle -e "1i \
-      pluginManagement { repositories { $localRepo } }"
-    substituteInPlace cie-java/build.gradle \
-      --replace 'mavenCentral()' "$localRepo"
+    runHook postBuild
+  '';
 
-    # Build the Java application
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle standalone \
-      --no-daemon \
-      --offline \
-      --parallel \
-      --info -Dorg.gradle.java.home=${jre} \
-      --build-file cie-java/build.gradle
+  doCheck = true;
 
-    pushd libs/build
+  checkPhase = ''
+    runHook preCheck
+
+    mesonCheckPhase
+    pushd ../..
+    gradleCheckPhase
+    popd
+
+    runHook postCheck
   '';
 
   postInstall = ''
@@ -144,15 +129,7 @@ stdenv.mkDerivation {
     install -Dm644 LICENSE "$out/share/licenses/cieid/LICENSE"
   '';
 
-  postFixup = ''
-    # Move static libraries to the dev output
-    mv -t "$dev/lib" "$out/lib/"*.a
-
-    # Make the jar deterministic (mainly, sorting its files)
-    strip-nondeterminism "$out/share/cieid/cieid.jar"
-  '';
-
-  passthru = { inherit javaDeps; };
+  preGradleUpdate = "cd ../..";
 
   meta = with lib; {
     homepage = "https://github.com/M0Rf30/cie-middleware-linux";

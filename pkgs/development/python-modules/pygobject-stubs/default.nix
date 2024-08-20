@@ -1,30 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, black
-, codespell
-, isort
-, mypy
-, pre-commit
-, pygobject3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygobject-stubs";
-  version = "2.9.0";
-  format = "pyproject";
+  version = "2.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pygobject-stubs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-A28vH5S5xxY7VIJORbgQ7jAi/wG4WiffNGryiumHWf0=";
+    hash = "sha256-HOAG5c0fjF6RzULc1IDk7hRSlKTqtdXEM6acyJeV0DE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # This package does not include any tests.
   doCheck = false;
@@ -32,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PEP 561 Typing Stubs for PyGObject";
     homepage = "https://github.com/pygobject/pygobject-stubs";
-    changelog = "https://github.com/pygobject/pygobject-stubs/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pygobject/pygobject-stubs/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ hacker1024 ];
   };

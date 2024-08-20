@@ -13,10 +13,11 @@ in
 
   options = {
     services.dae = with lib;{
+
       enable = mkEnableOption
         "dae, a Linux high-performance transparent proxy solution based on eBPF";
 
-      package = mkPackageOptionMD pkgs "dae" { };
+      package = mkPackageOption pkgs "dae" { };
 
 
       assets = mkOption {
@@ -46,7 +47,7 @@ in
       openFirewall = mkOption {
         type = with types; submodule {
           options = {
-            enable = mkEnableOption ("opening {option}`port` in the firewall");
+            enable = mkEnableOption "opening {option}`port` in the firewall";
             port = mkOption {
               type = types.port;
               description = ''

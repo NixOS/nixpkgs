@@ -5,8 +5,9 @@
 , qttools
 
 , asciidoctor
-, botan2
+, botan3
 , curl
+, kio
 , libXi
 , libXtst
 , libargon2
@@ -20,13 +21,14 @@
 , qtsvg
 , qtx11extras
 , readline
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , zlib
 
 , LocalAuthentication
 
 , withKeePassBrowser ? true
+, withKeePassBrowserPasskeys ? true
 , withKeePassFDOSecrets ? true
 , withKeePassKeeShare ? true
 , withKeePassNetworking ? true
@@ -40,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.6";
+  version = "2.7.9";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    hash = "sha256-xgrkMz7BCBxjfxHsAz/CFLv1d175LnrAJIOZMM3GmU0=";
+    hash = "sha256-rnietdc8eDNTag0GaZ8VJb28JsKKD/qrQ0Gg6FMWpr0=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -70,6 +72,7 @@ stdenv.mkDerivation rec {
   ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
   ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+  ++ (lib.optional withKeePassBrowserPasskeys "-DWITH_XC_BROWSER_PASSKEYS=ON")
   ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
   ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
@@ -88,7 +91,14 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
+  nativeBuildInputs = [
+    asciidoctor
+    cmake
+    wrapQtAppsHook
+    qttools
+    pkg-config
+  ]
+  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
   preFixup = ''
@@ -105,7 +115,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    botan2
+    botan3
+    kio
     libXi
     libXtst
     libargon2
@@ -125,7 +136,7 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.keepassxc;
 
   meta = with lib; {
-    description = "Offline password manager with many features.";
+    description = "Offline password manager with many features";
     longDescription = ''
       A community fork of KeePassX, which is itself a port of KeePass Password Safe.
       The goal is to extend and improve KeePassX with new features and bugfixes,
@@ -135,7 +146,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jonafato srapenne blankparticle ];
+    maintainers = with maintainers; [ jonafato blankparticle ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

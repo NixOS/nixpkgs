@@ -1,35 +1,35 @@
-{ lib
-, aws-sam-translator
-, buildPythonPackage
-, fetchFromGitHub
-, jschema-to-python
-, jsonpatch
-, jsonschema
-, junit-xml
-, mock
-, networkx
-, pydot
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, regex
-, sarif-om
-, setuptools
-, sympy
+{
+  lib,
+  aws-sam-translator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jschema-to-python,
+  jsonpatch,
+  jsonschema,
+  junit-xml,
+  mock,
+  networkx,
+  pydot,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  regex,
+  sarif-om,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.79.11";
+  version = "0.87.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
-    repo = "cfn-python-lint";
+    repo = "cfn-lint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dVLKMoZzP2q3bejEIslgpQgkPJOJUeEsXyyk8HRP6h0=";
+    hash = "sha256-em6Vi9zIn8ikmcHVbljA1vr+R3t8ZpJ57p3Ix3bqMYU=";
   };
 
   propagatedBuildInputs = [
@@ -57,12 +57,6 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # These tests depend on the current date, for example because of issues like this.
-    # This makes it possible for them to succeed on hydra and then begin to fail without
-    # any code changes.
-    # https://github.com/aws-cloudformation/cfn-python-lint/issues/1705
-    # See also: https://github.com/NixOS/nixpkgs/issues/108076
-    "TestQuickStartTemplates"
     # Requires git directory
     "test_update_docs"
     # Tests depend on network access (fails in getaddrinfo)
@@ -76,15 +70,14 @@ buildPythonPackage rec {
     "test_template_config"
   ];
 
-  pythonImportsCheck = [
-    "cfnlint"
-  ];
+  pythonImportsCheck = [ "cfnlint" ];
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
-    homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
+    mainProgram = "cfn-lint";
+    homepage = "https://github.com/aws-cloudformation/cfn-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

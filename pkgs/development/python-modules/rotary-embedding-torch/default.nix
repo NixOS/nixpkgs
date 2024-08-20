@@ -1,26 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, wheel
+  # build-system
+  setuptools,
+  wheel,
 
-# dependencies
-, einops
-, torch
+  # dependencies
+  beartype,
+  einops,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "rotary-embedding-torch";
-  version = "0.3.3";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "rotary-embedding-torch";
-    rev = version;
-    hash = "sha256-uTOKdxqbSLRJl0gnz3TvpVwhrfqflAp0wfn6d13+YrM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dP7QFUNIGFFQcR98po+LYg3MU7P+GUunO7zz/y8vZmY=";
   };
 
   nativeBuildInputs = [
@@ -29,19 +31,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    beartype
     einops
     torch
   ];
 
-  pythonImportsCheck = [
-    "rotary_embedding_torch"
-  ];
+  pythonImportsCheck = [ "rotary_embedding_torch" ];
 
   doCheck = false; # no tests
 
   meta = with lib; {
     description = "Implementation of Rotary Embeddings, from the Roformer paper, in Pytorch";
     homepage = "https://github.com/lucidrains/rotary-embedding-torch";
+    changelog = "https://github.com/lucidrains/rotary-embedding-torch/releases/tag/${version}";
     license = licenses.mit;
     maintainers = teams.tts.members;
   };

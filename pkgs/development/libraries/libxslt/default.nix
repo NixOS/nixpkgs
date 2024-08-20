@@ -15,16 +15,16 @@
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxslt";
-  version = "1.1.38";
+  version = "1.1.42";
 
   outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HzJFBCWBmgmsr/Krelp/ii7HlW5QXXvutF6EPQ4eyrE=";
+    url = "mirror://gnome/sources/libxslt/${lib.versions.majorMinor finalAttrs.version}/libxslt-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hcpiysDUH8d9P2Az2p32/XPSDqL8GLCjYJ/7QRDhuus=";
   };
 
   strictDeps = true;
@@ -55,10 +55,12 @@ stdenv.mkDerivation rec {
     "--without-mem-debug"
     "--without-debugger"
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ] ++ lib.optionals (!cryptoSupport) [
     "--without-crypto"
   ];
+
+  enableParallelBuilding = true;
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
@@ -73,17 +75,17 @@ stdenv.mkDerivation rec {
     inherit pythonSupport;
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libxslt";
       versionPolicy = "none";
     };
   };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";
-    description = "A C library and tools to do XSL transformations";
+    description = "C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
-}
+})

@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Many-to-one page printing utility";
+    mainProgram = "mpage";
 
     longDescription = ''
       Mpage reads plain text files or PostScript documents and prints

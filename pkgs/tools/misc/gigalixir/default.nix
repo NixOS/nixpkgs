@@ -7,12 +7,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.6.0";
+  version = "1.12.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-01CoCT++mGiwZ40vAjU3OFE74WGWlBuhaTwsNFIR1a0=";
+    hash = "sha256-T16+0F28/SxDl53GGTRzKbG+ghbL/80NkY08WpCixhA=";
   };
 
   postPatch = ''
@@ -59,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "gigalixir";
   };
 }

@@ -51,11 +51,12 @@ in stdenv.mkDerivation {
   configureFlags = [ "--enable-gmodule" "--with-standard-modules=all" ];
 
   meta = with lib; {
-    description = "A cron like daemon for mpd";
+    description = "Cron like daemon for mpd";
     homepage    = "http://alip.github.io/mpdcron/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ lovek323 manveru ];
+    broken      = stdenv.isDarwin; # fails due to old nokogiri https://github.com/sparklemotion/nokogiri/discussions/3152#discussioncomment-8806607
   };
 }
 # TODO: autoreconfHook this

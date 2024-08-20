@@ -1,10 +1,11 @@
-{ absl-py
-, buildPythonPackage
-, contextlib2
-, fetchPypi
-, fetchurl
-, lib
-, pyyaml
+{
+  absl-py,
+  buildPythonPackage,
+  contextlib2,
+  fetchPypi,
+  fetchurl,
+  lib,
+  pyyaml,
 }:
 
 let
@@ -20,6 +21,7 @@ in
 buildPythonPackage rec {
   pname = "ml-collections";
   version = "0.1.1";
+  format = "setuptools";
 
   # ml-collections does not have any git release tags. See https://github.com/google/ml_collections/issues/8.
   src = fetchPypi {
@@ -35,7 +37,11 @@ buildPythonPackage rec {
     cp ${requirements-test} requirements-test.txt
   '';
 
-  propagatedBuildInputs = [ absl-py contextlib2 pyyaml ];
+  propagatedBuildInputs = [
+    absl-py
+    contextlib2
+    pyyaml
+  ];
 
   # The official test suite uses bazel. With pytestCheckHook there are name
   # conflicts between files and tests have assumptions that are broken by the
@@ -45,7 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ml_collections" ];
 
   meta = with lib; {
-    description = "ML Collections is a library of Python collections designed for ML usecases.";
+    description = "ML Collections is a library of Python collections designed for ML usecases";
     homepage = "https://github.com/google/ml_collections";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];

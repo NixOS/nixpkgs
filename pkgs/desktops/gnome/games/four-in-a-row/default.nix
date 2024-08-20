@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gnome, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome, adwaita-icon-theme, gtk3, wrapGAppsHook3
 , gettext, meson, gsound, librsvg, itstool, vala
 , python3, ninja, desktop-file-utils }:
 
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook gettext meson itstool vala
+    pkg-config wrapGAppsHook3 gettext meson itstool vala
     ninja python3 desktop-file-utils
   ];
-  buildInputs = [ gtk3 gsound librsvg gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gsound librsvg adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
@@ -30,8 +30,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Four-in-a-row";
+    homepage = "https://gitlab.gnome.org/GNOME/four-in-a-row";
     description = "Make lines of the same color to win";
+    mainProgram = "four-in-a-row";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;

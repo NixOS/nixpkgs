@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "A first-person shooter video game developed by Epic Games and Digital Extreme -- demo version";
+    description = "First-person shooter video game developed by Epic Games and Digital Extreme -- demo version";
     homepage = "http://www.unrealtournament2004.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ abbradar ];

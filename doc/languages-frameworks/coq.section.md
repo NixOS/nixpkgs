@@ -55,17 +55,18 @@ Here is a simple package example. It is a pure Coq library, thus it depends on C
 ```nix
 { lib, mkCoqDerivation, version ? null
 , coq, mathcomp, mathcomp-finmap, mathcomp-bigenough }:
-with lib; mkCoqDerivation {
+
+mkCoqDerivation {
   /* namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2` */
   namePrefix = [ "coq" "mathcomp" ];
   pname = "multinomials";
   owner = "math-comp";
   inherit version;
-  defaultVersion =  with versions; switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.7" "8.12")  "1.11.0" ];             out = "1.5.2"; }
-      { cases = [ (range "8.7" "8.11")  (range "1.8" "1.10") ]; out = "1.5.0"; }
-      { cases = [ (range "8.7" "8.10")  (range "1.8" "1.10") ]; out = "1.4"; }
-      { cases = [ "8.6"                 (range "1.6" "1.7") ];  out = "1.1"; }
+  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
+      { cases = [ (range "8.7" "8.12") (isEq "1.11") ];        out = "1.5.2"; }
+      { cases = [ (range "8.7" "8.11") (range "1.8" "1.10") ]; out = "1.5.0"; }
+      { cases = [ (range "8.7" "8.10") (range "1.8" "1.10") ]; out = "1.4"; }
+      { cases = [ (isEq "8.6")         (range "1.6" "1.7") ];  out = "1.1"; }
     ] null;
   release = {
     "1.5.2".sha256 = "15aspf3jfykp1xgsxf8knqkxv8aav2p39c2fyirw7pwsfbsv2c4s";
@@ -83,8 +84,8 @@ with lib; mkCoqDerivation {
     [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
 
   meta = {
-    description = "A Coq/SSReflect Library for Monoidal Rings and Multinomials";
-    license = licenses.cecill-c;
+    description = "Coq/SSReflect Library for Monoidal Rings and Multinomials";
+    license = lib.licenses.cecill-c;
   };
 }
 ```

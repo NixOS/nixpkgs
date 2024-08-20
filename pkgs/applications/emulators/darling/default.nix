@@ -3,7 +3,7 @@
 , runCommandWith
 , writeShellScript
 , fetchFromGitHub
-, fetchpatch
+, nixosTests
 
 , freetype
 , libjpeg
@@ -38,7 +38,7 @@
 
 , xdg-user-dirs
 
-, addOpenGLRunpath
+, addDriverRunpath
 
 # Whether to pre-compile Python 2 bytecode for performance.
 , compilePy2Bytecode ? false
@@ -107,14 +107,14 @@ let
   ];
 in stdenv.mkDerivation {
   pname = "darling";
-  version = "unstable-2023-05-02";
+  version = "unstable-2024-02-03";
 
   src = fetchFromGitHub {
     owner = "darlinghq";
     repo = "darling";
-    rev = "557e7e9dece394a3f623825679474457e5b64fd0";
+    rev = "25afbc76428c39c3909e9efcf5caef1140425211";
     fetchSubmodules = true;
-    hash = "sha256-SOoLaV7wg33qRHPQXkdMvrY++CvoG85kwd6IU6DkYa0=";
+    hash = "sha256-T0g38loUFv3jHvUu3R3QH9hwP8JVe2al4g4VhXnBDMc=";
   };
 
   outputs = [ "out" "sdk" ];
@@ -217,9 +217,11 @@ in stdenv.mkDerivation {
       exit 1
     fi
 
-    patchelf --add-rpath "${lib.makeLibraryPath wrappedLibs}:${addOpenGLRunpath.driverLink}/lib" \
+    patchelf --add-rpath "${lib.makeLibraryPath wrappedLibs}:${addDriverRunpath.driverLink}/lib" \
       $out/libexec/darling/usr/libexec/darling/mldr
   '';
+
+  passthru.tests.nixos = nixosTests.darling;
 
   meta = with lib; {
     description = "Open-source Darwin/macOS emulation layer for Linux";

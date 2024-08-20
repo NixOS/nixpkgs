@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, pytestCheckHook
-, pythonOlder
-, sphinxHook
-, sphinx-rtd-theme
-, zope_interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  cryptography,
+  pytestCheckHook,
+  pythonOlder,
+  sphinxHook,
+  sphinx-rtd-theme,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -32,14 +34,13 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     sphinxHook
     sphinx-rtd-theme
-    zope_interface
+    zope-interface
   ];
 
-  passthru.optional-dependencies.crypto = [
-    cryptography
-  ];
+  passthru.optional-dependencies.crypto = [ cryptography ];
 
   nativeCheckInputs = [
     pytestCheckHook

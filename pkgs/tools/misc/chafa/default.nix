@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.12.5";
+  version = "1.14.2";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     rev = version;
-    sha256 = "sha256-2li2Vp+W4Q2/8WY8FJ519BuVR9KzddIJ1j/GY/hLMZo=";
+    sha256 = "sha256-BK2QTlcns+e3LL3NgcVYk4an+j/x0btpKAuBZ+QIN+Q=";
   };
 
   nativeBuildInputs = [ autoconf
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.mog ];
+    mainProgram = "chafa";
   };
 }

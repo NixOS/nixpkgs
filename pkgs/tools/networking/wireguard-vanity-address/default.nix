@@ -20,5 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/warner/wireguard-vanity-address";
     license = licenses.mit;
     maintainers = with maintainers; [ bcc32 ];
+    mainProgram = "wireguard-vanity-address";
   };
 }

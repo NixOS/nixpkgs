@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 let
   pname = "boilerpy3";
-  version = "1.0.6";
+  version = "1.0.7";
 in
 buildPythonPackage {
   inherit pname version;
@@ -18,7 +19,7 @@ buildPythonPackage {
     owner = "jmriebold";
     repo = "BoilerPy3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hl2+XpSvVaHpq9RGMnSzWHCA8TtBQnYwDtEOia1Rl/A=";
+    hash = "sha256-dhAB0VbBGsSrgYGUlZEYaKA6sQB/f9Bb3alsRuQ8opo=";
   };
 
   postPatch = ''
@@ -26,7 +27,6 @@ buildPythonPackage {
     substituteInPlace setup.py \
       --replace '>=3.6.*' '>=3.6'
   '';
-
 
   pythonImportsCheck = [ "boilerpy3" ];
 

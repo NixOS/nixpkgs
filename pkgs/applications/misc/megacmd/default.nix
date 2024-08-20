@@ -8,8 +8,8 @@
   # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
   # to be re-enabled when patch available
   # , ffmpeg
-, freeimage
 , gcc-unwrapped
+, icu
 , libmediainfo
 , libraw
 , libsodium
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "sha256-JnxfFbM+NyeUrEMok62zlsQIxjrUvLLg4tUTiKPDZFc=";
+    hash = "sha256-UlSqwM8GQKeG8/K0t5DbM034NQOeBg+ujNi/MMsVCuM=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cryptopp
     curl
     # ffmpeg
-    freeimage
+    icu
     gcc-unwrapped
     libmediainfo
     libraw
@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
     "--with-cryptopp"
     "--with-curl"
     # "--with-ffmpeg"
-    "--with-freeimage"
+    "--without-freeimage" # disabled as freeimage is insecure
+    "--with-icu"
     "--with-libmediainfo"
     "--with-libuv"
     "--with-libzen"

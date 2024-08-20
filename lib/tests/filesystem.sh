@@ -64,8 +64,14 @@ expectSuccess "pathType $PWD/directory" '"directory"'
 expectSuccess "pathType $PWD/regular" '"regular"'
 expectSuccess "pathType $PWD/symlink" '"symlink"'
 expectSuccess "pathType $PWD/fifo" '"unknown"'
-# Different errors depending on whether the builtins.readFilePath primop is available or not
-expectFailure "pathType $PWD/non-existent" "error: (evaluation aborted with the following error message: 'lib.filesystem.pathType: Path $PWD/non-existent does not exist.'|getting status of '$PWD/non-existent': No such file or directory)"
+
+# Only check error message when a Nixpkgs-specified error is thrown,
+# which is only the case when `readFileType` is not available
+# and the fallback implementation needs to be used.
+if [[ "$(nix-instantiate --eval --expr 'builtins ? readFileType')" == false ]]; then
+    expectFailure "pathType $PWD/non-existent" \
+        "error: evaluation aborted with the following error message: 'lib.filesystem.pathType: Path $PWD/non-existent does not exist.'"
+fi
 
 expectSuccess "pathIsDirectory /." "true"
 expectSuccess "pathIsDirectory $PWD/directory" "true"

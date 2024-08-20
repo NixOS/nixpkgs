@@ -1,34 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, betamax
-, hacking
-, iso8601
-, lxml
-, oauthlib
-, os-service-types
-, oslo-config
-, oslo-utils
-, pbr
-, pycodestyle
-, pyyaml
-, requests
-, requests-kerberos
-, requests-mock
-, six
-, stestr
-, stevedore
-, testresources
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  betamax,
+  hacking,
+  iso8601,
+  lxml,
+  oauthlib,
+  os-service-types,
+  oslo-config,
+  oslo-utils,
+  pbr,
+  pycodestyle,
+  pyyaml,
+  requests,
+  requests-kerberos,
+  requests-mock,
+  setuptools,
+  six,
+  stestr,
+  stevedore,
+  testresources,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.3.0";
+  version = "5.7.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AXwrm1mUU8kpQHUO27IPF2hxIbKJARS/nTbfFKBicRc=";
+    hash = "sha256-sswtaNGkjpwsbZsbH9ANfHvf4IboBAtR5wk4qLo639E=";
   };
 
   postPatch = ''
@@ -37,7 +40,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     betamax
     iso8601
     lxml

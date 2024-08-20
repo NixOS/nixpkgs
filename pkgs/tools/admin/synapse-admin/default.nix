@@ -3,25 +3,29 @@
 , fetchYarnDeps
 , mkYarnPackage
 , baseUrl ? null
+, writeShellScriptBin
 }:
 
 mkYarnPackage rec {
   pname = "synapse-admin";
-  version = "0.8.7";
+  version = "0.10.0";
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kvQBzrCu1sgDccKhr0i2DgDmO5z6u6s+vw5KymttoK4=";
+    sha256 = "sha256-3MC5PCEwYfZzJy9AW9nHTpvU49Lk6wbYC4Rcv9J9MEg=";
   };
 
-  yarnLock = ./yarn.lock;
   packageJSON = ./package.json;
 
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
-    hash = "sha256-f0ilsF3lA+134qUaX96mdntjpR4gRlmtRIh/xEFhtXQ=";
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-vpCwPL1B+hbIaVSHtlkGjPAteu9BFNNmCTE66CSyFkg=";
   };
+
+  nativeBuildInputs = [
+    (writeShellScriptBin "git" "echo ${version}")
+  ];
 
   NODE_ENV = "production";
   ${if baseUrl != null then "REACT_APP_SERVER" else null} = baseUrl;
@@ -33,12 +37,7 @@ mkYarnPackage rec {
     runHook preBuild
 
     export HOME=$(mktemp -d)
-    pushd deps/synapse-admin
-    mv node_modules node_modules.bak
-    cp -r $(readlink -f node_modules.bak) node_modules
-    chmod +w node_modules
     yarn --offline run build
-    popd
 
     runHook postBuild
   '';
@@ -46,8 +45,7 @@ mkYarnPackage rec {
   distPhase = ''
     runHook preDist
 
-    mkdir -p $out
-    cp -r deps/synapse-admin/build/* $out
+    cp -r deps/synapse-admin/dist $out
 
     runHook postDist
   '';

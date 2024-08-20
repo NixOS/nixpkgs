@@ -17,18 +17,20 @@
 # the dependencies from other pkgs.
 
 let
-  version = "4.8.0-494";
+  version = "4.11.0-6";
 
   unpacked = stdenv.mkDerivation rec {
     inherit version;
     pname = "dell-command-configure-unpacked";
 
     src = fetchurl {
-      url =
-        "https://dl.dell.com/FOLDER08911312M/1/command-configure_${version}.ubuntu20_amd64.tar.gz";
+      urls = [
+        "https://dl.dell.com/FOLDER10469726M/1/command-configure_${version}.ubuntu22_amd64.tar.gz"
+        "https://web.archive.org/web/20240228233129/https://dl.dell.com/FOLDER10469726M/1/command-configure_4.11.0-6.ubuntu22_amd64.tar.gz"
+      ];
       # The CDN blocks the Curl user-agent, so set to blank instead.
       curlOpts = ''-A=""'';
-      hash = "sha256-l5oHgDkFBF6llNsHufTmuDzjkhGmXHYXlOJ4hvZfRoE=";
+      hash = "sha256-Bwa4sYguYwEBKEJSP3wzHhzjuDeaGQN8fKeooWHX18E=";
     };
 
     dontBuild = true;
@@ -37,7 +39,7 @@ let
 
     unpackPhase = ''
       tar -xzf ${src}
-      dpkg-deb -x command-configure_${version}.ubuntu20_amd64.deb command-configure
+      dpkg-deb -x command-configure_${version}.ubuntu22_amd64.deb command-configure
       dpkg-deb -x srvadmin-hapi_9.5.0_amd64.deb srvadmin-hapi
     '';
 
@@ -53,10 +55,11 @@ let
     pname = "dell-command-configure-unpacked-wrapper-lib";
     inherit version;
 
-    src = ./.;
+    unpackPhase = ''
+      cp ${./wrapper-lib.c} wrapper-lib.c
+    '';
 
     postPatch = ''
-      ls -al
       substitute wrapper-lib.c lib.c \
         --subst-var-by to "${unpacked}/srvadmin-hapi/opt/dell/srvadmin/etc/omreg.d/omreg-hapi.cfg"
       cc -fPIC -shared lib.c -o ${wrapperLibName}
@@ -98,7 +101,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Configure BIOS settings on Dell laptops.";
+    description = "Configure BIOS settings on Dell laptops";
     homepage =
       "https://www.dell.com/support/article/us/en/19/sln311302/dell-command-configure";
     license = licenses.unfree;

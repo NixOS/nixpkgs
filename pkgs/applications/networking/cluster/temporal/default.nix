@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.22.0";
+  version = "1.24.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    hash = "sha256-7AdbGsgdDsSUtj8TkZl4CcvF2Xk1l9W9Vdos+fEsIVI=";
+    hash = "sha256-hQkus8BZvtR2ObCJbtP2SZST9tRxuPjFwR+jKDYH8Bs=";
   };
 
-  vendorHash = "sha256-gDiVB34fICaS6IyQCAa4ePff/vsT7/7HnJM9ZjiOh4k=";
+  vendorHash = "sha256-u9xQFTwVKEGRPhBwcBgexCQhlNO91yP4m4vchCdBt9E=";
 
   excludedPackages = [ "./build" ];
 
@@ -41,11 +41,11 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
+    description = "Microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
     homepage = "https://temporal.io";
     changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ titanous ];
+    maintainers = [ ];
     mainProgram = "temporal-server";
   };
 }

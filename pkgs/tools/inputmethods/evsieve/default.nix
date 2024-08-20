@@ -6,23 +6,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evsieve";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "KarsMulder";
     repo = "evsieve";
     rev = "v${version}";
-    hash = "sha256-R/y3iyKGE4dzAyNnDwrMCr8JFshYJwNcgHQ8UbtuRj8=";
+    hash = "sha256-UV5m8DmFtkCU/DoBJNBCdvhU/jYtU5+WnnhKwxZNl9g=";
   };
 
-  cargoHash = "sha256-jkm+mAHejCBZFalUbJNaIxtIl2kwnlPR2wsaYlcfSz8=";
+  cargoHash = "sha256-Bug25xK3YYQ3YjrUXlgWaVUPn87V3N/8XikqwYL/sUg=";
 
   buildInputs = [ libevdev ];
 
   doCheck = false; # unit tests create uinput devices
 
   meta = with lib; {
-    description = "A utility for mapping events from Linux event devices";
+    description = "Utility for mapping events from Linux event devices";
+    mainProgram = "evsieve";
     homepage = "https://github.com/KarsMulder/evsieve";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ tsowell ];

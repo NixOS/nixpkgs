@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , perlPackages
-, wrapGAppsHook
+, wrapGAppsHook3
 , imagemagick
 , gdk-pixbuf
 , librsvg
@@ -15,8 +15,6 @@
 
 let
   perlModules = with perlPackages; [
-      # Not sure if these are needed
-      # Gnome2 Gnome2Canvas Gnome2VFS Gtk2AppIndicator Gtk2Unique
       ImageMagick
       Cairo
       FileBaseDir
@@ -74,7 +72,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-o95skSr6rszh0wsHQTpu1GjqCDmde7aygIP+i4XQW9A=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs = [
     perlPackages.perl
     procps
@@ -104,6 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Screenshot and annotation tool";
+    mainProgram = "shutter";
     homepage = "https://shutter-project.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

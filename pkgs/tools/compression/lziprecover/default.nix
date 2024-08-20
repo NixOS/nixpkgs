@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lziprecover";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchurl {
     url = "mirror://savannah/lzip/lziprecover/${pname}-${version}.tar.gz";
-    sha256 = "sha256-8pgEF38G3VHD+lJhWuGYp2ACts6Nlhw1dVRsN0D0tXI=";
+    sha256 = "sha256-HWmc+u/pLrJiSjZSWAvK/gu7mP54GMJebegjvN0NRY8=";
   };
 
   configureFlags = [
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ vlaci ];
     platforms = lib.platforms.all;
+    mainProgram = "lziprecover";
   };
 }

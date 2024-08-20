@@ -22,21 +22,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.5.2";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = finalAttrs.pname;
+    repo = "citations";
     rev = finalAttrs.version;
-    hash = "sha256-QofsVqulFMiyYKci2vHdQAUJoIIgnPyTRizoBDvYG+g=";
+    hash = "sha256-RV9oQcXzRsNcvZc/8Xt7qZ/88DvHofC2Av0ftxzeF6Q=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nom-bibtex-0.4.0" = "sha256-hulMoH3gkhD2HurrXdIqqkfKkZGujV9We0m0jsgHFfM=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    src = finalAttrs.src;
+    hash = "sha256-XlqwgXuwxR6oEz0+hYAp/3b+XxH+Vd/DGr5j+iKhUjQ=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (lib.concatStringsSep " " [
+    "-Wno-typedef-redefinition"
+    "-Wno-unused-parameter"
+    "-Wno-missing-field-initializers"
+    "-Wno-incompatible-function-pointer-types"
+  ]);
+
   doCheck = true;
 
   nativeCheckInputs = [ clippy ];
@@ -81,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ benediktbroich ];
     platforms = platforms.unix;
+    mainProgram = "citations";
   };
 })

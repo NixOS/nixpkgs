@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-KrvTwcIeINIBkia6PTnKXp4jFd6GEMBh/xbn0Ot/wmE=";
   };
 
-  cargoSha256 = "sha256-Zft/ip+/uJbUIqCDDEa4hchmZZiYWGdaVnzWC74FgU8=";
+  cargoHash = "sha256-Zft/ip+/uJbUIqCDDEa4hchmZZiYWGdaVnzWC74FgU8=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -28,10 +28,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A gopher and gemini client for the modern internet";
+    description = "Gopher and gemini client for the modern internet";
     homepage = "https://github.com/jansc/ncgopher";
     license = licenses.bsd2;
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
+    mainProgram = "ncgopher";
   };
 }

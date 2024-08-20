@@ -6,20 +6,19 @@
 , curl
 , pkg-config
 , openssl
-, llvmPackages
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";
-  version = "2.2.1";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "AleoHQ";
     repo = "snarkOS";
     rev = "v${version}";
-    sha256 = "sha256-vEoEnjVjxVnjZ3Lya1qO2kOypNu07aYSlrSya5NJZzs=";
+    sha256 = "sha256-+z9dgg5HdR+Gomug03gI1zdCU6t4SBHkl1Pxoq69wrc=";
   };
 
-  cargoHash = "sha256-CVHvBqfcTqWBtLFcEcs9y/LmQ4gXjX+dfqqZSxN+33A=";
+  cargoHash = "sha256-qW/ZV4JqpNqqh8BYc+/d5g8junwhdZ38NhHclx+k/0M=";
 
   # buildAndTestSubdir = "cli";
 
@@ -50,10 +49,11 @@ rustPlatform.buildRustPackage rec {
 
 
   meta = with lib; {
-    description = "A Decentralized Operating System for Zero-Knowledge Applications";
+    description = "Decentralized Operating System for Zero-Knowledge Applications";
     homepage = "https://snarkos.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
     platforms = platforms.unix;
+    mainProgram = "snarkos";
   };
 }

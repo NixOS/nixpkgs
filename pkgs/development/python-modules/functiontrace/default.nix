@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://functiontrace.com";
-    description = "The Python module for Functiontrace";
+    description = "Python module for Functiontrace";
     license = licenses.prosperity30;
     maintainers = with maintainers; [ mathiassven ];
   };

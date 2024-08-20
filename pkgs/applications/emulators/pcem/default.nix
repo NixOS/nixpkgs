@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, wxGTK32, coreutils, SDL2, openal, alsa-lib, pkg-config, gtk3, wrapGAppsHook
+{ stdenv, lib, fetchzip, wxGTK32, coreutils, SDL2, openal, alsa-lib, pkg-config, gtk3, wrapGAppsHook3
 , autoreconfHook, withNetworking ? true, withALSA ? true }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "067pbnc15h6a4pnnym82klr1w8qwfm6p0pkx93gx06wvwqsxvbdv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
   buildInputs = [ wxGTK32 coreutils SDL2 openal gtk3 ]
     ++ lib.optional withALSA alsa-lib;
 
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Emulator for IBM PC computers and clones";
+    mainProgram = "pcem";
     homepage = "https://pcem-emulator.co.uk/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.terin ];

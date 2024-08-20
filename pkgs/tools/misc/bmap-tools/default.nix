@@ -19,8 +19,9 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "bmap-related tools";
     homepage = "https://github.com/intel/bmap-tools";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
+    mainProgram = "bmaptool";
   };
 }

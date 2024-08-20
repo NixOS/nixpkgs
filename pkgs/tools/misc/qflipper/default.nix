@@ -6,7 +6,7 @@
 , libusb1
 , libGL
 , qmake
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , mkDerivation
 
@@ -24,8 +24,8 @@
 }:
 let
   pname = "qFlipper";
-  version = "1.3.2";
-  sha256 = "sha256-n/vvLR4p7ZmQC+FuYOvarmgydfYwxRBRktzs7CfiNQg=";
+  version = "1.3.3";
+  hash = "sha256-/Xzy+OA0Nl/UlSkOOZW2YsOHdJvS/7X3Z3ITkPByAOc=";
   timestamp = "99999999999";
   commit = "nix-${version}";
 
@@ -38,14 +38,14 @@ mkDerivation {
     repo = "qFlipper";
     rev = version;
     fetchSubmodules = true;
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [
     pkg-config
     qmake
     qttools
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

@@ -1,22 +1,25 @@
 import ../make-test-python.nix ({pkgs, ...}: {
   name = "kerberos_server-heimdal";
+
   nodes.machine = { config, libs, pkgs, ...}:
   { services.kerberos_server =
     { enable = true;
-      realms = {
+      settings.realms = {
         "FOO.BAR".acl = [{principal = "admin"; access = ["add" "cpw"];}];
       };
     };
-    krb5 = {
+    security.krb5 = {
       enable = true;
-      kerberos = pkgs.heimdal;
-      libdefaults = {
-        default_realm = "FOO.BAR";
-      };
-      realms = {
-        "FOO.BAR" = {
-          admin_server = "machine";
-          kdc = "machine";
+      package = pkgs.heimdal;
+      settings = {
+        libdefaults = {
+          default_realm = "FOO.BAR";
+        };
+        realms = {
+          "FOO.BAR" = {
+            admin_server = "machine";
+            kdc = "machine";
+          };
         };
       };
     };
@@ -39,4 +42,6 @@ import ../make-test-python.nix ({pkgs, ...}: {
         "kinit -kt alice.keytab alice",
     )
   '';
+
+  meta.maintainers = [ pkgs.lib.maintainers.dblsaiko ];
 })

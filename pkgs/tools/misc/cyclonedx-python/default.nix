@@ -1,47 +1,40 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
-python3.pkgs.buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "cyclonedx-python";
-  version = "0.4.3";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
-    rev = "v${version}";
-    sha256 = "BvG4aWBMsllW2L4lLsiRFUCPjgoDpHxN49fsUFdg7tQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+XeMRREDX1+v+qOeYiHh7uhadfueYYOxspLY3q1NL6s=";
   };
 
-  # They pin versions for exact version numbers because "A bill-of-material such
-  # as CycloneDX expects exact version numbers" -- but that's unnecessary with
-  # Nix.
-  preBuild = ''
-    sed "s@==.*'@'@" -i setup.py
-  '';
+  build-system = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    packageurl-python
-    requests
-    xmlschema
-    setuptools
-    requirements-parser
-    packaging
+  dependencies = with python3Packages; [
     chardet
-    jsonschema
-  ];
+    cyclonedx-python-lib
+    packageurl-python
+    pip-requirements-parser
+    packaging
+    tomli
+  ] ++ cyclonedx-python-lib.optional-dependencies.validation;
 
-  # the tests want access to the cyclonedx binary
-  doCheck = false;
+  pythonImportsCheck = [ "cyclonedx" ];
 
-  pythonImportsCheck = [
-    "cyclonedx"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Python projects";
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/CycloneDX/cyclonedx-python/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ xanderio ];
+    mainProgram = "cyclonedx-py";
   };
 }

@@ -1,11 +1,12 @@
 { lib
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
 , gettext
-, gtk3
+, gtk4
+, libadwaita
 , meson
 , ninja
 , pkg-config
@@ -14,26 +15,28 @@
 , libwebp
 , optipng
 , pngquant
+, oxipng
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "curtail";
-  version = "1.3.1";
+  version = "1.10.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-/xvkRXs1EVu+9RZM+TnyIGxFV2stUR9XHEmaJxsJ3V8=";
+    sha256 = "sha256-xwpjyMMdjYMrd79/EzoNae4rQuq2VjwJRNoudNGD78E=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook4
     appstream-glib
     desktop-file-utils
     gettext
-    gtk3
+    gtk4
+    libadwaita
     meson
     ninja
     pkg-config
@@ -43,7 +46,8 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     appstream-glib
     gettext
-    gtk3
+    gtk4
+    libadwaita
   ];
 
   propagatedBuildInputs = [
@@ -59,14 +63,15 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath [ jpegoptim libwebp optipng pngquant ]}"
+      "--prefix" "PATH" ":" "${lib.makeBinPath [ jpegoptim libwebp optipng pngquant oxipng ]}"
     )
   '';
 
   meta = with lib; {
     description = "Simple & useful image compressor";
+    mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ anselmschueler ];
+    maintainers = [ ];
   };
 }

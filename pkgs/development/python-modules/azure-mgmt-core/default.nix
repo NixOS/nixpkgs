@@ -1,12 +1,14 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-core
-, typing-extensions
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
+  azure-core,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   version = "1.4.0";
+  format = "setuptools";
   pname = "azure-mgmt-core";
 
   src = fetchPypi {
@@ -25,12 +27,15 @@ buildPythonPackage rec {
   # not included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.core" "azure.core" ];
+  pythonImportsCheck = [
+    "azure.mgmt.core"
+    "azure.core"
+  ];
 
   meta = with pkgs.lib; {
     description = "Microsoft Azure Management Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

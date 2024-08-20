@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webtest
-, zope-component
-, hupper
-, pastedeploy
-, plaster
-, plaster-pastedeploy
-, repoze_lru
-, translationstring
-, venusian
-, webob
-, zope-deprecation
-, zope_interface
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  webtest,
+  zope-component,
+  hupper,
+  pastedeploy,
+  plaster,
+  plaster-pastedeploy,
+  repoze-lru,
+  translationstring,
+  venusian,
+  webob,
+  zope-deprecation,
+  zope-interface,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -33,12 +34,12 @@ buildPythonPackage rec {
     pastedeploy
     plaster
     plaster-pastedeploy
-    repoze_lru
+    repoze-lru
     translationstring
     venusian
     webob
     zope-deprecation
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     zope-component
   ];
 
-  pythonImportsCheck = [
-    "pyramid"
-  ];
+  pythonImportsCheck = [ "pyramid" ];
 
   meta = with lib; {
     description = "Python web framework";

@@ -19,8 +19,7 @@ buildDunePackage rec {
   pname = "lambdapi";
   version = "2.3.1";
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";

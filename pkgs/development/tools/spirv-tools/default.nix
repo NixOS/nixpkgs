@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  version = "1.3.261.0";
+  version = "1.3.283.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "sdk-${version}";
-    hash = "sha256-K7cv0mMNrXYOlJsxAPwz3rVX5FnsnBNvaU33k9hYnQc=";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-at3krE0torhjg7G+NkX0/ewc26Sg/1t2xW7wghAAuZo=";
   };
 
   # The cmake options are sufficient for turning on static building, but not
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
+    description = "SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     homepage = "https://github.com/KhronosGroup/SPIRV-Tools";
     license = licenses.asl20;
     platforms = with platforms; unix ++ windows;

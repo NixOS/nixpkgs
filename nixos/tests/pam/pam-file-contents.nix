@@ -7,7 +7,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
   nodes.machine = { ... }: {
     imports = [ ../../modules/profiles/minimal.nix ];
 
-    krb5.enable = true;
+    security.krb5.enable = true;
 
     users = {
       mutableUsers = false;

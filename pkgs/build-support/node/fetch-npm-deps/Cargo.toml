@@ -6,17 +6,19 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.75"
+anyhow = "1.0.82"
 backoff = "0.4.0"
-base64 = "0.21.4"
+data-encoding = "2.5.0"
 digest = "0.10.7"
-env_logger = "0.10.0"
+env_logger = "0.11.3"
 isahc = { version = "1.7.2", default_features = false }
-rayon = "1.8.0"
-serde = { version = "1.0.188", features = ["derive"] }
-serde_json = "1.0.107"
+log = "0.4.21"
+nix-nar = "0.3.0"
+rayon = "1.10.0"
+serde = { version = "1.0.198", features = ["derive"] }
+serde_json = "1.0.116"
 sha1 = "0.10.6"
 sha2 = "0.10.8"
-tempfile = "3.8.0"
-url = { version = "2.4.1", features = ["serde"] }
-walkdir = "2.4.0"
+tempfile = "3.10.1"
+url = { version = "2.5.0", features = ["serde"] }
+walkdir = "2.5.0"

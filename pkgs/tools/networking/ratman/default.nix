@@ -6,7 +6,7 @@
 , protobuf
 , rustPlatform
 , fetchYarnDeps
-, fixup_yarn_lock
+, fixup-yarn-lock
 , stdenv
 , yarn
 , nodejs
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ZZ7idZ67xvQFmQJqIFU/l77YU+yDQOqNthX5NR/l4k8=";
   };
 
-  cargoSha256 = "Nsux0QblBtzlhLEgfKYvkQrOz8+oVd2pqT3CL8TnQEc=";
+  cargoHash = "sha256-Nsux0QblBtzlhLEgfKYvkQrOz8+oVd2pqT3CL8TnQEc=";
 
   nativeBuildInputs = [ protobuf pkg-config installShellFiles ];
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       sha256 = "sha256-pWjKL41r/bTvWv+5qCgCFVL9+o64BiV2/ISdLeKEOqE=";
     };
 
-    nativeBuildInputs = [ yarn nodejs ];
+    nativeBuildInputs = [ yarn nodejs fixup-yarn-lock ];
 
     outputs = [ "out" "dist" ];
 
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       yarn config --offline set yarn-offline-mirror ${yarnDeps}
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
@@ -84,10 +84,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A modular decentralised peer-to-peer packet router and associated tools";
+    description = "Modular decentralised peer-to-peer packet router and associated tools";
     homepage = "https://git.irde.st/we/irdest";
     platforms = platforms.unix;
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ spacekookie yuka ];
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ spacekookie ];
   };
 }

@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "webanalyze";
-  version = "0.3.9";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "rverton";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-uDf0p4zw23+AVftMmrKfno+FbMZfGC1B5zvutj8qnPg=";
+    hash = "sha256-rnNbEPlbye0gjUamwq1xjFM/4g0eEHsGOAZWziEqxwM=";
   };
 
   vendorHash = "sha256-XPOsC+HoLytgv1fhAaO5HYSvuOP6OhjLyOYTfiD64QI=";
@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/rverton/webanalyze/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "webanalyze";
   };
 }

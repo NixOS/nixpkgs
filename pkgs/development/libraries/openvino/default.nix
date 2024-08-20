@@ -1,53 +1,71 @@
 { lib
-, stdenv
+, gcc12Stdenv
 , fetchFromGitHub
 , fetchurl
-, substituteAll
+, cudaSupport ? opencv.cudaSupport or false
 
 # build
-, addOpenGLRunpath
+, scons
+, addDriverRunpath
 , autoPatchelfHook
 , cmake
 , git
 , libarchive
+, patchelf
 , pkg-config
-, python
+, python3Packages
 , shellcheck
 
 # runtime
+, flatbuffers
+, level-zero
 , libusb1
 , libxml2
+, ocl-icd
 , opencv
 , protobuf
 , pugixml
-, tbb
+, snappy
+, tbb_2021_5
+, cudaPackages
 }:
 
 let
-  # See GNA_VERSION in cmake/dependencies.cmake
-  gna_version = "03.05.00.1906";
-  gna = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/gna/gna_${gna_version}.zip";
-    hash = "sha256-SlvobZwCaw4Qr6wqV/x8mddisw49UGq7OjOA+8/icm4=";
-  };
+  inherit (lib)
+    cmakeBool
+  ;
+
+  stdenv = gcc12Stdenv;
+
+  # prevent scons from leaking in the default python version
+  scons' = scons.override { inherit python3Packages; };
 
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v3.tgz";
-    hash = "sha256-053rJiwGmBteLS48WT6fyb5izk/rkd1OZI6SdTZZprM=";
+    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
+    hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
   };
+
+  python = python3Packages.python.withPackages (ps: with ps; [
+    cython
+    pybind11
+    setuptools
+    sphinx
+    wheel
+  ]);
+
 in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2023.0.0";
+  version = "2024.2.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-z88SgAZ0UX9X7BhBA7/NU/UhVLltb6ANKolruU8YiZQ=";
+    hash = "sha256-HiKKvmqgbwW625An+Su0EOHqVrP18yvG2aOzrS0jWr4=";
   };
 
   outputs = [
@@ -56,35 +74,21 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     cmake
     git
     libarchive
+    patchelf
     pkg-config
-    (python.withPackages (ps: with ps; [
-      cython
-      pybind11
-      setuptools
-    ]))
+    python
+    scons'
     shellcheck
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./cmake.patch;
-      inherit (lib) version;
-    })
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   postPatch = ''
-    mkdir -p temp/gna_${gna_version}
-    pushd temp/
-    bsdtar -xf ${gna}
-    autoPatchelf gna_${gna_version}
-    echo "${gna.url}" > gna_${gna_version}/ie_dependency.info
-    popd
-
     mkdir -p temp/tbbbind_${tbbbind_version}
     pushd temp/tbbbind_${tbbbind_version}
     bsdtar -xf ${tbbbind}
@@ -92,63 +96,72 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  dontUseCmakeBuildDir = true;
+  dontUseSconsCheck = true;
+  dontUseSconsBuild = true;
+  dontUseSconsInstall = true;
 
   cmakeFlags = [
-    "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
+    "-Wno-dev"
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
-    "-DENABLE_LTO:BOOL=ON"
-    # protobuf
-    "-DENABLE_SYSTEM_PROTOBUF:BOOL=OFF"
-    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
-    # tbb
-    "-DENABLE_SYSTEM_TBB:BOOL=ON"
-    # opencv
-    "-DENABLE_OPENCV:BOOL=ON"
+    "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
     "-DOpenCV_DIR=${opencv}/lib/cmake/opencv4/"
-    # pugixml
-    "-DENABLE_SYSTEM_PUGIXML:BOOL=ON"
-    # onednn
-    "-DENABLE_ONEDNN_FOR_GPU:BOOL=OFF"
-    # intel gna
-    "-DENABLE_INTEL_GNA:BOOL=ON"
-    # python
-    "-DENABLE_PYTHON:BOOL=ON"
-    # tests
-    "-DENABLE_CPPLINT:BOOL=OFF"
-    "-DBUILD_TESTING:BOOL=OFF"
-    "-DENABLE_SAMPLES:BOOL=OFF"
-  ];
+    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DPython_EXECUTABLE=${python.interpreter}"
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
+    (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
+    (cmakeBool "NCC_SYLE" false)
+    (cmakeBool "BUILD_TESTING" false)
+    (cmakeBool "ENABLE_CPPLINT" false)
+    (cmakeBool "ENABLE_TESTING" false)
+    (cmakeBool "ENABLE_SAMPLES" false)
+
+    # features
+    (cmakeBool "ENABLE_INTEL_CPU" stdenv.isx86_64)
+    (cmakeBool "ENABLE_JS" false)
+    (cmakeBool "ENABLE_LTO" true)
+    (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
+    (cmakeBool "ENABLE_OPENCV" true)
+    (cmakeBool "ENABLE_PYTHON" true)
+
+    # system libs
+    (cmakeBool "ENABLE_SYSTEM_FLATBUFFERS" true)
+    (cmakeBool "ENABLE_SYSTEM_OPENCL" true)
+    (cmakeBool "ENABLE_SYSTEM_PROTOBUF" false)
+    (cmakeBool "ENABLE_SYSTEM_PUGIXML" true)
+    (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
+    (cmakeBool "ENABLE_SYSTEM_TBB" true)
+  ];
 
   autoPatchelfIgnoreMissingDeps = [
     "libngraph_backend.so"
   ];
 
   buildInputs = [
+    flatbuffers
+    level-zero
     libusb1
     libxml2
-    opencv
-    protobuf
+    ocl-icd
+    opencv.cxxdev
     pugixml
-    tbb
+    snappy
+    tbb_2021_5
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    pushd $out/python/python${lib.versions.majorMinor python.version}
     mkdir -p $python
-    mv ./* $python/
-    popd
-    rm -r $out/python
+    mv $out/python/* $python/
+    rmdir $out/python
   '';
 
   postFixup = ''
     # Link to OpenCL
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 
@@ -164,8 +177,7 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = (stdenv.isLinux && stdenv.isAarch64) # requires scons, then fails with *** Source directory cannot be under variant directory.
-      || stdenv.isDarwin; # Cannot find macos sdk
+    broken = stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

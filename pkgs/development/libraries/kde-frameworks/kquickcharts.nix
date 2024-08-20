@@ -1,7 +1,7 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  qtquickcontrols2, qtbase,
+  qtquickcontrols2,
 }:
 
 mkDerivation {

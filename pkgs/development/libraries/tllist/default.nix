@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/tllist";
-    changelog = "https://codeberg.org/dnkl/tllist/releases/tag/${version}";
+    changelog = "https://codeberg.org/dnkl/tllist/releases/tag/${finalAttrs.version}";
     description = "C header file only implementation of a typed linked list";
     longDescription = ''
       Most C implementations of linked list are untyped. That is, their data

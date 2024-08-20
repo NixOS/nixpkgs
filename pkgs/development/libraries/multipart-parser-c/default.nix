@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib
-    mv lib*${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/
+    mv lib*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
 
     mkdir -p $out/include
     mv *.h $out/include/
   '';
 
   meta = {
-    description = "Http multipart parser implemented in C ";
+    description = "Http multipart parser implemented in C";
     homepage = "https://github.com/iafonov/multipart-parser-c";
     license = [ lib.licenses.mit ];
   };

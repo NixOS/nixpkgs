@@ -6,7 +6,7 @@
 , qmake
 , qtbase
 , qtwebengine
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pghsw8kwvjhg3jpmjs0n892h2l0pm0cs6ymi8b23fwk0kfj67rd";
   };
 
-  nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ qmake wrapGAppsHook3 wrapQtAppsHook ];
   buildInputs = [ qtbase qtwebengine cmark-gfm ];
 
   doCheck = true;
@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ cyplo ];
+    mainProgram = "mindforger";
   };
 }

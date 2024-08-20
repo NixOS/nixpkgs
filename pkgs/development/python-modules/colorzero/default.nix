@@ -1,12 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkginfo
-, sphinxHook
-, sphinx-rtd-theme
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkginfo,
+  pytestCheckHook,
 }:
-
 
 buildPythonPackage rec {
   pname = "colorzero";
@@ -25,24 +23,11 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  nativeBuildInputs = [ pkginfo ];
 
-  nativeBuildInputs = [
-    pkginfo
-    sphinx-rtd-theme
-    sphinxHook
-  ];
+  pythonImportsCheck = [ "colorzero" ];
 
-  pythonImportsCheck = [
-    "colorzero"
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Yet another Python color library";

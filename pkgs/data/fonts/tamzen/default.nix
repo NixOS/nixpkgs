@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tamzen-font";
-  version = "1.11.5";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "sunaku";
     repo = "tamzen-font";
     rev = "Tamzen-${version}";
-    sha256 = "00x5fipzqimglvshhqwycdhaqslbvn3rl06jnswhyxfvz16ymj7s";
+    sha256 = "sha256-W5Wqsm5rpzzcbJl2lv6ORAznaAwLcmJ2S6Qo2zIoq9I=";
   };
 
   nativeBuildInputs = [ xorg.mkfontscale ];

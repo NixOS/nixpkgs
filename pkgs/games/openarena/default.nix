@@ -18,6 +18,7 @@
 , SDL2
 , speex
 , makeDesktopItem
+, nixosTests
 }:
 
 let
@@ -102,8 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru.tests = { inherit (nixosTests) openarena; };
+
   meta = {
-    description = "A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena";
+    description = "Fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena";
     homepage = "http://openarena.ws/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "openarena";

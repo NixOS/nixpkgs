@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "poethepoet";
-  version = "0.24.1";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nat-n";
     repo = "poethepoet";
-    rev = "v${version}";
-    hash = "sha256-cIIMwQF0jqGQhNyX2qDBeKZlUNvdC6sBTv5LCxk8MMQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2AxNu4/tTTH5aW02ec83jxhLJoDKSogY/fm8PUm1cSg=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "poethepoet" ];
 
   meta = with lib; {
-    description = "A task runner that works well with poetry";
+    description = "Task runner that works well with poetry";
     homepage = "https://github.com/nat-n/poethepoet";
     changelog = "https://github.com/nat-n/poethepoet/releases/tag/${src.rev}";
     license = licenses.mit;

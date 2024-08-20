@@ -1,51 +1,47 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cacert
-, cached-property
-, cffi
-, fetchPypi
-, isPyPy
-, libgit2
-, pycparser
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cacert,
+  cached-property,
+  cffi,
+  fetchPypi,
+  isPyPy,
+  libgit2,
+  pycparser,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "1.15.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bd43Q2+rFCZK09bLxarj/VVeualoCnv91uVkzXe14rg=";
+    hash = "sha256-pjVSX/x0EoZp3i9jRgqUydVgljSkh1wKr85RD97sF6w=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  buildInputs = [
-    libgit2
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  buildInputs = [ libgit2 ];
 
   propagatedBuildInputs = [
     cached-property
     pycparser
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
-  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-  ];
+  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Disable tests that require networking
@@ -58,14 +54,13 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  pythonImportsCheck = [
-    "pygit2"
-  ];
+  pythonImportsCheck = [ "pygit2" ];
 
   meta = with lib; {
-    description = "A set of Python bindings to the libgit2 shared library";
+    description = "Set of Python bindings to the libgit2 shared library";
     homepage = "https://github.com/libgit2/pygit2";
+    changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

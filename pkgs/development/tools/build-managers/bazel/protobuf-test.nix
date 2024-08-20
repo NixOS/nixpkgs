@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , fetchurl
 , stdenv
-, darwin
+, cctools
 , lib
 , openjdk8
 , jdk11_headless
@@ -134,8 +134,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
@@ -160,7 +160,7 @@ let
   ''));
 
   testBazel = bazelTest {
-    name = "bazel-test-protocol-buffers";
+    name = "${bazel.pname}-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
     buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
@@ -170,7 +170,7 @@ let
         --distdir=${distDir} \
         --verbose_failures \
         --curses=no \
-        --sandbox_debug \
+        --subcommands \
         --strict_java_deps=off \
         --strict_proto_deps=off \
         //... \

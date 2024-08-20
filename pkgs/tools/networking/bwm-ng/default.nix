@@ -35,11 +35,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A small and simple console-based live network and disk io bandwidth monitor";
+    description = "Small and simple console-based live network and disk io bandwidth monitor";
+    mainProgram = "bwm-ng";
     homepage = "http://www.gropp.org/?id=projects&sub=bwm-ng";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ srapenne ];
+    maintainers = [ ];
     longDescription = ''
       bwm-ng supports:
        - /proc/net/dev, netstat, getifaddr, sysctl, kstat, /proc/diskstats /proc/partitions, IOKit,

@@ -17,18 +17,19 @@
 , json-glib
 , libsecret
 , libsoup_3
+, libpeas2
 }:
 
 stdenv.mkDerivation rec {
   pname = "boatswain";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "boatswain";
     rev = version;
-    hash = "sha256-Q16ooTaCgwbwEqa0iRzAoaS5OHCSi6dXaiVgC3uc/zc=";
+    hash = "sha256-Yqf7NJMyE6mg1zJJCLrIr6Emwt/nvlLHLAEtCXqFT8M=";
   };
 
   nativeBuildInputs = [
@@ -51,10 +52,11 @@ stdenv.mkDerivation rec {
     json-glib
     libsecret
     libsoup_3
+    libpeas2
   ];
 
   meta = with lib; {
-    description = "Control Elgato Stream Deck devices.";
+    description = "Control Elgato Stream Deck devices";
     homepage = "https://gitlab.gnome.org/World/boatswain";
     mainProgram = "boatswain";
     license = licenses.gpl3Plus;

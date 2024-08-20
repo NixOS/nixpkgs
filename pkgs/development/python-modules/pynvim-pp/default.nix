@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pynvim
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pynvim,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "pynvim-pp";
-  version = "unstable-2023-07-09";
-
-  format = "pyproject";
+  version = "unstable-2024-07-31";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "pynvim_pp";
-    rev = "93aa25bf3ee039c4eb85f402d6adf6977033013b";
-    hash = "sha256-gZvIiFpP+eMLD8/xodY7ywWxhWXtethXviVRedW/bgo=";
+    rev = "6d3c298b7eb9543bce7ab515b0a39f256c1d37ca";
+    hash = "sha256-W6YaxI/fa2HL6+FIBTTA+7K2Be02iuIfFFVO/hhYnpo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pynvim ];
+  dependencies = [ pynvim ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ms-jpq/pynvim_pp";
     description = "Dependency to chadtree and coq_nvim plugins";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

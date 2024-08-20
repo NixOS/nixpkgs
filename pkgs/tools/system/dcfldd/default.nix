@@ -12,13 +12,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ ];
 
   meta = with lib; {
-    description = "An enhanced version of GNU dd";
+    description = "Enhanced version of GNU dd";
 
     homepage = "https://dcfldd.sourceforge.net/";
 
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
 
     platforms = platforms.all;
     maintainers = with maintainers; [ qknight ];
+    mainProgram = "dcfldd";
   };
 }

@@ -24,12 +24,12 @@ in
 {
 
   options.services.trilium-server = with lib; {
-    enable = mkEnableOption (lib.mdDoc "trilium-server");
+    enable = mkEnableOption "trilium-server";
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/trilium";
-      description = lib.mdDoc ''
+      description = ''
         The directory storing the notes database and the configuration.
       '';
     };
@@ -37,7 +37,7 @@ in
     instanceName = mkOption {
       type = types.str;
       default = "Trilium";
-      description = lib.mdDoc ''
+      description = ''
         Instance name used to distinguish between different instances
       '';
     };
@@ -45,7 +45,7 @@ in
     noBackup = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Disable periodic database backups.
       '';
     };
@@ -53,7 +53,7 @@ in
     noAuthentication = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If set to true, no password is required to access the web frontend.
       '';
     };
@@ -61,7 +61,7 @@ in
     host = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         The host address to bind to (defaults to localhost).
       '';
     };
@@ -69,14 +69,14 @@ in
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = lib.mdDoc ''
+      description = ''
         The port number to bind to.
       '';
     };
 
     nginx = mkOption {
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Configuration for nginx reverse proxy.
       '';
 
@@ -85,14 +85,14 @@ in
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Configure the nginx reverse proxy settings.
             '';
           };
 
           hostName = mkOption {
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               The hostname use to setup the virtualhost configuration
             '';
           };

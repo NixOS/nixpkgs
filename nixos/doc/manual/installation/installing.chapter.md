@@ -174,8 +174,6 @@ commands:
 OK
 > set_network 0 psk "mypassword"
 OK
-> set_network 0 key_mgmt WPA-PSK
-OK
 > enable_network 0
 OK
 ```
@@ -190,8 +188,6 @@ OK
 > set_network 0 identity "myname@example.com"
 OK
 > set_network 0 password "mypassword"
-OK
-> set_network 0 key_mgmt WPA-EAP
 OK
 > enable_network 0
 OK
@@ -272,6 +268,9 @@ update /etc/fstab.
     # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
     # parted /dev/sda -- set 3 esp on
     ```
+    ::: {.note}
+    In case you decided to not create a swap partition, replace `3` by `2`. To be sure of the id number of ESP, run `parted --list`.
+    :::
 
 Once complete, you can follow with
 [](#sec-installation-manual-partitioning-formatting).
@@ -373,7 +372,7 @@ Use the following commands:
 
     ```ShellSession
     # mkdir -p /mnt/boot
-    # mount /dev/disk/by-label/boot /mnt/boot
+    # mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
     ```
 
 3.  If your machine has a limited amount of memory, you may want to
@@ -569,7 +568,7 @@ With a partitioned disk.
 # mkfs.fat -F 32 -n boot /dev/sda3        # (for UEFI systems only)
 # mount /dev/disk/by-label/nixos /mnt
 # mkdir -p /mnt/boot                      # (for UEFI systems only)
-# mount /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
+# mount -o umask=077 /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
 # nixos-generate-config --root /mnt
 # nano /mnt/etc/nixos/configuration.nix
 # nixos-install

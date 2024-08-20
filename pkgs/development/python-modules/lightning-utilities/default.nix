@@ -1,47 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-# build
-, setuptools
+  # build
+  setuptools,
 
-# runtime
-, packaging
-, typing-extensions
+  # runtime
+  looseversion,
+  packaging,
+  typing-extensions,
 
-# tests
-, pytest-timeout
-, pytestCheckHook
+  # tests
+  pytest-timeout,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.9.0";
-  format = "pyproject";
+  version = "0.11.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vSeHtvsIt4L4qJCVlTPVjIjd62+08JWBnr9+9+ujOfw=";
+    hash = "sha256-Bw28mLz9GaMucqP+EqR1F3OKLxDJiIVacrCBIV35G/I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace src/lightning_utilities/install/requirements.py \
+      --replace-fail "from distutils.version import LooseVersion" "from looseversion import LooseVersion"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    looseversion
     packaging
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "lightning_utilities"
-  ];
+  pythonImportsCheck = [ "lightning_utilities" ];
 
   nativeCheckInputs = [
     pytest-timeout
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   disabledTests = [
@@ -53,6 +60,8 @@ buildPythonPackage rec {
     # fails another test
     "lightning_utilities.core.imports.ModuleAvailableCache"
     "lightning_utilities.core.imports.requires"
+    # Failed: DID NOT RAISE <class 'AssertionError'>
+    "test_no_warning_call"
   ];
 
   disabledTestPaths = [
@@ -61,16 +70,11 @@ buildPythonPackage rec {
     "src/lightning_utilities/install/requirements.py"
   ];
 
-  pytestFlagsArray = [
-    # warns about distutils removal in python 3.12
-    "-W" "ignore::DeprecationWarning"
-  ];
-
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Lightning-AI/utilities/releases/tag/v${version}";
     description = "Common Python utilities and GitHub Actions in Lightning Ecosystem";
     homepage = "https://github.com/Lightning-AI/utilities";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

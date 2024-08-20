@@ -56,6 +56,14 @@ This partition table type uses GPT and:
 - creates an FAT32 ESP partition from 8MiB to specified `bootSize` parameter (256MiB by default), set it bootable ;
 - creates an primary ext4 partition starting after the boot partition and extending to the full disk image
 
+#### `efixbootldr`
+
+This partition table type uses GPT and:
+
+- creates an FAT32 ESP partition from 8MiB to 100MiB, set it bootable ;
+- creates an FAT32 BOOT partition from 100MiB to specified `bootSize` parameter (256MiB by default), set `bls_boot` flag ;
+- creates an primary ext4 partition starting after the boot partition and extending to the full disk image
+
 #### `hybrid`
 
 This partition table type uses GPT and:
@@ -111,19 +119,7 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
   # When setting one of `user' or `group', the other needs to be set too.
   contents ? []
 
-, # Type of partition table to use; either "legacy", "efi", or "none".
-  # For "efi" images, the GPT partition table is used and a mandatory ESP
-  #   partition of reasonable size is created in addition to the root partition.
-  # For "legacy", the msdos partition table is used and a single large root
-  #   partition is created.
-  # For "legacy+gpt", the GPT partition table is used, a 1MiB no-fs partition for
-  #   use by the bootloader is created, and a single large root partition is
-  #   created.
-  # For "hybrid", the GPT partition table is used and a mandatory ESP
-  #   partition of reasonable size is created in addition to the root partition.
-  #   Also a legacy MBR will be present.
-  # For "none", no partition table is created. Enabling `installBootLoader`
-  #   most likely fails as GRUB will probably refuse to install.
+, # Type of partition table to use; described in the `Image Partitioning` section above.
   partitionTableType ? "legacy"
 
 , # Whether to invoke `switch-to-configuration boot` during image creation
@@ -193,11 +189,11 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
   additionalPaths ? []
 }:
 
-assert (lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "hybrid" "none" ]);
+assert (lib.assertOneOf "partitionTableType" partitionTableType [ "legacy" "legacy+gpt" "efi" "efixbootldr" "hybrid" "none" ]);
 assert (lib.assertMsg (fsType == "ext4" && deterministic -> rootFSUID != null) "In deterministic mode with a ext4 partition, rootFSUID must be non-null, by default, it is equal to rootGPUID.");
   # We use -E offset=X below, which is only supported by e2fsprogs
 assert (lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4");
-assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi or legacy+gpt.");
+assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "efixbootldr" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi, efixbootldr, or legacy+gpt.");
   # If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
 assert (lib.assertMsg (onlyNixStore -> contents == [] && configFile == null && !installBootLoader) "In a only Nix store image, the contents must be empty, no configuration must be provided and no bootloader should be installed.");
 # Either both or none of {user,group} need to be set
@@ -206,13 +202,11 @@ assert (lib.assertMsg (lib.all
               == ((attrs.group or null) == null))
         contents) "Contents of the disk image should set none of {user, group} or both at the same time.");
 
-with lib;
-
 let format' = format; in let
 
   format = if format' == "qcow2-compressed" then "qcow2" else format';
 
-  compress = optionalString (format' == "qcow2-compressed") "-c";
+  compress = lib.optionalString (format' == "qcow2-compressed") "-c";
 
   filename = "nixos." + {
     qcow2 = "qcow2";
@@ -225,6 +219,7 @@ let format' = format; in let
     legacy = "1";
     "legacy+gpt" = "2";
     efi = "2";
+    efixbootldr = "3";
     hybrid = "3";
   }.${partitionTableType};
 
@@ -243,7 +238,7 @@ let format' = format; in let
         mkpart primary ext4 2MB -1 \
         align-check optimal 2 \
         print
-      ${optionalString deterministic ''
+      ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
@@ -258,11 +253,28 @@ let format' = format; in let
         mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
         mkpart primary ext4 ${bootSize} -1
-      ${optionalString deterministic ''
+      ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
           --partition-guid=2:${rootGPUID} \
+          $diskImage
+      ''}
+    '';
+    efixbootldr = ''
+      parted --script $diskImage -- \
+        mklabel gpt \
+        mkpart ESP fat32 8MiB 100MiB \
+        set 1 boot on \
+        mkpart BOOT fat32 100MiB ${bootSize} \
+        set 2 bls_boot on \
+        mkpart ROOT ext4 ${bootSize} -1
+      ${lib.optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC  \
+          --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F  \
+          --partition-guid=3:${rootGPUID} \
           $diskImage
       ''}
     '';
@@ -274,7 +286,7 @@ let format' = format; in let
         mkpart no-fs 0 1024KiB \
         set 2 bios_grub on \
         mkpart primary ext4 ${bootSize} -1
-      ${optionalString deterministic ''
+      ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
@@ -288,7 +300,7 @@ let format' = format; in let
 
   useEFIBoot = touchEFIVars;
 
-  nixpkgs = cleanSource pkgs.path;
+  nixpkgs = lib.cleanSource pkgs.path;
 
   # FIXME: merge with channel.nix / make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
@@ -302,8 +314,8 @@ let format' = format; in let
     echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';
 
-  binPath = with pkgs; makeBinPath (
-    [ rsync
+  binPath = lib.makeBinPath (with pkgs; [
+      rsync
       util-linux
       parted
       e2fsprogs
@@ -328,7 +340,7 @@ let format' = format; in let
   basePaths = [ config.system.build.toplevel ]
     ++ lib.optional copyChannel channelSources;
 
-  additionalPaths' = subtractLists basePaths additionalPaths;
+  additionalPaths' = lib.subtractLists basePaths additionalPaths;
 
   closureInfo = pkgs.closureInfo {
     rootPaths = basePaths ++ additionalPaths';
@@ -375,9 +387,9 @@ let format' = format; in let
     # Semi-shamelessly copied from make-etc.sh. I (@copumpkin) shall factor this stuff out as part of
     # https://github.com/NixOS/nixpkgs/issues/23052.
     set -f
-    sources_=(${concatStringsSep " " sources})
-    targets_=(${concatStringsSep " " targets})
-    modes_=(${concatStringsSep " " modes})
+    sources_=(${lib.concatStringsSep " " sources})
+    targets_=(${lib.concatStringsSep " " targets})
+    modes_=(${lib.concatStringsSep " " modes})
     set +f
 
     for ((i = 0; i < ''${#targets_[@]}; i++)); do
@@ -429,14 +441,14 @@ let format' = format; in let
       ${if copyChannel then "--channel ${channelSources}" else "--no-channel-copy"} \
       --substituters ""
 
-    ${optionalString (additionalPaths' != []) ''
-      nix --extra-experimental-features nix-command copy --to $root --no-check-sigs ${concatStringsSep " " additionalPaths'}
+    ${lib.optionalString (additionalPaths' != []) ''
+      nix --extra-experimental-features nix-command copy --to $root --no-check-sigs ${lib.concatStringsSep " " additionalPaths'}
     ''}
 
     diskImage=nixos.raw
 
     ${if diskSize == "auto" then ''
-      ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
+      ${if partitionTableType == "efi" || partitionTableType == "efixbootldr" || partitionTableType == "hybrid" then ''
         # Add the GPT at the end
         gptSpace=$(( 512 * 34 * 1 ))
         # Normally we'd need to account for alignment and things, if bootSize
@@ -500,10 +512,10 @@ let format' = format; in let
     ''}
 
     echo "copying staging root to image..."
-    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
+    cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
            -t ${fsType} \
            -i $diskImage \
-           $root${optionalString onlyNixStore builtins.storeDir}/* / ||
+           $root${lib.optionalString onlyNixStore builtins.storeDir}/* / ||
       (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
   '';
 
@@ -522,15 +534,23 @@ let format' = format; in let
     chmod 0644 $efiVars
   '';
 
+  createHydraBuildProducts = ''
+    mkdir -p $out/nix-support
+    echo "file ${format}-image $out/${filename}" >> $out/nix-support/hydra-build-products
+  '';
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
       preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = moveOrConvertImage + postVM;
+      postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
       QEMU_OPTS =
-        concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+        lib.concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
         ++ lib.optionals touchEFIVars [
           "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ] ++ lib.optionals (OVMF.systemManagementModeRequired or false) [
+          "-machine" "q35,smm=on"
+          "-global" "driver=cfi.pflash01,property=secure,value=on"
         ]
       );
       inherit memSize;
@@ -542,8 +562,8 @@ let format' = format; in let
       # It is necessary to set root filesystem unique identifier in advance, otherwise
       # bootloader might get the wrong one and fail to boot.
       # At the end, we reset again because we want deterministic timestamps.
-      ${optionalString (fsType == "ext4" && deterministic) ''
-        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
+      ${lib.optionalString (fsType == "ext4" && deterministic) ''
+        tune2fs -T now ${lib.optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
       ''}
       # make systemd-boot find ESP without udev
       mkdir /dev/block
@@ -555,29 +575,46 @@ let format' = format; in let
 
       # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
       # '-E offset=X' option, so we can't do this outside the VM.
-      ${optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
+      ${lib.optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
         mkdir -p /mnt/boot
         mkfs.vfat -n ESP /dev/vda1
         mount /dev/vda1 /mnt/boot
 
-        ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
+        ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
+      ''}
+      ${lib.optionalString (partitionTableType == "efixbootldr") ''
+        mkdir -p /mnt/{boot,efi}
+        mkfs.vfat -n ESP /dev/vda1
+        mkfs.vfat -n BOOT /dev/vda2
+        mount /dev/vda1 /mnt/efi
+        mount /dev/vda2 /mnt/boot
+
+        ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
 
       # Install a configuration.nix
       mkdir -p /mnt/etc/nixos
-      ${optionalString (configFile != null) ''
+      ${lib.optionalString (configFile != null) ''
         cp ${configFile} /mnt/etc/nixos/configuration.nix
       ''}
 
       ${lib.optionalString installBootLoader ''
         # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
         # Use this option to create a symlink from vda to any arbitrary device you want.
-        ${optionalString (config.boot.loader.grub.enable && config.boot.loader.grub.device != "/dev/vda") ''
-            mkdir -p $(dirname ${config.boot.loader.grub.device})
-            ln -s /dev/vda ${config.boot.loader.grub.device}
-        ''}
+        ${lib.optionalString (config.boot.loader.grub.enable) (lib.concatMapStringsSep " " (device:
+          lib.optionalString (device != "/dev/vda") ''
+            mkdir -p "$(dirname ${device})"
+            ln -s /dev/vda ${device}
+          '') config.boot.loader.grub.devices)}
 
         # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
+
+        # NOTE: systemd-boot-builder.py calls nix-env --list-generations which
+        # clobbers $HOME/.nix-defexpr/channels/nixos This would cause a  folder
+        # /homeless-shelter to show up in the final image which  in turn breaks
+        # nix builds in the target image if sandboxing is turned off (through
+        # __noChroot for example).
+        export HOME=$TMPDIR
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
         # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
@@ -586,9 +623,9 @@ let format' = format; in let
 
       # Set the ownerships of the contents. The modes are set in preVM.
       # No globbing on targets, so no need to set -f
-      targets_=(${concatStringsSep " " targets})
-      users_=(${concatStringsSep " " users})
-      groups_=(${concatStringsSep " " groups})
+      targets_=(${lib.concatStringsSep " " targets})
+      users_=(${lib.concatStringsSep " " users})
+      groups_=(${lib.concatStringsSep " " groups})
       for ((i = 0; i < ''${#targets_[@]}; i++)); do
         target="''${targets_[$i]}"
         user="''${users_[$i]}"
@@ -607,14 +644,14 @@ let format' = format; in let
       # In deterministic mode, this is fixed to 1970-01-01 (UNIX timestamp 0).
       # This two-step approach is necessary otherwise `tune2fs` will want a fresher filesystem to perform
       # some changes.
-      ${optionalString (fsType == "ext4") ''
-        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
-        ${optionalString deterministic "tune2fs -f -T 19700101 $rootDisk"}
+      ${lib.optionalString (fsType == "ext4") ''
+        tune2fs -T now ${lib.optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
+        ${lib.optionalString deterministic "tune2fs -f -T 19700101 $rootDisk"}
       ''}
     ''
   );
 in
   if onlyNixStore then
     pkgs.runCommand name {}
-      (prepareImage + moveOrConvertImage + postVM)
+      (prepareImage + moveOrConvertImage + createHydraBuildProducts + postVM)
   else buildImage

@@ -1,15 +1,17 @@
-{ beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, lib
-, lxml
-, python
+{
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  lib,
+  lxml,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "draftjs-exporter";
   version = "5.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "draftjs_exporter";
@@ -20,7 +22,10 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     lxml = [ lxml ];
-    html5lib = [ beautifulsoup4 html5lib ];
+    html5lib = [
+      beautifulsoup4
+      html5lib
+    ];
   };
 
   checkInputs = passthru.optional-dependencies.lxml ++ passthru.optional-dependencies.html5lib;

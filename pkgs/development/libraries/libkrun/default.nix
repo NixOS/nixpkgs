@@ -1,69 +1,77 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , rustPlatform
 , cargo
 , pkg-config
-, dtc
 , glibc
 , openssl
-, libiconv
+, libepoxy
+, libdrm
+, pipewire
+, virglrenderer
 , libkrunfw
+, llvmPackages
 , rustc
-, Hypervisor
+, withGpu ? false
+, withSound ? false
+, withNet ? false
 , sevVariant ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun";
-  version = "1.5.1";
+  version = "1.9.4";
 
-  src = if stdenv.isLinux then fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-N9AkG+zkjQHNaaCVrEpMfWUN9bQNHjMA2xi5NUulF5A=";
-  } else fetchurl {
-    url = "https://github.com/containers/libkrun/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-8hPbnZtDbiVdwBrtxt4nZ/QA2OFtui2VsQlaoOmWybo=";
+    repo = "libkrun";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-QzyNPThwbjPKANeZ4GAT9b4f8LTcjXnCiK+vzRkhM4c=";
   };
 
+  outputs = [ "out" "dev" ];
+
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-nbtp7FP+ObVGfDOEzTt4Z7TZwcNlREczTKIAXGSflZU=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-33s62iOWYh1a8ETY/fbPRxvnj8dR4/UfG8mjFyWwz5k=";
   };
 
   nativeBuildInputs = [
+    llvmPackages.clang
     rustPlatform.cargoSetupHook
     cargo
     rustc
-  ] ++ lib.optional sevVariant pkg-config;
+  ] ++ lib.optional (sevVariant || withGpu) pkg-config;
 
   buildInputs = [
     (libkrunfw.override { inherit sevVariant; })
-  ] ++ lib.optionals stdenv.isLinux [
     glibc
     glibc.static
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Hypervisor
-    dtc
-  ] ++ lib.optional sevVariant openssl;
+  ] ++ lib.optionals withGpu [ libepoxy libdrm virglrenderer ]
+    ++ lib.optional withSound pipewire
+    ++ lib.optional sevVariant openssl;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ]
+  env.LIBCLANG_PATH = "${llvmPackages.clang-unwrapped.lib}/lib/libclang.so";
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ] ++ lib.optional withGpu "GPU=1"
+    ++ lib.optional withSound "SND=1"
+    ++ lib.optional withNet "NET=1"
     ++ lib.optional sevVariant "SEV=1";
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/libkrun.dylib $out/lib/libkrun.${version}.dylib
+  postInstall = ''
+    mkdir -p $dev/lib/pkgconfig
+    mv $out/lib64/pkgconfig $dev/lib/pkgconfig
+    mv $out/include $dev/include
   '';
 
   meta = with lib; {
-    description = "A dynamic library providing Virtualization-based process isolation capabilities";
+    description = "Dynamic library providing Virtualization-based process isolation capabilities";
     homepage = "https://github.com/containers/libkrun";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [ nickcao RossComputerGuy ];
     platforms = libkrunfw.meta.platforms;
-    sourceProvenance = with sourceTypes; lib.optionals stdenv.isDarwin [ binaryNativeCode ];
   };
-}
+})

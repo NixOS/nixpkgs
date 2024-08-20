@@ -1,8 +1,14 @@
-{ buildPythonPackage, fetchPypi, setuptools-scm, six }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "jaraco-stream";
   version = "3.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "jaraco.stream";

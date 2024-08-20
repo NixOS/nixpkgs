@@ -47,10 +47,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to easily work with timezone lookups via a binary, a library, or a server";
+    description = "Tool to easily work with timezone lookups via a binary, a library, or a server";
     homepage = "https://github.com/twitchax/rtz";
     changelog = "https://github.com/twitchax/rtz/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "rtz";
   };
 }

@@ -17,16 +17,16 @@ let
 
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "0.10.6";
+    version = "0.13.1";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-4kNuudnYBD6rgIkysP7dEjsRu/dFvTm3hkbBYZ6+Zh4=";
+      hash = "sha256-bh0UsXA5yHtvP9femOwEzVzmu1VLz2uZwoIHL/kI7kM=";
     };
 
-    vendorHash = "sha256-ZECwF/avHKE4L9GHa2w5Lx71wD6UIAaPpRkUtpEVafI=";
+    vendorHash = "sha256-ziCJG722c32QAh9QmoC2E7TcLiC2InKwfdC9mkanTsU=";
 
     inherit overrideModAttrs;
 
@@ -44,12 +44,13 @@ let
     doCheck = !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
 
     preCheck = ''
-      export HOME=$(mktemp -d)
+      export HOME="$(mktemp -d)"
     '';
 
     postInstall = ''
       installShellCompletion --cmd temporal \
         --bash <($out/bin/temporal completion bash) \
+        --fish <($out/bin/temporal completion fish) \
         --zsh <($out/bin/temporal completion zsh)
     '';
 
@@ -62,16 +63,16 @@ let
 
   tctl = buildGoModule rec {
     pname = "tctl";
-    version = "1.18.0";
+    version = "1.18.1";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "tctl";
       rev = "v${version}";
-      hash = "sha256-LcBKkx3mcDOrGT6yJx98CSgxbwskqGPWqOzHWOu6cig=";
+      hash = "sha256-LX4hyPme+mkNmPvrTHIT5Ow3QM8BTAB7MXSY1fa8tSk=";
     };
 
-    vendorHash = "sha256-5wCIY95mJ6+FCln4yBu+fM4ZcsxBGcXkCvxjGzt0+dM=";
+    vendorHash = "sha256-294lnUKnXNrN6fJ+98ub7LwsJ9aT+FzWCB3nryfAlCI=";
 
     inherit overrideModAttrs;
 
@@ -82,7 +83,7 @@ let
     ldflags = [ "-s" "-w" ];
 
     preCheck = ''
-      export HOME=$(mktemp -d)
+      export HOME="$(mktemp -d)"
     '';
 
     postInstall = ''

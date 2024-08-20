@@ -19,7 +19,6 @@
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , setuptoolsBuildHook
-, setuptoolsCheckHook
 , wheelUnpackHook
 , eggUnpackHook
 , eggBuildHook
@@ -92,7 +91,7 @@
 
 , passthru ? {}
 
-, doCheck ? config.doCheckByDefault or false
+, doCheck ? true
 
 , disabledTestPaths ? []
 
@@ -210,13 +209,7 @@ let
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
-    nativeInstallCheckInputs = [
-    ] ++ lib.optionals (format == "setuptools") [
-      # Longer-term we should get rid of this and require
-      # users of this function to set the `installCheckPhase` or
-      # pass in a hook that sets it.
-      setuptoolsCheckHook
-    ] ++ nativeCheckInputs;
+    nativeInstallCheckInputs = nativeCheckInputs;
     installCheckInputs = checkInputs;
 
     postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
@@ -224,7 +217,7 @@ let
     '' + attrs.postFixup or "";
 
     # Python packages built through cross-compilation are always for the host platform.
-    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonOnBuildForHost ];
 
     outputs = outputs ++ lib.optional withDistOutput "dist";
 

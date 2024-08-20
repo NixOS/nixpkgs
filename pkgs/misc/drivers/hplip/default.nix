@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, substituteAll
-, pkg-config, autoreconfHook
-, cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
+, pkg-config, autoreconfHook, gobject-introspection, wrapGAppsHook3
+, cups, zlib, libjpeg, libusb1, python311Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools, avahi
 , bash, util-linux
@@ -14,16 +14,16 @@
 let
 
   pname = "hplip";
-  version = "3.23.3";
+  version = "3.24.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5CYKmKKx2I0h6CVi3kGaohyVvJ4qzjWDNGqA/SF+B7Y=";
+    hash = "sha256-XXZDgxiTpeKt351C1YGl2/5arwI2Johrh2LFZF2g8fs=";
   };
 
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
-    sha256 = "sha256-AyZBiF1B42dGnJeoJLFSCGNK83c86ZAM2uFciuv2H4A=";
+    hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
   };
 
   hplipState = substituteAll {
@@ -49,7 +49,7 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-python3Packages.buildPythonApplication {
+python311Packages.buildPythonApplication {
   inherit pname version src;
   format = "other";
 
@@ -66,26 +66,29 @@ python3Packages.buildPythonApplication {
     perl
     zlib
     avahi
+  ] ++ lib.optionals withQt5 [
+    qt5.qtwayland
   ];
 
   nativeBuildInputs = [
     pkg-config
     removeReferencesTo
     autoreconfHook
+    gobject-introspection
+    wrapGAppsHook3
   ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
-  pythonPath = with python3Packages; [
+  pythonPath = with python311Packages; [
     dbus
     pillow
     pygobject3
     reportlab
     usbutils
-    sip_4
     dbus-python
     distro
   ] ++ lib.optionals withQt5 [
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
     enum-compat
   ];
 
@@ -103,9 +106,6 @@ python3Packages.buildPythonApplication {
       url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
       sha256 = "sha256:18njrq5wrf3fi4lnpd1jqmaqr7ph5d7jxm7f15b1wwrbxir1rmml";
     })
-
-    # Revert changes that break compilation under -Werror=format-security
-    ./revert-snprintf-change.patch
   ];
 
   postPatch = ''
@@ -125,7 +125,7 @@ python3Packages.buildPythonApplication {
       -e s,/usr/bin/perl,${perl}/bin/perl,g \
       -e s,/usr/bin/file,${file}/bin/file,g \
       -e s,/usr/bin/gs,${ghostscript}/bin/gs,g \
-      -e s,/usr/share/cups/fonts,${ghostscript}/share/ghostscript/fonts,g \
+      -e s,/usr/share/cups/fonts,${ghostscript.fonts}/share/fonts,g \
       -e "s,ExecStart=/usr/bin/python /usr/bin/hp-config_usb_printer,ExecStart=$out/bin/hp-config_usb_printer,g" \
       -e s,Exec=/usr/bin/hp-uiscan,Exec=hp-uiscan,g \
       -e s,Icon=/usr/share/icons/Humanity/devices/48/printer.svg,Icon=printer,g \
@@ -237,6 +237,9 @@ python3Packages.buildPythonApplication {
   # 1. Calling patchPythonProgram on the original script in $out/share/hplip
   # 2. Making our own wrapper pointing directly to the original script.
   dontWrapPythonPrograms = true;
+  # We also avoid double (or triple in case qt5 support is added) wrapping
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
   preFixup = ''
     buildPythonPath "$out $pythonPath"
 
@@ -246,10 +249,10 @@ python3Packages.buildPythonApplication {
       echo "patching \`$py'..."
       patchPythonScript "$py"
       echo "wrapping \`$bin'..."
-      makeWrapper "$py" "$bin" \
+      ${if withQt5 then "makeQtWrapper" else "makeWrapper"} "$py" "$bin" \
           --prefix PATH ':' "$program_PATH" \
           --set PYTHONNOUSERSITE "true" \
-          $makeWrapperArgs
+          $makeWrapperArgs "''${gappsWrapperArgs[@]}"
     done
   '';
 
@@ -264,15 +267,11 @@ python3Packages.buildPythonApplication {
       --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
     remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
-  '' + lib.optionalString withQt5 ''
-    for f in $out/bin/hp-*;do
-      wrapQtApp $f
-    done
   '';
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.
   stripDebugList = [
-    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
+    "share/hplip" "lib/cups/backend" "lib/cups/filter" python311Packages.python.sitePackages "lib/sane"
   ];
 
   meta = with lib; {

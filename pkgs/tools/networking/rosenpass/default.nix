@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nixosTests
 , rustPlatform
-, targetPlatform
+, hostPlatform
 , installShellFiles
 , cmake
 , libsodium
@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rosenpass";
-  version = "unstable-2023-09-28";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "b15f17133f8b5c3c5175b4cfd4fc10039a4e203f";
-    hash = "sha256-UXAkmt4VY0irLK2k4t6SW+SEodFE3CbX5cFbsPG0ZCo=";
+    rev = "v${version}";
+    hash = "sha256-fQIeKGyTkFWUV9M1o256G4U1Os5OlVsRZu+5olEkbD4=";
   };
 
-  cargoHash = "sha256-N1DQHkgKgkDQ6DbgQJlpZkZ7AMTqX3P8R/cWr14jK2I=";
+  cargoHash = "sha256-GyeJCIE60JuZa/NuixDc3gTj9WAOpSReIyVxQqM4tDQ=";
 
   nativeBuildInputs = [
     cmake # for oqs build in the oqs-sys crate
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   # nix defaults to building for aarch64 _without_ the armv8-a
   # crypto extensions, but liboqs depends on these
-  preBuild = lib.optionalString targetPlatform.isAarch64 ''
+  preBuild = lib.optionalString hostPlatform.isAarch64 ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -march=armv8-a+crypto"
   '';
 
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.rosenpass = nixosTests.rosenpass;
 
   meta = with lib; {
-    description = "Build post-quantum-secure VPNs with WireGuard!";
+    description = "Build post-quantum-secure VPNs with WireGuard";
     homepage = "https://rosenpass.eu/";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ wucke13 ];

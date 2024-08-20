@@ -1,11 +1,14 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy27
-, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "spinners";
   version = "0.0.24";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -18,7 +21,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spinners" ];
 
   meta = with lib; {
-    description = "Spinners for the Terminal.";
+    description = "Spinners for the Terminal";
     homepage = "https://github.com/manrajgrover/py-spinners";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];

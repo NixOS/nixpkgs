@@ -1,21 +1,27 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
+, testers
+, nixosTests
+, opentelemetry-collector
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.87.0";
+  version = "0.103.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-AfjCGxoXKXVfDnPkLqx2W3dGBFY9aiBPgltFMg1xKZI=";
+    hash = "sha256-xmsxr1A0/kyWXLNVZglZy8K7ieZT1GS4lGqsSrUkttI=";
   };
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-OTeZL/mBYLKq47pJE26J+vbQkTZlgz0eVC1jwRmqw88=";
+  vendorHash = "sha256-1NDGfzg/60VJNrWkMtGS2t3Cv1CXSguR1qLp4mqF1UM=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # upstream strongly recommends disabling CGO
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
@@ -29,10 +35,26 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
+  postInstall = ''
+    installShellCompletion --cmd otelcorecol \
+      --bash <($out/bin/otelcorecol completion bash) \
+      --fish <($out/bin/otelcorecol completion fish) \
+      --zsh <($out/bin/otelcorecol completion zsh)
+  '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      inherit version;
+      package = opentelemetry-collector;
+      command = "otelcorecol -v";
+    };
+    inherit (nixosTests) opentelemetry-collector;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "Vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the

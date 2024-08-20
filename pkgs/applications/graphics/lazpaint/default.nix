@@ -1,30 +1,30 @@
 { lib, stdenv, fetchFromGitHub, lazarus, fpc, pango, cairo, glib
-, atk, gtk2, libX11, gdk-pixbuf, busybox, python3, makeWrapper }:
-
-with stdenv;
+, atk, gtk2, libX11, gdk-pixbuf, python3
+, makeWrapper
+}:
 
 let
   bgrabitmap = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgrabitmap";
-    rev = "v11.5.3";
-    sha256 = "sha256-qjBD9TVZQy1tKWHFWkuu6vdLjASzQb3+HRy0FLdd9a8=";
+    rev = "2814b069d55f726b9f3b4774d85d00dd72be9c05";
+    hash = "sha256-YibwdhlgjgI30gqYsKchgDPlOSpBiDBDJNlUDFMygGs=";
   };
   bgracontrols = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgracontrols";
-    rev = "v7.6";
-    sha256 = "sha256-btg9DMdYg+C8h0H7MU+uoo2Kb4OeLHoxFYHAv7LbLBA=";
+    rev = "v8.0";
+    hash = "sha256-5L05eGVN+xncd0/0XLFN6EL2ux4aAOsiU0BMoy0dKgg=";
   };
 in stdenv.mkDerivation rec {
   pname = "lazpaint";
-  version = "7.2.2";
+  version = "7.2.2-unstable-2024-01-20";
 
   src = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "lazpaint";
-    rev = "v${version}";
-    sha256 = "sha256-J6s0GnGJ7twEYW5+B72bB3EX4AYvLnhSPLbdhZWzlkw=";
+    rev = "fe54c2e2561c51218a5a2755842ce3fc2e0ebb35";
+    hash = "sha256-LaOTJiS+COJUlyJiN9H2kEKwv5lbJqOHsUXOnb+IQFA=";
   };
 
   nativeBuildInputs = [ lazarus fpc makeWrapper ];
@@ -49,25 +49,19 @@ in stdenv.mkDerivation rec {
       lazpaint/lazpaint.lpi
   '';
 
-  installPhase = ''
-    # Reuse existing install script
-    substituteInPlace Makefile --replace "/bin/bash" $BASH
-    cd lazpaint/release/debian
-    substituteInPlace makedeb.sh --replace "rm -rf" "ls"
-    patchShebangs ./makedeb.sh
-    PATH=$PATH:${busybox}/bin ./makedeb.sh
-    cp -r staging/usr $out
-
+  postBuild = ''
     # Python is needed for scripts
-    makeWrapper $out/share/lazpaint/lazpaint $out/bin/lazpaint \
+    wrapProgram $out/bin/lazpaint \
       --prefix PATH : ${lib.makeBinPath [ python3 ]}
   '';
 
   meta = with lib; {
     description = "Image editor like PaintBrush or Paint.Net";
-    homepage = "https://sourceforge.net/projects/lazpaint/";
+    homepage = "https://lazpaint.github.io";
+    downloadPage = "https://github.com/bgrabitmap/lazpaint/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "lazpaint";
   };
 }

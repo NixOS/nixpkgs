@@ -13,7 +13,7 @@ in
     projectroot = mkOption {
       default = "/srv/git";
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to git projects (bare repositories) that should be served by
         gitweb. Must not end with a slash.
       '';
@@ -22,7 +22,7 @@ in
     extraConfig = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Verbatim configuration text appended to the generated gitweb.conf file.
       '';
       example = ''
@@ -35,7 +35,7 @@ in
     gitwebTheme = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Use an alternative theme for gitweb, strongly inspired by GitHub.
       '';
     };
@@ -55,6 +55,6 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = [ ];
 
 }

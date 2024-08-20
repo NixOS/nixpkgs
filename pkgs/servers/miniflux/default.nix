@@ -1,20 +1,26 @@
-{ lib, buildGo121Module, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch2, installShellFiles, nixosTests }:
 
-let
+buildGoModule rec {
   pname = "miniflux";
-  version = "2.0.49";
-
-in buildGo121Module {
-  inherit pname version;
+  version = "2.1.4";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "miniflux";
     repo = "v2";
-    rev = version;
-    sha256 = "sha256-MGKQSlpTLqQPmvhACl9fbQkz2Uil8V8btjTwJIcY7g0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1EH8KtKdAssxLk0IyhJsbrFU1obDTvmaGtFyLVlnOdQ=";
   };
 
-  vendorHash = "sha256-J3WHFfmjgE71hK58WP3dq+Px4XxLbluJSGv+eJiIB0E=";
+  patches = [
+    (fetchpatch2 {
+      # Fix panic during YouTube channel feed discovery
+      name = "miniflux-pr2742.patch";
+      url = "https://github.com/miniflux/v2/commit/79ea9e28b5a8c09f4d1dcbf31b661fb5f8e85e6a.patch";
+      hash = "sha256-BZPv83QsJ6iJs12FLALfTN//VZL/BfGkXs3Pzn9cGeU=";
+    })
+  ];
+
+  vendorHash = "sha256-kr2qCKuwp6Fpr0zEjggqk4Mff3V9pxGLU71lRhdRrW8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,6 +41,7 @@ in buildGo121Module {
     description = "Minimalist and opinionated feed reader";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs benpye ];
+    maintainers = with maintainers; [ rvolosatovs benpye emilylange ];
+    mainProgram = "miniflux";
   };
 }

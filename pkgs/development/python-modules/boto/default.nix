@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, python
-, nose
-, mock
-, requests
-, httpretty
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  nose,
+  mock,
+  requests,
+  httpretty,
 }:
 
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,8 +40,14 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
-  nativeCheckInputs = [ nose mock ];
-  propagatedBuildInputs = [ requests httpretty ];
+  nativeCheckInputs = [
+    nose
+    mock
+  ];
+  propagatedBuildInputs = [
+    requests
+    httpretty
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/boto/boto";

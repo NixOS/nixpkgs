@@ -1,53 +1,54 @@
-{ lib
-, aiohttp
-, aioresponses
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, pytest-asyncio
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
-, setuptools-scm
-, urllib3
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  pytest-asyncio,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
+  setuptools-scm,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "raincloudy";
   version = "1.2.0";
-  format = "setuptools";
+  pypriject = true;
 
-  disabled = pythonOlder "3.7";
+  # https://github.com/vanstinator/raincloudy/issues/65
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "vanstinator";
-    repo = pname;
+    repo = "raincloudy";
     rev = "refs/tags/${version}";
     hash = "sha256-qCkBVirM09iA1sXiOB9FJns8bHjQq7rRk8XbRWrtBDI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     # https://github.com/vanstinator/raincloudy/pull/60
     substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4" \
+      --replace-fail "bs4" "beautifulsoup4" \
 
     # fix raincloudy.aio package discovery, by relying on
     # autodiscovery instead.
     sed -i '/packages=/d' setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     aiohttp
     requests
     beautifulsoup4
@@ -76,7 +77,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Melnor RainCloud Smart Garden Watering Irrigation Timer";
     homepage = "https://github.com/vanstinator/raincloudy";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/vanstinator/raincloudy/releases/tag/${version}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

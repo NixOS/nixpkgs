@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, setuptools
-, wcwidth
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  wcwidth,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,8 +20,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-AJWxK/WWbeUpwP6x+ghnFnGzNo7sd9fverEUviwGizw=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -37,8 +36,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pretty-print tabular data";
+    mainProgram = "tabulate";
     homepage = "https://github.com/astanin/python-tabulate";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

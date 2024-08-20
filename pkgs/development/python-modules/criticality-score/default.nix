@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pygithub, python-gitlab }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygithub,
+  python-gitlab,
+}:
 
 buildPythonPackage rec {
   pname = "criticality_score";
@@ -9,14 +15,18 @@ buildPythonPackage rec {
     hash = "sha256-5XkVT0blnLG158a01jDfQl1Rx9U1LMsqaMjTdN7Q4QQ=";
   };
 
-  propagatedBuildInputs = [ pygithub python-gitlab ];
+  propagatedBuildInputs = [
+    pygithub
+    python-gitlab
+  ];
 
   doCheck = false;
 
   pythonImportsCheck = [ "criticality_score" ];
 
   meta = with lib; {
-    description = "Python tool for computing the Open Source Project Criticality Score.";
+    description = "Python tool for computing the Open Source Project Criticality Score";
+    mainProgram = "criticality_score";
     homepage = "https://github.com/ossf/criticality_score";
     changelog = "https://github.com/ossf/criticality_score/releases/tag/v${version}";
     license = licenses.asl20;

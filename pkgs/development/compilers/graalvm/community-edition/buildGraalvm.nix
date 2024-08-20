@@ -63,22 +63,7 @@ let
     mkdir -p $out/bin
     ln -s ${lib.getDev musl}/bin/musl-gcc $out/bin/${stdenv.hostPlatform.system}-musl-gcc
   '');
-  # GraalVM 23.0.0+ (i.e.: JDK 21.0.0+) clean-up the environment inside darwin
-  # So we need to re-added some env vars to make everything work correctly again
-  darwin-cc = (runCommandCC "darwin-cc"
-    {
-      nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ darwin.apple_sdk.frameworks.Foundation zlib ];
-    } ''
-    makeWrapper ${stdenv.cc}/bin/cc $out/bin/cc \
-      --prefix NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} : "$NIX_CFLAGS_COMPILE" \
-      --prefix NIX_LDFLAGS_${stdenv.cc.suffixSalt} : "$NIX_LDFLAGS"
-  '');
-  binPath = lib.makeBinPath (
-    lib.optionals stdenv.isDarwin [ darwin-cc ]
-    ++ lib.optionals useMusl [ musl-gcc ]
-    ++ [ stdenv.cc ]
-  );
+  binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv.cc ]);
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -122,7 +107,7 @@ let
       ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
+      ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -180,25 +165,23 @@ let
       echo "Testing GraalVM"
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
+      extraNativeImageArgs="$(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n)"
+
       echo "Ahead-Of-Time compilation"
-      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
+      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility $extraNativeImageArgs HelloWorld
       ./helloworld | fgrep 'Hello World'
 
-      ${# --static is only available in Linux
+      ${# -H:+StaticExecutableWithDynamicLibC is only available in Linux
       lib.optionalString (stdenv.isLinux && !useMusl) ''
         echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
-        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC HelloWorld
-        ./helloworld | fgrep 'Hello World'
-
-        echo "Ahead-Of-Time compilation with --static"
-        $out/bin/native-image --static HelloWorld
+        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
         ./helloworld | fgrep 'Hello World'
       ''}
 
       ${# --static is only available in Linux
       lib.optionalString (stdenv.isLinux && useMusl) ''
         echo "Ahead-Of-Time compilation with --static and --libc=musl"
-        $out/bin/native-image --static HelloWorld --libc=musl
+        $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
         ./helloworld | fgrep 'Hello World'
       ''}
 

@@ -1,54 +1,45 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, flask
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, werkzeug
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-flask";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rv3mUvd3d78C3JEgWuxM4gzfKsu71mqRirkfXBRpPT0=";
+    hash = "sha256-WL4cl7Ibo8TUfgp2ketBAHdIUGw2v1EAT3jfEGkfqV4=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     flask
     werkzeug
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_flask"
-  ];
+  pythonImportsCheck = [ "pytest_flask" ];
 
-  pytestFlagsArray = lib.optionals stdenv.isDarwin [
-    "--ignore=tests/test_live_server.py"
-  ];
+  pytestFlagsArray = lib.optionals stdenv.isDarwin [ "--ignore=tests/test_live_server.py" ];
 
   meta = with lib; {
-    description = "A set of pytest fixtures to test Flask applications";
+    description = "Set of pytest fixtures to test Flask applications";
     homepage = "https://pytest-flask.readthedocs.io/";
     changelog = "https://github.com/pytest-dev/pytest-flask/blob/${version}/docs/changelog.rst";
     license = licenses.mit;

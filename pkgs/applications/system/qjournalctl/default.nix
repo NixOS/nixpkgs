@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qjournalctl";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "pentix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j27cmfq29mwrbjfrrwi6m1grcamhbfhk47xzlfsx5wr2q9m6qkz";
+    sha256 = "sha256-anNNzqjbIaQI+MAwwMwzy6v4SKqi4u9F5IbFBErm4q8=";
   };
 
   postPatch = ''
@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based graphical user interface for systemd's journalctl command";
+    mainProgram = "qjournalctl";
     homepage = "https://github.com/pentix/qjournalctl";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill srgom romildo ];
+    maintainers = with maintainers; [ srgom romildo ];
   };
 }

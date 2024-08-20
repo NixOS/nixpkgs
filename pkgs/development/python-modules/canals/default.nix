@@ -1,46 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, mkdocs-material
-, mkdocs-mermaid2-plugin
-, mkdocstrings
-, networkx
-, pygraphviz
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  mkdocs-material,
+  mkdocs-mermaid2-plugin,
+  mkdocstrings,
+  networkx,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "canals";
-  version = "0.8.1";
-  format = "pyproject";
+  version = "0.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
-    repo = pname;
+    repo = "canals";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XC4CxvDghz8/LReeYjHEVtd8j2ZN4jd+x7vP6N8BKpc=";
+    hash = "sha256-xoJqj/zPBPPCheBxA+8EFRJqUnlP+4aWLEh42q1X1mM=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     networkx
+    requests
+    typing-extensions
   ];
 
   passthru.optional-dependencies = {
-    graphviz = [
-      pygraphviz
-    ];
-    mermaid = [
-      requests
-    ];
     docs = [
       mkdocs-material
       mkdocs-mermaid2-plugin
@@ -54,7 +49,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Test requires internet connection to mermaid.ink
-    "test/pipelines/integration"
+    "test/pipeline/integration"
   ];
 
   disabledTests = [
@@ -62,12 +57,10 @@ buildPythonPackage rec {
     "test_draw_pygraphviz"
   ];
 
-  pythonImportsCheck = [
-    "canals"
-  ];
+  pythonImportsCheck = [ "canals" ];
 
   meta = with lib; {
-    description = "A component orchestration engine";
+    description = "Component orchestration engine";
     homepage = "https://github.com/deepset-ai/canals";
     changelog = "https://github.com/deepset-ai/canals/releases/tag/v${version}";
     license = licenses.asl20;

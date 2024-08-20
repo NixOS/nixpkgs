@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://fabiangreffrath.github.io/crispy-doom";
-    description = "A limit-removing enhanced-resolution Doom source port based on Chocolate Doom";
+    description = "Limit-removing enhanced-resolution Doom source port based on Chocolate Doom";
     longDescription = ''
       Crispy Doom is a limit-removing enhanced-resolution Doom source port based on Chocolate Doom.
       Its name means that 640x400 looks \"crisp\" and is also a slight reference to its origin.

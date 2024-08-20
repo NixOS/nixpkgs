@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bcftools";
-  version = "1.18";
+  version = "1.20";
 
   src = fetchurl {
     url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-2bnTYpPkzGKrdHOqJTk4nU4d55sakn1IP26R88POrH4=";
+    sha256 = "sha256-MSuDKd5RMN06N2eMcSlR5h5XcVV8cSmnCjJ6MA/ahiA=";
   };
 
   nativeBuildInputs = [

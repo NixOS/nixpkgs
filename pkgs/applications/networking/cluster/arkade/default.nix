@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -7,13 +6,13 @@
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.10.13";
+  version = "0.11.19";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    hash = "sha256-DhMoNI1eRzP9FK752Z8sAcuj5dpu2vRqXRv4tbSYmLE=";
+    hash = "sha256-Vhldn9CMxC/5qPFN+ohydHuMsrHjpBuFkP4khf+OQds=";
   };
 
   CGO_ENABLED = 0;
@@ -51,6 +50,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/alexellis/arkade";
     description = "Open Source Kubernetes Marketplace";
+    mainProgram = "arkade";
     license = licenses.mit;
     maintainers = with maintainers; [ welteki techknowlogick qjoly ];
   };

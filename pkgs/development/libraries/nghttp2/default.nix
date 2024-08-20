@@ -32,11 +32,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.57.0";
+  version = "1.62.1";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-xjdnfLrESU6q+LDgOGFzFGhFgw76/+To3JL7O0KOWtI=";
+    sha256 = "sha256-OWbsgv2n/DgFBtNyomDY2bbpRr5N6u8f7MGnS0gJrj0=";
   };
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
@@ -60,11 +60,21 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableHttp3 "http3")
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+    "-faligned-allocation"
+  ]);
+
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
   nativeCheckInputs = lib.optionals (enableTests) [ cunit tzdata ];
   preCheck = lib.optionalString (enableTests) ''
     export TZDIR=${tzdata}/share/zoneinfo
+  '';
+
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
   '';
 
   postInstall = lib.optionalString (enableApp) ''

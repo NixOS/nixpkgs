@@ -1,32 +1,40 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, pythonOlder
-, fetchPypi
-, isPyPy
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  pythonOlder,
+  fetchPypi,
+  writeText,
 
-# build
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# propagates
-, attrs
-, exceptiongroup
-, iniconfig
-, packaging
-, pluggy
-, py
-, tomli
+  # dependencies
+  attrs,
+  exceptiongroup,
+  iniconfig,
+  packaging,
+  pluggy,
+  tomli,
+
+  # optional-dependencies
+  argcomplete,
+  hypothesis,
+  mock,
+  pygments,
+  requests,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.4.2";
-  format = "pyproject";
+  version = "8.3.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p2YlnPq1ZKKtUssarhuIGnXD6340yjd5aXwj7UfEcGk=";
+    hash = "sha256-wTI0XRLOVRJCyHJp3oEkg/W8yHzbtHIuSEh7oZT5/c4=";
   };
 
   outputs = [
@@ -35,19 +43,33 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    iniconfig
-    packaging
-    pluggy
-    py
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ];
+  propagatedBuildInputs =
+    [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
+
+  passthru.optional-dependencies = {
+    testing = [
+      argcomplete
+      attrs
+      hypothesis
+      mock
+      pygments
+      requests
+      setuptools
+      xmlschema
+    ];
+  };
 
   postInstall = ''
     mkdir $testout
@@ -78,15 +100,18 @@ buildPythonPackage rec {
     preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
-  pythonImportsCheck = [
-    "pytest"
-  ];
+  pythonImportsCheck = [ "pytest" ];
 
   meta = with lib; {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    maintainers = with maintainers; [
+      domenkozar
+      lovek323
+      madjar
+      lsix
+    ];
     license = licenses.mit;
   };
 }

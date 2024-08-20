@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "kubectl plugin for retrieving resource example YAMLs";
+    mainProgram = "kubectl-example";
     homepage = "https://github.com/seredot/kubectl-example";
     changelog = "https://github.com/seredot/kubectl-example/releases/tag/v${version}";
     license = licenses.asl20;

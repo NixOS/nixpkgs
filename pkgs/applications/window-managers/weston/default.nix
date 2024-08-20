@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch2
+{ lib, stdenv, fetchurl
 , meson, ninja, pkg-config, python3, wayland-scanner
-, cairo, libdrm, libevdev, libinput, libxkbcommon, mesa, seatd, wayland
+, cairo, libGL, libdrm, libevdev, libinput, libxkbcommon, mesa, seatd, wayland
 , wayland-protocols, xcbutilcursor
 
 , demoSupport ? true
@@ -19,27 +19,24 @@
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "12.0.2";
+  version = "13.0.3";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    hash = "sha256-62hqfPAJkqI7F/GS/KmohzE+ksNG7jXYV1GWmD1la0o=";
+    hash = "sha256-J/aNluO5fZjare8TogI1ZSSST6OBQY+mcWuRNu8JkJM=";
   };
 
-  patches = [
-    # ci, backend-vnc: update to Neat VNC 0.7.0
-    # part of https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1051
-    (fetchpatch2 {
-      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/8895b15f3dfc555a869e310ff6e16ff5dced1336.patch";
-      hash = "sha256-PGAmQhzG8gZcYRaZwhKPlgzfbILIXGAHLSd9dCHAP1A=";
-      excludes = [ ".gitlab-ci.yml" ];
-    })
-  ];
+  postPatch = ''
+    # raise neatvnc version bound to < 0.9.0
+    # https://gitlab.freedesktop.org/wayland/weston/-/issues/890
+    substituteInPlace libweston/backend-vnc/meson.build \
+      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '< 0.9.0']"
+  '';
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    cairo libdrm libevdev libinput libxkbcommon mesa seatd wayland
+    cairo libGL libdrm libevdev libinput libxkbcommon mesa seatd wayland
     wayland-protocols
   ] ++ lib.optional hdrSupport libdisplay-info
     ++ lib.optional jpegSupport libjpeg
@@ -74,7 +71,7 @@ stdenv.mkDerivation rec {
   passthru.providedSessions = [ "weston" ];
 
   meta = with lib; {
-    description = "A lightweight and functional Wayland compositor";
+    description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
       as a useful environment in and of itself.

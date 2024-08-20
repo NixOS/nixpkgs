@@ -1,31 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, extruct
-, language-tags
-, regex
-, requests
-, pytestCheckHook
-, responses
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  extruct,
+  language-tags,
+  regex,
+  requests,
+  pytestCheckHook,
+  responses,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.46.0";
-  format = "pyproject";
+  version = "14.56.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
     rev = "refs/tags/${version}";
-    hash = "sha256-XCcunwqmcvPC5AVxR9mit06BRDTYfu/CeTXg3IH7Dy0=";
+    hash = "sha256-+9oQLCuR+rRCG5tnyofHd8WMkQ5QPsWfLCnwIDU5d9o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -40,16 +42,17 @@ buildPythonPackage rec {
     responses
   ];
 
-  disabledTestPaths = [
-    # This is not actual code, just some pre-written boiler-plate template
-    "templates/test_scraper.py"
+  disabledTests = [
+    # Fixture is broken
+    "test_instructions"
   ];
 
   pythonImportsCheck = [ "recipe_scrapers" ];
 
   meta = with lib; {
-    description = "Python package for scraping recipes data ";
+    description = "Python package for scraping recipes data";
     homepage = "https://github.com/hhursev/recipe-scrapers";
+    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];
   };

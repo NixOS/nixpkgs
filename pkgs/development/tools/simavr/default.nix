@@ -1,4 +1,4 @@
-{ lib, stdenv, makeSetupHook, fetchFromGitHub, libelf, which, pkg-config, freeglut
+{ lib, stdenv, makeSetupHook, fetchFromGitHub, libelf, which, pkg-config, libglut
 , avrgcc, avrlibc
 , libGLU, libGL
 , GLUT }:
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which pkg-config avrgcc ]
     ++ lib.optional stdenv.isDarwin setupHookDarwin;
-  buildInputs = [ libelf freeglut libGLU libGL ]
+  buildInputs = [ libelf libglut libGLU libGL ]
     ++ lib.optional stdenv.isDarwin GLUT;
 
   # remove forbidden references to $TMPDIR
@@ -44,7 +44,8 @@ in stdenv.mkDerivation rec {
   checkTarget = "-C tests run_tests";
 
   meta = with lib; {
-    description = "A lean and mean Atmel AVR simulator";
+    description = "Lean and mean Atmel AVR simulator";
+    mainProgram = "simavr";
     homepage    = "https://github.com/buserror/simavr";
     license     = licenses.gpl3;
     platforms   = platforms.unix;

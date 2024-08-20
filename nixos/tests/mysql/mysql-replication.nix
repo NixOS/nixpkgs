@@ -18,8 +18,8 @@ let
     name ? mkTestName package,
   }: makeTest {
     name = "${name}-replication";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ ajs124 das_j ];
+    meta = {
+      maintainers = lib.teams.helsinki-systems.members;
     };
 
     nodes = {

@@ -1,33 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, cryptography
-, charset-normalizer
-, pythonOlder
-, typing-extensions
-, pytestCheckHook
-, ocrmypdf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  charset-normalizer,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  substituteAll,
+  ocrmypdf,
 }:
 
 buildPythonPackage rec {
   pname = "pdfminer-six";
-  version = "20221105";
-  format = "setuptools";
+  version = "20240706";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = version;
-    hash = "sha256-OyEeQBuYfj4iEcRt2/daSaUfTOjCVSCyHW2qffal+Bk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-aY7GQADRxeiclr6/G3RRgrPcl8rGiC85JYEIjIa+vG0=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (substituteAll {
+      src = ./disable-setuptools-git-versioning.patch;
+      inherit version;
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     charset-normalizer
     cryptography
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   postInstall = ''
     for file in $out/bin/*.py; do
@@ -35,20 +45,12 @@ buildPythonPackage rec {
     done
   '';
 
-  postPatch = ''
-    # Version is not stored in repo, gets added by a GitHub action after tag is created
-    # https://github.com/pdfminer/pdfminer.six/pull/727
-    substituteInPlace pdfminer/__init__.py --replace "__VERSION__" ${version}
-  '';
-
   pythonImportsCheck = [
     "pdfminer"
     "pdfminer.high_level"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   passthru = {
     tests = {
@@ -57,9 +59,10 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/pdfminer/pdfminer.six/blob/${src.rev}/CHANGELOG.md";
     description = "PDF parser and analyzer";
     homepage = "https://github.com/pdfminer/pdfminer.six";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy marsam ];
+    maintainers = with maintainers; [ psyanticy ];
   };
 }

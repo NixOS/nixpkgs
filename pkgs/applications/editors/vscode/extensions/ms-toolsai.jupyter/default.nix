@@ -1,11 +1,16 @@
-{ lib, vscode-utils, jq, moreutils }:
+{
+  lib,
+  vscode-utils,
+  jq,
+  moreutils,
+}:
 
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "jupyter";
     publisher = "ms-toolsai";
-    version = "2023.2.1000411022";
-    sha256 = "sha256-gMK/t/rLXYN3rlHxxVeW0W/FWEP0ZCiEwzM8DY14vYg=";
+    version = "2024.7.0";
+    hash = "sha256-hf6Y1SjKfLGe5LQ9swbPzbOCtohQ43DzHXMZwRt2d90=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +33,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     EOF
     }
     jq "$(print_jq_query)" ./package.json | sponge ./package.json
+    # Add a link from temp to /tmp so that the extension gets a writable
+    # directory to write to.
+    ln -s /tmp temp
   '';
 
   meta = {

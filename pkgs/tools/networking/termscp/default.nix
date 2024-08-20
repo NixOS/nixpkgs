@@ -14,20 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.12.3";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
-    repo = pname;
+    repo = "termscp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+5s5PskSHZKv1deti5r986qXg8J9APuVXY+Lvq3ki0w=";
+    hash = "sha256-XK0bH5ru248tSlD3Sdxb07O6i335dfTFvxDzKdc/3GQ=";
   };
 
-  cargoPatches = [
-    ./Cargo.lock.patch
-  ];
-
-  cargoHash = "sha256-2RmYxtjJm70qbiGl8YHXgebtvNsQvBdgkNDm8td9oNk=";
+  cargoHash = "sha256-DzKxVqE0GMmpkxLH3raASgha9qGGs4kaUdSaviUwvdM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -55,10 +51,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A feature rich terminal UI file transfer and explorer with support for SCP/SFTP/FTP/S3/SMB";
+    description = "Feature rich terminal UI file transfer and explorer with support for SCP/SFTP/FTP/S3/SMB";
     homepage = "https://github.com/veeso/termscp";
     changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "termscp";
   };
 }

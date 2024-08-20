@@ -1,61 +1,56 @@
 { lib
 , python3
-, fetchPypi
 , fetchFromGitHub
 , ffmpeg
 }:
 
-let
-  python = python3;
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.1";
-
-  format = "pyproject";
+  version = "4.2.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xKas3WO3uigY1iFfxIN3+d+5U31vM7cLv08oMef8trc=";
+    hash = "sha256-vxMhFs2mLbVQndlC2UpeDP+M4pwU9Y4cZHbZ8y3vWbI=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python.pkgs; [
-    spotipy
-    ytmusicapi
-    pytube
-    yt-dlp
-    mutagen
-    rich
-    beautifulsoup4
-    requests
-    rapidfuzz
-    python-slugify
-    uvicorn
-    pydantic
-    fastapi
-    platformdirs
-    pykakasi
-    syncedlyrics
-    typing-extensions
-    soundcloud-v2
+  # Remove when https://github.com/spotDL/spotify-downloader/issues/2119 is fixed
+  patches = [ ./is_lrc_valid-failure.patch ];
+
+  dependencies = with python3.pkgs; [
     bandcamp-api
-    setuptools # for pkg_resources
+    beautifulsoup4
+    fastapi
+    mutagen
+    platformdirs
+    pydantic
+    pykakasi
+    python-slugify
+    pytube
+    rapidfuzz
+    requests
+    rich
+    setuptools
+    soundcloud-v2
+    spotipy
+    syncedlyrics
+    uvicorn
+    yt-dlp
+    ytmusicapi
   ] ++ python-slugify.optional-dependencies.unidecode;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    pytest-mock
-    pytest-vcr
+  nativeCheckInputs = with python3.pkgs; [
     pyfakefs
+    pytest-mock
     pytest-subprocess
+    pytest-vcr
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -63,23 +58,27 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   disabledTestPaths = [
-    # require networking
+    # Tests require networking
     "tests/test_init.py"
     "tests/test_matching.py"
+    "tests/providers/lyrics"
+    "tests/types"
+    "tests/utils/test_github.py"
     "tests/utils/test_m3u.py"
     "tests/utils/test_metadata.py"
     "tests/utils/test_search.py"
   ];
 
   disabledTests = [
-    # require networking
-    "test_album_from_url"
+    # Test require networking
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
     "test_preload_song"
-    "test_ytm_get_results"
+    "test_yt_get_results"
+    "test_yt_search"
     "test_ytm_search"
+    "test_ytm_get_results"
   ];
 
   makeWrapperArgs = [
@@ -92,5 +91,6 @@ in python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "spotdl";
   };
 }

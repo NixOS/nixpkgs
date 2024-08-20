@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 
 }:
 
 buildPythonPackage rec {
   pname = "stopit";
   version = "1.1.2";
+  format = "setuptools";
 
   # tests are missing from the PyPi tarball
   src = fetchFromGitHub {

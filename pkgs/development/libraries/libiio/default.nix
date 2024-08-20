@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "-DOSX_PACKAGE=off"
     "-DOSX_FRAMEWORK=off"
   ] ++ lib.optionals pythonSupport [
-    "-DPython_EXECUTABLE=${python.pythonForBuild.interpreter}"
+    "-DPython_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
     "-DPYTHON_BINDINGS=on"
   ] ++ lib.optionals (!avahiSupport) [
     "-DHAVE_DNS_SD=OFF"

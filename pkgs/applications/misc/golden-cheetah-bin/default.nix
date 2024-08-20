@@ -14,10 +14,10 @@ in
 appimageTools.wrapType2 {
   inherit pname src version;
 
-  extraPkgs = pkgs: with pkgs; [ R zlib libusb-compat-0_1 ];
+  extraPkgs = pkgs: [ pkgs.R pkgs.zlib pkgs.libusb-compat-0_1 ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/GoldenCheetah
+    mv $out/bin/${pname} $out/bin/GoldenCheetah
     mkdir -p $out/share/applications
     mkdir -p $out/share/pixmaps
     cp ${appimageContents}/GoldenCheetah.desktop $out/share/applications/

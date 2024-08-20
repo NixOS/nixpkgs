@@ -10,19 +10,19 @@
 , gtk3
 , copyDesktopItems
 , icoutils
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 }:
 
 buildDotnetModule rec {
   pname = "scarab";
-  version = "2.1.0.0";
+  version = "2.5.0.0";
 
   src = fetchFromGitHub {
     owner = "fifty-six";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TbsCj30ZlZmm+i/k31eo9X+XE9Zu13uL9QZOGaRm9zs=";
+    sha256 = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
   };
 
   nugetDeps = ./deps.nix;
@@ -46,7 +46,7 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     copyDesktopItems
     icoutils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postFixup = ''

@@ -2,30 +2,41 @@
 , lib
 , stdenv
 , cmake
+, nix-update-script
+, testers
+, magic-enum
 }:
 stdenv.mkDerivation rec{
   pname = "magic-enum";
-  version = "0.8.2";
+  version = "0.9.6";
+
   src = fetchFromGitHub {
     owner = "Neargye";
     repo = "magic_enum";
-    rev = "v${version}";
-    sha256 = "sha256-k4zCEQxO0N/o1hDYxw5p9u0BMwP/5oIoe/4yw7oqEo0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1pO9FWd0InXqg8+lwRF3YNFTAeVLjqoI9v15LjWxnZY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  # disable tests until upstream fixes build issues with gcc 12
-  # see https://github.com/Neargye/magic_enum/issues/235
-  doCheck = false;
   cmakeFlags = [
-    "-DMAGIC_ENUM_OPT_BUILD_TESTS=OFF"
+    # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
+    # (setting it to an absolute path causes include files to go to $out/$out/include,
+    #  because the absolute path is interpreted with root at $out).
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib;{
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = magic-enum; };
+  };
+
+  meta = {
     description = "Static reflection for enums (to string, from string, iteration) for modern C++";
     homepage = "https://github.com/Neargye/magic_enum";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Alper-Celik ];
+    changelog = "https://github.com/Neargye/magic_enum/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Alper-Celik ];
   };
 }

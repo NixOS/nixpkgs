@@ -9,6 +9,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       mistune = super.mistune.overridePythonAttrs (old: rec {
         version = "2.0.5";
@@ -20,21 +21,26 @@ let
       });
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "lektor";
-  version = "3.4.0b8";
+  version = "3.4.0b12";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "lektor";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FtmRW4AS11zAX2jvGY8XTsPrN3mhHkIWoFY7sXmqG/U=";
+    # fix for case-insensitive filesystems
+    postFetch = ''
+      rm -f $out/tests/demo-project/content/icc-profile-test/{LICENSE,license}.txt
+    '';
+    hash = "sha256-y0/fYuiIB/O5tsYKjzOPnCafOIZCn4Z5OITPMcnHd/M=";
   };
 
   npmDeps = fetchNpmDeps {
-    src = "${src}/frontend";
-    hash = "sha256-Z7LP9rrVSzKoLITUarsnRbrhIw7W7TZSZUgV/OT+m0M=";
+    src = "${src}/${npmRoot}";
+    hash = "sha256-LXe5/u4nAGig8RSu6r8Qsr3p3Od8eoMxukW8Z4HkJ44=";
   };
 
   npmRoot = "frontend";
@@ -46,13 +52,9 @@ in python.pkgs.buildPythonApplication rec {
     npmHooks.npmConfigHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = with python.pkgs; [
     babel
     click
-    exifread
-    filetype
     flask
     inifile
     jinja2
@@ -86,16 +88,18 @@ in python.pkgs.buildPythonApplication rec {
     # Tests require network access
     "test_path_installed_plugin_is_none"
     "test_VirtualEnv_run_pip_install"
-    # expects FHS paths
-    "test_VirtualEnv_executable"
   ];
 
-  meta = with lib; {
-    description = "A static content management system";
+  postCheck = ''
+    make test-js
+  '';
+
+  meta = {
+    description = "Static content management system";
     homepage = "https://www.getlektor.com/";
     changelog = "https://github.com/lektor/lektor/blob/v${version}/CHANGES.md";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd3;
     mainProgram = "lektor";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

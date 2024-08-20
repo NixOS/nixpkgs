@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     # pkg-config output patching hook expects prefix variable here
     substituteInPlace data/dbus-cpp.pc.in \
       --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A dbus-binding leveraging C++-11";
+    description = "Dbus-binding leveraging C++-11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];

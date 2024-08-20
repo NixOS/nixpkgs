@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.thregr.org/~wavexx/software/facedetect/";
-    description = "A simple face detector for batch processing";
+    description = "Simple face detector for batch processing";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.rycee ];
+    mainProgram = "facedetect";
   };
 }

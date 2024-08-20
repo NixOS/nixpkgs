@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "+kCHe84ikdCLd7j5YwP2j3xz+XTzzo/kLy+b9YUFDnI=";
   };
 
-  cargoSha256 = "VKY/FQUrFWtLxKoK6LP6qPMqNN4absZvnAbH9mha1fI=";
+  cargoHash = "sha256-VKY/FQUrFWtLxKoK6LP6qPMqNN4absZvnAbH9mha1fI=";
 
   # required for tests
   postPatch = ''
@@ -24,9 +24,10 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A script interpolation engine for markdown documents";
+    description = "Script interpolation engine for markdown documents";
     homepage = "https://github.com/terror/present/";
     license = licenses.cc0;
     maintainers = with maintainers; [ cameronfyfe ];
+    mainProgram = "present";
   };
 }

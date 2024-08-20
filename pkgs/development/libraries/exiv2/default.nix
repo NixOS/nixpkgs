@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.28.0";
+  version = "0.28.3";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo = "exiv2";
     rev = "v${version}";
-    hash = "sha256-nEoLJWxSJmAonCbW/iZKjLrKMj09mwEaSUXUcUu8GxU=";
+    hash = "sha256-KD3kkIQXPcjCVZZrmbn93xYbJ8ryG0mLFbkO5AVqnTw=";
   };
 
   nativeBuildInputs = [
@@ -67,8 +67,7 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  # https://github.com/Exiv2/exiv2/issues/2762
-  doCheck = lib.versionOlder brotli.version "1.1.0";
+  doCheck = true;
 
   preCheck = ''
     patchShebangs ../test/
@@ -87,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2 $static/lib/*.a
+    remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2
   '';
 
   disallowedReferences = [ stdenv.cc.cc ];
@@ -97,7 +96,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://exiv2.org";
-    description = "A library and command-line utility to manage image metadata";
+    description = "Library and command-line utility to manage image metadata";
+    mainProgram = "exiv2";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];

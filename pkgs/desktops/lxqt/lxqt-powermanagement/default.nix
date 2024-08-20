@@ -1,48 +1,50 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, kwindowsystem
-, solid
 , kidletime
+, kwindowsystem
 , liblxqt
 , libqtxdg
+, lxqt-build-tools
 , lxqt-globalkeys
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
+, solid
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "lnEi3Emwx3ykIx1ZlRMjRP3FAaYgIhsVpY9r0dT3DEE=";
+    hash = "sha256-wtqVUXYQWIPhvHj7Ig9qR6sglCRQzcxG192DM3xq/mA=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
-    qtsvg
-    kwindowsystem
-    solid
     kidletime
+    kwindowsystem
     liblxqt
     libqtxdg
     lxqt-globalkeys
+    qtbase
+    qtsvg
+    qtwayland
+    solid
   ];
 
   passthru.updateScript = gitUpdater { };

@@ -1,24 +1,29 @@
 { lib
-, python3
-, fetchPypi
+, python3Packages
+, fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wyoming-piper";
-  version = "1.3.2";
-  format = "setuptools";
+  version = "1.5.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "wyoming_piper";
-    inherit version;
-    hash = "sha256-WyoHwIF3xC5nOa7iQ8/esfdwahbU6YJzK5G2Vi3mV4M=";
+  src = fetchFromGitHub {
+    owner = "rhasspy";
+    repo = "wyoming-piper";
+    rev = "v${version}";
+    hash = "sha256-aI1CWtSpSPX1aK4UR/lsCQZQwNs7qOLKfatlSomJx1Q=";
   };
 
-  patches = [
-    ./piper-entrypoint.patch
+  nativeBuildInputs = with python3Packages; [
+    setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "wyoming"
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     wyoming
   ];
 
@@ -29,8 +34,10 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/rhasspy/wyoming-piper/v${version}/master/CHANGELOG.md";
     description = "Wyoming Server for Piper";
-    homepage = "https://pypi.org/project/wyoming-piper/";
+    mainProgram = "wyoming-piper";
+    homepage = "https://github.com/rhasspy/wyoming-piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg_4, freeglut
+{ stdenv, SDL2_image_2_6, SDL2_ttf, SDL2_net, fpc, haskell, ffmpeg_4, libglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools, wrapQtAppsHook
@@ -7,7 +7,7 @@
 }:
 
 let
-  ghc = ghcWithPackages (pkgs: with pkgs; [
+  ghc = haskell.packages.ghc94.ghcWithPackages (pkgs: with pkgs; [
           SHA bytestring entropy hslogger network pkgs.zlib random
           regex-tdfa sandi utf8-string vector
         ]);
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
-    SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
+    SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image_2_6
     fpc lua5_1
     llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
-    ffmpeg_4 freeglut physfs
+    ffmpeg_4 libglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
-    SDL2_image
+    SDL2_image_2_6
     SDL2_mixer
     SDL2_net
     SDL2_ttf
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libGLU freeglut physfs ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libGLU libglut physfs ]}"
   ];
 
   meta = with lib; {
     description = "Turn-based strategy artillery game similar to Worms";
-    homepage = "http://hedgewars.org/";
-    license = licenses.gpl2;
+    homepage = "https://hedgewars.org/";
+    license = licenses.gpl2Plus;
     longDescription = ''
        Each player controls a team of several hedgehogs. During the course of
        the game, players take turns with one of their hedgehogs. They then use

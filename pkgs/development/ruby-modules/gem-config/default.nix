@@ -17,17 +17,18 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
-, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
+{ lib, fetchurl, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+, libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, lerc, buildRubyGem
+, cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
-, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
+, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
-, autoSignDarwinBinariesHook, fetchpatch
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
+, cargo, rustc, rustPlatform
+, autoSignDarwinBinariesHook
 }@args:
 
 let
@@ -49,7 +50,7 @@ in
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
     nativeBuildInputs = [ rake bundler pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook atk ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 atk ];
   };
 
   bundler = attrs:
@@ -76,7 +77,7 @@ in
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ cairo pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
+    buildInputs = [ cairo expat pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   charlock_holmes = attrs: {
@@ -125,7 +126,16 @@ in
   };
 
   curses = attrs: {
+    dontBuild = false;
     buildInputs = [ ncurses ];
+    patches = lib.optionals (lib.versionOlder attrs.version "1.4.5") [
+      # Fixes incompatible function pointer type error with clang 16. Fixed in 1.4.5 and newer.
+      # Upstream issue: https://github.com/ruby/curses/issues/85
+      (fetchpatch2 {
+        url = "https://github.com/ruby/curses/commit/13e00d07c3aaed83d5f138cf268cc33c9f025d0e.patch?full_index=1";
+        hash = "sha256-ZJ2egqj3Uwmi4KrF79dtwczpwUqFCp52/xQYUymYDmc=";
+      })
+    ];
   };
 
   dep-selector-libgecode = attrs: {
@@ -229,7 +239,13 @@ in
   gdk_pixbuf2 = attrs: {
     nativeBuildInputs = [ pkg-config bundler rake ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gdk-pixbuf ];
+  };
+
+  gdk3 = attrs: {
+    nativeBuildInputs = [ pkg-config bundler rake ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gdk-pixbuf cairo ];
   };
 
   gpgme = attrs: {
@@ -290,6 +306,41 @@ in
     in ''
       substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
     '';
+  } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
+    cargoRoot = "ext/fast_mmaped_file_rs";
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = stdenv.mkDerivation {
+        inherit (buildRubyGem { inherit (attrs) gemName version source; })
+          name
+          src
+          unpackPhase
+          nativeBuildInputs
+        ;
+        dontBuilt = true;
+        installPhase = ''
+          cp -R ext/fast_mmaped_file_rs $out
+        '';
+      };
+      hash = if lib.versionAtLeast attrs.version "1.1.1"
+        then "sha256-RsN5XWX7Mj2ORccM0eczY+44WXsbXNTnJVcCMvnOATk="
+        else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+    };
+    nativeBuildInputs = [
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+      rustPlatform.bindgenHook
+    ];
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
+    preBuild = ''
+      cat ../.cargo/config > ext/fast_mmaped_file_rs/.cargo/config.toml
+      sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+    '';
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
+    '';
   };
 
   glib2 = attrs: {
@@ -320,10 +371,41 @@ in
     dontStrip = stdenv.isDarwin;
   };
 
+  gtk3 = attrs: {
+    nativeBuildInputs = [
+      binutils
+      pkg-config
+    ] ++ lib.optionals stdenv.isLinux [
+      util-linux
+      libselinux
+      libsepol
+    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    propagatedBuildInputs = [
+      atk
+      gdk-pixbuf
+      fribidi
+      gobject-introspection
+      gtk3
+      cairo
+      harfbuzz
+      lerc
+      libdatrie
+      libthai
+      pcre
+      pcre2
+      xorg.libpthreadstubs
+      xorg.libXdmcp
+      xorg.libXtst
+      libxkbcommon
+      libepoxy
+    ];
+    dontStrip = stdenv.isDarwin;
+  };
+
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkg-config pcre2 ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 glib ];
   };
 
   gollum = attrs: {
@@ -332,6 +414,13 @@ in
       substituteInPlace bin/gollum \
         --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
     '';
+  };
+
+  google-protobuf = attrs:
+    lib.optionalAttrs (lib.versionAtLeast attrs.version "3.25.0") {
+    # Fails on 3.25.0 with:
+    #   convert.c:312:32: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+    hardeningDisable = [ "format" ];
   };
 
   grpc = attrs: {
@@ -368,8 +457,24 @@ in
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
   };
 
+  hpricot = attrs: {
+    dontBuild = false;
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./hpricot-fix-incompatible-function-pointer-conversion.patch
+    ];
+  };
+
   iconv = attrs: {
-    buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    dontBuild = false;
+    buildFlags = lib.optionals stdenv.isDarwin [
+      "--with-iconv-dir=${lib.getLib libiconv}"
+      "--with-iconv-include=${lib.getDev libiconv}/include"
+    ];
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./iconv-fix-incompatible-function-pointer-conversions.patch
+    ];
   };
 
   idn-ruby = attrs: {
@@ -392,7 +497,7 @@ in
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python2 ];
+    buildInputs = [ which nodejs.libv8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
     # The gem includes broken symlinks which are ignored during unpacking, but
@@ -412,7 +517,7 @@ in
   };
 
   execjs = attrs: {
-    propagatedBuildInputs = [ v8 ];
+    propagatedBuildInputs = [ nodejs.libv8 ];
   };
 
   libxml-ruby = attrs: {
@@ -420,8 +525,8 @@ in
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
     ] ++ lib.optionals stdenv.isDarwin [
-      "--with-iconv-dir=${libiconv}"
-      "--with-opt-include=${libiconv}/include"
+      "--with-iconv-dir=${lib.getLib libiconv}"
+      "--with-opt-include=${lib.getDev libiconv}/include"
     ];
   };
 
@@ -486,10 +591,6 @@ in
     '';
   };
 
-  msgpack = attrs: {
-    buildInputs = [ msgpack ];
-  };
-
   mysql = attrs: {
     buildInputs = [ libmysqlclient zlib openssl ];
   };
@@ -506,7 +607,7 @@ in
     ];
   };
 
-  nokogiri = attrs: {
+  nokogiri = attrs: ({
     buildFlags = [
       "--use-system-libraries"
       "--with-zlib-lib=${zlib.out}/lib"
@@ -521,7 +622,9 @@ in
       "--with-iconv-dir=${libiconv}"
       "--with-opt-include=${libiconv}/include"
     ];
-  };
+  } // lib.optionalAttrs stdenv.isDarwin {
+    buildInputs = [ libxml2 ];
+  });
 
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
@@ -540,14 +643,6 @@ in
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
     dontBuild = false;
-    patches = [
-      # fix ruby 3.1 https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3
-      (fetchpatch {
-        url = "https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3/commits/b596b919bc7857fdc0fc1c61a8cb7eab32cfc2db.patch";
-        hash = "sha256-AzGTQaD/e6X4LOMuXhy/WhbayhWKYCGHXPFlzLRWyPM=";
-        stripLen = 1;
-      })
-    ];
   };
 
   pango = attrs: {
@@ -561,7 +656,7 @@ in
     ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ libdatrie libthai ]
       ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gtk2 ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gtk2 ];
   };
 
   patron = attrs: {
@@ -709,10 +804,7 @@ in
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
-  } // (lib.optionalAttrs stdenv.isDarwin {
-    # https://github.com/NixOS/nixpkgs/issues/19098
-    buildFlags = [ "--disable-lto" ];
-  });
+  };
 
   sass-embedded = attrs: {
     # Patch the Rakefile to use our dart-sass and not try to fetch anything.

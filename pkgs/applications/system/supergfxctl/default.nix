@@ -1,33 +1,22 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, fetchpatch
 , pkg-config
 , systemd
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "supergfxctl";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "supergfxctl";
     rev = version;
-    hash = "sha256-AThaZ9dp5T/DtLPE6gZ9qgkw0xksiq+VCL9Y4G41voE=";
+    hash = "sha256-gjMLyT3pvQhmjz9SFbYlDAqg+tCX5ORkCkcnyBzO5ws=";
   };
 
-  # fix reported version in Cargo.lock
-  # submitted upstream: https://gitlab.com/asus-linux/supergfxctl/-/merge_requests/31
-  # FIXME: remove for next update
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://gitlab.com/asus-linux/supergfxctl/-/commit/8812dd208791d162881d72f785650a3344ec5151.diff";
-      hash = "sha256-eFFj2nIwGXHV1vMIpZvdvFPtfNLDfgqyGRt+VvB03LE=";
-    })
-  ];
-
-  cargoSha256 = "sha256-gbRGUWfpCQjCxuTdQ+qwOeCDU17G3nNFkIPAgzmeL+E=";
+  cargoHash = "sha256-ndugyiAYPDyue2Ajxx22BNvYc9iBTxZqP5OxaqmC7U0=";
 
   postPatch = ''
     substituteInPlace data/supergfxd.service --replace /usr/bin/supergfxd $out/bin/supergfxd
@@ -47,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A GPU switching utility, mostly for ASUS laptops";
+    description = "GPU switching utility, mostly for ASUS laptops";
     homepage = "https://gitlab.com/asus-linux/supergfxctl";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];

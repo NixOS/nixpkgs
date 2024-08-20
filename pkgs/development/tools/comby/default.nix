@@ -16,7 +16,7 @@ let
       inherit pname preBuild;
       version = "1.8.1";
       duneVersion = "3";
-      minimalOcamlVersion = "4.08.1";
+      minimalOCamlVersion = "4.08.1";
       doCheck = true;
 
       src = fetchFromGitHub {
@@ -47,6 +47,7 @@ let
 
       meta = {
         description = "Tool for searching and changing code structure";
+        mainProgram = "comby";
         license = lib.licenses.asl20;
         homepage = "https://comby.dev";
       };

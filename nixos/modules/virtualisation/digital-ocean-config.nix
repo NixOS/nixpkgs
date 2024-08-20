@@ -10,19 +10,19 @@ with lib;
       type = bool;
       default = false;
       example = true;
-      description = lib.mdDoc "Whether to set the root password from the Digital Ocean metadata";
+      description = "Whether to set the root password from the Digital Ocean metadata";
     };
     setSshKeys = mkOption {
       type = bool;
       default = true;
       example = true;
-      description = lib.mdDoc "Whether to fetch ssh keys from Digital Ocean";
+      description = "Whether to fetch ssh keys from Digital Ocean";
     };
     seedEntropy = mkOption {
       type = bool;
       default = true;
       example = true;
-      description = lib.mdDoc "Whether to run the kernel RNG entropy seeding script from the Digital Ocean vendor data";
+      description = "Whether to run the kernel RNG entropy seeding script from the Digital Ocean vendor data";
     };
   };
   config =
@@ -31,7 +31,7 @@ with lib;
       hostName = config.networking.hostName;
       doMetadataFile = "/run/do-metadata/v1.json";
     in mkMerge [{
-      fileSystems."/" = {
+      fileSystems."/" = lib.mkDefault {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
         fsType = "ext4";
@@ -41,11 +41,7 @@ with lib;
         kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
         initrd.kernelModules = [ "virtio_scsi" ];
         kernelModules = [ "virtio_pci" "virtio_net" ];
-        loader = {
-          grub.device = "/dev/vda";
-          timeout = 0;
-          grub.configurationLimit = 0;
-        };
+        loader.grub.devices = ["/dev/vda"];
       };
       services.openssh = {
         enable = mkDefault true;

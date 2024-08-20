@@ -1,27 +1,29 @@
-{ lib, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "parse";
-  version = "1.19.1";
+  version = "1.20.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "r1chardj0n3s";
     repo = "parse";
     rev = "refs/tags/${version}";
-    hash = "sha256-f08SlkGnwhSh0ajTKFqBAGGFvLj8nWBZVb6uClbRaP4=";
+    hash = "sha256-i/H3E/Z8vqt2jLS8BaVHJuD2Fbi7TP7EeOjXAJ16bWg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    rm .pytest.ini
+  '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/r1chardj0n3s/parse";

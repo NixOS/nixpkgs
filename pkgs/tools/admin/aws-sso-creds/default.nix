@@ -6,15 +6,15 @@
 }:
 buildGoModule rec {
   pname = "aws-sso-creds";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "jaxxstorm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V50t1L4+LZnMaET3LTp1nt7frNpu95KjgbQ5Onqt5sI=";
+    sha256 = "sha256-QYE+HvvBEWPxopVP8QMqb4lNRyAtVDewuiWzja9XdM4=";
   };
-  vendorHash = "sha256-0jXZpdiSHMn94MT3mPNtbfV7owluWhy1iAvQIBdebdE=";
+  vendorHash = "sha256-2EDpyw7Mqhvc0i6+UjWfNlvndRYJDaezRkOy9PBeD1Y=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -3,13 +3,12 @@
 buildDunePackage {
   pname = "conduit-lwt";
   inherit (conduit) version src;
-  duneVersion = "3";
 
   buildInputs = [ ppx_sexp_conv ];
 
   propagatedBuildInputs = [ conduit lwt sexplib ];
 
   meta = conduit.meta // {
-    description = "A network connection establishment library for Lwt";
+    description = "Network connection establishment library for Lwt";
   };
 }

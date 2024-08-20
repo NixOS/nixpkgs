@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pytest-lazy-fixture
-, numpy
-, networkx
-, pydicom
-, colorama
-, typeguard
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  networkx,
+  numpy,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typeguard,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -29,35 +30,46 @@ buildPythonPackage rec {
   postPatch = ''
     # Asked in https://github.com/Project-MONAI/monai-deploy-app-sdk/issues/450
     # if this patch can be incorporated upstream.
-    substituteInPlace pyproject.toml --replace 'versioneer-518' 'versioneer'
+    substituteInPlace pyproject.toml \
+      --replace-fail 'versioneer-518' 'versioneer'
   '';
 
-  nativeBuildInputs = [ versioneer ];
+  build-system = [
+    versioneer
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     networkx
     colorama
     typeguard
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-lazy-fixture ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-lazy-fixture
+  ];
+
   disabledTests = [
     # requires Docker daemon:
     "test_packager"
   ];
+
   pythonImportsCheck = [
     "monai.deploy"
     "monai.deploy.core"
     # "monai.deploy.operators" should be imported as well but
     # requires some "optional" dependencies
-    # like highdicom (which is not packaged yet) and pydicom
+    # like highdicom and pydicom
   ];
 
   meta = with lib; {
     description = "Framework and tools to design, develop and verify AI applications in healthcare imaging";
+    mainProgram = "monai-deploy";
     homepage = "https://monai.io/deploy.html";
+    changelog = "https://github.com/Project-MONAI/monai-deploy-app-sdk/blob/main/docs/source/release_notes/v${version}.md";
     license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

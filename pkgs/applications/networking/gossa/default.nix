@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildGoModule
 }:
@@ -25,8 +24,9 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/pldubouilh/gossa";
-    description = "A fast and simple multimedia fileserver";
+    description = "Fast and simple multimedia fileserver";
     license = licenses.mit;
     maintainers = with maintainers; [ dsymbol ];
+    mainProgram = "gossa";
   };
 }

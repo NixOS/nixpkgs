@@ -1,25 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "nextcloudmonitor";
-  version = "1.4.0";
+  version = "1.5.1";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "meichthys";
     repo = "nextcloud_monitor";
-    rev = "v${version}";
-    hash = "sha256-jyC8oOFr5yVtIJNxVCLNTyFpJTdjHu8t6Xs4il45ysI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HQLaHuvXWtHkG1dzD7ldvYKepTB4qQqzpKLYMR+lor4=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # no tests implemented
   doCheck = false;

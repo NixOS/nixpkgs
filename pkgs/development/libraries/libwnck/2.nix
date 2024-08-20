@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
 
   meta = {
-    description = "A library for creating task lists and pagers";
+    description = "Library for creating task lists and pagers";
     homepage = "https://gitlab.gnome.org/GNOME/libwnck";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ johnazoidberg ];

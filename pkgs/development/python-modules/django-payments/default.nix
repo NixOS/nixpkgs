@@ -1,23 +1,25 @@
-{ lib
-, buildPythonPackage
-, braintree
-, cryptography
-, django
-, django-phonenumber-field
-, fetchFromGitHub
-, mercadopago
-, pythonOlder
-, requests
-, setuptools-scm
-, sphinx-rtd-theme
-, stripe
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  braintree,
+  cryptography,
+  django,
+  django-phonenumber-field,
+  fetchFromGitHub,
+  mercadopago,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
+  sphinx-rtd-theme,
+  stripe,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "django-payments";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,16 +32,15 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "django-phonenumber-field[phonenumberslite]" "django-phonenumber-field"
+      --replace-fail "django-phonenumber-field[phonenumberslite]" "django-phonenumber-field"
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-phonenumber-field
     requests
@@ -48,14 +49,20 @@ buildPythonPackage rec {
   # require internet connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "payments"
-  ];
+  pythonImportsCheck = [ "payments" ];
 
   passthru.optional-dependencies = {
-    all = [ braintree /* suds-community */ mercadopago cryptography xmltodict stripe ];
+    all = [
+      braintree # suds-community
+      mercadopago
+      cryptography
+      xmltodict
+      stripe
+    ];
     braintree = [ braintree ];
-    cybersource = [ /* suds-community */ ];
+    cybersource = [
+      # suds-community
+    ];
     docs = [ sphinx-rtd-theme ];
     mercadopago = [ mercadopago ];
     sagepay = [ cryptography ];
@@ -64,7 +71,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Universal payment handling for Django.";
+    description = "Universal payment handling for Django";
     homepage = "https://github.com/jazzband/django-payments/";
     changelog = "https://github.com/jazzband/django-payments/releases/tag/v${version}";
     license = licenses.bsd3;

@@ -1,14 +1,14 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub, unstableGitUpdater }:
 
 stdenvNoCC.mkDerivation {
   pname = "publicsuffix-list";
-  version = "unstable-2023-02-16";
+  version = "0-unstable-2024-06-19";
 
   src = fetchFromGitHub {
     owner = "publicsuffix";
     repo = "list";
-    rev = "8ec4d3049fe139f92937b6137155c33b81dcaf18";
-    hash = "sha256-wA8zk0iADFNP33veIf+Mfx22zdMzHsMNWEizMp1SnuA=";
+    rev = "92c74a6cde6092a5e80531c0662e1055abeb975e";
+    hash = "sha256-fkfjR2A2nf3/F16Pn0hCwXtAd26TbUVA5gIv+J4DOjc=";
   };
 
   dontBuild = true;
@@ -20,6 +20,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://publicsuffix.org/";

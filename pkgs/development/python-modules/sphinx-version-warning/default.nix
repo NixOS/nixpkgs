@@ -1,15 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonImportsCheckHook
-, sphinx
-, sphinxHook
-, sphinx-autoapi
-, sphinx-rtd-theme
-, sphinx-tabs
-, sphinx-prompt
-, sphinxemoji
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonImportsCheckHook,
+  pythonOlder,
+  setuptools,
+  sphinx,
+  sphinx-autoapi,
+  sphinx-prompt,
+  sphinx-rtd-theme,
+  sphinx-tabs,
+  sphinxemoji,
+  sphinxHook,
 }:
 
 # Latest tagged release release "1.1.2" (Nov 2018) does not contain
@@ -18,9 +21,14 @@
 buildPythonPackage {
   pname = "sphinx-version-warning";
   version = "unstable-2019-08-10";
-  format = "pyproject";
+  pyproject = true;
 
-  outputs = [ "out" "doc" ];
+  disabled = pythonOlder "3.7";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "humitos";
@@ -40,21 +48,23 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     pythonImportsCheckHook
-    sphinxHook
     sphinx-autoapi
+    sphinx-prompt
     sphinx-rtd-theme
     sphinx-tabs
-    sphinx-prompt
     sphinxemoji
+    sphinxHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [ sphinx ];
+  buildInputs = [ sphinx ];
 
   pythonImportsCheck = [ "versionwarning" ];
 
   meta = with lib; {
-    description = "A sphinx extension to show a warning banner at the top of your documentation";
+    description = "Sphinx extension to show a warning banner at the top of your documentation";
     homepage = "https://github.com/humitos/sphinx-version-warning";
+    changelog = "https://github.com/humitos/sphinx-version-warning/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ kaction ];
   };

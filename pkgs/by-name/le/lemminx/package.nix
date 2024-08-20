@@ -1,12 +1,23 @@
 { lib
 , fetchFromGitHub
 , makeWrapper
-, jre
+, jdk_headless
+, jre_minimal
 , maven
 , writeScript
 , lemminx
 }:
 
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.logging"
+      "java.xml"
+    ];
+    jdk = jdk_headless;
+  };
+in
 maven.buildMavenPackage rec {
   pname = "lemminx";
   version = "0.27.0";
@@ -35,7 +46,8 @@ maven.buildMavenPackage rec {
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
 
-  mvnHash = "sha256-sIiCp1AorVQXt13Tq0vw9jGioG3zcQMqqKS/Q0Tf4MQ=";
+  mvnJdk = jdk_headless;
+  mvnHash = "sha256-jIvYUATcNUZZmZcXbUMqyHGX4CYiXqL0jkji+zrCYJY=";
 
   buildOffline = true;
 
@@ -98,6 +110,7 @@ maven.buildMavenPackage rec {
 
   meta = with lib; {
     description = "XML Language Server";
+    mainProgram = "lemminx";
     homepage = "https://github.com/eclipse/lemminx";
     license = licenses.epl20;
     maintainers = with maintainers; [ tricktron ];

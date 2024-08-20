@@ -1,0 +1,13 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 03f64e53..9e2ddcb6 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -15,6 +15,7 @@ serde_json = "1.0"
+ serde = { version = "1.0", features = ["derive"] }
+ # Tauri
+ tauri = { version = "1.2.4", features = [
++        "updater",
+         "process-relaunch",
+         "window-close",
+         "notification-all",
+

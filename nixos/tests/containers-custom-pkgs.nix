@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
 in {
   name = "containers-custom-pkgs";
   meta = {
-    maintainers = with lib.maintainers; [ adisbladis erikarvstedt ];
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 
   nodes.machine = { config, ... }: {

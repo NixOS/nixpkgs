@@ -7,7 +7,7 @@
 , libGL
 , atkmm
 , pcre
-, gtkmm3
+, gtkmm4
 , pugixml
 , mesa
 , pciutils
@@ -15,26 +15,36 @@
 
 stdenv.mkDerivation rec {
   pname = "adriconf";
-  version = "2.5.1";
+  version = "2.7.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RhHmrjb5TvJnZ6R0aefqdmwMBpu4iTrxSHru7JAwrgs=";
+    sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm libGL atkmm pcre gtkmm3 pugixml mesa pciutils ];
+  buildInputs = [ libdrm libGL atkmm pcre gtkmm4 pugixml mesa pciutils ];
 
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 
+  postInstall = ''
+    install -Dm444 ../flatpak/org.freedesktop.adriconf.metainfo.xml \
+      -t $out/share/metainfo/
+    install -Dm444 ../flatpak/org.freedesktop.adriconf.desktop \
+      -t $out/share/applications/
+    install -Dm444 ../flatpak/org.freedesktop.adriconf.png \
+      -t $out/share/icons/hicolor/256x256/apps/
+  '';
+
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/adriconf/";
-    description = "A GUI tool used to configure open source graphics drivers";
+    description = "GUI tool used to configure open source graphics drivers";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ muscaln ];
     platforms = platforms.linux;
+    mainProgram = "adriconf";
   };
 }

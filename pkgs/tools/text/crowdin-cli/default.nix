@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "crowdin-cli";
-  version = "3.15.0";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://github.com/crowdin/${pname}/releases/download/${version}/${pname}.zip";
-    hash = "sha256-ky+JNRay9VNscCXeGiSOIZlLKEcKv95TW/Kx2UtD1hA=";
+    hash = "sha256-EpRGEn+cteFt4tn70bycIrIIjk+ZUO2n5SK14Hc2Qq0=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper unzip ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     mainProgram = "crowdin";
     homepage = "https://github.com/crowdin/crowdin-cli/";
-    description = "A command-line client for the Crowdin API";
+    description = "Command-line client for the Crowdin API";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ DamienCassou ];

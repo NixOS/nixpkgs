@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, nix-update-script
 , cargo
 , meson
 , ninja
@@ -13,8 +12,6 @@
 , gst_all_1
 , gtk4
 , libadwaita
-, llvmPackages
-, glibc
 , pipewire
 , wayland
 , wrapGAppsHook4
@@ -23,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ashpd-demo";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "bilelmoussaoui";
     repo = "ashpd";
     rev = "${finalAttrs.version}-demo";
-    hash = "sha256-isc0+Mke6XeCCLiuxnjHqrnlGqYuQnmcU1acM14UOno=";
+    hash = "sha256-fIyJEUcyTcjTbBycjuJb99wALQelMT7Zq6PHKcL2F80=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = "${finalAttrs.src}/ashpd-demo";
-    hash = "sha256-9L/WFL2fLCRahjGCVdgV+3HfDMrntdIWcuuOJbzdPiI=";
+    hash = "sha256-ldflCBErM9w3eO2DwWfYTrdO7lowZtqfj7Fft6Crl1w=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";
+    mainProgram = "ashpd-demo";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];

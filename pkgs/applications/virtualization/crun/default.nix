@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.10";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    hash = "sha256-deva/IPyjcGGAnUIofev3RV2ia7uI+OgSiUz/GtHhxE=";
+    hash = "sha256-OhDzScs8xGs7kRn/xZRPwyqIszD0OuuY4ymrJ9QVDvM=";
     fetchSubmodules = true;
   };
 
@@ -75,10 +75,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/containers/crun/releases/tag/${version}";
-    description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
+    description = "Fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
+    mainProgram = "crun";
   };
 }

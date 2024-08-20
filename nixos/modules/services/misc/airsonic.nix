@@ -9,18 +9,18 @@ in {
   options = {
 
     services.airsonic = {
-      enable = mkEnableOption (lib.mdDoc "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)");
+      enable = mkEnableOption "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)";
 
       user = mkOption {
         type = types.str;
         default = "airsonic";
-        description = lib.mdDoc "User account under which airsonic runs.";
+        description = "User account under which airsonic runs.";
       };
 
       home = mkOption {
         type = types.path;
         default = "/var/lib/airsonic";
-        description = lib.mdDoc ''
+        description = ''
           The directory where Airsonic will create files.
           Make sure it is writable.
         '';
@@ -29,7 +29,7 @@ in {
       virtualHost = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
@@ -37,7 +37,7 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc ''
+        description = ''
           The host name or IP address on which to bind Airsonic.
           The default value is appropriate for first launch, when the
           default credentials are easy to guess. It is also appropriate
@@ -50,7 +50,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 4040;
-        description = lib.mdDoc ''
+        description = ''
           The port on which Airsonic will listen for
           incoming HTTP traffic. Set to 0 to disable.
         '';
@@ -59,7 +59,7 @@ in {
       contextPath = mkOption {
         type = types.path;
         default = "/";
-        description = lib.mdDoc ''
+        description = ''
           The context path, i.e., the last part of the Airsonic
           URL. Typically '/' or '/airsonic'. Default '/'
         '';
@@ -68,7 +68,7 @@ in {
       maxMemory = mkOption {
         type = types.int;
         default = 100;
-        description = lib.mdDoc ''
+        description = ''
           The memory limit (max Java heap size) in megabytes.
           Default: 100
         '';
@@ -78,22 +78,19 @@ in {
         type = types.listOf types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
         defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
-        description = lib.mdDoc ''
+        description = ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside
           ''${config.${opt.home}}/transcoders.
         '';
       };
 
-      jre = mkOption {
-        type = types.package;
-        default = pkgs.jre8;
-        defaultText = literalExpression "pkgs.jre8";
-        description = lib.mdDoc ''
-          JRE package to use.
-
+      jre = mkPackageOption pkgs "jre8" {
+        extraDescription = ''
+          ::: {.note}
           Airsonic only supports Java 8, airsonic-advanced requires at least
           Java 11.
+          :::
         '';
       };
 
@@ -101,11 +98,11 @@ in {
         type = types.path;
         default = "${pkgs.airsonic}/webapps/airsonic.war";
         defaultText = literalExpression ''"''${pkgs.airsonic}/webapps/airsonic.war"'';
-        description = lib.mdDoc "Airsonic war file to use.";
+        description = "Airsonic war file to use.";
       };
 
       jvmOptions = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Extra command line options for the JVM running AirSonic.
           Useful for sending jukebox output to non-default alsa
           devices.
@@ -144,7 +141,7 @@ in {
           -Dairsonic.home=${cfg.home} \
           -Dserver.address=${cfg.listenAddress} \
           -Dserver.port=${toString cfg.port} \
-          -Dairsonic.contextPath=${cfg.contextPath} \
+          -Dserver.context-path=${cfg.contextPath} \
           -Djava.awt.headless=true \
           ${optionalString (cfg.virtualHost != null)
             "-Dserver.use-forward-headers=true"} \

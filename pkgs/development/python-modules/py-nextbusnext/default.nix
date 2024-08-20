@@ -1,31 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-nextbusnext";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "2.0.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ViViDboarder";
     repo = "py_nextbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-044VDg7bQNNnRGiPZW9gwo3Bzq0LPYKTrd3EgmBOcGA=";
+    hash = "sha256-mmuD5edgcesMFsdfbWJyzOuKLCgsqvUPG61j/dA6Crc=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "py_nextbus"
-  ];
+  dependencies = [ requests ];
+
+  pythonImportsCheck = [ "py_nextbus" ];
+
+  # upstream has no tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Minimalistic Python client for the NextBus public API";

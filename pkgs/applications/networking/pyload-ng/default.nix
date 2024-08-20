@@ -1,41 +1,56 @@
-{ lib, fetchPypi, python3 }:
+{
+  lib,
+  fetchPypi,
+  nixosTests,
+  python3,
+}:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.5.0b3.dev72";
+  version = "0.5.0b3.dev85";
   pname = "pyload-ng";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pcbJc23Fylh/JoWRmbZmC8xUzUqh2ej6gT+B2w8DHFQ=";
+    inherit version;
+    # The uploaded tarball uses an underscore in recent releases
+    pname = "pyload_ng";
+    hash = "sha256-KLpfh53JKqe0kZLcQ1C4fXFFYeO5pPhia9fRxWsbIHY=";
   };
+
+  patches = [
+    # Makes it possible to change the default username/password in the module
+    ./declarative-default-user.patch
+    # Makes it possible to change the configuration through environment variables
+    # in the NixOS module (aimed mostly at listen address/port)
+    ./declarative-env-config.patch
+  ];
 
   postPatch = ''
     # relax version bounds
-    sed -i 's/\([A-z0-9]*\)~=.*$/\1/' setup.cfg
-    # not sure what Flask-Session2 is but flask-session works just fine
-    sed -i '/Flask-Session2/d' setup.cfg
+    sed -i -E 's/([A-z0-9]*)~=[^;]*(.*)/\1\2/' setup.cfg
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    bitmath
-    certifi
-    cheroot
-    cryptography
-    filetype
-    flask
-    flask-babel
-    flask-caching
-    flask-compress
-    flask-session
-    flask-themes2
-    js2py
-    pycurl
-    semver
-    setuptools
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      bitmath
+      certifi
+      cheroot
+      cryptography
+      filetype
+      flask
+      flask-babel
+      flask-caching
+      flask-compress
+      flask-session
+      flask-themes2
+      pycurl
+      semver
+      setuptools
+    ]
+    ++ (if pythonOlder "3.12" then [ js2py ] else [ dukpy ]);
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     plugins = with python3.pkgs; [
       beautifulsoup4 # for some plugins
       colorlog # colorful console logging
@@ -45,10 +60,15 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) pyload;
+  };
+
+  meta = {
     description = "Free and open-source download manager with support for 1-click-hosting sites";
     homepage = "https://github.com/pyload/pyload";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ruby0b ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ ruby0b ];
+    mainProgram = "pyload";
   };
 }

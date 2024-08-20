@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch, pkg-config, openssl, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zee";
@@ -28,9 +28,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-fBBjtjM7AnyAL6EOFstL4h6yS+UoLgxck6Mc0tJcXaI=";
 
   meta = with lib; {
-    description = "A modern text editor for the terminal written in Rust";
+    description = "Modern text editor for the terminal written in Rust";
     homepage = "https://github.com/zee-editor/zee";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner ];
+    mainProgram = "zee";
   };
 }

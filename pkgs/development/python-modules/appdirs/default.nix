@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "appdirs";
   version = "1.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A python module for determining appropriate platform-specific dirs";
+    description = "Python module for determining appropriate platform-specific dirs";
     homepage = "https://github.com/ActiveState/appdirs";
     license = lib.licenses.mit;
   };

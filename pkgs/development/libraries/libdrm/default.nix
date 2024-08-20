@@ -1,26 +1,30 @@
 { stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
-, libpthreadstubs, libpciaccess
+, libpthreadstubs
+, withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess, libpciaccess
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.116";
+  version = "2.4.122";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RsU/QHNeo9JtYUKX8VX2ExpRBiSiQnT2VPZGnKkFM5o=";
+    hash = "sha256-2fUHm3d9/8qTAMzFaxCpNYjN+8nd4vrhEZQN+2KS8lE=";
   };
 
   outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ pkg-config meson ninja docutils ];
-  buildInputs = [ libpthreadstubs libpciaccess ]
+  buildInputs = [ libpthreadstubs ]
+    ++ lib.optional withIntel libpciaccess
     ++ lib.optional withValgrind valgrind-light;
 
   mesonFlags = [
     "-Dinstall-test-programs=true"
     "-Dcairo-tests=disabled"
+    (lib.mesonEnable "intel" withIntel)
     (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals stdenv.hostPlatform.isAarch [
@@ -28,6 +32,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Detnaviv=disabled"
   ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.freedesktop.org/mesa/drm.git";
+      rev-prefix = "libdrm-";
+      # Skip versions like libdrm-2_0_2 that happen to go last when
+      # sorted.
+      ignoredVersions = "_";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";

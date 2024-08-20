@@ -20,13 +20,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "61";
+  version = "65";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    hash = "sha256-7qkQelB0Y+DBihhaYVVQjK66pk8p2Sjhno87bW554SY=";
+    hash = "sha256-5Hpj/RkD11bNcr9/gQG0Y7BNMsh1BGZQiN4IMbI4osc=";
   };
 
   format = "other";
@@ -69,6 +69,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "LaTeX editor written in Python with Gtk";
+    mainProgram = "setzer";
     homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

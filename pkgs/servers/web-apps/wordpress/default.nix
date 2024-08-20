@@ -1,7 +1,11 @@
 { callPackage }: builtins.mapAttrs (_: callPackage ./generic.nix) rec {
-  wordpress = wordpress6_3;
-  wordpress6_3 = {
-    version = "6.3.2";
-    hash = "sha256-Jo2/Vlm4Ml24ucPI6ZHs2mkbpY2rZB1dofmGXNPweA8=";
+  wordpress = wordpress_6_6;
+  wordpress_6_5 = {
+    version = "6.5.5";
+    hash = "sha256-bIRmTqmzIRo1KdhAcJa1GxhVcTEiEaLFPzlNFbzfLcQ=";
+  };
+  wordpress_6_6 = {
+    version = "6.6.1";
+    hash = "sha256-YW6BhlP48okxLrpsJwPgynSHpbdRqyMoXaq9IBd8TlU=";
   };
 }

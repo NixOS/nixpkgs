@@ -1,21 +1,32 @@
 { stdenv, lib, fetchFromGitLab
-, autoreconfHook, pkg-config, python3, addOpenGLRunpath
+, fetchpatch
+, autoreconfHook, pkg-config, python3, addDriverRunpath
 , libX11, libXext, xorgproto
 }:
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "sha256-p/vLxagN9nCYw1JpUmZetgctQbrp3Wo33OVFrtvmnjQ=";
+    sha256 = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
+  patches = [
+    # Enable 64-bit file APIs on 32-bit systems:
+    #   https://gitlab.freedesktop.org/glvnd/libglvnd/-/merge_requests/288
+    (fetchpatch {
+      name = "large-file.patch";
+      url = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/commit/956d2d3f531841cabfeddd940be4c48b00c226b4.patch";
+      hash = "sha256-Y6YCzd/jZ1VZP9bFlHkHjzSwShXeA7iJWdyfxpgT2l0=";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 addDriverRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -30,7 +41,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString ([
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
-    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
+    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addDriverRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
 
     "-Wno-error=array-bounds"
   ] ++ lib.optionals stdenv.cc.isClang [
@@ -50,13 +61,13 @@ stdenv.mkDerivation rec {
   # Note that libEGL does not need it because it uses driver config files which should
   # contain absolute paths to libraries.
   postFixup = ''
-    addOpenGLRunpath $out/lib/libGLX.so
+    addDriverRunpath $out/lib/libGLX.so
   '';
 
-  passthru = { inherit (addOpenGLRunpath) driverLink; };
+  passthru = { inherit (addDriverRunpath) driverLink; };
 
   meta = with lib; {
-    description = "The GL Vendor-Neutral Dispatch library";
+    description = "GL Vendor-Neutral Dispatch library";
     longDescription = ''
       libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
       calls between multiple vendors. It allows multiple drivers from different
@@ -69,6 +80,8 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
     license = with licenses; [ mit bsd1 bsd3 gpl3Only asl20 ];
     platforms = platforms.unix;
+    # https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/212
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = with maintainers; [ primeos ];
   };
 }

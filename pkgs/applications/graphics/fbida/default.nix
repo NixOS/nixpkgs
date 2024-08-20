@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, libGL
 , libjpeg
 , libexif
 , giflib
@@ -17,6 +18,7 @@
 , sane-backends
 , libXpm
 , libepoxy
+, pixman
 , poppler
 , mesa
 , lirc
@@ -42,6 +44,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config which ];
   buildInputs = [
+    libGL
     libexif
     libjpeg
     libpng
@@ -56,6 +59,7 @@ stdenv.mkDerivation rec {
     libdrm
     libXpm
     libepoxy
+    pixman
     poppler
     lirc
     mesa

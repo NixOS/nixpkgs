@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Unicode font";
+    description = "Unicode font";
     license = licenses.mit;
     maintainers = [ maintainers.raskin ];
   };

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/selmf/unarr";
-    description = "A lightweight decompression library with support for rar, tar and zip archives";
+    description = "Lightweight decompression library with support for rar, tar and zip archives";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;

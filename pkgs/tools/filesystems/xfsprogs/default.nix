@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.4.0";
+  version = "6.9.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-wxhoQYv79Jo6nEf8cM3/3p2W9P8AUb0EoIgeZlRkgQQ=";
+    hash = "sha256-l1KEeD+z+8ThrmQL2ATXiOQjeoawdYKs7oa25I9lIbc=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     description = "SGI XFS utilities";
     license = with licenses; [ gpl2Only lgpl21 gpl3Plus ];  # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dezgeg ajs124 ];
+    maintainers = with maintainers; [ dezgeg ajs124 ] ++ teams.helsinki-systems.members;
   };
 }

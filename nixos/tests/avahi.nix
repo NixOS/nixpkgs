@@ -9,14 +9,14 @@
 import ./make-test-python.nix {
   name = "avahi";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes = let
     cfg = { ... }: {
       services.avahi = {
         enable = true;
-        nssmdns = true;
+        nssmdns4 = true;
         publish.addresses = true;
         publish.domain = true;
         publish.enable = true;

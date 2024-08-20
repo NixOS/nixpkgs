@@ -16,22 +16,24 @@
 , qtsensors
 , qttools
 , qtxmlpatterns
+, extra-cmake-modules
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcompris";
-  version = "3.3";
+  version = "4.1";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
-    hash = "sha256-8hqiq1wYw4irbOXCrwcJqTMuLISzSmSqPuw2Rn8XzQA=";
+    url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Pz0cOyBfiexKHUsHXm18Zw2FKu7b7vVuwy4Vu4daBoU=";
   };
 
   cmakeFlags = [
-    "-DQML_BOX2D_LIBRARY=${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1"
+    (lib.cmakeFeature "QML_BOX2D_LIBRARY" "${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1")
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
-  nativeBuildInputs = [ cmake gettext ninja qttools wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake extra-cmake-modules gettext ninja qttools wrapQtAppsHook ];
 
   buildInputs = [
     qmlbox2d
@@ -51,19 +53,20 @@ stdenv.mkDerivation rec {
   ]);
 
   postInstall = ''
-    install -Dm444 ../org.kde.gcompris.desktop     -t $out/share/applications
     install -Dm444 ../org.kde.gcompris.appdata.xml -t $out/share/metainfo
-    install -Dm444 ../images/256-apps-gcompris-qt.png $out/share/icons/hicolor/256x256/apps/gcompris-qt.png
 
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
+  # we need a graphical environment for the tests
+  doCheck = false;
+
   meta = with lib; {
-    description = "A high quality educational software suite, including a large number of activities for children aged 2 to 10";
+    description = "High quality educational software suite, including a large number of activities for children aged 2 to 10";
     homepage = "https://gcompris.net/";
     license = licenses.gpl3Plus;
     mainProgram = "gcompris-qt";
     maintainers = with maintainers; [ guibou ];
     platforms = platforms.linux;
   };
-}
+})

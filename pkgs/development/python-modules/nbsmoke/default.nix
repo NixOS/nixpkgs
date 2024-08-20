@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, jupyter-client
-, ipykernel
-, holoviews
-, nbformat
-, nbconvert
-, pyflakes
-, requests
-, beautifulsoup4
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  jupyter-client,
+  ipykernel,
+  holoviews,
+  nbformat,
+  nbconvert,
+  pyflakes,
+  requests,
+  beautifulsoup4,
 }:
 
 buildPythonPackage rec {
   pname = "nbsmoke";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

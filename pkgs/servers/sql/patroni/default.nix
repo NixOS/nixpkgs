@@ -6,24 +6,17 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
-  version = "2.1.3";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-cBkiBrty/6A3rIv9A1oh8GvPjwxhHwYEKuDIsNzHw1g=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-7Tq7i6AH6tt9Uyx276rVBwvbxxETRyVKnhhTijW02sU=";
   };
 
-  # cdiff renamed to ydiff; remove when patroni source reflects this.
-  postPatch = ''
-    for i in requirements.txt patroni/ctl.py tests/test_ctl.py; do
-      substituteInPlace $i --replace cdiff ydiff
-    done
-  '';
-
   propagatedBuildInputs = with pythonPackages; [
-    boto
+    boto3
     click
     consul
     dnspython
@@ -60,7 +53,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://patroni.readthedocs.io/en/latest/";
-    description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
+    description = "Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = teams.deshaw.members;

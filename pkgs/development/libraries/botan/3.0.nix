@@ -1,9 +1,9 @@
-{ callPackage, fetchpatch, lib, ... } @ args:
+{ callPackage, stdenv, lib, ... } @ args:
 
 callPackage ./generic.nix (args // {
-  baseVersion = "3.2";
+  baseVersion = "3.5";
   revision = "0";
-  sha256 = "BJyEeDX89u86niBrM94F3TiZnDJeJHSCdypVmNnl7OM=";
-  # reconsider removing this platform marking, when MacOS uses Clang 14.0+ by default.
-  badPlatforms = lib.platforms.darwin;
+  hash = "sha256-Z+ja4cokaNkN5OYByH1fMf9JKzjoq4vL0C3fcQTtip8=";
+  # this patch fixes build errors on MacOS with SDK 10.12, recheck to remove this again
+  extraPatches = lib.optionals stdenv.hostPlatform.isDarwin [ ./botan3-macos.patch ];
 })

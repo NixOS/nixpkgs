@@ -30,11 +30,12 @@ let
       linux_5_10_hardened
       linux_5_15_hardened
       linux_6_1_hardened
-      linux_6_5_hardened
+      linux_6_6_hardened
       linux_rt_5_4
       linux_rt_5_10
       linux_rt_5_15
       linux_rt_6_1
+      linux_rt_6_6
       linux_libre
 
       linux_testing;
@@ -43,6 +44,9 @@ let
 in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
   passthru = {
     inherit testsForLinuxPackages;
+
+    # Useful for development testing of all Kernel configs without building full Kernel
+    configfiles = mapAttrs (_: lP: lP.kernel.configfile) kernels;
 
     testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
   };

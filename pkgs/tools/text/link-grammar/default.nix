@@ -54,7 +54,7 @@ link-grammar = stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Grammar Checking library";
+    description = "Grammar Checking library";
     homepage = "https://www.abisource.com/projects/link-grammar/";
     changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${version}/ChangeLog";
     license = licenses.lgpl21Only;

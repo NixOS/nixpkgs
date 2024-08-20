@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pyproj
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  lxml,
+  pyproj,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.29.2";
+  version = "0.31.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dbL4VdnPszwiDO+UjluuyqeBRMKojTnZPEFKEYiIWS0=";
+    rev = version;
+    hash = "sha256-vjJsLavVOqTTrVtYbtA0G+nl0HanKeGtzNFFj92Frw8=";
   };
 
   postPatch = ''
@@ -41,36 +41,24 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "owslib"
-  ];
+  pythonImportsCheck = [ "owslib" ];
 
   preCheck = ''
     # _pytest.pathlib.ImportPathMismatchError: ('owslib.swe.sensor.sml', '/build/source/build/...
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  disabledTests = [
-    # Tests require network access
-    "test_ows_interfaces_wcs"
-    "test_wfs_110_remotemd"
-    "test_wfs_200_remotemd"
-    "test_wms_130_remotemd"
-    "test_wmts_example_informatievlaanderen"
-    "test_opensearch_creodias"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_ogcapi_records_pygeoapi"
-    "test_wms_getfeatureinfo_130"
+  pytestFlagsArray = [
+    # disable tests which require network access
+    "-m 'not online'"
   ];
 
   meta = with lib; {
     description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
-    changelog = "https://github.com/geopython/OWSLib/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/geopython/OWSLib/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = teams.geospatial.members;
   };

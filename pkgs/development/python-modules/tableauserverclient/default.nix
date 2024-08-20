@@ -1,35 +1,62 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchPypi
-, defusedxml
-, requests
-, packaging
-, requests-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchPypi,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.26";
+  version = "0.31";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vn7A7n0Z4kTtrm8MEoUJiv94K3qA/4Kx8lElhDM/LlI=";
+    hash = "sha256-e00/+yVKg7dGGq3Os+oWu/F93j5e9dnwWZxKwm+soqM=";
   };
 
-  propagatedBuildInputs = [ defusedxml requests packaging ];
+  postPatch = ''
+    # Remove vendorized versioneer
+    rm versioneer.py
+  '';
 
-  checkInputs = [ requests-mock ];
+  pythonRelaxDeps = [ "urllib3" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    setuptools
+    versioneer
+  ];
 
-  doCheck = false; # it attempts to create some file artifacts and fails
+  propagatedBuildInputs = [
+    defusedxml
+    requests
+    packaging
+  ];
 
-  meta = {
-    description = "A Python module for working with the Tableau Server REST API.";
-    homepage = "https://pypi.org/project/tableauserverclient/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+  nativeCheckInputs = [
+    requests-mock
+    pytestCheckHook
+  ];
+
+  # Tests attempt to create some file artifacts and fails
+  doCheck = false;
+
+  pythonImportsCheck = [ "tableauserverclient" ];
+
+  meta = with lib; {
+    description = "Module for working with the Tableau Server REST API";
+    homepage = "https://github.com/tableau/server-client-python";
+    changelog = "https://github.com/tableau/server-client-python/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = [ ];
   };
 }

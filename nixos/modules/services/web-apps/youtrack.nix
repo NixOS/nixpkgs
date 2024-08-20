@@ -1,137 +1,224 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.youtrack;
-
-  extraAttr = concatStringsSep " " (mapAttrsToList (k: v: "-D${k}=${v}") (stdParams // cfg.extraParams));
-  mergeAttrList = lib.foldl' lib.mergeAttrs {};
-
-  stdParams = mergeAttrList [
-    (optionalAttrs (cfg.baseUrl != null) {
-      "jetbrains.youtrack.baseUrl" = cfg.baseUrl;
-    })
-    {
-    "java.aws.headless" = "true";
-    "jetbrains.youtrack.disableBrowser" = "true";
-    }
-  ];
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "youtrack" "baseUrl" ] [ "services" "youtrack" "environmentalParameters" "base-url" ])
+    (lib.mkRenamedOptionModule [ "services" "youtrack" "port" ] [ "services" "youtrack" "environmentalParameters" "listen-port" ])
+    (lib.mkRemovedOptionModule [ "services" "youtrack" "maxMemory" ] "Please instead use `services.youtrack.generalParameters`.")
+    (lib.mkRemovedOptionModule [ "services" "youtrack" "maxMetaspaceSize" ] "Please instead use `services.youtrack.generalParameters`.")
+  ];
+
   options.services.youtrack = {
+    enable = lib.mkEnableOption "YouTrack service";
 
-    enable = mkEnableOption (lib.mdDoc "YouTrack service");
-
-    address = mkOption {
-      description = lib.mdDoc ''
+    address = lib.mkOption {
+      description = ''
         The interface youtrack will listen on.
       '';
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    baseUrl = mkOption {
-      description = lib.mdDoc ''
-        Base URL for youtrack. Will be auto-detected and stored in database.
-      '';
-      type = types.nullOr types.str;
-      default = null;
-    };
-
-    extraParams = mkOption {
+    extraParams = lib.mkOption {
       default = {};
-      description = lib.mdDoc ''
-        Extra parameters to pass to youtrack. See
+      description = ''
+        Extra parameters to pass to youtrack.
+        Use to configure YouTrack 2022.x, deprecated with YouTrack 2023.x. Use `services.youtrack.generalParameters`.
         https://www.jetbrains.com/help/youtrack/standalone/YouTrack-Java-Start-Parameters.html
         for more information.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "jetbrains.youtrack.overrideRootPassword" = "tortuga";
         }
       '';
-      type = types.attrsOf types.str;
+      type = lib.types.attrsOf lib.types.str;
+      visible = false;
     };
 
-    package = mkOption {
-      description = lib.mdDoc ''
+    package = lib.mkOption {
+      description = ''
         Package to use.
       '';
-      type = types.package;
-      default = pkgs.youtrack;
-      defaultText = literalExpression "pkgs.youtrack";
+      type = lib.types.package;
+      default = null;
+      relatedPackages = [ "youtrack_2022_3" "youtrack" ];
     };
 
-    port = mkOption {
-      description = lib.mdDoc ''
-        The port youtrack will listen on.
-      '';
-      default = 8080;
-      type = types.port;
-    };
 
-    statePath = mkOption {
-      description = lib.mdDoc ''
-        Where to keep the youtrack database.
+    statePath = lib.mkOption {
+      description = ''
+        Path were the YouTrack state is stored.
+        To this path the base version (e.g. 2023_1) of the used package will be appended.
       '';
-      type = types.path;
+      type = lib.types.path;
       default = "/var/lib/youtrack";
     };
 
-    virtualHost = mkOption {
-      description = lib.mdDoc ''
+    virtualHost = lib.mkOption {
+      description = ''
         Name of the nginx virtual host to use and setup.
         If null, do not setup anything.
       '';
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
     };
 
-    jvmOpts = mkOption {
-      description = lib.mdDoc ''
+    jvmOpts = lib.mkOption {
+      description = ''
         Extra options to pass to the JVM.
+        Only has a use with YouTrack 2022.x, deprecated with YouTrack 2023.x. Use `serivces.youtrack.generalParameters`.
         See https://www.jetbrains.com/help/youtrack/standalone/Configure-JVM-Options.html
         for more information.
       '';
-      type = types.separatedString " ";
-      example = "-XX:MetaspaceSize=250m";
+      type = lib.types.separatedString " ";
+      example = "--J-XX:MetaspaceSize=250m";
       default = "";
+      visible = false;
     };
 
-    maxMemory = mkOption {
-      description = lib.mdDoc ''
-        Maximum Java heap size
-      '';
-      type = types.str;
-      default = "1g";
+    autoUpgrade = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether YouTrack should auto upgrade it without showing the upgrade dialog.";
     };
 
-    maxMetaspaceSize = mkOption {
-      description = lib.mdDoc ''
-        Maximum java Metaspace memory.
+    generalParameters = lib.mkOption {
+      type = with lib.types; listOf str;
+      description = ''
+        General configuration parameters and other JVM options.
+        Only has an effect for YouTrack 2023.x.
+        See https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#general-parameters
+        for more information.
       '';
-      type = types.str;
-      default = "350m";
+      example = lib.literalExpression ''
+        [
+          "-Djetbrains.youtrack.admin.restore=true"
+          "-Xmx1024m"
+        ];
+      '';
+      default = [];
+    };
+
+    environmentalParameters = lib.mkOption {
+      type = lib.types.submodule {
+        freeformType = with lib.types; attrsOf (oneOf [ int str port ]);
+        options = {
+          listen-address = lib.mkOption {
+            type = lib.types.str;
+            default = "0.0.0.0";
+            description = "The interface YouTrack will listen on.";
+          };
+          listen-port = lib.mkOption {
+            type = lib.types.port;
+            default = 8080;
+            description = "The port YouTrack will listen on.";
+          };
+        };
+      };
+      description = ''
+        Environmental configuration parameters, set imperatively. The values doesn't get removed, when removed in Nix.
+        Only has an effect for YouTrack 2023.x.
+        See https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#environmental-parameters
+        for more information.
+      '';
+      example = lib.literalExpression ''
+        {
+          secure-mode = "tls";
+        }
+      '';
+      default = {};
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    warnings = lib.optional (lib.versions.major cfg.package.version <= "2022")
+      "YouTrack 2022.x is deprecated. See https://nixos.org/manual/nixos/unstable/index.html#module-services-youtrack for details on how to upgrade."
+    ++ lib.optional (cfg.extraParams != {} && (lib.versions.major cfg.package.version >= "2023"))
+      "'services.youtrack.extraParams' is deprecated and has no effect on YouTrack 2023.x and newer. Please migrate to 'services.youtrack.generalParameters'"
+    ++ lib.optional (cfg.jvmOpts != "" && (lib.versions.major cfg.package.version >= "2023"))
+      "'services.youtrack.jvmOpts' is deprecated and has no effect on YouTrack 2023.x and newer. Please migrate to 'services.youtrack.generalParameters'";
 
-    systemd.services.youtrack = {
-      environment.HOME = cfg.statePath;
-      environment.YOUTRACK_JVM_OPTS = "${extraAttr}";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ unixtools.hostname ];
-      serviceConfig = {
-        Type = "simple";
-        User = "youtrack";
-        Group = "youtrack";
-        Restart = "on-failure";
-        ExecStart = ''${cfg.package}/bin/youtrack --J-Xmx${cfg.maxMemory} --J-XX:MaxMetaspaceSize=${cfg.maxMetaspaceSize} ${cfg.jvmOpts} ${cfg.address}:${toString cfg.port}'';
+    # XXX: Drop all version feature switches at the point when we consider YT 2022.3 as outdated.
+    services.youtrack.package = lib.mkDefault (
+      if lib.versionAtLeast config.system.stateVersion "24.11" then pkgs.youtrack
+      else pkgs.youtrack_2022_3
+    );
+
+    services.youtrack.generalParameters = lib.optional (lib.versions.major cfg.package.version >= "2023")
+      "-Ddisable.configuration.wizard.on.upgrade=${lib.boolToString cfg.autoUpgrade}"
+      ++ (lib.mapAttrsToList (k: v: "-D${k}=${v}") cfg.extraParams);
+
+    systemd.services.youtrack = let
+      service_jar = let
+        mergeAttrList = lib.foldl' lib.mergeAttrs {};
+        stdParams = mergeAttrList [
+          (lib.optionalAttrs (cfg.environmentalParameters ? base-url && cfg.environmentalParameters.base-url != null) {
+            "jetbrains.youtrack.baseUrl" = cfg.environmentalParameters.base-url;
+          })
+          {
+          "java.aws.headless" = "true";
+          "jetbrains.youtrack.disableBrowser" = "true";
+          }
+        ];
+        extraAttr = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-D${k}=${v}") (stdParams // cfg.extraParams));
+      in {
+        environment.HOME = cfg.statePath;
+        environment.YOUTRACK_JVM_OPTS = "${extraAttr}";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        path = with pkgs; [ unixtools.hostname ];
+        serviceConfig = {
+          Type = "simple";
+          User = "youtrack";
+          Group = "youtrack";
+          Restart = "on-failure";
+          ExecStart = ''${cfg.package}/bin/youtrack ${cfg.jvmOpts} ${cfg.environmentalParameters.listen-address}:${toString cfg.environmentalParameters.listen-port}'';
+        };
       };
-    };
+      service_zip = let
+        jvmoptions = pkgs.writeTextFile {
+          name = "youtrack.jvmoptions";
+          text = (lib.concatStringsSep "\n" cfg.generalParameters);
+        };
+
+        package = cfg.package.override {
+          statePath = cfg.statePath;
+        };
+      in {
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        path = with pkgs; [ unixtools.hostname ];
+        preStart = ''
+          # This detects old (i.e. <= 2022.3) installations that were not migrated yet
+          # and migrates them to the new state directory style
+          if [[ -d ${cfg.statePath}/teamsysdata ]] && [[ ! -d ${cfg.statePath}/2022_3 ]]
+          then
+            mkdir -p ${cfg.statePath}/2022_3
+            mv ${cfg.statePath}/teamsysdata ${cfg.statePath}/2022_3
+            mv ${cfg.statePath}/.youtrack ${cfg.statePath}/2022_3
+          fi
+          mkdir -p ${cfg.statePath}/{backups,conf,data,logs,temp}
+          ${pkgs.coreutils}/bin/ln -fs ${jvmoptions} ${cfg.statePath}/conf/youtrack.jvmoptions
+          ${package}/bin/youtrack configure ${lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "--${name}=${toString value}") cfg.environmentalParameters )}
+        '';
+        serviceConfig = lib.mkMerge [
+          {
+            Type = "simple";
+            User = "youtrack";
+            Group = "youtrack";
+            Restart = "on-failure";
+            ExecStart = "${package}/bin/youtrack run";
+          }
+          (lib.mkIf (cfg.statePath == "/var/lib/youtrack") {
+            StateDirectory = "youtrack";
+          })
+        ];
+      };
+    in if (lib.versions.major cfg.package.version >= "2023") then service_zip else service_jar;
 
     users.users.youtrack = {
       description = "Youtrack service user";
@@ -143,8 +230,8 @@ in
 
     users.groups.youtrack = {};
 
-    services.nginx = mkIf (cfg.virtualHost != null) {
-      upstreams.youtrack.servers."${cfg.address}:${toString cfg.port}" = {};
+    services.nginx = lib.mkIf (cfg.virtualHost != null) {
+      upstreams.youtrack.servers."${cfg.address}:${toString cfg.environmentalParameters.listen-port}" = {};
       virtualHosts.${cfg.virtualHost}.locations = {
         "/" = {
           proxyPass = "http://youtrack";
@@ -173,9 +260,10 @@ in
             proxy_set_header X-Forwarded-Proto $scheme;
           '';
         };
-
       };
     };
-
   };
+
+  meta.doc = ./youtrack.md;
+  meta.maintainers = [ lib.maintainers.leona ];
 }

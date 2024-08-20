@@ -13,25 +13,18 @@ in
     ];
 
     options.hardware.ckb-next = {
-      enable = mkEnableOption (lib.mdDoc "the Corsair keyboard/mouse driver");
+      enable = mkEnableOption "the Corsair keyboard/mouse driver";
 
       gid = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 100;
-        description = lib.mdDoc ''
+        description = ''
           Limit access to the ckb daemon to a particular group.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ckb-next;
-        defaultText = literalExpression "pkgs.ckb-next";
-        description = lib.mdDoc ''
-          The package implementing the Corsair keyboard/mouse driver.
-        '';
-      };
+      package = mkPackageOption pkgs "ckb-next" { };
     };
 
     config = mkIf cfg.enable {
@@ -48,6 +41,6 @@ in
     };
 
     meta = {
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ ];
     };
   }

@@ -8,25 +8,26 @@
 
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.3.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     rev = "v${version}";
-    hash = "sha256-bnKaaqh1/921SRwnwqgYb31SJ8vguEBtzywPTz79S6I=";
+    hash = "sha256-XoSk08TVv17YyuTsRJ25e6bwSwKIF2+HjF5nFaul8+M=";
   };
 
   postPatch =
-    # This version number seems to be hardcoded and didn't get updated with the
-    # version bump from 4.2.0 to 4.3.0.
-    let dafnyRuntimeJarVersion = "4.2.0";
-    in ''
+    let
+      # This file wasn't updated between 4.6.0 and 4.7.0.
+      runtimeJarVersion = "4.6.0";
+    in
+    ''
       cp ${
         writeScript "fake-gradlew-for-dafny" ''
           mkdir -p build/libs/
           javac $(find -name "*.java" | grep "^./src/main") -d classes
-          jar cf build/libs/DafnyRuntime-${dafnyRuntimeJarVersion}.jar -C classes dafny
+          jar cf build/libs/DafnyRuntime-${runtimeJarVersion}.jar -C classes dafny
         ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
 
       # Needed to fix
@@ -35,8 +36,8 @@ buildDotnetModule rec {
       # frameworks, you must specify the framework for the published
       # application."
       substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
-        --replace TargetFrameworks TargetFramework \
-        --replace "netstandard2.0;net452" net6.0
+        --replace-warn TargetFrameworks TargetFramework \
+        --replace-warn "netstandard2.0;net452" net6.0
     '';
 
   buildInputs = [ jdk11 ];
@@ -60,7 +61,7 @@ buildDotnetModule rec {
   '';
 
   meta = with lib; {
-    description = "A programming language with built-in specification constructs";
+    description = "Programming language with built-in specification constructs";
     homepage = "https://research.microsoft.com/dafny";
     maintainers = with maintainers; [ layus ];
     license = licenses.mit;

@@ -47,6 +47,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/usbarmory/interlock";
     description = "File encryption tool and an HSM frontend";
+    mainProgram = "interlock";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

@@ -6,7 +6,7 @@
 , installShellFiles
 , pkg-config
 , bzip2
-, libgit2_1_6
+, libgit2
 , openssl
 , zlib
 , zstd
@@ -25,16 +25,19 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-YUstBO+iznr0eJYVJdNQ2BjDhvviRQuojhT9IlTuR0k=";
+    hash = "sha256-0RLEPVtYnwYH+pMnpO0/Evbp7x9d0RMobOVAqwgMJz4=";
   };
 
-  cargoHash = "sha256-OAgEzf+EyrwjNa40BwPwSNZ4lhEH93YxCbPJJ3r7oSQ=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes."cargo-0.82.0" = "sha256-1G14vLW3FhLxOWGxuHXcWgb+XXS1vOOyQYKVbrJWlmI=";
+  };
 
   nativeBuildInputs = [
     curl
@@ -45,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     bzip2
     curl
-    libgit2_1_6
+    libgit2
     openssl
     zlib
     zstd
@@ -80,6 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
+    LIBGIT2_NO_VENDOR = 1;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -87,6 +91,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Command line tool to generate Nix packages from URLs";
+    mainProgram = "nix-init";
     homepage = "https://github.com/nix-community/nix-init";
     changelog = "https://github.com/nix-community/nix-init/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;

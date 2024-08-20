@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, pkgs
 , fetchFromGitHub
 , fetchurl
 , mpiCheckPhaseHook
@@ -14,7 +13,6 @@
 , lapack
 , python3
 , tcsh
-, bash
 , automake
 , autoconf
 , libtool
@@ -54,13 +52,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    hash = "sha256-nnNTZ+c7VVGAqwOBMkBlW3rImNjs08Ne35XRkI3ssGo=";
+    hash = "sha256-BcYRqPaPR24OTRY0MJgBxi46HvUG4uFaY0unZmu5b9k=";
   };
 
   nativeBuildInputs = [
@@ -208,6 +206,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open Source High-Performance Computational Chemistry";
+    mainProgram = "nwchem";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ sheepforce markuskowa ];
     homepage = "https://nwchemgit.github.io";

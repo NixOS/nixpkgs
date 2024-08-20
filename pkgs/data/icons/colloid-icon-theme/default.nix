@@ -13,18 +13,18 @@ let
   pname = "colloid-icon-theme";
 
 in
-lib.checkListOfEnum "${pname}: scheme variants" [ "default" "nord" "dracula" "all" ] schemeVariants
+lib.checkListOfEnum "${pname}: scheme variants" [ "default" "nord" "dracula" "gruvbox" "everforest" "catppuccin" "all" ] schemeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all" ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-07-01";
+  version = "2024-02-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-2J6LmDV/Y2+x+nK3mO+t4MnmZCbVwDLX0tDG6BmLgqo=";
+    hash = "sha256-bTN6x3t88yBL4WsPfOJIiNGWTywdIVi7E2VJKgMzEso=";
   };
 
   nativeBuildInputs = [

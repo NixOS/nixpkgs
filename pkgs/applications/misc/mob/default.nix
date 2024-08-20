@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "mob";
-  version = "4.4.6";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "remotemobprogramming";
-    repo = pname;
+    repo = "mob";
     rev = "v${version}";
-    sha256 = "sha256-UunFfP0Rn4t8lSJiubbqZ0bImK9OhIdC0gSGbkg6Ohw=";
+    hash = "sha256-CUD4gcQrLzYsD6zX6I4C59lHGKOaE5ggjbIVyznBNEg=";
   };
 
   vendorHash = null;
@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for smooth git handover";
+    mainProgram = "mob";
     homepage = "https://github.com/remotemobprogramming/mob";
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo ];

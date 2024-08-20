@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
+    "-DCMAKE_CXX_FLAGS=-std=c++14"
     "-DBLAS_FOUND:BOOL=TRUE"
     "-DBLAS_LIBRARIES:STRING=${blas}/lib/libblas.so"
     "-DLAPACK_FOUND:BOOL=TRUE"
@@ -44,10 +44,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "IT++ is a C++ library of mathematical, signal processing and communication classes and functions";
+    mainProgram = "itpp-config";
     homepage = "https://itpp.sourceforge.net/";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = [ ];
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/itpp.x86_64-darwin
   };
 }

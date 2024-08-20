@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "symbolicator";
-  version = "23.10.1";
+  version = "24.7.1";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = version;
-    hash = "sha256-G8ElLH6u07uJR2Jz05rM59tnVADaDQ768lK477NuWuM=";
+    hash = "sha256-thc1VXKtOc+kgIMHGDBp4InaSFG9mK9WYS7g90b5Fzs=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "cpp_demangle-0.4.1" = "sha256-9QopX2TOJc8bZ+UlSOFdjoe8NTJLVGrykyFL732tE3A=";
-      "reqwest-0.11.18" = "sha256-t6fs2bbBfgcspCrGfWIFCYbYZ7GPcBWI0dy68YdklOQ=";
+      "reqwest-0.12.2" = "sha256-m46NyzsgXsDxb6zwVXP0wCdtCH+rb5f0x+oPNHuBF8s=";
     };
   };
 
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     zstd
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {

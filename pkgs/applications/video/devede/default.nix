@@ -1,5 +1,5 @@
 { lib, fetchFromGitLab, python3Packages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor
-, gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
+, gtk3, gettext, wrapGAppsHook3, gdk-pixbuf, gobject-introspection }:
 
 let
   inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3 setuptools;
@@ -12,11 +12,11 @@ in buildPythonApplication rec {
     owner = "rastersoft";
     repo = "devedeng";
     rev = version;
-    sha256 = "sha256-CdntdD5DRA/eXTBRBRszkbYFeFxj+0odb8XHkAFdobU=";
+    hash = "sha256-CdntdD5DRA/eXTBRBRszkbYFeFxj+0odb8XHkAFdobU=";
   };
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook
+    gettext wrapGAppsHook3
     gobject-introspection
   ];
 

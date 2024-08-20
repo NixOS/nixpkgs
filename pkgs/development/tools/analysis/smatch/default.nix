@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = with lib; {
-    description = "A semantic analysis tool for C";
+    description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

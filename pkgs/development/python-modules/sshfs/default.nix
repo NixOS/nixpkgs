@@ -1,29 +1,29 @@
-{ stdenv
-, lib
-, asyncssh
-, bcrypt
-, buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, mock-ssh-server
-, pytest-asyncio
-, pytestCheckHook
-, setuptools
-, setuptools-scm
+{
+  stdenv,
+  lib,
+  asyncssh,
+  bcrypt,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  mock-ssh-server,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2023.7.0";
+  version = "2024.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
-    repo = pname;
+    repo = "sshfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-XKBpB3ackquVKsdF8b/45Kaz5Y2ussOl0o0HkD+k9tM=";
+    hash = "sha256-qkEojf/3YBMoYbRt0Q93MJYXyL9AWR24AEe3/zdn58U=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -49,9 +49,7 @@ buildPythonPackage rec {
     "test_checksum"
   ];
 
-  pythonImportsCheck = [
-    "sshfs"
-  ];
+  pythonImportsCheck = [ "sshfs" ];
 
   meta = with lib; {
     description = "SSH/SFTP implementation for fsspec";

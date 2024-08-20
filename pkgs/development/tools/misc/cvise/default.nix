@@ -1,7 +1,6 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, bash
 , cmake
 , colordiff
 , flex
@@ -16,14 +15,14 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.8.0";
+  version = "2.10.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9HFCFgpRXqefFJLulwvi6nx0fl0G6IXI9gSinekJXRU=";
+    hash = "sha256-0gk4O1q90eH1FMhj4ncNVqX/MfVyaU0nckh1xny2wlM=";
   };
 
   patches = [
@@ -36,10 +35,6 @@ buildPythonApplication rec {
     # tested compilers.
     substituteInPlace CMakeLists.txt \
       --replace " -Werror " " "
-
-    # 'cvise --command=...' generates a script with hardcoded shebang.
-    substituteInPlace cvise.py \
-      --replace "#!/bin/bash" "#!${bash}/bin/bash"
 
     substituteInPlace cvise/utils/testing.py \
       --replace "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \

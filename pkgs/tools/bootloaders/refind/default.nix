@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, gnu-efi, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, gnu-efi
+, nixosTests
+, efibootmgr
+, openssl
+, withSbsigntool ? false # currently, cross compiling sbsigntool is broken, so default to false
+, sbsigntool
+, makeWrapper
+}:
 
 let
   archids = {
@@ -14,25 +24,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.13.3.1";
+  version = "0.14.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "1lfgqqiyl6isy25wrxzyi3s334ii057g88714igyjjmxh47kygks";
+    url = "mirror://sourceforge/project/refind/${version}/refind-src-${version}.tar.gz";
+    hash = "sha256-99k86A2na4bFZygeoiW2qHkHzob/dyM8k1elIsEVyPA=";
   };
 
   patches = [
     # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
-
-    # Fixes issue with null dereference in ReadHiddenTags
-    # Upstream: https://sourceforge.net/p/refind/code/merge-requests/45/
-    (fetchpatch {
-      url = "https://github.com/samueldr/rEFInd/commit/29cd79dedabf84d5ddfe686f5692278cae6cc4d6.patch";
-      sha256 = "sha256-/jAmOwvMmFWazyukN+ru1tQDiIBtgGk/e/pczsl1Xc8=";
-    })
+    # Avoid leaking the build timestamp
+    # https://sourceforge.net/p/refind/code/merge-requests/53/
+    ./0002-preserve-dates.patch
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ gnu-efi ];
 
   hardeningDisable = [ "stackprotector" ];
@@ -45,6 +52,9 @@ stdenv.mkDerivation rec {
       "EFICRT0=${gnu-efi}/lib"
       "HOSTARCH=${hostarch}"
       "ARCH=${hostarch}"
+    ] ++ lib.optional stdenv.isAarch64 [
+      # aarch64 is special for GNU-EFI, see BUILDING.txt
+      "GNUEFI_ARM64_TARGET_SUPPORT=y"
     ];
 
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
@@ -102,16 +112,16 @@ stdenv.mkDerivation rec {
     install -D -m0644 keys/* $out/share/refind/keys/
 
     # Fix variable definition of 'RefindDir' which is used to locate ressource files.
-    sed -i "s,\bRefindDir=.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
-
-    # Patch uses of `which`.  We could patch in calls to efibootmgr,
-    # openssl, convert, and openssl, but that would greatly enlarge
-    # refind's closure (from ca 28MB to over 400MB).
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
-    sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+    sed -i "s,\bRefindDir=\"\$This.*,RefindDir=$out/share/refind,g" $out/bin/refind-install
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/refind-install \
+      --prefix PATH : ${lib.makeBinPath ( [ efibootmgr openssl ] ++ lib.optional withSbsigntool sbsigntool )}
+    wrapProgram $out/bin/refind-mvrefind \
+      --prefix PATH : ${lib.makeBinPath [ efibootmgr ]}
   '';
 
   passthru.tests = {
@@ -119,13 +129,13 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A graphical {,U}EFI boot manager";
+    description = "Graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
       computers, such as all Intel-based Macs and recent (most 2011
       and later) PCs. rEFInd presents a boot menu showing all the EFI
       boot loaders on the EFI-accessible partitions, and optionally
-      BIOS-bootable partitions on Macs. EFI-compatbile OSes, including
+      BIOS-bootable partitions on Macs. EFI-compatible OSes, including
       Linux, provide boot loaders that rEFInd can detect and
       launch. rEFInd can launch Linux EFI boot loaders such as ELILO,
       GRUB Legacy, GRUB 2, and 3.3.0 and later kernels with EFI stub
@@ -136,7 +146,7 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ AndersonTorres samueldr ];
+    maintainers = with maintainers; [ AndersonTorres chewblacka ];
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };

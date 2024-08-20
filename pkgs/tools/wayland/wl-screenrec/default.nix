@@ -3,22 +3,22 @@
 , fetchFromGitHub
 , pkg-config
 , libdrm
-, ffmpeg
+, ffmpeg_7
 , wayland
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wl-screenrec";
-  version = "unstable-2023-09-17";
+  version = "0.1.4-unstable-2024-07-28";
 
   src = fetchFromGitHub {
     owner = "russelltg";
     repo = pname;
-    rev = "a36c5923009b44f2131196d8a3a234948f8e0102";
-    hash = "sha256-V29eB9vozVKIBq8dO7zgA4nirsh1eDBjJN+rwVkeDLE=";
+    rev = "b817accf1d4f2373cb6f466f760de35e5b8626bd";
+    hash = "sha256-07O2YM9dOHWzriM2+uiBWjEt2hKAuXtRtnKBuzb02Us=";
   };
 
-  cargoHash = "sha256-uUfEweLWn/NdqgY8O7Ld+YnGPKQV1tpJi/Gd4MZB4xI=";
+  cargoHash = "sha256-AYirjrnk8SGTXk5IjzCep2AQJYPbgHAOOf47MUDYj4k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     wayland
     libdrm
-    ffmpeg
+    ffmpeg_7
   ];
 
   doCheck = false; # tests use host compositor, etc

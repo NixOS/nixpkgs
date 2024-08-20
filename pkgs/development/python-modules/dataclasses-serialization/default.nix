@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, more-properties
-, typing-inspect
-, toolz
-, toposort
-, bson
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  more-properties,
+  typing-inspect,
+  toolz,
+  toposort,
+  bson,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

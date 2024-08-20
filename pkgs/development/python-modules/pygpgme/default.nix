@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, gpgme
-, isPyPy
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  gpgme,
+  isPyPy,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   version = "0.3";
+  format = "setuptools";
   pname = "pygpgme";
 
   # Native code doesn't compile against the C API of Python 3.11:
@@ -26,8 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://launchpad.net/pygpgme";
-    description = "A Python wrapper for the GPGME library";
+    description = "Python wrapper for the GPGME library";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

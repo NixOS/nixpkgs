@@ -1,16 +1,19 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  aiohttp,
+  aiortsp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.7.11";
-  format = "setuptools";
+  version = "0.9.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -18,18 +21,19 @@ buildPythonPackage rec {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-SPmLzTJQNDaQ6AofIET7eZkxJxxfJ00/wNpInXo0u2I=";
+    hash = "sha256-EWNnaLXgJ4ieLFVBT651d50eZ/s/NfdRwRAVQy49kpc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
+    aiortsp
     orjson
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "reolink_aio"
-  ];
+  pythonImportsCheck = [ "reolink_aio" ];
 
   # All tests require a network device
   doCheck = false;

@@ -1,18 +1,20 @@
---- a/util/install_helper.sh	2019-07-10 12:00:15.984840142 +0200
-+++ b/util/install_helper.sh	2019-07-10 12:28:56.343011401 +0200
-@@ -37,10 +37,10 @@
- fi
+--- a/util/install_helper.sh	2023-08-26 22:12:11.028651669 +0200
++++ b/util/install_helper.sh	2023-08-26 22:38:03.165058694 +0200
+@@ -39,12 +39,12 @@
  
- install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
+ if [ "${udevrulesdir}" != "" ]; then
+     install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
 -        "${DESTDIR}${udevrulesdir}/99-fuse3.rules"
 +        "${sysconfdir}${udevrulesdir}/99-fuse3.rules"
+ fi
  
- install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
--        "${DESTDIR}/etc/init.d/fuse3"
-+        "${sysconfdir}/init.d/fuse3"
+ if [ "$initscriptdir" != "" ]; then
+     install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
+-            "${DESTDIR}${initscriptdir}/fuse3"
++            "${sysconfdir}${initscriptdir}/fuse3"
  
- 
- if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
+     if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
+         /usr/sbin/update-rc.d fuse3 start 34 S . start 41 0 6 . || /bin/true
 diff --git a/util/meson.build b/util/meson.build
 index aa0e734..06d4378 100644
 --- a/util/meson.build

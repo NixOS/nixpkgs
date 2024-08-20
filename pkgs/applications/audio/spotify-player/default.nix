@@ -24,6 +24,7 @@
 , withImage ? true
 , withNotify ? true
 , withSixel ? true
+, withFuzzy ? true
 , stdenv
 , darwin
 , makeBinaryWrapper
@@ -33,16 +34,16 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "alsa" "pulseaud
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.15.2";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yYn8xuJE0mILF7poiTbHCmFswP/xG+BbL+AASrLpbAs=";
+    hash = "sha256-R8F7s8FPnCe+shNUN/u0qcxFy3IbyfVo2xZ5/E/qwaw=";
   };
 
-  cargoHash = "sha256-/q7xrsuRym5oDCGJRpBTdBach2CAbhCCC3cPFzCT4PU=";
+  cargoHash = "sha256-7vximGisIIXBrwHXSWQjO08OraaweG7ZT6v+gVdYGVc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -83,7 +84,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals withDaemon [ "daemon" ]
     ++ lib.optionals withNotify [ "notify" ]
     ++ lib.optionals withStreaming [ "streaming" ]
-    ++ lib.optionals withSixel [ "sixel" ];
+    ++ lib.optionals withSixel [ "sixel" ]
+    ++ lib.optionals withFuzzy [ "fzf" ];
 
   # sixel-sys is dynamically linked to libsixel
   postInstall = lib.optionals (stdenv.isDarwin && withSixel) ''
@@ -92,11 +94,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A terminal spotify player that has feature parity with the official client";
+    description = "Terminal spotify player that has feature parity with the official client";
     homepage = "https://github.com/aome510/spotify-player";
     changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya xyven1 ];
+    maintainers = with lib.maintainers; [ dit7ya xyven1 _71zenith ];
   };
 }

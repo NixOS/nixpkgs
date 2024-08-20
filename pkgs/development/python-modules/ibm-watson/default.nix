@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ibm-cloud-sdk-core
-, pytest-rerunfailures
-, pytestCheckHook
-, python-dateutil
-, python-dotenv
-, pythonOlder
-, requests
-, responses
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ibm-cloud-sdk-core,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  python-dateutil,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  setuptools,
+  responses,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "7.0.1";
-  format = "setuptools";
+  version = "8.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,10 +25,12 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f/nf9WFiUNDQBkFNMV16EznCw0TN9L4fDIPQ/j4B1Sc=";
+    hash = "sha256-r7A5i17KIy1pBrj01yeknfrOFjb5yZco8ZOc7tlFM7k=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ibm-cloud-sdk-core
     python-dateutil
     requests
@@ -40,9 +44,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "ibm_watson"
-  ];
+  pythonImportsCheck = [ "ibm_watson" ];
 
   meta = with lib; {
     description = "Client library to use the IBM Watson Services";

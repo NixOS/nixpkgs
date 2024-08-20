@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, parameterized
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  parameterized,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -22,24 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-N11iqsxMGgzwW2QYeOoHQaR/aDEuoUnnd/2Mc5culN0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "moreorless"
-  ];
+  pythonImportsCheck = [ "moreorless" ];
 
   pytestFlagsArray = [
     "moreorless/tests/click.py"

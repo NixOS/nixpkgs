@@ -25,11 +25,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.8.2";
+  version = "3.9.0";
 
   src = fetchurl {
-    url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
-    hash = "sha256-Z5CQPNu14ORxlmkeuaXyz4BQJi3vlB4Dnm1L9AQ6XjA=";
+    url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
+    hash = "sha256-VvXkIOfCVFWk6WwZtnL4D5oKNftb7MkkfJ49XcxhfzQ=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -84,6 +84,8 @@ in stdenv.mkDerivation rec {
     make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
+  enableParallelBuilding = true;
+
   NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
 
   installTargets = [ "non-interactive-package" ];
@@ -115,7 +117,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.postfix.org/";
     changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
-    description = "A fast, easy to administer, and secure mail server";
+    description = "Fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin dotlambda lewo ];

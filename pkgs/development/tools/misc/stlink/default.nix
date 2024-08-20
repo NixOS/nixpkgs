@@ -1,12 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , libusb1
 , gtk3
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGUI ? false
 }:
 
@@ -19,21 +18,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "stlink";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "stlink-org";
     repo = "stlink";
     rev = "v${version}";
-    sha256 = "03xypffpbp4imrczbxmq69vgkr7mbp0ps9dk815br5wwlz6vgygl";
+    sha256 = "sha256-hlFI2xpZ4ldMcxZbg/T5/4JuFFdO9THLcU0DQKSFqrw=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/stlink-org/stlink/commit/468b1d2daa853b975c33ab69876c486734f2c6a7.diff";
-      sha256 = "sha256-ueSi/zc7xbOATl0yBtCL4U64IQ/yqu6sMYDOiPl1JBI=";
-    })
-  ];
 
   buildInputs = [
     libusb1'
@@ -44,7 +36,7 @@ in stdenv.mkDerivation rec {
     cmake
   ] ++ lib.optionals withGUI [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   cmakeFlags = [
@@ -56,6 +48,7 @@ in stdenv.mkDerivation rec {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
     maintainers = [ maintainers.bjornfor maintainers.rongcuid ];
   };
 }

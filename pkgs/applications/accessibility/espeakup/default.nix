@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "linux-speakup";
     repo = "espeakup";
     rev = "v${version}";
-    sha256 = "0lmjwafvfxy07zn18v3dzjwwpnid2xffgvy2dzlwkbns8gb60ds2";
+    hash = "sha256-Qjdg1kParsnpb8Lv51wXLdrLufxtbBTsP8B3t53islI=";
   };
 
   nativeBuildInputs = [
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethindp ];
     platforms = with platforms; linux;
+    mainProgram = "espeakup";
   };
 }

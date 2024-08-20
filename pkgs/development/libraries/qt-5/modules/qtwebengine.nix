@@ -1,8 +1,13 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
+, fetchpatch
+, fetchpatch2
 
 , bison, flex, git, gperf, ninja, pkg-config, python, which
-, nodejs, qtbase, perl
+, nodejs, perl
+, buildPackages
+, pkgsBuildTarget
+, pkgsBuildBuild
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
@@ -19,20 +24,47 @@
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
-, cups, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg_4 ? null
-, lib, stdenv, fetchpatch
+, cups, openbsm, xcbuild, writeScriptBin
+, ffmpeg_7 ? null
+, lib, stdenv
 , version ? null
 , qtCompatVersion
 , pipewireSupport ? stdenv.isLinux
-, pipewire_0_2
+, pipewire
 , postPatch ? ""
+, nspr
+, lndir
 }:
 
-qtModule {
+let
+  # qtwebengine expects to find an executable in $PATH which runs on
+  # the build platform yet knows about the host `.pc` files.  Most
+  # configury allows setting $PKG_CONFIG to point to an
+  # arbitrarily-named script which serves this purpose; however QT
+  # insists that it is named `pkg-config` with no target prefix.  So
+  # we re-wrap the host platform's pkg-config.
+  pkg-config-wrapped-without-prefix = stdenv.mkDerivation {
+    name = "pkg-config-wrapper-without-target-prefix";
+    dontUnpack = true;
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out/bin
+      ln -s '${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' $out/bin/pkg-config
+    '';
+  };
+
+in
+
+qtModule ({
   pname = "qtwebengine";
   nativeBuildInputs = [
-    bison flex git gperf ninja pkg-config python which gn nodejs
+    bison flex git gperf ninja pkg-config (python.withPackages(ps: [ ps.html5lib ])) which gn nodejs
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    perl
+    lndir (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
+    pkgsBuildBuild.pkg-config
+    (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
+    pkg-config-wrapped-without-prefix
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -46,10 +78,51 @@ qtModule {
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
+  patches = [
+    # Support FFmpeg 5
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/14074e4d789167bd776939037fe6df8d4d7dc0b3/qt5-webengine-ffmpeg5.patch";
+      hash = "sha256-jTbJFXBPwRMzr8IeTxrv9dtS+/xDS/zR4dysV/bRg3I=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+
+    # Support FFmpeg 7
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/e8fb4f86104243b90966b69cdfaa967273d834b6/qt5-webengine-ffmpeg7.patch";
+      hash = "sha256-YNeHmOVp0M5HB+b91AOxxJxl+ktBtLYVdHlq13F7xtY=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+    })
+
+    # Support PipeWire ≥ 0.3
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/c9db2cd9e144bd7a5e9246f5f7a01fe52fd089ba/qt5-webengine-pipewire-0.3.patch";
+      hash = "sha256-mGexRfVDF3yjNzSi9BjavhzPtsXI0BooSr/rZ1z/BDo=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+  ];
+
   postPatch = ''
     # Patch Chromium build tools
     (
       cd src/3rdparty/chromium;
+
+      patch -p2 < ${
+        (fetchpatch { # support for building with python 3.12
+          name = "python312-imp.patch";
+          url = "https://codereview.qt-project.org/gitweb?p=qt/qtwebengine-chromium.git;a=patch;h=3664134f749f4851a14ab1953a9ee460a1fe0b68";
+          hash = "sha256-XY0dEdeuOTRMR7onmuNg1Axld8+pquKAzOfDAGSIzI4=";
+        })
+      }
+      patch -p1 < ${
+        (fetchpatch { # support for building with python 3.12
+          name = "python312-six.patch";
+          url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
+          hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
+        })
+      }
 
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
@@ -57,12 +130,6 @@ qtModule {
 
       # TODO: be more precise
       patchShebangs .
-
-      # Fix compatibility with python3.11
-      substituteInPlace tools/metrics/ukm/ukm_model.py \
-        --replace "r'^(?i)(|true|false)$'" "r'(?i)^(|true|false)$'"
-      substituteInPlace tools/grit/grit/util.py \
-        --replace "mode = 'rU'" "mode = 'r'"
     )
   ''
   # Prevent Chromium build script from making the path to `clang` relative to
@@ -108,16 +175,25 @@ qtModule {
       --replace "-Wl,-fatal_warnings" ""
   '') + postPatch;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
-    # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
-    "-Wno-class-memaccess"
-  ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
-    # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
-    # TODO: investigate and fix properly
-    "-march=westmere"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-elaborated-enum-base"
-  ]);
+  env = {
+    NIX_CFLAGS_COMPILE =
+      toString (
+        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+          "-w "
+        ] ++ lib.optionals stdenv.cc.isGNU [
+          # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
+          "-Wno-class-memaccess"
+        ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
+          # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+          # TODO: investigate and fix properly
+          "-march=westmere"
+        ] ++ lib.optionals stdenv.cc.isClang [
+          "-Wno-elaborated-enum-base"
+        ]);
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
+    "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
+  };
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -125,10 +201,15 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export QMAKE_CC=$CC
+    export QMAKE_CXX=$CXX
+    export QMAKE_LINK=$CXX
+    export QMAKE_AR=$AR
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ lib.optional pipewireSupport "-webengine-webrtc-pipewire"
+    ++ lib.optional (pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -147,7 +228,7 @@ qtModule {
     harfbuzz icu
 
     libevent
-    ffmpeg_4
+    ffmpeg_7
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -167,7 +248,7 @@ qtModule {
 
   ] ++ lib.optionals pipewireSupport [
     # Pipewire
-    pipewire_0_2
+    pipewire
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
@@ -226,7 +307,9 @@ qtModule {
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    mkdir -p $out/libexec
+  '' + lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
@@ -240,26 +323,37 @@ qtModule {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    description = "A web engine based on the Chromium web browser";
+    description = "Web engine based on the Chromium web browser";
+    mainProgram = "qwebengine_convert_dict";
     maintainers = with maintainers; [ matthewbauer ];
 
     # qtwebengine-5.15.8: "QtWebEngine can only be built for x86,
     # x86-64, ARM, Aarch64, and MIPSel architectures."
-    platforms =
-      lib.trivial.pipe lib.systems.doubles.all [
-        (map (double: lib.systems.elaborate { system = double; }))
-        (lib.lists.filter (parsedPlatform: with parsedPlatform;
-          isUnix &&
-          (isx86_32  ||
-           isx86_64  ||
-           isAarch32 ||
-           isAarch64 ||
-           (isMips && isLittleEndian))))
-        (map (plat: plat.system))
-      ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    platforms = with lib.systems.inspect.patterns;
+      let inherit (lib.systems.inspect) patternLogicalAnd;
+      in concatMap (patternLogicalAnd isUnix) (lib.concatMap lib.toList [
+        isx86_32
+        isx86_64
+        isAarch32
+        isAarch64
+        (patternLogicalAnd isMips isLittleEndian)
+      ]);
 
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
   };
-}
+
+} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  configurePlatforms = [ ];
+  # to get progress output in `nix-build` and `nix build -L`
+  preBuild = ''
+    export TERM=dumb
+  '';
+  depsBuildBuild = [
+    pkgsBuildBuild.stdenv
+    zlib
+    nss
+    nspr
+  ];
+
+})

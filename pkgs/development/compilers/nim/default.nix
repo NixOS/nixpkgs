@@ -1,9 +1,9 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
 
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
-, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security, nim-unwrapped
-, nim-unwrapped-2, nim }:
+{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit
+, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
+, nim-unwrapped-2, nim-unwrapped-1, nim }:
 
 let
   parseCpu = platform:
@@ -74,14 +74,14 @@ let
 
 in {
 
-  nim-unwrapped = stdenv.mkDerivation (finalAttrs: {
+  nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
-    version = "1.6.14";
+    version = "2.0.8";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-0HDS8oriQA33/kpJ7OufRc1TmQaxB0gYVqCveo+oLck=";
+      hash = "sha256-VwLahEcA0xKdtzFwtcYGrb37h+grgWwNkRB+ogpl3xY=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
@@ -96,7 +96,10 @@ in {
 
       ./extra-mangling.patch
       # Mangle store paths of modules to prevent runtime dependence.
-    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
+
+      ./openssl.patch
+      # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
+    ];
 
     configurePhase = let
       bootstrapCompiler = stdenv.mkDerivation {
@@ -144,7 +147,7 @@ in {
       ln -sf $out/nim/bin/nim $out/bin/nim
       ln -sf $out/nim/lib $out/lib
       ./install.sh $out
-      cp -a tools $out/nim/
+      cp -a tools dist $out/nim/
       runHook postInstall
     '';
 
@@ -157,11 +160,11 @@ in {
     };
   });
 
-  nim-unwrapped-2 = nim-unwrapped.overrideAttrs (finalAttrs: rec {
-    version = "2.0.0";
+  nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (finalAttrs: prevAttrs: {
+    version = "1.6.20";
     src = fetchurl {
-      url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-vWEB2EADb7eOk6ad9s8/n9DCHNdUtpX/hKO0rdjtCvc=";
+      url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
+      hash = "sha256-/+0EdQTR/K9hDw3Xzz4Ce+kaKSsMnFEWFQTC87mE/7k=";
     };
 
     patches = [
@@ -173,17 +176,13 @@ in {
 
       ./extra-mangling.patch
       # Mangle store paths of modules to prevent runtime dependence.
-
-      ./openssl.patch
-      # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
-    ];
+    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
   });
 
 } // (let
   wrapNim = { nim', patches }:
-    let
-      targetPlatformConfig = stdenv.targetPlatform.config;
-      self = stdenv.mkDerivation (finalAttrs: {
+    let targetPlatformConfig = stdenv.targetPlatform.config;
+    in stdenv.mkDerivation (finalAttrs: {
         name = "${targetPlatformConfig}-nim-wrapper-${nim'.version}";
         inherit (nim') version;
         preferLocalBuild = true;
@@ -304,22 +303,19 @@ in {
         meta = nim'.meta // {
           description = nim'.meta.description
             + " (${targetPlatformConfig} wrapper)";
-          platforms = with lib.platforms; unix ++ genode;
+          platforms = with lib.platforms; unix ++ genode ++ windows;
         };
       });
-    in self // {
-      pkgs = callPackage ../../../top-level/nim-packages.nix { nim = self; };
-    };
 in {
-
-  nim = wrapNim {
-    nim' = buildPackages.nim-unwrapped;
-    patches = [ ./nim.cfg.patch ];
-  };
 
   nim2 = wrapNim {
     nim' = buildPackages.nim-unwrapped-2;
     patches = [ ./nim2.cfg.patch ];
+  };
+
+  nim1 = wrapNim {
+    nim' = buildPackages.nim-unwrapped-1;
+    patches = [ ./nim.cfg.patch ];
   };
 
 })

@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, raylib }:
+{ lib, stdenv, fetchFromGitHub, raylib, darwin }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
 stdenv.mkDerivation rec {
   pname = "raylib-games";
   version = "2022-10-24";
@@ -11,7 +14,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-N9ip8yFUqXmNMKcvQuOyxDI4yF/w1YaoIh0prvS4Xr4=";
   };
 
-  buildInputs = [ raylib ];
+  buildInputs = [ raylib ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   configurePhase = ''
     runHook preConfigure
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A collection of games made with raylib ";
+    description = "Collection of games made with raylib";
     homepage = "https://www.raylib.com/games.html";
     license = licenses.zlib;
     maintainers = with maintainers; [ ehmry ];

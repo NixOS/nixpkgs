@@ -12,10 +12,10 @@ let
   };
 in {
   options.services.kubernetes.addons.dns = {
-    enable = mkEnableOption (lib.mdDoc "kubernetes dns addon");
+    enable = mkEnableOption "kubernetes dns addon";
 
     clusterIp = mkOption {
-      description = lib.mdDoc "Dns addon clusterIP";
+      description = "Dns addon clusterIP";
 
       # this default is also what kubernetes users
       default = (
@@ -31,19 +31,19 @@ in {
     };
 
     clusterDomain = mkOption {
-      description = lib.mdDoc "Dns cluster domain";
+      description = "Dns cluster domain";
       default = "cluster.local";
       type = types.str;
     };
 
     replicas = mkOption {
-      description = lib.mdDoc "Number of DNS pod replicas to deploy in the cluster.";
+      description = "Number of DNS pod replicas to deploy in the cluster.";
       default = 2;
       type = types.int;
     };
 
     reconcileMode = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Controls the addon manager reconciliation mode for the DNS addon.
 
         Setting reconcile mode to EnsureExists makes it possible to tailor DNS behavior by editing the coredns ConfigMap.
@@ -55,7 +55,7 @@ in {
     };
 
     coredns = mkOption {
-      description = lib.mdDoc "Docker image to seed for the CoreDNS container.";
+      description = "Docker image to seed for the CoreDNS container.";
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
@@ -66,7 +66,7 @@ in {
     };
 
     corefile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Custom coredns corefile configuration.
 
         See: <https://coredns.io/manual/toc/#configuration>.

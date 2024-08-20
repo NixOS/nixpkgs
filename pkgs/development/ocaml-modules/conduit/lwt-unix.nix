@@ -6,7 +6,6 @@
 buildDunePackage {
   pname = "conduit-lwt-unix";
   inherit (conduit-lwt) version src;
-  duneVersion = "3";
 
   buildInputs = [ ppx_sexp_conv ];
 
@@ -29,6 +28,6 @@ buildDunePackage {
   ];
 
   meta = conduit-lwt.meta // {
-    description = "A network connection establishment library for Lwt_unix";
+    description = "Network connection establishment library for Lwt_unix";
   };
 }

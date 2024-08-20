@@ -10,6 +10,13 @@ for flag in ${NIX_HARDENING_ENABLE_@suffixSalt@-}; do
   hardeningEnableMap["$flag"]=1
 done
 
+# fortify3 implies fortify enablement - make explicit before
+# we filter unsupported flags because unsupporting fortify3
+# doesn't mean we should unsupport fortify too
+if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
+  hardeningEnableMap["fortify"]=1
+fi
+
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
   unset -v "hardeningEnableMap[$flag]"
@@ -19,13 +26,13 @@ for flag in @hardening_unsupported_flags@; do
   fi
 done
 
-# make fortify and fortify3 mutually exclusive
+# now make fortify and fortify3 mutually exclusive
 if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
   unset -v "hardeningEnableMap['fortify']"
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
+  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection pacret pie pic strictoverflow format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -68,9 +75,21 @@ for flag in "${!hardeningEnableMap[@]}"; do
           ;;
       esac
       ;;
+    shadowstack)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling shadowstack >&2; fi
+      hardeningCFlagsBefore+=('-fcf-protection=return')
+      ;;
+    pacret)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pacret >&2; fi
+      hardeningCFlagsBefore+=('-mbranch-protection=pac-ret')
+      ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
       hardeningCFlagsBefore+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
+      ;;
+    stackclashprotection)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stack-clash-protection >&2; fi
+      hardeningCFlagsBefore+=('-fstack-clash-protection')
       ;;
     pie)
       # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
@@ -99,9 +118,17 @@ for flag in "${!hardeningEnableMap[@]}"; do
         hardeningCFlagsBefore+=('-fno-strict-overflow')
       fi
       ;;
+    trivialautovarinit)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling trivialautovarinit >&2; fi
+      hardeningCFlagsBefore+=('-ftrivial-auto-var-init=pattern')
+      ;;
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
       hardeningCFlagsBefore+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+      ;;
+    zerocallusedregs)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling zerocallusedregs >&2; fi
+      hardeningCFlagsBefore+=('-fzero-call-used-regs=used-gpr')
       ;;
     *)
       # Ignore unsupported. Checked in Nix that at least *some*

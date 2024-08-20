@@ -19,16 +19,29 @@
 , useFabricmanager ? false
 , ibtSupport ? false
 
-, prePatch ? ""
+, prePatch ? null
 , postPatch ? null
 , patchFlags ? null
-, patches ? []
+, patches ? [ ]
+, preInstall ? null
+, postInstall ? null
 , broken ? false
 , brokenOpen ? broken
 }@args:
 
-{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences, which, libarchive
+{ lib
+, stdenv
+, callPackage
+, pkgs
+, pkgsi686Linux
+, fetchurl
+, fetchzip
+, kernel ? null
+, perl
+, nukeReferences
+, which
+, libarchive
+, jq
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -42,27 +55,35 @@
   # firmware
 , firmware ? openSha256 != null || useFabricmanager
   # Whether the user accepts the NVIDIA Software License
-, config, acceptLicense ? config.nvidia.acceptLicense or false
+, config
+, acceptLicense ? config.nvidia.acceptLicense or false
 }:
 
-with lib;
-
 assert !libsOnly -> kernel != null;
-assert versionOlder version "391" -> sha256_32bit != null;
+assert lib.versionOlder version "391" -> sha256_32bit != null;
 assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
 assert useFabricmanager -> fabricmanagerSha256 != null;
-assert useFabricmanager -> !(useSettings || usePersistenced);
+assert useFabricmanager -> !useSettings;
 
 let
-  nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
-  pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
-  i686bundled = versionAtLeast version "391" && !disable32Bit;
+  nameSuffix = lib.optionalString (!libsOnly) "-${kernel.version}";
+  pkgSuffix = lib.optionalString (lib.versionOlder version "304") "-pkg0";
+  i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
 
   libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
-    libdrm xorg.libXext xorg.libX11
-    xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc
-    wayland mesa libGL openssl
+    libdrm
+    xorg.libXext
+    xorg.libX11
+    xorg.libXv
+    xorg.libXrandr
+    xorg.libxcb
+    zlib
+    stdenv.cc.cc
+    wayland
+    mesa
+    libGL
+    openssl
     dbus # for nvidia-powerd
   ]);
 
@@ -94,47 +115,51 @@ let
     src =
       if !acceptLicense && (openSha256 == null) then throwLicense else
       if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          urls = if args ? url then [ args.url ] else [
-            "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-            "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-          ];
-          sha256 = sha256_64bit;
-        }
+        fetchurl
+          {
+            urls = if args ? url then [ args.url ] else [
+              "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
+              "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
+            ];
+            sha256 = sha256_64bit;
+          }
       else if stdenv.hostPlatform.system == "i686-linux" then
-        fetchurl {
-          urls = if args ? url then [ args.url ] else [
-            "https://us.download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-            "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-          ];
-          sha256 = sha256_32bit;
-        }
+        fetchurl
+          {
+            urls = if args ? url then [ args.url ] else [
+              "https://us.download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
+              "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
+            ];
+            sha256 = sha256_32bit;
+          }
       else if stdenv.hostPlatform.system == "aarch64-linux" && sha256_aarch64 != null then
-        fetchurl {
-          urls = if args ? url then [ args.url ] else [
-            "https://us.download.nvidia.com/XFree86/aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-            "https://download.nvidia.com/XFree86/Linux-aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-          ];
-          sha256 = sha256_aarch64;
-        }
+        fetchurl
+          {
+            urls = if args ? url then [ args.url ] else [
+              "https://us.download.nvidia.com/XFree86/aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
+              "https://download.nvidia.com/XFree86/Linux-aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
+            ];
+            sha256 = sha256_aarch64;
+          }
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
     inherit prePatch postPatch patchFlags;
+    inherit preInstall postInstall;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
 
     outputs = [ "out" ]
-        ++ optional i686bundled "lib32"
-        ++ optional (!libsOnly) "bin"
-        ++ optional (!libsOnly && firmware) "firmware";
+      ++ lib.optional i686bundled "lib32"
+      ++ lib.optional (!libsOnly) "bin"
+      ++ lib.optional (!libsOnly && firmware) "firmware";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
-    makeFlags = optionals (!libsOnly) (kernel.makeFlags ++ [
+    makeFlags = lib.optionals (!libsOnly) (kernel.makeFlags ++ [
       "IGNORE_PREEMPT_RT_PRESENCE=1"
       "NV_BUILD_SUPPORTS_HMM=1"
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
@@ -147,48 +172,77 @@ let
     dontPatchELF = true;
 
     libPath = libPathFor pkgs;
-    libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
+    libPath32 = lib.optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    nativeBuildInputs = [ perl nukeReferences which libarchive ]
-      ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
+    nativeBuildInputs = [ perl nukeReferences which libarchive jq ]
+      ++ lib.optionals (!libsOnly) kernel.moduleBuildDependencies;
 
-    disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
+    disallowedReferences = lib.optionals (!libsOnly) [ kernel.dev ];
 
-    passthru = {
-      open = mapNullable (hash: callPackage ./open.nix {
-        inherit hash;
-        nvidia_x11 = self;
-        broken = brokenOpen;
-      }) openSha256;
-      settings = if useSettings then
-        (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
-          withGtk2 = preferGtk2;
-          withGtk3 = !preferGtk2;
-        } else {};
-      persistenced = if usePersistenced then
-        mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256
-      else {};
-      fabricmanager = if useFabricmanager then
-        mapNullable (hash: callPackage (import ./fabricmanager.nix self hash) { }) fabricmanagerSha256
-      else {};
-      inherit persistencedVersion settingsVersion;
-      compressFirmware = false;
-      ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
-    } // optionalAttrs (!i686bundled) {
-      inherit lib32;
-    };
+    passthru =
+      let
+        fetchFromGithubOrNvidia = { owner, repo, rev, ... }@args:
+          let
+            args' = builtins.removeAttrs args [ "owner" "repo" "rev" ];
+            baseUrl = "https://github.com/${owner}/${repo}";
+          in
+          fetchzip (args' // {
+            urls = [
+              "${baseUrl}/archive/${rev}.tar.gz"
+              "https://download.nvidia.com/XFree86/${repo}/${repo}-${rev}.tar.bz2"
+            ];
+            # github and nvidia use different compression algorithms,
+            #  use an invalid file extension to force detection.
+            extension = "tar.??";
+          });
+      in
+      {
+        open = lib.mapNullable
+          (hash: callPackage ./open.nix {
+            inherit hash;
+            nvidia_x11 = self;
+            broken = brokenOpen;
+          })
+          openSha256;
+        settings =
+          if useSettings then
+            (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256)
+              {
+                withGtk2 = preferGtk2;
+                withGtk3 = !preferGtk2;
+                fetchFromGitHub = fetchFromGithubOrNvidia;
+              } else { };
+        persistenced =
+          if usePersistenced then
+            lib.mapNullable
+              (hash: callPackage (import ./persistenced.nix self hash) {
+                fetchFromGitHub = fetchFromGithubOrNvidia;
+              })
+              persistencedSha256
+          else { };
+        fabricmanager =
+          if useFabricmanager then
+            lib.mapNullable (hash: callPackage (import ./fabricmanager.nix self hash) { }) fabricmanagerSha256
+          else { };
+        inherit persistencedVersion settingsVersion;
+        compressFirmware = false;
+        ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
+      } // lib.optionalAttrs (!i686bundled) {
+        inherit lib32;
+      };
 
     meta = with lib; {
       homepage = "https://www.nvidia.com/object/unix.html";
       description = "${if useFabricmanager then "Data Center" else "X.org"} driver and kernel module for NVIDIA cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ]
-        ++ optionals (sha256_32bit != null) [ "i686-linux" ]
-        ++ optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
-      maintainers = with maintainers; [ jonringer kiskae edwtjo ];
+        ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
+        ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
+      maintainers = with maintainers; [ kiskae edwtjo ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };
   };
 
-in self
+in
+self

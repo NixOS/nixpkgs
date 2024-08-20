@@ -3,21 +3,25 @@
 To enable the Xfce Desktop Environment, set
 
 ```nix
-services.xserver.desktopManager.xfce.enable = true;
-services.xserver.displayManager.defaultSession = "xfce";
+{
+  services.xserver.desktopManager.xfce.enable = true;
+  services.displayManager.defaultSession = "xfce";
+}
 ```
 
 Optionally, *picom* can be enabled for nice graphical effects, some
 example settings:
 
 ```nix
-services.picom = {
-  enable = true;
-  fade = true;
-  inactiveOpacity = 0.9;
-  shadow = true;
-  fadeDelta = 4;
-};
+{
+  services.picom = {
+    enable = true;
+    fade = true;
+    inactiveOpacity = 0.9;
+    shadow = true;
+    fadeDelta = 4;
+  };
+}
 ```
 
 Some Xfce programs are not installed automatically. To install them
@@ -28,7 +32,7 @@ manually (system wide), put them into your
 
 Thunar (the Xfce file manager) is automatically enabled when Xfce is
 enabled. To enable Thunar without enabling Xfce, use the configuration
-option [](#opt-programs.thunar.enable) instead of simply adding
+option [](#opt-programs.thunar.enable) instead of adding
 `pkgs.xfce.thunar` to [](#opt-environment.systemPackages).
 
 If you'd like to add extra plugins to Thunar, add them to

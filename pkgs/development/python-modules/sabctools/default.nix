@@ -2,26 +2,31 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   sabnzbd,
 }:
 buildPythonPackage rec {
   pname = "sabctools";
-  version = "7.1.2"; # needs to match version sabnzbd expects, e.g. https://github.com/sabnzbd/sabnzbd/blob/4.0.x/requirements.txt#L3
-  format = "setuptools";
+  version = "8.2.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wDgFXuxclmqMlRXyr9qpruJJcOXfOiOWTZXX53uYEB8=";
+    hash = "sha256-ZEC813/JpGPEFL+nXKFAXFfUrrhECCIqONe27LwS00g=";
   };
 
-  pythonImportsCheck = ["sabctools"];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.tests = {inherit sabnzbd;};
+  pythonImportsCheck = [ "sabctools" ];
+
+  passthru.tests = {
+    inherit sabnzbd;
+  };
 
   meta = with lib; {
     description = "C implementations of functions for use within SABnzbd";
     homepage = "https://github.com/sabnzbd/sabctools";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [adamcstephens];
+    maintainers = with maintainers; [ adamcstephens ];
   };
 }

@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "dpilger26";
     repo = "NumCpp";
     rev = "Version_${finalAttrs.version}";
-    hash = "sha256-HeT2zZbULXZhmgquQTl3qHL0T50IIUf3oAZaEDIcAys=";
+    hash = "sha256-1LGyDvT+PiGRXn7NorcYUjSPzNuRv/YXhQWIaOa7xdo=";
   };
 
   nativeCheckInputs = [gtest python3];
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_CFLAGS_COMPILE="-Wno-error";
 
   meta = with lib; {
-    description = "A Templatized Header Only C++ Implementation of the Python NumPy Library";
+    description = "Templatized Header Only C++ Implementation of the Python NumPy Library";
     homepage = "https://github.com/dpilger26/NumCpp";
     license = licenses.mit;
     maintainers = with maintainers; [spalf];

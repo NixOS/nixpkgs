@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeText
 
 , cmake
 , pkg-config
@@ -27,15 +26,15 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.26";
+  version = "0.0.32";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
-    rev = "v${version}";
-    hash = "sha256-p+ZL3oxzwKhh+j1bxakgyStH+1GAu2aEwNmsqo6fNFo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3oL+hRFATdJmBmZK55Ui2blj8LTqt/zJWJ85kSUFCY4=";
   };
 
   nativeBuildInputs = [
@@ -107,4 +106,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

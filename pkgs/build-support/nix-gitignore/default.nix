@@ -7,9 +7,32 @@
 # - zero or more directories. For example, "a/**/b" matches "a/b",
 # - "a/x/b", "a/x/y/b" and so on.
 
-with builtins;
-
 let
+  inherit (builtins) filterSource;
+
+  inherit (lib)
+    concatStringsSep
+    elemAt
+    filter
+    head
+    isList
+    length
+    optionals
+    optionalString
+    pathExists
+    readFile
+    removePrefix
+    replaceStrings
+    stringLength
+    sub
+    substring
+    toList
+    trace
+    ;
+
+
+  inherit (lib.strings) match split typeOf;
+
   debug = a: trace a a;
   last = l: elemAt l ((length l) - 1);
 in rec {
@@ -17,7 +40,7 @@ in rec {
   filterPattern = patterns: root:
     (name: _type:
       let
-        relPath = lib.removePrefix ((toString root) + "/") name;
+        relPath = removePrefix ((toString root) + "/") name;
         matches = pair: (match (head pair) relPath) != null;
         matched = map (pair: [(matches pair) (last pair)]) patterns;
       in
@@ -45,7 +68,7 @@ in rec {
           escs = "\\*?";
           splitString =
             let recurse = str : [(substring 0 1 str)] ++
-                                 (lib.optionals (str != "") (recurse (substring 1 (stringLength(str)) str) ));
+                                 (optionals (str != "") (recurse (substring 1 (stringLength(str)) str) ));
             in str : recurse str;
           chars = s: filter (c: c != "" && !isList c) (splitString s);
           escape = s: map (c: "\\" + c) (chars s);
@@ -66,7 +89,7 @@ in rec {
       handleSlashPrefix = l:
         let
           split = (match "^(/?)(.*)" l);
-          findSlash = l: lib.optionalString ((match ".+/.+" l) == null) l;
+          findSlash = l: optionalString ((match ".+/.+" l) == null) l;
           hasSlash = mapAroundCharclass findSlash l != l;
         in
           (if (elemAt split 0) == "/" || hasSlash
@@ -94,12 +117,12 @@ in rec {
   gitignoreCompileIgnore = file_str_patterns: root:
     let
       onPath = f: a: if typeOf a == "path" then f a else a;
-      str_patterns = map (onPath readFile) (lib.toList file_str_patterns);
+      str_patterns = map (onPath readFile) (toList file_str_patterns);
     in concatStringsSep "\n" str_patterns;
 
-  gitignoreFilterPure = filter: patterns: root: name: type:
+  gitignoreFilterPure = predicate: patterns: root: name: type:
     gitignoreFilter (gitignoreCompileIgnore patterns root) root name type
-    && filter name type;
+    && predicate name type;
 
   # This is a very hacky way of programming this!
   # A better way would be to reuse existing filtering by making multiple gitignore functions per each root.
@@ -145,23 +168,23 @@ in rec {
       '');
 
   withGitignoreFile = patterns: root:
-    lib.toList patterns ++ [ ".git" ] ++ [(root + "/.gitignore")];
+    toList patterns ++ [ ".git" ] ++ [(root + "/.gitignore")];
 
   withRecursiveGitignoreFile = patterns: root:
-    lib.toList patterns ++ [ ".git" ] ++ [(compileRecursiveGitignore root)];
+    toList patterns ++ [ ".git" ] ++ [(compileRecursiveGitignore root)];
 
   # filterSource derivatives
 
-  gitignoreFilterSourcePure = filter: patterns: root:
-    filterSource (gitignoreFilterPure filter patterns root) root;
+  gitignoreFilterSourcePure = predicate: patterns: root:
+    filterSource (gitignoreFilterPure predicate patterns root) root;
 
-  gitignoreFilterSource = filter: patterns: root:
-    gitignoreFilterSourcePure filter (withGitignoreFile patterns root) root;
+  gitignoreFilterSource = predicate: patterns: root:
+    gitignoreFilterSourcePure predicate (withGitignoreFile patterns root) root;
 
-  gitignoreFilterRecursiveSource = filter: patterns: root:
-    gitignoreFilterSourcePure filter (withRecursiveGitignoreFile patterns root) root;
+  gitignoreFilterRecursiveSource = predicate: patterns: root:
+    gitignoreFilterSourcePure predicate (withRecursiveGitignoreFile patterns root) root;
 
-  # "Filter"-less alternatives
+  # "Predicate"-less alternatives
 
   gitignoreSourcePure = gitignoreFilterSourcePure (_: _: true);
   gitignoreSource = patterns: let type = typeOf patterns; in

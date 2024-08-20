@@ -1,23 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, boto3
-, diskcache
-, enum34
-, packaging
-, pathlib
-, numpy
-, requests
-, scikit-image
-, six
-, pytestCheckHook
-, isPy27
-, tifffile
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  boto3,
+  diskcache,
+  packaging,
+  numpy,
+  requests,
+  scikit-image,
+  six,
+  pytestCheckHook,
+  tifffile,
 }:
 
 buildPythonPackage rec {
   pname = "slicedimage";
   version = "4.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spacetx";
@@ -35,11 +34,9 @@ buildPythonPackage rec {
     scikit-image
     six
     tifffile
-  ] ++ lib.optionals isPy27 [ pathlib enum34 ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Ignore tests which require setup, check again if disabledTestFiles can be used
   pytestFlagsArray = [ "--ignore tests/io_" ];
@@ -48,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to access sliced imaging data";
+    mainProgram = "slicedimage";
     homepage = "https://github.com/spacetx/slicedimage";
     license = licenses.mit;
     maintainers = [ ];

@@ -4,31 +4,36 @@
 , fetchFromGitHub
 , lvm2
 , pkg-config
+, stdenv
 }:
 
 buildGoModule rec {
   pname = "kubeclarity";
-  version = "2.21.1";
+  version = "2.23.3";
 
   src = fetchFromGitHub {
     owner = "openclarity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+kWqw8o5KlVciWIB8cCVkMuiqW0wpIfua5qVgXZG3ww=";
+    hash = "sha256-MC9GeJeVG7ROkpmOW2HD/fWMMnHo43q4Du9MzWTk2cg=";
   };
 
-  vendorHash = "sha256-kYdKCHqzDbfCGMlTMPSHAQkSLyhkCl/OvV7CF5jdyaY=";
+  vendorHash = "sha256-JY64fqzNBpo9Jwo8sWsWTVVAO5zzwxwXy0A2bgqJHuU=";
+
+  proxyVendor = true;
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
     lvm2
   ];
 
   sourceRoot = "${src.name}/cli";
+
+  CGO_ENABLED = "0";
 
   ldflags = [
     "-s"
@@ -41,6 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubernetes runtime scanner";
+    mainProgram = "kubeclarity";
     longDescription = ''
       KubeClarity is a vulnerabilities scanning and CIS Docker benchmark tool that
       allows users to get an accurate and immediate risk assessment of their

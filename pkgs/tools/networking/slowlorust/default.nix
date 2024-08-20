@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/MJVL/slowlorust";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "slowlorust";
   };
 }

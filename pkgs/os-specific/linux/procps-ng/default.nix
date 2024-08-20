@@ -15,6 +15,9 @@
   # exception is ‘watch’ which is portable enough to run on pretty much
   # any UNIX-compatible system.
 , watchOnly ? !(stdenv.isLinux || stdenv.isCygwin)
+
+, binlore
+, procps
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +30,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RRiz56r9NOwH0AY9JQ/UdJmbILIAIYw65W9dIRPxQbQ=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    ./v3-CVE-2023-4016.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # NOTE: Starting from 4.x we will not need a patch anymore, but need to add
     # "--disable-w" to configureFlags instead to prevent the utmp errors
     (fetchpatch {
@@ -46,8 +51,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Too red
-  configureFlags = [ "--disable-modern-top" ]
+  # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
+  configureFlags = [ "--disable-modern-top" "--enable-watch8bit" ]
     ++ lib.optional withSystemd "--with-systemd"
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
@@ -59,11 +64,17 @@ stdenv.mkDerivation rec {
     install -m 0644 -D watch.1 $out/share/man/man1/watch.1
   '';
 
+  # no obvious exec in documented arguments; haven't trawled source
+  # to figure out what exec binlore hits on
+  passthru.binlore.out = binlore.synthesize procps ''
+    execer cannot bin/{ps,top,free}
+  '';
+
   meta = with lib; {
     homepage = "https://gitlab.com/procps-ng/procps";
     description = "Utilities that give information about processes using the /proc filesystem";
     priority = 11; # less than coreutils, which also provides "kill" and "uptime"
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.typetetris ];
   };

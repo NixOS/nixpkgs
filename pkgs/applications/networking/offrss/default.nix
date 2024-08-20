@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
     homepage = "http://vicerveza.homeunix.net/~viric/cgi-bin/offrss";
     description = "Offline RSS/Atom reader";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "offrss";
   };
 }

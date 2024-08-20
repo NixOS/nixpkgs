@@ -1,23 +1,22 @@
-diff -ru Paranoid-2.05/lib/Paranoid.pm /tmp/Paranoid-2.05/lib/Paranoid.pm
---- Paranoid-2.05/lib/Paranoid.pm	2017-02-06 05:48:57.000000000 -0500
-+++ /tmp/Paranoid-2.05/lib/Paranoid.pm	2018-05-10 06:40:35.286313299 -0400
-@@ -61,7 +61,7 @@
+diff '--color=auto' -ur Paranoid-2.10/lib/Paranoid.pm Paranoid-2.10-patched/lib/Paranoid.pm
+--- Paranoid-2.10/lib/Paranoid.pm	2022-03-08 10:01:04.000000000 +0100
++++ Paranoid-2.10-patched/lib/Paranoid.pm	2023-10-20 16:57:54.025754755 +0200
+@@ -47,7 +47,7 @@
+ %EXPORT_TAGS = ( all => [@EXPORT_OK], );
  
-     my $path = shift;
+ use constant PTRUE_ZERO   => '0 but true';
+-use constant DEFAULT_PATH => '/bin:/sbin:/usr/bin:/usr/sbin';
++use constant DEFAULT_PATH => '__BLESSED_PATH__';
  
--    $path = '/bin:/usr/bin' unless defined $path;
-+    $path = '__BLESSED_PATH__' unless defined $path;
- 
-     delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
-     $ENV{PATH} = $path;
-Binary files Paranoid-2.05/lib/.Paranoid.pm.swp and /tmp/Paranoid-2.05/lib/.Paranoid.pm.swp differ
-diff -ru Paranoid-2.05/t/01_init_core.t /tmp/Paranoid-2.05/t/01_init_core.t
---- Paranoid-2.05/t/01_init_core.t	2016-07-12 04:49:33.000000000 -0400
-+++ /tmp/Paranoid-2.05/t/01_init_core.t	2018-05-10 06:43:41.323183381 -0400
-@@ -35,5 +35,5 @@
+ #####################################################################
+ #
+diff '--color=auto' -ur Paranoid-2.10/t/01_init_core.t Paranoid-2.10-patched/t/01_init_core.t
+--- Paranoid-2.10/t/01_init_core.t	2022-01-24 10:30:20.000000000 +0100
++++ Paranoid-2.10-patched/t/01_init_core.t	2023-10-20 16:58:16.856288407 +0200
+@@ -35,5 +35,4 @@
  ok( psecureEnv('/bin:/sbin'), 'psecureEnv 1' );
  is( $ENV{PATH}, '/bin:/sbin', 'Validated PATH' );
  ok( psecureEnv(), 'psecureEnv 2' );
--is( $ENV{PATH}, '/bin:/usr/bin', 'Validated PATH' );
+-is( $ENV{PATH}, '/bin:/sbin:/usr/bin:/usr/sbin', 'Validated PATH' );
+-
 +is( $ENV{PATH}, '__BLESSED_PATH__', 'Validated PATH' );
- 

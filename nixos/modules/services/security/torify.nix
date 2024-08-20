@@ -27,7 +27,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to build tsocks wrapper script to relay application traffic via Tor.
 
           ::: {.important}
@@ -44,7 +44,7 @@ in
         type = types.str;
         default = "localhost:9050";
         example = "192.168.0.20";
-        description = lib.mdDoc ''
+        description = ''
           IP address of TOR client to use.
         '';
       };
@@ -52,7 +52,7 @@ in
       config = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration. Contents will be added verbatim to TSocks
           configuration file.
         '';

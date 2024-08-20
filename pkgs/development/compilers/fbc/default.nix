@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "fbc";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchzip {
     # Bootstrap tarball has sources pretranslated from FreeBASIC to C
     url = "https://github.com/freebasic/fbc/releases/download/${version}/FreeBASIC-${version}-source-bootstrap.tar.xz";
-    hash = "sha256-7FmyEfykOAgHaL2AG8zIgftzOszhwVzNKEqskiLGpfk=";
+    hash = "sha256-LBROv3m1DrEfSStMbNuLC+fldYNfSS+D09bJyNMNPP0=";
   };
 
   postPatch = ''
@@ -122,7 +122,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.freebasic.net/";
-    description = "A multi-platform BASIC Compiler";
+    description = "Multi-platform BASIC Compiler";
+    mainProgram = "fbc";
     longDescription = ''
       FreeBASIC is a completely free, open-source, multi-platform BASIC compiler (fbc),
       with syntax similar to (and support for) MS-QuickBASIC, that adds new features

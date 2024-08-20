@@ -1,16 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi
-, py, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  py,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-raisesregexp";
   version = "2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "b54372494fc1f11388b1b9348aeb36b69609699eb8f46e0e010afc733d78236a";
   };
 
-  buildInputs = [ py pytest ];
+  buildInputs = [
+    py
+    pytest
+  ];
 
   # https://github.com/kissgyorgy/pytest-raisesregexp/pull/3
   prePatch = ''

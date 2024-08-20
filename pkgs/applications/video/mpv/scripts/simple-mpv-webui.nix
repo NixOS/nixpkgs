@@ -1,27 +1,35 @@
-{ lib, stdenvNoCC
-, fetchFromGitHub }:
-stdenvNoCC.mkDerivation rec {
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+}:
+buildLua rec {
   pname = "simple-mpv-ui";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "open-dynaMIX";
     repo = "simple-mpv-webui";
     rev = "v${version}";
-    sha256 = "1z0y8sdv5mbxznxqh43w5592ym688vkvqg7w26p8cinrhf09pbw8";
+    hash = "sha256-I8lwpo3Hfpy3UnPMmHEJCdArVQnNL245NkxsYVmnMF0=";
+    sparseCheckout = [
+      "main.lua"
+      "webui-page"
+    ];
   };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/share/mpv/scripts
-    cp -r webui.lua webui-page $out/share/mpv/scripts/
-  '';
-  passthru.scriptName = "webui.lua";
+  scriptPath = ".";
+  passthru.scriptName = "webui";
 
   meta = with lib; {
-    description = "A web based user interface with controls for the mpv mediaplayer";
+    description = "Web based user interface with controls for the mpv mediaplayer";
     homepage = "https://github.com/open-dynaMIX/simple-mpv-webui";
-    maintainers = with maintainers; [ cript0nauta zopieux ];
+    maintainers = with maintainers; [
+      cript0nauta
+      zopieux
+    ];
     longDescription = ''
       You can access the webui when accessing http://127.0.0.1:8080 or
       http://[::1]:8080 in your webbrowser. By default it listens on
@@ -30,4 +38,3 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
   };
 }
-

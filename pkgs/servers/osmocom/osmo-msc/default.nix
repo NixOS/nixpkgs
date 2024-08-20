@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-msc";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-msc";
     rev = version;
-    hash = "sha256-e36k/uEajtQ3cnqn+xvPQPGWuA8ILIlkjOkd96IOvow=";
+    hash = "sha256-3yQKboodOBc55R6CdvqSFSwQpstvCVvtZMn7gFKASmI=";
   };
 
   postPatch = ''
@@ -53,9 +53,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Osmocom implementation of 3GPP Mobile Swtiching Centre (MSC)";
+    mainProgram = "osmo-msc";
     homepage = "https://osmocom.org/projects/osmomsc/wiki";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

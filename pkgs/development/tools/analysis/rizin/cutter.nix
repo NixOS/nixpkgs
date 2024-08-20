@@ -1,38 +1,67 @@
-{ fetchFromGitHub, lib, mkDerivation
+{ lib
+, fetchFromGitHub
+, stdenv
 # for passthru.plugins
 , pkgs
 # nativeBuildInputs
-, qmake, pkg-config, cmake
+, cmake
+, pkg-config
+, wrapQtAppsHook
 # Qt
-, qtbase, qtsvg, qtwebengine, qttools
+, qt5compat
+, qtbase
+, qtwayland
+, qtsvg
+, qttools
+, qtwebengine
 # buildInputs
 , graphviz
-, rizin
 , python3
-, wrapQtAppsHook
+, rizin
 }:
 
-let cutter = mkDerivation rec {
+let cutter = stdenv.mkDerivation rec {
   pname = "cutter";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "cutter";
     rev = "v${version}";
-    hash = "sha256-88yIqFYIv7o6aC2YSJwWJ46fZJBnOmifv+SirsfS4tw=";
+    hash = "sha256-TSEi1mXVvvaGo4koo3EnN/veXPUHF747g+gifnl4IDQ=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qmake pkg-config python3 wrapQtAppsHook ];
-  propagatedBuildInputs = [ python3.pkgs.pyside2 ];
-  buildInputs = [ graphviz qtbase qttools qtsvg qtwebengine rizin python3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    wrapQtAppsHook
+  ];
+
+  propagatedBuildInputs = [
+    python3.pkgs.pyside6
+  ];
+
+  buildInputs = [
+    graphviz
+    python3
+    qt5compat
+    qtbase
+    qtsvg
+    qttools
+    qtwebengine
+    rizin
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
+  ];
 
   cmakeFlags = [
     "-DCUTTER_USE_BUNDLED_RIZIN=OFF"
     "-DCUTTER_ENABLE_PYTHON=ON"
     "-DCUTTER_ENABLE_PYTHON_BINDINGS=ON"
     "-DCUTTER_ENABLE_GRAPHVIZ=ON"
+    "-DCUTTER_QT6=ON"
   ];
 
   preBuild = ''
@@ -59,5 +88,6 @@ let cutter = mkDerivation rec {
     license = licenses.gpl3;
     mainProgram = "cutter";
     maintainers = with maintainers; [ mic92 dtzWill ];
+    inherit (rizin.meta) platforms;
   };
 }; in cutter

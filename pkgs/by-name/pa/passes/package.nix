@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passes";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "pablo-s";
     repo = "passes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SIJLBVWyW9+Hzb6ebfUnBfUuvNmYBm9ojKrnFOS3BGc=";
+    hash = "sha256-RfoqIyqc9zwrWZ5RLhQl+6vTccbCTwtDcMlnWPCDOag=";
   };
 
   postPatch = ''
@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A digital pass manager";
+    description = "Digital pass manager";
+    mainProgram = "passes";
     homepage = "https://github.com/pablo-s/passes";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];

@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, round
-, graphviz
-, inkscape
-, imagemagick
-, pytestCheckHook
-, typed-ast
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  round,
+  graphviz,
+  inkscape,
+  imagemagick,
+  pytestCheckHook,
+  typed-ast,
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.23.3";
+  version = "0.23.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "mingrammer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4b+jmR56y2VV0XxD6FCmNpDB0UKH9+FqcTQuU2jRCXo=";
+    hash = "sha256-2jRWN2glGEr51fzny8nkqa5c2EdJG5aZPG2eTD7AISY=";
   };
 
   postPatch = ''
@@ -45,7 +46,8 @@ buildPythonPackage rec {
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
   nativeBuildInputs = [
-    inkscape imagemagick
+    inkscape
+    imagemagick
     jinja2
     poetry-core
     round
@@ -56,13 +58,9 @@ buildPythonPackage rec {
     typed-ast
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "diagrams"
-  ];
+  pythonImportsCheck = [ "diagrams" ];
 
   meta = with lib; {
     description = "Diagram as Code";

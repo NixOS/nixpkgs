@@ -58,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pdf_viewer_build_config.pro \
-      --replace "-lmupdf-threads" "-lgumbo -lharfbuzz -lfreetype -ljbig2dec -ljpeg -lopenjp2"
+      --replace "-lmupdf-threads" "-lgumbo -lharfbuzz -lfreetype -ljbig2dec -ljpeg -lopenjp2" \
+      --replace "-lmupdf-third" ""
     substituteInPlace pdf_viewer/main.cpp \
       --replace "/usr/share/sioyek" "$out/share" \
       --replace "/etc/sioyek" "$out/etc"
@@ -84,7 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://sioyek.info/";
-    description = "A PDF viewer designed for research papers and technical books";
+    description = "PDF viewer designed for research papers and technical books";
+    mainProgram = "sioyek";
     changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ podocarp ];

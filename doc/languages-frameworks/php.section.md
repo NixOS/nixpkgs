@@ -58,7 +58,7 @@ php.withExtensions ({ enabled, all }:
   ++ [ all.imagick ])
 ```
 
-To build your list of extensions from the ground up, you can simply
+To build your list of extensions from the ground up, you can
 ignore `enabled`:
 
 ```nix
@@ -97,7 +97,7 @@ let
   myPhp = php.withExtensions ({ all, ... }: with all; [ imagick opcache ]);
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
-};
+}
 ```
 
 ```nix
@@ -108,7 +108,7 @@ let
   };
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
-};
+}
 ```
 
 #### Example usage with `nix-shell` {#ssec-php-user-guide-installing-with-extensions-nix-shell}
@@ -140,7 +140,7 @@ Example of building `composer` with additional extensions:
 ### Overriding PHP packages {#ssec-php-user-guide-overriding-packages}
 
 `php-packages.nix` form a scope, allowing us to override the packages defined
-within. For example, to apply a patch to a `mysqlnd` extension, you can simply
+within. For example, to apply a patch to a `mysqlnd` extension, you can
 pass an overlay-style function to `php`’s `packageOverrides` argument:
 
 ```nix
@@ -149,7 +149,7 @@ php.override {
     extensions = prev.extensions // {
       mysqlnd = prev.extensions.mysqlnd.overrideAttrs (attrs: {
         patches = attrs.patches or [] ++ [
-          …
+          # ...
         ];
       });
     };
@@ -191,7 +191,7 @@ using the `bin` attribute in `composer.json`, these binaries will be
 automatically linked and made accessible in the derivation. In this context,
 "binaries" refer to PHP scripts that are intended to be executable.
 
-To use the helper effectively, simply add the `vendorHash` attribute, which
+To use the helper effectively, add the `vendorHash` attribute, which
 enables the wrapper to handle the heavy lifting.
 
 Internally, the helper operates in three stages:
@@ -283,7 +283,10 @@ in {
   ];
 
   composerRepository = php.mkComposerRepository {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
+    composerNoDev = true;
+    composerNoPlugins = true;
+    composerNoScripts = true;
     # Specifying a custom composer.lock since it is not present in the sources.
     composerLock = ./composer.lock;
     # The composer vendor hash

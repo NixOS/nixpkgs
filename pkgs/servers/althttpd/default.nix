@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Althttpd webserver";
+    description = "Althttpd webserver";
     homepage = "https://sqlite.org/althttpd/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
+    mainProgram = "althttpd";
   };
 }

@@ -3,20 +3,20 @@
 , autoreconfHook
 , pkg-config
 , dbus
-, fetchpatch
 , sysctl
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.58";
+  version = "0.67";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    hash = "sha256-CwUwwvyT541aIvypVMqRhHkVJLna121Cme+v7c0FLWo=";
+    hash = "sha256-PIxPhKqsxybkLQerkQ15kTRh0oW812lWbCGEig11KQk=";
   };
 
   nativeBuildInputs = [
@@ -30,18 +30,19 @@ stdenv.mkDerivation rec {
     sysctl
   ];
 
-  patches = [
-    # /proc/sys/net/core/somaxconn doesn't always exist in the nix build environment
-    (fetchpatch {
-      name = "skip-sysctl-test-if-sysfs-not-available.patch";
-      url = "https://patchwork.kernel.org/project/ell/patch/526DA75D-01AB-4D85-BF5C-5F25E5C39480@kloenk.dev/raw/";
-      hash = "sha256-YYGYWQ67cbMLt6RnqZmHt+tpvVIDKPbSCqPIouk6alU=";
-    })
-  ];
   enableParallelBuilding = true;
+
+  # Runs multiple dbus instances on the same port failing the bind.
+  enableParallelChecking = false;
 
   # tests sporadically fail on musl
   doCheck = !stdenv.hostPlatform.isMusl;
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
@@ -52,6 +53,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=${version}";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 dtzWill amaxine ];
+    maintainers = with maintainers; [ mic92 dtzWill ];
   };
 }

@@ -1,62 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, shapely
-, python-dateutil
-, pytz
-, importlib-metadata
-, numpy
-, dateparser
-, remotezip
-, pytestCheckHook
-, requests-mock
-, defusedxml
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  defusedxml,
+  fetchFromGitHub,
+  importlib-metadata,
+  numpy,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  remotezip,
+  requests-mock,
+  requests,
+  setuptools-scm,
+  shapely,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "6.6.3";
-  format = "setuptools";
+  version = "8.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w4xpCqNal0BHsmf1cL4k/DKzs/e9WQXTQNJNs8puJUU=";
+    hash = "sha256-cmKZ+pM7KDvGbO/+B6Xmm7zS69aq3MbRuyByV8ZT6hc=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    shapely
-    python-dateutil
-    pytz
+  pythonRelaxDeps = [ "tenacity" ];
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    dateparser
     importlib-metadata
     numpy
-    dateparser
+    python-dateutil
+    pytz
     remotezip
+    requests
+    shapely
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
-    requests-mock
     defusedxml
+    pytestCheckHook
+    requests-mock
+    tenacity
   ];
 
-  pythonImportsCheck = [
-    "asf_search"
-  ];
+  pythonImportsCheck = [ "asf_search" ];
 
   meta = with lib; {
-    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.rev}/CHANGELOG.md";
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bzizou ];
   };

@@ -1,42 +1,36 @@
-{ asttokens
-, buildPythonPackage
-, cython
-, executing
-, fetchFromGitHub
-, git
-, lib
-, littleutils
-, pure-eval
-, pygments
-, pytestCheckHook
-, setuptools-scm
-, toml
-, typeguard
+{
+  asttokens,
+  buildPythonPackage,
+  cython,
+  executing,
+  fetchFromGitHub,
+  lib,
+  littleutils,
+  pure-eval,
+  pygments,
+  pytestCheckHook,
+  setuptools-scm,
+  typeguard,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "stack-data";
-  version = "0.2.0";
+  version = "0.6.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "stack_data";
-    rev = "v${version}";
-    hash = "sha256-brXFrk1UU5hxCVeRvGK7wzRA0Hoj9fgqoxTIwInPrEc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dmBhfCg60KX3gWp3k1CGRxW14z3BLlair0PjLW9HFYo=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    git
+  build-system = [
+    setuptools
     setuptools-scm
-    toml
-  ];
-
-  propagatedBuildInputs = [
-    asttokens
-    executing
-    pure-eval
+    wheel
   ];
 
   nativeCheckInputs = [
@@ -47,9 +41,11 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  # https://github.com/alexmojaki/stack_data/issues/50
-  # incompatible with typeguard>=3
-  doCheck = false;
+  dependencies = [
+    asttokens
+    executing
+    pure-eval
+  ];
 
   disabledTests = [
     # AssertionError
@@ -64,7 +60,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extract data from stack frames and tracebacks";
     homepage = "https://github.com/alexmojaki/stack_data/";
+    changelog = "https://github.com/alexmojaki/stack_data/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
+    mainProgram = "stack-data";
   };
 }

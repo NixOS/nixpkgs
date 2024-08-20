@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Tool to find misconfiguration through LDAP";
+    mainProgram = "adenum";
     homepage = "https://github.com/SecuProject/ADenum";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

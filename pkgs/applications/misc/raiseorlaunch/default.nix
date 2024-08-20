@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "raiseorlaunch";
-  version = "2.3.3";
+  version = "2.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d694015d020a888b42564d56559213b94981ca2b32b952a49b2de4d029d2e59";
+    hash = "sha256-L/hu0mYCAxHkp5me96a6HlEY6QsuJDESpTNhlzVRHWs=";
   };
 
   nativeBuildInputs = [ python3Packages.setuptools-scm ];
@@ -18,7 +18,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ winpat ];
-    description = "A run-or-raise-application-launcher for i3 window manager";
+    description = "Run-or-raise-application-launcher for i3 window manager";
+    mainProgram = "raiseorlaunch";
     homepage = "https://github.com/open-dynaMIX/raiseorlaunch";
     license = licenses.mit;
     platforms = platforms.linux;

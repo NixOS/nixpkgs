@@ -1,48 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.0.3";
-  format = "pyproject";
+  version = "3.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sanders41";
-    repo = pname;
+    repo = "camel-converter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0sNb1zg8cnDjQQnStfe1k8uB1GpmNtd/VwqSqTcLmj0=";
+    hash = "sha256-CJbflRI3wfUmPoVuLwZDYcobESmySvnS99PdpSDhDLk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=camel_converter --cov-report term-missing" ""
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   passthru.optional-dependencies = {
-    pydantic = [
-      pydantic
-    ];
+    pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ] ++ passthru.optional-dependencies.pydantic;
 
-  pythonImportsCheck = [
-    "camel_converter"
-  ];
+  pythonImportsCheck = [ "camel_converter" ];
 
   disabledTests = [
     # AttributeError: 'Test' object has no attribute 'model_dump'

@@ -36,7 +36,8 @@ stdenv.mkDerivation {
       compliant with DLNA/UPnP-AV clients.
     '';
     homepage = "https://sourceforge.net/projects/minidlna/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
+    mainProgram = "minidlnad";
   };
 }

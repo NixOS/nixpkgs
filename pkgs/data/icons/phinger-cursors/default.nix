@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "phinger-cursors";
-  version = "1.1";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://github.com/phisch/phinger-cursors/releases/download/v${version}/phinger-cursors-variants.tar.bz2";
-    sha256 = "sha256-II+1x+rcjGRRVB8GYkVwkKVHNHcNaBKRb6C613901oc=";
+    sha256 = "sha256-3bcxDGK/jg4nmKJPioZ+Svexejl1e6RcheE/OYj2Rvw=";
   };
 
   sourceRoot = ".";
@@ -19,10 +19,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The most over-engineered cursor theme";
+    description = "Most over-engineered cursor theme";
     homepage = "https://github.com/phisch/phinger-cursors";
     platforms = platforms.unix;
     license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

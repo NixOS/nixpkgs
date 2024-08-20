@@ -8,7 +8,7 @@
 , python3
 , shared-mime-info
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , discount
 , glib
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minder";
-  version = "1.15.6";
+  version = "1.16.4";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vxUZo68QdeuFlQxLldWplmeGtyX2NHo3AJZmt+JLCF4=";
+    sha256 = "sha256-1r2PbBYw4mmiScKbX9BGqe4i+emSvismJfPm3opLlOg=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     python3
     shared-mime-info
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phase1geo/Minder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     mainProgram = "com.github.phase1geo.minder";
   };
 }

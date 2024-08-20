@@ -1,44 +1,52 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, importlib-metadata
-, mock
-, poetry-core
-, pydantic
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, types-docutils
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  importlib-metadata,
+  mock,
+  pydantic,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck-core";
-  version = "1.0.3";
-  format = "pyproject";
+  version = "1.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstcheck";
-    repo = pname;
+    repo = "rstcheck-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9U+GhkwBr+f3yEe7McOxqPRUuTp9vP+3WT5wZ92n32w=";
+    hash = "sha256-PiQMk0lIv24S6qXMYIQR+SkSji+WA30ivWs2uPQwf2A=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    docutils
-    importlib-metadata
-    pydantic
-    types-docutils
-    typing-extensions
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
+  };
+
+  dependencies =
+    [
+      docutils
+      pydantic
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-metadata
+      typing-extensions
+    ];
 
   nativeCheckInputs = [
     mock
@@ -46,15 +54,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Disabled until https://github.com/rstcheck/rstcheck-core/issues/19 is resolved.
-    "test_error_without_config_file_macos"
-    "test_file_1_is_bad_without_config_macos"
+  disabledTests = [
+    # https://github.com/rstcheck/rstcheck-core/issues/84
+    "test_check_yaml_returns_error_on_bad_code_block"
   ];
 
-  pythonImportsCheck = [
-    "rstcheck_core"
-  ];
+  pythonImportsCheck = [ "rstcheck_core" ];
 
   meta = with lib; {
     description = "Library for checking syntax of reStructuredText";

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python3
 , openssl
+, libiconv
 , cargo
 , rustPlatform
 , rustc
@@ -16,25 +17,25 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.95.0";
+  version = "1.113.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "matrix-org";
+    owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-WYKuWTOP0w9Xtao9vF3+km4mXVTrt/mshcaXuF92voQ=";
+    hash = "sha256-8Ts2QOSugPU8Do1Mpusez9tSqiaB+UzCWWY4XJk/KRM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-uUu2Hu4a7J49S3rhZ7xsLJQC7seYkVScYYbWaw4Q/rU=";
+    hash = "sha256-Jlnv3GAobrXaO5fBq6oI9Gq8phz2/jFc+QIUYsUyeNo=";
   };
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
-    # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
+    # https://github.com/element-hq/synapse/blob/v1.69.0/pyproject.toml#L177-L185
     sed -i '/^setuptools_rust =/d' pyproject.toml
 
     # Remove version pin on build dependencies. Upstream does this on purpose to
@@ -57,6 +58,8 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -71,6 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     jsonschema
     matrix-common
     msgpack
+    python-multipart
     netaddr
     packaging
     phonenumbers
@@ -146,7 +150,7 @@ python3.pkgs.buildPythonApplication rec {
 
     # high parallelisem makes test suite unstable
     # upstream uses 2 cores but 4 seems to be also stable
-    # https://github.com/matrix-org/synapse/blob/develop/.github/workflows/latest_deps.yml#L103
+    # https://github.com/element-hq/synapse/blob/develop/.github/workflows/latest_deps.yml#L103
     if (( $NIX_BUILD_CORES > 4)); then
       NIX_BUILD_CORES=4
     fi
@@ -164,9 +168,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://matrix.org";
-    changelog = "https://github.com/matrix-org/synapse/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
-    license = licenses.asl20;
+    license = licenses.agpl3Plus;
     maintainers = teams.matrix.members;
   };
 }

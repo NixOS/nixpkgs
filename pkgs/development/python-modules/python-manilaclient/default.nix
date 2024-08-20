@@ -1,43 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, pbr
-, openstackdocstheme
-, oslo-config
-, oslo-log
-, oslo-serialization
-, oslo-utils
-, prettytable
-, requests
-, simplejson
-, sphinx
-, sphinxcontrib-programoutput
-, babel
-, osc-lib
-, python-keystoneclient
-, debtcollector
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  openstackdocstheme,
+  oslo-config,
+  oslo-log,
+  oslo-serialization,
+  oslo-utils,
+  prettytable,
+  requests,
+  simplejson,
+  setuptools,
+  sphinxHook,
+  sphinxcontrib-programoutput,
+  babel,
+  osc-lib,
+  python-keystoneclient,
+  debtcollector,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "4.6.0";
-  format = "setuptools";
+  version = "4.9.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JFdpPX2lVSGN/jVsKMOOKrPm51fwpD476TnQo/0AYWQ=";
+    hash = "sha256-TebykdG0fkeC+5Vs9eiwuJpXam41gg8gR4F2poYKDhI=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
+  build-system = [
     openstackdocstheme
-    sphinx
+    setuptools
+    sphinxHook
     sphinxcontrib-programoutput
   ];
 
-  propagatedBuildInputs = [
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
     pbr
     oslo-config
     oslo-log
@@ -52,12 +55,6 @@ buildPythonPackage rec {
     debtcollector
   ];
 
-  postInstall = ''
-    export PATH=$out/bin:$PATH
-    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
-    installManPage doc/build/man/python-manilaclient.1
-  '';
-
   # Checks moved to 'passthru.tests' to workaround infinite recursion
   doCheck = false;
 
@@ -65,12 +62,11 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [
-    "manilaclient"
-  ];
+  pythonImportsCheck = [ "manilaclient" ];
 
   meta = with lib; {
     description = "Client library for OpenStack Manila API";
+    mainProgram = "manila";
     homepage = "https://github.com/openstack/python-manilaclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

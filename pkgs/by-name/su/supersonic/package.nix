@@ -11,7 +11,7 @@
 , wayland-protocols
 , libxkbcommon
 , libglvnd
-, mpv
+, mpv-unwrapped
 , darwin
 , waylandSupport ? false
 }:
@@ -20,16 +20,16 @@ assert waylandSupport -> stdenv.isLinux;
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.6.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     rev = "v${version}";
-    hash = "sha256-elDVkhRW1mTez56OKQJJ0m0VxP8/Bq+HcXf5iokeY5I=";
+    hash = "sha256-2TxtrfrwqxPQx7PWiWyJLmHtq/SEb2agAImpdsDeBDk=";
   };
 
-  vendorHash = "sha256-z1sDlyc7HW+tYfG0Z4EjUCEM3Su4JjmWIKxU2MV6GOA=";
+  vendorHash = "sha256-bLQLRPu1Kvtx1+Lc8VpPAlOoGzYZo7dzEPwT0iauDWs=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -43,7 +43,7 @@ buildGoModule rec {
 
   buildInputs = [
     libglvnd
-    mpv
+    mpv-unwrapped
   ] ++ lib.optionals stdenv.isLinux [
     xorg.libXxf86vm
     xorg.libX11

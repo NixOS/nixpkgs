@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.firejail;
 
@@ -21,13 +19,13 @@ let
         else { executable = value; desktop = null; profile = null; extraArgs = []; };
         args = lib.escapeShellArgs (
           opts.extraArgs
-          ++ (optional (opts.profile != null) "--profile=${toString opts.profile}")
+          ++ (lib.optional (opts.profile != null) "--profile=${builtins.toString opts.profile}")
         );
       in
       ''
         cat <<_EOF >$out/bin/${command}
         #! ${pkgs.runtimeShell} -e
-        exec /run/wrappers/bin/firejail ${args} -- ${toString opts.executable} "\$@"
+        exec /run/wrappers/bin/firejail ${args} -- ${builtins.toString opts.executable} "\$@"
         _EOF
         chmod 0755 $out/bin/${command}
 
@@ -40,38 +38,38 @@ let
 
 in {
   options.programs.firejail = {
-    enable = mkEnableOption (lib.mdDoc "firejail");
+    enable = lib.mkEnableOption "firejail, a sandboxing tool for Linux";
 
-    wrappedBinaries = mkOption {
-      type = types.attrsOf (types.either types.path (types.submodule {
+    wrappedBinaries = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.either lib.types.path (lib.types.submodule {
         options = {
-          executable = mkOption {
-            type = types.path;
-            description = lib.mdDoc "Executable to run sandboxed";
-            example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
+          executable = lib.mkOption {
+            type = lib.types.path;
+            description = "Executable to run sandboxed";
+            example = lib.literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
           };
-          desktop = mkOption {
-            type = types.nullOr types.path;
+          desktop = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
-            description = lib.mkDoc ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
-            example = literalExpression ''"''${pkgs.firefox}/share/applications/firefox.desktop"'';
+            description = ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
+            example = lib.literalExpression ''"''${pkgs.firefox}/share/applications/firefox.desktop"'';
           };
-          profile = mkOption {
-            type = types.nullOr types.path;
+          profile = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
-            description = lib.mdDoc "Profile to use";
-            example = literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
+            description = "Profile to use";
+            example = lib.literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
           };
-          extraArgs = mkOption {
-            type = types.listOf types.str;
+          extraArgs = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [];
-            description = lib.mdDoc "Extra arguments to pass to firejail";
+            description = "Extra arguments to pass to firejail";
             example = [ "--private=~/.firejail_home" ];
           };
         };
       }));
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           firefox = {
             executable = "''${lib.getBin pkgs.firefox}/bin/firefox";
@@ -83,13 +81,13 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Wrap the binaries in firejail and place them in the global path.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.firejail =
       { setuid = true;
         owner = "root";
@@ -100,5 +98,5 @@ in {
     environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
   };
 
-  meta.maintainers = with maintainers; [ peterhoeg ];
+  meta.maintainers = with lib.maintainers; [ peterhoeg ];
 }

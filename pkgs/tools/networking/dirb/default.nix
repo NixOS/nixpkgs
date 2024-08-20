@@ -32,15 +32,16 @@ in stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postInstall = ''
-    mkdir -p $out/share/dirb/
+    mkdir -p $out/share/{dirb,wordlists}
     cp -r wordlists/ $out/share/dirb/
+    ln -s $out/share/dirb/wordlists/ $out/share/wordlists/dirb
   '';
 
   meta = {
-    description = "A web content scanner";
+    description = "Web content scanner";
     homepage = "https://dirb.sourceforge.net/";
     maintainers = with lib.maintainers; [ bennofs ];
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     platforms = lib.platforms.unix;
   };
 }

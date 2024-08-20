@@ -10,20 +10,20 @@
 
 mkYarnPackage rec {
   pname = "mjolnir";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/vnojWLpu/fktqPUhAdL1QTESxDwFrBVYAkyF79Fj9w=";
+    hash = "sha256-xejFKz2MmdjMFU0X0SdI+qXTBRAwIvkcfZPQqXB9LV0=";
   };
 
   packageJSON = ./package.json;
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-B4s0CYr5Ihoh4gkckwZ3z0Nb4LMET48WvRXuhk3fpQM=";
+    hash = "sha256-RpvdyxJj92k4wFjBBmWCnEpFVOXVWlHEm0SmEBUlnTM=";
   };
 
   packageResolutions = {
@@ -54,7 +54,7 @@ mkYarnPackage rec {
   };
 
   meta = with lib; {
-    description = "A moderation tool for Matrix";
+    description = "Moderation tool for Matrix";
     homepage = "https://github.com/matrix-org/mjolnir";
     longDescription = ''
       As an all-in-one moderation tool, it can protect your server from
@@ -72,5 +72,6 @@ mkYarnPackage rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];
+    mainProgram = "mjolnir";
   };
 }

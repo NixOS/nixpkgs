@@ -4,34 +4,31 @@
 
 stdenv.mkDerivation rec {
   pname = "boolector";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner  = "boolector";
     repo   = "boolector";
     rev    = version;
-    sha256 = "1smcy6yp8wvnw2brgnv5bf40v87k4v4fbdbrhi7987vja632k50z";
+    hash   = "sha256-CdfpXUbU1+yEmrNyl+hvHlJfpzzzx356naim6vRafDg=";
   };
 
   patches = [
-    # present in master - remove after 3.2.2
+    # present in master - remove after 3.2.3
     (fetchpatch {
-      name = "fix-parser-getc-char-casts.patch";
-      url = "https://github.com/Boolector/boolector/commit/cc3a70918538c1e71ea5e7273fa1ac098da37c1b.patch";
-      sha256 = "0pjvagcy74vxa2q75zbshcz8j7rvhl98549xfcf5y8yyxf5h8hyq";
+      name = "update-unit-tests-to-cpp-14.patch";
+      url = "https://github.com/Boolector/boolector/commit/cc13f371c0c5093d98638ddd213dc835ef3aadf3.patch";
+      hash = "sha256-h8DBhAvUu+wXBwmvwRhHnJv3XrbEpBpvX9D1FI/+avc=";
     })
   ];
 
-  postPatch = ''
-    sed s@REPLACEME@file://${gtest.src}@ ${./cmake-gtest.patch} | patch -p1
-  '';
-
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gtest ];
   buildInputs = [ lingeling btor2tools gmp ];
 
   cmakeFlags =
     [ "-DBUILD_SHARED_LIBS=ON"
       "-DUSE_LINGELING=YES"
+      "-DBtor2Tools_INCLUDE_DIR=${btor2tools.dev}/include/btor2parser"
     ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
 
   nativeCheckInputs = [ python3 ];
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An extremely fast SMT solver for bit-vectors and arrays";
+    description = "Extremely fast SMT solver for bit-vectors and arrays";
     homepage    = "https://boolector.github.io";
     license     = licenses.mit;
     platforms   = with platforms; linux ++ darwin;

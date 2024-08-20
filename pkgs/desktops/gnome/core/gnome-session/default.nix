@@ -1,5 +1,4 @@
 { fetchurl
-, fetchpatch
 , lib
 , stdenv
 , substituteAll
@@ -7,6 +6,7 @@
 , ninja
 , pkg-config
 , gnome
+, adwaita-icon-theme
 , glib
 , gtk3
 , gsettings-desktop-schemas
@@ -26,19 +26,18 @@
 , libepoxy
 , bash
 , gnome-session-ctl
-, gnomeShellSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "44.0";
+  version = "46.0";
 
   outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "zPgpqWUmE16en5F1JlFdNqUJK9+jFvNzfdjFpSTb8sY=";
+    hash = "sha256-xuFiSvYJC8ThoZH+Imir+nqN4HgxynpX8hfmeb97mlQ=";
   };
 
   patches = [
@@ -47,12 +46,6 @@ stdenv.mkDerivation rec {
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
       bash = "${bash}/bin/bash";
-    })
-    # See #226355. Can be removed on update to v45.
-    (fetchpatch {
-      name = "fix-gnome-boxes-crash.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-session/commit/fab1a3b91677035d541de2c141f8073c4057342c.patch";
-      hash = "sha256-2xeoNgV8UDexkufXDqimAplX0GC99tUWUqjw3kfN+5Q=";
     })
   ];
 
@@ -77,16 +70,11 @@ stdenv.mkDerivation rec {
     gnome-desktop
     json-glib
     xorg.xtrans
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gnome.gnome-settings-daemon
     gsettings-desktop-schemas
     systemd
     libepoxy
-  ];
-
-  mesonFlags = [
-    "-Dsystemd=true"
-    "-Dsystemd_session=default"
   ];
 
   postPatch = ''
@@ -121,7 +109,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/libexec/gnome-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      ${lib.optionalString gnomeShellSupport "--suffix XDG_DATA_DIRS : \"${gnome.gnome-shell}/share\""} \
+      --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share" \
       --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
   '';
 
@@ -140,7 +128,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME session manager";
-    homepage = "https://wiki.gnome.org/Projects/SessionManagement";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-session";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

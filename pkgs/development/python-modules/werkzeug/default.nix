@@ -1,56 +1,69 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, watchdog
-, ephemeral-port-reserve
-, pytest-timeout
-, pytest-xprocess
-, pytestCheckHook
-, markupsafe
-# for passthru.tests
-, moto, sentry-sdk
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  markupsafe,
+
+  # optional-dependencies
+  watchdog,
+
+  # tests
+  cryptography,
+  ephemeral-port-reserve,
+  greenlet,
+  pytest-timeout,
+  pytest-xprocess,
+  pytestCheckHook,
+
+  # reverse dependencies
+  moto,
+  sentry-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.3.7";
+  version = "3.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K4wORHtLnbzIXdl7butNy69si2w74L1lTiVVPgohV9g=";
+    hash = "sha256-CX5b/anwq6jaa4VFFG3vSB0Gqn0yZudEjizM9n3YvRg=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    markupsafe
-  ];
+  propagatedBuildInputs = [ markupsafe ];
 
   passthru.optional-dependencies = {
     watchdog = lib.optionals (!stdenv.isDarwin) [
-      # watchdog requires macos-sdk 10.13[
+      # watchdog requires macos-sdk 10.13
       watchdog
     ];
   };
 
-  nativeCheckInputs = [
-    ephemeral-port-reserve
-    pytest-timeout
-    pytest-xprocess
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      cryptography
+      ephemeral-port-reserve
+      pytest-timeout
+      pytest-xprocess
+      pytestCheckHook
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ greenlet ]
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_get_machine_id"
-  ];
+  pythonImportsCheck = [ "werkzeug" ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_get_machine_id" ];
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused
@@ -67,16 +80,19 @@ buildPythonPackage rec {
     inherit moto sentry-sdk;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://werkzeug.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     homepage = "https://palletsprojects.com/p/werkzeug/";
-    description = "The comprehensive WSGI web application library";
+    description = "Comprehensive WSGI web application library";
     longDescription = ''
       Werkzeug is a comprehensive WSGI web application library. It
       began as a simple collection of various utilities for WSGI
       applications and has become one of the most advanced WSGI
       utility libraries.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

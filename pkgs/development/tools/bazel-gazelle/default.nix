@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "bazel-gazelle";
-  version = "0.33.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WmDtMOEs7cOb/juWTHjkc8/92f2OL0vurMMM15IE3YI=";
+    hash = "sha256-0FOKLBu1eZMK1nXOmXN4achrZgNUqzzcuC6sH0RLtbc=";
   };
 
   vendorHash = null;

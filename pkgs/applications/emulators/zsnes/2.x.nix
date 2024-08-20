@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/xyproto/zsnes";
-    description = "A maintained fork of zsnes";
+    description = "Maintained fork of zsnes";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;

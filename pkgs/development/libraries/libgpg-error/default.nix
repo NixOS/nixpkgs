@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, gettext
+{ stdenv, lib, buildPackages, fetchurl, fetchpatch, gettext
 , genPosixLockObjOnly ? false
 }: let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
@@ -17,12 +17,20 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.47";
+  version = "1.50";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-njxnCWa5bsx0bCjCxBlUHjvLeH0ac5MPXl9eG8u7m9s=";
+    hash = "sha256-aUBTSeCmM+REooxbNc6PFEhGhFGKUI3EigiZkv6T4go=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/macports/macports-ports/raw/cc17f22f4056d84967bd94cf41458e3d3150f9e1/devel/libgpg-error/files/patch-src-spawn-posix.c.diff";
+      extraPrefix = "";
+      hash = "sha256-nIS9oKcgHdHtRTlaSx7mgwQPXq855t+SNujplQKKhzQ=";
+    })
+  ];
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
@@ -63,7 +71,8 @@ in stdenv.mkDerivation (rec {
   meta = with lib; {
     homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
-    description = "A small library that defines common error values for all GnuPG components";
+    description = "Small library that defines common error values for all GnuPG components";
+    mainProgram = "gen-posix-lock-obj";
 
     longDescription = ''
       Libgpg-error is a small library that defines common error values
@@ -74,6 +83,6 @@ in stdenv.mkDerivation (rec {
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
   };
 } // genPosixLockObjOnlyAttrs)

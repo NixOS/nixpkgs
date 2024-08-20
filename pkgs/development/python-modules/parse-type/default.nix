@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parse
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  parse,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "parse-type";
   version = "0.6.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jenisys";
@@ -22,9 +24,7 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pytest.ini \

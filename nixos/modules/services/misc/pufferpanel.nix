@@ -7,7 +7,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable PufferPanel game management server.
 
         Note that [PufferPanel templates] and binaries downloaded by PufferPanel
@@ -33,13 +33,13 @@ in
       '';
     };
 
-    package = lib.mkPackageOptionMD pkgs "pufferpanel" { };
+    package = lib.mkPackageOption pkgs "pufferpanel" { };
 
     extraGroups = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "podman" ];
-      description = lib.mdDoc ''
+      description = ''
         Additional groups for the systemd service.
       '';
     };
@@ -48,7 +48,7 @@ in
       type = lib.types.listOf lib.types.package;
       default = [ ];
       example = lib.literalExpression "[ pkgs.jre ]";
-      description = lib.mdDoc ''
+      description = ''
         Packages to add to the PATH environment variable. Both the {file}`bin`
         and {file}`sbin` subdirectories of each package are added.
       '';
@@ -66,7 +66,7 @@ in
           PUFFER_PANEL_REGISTRATIONENABLED = "false";
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Environment variables to set for the service. Secrets should be
         specified using {option}`environmentFile`.
 
@@ -93,7 +93,7 @@ in
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File to load environment variables from. Loaded variables override
         values set in {option}`environment`.
       '';

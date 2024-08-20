@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , gst_all_1
 , qtbase
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
     "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
     "-DUSE_QTPDF=OFF"
-    "-DLINK_MUPDF_THIRD=ON"
+    "-DLINK_MUPDF_THIRD=OFF"
     "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
     "-DLINK_MUJS=OFF"
     "-DLINK_GUMBO=ON"
@@ -87,8 +87,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Modular multi screen pdf presentation viewer";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
-    license = with licenses; [ agpl3 gpl3Plus ];
+    license = with licenses; [ agpl3Only gpl3Plus ];
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien dotlambda ];
+    mainProgram = "beamerpresenter";
   };
 }

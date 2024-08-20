@@ -9,38 +9,41 @@ in
 {
   options = {
     services.jackett = {
-      enable = mkEnableOption (lib.mdDoc "Jackett");
+      enable = mkEnableOption "Jackett, API support for your favorite torrent trackers";
+
+      port = mkOption {
+        default = 9117;
+        type = types.port;
+        description = ''
+          Port serving the web interface
+        '';
+      };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/jackett/.config/Jackett";
-        description = lib.mdDoc "The directory where Jackett stores its data files.";
+        description = "The directory where Jackett stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for the Jackett web interface.";
+        description = "Open ports in the firewall for the Jackett web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "jackett";
-        description = lib.mdDoc "User account under which Jackett runs.";
+        description = "User account under which Jackett runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "jackett";
-        description = lib.mdDoc "Group under which Jackett runs.";
+        description = "Group under which Jackett runs.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.jackett;
-        defaultText = literalExpression "pkgs.jackett";
-        description = lib.mdDoc "Jackett package to use.";
-      };
+      package = mkPackageOption pkgs "jackett" { };
     };
   };
 
@@ -58,13 +61,13 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/Jackett --NoUpdates --DataFolder '${cfg.dataDir}'";
+        ExecStart = "${cfg.package}/bin/Jackett --NoUpdates --Port ${toString cfg.port} --DataFolder '${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9117 ];
+      allowedTCPPorts = [ cfg.port ];
     };
 
     users.users = mkIf (cfg.user == "jackett") {

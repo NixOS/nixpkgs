@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, file, zip, wxGTK32, gtk3
-, contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook
+, contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1idaksw1vacmm83krxh5zlb12kad3dkz9ixh70glw1gaibib7vhm";
   };
 
-  nativeBuildInputs = [ pkg-config file zip wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config file zip wrapGAppsHook3 ];
   buildInputs = [ wxGTK32 gtk3 ]
     ++ lib.optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;
-    description = "The open source, cross platform, free C, C++ and Fortran IDE";
+    description = "Open source, cross platform, free C, C++ and Fortran IDE";
     longDescription =
       ''
         Code::Blocks is a free C, C++ and Fortran IDE built to meet the most demanding needs of its users.

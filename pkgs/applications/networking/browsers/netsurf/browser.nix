@@ -5,12 +5,14 @@
 , check
 , curl
 , expat
+, gperf
 , gtk2
 , gtk3
 , libXcursor
 , libXrandr
 , libidn
 , libjpeg
+, libjxl
 , libpng
 , libwebp
 , libxml2
@@ -18,7 +20,7 @@
 , openssl
 , perlPackages
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , xxd
 
 # Netsurf-specific dependencies
@@ -44,11 +46,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf";
-  version = "3.10";
+  version = "3.11";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-NkhEKeGTYUaFwv8kb1W9Cm3d8xoBi+5F4NH3wohRmV4=";
+    hash = "sha256-wopiau/uQo0FOxP4i1xECSIkWXZSLRLq8TfP0y0gHLI=";
   };
 
   nativeBuildInputs = [
@@ -58,15 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     xxd
   ]
-  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook;
+  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook3;
 
   buildInputs = [
     check
     curl
+    gperf
     libXcursor
     libXrandr
     libidn
     libjpeg
+    libjxl
     libpng
     libwebp
     libxml2
@@ -103,8 +107,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
+  env.CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+
+  patchPhase = lib.optionalString stdenv.cc.isClang ''
+    runHook prePatch
+
+    substituteInPlace Makefile \
+      --replace-warn '--trace' '-t' \
+      --replace-warn '-Wimplicit-fallthrough=3' '-Wimplicit-fallthrough'
+
+    runHook postPatch
+  '';
+
   preConfigure = ''
-    cat <<EOF > Makefile.conf
+    cat <<EOF > Makefile.config
     override NETSURF_GTK_RES_PATH  := $out/share/
     override NETSURF_USE_GRESOURCE := YES
     EOF
@@ -117,7 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
-    description = "A free, open source, small web browser";
+    description = "Free, open source, small web browser";
+    mainProgram = "netsurf-gtk3";
     longDescription = ''
       NetSurf is a free, open source web browser. It is written in C and
       released under the GNU Public Licence version 2. NetSurf has its own

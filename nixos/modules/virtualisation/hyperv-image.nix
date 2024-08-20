@@ -12,21 +12,21 @@ in {
         type = with types; either (enum [ "auto" ]) int;
         default = "auto";
         example = 2048;
-        description = lib.mdDoc ''
+        description = ''
           The size of the hyper-v base image in MiB.
         '';
       };
       vmDerivationName = mkOption {
         type = types.str;
         default = "nixos-hyperv-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-        description = lib.mdDoc ''
+        description = ''
           The name of the derivation for the hyper-v appliance.
         '';
       };
       vmFileName = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.vhdx";
-        description = lib.mdDoc ''
+        description = ''
           The file name of the hyper-v appliance.
         '';
       };
@@ -60,7 +60,6 @@ in {
     boot.growPartition = true;
 
     boot.loader.grub = {
-      version = 2;
       device = "nodev";
       efiSupport = true;
       efiInstallAsRemovable = true;

@@ -30,5 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/MichaelMure/git-bug-migration";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ DeeUnderscore ];
+    mainProgram = "git-bug-migration";
   };
 }

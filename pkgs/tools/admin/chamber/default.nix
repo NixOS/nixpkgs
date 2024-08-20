@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "chamber";
-  version = "2.13.4";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J6sLDalvUl4SgSyr5DK/tW7DyRa/qdKw6zornz1R2ck=";
+    sha256 = "sha256-oeHnzKsOgR1R9oEUQJofYaXJR6X6WwRlGU72g4Yc1yg=";
   };
 
   CGO_ENABLED = 0;
 
-  vendorHash = "sha256-BkTC6sqitc1OHdQFlA2BtqxHI31ubBj2GRszs3YlWsA=";
+  vendorHash = "sha256-1glSjsuHN7urlktxJ/vR/jfDgbVBWsui0bZWMhmJ50c=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/segmentio/chamber";
     license = licenses.mit;
     maintainers = with maintainers; [ kalekseev ];
+    mainProgram = "chamber";
   };
 }

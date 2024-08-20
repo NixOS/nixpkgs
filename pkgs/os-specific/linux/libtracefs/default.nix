@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchgit
+, fetchzip
 , pkg-config
 , libtraceevent
 , asciidoc
@@ -21,10 +21,9 @@ stdenv.mkDerivation rec {
   pname = "libtracefs";
   version = "1.7.0";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git";
-    rev = "libtracefs-${version}";
-    sha256 = "sha256-64eXFFdnZHHf4C3vbADtPuIMsfJ85VZ6t8A1gIc1CW0=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${version}.tar.gz";
+    hash = "sha256-64eXFFdnZHHf4C3vbADtPuIMsfJ85VZ6t8A1gIc1CW0=";
   };
 
   postPatch = ''
@@ -55,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux kernel trace file system library";
+    mainProgram = "sqlhist";
     homepage    = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/";
     license     = licenses.lgpl21Only;
     platforms   = platforms.linux;

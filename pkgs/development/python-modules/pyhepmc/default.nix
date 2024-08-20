@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, setuptools
-, setuptools-scm
-, numpy
-, pybind11
-, wheel
-, pytestCheckHook
-, pythonOlder
-, graphviz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  setuptools,
+  setuptools-scm,
+  numpy,
+  pybind11,
+  wheel,
+  pytestCheckHook,
+  pythonOlder,
+  graphviz,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    pybind11
-  ];
+  buildInputs = [ pybind11 ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   dontUseCmakeConfigure = true;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
   CMAKE_ARGS = [ "-DEXTERNAL_PYBIND11=ON" ];
 
   preBuild = ''
@@ -66,4 +62,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ veprbl ];
   };
 }
-

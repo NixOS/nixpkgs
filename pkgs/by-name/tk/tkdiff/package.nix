@@ -2,16 +2,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tkdiff";
-  version = "5.6";
+  version = "5.7";
 
   src = fetchzip {
     url = "mirror://sourceforge/tkdiff/tkdiff-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}.zip";
-    hash = "sha256-EpbIdjsejkkTaSpoZRM5AHz0r1Cio+YzRryK0BoghBk=";
+    hash = "sha256-ZndpolvaXoCAzR4KF+Bu7DJrXyB/C2H2lWp5FyzOc4M=";
   };
-
-  # fix regression: allow /dev/null again. eg: "tkdiff /dev/null file"
-  # svn diff --git -r188:189 https://svn.code.sf.net/p/tkdiff/code/trunk
-  patches = [ ./189.patch ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -26,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A graphical front end to the diff program";
+    description = "Graphical front end to the diff program";
     homepage = "https://tkdiff.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
     longDescription = ''
@@ -37,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       diff regions to achieve exactly the merge output desired.
     '';
     mainProgram = "tkdiff";
-    maintainers = with lib.maintainers; [ robert-manchester ];
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = tk.meta.platforms;
   };
 })

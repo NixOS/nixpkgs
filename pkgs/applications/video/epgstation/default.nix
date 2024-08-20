@@ -6,7 +6,6 @@
 , makeWrapper
 , bash
 , nodejs
-, gzip
 , python3
 }:
 
@@ -119,5 +118,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/l3tnun/EPGStation";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
+    mainProgram = "epgstation";
   };
 }

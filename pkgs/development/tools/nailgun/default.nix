@@ -11,9 +11,9 @@ let
 
   commonMeta = {
     license = lib.licenses.asl20;
-    homepage = "http://www.martiansoftware.com/nailgun/";
+    homepage = "https://www.martiansoftware.com/nailgun/";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   server = stdenvNoCC.mkDerivation {

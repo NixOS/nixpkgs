@@ -1,18 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, gettext, pkg-config, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.19";
+  version = "5.5.23";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    hash = "sha256-4mFn5cY7ipAU4vOiHC2s69fxYJwShQEQ1eA8t5JvOP0=";
+    hash = "sha256-c/Mx2HXAj6mHH8rElG7+F94sSrVSL1N9HZBvaMWUjlw=";
   };
 
   patches = [
-    ./clang.patch
+    (fetchpatch {
+      url = "https://github.com/macports/macports-ports/raw/93de4e9fc1e5e8427bf98f48209e783a5e8fab57/net/whois/files/implicit.patch";
+      extraPrefix = "";
+      hash = "sha256-ogVylQz//tpXxPNIWIHkhghvToU1z1D1FfnUBdZLyRY=";
+    })
   ];
 
   nativeBuildInputs = [ perl gettext pkg-config ];
@@ -39,8 +43,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://packages.qa.debian.org/w/whois.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+    mainProgram = "whois";
   };
 }

@@ -25,6 +25,7 @@
 }:
 
 let
+  atLeast14 = lib.versionAtLeast version "14";
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
@@ -34,6 +35,7 @@ let
   atLeast7  = lib.versionAtLeast version  "7";
   atLeast6  = lib.versionAtLeast version  "6";
   atLeast49 = lib.versionAtLeast version  "4.9";
+  is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
@@ -63,8 +65,9 @@ in
 ++ optionals (noSysDirs) (
   [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
   ({
-    "13" = [ ./13/no-sys-dirs-riscv.patch ];
-    "12" = [ ./no-sys-dirs-riscv.patch ];
+    "14" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
+    "13" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
+    "12" = [ ./no-sys-dirs-riscv.patch ./12/mangle-NIX_STORE-in-__FILE__.patch ];
     "11" = [ ./no-sys-dirs-riscv.patch ];
     "10" = [ ./no-sys-dirs-riscv.patch ];
     "9"  = [ ./no-sys-dirs-riscv-gcc9.patch ];
@@ -73,7 +76,6 @@ in
 ++ optional (atLeast12 && langAda) ./gnat-cflags-11.patch
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
 ++ optional atLeast7 ./ppc-musl.patch
-++ optional is12 ./12/lambda-ICE-PR109241.patch # backport ICE fix on ccache code
 ++ optional (atLeast9 && langD) ./libphobos.patch
 
 
@@ -123,24 +125,41 @@ in
 
 ## Darwin
 
+# Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
+++ optional (atLeast14 && stdenv.isDarwin && stdenv.isx86_64) ../patches/14/libgcc-darwin-detection.patch
+
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
+# Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
+++ optional (atLeast14 && stdenv.isDarwin && langAda) ../patches/14/gcc-darwin-remove-coreservices.patch
+
 # Use absolute path in GNAT dylib install names on Darwin
-++ optional (atLeast12 && stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
+++ optionals (stdenv.isDarwin && langAda) ({
+  "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
+  "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
+  "12" = [ ./gnat-darwin-dylib-install-name.patch ];
+}.${majorVersion} or [])
 
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
 ++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+  "14" = [ (fetchpatch {
+    # There are no upstream release tags in https://github.com/iains/gcc-14-branch.
+    # 04696df09633baf97cdbbdd6e9929b9d472161d3 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.2.0
+    name = "gcc-14-darwin-aarch64-support.patch";
+    url = "https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r0.diff";
+    hash = "sha256-GEUz7KdGzd2WJ0gjX3Uddq2y9bWKdZpT3E9uZ09qLs4=";
+  }) ];
   "13" = [ (fetchpatch {
     name = "gcc-13-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
-    sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/bda0faddfbfb392e7b9c9101056b2c5ab2500508/gcc/gcc-13.3.0.diff";
+    sha256 = "sha256-RBTCBXIveGwuQGJLzMW/UexpUZdDgdXprp/G2NHkmQo=";
   }) ];
   "12" = [ (fetchurl {
     name = "gcc-12-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
-    sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/1ed9eaea059f1677d27382c62f21462b476b37fe/gcc/gcc-12.4.0.diff";
+    sha256 = "sha256-wOjpT79lps4TKG5/E761odhLGCphBIkCbOPiQg/D1Fw=";
   }) ];
   "11" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
@@ -148,6 +167,20 @@ in
     url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
     hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
   }) ];
+  "10" = [ (fetchpatch {
+    # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
+    # d04fe55 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
+    url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...gcc-10-5Dr0-pre-0.diff";
+    hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
+  }) ];
+}.${majorVersion} or [])
+
+# Work around newer AvailabilityInternal.h when building older versions of GCC.
+++ optionals (stdenv.isDarwin) ({
+  "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
+  "8" = [ ../patches/8/AvailabilityInternal.h-fixincludes.patch ];
+  "7" = [ ../patches/7/AvailabilityInternal.h-fixincludes.patch ];
+  "6" = [ ../patches/6/AvailabilityInternal.h-fixincludes.patch ];
 }.${majorVersion} or [])
 
 
@@ -175,8 +208,8 @@ in
 
 ## gcc 11.0 and older ##############################################################################
 
-# https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
-++ optional (is11 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
+# libgcc’s `configure` script misdetects aarch64-darwin, resulting in an invalid deployment target.
+++ optional (is11 && stdenv.isDarwin && stdenv.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
 
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
 ++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
@@ -191,11 +224,18 @@ in
   sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
 })
 
+# Fix undefined symbol errors when building older versions with clang
+++ optional (!atLeast11 && stdenv.cc.isClang && stdenv.hostPlatform.isDarwin) ./clang-genconditions.patch
+
 
 ## gcc 9.0 and older ##############################################################################
 
 ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
 ++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
+
+# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
+# which is not supported by the clang integrated assembler used by default on Darwin.
+++ optional (is9 && hostPlatform.isDarwin) ./9/gcc9-darwin-as-gstabs.patch
 
 
 ## gcc 8.0 and older ##############################################################################
@@ -203,6 +243,15 @@ in
 # for 49 this is applied later
 ++ optional (atLeast49 && !is49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
 ++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+
+# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
+# which is not supported by the clang integrated assembler used by default on Darwin.
+++ optional (is8 && hostPlatform.isDarwin) ./8/gcc8-darwin-as-gstabs.patch
+
+# Make avr-gcc8 build on aarch64-darwin
+# avr-gcc8 is maintained for the `qmk` package
+# https://github.com/osx-cross/homebrew-avr/blob/main/Formula/avr-gcc%408.rb#L69
+++ optional (is8 && targetPlatform.isAvr && hostPlatform.isDarwin && hostPlatform.isAarch64) ./8/avr-gcc-8-darwin.patch
 
 
 ## gcc 7.0 and older ##############################################################################
@@ -239,6 +288,15 @@ in
   ./gnat-cflags.patch
   ./6/gnat-glibc234.patch
 ]
+
+# The clang-based assembler used in darwin.binutils (LLVM >11) does not support piping input.
+# Fortunately, it does not exhibit the problem GCC has with the cctools assembler.
+# This patch can be dropped should darwin.binutils ever implement support.
+++ optional (!atLeast7 && hostPlatform.isDarwin && lib.versionAtLeast (lib.getVersion stdenv.cc) "12") ./4.9/darwin-clang-as.patch
+
+# Building libstdc++ with flat namespaces results in trying to link CoreFoundation, which
+# defaults to the impure, system location and causes the build to fail.
+++ optional (is6 && hostPlatform.isDarwin) ./6/libstdc++-disable-flat_namespace.patch
 
 ## gcc 4.9 and older ##############################################################################
 

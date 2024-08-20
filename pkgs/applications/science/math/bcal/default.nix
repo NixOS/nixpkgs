@@ -29,9 +29,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Storage conversion and expression calculator";
+    mainProgram = "bcal";
     homepage = "https://github.com/jarun/bcal";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = [ ];
   };
 }

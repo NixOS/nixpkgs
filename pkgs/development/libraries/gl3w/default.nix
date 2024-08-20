@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gl3w";
-  version = "unstable-2023-10-10";
+  version = "0-unstable-2023-10-10";
 
   src = fetchFromGitHub {
     owner = "skaslev";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Simple OpenGL core profile loading";
     homepage = "https://github.com/skaslev/gl3w";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

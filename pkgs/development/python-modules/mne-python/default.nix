@@ -1,74 +1,94 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, pytestCheckHook
-, pytest-timeout
-, h5py
-, matplotlib
-, nibabel
-, pandas
-, scikit-learn
-, decorator
-, jinja2
-, pooch
-, tqdm
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  numpy,
+  scipy,
+  pytestCheckHook,
+  pytest-timeout,
+  matplotlib,
+  decorator,
+  jinja2,
+  pooch,
+  tqdm,
+  packaging,
+  lazy-loader,
+  h5io,
+  pymatreader,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "1.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mne-tools";
-    repo = pname;
+    repo = "mne-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-djVQkj8ktIOxe1xmi+XuIvdS1WdDzozgTJNJhWAhuBo=";
+    hash = "sha256-piCFynpKh7gTWIGh2g0gJICLS+eg/0XAxaDkyu7v5vs=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml  \
+      --replace-fail "--cov-report=" ""  \
+      --replace-fail "--cov-branch" ""
+  '';
+
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
+
   propagatedBuildInputs = [
-    decorator
-    jinja2
-    matplotlib
     numpy
-    pooch
     scipy
-    setuptools
+    matplotlib
     tqdm
+    pooch
+    decorator
+    packaging
+    jinja2
+    lazy-loader
+  ];
+
+  passthru.optional-dependencies.hdf5 = [
+    h5io
+    pymatreader
   ];
 
   nativeCheckInputs = [
-    h5py
-    nibabel
-    pandas
     pytestCheckHook
-    scikit-learn
     pytest-timeout
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
-    export HOME=$TMP
+    export HOME=$(mktemp -d)
     export MNE_SKIP_TESTING_DATASET_TESTS=true
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
-  # All tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "mne"
+  disabledTests = [
+    # Fails due to changes in Numpy types
+    "mne.stats._adjacency.combine_adjacency"
   ];
+
+  pythonImportsCheck = [ "mne" ];
 
   meta = with lib; {
     description = "Magnetoencephelography and electroencephalography in Python";
+    mainProgram = "mne";
     homepage = "https://mne.tools";
+    changelog = "https://mne.tools/stable/changes/v${version}.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [
+      bcdarwin
+      mbalatsko
+    ];
   };
 }

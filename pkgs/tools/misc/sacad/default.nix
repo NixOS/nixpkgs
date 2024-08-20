@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sacad";
-  version = "2.4.0";
+  version = "2.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KLVkyiXjpqskM67W9uPl9aPKc3pYMu0nAfwI0OpOniE=";
+    hash = "sha256-ZJPcxKc0G8V7x9nyzKXaXpfNpMB3/qRoX0d4lfBZTFY=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -34,6 +34,6 @@ python3Packages.buildPythonApplication rec {
     description = "Smart Automatic Cover Art Downloader";
     homepage = "https://github.com/desbma/sacad";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

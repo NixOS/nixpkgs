@@ -12,7 +12,8 @@
 , ninja
 , pkg-config
 , python3
-, systemd
+, substituteAll
+, systemdMinimal
 , usbutils
 , vala
 , which
@@ -20,19 +21,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.17.18";
+  version = "0.18.3";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-RmrT4McV5W9Q6mqWUWWCPQc6hBN6y4oeObZlc2SKmF8=";
+    hash = "sha256-q6lcMjA3yELxYXkxJgIxuFV9EZqiiRy8qLgR/MVZKUo=";
   };
 
   patches = [
     # Hardcode absolute paths to libraries so that consumers
     # do not need to set LD_LIBRARY_PATH themselves.
     ./hardcode-paths.patch
+
+    # Replace references to udevadm with an absolute paths, so programs using
+    # umockdev will just work without having to provide it in their test environment
+    # $PATH.
+    (substituteAll {
+      src = ./substitute-udevadm.patch;
+      udevadm = "${systemdMinimal}/bin/udevadm";
+    })
   ];
 
   nativeBuildInputs = [
@@ -49,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdMinimal
     libpcap
   ];
 
@@ -59,9 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     python3
-    which
     usbutils
+    which
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dgtk_doc=true"

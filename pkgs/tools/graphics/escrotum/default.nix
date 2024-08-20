@@ -1,8 +1,9 @@
 { lib, python3Packages, fetchFromGitHub
+, ffmpeg-full
 , gtk3
 , pango
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with python3Packages; buildPythonApplication {
@@ -23,7 +24,7 @@ with python3Packages; buildPythonApplication {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [ pygobject3 xcffib pycairo numpy ];
@@ -32,6 +33,8 @@ with python3Packages; buildPythonApplication {
   strictDeps = false;
 
   outputs = [ "out" "man" ];
+
+  makeWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}"];
 
   postInstall = ''
     mkdir -p $man/share/man/man1
@@ -44,5 +47,6 @@ with python3Packages; buildPythonApplication {
     platforms = platforms.linux;
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.gpl3;
+    mainProgram = "escrotum";
   };
 }

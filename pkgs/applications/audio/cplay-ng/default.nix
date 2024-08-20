@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/xi/cplay-ng";
     description = "Simple curses audio player";
+    mainProgram = "cplay-ng";
     longDescription = ''
       cplay is a minimalist music player with a textual user interface written
       in Python. It aims to provide a power-user-friendly interface with simple

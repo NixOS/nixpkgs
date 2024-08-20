@@ -1,11 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, mistune, cjkwrap, wcwidth
-, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mistune,
+  cjkwrap,
+  wcwidth,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "md2gemini";
   version = "1.9.1";
+  format = "setuptools";
 
-  propagatedBuildInputs = [ mistune cjkwrap wcwidth ];
+  propagatedBuildInputs = [
+    mistune
+    cjkwrap
+    wcwidth
+  ];
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "md2gemini" ];
 

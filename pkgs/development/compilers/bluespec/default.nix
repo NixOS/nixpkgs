@@ -13,13 +13,13 @@
 , tcl
 , tk
 , xorg
-, yices
+, yices # bsc uses a patched version of yices
 , zlib
 , ghc
 , gmp-static
-, verilog
+, iverilog
 , asciidoctor
-, tex
+, texliveFull
 , which
 }:
 
@@ -28,13 +28,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "bluespec";
-  version = "2023.01";
+  version = "2024.01";
 
   src = fetchFromGitHub {
     owner = "B-Lang-org";
     repo = "bsc";
     rev = version;
-    sha256 = "sha256-kFHQtRaQmZiHo+IQ+mwbW23i3kbdAh/XH0OE7P/ibd0=";
+    sha256 = "sha256-yqmtydv94p7qhps0t4EdPaSZNh/9XCuUwOzLqz0gjxE=";
   };
 
   yices-src = fetchurl {
@@ -46,7 +46,8 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  # https://github.com/B-Lang-org/bsc/pull/278
+  # https://github.com/B-Lang-org/bsc/pull/278 is still applicable, but will probably not be applied as such
+  # there is work ongoing: https://github.com/B-Lang-org/bsc/issues/595 https://github.com/B-Lang-org/bsc/pull/600
   patches = [ ./libstp_stub_makefile.patch ];
 
   postUnpack = ''
@@ -67,6 +68,10 @@ in stdenv.mkDerivation rec {
 
     # allow running bsc to bootstrap
     export LD_LIBRARY_PATH=$PWD/inst/lib/SAT
+
+    # use more cores for GHC building, 44 causes heap overflows in ghc, and
+    # there is not much speedup after 8..
+    if [[ $NIX_BUILD_CORES -gt 8 ]] ; then export GHCJOBS=8; else export GHCJOBS=$NIX_BUILD_CORES; fi
   '';
 
   buildInputs = yices.buildInputs ++ [
@@ -88,7 +93,7 @@ in stdenv.mkDerivation rec {
     ghcWithPackages
     perl
     pkg-config
-    tex
+    texliveFull
   ];
 
   makeFlags = [
@@ -96,17 +101,17 @@ in stdenv.mkDerivation rec {
     "NO_DEPS_CHECKS=1" # skip the subrepo check (this deriviation uses yices-src instead of the subrepo)
     "NOGIT=1" # https://github.com/B-Lang-org/bsc/issues/12
     "LDCONFIG=ldconfig" # https://github.com/B-Lang-org/bsc/pull/43
-    "STP_STUB=1"
+    "STP_STUB=1" # uses yices as a SMT solver and stub out STP
   ];
 
   doCheck = true;
 
   nativeCheckInputs = [
     gmp-static
-    verilog
+    iverilog
   ];
 
-  checkTarget = "check-smoke";
+  checkTarget = "check-smoke"; # this is the shortest check but "check-suite" tests much more
 
   installPhase = ''
     mkdir -p $out

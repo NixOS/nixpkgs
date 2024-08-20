@@ -5,22 +5,27 @@
 , installShellFiles
 , scdoc
 , Security
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stargazer";
-  version = "1.0.5";
+  version = "1.2.1";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
     rev = version;
-    hash = "sha256-n88X3RJD7PqOcVRK/bp/gMNLVrbwnJ2iwi2rCpsfp+o=";
+    hash = "sha256-pYize+MGChi1GxCNaQsNlHELtsPUvfFZMPl0Q+pOTp0=";
   };
 
-  cargoHash = "sha256-Yqh3AQIOahKz2mLeVNm58Yr6vhjU4aQwN62y3Z5/EJc=";
+  cargoHash = "sha256-KmVNRVyKD5q4/vWtnHM4nfiGg+uZvRl+l+Zk5hjWg9E=";
 
-  doCheck = false; # Uses extenal testing framework that requires network
+  doCheck = false; # Uses external testing framework that requires network
+
+  passthru.tests = {
+    basic-functionality = nixosTests.stargazer;
+  };
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 
@@ -35,7 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fast and easy to use Gemini server";
+    description = "Fast and easy to use Gemini server";
+    mainProgram = "stargazer";
     homepage = "https://sr.ht/~zethra/stargazer/";
     license = licenses.agpl3Plus;
     changelog = "https://git.sr.ht/~zethra/stargazer/refs/${version}";

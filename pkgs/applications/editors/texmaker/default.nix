@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler, wrapGAppsHook }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler, wrapGAppsHook3 }:
 
 mkDerivation rec {
   pname = "texmaker";
@@ -10,7 +10,7 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
-  nativeBuildInputs = [ pkg-config poppler qmake wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config poppler qmake wrapGAppsHook3 ];
   env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
   qmakeFlags = [
@@ -36,5 +36,6 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cfouche markuskowa ];
+    mainProgram = "texmaker";
   };
 }

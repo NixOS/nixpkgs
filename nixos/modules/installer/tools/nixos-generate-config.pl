@@ -130,7 +130,7 @@ sub pciCheck {
     debug "\n";
 
     if (defined $module) {
-        # See the bottom of http://pciids.sourceforge.net/pci.ids for
+        # See the bottom of https://pciids.sourceforge.net/pci.ids for
         # device classes.
         if (# Mass-storage controller.  Definitely important.
             $class =~ /^0x01/ ||
@@ -257,6 +257,7 @@ foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
 
 # Add bcache module, if needed.
 my @bcacheDevices = glob("/dev/bcache*");
+@bcacheDevices = grep(!m#dev/bcachefs.*#, @bcacheDevices);
 if (scalar @bcacheDevices > 0) {
     push @initrdAvailableKernelModules, "bcache";
 }
@@ -452,6 +453,17 @@ EOF
         }
     }
 
+    # Preserve umask (fmask, dmask) settings for vfat filesystems.
+    # (The default is to mount these world-readable, but that's a security risk
+    # for the EFI System Partition.)
+    if ($fsType eq "vfat") {
+        for (@superOptions) {
+            if ($_ =~ /fmask|dmask/) {
+                push @extraOptions, $_;
+            }
+        }
+    }
+
     # is this a stratis fs?
     my $stableDevPath = findStableDevPath $device;
     my $stratisPool;
@@ -466,6 +478,19 @@ EOF
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
     # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
+
+    # This should work for single and multi-device systems.
+    # still needs subvolume support
+    if ($fsType eq "bcachefs") {
+        my ($status, @info) = runCommand("bcachefs fs usage $rootDir$mountPoint");
+        my $UUID = $info[0];
+
+        if ($status == 0 && $UUID =~ /^Filesystem:[ \t\n]*([0-9a-z-]+)/) {
+            $stableDevPath = "UUID=$1";
+        } else {
+            print STDERR "warning: can't find bcachefs mount UUID falling back to device-path";
+        }
+    }
 
     # Emit the filesystem.
     $fileSystems .= <<EOF;

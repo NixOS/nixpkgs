@@ -17,7 +17,7 @@ let
 in {
   options = {
     services.mautrix-facebook = {
-      enable = mkEnableOption (lib.mdDoc "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge");
+      enable = mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
 
       settings = mkOption rec {
         apply = recursiveUpdate default;
@@ -83,7 +83,7 @@ in {
             };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
           [example-config.yaml](https://github.com/mautrix/facebook/blob/master/mautrix_facebook/example-config.yaml).
@@ -96,7 +96,7 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           File containing environment variables to be passed to the mautrix-facebook service.
 
           Any config variable can be overridden by setting `MAUTRIX_FACEBOOK_SOME_KEY` to override the `some.key` variable.
@@ -106,7 +106,7 @@ in {
       configurePostgresql = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable PostgreSQL and create a user and database for mautrix-facebook. The default `settings` reference this database, if you disable this option you must provide a database URL.
         '';
       };
@@ -114,7 +114,7 @@ in {
       registrationData = mkOption {
         type = types.attrs;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Output data for appservice registration. Simply make any desired changes and serialize to JSON. Note that this data contains secrets so think twice before putting it into the nix store.
 
           Currently `as_token` and `hs_token` need to be added as they are not known to this module.
@@ -135,9 +135,7 @@ in {
       ensureDatabases = ["mautrix-facebook"];
       ensureUsers = [{
         name = "mautrix-facebook";
-        ensurePermissions = {
-          "DATABASE \"mautrix-facebook\"" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       }];
     };
 
@@ -145,7 +143,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [
         "network-online.target"
-      ] ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
+      ] ++ optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         ++ optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 

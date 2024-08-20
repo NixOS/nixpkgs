@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, importlib-metadata
-, typing-extensions
-, cloudpathlib
-, azure-storage-blob
-, google-cloud-storage
-, boto3
-, psutil
-, pydantic
-, pytestCheckHook
-, pytest-cases
-, pytest-cov
-, pytest-xdist
-, python-dotenv
-, shortuuid
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  importlib-metadata,
+  typing-extensions,
+  cloudpathlib,
+  azure-storage-blob,
+  google-cloud-storage,
+  boto3,
+  psutil,
+  pydantic,
+  pytest7CheckHook,
+  pytest-cases,
+  pytest-cov,
+  pytest-xdist,
+  python-dotenv,
+  shortuuid,
 }:
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.16.0";
+  version = "0.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,13 +30,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
-    rev = "v${version}";
-    hash = "sha256-d4CbzPy3H5HQ4YmSRCRMEYaTpwB7F0Bznd26aKWiHTA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RrdRUqQ3QyMUpTi1FEsSXK6WS37r77SdPBH1oVVvSw0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     importlib-metadata
@@ -43,18 +42,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    all = [
-      cloudpathlib
-    ];
-    azure = [
-      azure-storage-blob
-    ];
-    gs = [
-      google-cloud-storage
-    ];
-    s3 = [
-      boto3
-    ];
+    all = [ cloudpathlib ];
+    azure = [ azure-storage-blob ];
+    gs = [ google-cloud-storage ];
+    s3 = [ boto3 ];
   };
 
   pythonImportsCheck = [ "cloudpathlib" ];
@@ -65,7 +56,7 @@ buildPythonPackage rec {
     google-cloud-storage
     psutil
     pydantic
-    pytestCheckHook
+    pytest7CheckHook
     pytest-cases
     pytest-cov
     pytest-xdist

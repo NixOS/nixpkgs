@@ -1,35 +1,35 @@
 { lib
-, buildGo121Module
+, stdenv
+, buildGo123Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go
 , git
+, go_1_23
 , enumer
 , mockgen
 , nodejs
 , npmHooks
 , nix-update-script
 , nixosTests
-, stdenv
 }:
 
-buildGo121Module rec {
+buildGo123Module rec {
   pname = "evcc";
-  version = "0.121.2";
+  version = "0.130.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
-    repo = pname;
+    repo = "evcc";
     rev = version;
-    hash = "sha256-WGce6HszjS/AVwlEmT8KZnFHZieaGzT+yyzxOtqf/zg=";
+    hash = "sha256-+B2OQOf7BgYzJKvX9cu6SkIzfkD9z3Dk4pfVJmhTQzg=";
   };
 
-  vendorHash = "sha256-dBJsPv3tOWxLvVlkTG0npKalH2RWfwR3vJRjqb4TYQE=";
+  vendorHash = "sha256-Oj5+bmhlZHyOfcJf10EK8mvJauIWk88k0qj2NBkRvFQ=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-KTMUZOW56vPGoJviKRJWM9UL28gXL0L3j4ZmUzSeavU=";
+    hash = "sha256-8DfLh6RhBI6GeTSIvmXCZ8Yudt5TYnimUoAdbOYfWfw=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildGo121Module rec {
   overrideModAttrs = _: {
     nativeBuildInputs = [
       enumer
-      go
+      go_1_23
       git
       cacert
       mockgen
@@ -67,13 +67,35 @@ buildGo121Module rec {
     make ui
   '';
 
-  doCheck = !stdenv.isDarwin; # tries to bind to local network, doesn't work in darwin sandbox
+  doCheck = !stdenv.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
-  preCheck = ''
-    # requires network access
-    rm meter/template_test.go
-    rm charger/template_test.go
-  '';
+  checkFlags = let
+    skippedTests = [
+      # network access
+      "TestOctopusConfigParse"
+      "TestTemplates/ac-elwa-2"
+      "TestTemplates/allinpower"
+      "TestTemplates/electricitymaps"
+      "TestTemplates/elering"
+      "TestTemplates/energinet"
+      "TestTemplates/grünstromindex"
+      "TestTemplates/keba-modbus"
+      "TestTemplates/pun"
+      "TestTemplates/entsoe"
+      "TestTemplates/ngeso"
+      "TestTemplates/tibber"
+      "TestTemplates/groupe-e"
+      "TestTemplates/awattar"
+      "TestTemplates/energy-charts-api"
+      "TestTemplates/polestar"
+      "TestTemplates/sma-inverter-speedwire/battery"
+      "TestTemplates/sma-inverter-speedwire/pv"
+      "TestTemplates/smartenergy"
+      "TestTemplates/tibber-pulse/grid"
+
+    ];
+  in
+  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     tests = {

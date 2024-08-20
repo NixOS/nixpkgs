@@ -31,7 +31,7 @@ def latest_packages(packages: bytes):
             old_package = latest_packages[channel]
             if old_package.get_version() < package.get_version():  # type: ignore
                 latest_packages[channel] = package
-    return latest_packages
+    return OrderedDict(sorted(latest_packages.items(), key=lambda x:x[0]))
 
 
 def nix_expressions(latest: dict[str, Packages]):
@@ -52,7 +52,7 @@ def nix_expressions(latest: dict[str, Packages]):
               channel = "{channel}";
               version = "{version}";
               revision = "{revision}";
-              sha256 = "{sri}";
+              hash = "{sri}";
             }};'''
         )
         channel_strs.append(channel_str)

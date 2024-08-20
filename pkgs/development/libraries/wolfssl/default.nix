@@ -5,21 +5,22 @@
 , autoreconfHook
 , util-linux
 , openssl
+, cacert
 # The primary --enable-XXX variant. 'all' enables most features, but causes build-errors for some software,
 # requiring to build a special variant for that software. Example: 'haproxy'
 , variant ? "all"
 , extraConfigureFlags ? []
-, enableLto ? !(stdenv.isDarwin || stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
+, enableLto ? !(stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.6.3";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "refs/tags/v${finalAttrs.version}-stable";
-    hash = "sha256-UN4zs+Rxh/bsLD1BQA+f1YN/UOJ6OB2HduhoetEp10Y=";
+    hash = "sha256-VTMVgBSDL6pw1eEKnxGzTdyQYWVbMd3mAnOnpAOKVhk=";
   };
 
   postPatch = ''
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-bigcache"
 
     # Use WolfSSL's Single Precision Math with timing-resistant cryptography.
-    "--enable-sp=yes${lib.optionalString (!stdenv.isx86_32) ",asm"}"
+    "--enable-sp=yes${lib.optionalString (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch) ",asm"}"
     "--enable-sp-math-all"
     "--enable-harden"
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
@@ -58,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     # However, all ARM macOS systems have the supported extensions autodetected in the configure script.
     "--enable-armasm=inline"
   ] ++ extraConfigureFlags;
+
+  # Breaks tls13 tests on aarch64-darwin.
+  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "zerocallusedregs" ];
 
   # LTO should help with the C implementations.
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableLto "-flto";
@@ -83,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     openssl
+    cacert
   ];
 
   postInstall = ''
@@ -94,7 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
+    description = "Small, fast, portable implementation of TLS/SSL for embedded devices";
+    mainProgram = "wolfssl-config";
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
     platforms = platforms.all;

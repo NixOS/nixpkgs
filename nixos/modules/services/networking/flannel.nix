@@ -14,17 +14,12 @@ let
   };
 in {
   options.services.flannel = {
-    enable = mkEnableOption (lib.mdDoc "flannel");
+    enable = mkEnableOption "flannel";
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use for flannel";
-      type = types.package;
-      default = pkgs.flannel;
-      defaultText = literalExpression "pkgs.flannel";
-    };
+    package = mkPackageOption pkgs "flannel" { };
 
     publicIp = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         IP accessible by other nodes for inter-host communication.
         Defaults to the IP of the interface being used for communication.
       '';
@@ -33,7 +28,7 @@ in {
     };
 
     iface = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Interface to use (IP or name) for inter-host communication.
         Defaults to the interface for the default route on the machine.
       '';
@@ -43,38 +38,38 @@ in {
 
     etcd = {
       endpoints = mkOption {
-        description = lib.mdDoc "Etcd endpoints";
+        description = "Etcd endpoints";
         type = types.listOf types.str;
         default = ["http://127.0.0.1:2379"];
       };
 
       prefix = mkOption {
-        description = lib.mdDoc "Etcd key prefix";
+        description = "Etcd key prefix";
         type = types.str;
         default = "/coreos.com/network";
       };
 
       caFile = mkOption {
-        description = lib.mdDoc "Etcd certificate authority file";
+        description = "Etcd certificate authority file";
         type = types.nullOr types.path;
         default = null;
       };
 
       certFile = mkOption {
-        description = lib.mdDoc "Etcd cert file";
+        description = "Etcd cert file";
         type = types.nullOr types.path;
         default = null;
       };
 
       keyFile = mkOption {
-        description = lib.mdDoc "Etcd key file";
+        description = "Etcd key file";
         type = types.nullOr types.path;
         default = null;
       };
     };
 
     kubeconfig = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Path to kubeconfig to use for storing flannel config using the
         Kubernetes API
       '';
@@ -83,12 +78,12 @@ in {
     };
 
     network = mkOption {
-      description = lib.mdDoc " IPv4 network in CIDR format to use for the entire flannel network.";
+      description = " IPv4 network in CIDR format to use for the entire flannel network.";
       type = types.str;
     };
 
     nodeName = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Needed when running with Kubernetes as backend as this cannot be auto-detected";
       '';
       type = types.nullOr types.str;
@@ -98,13 +93,13 @@ in {
     };
 
     storageBackend = mkOption {
-      description = lib.mdDoc "Determines where flannel stores its configuration at runtime";
+      description = "Determines where flannel stores its configuration at runtime";
       type = types.enum ["etcd" "kubernetes"];
       default = "etcd";
     };
 
     subnetLen = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         The size of the subnet allocated to each host. Defaults to 24 (i.e. /24)
         unless the Network was configured to be smaller than a /24 in which case
         it is one less than the network.
@@ -114,7 +109,7 @@ in {
     };
 
     subnetMin = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         The beginning of IP range which the subnet allocation should start with.
         Defaults to the first subnet of Network.
       '';
@@ -123,7 +118,7 @@ in {
     };
 
     subnetMax = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         The end of IP range which the subnet allocation should start with.
         Defaults to the last subnet of Network.
       '';
@@ -132,7 +127,7 @@ in {
     };
 
     backend = mkOption {
-      description = lib.mdDoc "Type of backend to use and specific configurations for that backend.";
+      description = "Type of backend to use and specific configurations for that backend.";
       type = types.attrs;
       default = {
         Type = "vxlan";

@@ -9,17 +9,17 @@
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.17.834.g26ee1129";
+  version = "1.2.40.599.g606b7f29";
 
   src = if stdenv.isAarch64 then (
     fetchurl {
-      url = "https://web.archive.org/web/20230808124344/https://download.scdn.co/SpotifyARM64.dmg";
-      sha256 = "sha256-u22hIffuCT6DwN668TdZXYedY9PSE7ZnL+ITK78H7FI=";
+      url = "https://web.archive.org/web/20240622065234/https://download.scdn.co/SpotifyARM64.dmg";
+      hash = "sha256-mmjxKYmsX0rFlIU19JOfPbNgOhlcZs5slLUhDhlON1c=";
     })
   else (
     fetchurl {
-      url = "https://web.archive.org/web/20230808124637/https://download.scdn.co/Spotify.dmg";
-      sha256 = "sha256-aaYMbZpa2LvyBeXmEAjrRYfYqbudhJHR/hvCNTsNQmw=";
+      url = "https://web.archive.org/web/20240622065548/https://download.scdn.co/Spotify.dmg";
+      hash = "sha256-hvS0xnmJQoQfNJRFsLBQk8AJjDOzDy+OGwNOq5Ms/O0=";
     });
 
   nativeBuildInputs = [ undmg ];
@@ -36,6 +36,6 @@ stdenv.mkDerivation {
   '';
 
   meta = meta // {
-    maintainers = with lib.maintainers; [ Enzime ];
+    maintainers = with lib.maintainers; [ matteopacini ];
   };
 }

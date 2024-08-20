@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
+    mainProgram = "frostwire";
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# dependencies
-, einops
-, numpy
-, torch-bin
-, torchaudio-bin
+  # dependencies
+  einops,
+  numpy,
+  torch-bin,
+  torchaudio-bin,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/facebookresearch/encodec";
     changelog = "https://github.com/facebookresearch/encodec/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = teams.tts.members;
   };
 }

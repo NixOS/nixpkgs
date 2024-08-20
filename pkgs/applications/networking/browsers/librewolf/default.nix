@@ -3,24 +3,28 @@
 let
   librewolf-src = callPackage ./librewolf.nix { };
 in
-((buildMozillaMach rec {
+(buildMozillaMach rec {
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
+  requireSigning = false;
+  allowAddonSideload = true;
+  branding = "browser/branding/librewolf";
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
-    description = "A fork of Firefox, focused on privacy, security and freedom";
+    description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
-    maintainers = with lib.maintainers; [ squalus ];
+    maintainers = with lib.maintainers; [ dotlambda squalus ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
     broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                            # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
+    mainProgram = "librewolf";
   };
   tests = [ nixosTests.librewolf ];
   updateScript = callPackage ./update.nix {
@@ -29,6 +33,4 @@ in
 }).override {
   crashreporterSupport = false;
   enableOfficialBranding = false;
-}).overrideAttrs (prev: {
-  MOZ_REQUIRE_SIGNING = "";
-})
+}

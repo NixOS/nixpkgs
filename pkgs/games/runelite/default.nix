@@ -1,69 +1,70 @@
-{ pkgs, lib, stdenv, makeDesktopItem, fetchurl, unzip, makeWrapper, xorg, jre, }:
+{ lib
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, maven
+, jdk17
+, jre
+, xorg
+, gitUpdater
+, libGL
+}:
 
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "runelite";
-  version = "2.5.0";
+  version = "2.7.1";
 
-  jar = fetchurl {
-    url = "https://github.com/runelite/launcher/releases/download/${version}/RuneLite.jar";
-    hash = "sha512-uEvlxXtnq7pgt8H5/hYIMu/kl32/dNojcHrPW6n2/RD/nzywreDw4kZ3G1kx0gGBY71x0RIEseEbm4BM+fhJlQ==";
-  };
-
-  icon = fetchurl {
-    url = "https://github.com/runelite/launcher/raw/${version}/appimage/runelite.png";
-    hash = "sha512-Yh8mpc6z9xd6ePe3f1f+KzrpE9r3fsdtQ0pfAvOhK/0hrCo/17eQA6v73yFXZcPQogVwm9CmJlrx4CkfzB25RQ==";
+  src = fetchFromGitHub {
+    owner = "runelite";
+    repo = "launcher";
+    rev = version;
+    hash = "sha256-7T9n23qMl4IJQL7yWLXKvRzYcMeXDUwkY8MBFc2t3Rw=";
   };
 
-  # The `.so` files provided by these two jars aren't detected by RuneLite for some reason, so we have to provide them manually
-  jogl = fetchurl {
-    url = "https://repo.runelite.net/net/runelite/jogl/jogl-all/2.4.0-rc-20200429/jogl-all-2.4.0-rc-20200429-natives-linux-amd64.jar";
-    hash = "sha512-OmJIbk5pKtvf1n1I5UHu6iaOKNrPgmaJTPhqC8yMjaRh/Hso1vV/+Eu+zKu7d5UiVggVUzJxqDKatmEnqFrzbg==";
-  };
-  gluegen = fetchurl {
-    url = "https://repo.runelite.net/net/runelite/gluegen/gluegen-rt/2.4.0-rc-20220318/gluegen-rt-2.4.0-rc-20220318-natives-linux-amd64.jar";
-    hash = "sha512-kF+RdDzYEhBuZOJ6ZwMhaEVcjYLxiwR8tYAm08FXDML45iP4HBEfmqHOLJpIakK06aQFj99/296vx810eDFX5A==";
-  };
-  dontUnpack = true;
+  mvnJdk = jdk17;
+  mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";
     type = "Application";
     exec = "runelite";
-    icon = icon;
+    icon = "runelite";
     comment = "Open source Old School RuneScape client";
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
     categories = [ "Game" ];
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  # tests require internet :(
+  mvnParameters = "-Dmaven.test.skip";
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
-    mkdir -p $out/share/runelite
+    mkdir -p $out/share/icons
     mkdir -p $out/share/applications
-    mkdir -p $out/natives
 
-    unzip ${jogl}    'natives/*' -d $out
-    unzip ${gluegen} 'natives/*' -d $out
+    cp target/RuneLite.jar $out/share
+    cp appimage/runelite.png $out/share/icons
 
-    ln -s ${jar} $out/share/runelite/RuneLite.jar
     ln -s ${desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
 
-    # RuneLite looks for `.so` files in $PWD/natives, so ensure that we set the PWD to the right place
     makeWrapper ${jre}/bin/java $out/bin/runelite \
-      --chdir "$out" \
-      --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
-      --add-flags "-jar $out/share/runelite/RuneLite.jar"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm libGL ]}" \
+      --add-flags "-jar $out/share/RuneLite.jar"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     description = "Open source Old School RuneScape client";
     homepage = "https://runelite.net/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ kmeakin ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ kmeakin moody ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "runelite";
   };
 }

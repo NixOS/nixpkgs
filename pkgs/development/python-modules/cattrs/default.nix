@@ -1,27 +1,29 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cbor2
-, fetchFromGitHub
-, exceptiongroup
-, hypothesis
-, immutables
-, motor
-, msgpack
-, orjson
-, poetry-core
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tomlkit
-, typing-extensions
-, ujson
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cbor2,
+  fetchFromGitHub,
+  exceptiongroup,
+  hatchling,
+  hatch-vcs,
+  hypothesis,
+  immutables,
+  motor,
+  msgpack,
+  orjson,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomlkit,
+  typing-extensions,
+  ujson,
 }:
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "23.1.2";
+  version = "23.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,20 +31,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-attrs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-YO4Clbo5fmXbysxwwM2qCHJwO5KwDC05VctRVFruJcw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zWM5zmZr2EiJb/4Dc6KjDL89p0C1V0Dsz949byz5OVM=";
   };
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    attrs
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [ attrs ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
   nativeCheckInputs = [
     cbor2
@@ -59,12 +62,9 @@ buildPythonPackage rec {
     ujson
   ];
 
-
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" "" \
-      --replace 'orjson = "^3.5.2"' "" \
-      --replace "[tool.poetry.group.dev.dependencies]" "[tool.poetry.dev-dependencies]"
+      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
     substituteInPlace tests/test_preconf.py \
       --replace "from orjson import dumps as orjson_dumps" "" \
       --replace "from orjson import loads as orjson_loads" ""
@@ -89,9 +89,7 @@ buildPythonPackage rec {
     "test_tomlkit"
   ];
 
-  pythonImportsCheck = [
-    "cattr"
-  ];
+  pythonImportsCheck = [ "cattr" ];
 
   meta = with lib; {
     description = "Python custom class converters for attrs";

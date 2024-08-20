@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A tool to unpack the zip data contained in any type of file";
+    description = "Tool to unpack the zip data contained in any type of file";
     homepage = "https://aluigi.altervista.org/mytoolz.htm#offzip";
     license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ r-burns ];
     platforms = platforms.unix;
+    mainProgram = "offzip";
   };
 }

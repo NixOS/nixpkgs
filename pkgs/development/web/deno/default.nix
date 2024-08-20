@@ -9,25 +9,25 @@
 , libiconv
 , darwin
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
+,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.37.2";
+  version = "1.45.5";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-F04Dxt3pLtUaku6bWGDSwJQwk/NUyBfZPhT7zLyBq48=";
+    hash = "sha256-hV//IH9PoAS9vt7uESBAyD6KYhZdCQuMx4NtB+BaBss=";
   };
 
-  cargoHash = "sha256-PfChqb2yMFk4HAAspkKHjstlxCTkEA2k+VRMf8MVwTw=";
+  cargoHash = "sha256-TopzwlyvaDnZ3J2oDz9a27Fw3aRM000IcvKBykDPytU=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
     # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
+    substituteInPlace .cargo/config.toml --replace "-fuse-ld=lld " ""
   '';
 
   # uses zlib-ng but can't dynamically link yet
@@ -40,9 +40,19 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
   buildInputs = lib.optionals stdenv.isDarwin (
-    [ libiconv darwin.libobjc ] ++
-    (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
+    [ libiconv darwin.libobjc ]
+    ++ (with darwin.apple_sdk_11_0.frameworks; [
+      Security
+      CoreServices
+      Metal
+      MetalPerformanceShaders
+      Foundation
+      QuartzCore
+    ])
   );
+
+  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
 
   buildAndTestSubdir = "cli";
 
@@ -58,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
@@ -79,7 +89,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://deno.land/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
-    description = "A secure runtime for JavaScript and TypeScript";
+    description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
       Deno will always be distributed as a single executable.

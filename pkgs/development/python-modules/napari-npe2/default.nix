@@ -1,23 +1,25 @@
-{ lib
-, appdirs
-, build
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, magicgui
-, napari # reverse dependency, for tests
-, pydantic
-, pythonOlder
-, pytomlpp
-, pyyaml
-, rich
-, typer
+{
+  lib,
+  appdirs,
+  build,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  magicgui,
+  napari, # reverse dependency, for tests
+  pydantic,
+  pythonOlder,
+  pytomlpp,
+  pyyaml,
+  rich,
+  typer,
+  tomli-w,
 }:
 
 buildPythonPackage rec {
   pname = "napari-npe2";
-  version = "0.7.2";
+  version = "0.7.2-unstable-2023-10-20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,11 +27,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PjoLocNTkcAnBNRbPi+MZqZtQ2bjWPIUVz0+k8nIn2A=";
+    rev = "9d29e4d6dbbec75c2d36273647efd9ddfb59ded0";
+    hash = "sha256-JLu/5pXijPdpKY2z2rREtSKPiP33Yy4viegbxUiQg7Y=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  # fix this in the next release
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.7.2";
 
   nativeBuildInputs = [
     hatchling
@@ -45,16 +48,18 @@ buildPythonPackage rec {
     pyyaml
     rich
     typer
+    tomli-w
   ];
 
-  pythonImportsCheck = [
-    "npe2"
-  ];
+  pythonImportsCheck = [ "npe2" ];
 
-  passthru.tests = { inherit napari; };
+  passthru.tests = {
+    inherit napari;
+  };
 
   meta = with lib; {
     description = "Plugin system for napari (the image visualizer)";
+    mainProgram = "npe2";
     homepage = "https://github.com/napari/npe2";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];

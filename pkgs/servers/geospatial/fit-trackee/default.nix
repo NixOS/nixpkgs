@@ -7,19 +7,18 @@
 }:
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.49";
+      sqlalchemy = super.sqlalchemy_1_4;
+
+      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.5";
+
         src = fetchPypi {
-          pname = "SQLAlchemy";
+          pname = "flask_sqlalchemy";
           inherit version;
-          hash = "sha256-Bv8ly64ww5bEt3N0ZPKn/Deme32kCZk7GCsCTOyArtk=";
+          hash = "sha256-xXZeWMoUVAG1IQbA9GF4VpJDxdolVWviwjHsxghnxbE=";
         };
-        # Remove "test/typing" that does not exist
-        disabledTestPaths = [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
       });
     };
   };
@@ -27,36 +26,43 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fit-trackee";
-  version = "0.7.22";
-  format = "pyproject";
+  version = "0.8.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
-    rev = "v${version}";
-    hash = "sha256-aPQ8jLssN9nx0Bpd/44E3sQi2w0cR8ecG76DJjreeHA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lTDS+HfYG6ayXDotu7M2LUrw+1ZhQ0ftw0rTn4Mr3rQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace psycopg2-binary psycopg2 \
-      --replace 'poetry>=0.12' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
+      --replace-fail psycopg2-binary psycopg2
   '';
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  build-system = [
+    python.pkgs.poetry-core
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  pythonRelaxDeps = [
+    "flask-limiter"
+    "gunicorn"
+    "pyjwt"
+    "pyopenssl"
+  ];
+
+  dependencies = with python.pkgs; [
     authlib
     babel
+    click
     dramatiq
     flask
     flask-bcrypt
     flask-dramatiq
     flask-limiter
     flask-migrate
+    flask-sqlalchemy
     gpxpy
     gunicorn
     humanize
@@ -68,7 +74,8 @@ python.pkgs.buildPythonApplication rec {
     sqlalchemy
     staticmap
     ua-parser
-  ] ++ dramatiq.optional-dependencies.redis;
+  ] ++ dramatiq.optional-dependencies.redis
+    ++ flask-limiter.optional-dependencies.redis;
 
   pythonImportsCheck = [ "fittrackee" ];
 
@@ -77,6 +84,7 @@ python.pkgs.buildPythonApplication rec {
     freezegun
     postgresqlTestHook
     postgresql
+    time-machine
   ];
 
   pytestFlagsArray = [
@@ -84,22 +92,19 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postgresqlTestSetupPost = ''
-    export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABAS?host=$PGHOST
-  '';
-
-  postInstall = ''
-    mkdir -p $out/var/share/fittrackee-instance
+    export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
   preCheck = ''
     export TMP=$(mktemp -d)
   '';
 
-  meta = with lib; {
-    description = "Self-hosted outdoor activity tracker :bicyclist";
+  meta = {
+    description = "Self-hosted outdoor activity tracker";
     homepage = "https://github.com/SamR1/FitTrackee";
     changelog = "https://github.com/SamR1/FitTrackee/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

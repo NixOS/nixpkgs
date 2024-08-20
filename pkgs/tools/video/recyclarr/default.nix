@@ -8,6 +8,7 @@
 , recyclarr
 , git
 , icu
+, openssl
 , testers
 , zlib
 }:
@@ -26,21 +27,21 @@ let
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-4xBT4IuonAQPSPKedecNd6YjoOh6pe3nCXMXpNBWP1g=";
-    arm64-linux_hash = "sha256-4s/W1Xz0M1L6xm79AJy836OhNmW0Z4YoRsc7Qd5EwaM=";
-    x64-osx_hash = "sha256-IQgKbZrINt6K3ezS+XjUEYoDIYtngvo++RTpCk+SeSc=";
-    arm64-osx_hash = "sha256-9vHzGAH+fbn+x3lm3/UuNfd0Fv8s2MPPGSe5VnaASeg=";
+    x64-linux_hash = "sha256-LMAY1UIwvB+ne4rpwLKaYO6QGTwdiS3YBndr73zIzvQ=";
+    arm64-linux_hash = "sha256-by3PSYdN7TPjA0Cx4pfzIbpZ/YVU1agfcuvuZh6mbfU=";
+    x64-osx_hash = "sha256-/YqdlVktgbBUNdm+mAD053pf6wCMXYt6gQP+iTQdKqw=";
+    arm64-osx_hash = "sha256-2RRQGNTztK14KDFRqgpagNCWTizHVNY67psaxFfyDZ4=";
   }."${arch}-${os}_hash";
 
   libPath = {
-    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU zlib]}";
-    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu zlib]}";
+    osx = "DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [darwin.ICU openssl zlib]}";
+    linux = "LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu openssl zlib]}";
   }."${os}";
 
 in
 stdenv.mkDerivation rec {
   pname = "recyclarr";
-  version = "6.0.1";
+  version = "7.0.0";
 
   src = fetchurl {
     url = "https://github.com/recyclarr/recyclarr/releases/download/v${version}/recyclarr-${os}-${arch}.tar.xz";
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = recyclarr;
+      version = "v${version}";
     };
   };
 
@@ -83,6 +85,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ josephst ];
+    mainProgram = "recyclarr";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

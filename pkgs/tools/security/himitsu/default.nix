@@ -1,38 +1,34 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, hare
-, scdoc
+{
+  fetchFromSourcehut,
+  hareHook,
+  lib,
+  scdoc,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "himitsu";
-  version = "0.3";
+  version = "0.8";
 
   src = fetchFromSourcehut {
-    name = pname + "-src";
     owner = "~sircmpwn";
-    repo = pname;
-    rev = version;
-    hash = "sha256-HoAntg9aQhMmff3T3/xnor7Sf3yX9qBbZlpVfyac5o8=";
+    repo = "himitsu";
+    rev = finalAttrs.version;
+    hash = "sha256-+GQgRPJut+3zvzSyTGujTbbwJNNgHtFxAoEEwU0lbfU=";
   };
 
   nativeBuildInputs = [
-    hare
+    hareHook
     scdoc
   ];
 
-  preConfigure = ''
-    export HARECACHE=$(mktemp -d)
-  '';
-
-  installFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
+  installFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://himitsustore.org/";
-    description = "A secret storage manager";
+    description = "Secret storage manager";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ auchter ];
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
-}
+})

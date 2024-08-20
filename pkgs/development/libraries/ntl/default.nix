@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "TUNE=${
       if tune then
         "auto"
-      else if stdenv.targetPlatform.isx86 then
+      else if stdenv.hostPlatform.isx86 then
         "x86" # "chooses options that should be well suited for most x86 platforms"
       else
         "generic" # "chooses options that should be OK for most platforms"
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # takes some time
 
   meta = with lib; {
-    description = "A Library for doing Number Theory";
+    description = "Library for doing Number Theory";
     longDescription = ''
       NTL is a high-performance, portable C++ library providing data
       structures and algorithms for manipulating signed, arbitrary

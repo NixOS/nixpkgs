@@ -18,33 +18,26 @@ in
 
     services.journalbeat = {
 
-      enable = mkEnableOption (lib.mdDoc "journalbeat");
+      enable = mkEnableOption "journalbeat";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.journalbeat;
-        defaultText = literalExpression "pkgs.journalbeat";
-        description = lib.mdDoc ''
-          The journalbeat package to use
-        '';
-      };
+      package = mkPackageOption pkgs "journalbeat" { };
 
       name = mkOption {
         type = types.str;
         default = "journalbeat";
-        description = lib.mdDoc "Name of the beat";
+        description = "Name of the beat";
       };
 
       tags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Tags to place on the shipped log messages";
+        description = "Tags to place on the shipped log messages";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "journalbeat";
-        description = lib.mdDoc ''
+        description = ''
           Directory below `/var/lib/` to store journalbeat's
           own logs and other data. This directory will be created automatically
           using systemd's StateDirectory mechanism.
@@ -54,7 +47,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Any other configuration options you want to add";
+        description = "Any other configuration options you want to add";
       };
 
     };

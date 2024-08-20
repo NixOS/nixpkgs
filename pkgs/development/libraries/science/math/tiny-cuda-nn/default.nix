@@ -11,13 +11,18 @@
   which,
 }: let
   inherit (lib) lists strings;
-  inherit (cudaPackages) backendStdenv cudaFlags;
+  inherit (cudaPackages) backendStdenv flags;
 
   cuda-common-redist = with cudaPackages; [
-    cuda_cudart # cuda_runtime.h
-    libcublas # cublas_v2.h
-    libcusolver # cusolverDn.h
-    libcusparse # cusparse.h
+    (lib.getDev cuda_cudart) # cuda_runtime.h
+    (lib.getLib cuda_cudart)
+    (lib.getDev cuda_cccl) # <nv/target>
+    (lib.getDev libcublas) # cublas_v2.h
+    (lib.getLib libcublas)
+    (lib.getDev libcusolver) # cusolverDn.h
+    (lib.getLib libcusolver)
+    (lib.getDev libcusparse) # cusparse.h
+    (lib.getLib libcusparse)
   ];
 
   cuda-native-redist = symlinkJoin {
@@ -41,7 +46,7 @@ in
 
     src = fetchFromGitHub {
       owner = "NVlabs";
-      repo = finalAttrs.pname;
+      repo = "tiny-cuda-nn";
       rev = "v${finalAttrs.version}";
       fetchSubmodules = true;
       hash = "sha256-qW6Fk2GB71fvZSsfu+mykabSxEKvaikZ/pQQZUycOy0=";
@@ -84,9 +89,7 @@ in
     doCheck = false;
 
     preConfigure = ''
-      export TCNN_CUDA_ARCHITECTURES="${
-        strings.concatStringsSep ";" (lists.map cudaFlags.dropDot cudaFlags.cudaCapabilities)
-      }"
+      export TCNN_CUDA_ARCHITECTURES="${flags.cmakeCudaArchitecturesString}"
       export CUDA_HOME="${cuda-native-redist}"
       export LIBRARY_PATH="${cuda-native-redist}/lib/stubs:$LIBRARY_PATH"
       export CC="${backendStdenv.cc}/bin/cc"

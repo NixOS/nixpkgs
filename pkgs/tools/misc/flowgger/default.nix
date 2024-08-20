@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flowgger";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-PRlcfSVfQWt+rQEJjblY7/AMrjhGYO2/G7EX60aGApA=";
+    hash = "sha256-eybahv1A/AIpAXGj6/md8k+b9fu9gSchU16fnAWZP2s=";
   };
 
-  cargoHash = "sha256-hp2LrEVWo0gk95dPROqVcHEEG5N9fWms0mZkY9QILg0=";
+  cargoHash = "sha256-DZGyX3UDqCjB5NwCXcR8b9pXdq8qacd3nkqGp6vYb+U=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,8 +35,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/awslabs/flowgger";
-    description = "A fast, simple and lightweight data collector written in Rust";
+    description = "Fast, simple and lightweight data collector written in Rust";
     license = licenses.bsd2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
+    mainProgram = "flowgger";
   };
 }

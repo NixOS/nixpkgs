@@ -23,6 +23,11 @@ formats commits for you.
 
 */
 
+let
+  # Read ./recipes-archive-melpa.json in an outer let to make sure we only do this once.
+  defaultArchive = builtins.fromJSON (builtins.readFile ./recipes-archive-melpa.json);
+in
+
 { lib, pkgs }: variant: self:
 let
   dontConfigure = pkg:
@@ -57,7 +62,7 @@ let
     if pkg != null then dontConfigure (externalSrc pkg pkgs.rtags)
     else null;
 
-  generateMelpa = lib.makeOverridable ({ archiveJson ? ./recipes-archive-melpa.json
+  generateMelpa = lib.makeOverridable ({ archiveJson ? defaultArchive
                                        }:
     let
       inherit (import ./libgenerated.nix lib self) melpaDerivation;
@@ -66,7 +71,7 @@ let
           (s: s != null)
           (map
             (melpaDerivation variant)
-            (lib.importJSON archiveJson)
+            (if builtins.isList archiveJson then archiveJson else lib.importJSON archiveJson)
           )
         )
       );
@@ -194,7 +199,7 @@ let
           stripDebugList = [ "share" ];
         });
 
-        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: lib.optionalAttrs (lib.versionOlder old.version "20240808.2016") {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
@@ -247,7 +252,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/109
           CXXFLAGS = "-std=c++17";
 
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -281,6 +286,20 @@ let
           packageRequires = [ self.haskell-mode ];
         });
 
+        hotfuzz = super.hotfuzz.overrideAttrs (old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
+
+          dontUseCmakeBuildDir = true;
+
+          preBuild = ''
+            make -j$NIX_BUILD_CORES
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            install source/hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
+          '';
+        });
+
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
@@ -302,9 +321,8 @@ let
           '';
           dontUseCmakeBuildDir = true;
           doCheck = pkgs.stdenv.isLinux;
-          packageRequires = [ self.emacs ];
-          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
+          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -315,7 +333,7 @@ let
         ivy-rtags = fix-rtags super.ivy-rtags;
 
         jinx = super.jinx.overrideAttrs (old: let
-          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+          libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
         in {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.pkg-config
@@ -463,6 +481,13 @@ let
 
         ox-rss = buildWithGit super.ox-rss;
 
+        python-isort = super.python-isort.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace python-isort.el \
+              --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+          '';
+        });
+
         # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
@@ -487,14 +512,29 @@ let
 
         rime = super.rime.overrideAttrs (old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
-          preBuild = (old.preBuild or "") + ''
+          preBuild = (old.preBuild or "") +
+          (if pkgs.stdenv.isDarwin then
+            ''
+              export MODULE_FILE_SUFFIX=".dylib"
+              make lib
+              mkdir -p /tmp/build/rime-lib
+              cp *.dylib /tmp/build/rime-lib
+            ''
+          else
+          ''
             make lib
             mkdir -p /build/rime-lib
             cp *.so /build/rime-lib
-          '';
-          postInstall = (old.postInstall or "") + ''
+          '');
+          postInstall = (old.postInstall or "") +
+          (if pkgs.stdenv.isDarwin then
+          ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /tmp/build/rime-lib/*.dylib
+          ''
+          else
+          ''
             install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
-          '';
+          '');
         });
 
         shm = super.shm.overrideAttrs (attrs: {
@@ -504,7 +544,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
-          nativeBuildInputs = [ pkgs.pkg-config ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
           postPatch = ''
             substituteInPlace telega-customize.el \
@@ -560,7 +600,7 @@ let
             export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -646,7 +686,7 @@ let
         };
 
         vterm = super.vterm.overrideAttrs (old: {
-          nativeBuildInputs = [ pkgs.cmake ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake ];
           buildInputs = old.buildInputs ++ [ self.emacs pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"
@@ -688,6 +728,27 @@ let
               --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
           '';
         });
+
+        # Build a helper executable that interacts with the macOS Dictionary.app
+        osx-dictionary =
+          if pkgs.stdenv.isDarwin
+          then super.osx-dictionary.overrideAttrs (old: {
+            buildInputs =
+              old.buildInputs ++
+              (with pkgs.darwin.apple_sdk.frameworks; [CoreServices Foundation]);
+            dontUnpack = false;
+            buildPhase = (old.buildPhase or "") + ''
+              cd source
+              $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
+            '';
+            postInstall = (old.postInstall or "") + "\n" + ''
+              outd=$out/share/emacs/site-lisp/elpa/osx-dictionary-*
+              mkdir -p $out/bin
+              install -m444 -t $out/bin osx-dictionary-cli
+              rm $outd/osx-dictionary.m
+            '';
+          })
+          else super.osx-dictionary;
       };
 
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openexr, hdf5-threadsafe, ilmbase }:
+{ lib, stdenv, fetchFromGitHub, cmake, openexr, hdf5-threadsafe }:
 
 stdenv.mkDerivation rec
 {
@@ -20,13 +20,7 @@ stdenv.mkDerivation rec
 
   nativeBuildInputs = [ cmake ];
 
-  # NOTE: Alembic also support imath instead of ilmbase, but some users of Alembic (e.g. Blender)
-  # are incompatible with the imath version of Alembic
-  buildInputs = [ openexr hdf5-threadsafe ilmbase ];
-
-  # Downstream packages trying to use Alembic via CMake need ilmbase as well
-  # For some reason this won't be picked up correctly otherwise
-  propagatedBuildInputs = [ ilmbase ];
+  buildInputs = [ openexr hdf5-threadsafe ];
 
   # These flags along with the postPatch step ensure that all artifacts end up
   # in the correct output without needing to move anything
@@ -59,7 +53,7 @@ stdenv.mkDerivation rec
   '';
 
   meta = with lib; {
-    description = "An open framework for storing and sharing scene data";
+    description = "Open framework for storing and sharing scene data";
     homepage = "http://alembic.io/";
     license = licenses.bsd3;
     platforms = platforms.all;

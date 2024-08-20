@@ -24,7 +24,7 @@ let
   phocConfigType = types.submodule {
     options = {
       xwayland = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable XWayland support.
 
           To start XWayland immediately, use `immediate`.
@@ -33,14 +33,14 @@ let
         default = "false";
       };
       cursorTheme = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Cursor theme to use in Phosh.
         '';
         type = types.str;
         default = "default";
       };
       outputs = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Output configurations.
         '';
         type = types.attrsOf phocOutputType;
@@ -56,7 +56,7 @@ let
   phocOutputType = types.submodule {
     options = {
       modeline = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           One or more modelines.
         '';
         type = types.either types.str (types.listOf types.str);
@@ -67,7 +67,7 @@ let
         ];
       };
       mode = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Default video mode.
         '';
         type = types.nullOr types.str;
@@ -75,7 +75,7 @@ let
         example = "768x1024";
       };
       scale = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Display scaling factor.
         '';
         type = types.nullOr (
@@ -89,7 +89,7 @@ let
         example = 2;
       };
       rotate = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Screen transformation.
         '';
         type = types.enum [
@@ -132,33 +132,25 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Phone Shell.";
+        description = "Enable the Phone Shell.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.phosh;
-        defaultText = literalExpression "pkgs.phosh";
-        example = literalExpression "pkgs.phosh";
-        description = lib.mdDoc ''
-          Package that should be used for Phosh.
-        '';
-      };
+      package = mkPackageOption pkgs "phosh" { };
 
       user = mkOption {
-        description = lib.mdDoc "The user to run the Phosh service.";
+        description = "The user to run the Phosh service.";
         type = types.str;
         example = "alice";
       };
 
       group = mkOption {
-        description = lib.mdDoc "The group to run the Phosh service.";
+        description = "The group to run the Phosh service.";
         type = types.str;
         example = "users";
       };
 
       phocConfig = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configurations for the Phoc compositor.
         '';
         type = types.oneOf [ types.lines types.path phocConfigType ];
@@ -194,6 +186,21 @@ in
         UtmpIdentifier = "tty7";
         UtmpMode = "user";
       };
+      environment = {
+        # We are running without a display manager, so need to provide
+        # a value for XDG_CURRENT_DESKTOP.
+        #
+        # Among other things, this variable influences:
+        #  - visibility of desktop entries with "OnlyShowIn=Phosh;"
+        #    https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.5.html#key-onlyshowin
+        #  - the chosen xdg-desktop-portal configuration.
+        #    https://flatpak.github.io/xdg-desktop-portal/docs/portals.conf.html
+        XDG_CURRENT_DESKTOP = "Phosh:GNOME";
+        # pam_systemd uses these to identify the session in logind.
+        # https://www.freedesktop.org/software/systemd/man/latest/pam_systemd.html#desktop=
+        XDG_SESSION_DESKTOP = "phosh";
+        XDG_SESSION_TYPE = "wayland";
+      };
     };
 
     environment.systemPackages = [
@@ -209,11 +216,11 @@ in
 
     security.pam.services.phosh = {};
 
-    hardware.opengl.enable = mkDefault true;
+    hardware.graphics.enable = mkDefault true;
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;
-    services.xserver.displayManager.sessionPackages = [ cfg.package ];
+    services.displayManager.sessionPackages = [ cfg.package ];
 
     environment.etc."phosh/phoc.ini".source =
       if builtins.isPath cfg.phocConfig then cfg.phocConfig

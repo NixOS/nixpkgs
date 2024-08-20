@@ -59,8 +59,21 @@ in rec {
     then attrs // gemConfig.${attrs.gemName} attrs
     else attrs);
 
-  genStubsScript = { lib, ruby, confFiles, bundler, groups, binPaths, ... }: ''
-      ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
+  genStubsScript = { lib, runCommand, ruby, confFiles, bundler, groups, binPaths, ... }:
+    let
+      genStubsScript = runCommand "gen-bin-stubs"
+        {
+          strictDeps = true;
+          nativeBuildInputs = [ ruby ];
+        }
+        ''
+          cp ${./gen-bin-stubs.rb} $out
+          chmod +x $out
+          patchShebangs --build $out
+        '';
+    in
+    ''
+      ${genStubsScript} \
         "${ruby}/bin/ruby" \
         "${confFiles}/Gemfile" \
         "$out/${ruby.gemPath}" \

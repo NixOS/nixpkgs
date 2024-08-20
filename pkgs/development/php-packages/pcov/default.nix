@@ -1,8 +1,15 @@
-{ buildPecl, lib, php, pcre2, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  php,
+  pcre2,
+  fetchFromGitHub,
+}:
 
 let
   version = "1.0.11";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "pcov";
 
@@ -17,7 +24,7 @@ in buildPecl {
 
   meta = with lib; {
     changelog = "https://github.com/krakjoe/pcov/releases/tag/v${version}";
-    description = "A self contained php-code-coverage compatible driver for PHP.";
+    description = "Self contained php-code-coverage compatible driver for PHP";
     license = licenses.php301;
     homepage = "https://github.com/krakjoe/pcov";
     maintainers = teams.php.members;

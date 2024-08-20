@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, gitpython
-, mkdocs
-, pytz
-, pytestCheckHook
-, git
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  babel,
+  gitpython,
+  mkdocs,
+  pytz,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.2.0";
+  version = "1.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,11 +20,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
-    rev = "v${version}" ;
-    hash = "sha256-l7NUmsdd1FHkbdqtRcMQBfplZJgLCXrN+QuYaQLpz0k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dzFxNAVBQ5a4opdxSz42VCns49DlZyrglUaQTzfLnW8=";
   };
 
   propagatedBuildInputs = [
+    babel
     gitpython
     mkdocs
     pytz
@@ -31,9 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    "tests/test_builds.py"
-  ];
+  disabledTestPaths = [ "tests/test_builds.py" ];
 
   pythonImportsCheck = [ "mkdocs_git_revision_date_localized_plugin" ];
 

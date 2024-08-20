@@ -1,12 +1,10 @@
 { lib
 , stdenv
-, runCommand
 , fetchFromGitHub
 , fetchYarnDeps
-, writeText
 , jq
 , yarn
-, fixup_yarn_lock
+, fixup-yarn-lock
 , nodejs
 , jitsi-meet
 }:
@@ -23,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = finalAttrs.pname;
+    repo = "element-web";
     rev = "v${finalAttrs.version}";
     hash = webSrcHash;
   };
@@ -33,7 +31,18 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = webYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock jq nodejs ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    export VERSION=${finalAttrs.version}
+    yarn --offline build:res
+    yarn --offline build:module_system
+    yarn --offline build:bundle
+
+    runHook postBuild
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -46,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     export NODE_OPTIONS=--openssl-legacy-provider
     mkdir -p $HOME
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $offlineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules
@@ -54,22 +63,11 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    export VERSION=${finalAttrs.version}
-    yarn build:res --offline
-    yarn build:module_system --offline
-    yarn build:bundle --offline
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
     cp -R webapp $out
-    cp ${jitsi-meet}/libs/external_api.min.js $out/jitsi_external_api.min.js
+    tar --extract --to-stdout --file ${jitsi-meet.src} jitsi-meet/libs/external_api.min.js > $out/jitsi_external_api.min.js
     echo "${finalAttrs.version}" > "$out/version"
     jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
@@ -77,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   '';
 
   meta = {
-    description = "A glossy Matrix collaboration client for the web";
+    description = "Glossy Matrix collaboration client for the web";
     homepage = "https://element.io/";
     changelog = "https://github.com/vector-im/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = lib.teams.matrix.members;

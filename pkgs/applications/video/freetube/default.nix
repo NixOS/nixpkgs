@@ -1,18 +1,25 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron_22 }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.19.1";
+  version = "0.21.3";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "add96ad3509d4d5c6d8658b005dfd046963cd6bb0a4e1f3e88f726a86c05810f";
+    hash = "sha256-sg/ycFo4roOJ2sW4naRCE6dwGXVQFzF8uwAZQkS2EY4=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
-    inherit src;
-  };
+  passthru.tests = nixosTests.freetube;
+
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
   dontUnpack = true;
   dontConfigure = true;
@@ -35,17 +42,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # Electron version is set to 22 in order to match upstream
   postFixup = ''
-    makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
   '';
 
-  meta = with lib; {
-    description = "An Open Source YouTube app for privacy";
+  meta = {
+    description = "Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ryneeverett alyaeanyx ];
-    inherit (electron_22.meta) platforms;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      ryneeverett
+      alyaeanyx
+    ];
+    inherit (electron.meta) platforms;
+    mainProgram = "freetube";
   };
 }

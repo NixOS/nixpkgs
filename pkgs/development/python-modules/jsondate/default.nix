@@ -1,7 +1,13 @@
-{ lib, fetchFromGitHub, buildPythonPackage, six }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  six,
+}:
 
 buildPythonPackage rec {
   version = "0.1.3";
+  format = "setuptools";
   pname = "jsondate";
 
   src = fetchFromGitHub {

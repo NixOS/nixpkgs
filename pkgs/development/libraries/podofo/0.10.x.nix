@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podofo";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "podofo";
     repo = "podofo";
     rev = finalAttrs.version;
-    hash = "sha256-Y5dpx0otX14Jig/O/oq+Sfdcia1a0bhT/6k8nwg+k5o=";
+    hash = "sha256-B+YNTo2rZAL4PqDo+lFOQiWM9bl/TIn8xrJyefrIAYE=";
   };
 
   outputs = [ "out" "dev" "lib" ];
@@ -53,15 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
-  postInstall = ''
-    moveToOutput lib "$lib"
-  '';
-
   meta = {
     homepage = "https://github.com/podofo/podofo";
-    description = "A library to work with the PDF file format";
+    description = "Library to work with the PDF file format";
     platforms = lib.platforms.all;
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
-    maintainers = [];
+    maintainers = [ ];
   };
 })

@@ -1,36 +1,70 @@
-{ lib, fetchFromGitHub, python3Packages, sqlite, which }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  sqlite,
+  which,
+  nix-update-script,
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "s3ql";
-  version = "4.0.0";
+  version = "5.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/release-${version}";
-    sha256 = "sha256-7N09b7JwMPliuyv2fEy1gQYaFCMSSvajOBPhNL3DQsg=";
+    owner = "s3ql";
+    repo = "s3ql";
+    rev = "refs/tags/s3ql-${version}";
+    hash = "sha256-85J0ymGe9V6f95Ycdq84dY+UiybhPdFXZzuIBb1nD5c=";
   };
 
-  nativeCheckInputs = [ which ] ++ (with python3Packages; [ cython pytest pytest-trio ]);
-  propagatedBuildInputs = with python3Packages; [
-    sqlite apsw pycrypto requests defusedxml dugong
-    google-auth google-auth-oauthlib trio pyfuse3
+  build-system = with python3.pkgs; [ setuptools ];
+
+  nativeBuildInputs = [ which ] ++ (with python3.pkgs; [ cython ]);
+
+  propagatedBuildInputs = with python3.pkgs; [
+    apsw
+    cryptography
+    defusedxml
+    dugong
+    google-auth
+    google-auth-oauthlib
+    pyfuse3
+    requests
+    sqlite
+    trio
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-trio
+    pytestCheckHook
   ];
 
   preBuild = ''
-    ${python3Packages.python.pythonForBuild.interpreter} ./setup.py build_cython build_ext --inplace
+    ${python3.pkgs.python.pythonOnBuildForHost.interpreter} ./setup.py build_cython build_ext --inplace
   '';
 
-  checkPhase = ''
-    # Removing integration tests
-    rm tests/t{4,5,6}_*
-    pytest tests
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
+
+  pythonImportsCheck = [ "s3ql" ];
+
+  pytestFlagsArray = [ "tests/" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "s3ql-([0-9.]+)"
+    ];
+  };
 
   meta = with lib; {
-    description = "A full-featured file system for online data storage";
+    description = "Full-featured file system for online data storage";
     homepage = "https://github.com/s3ql/s3ql/";
-    license = licenses.gpl3;
+    changelog = "https://github.com/s3ql/s3ql/releases/tag/s3ql-${version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ rushmorem ];
     platforms = platforms.linux;
   };

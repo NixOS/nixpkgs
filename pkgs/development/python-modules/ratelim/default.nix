@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, decorator
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  decorator,
 }:
 
 buildPythonPackage rec {
   pname = "ratelim";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "07dirdd8y23706110nb0lfz5pzbrcvd9y74h64la3y8igqbk4vc2";
   };
 
-  propagatedBuildInputs = [
-    decorator
-  ];
+  propagatedBuildInputs = [ decorator ];
 
   pythonImportsCheck = [ "ratelim" ];
 

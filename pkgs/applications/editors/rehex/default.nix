@@ -5,6 +5,7 @@
 , which
 , zip
 , libicns
+, botan3
 , capstone
 , jansson
 , libunistring
@@ -19,26 +20,29 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.60.1";
+  version = "0.62.1";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    hash = "sha256-oF8XtxKqyo6c2lNH6WDq6aEPeZw8RqBinDVhPpaDAWg=";
+    hash = "sha256-RlYpg3aon1d25n8K/bbHGVLn5/iOOUSlvjT8U0fp9hA=";
   };
 
   nativeBuildInputs = [ pkg-config which zip ]
     ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [ capstone jansson libunistring wxGTK32 ]
+  buildInputs = [ botan3 capstone jansson libunistring wxGTK32 ]
     ++ (with lua53Packages; [ lua busted ])
     ++ (with perlPackages; [ perl TemplateToolkit ])
     ++ lib.optionals stdenv.isLinux [ gtk3 ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ]
-    ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "BOTAN_PKG=botan-3"
+    "CXXSTD=-std=c++20"
+  ] ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
 
   enableParallelBuilding = true;
 
@@ -53,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ markus1189 wegank ];
     platforms = platforms.all;
+    mainProgram = "rehex";
   };
 }

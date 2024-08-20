@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, git, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "git-backdate";
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rixx/git-backdate";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ matthiasbeyer ];
+    mainProgram = "git-backdate";
   };
 }
 

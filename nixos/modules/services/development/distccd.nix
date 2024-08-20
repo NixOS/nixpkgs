@@ -8,13 +8,13 @@ in
 {
   options = {
     services.distccd = {
-      enable = mkEnableOption (lib.mdDoc "distccd");
+      enable = mkEnableOption "distccd, a distributed C/C++ compiler";
 
       allowedClients = mkOption {
         type = types.listOf types.str;
         default = [ "127.0.0.1" ];
         example = [ "127.0.0.1" "192.168.0.0/24" "10.0.0.0/24" ];
-        description = lib.mdDoc ''
+        description = ''
           Client IPs which are allowed to connect to distccd in CIDR notation.
 
           Anyone who can connect to the distccd server can run arbitrary
@@ -26,7 +26,7 @@ in
       jobTimeout = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Maximum duration, in seconds, of a single compilation request.
         '';
       };
@@ -34,7 +34,7 @@ in
       logLevel = mkOption {
         type = types.nullOr (types.enum [ "critical" "error" "warning" "notice" "info" "debug" ]);
         default = "warning";
-        description = lib.mdDoc ''
+        description = ''
           Set the minimum severity of error that will be included in the log
           file. Useful if you only want to see error messages rather than an
           entry for each connection.
@@ -44,7 +44,7 @@ in
       maxJobs = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of tasks distccd should execute at any time.
         '';
       };
@@ -53,7 +53,7 @@ in
       nice = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Niceness of the compilation tasks.
         '';
       };
@@ -61,34 +61,27 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Opens the specified TCP port for distcc.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.distcc;
-        defaultText = literalExpression "pkgs.distcc";
-        description = lib.mdDoc ''
-          The distcc package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "distcc" { };
 
       port = mkOption {
         type = types.port;
         default = 3632;
-        description = lib.mdDoc ''
+        description = ''
           The TCP port which distccd will listen on.
         '';
       };
 
       stats = {
-        enable = mkEnableOption (lib.mdDoc "statistics reporting via HTTP server");
+        enable = mkEnableOption "statistics reporting via HTTP server";
         port = mkOption {
           type = types.port;
           default = 3633;
-          description = lib.mdDoc ''
+          description = ''
             The TCP port which the distccd statistics HTTP server will listen
             on.
           '';
@@ -98,7 +91,7 @@ in
       zeroconf = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to register via mDNS/DNS-SD
         '';
       };

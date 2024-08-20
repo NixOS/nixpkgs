@@ -15,8 +15,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Parsing HTML at the command line";
+    mainProgram = "pup";
     homepage = "https://github.com/ericchiang/pup";
     license = licenses.mit;
-    maintainers = with maintainers; [ yana ];
+    maintainers = [ ];
   };
 }

@@ -1,10 +1,9 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , mkDerivation
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 
 , withGrass ? true
@@ -12,6 +11,7 @@
 
 , bison
 , cmake
+, draco
 , exiv2
 , fcgi
 , flex
@@ -29,7 +29,7 @@
 , postgresql
 , proj
 , protobuf
-, python3
+, python311
 , qca-qt5
 , qscintilla
 , qt3d
@@ -48,10 +48,12 @@
 }:
 
 let
-  py = python3.override {
+  py = python311.override {
+    self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        withSerialPort = true;
       };
     };
   };
@@ -64,8 +66,8 @@ let
     owslib
     psycopg2
     pygments
-    pyqt-builder
     pyqt5
+    pyqt-builder
     python-dateutil
     pytz
     pyyaml
@@ -77,14 +79,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.32.3";
+  version = "3.38.2";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-ge5ne22sDLKbrJk2vYQxpu3iRXSoOk9924c/RdtD3Nc=";
+    hash = "sha256-lArwRtHR/KAsgjpjid6YnPA9BkcG1Mg/KeIIOWN75Kg=";
   };
 
   passthru = {
@@ -94,16 +96,17 @@ in mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
 
+    bison
     cmake
     flex
-    bison
     ninja
   ];
 
   buildInputs = [
+    draco
     exiv2
     fcgi
     geos
@@ -142,23 +145,18 @@ in mkDerivation rec {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
-    (fetchpatch {
-      name = "exiv2-0.28.patch";
-      url = "https://github.com/qgis/QGIS/commit/32f5418fc4f7bb2ee986dee1824ff2989c113a94.patch";
-      hash = "sha256-zWyf+kLro4ZyUJLX/nDjY0nLneTaI1DxHvRsvwoWq14=";
-    })
   ];
 
   # Add path to Qt platform plugins
   # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
-  preBuild = ''
-    export QT_QPA_PLATFORM_PLUGIN_PATH=${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms
-  '';
+  env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
-    "-DWITH_PDAL=TRUE"
+    "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
+    "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
@@ -167,7 +165,7 @@ in mkDerivation rec {
     );
 
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms"
+    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
   dontWrapGApps = true; # wrapper params passed below
@@ -183,7 +181,7 @@ in mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Free and Open Source Geographic Information System";
+    description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];

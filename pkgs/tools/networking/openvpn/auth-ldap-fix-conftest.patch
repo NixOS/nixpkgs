@@ -1,0 +1,36 @@
+diff --git a/aclocal.m4 b/aclocal.m4
+index e5b7dbf..01cecf1 100644
+--- a/aclocal.m4
++++ b/aclocal.m4
+@@ -73,6 +73,7 @@ AC_DEFUN([OD_OBJC_RUNTIME],[
+ 				AC_LANG_PROGRAM([
+ 						#include <objc/objc.h>
+ 						#include <objc/Object.h>
++						#include <stdio.h>
+ 					], [
+ 						Object *obj = @<:@Object alloc@:>@;
+ 						puts(@<:@obj name@:>@);
+@@ -94,6 +95,7 @@ AC_DEFUN([OD_OBJC_RUNTIME],[
+ 					AC_LANG_PROGRAM([
+ 							#include <objc/objc.h>
+ 							#include <objc/Object.h>
++							#include <stdio.h>
+ 						], [
+ 							Object *obj = @<:@Object alloc@:>@;
+ 							puts(@<:@obj name@:>@);
+@@ -131,6 +133,7 @@ AC_DEFUN([OD_OBJC_RUNTIME],[
+ 					AC_LANG_PROGRAM([
+ 							#include <objc/objc.h>
+ 							#include <objc/objc-api.h>
++							#include <stdio.h>
+ 						], [
+ 							id class = objc_lookUpClass("Object");
+ 							id obj = @<:@class alloc@:>@;
+@@ -162,6 +165,7 @@ AC_DEFUN([OD_OBJC_RUNTIME],[
+ 							#else
+ 							#include <objc/objc-api.h>
+ 							#endif
++							#include <stdio.h>
+ 						], [
+ 							#ifdef __GNU_LIBOBJC_
+ 							Class class = objc_lookUpClass("Object");

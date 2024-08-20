@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchzip }:
+{ stdenvNoCC, fetchzip }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mph-2b-damase";

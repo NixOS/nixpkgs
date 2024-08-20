@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -6,13 +7,13 @@
 
 buildGoModule rec {
   pname = "cri-tools";
-  version = "1.28.0";
+  version = "1.31.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-inw4bPeObMlwtgFLR/8+tqRKTkcViZeEFZ1MOm0HYI4=";
+    hash = "sha256-ruhWuBpPjc0dX7kgiTBFFHriSGYx4XoMNv+M39aIh10=";
   };
 
   vendorHash = null;
@@ -30,11 +31,12 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
     make install BINDIR=$out/bin
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
-      $out/bin/crictl completion $shell > crictl.$shell
-      installShellCompletion crictl.$shell
+      installShellCompletion --cmd crictl \
+        --$shell <($out/bin/crictl completion $shell)
     done
+  '' + ''
     runHook postInstall
   '';
 

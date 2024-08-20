@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to automate the work with Google dorks";
+    mainProgram = "dorkscout";
     homepage = "https://github.com/R4yGM/dorkscout";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/jamespwilliams/psitop";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "psitop";
   };
 }

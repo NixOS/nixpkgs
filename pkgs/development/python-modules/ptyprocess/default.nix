@@ -1,16 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  flit-core,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ptyprocess";
   version = "0.7.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220";
+    hash = "sha256-XF0KO0jO7gtISF4MJgN8Cs19KXZco/u1yzgx00dCMiA=";
   };
 
   patches = [
@@ -19,11 +26,23 @@ buildPythonPackage rec {
       url = "https://github.com/pexpect/ptyprocess/commit/40c1ccf3432a6787be1801ced721540e34c6cd87.patch";
       hash = "sha256-IemngBqBq3QRCmVscWtsuXHiFgvTOJIIB9SyAvsqHd0=";
     })
+    (fetchpatch {
+      url = "https://github.com/pexpect/ptyprocess/commit/a44312974bd9084aa568d2e18ce5b2a7e0e45983.patch";
+      hash = "sha256-DEO4FbzKNAXADYocSQhhwjQTGGu9V5pqd38u1sWhpOI=";
+    })
   ];
+
+  build-system = [ flit-core ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "ptyprocess" ];
 
   meta = {
     description = "Run a subprocess in a pseudo terminal";
     homepage = "https://github.com/pexpect/ptyprocess";
+    changelog = "https://github.com/pexpect/ptyprocess/releases/tag/${version}";
     license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/evilsocket/shellz";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "shellz";
   };
 }

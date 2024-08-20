@@ -8,12 +8,14 @@ in
 {
   options = {
     services.cloudflare-dyndns = {
-      enable = mkEnableOption (lib.mdDoc "Cloudflare Dynamic DNS Client");
+      enable = mkEnableOption "Cloudflare Dynamic DNS Client";
+
+      package = mkPackageOption pkgs "cloudflare-dyndns" { };
 
       apiTokenFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to a file containing the CloudFlare API token.
 
           The file must have the form `CLOUDFLARE_API_TOKEN=...`
@@ -23,15 +25,25 @@ in
       domains = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of domain names to update records for.
+        '';
+      };
+
+      frequency = mkOption {
+        type = types.nullOr types.str;
+        default = "*:0/5";
+        description = ''
+          Run cloudflare-dyndns with the given frequency (see
+          {manpage}`systemd.time(7)` for the format).
+          If null, do not run automatically.
         '';
       };
 
       proxied = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether this is a DNS-only record, or also being proxied through CloudFlare.
         '';
       };
@@ -39,7 +51,7 @@ in
       ipv4 = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable setting IPv4 A records.
         '';
       };
@@ -47,7 +59,7 @@ in
       ipv6 = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable setting IPv6 AAAA records.
         '';
       };
@@ -55,7 +67,7 @@ in
       deleteMissing = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to delete the record when no IP address is found.
         '';
       };
@@ -67,7 +79,6 @@ in
       description = "CloudFlare Dynamic DNS Client";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      startAt = "*:0/5";
 
       environment = {
         CLOUDFLARE_DOMAINS = toString cfg.domains;
@@ -86,8 +97,10 @@ in
               ++ optional cfg.deleteMissing "--delete-missing"
               ++ optional cfg.proxied "--proxied";
           in
-          "${pkgs.cloudflare-dyndns}/bin/cloudflare-dyndns ${toString args}";
+          "${getExe cfg.package} ${toString args}";
       };
+    } // optionalAttrs (cfg.frequency != null) {
+      startAt = cfg.frequency;
     };
   };
 }

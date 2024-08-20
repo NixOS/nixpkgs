@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tetris clone with 'bastard' block-choosing AI";
+    mainProgram = "bastet";
     homepage = "http://fph.altervista.org/prog/bastet.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.dezgeg ];

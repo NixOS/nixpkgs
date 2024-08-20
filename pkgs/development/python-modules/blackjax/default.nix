@@ -1,36 +1,44 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools-scm
-, fastprogress
-, jax
-, jaxlib
-, jaxopt
-, optax
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
+  fastprogress,
+  jax,
+  jaxlib,
+  jaxopt,
+  optax,
+  typing-extensions,
+
+  # checks
+  pytestCheckHook,
+  pytest-xdist,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.0.0";
+  version = "1.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
-    repo = pname;
+    repo = "blackjax";
     rev = "refs/tags/${version}";
-    hash = "sha256-hqOKSHyZ/BmOu6MJLeecD3H1BbLbZqywmlBzn3xjQRk=";
+    hash = "sha256-f1piE79TLVLtIe9/DaLhXss/ifhU719nEylyl70SVJc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  propagatedBuildInputs = [
+  dependencies = [
     fastprogress
     jax
     jaxlib
@@ -39,22 +47,36 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  disabledTestPaths = [ "tests/test_benchmarks.py" ];
-  disabledTests = [
-    # too slow
-    "test_adaptive_tempered_smc"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
   ];
 
-  pythonImportsCheck = [
-    "blackjax"
-  ];
+  disabledTestPaths =
+    [ "tests/test_benchmarks.py" ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # Assertion errors on numerical values
+      "tests/mcmc/test_integrators.py"
+    ];
 
-  meta = with lib; {
+  disabledTests =
+    [
+      # too slow
+      "test_adaptive_tempered_smc"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # Numerical test (AssertionError)
+      # https://github.com/blackjax-devs/blackjax/issues/668
+      "test_chees_adaptation"
+    ];
+
+  pythonImportsCheck = [ "blackjax" ];
+
+  meta = {
     homepage = "https://blackjax-devs.github.io/blackjax";
     description = "Sampling library designed for ease of use, speed and modularity";
     changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

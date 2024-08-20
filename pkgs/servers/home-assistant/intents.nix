@@ -3,15 +3,16 @@
 , fetchFromGitHub
 , pythonOlder
 
-# build
-, hassil
-, jinja2
-, pyyaml
-, regex
-, voluptuous
-, python
+# build-system
 , setuptools
-, wheel
+
+# codegen
+, hassil
+, python
+, pyyaml
+, voluptuous
+, regex
+, jinja2
 
 # tests
 , pytest-xdist
@@ -20,8 +21,8 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2023.10.2";
-  format = "pyproject";
+  version = "2024.8.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -29,43 +30,35 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = "intents-package";
     rev = "refs/tags/${version}";
-    hash = "sha256-4zaMDYHrUape+s9Z1nfGpud74pbkAeKBpJtmIyLdCjk=";
     fetchSubmodules = true;
+    hash = "sha256-s6cw9Ni4NFNNLu7s8YaHk6MeKlss60GgxdwcUVA1djo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'requires = ["setuptools~=62.3", "wheel~=0.37.1"]' 'requires = ["setuptools", "wheel"]'
-  '';
-
-  nativeBuildInputs = [
-    hassil
-    jinja2
-    pyyaml
-    regex
+  build-system = [
     setuptools
-    wheel
+
+    # build-time codegen; https://github.com/home-assistant/intents/blob/main/requirements.txt#L1-L5
+    hassil
+    pyyaml
     voluptuous
+    regex
+    jinja2
   ];
 
   postInstall = ''
-    pushd intents
-    # https://github.com/home-assistant/intents/blob/main/script/package#L18
-    ${python.pythonForBuild.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
-    popd
+    # https://github.com/home-assistant/intents-package/blob/main/script/package#L23-L24
+    PACKAGE_DIR=$out/${python.sitePackages}/home_assistant_intents
+    ${python.pythonOnBuildForHost.interpreter} script/merged_output.py $PACKAGE_DIR/data
+    ${python.pythonOnBuildForHost.interpreter} script/write_languages.py $PACKAGE_DIR/data > $PACKAGE_DIR/languages.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
     "intents/tests"
-  ];
-
-  disabledTests = [
-    # AssertionError: Recognition failed for 'put apples on the list'
-    "test_shopping_list_HassShoppingListAddItem"
   ];
 
   meta = with lib; {

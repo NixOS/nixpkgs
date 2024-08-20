@@ -1,7 +1,7 @@
 # python library used to update plugins:
 # - pkgs/applications/editors/vim/plugins/update.py
 # - pkgs/applications/editors/kakoune/plugins/update.py
-# - maintainers/scripts/update-luarocks-packages
+# - pkgs/development/lua-modules/updater/updater.py
 
 # format:
 # $ nix run nixpkgs#black maintainers/scripts/pluginupdate.py
@@ -17,6 +17,7 @@ import http
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -26,7 +27,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -107,7 +108,7 @@ class Repo:
 
     @property
     def name(self):
-        return self.uri.split("/")[-1]
+        return self.uri.strip("/").split("/")[-1]
 
     @property
     def branch(self):
@@ -141,7 +142,7 @@ class Repo:
         return loaded
 
     def prefetch(self, ref: Optional[str]) -> str:
-        print("Prefetching")
+        print("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
 
@@ -192,6 +193,11 @@ class RepoGitHub(Repo):
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
             xml = req.read()
+
+            # Filter out illegal XML characters
+            illegal_xml_regex = re.compile(b"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]")
+            xml = illegal_xml_regex.sub(b"", xml)
+
             root = ET.fromstring(xml)
             latest_entry = root.find(ATOM_ENTRY)
             assert latest_entry is not None, f"No commits found in repository {self}"
@@ -260,6 +266,7 @@ class PluginDesc:
 
     @staticmethod
     def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> "PluginDesc":
+        log.debug("Loading row %s", row)
         branch = row["branch"]
         repo = make_repo(row["repo"], branch.strip())
         repo.token = config.github_token
@@ -322,7 +329,7 @@ def load_plugins_from_csv(
 
 
 
-def run_nix_expr(expr, nixpkgs: str):
+def run_nix_expr(expr, nixpkgs: str, **args):
     '''
     :param expr nix expression to fetch current plugins
     :param nixpkgs Path towards a nixpkgs checkout
@@ -341,7 +348,7 @@ def run_nix_expr(expr, nixpkgs: str):
             nix_path,
         ]
         log.debug("Running command: %s", " ".join(cmd))
-        out = subprocess.check_output(cmd, timeout=90)
+        out = subprocess.check_output(cmd, **args)
         data = json.loads(out)
         return data
 
@@ -468,6 +475,7 @@ class Editor:
             "--input-names",
             "-i",
             dest="input_file",
+            type=Path,
             default=self.default_in,
             help="A list of plugins in the form owner/repo",
         )
@@ -476,6 +484,7 @@ class Editor:
             "-o",
             dest="outfile",
             default=self.default_out,
+            type=Path,
             help="Filename to save generated nix code",
         )
         common.add_argument(
@@ -728,6 +737,7 @@ def rewrite_input(
     redirects: Redirects = {},
     append: List[PluginDesc] = [],
 ):
+    log.info("Rewriting input file %s", input_file)
     plugins = load_plugins_from_csv(
         config,
         input_file,
@@ -736,10 +746,14 @@ def rewrite_input(
     plugins.extend(append)
 
     if redirects:
+        log.debug("Dealing with deprecated plugins listed in %s", deprecated)
+
         cur_date_iso = datetime.now().strftime("%Y-%m-%d")
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
+        # TODO parallelize this step
         for pdesc, new_repo in redirects.items():
+            log.info("Rewriting input file %s", input_file)
             new_pdesc = PluginDesc(new_repo, pdesc.branch, pdesc.alias)
             old_plugin, _ = prefetch_plugin(pdesc)
             new_plugin, _ = prefetch_plugin(new_pdesc)
@@ -777,20 +791,33 @@ def update_plugins(editor: Editor, args):
     All input arguments are grouped in the `Editor`."""
 
     log.info("Start updating plugins")
+    if args.proc > 1 and args.github_token == None:
+        log.warning("You have enabled parallel updates but haven't set a github token.\n"
+        "You may be hit with `HTTP Error 429: too many requests` as a consequence."
+        "Either set --proc=1 or --github-token=YOUR_TOKEN. ")
+
     fetch_config = FetchConfig(args.proc, args.github_token)
     update = editor.get_update(args.input_file, args.outfile, fetch_config)
 
+    start_time = time.time()
     redirects = update()
+    duration = time.time() - start_time
+    print(f"The plugin update took {duration:.2f}s.")
     editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
     if autocommit:
-        from datetime import date
-        editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        updated = date.today().strftime('%m-%d-%Y')
-
-        commit(editor.nixpkgs_repo, f"{editor.attr_path}: updated the {updated}", [args.outfile])
+        try:
+            repo = git.Repo(os.getcwd())
+            updated = datetime.now(tz=UTC).strftime('%Y-%m-%d')
+            print(args.outfile)
+            commit(repo,
+                   f"{editor.attr_path}: update on {updated}", [args.outfile]
+                   )
+        except git.InvalidGitRepositoryError as e:
+            print(f"Not in a git repository: {e}", file=sys.stderr)
+            sys.exit(1)
 
     if redirects:
         update()

@@ -14,37 +14,16 @@
 , libXrandr
 }:
 
-let
-  juce-lv2 = stdenv.mkDerivation {
-    pname = "juce-lv2";
-    version = "unstable-2022-03-30";
-
-    # lv2 branch
-    src = fetchFromGitHub {
-      owner = "lv2-porting-project";
-      repo = "JUCE";
-      rev = "e825ad977cf4499a7bfa05b97b208236f8fd253b";
-      sha256 = "sha256-Fqp1y9BN0E9p/12ukG1oh3COhXNRWBAlFRSl0LPyiFc=";
-    };
-
-    dontConfigure = true;
-    dontBuild = true;
-
-    installPhase = ''
-      cp -r . $out
-    '';
-  };
-in
 stdenv.mkDerivation rec {
   pname = "surge-XT";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "surge";
     rev = "release_xt_${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-LRYKkzeEuuRbMmvU3E0pHAnotOd4DyIJ7rTb+fpW0H4=";
+    hash = "sha256-r8CZxjmH9lfCizc95jRB4je+R/74zMqRMlGIZxxxriw=";
   };
 
   nativeBuildInputs = [
@@ -64,9 +43,15 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
+  enableParallelBuilding = true;
+
   cmakeFlags = [
-    "-DJUCE_SUPPORTS_LV2=ON"
-    "-DSURGE_JUCE_PATH=${juce-lv2}"
+    "-DSURGE_BUILD_LV2=TRUE"
+  ];
+
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' has not been declared
+    "-include cstdint"
   ];
 
   # JUCE dlopen's these at runtime, crashes without them

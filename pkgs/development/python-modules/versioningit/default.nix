@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-metadata
-, packaging
-, setuptools
-, tomli
-, pytestCheckHook
-, build
-, pydantic
-, pytest-mock
-, git
-, mercurial
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  importlib-metadata,
+  packaging,
+  tomli,
+  pytestCheckHook,
+  build,
+  hatchling,
+  pydantic,
+  pytest-mock,
+  setuptools,
+  git,
+  mercurial,
 }:
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "2.2.0";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
+    hash = "sha256-sLpYblrwi4fb4zVAgpEKHQUCw2IC1JbhrmDvO0HuKcE=";
   };
 
   postPatch = ''
@@ -33,20 +35,20 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail" ""
   '';
 
-  propagatedBuildInputs = [
-    packaging
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  nativeBuildInputs = [ hatchling ];
+
+  propagatedBuildInputs =
+    [ packaging ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytestCheckHook
     build
+    hatchling
     pydantic
     pytest-mock
+    setuptools
     git
     mercurial
   ];
@@ -56,15 +58,14 @@ buildPythonPackage rec {
     "test_editable_mode"
   ];
 
-  pythonImportsCheck = [
-    "versioningit"
-  ];
+  pythonImportsCheck = [ "versioningit" ];
 
   meta = with lib; {
     description = "setuptools plugin for determining package version from VCS";
+    mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ DeeUnderscore ];
   };
 }

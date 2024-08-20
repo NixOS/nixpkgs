@@ -19,10 +19,9 @@ python3Packages.buildPythonApplication rec {
     colorama imagesize lxml requests setuptools six
   ];
 
-  disabled = python3Packages.pythonOlder "3.3";
-
   meta = {
-    description = "A comic strip downloader and archiver";
+    description = "Comic strip downloader and archiver";
+    mainProgram = "dosage";
     homepage = "https://dosage.rocks/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ toonn ];

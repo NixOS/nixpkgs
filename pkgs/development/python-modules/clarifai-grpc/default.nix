@@ -1,26 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, googleapis-common-protos
-, grpcio
-, protobuf
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  googleapis-common-protos,
+  grpcio,
+  protobuf,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "9.9.3";
-  format = "setuptools";
+  version = "10.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9h/d1w5toxWMHMvVkQiuHySf3+IjeumD4EipgI1kaEs=";
+  src = fetchFromGitHub {
+    owner = "Clarifai";
+    repo = "clarifai-python-grpc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ftlFtoGMw2yraqcUb5k8IpA+epXONXeFFE2bThmu0Z4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     googleapis-common-protos
     grpcio
     protobuf

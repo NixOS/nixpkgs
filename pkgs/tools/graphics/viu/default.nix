@@ -19,15 +19,16 @@ rustPlatform.buildRustPackage rec {
   # tests need an interactive terminal
   doCheck = false;
 
-  cargoSha256 = "sha256-ildtjaYGbrQacJOdGDVwFv+kod+vZHqukWN6ARtJqI4=";
+  cargoHash = "sha256-ildtjaYGbrQacJOdGDVwFv+kod+vZHqukWN6ARtJqI4=";
 
   buildFeatures = lib.optional withSixel "sixel";
   buildInputs = lib.optional withSixel libsixel;
 
   meta = with lib; {
-    description = "A command-line application to view images from the terminal written in Rust";
+    description = "Command-line application to view images from the terminal written in Rust";
     homepage = "https://github.com/atanunq/viu";
     license = licenses.mit;
     maintainers = with maintainers; [ chuangzhu ];
+    mainProgram = "viu";
   };
 }

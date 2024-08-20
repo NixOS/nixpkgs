@@ -1,43 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, cyrus_sasl
-, openldap
-, typing-extensions
-, gevent
-, tornado
-, trio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  cyrus_sasl,
+  openldap,
+  gevent,
+  tornado,
+  trio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bonsai";
-  version = "1.5.1";
+  version = "1.5.3";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "bonsai";
     rev = "v${version}";
-    hash = "sha256-UR/Ds5famD8kuDa6IIIyEv45eJuAcoygXef8XE+5Cxk=";
+    hash = "sha256-SAP/YeWqow5dqXlXDzjnTWIfJhMwVeZSSUfWr1Mgmng=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     cyrus_sasl
     openldap
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   passthru.optional-dependencies = {
@@ -46,9 +40,7 @@ buildPythonPackage rec {
     trio = [ trio ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # requires running LDAP server

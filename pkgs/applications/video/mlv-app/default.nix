@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "mlv-app";
-  version = "1.11";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "ilia3101";
     repo = "MLV-App";
     rev = "QTv${version}";
-    sha256 = "0s5sjdxi8a17ddvih4ara7mlb2xrc9xqx52jmhfaca6ng341gi4x";
+    sha256 = "sha256-RfZXHmWSjZBxNFwQ/bzHppsLS0LauURIdnkAzxAIBcU=";
   };
 
   patches = if stdenv.isAarch64 then ./aarch64-flags.patch else null;
@@ -54,9 +54,8 @@ mkDerivation rec {
     description = "All in one MLV processing app that is pretty great";
     homepage = "https://mlv.app";
     license = licenses.gpl3;
-    maintainers = with maintainers; [
-      kiwi
-    ];
+    maintainers = [ ];
     platforms = platforms.linux;
+    mainProgram = "mlvapp";
   };
 }

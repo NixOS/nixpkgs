@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "coreapi";
   version = "2.3.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "python-client";
@@ -39,6 +40,6 @@ buildPythonPackage rec {
     description = "Python client library for Core API";
     homepage = "https://github.com/core-api/python-client";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

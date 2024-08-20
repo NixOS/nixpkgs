@@ -37,16 +37,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "emulsion";
-  version = "9.0";
+  version = "11.0";
 
   src = fetchFromGitHub {
     owner = "ArturKovacs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Cdi+PQDHxMQG7t7iwDi6UWfDwQjjA2yiOf9p/ahBlOw=";
+    sha256 = "sha256-0t+MUZu1cvkJSL9Ly9kblH8fMr05KuRpOo+JDn/VUc8=";
   };
 
-  cargoSha256 = "sha256-2wiLamnGqACx1r4WJbWPCN3tvhww/rRWz8fcvAbjYE0=";
+  cargoHash = "sha256-detJZRnxT3FubaF/A4w2pFdhW03BH0gsaeuNFYu+cBw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -68,10 +68,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fast and minimalistic image viewer";
+    description = "Fast and minimalistic image viewer";
     homepage = "https://arturkovacs.github.io/emulsion-website/";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
     license = licenses.mit;
+    mainProgram = "emulsion";
   };
 }

@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Small utility that converts MDF images to ISO format";
     homepage = src.url;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.oxij ];
+    mainProgram = "mdf2iso";
   };
 }

@@ -5,11 +5,14 @@
 , lib
 , rustPlatform
 , pkg-config
+, darwin
 , udev
 , zlib
 , protobuf
 , openssl
 , libclang
+, libcxx
+, rocksdb_8_3
 , rustfmt
 , perl
 , hidapi
@@ -23,7 +26,6 @@
     "solana-ledger-tool"
     "solana-log-analyzer"
     "solana-net-shaper"
-    "solana-sys-tuner"
     "solana-validator"
     "cargo-build-bpf"
     "cargo-test-bpf"
@@ -43,7 +45,9 @@ let
   pinData = lib.importJSON ./pin.json;
   version = pinData.version;
   hash = pinData.hash;
-  cargoHash = pinData.cargoHash;
+  rocksdb = rocksdb_8_3;
+  inherit (darwin.apple_sdk_11_0) Libsystem;
+  inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-validator";
@@ -56,8 +60,13 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  # partly inspired by https://github.com/obsidiansystems/solana-bridges/blob/develop/default.nix#L29
-  inherit cargoHash;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
+      "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
+    };
+  };
 
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 
@@ -66,19 +75,32 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
   buildInputs =
-    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ]);
+    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ])
+    ++ lib.optionals stdenv.isDarwin [ Security System Libsystem libcxx ];
   strictDeps = true;
 
   doCheck = false;
 
+  env = {
+    # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
+    # try to build RocksDB from source.
+    ROCKSDB_LIB_DIR = "${lib.getLib rocksdb}/lib";
+
+    # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
+    OPENSSL_NO_VENDOR = "1";
+  } // lib.optionalAttrs stdenv.isDarwin {
+    # Require this on darwin otherwise the compiler starts rambling about missing
+    # cmath functions
+    CPPFLAGS = "-isystem ${lib.getDev libcxx}/include/c++/v1";
+    LDFLAGS = "-L${lib.getLib libcxx}/lib";
+  };
+
   meta = with lib; {
-    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
+    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces.";
     homepage = "https://solana.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ adjacentresearch ];
     platforms = platforms.unix;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
   };
   passthru.updateScript = ./update.sh;
 }

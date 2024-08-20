@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ncurses, cmdliner_1_0, re }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "ocp-build is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocp-build";
   version = "1.99.21";
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/bin";
 
   meta = with lib; {
-    description = "A build tool for OCaml";
+    description = "Build tool for OCaml";
     longDescription = ''
       ocp-build is a build system for OCaml application, based on simple
       descriptions of packages. ocp-build combines the descriptions of

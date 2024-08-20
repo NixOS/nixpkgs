@@ -21,7 +21,7 @@
 , compat30 ? true
 , unicode ? true
 , withMesa ? !stdenv.isDarwin
-, withWebKit ? stdenv.isDarwin
+, withWebKit ? true
 , webkitgtk
 , setfile
 , AGL
@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.2.1";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-u+INjo9EkW433OYoCDZpw5pcW1DyF/t/J5ntLZX+6aA=";
+    hash = "sha256-ibkXs693xO+z3JuMvlG4b/+A8f4Lf5TYqdDa67fb9ck=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
     "--disable-monolithic"
     "--enable-mediactrl"
     "--with-nanosvg"
+    "--disable-rpath"
+    "--enable-repro-build"
     (if compat28 then "--enable-compat28" else "--disable-compat28")
     (if compat30 then "--enable-compat30" else "--disable-compat30")
   ] ++ lib.optional unicode "--enable-unicode"
@@ -138,7 +140,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.wxwidgets.org/";
-    description = "A Cross-Platform C++ GUI Library";
+    description = "Cross-Platform C++ GUI Library";
     longDescription = ''
       wxWidgets gives you a single, easy-to-use API for writing GUI applications
       on multiple platforms that still utilize the native platform's controls

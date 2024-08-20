@@ -1,16 +1,19 @@
-{ lib
-, cython
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  cython,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-benchmark,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ulid-transform";
-  version = "0.8.1";
+  version = "0.13.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +22,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-isngr9CZ2YYuq+5s3p4HXrTU20vPqZGZ1r8mBoVkxiI=";
+    hash = "sha256-tOtOTFKBVQmCm02k9Q8r+EgF39iN+XNXCnlw2ppYM58=";
   };
 
   nativeBuildInputs = [
@@ -29,17 +32,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-benchmark
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=ulid_transform --cov-report=term-missing:skip-covered" ""
-  '';
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  pythonImportsCheck = [
-    "ulid_transform"
-  ];
+  pythonImportsCheck = [ "ulid_transform" ];
 
   meta = with lib; {
     description = "Library to create and transform ULIDs";

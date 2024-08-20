@@ -4,7 +4,7 @@
 , gettext
 , gobject-introspection
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , scrot
 , slop
@@ -18,21 +18,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gscreenshot";
-  version = "3.4.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "thenaterhood";
     repo = "${pname}";
-    rev = "v${version}";
-    sha256 = "sLJ+Fk+ePrmJeSllGd30uEQ/uFDl5CIob//1cDLKZHg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-dYmdM9QtemVKggEmMMcprVIM1fe02jQOyBPniy7p9ns=";
   };
 
-  # needed for wrapGAppsHook to function
+  # needed for wrapGAppsHook3 to function
   strictDeps = false;
   # tests require a display and fail
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   propagatedBuildInputs = [
     gettext
     gobject-introspection
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   patches = [ ./0001-Changing-paths-to-be-nix-compatible.patch ];
 
   meta = {
-    description = "A screenshot frontend (CLI and GUI) for a variety of screenshot backends";
+    description = "Screenshot frontend (CLI and GUI) for a variety of screenshot backends";
 
     longDescription = ''
       gscreenshot provides a common frontend and expanded functionality to a

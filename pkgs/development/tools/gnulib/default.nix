@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchgit, python3 }:
+{ lib, stdenv, fetchFromSavannah, python3, perl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnulib";
-  version = "20210702";
+  version = "20231109";
 
-  src = fetchgit {
-    url = "https://git.savannah.gnu.org/r/gnulib.git";
-    rev = "901694b904cd861adc2529b2e05a3fb33f9b534f";
-    sha256 = "1f5znlv2wjziglw9vlygdgm4jfbsz34h2dz6w4h90bl4hm0ycb1w";
+  src = fetchFromSavannah {
+    repo = "gnulib";
+    rev = "2dd1a7984c6b3e6056cef7e3f9933e0039c21634";
+    hash = "sha256-QtWf3mljEnr0TTogkoKN63Y5HTm14A2e/sIXX3xe2SE=";
   };
 
   postPatch = ''
     patchShebangs gnulib-tool.py
+    substituteInPlace build-aux/{prefix-gnulib-mk,useless-if-before-free,update-copyright,gitlog-to-changelog,announce-gen} \
+    --replace-fail 'exec perl' 'exec ${lib.getExe perl}'
   '';
 
   buildInputs = [ python3 ];
@@ -40,6 +42,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Central location for code to be shared among GNU packages";
     homepage = "https://www.gnu.org/software/gnulib/";
+    changelog = "https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=ChangeLog";
     license = licenses.gpl3Plus;
     mainProgram = "gnulib-tool";
     platforms = platforms.unix;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "m17n-db";
-  version = "1.8.2";
+  version = "1.8.5";
 
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/m17n/m17n-db-${version}.tar.gz";
-    sha256 = "sha256-vHR+J9ct9YoH9DG3JdeuQJIyLbxGEUykBTgoIbK6XGk=";
+    sha256 = "sha256-to//QiwKKGTuVuLEUXOCEzuYG7S6ObU/R4lc2LHApzY=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (database)";
+    mainProgram = "m17n-db";
     changelog = "https://git.savannah.nongnu.org/cgit/m17n/m17n-db.git/plain/NEWS?h=REL-${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;

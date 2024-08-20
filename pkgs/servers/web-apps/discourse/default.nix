@@ -13,7 +13,6 @@
 , gzip
 , gnutar
 , git
-, esbuild
 , cacert
 , util-linux
 , gawk
@@ -36,24 +35,25 @@
 , icu
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, fixup-yarn-lock
 , nodePackages
 , nodejs_18
 , jq
 , moreutils
 , terser
+, uglify-js
 
 , plugins ? []
 }@args:
 
 let
-  version = "3.2.0.beta1";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-HVjt5rsLSuyOaQxkbiTrsYsSXj3oSWjke98QVp+tEqk=";
+    sha256 = "sha256-+at4IiJ0yRPq9XyvAwa2Kuc0wYQOB5hw7E1jmQAAkc4=";
   };
 
   ruby = ruby_3_2;
@@ -66,7 +66,7 @@ let
     gnutar
     git
     brotli
-    esbuild
+    nodejs_18
 
     # Misc required system utils
     which
@@ -188,7 +188,7 @@ let
             # available for aarch64. It has to be called
             # libpsl.x86_64.so or it isn't found.
             postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+              cp $(readlink -f ${lib.getLib libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
         };
@@ -202,22 +202,25 @@ let
     pname = "discourse-assets";
     inherit version src;
 
+    yarnDevOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      hash = "sha256-0s8c2V8Wl3f5kL1OIn2ps6hL7CUQD5+LJm+9LYHc+W0=";
+    };
+
     yarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "070h66zp8kmsigbrkh5d3jzbzvllzhbx0fa2yzx5lbpgnjhih3p2";
+      yarnLock = src + "/app/assets/javascripts/yarn-ember5.lock";
+      hash = "sha256-ZBXvNdHHV92kSAswe6KA+OqaY5smf7ZKTTOiY8g78D0=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      nodePackages.uglify-js
+      uglify-js
       terser
-      nodePackages.patch-package
       yarn
-      nodejs_18
       jq
       moreutils
-      esbuild
+      fixup-yarn-lock
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -236,18 +239,13 @@ let
       # assets precompilation task.
       ./assets_rake_command.patch
 
-      # `app/assets/javascripts/discourse/package.json`'s postinstall
-      # hook tries to call `../node_modules/.bin/patch-package`, which
-      # hasn't been `patchShebangs`-ed yet. So instead we just use
-      # `patch-package` from `nativeBuildInputs`.
-      ./asserts_patch-package_from_path.patch
-
-      # `lib/discourse_js_processor.rb`
-      # tries to call `../node_modules/.bin/esbuild`, which
-      # hasn't been `patchShebangs`-ed yet. So instead we just use
-      # `esbuild` from `nativeBuildInputs`.
-      ./assets_esbuild_from_path.patch
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
+
+    env.RAILS_ENV = "production";
 
     # We have to set up an environment that is close enough to
     # production ready or the assets:precompile task refuses to
@@ -257,26 +255,29 @@ let
       # Yarn wants a real home directory to write cache, config, etc to
       export HOME=$NIX_BUILD_TOP/fake_home
 
-      # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
+      yarn_install() {
+        local offlineCache=$1 yarnLock=$2
 
-      # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
+        # Make yarn install packages from our offline cache, not the registry
+        yarn config --offline set yarn-offline-mirror $offlineCache
 
+        # Fixup "resolved"-entries in yarn.lock to match our offline cache
+        fixup-yarn-lock $yarnLock
+
+        # Install while ignoring hook scripts
+        yarn --offline --ignore-scripts --cwd $(dirname $yarnLock) install
+      }
+
+      # Install devDependencies for generating the theme-transpiler executed as
+      # dependent task assets:precompile:theme_transpiler before db:migrate
+      yarn_install $yarnDevOfflineCache yarn.lock
+
+      # Install the runtime dependencies
+      yarn_install $yarnOfflineCache app/assets/javascripts/yarn-ember5.lock
+      # Patch before running postinstall hook script
+      patchShebangs --build app/assets/javascripts
+      yarn --offline --cwd app/assets/javascripts run postinstall
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-
-      find app/assets/javascripts -name package.json -print0 \
-        | xargs -0 -I {} bash -c "jq 'del(.scripts.postinstall)' -r <{} | sponge {}"
-      yarn install --offline --cwd app/assets/javascripts/discourse
-
-      patchShebangs app/assets/javascripts/node_modules/
-
-      # Run `patch-package` AFTER the corresponding shebang inside `.bin/patch-package`
-      # got patched. Otherwise this will fail with
-      #     /bin/sh: line 1: /build/source/app/assets/javascripts/node_modules/.bin/patch-package: cannot execute: required file not found
-      pushd app/assets/javascripts &>/dev/null
-        yarn run patch-package
-      popd &>/dev/null
 
       redis-server >/dev/null &
 
@@ -294,13 +295,7 @@ let
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
 
-      # Create a temporary home dir to stop bundler from complaining
-      mkdir $NIX_BUILD_TOP/tmp_home
-      export HOME=$NIX_BUILD_TOP/tmp_home
-
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
-
-      export RAILS_ENV=production
 
       bundle exec rake db:migrate >/dev/null
       chmod -R +w tmp
@@ -361,11 +356,10 @@ let
       # Make sure the notification email setting applies
       ./notification_email.patch
 
-      # `lib/discourse_js_processor.rb`
-      # tries to call `../node_modules/.bin/esbuild`, which
-      # hasn't been `patchShebangs`-ed yet. So instead we just use
-      # `esbuild` from `nativeBuildInputs`.
-      ./assets_esbuild_from_path.patch
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
 
     postPatch = ''
@@ -416,6 +410,9 @@ let
 
     passthru = {
       inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
+      inherit (pkgs)
+        discourseAllPlugins
+      ;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;

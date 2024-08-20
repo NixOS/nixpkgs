@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , writeText
-, fetchurl
+, fetchFromGitHub
 , buildcatrust
 , blacklist ? []
 , extraCertificateFiles ? []
@@ -17,24 +17,14 @@
 }:
 
 let
-  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" (blacklist ++ [
-    # Mozilla does not trust new certificates issued by these CAs after 2022/11/30¹
-    # in their products, but unfortunately we don't have such a fine-grained
-    # solution for most system packages², so we decided to eject these.
-    #
-    # [1] https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/oxX69KFvsm4/m/yLohoVqtCgAJ
-    # [2] https://utcc.utoronto.ca/~cks/space/blog/linux/CARootStoreTrustProblem
-    "TrustCor ECA-1"
-    "TrustCor RootCert CA-1"
-    "TrustCor RootCert CA-2"
-  ]));
+  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.92";
+  srcVersion = "3.101.1";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
-    description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
+    description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz lukegb ];
     license = licenses.mpl20;
@@ -43,9 +33,11 @@ let
     pname = "nss-cacert-certdata";
     inherit version;
 
-    src = if nssOverride != null then nssOverride.src else fetchurl {
-      url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      hash = "sha256-PbGS1uiCA5rwKufq8yF+0RS7etg0FMZGdyq4Ah4kolQ=";
+    src = if nssOverride != null then nssOverride.src else fetchFromGitHub {
+      owner = "nss-dev";
+      repo = "nss";
+      rev = "NSS_${lib.replaceStrings ["."] ["_"] version}_RTM";
+      hash = "sha256-KcRiOUbdFnH618MFM6uxmRn+/Jn4QMHtv1BELXrCAX4=";
     };
 
     dontBuild = true;
@@ -54,7 +46,7 @@ let
       runHook preInstall
 
       mkdir $out
-      cp nss/lib/ckfw/builtins/certdata.txt $out
+      cp lib/ckfw/builtins/certdata.txt $out
 
       runHook postInstall
     '';
@@ -79,12 +71,16 @@ stdenv.mkDerivation rec {
       --ca_bundle_input "${extraCertificatesBundle}" ${lib.escapeShellArgs (map (arg: "${arg}") extraCertificateFiles)} \
       --blocklist "${blocklist}" \
       --ca_bundle_output ca-bundle.crt \
+      --ca_standard_bundle_output ca-no-trust-rules-bundle.crt \
       --ca_unpacked_output unbundled \
       --p11kit_output ca-bundle.trust.p11-kit
   '';
 
   installPhase = ''
     install -D -t "$out/etc/ssl/certs" ca-bundle.crt
+
+    # install standard PEM compatible bundle
+    install -D -t "$out/etc/ssl/certs" ca-no-trust-rules-bundle.crt
 
     # install p11-kit specific output to p11kit output
     install -D -t "$p11kit/etc/ssl/trust-source" ca-bundle.trust.p11-kit

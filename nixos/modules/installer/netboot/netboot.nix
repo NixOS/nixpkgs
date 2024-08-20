@@ -15,7 +15,7 @@ with lib;
                 + lib.optionalString isAarch "-Xbcj arm"
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
-      description = lib.mdDoc ''
+      description = ''
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
@@ -24,7 +24,7 @@ with lib;
 
     netboot.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = lib.mdDoc ''
+      description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
       '';
@@ -36,10 +36,6 @@ with lib;
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
-
-    # !!! Hack - attributes expected by other modules.
-    environment.systemPackages = [ pkgs.grub2_efi ]
-      ++ (lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [pkgs.grub2 pkgs.syslinux]);
 
     fileSystems."/" = mkImageMediaOverride
       { fsType = "tmpfs";
@@ -62,19 +58,12 @@ with lib;
       };
 
     fileSystems."/nix/store" = mkImageMediaOverride
-      { fsType = "overlay";
-        device = "overlay";
-        options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
-        ];
-
-        depends = [
-          "/nix/.ro-store"
-          "/nix/.rw-store/store"
-          "/nix/.rw-store/work"
-        ];
+      { overlay = {
+          lowerdir = [ "/nix/.ro-store" ];
+          upperdir = "/nix/.rw-store/store";
+          workdir = "/nix/.rw-store/work";
+        };
+        neededForBoot = true;
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
@@ -99,8 +88,8 @@ with lib;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
       contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
+        [ { source = config.system.build.squashfsStore;
+            target = "/nix-store.squashfs";
           }
         ];
     };

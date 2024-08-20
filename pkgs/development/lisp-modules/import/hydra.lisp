@@ -174,6 +174,7 @@
    "clx-truetype"
    "collectors"
    "colorize"
+   "com.inuoe.jzon"
    "command-line-arguments"
    "css-lite"
    "css-selectors"

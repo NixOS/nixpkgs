@@ -30,6 +30,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://convertall.bellz.org/";
     description = "Graphical unit converter";
+    mainProgram = "convertall";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej ];
     platforms = pyqt5.meta.platforms;

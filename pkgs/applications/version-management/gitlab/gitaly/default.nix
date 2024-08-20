@@ -1,32 +1,33 @@
 { lib
+, callPackage
 , fetchFromGitLab
-, fetchFromGitHub
 , buildGoModule
 , pkg-config
 }:
 
 let
-  version = "16.4.1";
+  version = "17.2.0";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
+
+  git = callPackage ./git.nix { };
 
   commonOpts = {
     inherit version;
 
+    # nixpkgs-update: no auto update
     src = fetchFromGitLab {
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-t3d72l/Na0qv+jezT/YhAUbG9DSSe9pyixQjTALTxvk=";
+      hash = "sha256-thQ8Gufcygt3QEbIcmkroSuAky9kJ7f7hupim87AJdE=";
     };
 
-    vendorHash = "sha256-Nlq1l1f389DC854rFznEu2Viv0T7Y1cD1Ht0o2N304o=";
+    vendorHash = "sha256-FqnGVRldhevJgBBvJcvGXzRaYWqSHzZiXIQmCNzJv+4=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
     tags = [ "static" ];
-
-    nativeBuildInputs = [ pkg-config ];
 
     doCheck = false;
   };
@@ -49,9 +50,13 @@ buildGoModule ({
 
   outputs = [ "out" ];
 
+  passthru = {
+    inherit git;
+  };
+
   meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
-    description = "A Git RPC service for handling all the git calls made by GitLab";
+    description = "Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux ++ [ "x86_64-darwin" ];
     maintainers = teams.gitlab.members;
     license = licenses.mit;

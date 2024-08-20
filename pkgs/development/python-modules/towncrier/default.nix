@@ -1,39 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, click
-, click-default-group
-, incremental
-, jinja2
-, mock
-, pytestCheckHook
-, toml
-, twisted
-, setuptools
-, git # shells out to git
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  git, # shells out to git
+  hatchling,
+  importlib-resources,
+  incremental,
+  jinja2,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "23.6.0";
-  format = "setuptools";
+  version = "24.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/Cm9WrRyfI2s++Y29/tdxTuZgFti2hyWshSDYVn/cME=";
+    hash = "sha256-V6BX+u2ryt8aYvb5utcmrlZsHzGkETON24MWmT9YOz0=";
   };
 
-  propagatedBuildInputs = [
-    click
-    click-default-group
-    incremental
-    jinja2
-    toml
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "hatchling ~= 1.17.1" "hatchling"
+  '';
+
+  nativeBuildInputs = [ hatchling ];
+
+  propagatedBuildInputs =
+    [
+      click
+      incremental
+      jinja2
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -46,15 +54,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "towncrier"
-  ];
+  pythonImportsCheck = [ "towncrier" ];
 
   meta = with lib; {
     description = "Utility to produce useful, summarised news files";
+    mainProgram = "towncrier";
     homepage = "https://github.com/twisted/towncrier/";
     changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

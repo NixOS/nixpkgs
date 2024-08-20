@@ -1,7 +1,7 @@
 { lib
 , config
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , cairo
 , cmake
 , opencv
@@ -13,11 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
-  version = "1.8.0";
+  version = "2.3.3";
 
-  src = fetchurl {
-    url = "https://files.dyne.org/frei0r/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-RaKGVcrwVyJ7RCuADKOJnpNJBRXIHiEtIZ/fSnYT9cQ=";
+  src = fetchFromGitHub {
+    owner = "dyne";
+    repo = "frei0r";
+    rev = "v${version}";
+    hash = "sha256-uKYCJD88TnrJTTnzCCietNt01QPeFW+hhnjcBNKUWsY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

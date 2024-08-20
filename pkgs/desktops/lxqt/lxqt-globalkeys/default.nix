@@ -1,38 +1,38 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , lxqt-build-tools
 , qtbase
 , qttools
-, qtx11extras
 , qtsvg
 , kwindowsystem
 , liblxqt
 , libqtxdg
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-globalkeys";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "lo5FG6+kQTm15MEh+CZO2DvywsLrmX4sKzs4Rka6GSo=";
+    hash = "sha256-24alERAnzlU/ZwIlRy9B+58zjRnF9eXunWeEO/lDVxM=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
-    qttools
-    qtx11extras
     qtsvg
     kwindowsystem
     liblxqt

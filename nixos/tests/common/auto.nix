@@ -12,7 +12,7 @@ in
     test-support.displayManager.auto = {
       enable = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the fake "auto" display manager, which
           automatically logs in the user specified in the
           {option}`user` option.  This is mostly useful for
@@ -22,7 +22,7 @@ in
 
       user = lib.mkOption {
         default = "root";
-        description = lib.mdDoc "The user account to login automatically.";
+        description = "The user account to login automatically.";
       };
     };
   };
@@ -30,12 +30,10 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = cfg.user;
-      };
+    services.xserver.displayManager.lightdm.enable = true;
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = cfg.user;
     };
 
     # lightdm by default doesn't allow auto login for root, which is

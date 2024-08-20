@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, prompt-toolkit
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  prompt-toolkit,
 }:
 
 buildPythonPackage rec {
@@ -19,22 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-e7C9IDr+mhVSfU8lMywjX1BYwFo/qegPNzabak7UPcY=";
   };
 
-  propagatedBuildInputs = [
-    prompt-toolkit
-  ];
+  propagatedBuildInputs = [ prompt-toolkit ];
 
   # repo contains no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "clintermission"
-  ];
+  pythonImportsCheck = [ "clintermission" ];
 
   meta = with lib; {
     description = "Non-fullscreen command-line selection menu";
     homepage = "https://github.com/sebageek/clintermission";
     changelog = "https://github.com/sebageek/clintermission/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -156,7 +156,7 @@ in
         ensureDatabases = [ "sftpgo" ];
         ensureUsers = [{
           name = "sftpgo";
-          ensurePermissions."DATABASE sftpgo" = "ALL PRIVILEGES";
+          ensureDBOwnership = true;
         }];
       };
 

@@ -7,10 +7,8 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
+, fixup-yarn-lock
 , electron
-, libpulseaudio
-, pipewire
 , alsa-utils
 , which
 , testers
@@ -19,28 +17,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.14";
+  version = "1.4.27";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2H7j8e2wPMd4cHXDKxSmyC2Ng/B3jb3/tGVTpUOU3XM=";
+    hash = "sha256-nUHiveS1XI+vC2Tj1DK/DS4CrKTLMg1IYgTPWXuLrAc=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-zB6H14VAf13pAHQmsWC51d/qqyfRmAEbltyLD5ucG4Y=";
+    hash = "sha256-jBwyIyiWeqNmOnxmVOr7c4oMWwHElEjM25sShhTMi78=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -71,11 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
     popd
 
-    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
+    # Linux needs 'aplay' for notification sounds
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -100,9 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
+    mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
+    maintainers = with lib.maintainers; [ muscaln qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

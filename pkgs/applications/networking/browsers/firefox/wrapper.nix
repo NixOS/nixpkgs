@@ -3,8 +3,8 @@
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
-, gnome/*.gnome-shell*/
+, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
+, adwaita-icon-theme
 , browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx-cast-bridge
@@ -17,7 +17,8 @@
 , pciutils
 , sndio
 , libjack2
-, speechd
+, speechd-minimal
+, removeReferencesTo
 }:
 
 ## configurability of the wrapper itself
@@ -46,7 +47,7 @@ let
     , extraPrefs ? ""
     , extraPrefsFiles ? []
     # For more information about policies visit
-    # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+    # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
     , libName ? browser.libName or "firefox" # Important for tor package or the like
@@ -87,7 +88,7 @@ let
 
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
-            ++ lib.optional ffmpegSupport ffmpeg_5
+            ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
@@ -97,7 +98,7 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -115,18 +116,15 @@ let
 
       nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
-      requiresSigning = browser ? MOZ_REQUIRE_SIGNING
-                     -> toString browser.MOZ_REQUIRE_SIGNING != "";
-
       # Check that every extension has a unqiue .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if requiresSigning && !lib.hasSuffix "esr" browser.name then
-        throw "Nix addons are only supported without signature enforcement (eg. Firefox ESR)"
+      else if browser.requireSigning || !browser.allowAddonSideload then
+        throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
-        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
+        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
         else
         a
       ) (lib.optionals usesNixExtensions nixExtensions);
@@ -241,7 +239,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq ];
+      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -324,7 +322,7 @@ let
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-            --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share' \
+            --suffix XDG_DATA_DIRS : '${adwaita-icon-theme}/share' \
             --set-default MOZ_ENABLE_WAYLAND 1 \
             "''${oldWrapperArgs[@]}"
         #############################
@@ -416,9 +414,12 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-
+      postInstall = ''
+        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
+        mainProgram = launcherName;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };

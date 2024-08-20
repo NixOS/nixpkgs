@@ -14,11 +14,11 @@ in
 
   options = {
     services.cfdyndns = {
-      enable = mkEnableOption (lib.mdDoc "Cloudflare Dynamic DNS Client");
+      enable = mkEnableOption "Cloudflare Dynamic DNS Client";
 
       email = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The email address to use to authenticate to CloudFlare.
         '';
       };
@@ -26,7 +26,7 @@ in
       apiTokenFile = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           The path to a file containing the API Token
           used to authenticate with CloudFlare.
         '';
@@ -35,7 +35,7 @@ in
       apikeyFile = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           The path to a file containing the API Key
           used to authenticate with CloudFlare.
         '';
@@ -45,7 +45,7 @@ in
         default = [];
         example = [ "host.tld" ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           The records to update in CloudFlare.
         '';
       };

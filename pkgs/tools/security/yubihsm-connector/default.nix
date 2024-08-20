@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   preBuild = ''
-    go generate
+    GOOS= GOARCH= go generate
   '';
 
   meta = with lib; {
@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://developers.yubico.com/yubihsm-connector/";
     maintainers = with maintainers; [ matthewcroughan ];
     license = licenses.asl20;
+    mainProgram = "yubihsm-connector";
   };
 }

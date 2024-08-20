@@ -1,21 +1,27 @@
-{ fetchFromGitHub, lib, php }:
+{
+  fetchFromGitHub,
+  lib,
+  php,
+}:
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpstan";
-  version = "1.10.37";
+  version = "1.11.8";
 
   src = fetchFromGitHub {
     owner = "phpstan";
     repo = "phpstan-src";
     rev = finalAttrs.version;
-    hash = "sha256-y55bfwE3H/oDCwDq3wrClyX8dhk0p6vEl/CMhqN6LkA=";
+    hash = "sha256-wF2OqJ0kg+wEjSq8mAyF5em5RAqjyXqKFkdAjxOrePM=";
   };
 
-  vendorHash = "sha256-hjCfrmpn2rYgApenZkHX8fXqPXukh7BVKENkvwIk8Dk=";
+  vendorHash = "sha256-8WJg3zfPk0tFU5GZvjnqG8iS4p9oOoBWDX0jYhQ1AXw=";
+  composerStrictValidation = false;
 
   meta = {
     changelog = "https://github.com/phpstan/phpstan/releases/tag/${finalAttrs.version}";
     description = "PHP Static Analysis Tool";
+    homepage = "https://github.com/phpstan/phpstan";
     longDescription = ''
       PHPStan focuses on finding errors in your code without actually
       running it. It catches whole classes of bugs even before you write
@@ -24,7 +30,7 @@ php.buildComposerProject (finalAttrs: {
       before you run the actual line.
     '';
     license = lib.licenses.mit;
-    homepage = "https://github.com/phpstan/phpstan";
+    mainProgram = "phpstan";
     maintainers = lib.teams.php.members;
   };
 })

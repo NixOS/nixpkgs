@@ -33,5 +33,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/jfarseneau/antennas";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bachp ];
+    mainProgram = "antennas";
   };
 }

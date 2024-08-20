@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchPypi
 }:
@@ -32,14 +31,10 @@ buildPythonPackage rec {
   # Instead, we do this as a passthru.tests test.
   doCheck = false;
 
-  passthru.tests = {
-    pytest = callPackage ./tests.nix { };
-  };
-
   meta = with lib; {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/hynek/attrs";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

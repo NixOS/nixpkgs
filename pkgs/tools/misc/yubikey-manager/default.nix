@@ -8,24 +8,23 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.2.1";
-  format = "pyproject";
+  version = "5.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     rev = version;
-    hash = "sha256-CUe/oB/+Hq9evnLwl8r0k5ObhI3vDt7oX79+20yMfjY=";
+    hash = "sha256-m/B5G83XZROoCNq/ZT0U0MUth2IC99e3LWc8FcOq1ig=";
   };
 
   postPatch = ''
     substituteInPlace "ykman/pcsc/__init__.py" \
-      --replace 'pkill' '${if stdenv.isLinux then "${procps}" else "/usr"}/bin/pkill'
+      --replace 'pkill' '${if stdenv.isLinux then procps else "/usr"}/bin/pkill'
   '';
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
-    pythonRelaxDepsHook
     installShellFiles
   ];
 
@@ -55,14 +54,14 @@ python3Packages.buildPythonPackage rec {
     makefun
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developers.yubico.com/yubikey-manager";
     changelog = "https://github.com/Yubico/yubikey-manager/releases/tag/${version}";
     description = "Command line tool for configuring any YubiKey over all USB transports";
 
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ benley lassulus pinpox nickcao ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ benley lassulus pinpox nickcao ];
     mainProgram = "ykman";
   };
 }

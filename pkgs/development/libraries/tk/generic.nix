@@ -22,7 +22,7 @@ tcl.mkTclDerivation {
       substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
     done
   ''
-  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11") ''
+  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
     substituteInPlace unix/configure* \
       --replace " -framework UniformTypeIdentifiers" ""
   '';
@@ -65,10 +65,10 @@ tcl.mkTclDerivation {
   };
 
   meta = with lib; {
-    description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
+    description = "Widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = "https://www.tcl.tk/";
     license = licenses.tcltk;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lovek323 vrthra ];
+    maintainers = [ ];
   };
 }

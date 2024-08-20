@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/SRI-CSL/gllvm";
     description = "Whole Program LLVM: wllvm ported to go";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

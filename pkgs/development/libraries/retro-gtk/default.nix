@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchpatch
-, cmake
 , meson
 , ninja
 , pkg-config
@@ -53,7 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The GTK Libretro frontend framework";
+    description = "GTK Libretro frontend framework";
+    mainProgram = "retro-demo";
     longDescription = ''
       Libretro is a plugin format design to implement video game
       console emulators, video games and similar multimedia

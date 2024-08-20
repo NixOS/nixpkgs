@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
 }:
 
 buildPythonPackage rec {
   pname = "inotify";
   version = "unstable-2020-08-27";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dsoprea";
@@ -16,9 +18,7 @@ buildPythonPackage rec {
     fetchSubmodules = false;
   };
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   # dunno what's wrong but the module works regardless
   doCheck = false;

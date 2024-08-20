@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, eth-hash
-, eth-utils
-, hexbytes
-, pytestCheckHook
-, pythonOlder
-, rlp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  eth-hash,
+  eth-utils,
+  hexbytes,
+  pytestCheckHook,
+  pythonOlder,
+  rlp,
 }:
 
 buildPythonPackage rec {
   pname = "eth-rlp";
-  version = "0.3.0";
-  disabled = pythonOlder "3.7";
+  version = "2.1.0";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-rlp";
     rev = "v${version}";
-    hash = "sha256-wfmRjHFu6H3J6hNin8ZA2454xXrLgcUdeR8iGXFomRE=";
+    hash = "sha256-FTqIutndf+epmO5XNEUoRAUEmn299aTLIZNe5SMcxAQ=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     hexbytes
@@ -27,9 +32,7 @@ buildPythonPackage rec {
     rlp
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  nativeCheckInputs = [ pytestCheckHook ] ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_rlp" ];
 
@@ -37,6 +40,6 @@ buildPythonPackage rec {
     description = "RLP definitions for common Ethereum objects";
     homepage = "https://github.com/ethereum/eth-rlp";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

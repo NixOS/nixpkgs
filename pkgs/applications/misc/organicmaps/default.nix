@@ -9,7 +9,9 @@
 , rsync
 , wrapQtAppsHook
 , qtbase
+, qtpositioning
 , qtsvg
+, qtwayland
 , libGLU
 , libGL
 , zlib
@@ -28,13 +30,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.08.18-8";
+  version = "2024.07.29-2";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    hash = "sha256-vdleO4jNKibyDlqrfZsOCScpQ9zreuYSw2BSoNpmeLY=";
+    hash = "sha256-cAoG/4vuA664+JcLTUdlLMMRggAznqHh3NA0Pk8RcFc=";
     fetchSubmodules = true;
   };
 
@@ -65,7 +67,9 @@ in stdenv.mkDerivation rec {
   # Most dependencies are vendored
   buildInputs = [
     qtbase
+    qtpositioning
     qtsvg
+    qtwayland
     libGLU
     libGL
     zlib

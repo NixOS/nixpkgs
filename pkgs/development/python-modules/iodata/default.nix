@@ -1,26 +1,49 @@
-{ buildPythonPackage, lib, fetchFromGitHub, numpy, scipy, attrs, cython, nose }:
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  numpy,
+  scipy,
+  attrs,
+  pytest-xdist,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "iodata";
-  version = "0.1.7";
+  version = "1.0.0a4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theochem";
     repo = pname;
-    rev = version;
-    hash = "sha256-Qn2xWFxdS12K92DhdHVzYrBjPRV+vYo7Cs27vkeCaxM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ld6V+/8lg4Du6+mHU5XuXXyMpWwyepXurerScg/bf2Q=";
   };
 
-  leaveDotGit = true;
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ cython nose ];
-  propagatedBuildInputs = [ numpy scipy attrs ];
+  dependencies = [
+    numpy
+    scipy
+    attrs
+  ];
 
-  pythonImportsCheck = [ "iodata" "iodata.overlap_accel" ];
-  doCheck = false; # Requires roberto or nose and a lenghtly setup to find the cython modules
+  pythonImportsCheck = [ "iodata" ];
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Python library for reading, writing, and converting computational chemistry file formats and generating input files";
+    mainProgram = "iodata-convert";
     homepage = "https://github.com/theochem/iodata";
     license = licenses.lgpl3Only;
     maintainers = [ maintainers.sheepforce ];

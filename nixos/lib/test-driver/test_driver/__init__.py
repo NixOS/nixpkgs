@@ -6,7 +6,12 @@ from pathlib import Path
 import ptpython.repl
 
 from test_driver.driver import Driver
-from test_driver.logger import rootlog
+from test_driver.logger import (
+    CompositeLogger,
+    JunitXMLLogger,
+    TerminalLogger,
+    XMLLogger,
+)
 
 
 class EnvDefault(argparse.Action):
@@ -77,12 +82,25 @@ def main() -> None:
         help="vlans to span by the driver",
     )
     arg_parser.add_argument(
+        "--global-timeout",
+        type=int,
+        metavar="GLOBAL_TIMEOUT",
+        action=EnvDefault,
+        envvar="globalTimeout",
+        help="Timeout in seconds for the whole test",
+    )
+    arg_parser.add_argument(
         "-o",
         "--output_directory",
         help="""The path to the directory where outputs copied from the VM will be placed.
                 By e.g. Machine.copy_from_vm or Machine.screenshot""",
         default=Path.cwd(),
         type=writeable_dir,
+    )
+    arg_parser.add_argument(
+        "--junit-xml",
+        help="Enable JunitXML report generation to the given path",
+        type=Path,
     )
     arg_parser.add_argument(
         "testscript",
@@ -94,15 +112,26 @@ def main() -> None:
 
     args = arg_parser.parse_args()
 
+    output_directory = args.output_directory.resolve()
+    logger = CompositeLogger([TerminalLogger()])
+
+    if "LOGFILE" in os.environ.keys():
+        logger.add_logger(XMLLogger(os.environ["LOGFILE"]))
+
+    if args.junit_xml:
+        logger.add_logger(JunitXMLLogger(output_directory / args.junit_xml))
+
     if not args.keep_vm_state:
-        rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
+        logger.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
     with Driver(
         args.start_scripts,
         args.vlans,
         args.testscript.read_text(),
-        args.output_directory.resolve(),
+        output_directory,
+        logger,
         args.keep_vm_state,
+        args.global_timeout,
     ) as driver:
         if args.interactive:
             history_dir = os.getcwd()
@@ -116,7 +145,7 @@ def main() -> None:
             tic = time.time()
             driver.run_tests()
             toc = time.time()
-            rootlog.info(f"test script finished in {(toc-tic):.2f}s")
+            logger.info(f"test script finished in {(toc-tic):.2f}s")
 
 
 def generate_driver_symbols() -> None:
@@ -125,7 +154,7 @@ def generate_driver_symbols() -> None:
     in user's test scripts. That list is then used by pyflakes to lint those
     scripts.
     """
-    d = Driver([], [], "", Path())
+    d = Driver([], [], "", Path(), CompositeLogger([]))
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))

@@ -1,35 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, testtools
-, testresources
-, pbr
-, subunit
-, fixtures
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  testtools,
+  testresources,
+  pbr,
+  subunit,
+  fixtures,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "testrepository";
-  version = "0.0.20";
+  version = "0.0.21";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ssqb07c277010i6gzzkbdd46gd9mrj0bi0i8vn560n2k2y4j93m";
+    hash = "sha256-Nor89+CQs8aIvddUol9kvDFOUSuBb4xxufn8F9w3o9k=";
   };
 
   nativeCheckInputs = [ testresources ];
   buildInputs = [ pbr ];
-  propagatedBuildInputs = [ fixtures subunit testtools ];
+  propagatedBuildInputs = [
+    fixtures
+    subunit
+    testtools
+  ];
 
   checkPhase = ''
     ${python.interpreter} ./testr
   '';
 
   meta = with lib; {
-    description = "A database of test results which can be used as part of developer workflow";
+    description = "Database of test results which can be used as part of developer workflow";
+    mainProgram = "testr";
     homepage = "https://pypi.python.org/pypi/testrepository";
     license = licenses.bsd2;
   };
-
 }

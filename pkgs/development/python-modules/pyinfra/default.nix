@@ -1,56 +1,60 @@
-{ lib
-, buildPythonPackage
-, click
-, colorama
-, configparser
-, distro
-, fetchFromGitHub
-, gevent
-, jinja2
-, paramiko
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pywinrm
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  configparser,
+  distro,
+  fetchFromGitHub,
+  gevent,
+  jinja2,
+  packaging,
+  paramiko,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pywinrm,
+  pyyaml,
+  setuptools,
+  typeguard,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.8";
-  format = "setuptools";
+  version = "3.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Fizzadar";
-    repo = pname;
+    repo = "pyinfra";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BYd2UYQJD/HsmpnlQjZvjfg17ShPuA3j4rtv6fTQK/A=";
+    hash = "sha256-Pjmh/aPsMIwGv5Agf+UGm1T3jv8i9jJQ7SEGc3vDxZg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     colorama
     configparser
     distro
     gevent
     jinja2
+    packaging
     paramiko
     python-dateutil
     pywinrm
     pyyaml
     setuptools
-  ];
+    typeguard
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyinfra"
-  ];
+  pythonImportsCheck = [ "pyinfra" ];
 
   disabledTests = [
     # Test requires SSH binary
@@ -66,7 +70,8 @@ buildPythonPackage rec {
     homepage = "https://pyinfra.com";
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
     changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ totoroot ];
     license = licenses.mit;
+    maintainers = with maintainers; [ totoroot ];
+    mainProgram = "pyinfra";
   };
 }

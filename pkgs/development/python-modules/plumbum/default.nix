@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, openssh
-, ps
-, psutil
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  openssh,
+  ps,
+  psutil,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.8.2";
+  version = "1.8.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b8JcGRHiZSv/ViyEogpLgGXOMHHSC+cjWT0FqhkolcA=";
+    hash = "sha256-k2H/FBQAWrCN1P587s/OhiCGNasMKEFJYIBIU808rlE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace '"--cov-config=setup.cfg", ' ""
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling
@@ -65,9 +64,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
-    description = " Plumbum: Shell Combinators ";
+    description = " Plumbum: Shell Combinators";
     homepage = " https://github.com/tomerfiliba/plumbum ";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

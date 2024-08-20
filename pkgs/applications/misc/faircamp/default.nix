@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchgit
+, fetchFromGitea
+, fetchpatch
 , makeWrapper
 , pkg-config
 , glib
@@ -9,28 +10,39 @@
 , vips
 , ffmpeg
 , callPackage
-, unstableGitUpdater
 , darwin
+, testers
+, faircamp
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "faircamp";
-  version = "unstable-2023-04-10";
+  version = "0.15.0";
 
-  # TODO when switching to a stable release, use fetchFromGitea and add a
-  # version test. Meanwhile, fetchgit is used to make unstableGitUpdater work.
-  src = fetchgit {
-    url = "https://codeberg.org/simonrepp/faircamp.git";
-    rev = "21f775dc35a88c54015694f9757e81c97fa860ea";
-    hash = "sha256-aMSMMIGfoiqtg8Dj8QiCbUE40OKQXMXt4hvlvbXQLls=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "simonrepp";
+    repo = "faircamp";
+    rev = version;
+    hash = "sha256-V8fz65LNNCEhexV+ps3cclc0CJljVlAwBf2KjZCBx88=";
   };
+
+  patches = [
+    # Fix build error in tests
+    (fetchpatch {
+      url = "https://codeberg.org/simonrepp/faircamp/commit/7240dd707f3669d49e755088393d27369ca368c2.patch";
+      hash = "sha256-Ec75Gte2zUp/q912keLdYXUse60QirTQ+DkSaCwEboQ=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "enolib-0.1.0" = "sha256-0+T8RRQnqbIiIup/aDJgvxeV8sRV4YrlA9JVbQxMfF0=";
+      "enolib-0.4.2" = "sha256-FJuWKcwjoi/wKfTzxghobNWblhnKRdUvHOejhpCF7kY=";
     };
   };
+
+  buildFeatures = [ "libvips" ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -50,12 +62,14 @@ rustPlatform.buildRustPackage {
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  passthru.tests.wav = callPackage ./test-wav.nix { };
-
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.tests = {
+    wav = callPackage ./test-wav.nix { };
+    version = testers.testVersion { package = faircamp; };
+  };
 
   meta = with lib; {
-    description = "A self-hostable, statically generated bandcamp alternative";
+    description = "Self-hostable, statically generated bandcamp alternative";
+    mainProgram = "faircamp";
     longDescription = ''
       Faircamp takes a directory on your disk - your Catalog - and from it
       produces a fancy-looking (and technically simple and completely static)

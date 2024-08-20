@@ -2,7 +2,8 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
-, withLibcrypt? false
+, enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false
+, enableCETRuntimeDefault ? false
 , pkgsBuildBuild
 , libgcc
 }:
@@ -16,7 +17,7 @@ let
 in
 
 (callPackage ./common.nix { inherit stdenv; } {
-  inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
+  inherit withLinuxHeaders withGd profilingLibraries enableCET enableCETRuntimeDefault;
   pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 
@@ -41,9 +42,6 @@ in
 
       # Apparently --bindir is not respected.
       makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
-    '' + lib.optionalString stdenv.buildPlatform.isDarwin ''
-      # ld-wrapper will otherwise attempt to inject CoreFoundation into ld-linux's RUNPATH
-      export NIX_COREFOUNDATION_RPATH=
     '';
 
     # The pie, stackprotector and fortify hardening flags are autodetected by
@@ -154,7 +152,7 @@ in
       ln -sf $out/lib/libpthread.so.0 $out/lib/libpthread.so
       ln -sf $out/lib/librt.so.1 $out/lib/librt.so
       ln -sf $out/lib/libdl.so.2 $out/lib/libdl.so
-      ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
+      test -f $out/lib/libutil.so.1 && ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
       touch $out/lib/libpthread.a
 
       # Put libraries for static linking in a separate output.  Note
@@ -163,6 +161,8 @@ in
       mkdir -p $static/lib
       mv $out/lib/*.a $static/lib
       mv $static/lib/lib*_nonshared.a $out/lib
+      # If libutil.so.1 is missing, libutil.a is required.
+      test -f $out/lib/libutil.so.1 || mv $static/lib/libutil.a $out/lib
       # Some of *.a files are linker scripts where moving broke the paths.
       sed "/^GROUP/s|$out/lib/lib|$static/lib/lib|g" \
         -i "$static"/lib/*.a
@@ -180,6 +180,6 @@ in
         inherit libgcc;
       };
 
-  meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
+  meta = (previousAttrs.meta or {}) // { description = "GNU C Library"; };
 })
 

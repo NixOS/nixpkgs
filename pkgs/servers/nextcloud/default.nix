@@ -1,6 +1,6 @@
 { lib, stdenvNoCC, fetchurl, nixosTests
-, nextcloud27Packages
-, nextcloud26Packages
+, nextcloud28Packages
+, nextcloud29Packages
 }:
 
 let
@@ -35,34 +35,22 @@ let
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
-      platforms = with platforms; unix;
+      platforms = platforms.linux;
       knownVulnerabilities = extraVulnerabilities
         ++ (optional eol "Nextcloud version ${version} is EOL");
     };
   };
 in {
-  nextcloud25 = throw ''
-    Nextcloud v25 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2023-10. Please upgrade to at least Nextcloud v26 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud26;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 24 you have to upgrade to Nextcloud 25
-    first on 23.05 because Nextcloud doesn't support upgrades across multiple major versions!
-  '';
-
-  nextcloud26 = generic {
-    version = "26.0.7";
-    hash = "sha256-vtJEqLlNE7YWqSdAUhZwwdZ9Q8SAR3I/sTGAv/bUjpI=";
-    packages = nextcloud26Packages;
+  nextcloud28 = generic {
+    version = "28.0.8";
+    hash = "sha256-VaL3RfzI8BtYFrIzM/HjAU0gQKZnlOEy3dDSGaN75To=";
+    packages = nextcloud28Packages;
   };
 
-  nextcloud27 = generic {
-    version = "27.1.2";
-    hash = "sha256-B0KyR6ruC3BE2wBi8KkUqnczjHp9j+faCRcUfXZolyE=";
-    packages = nextcloud27Packages;
+  nextcloud29 = generic {
+    version = "29.0.4";
+    hash = "sha256-GcRp4mSzHugEAPg5ZGCFRUZWnojbTBX8CFThkvlgJ+s=";
+    packages = nextcloud29Packages;
   };
 
   # tip: get the sha with:

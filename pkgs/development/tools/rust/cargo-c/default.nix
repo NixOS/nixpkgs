@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.9.24";
+  version = "0.10.2";
 
   src = fetchCrate {
     inherit pname;
     # this version may need to be updated along with package version
-    version = "${version}+cargo-0.73.0";
-    hash = "sha256-eNaK+SRrHz/DXkCcJP040R6bdhyFmjxkwHbXVFlHub8=";
+    version = "${version}+cargo-0.80.0";
+    hash = "sha256-ltxd4n3oo8ZF/G/zmR4FSVtNOkxwCjDv6PdxkmWxZ+8=";
   };
 
-  cargoHash = "sha256-Us50BbdNSJAx7JTKkvA4tjbGNueCJsAwGEelc1sP5pc=";
+  cargoHash = "sha256-UfhIz87s0CLUDbIpWMPzGQ7qVmh14GuiFoquauSbTOw=";
 
   nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
   buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A cargo subcommand to build and install C-ABI compatible dynamic and static libraries";
+    description = "Cargo subcommand to build and install C-ABI compatible dynamic and static libraries";
     longDescription = ''
       Cargo C-ABI helpers. A cargo applet that produces and installs a correct
       pkg-config file, a static library and a dynamic library, and a C header
@@ -55,6 +55,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lu-zero/cargo-c";
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ cpu ];
   };
 }

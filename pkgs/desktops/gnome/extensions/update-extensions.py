@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 from operator import itemgetter
 from pathlib import Path
-from typing import List, Dict, Optional, Any, Tuple
+from typing import List, Dict, Optional, Any, Tuple, Set
 
 # We don't want all those deprecated legacy extensions
 # Group extensions by GNOME "major" version for compatibility reasons
@@ -20,6 +20,8 @@ supported_versions = {
     "42": "42",
     "43": "43",
     "44": "44",
+    "45": "45",
+    "46": "46",
 }
 
 # Some type alias to increase readability of complex compound types
@@ -266,15 +268,28 @@ if __name__ == "__main__":
             processed_extensions.append(processed_extension)
             logging.debug(f"Processed {num + 1} / {len(raw_extensions)}")
 
+    # We micro-manage a lot of the serialization process to keep the diffs optimal.
+    # We generally want most of the attributes of an extension on one line,
+    # but then each of its supported versions with metadata on a new line.
     with open(updater_dir_path / "extensions.json", "w") as out:
-        # Manually pretty-print the outer level, but then do one compact line per extension
-        # This allows for the diffs to be manageable (one line of change per extension) despite their quantity
         for index, extension in enumerate(processed_extensions):
+            # Manually pretty-print the outermost array level
             if index == 0:
                 out.write("[ ")
             else:
                 out.write(", ")
-            json.dump(extension, out, ensure_ascii=False)
+            # Dump each extension into a single-line string forst
+            extension = json.dumps(extension, ensure_ascii=False)
+            # Inject line breaks for each supported version
+            for version in supported_versions:
+                # This one only matches the first entry
+                extension = extension.replace(f"{{\"{version}\": {{", f"{{\n    \"{version}\": {{")
+                # All other entries
+                extension = extension.replace(f", \"{version}\": {{", f",\n    \"{version}\": {{")
+            # One last line break around the closing braces
+            extension = extension.replace("}}}", "}\n  }}")
+
+            out.write(extension)
             out.write("\n")
         out.write("]\n")
 
@@ -287,15 +302,21 @@ if __name__ == "__main__":
         json.load(out)
 
     with open(updater_dir_path / "collisions.json", "w") as out:
+        # Find the name collisions only for the last 3 shell versions
+        last_3_versions = sorted(supported_versions.keys(), key=lambda v: float(v), reverse=True)[:3]
+        package_name_registry_for_versions = [v for k, v in package_name_registry.items() if k in last_3_versions]
+        # Merge all package names into a single dictionary
+        package_name_registry_filtered: Dict[PackageName, Set[Uuid]] = {}
+        for pkgs in package_name_registry_for_versions:
+            for pname, uuids in pkgs.items():
+                if pname not in package_name_registry_filtered:
+                    package_name_registry_filtered[pname] = set()
+                package_name_registry_filtered[pname].update(uuids)
         # Filter out those that are not duplicates
-        package_name_registry_filtered: Dict[ShellVersion, Dict[PackageName, List[Uuid]]] = {
-            # The outer level keys are shell versions
-            shell_version: {
-                # The inner keys are extension names, with a list of all extensions with that name as value.
-                pname: extensions for pname, extensions in collisions.items() if len(extensions) > 1
-            } for shell_version, collisions in package_name_registry.items()
-        }
-        json.dump(package_name_registry_filtered, out, indent=2, ensure_ascii=False)
+        package_name_registry_filtered = {k: v for k, v in package_name_registry_filtered.items() if len(v) > 1}
+        # Convert set to list
+        collisions: Dict[PackageName, List[Uuid]] = {k: list(v) for k, v in package_name_registry_filtered.items()}
+        json.dump(collisions, out, indent=2, ensure_ascii=False)
         out.write("\n")
 
     logging.info(

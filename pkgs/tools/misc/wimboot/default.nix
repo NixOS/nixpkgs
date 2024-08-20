@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wimboot";
-  version = "2.7.6";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "wimboot";
     rev = "v${version}";
-    sha256 = "sha256-AFPuHxcDM/cdEJ5nRJnVbPk7Deg97NeSMsg/qwytZX4=";
+    sha256 = "sha256-JqdOgcwOXIJDl8O7k/pHdd4MNC/rJ0fWTowtEVpJyx8=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ipxe.org/wimboot";
     description = "Windows Imaging Format bootloader";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ das_j ajs124 ];
+    maintainers = teams.helsinki-systems.members;
     platforms = [ "x86_64-linux" ];
   };
 }

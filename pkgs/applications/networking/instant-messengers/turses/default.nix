@@ -7,6 +7,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
 
       # Support for later tweepy releases is missing
@@ -86,10 +87,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Twitter client for the console";
+    description = "Twitter client for the console";
+    mainProgram = "turses";
     homepage = "https://github.com/louipc/turses";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

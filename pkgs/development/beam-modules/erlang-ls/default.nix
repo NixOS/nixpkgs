@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
-, stdenv, writeScript, lib, erlang }:
+, stdenv, writeScript, lib }:
 let
-  version = "0.48.0";
+  version = "0.52.0";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -24,7 +24,7 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-QwsN/P2FBuhIS/vRlrdvokQS6G77kkZ2Rg5rwNc36Jg=";
+    hash = "sha256-tV7M8y0R+BN5ATxM03K0/gtHgITI9KxtvA7o0ft8RuE=";
     rev = version;
   };
   releaseType = "escript";
@@ -46,14 +46,10 @@ rebar3Relx {
   '';
   # tests seem to be a bit flaky on darwin, skip them for now
   doCheck = !stdenv.isDarwin;
-  installPhase = ''
-    mkdir -p $out/bin
-    cp _build/default/bin/erlang_ls $out/bin/
-    cp _build/dap/bin/els_dap $out/bin/
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
   meta = with lib; {
     homepage = "https://github.com/erlang-ls/erlang_ls";
-    description = "The Erlang Language Server";
+    description = "Erlang Language Server";
     platforms = platforms.unix;
     license = licenses.asl20;
     mainProgram = "erlang_ls";

@@ -13,7 +13,8 @@
 , libspiro
 , lua5
 , qtbase
-, texlive
+, qtsvg
+, texliveSmall
 , wrapQtAppsHook
 , zlib
 , withTeXLive ? true
@@ -41,9 +42,10 @@ stdenv.mkDerivation rec {
     libspiro
     lua5
     qtbase
+    qtsvg
     zlib
   ] ++ (lib.optionals withTeXLive [
-    texlive
+    texliveSmall
   ]);
 
   makeFlags = [
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
     "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
   ];
 
-  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
+  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texliveSmall ]}" ];
 
   enableParallelBuilding = true;
 
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An editor for drawing figures";
+    description = "Editor for drawing figures";
     homepage = "http://ipe.otfried.org"; # https not available
     license = licenses.gpl3Plus;
     longDescription = ''

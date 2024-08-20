@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.25.4";
+  version = "0.26.0";
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-VttdIGuCG5qIMdJucT5BCscLIlWm9D/N98Ae794jt6I=";
+    sha256 = "sha256-EbbvBnG+X+rWiL9VTDCiocaDSTrRDF/jEV/7RlVCToQ=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
-    description = "The Compositing Window Manager and Desktop Shell";
+    description = "Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;
     platforms = platforms.linux;

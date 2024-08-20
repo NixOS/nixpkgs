@@ -1,8 +1,17 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, fetchpatch, keyring, mock, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  keyring,
+  mock,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "plyer";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kivy";
@@ -24,7 +33,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ keyring ];
 
-  nativeCheckInputs = [ mock pytestCheckHook ];
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   pytestFlagsArray = [ "plyer/tests" ];
   disabledTests = [

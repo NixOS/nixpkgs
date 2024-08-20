@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubelogin";
-  version = "0.0.32";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pMen6ZL1S0xr5+h7gVBMG4XjlZUifIiqHvjKgg8AY5c=";
+    sha256 = "sha256-DRXvnIOETNlZ50oa8PbLSwmq6VJJcerUe1Ir7s4/7Kw=";
   };
 
-  vendorHash = "sha256-pNOCagxOcxhELSWO1GfbxGmopYXIgKD00XdZdVgawrc=";
+  vendorHash = "sha256-K/GfRJ0KbizsVmKa6V3/ZLDKivJttEsqA3Q84S0S4KI=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -19,9 +19,10 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A Kubernetes credential plugin implementing Azure authentication";
+    description = "Kubernetes credential plugin implementing Azure authentication";
+    mainProgram = "kubelogin";
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = [ ];
   };
 }

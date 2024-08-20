@@ -1,43 +1,44 @@
-{ lib
-, stdenv
-, Accelerate
-, blis
-, buildPythonPackage
-, catalogue
-, confection
-, CoreFoundation
-, CoreGraphics
-, CoreVideo
-, cymem
-, cython
-, fetchPypi
-, hypothesis
-, mock
-, murmurhash
-, numpy
-, plac
-, preshed
-, pydantic
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, srsly
-, tqdm
-, typing-extensions
-, wasabi
+{
+  lib,
+  stdenv,
+  Accelerate,
+  blis,
+  buildPythonPackage,
+  catalogue,
+  confection,
+  CoreFoundation,
+  CoreGraphics,
+  CoreVideo,
+  cymem,
+  cython_0,
+  fetchPypi,
+  hypothesis,
+  mock,
+  murmurhash,
+  numpy,
+  plac,
+  preshed,
+  pydantic,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  srsly,
+  tqdm,
+  typing-extensions,
+  wasabi,
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.2.0";
+  version = "8.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gsoeeDHjVNdMZ3bth9vXP0qtWe0ljIdGy+hoaIGG/Ek=";
+    hash = "sha256-9a/FIikSqAvai9zslYNiorpTjXAn3I22FUhF0oWdynY=";
   };
 
   postPatch = ''
@@ -45,18 +46,16 @@ buildPythonPackage rec {
       --replace "preshed>=3.0.2,<3.1.0" "preshed"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    cython
-  ] ++ lib.optionals stdenv.isDarwin [
-    Accelerate
-    CoreFoundation
-    CoreGraphics
-    CoreVideo
-  ];
+  buildInputs =
+    [ cython_0 ]
+    ++ lib.optionals stdenv.isDarwin [
+      Accelerate
+      CoreFoundation
+      CoreGraphics
+      CoreVideo
+    ];
 
   propagatedBuildInputs = [
     blis
@@ -71,9 +70,7 @@ buildPythonPackage rec {
     srsly
     tqdm
     wasabi
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     hypothesis
@@ -90,13 +87,12 @@ buildPythonPackage rec {
     rm -r thinc
   '';
 
-  pythonImportsCheck = [
-    "thinc"
-  ];
+  pythonImportsCheck = [ "thinc" ];
 
   meta = with lib; {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
+    changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];
   };

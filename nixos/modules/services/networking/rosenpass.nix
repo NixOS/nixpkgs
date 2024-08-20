@@ -13,7 +13,6 @@ let
     filterAttrsRecursive
     flatten
     getExe
-    mdDoc
     mkIf
     optional
     ;
@@ -27,7 +26,6 @@ in
     let
       inherit (lib)
         literalExpression
-        mdDoc
         mkOption
         ;
       inherit (lib.types)
@@ -40,13 +38,13 @@ in
         ;
     in
     {
-      enable = lib.mkEnableOption (mdDoc "Rosenpass");
+      enable = lib.mkEnableOption "Rosenpass";
 
       package = lib.mkPackageOption pkgs "rosenpass" { };
 
       defaultDevice = mkOption {
         type = nullOr str;
-        description = mdDoc "Name of the network interface to use for all peers by default.";
+        description = "Name of the network interface to use for all peers by default.";
         example = "wg0";
       };
 
@@ -57,17 +55,17 @@ in
           options = {
             public_key = mkOption {
               type = path;
-              description = mdDoc "Path to a file containing the public key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
+              description = "Path to a file containing the public key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
             };
 
             secret_key = mkOption {
               type = path;
-              description = mdDoc "Path to a file containing the secret key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
+              description = "Path to a file containing the secret key of the local Rosenpass peer. Generate this by running {command}`rosenpass gen-keys`.";
             };
 
             listen = mkOption {
               type = listOf str;
-              description = mdDoc "List of local endpoints to listen for connections.";
+              description = "List of local endpoints to listen for connections.";
               default = [ ];
               example = literalExpression "[ \"0.0.0.0:10000\" ]";
             };
@@ -75,7 +73,7 @@ in
             verbosity = mkOption {
               type = enum [ "Verbose" "Quiet" ];
               default = "Quiet";
-              description = mdDoc "Verbosity of output produced by the service.";
+              description = "Verbosity of output produced by the service.";
             };
 
             peers =
@@ -86,38 +84,38 @@ in
                   options = {
                     public_key = mkOption {
                       type = path;
-                      description = mdDoc "Path to a file containing the public key of the remote Rosenpass peer.";
+                      description = "Path to a file containing the public key of the remote Rosenpass peer.";
                     };
 
                     endpoint = mkOption {
                       type = nullOr str;
                       default = null;
-                      description = mdDoc "Endpoint of the remote Rosenpass peer.";
+                      description = "Endpoint of the remote Rosenpass peer.";
                     };
 
                     device = mkOption {
                       type = str;
                       default = cfg.defaultDevice;
                       defaultText = literalExpression "config.${opt.defaultDevice}";
-                      description = mdDoc "Name of the local WireGuard interface to use for this peer.";
+                      description = "Name of the local WireGuard interface to use for this peer.";
                     };
 
                     peer = mkOption {
                       type = str;
-                      description = mdDoc "WireGuard public key corresponding to the remote Rosenpass peer.";
+                      description = "WireGuard public key corresponding to the remote Rosenpass peer.";
                     };
                   };
                 };
               in
               mkOption {
                 type = listOf peer;
-                description = mdDoc "List of peers to exchange keys with.";
+                description = "List of peers to exchange keys with.";
                 default = [ ];
               };
           };
         };
         default = { };
-        description = mdDoc "Configuration for Rosenpass, see <https://rosenpass.eu/> for further information.";
+        description = "Configuration for Rosenpass, see <https://rosenpass.eu/> for further information.";
       };
     };
 
@@ -132,22 +130,22 @@ in
             relevant = config.systemd.network.enable;
             root = config.systemd.network.netdevs;
             peer = (x: x.wireguardPeers);
-            key = (x: if x.wireguardPeerConfig ? PublicKey then x.wireguardPeerConfig.PublicKey else null);
-            description = mdDoc "${options.systemd.network.netdevs}.\"<name>\".wireguardPeers.*.wireguardPeerConfig.PublicKey";
+            key = x: x.PublicKey or null;
+            description = "${options.systemd.network.netdevs}.\"<name>\".wireguardPeers.*.PublicKey";
           }
           {
             relevant = config.networking.wireguard.enable;
             root = config.networking.wireguard.interfaces;
             peer = (x: x.peers);
             key = (x: x.publicKey);
-            description = mdDoc "${options.networking.wireguard.interfaces}.\"<name>\".peers.*.publicKey";
+            description = "${options.networking.wireguard.interfaces}.\"<name>\".peers.*.publicKey";
           }
           rec {
             relevant = root != { };
             root = config.networking.wg-quick.interfaces;
             peer = (x: x.peers);
             key = (x: x.publicKey);
-            description = mdDoc "${options.networking.wg-quick.interfaces}.\"<name>\".peers.*.publicKey";
+            description = "${options.networking.wg-quick.interfaces}.\"<name>\".peers.*.publicKey";
           }
         ];
         relevantExtractions = filter (x: x.relevant) extractions;
@@ -208,6 +206,7 @@ in
       in
       rec {
         wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         path = [ cfg.package pkgs.wireguard-tools ];
 
@@ -226,8 +225,10 @@ in
         # See <https://www.freedesktop.org/software/systemd/man/systemd.unit.html#Specifiers>
         environment.CONFIG = "%t/${serviceConfig.RuntimeDirectory}/config.toml";
 
-        preStart = "${getExe pkgs.envsubst} -i ${config} -o \"$CONFIG\"";
-        script = "rosenpass exchange-config \"$CONFIG\"";
+        script = ''
+          ${getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
+          rosenpass exchange-config "$CONFIG"
+        '';
       };
   };
 }

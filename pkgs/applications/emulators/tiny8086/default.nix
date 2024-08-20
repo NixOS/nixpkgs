@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/adriancable/8086tiny";
-    description = "An open-source small 8086 emulator";
+    description = "Open-source small 8086 emulator";
     longDescription = ''
       8086tiny is a tiny, open-source (MIT), portable (little-endian hosts)
       Intel PC emulator, powerful enough to run DOS, Windows 3.0, Excel, MS
@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
+    mainProgram = "8086tiny";
   };
 }

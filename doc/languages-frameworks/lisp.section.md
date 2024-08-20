@@ -45,7 +45,7 @@ $ sbcl
 
 Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 
-```
+```nix
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
 in mkShell {
@@ -55,10 +55,12 @@ in mkShell {
 
 Such a Lisp can be now used e.g. to compile your sources:
 
-```
-buildPhase = ''
-  ${sbcl'}/bin/sbcl --load my-build-file.lisp
-''
+```nix
+{
+  buildPhase = ''
+    ${sbcl'}/bin/sbcl --load my-build-file.lisp
+  '';
+}
 ```
 
 ## Importing packages from Quicklisp {#lisp-importing-packages-from-quicklisp}
@@ -66,7 +68,7 @@ buildPhase = ''
 To save some work of writing Nix expressions, there is a script that imports all
 the packages distributed by Quicklisp into `imported.nix`. This works by parsing
 its `releases.txt` and `systems.txt` files, which are published every couple of
-months on [quicklisp.org](http://beta.quicklisp.org/dist/quicklisp.txt).
+months on [quicklisp.org](https://beta.quicklisp.org/dist/quicklisp.txt).
 
 The import process is implemented in the `import` directory as Common Lisp
 code in the `org.lispbuilds.nix` ASDF system. To run the script, one can
@@ -173,7 +175,7 @@ into the package scope with `withOverrides`.
 A package defined outside Nixpkgs using `buildASDFSystem` can be woven into the
 Nixpkgs-provided scope like this:
 
-```
+```nix
 let
   alexandria = sbcl.buildASDFSystem rec {
     pname = "alexandria";
@@ -199,7 +201,7 @@ new package with different parameters.
 
 Example of overriding `alexandria`:
 
-```
+```nix
 sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
   version = "1.4";
   src = fetchFromGitLab {
@@ -225,7 +227,7 @@ vice versa.
 
 To package slashy systems, use `overrideLispAttrs`, like so:
 
-```
+```nix
 ecl.pkgs.alexandria.overrideLispAttrs (oldAttrs: {
   systems = oldAttrs.systems ++ [ "alexandria/tests" ];
   lispLibs = oldAttrs.lispLibs ++ [ ecl.pkgs.rt ];
@@ -268,7 +270,7 @@ getting an environment variable for `ext:getenv`. This will load the
 
 ### Loading systems {#lisp-loading-systems}
 
-There, you can simply use `asdf:load-system`. This works by setting the right
+There, you can use `asdf:load-system`. This works by setting the right
 values for the `CL_SOURCE_REGISTRY`/`ASDF_OUTPUT_TRANSLATIONS` environment
 variables, so that systems are found in the Nix store and pre-compiled FASLs are
 loaded.
@@ -290,7 +292,7 @@ derivation.
 
 This example wraps CLISP:
 
-```
+```nix
 wrapLisp {
   pkg = clisp;
   faslExt = "fas";

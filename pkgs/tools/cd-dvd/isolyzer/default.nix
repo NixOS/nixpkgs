@@ -21,5 +21,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Verify size of ISO 9660 image against Volume Descriptor fields";
     license = licenses.asl20;
     maintainers = with maintainers; [ mkg20001 ];
+    mainProgram = "isolyzer";
   };
 }

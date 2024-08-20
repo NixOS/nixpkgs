@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "vdf";
   version = "3.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ValvePython";
@@ -16,7 +18,10 @@ buildPythonPackage rec {
     hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
-  nativeCheckInputs = [ mock pytestCheckHook ];
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
   pythonImportsCheck = [ "vdf" ];
 
   meta = with lib; {

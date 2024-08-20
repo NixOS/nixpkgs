@@ -9,7 +9,7 @@
 , pkg-config
 , polkit
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , editorconfig-core-c
 , granite
 , gtk3
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "7.1.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-Dtm0+NqDwfn5HUQEYtHTiyrpM3mHp1wUFOGaxH86YUo=";
+    sha256 = "sha256-AizJPWRrCJvck+TFy/BVbzI6k62+tGkVux01Nl0XReg=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     polkit # needed for ITS rules
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

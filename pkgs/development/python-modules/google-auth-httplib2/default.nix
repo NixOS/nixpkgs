@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, google-auth
-, httplib2
-, mock
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  google-auth,
+  httplib2,
+  mock,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-httplib2";
-  version = "0.1.1";
+  version = "0.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xkvFVf3G3XiOpi7Pe8z/z0l793JEiHo/PXpaAvjj/Ck=";
+    hash = "sha256-OKp7rfSPl08euYYXlOnAyyoFEaTsBnmx+IbRCPVkDgU=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2";
     changelog = "https://github.com/googleapis/google-auth-library-python-httplib2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

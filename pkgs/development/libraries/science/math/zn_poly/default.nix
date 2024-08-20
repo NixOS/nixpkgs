@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , gmp
 , python3
 , tune ? false # tune to hardware, impure
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   # name of library file ("libzn_poly.so")
   libbasename = "libzn_poly";
-  libext = stdenv.targetPlatform.extensions.sharedLibrary;
+  libext = stdenv.hostPlatform.extensions.sharedLibrary;
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

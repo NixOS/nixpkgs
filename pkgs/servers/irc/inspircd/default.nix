@@ -145,13 +145,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "3.16.1";
+  version = "3.17.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UpDjxF4zRrtiY4Z1tRML1uWQdklfgCeLsJtxCKfHOdw=";
+    sha256 = "sha256-4jtIh6wpZ/rexnwhqicU1gUk6DerGLXM9OY+GkmiEnI=";
   };
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];
@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A modular C++ IRC server";
+    description = "Modular C++ IRC server";
     license = [ lib.licenses.gpl2Only ]
       ++ lib.concatMap getLicenses extraInputs
       ++ lib.optionals (anyMembers extraModules libcModules) (getLicenses stdenv.cc.libc)

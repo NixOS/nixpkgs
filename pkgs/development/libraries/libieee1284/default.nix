@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Parallel port communication library";
+    mainProgram = "libieee1284_test";
     homepage = "http://cyberelk.net/tim/software/libieee1284/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

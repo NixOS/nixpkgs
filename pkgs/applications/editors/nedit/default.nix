@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/nedit";
-    description = "A fast, compact Motif/X11 plain text editor";
+    description = "Fast, compact Motif/X11 plain text editor";
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };
