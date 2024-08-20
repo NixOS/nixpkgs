@@ -23,4 +23,10 @@ rec {
   };
 
   test-suite = pkgs.callPackage ./test-suite.nix {};
+
+  meta = with pkgs.lib; {
+    description = "Android SDK & sdkmanager";
+    homepage = "https://developer.android.com/tools/sdkmanager";
+    maintainers = with maintainers; [ numinit hadilq ];
+  };
 }
