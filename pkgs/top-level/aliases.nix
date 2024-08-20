@@ -1156,6 +1156,7 @@ mapAliases ({
   picom-allusive = throw "picom-allusive was renamed to compfy and is being abandoned by upstream"; # Added 2024-02-13
   picom-jonaburg = throw "picom-jonaburg was removed because it is unmaintained by upstream"; # Added 2024-02-13
   picom-next = picom; # Added 2024-02-13
+  pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
 
   # Obsolete PHP version aliases
   php80 = throw "php80 has been dropped due to the lack of maintenance from upstream for future releases"; # Added 2023-06-21
