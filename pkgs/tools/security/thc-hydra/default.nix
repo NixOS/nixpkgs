@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
+{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql, samba
 , withGUI ? false, makeWrapper, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
+    samba
   ] ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;
