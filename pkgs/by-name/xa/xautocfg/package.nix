@@ -6,13 +6,14 @@
   libXi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xautocfg";
   version = "1.2";
+
   src = fetchFromGitHub {
     owner = "SFTtech";
-    repo = pname;
-    rev = "v${version}";
+    repo = "xautocfg";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-NxfuBknNRicmEAPBeMaNb57gpM0y0t+JmNMKpSNzlQM=";
   };
 
@@ -32,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jceb ];
   };
-}
+})
