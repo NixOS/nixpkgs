@@ -25,7 +25,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KtR+qU2Xys4NkEARZBbO8mTPa7EI9JplWvXdtuLt2vE=";
   };
 
-  cargoHash = "sha256-b0KmL6RQevO7oLPZCgUc4EUkgv99DbMFD/RkE/fwAHw=";
+  patches = [
+      ./time.patch  # TODO: remove when https://github.com/surrealdb/surrealdb/pull/4565 merged
+  ];
+
+  cargoHash = "sha256-5qIIPdE6HYov5EIR4do+pMeZ1Lo3at39aKOP9scfMy8=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -69,6 +73,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ sikmir happysalada ];
+    maintainers = with maintainers; [ sikmir happysalada siriobalmelli ];
   };
 }
