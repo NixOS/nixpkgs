@@ -123,13 +123,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "2024-07-09";
+  version = "2024-08-20";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "d7986226f0666d5aa0032fdcdb9f38eef6a91dd3";
-    hash = "sha256-9DW0tAiAOfglua76t3viSvIw1gR1EETf0HTAmZklc3I=";
+    rev = "4bb2f08be14ff86d57b94b520a6cd2181efaee36";
+    hash = "sha256-NzsqjLSobba4BJ5FS3vccC9rAH0OE9XI97geGj0KHts=";
   };
 
   buildInputs = [
@@ -205,19 +205,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    # Change 5s timeout for init to 30s
-    substituteInPlace t/lib/HydraTestContext.pm \
-      --replace-fail 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
-  '';
-
   preCheck = ''
     patchShebangs .
     export LOGNAME=''${LOGNAME:-foo}
     # set $HOME for bzr so it can create its trace file
     export HOME=$(mktemp -d)
-    # remove flaky test
-    rm t/Hydra/Controller/User/ldap-legacy.t
   '';
 
   postInstall = ''
