@@ -16,16 +16,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ptyxis";
-  version = "46.5";
+  version = "46.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "ptyxis";
     rev = finalAttrs.version;
-    hash = "sha256-PHjQJEM0W26ZpzW//+gsYCCq0lcikWh0707kDXxryAo=";
+    hash = "sha256-exsb5+5jxUKRHDaaBG3rJcJoqLGa6n/dsMlDtwUGfJo=";
   };
 
+  # FIXME: drop patched vte-gtk4 in 47.x release
   vte-gtk4-patched = vte-gtk4.overrideAttrs (prev: {
     patches = (prev.patches or [ ]) ++ [
       "${finalAttrs.src}/build-aux/0001-a11y-implement-GtkAccessibleText.patch"
