@@ -8,6 +8,8 @@
 , makeWrapper
 , cups
 , jbigkit
+, libjpeg
+, libgcrypt
 , glib
 , gtk3
 , gdk-pixbuf
@@ -41,12 +43,15 @@ let
     hash = "sha256-JQAe/avYG+9TAsH26UGai6u8/upRXwZrGBc/hd4jZe8=";
   };
 
-  buildInputs = [ cups zlib jbigkit glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
+  buildInputs = [ cups zlib jbigkit libjpeg libgcrypt glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
 in
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
   inherit version;
   src = src_canon;
+
+  # we can't let patchelf remove unnecessary RPATHs because the driver uses dlopen to load libjpeg and libgcrypt
+  dontPatchELF = true;
 
   postUnpack = ''
     (
