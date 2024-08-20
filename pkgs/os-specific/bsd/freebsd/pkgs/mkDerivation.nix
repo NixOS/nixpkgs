@@ -89,6 +89,7 @@ lib.makeOverridable (
       # Since STRIP in `makeFlags` has to be a flag, not the binary itself
       STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
     }
+    // lib.optionalAttrs (!stdenv.hostPlatform.isFreeBSD) { BOOTSTRAPPING = true; }
     // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
     // lib.optionalAttrs (stdenv'.cc.isClang or false) {
       HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
