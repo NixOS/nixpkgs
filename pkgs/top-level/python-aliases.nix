@@ -620,6 +620,7 @@ mapAliases ({
   urwid-mitmproxy-mitmproxy = throw "urwid-mitmproxy has been removed because mitmproxy no longer uses it"; # Added 2024-07-26
   uuid = throw "uuid is a Python standard module"; # added 2024-04-18
   validictory = throw "validictory has been removed, since it abandoned"; # added 2023-07-07
+  validphys2 = throw "validphys2 has been removed, since it had a broken dependency that was removed"; # added 2023-07-07
   vega_datasets = vega-datasets; # added 2023-11-04
   ViennaRNA = viennarna; # added 2023-08-23
   virtual-display = throw "virtual-display has been renamed to PyVirtualDisplay"; # added 2023-01-07
