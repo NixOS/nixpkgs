@@ -4,12 +4,8 @@
 , toVimPlugin
 }:
 
-rec {
-  addRtp = drv:
-    drv // {
-      rtp = lib.warn "`rtp` attribute is deprecated, use `outPath` instead." drv.outPath;
-      overrideAttrs = f: addRtp (drv.overrideAttrs f);
-    };
+{
+  addRtp = drv: lib.warn "`addRtp` is deprecated, does nothing." drv;
 
   buildVimPlugin =
     { name ? "${attrs.pname}-${attrs.version}"
@@ -45,6 +41,6 @@ rec {
         } // meta;
       });
     in
-    addRtp (toVimPlugin drv);
+      toVimPlugin drv;
 
 }
