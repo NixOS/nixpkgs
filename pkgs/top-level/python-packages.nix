@@ -9697,6 +9697,8 @@ self: super: with self; {
 
   osc-sdk-python = callPackage ../development/python-modules/osc-sdk-python { };
 
+  oschmod = callPackage ../development/python-modules/oschmod { };
+
   oscpy = callPackage ../development/python-modules/oscpy { };
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
