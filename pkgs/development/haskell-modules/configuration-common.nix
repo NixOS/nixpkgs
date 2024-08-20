@@ -605,10 +605,6 @@ self: super: {
   focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
 
-  # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
-  opencv = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv);
-  opencv-extra = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv-extra);
-
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 
