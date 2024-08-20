@@ -24,7 +24,7 @@ let
 in
 buildPythonApplication rec {
   pname = "kikit";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +33,7 @@ buildPythonApplication rec {
     owner = "yaqwsx";
     repo = "KiKit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f8FB6EEy9Ch4LcMKd9PADXV9QrSb7e22Ui86G6AnQKE=";
+    hash = "sha256-r8LQcy3I6hmcrU/6HfPAYJd+cEZdhad6DUldC9HvXZU=";
   };
 
   propagatedBuildInputs = [
