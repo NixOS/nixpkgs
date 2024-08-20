@@ -20,18 +20,19 @@
 , nspr
 , nss
 , pango
+, writeScript
 , xorg
 }:
 let
-  id = "180492850";
+  id = "182296295";
 in
 stdenvNoCC.mkDerivation rec {
   pname = "multiviewer-for-f1";
-  version = "1.35.2";
+  version = "1.35.4";
 
   src = fetchurl {
     url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
-    sha256 = "sha256-V1+kMgfbgDS47YNIotmzrh2Hry5pvdQvrzWwuKJY1oM=";
+    sha256 = "sha256-aDkuv4Zn2T/jS7rMRz6aR+110mfWgnkUJfx0LLP+Txg=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +89,31 @@ stdenvNoCC.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/Multiviewer for F1\""
 
     runHook postInstall
+  '';
+
+  passthru.updateScript = writeScript "update-multiviewer-for-f1" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    set -eu -o pipefail
+
+    # Check download page for latest .deb
+    link=$(curl -s "https://multiviewer.app/download" `
+    | grep -Poi 'https:\/\/releases.multiviewer.app\/download\/*\d+\/multiviewer-for-f1_\d+\.\d+\.\d+_amd64.deb' `
+    | head -1)
+
+    # Pre-calculate package hash
+    hash=$(nix-prefetch-url --type sha256 $link)
+
+    # Current package version
+    version=$(echo $link | grep -Poi '(\d+\.\d+\.\d+)')
+
+    # Build ID
+    id=$(echo $link | grep -Pio '(?<=\/)(\d+)(?=\/)')
+
+    # Update ID and version in source
+    update-source-version --version-key=id "$id"
+    update-source-version ${pname} "$version" "$hash" --system=x86_64-linux
   '';
 
   meta = with lib; {
