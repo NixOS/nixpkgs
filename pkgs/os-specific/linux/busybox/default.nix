@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
+{ stdenv, lib, buildPackages, fetchurl, fetchpatch, fetchFromGitLab
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableMinimal ? false
 , enableAppletSymlinks ? true
@@ -74,6 +74,27 @@ stdenv.mkDerivation rec {
       name = "CVE-2022-28391.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
       sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-48174.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15216
+      url = "https://git.busybox.net/busybox/patch/?id=d417193cf37ca1005830d7e16f5fa7e1d8a44209";
+      hash = "sha256-mpDEwYncpU6X6tmtj9xM2KCrB/v2ys5bYxmPPrhm6es=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-42366.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15874
+      # This patch is also used by Alpine, see https://git.alpinelinux.org/aports/tree/main/busybox/0037-awk.c-fix-CVE-2023-42366-bug-15874.patch
+      url = "https://bugs.busybox.net/attachment.cgi?id=9697";
+      hash = "sha256-2eYfLZLjStea9apKXogff6sCAdG9yHx0ZsgUBaGfQIA=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-42363.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15865
+      url = "https://git.launchpad.net/ubuntu/+source/busybox/plain/debian/patches/CVE-2023-42363.patch?id=c9d8a323b337d58e302717d41796aa0242963d5a";
+      hash = "sha256-1W9Q8+yFkYQKzNTrvndie8QuaEbyAFL1ZASG2fPF+Z4=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-42364_CVE-2023-42365.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15871 https://bugs.busybox.net/show_bug.cgi?id=15868
+      url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2023-42364-CVE-2023-42365.patch?id=8a4bf5971168bf48201c05afda7bee0fbb188e13";
+      hash = "sha256-nQPgT9eA1asCo38Z9X7LR9My0+Vz5YBPba3ARV3fWcc=";
     })
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
