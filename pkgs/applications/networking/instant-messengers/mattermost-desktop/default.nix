@@ -1,24 +1,24 @@
 { lib
 , stdenv
 , fetchurl
-, electron_28
+, electron
 , makeWrapper
 }:
 
 let
 
   pname = "mattermost-desktop";
-  version = "5.7.0";
+  version = "5.8.1";
 
   srcs = {
     "x86_64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
-      hash = "sha256-1xfU9+VzjhSVWsP1AYizphhQ2010GbQBgQ4dxvY3TBU=";
+      hash = "sha256-VuYHF5ALdbsKxBI7w5UhcqKYLV8BHZncWSDeuCy/SW0=";
     };
 
     "aarch64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-arm64.tar.gz";
-      hash = "sha256-RrH+R9IuokKK+zfmCmOt38hD1HvWJbKqmxTFhQ3RcqQ=";
+      hash = "sha256-b+sVzMX/NDavshR+WsQyVgYyLkIPSuUlZGqK6/ZjLFs=";
     };
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/Mattermost.desktop \
       --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
-    makeWrapper '${lib.getExe electron_28}' $out/bin/${pname} \
+    makeWrapper '${lib.getExe electron}' $out/bin/${pname} \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/share/${pname}/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

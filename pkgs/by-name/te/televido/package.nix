@@ -16,19 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "televido";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "d-k-bo";
     repo = "televido";
     rev = "v${version}";
-    hash = "sha256-qfUwPyutBNEnplD3kmTJXffzcWkEcR6FTLnT5YDSysU=";
+    hash = "sha256-pMrMXRnfvpDLFkL2IqYJKRao/OF78mXUCBqBgT97+hc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-CmQQH6a5xMq+v+P4/sbpQ7iDaGKtzV39FgufD5uxz4Y=";
+    hash = "sha256-wavxkhDS0hspGMw5ZKTxjZ07TiZ67OkbMhicB8h5y64=";
   };
 
   nativeBuildInputs = [

@@ -4,18 +4,18 @@
 , kdeclarative
 , plasma-framework
 , plasma-workspace
-, gitUpdater
+, unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "qogir-kde";
-  version = "unstable-2023-10-20";
+  version = "0-unstable-2024-07-29";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "1cfe8da54e6f76d5ce0d2234dcb4f5186431edb3";
-    hash = "sha256-Ts8cS7dH8RkfRgWvzDKLCC2G6Hsnvx0NAGstfxMIt+Y=";
+    rev = "5a19a4b4006b7486af12a5f051ca5377104cab1b";
+    hash = "sha256-DHV2iVEYxGY9+21TF9YLEH0OoDWVTvcCJytb7k+nS8M=";
   };
 
   # Propagate sddm theme dependencies to user env otherwise sddm does
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Flat Design theme for KDE Plasma desktop";

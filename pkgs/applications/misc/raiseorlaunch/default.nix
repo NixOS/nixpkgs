@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-L/hu0mYCAxHkp5me96a6HlEY6QsuJDESpTNhlzVRHWs=";
+    hash = "sha256-L/hu0mYCAxHkp5me96a6HlEY6QsuJDESpTNhlzVRHWs=";
   };
 
   nativeBuildInputs = [ python3Packages.setuptools-scm ];

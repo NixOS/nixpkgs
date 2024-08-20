@@ -11,8 +11,28 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
+      bleach = super.bleach.overridePythonAttrs (oldAttrs: rec {
+        version = "5.0.1";
+
+        src = fetchPypi {
+          pname = "bleach";
+          inherit version;
+          hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
+        };
+      });
+
       django = super.django_4;
+
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+        };
+      });
 
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
@@ -25,17 +45,19 @@ let
       };
 
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
+
+      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2024.5.0";
+  version = "2024.7.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dLzCugbRQSGuOwe99a3WLMffisyvYWNRdSdcdW9knjY=";
+    hash = "sha256-08ykuFPcG3WvinJd9zadirXFqsMt9GbdOGU2CGbW7ls=";
   };
 
   npmDeps = buildNpmPackage {
@@ -43,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-SEgAC3dmnxG1xM9QZQ/e+6NFOwXU3tXlbfZCzrAMFO0=";
+    npmDepsHash = "sha256-BfvKuwB5VLX09Lxji+EpMBvZeKTIQvptVtrHSRYY+14=";
 
     dontBuild = true;
 
@@ -65,6 +87,26 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # https://github.com/pretix/pretix/pull/4362
+    # Fix TOCTOU race in directory creation
+    ./pr4362.patch
+  ];
+
+  pythonRelaxDeps = [
+    "importlib-metadata"
+    "kombu"
+    "pillow"
+    "protobuf"
+    "python-bidi"
+    "requests"
+    "sentry-sdk"
+  ];
+
+  pythonRemoveDeps = [
+    "phonenumberslite" # we provide phonenumbers instead
+    "psycopg2-binary" # we provide psycopg2 instead
+    "vat-moss-forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''
@@ -77,20 +119,8 @@ python.pkgs.buildPythonApplication rec {
     sed -i "/setuptools-rust/d" pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers \
-      --replace-fail psycopg2-binary psycopg2 \
-      --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
-      --replace-fail "bleach==5.0.*" bleach \
-      --replace-fail "django-oauth-toolkit==2.3.*" django-oauth-toolkit \
-      --replace-fail "djangorestframework==3.15.*" djangorestframework \
-      --replace-fail "dnspython==2.6.*" dnspython \
-      --replace-fail "importlib_metadata==7.*" importlib_metadata \
-      --replace-fail "markdown==3.6" markdown \
-      --replace-fail "protobuf==5.27.*" protobuf \
-      --replace-fail "pycryptodome==3.20.*" pycryptodome \
-      --replace-fail "python-dateutil==2.9.*" python-dateutil \
-      --replace-fail "requests==2.32.*" "requests" \
-      --replace-fail "stripe==7.9.*" stripe
+      --replace-fail '"backend"' '"setuptools.build_meta"' \
+      --replace-fail 'backend-path = ["_build"]' ""
   '';
 
   build-system = with python.pkgs; [
@@ -218,6 +248,13 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
+
+    # outdated translation files
+    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
+    "test_different_dates_spanish"
+    "test_same_day_spanish"
+    "test_same_month_spanish"
+    "test_same_year_spanish"
   ];
 
   preCheck = ''

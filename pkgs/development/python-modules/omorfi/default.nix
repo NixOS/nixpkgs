@@ -2,7 +2,6 @@
   buildPythonPackage,
   pkgs,
   lib,
-  stdenv,
   hfst,
 }:
 
@@ -26,7 +25,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/flammie/omorfi";
     license = licenses.gpl3;
     maintainers = with maintainers; [ lurkki ];
-    # Ofborg build error (hfst not found?)
-    broken = stdenv.isDarwin;
   };
 }

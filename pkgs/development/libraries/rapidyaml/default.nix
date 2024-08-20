@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidyaml";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "biojppm";
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-p9XaMsrOgnEdb0yl52HXhNzz6YxuvTD5GCaq1a+l1bQ=";
+    hash = "sha256-NUPx/1DkhSeCTt3Y5WpsN3wX7pMNOeku7eHdmFv/OWw=";
   };
 
   nativeBuildInputs = [ cmake git ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Library to parse and emit YAML, and do it fast";
     homepage = "https://github.com/biojppm/rapidyaml";
     license = licenses.mit;
-    maintainers = with maintainers; [ martfont ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

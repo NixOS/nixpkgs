@@ -33,10 +33,10 @@ let
 
     ${optionalString (cfg.settings.DB_CONNECTION == "sqlite")
       "touch ${cfg.dataDir}/storage/database/database.sqlite"}
+    ${artisan} cache:clear
     ${artisan} package:discover
     ${artisan} firefly-iii:upgrade-database
     ${artisan} firefly-iii:laravel-passport-keys
-    ${artisan} cache:clear
     ${artisan} view:cache
     ${artisan} route:cache
     ${artisan} config:cache
@@ -46,7 +46,8 @@ let
     Type = "oneshot";
     User = user;
     Group = group;
-    StateDirectory = "${removePrefix "/var/lib/" cfg.dataDir}";
+    StateDirectory = "firefly-iii";
+    ReadWritePaths = [cfg.dataDir];
     WorkingDirectory = cfg.package;
     PrivateTmp = true;
     PrivateDevices = true;
@@ -282,8 +283,6 @@ in {
       before = [ "phpfpm-firefly-iii.service" ];
       serviceConfig = {
         ExecStart = firefly-iii-maintenance;
-        RuntimeDirectory = "phpfpm";
-        RuntimeDirectoryPreserve = true;
         RemainAfterExit = true;
       } // commonServiceConfig;
       unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";

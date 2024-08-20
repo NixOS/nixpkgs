@@ -6,14 +6,14 @@
   cdrtools,
   curl,
   gawk,
+  glxinfo,
   gnugrep,
   gnused,
   jq,
-  ncurses,
   pciutils,
   procps,
   python3,
-  qemu,
+  qemu_full,
   socat,
   spice-gtk,
   swtpm,
@@ -25,44 +25,45 @@
   zsync,
   OVMF,
   OVMFFull,
-  quickemu,
   testers,
   installShellFiles,
-  fetchpatch2,
 }:
 let
-  runtimePaths = [
-    cdrtools
-    curl
-    gawk
-    gnugrep
-    gnused
-    jq
-    ncurses
-    pciutils
-    procps
-    python3
-    qemu
-    socat
-    swtpm
-    usbutils
-    util-linux
-    unzip
-    xdg-user-dirs
-    xrandr
-    zsync
-  ];
+  runtimePaths =
+    [
+      cdrtools
+      curl
+      gawk
+      gnugrep
+      gnused
+      jq
+      pciutils
+      procps
+      python3
+      qemu_full
+      socat
+      swtpm
+      util-linux
+      unzip
+      xrandr
+      zsync
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      glxinfo
+      usbutils
+      xdg-user-dirs
+    ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.4";
+  version = "4.9.6";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = finalAttrs.version;
-    hash = "sha256-fjbXgze6klvbRgkJtPIUh9kEkP/As7dAj+cazpzelBY=";
+    hash = "sha256-VaA39QNZNaomvSBMzJMjYN0KOTwWw2798KE8VnM+1so=";
   };
 
   postPatch = ''
@@ -71,18 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
       -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
       -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
+      -e 's,\[ -x "\$(command -v smbd)" \],true,' \
       quickemu
   '';
-
-  patches = [
-    # reduces windows vm ram requirements to 4G, to match microsoft recommendations
-    # TODO: remove on next release
-    (fetchpatch2 {
-      name = "decrease-windows-ram-requirements.patch";
-      url = "https://github.com/quickemu-project/quickemu/commit/f51697593a4650c5486661292e2febe1d16f8c71.patch";
-      hash = "sha256-J5hIvQGtkufOcjk2FZN65iox/W2zkLlg+Veg9TF11Fs=";
-    })
-  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -106,11 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion { package = quickemu; };
+  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";
     homepage = "https://github.com/quickemu-project/quickemu";
+    changelog = "https://github.com/quickemu-project/quickemu/releases/tag/${finalAttrs.version}";
     mainProgram = "quickemu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

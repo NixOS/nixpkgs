@@ -36,17 +36,8 @@ rec {
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
 
-  # TODO: Move documentation for runCommandWith to the Nixpkgs manual
-  /*
-    Generalized version of the `runCommand`-variants
-    which does customized behavior via a single
-    attribute set passed as the first argument
-    instead of having a lot of variants like
-    `runCommand*`. Additionally it allows changing
-    the used `stdenv` freely and has a more explicit
-    approach to changing the arguments passed to
-    `stdenv.mkDerivation`.
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandWith
   runCommandWith =
     let
       # prevent infinite recursion for the default stdenv value
@@ -127,7 +118,13 @@ rec {
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
-  writeText = name: text: writeTextFile { inherit name text; };
+  writeText = name: text:
+    # TODO: To fully deprecate, replace the assertion with `lib.isString` and remove the warning
+    assert lib.assertMsg (lib.strings.isConvertibleWithToString text) ''
+      pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.'';
+    lib.warnIf (! lib.isString text) ''
+      pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first.''
+    writeTextFile { inherit name text; };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
@@ -586,7 +583,7 @@ rec {
   '';
 
 
-  # Docs in doc/builders/special/makesetuphook.section.md
+  # Docs in doc/build-helpers/special/makesetuphook.section.md
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
@@ -881,9 +878,8 @@ rec {
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file"
     {
-      outputHashAlgo = "sha256";
+      outputHash = "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=";
       outputHashMode = "recursive";
-      outputHash = "0ip26j2h11n1kgkz36rl4akv694yz65hr72q4kv4b3lxcbi65b3p";
       preferLocalBuild = true;
     } "touch $out";
 

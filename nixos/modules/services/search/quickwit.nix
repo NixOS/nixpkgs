@@ -160,7 +160,7 @@ in
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         ReadWritePaths = [
-          "/var/lib/quickwit"
+          cfg.dataDir
         ];
         RestrictAddressFamilies = [
           "AF_NETLINK"

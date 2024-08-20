@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools for the Linux multipathing storage driver";
     homepage = "http://christophe.varoqui.free.fr/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

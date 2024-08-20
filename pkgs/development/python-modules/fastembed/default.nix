@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # build-system
   poetry-core,
@@ -25,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.3.0";
+  version = "0.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,12 +33,11 @@ buildPythonPackage rec {
     owner = "qdrant";
     repo = "fastembed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Tfj0YdUW/Nnvn4+RoOWj9l0gDkWbpVgiADA09ht4xxM=";
+    hash = "sha256-fsouRmBW56NJMsVsOaBUp920NVj/o0wd6DNsEd5qil8=";
   };
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     huggingface-hub

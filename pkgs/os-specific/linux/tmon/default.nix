@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     description = "Monitoring and Testing Tool for Linux kernel thermal subsystem";
     mainProgram = "tmon";
     homepage = "https://www.kernel.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

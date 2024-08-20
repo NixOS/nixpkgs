@@ -15,8 +15,6 @@
 
 let
   perlModules = with perlPackages; [
-      # Not sure if these are needed
-      # Gnome2 Gnome2Canvas Gnome2VFS Gtk2AppIndicator Gtk2Unique
       ImageMagick
       Cairo
       FileBaseDir

@@ -101,7 +101,7 @@ See the [Dart documentation](#ssec-dart-applications) for more details on requir
 `flutter` in Nixpkgs always points to `flutterPackages.stable`, which is the latest packaged version. To avoid unforeseen breakage during upgrade, packages in Nixpkgs should use a specific flutter version, such as `flutter319` and `flutter322`, instead of using `flutter` directly.
 
 ```nix
-{  flutter, fetchFromGitHub }:
+{  flutter322, fetchFromGitHub }:
 
 flutter322.buildFlutterApplication {
   pname = "firmware-updater";
@@ -114,7 +114,7 @@ flutter322.buildFlutterApplication {
     owner = "canonical";
     repo = "firmware-updater";
     rev = "6e7dbdb64e344633ea62874b54ff3990bd3b8440";
-    sha256 = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
+    hash = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
     fetchSubmodules = true;
   };
 

@@ -6,14 +6,14 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PgV6V18FyezIZpqMQEbyv98MaVM7h7T7/Kvg3yMMwzE=";
+    hash = "sha256-PgV6V18FyezIZpqMQEbyv98MaVM7h7T7/Kvg3yMMwzE=";
   };
 
   meta = with lib; {
     homepage = "https://github.com/travitch/whole-program-llvm";
     description = "Wrapper script to build whole-program LLVM bitcode files";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 dtzWill ];
+    maintainers = with maintainers; [ mic92 ];
     platforms = platforms.all;
   };
 }

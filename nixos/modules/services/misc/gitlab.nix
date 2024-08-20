@@ -9,10 +9,12 @@ let
   toml = pkgs.formats.toml {};
   yaml = pkgs.formats.yaml {};
 
+  git = cfg.packages.gitaly.git;
+
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
-                        pkgs.postgresql_13;
+                        pkgs.postgresql_14;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -51,7 +53,7 @@ let
     prometheus_listen_addr = "localhost:9236"
 
     [git]
-    bin_path = "${pkgs.git}/bin/git"
+    bin_path = "${git}/bin/git"
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
@@ -184,16 +186,15 @@ let
     MALLOC_ARENA_MAX = "2";
   } // cfg.extraEnv;
 
-  runtimeDeps = with pkgs; [
+  runtimeDeps = [ git ] ++ (with pkgs; [
     nodejs
     gzip
-    git
     gnutar
     postgresqlPackage
     coreutils
     procps
     findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
-  ];
+  ]);
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
@@ -1119,12 +1120,12 @@ in {
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
       {
-        assertion = versionAtLeast postgresqlPackage.version "13.6.0";
-        message = "PostgreSQL >=13.6 is required to run GitLab 16. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        assertion = versionAtLeast postgresqlPackage.version "14.9";
+        message = "PostgreSQL >= 14.9 is required to run GitLab 17. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 
-    environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
 
     systemd.targets.gitlab = {
       description = "Common target for all GitLab services.";
@@ -1282,6 +1283,7 @@ in {
       "d ${gitlabConfig.production.shared.path}/registry 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/ci_secure_files 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/external-diffs 0750 ${cfg.user} ${cfg.group} -"
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
       "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
       "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
@@ -1294,12 +1296,11 @@ in {
     systemd.services.gitlab-config = {
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         jq
         openssl
         replace-secret
-        git
-      ];
+      ]);
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;
@@ -1337,7 +1338,7 @@ in {
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
           ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
-          ${cfg.packages.gitlab-shell}/bin/install
+          ${cfg.packages.gitlab-shell}/bin/gitlab-shell-install
 
           ${optionalString cfg.smtp.enable ''
               install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
@@ -1457,9 +1458,8 @@ in {
         SIDEKIQ_MEMORY_KILLER_GRACE_TIME = cfg.sidekiq.memoryKiller.graceTime;
         SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT = cfg.sidekiq.memoryKiller.shutdownWait;
       });
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         postgresqlPackage
-        git
         ruby
         openssh
         nodejs
@@ -1472,7 +1472,7 @@ in {
         gzip
 
         procps # Sidekiq MemoryKiller
-      ];
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1499,12 +1499,11 @@ in {
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         openssh
-        git
         gzip
         bzip2
-      ];
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1581,7 +1580,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         remarshal
         exiftool
         git
@@ -1589,7 +1588,7 @@ in {
         gzip
         openssh
         cfg.packages.gitlab-workhorse
-      ];
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1657,15 +1656,14 @@ in {
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         postgresqlPackage
-        git
         openssh
         nodejs
         procps
         gnupg
         gzip
-      ];
+      ]);
       serviceConfig = {
         Type = "notify";
         User = cfg.user;

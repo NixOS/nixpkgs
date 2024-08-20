@@ -121,12 +121,17 @@ stdenv.mkDerivation rec {
       ln -s $IDADIR/$bb $out/bin/$bb
     done
 
+    # runtimeDependencies don't get added to non-executables, and openssl is needed
+    #  for cloud decompilation
+    patchelf --add-needed libcrypto.so $IDADIR/libida64.so
+
     runHook postInstall
   '';
 
   meta = with lib; {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
+    changelog = "https://hex-rays.com/products/ida/news/";
     license = licenses.unfree;
     mainProgram = "ida64";
     maintainers = with maintainers; [ msanft ];

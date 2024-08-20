@@ -6,6 +6,7 @@
 , brotli
 , testers
 , frankenphp
+, cctools
 , darwin
 , libiconv
 , pkg-config
@@ -27,13 +28,13 @@ let
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.2.0";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-W+9p/9qT7v1jq6m/gRgfw4AmnPRZVY3UixXaypUVn4E=";
+    hash = "sha256-ZM8/1u4wIBHUgq2x8zyDJhf+qFQz4u5fhLNLaqAv/54=";
   };
 
   sourceRoot = "${src.name}/caddy";
@@ -41,10 +42,10 @@ in buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-eNW03oBaON2X5X2ZbM3Ly5T+bJzSDhEYajY5LaZhwdQ=";
+  vendorHash = "sha256-3Y5STb521iRois/KLQqdTxxTYdp39PTaiJEBjWrZsyw=";
 
   buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];
 

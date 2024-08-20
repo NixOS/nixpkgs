@@ -53,7 +53,7 @@ let
   patchVersion = elemAt dfVersionTuple (dfVersionBaseIndex + 1);
 
   isAtLeast50 = baseVersion >= 50;
-  enableUnfuck = !isAtLeast50 && dwarf-fortress-unfuck != null;
+  enableUnfuck = !isAtLeast50 && dwarf-fortress-unfuck != null && (dwarf-fortress-unfuck.dfVersion or null) == dfVersion;
 
   game =
     if hasAttr dfVersion df-hashes
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  postUnpack = optionalString stdenv.isLinux ''
+  postUnpack = ''
     directory=${
       if stdenv.isLinux then "df_linux"
       else if stdenv.isDarwin then "df_osx"
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = optional stdenv.isLinux autoPatchelfHook;
   buildInputs = optionals isAtLeast50 [ SDL2 SDL2_image SDL2_mixer ]
     ++ optional (!isAtLeast50) SDL
     ++ optional enableUnfuck dwarf-fortress-unfuck
@@ -108,6 +108,9 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -r * $out
 
+    # Clean up OS X detritus in the tarball.
+    find $out -type f -name '._*' -exec rm -rf {} \;
+
     # Lots of files are +x in the newer releases...
     find $out -type d -exec chmod 0755 {} \;
     find $out -type f -exec chmod 0644 {} \;
@@ -116,7 +119,7 @@ stdenv.mkDerivation {
     [ -f $out/run_df ] && chmod +x $out/run_df
 
     # We don't need any of these since they will just break autoPatchelf on <version 50.
-    [ -d $out/libs ] && rm -f $out/libs/*.so $out/libs/*.so.*
+    [ -d $out/libs ] && rm -rf $out/libs/*.so $out/libs/*.so.* $out/libs/*.dylib
 
     # Store the original hash
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
@@ -129,6 +132,7 @@ stdenv.mkDerivation {
 
     ln -s ${getLib ncurses}/lib/libncurses.dylib $out/libs
     ln -s ${getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
+    ln -s ${getLib gcc.cc}/lib/libgcc_s.1.dylib $out/libs
     ln -s ${getLib fmodex}/lib/libfmodex.dylib $out/libs
 
     install_name_tool \
@@ -138,7 +142,6 @@ stdenv.mkDerivation {
               @executable_path/libs/libstdc++.6.dylib \
       $exe
   '' + ''
-    ls -al $out
     runHook postInstall
   '';
 

@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "irill";
     repo = "dose3";
     rev = version;
-    sha256 = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
+    hash = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
   };
 
   minimalOCamlVersion = "4.07";

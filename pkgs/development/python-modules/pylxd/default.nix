@@ -10,7 +10,6 @@
   pythonOlder,
   requests,
   urllib3,
-  pythonRelaxDepsHook,
   requests-toolbelt,
   requests-unixsocket,
   setuptools,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "urllib3" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -66,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://pylxd.readthedocs.io/";
     changelog = "https://github.com/canonical/pylxd/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7UludMpUUtXUzr4j3yKepGJzWpZSi5+ijjzh96K+0xo=";
+    hash = "sha256-7UludMpUUtXUzr4j3yKepGJzWpZSi5+ijjzh96K+0xo=";
   };
 
   # ERROR: testExtended (tests.test_acls.AclExtensions)

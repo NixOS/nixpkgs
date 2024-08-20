@@ -17,22 +17,22 @@
 , libxkbcommon
 , vulkan-loader
 , wayland
-, gnome
+, zenity
 , libsForQt5
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.23.0";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
     rev = "v${version}";
-    hash = "sha256-3Z/v3+3mrmPV2Rb/5tM+h6UN+MEIF/aK07B93Zn38AA=";
+    hash = "sha256-FtLLj5uFcKuRTCSsSuyj0XGzFMVWQvVk4dTmBCmzfNs=";
   };
 
-  cargoHash = "sha256-bAap8eSXAPLrs5MEX1Pp6gKdp0iLxci4aX+2+ve6Wk0=";
+  cargoHash = "sha256-xC6HiXt8cfrDtno9IrOe8SP7WBL79paLI223fjxPsbg=";
 
   nativeBuildInputs = [
     cmake
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ gnome.zenity libsForQt5.kdialog ]}
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ zenity libsForQt5.kdialog ]}
     '';
 
 

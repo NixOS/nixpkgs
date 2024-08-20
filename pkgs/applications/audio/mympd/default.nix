@@ -12,17 +12,18 @@
 , gzip
 , perl
 , jq
+, nixosTests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "15.0.2";
+  version = "17.0.1";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Yz6gL87Vc8iFTRgKhyUgLL1ool+oinvwq2W9OjFl/OQ=";
+    sha256 = "sha256-NkOTCvpU6MxGOvQwiTLMJ444HgNK5tpt3hUs2epFyLE=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   # 5 tests out of 23 fail, probably due to the sandbox...
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) mympd; };
 
   meta = {
     homepage = "https://jcorporation.github.io/myMPD";

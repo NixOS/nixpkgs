@@ -1,17 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch2, installShellFiles, nixosTests }:
 
 buildGoModule rec {
   pname = "miniflux";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     rev = "refs/tags/${version}";
-    hash = "sha256-Q43ru/n7cY1DIT/JJP1sTbnXcgtbIh16fTDL9eV0YDE=";
+    hash = "sha256-1EH8KtKdAssxLk0IyhJsbrFU1obDTvmaGtFyLVlnOdQ=";
   };
 
-  vendorHash = "sha256-WCb0DxicVuJDm52GidivQPZb09LvZqJmgR5BoK8iZ7s=";
+  patches = [
+    (fetchpatch2 {
+      # Fix panic during YouTube channel feed discovery
+      name = "miniflux-pr2742.patch";
+      url = "https://github.com/miniflux/v2/commit/79ea9e28b5a8c09f4d1dcbf31b661fb5f8e85e6a.patch";
+      hash = "sha256-BZPv83QsJ6iJs12FLALfTN//VZL/BfGkXs3Pzn9cGeU=";
+    })
+  ];
+
+  vendorHash = "sha256-kr2qCKuwp6Fpr0zEjggqk4Mff3V9pxGLU71lRhdRrW8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -1,6 +1,4 @@
 { buildPythonPackage
-, python
-, pythonRelaxDepsHook
 , lib
 , gfortran
 , fetchgit
@@ -34,7 +32,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gfortran
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "networkx" ];

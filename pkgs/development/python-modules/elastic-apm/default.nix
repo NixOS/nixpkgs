@@ -19,7 +19,6 @@
   pytest-random-order,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sanic,
   sanic-testing,
   setuptools,
@@ -33,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.22.2";
+  version = "6.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,14 +41,13 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AHKF+o0iZ+c1JFq3lL5XdHBDAae9qTR1OJvwuUVsaeU=";
+    hash = "sha256-S1Ebo9AWN+Mf3OFwxNTiR/AZtje3gNiYkZnVqGb7D4c=";
   };
 
   pythonRelaxDeps = [ "wrapt" ];
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp

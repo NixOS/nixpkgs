@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "sha256-KUhFZrF7BuLB2Z3LnTcHEEZVA6iosam6YsOd8KWvx7E=";
+    hash = "sha256-KUhFZrF7BuLB2Z3LnTcHEEZVA6iosam6YsOd8KWvx7E=";
     fetchSubmodules = true;
   };
 

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "prefixed";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0QrJCs/EzBTYLBQIszCy/ahe187CIGqADUOJn4w4UmU=";
+    hash = "sha256-E1uT1NGKLKSSQ8xbYvegKWl1nhcBNc0BIXWfSmZs02k=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

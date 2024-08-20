@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  anyio,
   backoff,
   httpx,
   idna,
@@ -11,29 +12,27 @@
   packaging,
   poetry-core,
   pydantic,
-  pythonRelaxDepsHook,
   wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "langfuse";
-  version = "2.36.1";
+  version = "2.43.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qPSkATK+IRgtK43B9nr5rC3zZ7qm+/uBJrm7mVhZyUE=";
+    hash = "sha256-pS3JF+9AfPkK3EmQOipVs5SJs0fWsZhudg4uNPH+6p8=";
   };
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   pythonRelaxDeps = [ "packaging" ];
 
   dependencies = [
+    anyio
     backoff
     httpx
     idna

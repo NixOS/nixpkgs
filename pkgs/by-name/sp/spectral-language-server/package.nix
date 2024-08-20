@@ -1,7 +1,8 @@
 { lib
 , buildNpmPackage
-, mkYarnPackage
+, stdenv
 , fetchYarnDeps
+, yarnConfigHook
 , fetchFromGitHub
 , typescript
 , jq
@@ -10,32 +11,28 @@
 let
   # Instead of the build script that spectral-language-server provides (ref: https://github.com/luizcorreia/spectral-language-server/blob/master/script/vscode-spectral-build.sh), we build vscode-spectral manually.
   # This is because the script must go through the network and will not work under the Nix sandbox environment.
-  vscodeSpectral = mkYarnPackage rec {
+  vscodeSpectral = stdenv.mkDerivation (finalAttrs: {
     pname = "vscode-spectral";
     version = "1.1.2";
 
     src = fetchFromGitHub {
       owner = "stoplightio";
       repo = "vscode-spectral";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-TWy+bC6qhTKDY874ORTBbvCIH8ycpmBiU8GLYxBIiAs=";
     };
 
-    packageJSON = ./package.json;
-
     offlineCache = fetchYarnDeps {
-      yarnLock = src + "/yarn.lock";
+      yarnLock = finalAttrs.src + "/yarn.lock";
       hash = "sha256-am27A9VyFoXuOlgG9mnvNqV3Q7Bi7GJzDqqVFGDVWIA=";
     };
 
-    nativeBuildInputs = [ typescript jq ];
+    nativeBuildInputs = [ typescript jq yarnConfigHook ];
 
     postPatch = ''
       cp server/tsconfig.json server/tsconfig.json.bak
       jq '.compilerOptions += {"module": "NodeNext", "moduleResolution": "NodeNext"}' server/tsconfig.json.bak > server/tsconfig.json
     '';
-
-    dontConfigure = true;
 
     buildPhase = ''
       runHook preBuild
@@ -53,14 +50,12 @@ let
       runHook postInstall
     '';
 
-    doDist = false;
-
     meta = with lib; {
       homepage = "https://github.com/stoplightio/vscode-spectral";
       description = "VS Code extension bringing the awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
       license = licenses.asl20;
     };
-  };
+  });
 in
 buildNpmPackage rec {
   pname = "spectral-language-server";

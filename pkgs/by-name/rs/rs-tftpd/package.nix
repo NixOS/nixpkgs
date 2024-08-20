@@ -6,16 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rs-tftpd";
-  version = "0.2.13";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "altugbakan";
     repo = "rs-tftpd";
     rev = version;
-    hash = "sha256-ABxgptbdepyTqMOz1YHSNRn1+8xYo8vN/dqZiSleJz4=";
+    hash = "sha256-ZWafSqHEBgS7LR9hTfatatvAFZnCP8L5rHLerdjyrUc=";
   };
 
-  cargoHash = "sha256-8QVgdQnis0ihkU5ZYtxbPIM+9arfO4do1ToRHoi94A8=";
+  cargoHash = "sha256-uBVDH7YYSuFv0r5T2+EAoL02ta+1hjaza/Ilu+a+k0k=";
+
+  buildFeatures = [ "client" ];
 
   passthru.updateScript = nix-update-script {};
 

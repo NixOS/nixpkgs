@@ -1,23 +1,21 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, fetchFromGitHub
-, butler
-, electron
-, steam-run
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  fetchFromGitHub,
+  electron,
+  steam-run,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-stdenvNoCC.mkDerivation rec {
-  pname = "itch";
-  version = "26.1.3";
 
-  # TODO: Using kitch instead of itch, revert when possible
-  src = fetchzip {
-    url = "https://broth.itch.ovh/kitch/linux-amd64/${version}/archive/default#.zip";
+let
+  version = "26.1.9";
+  butler = fetchzip {
+    url = "https://broth.itch.zone/butler/linux-amd64/15.21.0/butler.zip";
     stripRoot = false;
-    hash = "sha256-FHwbzLPMzIpyg6KyYTq6/rSNRH76dytwb9D5f9vNKkU=";
+    hash = "sha256-jHni/5qf7xST6RRonP2EW8fJ6647jobzrnHe8VMx4IA=";
   };
 
   itch-setup = fetchzip {
@@ -26,16 +24,31 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
   };
 
-  icons = let sparseCheckout = "/release/images/itch-icons"; in
+  sparseCheckout = "/release/images/itch-icons";
+  icons =
     fetchFromGitHub {
-        owner = "itchio";
-        repo = "itch";
-        rev = "v${version}-canary";
-        hash = "sha256-0AMyDZ5oI7/pSvudoEqXnMZJtpcKVlUSR6YVm+s4xv0=";
-        sparseCheckout = [ sparseCheckout ];
-      } + sparseCheckout;
+      owner = "itchio";
+      repo = "itch";
+      rev = "v${version}";
+      hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
+      sparseCheckout = [ sparseCheckout ];
+    }
+    + sparseCheckout;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "itch";
+  inherit version;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  src = fetchzip {
+    url = "https://broth.itch.ovh/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
+    stripRoot = false;
+    hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
+  };
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -44,7 +57,10 @@ stdenvNoCC.mkDerivation rec {
       tryExec = "itch";
       icon = "itch";
       desktopName = "itch";
-      mimeTypes = [ "x-scheme-handler/itchio" "x-scheme-handler/itch" ];
+      mimeTypes = [
+        "x-scheme-handler/itchio"
+        "x-scheme-handler/itch"
+      ];
       comment = "Install and play itch.io games easily";
       categories = [ "Game" ];
     })
@@ -54,19 +70,15 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    # TODO: Remove when the next stable Itch is stabilized
-    substituteInPlace ./resources/app/package.json \
-      --replace "kitch" "itch"
-
     mkdir -p $out/bin $out/share/itch/resources/app
     cp -r resources/app "$out/share/itch/resources/"
 
     install -Dm644 LICENSE -t "$out/share/licenses/$pkgname/"
     install -Dm644 LICENSES.chromium.html -t "$out/share/licenses/$pkgname/"
 
-    for icon in $icons/icon*.png
+    for icon in ${icons}/icon*.png
     do
-      iconsize="''${icon#$icons/icon}"
+      iconsize="''${icon#${icons}/icon}"
       iconsize="''${iconsize%.png}"
       icondir="$out/share/icons/hicolor/''${iconsize}x''${iconsize}/apps/"
       install -Dm644 "$icon" "$icondir/itch.png"
@@ -80,16 +92,17 @@ stdenvNoCC.mkDerivation rec {
       --add-flags ${electron}/bin/electron \
       --add-flags $out/share/itch/resources/app \
       --set BROTH_USE_LOCAL butler,itch-setup \
-      --prefix PATH : ${butler}/bin/:${itch-setup}
+      --prefix PATH : ${butler}:${itch-setup}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    changelog = "https://github.com/itchio/itch/releases/tag/v${version}-canary";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    maintainers = with maintainers; [ pasqui23 ];
+    maintainers = with lib.maintainers; [ pasqui23 ];
     mainProgram = "itch";
   };
-}
+})

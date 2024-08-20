@@ -62,8 +62,8 @@ in
 , glib
 , gnum4
 , gtk3
-, icu
 , icu72
+, icu73
 , libGL
 , libGLU
 , libevent
@@ -487,7 +487,9 @@ buildStdenv.mkDerivation {
   ]
   # icu73 changed how it follows symlinks which breaks in the firefox sandbox
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
-  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+  # icu74 fails to build on 127 and older
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
+  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
   ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2

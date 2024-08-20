@@ -31,6 +31,6 @@ buildPythonApplication rec {
     mainProgram = "pass2csv";
     homepage = "https://github.com/reinefjord/pass2csv";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

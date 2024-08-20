@@ -1,23 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage }:
+{ lib, buildGoModule, fetchFromGitHub, callPackage, nixosTests }:
 
 buildGoModule rec {
   pname = "croc";
-  version = "10.0.8";
+  version = "10.0.11";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kfvAJT//ZjhjNhKNbaRGjiXO8fsaZZCVZ03BUdD6V6c=";
+    hash = "sha256-vW67Q/11BPRHkDA1m99+PdxQUoylMt2sx6gZFEzgSNY=";
   };
 
-  vendorHash = "sha256-URaU6gy+DOChdbuvUTIWY3cUQTVogD5gUH3p17xmXzE=";
+  vendorHash = "sha256-eejDwlovkGLENvNywtFPmqKcwqr+HB+oURL/sDfhOuA=";
 
   subPackages = [ "." ];
 
   passthru = {
     tests = {
       local-relay = callPackage ./test-local-relay.nix { };
+      inherit (nixosTests) croc;
     };
   };
 

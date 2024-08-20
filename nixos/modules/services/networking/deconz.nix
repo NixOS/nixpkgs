@@ -14,7 +14,7 @@ in
 {
   options.services.deconz = {
 
-    enable = lib.mkEnableOption "deCONZ, a Zigbee gateway for use with ConBee hardware (https://phoscon.de/en/conbee2)";
+    enable = lib.mkEnableOption "deCONZ, a Zigbee gateway for use with ConBee/RaspBee hardware (https://phoscon.de/)";
 
     package = lib.mkOption {
       type = lib.types.package;
@@ -122,6 +122,7 @@ in
         RuntimeDirectory = name;
         RuntimeDirectoryMode = "0700";
         StateDirectory = name;
+        SuccessExitStatus = [ 143 ];
         WorkingDirectory = stateDir;
         # For access to /dev/ttyACM0 (ConBee).
         SupplementaryGroups = [ "dialout" ];

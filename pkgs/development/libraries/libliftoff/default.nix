@@ -1,35 +1,42 @@
-{ lib, stdenv, fetchFromGitLab
-, meson, pkg-config, ninja
-, libdrm
+{
+  callPackage,
+  fetchFromGitLab,
+  fetchpatch,
 }:
-
-stdenv.mkDerivation rec {
-  pname = "libliftoff";
-  version = "0.4.1";
-
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "emersion";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-NPwhsd6IOQ0XxNQQNdaaM4kmwoLftokV86WYhoa5csY=";
+let
+  mkVariant =
+    {
+      version,
+      hash,
+      patches ? [ ],
+    }:
+    callPackage ./generic.nix {
+      inherit version patches;
+      src = fetchFromGitLab {
+        domain = "gitlab.freedesktop.org";
+        owner = "emersion";
+        repo = "libliftoff";
+        rev = "v${version}";
+        inherit hash;
+      };
+    };
+in
+{
+  libliftoff_0_4 = mkVariant {
+    version = "0.4.1";
+    hash = "sha256-NPwhsd6IOQ0XxNQQNdaaM4kmwoLftokV86WYhoa5csY=";
+    patches = [
+      # Pull gcc-14 fix:
+      #   https://gitlab.freedesktop.org/emersion/libliftoff/-/merge_requests/78
+      (fetchpatch {
+        name = "libliftoff-gcc-14-calloc.patch";
+        url = "https://gitlab.freedesktop.org/emersion/libliftoff/-/commit/29a06add8ef184f85e37ff8abdc34fbaa2f4ee1e.patch";
+        hash = "sha256-Y8x1RK3o/I9bs/ZOLeC4t9AIK78l0QnlBWHhiVC+sz8=";
+      })
+    ];
   };
-
-  nativeBuildInputs = [ meson pkg-config ninja ];
-
-  buildInputs = [ libdrm ];
-
-  meta = with lib; {
-    description = "Lightweight KMS plane library";
-    longDescription = ''
-      libliftoff eases the use of KMS planes from userspace without standing in
-      your way. Users create "virtual planes" called layers, set KMS properties
-      on them, and libliftoff will pick planes for these layers if possible.
-    '';
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/emersion/libliftoff/releases/tag/v${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos Scrumplex ];
+  libliftoff_0_5 = mkVariant {
+    version = "0.5.0";
+    hash = "sha256-PcQY8OXPqfn8C30+GAYh0Z916ba5pik8U0fVpZtFb5g=";
   };
 }

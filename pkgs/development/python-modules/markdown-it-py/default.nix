@@ -21,7 +21,6 @@
   stdenv,
   pytest-regressions,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
 }:
 
@@ -43,7 +42,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "linkify-it-py" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     flit-core
   ];
 

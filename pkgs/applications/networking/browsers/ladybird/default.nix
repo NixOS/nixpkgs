@@ -7,12 +7,20 @@
 , tzdata
 , unicode-emoji
 , unicode-character-database
-, darwin
 , cmake
 , ninja
+, pkg-config
+, libavif
+, libjxl
+, libtiff
+, libwebp
 , libxcrypt
 , python3
 , qt6Packages
+, woff2
+, ffmpeg
+, simdutf
+, skia
 , nixosTests
 , AppKit
 , Cocoa
@@ -50,18 +58,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-06-04";
+  version = "0-unstable-2024-08-12";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "c6e9f0e7b5b050ddbb5d735ca9c65458add9b4a5";
-    hash = "sha256-+NDrd0kO9bqXFcCEJFmNwNu5jmf+wT+uUVlmbmCYLw4=";
+    rev = "7e57cc7b090455e93261c847064f12a61d686ff3";
+    hash = "sha256-8rkgxEfRH8ERuC7iplQKOzKb1EJ4+SNGDX5gTGpOmQo=";
   };
-
-  patches = [
-    ./nixos-font-path.patch
-  ];
 
   postPatch = ''
     sed -i '/iconutil/d' Ladybird/CMakeLists.txt
@@ -70,6 +74,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
+
+    # libwebp is not built with cmake support yet
+    # https://github.com/NixOS/nixpkgs/issues/334148
+    cat > Meta/CMake/FindWebP.cmake <<'EOF'
+    find_package(PkgConfig)
+    pkg_check_modules(WEBP libwebp REQUIRED)
+    include_directories(''${WEBP_INCLUDE_DIRS})
+    link_directories(''${WEBP_LIBRARY_DIRS})
+    EOF
+    substituteInPlace Userland/Libraries/LibGfx/CMakeLists.txt \
+      --replace-fail 'WebP::' "" \
+      --replace-fail libwebpmux webpmux
   '';
 
   preConfigure = ''
@@ -78,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     # expected version in the package's CMake.
 
     # Check that the versions match
-    grep -F 'set(CLDR_VERSION "${cldr_version}")' Meta/CMake/locale_data.cmake || (echo cldr_version mismatch && exit 1)
-    grep -F 'set(TZDB_VERSION "${tzdata.version}")' Meta/CMake/time_zone_data.cmake || (echo tzdata.version mismatch && exit 1)
+    grep -F 'locale_version = "${cldr_version}"' Meta/gn/secondary/Userland/Libraries/LibLocale/BUILD.gn || (echo cldr_version mismatch && exit 1)
+    grep -F 'tzdb_version = "${tzdata.version}"' Meta/gn/secondary/Userland/Libraries/LibTimeZone/BUILD.gn || (echo tzdata.version mismatch && exit 1)
     grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
 
     mkdir -p build/Caches
@@ -112,14 +128,24 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = with qt6Packages; [
     cmake
     ninja
+    pkg-config
     python3
     wrapQtAppsHook
   ];
 
   buildInputs = with qt6Packages; [
+    ffmpeg
+    libavif
+    libjxl
+    libwebp
     libxcrypt
     qtbase
     qtmultimedia
+    simdutf
+    skia
+    woff2
+  ] ++ lib.optional stdenv.isLinux [
+    qtwayland
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
@@ -131,11 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable network operations
     "-DSERENITY_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
-    "-DENABLE_COMMONMARK_SPEC_DOWNLOAD=OFF"
   ] ++ lib.optionals stdenv.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-    # FIXME: Enable this when launching with the commandline flag --enable-gpu-painting doesn't fail calling eglBindAPI on GNU/Linux
-    "-DENABLE_ACCELERATED_GRAPHICS=OFF"
   ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
@@ -163,5 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
+    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
+    broken = stdenv.isDarwin;
   };
 })

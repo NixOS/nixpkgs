@@ -55,13 +55,19 @@ sets are
 * `pkgs.python311Packages`
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
-* `pkgs.pypyPackages`
+* `pkgs.pypy27Packages`
+* `pkgs.pypy39Packages`
+* `pkgs.pypy310Packages`
 
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python311Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python312Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
+* `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
+* `pkgs.pypy3Packages` pointing to `pkgs.pypy39Packages`
+* `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
+
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
@@ -162,7 +168,8 @@ following are specific to `buildPythonPackage`:
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
-* `pyproject`: Whether the pyproject format should be used. When set to `true`,
+* `pyproject`: Whether the pyproject format should be used. As all other formats
+  are deprecated, you are recommended to set this to `true`. When you do so,
   `pypaBuildHook` will be used, and you can add the required build dependencies
   from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`
@@ -309,13 +316,7 @@ python3Packages.buildPythonApplication rec {
 }
 ```
 
-This is then added to `all-packages.nix` just as any other application would be.
-
-```nix
-{
-  luigi = callPackage ../applications/networking/cluster/luigi { };
-}
-```
+This is then added to `pkgs/by-name` just as any other application would be.
 
 Since the package is an application, a consumer doesn't need to care about
 Python versions or modules, which is why they don't go in `python3Packages`.
@@ -324,25 +325,27 @@ Python versions or modules, which is why they don't go in `python3Packages`.
 
 A distinction is made between applications and libraries, however, sometimes a
 package is used as both. In this case the package is added as a library to
-`python-packages.nix` and as an application to `all-packages.nix`. To reduce
+`python-packages.nix` and as an application to `pkgs/by-name`. To reduce
 duplication the `toPythonApplication` can be used to convert a library to an
 application.
 
 The Nix expression shall use [`buildPythonPackage`](#buildpythonpackage-function) and be called from
-`python-packages.nix`. A reference shall be created from `all-packages.nix` to
+`python-packages.nix`. A reference shall be created from `pkgs/by-name` to
 the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
 applied to the reference:
 
 ```nix
 {
-  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
-}
+  python3Packages,
+}:
+
+python3Packages.toPythonApplication python3Packages.youtube-dl
 ```
 
 #### `toPythonModule` function {#topythonmodule-function}
 
 In some cases, such as bindings, a package is created using
-[`stdenv.mkDerivation`](#sec-using-stdenv) and added as attribute in `all-packages.nix`. The Python
+[`stdenv.mkDerivation`](#sec-using-stdenv) and added as attribute in `pkgs/by-name` or in `all-packages.nix`. The Python
 bindings should be made available from `python-packages.nix`. The
 `toPythonModule` function takes a derivation and makes certain Python-specific
 modifications.
@@ -474,7 +477,6 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
-- `setuptoolsCheckHook` to run tests with `python setup.py test`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
@@ -993,7 +995,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
     homepage = "https://github.com/ContinuumIO/datashape";
-    description = "A data description language";
+    description = "Data description language";
     license = lib.licenses.bsd2;
   };
 }
@@ -1118,7 +1120,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
-    description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
+    description = "Pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with lib.licenses; [ bsd2 bsd3 ];
   };
@@ -1315,9 +1317,6 @@ we can do:
 
 ```nix
 {
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
   pythonRelaxDeps = [
     "pkg1"
     "pkg3"
@@ -1340,7 +1339,6 @@ example:
 
 ```nix
 {
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = true;
 }
 ```
@@ -1362,8 +1360,15 @@ instead of a dev dependency).
 Keep in mind that while the examples above are done with `requirements.txt`,
 `pythonRelaxDepsHook` works by modifying the resulting wheel file, so it should
 work with any of the [existing hooks](#setup-hooks).
-It indicates that `pythonRelaxDepsHook` has no effect on build time dependencies, such as in `build-system`.
-If a package requires incompatible build time dependencies, they should be removed in `postPatch` with `substituteInPlace` or something similar.
+
+The `pythonRelaxDepsHook` has no effect on build time dependencies, such as
+those specified in `build-system`. If a package requires incompatible build
+time dependencies, they should be removed in `postPatch` through
+`substituteInPlace` or similar.
+
+For ease of use, both `buildPythonPackage` and `buildPythonApplication` will
+automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
+`pythonRemoveDeps` is specified.
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 

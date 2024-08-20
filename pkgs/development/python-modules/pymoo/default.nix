@@ -15,7 +15,6 @@
   notebook,
   numba,
   numpy,
-  pandas,
   scipy,
 }:
 

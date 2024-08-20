@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , libxml2
+, curl
 , libxslt
 , pkg-config
 , cmake
@@ -45,7 +46,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config cmake perl bison flex ];
-  buildInputs = [ libxml2 libxslt ];
+  buildInputs = [
+    curl
+    libxml2
+    libxslt
+  ];
 
   meta = {
     description = "RDF Parser Toolkit";

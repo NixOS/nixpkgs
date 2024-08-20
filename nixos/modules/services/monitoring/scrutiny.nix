@@ -110,7 +110,10 @@ in
       };
 
       collector = {
-        enable = mkEnableOption "the Scrutiny metrics collector";
+        enable = mkEnableOption "the Scrutiny metrics collector" // {
+          default = cfg.enable;
+          defaultText = lib.literalExpression "config.services.scrutiny.enable";
+        };
 
         package = mkPackageOption pkgs "scrutiny-collector" { };
 

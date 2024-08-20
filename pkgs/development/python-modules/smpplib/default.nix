@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UhWpWwU40m8YlgDgmCsx2oKB90U81uKGLFsh4+EAIzE=";
+    hash = "sha256-UhWpWwU40m8YlgDgmCsx2oKB90U81uKGLFsh4+EAIzE=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-smpplib/python-smpplib";
     changelog = "https://github.com/python-smpplib/python-smpplib/releases/tag/${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

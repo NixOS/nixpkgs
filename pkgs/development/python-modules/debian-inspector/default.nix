@@ -13,9 +13,9 @@
 buildPythonPackage rec {
   pname = "debian-inspector";
   version = "31.1.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "debian_inspector";
@@ -25,15 +25,17 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     chardet
     attrs
-    commoncode
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    commoncode
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "debian_inspector" ];
 

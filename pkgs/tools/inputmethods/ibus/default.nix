@@ -183,6 +183,6 @@ stdenv.mkDerivation rec {
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel yana ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

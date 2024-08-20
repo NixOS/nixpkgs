@@ -20,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "3.2.4";
+  version = "3.2.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub rec {
     owner = "magmax";
     repo = "python-inquirer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LsZ2SYgBOKZegk7b9DwForwMA49XvIe+Z6WvI1/YscY=";
+    hash = "sha256-7No4Yw0zBGflvglx7G1/yjrsU/DkTrSz93DfIzokBYM=";
   };
 
   nativeBuildInputs = [ poetry-core ];

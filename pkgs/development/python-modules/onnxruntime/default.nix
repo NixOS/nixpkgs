@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   autoPatchelfHook,
-  pythonRelaxDepsHook,
   onnxruntime,
   coloredlogs,
   numpy,
@@ -36,7 +35,7 @@ buildPythonPackage {
     chmod +w dist
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
   pythonRemoveDeps = [
@@ -60,6 +59,7 @@ buildPythonPackage {
         libcufft # libcufft.so.XX
         cudnn # libcudnn.soXX
         cuda_cudart # libcudart.so.XX
+        nccl # libnccl.so.XX
       ]
     );
 

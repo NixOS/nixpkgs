@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , cmake
 , doctest
-, gtest
 }:
 stdenv.mkDerivation rec {
   pname = "xtl";

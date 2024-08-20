@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   substituteAll,
   gdb,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.1";
+  version = "1.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2TkieSQYxnlUroSD9wNKNaHUTLRksFWL/6XmSNGTCA4=";
+    hash = "sha256-J63izrJX7/el36kMHv+IyqDQ1C13CKb40HLOVgOzHEw=";
   };
 
   patches =
@@ -91,6 +92,9 @@ buildPythonPackage rec {
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
         }
       )'';
+
+  # Disable tests for unmaintained versions of python
+  doCheck = pythonAtLeast "3.11";
 
   nativeCheckInputs = [
     ## Used to run the tests:

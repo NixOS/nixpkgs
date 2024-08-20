@@ -2,16 +2,11 @@
   autoPatchelfHook,
   buildPythonPackage,
   colorama,
-  coverage,
   distro,
   fetchFromGitHub,
-  httpretty,
   lib,
-  mock,
   packaging,
   psutil,
-  pytest,
-  pytest-socket,
   python-dateutil,
   pyyaml,
   requests,
@@ -20,22 +15,19 @@
   stdenv,
   setuptools,
   stevedore,
-  tomlkit,
-  tox,
   tqdm,
-  typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "e3-core";
-  version = "22.4.0";
+  version = "22.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
-    rev = "v${version}";
-    hash = "sha256-dgEk2/qRfAYwUz+e5TWKUy/aPLpmyWZ32OV1i7QM9Fs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7csZYohU89uavSMPOKGJ8HClmtiweGSghyR7QgFfSY8=";
   };
 
   patches = [ ./0001-use-distro-over-ld.patch ];

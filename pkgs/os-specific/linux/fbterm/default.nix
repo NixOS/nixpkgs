@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     mainProgram = "fbterm";
     homepage = "https://salsa.debian.org/debian/fbterm";
     maintainers = with maintainers; [ lovesegfault raskin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

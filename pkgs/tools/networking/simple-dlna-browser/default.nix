@@ -24,7 +24,7 @@ stdenv.mkDerivation {
       "sh/tools/simple-dlna-browser"
     ];
     rev = "666e2c402723251ba19ce9d7c11b83b06c15a2c5";
-    sha256 = "sha256-jwPAEgti5DrjNnNVW/61GGTP+QedGAjz9kPwYhMAdTk=";
+    hash = "sha256-jwPAEgti5DrjNnNVW/61GGTP+QedGAjz9kPwYhMAdTk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -9,14 +9,13 @@
   opentelemetry-test-utils,
   setuptools,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   writeScript,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.24.0";
+    version = "1.26.0";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -26,12 +25,11 @@ let
       owner = "open-telemetry";
       repo = "opentelemetry-python";
       rev = "refs/tags/v${version}";
-      hash = "sha256-id5cwNl2idgZa1AFfolzEo5vzspv3V2c1Vtzg3EWDZs=";
+      hash = "sha256-slb1ZKGnfJRZiBh++S20en7U6RckspHHuMohHOz2Hts=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
 
-    nativeBuildInputs = [ pythonRelaxDepsHook ];
 
     build-system = [ hatchling ];
 

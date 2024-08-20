@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/bloaty";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

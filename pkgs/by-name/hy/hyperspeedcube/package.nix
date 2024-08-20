@@ -26,7 +26,6 @@
 , python3
 , rustPlatform
 , shaderc
-, stdenv
 , vulkan-extension-layer
 , vulkan-headers
 , vulkan-loader
@@ -41,13 +40,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperspeedcube";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "HactarCE";
     repo = "Hyperspeedcube";
     rev = "v${version}";
-    hash = "sha256-FcQuXxVxiyI4hOKS70m62BtZMfN5FzGTLagS+2B3WdY=";
+    hash = "sha256-ykFf0dfc8j88Y25tx+G9lic09eHDz3WR+h6+owTeWbU=";
   };
 
   cargoLock = {

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YBJu0vIOD747DrJLcqiZMHq34+gHdXeGLCw1OxxzIJ0=";
+    hash = "sha256-xIbP2zHvHWV+2wW17i78vxc5npCvRBYP6QuL/mCBIww=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/mdit-py-plugins";
     changelog = "https://github.com/executablebooks/mdit-py-plugins/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

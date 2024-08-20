@@ -72,7 +72,7 @@ in {
       type = types.lines;
       example = "Storage=volatile";
       description = ''
-        Extra config options for systemd-journald. See man journald.conf
+        Extra config options for systemd-journald. See {manpage}`journald.conf(5)`
         for available options.
       '';
     };
@@ -96,6 +96,7 @@ in {
       "systemd-journald@.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
+      "systemd-journald-sync@.service"
       ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"

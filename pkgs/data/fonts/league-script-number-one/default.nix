@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "league-script-number-one";
   version = "2011-05-25";
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "league-script-number-one";
     rev = "225add0b37cf8268759ba4572e02630d9fb54ecf";
     hash = "sha256-Z3Zrp0Os3On0tESVical1Qh6wY1H2Hc0OPTlkbtsrCI=";
   };
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ minijackson ];
   };
-})
+}

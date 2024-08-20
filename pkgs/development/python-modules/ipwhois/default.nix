@@ -9,7 +9,6 @@
   libredirect,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "dnspython" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

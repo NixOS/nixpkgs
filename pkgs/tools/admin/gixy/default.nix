@@ -1,7 +1,14 @@
-{ lib, fetchFromGitHub, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  python3,
+  nginx,
+}:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pyparsing = super.pyparsing.overridePythonAttrs rec {
         version = "2.4.7";
@@ -11,9 +18,7 @@ let
           rev = "pyparsing_${version}";
           sha256 = "14pfy80q2flgzjcx8jkracvnxxnr59kjzp3kdm5nh232gk1v6g6h";
         };
-        nativeBuildInputs = [
-          super.setuptools
-        ];
+        nativeBuildInputs = [ super.setuptools ];
       };
     };
   };
@@ -21,10 +26,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gixy";
   version = "0.1.20";
-  format = "setuptools";
-
-  # package is only compatible with python 2.7 and 3.5+
-  disabled = with python.pkgs; !(pythonAtLeast "3.5" || isPy27);
+  pyproject = true;
 
   # fetching from GitHub because the PyPi source is missing the tests
   src = fetchFromGitHub {
@@ -34,21 +36,34 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "14arz3fjidb8z37m08xcpih1391varj8s0v3gri79z3qb4zq5k6b";
   };
 
-  postPatch = ''
-    sed -ie '/argparse/d' setup.py
-  '';
+  patches = [
+    # Migrate tests to pytest
+    # https://github.com/yandex/gixy/pull/146
+    (fetchpatch2 {
+      url = "https://github.com/yandex/gixy/compare/6f68624a7540ee51316651bda656894dc14c9a3e...b1c6899b3733b619c244368f0121a01be028e8c2.patch";
+      hash = "sha256-6VUF2eQ2Haat/yk8I5qIXhHdG9zLQgEXJMLfe25OKEo=";
+    })
+  ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = [ python.pkgs.setuptools ];
+
+  dependencies = with python.pkgs; [
     cached-property
     configargparse
     pyparsing
     jinja2
-    nose3
-    setuptools
     six
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ python.pkgs.pytestCheckHook ];
+
+  pythonRemoveDeps = [ "argparse" ];
+
+  passthru = {
+    inherit (nginx.passthru) tests;
+  };
+
+  meta = {
     description = "Nginx configuration static analyzer";
     mainProgram = "gixy";
     longDescription = ''
@@ -56,8 +71,9 @@ python.pkgs.buildPythonApplication rec {
       The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.
     '';
     homepage = "https://github.com/yandex/gixy";
-    license = licenses.mpl20;
-    maintainers = [ maintainers.willibutz ];
-    platforms = platforms.unix;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.willibutz ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  python3,
   fetchPypi,
   buildPythonPackage,
   smbus2,

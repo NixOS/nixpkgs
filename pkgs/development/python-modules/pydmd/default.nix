@@ -58,7 +58,6 @@ let
       changelog = "https://github.com/PyDMD/PyDMD/releases/tag/v${version}";
       license = licenses.mit;
       maintainers = with maintainers; [ yl3dy ];
-      broken = stdenv.hostPlatform.isAarch64;
     };
   };
 in

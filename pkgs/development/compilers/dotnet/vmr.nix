@@ -1,5 +1,4 @@
 { clangStdenv
-, stdenvNoCC
 , lib
 , fetchurl
 , dotnetCorePackages
@@ -20,11 +19,12 @@
 , swiftPackages
 , openssl
 , getconf
-, makeWrapper
 , python3
 , xmlstarlet
 , nodejs
 , callPackage
+, unzip
+, yq
 
 , dotnetSdk
 , releaseManifestFile
@@ -41,7 +41,6 @@ let
     isDarwin
     buildPlatform
     targetPlatform;
-  inherit (darwin) cctools;
   inherit (swiftPackages) apple_sdk swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
@@ -52,16 +51,6 @@ let
   targetArch = lib.elemAt (lib.splitString "-" targetRid) 1;
 
   sigtool = callPackage ./sigtool.nix {};
-
-  # we need dwarfdump from cctools, but can't have e.g. 'ar' overriding stdenv
-  dwarfdump = stdenvNoCC.mkDerivation {
-    name = "dwarfdump-wrapper";
-    dontUnpack = true;
-    installPhase = ''
-      mkdir -p "$out/bin"
-      ln -s "${cctools}/bin/dwarfdump" "$out/bin"
-    '';
-  };
 
   _icu = if isDarwin then darwin.ICU else icu;
 
@@ -89,6 +78,8 @@ in stdenv.mkDerivation rec {
     pkg-config
     python3
     xmlstarlet
+    unzip
+    yq
   ]
   ++ lib.optionals (lib.versionAtLeast version "9") [
     nodejs
@@ -118,7 +109,6 @@ in stdenv.mkDerivation rec {
       buildInputs = old.buildInputs ++ old.propagatedBuildInputs;
       propagatedBuildInputs = [];
     }))
-    dwarfdump
     sigtool
     Foundation
     CoreFoundation
@@ -144,14 +134,6 @@ in stdenv.mkDerivation rec {
 
   patches = lib.optionals (lib.versionOlder version "9") [
     ./fix-aspnetcore-portable-build.patch
-  ]
-  ++ lib.optionals isDarwin [
-    # stop passing -sdk without a path
-    # stop using xcrun
-    # add -module-cache-path to fix swift errors, see sandboxProfile
-    # <unknown>:0: error: unable to open output file '/var/folders/[...]/C/clang/ModuleCache/[...]/SwiftShims-[...].pcm': 'Operation not permitted'
-    # <unknown>:0: error: could not build Objective-C module 'SwiftShims'
-    ./stop-passing-bare-sdk-arg-to-swiftc.patch
   ];
 
   postPatch = ''
@@ -306,6 +288,16 @@ in stdenv.mkDerivation rec {
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n SkipInstallerBuild -v true \
       src/runtime/Directory.Build.props
+
+    # stop passing -sdk without a path
+    # stop using xcrun
+    # add -module-cache-path to fix swift errors, see sandboxProfile
+    # <unknown>:0: error: unable to open output file '/var/folders/[...]/C/clang/ModuleCache/[...]/SwiftShims-[...].pcm': 'Operation not permitted'
+    # <unknown>:0: error: could not build Objective-C module 'SwiftShims'
+    substituteInPlace \
+      src/runtime/src/native/libs/System.Security.Cryptography.Native.Apple/CMakeLists.txt \
+      --replace-fail ' -sdk ''${CMAKE_OSX_SYSROOT}' "" \
+      --replace-fail 'xcrun swiftc' 'swiftc -module-cache-path "$ENV{HOME}/.cache/module-cache"'
   ''
   + lib.optionalString (lib.versionAtLeast version "9") ''
     # fix: strip: error: unknown argument '-n'
@@ -363,6 +355,7 @@ in stdenv.mkDerivation rec {
     typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
   '';
 
+  dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
   dontUseCmakeConfigure = true;
 
   # https://github.com/NixOS/nixpkgs/issues/38991
@@ -420,6 +413,16 @@ in stdenv.mkDerivation rec {
     done
     popd
 
+    local -r unpacked="$PWD/.unpacked"
+    for nupkg in $out/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
+        rm -rf "$unpacked"
+        unzip -qd "$unpacked" "$nupkg"
+        chmod -R +rw "$unpacked"
+        rm "$nupkg"
+        mv "$unpacked" "$nupkg"
+        # TODO: should we fix executable flags here? see dotnetInstallHook
+    done
+
     runHook postInstall
   '';
 
@@ -428,7 +431,12 @@ in stdenv.mkDerivation rec {
   stripDebugList = [ "." ];
   # stripping dlls results in:
   # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
-  stripExclude = [ "*.dll" ];
+  # stripped crossgen2 results in:
+  # Failure processing application bundle; possible file corruption.
+  # this needs to be a bash array
+  preFixup = ''
+    stripExclude=(\*.dll crossgen2)
+  '';
 
   passthru = {
     inherit releaseManifest buildRid targetRid;

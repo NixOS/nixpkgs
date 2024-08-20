@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-estimator";
-  version = "2.11.0";
+  version = "2.15.0";
   format = "wheel";
 
   src = fetchPypi {
     pname = "tensorflow_estimator";
     inherit version format;
-    hash = "sha256-6jtkrP/z2aJE8GF4yb3ty90/Eltn0IiNuoIpSY0GRos=";
+    hash = "sha256-rt8h7sf7LckRUPyRoc4SvETbtyJ4oItY55/4fJ4o8VM=";
   };
 
   propagatedBuildInputs = [

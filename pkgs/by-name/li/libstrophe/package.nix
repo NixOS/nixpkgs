@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
       runs well on both Linux, Unix, and Windows based platforms.
     '';
     homepage = "https://strophe.im/libstrophe/";
+    changelog = "https://github.com/strophe/libstrophe/blob/${src.rev}/ChangeLog";
     license = with licenses; [ gpl3Only mit ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ devhell flosse ];

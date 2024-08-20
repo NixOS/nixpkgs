@@ -1,6 +1,6 @@
 { lib, mkCoqDerivation, which, coq, version ? null }:
 
-with builtins; with lib; let
+let
   elpi = coq.ocamlPackages.elpi.override (lib.switch coq.coq-version [
     { case = "8.11"; out = { version = "1.11.4"; };}
     { case = "8.12"; out = { version = "1.12.0"; };}
@@ -10,14 +10,15 @@ with builtins; with lib; let
     { case = "8.16"; out = { version = "1.17.0"; };}
     { case = "8.17"; out = { version = "1.17.0"; };}
     { case = "8.18"; out = { version = "1.18.1"; };}
-    { case = "8.19"; out = { version = "1.18.1"; };}
+    { case = "8.20"; out = { version = "1.19.2"; };}
   ] {} );
-in mkCoqDerivation {
+in (mkCoqDerivation {
   pname = "elpi";
   repo  = "coq-elpi";
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+    { case = "8.20"; out = "2.2.0"; }
     { case = "8.19"; out = "2.0.1"; }
     { case = "8.18"; out = "2.0.0"; }
     { case = "8.17"; out = "1.18.0"; }
@@ -28,6 +29,7 @@ in mkCoqDerivation {
     { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
+  release."2.2.0".sha256      = "sha256-rADEoqTXM7/TyYkUKsmCFfj6fjpWdnZEOK++5oLfC/I=";
   release."2.0.1".sha256      = "sha256-cuoPsEJ+JRLVc9Golt2rJj4P7lKltTrrmQijjoViooc=";
   release."2.0.0".sha256      = "sha256-A/cH324M21k3SZ7+YWXtaYEbu6dZQq3K0cb1RMKjbsM=";
   release."1.19.0".sha256     = "sha256-kGoo61nJxeG/BqV+iQaV3iinwPStND+7+fYMxFkiKrQ=";
@@ -67,11 +69,17 @@ in mkCoqDerivation {
   buildFlags = [ "OCAMLWARN=" ];
 
   mlPlugin = true;
+  useDuneifVersion = v: lib.versions.isGe "2.2.0" v || v == "dev";
   propagatedBuildInputs = [ coq.ocamlPackages.findlib elpi ];
 
   meta = {
     description = "Coq plugin embedding ELPI";
-    maintainers = [ maintainers.cohencyril ];
-    license = licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.cohencyril ];
+    license = lib.licenses.lgpl21Plus;
   };
-}
+}).overrideAttrs (o:
+  lib.optionalAttrs (o.version != null
+    && (o.version == "dev" || lib.versions.isGe "2.2.0" o.version))
+  {
+    propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.ppx_optcomp ];
+  })

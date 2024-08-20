@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  setuptools-scm,
   pytablewriter,
   pytest,
   tcolorpy,
@@ -12,15 +14,21 @@
 
 buildPythonPackage rec {
   pname = "pytest-md-report";
-  version = "0.5.1";
-  format = "setuptools";
+  version = "0.6.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WzPspBVcrtcDqZI+PuAttfI7YBKC5DW5IM+Y7iUdQFI=";
+    pname = "pytest_md_report";
+    inherit version;
+    hash = "sha256-XpbGVevJtcPHt4v3xTgsH2gFbpaQRDAlJ5D4c33lzpk=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     pytablewriter

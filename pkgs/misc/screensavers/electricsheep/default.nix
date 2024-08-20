@@ -13,7 +13,7 @@
 , libgtop
 , boost179
 , tinyxml
-, freeglut
+, libglut
 , libGLU
 , libGL
 , glee
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libgtop
     boost179
     tinyxml
-    freeglut
+    libglut
     libGLU
     libGL
     glee
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
     homepage = "https://electricsheep.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };

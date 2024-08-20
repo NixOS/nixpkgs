@@ -1,24 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, dtc, openssl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, rustPlatform, pkg-config, dtc, openssl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "39.0";
+  version = "41.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sMnfeICo/PhpljstTIj4CiE4QBuyVKYD9oWvWf0Ouew=";
+    hash = "sha256-CI7hWRZUexvmBZJ8cPXxZxwmcxLnw6h9PFMhoaj9jh4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "acpi_tables-0.1.0" = "sha256-a6ojB2XVeH+YzzXRle0agg+ljn0Jsgyaf6TJZAGt8sQ=";
-      "igvm-0.1.9" = "sha256-OztgRiv+//27MS9SqSBJPbrVlXihK2m9UkG4REZ9Vn0=";
       "micro_http-0.1.0" = "sha256-yIgcoEfc7eeS1+bijzkifaBxVNHa71Y+Vn79owMaKvM=";
-      "mshv-bindings-0.1.1" = "sha256-US/AzS7iRUQijkGs1EG04Hk4Q7dPz65BeTMsI8rtMqw=";
-      "vfio-bindings-0.4.0" = "sha256-k8Hf5y8MiTnd3k2iEgnnX/o8VdVS7prKlnssyEerVRM=";
+      "mshv-bindings-0.2.0" = "sha256-NYViItbjt1Q2G4yO3j37naHe9EJ+llkjrNt6w4zoiW8=";
+      "vfio-bindings-0.4.0" = "sha256-mzdYH23CVWm7fvu4+1cFHlPhkUjh7+JlU/ScoXaDNgA=";
       "vfio_user-0.1.0" = "sha256-LJ84k9pMkSAaWkuaUd+2LnPXnNgrP5LdbPOc1Yjz5xA=";
       "vm-fdt-0.3.0" = "sha256-9PywgSnSL+8gT6lcl9t6w7X4fEINa+db+H1vWS+gDOI=";
     };
@@ -27,7 +28,8 @@ rustPlatform.buildRustPackage rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isAarch64 dtc;
+  buildInputs = lib.optional stdenv.isAarch64 dtc;
+  checkInputs = [ openssl ];
 
   OPENSSL_NO_VENDOR = true;
 

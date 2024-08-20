@@ -20,6 +20,6 @@ mkDerivation {
     mainProgram = "telly-skout";
     homepage = "https://apps.kde.org/telly-skout/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

@@ -8,12 +8,12 @@
 buildLua rec {
   pname = "manga-reader";
 
-  version = "0-unstable-2024-03-17";
+  version = "0-unstable-2024-07-05";
   src = fetchFromGitHub {
     owner = "Dudemanguy";
     repo = "mpv-manga-reader";
-    rev = "6b65d98be7d20c8e272a4caa6c5018ed3a8bb2b3";
-    hash = "sha256-54n513lpn1KCErXJHqL+GKdDE1P52LolS6xDott/epY=";
+    rev = "fb06931eed4092fa74a98266cd04fa507ea63e13";
+    hash = "sha256-xtzDHv+zW/9LsLWo4Km7OQ05BVJlwqu9461i9ee94lM=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

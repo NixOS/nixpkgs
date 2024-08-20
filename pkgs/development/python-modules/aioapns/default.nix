@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aioapns";
-  version = "3.2";
+  version = "3.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QPayQogW97saMmaPUP5x0CiXd6Qptg/OROigi5ASNQg=";
+    hash = "sha256-bfQpcp/oEBpFu9ywog8CFGGHR8Z5kL6l2O2nzZXaN90=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Fatal1ty/aioapns";
     changelog = "https://github.com/Fatal1ty/aioapns/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

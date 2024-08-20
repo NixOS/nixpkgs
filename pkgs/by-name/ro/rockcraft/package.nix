@@ -1,12 +1,51 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, dpkg
-, nix-update-script
-, python3
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  dpkg,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      craft-application = super.craft-application.overridePythonAttrs (old: rec {
+        version = "1.2.1";
+        src = fetchFromGitHub {
+          owner = "canonical";
+          repo = "craft-application";
+          rev = "refs/tags/${version}";
+          hash = "sha256-CXZEWVoE66dlQJp4G8tinufjyaDJaH1Muxz/qd/81oA=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace-fail "setuptools==67.7.2" "setuptools"
+        '';
+        preCheck = ''
+          export HOME=$(mktemp -d)
+        '';
+      });
+      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
+        version = "0.11.2";
+        src = fetchFromGitHub {
+          owner = "NowanIlfideme";
+          repo = "pydantic-yaml";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+        };
+        dependencies = with self; [
+          deprecated
+          importlib-metadata
+          pydantic_1
+          ruamel-yaml
+          types-deprecated
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "rockcraft";
   version = "1.2.3";
 
@@ -20,22 +59,28 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace rockcraft/__init__.py \
       --replace-fail "dev" "${version}"
+
+    substituteInPlace rockcraft/utils.py \
+      --replace-fail "distutils.util" "setuptools.dist"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
-    craft-application-1
+  build-system = with python.pkgs; [ setuptools-scm ];
+
+  dependencies = with python.pkgs; [
+    craft-application
     craft-archives
     spdx-lookup
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-  ] ++ [
-    dpkg
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+    ]
+    ++ [ dpkg ];
 
   preCheck = ''
     mkdir -p check-phase

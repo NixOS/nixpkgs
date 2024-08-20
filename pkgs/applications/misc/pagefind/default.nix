@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , rustPlatform
 , fetchFromGitHub
 , fetchNpmDeps
@@ -8,9 +7,9 @@
 , gzip
 , nodejs
 , rustc
-, stdenv
 , wasm-bindgen-cli
 , wasm-pack
+, fetchpatch
 }:
 
 let
@@ -34,7 +33,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pcgcu9zylSTjj5rxNff+afFBWVpN5sGtlpadG1wb93M=";
   };
 
-  cargoHash = "sha256-E4gjG5GrVWkMKgjQiAvEiSy2/tx/yHKe+5isveMZ9tU=";
+  cargoPatches = [
+    (fetchpatch { # https://github.com/CloudCannon/pagefind/pull/680
+      name = "cargo-update-time.patch";
+      url = "https://github.com/CloudCannon/pagefind/commit/e6778572d225316803180db822f5cc12a936acd2.patch";
+      hash = "sha256-XHpHA1hPIe+wjDQ6LE9hn2jn3eMBOK9Yoo920jfH9do=";
+    })
+  ];
+
+  cargoHash = "sha256-KWWln7QCRo02cOgHy5JNERGS0CvvgsPISwkTZeeNEkg=";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
@@ -121,9 +128,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
     platforms = platforms.unix;
-    # See comment about wasm32-unknown-unknown in rustc.nix.
-    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-      !stdenv.hostPlatform.gcc.thumb or true;
     mainProgram = "pagefind";
   };
 }

@@ -117,5 +117,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ drupol ];
+  meta.maintainers = [ ];
 }

@@ -25,17 +25,13 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = [
     graphviz
   ] ++ (with python3.pkgs; [
     scapy
     typer
     typing-extensions
-  ] ++ typer.optional-dependencies.all);
+  ]);
 
   # Project has no tests
   doCheck = false;

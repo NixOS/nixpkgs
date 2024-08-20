@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://deep-translator.readthedocs.io";
     changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

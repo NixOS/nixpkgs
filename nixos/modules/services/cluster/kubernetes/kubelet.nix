@@ -65,7 +65,7 @@ let
     // lib.optionalAttrs (cfg.tlsKeyFile != null)   { tlsPrivateKeyFile = cfg.tlsKeyFile; }
     // lib.optionalAttrs (cfg.clusterDomain != "")  { clusterDomain = cfg.clusterDomain; }
     // lib.optionalAttrs (cfg.clusterDns != "")     { clusterDNS = [ cfg.clusterDns ] ; }
-    // lib.optionalAttrs (cfg.featureGates != [])   { featureGates = cfg.featureGates; }
+    // lib.optionalAttrs (cfg.featureGates != {})   { featureGates = cfg.featureGates; }
   ));
 
   manifestPath = "kubernetes/manifests";
@@ -185,10 +185,10 @@ in
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates";
+      description = "Attribute set of feature gate";
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
+      type = attrsOf bool;
     };
 
     healthz = {
@@ -356,7 +356,7 @@ in
       boot.kernelModules = ["br_netfilter" "overlay"];
 
       services.kubernetes.kubelet.hostname =
-        mkDefault config.networking.fqdnOrHostName;
+        mkDefault (lib.toLower config.networking.fqdnOrHostName);
 
       services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   buildPythonPackage,
+  distutils,
   fetchFromGitHub,
   python,
   wheel,
@@ -9,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "69.5.1";
+  version = "72.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X0ntFlDIhUjxtWzz0LxybQSuxhRpHlMeBYtOGwqDl4A=";
+    hash = "sha256-3Hm9HxJdSmyhHtDZeMF76HaR17vZwZWYYhS6Z0nA8rU=";
   };
 
   patches = [
@@ -32,6 +33,10 @@ buildPythonPackage rec {
 
   # Requires pytest, causing infinite recursion.
   doCheck = false;
+
+  passthru.tests = {
+    inherit distutils;
+  };
 
   meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";

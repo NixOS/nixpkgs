@@ -1,39 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.2.7";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "miniupnp";
     repo = "miniupnp";
-    rev = "miniupnpc_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-cIijY1NcdF169tibfB13845UT9ZoJ/CZ+XLES9ctWTY=";
+    rev = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-kPH5nr+rIcF3mxl+L0kN5dn+9xvQccVa8EduwhuYboY=";
   };
 
   sourceRoot = "${src.name}/miniupnpc";
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "UPNPC_BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "UPNPC_BUILD_STATIC" stdenv.hostPlatform.isStatic)
+  ];
+
   doCheck = !stdenv.isFreeBSD;
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
   postInstall = ''
-    chmod +x $out/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}
-
-    # for some reason cmake does not install binaries and manpages
-    # https://github.com/miniupnp/miniupnp/issues/637
-    mkdir -p $out/bin
-    cp -a upnpc-static $out/bin/upnpc
-    cp -a ../external-ip.sh $out/bin/external-ip
-    mkdir -p $out/share/man
-    cp -a ../man3 $out/share/man
+    mv $out/bin/upnpc-* $out/bin/upnpc
+    mv $out/bin/upnp-listdevices-* $out/bin/upnp-listdevices
+    mv $out/bin/external-ip.sh $out/bin/external-ip
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) upnp;
+  };
 
   meta = with lib; {
     homepage = "https://miniupnp.tuxfamily.org/";

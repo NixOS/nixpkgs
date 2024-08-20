@@ -44,19 +44,19 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.5";
+  version = "5.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lqyi33dY9oaN9CC/ByXNC5PZhwlgbx+4sjQ7W9yCLZE=";
+    hash = "sha256-EL1DS/2jKWOf6VKUcMTCeTgGTBOZhAJOamJRPlCv9Cc=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     cryptography
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # non-exhaustive list of extras, that was cobbled together for testing
     all = [
       antlr4-python3-runtime
@@ -98,7 +98,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-order
     pytest-xdist
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
@@ -156,6 +156,12 @@ buildPythonPackage rec {
     # Threading tests regularly blocks test execution
     "tests/test_utilities/test_threaded_server.py"
     "tests/test_s3/test_s3_bucket_policy.py"
+
+    # https://github.com/getmoto/moto/issues/7786
+    "tests/test_dynamodb/test_dynamodb_import_table.py"
+
+    # Infinite recursion with pycognito
+    "tests/test_cognitoidp/test_cognitoidp.py"
   ];
 
   meta = with lib; {

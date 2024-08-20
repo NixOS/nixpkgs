@@ -118,7 +118,7 @@ let
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";
           platforms = platforms.all;
-          maintainers = with maintainers; [ florianjacob kiwi sebbel twey boozedog ] ++ teams.flyingcircus.members;
+          maintainers = with maintainers; [ florianjacob sebbel twey boozedog ] ++ teams.flyingcircus.members;
         };
       };
 in

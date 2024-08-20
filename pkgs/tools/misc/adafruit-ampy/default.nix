@@ -21,7 +21,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/pycampers/ampy";
     license = licenses.mit;
     description = "Utility to interact with a MicroPython board over a serial connection";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ampy";
   };
 }

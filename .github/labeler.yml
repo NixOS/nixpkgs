@@ -12,9 +12,14 @@
   - any:
     - changed-files:
       - any-glob-to-any-file:
-        - pkgs/desktops/cinnamon/**/*
         - nixos/modules/services/x11/desktop-managers/cinnamon.nix
         - nixos/tests/cinnamon.nix
+        - nixos/tests/cinnamon-wayland.nix
+        - pkgs/by-name/ci/cinnamon-*/**/*
+        - pkgs/by-name/cj/cjs/**/*
+        - pkgs/by-name/mu/muffin/**/*
+        - pkgs/by-name/ne/nemo/**/*
+        - pkgs/by-name/ne/nemo-*/**/*
 
 "6.topic: dotnet":
   - any:
@@ -34,9 +39,9 @@
         - nixos/modules/services/editors/emacs.nix
         - nixos/modules/services/editors/emacs.xml
         - nixos/tests/emacs-daemon.nix
+        - pkgs/applications/editors/emacs/build-support/**/*
         - pkgs/applications/editors/emacs/elisp-packages/**/*
         - pkgs/applications/editors/emacs/**/*
-        - pkgs/build-support/emacs/**/*
         - pkgs/top-level/emacs-packages.nix
 
 "6.topic: Enlightenment DE":
@@ -73,6 +78,13 @@
         - '**/flake.nix'
         - lib/systems/flake-systems.nix
         - nixos/modules/config/nix-flakes.nix
+
+"6.topic: flutter":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/build-support/flutter/*.nix
+        - pkgs/development/compilers/flutter/**/*.nix
 
 "6.topic: GNOME":
   - any:
@@ -149,7 +161,7 @@
   - any:
     - changed-files:
       - any-glob-to-any-file:
-        - pkgs/development/compilers/llvm/*
+        - pkgs/development/compilers/llvm/**/*
 
 "6.topic: lua":
   - any:
@@ -338,6 +350,7 @@
         #       *developed in this repo*;
         #       - not individual tests
         #       - not packages for test frameworks
+        - pkgs/build-support/testers/**
         - nixos/lib/testing/**
         - nixos/lib/test-driver/**
         - nixos/tests/nixos-test-driver/**

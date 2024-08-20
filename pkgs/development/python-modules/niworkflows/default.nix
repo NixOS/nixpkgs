@@ -30,26 +30,24 @@
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.10.1";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZOn3KSaPAA8zTdyexrjF9Wkb5C5qA/5eSJahg2DcX20=";
+    hash = "sha256-29ZxLuKrvgCIOMMCUpi0HHhlNlgqUrUrSCiikwecmKw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace '"traits < 6.4"' '"traits"'
-  '';
+  pythonRelaxDeps = [ "traits" ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     importlib-resources
     jinja2

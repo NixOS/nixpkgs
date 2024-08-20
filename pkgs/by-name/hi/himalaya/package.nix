@@ -5,8 +5,8 @@
 , pkg-config
 , darwin
 , installShellFiles
-, installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
-, installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
+, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , notmuch
 , gpgme
 , buildNoDefaultFeatures ? false
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NrWBg0sjaz/uLsNs8/T4MkUgHOUvAWRix1O5usKsw6o=";
   };
 
-  cargoSha256 = "YS8IamapvmdrOPptQh2Ef9Yold0IK1XIeGs0kDIQ5b8=";
+  cargoHash = "sha256-YS8IamapvmdrOPptQh2Ef9Yold0IK1XIeGs0kDIQ5b8=";
 
   NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
     "-F${darwin.apple_sdk.frameworks.AppKit}/Library/Frameworks"

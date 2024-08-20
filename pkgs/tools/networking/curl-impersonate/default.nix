@@ -16,7 +16,7 @@
 , autoconf
 , automake
 , libtool
-, darwin
+, cctools
 , cacert
 , unzip
 , go
@@ -63,7 +63,7 @@ let
 
     nativeBuildInputs = lib.optionals stdenv.isDarwin [
       # Must come first so that it shadows the 'libtool' command but leaves 'libtoolize'
-      darwin.cctools
+      cctools
     ] ++ [
       installShellFiles
       cmake
@@ -173,7 +173,7 @@ let
       description = "Special build of curl that can impersonate Chrome & Firefox";
       homepage = "https://github.com/lwthiker/curl-impersonate";
       license = with licenses; [ curl mit ];
-      maintainers = with maintainers; [ deliciouslytyped lilyinstarlight ];
+      maintainers = with maintainers; [ deliciouslytyped ];
       platforms = platforms.unix;
       mainProgram = "curl-impersonate-${name}";
     };

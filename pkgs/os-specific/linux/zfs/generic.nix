@@ -30,7 +30,7 @@ let
   , isUnstable ? false
   , latestCompatibleLinuxPackages
   , kernelCompatible ? null
-  , maintainers ? (with lib.maintainers; [ amarshall adamcstephens ])
+  , maintainers ? (with lib.maintainers; [ amarshall ])
   , tests
   }@innerArgs:
 

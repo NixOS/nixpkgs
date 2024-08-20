@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "domoticz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bIA7Dx8XV2zT2Cdm4CwKX6xfedBREhevE/bN76o4r78=";
+    hash = "sha256-bIA7Dx8XV2zT2Cdm4CwKX6xfedBREhevE/bN76o4r78=";
     fetchSubmodules = true;
   };
 

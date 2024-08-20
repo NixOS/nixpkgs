@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , meson, ninja
-, pkg-config, libGL, ApplicationServices
+, pkg-config, libGLX
 , testers
 , gitUpdater
 }:
@@ -17,8 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
-  propagatedBuildInputs = [ libGL ]
-    ++ lib.optional stdenv.isDarwin ApplicationServices;
+  propagatedBuildInputs = [ libGLX ];
 
   outputs = [ "out" "dev" ];
 
@@ -35,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater {
       # No nicer place to find latest release.
       url = "https://gitlab.freedesktop.org/mesa/glu";
-    rev-prefix = "glu-";
+      rev-prefix = "glu-";
     };
   };
 

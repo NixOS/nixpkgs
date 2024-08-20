@@ -6,16 +6,22 @@
 , gettext
 , pkg-config
 , cscope
-, ruby
+, ruby_3_2
 , tcl
-, perl
+, perl536
 , luajit
 , darwin
 , libiconv
 , python3
 }:
 
+# Try to match MacVim's documented script interface compatibility
 let
+  # Perl 5.30 - closest we get is 5.36. 5.38 is currently failing
+  perl = perl536;
+  # Ruby 3.2
+  ruby = ruby_3_2;
+
   # Building requires a few system tools to be in PATH.
   # Some of these we could patch into the relevant source files (such as xcodebuild and
   # qlmanage) but some are used by Xcode itself and we have no choice but to put them in PATH.
@@ -26,16 +32,16 @@ let
   '';
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
-  version = "8.2.3455";
+  version = "178";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-172";
-    sha256 = "sha256-LLLQ/V1vyKTuSXzHW3SOlOejZD5AV16NthEdMoTnfko=";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-JYh5fyaYuME/Lk67vrf1hYOIcAkEbwtslcnI9KRzHa8=";
   };
 
   enableParallelBuilding = true;
@@ -48,26 +54,26 @@ stdenv.mkDerivation {
   patches = [ ./macvim.patch ];
 
   configureFlags = [
-      "--enable-cscope"
-      "--enable-fail-if-missing"
-      "--with-features=huge"
-      "--enable-gui=macvim"
-      "--enable-multibyte"
-      "--enable-nls"
-      "--enable-luainterp=dynamic"
-      "--enable-python3interp=dynamic"
-      "--enable-perlinterp=dynamic"
-      "--enable-rubyinterp=dynamic"
-      "--enable-tclinterp=yes"
-      "--without-local-dir"
-      "--with-luajit"
-      "--with-lua-prefix=${luajit}"
-      "--with-python3-command=${python3}/bin/python3"
-      "--with-ruby-command=${ruby}/bin/ruby"
-      "--with-tclsh=${tcl}/bin/tclsh"
-      "--with-tlib=ncurses"
-      "--with-compiledby=Nix"
-      "--disable-sparkle"
+    "--enable-cscope"
+    "--enable-fail-if-missing"
+    "--with-features=huge"
+    "--enable-gui=macvim"
+    "--enable-multibyte"
+    "--enable-nls"
+    "--enable-luainterp=dynamic"
+    "--enable-python3interp=dynamic"
+    "--enable-perlinterp=dynamic"
+    "--enable-rubyinterp=dynamic"
+    "--enable-tclinterp=yes"
+    "--without-local-dir"
+    "--with-luajit"
+    "--with-lua-prefix=${luajit}"
+    "--with-python3-command=${python3}/bin/python3"
+    "--with-ruby-command=${ruby}/bin/ruby"
+    "--with-tclsh=${tcl}/bin/tclsh"
+    "--with-tlib=ncurses"
+    "--with-compiledby=Nix"
+    "--disable-sparkle"
   ];
 
   # Remove references to Sparkle.framework from the project.
@@ -78,37 +84,45 @@ stdenv.mkDerivation {
     sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
   '';
 
-  # This is unfortunate, but we need to use the same compiler as Xcode,
-  # but Xcode doesn't provide a way to configure the compiler.
-  preConfigure = ''
-    CC=/usr/bin/clang
+  # This is unfortunate, but we need to use the same compiler as Xcode, but Xcode doesn't provide a
+  # way to configure the compiler. We also need to pull in lib/include paths for some of our build
+  # inputs since we don't have cc-wrapper to do that for us.
+  preConfigure =
+    let
+      # ideally we'd recurse, but we don't need that right now
+      inputs = [ ncurses ] ++ perl.propagatedBuildInputs;
+      ldflags = map (drv: "-L${lib.getLib drv}/lib") inputs;
+      cppflags = map (drv: "-isystem ${lib.getDev drv}/include") inputs;
+    in
+    ''
+      CC=/usr/bin/clang
 
-    DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
-    configureFlagsArray+=(
-      --with-developer-dir="$DEV_DIR"
-      LDFLAGS="-L${ncurses}/lib"
-      CPPFLAGS="-isystem ${ncurses.dev}/include"
-      CFLAGS="-Wno-error=implicit-function-declaration"
-    )
-  ''
-  # For some reason having LD defined causes PSMTabBarControl to fail at link-time as it
-  # passes arguments to ld that it meant for clang.
-  + ''
-    unset LD
-  ''
-  # When building with nix-daemon, we need to pass -derivedDataPath or else it tries to use
-  # a folder rooted in /var/empty and fails. Unfortunately we can't just pass -derivedDataPath
-  # by itself as this flag requires the use of -scheme or -xctestrun (not sure why), but MacVim
-  # by default just runs `xcodebuild -project src/MacVim/MacVim.xcodeproj`, relying on the default
-  # behavior to build the first target in the project. Experimentally, there seems to be a scheme
-  # called MacVim, so we'll explicitly select that. We also need to specify the configuration too
-  # as the scheme seems to have the wrong default.
-  + ''
-    configureFlagsArray+=(
-      XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
-      --with-xcodecfg="Release"
-    )
-  ''
+      DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
+      configureFlagsArray+=(
+        --with-developer-dir="$DEV_DIR"
+        LDFLAGS=${lib.escapeShellArg ldflags}
+        CPPFLAGS=${lib.escapeShellArg cppflags}
+        CFLAGS="-Wno-error=implicit-function-declaration"
+      )
+    ''
+    # For some reason having LD defined causes PSMTabBarControl to fail at link-time as it
+    # passes arguments to ld that it meant for clang.
+    + ''
+      unset LD
+    ''
+    # When building with nix-daemon, we need to pass -derivedDataPath or else it tries to use
+    # a folder rooted in /var/empty and fails. Unfortunately we can't just pass -derivedDataPath
+    # by itself as this flag requires the use of -scheme or -xctestrun (not sure why), but MacVim
+    # by default just runs `xcodebuild -project src/MacVim/MacVim.xcodeproj`, relying on the default
+    # behavior to build the first target in the project. Experimentally, there seems to be a scheme
+    # called MacVim, so we'll explicitly select that. We also need to specify the configuration too
+    # as the scheme seems to have the wrong default.
+    + ''
+      configureFlagsArray+=(
+        XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
+        --with-xcodecfg="Release"
+      )
+    ''
   ;
 
   # Because we're building with system clang, this means we're building against Xcode's SDK and
@@ -124,7 +138,7 @@ stdenv.mkDerivation {
   # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
     substituteInPlace src/auto/config.mk \
-      --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include" \
+      --replace "PERL_CFLAGS${"\t"}=" "PERL_CFLAGS${"\t"}= -I${darwin.libutil}/include" \
       --replace " -L${stdenv.cc.libc}/lib" "" \
       --replace " -L${darwin.libobjc}/lib" "" \
       --replace " -L${darwin.libunwind}/lib" "" \
@@ -143,17 +157,25 @@ stdenv.mkDerivation {
     substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
   '';
 
+  # Note that $out/MacVim.app has a misnamed set of binaries in the Contents/bin folder (the V is
+  # capitalized) and is missing a bunch of them. This is why we're grabbing the version from the
+  # build folder.
   postInstall = ''
     mkdir -p $out/Applications
     cp -r src/MacVim/build/Release/MacVim.app $out/Applications
     rm -rf $out/MacVim.app
 
-    rm $out/bin/*
-
-    cp src/vimtutor $out/bin
-    for prog in mvim ex vi vim vimdiff view rvim rvimdiff rview; do
+    mkdir -p $out/bin
+    for prog in ex vi {,g,m,r}vi{m,mdiff,ew}; do
       ln -s $out/Applications/MacVim.app/Contents/bin/mvim $out/bin/$prog
     done
+    for prog in {,g}vimtutor xxd; do
+      ln -s $out/Applications/MacVim.app/Contents/bin/$prog $out/bin/$prog
+    done
+    ln -s $out/Applications/MacVim.app/Contents/bin/gvimtutor $out/bin/mvimtutor
+
+    mkdir -p $out/share
+    ln -s $out/Applications/MacVim.app/Contents/man $out/share/man
 
     # Fix rpaths
     exe="$out/Applications/MacVim.app/Contents/MacOS/Vim"
@@ -165,7 +187,7 @@ stdenv.mkDerivation {
     install_name_tool -add_rpath ${ruby}/lib $exe
 
     # Remove manpages from tools we aren't providing
-    find $out/share/man \( -name eVim.1 -or -name xxd.1 \) -delete
+    find $out/Applications/MacVim.app/Contents/man -name evim.1 -delete
   '';
 
   # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
@@ -179,10 +201,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Vim - the text editor - for macOS";
-    homepage    = "https://github.com/macvim-dev/macvim";
+    homepage = "https://macvim.org/";
     license = licenses.vim;
-    maintainers = with maintainers; [ lilyball ];
-    platforms   = platforms.darwin;
+    maintainers = [ ];
+    platforms = platforms.darwin;
     hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
-}
+})

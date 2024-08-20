@@ -7,6 +7,7 @@
 , cmake
 , ninja
 , vala
+, nixosTests
 , wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
   ];
+
+  passthru.tests = { inherit (nixosTests) plotinus; };
 
   meta = with lib; {
     description = "Searchable command palette in every modern GTK application";

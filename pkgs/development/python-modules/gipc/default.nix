@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "http://gehrcke.de/gipc";
     changelog = "https://github.com/jgehrcke/gipc/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

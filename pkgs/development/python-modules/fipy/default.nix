@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "fipy";
-  version = "3.4.4";
+  version = "3.4.5";
   format = "setuptools";
 
   # Python 3.12 is not yet supported.
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "fipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-XZpm+gzysR2OXBcxWUEjP1PlaLuOL2NpmeKMCH+OEb4=";
+    hash = "sha256-345YrGQgHNq0FULjJjLqHksyfm/EHl+KyGfxwS6xK9U=";
   };
 
   propagatedBuildInputs = [

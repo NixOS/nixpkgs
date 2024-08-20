@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "bkryza";
     repo = "clang-uml";
     rev = finalAttrs.version;
-    hash = "sha256-ZVaMLsI1FK05xFfMmlLBPop7DR3fDstnfgjdBmsjNBA=";
+    hash = "sha256-PEzTvwW/wUg8wgKjeNGbpgpP3SH2sVWRYc6o3gFjxx0=";
   };
 
   nativeBuildInputs = [

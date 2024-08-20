@@ -11,17 +11,21 @@
 
 buildPythonPackage rec {
   pname = "yangson";
-  version = "1.5.2";
+  version = "1.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CZ-NIC";
     repo = "yangson";
     rev = "refs/tags/${version}";
-    hash = "sha256-c/UWyfJdVz6wSluL1Ej9cSV3EpDUTkP0GTeHPYfAduE=";
+    hash = "sha256-/9MxCkcPGRNZkuwAAvlr7gtGcyxXtliski7bNtFhVBE=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "setuptools"
+  ];
 
   dependencies = [
     elementpath
@@ -41,6 +45,6 @@ buildPythonPackage rec {
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -88,6 +88,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/circus-tent/circus";
     changelog = "https://github.com/circus-tent/circus/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

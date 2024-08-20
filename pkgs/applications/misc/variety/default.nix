@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , gexiv2
 , gobject-introspection

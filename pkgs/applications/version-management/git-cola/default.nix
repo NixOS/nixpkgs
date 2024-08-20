@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.7.1";
+  version = "4.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    hash = "sha256-93aayGGMgkSghTpx8M5Cfbxf2szAwrSzuoWK6GCTqZ8=";
+    hash = "sha256-3SCfsLYB4qhvsVo0Ji4WPwIDGcMwQ4M4zKnCOsXGTS0=";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [
@@ -64,5 +64,6 @@ python3Packages.buildPythonApplication rec {
     description = "Sleek and powerful Git GUI";
     license = licenses.gpl2;
     maintainers = [ maintainers.bobvanderlinden ];
+    mainProgram = "git-cola";
   };
 }

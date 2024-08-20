@@ -1,8 +1,21 @@
+From 99b1bbc01ea0611e93cb94c2a2532aef96676976 Mon Sep 17 00:00:00 2001
+From: X9VoiD <oscar.silvestrexx@gmail.com>
+Date: Wed, 19 Oct 2022 00:29:28 +0800
+Subject: [PATCH 15/16] linuxPackages.broadcom_sta: fix build issues with
+ kernel 6.0+
+
+---
+ src/shared/linux_osl.c          |  2 +-
+ src/wl/sys/wl_cfg80211_hybrid.c | 17 ++++++++---------
+ src/wl/sys/wl_iw.h              |  1 -
+ src/wl/sys/wl_linux.c           | 17 +++++++++--------
+ 4 files changed, 18 insertions(+), 19 deletions(-)
+
 diff --git a/src/shared/linux_osl.c b/src/shared/linux_osl.c
-index 711b771..5a2636a 100644
+index 5a25b82..18bacb6 100644
 --- a/src/shared/linux_osl.c
 +++ b/src/shared/linux_osl.c
-@@ -1105,7 +1105,7 @@ osl_os_get_image_block(char *buf, int len, void *image)
+@@ -1101,7 +1101,7 @@ osl_os_get_image_block(char *buf, int len, void *image)
  	if (!image)
  		return 0;
  
@@ -12,7 +25,7 @@ index 711b771..5a2636a 100644
  		fp->f_pos += rdlen;
  
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
-index 2b3c290..093dce6 100644
+index 9ae56a1..a6b2ca2 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c
 @@ -790,6 +790,7 @@ wl_set_auth_type(struct net_device *dev, struct cfg80211_connect_params *sme)
@@ -70,10 +83,10 @@ index 3ab084f..471d11f 100644
  #define WL_IW_GET_RSSI			(SIOCIWFIRSTPRIV+3)
  #define WL_IW_SET_PASSIVE_SCAN	(SIOCIWFIRSTPRIV+5)
 diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
-index d13fb98..97ae2a6 100644
+index 25c4706..4c7e238 100644
 --- a/src/wl/sys/wl_linux.c
 +++ b/src/wl/sys/wl_linux.c
-@@ -797,14 +797,15 @@ wl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+@@ -791,14 +791,15 @@ wl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  	pci_read_config_dword(pdev, 0x40, &val);
  	if ((val & 0x0000ff00) != 0)
  		pci_write_config_dword(pdev, 0x40, val & 0xffff00ff);
@@ -97,3 +110,6 @@ index d13fb98..97ae2a6 100644
  	wl = wl_attach(pdev->vendor, pdev->device, pci_resource_start(pdev, 0), PCI_BUS, pdev,
  		pdev->irq, bar1_addr, bar1_size);
  
+-- 
+2.45.1
+

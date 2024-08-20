@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  pythonImportCheck = [ "pdfrw" ];
+  pythonImportsCheck = [ "pdfrw" ];
 
   meta = with lib; {
     description = "Pure Python library that reads and writes PDFs";

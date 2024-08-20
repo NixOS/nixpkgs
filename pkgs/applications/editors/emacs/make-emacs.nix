@@ -60,6 +60,7 @@
 , texinfo
 , webkitgtk
 , wrapGAppsHook3
+, zlib
 
 # Boolean flags
 , withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
@@ -135,8 +136,8 @@ let
   libGccJitLibraryPaths = [
     "${lib.getLib libgccjit}/lib/gcc"
     "${lib.getLib stdenv.cc.libc}/lib"
-  ] ++ lib.optionals (stdenv.cc?cc.libgcc) [
-    "${lib.getLib stdenv.cc.cc.libgcc}/lib"
+  ] ++ lib.optionals (stdenv.cc?cc.lib.libgcc) [
+    "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
 
   inherit (if variant == "macport"
@@ -250,6 +251,7 @@ mkDerivation (finalAttrs: {
     glib-networking
   ] ++ lib.optionals withNativeCompilation [
     libgccjit
+    zlib
   ] ++ lib.optionals withImageMagick [
     imagemagick
   ] ++ lib.optionals withPgtk [
@@ -298,12 +300,13 @@ mkDerivation (finalAttrs: {
     OSAKit
     Quartz
     QuartzCore
-    UniformTypeIdentifiers
     WebKit
     # TODO are these optional?
     GSS
     ImageCaptureCore
     ImageIO
+  ] ++ lib.optionals (variant == "macport" && stdenv.hostPlatform.isAarch64) [
+    UniformTypeIdentifiers
   ];
 
   # Emacs needs to find movemail at run time, see info (emacs) Movemail

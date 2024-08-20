@@ -23,7 +23,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "Fast MessagePack (http://msgpack.org) library ";
+    description = "Fast MessagePack (http://msgpack.org) library";
     license = lib.licenses.isc;
     homepage = "https://github.com/vbmithr/ocaml-msgpck";
     maintainers = [ lib.maintainers.ulrikstrid ];

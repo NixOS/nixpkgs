@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/taviso/dbusmap";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "dbus-map";
   };
 }

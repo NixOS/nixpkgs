@@ -8,15 +8,13 @@
   pyyaml,
   poetry-core,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
-  toml-adapt,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.3.3";
+  version = "0.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,14 +23,13 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "succulent";
     rev = "refs/tags/${version}";
-    hash = "sha256-+S4ekvaQvbBxjUQkG+Bd9lYdZwHB3oq7Ay9kWquCcyE=";
+    hash = "sha256-lU4M/ObX2mhHgYsc72zLp87g1lJ6ikfTeEojEdJwjGs=";
   };
 
   pythonRelaxDeps = [ "flask" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

@@ -1,39 +1,32 @@
 {
-  stdenv,
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
+  stdenv,
   billiard,
-  kombu,
-  vine,
-  click,
+  buildPythonPackage,
   click-didyoumean,
-  click-repl,
   click-plugins,
-  tzdata,
-  python-dateutil,
-
-  # optional-dependencies
+  click-repl,
+  click,
+  fetchPypi,
   google-cloud-storage,
+  kombu,
   moto,
   msgpack,
+  nixosTests,
   pymongo,
-  pyyaml,
-
-  # tests
+  redis,
   pytest-celery,
   pytest-click,
   pytest-subtests,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  nixosTests,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  tzdata,
+  vine,
 }:
 
 buildPythonPackage rec {
@@ -62,28 +55,23 @@ buildPythonPackage rec {
     vine
   ];
 
-  optional-dependencies = {
+  passthru.optional-dependencies = {
     gcs = [ google-cloud-storage ];
     mongodb = [ pymongo ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
+    redis = [ redis ];
   };
 
-  nativeCheckInputs =
-    [
-      moto
-      pytest-celery
-      pytest-click
-      pytest-subtests
-      pytest-timeout
-      pytest-xdist
-      pytestCheckHook
-    ]
-    # based on https://github.com/celery/celery/blob/main/requirements/test.txt
-    ++ optional-dependencies.yaml
-    ++ optional-dependencies.msgpack
-    ++ optional-dependencies.mongodb
-    ++ optional-dependencies.gcs;
+  nativeCheckInputs = [
+    moto
+    pytest-celery
+    pytest-click
+    pytest-subtests
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -91,7 +79,7 @@ buildPythonPackage rec {
     # test_multi tries to create directories under /var
     "t/unit/bin/test_multi.py"
     "t/unit/apps/test_multi.py"
-    # requires moto<5
+    # Test requires moto<5
     "t/unit/backends/test_s3.py"
   ];
 
@@ -102,13 +90,15 @@ buildPythonPackage rec {
       # seems to only fail on higher core counts
       # AssertionError: assert 3 == 0
       "test_setup_security_disabled_serializers"
-      # fails with pytest-xdist
+      # Test is flaky, especially on hydra
+      "test_ready"
+      # Tests fail with pytest-xdist
       "test_itercapture_limit"
       "test_stamping_headers_in_options"
       "test_stamping_with_replace"
     ]
     ++ lib.optionals stdenv.isDarwin [
-      # too many open files on hydra
+      # Too many open files on hydra
       "test_cleanup"
       "test_with_autoscaler_file_descriptor_safety"
       "test_with_file_descriptor_safety"
@@ -122,10 +112,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Distributed task queue";
-    mainProgram = "celery";
     homepage = "https://github.com/celery/celery/";
     changelog = "https://github.com/celery/celery/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "celery";
   };
 }

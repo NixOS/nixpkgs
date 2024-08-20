@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "pplite";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchurl {
-    url = "https://github.com/ezaffanella/PPLite/raw/main/releases/pplite-0.11.tar.gz";
-    hash = "sha256-6IS5zVab8X+gnhK8/qbPH5FODFaG6vIsIG9TTEpfHEI=";
+    url = "https://github.com/ezaffanella/PPLite/raw/main/releases/pplite-0.12.tar.gz";
+    hash = "sha256-9qulVEIZRPHV5GnVmp65nMrGrUwRGkR8i8ORbLdHb1E=";
   };
 
   buildInputs = [ flint gmp ];

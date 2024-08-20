@@ -31,6 +31,7 @@ stdenv.mkDerivation {
       such as Deluxe Paint and Graphicraft to read and write images.
     '';
     homepage = "https://github.com/svanderburg/libilbm";
+    changelog = "https://github.com/svanderburg/libilbm/blob/master/ChangeLog";
     maintainers = with maintainers; [ _414owen ];
     platforms = platforms.all;
     license = licenses.mit;

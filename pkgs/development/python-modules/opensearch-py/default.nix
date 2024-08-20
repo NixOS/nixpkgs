@@ -12,6 +12,7 @@
   requests,
   six,
   urllib3,
+  events,
 
   # optional-dependencies
   aiohttp,
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "2.4.2";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MPuHdjhsrccKYUIDlDYGoXBbBu/V+q43Puf0e5j8vhU=";
+    hash = "sha256-qpay0EDD99MzxDMkjk3hU/34rxLD71PM8zdcIcHj/0Q=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     requests
     six
     urllib3
+    events
   ];
 
   passthru.optional-dependencies.async = [ aiohttp ];

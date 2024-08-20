@@ -47,12 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals cudaSupport (
       with cudaPackages;
       [
-        cuda_cccl.dev
-        cuda_cudart.dev
-        cuda_cudart.lib
-        cuda_cudart.static
-        libcublas.dev
-        libcublas.lib
+        cuda_cccl
+        cuda_cudart
+        libcublas
       ]);
 
   cmakeFlags = [
@@ -79,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nomic-ai/gpt4all";
     license = lib.licenses.mit;
     mainProgram = "gpt4all";
-    maintainers = with lib.maintainers; [ drupol polygon ];
+    maintainers = with lib.maintainers; [ polygon ];
   };
 })

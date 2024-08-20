@@ -302,7 +302,7 @@ in
         default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia"
-          "amdgpu-pro"
+          "amdgpu"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
@@ -648,7 +648,8 @@ in
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
                     || dmConf.startx.enable
-                    || config.services.greetd.enable);
+                    || config.services.greetd.enable
+                    || config.services.displayManager.ly.enable);
       in mkIf (default) (mkDefault true);
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
@@ -716,10 +717,7 @@ in
 
         restartIfChanged = false;
 
-        environment =
-          optionalAttrs config.hardware.opengl.setLdLibraryPath
-            { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ]; }
-          // config.services.displayManager.environment;
+        environment = config.services.displayManager.environment;
 
         preStart =
           ''

@@ -1,12 +1,10 @@
 { lib
-, writeText
 , fetchurl
 , stdenvNoCC
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , unzip
-, bash
 , electron
 , commandLineArgs ? ""
 }:
@@ -18,10 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: let
   };
 in {
   pname = "affine";
-  version = "0.14.3";
+  version = "0.16.0";
   src = fetchurl {
     url = "https://github.com/toeverything/AFFiNE/releases/download/v${finalAttrs.version}/affine-${finalAttrs.version}-stable-linux-x64.zip";
-    hash = "sha256-/dKvRr0cH9mLF1y6FGFRDlsFXaymEmb55AZ37Ti0PU4=";
+    hash = "sha256-6F6BzEnseqdzkEUVgUa9eu7MkyNsvucK9lGL+dsKhwc=";
   };
   nativeBuildInputs = [
     copyDesktopItems
@@ -61,7 +59,7 @@ in {
     homepage = "https://affine.pro/";
     downloadPage = "https://affine.pro/download";
     license = licenses.mit;
-    maintainers = with maintainers; [richar];
+    maintainers = with maintainers; [richar redyf];
     mainProgram = "affine";
     platforms = ["x86_64-linux"];
   };

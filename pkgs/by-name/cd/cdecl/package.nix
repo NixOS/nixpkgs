@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdecl";
-  version = "17.0";
+  version = "18.2";
 
   src = fetchFromGitHub {
     owner = "paul-j-lucas";
     repo = "cdecl";
     rev = "refs/tags/cdecl-${finalAttrs.version}";
-    hash = "sha256-ElMmsFD4VXF6BFjFuuWmgFJaqCPCxpQB7S9tLkeGmMY=";
+    hash = "sha256-6mj5M4SI0TG+N4exu3xdAqh8a98VOFtS1DbuRIYmW+Y=";
   };
 
   strictDeps = true;
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Composing and deciphering C (or C++) declarations or casts, aka ''gibberish.''";
     homepage = "https://github.com/paul-j-lucas/cdecl";
+    changelog = "https://github.com/paul-j-lucas/cdecl/blob/cdecl-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.unix;

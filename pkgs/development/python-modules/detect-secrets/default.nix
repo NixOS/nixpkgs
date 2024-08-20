@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "detect-secrets";
-  version = "1.4.0";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6EmL6XPySqcA3EA+FFkfw7Dkxl5LvyBorIw0hesV5eU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pNLAZUJhjZ3b01XaltJUJ9O7Blv6/pHQrRvURe7MJ5A=";
     leaveDotGit = true;
   };
 
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

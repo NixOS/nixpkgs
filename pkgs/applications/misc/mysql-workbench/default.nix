@@ -48,11 +48,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.36";
+  version = "8.0.38";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-Y02KZrbCd3SRBYpgq6gYfpR+TEmg566D3zEvpwcUY3w=";
+    hash = "sha256-W2RsA2hIRUaNRK0Q5pN1YODbEiw6HE3cfeisPdUcYPY=";
   };
 
   patches = [
@@ -77,9 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fix-swig-build.patch;
       cairoDev = "${cairo.dev}";
     })
-
-    # a newer libxml2 version has changed some interfaces
-    ./fix-xml2.patch
 
     # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
     ./dont-search-for-antlr-jar.patch
@@ -108,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     antlr4_12.runtime.cpp
     python3
     mysql
-    libxml2
+    (libxml2.override { enableHttp = true; })
     libmysqlconnectorcpp
     vsqlite
     gdal
@@ -140,10 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     zstd
   ];
-
-  # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
-  # when updating the version make sure this is still needed
-  env.CXXFLAGS = "-include cstdint";
 
   env.NIX_CFLAGS_COMPILE = toString ([
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated

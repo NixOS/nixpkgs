@@ -22,9 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/AmokHuginnsson/replxx";
+    changelog = "https://github.com/AmokHuginnsson/replxx/releases/tag/release-${finalAttrs.version}";
     description = "Readline and libedit replacement that supports UTF-8, syntax highlighting, hints and Windows and is BSD licensed";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

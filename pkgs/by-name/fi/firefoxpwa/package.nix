@@ -8,15 +8,18 @@
   rustPlatform,
 
   cups,
+  ffmpeg,
   firefox-unwrapped,
   libcanberra-gtk3,
   libglvnd,
   libnotify,
+  libpulseaudio,
   libva,
   mesa,
   nixosTests,
   openssl,
   pciutils,
+  pipewire,
   pkg-config,
   stdenv,
   udev,
@@ -68,11 +71,14 @@ rustPlatform.buildRustPackage rec {
       libs =
         lib.optionals stdenv.isLinux [
           cups
+          ffmpeg
           libglvnd
           libnotify
+          libpulseaudio
           libva
           mesa
           pciutils
+          pipewire
           udev
           xorg.libXScrnSaver
         ]

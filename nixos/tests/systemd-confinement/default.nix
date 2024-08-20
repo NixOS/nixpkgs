@@ -153,7 +153,7 @@ import ../make-test-python.nix {
           })
         '';
       }
-    ]) (lib.cartesianProductOfSets {
+    ]) (lib.cartesianProduct {
       user = [ "root" "dynamic-user" "static-user" ];
       privateTmp = [ true false ];
     });

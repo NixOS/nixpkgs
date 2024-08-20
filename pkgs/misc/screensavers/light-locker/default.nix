@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       It relies on LightDM for locking and unlocking your session via
       ConsoleKit/UPower or logind/systemd.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ obadz ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };

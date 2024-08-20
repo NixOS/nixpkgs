@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-bls12-381";
     rev = version;
-    sha256 = "sha256-z2ZSOrXgm+XjdrY91vqxXSKhA0DyJz6JkkNljDZznX8=";
+    hash = "sha256-z2ZSOrXgm+XjdrY91vqxXSKhA0DyJz6JkkNljDZznX8=";
   };
 
   minimalOCamlVersion = "4.08";

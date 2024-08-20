@@ -5,6 +5,7 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
+  jiter,
   openai,
   poetry-core,
   pydantic,
@@ -15,7 +16,6 @@
   diskcache,
   redis,
   pythonOlder,
-  pythonRelaxDepsHook,
   rich,
   tenacity,
   typer,
@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.2.3";
+  version = "1.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,21 +32,22 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     rev = "refs/tags/${version}";
-    hash = "sha256-LmorlFKIG7iPAK4pDbQqjxjiwB1md3u52B4u5WlqqTk=";
+    hash = "sha256-XouTXv8wNPPBKVs2mCue1o4hfHlPlq6uXBuDXiZLIHI=";
   };
 
   pythonRelaxDeps = [
     "docstring-parser"
+    "jiter"
     "pydantic"
+    "tenacity"
   ];
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   dependencies = [
     aiohttp
     docstring-parser
+    jiter
     openai
     pydantic
     rich
@@ -68,14 +69,14 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require OpenAI API key
-    "test_partial"
     "successfully"
+    "test_mode_functions_deprecation_warning"
+    "test_partial"
   ];
 
   disabledTestPaths = [
     # Tests require OpenAI API key
     "tests/test_distil.py"
-    "tests/test_new_client.py"
     "tests/llm/"
   ];
 

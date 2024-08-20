@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.24";
+  version = "3.0.25";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
     rev = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-xz1cyNQgmXUIZc56OHwWZCGVNpp7CFFyCd0EvAas4zw=";
+    hash = "sha256-MXbsNrF3y2DimXUuf6XbqqCxcNsTGfNHSAMstdX1MoU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     cmake
     qt5.wrapQtAppsHook
   ];

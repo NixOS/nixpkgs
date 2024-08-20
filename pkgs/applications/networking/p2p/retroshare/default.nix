@@ -1,19 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub
-, fetchpatch
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch2
 , qmake, cmake, pkg-config, miniupnpc, bzip2
 , speex, libmicrohttpd, libxml2, libxslt, sqlcipher, rapidjson, libXScrnSaver
-, qtbase, qtx11extras, qtmultimedia, libgnome-keyring3
+, qtbase, qtx11extras, qtmultimedia, libgnome-keyring
 }:
 
 mkDerivation rec {
   pname = "retroshare";
-  version = "0.6.6";
+  version = "0.6.7.2";
 
   src = fetchFromGitHub {
     owner = "RetroShare";
     repo = "RetroShare";
     rev = "v${version}";
-    sha256 = "1hsymbhsfgycj39mdkrdp2hgq8irmvxa4a6jx2gg339m1fgf2xmh";
+    hash = "sha256-1A1YvOWIiWlP1JPUTg5Z/lxVGCBv4tCPf5sZdPogitU=";
     fetchSubmodules = true;
   };
 
@@ -21,19 +20,19 @@ mkDerivation rec {
     # The build normally tries to get git sub-modules during build
     # but we already have them checked out
     ./no-submodules.patch
-    ./cpp-filesystem.patch
 
-    # Fix gcc-13 build failure
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/RetroShare/RetroShare/commit/e1934fd9b03cd52c556eb06d94fb5d68b649592e.patch";
-      hash = "sha256-oqxQAsD4fmkWAH2kSVmmed/q0LzTW/iqUU1SgYNdFyk=";
+    # Support the miniupnpc-2.2.8 API change
+    (fetchpatch2 {
+      url = "https://github.com/RetroShare/libretroshare/commit/f1b89c4f87d77714571b4135c301bf0429096a20.patch?full_index=1";
+      hash = "sha256-UiZMsUFaOZTLj/dx1rLr5bTR1CQ6nt2+IygQdvwJqwc=";
+      stripLen = 1;
+      extraPrefix = "libretroshare/";
     })
   ];
 
   nativeBuildInputs = [ pkg-config qmake cmake ];
   buildInputs = [
-    speex miniupnpc qtmultimedia qtx11extras qtbase libgnome-keyring3
+    speex miniupnpc qtmultimedia qtx11extras qtbase libgnome-keyring
     bzip2 libXScrnSaver libxml2 libxslt sqlcipher libmicrohttpd rapidjson
   ];
 
@@ -47,6 +46,15 @@ mkDerivation rec {
     "RS_MINI_VERSION=${lib.versions.patch version}"
     "RS_EXTRA_VERSION="
   ];
+
+  postPatch = ''
+    # Build libsam3 as C, not C++. No, I have no idea why it tries to
+    # do that, either.
+    substituteInPlace libretroshare/src/libretroshare.pro \
+      --replace-fail \
+        "LIBSAM3_MAKE_PARAMS =" \
+        "LIBSAM3_MAKE_PARAMS = CC=$CC AR=$AR"
+  '';
 
   postInstall = ''
     # BT DHT bootstrap

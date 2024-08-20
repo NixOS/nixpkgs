@@ -14,18 +14,18 @@
 , config
 , enableCuda ? config.cudaSupport
 , cudaPackages
-, addOpenGLRunpath
+, addDriverRunpath
 }:
 
 stdenv.mkDerivation rec {
   pname = "openmm";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = pname;
     rev = version;
-    hash = "sha256-pYWBniV1J+UZBOPPjuUxVevONHaclo+GvGBEpr7Zmxg=";
+    hash = "sha256-2UFccB+xXAw3uRw0G1TKlqTVl9tUl1sRPFG4H05vq04=";
   };
 
   # "This test is stochastic and may occassionally fail". It does.
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     python3Packages.build
     python3Packages.installer
     python3Packages.wheel
-  ] ++ lib.optional enableCuda addOpenGLRunpath;
+  ] ++ lib.optional enableCuda addDriverRunpath;
 
   buildInputs = [ fftwSinglePrec ]
     ++ lib.optionals enableOpencl [ ocl-icd opencl-headers ]
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for lib in $out/lib/plugins/*CUDA.so $out/lib/plugins/*Cuda*.so; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -12,16 +11,16 @@ let bins = [ "regbot" "regctl" "regsync" ]; in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.6.1";
+  version = "0.7.1";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-0TeqZeW2HTjHyHyO8EhmOUCaLTq/XpWTPQMKh58VH8M=";
+    sha256 = "sha256-QG0qwilYqsueyI3rzpNj9z8gYYRzIorlOID+baORgJU=";
   };
-  vendorHash = "sha256-cKpsgT/YOyNEV8OQdclZnDmGKCrUjNeZCOd0zQ/bvL8=";
+  vendorHash = "sha256-gqnE3kfBLjV8CroYcJwa9QWCFOL/dBIblPQJZR2DW+4=";
 
   outputs = [ "out" ] ++ bins;
 

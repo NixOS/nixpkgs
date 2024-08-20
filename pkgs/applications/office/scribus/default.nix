@@ -33,11 +33,11 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4J3Xjm22HQG5MhEI/t7bzNbsCrNS3Vuv24sEHw73npk=";
+    hash = "sha256-fv+bH0fjcuVrs2nx2+GP5JEBeJtea8/beJDgNGtkE4M=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     maintainers = with maintainers; [
-      kiwi
       arthsmn
     ];
     description = "Desktop Publishing (DTP) and Layout program";

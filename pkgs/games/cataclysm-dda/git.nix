@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, CoreFoundation, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
+{ lib, callPackage, CoreFoundation, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false

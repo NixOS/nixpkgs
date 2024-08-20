@@ -3,15 +3,15 @@
   stdenv,
   vscode-utils,
   autoPatchelfHook,
-  libxcrypt-legacy,
+  zlib,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "sourcery";
     publisher = "sourcery";
-    version = "1.16.0";
-    hash = "sha256-SHgS2C+ElTJW4v90Wg0QcsSL2FoSz+SxZQpgq2J4JiU=";
+    version = "1.22.0";
+    hash = "sha256-G2sBH7qfMcoPoR7uz3D0xhfIsmvHkJgNRjcy58y7QeI=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   buildInputs = [
     stdenv.cc.cc.lib
-    libxcrypt-legacy
+    zlib
   ];
 
   meta = {

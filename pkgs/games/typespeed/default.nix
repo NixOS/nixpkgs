@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Curses based typing game";
     mainProgram = "typespeed";
     homepage = "https://typespeed.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.auntie ];
   };

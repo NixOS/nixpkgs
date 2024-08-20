@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mayeut/pybase64";
     changelog = "https://github.com/mayeut/pybase64/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

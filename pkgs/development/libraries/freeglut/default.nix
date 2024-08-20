@@ -1,24 +1,24 @@
-{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGL, libGLU, cmake
+{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGLX, libGLU, cmake
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeglut";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-PAvLkV2bGAqX7a69ARt6HeVFg6g4ZE3NQrsOoMbz6uw=";
+    sha256 = "sha256-nD1NZRb7+gKA7ck8d2mPtzA+RDwaqvN9Jp4yiKbD6lI=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGL libGLU ];
+  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGLU ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
-                 "-DOPENGL_INCLUDE_DIR=${libGL}/include"
-                 "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
+                 "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
+                 "-DOPENGL_gl_LIBRARY:FILEPATH=${libGLX}/lib/libGL.dylib"
                  "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
                  "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"

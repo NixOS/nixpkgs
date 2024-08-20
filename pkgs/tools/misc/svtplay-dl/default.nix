@@ -1,72 +1,85 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, python3Packages
-, perl
-, zip
-, gitMinimal
-, ffmpeg
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+  perl,
+  ffmpeg,
 }:
 
 let
 
   inherit (python3Packages)
-    python pytest nose3 cryptography pyyaml requests mock requests-mock
-    python-dateutil setuptools;
+    buildPythonApplication
+    setuptools
+    requests
+    pysocks
+    cryptography
+    pyyaml
+    pytestCheckHook
+    mock
+    requests-mock
+    ;
 
-  version = "4.83";
+  version = "4.97.1";
 
 in
 
-stdenv.mkDerivation rec {
+buildPythonApplication {
   pname = "svtplay-dl";
   inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    hash = "sha256-CaidnRd21qtPKlFMHfQMmYVz/CfN88uBC1XK3JikHf0=";
+    hash = "sha256-9h3hHRRL7DKeCpEXL5w72hYi1nTS+a+x5e9ArMmVgYQ=";
   };
 
-  pythonPaths = [ cryptography pyyaml requests ];
-  buildInputs = [ python perl python-dateutil setuptools ] ++ pythonPaths;
-  nativeBuildInputs = [ gitMinimal zip makeWrapper ];
-  nativeCheckInputs = [ nose3 pytest mock requests-mock ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace scripts/run-tests.sh \
-      --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
+  dependencies = [
+    requests
+    pysocks
+    cryptography
+    pyyaml
+  ];
 
-    sed -i '/def test_sublang2\?(/ i\    @unittest.skip("accesses network")' \
-      lib/svtplay_dl/tests/test_postprocess.py
+  nativeBuildInputs = [
+    # For `pod2man(1)`.
+    perl
+    installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    requests-mock
+  ];
+
+  pytestFlagsArray = [
+    "--doctest-modules"
+    "lib"
+  ];
+
+  postBuild = ''
+    make svtplay-dl.1
   '';
-
-  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
 
   postInstall = ''
-    wrapProgram "$out/bin/svtplay-dl" \
-      --prefix PATH : "${ffmpeg}" \
-      --prefix PYTHONPATH : "$PYTHONPATH"
+    installManPage svtplay-dl.1
+    makeWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ ffmpeg ]}")
   '';
 
-  doCheck = true;
-  checkPhase = ''
-    sh scripts/run-tests.sh -2
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
+  postInstallCheck = ''
     $out/bin/svtplay-dl --help > /dev/null
-    runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/spaam/svtplay-dl";
     description = "Command-line tool to download videos from svtplay.se and other sites";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "svtplay-dl";
   };

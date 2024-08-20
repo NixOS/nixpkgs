@@ -17,7 +17,6 @@
 , nodejs
 , yarn
 , yarn2nix-moretea
-, v8
 , cacert
 , redis
 }:
@@ -83,7 +82,7 @@ let
       };
       mini_racer = attrs: {
         buildFlags = [
-          "--with-v8-dir=\"${v8}\""
+          "--with-v8-dir=\"${nodejs.libv8}\""
         ];
         dontBuild = false;
         postPatch = ''

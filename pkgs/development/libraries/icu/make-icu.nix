@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, fixDarwinDylibNames, testers }:
+{ stdenv, lib, buildPackages, fetchurl, fixDarwinDylibNames, testers, updateAutotoolsGnuConfigScriptsHook }:
 
 { version, hash, patches ? [], patchFlags ? [], withStatic ? stdenv.hostPlatform.isStatic }:
 
@@ -64,9 +64,11 @@ let
     outputs = [ "out" "dev" ] ++ lib.optional withStatic "static";
     outputBin = "dev";
 
-    # FIXME: This fixes dylib references in the dylibs themselves, but
-    # not in the programs in $out/bin.
-    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++
+      # FIXME: This fixes dylib references in the dylibs themselves, but
+      # not in the programs in $out/bin.
+      lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall = lib.optionalString withStatic ''

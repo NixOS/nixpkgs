@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, cmake, enableJemalloc ? !stdenv.hostPlatform.isMusl, jemalloc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, zlib, cmake, enableJemalloc ? !stdenv.hostPlatform.isMusl, jemalloc }:
 
 stdenv.mkDerivation rec {
   pname = "lwan";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "lpereira";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z8kiuZHLEupCKFrj8guiu9fTG7s+5KiQ6x0pg9iMy0c=";
+    sha256 = "sha256-otiPH+e+auMCyeOTq4LJYaBNv+I91kOCww7DCepQTAQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lpereira/lwan/commit/9b94ff5eecec1e925103b25a43dacc226a634878.patch";
+      hash = "sha256-g1ZwmEodtF1fkbIBaLT4YvH8EG8DGafHydPSYJra+c0=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

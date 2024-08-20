@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   cmake,
   setuptools-scm,

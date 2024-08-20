@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "merces";
     repo = "pev";
     rev = "beec2b4f09585fea919ed41ce466dee06be0b6bf";
-    sha256 = "sha256-HrMbk9YbuqkoBBM7+rfXpqVEnd1rDl2rMePdcfU1WDg=";
+    hash = "sha256-HrMbk9YbuqkoBBM7+rfXpqVEnd1rDl2rMePdcfU1WDg=";
     fetchSubmodules = true;
   };
 

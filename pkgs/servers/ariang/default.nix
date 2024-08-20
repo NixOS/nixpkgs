@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildNpmPackage
 , nix-update-script

@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, stdenv, nodejs, pnpm, buildGoModule, mage, writeShellScriptBin, nixosTests }:
 
 let
-  version = "0.23.0";
+  version = "0.24.1";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-DGdJ/qO86o4LDB2Soio6/zd5S0su6ffrtT+iOn1eQnA=";
+    hash = "sha256-39S7Xl8He+unIkAZ9GnjqWHBOfdDj4rSUmrExB+Q6Vc=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +17,7 @@ let
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src sourceRoot;
-      hash = "sha256-awQgOLkb46v2aWfw6yv+zGPoOnczalkzg02tBgMTyMY=";
+      hash = "sha256-iEcic/oQ33IO9tWqIQGfyjSY4YpJ8FckaI59qTgdq3c=";
     };
 
     nativeBuildInputs = [
@@ -67,12 +67,12 @@ buildGoModule {
     in
     [ fakeGit mage ];
 
-  vendorHash = "sha256-d4AeQEAtPqMDe5a5aKhCe3i3pDXAMZJkJXxfcAFTx7A=";
+  vendorHash = "sha256-oOa9qTy5jNYq05Tbp9hI4L0OBtKtglhk6Uz380nZH1Y=";
 
   inherit frontend;
 
   prePatch = ''
-    cp -r $frontend frontend/dist
+    cp -r ${frontend} frontend/dist
   '';
 
   postConfigure = ''

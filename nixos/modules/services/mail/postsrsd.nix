@@ -120,14 +120,9 @@ in {
         if [ ! -e "${cfg.secretsFile}" ]; then
           echo "WARNING: secrets file not found, autogenerating!"
           DIR="$(dirname "${cfg.secretsFile}")"
-          if [ ! -d "$DIR" ]; then
-            mkdir -p -m750 "$DIR"
-            chown "${cfg.user}:${cfg.group}" "$DIR"
-          fi
-          dd if=/dev/random bs=18 count=1 | base64 > "${cfg.secretsFile}"
-          chmod 600 "${cfg.secretsFile}"
+          install -m 750 -o ${cfg.user} -g ${cfg.group} -d "$DIR"
+          install -m 600 -o ${cfg.user} -g ${cfg.group} <(dd if=/dev/random bs=18 count=1 | base64) "${cfg.secretsFile}"
         fi
-        chown "${cfg.user}:${cfg.group}" "${cfg.secretsFile}"
       '';
     };
 

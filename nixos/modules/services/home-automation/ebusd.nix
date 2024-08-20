@@ -11,7 +11,7 @@ in
   options.services.ebusd = {
     enable = mkEnableOption "ebusd, a daemon for communication with eBUS heating systems";
 
-    package = mkPackageOptionMD pkgs "ebusd" { };
+    package = mkPackageOption pkgs "ebusd" { };
 
     device = mkOption {
       type = types.str;

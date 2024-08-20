@@ -17,8 +17,7 @@ let
   cfgZED = config.services.zfs.zed;
 
   selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
-  clevisDatasets = map (e: e.device) (filter (e: e.device != null && (hasAttr e.device config.boot.initrd.clevis.devices) && e.fsType == "zfs" && (fsNeededForBoot e)) config.system.build.fileSystems);
-
+  clevisDatasets = attrNames (filterAttrs (device: _: any (e: e.fsType == "zfs" && (fsNeededForBoot e) && (e.device == device || hasPrefix "${device}/" e.device)) config.system.build.fileSystems) config.boot.initrd.clevis.devices);
 
   inInitrd = config.boot.initrd.supportedFilesystems.zfs or false;
   inSystem = config.boot.supportedFilesystems.zfs or false;

@@ -1,24 +1,24 @@
-{ lib
-, callPackage
-, extraPackages ? (ps: [ ])
-, runCommand
+{
+  lib,
+  python3,
+  runCommand,
+  # configurable options
+  extraPackages ? (ps: [ ]),
 }:
 
 let
-  xonsh-unwrapped = callPackage ./unwrapped.nix { };
-  inherit (xonsh-unwrapped.passthru) python;
-
-  pythonEnv = python.withPackages (ps: [
-    (ps.toPythonModule xonsh-unwrapped)
-  ] ++ extraPackages ps);
+  pythonEnv = python3.withPackages
+    (ps: [ ps.xonsh ] ++ extraPackages ps);
+  xonsh = python3.pkgs.xonsh;
 in
-runCommand "xonsh-${xonsh-unwrapped.version}"
-{
-  inherit (xonsh-unwrapped) pname version meta;
-  passthru = xonsh-unwrapped.passthru // { unwrapped = xonsh-unwrapped; };
-} ''
-  mkdir -p $out/bin
-  for bin in ${lib.getBin xonsh-unwrapped}/bin/*; do
-    ln -s ${pythonEnv}/bin/$(basename "$bin") $out/bin/
-  done
-''
+runCommand
+  "xonsh-${xonsh.version}"
+  {
+    inherit (xonsh) pname version meta passthru;
+  }
+  ''
+    mkdir -p $out/bin
+    for bin in ${lib.getBin xonsh}/bin/*; do
+      ln -s ${pythonEnv}/bin/$(basename "$bin") $out/bin/
+    done
+  ''

@@ -11,6 +11,7 @@ let
       git
       xdg-user-dirs
       ncurses
+      udev
     ]) ++ (with python.pkgs; [
       python
       setuptools

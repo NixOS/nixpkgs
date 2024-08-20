@@ -11,6 +11,7 @@
 , mouseSupport ? false, gpm
 , unicodeSupport ? true
 , testers
+, binlore
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -178,6 +179,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
+  '';
+
+  # I'm not very familiar with ncurses, but it looks like most of the
+  # exec here will run hard-coded executables. There's one that is
+  # dynamic, but it looks like it only comes from executing a terminfo
+  # file, so I think it isn't going to be under user control via CLI?
+  # Happy to have someone help nail this down in either direction!
+  # The "capability" is 'iprog', and I could only find 1 real example:
+  # https://invisible-island.net/ncurses/terminfo.ti.html#tic-linux-s
+  passthru.binlore.out = binlore.synthesize ncurses ''
+    execer cannot bin/{reset,tput,tset}
   '';
 
   meta = with lib; {

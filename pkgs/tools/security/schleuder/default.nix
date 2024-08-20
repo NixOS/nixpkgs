@@ -34,6 +34,6 @@ bundlerApp {
     homepage = "https://schleuder.org";
     changelog = "https://0xacab.org/schleuder/schleuder/blob/main/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa lheckemann ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

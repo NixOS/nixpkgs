@@ -143,7 +143,7 @@ You can also pass additional arguments to `makeWrapper` using `gappsWrapperArgs`
 
 ## Updating GNOME packages {#ssec-gnome-updating}
 
-Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running `nix-shell maintainers/scripts/update.nix --argstr package gnome.nautilus` or even en masse with `nix-shell maintainers/scripts/update.nix --argstr path gnome`. Read the package’s `NEWS` file to see what changed.
+Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running `nix-shell maintainers/scripts/update.nix --argstr package nautilus` or even en masse with `nix-shell maintainers/scripts/update.nix --argstr path gnome`. Read the package’s `NEWS` file to see what changed.
 
 ## Frequently encountered issues {#ssec-gnome-common-issues}
 

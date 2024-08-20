@@ -8,7 +8,7 @@
 }:
 let
   pname = "tracexec";
-  version = "0.4.0";
+  version = "0.5.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -17,14 +17,12 @@ rustPlatform.buildRustPackage {
     owner = "kxxt";
     repo = "tracexec";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rhxg3VmdMSo1xlazvToIdvkBvuFUKTq82U3PnedGHHs=";
+    hash = "sha256-PLUB0t9eDR0mYUI6TiUxafo6yMymwdTux7ykF8rTGGc=";
   };
 
-  cargoHash = "sha256-rioZfUJD4ZOpXGCWsBDQkYwW9XtTjFnGgMKl0mPF5XM=";
+  cargoHash = "sha256-PJclGjQTAOvnl8LJTxlDyEuzdWE1R7A2gJe1I1sKde0=";
 
-  nativeBuildInputs = [
-    cargo-about
-  ];
+  nativeBuildInputs = [ cargo-about ];
 
   # Remove RiscV64 specialisation when this is fixed:
   # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
@@ -62,7 +60,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";
-    maintainers = with lib.maintainers; [ fpletz nh2 ];
+    maintainers = with lib.maintainers; [
+      fpletz
+      nh2
+    ];
     platforms = lib.platforms.linux;
   };
 }

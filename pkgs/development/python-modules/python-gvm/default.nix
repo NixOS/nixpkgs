@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "24.3.0";
+  version = "24.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,10 +24,12 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "python-gvm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GIEsP8+RJMIehsBbZWpIRXCdqxm042lPbYTHY7/fknM=";
+    hash = "sha256-WsZxISvPw4uvRKv5CYpcLunAxvoCvVWTSp+m2QTEe0g=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "defusedxml" ];
 
   dependencies = [
     defusedxml

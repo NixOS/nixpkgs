@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiawatha";
-  version = "11.5";
+  version = "11.6";
 
   src = fetchFromGitLab {
     owner = "hsleisink";
     repo = "hiawatha";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kswVBVL/QUQmCwH74qWwSwLz4uwDymuHIr8NokrrgEM=";
+    hash = "sha256-YsZdVqanVNibA4KnAknLh61hVo7x5uu67lb+RX2N7c8=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
     mainProgram = "hiawatha";
-    maintainers = [];
+    maintainers = [ ];
   };
 
 })

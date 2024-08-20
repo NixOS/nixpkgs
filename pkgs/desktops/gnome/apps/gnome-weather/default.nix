@@ -4,6 +4,7 @@
 , desktop-file-utils
 , pkg-config
 , gnome
+, adwaita-icon-theme
 , gtk4
 , libadwaita
 , wrapGAppsHook4
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     libadwaita
     gjs
     libgweather
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     geoclue2
     gsettings-desktop-schemas
   ];

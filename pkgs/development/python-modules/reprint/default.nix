@@ -18,7 +18,7 @@ buildPythonPackage rec {
     rev = "${version}";
     hash = "sha256-99FC12LcvvRRwNAxDSvWo9vRYmieL0JHSaCJqO/UGEs=";
   };
-  doCheck = false;
+  doCheck = false;  # Disable tests due to unnecessary dependency on backports.shutil_get_terminal_size
 
   build-system = [ setuptools ];
 
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   ];
 
 
+  nativeCheckInputs = [];
   pythonImportsCheck = [ "reprint" ];
 
 
@@ -35,6 +36,6 @@ buildPythonPackage rec {
     description = "Module for binding variables and refreshing multi-line output in terminal";
     homepage = "https://github.com/Yinzo/reprint";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jasonodoom ];
+    maintainers = with lib.maintainers; [ jasonodoom jleightcap ];
   };
 }

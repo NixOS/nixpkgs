@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tau-hydrogen";
-  version = "1.0.14";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "tau-OS";
     repo = "tau-hydrogen";
     rev = finalAttrs.version;
-    hash = "sha256-8awcowBm0hwoYYm/wtKeqCWRhgXh2rI3UvAlL1tbj6c=";
+    hash = "sha256-nnQ0lkHtkOjJhF4NSMqjt0deddYjMnHHlANlHoZS2wY=";
   };
 
   nativeBuildInputs = [

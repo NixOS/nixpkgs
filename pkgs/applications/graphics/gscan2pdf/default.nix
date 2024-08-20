@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, wrapGAppsHook3, fetchpatch,
+{ lib, fetchurl, perlPackages, wrapGAppsHook3,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
@@ -6,24 +6,16 @@
   # test dependencies
   xvfb-run, liberation_ttf, file, tesseract }:
 
-with lib;
-
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.13.2";
+  version = "2.13.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
-    hash = "sha256-NGz6DUa7TdChpgwmD9pcGdvYr3R+Ft3jPPSJpybCW4Q=";
+    hash = "sha256-QAs6fsQDe9+nKM/OAVZUHB034K72jHsKoA2LY2JQa8Y=";
   };
 
   patches = [
-    # fixes warnings during tests. See https://sourceforge.net/p/gscan2pdf/bugs/421
-    (fetchpatch {
-      name = "0001-Remove-given-and-when-keywords-and-operator.patch";
-      url = "https://sourceforge.net/p/gscan2pdf/bugs/_discuss/thread/602a7cedfd/1ea4/attachment/0001-Remove-given-and-when-keywords-and-operator.patch";
-      hash = "sha256-JtrHUkfEKnDhWfEVdIdYVlr5b/xChTzsrrPmruLaJ5M=";
-    })
     # fixes an error with utf8 file names. See https://sourceforge.net/p/gscan2pdf/bugs/400
     ./image-utf8-fix.patch
   ];
@@ -113,18 +105,6 @@ perlPackages.buildPerlPackage rec {
   ]);
 
   checkPhase = ''
-    # Temporarily disable a test failing after a patch imagemagick update.
-    # It might only due to the reporting and matching used in the test.
-    # See https://github.com/NixOS/nixpkgs/issues/223446
-    # See https://sourceforge.net/p/gscan2pdf/bugs/417/
-    #
-    #   Failed test 'valid TIFF created'
-    #   at t/131_save_tiff.t line 44.
-    #                   'test.tif TIFF 70x46 70x46+0+0 8-bit sRGB 10024B 0.000u 0:00.000
-    # '
-    #     doesn't match '(?^:test.tif TIFF 70x46 70x46\+0\+0 8-bit sRGB [7|9][.\d]+K?B)'
-    rm t/131_save_tiff.t
-
     # Temporarily disable a dubiously failing test:
     # t/169_import_scan.t ........................... 1/1
     # #   Failed test 'variable-height scan imported with expected size'
@@ -135,17 +115,22 @@ perlPackages.buildPerlPackage rec {
     # t/169_import_scan.t ........................... Dubious, test returned 1 (wstat 256, 0x100)
     rm t/169_import_scan.t
 
-    # Disable a test which passes but reports an incorrect status
-    # t/0601_Dialog_Scan.t .......................... All 14 subtests passed
-    # t/0601_Dialog_Scan.t                        (Wstat: 139 Tests: 14 Failed: 0)
-    #   Non-zero wait status: 139
-    rm t/0601_Dialog_Scan.t
+    # Disable a test failing because of a warning interfering with the pinned output
+    # t/3722_user_defined.t ......................... 1/2
+    #   Failed test 'user_defined caught error injected in queue'
+    #   at t/3722_user_defined.t line 41.
+    #          got: 'error
+    # WARNING: The convert command is deprecated in IMv7, use "magick" instead of "convert" or "magick convert"'
+    #     expected: 'error'
+    # Looks like you failed 1 test of 2.
+    rm t/3722_user_defined.t
 
+    export XDG_CACHE_HOME="$(mktemp -d)"
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';
 
-  meta = {
+  meta = with lib; {
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
     license = licenses.gpl3;

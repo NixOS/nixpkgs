@@ -14,16 +14,16 @@ let
 in
 buildGoModule rec {
   pname = "centrifugo";
-  version = "5.4.0";
+  version = "5.4.5";
 
   src = fetchFromGitHub {
     owner = "centrifugal";
     repo = "centrifugo";
     rev = "v${version}";
-    hash = "sha256-sSEainZXgZ26u4J0FXVM8Je1uwDrAOkzLMgrCUtOx74=";
+    hash = "sha256-kbSHNtujHlT9l9VV9fVlVnTMOQSKdXSwMP/x0EGTNZo=";
   };
 
-  vendorHash = "sha256-kPnkuBOcTDuAWD51JGJvgHLj9jn9kHZOfPw/DF64Mn8=";
+  vendorHash = "sha256-gfz2jRGx8egAKCFaQOZfh7cthcXS9t8ugB0zF+tiYh0=";
 
   ldflags = [
     "-s"

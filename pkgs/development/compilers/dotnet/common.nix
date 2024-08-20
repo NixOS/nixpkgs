@@ -1,12 +1,22 @@
 # TODO: switch to stdenvNoCC
 { stdenv
+, stdenvNoCC
 , lib
 , writeText
 , testers
 , runCommand
+, runCommandWith
 , expect
 , curl
 , installShellFiles
+, callPackage
+, zlib
+, swiftPackages
+, darwin
+, icu
+, lndir
+, substituteAll
+, nugetPackageHook
 }: type: args: stdenv.mkDerivation (finalAttrs: args // {
   doInstallCheck = true;
 
@@ -16,17 +26,16 @@
     $out/bin/dotnet --info
   '';
 
-  # TODO: move this to sdk section?
-  setupHook = writeText "dotnet-setup-hook" (''
-    if [ ! -w "$HOME" ]; then
-      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
-    fi
+  setupHooks = args.setupHooks or [] ++ [
+    ./dotnet-setup-hook.sh
+  ] ++ lib.optional (type == "sdk") (substituteAll {
+    src = ./dotnet-sdk-setup-hook.sh;
+    inherit lndir;
+  });
 
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
-    export DOTNET_NOLOGO=1 # Disables the welcome message
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1 # Skip integrity check on first run, which fails due to read-only directory
-  '' + args.setupHook or "");
+  propagatedBuildInputs =
+    (args.propagatedBuildInputs or [])
+    ++ [ nugetPackageHook ];
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ installShellFiles ];
 
@@ -43,9 +52,11 @@
       mkDotnetTest =
         {
           name,
+          stdenv ? stdenvNoCC,
           template,
           usePackageSource ? false,
           build,
+          buildInputs ? [],
           # TODO: use correct runtimes instead of sdk
           runtime ? finalAttrs.finalPackage,
           runInputs ? [],
@@ -54,22 +65,22 @@
         }:
         let
           sdk = finalAttrs.finalPackage;
-          built = runCommand "dotnet-test-${name}" {
-            buildInputs = [ sdk ];
+          built = stdenv.mkDerivation {
+            name = "dotnet-test-${name}";
+            buildInputs =
+              [ sdk ]
+              ++ buildInputs
+              ++ lib.optional (usePackageSource) sdk.packages;
             # make sure ICU works in a sandbox
-            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile + ''
-              (allow network-inbound (local ip))
-              (allow mach-lookup (global-name "com.apple.FSEvents"))
+            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
+            unpackPhase = ''
+              mkdir test
+              cd test
+              dotnet new ${template} -o .
             '';
-          } (''
-            HOME=$PWD/.home
-            dotnet new nugetconfig
-            dotnet nuget disable source nuget
-          '' + lib.optionalString usePackageSource ''
-            dotnet nuget add source ${finalAttrs.finalPackage.packages}
-          '' + ''
-            dotnet new ${template} -n test -o .
-          '' + build);
+            buildPhase = build;
+            dontPatchELF = true;
+          };
         in
           if run == null
             then built
@@ -77,6 +88,7 @@
             runCommand "${built.name}-run" ({
               src = built;
               nativeBuildInputs = [ built ] ++ runInputs;
+              passthru = { inherit built; };
             } // lib.optionalAttrs (stdenv.isDarwin && runAllowNetworking) {
               sandboxProfile = ''
                 (allow network-inbound (local ip))
@@ -95,7 +107,6 @@
         # yes, older SDKs omit the comma
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
-
     in {
       version = testers.testVersion ({
         package = finalAttrs.finalPackage;
@@ -103,7 +114,7 @@
         command = "dotnet --info";
       });
     }
-    // lib.optionalAttrs (type == "sdk") {
+    // lib.optionalAttrs (type == "sdk") ({
       console = mkDotnetTest {
         name = "console";
         template = "console";
@@ -113,8 +124,8 @@
       publish = mkDotnetTest {
         name = "publish";
         template = "console";
-        build = "dotnet publish -o $out";
-        run = checkConsoleOutput "$src/test";
+        build = "dotnet publish -o $out/bin";
+        run = checkConsoleOutput "$src/bin/test";
       };
 
       self-contained = mkDotnetTest {
@@ -130,20 +141,20 @@
         name = "single-file";
         template = "console";
         usePackageSource = true;
-        build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out";
+        build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out/bin";
         runtime = null;
-        run = checkConsoleOutput "$src/test";
+        run = checkConsoleOutput "$src/bin/test";
       };
 
       web = mkDotnetTest {
         name = "web";
         template = "web";
-        build = "dotnet publish -o $out";
+        build = "dotnet publish -o $out/bin";
         runInputs = [ expect curl ];
         run = ''
           expect <<"EOF"
             set status 1
-            spawn $env(src)/test
+            spawn $env(src)/bin/test
             proc abort { } { exit 2 }
             expect_before default abort
             expect -re {Now listening on: ([^\r]+)\r} {
@@ -165,6 +176,28 @@
         '';
         runAllowNetworking = true;
       };
-    } // args.passthru.tests or {};
+    } // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
+      aot = mkDotnetTest {
+        name = "aot";
+        stdenv = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
+        template = "console";
+        usePackageSource = true;
+        buildInputs =
+          [ zlib
+          ] ++ lib.optional stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
+            swiftPackages.swift
+            Foundation
+            CryptoKit
+            GSS
+            ICU
+          ]);
+        build = ''
+          dotnet restore -p:PublishAot=true
+          dotnet publish -p:PublishAot=true -o $out/bin
+        '';
+        runtime = null;
+        run = checkConsoleOutput "$src/bin/test";
+      };
+    }) // args.passthru.tests or {};
   } // args.passthru or {};
 })

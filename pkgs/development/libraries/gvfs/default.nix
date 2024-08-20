@@ -41,17 +41,16 @@
 , libgdata
 , libmsgraph
 , python3
-, python3Packages
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.54.1";
+  version = "1.54.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rEo7zLf+FQIVjvD95cl5q0RxJVfQKKjk8wop8PvZ0Z8=";
+    hash = "sha256-VJCPThC18cIx6QMwyMFbfyHyu2EPGUwDSzOON5xQjjw=";
   };
 
   patches = [
@@ -137,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = finalAttrs.doCheck;
+  doInstallCheck = finalAttrs.finalPackage.doCheck;
 
   separateDebugInfo = true;
 

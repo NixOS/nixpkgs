@@ -4,17 +4,14 @@
   automat,
   buildPythonPackage,
   cryptography,
+  fetchpatch2,
   fetchPypi,
   geoip,
-  idna,
   incremental,
   lsof,
   mock,
-  pyopenssl,
   pytestCheckHook,
-  python,
   pythonOlder,
-  service-identity,
   twisted,
   zope-interface,
 }:
@@ -30,6 +27,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-cfha6T121yZRAFnJ7XTmCLxaXJ99EDhTtJ5BQoBAai8=";
   };
+
+  patches = [
+    # https://github.com/meejah/txtorcon/pull/400
+    (fetchpatch2 {
+      name = "twisted-24.7.0-fixes.patch";
+      url = "https://github.com/meejah/txtorcon/commit/88b5dc2971514babd36d837c93550715dea44b09.patch";
+      hash = "sha256-O7kFZw+y1PHJRcMdxCczy8UZd3ruLhjLMxh2tcawWI4=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cryptography

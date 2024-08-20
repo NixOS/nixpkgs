@@ -4,7 +4,6 @@
   fetchpatch,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   altair,
   ipytablewidgets,
   ipywidgets,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "pandas" ];

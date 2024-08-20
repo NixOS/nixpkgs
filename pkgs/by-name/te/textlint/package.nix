@@ -1,10 +1,12 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   autoconf,
   automake,
   makeWrapper,
+  python311,
   runCommand,
   textlint,
   textlint-plugin-latex2e,
@@ -17,6 +19,7 @@
   textlint-rule-no-start-duplicated-conjunction,
   textlint-rule-period-in-list-item,
   textlint-rule-preset-ja-technical-writing,
+  textlint-rule-prh,
   textlint-rule-stop-words,
   textlint-rule-terminology,
   textlint-rule-unexpanded-acronym,
@@ -25,13 +28,13 @@
 
 buildNpmPackage rec {
   pname = "textlint";
-  version = "14.0.4";
+  version = "14.1.0";
 
   src = fetchFromGitHub {
     owner = "textlint";
     repo = "textlint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u8BRzfvpZ8xggJwH8lsu+hqsql6s4SZVlkFzLBe6zvE=";
+    hash = "sha256-/pXUqpQ3cRjcwZAfBVpf9K9JsPmxB9iX8p64iE/n/68=";
   };
 
   patches = [
@@ -41,12 +44,18 @@ buildNpmPackage rec {
     ./remove-workspaces.patch
   ];
 
-  npmDepsHash = "sha256-rmRtCP51rt/wd/ef0iwMMI6eCGF1KNN7kJqomitMJ+w=";
+  npmDepsHash = "sha256-FnDKPLhf9OxwRrrBJgejp4X13FGEI317yTgI3tA5cX8=";
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
+  nativeBuildInputs =
+    [
+      autoconf
+      automake
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # File "/build/source/node_modules/node-gyp/gyp/gyp_main.py", line 42, in <module>
+      # npm error ModuleNotFoundError: No module named 'distutils'
+      python311
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -117,6 +126,7 @@ buildNpmPackage rec {
         textlint-rule-no-start-duplicated-conjunction
         textlint-rule-period-in-list-item
         textlint-rule-preset-ja-technical-writing
+        textlint-rule-prh
         textlint-rule-stop-words
         textlint-rule-terminology
         textlint-rule-unexpanded-acronym

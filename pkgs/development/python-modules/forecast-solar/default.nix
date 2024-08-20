@@ -6,7 +6,6 @@
   pythonOlder,
   aiodns,
   aiohttp,
-  backports-zoneinfo,
   pytestCheckHook,
 }:
 
@@ -14,6 +13,8 @@ buildPythonPackage rec {
   pname = "forecast-solar";
   version = "3.1.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     aiodns
     aiohttp
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   pythonImportsCheck = [ "forecast_solar" ];
 

@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.24.0";
+  version = "3.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6V5vbgqjLmxFPUTisymJMf3XlHwwnqMpoxtv8fk54X4=";
+    hash = "sha256-Wyr/MgWoVEgRF0NoNq4UA/EfJZTmgQqYiGr9V+2ihQk=";
   };
 
   build-system = [ setuptools ];
@@ -132,6 +132,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

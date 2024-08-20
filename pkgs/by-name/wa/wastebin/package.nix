@@ -4,6 +4,9 @@
 , pkg-config
 , sqlite
 , zstd
+, stdenv
+, darwin
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,10 +29,16 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     zstd
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) wastebin;
   };
 
   meta = with lib; {

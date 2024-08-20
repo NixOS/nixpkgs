@@ -4,20 +4,21 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+  setuptools-scm,
   beautifulsoup4,
   boto3,
   lxml,
   pdoc,
   pytestCheckHook,
   requests-mock,
+  typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "91";
+  version = "95";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   pyproject = true;
 
@@ -25,14 +26,14 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W8NP5h9fHyTJj6TIpBunoPcNOu8eWV1rA8ZaoGUnmBQ=";
+    hash = "sha256-OClJjttOb21NnukOapEtXn/XNw9p6SUe3MY68FR9GWc=";
   };
 
   postPatch = ''
     rm bx_py_utils_tests/publish.py
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ setuptools-scm ];
 
   pythonImportsCheck = [
     "bx_py_utils.anonymize"
@@ -62,6 +63,7 @@ buildPythonPackage rec {
     pdoc
     pytestCheckHook
     requests-mock
+    typeguard
   ];
 
   disabledTests = [

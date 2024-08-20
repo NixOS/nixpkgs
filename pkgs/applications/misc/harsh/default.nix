@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "harsh";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "wakatara";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SF5SvVllAXaALSasVt+wqiywYltAuzaPoc9IohwYmss=";
+    hash = "sha256-XkOdW6ewout69A1ovth1iQR36nRtkdsbDI9CWibSHXs=";
   };
 
   vendorHash = "sha256-4Sa8/mVD7t4uR8Wq4n+fvot7LZfraphFobrG6rteQeI=";
@@ -21,7 +21,7 @@ buildGoModule rec {
     homepage = "https://github.com/wakatara/harsh";
     changelog = "https://github.com/wakatara/harsh/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ laurailway ];
+    maintainers = [ ];
     mainProgram = "harsh";
   };
 }

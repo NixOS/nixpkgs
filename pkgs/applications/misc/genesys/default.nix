@@ -5,7 +5,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.7";
 
   src = fetchurl {
-    url = "https://github.com/mrlem/genesys/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/mrlem/genesys/releases/download/v${finalAttrs.version}/genesys-${finalAttrs.version}.tar.gz";
     hash = "sha256-I1lEVvwRiGf1f4zUtqKhSb+it/nC8WAmw5S6edquOj8=";
   };
 

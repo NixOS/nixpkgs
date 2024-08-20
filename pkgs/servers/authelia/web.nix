@@ -1,21 +1,32 @@
-{ buildNpmPackage, fetchFromGitHub }:
+{ stdenv, nodejs, pnpm, fetchFromGitHub }:
 
 let
-  inherit (import ./sources.nix { inherit fetchFromGitHub; }) pname version src npmDepsHash;
+  inherit (import ./sources.nix { inherit fetchFromGitHub; }) pname version src pnpmDepsHash;
 in
-buildNpmPackage {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${pname}-web";
-  inherit src version npmDepsHash;
+  inherit src version;
 
-  sourceRoot = "${src.name}/web";
+  sourceRoot = "${finalAttrs.src.name}/web";
+
+  nativeBuildInputs = [
+    nodejs
+    pnpm.configHook
+  ];
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src sourceRoot;
+    hash = pnpmDepsHash;
+  };
 
   postPatch = ''
     substituteInPlace ./vite.config.ts \
       --replace 'outDir: "../internal/server/public_html"' 'outDir: "dist"'
-    cp ${./package-lock.json} ./package-lock.json
   '';
 
-  npmFlags = [ "--legacy-peer-deps" ];
+  postBuild = ''
+    pnpm run build
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -25,4 +36,4 @@ buildNpmPackage {
 
     runHook postInstall
   '';
-}
+})

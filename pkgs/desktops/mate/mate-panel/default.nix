@@ -5,7 +5,6 @@
 , gettext
 , itstool
 , glib
-, gnome
 , gtk-layer-shell
 , gtk3
 , libmateweather
@@ -13,6 +12,7 @@
 , librsvg
 , libxml2
 , dconf
+, dconf-editor
 , mate-desktop
 , mate-menus
 , hicolor-icon-theme
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "UTPGT1lpro7uvm6LukUN6nkssL4G2a4cNuhWnS+FJLo=";
+    sha256 = "Z4pD6DeqJxhJQgT93xm7kGzwfl2A/S4d3nRfJtKtujM=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     gtk3
     # See https://github.com/mate-desktop/mate-panel/issues/1402
     # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
-    gnome.dconf-editor
+    dconf-editor
   ];
 
   # Needed for Wayland support.

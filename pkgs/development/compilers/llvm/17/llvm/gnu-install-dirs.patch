@@ -72,8 +72,8 @@ index 230620c37027..dd16cab1835e 100644
 +    # As noted in the differential above, an alternative solution is to have
 +    # all rdeps of nixpkgs' LLVM (that use the AddLLVM.cmake machinery) set
 +    # `CMAKE_INSTALL_RPATH`.
-+    set(_build_rpath "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
-+    set(_install_rpath "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
++    set(_build_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
++    set(_install_rpath ${extra_libdir})
      if(${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|DragonFly)")
        set_property(TARGET ${name} APPEND_STRING PROPERTY
                     LINK_FLAGS " -Wl,-z,origin ")
@@ -86,10 +86,10 @@ index 891c9e6d618c..8d963f3b0069 100644
  
    if( APPLE )
 -    set(ocaml_rpath "@executable_path/../../../lib${LLVM_LIBDIR_SUFFIX}")
-+    set(ocaml_rpath "@executable_path/../../../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}")
++    set(ocaml_rpath "${LLVM_LIBRARY_DIR}")
    elseif( UNIX )
 -    set(ocaml_rpath "\\$ORIGIN/../../../lib${LLVM_LIBDIR_SUFFIX}")
-+    set(ocaml_rpath "\\$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}")
++    set(ocaml_rpath "${LLVM_LIBRARY_DIR}")
    endif()
    list(APPEND ocaml_flags "-ldopt" "-Wl,-rpath,${ocaml_rpath}")
  

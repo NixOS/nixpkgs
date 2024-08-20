@@ -19,11 +19,11 @@
 buildPythonPackage rec {
   pname = "django-scim2";
   version = "0.19.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15five";
-    repo = pname;
+    repo = "django-scim2";
     rev = "refs/tags/${version}";
     hash = "sha256-larDh4f9/xVr11/n/WfkJ2Tx45DMQqyK3ZzkWAvzeig=";
   };
@@ -31,13 +31,13 @@ buildPythonPackage rec {
   # remove this when upstream releases a new version > 0.19.0
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry>=0.12" "poetry-core>=1.5.2" \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+      --replace-fail "poetry>=0.12" "poetry-core>=1.5.2" \
+      --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     scim2-filter-parser
   ];

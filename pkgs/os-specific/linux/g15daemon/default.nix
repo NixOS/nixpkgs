@@ -4,7 +4,7 @@
 , libusb-compat-0_1
 }:
 let
-  license = lib.licenses.gpl2;
+  license = lib.licenses.gpl2Plus;
   maintainers = with lib.maintainers; [ peterhoeg ];
 
   g15src = { pname, version, sha256 }: fetchurl {

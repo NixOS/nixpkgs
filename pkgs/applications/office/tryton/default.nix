@@ -7,7 +7,7 @@
 , atk
 , gtk3
 , gtkspell3
-, gnome
+, adwaita-icon-theme
 , glib
 , goocanvas2
 , gdk-pixbuf
@@ -17,17 +17,15 @@
 , wrapGAppsHook3
 }:
 
-with lib;
-
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.2.1";
+  version = "7.2.4";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CK3XkHX16Ec/j1DhC29uoj/YqcLXs/KsIb7v/cfoiaM=";
+    hash = "sha256-LYebXgAvIG3pUF7GpRjeQvP6S83yPjPO/lZg9r0X+Kc=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     atk
     gdk-pixbuf
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     goocanvas2
     fontconfig
     freetype
@@ -61,7 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Client of the Tryton application platform";
     mainProgram = "tryton";
     longDescription = ''

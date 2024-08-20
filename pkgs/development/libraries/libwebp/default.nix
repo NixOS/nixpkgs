@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut, libGL, libGLU # OpenGL (required for vwebp)
+, openglSupport ? false, libglut, libGL, libGLU # OpenGL (required for vwebp)
 , pngSupport ? true, libpng # PNG image format
 , jpegSupport ? true, libjpeg # JPEG image format
 , tiffSupport ? true, libtiff # TIFF image format
@@ -13,7 +13,6 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 
 # for passthru.tests
-, freeimage
 , gd
 , graphicsmagick
 , haskellPackages
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook libtool ];
   buildInputs = [ ]
-    ++ lib.optionals openglSupport [ freeglut libGL libGLU ]
+    ++ lib.optionals openglSupport [ libglut libGL libGLU ]
     ++ lib.optionals pngSupport [ libpng ]
     ++ lib.optionals jpegSupport [ libjpeg ]
     ++ lib.optionals tiffSupport [ libtiff ]

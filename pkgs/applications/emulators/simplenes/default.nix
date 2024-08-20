@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/amhndu/SimpleNES";
     description = "NES emulator written in C++";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ivar ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "SimpleNES";
   };

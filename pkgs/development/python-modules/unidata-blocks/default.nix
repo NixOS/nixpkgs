@@ -2,36 +2,35 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytestCheckHook,
   pythonOlder,
+  pytestCheckHook,
   nix-update-script,
-  hatch-vcs,
   hatchling,
   langcodes,
 }:
 
 buildPythonPackage rec {
   pname = "unidata-blocks";
-  version = "0.0.10";
+  version = "0.0.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "unidata_blocks";
     inherit version;
-    hash = "sha256-wwiOjfIAx6AZtK98uuPQ0jwblq+CdnMQp+JkQWh+RgM=";
+    hash = "sha256-JQwKMEhDdvvsnXI6QsV2TcuB3mw5NcALbi5kM5xl/Pw=";
   };
 
-  format = "pyproject";
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatch-vcs
-    hatchling
+  dependencies = [
+    langcodes
   ];
 
-  propagatedBuildInputs = [ langcodes ];
-
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "unidata_blocks" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -40,6 +39,9 @@ buildPythonPackage rec {
     description = "Library that helps query unicode blocks by Blocks.txt";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ h7x4 ];
+    maintainers = with lib.maintainers; [
+      TakWolf
+      h7x4
+    ];
   };
 }

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , makeWrapper
+, nix-update-script
 , prefetch-yarn-deps
 , fixup-yarn-lock
 , nodejs
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.76.1";
+  version = "0.78.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-i+1Bd9equlYxxdmvoUim31SM5ymJjnauvqGOmnPmTWA=";
+    hash = "sha256-I0ngEJfHWywJSYOloJbtuKzu95yJibo7hLFgkyT2Wz8=";
   };
 
   nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-xR6W9Kclgt7YZvkqNg7hOtY39mMNZvtDR/a1aOgD2Ko=";
+    hash = "sha256-TKAV49VJmR/SWTd2T2vHMnYq2j9fwimzYq1CCfRXk0Q=";
   };
 
   configurePhase = ''
@@ -70,8 +71,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    basic-functionality = nixosTests.outline;
+  passthru = {
+    tests = {
+      basic-functionality = nixosTests.outline;
+    };
+    updateScript = nix-update-script { };
+    # alias for nix-update to be able to find and update this attribute
+    offlineCache = yarnOfflineCache;
   };
 
   meta = with lib; {

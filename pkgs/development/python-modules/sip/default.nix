@@ -5,8 +5,6 @@
   pythonOlder,
   setuptools,
   packaging,
-  ply,
-  toml,
   tomli,
 
   # tests

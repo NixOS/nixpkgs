@@ -1,0 +1,128 @@
+diff --git a/ext/adaptivedemux2/meson.build b/ext/adaptivedemux2/meson.build
+index 711b38a2a9..67a789f664 100644
+--- a/ext/adaptivedemux2/meson.build
++++ b/ext/adaptivedemux2/meson.build
+@@ -82,7 +82,7 @@ soup_link_args = []
+ soup_link_deps = []
+ 
+ default_library = get_option('default_library')
+-if host_system != 'linux' or default_library in ['static', 'both']
++if default_library in ['static', 'both']
+   if soup_ver_opt in ['auto', '3']
+     libsoup3_dep = dependency('libsoup-3.0', allow_fallback: true,
+                               required: soup_ver_opt == '3' and soup_opt.enabled())
+@@ -120,7 +120,7 @@ adaptive_deps = [gmodule_dep, gst_dep, gsttag_dep, gstnet_dep, gstbase_dep, gstp
+ adaptive_args = [gst_plugins_good_args, soup_loader_args, hls_cargs,
+     '-DGST_ISOFF_API=G_GNUC_INTERNAL']
+ 
+-if host_system != 'linux'
++if false
+     adaptivedemux2 = library('gstadaptivedemux2',
+       c_args: [adaptive_args, soup_link_args],
+       dependencies: [adaptive_deps, soup_link_deps],
+diff --git a/ext/soup/gstsouploader.c b/ext/soup/gstsouploader.c
+index 9192e4dac5..8082b2614d 100644
+--- a/ext/soup/gstsouploader.c
++++ b/ext/soup/gstsouploader.c
+@@ -34,12 +34,18 @@ GST_DEBUG_CATEGORY (gst_soup_debug);
+ 
+ #ifndef LINK_SOUP
+ 
+-#if defined(__APPLE__) || defined(G_OS_WIN32)
+-#error "dlopen of libsoup is only supported on Linux"
++#if defined(G_OS_WIN32)
++#error "dlopen of libsoup is only supported on Darwin and Linux"
+ #endif
+ 
++#if defined(__APPLE__)
++#define LIBSOUP_3_SONAME "libsoup-3.0.0.dylib"
++#define LIBSOUP_2_SONAME "libsoup-2.4.1.dylib"
++#define LIBSOUP_COMMON_SYMBOL "soup_get_major_version"
++#else
+ #define LIBSOUP_3_SONAME "libsoup-3.0.so.0"
+ #define LIBSOUP_2_SONAME "libsoup-2.4.so.1"
++#endif
+ 
+ #define LOAD_SYMBOL(name) G_STMT_START {                                \
+     if (!g_module_symbol (module, G_STRINGIFY (name), (gpointer *) &G_PASTE (vtable->_, name))) { \
+@@ -156,7 +162,46 @@ gst_soup_load_library (void)
+   GST_DEBUG_CATEGORY_INIT (gst_soup_debug, "soup", 0, "soup");
+ #endif
+ 
+-#ifdef HAVE_RTLD_NOLOAD
++#if defined(__APPLE__)
++  g_autofree gchar* libsoup_path = NULL;
++  {
++    /* In order to avoid causing conflicts we detect if libsoup 2 or 3 is loaded already.
++     * Darwin has to probe by checking for symbols because `dlopen` called with a dylib
++     * basename will try to locate it via the process’s rpath stack (and not find it). */
++
++    gpointer func = NULL;
++    Dl_info info = { 0 };
++
++    GModule* module = g_module_open (NULL, 0);
++    if (g_module_symbol (module, LIBSOUP_COMMON_SYMBOL, &func)
++        && dladdr (func, &info) && info.dli_sname) {
++      libsoup_path = g_strndup(info.dli_fname, PATH_MAX - 1);
++      g_autofree gchar* image_name = g_path_get_basename (libsoup_path);
++
++      /* Make sure `libsoup_path` points to a dylib that actually exists and
++       * contains the libsoup symbol that was queried. */
++      gpointer handle = dlopen (libsoup_path, RTLD_NOW | RTLD_NOLOAD);
++      gboolean has_symbol = dlsym (handle, LIBSOUP_COMMON_SYMBOL) != NULL;
++      if (handle && has_symbol && g_str_equal (image_name, LIBSOUP_3_SONAME)) {
++        libsoup_sonames[0] = libsoup_path;
++        GST_DEBUG ("LibSoup 3 found");
++      } else if (handle && has_symbol && g_str_equal (image_name, LIBSOUP_2_SONAME)) {
++        libsoup_sonames[0] = libsoup_path;
++        GST_DEBUG ("LibSoup 2 found");
++      } else {
++        g_clear_pointer (&libsoup_path, g_free);
++      }
++      g_clear_pointer (&handle, dlclose);
++    }
++    g_module_close (module);
++
++    if (!libsoup_sonames[0]) {
++      GST_DEBUG ("Trying all libsoups");
++      libsoup_sonames[0] = LIBSOUP_3_SONAME;
++      libsoup_sonames[1] = LIBSOUP_2_SONAME;
++    }
++  }
++#elif defined(HAVE_RTLD_NOLOAD)
+   {
+     gpointer handle = NULL;
+ 
+diff --git a/ext/soup/meson.build b/ext/soup/meson.build
+index aaa01dbcf6..83b7cf3fbf 100644
+--- a/ext/soup/meson.build
++++ b/ext/soup/meson.build
+@@ -20,8 +20,8 @@ soup_link_deps = []
+ libsoup2_dep = disabler()
+ libsoup3_dep = disabler()
+ default_library = get_option('default_library')
+-soup_lookup_dep = get_option('soup-lookup-dep') and host_system == 'linux'
+-if host_system != 'linux' or default_library in ['static', 'both'] or soup_lookup_dep
++soup_lookup_dep = get_option('soup-lookup-dep')
++if default_library in ['static', 'both'] or soup_lookup_dep
+   if soup_ver_opt in ['auto', '3']
+     libsoup3_dep = dependency('libsoup-3.0', allow_fallback: true,
+                               required: soup_ver_opt == '3' and soup_opt.enabled())
+@@ -33,7 +33,7 @@ if host_system != 'linux' or default_library in ['static', 'both'] or soup_looku
+   endif
+ endif
+ 
+-if host_system != 'linux' or default_library in ['static', 'both']
++if default_library in ['static', 'both']
+   if libsoup3_dep.found()
+     soup_link_deps += libsoup3_dep
+     soup_link_args += '-DLINK_SOUP=3'
+@@ -60,7 +60,7 @@ soup_library_kwargs = {
+ soup_library_deps = [gst_dep, gstbase_dep, gsttag_dep, gmodule_dep, gio_dep, libdl_dep]
+ soup_library_c_args = gst_plugins_good_args
+ 
+-if host_system != 'linux'
++if false
+   gstsouphttpsrc = library('gstsoup',
+     c_args : soup_library_c_args + soup_link_args,
+     dependencies : soup_library_deps + soup_link_deps,

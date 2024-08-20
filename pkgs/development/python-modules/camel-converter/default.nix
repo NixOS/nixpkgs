@@ -5,6 +5,7 @@
   poetry-core,
   pydantic,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
@@ -22,18 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-CJbflRI3wfUmPoVuLwZDYcobESmySvnS99PdpSDhDLk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=camel_converter --cov-report term-missing --no-cov-on-fail" ""
-  '';
-
   build-system = [ poetry-core ];
 
   passthru.optional-dependencies = {
     pydantic = [ pydantic ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pydantic;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ] ++ passthru.optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "camel_converter" ];
 

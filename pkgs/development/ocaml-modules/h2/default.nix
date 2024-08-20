@@ -1,7 +1,5 @@
 { buildDunePackage
-, lib
 , fetchFromGitHub
-, ocaml
 , hpack
 , angstrom
 , faraday

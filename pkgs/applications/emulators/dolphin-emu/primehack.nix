@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "shiiion";
     repo = "dolphin";
     rev = version;
-    sha256 = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
+    hash = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
     fetchSubmodules = true;
   };
 
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shiiion/dolphin";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ashkitten Madouura ];
+    maintainers = with maintainers; [ Madouura ];
     broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };

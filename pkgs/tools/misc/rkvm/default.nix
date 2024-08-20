@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rkvm";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "htrefil";
     repo = pname;
     rev = version;
-    hash = "sha256-bWDVc5pWc5gtwGF3vwUgjDhqZP7E79nteKiuAEEbw6E=";
+    hash = "sha256-pGCoNmGOeV7ND4kcRjlJZbEMnmKQhlCtyjMoWIwVZrM=";
   };
 
-  cargoHash = "sha256-FUaycVxW7QJ5gTZ/8bWjqSaMSepRF5iqlBNJLaDRNxc=";
+  cargoHash = "sha256-aq8Ky29jXY0cW5s0E4NDs29DY8RIA0Fvy2R72WPAYsk=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook makeWrapper ];
   buildInputs = [ libevdev ];
@@ -42,6 +42,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/htrefil/rkvm/releases/tag/${version}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
   };
 }

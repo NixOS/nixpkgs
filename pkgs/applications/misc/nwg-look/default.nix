@@ -1,9 +1,7 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , wrapGAppsHook3
 , buildGoModule
-, go
 , glib
 , pkg-config
 , cairo

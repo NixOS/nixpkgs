@@ -41,7 +41,6 @@
 , rapidjson
 , sqlite
 , tinyxml
-, udev
 , util-linux
 , wxGTK32
 , xorg

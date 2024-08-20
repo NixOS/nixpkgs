@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "opennota";
     repo = "check";
     inherit rev;
-    sha256 = "sha256-u8U/62LZEn1ffwdGsUCGam4HAk7b2LetomCLZzHuuas=";
+    hash = "sha256-u8U/62LZEn1ffwdGsUCGam4HAk7b2LetomCLZzHuuas=";
   };
 
   vendorHash = "sha256-DyysiVYFpncmyCzlHIOEtWlCMpm90AC3gdItI9WinSo=";

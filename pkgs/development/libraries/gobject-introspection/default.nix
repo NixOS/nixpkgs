@@ -8,7 +8,6 @@
 , ninja
 , gtk-doc
 , docbook-xsl-nons
-, docbook_xml_dtd_43
 , docbook_xml_dtd_45
 , pkg-config
 , libffi
@@ -33,6 +32,7 @@ let
   pythonModules = pp: [
     pp.mako
     pp.markdown
+    pp.setuptools
   ];
 
   # https://discourse.gnome.org/t/dealing-with-glib-and-gobject-introspection-circular-dependency/18701

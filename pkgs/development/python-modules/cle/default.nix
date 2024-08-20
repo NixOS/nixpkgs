@@ -8,7 +8,6 @@
   minidump,
   pefile,
   pyelftools,
-  pynose,
   pytestCheckHook,
   pythonOlder,
   pyvex,
@@ -19,14 +18,14 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.106";
+  version = "9.2.115";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f8lbofU5VYWDZ4BmSRE81X/3Rk8aj9yvEn9PM0lkZoM=";
+    hash = "sha256-tAng3ed/oGeFIg1bSugT+s9laLuD9nsuTvLd2lx6Xcs=";
   };
 in
 buildPythonPackage rec {
@@ -40,10 +39,12 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "cle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eOKAVqtGt86UJhdobKu4QYN5lC9YjZ+luZwwSm3J1xw=";
+    hash = "sha256-HYALGByZYM2FXXIucYkByZ7C31Mb1ZgiySKDWdk/5GQ=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "pyvex" ];
 
   dependencies = [
     archinfo
@@ -58,7 +59,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pynose
     pytestCheckHook
   ];
 

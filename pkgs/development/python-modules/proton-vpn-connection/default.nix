@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Defines the interface that VPN connection backends should implement";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-connection";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

@@ -8,17 +8,20 @@
 , CoreServices
 , Libsystem
 , SystemConfiguration
+, nix-update-script
+, testers
+, rye
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.34.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-M5TJXyh1fNigHOuBpEpnUeOWboZWxZ9bGrBuMB1oHgE=";
+    hash = "sha256-mTVpNyFEovaOdOBTcASSRejKfSs50cqpDuStDAkcdkQ=";
   };
 
   cargoLock = {
@@ -57,11 +60,13 @@ rustPlatform.buildRustPackage rec {
     # The following require internet access to fetch a python binary
     "--skip=test_add_and_sync_no_auto_sync"
     "--skip=test_add_autosync"
+    "--skip=test_add_dev"
     "--skip=test_add_explicit_version_or_url"
     "--skip=test_add_flask"
     "--skip=test_add_from_find_links"
     "--skip=test_autosync_remember"
     "--skip=test_basic_list"
+    "--skip=test_basic_script"
     "--skip=test_basic_tool_behavior"
     "--skip=test_config_empty"
     "--skip=test_config_get_set_multiple"
@@ -80,12 +85,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_version"
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = rye; };
+  };
+
+  meta = {
     description = "Tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
     changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rye";
   };
 }

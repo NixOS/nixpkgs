@@ -17,10 +17,6 @@ in python3.pkgs.buildPythonApplication {
 
   format = "pyproject";
 
-  nativeBuildInputs = [
-    python3.pkgs.pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = [
     python3.pkgs.hatchling
     python3.pkgs.pydantic

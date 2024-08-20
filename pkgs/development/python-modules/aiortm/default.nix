@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.8.13";
+  version = "0.8.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiortm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JoolmxZFN0UG8wAMxMAYL8APFjpEcMECirCKUA/UBlY=";
+    hash = "sha256-iZYzERIJslbvmW+4yeHQvXt1EEyZcSR6+qYdpo9EmAg=";
   };
 
   postPatch = ''

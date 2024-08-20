@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://yoshimi.github.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     mainProgram = "yoshimi";
   };
 }

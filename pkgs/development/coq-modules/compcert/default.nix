@@ -1,5 +1,5 @@
 { lib, mkCoqDerivation
-, coq, flocq, compcert
+, coq, flocq
 , ocamlPackages, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
 , version ? null
@@ -66,8 +66,8 @@ compcert = mkCoqDerivation {
     -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
     -toolprefix ${tools}/bin/ \
     -use-external-Flocq \
-    ${target}
-  '';
+    ${target} \
+  '';  # don't remove the \ above, the command gets appended in override below
 
   installTargets = "documentation install";
   installFlags = []; # trust ./configure
@@ -100,8 +100,8 @@ compcert = mkCoqDerivation {
     platforms   = builtins.attrNames targets;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
-}; in
-compcert.overrideAttrs (o:
+};
+patched_compcert = compcert.overrideAttrs (o:
   {
     patches = with lib.versions; lib.switch [ coq.version o.version ] [
       { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
@@ -193,8 +193,25 @@ compcert.overrideAttrs (o:
             url = "https://github.com/AbsInt/CompCert/commit/a2e4ed62fc558d565366845f9d135bd7db5e23c4.patch";
             hash = "sha256-ufk0bokuayLfkSvK3cK4E9iXU5eZpp9d/ETSa/zCfMg=";
           })
+          # Support for Coq 8.19.2
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
+            hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
+          })
+        ];
+      }
+      { cases = [ (isEq "8.19") (isEq "3.14") ];
+        out = [
+          # Support for Coq 8.19.2
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
+            hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
+          })
         ];
       }
     ] [];
-  }
+  }); in
+patched_compcert.overrideAttrs (o:
+  lib.optionalAttrs (coq.version != null && coq.version == "dev")
+  { configurePhase = "${o.configurePhase} -ignore-ocaml-version -ignore-coq-version"; }
 )

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "amaranth-soc";
-  version = "0.1a-unstable-2024-05-17";
+  version = "0.1a-unstable-2024-06-10";
   pyproject = true;
   # from `pdm show`
   realVersion = let
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-soc";
-    rev = "45ff663b83694b09b2b8f3fc0f10c555a12ba987";
-    hash = "sha256-Ql8XYC13wscPL96HY0kXselq78D747BpLK8X1sxpwz0=";
+    rev = "e1b842800533f44924f21c3867bc2290084d100f";
+    hash = "sha256-GAGQEncONY566v8hLjGeZ7CRlOt36vHg+0a5xcB+g1Y=";
   };
 
   nativeBuildInputs = [ pdm-backend ];

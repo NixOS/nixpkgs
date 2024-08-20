@@ -1,8 +1,4 @@
-{
-  lib,
-  makeSetupHook,
-  zig,
-}:
+{ makeSetupHook, zig }:
 
 makeSetupHook {
   name = "zig-hook";
@@ -18,6 +14,7 @@ makeSetupHook {
     zig_default_flags = [
       "-Dcpu=baseline"
       "--release=safe"
+      "--color off" # Turn off progress output
     ];
   };
 

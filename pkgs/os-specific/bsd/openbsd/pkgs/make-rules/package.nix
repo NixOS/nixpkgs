@@ -2,7 +2,6 @@
   fetchpatch,
   lib,
   mkDerivation,
-  stdenv,
 }:
 
 mkDerivation {
@@ -15,11 +14,20 @@ mkDerivation {
   dontBuild = true;
 
   patches = [
+    # Use `$AR` not hardcoded `ar`
     (fetchpatch {
+      name = "use-ar-variable.patch";
       url = "https://marc.info/?l=openbsd-tech&m=171575284906018&q=raw";
-      sha256 = "sha256-bigxJGbaf9mCmFXxLVzQpnUUaEMMDfF3eZkTXVzd6B8=";
+      hash = "sha256-bigxJGbaf9mCmFXxLVzQpnUUaEMMDfF3eZkTXVzd6B8=";
     })
     ./netbsd-make-sinclude.patch
+    # Support for a new NOBLIBSTATIC make variable
+    (fetchpatch {
+      name = "nolibstatic-support.patch";
+      url = "https://marc.info/?l=openbsd-tech&m=171972639411562&q=raw";
+      hash = "sha256-p4izV6ZXkfgJud+ZZU1Wqr5qFuHUzE6qVXM7QnXvV3k=";
+      includes = [ "share/mk/*" ];
+    })
   ];
 
   postPatch = ''

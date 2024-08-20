@@ -1,7 +1,6 @@
 { python3Packages
 , lib
 , fetchFromGitHub
-, perlPackages
 , gettext
 , gtk3
 , gobject-introspection
@@ -35,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
     glib
     gdk-pixbuf
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -45,7 +45,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools
     python3Packages.pygobject3
     gtk3
-    gobject-introspection
     librsvg
     libayatana-appindicator
     libpulseaudio

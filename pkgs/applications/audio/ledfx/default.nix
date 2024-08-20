@@ -26,7 +26,6 @@ python3.pkgs.buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     aiohttp

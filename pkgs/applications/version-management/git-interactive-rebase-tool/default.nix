@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "MitMaro";
     repo = pname;
     rev = version;
-    hash = "sha256-xwvL6QX+eMbxCouE1i86j/PRCxTJVAQnRVeK6fYQo/M=";
+    hash = "sha256-NlnESZua4OP7rhMoER/VgBST9THqISQ0LCG1ZakNTqs=";
   };
 
-  cargoHash = "sha256-RDGbsmOBVMxInstTrRZK0G5eZR79ZoFK5UlkCj3zpoY=";
+  cargoHash = "sha256-9pUUKxPpyoX9f10ZiLWsol2rv66WzQqwa6VubRTrT9Y=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

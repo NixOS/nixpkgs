@@ -1,3 +1,10 @@
+let
+  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
+  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+  ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
+  versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
+in
+
 { lib
 , stdenv
 , callPackage
@@ -30,10 +37,6 @@
 let
   inherit (stdenv.hostPlatform) system;
 
-  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
-  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
-  ideInfo = lib.importJSON ./bin/ides.json;
-  versions = lib.importJSON ./bin/versions.json;
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
   package = if stdenv.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
@@ -43,6 +46,8 @@ let
     description = meta.description + lib.optionalString meta.isOpenSource (if fromSource then " (built from source)" else " (patched binaries from jetbrains)");
     maintainers = map (x: lib.maintainers."${x}") meta.maintainers;
     license = if meta.isOpenSource then lib.licenses.asl20 else lib.licenses.unfree;
+    sourceProvenance = if fromSource then [ lib.sourceTypes.fromSource ] else
+      (if stdenv.isDarwin then [ lib.sourceTypes.binaryNativeCode ] else [ lib.sourceTypes.binaryBytecode ]);
   };
 
   mkJetBrainsProduct =
@@ -96,6 +101,8 @@ let
 in
 rec {
   # Sorted alphabetically
+
+  aqua = mkJetBrainsProduct { pname = "aqua"; extraBuildInputs = [ stdenv.cc.cc lldb ]; };
 
   clion = (mkJetBrainsProduct {
     pname = "clion";

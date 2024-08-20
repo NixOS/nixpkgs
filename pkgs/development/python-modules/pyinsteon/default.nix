@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pyinsteon";
     repo = "pyinsteon";
     rev = "refs/tags/${version}";
-    hash = "sha256-V1sYLKKlTMG9Km53uNCU34e8D/owxuDNT+HGZxtK21I=";
+    hash = "sha256-SyhPM3NS7iJX8jwTJ4YWZ72eYLn9JT6eESekPf5eCKI=";
   };
 
   build-system = [ setuptools ];

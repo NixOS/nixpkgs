@@ -9,23 +9,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "boxbuddy";
-  version = "2.2.5";
+  version = "2.2.9";
 
   src = fetchFromGitHub {
     owner = "Dvlv";
     repo = "BoxBuddyRS";
     rev = version;
-    hash = "sha256-Dy7mSBraMHAno8cIk9f6/Ofsm2ZGSb7VS5Wy1o+ZoC8=";
+    hash = "sha256-u5roZFpeVsqO/4kNdwnD2BCMSM8C0jVG98p/IdlHA8o=";
   };
 
-  cargoHash = "sha256-NB93bw2mMCVmZWpxCJGusXp2DgotjrlHUlsd0mb+fBA=";
+  cargoHash = "sha256-LjHPIQoC/Nldfgl5sjbd+sxjtjY2ZeUd5rVaEEELQq4=";
 
   # The software assumes it is installed either in flatpak or in the home directory
   # so the xdg data path needs to be patched here
   postPatch = ''
     substituteInPlace src/utils.rs \
       --replace-fail '{data_home}/locale' "$out/share/locale" \
-      --replace-fail '{data_home}/icons/boxbuddy/{}' "$out/share/icons/boxbuddy/{}"
+      --replace-fail '{data_home}/icons/boxbuddy/{icon}' "$out/share/icons/boxbuddy/{icon}"
   '';
 
   nativeBuildInputs = [

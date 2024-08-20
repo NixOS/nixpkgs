@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ferium";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "gorilla-devs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-a4bX5pC3FSCswvUG1wFeo3e6F+CmyfYowv7OhF2DZss=";
+    hash = "sha256-jj3BdaxH7ofhHNF2eu+burn6+/0bPQQZ8JfjXAFyN4A=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoHash = "sha256-CyDFBSTdUjapMtb6cNOEV53wTJDWotdSZZgHAQpsa9I=";
+  cargoHash = "sha256-dysKHi6CqPrF/q7LPn1+TwOP3p2KwauhTuqLCda3OSs=";
 
   # Disable the GUI file picker so that GTK/XDG dependencies aren't used
   buildNoDefaultFeatures = true;

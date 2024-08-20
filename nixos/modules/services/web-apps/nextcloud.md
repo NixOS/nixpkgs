@@ -121,6 +121,29 @@ Auto updates for Nextcloud apps can be enabled using
     This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
     to external storage such as S3.
 
+  - **Issues with file permissions / unsafe path transitions**
+
+    {manpage}`systemd-tmpfiles(8)` makes sure that the paths for
+
+    * configuration (including declarative config)
+    * data
+    * app store
+    * home directory itself (usually `/var/lib/nextcloud`)
+
+    are properly set up. However, `systemd-tmpfiles` will refuse to do so
+    if it detects an unsafe path transition, i.e. creating files/directories
+    within a directory that is neither owned by `root` nor by `nextcloud`, the
+    owning user of the files/directories to be created.
+
+    Symptoms of that include
+
+    * `config/override.config.php` not being updated (and the config file
+      eventually being garbage-collected).
+    * failure to read from application data.
+
+    To work around that, please make sure that all directories in question
+    are owned by `nextcloud:nextcloud`.
+
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 
 By default, `nginx` is used as reverse-proxy for `nextcloud`.

@@ -14,13 +14,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-sip-connector";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sip-connector";
     rev = version;
-    hash = "sha256-5+bNqdQuobCwy99BLTIWLLNIpirMcb8w1xnIew5a9WE=";
+    hash = "sha256-rQzx3/XmhdXEPEuMsvgs39ELJaCX1DbeEJg3YbY4wdI=";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-sip-connector";
     homepage = "https://osmocom.org/projects/osmo-sip-conector";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

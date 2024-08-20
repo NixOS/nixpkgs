@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3WZ77KVDNitdIcXPFf0CMXtjDvEXi91Jr7mpeV09Wt4=";
+    hash = "sha256-HIzZcH/yGBRX/9UyFuRyusAkzgzhREkMRNaP+6vQC+E=";
   };
 
   buildInputs = [

@@ -1,13 +1,16 @@
-{ config, lib, options, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.languagetool;
-  settingsFormat = pkgs.formats.javaProperties {};
-in {
+  settingsFormat = pkgs.formats.javaProperties { };
+in
+{
   options.services.languagetool = {
     enable = mkEnableOption "the LanguageTool server, a multilingual spelling, style, and grammar checker that helps correct or paraphrase texts";
+
+    package = mkPackageOption pkgs "languagetool" { };
 
     port = mkOption {
       type = types.port;
@@ -31,7 +34,7 @@ in {
       '';
     };
 
-    settings = lib.mkOption {
+    settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
 
@@ -49,11 +52,25 @@ in {
         for supported settings.
       '';
     };
+
+    jrePackage = mkPackageOption pkgs "jre" { };
+
+    jvmOptions = mkOption {
+      description = ''
+        Extra command line options for the JVM running languagetool.
+        More information can be found here: https://docs.oracle.com/en/java/javase/19/docs/specs/man/java.html#standard-options-for-java
+      '';
+      default = [ ];
+      type = types.listOf types.str;
+      example = [
+        "-Xmx512m"
+      ];
+    };
   };
 
   config = mkIf cfg.enable {
 
-    systemd.services.languagetool =  {
+    systemd.services.languagetool = {
       description = "LanguageTool HTTP server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -65,13 +82,17 @@ in {
         RestrictNamespaces = [ "" ];
         SystemCallFilter = [ "@system-service" "~ @privileged" ];
         ProtectHome = "yes";
+        Restart = "on-failure";
         ExecStart = ''
-          ${pkgs.languagetool}/bin/languagetool-http-server \
-            --port ${toString cfg.port} \
-            ${optionalString cfg.public "--public"} \
-            ${optionalString (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"} \
-            "--config" ${settingsFormat.generate "languagetool.conf" cfg.settings}
-          '';
+          ${cfg.jrePackage}/bin/java \
+            -cp ${cfg.package}/share/languagetool-server.jar \
+            ${toString cfg.jvmOptions} \
+            org.languagetool.server.HTTPServer \
+              --port ${toString cfg.port} \
+              ${optionalString cfg.public "--public"} \
+              ${optionalString (cfg.allowOrigin != null) "--allow-origin ${cfg.allowOrigin}"} \
+              "--config" ${settingsFormat.generate "languagetool.conf" cfg.settings}
+        '';
       };
     };
   };

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   cheroot,
-  fetchpatch,
   fetchPypi,
   jaraco-collections,
   more-itertools,
@@ -26,29 +25,17 @@
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.9.0";
+  version = "18.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "CherryPy";
-    inherit version;
-    hash = "sha256-awbBkc5xqGRh8wVyoatX/8CfQxQ7qOQsEDx7M0ciDrE=";
+    inherit pname version;
+    hash = "sha256-bHDnjuETAOiyHAdnxUKuaxAqScrFz9Tj4xPXu5B8WJE=";
   };
 
-  patches = [
-    # Replace distutils.spawn.find_executable with shutil.which, https://github.com/cherrypy/cherrypy/pull/2023
-    (fetchpatch {
-      name = "remove-distutils.patch";
-      url = "https://github.com/cherrypy/cherrypy/commit/8a19dd5f1e712a326a3613b17e6fc900012ed09a.patch";
-      hash = "sha256-fXECX0CdU74usiq9GEkIG9CF+dueszblT4qOeF6B700=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools_scm_git_archive >= 1.1",' ""
     # Disable doctest plugin because times out
     substituteInPlace pytest.ini \
       --replace-fail "--doctest-modules" "-vvv" \
@@ -57,9 +44,9 @@ buildPythonPackage rec {
     sed -i "/--cov/d" pytest.ini
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cheroot
     jaraco-collections
     more-itertools
@@ -139,6 +126,6 @@ buildPythonPackage rec {
     homepage = "https://cherrypy.dev/";
     changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

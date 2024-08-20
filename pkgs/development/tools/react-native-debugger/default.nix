@@ -7,7 +7,6 @@
 , gdk-pixbuf
 , fontconfig
 , pango
-, gnome
 , atk
 , at-spi2-atk
 , at-spi2-core
@@ -112,6 +111,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools";
     mainProgram = "react-native-debugger";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

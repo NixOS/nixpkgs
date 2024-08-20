@@ -12,7 +12,7 @@
 , glib
 , glib-networking
 , glibmm
-, gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 , gtk3
 , gtkmm3
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking.out
     glibmm
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
     gtk3
     gtkmm3
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/brummer10/guitarix";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ astsmtl goibhniu lord-valen ];
+    maintainers = with maintainers; [ astsmtl lord-valen ];
     platforms = platforms.linux;
   };
 })

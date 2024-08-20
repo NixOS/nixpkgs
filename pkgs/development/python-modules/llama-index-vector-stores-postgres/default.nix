@@ -7,13 +7,12 @@
   pgvector,
   poetry-core,
   psycopg2,
-  pythonRelaxDepsHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-postgres";
-  version = "0.1.10";
+  version = "0.1.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,14 +20,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_postgres";
     inherit version;
-    hash = "sha256-mtEAl4e3NAx5rILQu7BAv/4+kxth5IybHeKUAwFZQbs=";
+    hash = "sha256-aqSSgXb1fmEY98pj8xNQolDLOFbsq/UOXCVZReHYgD4=";
   };
 
   pythonRemoveDeps = [ "psycopg2-binary" ];
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

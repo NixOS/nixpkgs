@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cargo
 , cmake
 , ninja
@@ -35,19 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "18.1";
+  version = "18.4";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-kAMKeYYMCFMgG3+G/05DwA3mj4JkJdrXadjFUMPDAbM=";
+    hash = "sha256-BoEFh0lCd2pCIod5sFafnOs/TQHj/SlIAU8P4o+cjyE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-8mUo2I5FsA3ym/hrlGaUW8yltLuh/0H6wetCbzvRga0=";
+    hash = "sha256-1MJ5cP4lyRSZ7VRED8RL5scnqpcy8/avmBKW1Zmt6FU=";
   };
 
   nativeBuildInputs = [
@@ -91,6 +92,13 @@ stdenv.mkDerivation rec {
     Security
   ]);
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ddnet/ddnet/pull/8517/commits/c840bf45016a30e629f7684df5fab5d07b2c70d5.patch";
+      hash = "sha256-UG7pi0Xh/nAHFEF1RIyNZLewF+NFilTLARbV5oUlftc=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
@@ -101,7 +109,8 @@ stdenv.mkDerivation rec {
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  doCheck = true;
+  # Tests loop forever on Darwin for some reason
+  doCheck = !stdenv.isDarwin;
   checkTarget = "run_tests";
 
   postInstall = lib.optionalString (!buildClient) ''

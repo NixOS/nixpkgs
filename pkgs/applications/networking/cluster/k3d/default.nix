@@ -15,16 +15,17 @@ let
 in
 buildGoModule rec {
   pname = "k3d";
-  version = "5.6.0";
+  version = "5.7.3";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KIYwuDPkxhtQy989XW+DcI5NJPhfLP07mYUFc180Sdw=";
+    hash = "sha256-G9z4yJ7Oa2zmxYTRIMCiXlBPLlc3vGPUqUOoIohDKU8=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-lFmIRtkUiohva2Vtg4AqHaB5McVOWW5+SFShkNqYVZ8=";
+  deleteVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
 

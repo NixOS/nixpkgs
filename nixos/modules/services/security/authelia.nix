@@ -8,7 +8,6 @@ let
   cfg = config.services.authelia;
 
   format = pkgs.formats.yaml { };
-  configFile = format.generate "config.yml" cfg.settings;
 
   autheliaOpts = with lib; { name, ... }: {
     options = {
@@ -156,17 +155,11 @@ let
             };
 
             server = {
-              host = mkOption {
+              address = mkOption {
                 type = types.str;
-                default = "localhost";
-                example = "0.0.0.0";
+                default = "tcp://:9091/";
+                example = "unix:///var/run/authelia.sock?path=authelia&umask=0117";
                 description = "The address to listen on.";
-              };
-
-              port = mkOption {
-                type = types.port;
-                default = 9091;
-                description = "The port to listen on.";
               };
             };
 
@@ -233,6 +226,23 @@ let
       };
     };
   };
+
+  writeOidcJwksConfigFile = oidcIssuerPrivateKeyFile: pkgs.writeText "oidc-jwks.yaml" ''
+    identity_providers:
+      oidc:
+        jwks:
+          - key: {{ secret "${oidcIssuerPrivateKeyFile}" | mindent 10 "|" | msquote }}
+  '';
+
+  # Remove an attribute in a nested set
+  # https://discourse.nixos.org/t/modify-an-attrset-in-nix/29919/5
+  removeAttrByPath = set: pathList:
+    lib.updateManyAttrsByPath [{
+      path = lib.init pathList;
+      update = old:
+        lib.filterAttrs (n: v: n != (lib.last pathList)) old;
+    }]
+      set;
 in
 {
   options.services.authelia.instances = with lib; mkOption {
@@ -281,9 +291,19 @@ in
     let
       mkInstanceServiceConfig = instance:
         let
+          cleanedSettings =
+            if (instance.settings.server?host || instance.settings.server?port || instance.settings.server?path) then
+            # Old settings are used: display a warning and remove the default value of server.address
+            # as authelia does not allow both old and new settings to be set
+              lib.warn "Please replace services.authelia.instances.${instance.name}.settings.{host,port,path} with services.authelia.instances.${instance.name}.settings.address, before release 5.0.0"
+                (removeAttrByPath instance.settings [ "server" "address" ])
+            else
+              instance.settings;
+
           execCommand = "${instance.package}/bin/authelia";
-          configFile = format.generate "config.yml" instance.settings;
-          configArg = "--config ${builtins.concatStringsSep "," (lib.concatLists [[configFile] instance.settingsFiles])}";
+          configFile = format.generate "config.yml" cleanedSettings;
+          oidcJwksConfigFile = lib.optional (instance.secrets.oidcIssuerPrivateKeyFile != null) (writeOidcJwksConfigFile instance.secrets.oidcIssuerPrivateKeyFile);
+          configArg = "--config ${builtins.concatStringsSep "," (lib.concatLists [[configFile] instance.settingsFiles oidcJwksConfigFile])}";
         in
         {
           description = "Authelia authentication and authorization server";
@@ -291,10 +311,10 @@ in
           after = [ "network.target" ];
           environment =
             (lib.filterAttrs (_: v: v != null) {
-              AUTHELIA_JWT_SECRET_FILE = instance.secrets.jwtSecretFile;
+              X_AUTHELIA_CONFIG_FILTERS = lib.mkIf (oidcJwksConfigFile != [ ]) "template";
+              AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = instance.secrets.jwtSecretFile;
               AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = instance.secrets.storageEncryptionKeyFile;
               AUTHELIA_SESSION_SECRET_FILE = instance.secrets.sessionSecretFile;
-              AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = instance.secrets.oidcIssuerPrivateKeyFile;
               AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = instance.secrets.oidcHmacSecretFile;
             })
             // instance.environmentVariables;

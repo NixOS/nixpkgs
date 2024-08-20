@@ -869,7 +869,7 @@ It produces packages that cannot be built automatically.
 fetchtorrent {
   config = { peer-limit-global = 100; };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
-  sha256 = "";
+  hash = "";
 }
 ```
 

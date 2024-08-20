@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/akarneliuk/pygnmi";
     changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

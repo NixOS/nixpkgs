@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lscolors";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-efkSiwxL7sZIwFXJZunddAb4lTOfhj8oOEOUW3kyRXI=";
+    hash = "sha256-m9S8fG0c+67/msdWaN8noazEdsdLk1aswUJ+8hkjhxo=";
   };
 
-  cargoHash = "sha256-1Cyg4WT4xYqc3s5AOXR9GfcS3qKOgscYujGXR9fzuCA=";
+  cargoHash = "sha256-6d/v89Yqn9FioWQTb5513kPbO9lnzBxaubfcdCzwUP4=";
 
   buildFeatures = [ "nu-ansi-term" ];
 

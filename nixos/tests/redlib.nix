@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   meta.maintainers = with lib.maintainers; [ soispha ];
 
   nodes.machine = {
-    services.libreddit = {
+    services.redlib = {
       package = pkgs.redlib;
       enable = true;
       # Test CAP_NET_BIND_SERVICE
@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   };
 
   testScript = ''
-    machine.wait_for_unit("libreddit.service")
+    machine.wait_for_unit("redlib.service")
     machine.wait_for_open_port(80)
     # Query a page that does not require Internet access
     machine.succeed("curl --fail http://localhost:80/settings")

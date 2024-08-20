@@ -4,7 +4,6 @@
   django,
   fetchPypi,
   pillow,
-  pytestCheckHook,
   pythonOlder,
   reportlab,
   svglib,
@@ -39,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SmileyChris/easy-thumbnails";
     changelog = "https://github.com/SmileyChris/easy-thumbnails/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

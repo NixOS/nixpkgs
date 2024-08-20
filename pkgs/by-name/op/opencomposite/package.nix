@@ -1,37 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-
-, cmake
-
-, glm
-, libGL
-, openxr-loader
-, python3
-, vulkan-headers
-, vulkan-loader
-, xorg
-
-, unstableGitUpdater
+{
+  cmake,
+  fetchFromGitLab,
+  glm,
+  jsoncpp,
+  lib,
+  libGL,
+  openxr-loader,
+  python3,
+  stdenv,
+  unstableGitUpdater,
+  vulkan-headers,
+  vulkan-loader,
+  xorg,
 }:
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "0-unstable-2024-06-01";
+  version = "0-unstable-2024-07-23";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "49c4b89579fd49c5b40b72924d6593fcd47c5065";
-    hash = "sha256-Aubf1tupyXzmff3ho/yKx9B3uJ8I0aoZi9zRV3A89Pc=";
+    rev = "632e5cc50b913e93194ca2970e6f13021182579f";
+    hash = "sha256-KQmNyGRlbUrntTPNn5rzTyyR+Bvh3EfSqBgyNGGDo04=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     glm
+    jsoncpp
     libGL
     openxr-loader
     python3
@@ -41,10 +39,9 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
     (lib.cmakeBool "USE_SYSTEM_OPENXR" true)
     (lib.cmakeBool "USE_SYSTEM_GLM" true)
-    # debug logging macros cause format-security warnings
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
   ];
 
   installPhase = ''
@@ -59,10 +56,10 @@ stdenv.mkDerivation {
     branch = "openxr";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
     homepage = "https://gitlab.com/znixian/OpenOVR";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ Scrumplex ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

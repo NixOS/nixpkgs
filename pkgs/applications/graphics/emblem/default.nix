@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitLab
 , rustPlatform
-, appstream-glib
 , cargo
 , desktop-file-utils
 , glib
@@ -11,7 +10,6 @@
 , pkg-config
 , rustc
 , wrapGAppsHook4
-, gtk4
 , libadwaita
 , libxml2
 , darwin
@@ -19,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emblem";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,15 +25,16 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "emblem";
     rev = version;
-    sha256 = "sha256-VA4KZ8x/MMAA/g/x59h1CyHhlj0vbZqwAFdsfTPA2Ds=";
+    sha256 = "sha256-pW+2kQANZ9M1f0jMoBqCxMjLCu0xAnuEE2EdzDq4ZCE=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-2mxDXDGQA2YB+gnGwy6VSZP/RRBKg0RiR1GlXIkio9E=";
   };
 
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     glib
     meson
@@ -48,19 +47,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk4
     libadwaita
     libxml2
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=incompatible-function-pointer-types"
+  ]);
+
+  meta = {
     description = "Generate project icons and avatars from a symbolic icon";
     mainProgram = "emblem";
     homepage = "https://gitlab.gnome.org/World/design/emblem";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ figsoda foo-dogsquared ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ figsoda foo-dogsquared aleksana ];
   };
 }

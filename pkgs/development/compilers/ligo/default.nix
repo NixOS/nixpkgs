@@ -15,14 +15,16 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "1.6.0";
+  version = "1.7.1";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    hash = "sha256-ZPHOgozuUij9+4YXZTnn1koddQEQZe/yrpb+OPHO+nA=";
+    hash = "sha256-pBoLgS/9MLMrc98niI+o2JoJ3gpvhyRY2o9GmVc5hIA=";
     fetchSubmodules = true;
   };
+
+  patches = [ ./make-compatible-with-linol-0_6.patch ];
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;

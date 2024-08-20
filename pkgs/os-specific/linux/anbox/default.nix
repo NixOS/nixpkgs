@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "ddf4c57ebbe3a2e46099087570898ab5c1e1f279";
-    sha256 = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
+    hash = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
     fetchSubmodules = true;
   };
 
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://anbox.io";
     description = "Android in a box";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ edwtjo ];
     platforms = [ "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
   };

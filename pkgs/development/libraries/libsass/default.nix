@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = finalAttrs.pname;
+    repo = "libsass";
     rev = finalAttrs.version;
     hash = "sha256-FkLL3OAJXDptRQY6ZkYbss2pcc40f/wasIvEIyHRQFo=";
     # Remove unicode file names which leads to different checksums on HFS+

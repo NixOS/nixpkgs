@@ -124,7 +124,7 @@
     };
 
     # Test that server reloads when an alias is removed (and subsequently test removal works in acme)
-    "${server}-remove-alias".configuration = { nodes, config, ... }: baseConfig {
+    "${server}_remove_alias".configuration = { nodes, config, ... }: baseConfig {
       inherit nodes config;
       specialConfig = {
         # Remove an alias, but create a standalone vhost in its place for testing.
@@ -140,7 +140,7 @@
     };
 
     # Test that the server reloads when only the acme configuration is changed.
-    "${server}-change-acme-conf".configuration = { nodes, config, ... }: baseConfig {
+    "${server}_change_acme_conf".configuration = { nodes, config, ... }: baseConfig {
       inherit nodes config;
       specialConfig = {
         security.acme.certs."${server}-http.example.test" = {
@@ -200,6 +200,14 @@ in {
         # Tests HTTP-01 verification using Lego's built-in web server
         http01lego.configuration = simpleConfig;
 
+        # account hash generation with default server from <= 23.11
+        http01lego_legacyAccountHash.configuration = lib.mkMerge [
+          simpleConfig
+          {
+            security.acme.defaults.server = lib.mkForce null;
+          }
+        ];
+
         renew.configuration = lib.mkMerge [
           simpleConfig
           {
@@ -243,7 +251,7 @@ in {
         ];
 
         # Test OCSP Stapling
-        ocsp-stapling.configuration = { ... }: lib.mkMerge [
+        ocsp_stapling.configuration = { ... }: lib.mkMerge [
           webserverBasicConfig
           {
             security.acme.certs."a.example.test".ocspMustStaple = true;
@@ -258,7 +266,7 @@ in {
 
         # Validate service relationships by adding a slow start service to nginx' wants.
         # Reproducer for https://github.com/NixOS/nixpkgs/issues/81842
-        slow-startup.configuration = { ... }: lib.mkMerge [
+        slow_startup.configuration = { ... }: lib.mkMerge [
           webserverBasicConfig
           {
             systemd.services.my-slow-service = {
@@ -276,7 +284,7 @@ in {
           }
         ];
 
-        concurrency-limit.configuration = {pkgs, ...}: lib.mkMerge [
+        concurrency_limit.configuration = {pkgs, ...}: lib.mkMerge [
           webserverBasicConfig {
             security.acme.maxConcurrentRenewals = 1;
 
@@ -309,7 +317,7 @@ in {
 
         # Test lego internal server (listenHTTP option)
         # Also tests useRoot option
-        lego-server.configuration = { ... }: {
+        lego_server.configuration = { ... }: {
           security.acme.useRoot = true;
           security.acme.certs."lego.example.test" = {
             listenHTTP = ":80";
@@ -350,7 +358,7 @@ in {
         caddy.configuration = baseCaddyConfig;
 
         # Test that the server reloads when only the acme configuration is changed.
-        "caddy-change-acme-conf".configuration = { nodes, config, ... }: lib.mkMerge [
+        "caddy_change_acme_conf".configuration = { nodes, config, ... }: lib.mkMerge [
           (baseCaddyConfig {
             inherit nodes config;
           })
@@ -424,7 +432,7 @@ in {
       backoff = BackoffTracker()
 
 
-      def switch_to(node, name):
+      def switch_to(node, name, allow_fail=False):
           # On first switch, this will create a symlink to the current system so that we can
           # quickly switch between derivations
           root_specs = "/tmp/specialisation"
@@ -438,9 +446,14 @@ in {
           if rc > 0:
               switcher_path = f"/tmp/specialisation/{name}/bin/switch-to-configuration"
 
-          node.succeed(
-              f"{switcher_path} test"
-          )
+          if not allow_fail:
+            node.succeed(
+                f"{switcher_path} test"
+            )
+          else:
+            node.execute(
+                f"{switcher_path} test"
+            )
 
 
       # Ensures the issuer of our cert matches the chain
@@ -544,7 +557,7 @@ in {
           check_issuer(webserver, "http.example.test", "pebble")
 
       # Perform account hash test
-      with subtest("Assert that account hash didn't unexpected change"):
+      with subtest("Assert that account hash didn't unexpectedly change"):
           hash = webserver.succeed("ls /var/lib/acme/.lego/accounts/")
           print("Account hash: " + hash)
           assert hash.strip() == "d590213ed52603e9128d"
@@ -616,12 +629,12 @@ in {
           webserver.succeed("systemctl start nginx-config-reload.service")
 
       with subtest("Correctly implements OCSP stapling"):
-          switch_to(webserver, "ocsp-stapling")
+          switch_to(webserver, "ocsp_stapling")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_stapling(client, "a.example.test")
 
       with subtest("Can request certificate with HTTP-01 using lego's internal web server"):
-          switch_to(webserver, "lego-server")
+          switch_to(webserver, "lego_server")
           webserver.wait_for_unit("acme-finished-lego.example.test.target")
           webserver.wait_for_unit("nginx.service")
           webserver.succeed("echo HENLO && systemctl cat nginx.service")
@@ -631,14 +644,14 @@ in {
 
       with subtest("Can request certificate with HTTP-01 when nginx startup is delayed"):
           webserver.execute("systemctl stop nginx")
-          switch_to(webserver, "slow-startup")
+          switch_to(webserver, "slow_startup")
           webserver.wait_for_unit("acme-finished-slow.example.test.target")
           check_issuer(webserver, "slow.example.test", "pebble")
           webserver.wait_for_unit("nginx.service")
           check_connection(client, "slow.example.test")
 
       with subtest("Can limit concurrency of running renewals"):
-          switch_to(webserver, "concurrency-limit")
+          switch_to(webserver, "concurrency_limit")
           webserver.wait_for_unit("acme-finished-f.example.test.target")
           webserver.wait_for_unit("acme-finished-g.example.test.target")
           webserver.wait_for_unit("acme-finished-h.example.test.target")
@@ -656,7 +669,7 @@ in {
           check_connection(client, "a.example.test")
 
       with subtest("security.acme changes reflect on caddy"):
-          switch_to(webserver, "caddy-change-acme-conf")
+          switch_to(webserver, "caddy_change_acme_conf")
           webserver.wait_for_unit("acme-finished-example.test.target")
           webserver.wait_for_unit("caddy.service")
           # FIXME reloading caddy is not sufficient to load new certs.
@@ -708,7 +721,7 @@ in {
 
           with subtest("Can remove an alias from a domain + cert is updated"):
               test_alias = f"{server}-{domains[0]}-alias.example.test"
-              switch_to(webserver, f"{server}-remove-alias")
+              switch_to(webserver, f"{server}_remove_alias")
               webserver.wait_for_unit(f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection(client, test_domain)
@@ -723,9 +736,27 @@ in {
               # Switch back to normal server config first, reset everything.
               switch_to(webserver, server)
               wait_for_server()
-              switch_to(webserver, f"{server}-change-acme-conf")
+              switch_to(webserver, f"{server}_change_acme_conf")
               webserver.wait_for_unit(f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection_key_bits(client, test_domain, "384")
+
+      # Perform http-01 w/ lego test again, but using the pre-24.05 account hashing
+      # (see https://github.com/NixOS/nixpkgs/pull/317257)
+      with subtest("Check account hashing compatibility with pre-24.05 settings"):
+          webserver.succeed("rm -rf /var/lib/acme/.lego/accounts/*")
+          switch_to(webserver, "http01lego_legacyAccountHash", allow_fail=True)
+          # unit is failed, but in a way that this throws no exception:
+          try:
+            webserver.wait_for_unit("acme-finished-http.example.test.target")
+          except Exception:
+            # The unit is allowed – or even expected – to fail due to not being able to
+            # reach the actual letsencrypt server. We only use it for serialising the
+            # test execution, such that the account check is done after the service run
+            # involving the account creation has been executed at least once.
+            pass
+          hash = webserver.succeed("ls /var/lib/acme/.lego/accounts/")
+          print("Account hash: " + hash)
+          assert hash.strip() == "1ccf607d9aa280e9af00"
     '';
 }

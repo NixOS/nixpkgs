@@ -18,6 +18,8 @@
 , which
 , wrapGAppsHook3
 , darwin
+, vulkan-loader
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
     which
     wrapGAppsHook3
@@ -63,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.apple_sdk_11_0.frameworks.Cocoa
     darwin.apple_sdk_11_0.frameworks.OpenAL
   ];
+
+  appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
 
   enableParallelBuilding = true;
 

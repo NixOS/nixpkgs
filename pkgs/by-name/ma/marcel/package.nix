@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "marcel";
-  version = "0.28";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geophile";
     repo = "marcel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aJq8FAW1/Vo2x3st+/cxAzo4jHYPBDx/2i/2h1GVnrs=";
+    hash = "sha256-hUI5dUqelmRuk65s67rJXrZoPDWAcnNVIHlzxAgRExs=";
   };
 
   nativeBuildInputs = with python3Packages; [

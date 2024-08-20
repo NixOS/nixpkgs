@@ -1,10 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
   pythonOlder,
-  pythonRelaxDepsHook,
   # pyproject
   hatchling,
   hatch-requirements-txt,
@@ -15,7 +15,6 @@
   httpx,
   huggingface-hub,
   packaging,
-  requests,
   typing-extensions,
   websockets,
   # checkInputs
@@ -29,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.0.1";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +40,7 @@ buildPythonPackage rec {
     # not to be confused with @gradio/client@${version}
     rev = "refs/tags/gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-nbOWg2ZPcXTft7e4tR5p5xecVU62en0hEdXqAgLDZF4=";
+    hash = "sha256-UZQWguUN3l0cj2wb2f7A61RTLy9nPYcIEwHIo+F1kR0=";
   };
   prePatch = ''
     cd client/python
@@ -58,7 +57,6 @@ buildPythonPackage rec {
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -92,6 +90,14 @@ buildPythonPackage rec {
     "test/"
     "-m 'not flaky'"
     #"-x" "-W" "ignore" # uncomment for debugging help
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # flaky: OSError: Cannot find empty port in range: 7860-7959
+    "test_layout_components_in_output"
+    "test_layout_and_state_components_in_output"
+    "test_upstream_exceptions"
+    "test_httpx_kwargs"
   ];
 
   pythonImportsCheck = [ "gradio_client" ];

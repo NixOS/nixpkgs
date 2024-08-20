@@ -27,6 +27,6 @@ buildGoModule rec {
     license = licenses.mit;
     description = "jid on jq - interactive JSON query tool using jq expressions";
     mainProgram = "jiq";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

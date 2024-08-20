@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , ipaddr, ipaddr-cstruct, ounit2, ppx_sexp_conv
 }:
 

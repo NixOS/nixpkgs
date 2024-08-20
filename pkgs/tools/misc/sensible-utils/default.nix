@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sensible-utils";
-  version = "0.0.18";
+  version = "0.0.24";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "sensible-utils";
     rev = "debian/${version}";
-    sha256 = "sha256-fZJKPnEkPfo/3luUcHzAmGB2k1nkA4ATEQMSz0aN0YY=";
+    sha256 = "sha256-omdg5df/TxURarrqawsB3+B85siDJxDaex/2rx5csXI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

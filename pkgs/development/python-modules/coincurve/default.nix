@@ -2,49 +2,62 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  asn1crypto,
-  autoconf,
-  automake,
-  cffi,
-  libtool,
+
+  # build-system
+  cmake,
+  hatchling,
+  ninja,
   pkg-config,
-  pytestCheckHook,
-  python,
-  pythonOlder,
+  setuptools,
+  scikit-build-core,
+
+  # dependencies
+  asn1crypto,
+  cffi,
   secp256k1,
+
+  # checks
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "coincurve";
-  version = "19.0.1";
-  format = "setuptools";
+  version = "20.0.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "coincurve";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T60iKRrc8/t86nqf8/R4971SjOw586YNCWWBuLd9MjM=";
+    hash = "sha256-NKx/iLuzFEu1UBuwa14x55Ab3laVAKEtX6dtoWi0dOg=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'requests'" ""
-
     # don't try to load .dll files
-    rm coincurve/_windows_libsecp256k1.py
     cp -r --no-preserve=mode ${secp256k1.src} libsecp256k1
     patchShebangs secp256k1/autogen.sh
   '';
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
+  build-system = [
+    hatchling
+    cffi
+    cmake
+    ninja
     pkg-config
+    setuptools
+    scikit-build-core
   ];
 
-  propagatedBuildInputs = [
+  dontUseCmakeConfigure = true;
+
+  env.COINCURVE_IGNORE_SYSTEM_LIB = "OFF";
+
+  buildInputs = [ secp256k1 ];
+
+  dependencies = [
     asn1crypto
     cffi
   ];
@@ -68,6 +81,6 @@ buildPythonPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

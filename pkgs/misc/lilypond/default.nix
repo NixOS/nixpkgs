@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lilypond";
-  version = "2.24.3";
+  version = "2.24.4";
 
   src = fetchurl {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    sha256 = "sha256-3wBfdu969aTNdKEPjnEVJ4t/p58UAYk3tlwQlJjsRL4=";
+    sha256 = "sha256-6W+gNXHHnyDhl5ZTr6vb5O5Cdlo9n9FJU/DNnupReBw=";
   };
 
   postInstall = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
         # its Scheme libraries.
         wrapProgram "$f" \
           --set GUILE_AUTO_COMPILE 0 \
-          --set PATH "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
+          --prefix PATH : "${lib.makeBinPath [ ghostscript coreutils (placeholder "out") ]}" \
           --argv0 "$f"
     done
   '';
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-documentation"
      # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
-    "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
+    "--with-urwotf-dir=${ghostscript.fonts}/share/fonts"
     "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
   ];
 

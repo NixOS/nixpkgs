@@ -35,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "CLI tool to easily migrate Kubernetes persistent volumes ";
+    description = "CLI tool to easily migrate Kubernetes persistent volumes";
     mainProgram = "pv-migrate";
     homepage = "https://github.com/utkuozdemir/pv-migrate";
     changelog = "https://github.com/utkuozdemir/pv-migrate/releases/tag/${version}";

@@ -21,7 +21,7 @@ let
 
   meta = with lib; {
     homepage = "https://insomnia.rest";
-    description = " The open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC. With Cloud, Local and Git storage. ";
+    description = " The open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC. With Cloud, Local and Git storage.";
     mainProgram = "insomnia";
     changelog = "https://github.com/Kong/insomnia/releases/tag/core@${version}";
     license = licenses.asl20;

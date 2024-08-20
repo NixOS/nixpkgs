@@ -1,7 +1,7 @@
 { boost
 , cmake
 , fetchFromGitHub
-, freeglut
+, libglut
 , freetype
 , glew
 , libjpeg
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     boost
-    freeglut
+    libglut
     freetype
     glew
     libjpeg

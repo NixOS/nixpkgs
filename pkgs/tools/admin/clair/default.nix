@@ -44,6 +44,6 @@ buildGoModule rec {
     homepage = "https://github.com/quay/clair";
     changelog = "https://github.com/quay/clair/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

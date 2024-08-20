@@ -1,6 +1,7 @@
 {
   lib,
   mkDerivation,
+  versionData,
   bsdSetupHook,
   freebsdSetupHook,
   makeMinimal,
@@ -12,12 +13,12 @@
 }:
 
 mkDerivation {
-  isStatic = true;
+  noLibc = true;
   path = "lib/csu";
   extraPaths = [
     "lib/Makefile.inc"
     "lib/libc/include/libc_private.h"
-  ];
+  ] ++ lib.optionals (versionData.major == 14) [ "sys/sys/param.h" ];
   nativeBuildInputs = [
     bsdSetupHook
     freebsdSetupHook

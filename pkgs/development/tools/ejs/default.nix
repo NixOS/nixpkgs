@@ -29,6 +29,6 @@ buildNpmPackage rec {
     homepage = "http://ejs.co";
     license = lib.licenses.asl20;
     mainProgram = "ejs";
-    maintainers = with lib.maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

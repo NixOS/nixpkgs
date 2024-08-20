@@ -22,7 +22,7 @@ formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:
+{ lib, pkgs, buildPackages }:
 
 self: let
 
@@ -30,11 +30,6 @@ self: let
     elpaBuild = args: self.elpaBuild (args // {
       meta = (args.meta or {}) // { broken = true; };
     });
-  };
-
-  elpaBuild = import ../../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo writeText gcc;
-    inherit (self) emacs;
   };
 
   # Use custom elpa url fetcher with fallback/uncompress
@@ -77,14 +72,14 @@ self: let
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";
 
-        nativeBuildInputs = [
+        nativeBuildInputs = old.nativeBuildInputs ++ [
           buildPackages.gnat
           buildPackages.gprbuild
           buildPackages.dos2unix
           buildPackages.re2c
         ];
 
-        buildInputs = [
+        buildInputs = old.buildInputs ++ [
           pkgs.gnatPackages.gnatcoll-xref
         ];
 
@@ -188,6 +183,7 @@ self: let
 
     elpaPackages = super // overrides;
 
-  in elpaPackages // { inherit elpaBuild; });
+  in elpaPackages);
 
-in (generateElpa { }) // { __attrsFailEvaluation = true; }
+in
+generateElpa { }

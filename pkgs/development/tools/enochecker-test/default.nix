@@ -2,7 +2,6 @@
 , buildPythonApplication
 , fetchPypi
 , pythonOlder
-, pythonRelaxDepsHook
 
 , certifi
 , charset-normalizer
@@ -34,7 +33,6 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

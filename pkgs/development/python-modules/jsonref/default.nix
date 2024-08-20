@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gazpachoking/jsonref";
     changelog = "https://github.com/gazpachoking/jsonref/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

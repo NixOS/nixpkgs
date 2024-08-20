@@ -19,7 +19,9 @@
 , pango
 , pipewire
 , pulseaudio
+, vulkan-loader
 , wrapGAppsHook3
+, xcb-imdkit
 , xdg-utils
 , xorg
 , zlib
@@ -27,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "5.1.8";
+  version = "5.2";
 
   src = fetchurl {
-    url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-KxNLae/uTYL1m/X+/7wr7hhKfw31NpB9Mw9RzfrTuus=";
+    url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
+    hash = "sha256:0cnjwgjbpyrb4pd0841zbhy84ps7gkmq3j148ga826nrxnw082pi";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
@@ -66,6 +68,8 @@ stdenv.mkDerivation rec {
     pipewire
     pulseaudio
     stdenv.cc.cc.lib
+    vulkan-loader
+    xcb-imdkit
     xcbutil
     xcbutilwm
     zlib
@@ -78,6 +82,11 @@ stdenv.mkDerivation rec {
     cp -r opt/bitwig-studio $out/libexec
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
     cp -r usr/share $out/share
+
+    # Bitwig includes a copy of libxcb-imdkit.
+    # Removing it will force it to use our version.
+    rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
+
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
       --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio

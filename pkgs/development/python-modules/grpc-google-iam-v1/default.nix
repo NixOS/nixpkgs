@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-grpc-google-iam-v1";
     changelog = "https://github.com/googleapis/python-grpc-google-iam-v1/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

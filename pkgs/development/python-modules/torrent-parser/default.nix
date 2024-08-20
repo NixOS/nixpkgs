@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/7sDream/torrent_parser";
     changelog = "https://github.com/7sDream/torrent_parser/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

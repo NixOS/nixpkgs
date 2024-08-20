@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "fbb-git";
     repo = "bisoncpp";
     rev = "6.04.00";
-    sha256 = "sha256:0aa9bij4g08ilsk6cgrbgi03vyhqr9fn6j2164sjin93m63212wl";
+    hash = "sha256:0aa9bij4g08ilsk6cgrbgi03vyhqr9fn6j2164sjin93m63212wl";
   };
 
   buildInputs = [ bobcat ];

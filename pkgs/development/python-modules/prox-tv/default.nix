@@ -5,7 +5,8 @@
   buildPythonPackage,
   cffi,
   fetchFromGitHub,
-  nose,
+  setuptools,
+  pytestCheckHook,
   numpy,
   stdenv,
 }:
@@ -13,7 +14,7 @@
 buildPythonPackage {
   pname = "prox-tv";
   version = "3.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "albarji";
@@ -22,26 +23,25 @@ buildPythonPackage {
     sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
   };
 
-  nativeCheckInputs = [ nose ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     cffi
   ];
-
-  # this test is known to fail on darwin
-  checkPhase = ''
-    nosetests --exclude=test_tvp_1d ${lib.optionalString stdenv.isDarwin " --exclude=test_tv2_1d"}
-  '';
-
-  propagatedNativeBuildInputs = [ cffi ];
 
   buildInputs = [
     blas
     lapack
   ];
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   enableParallelBuilding = true;
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test_tvp_1d" ] ++ lib.optionals stdenv.isDarwin [ "test_tv2_1d" ];
 
   meta = with lib; {
     homepage = "https://github.com/albarji/proxTV";

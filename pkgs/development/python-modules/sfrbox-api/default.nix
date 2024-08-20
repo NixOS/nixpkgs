@@ -27,10 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-rMfX9vA8IuWxXvVs4WYNHO6neeoie/3gABwhXyJoAF8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pydantic = ">=1.10.2"' 'pydantic = "*"'
-  '';
+  pythonRelaxDeps = [
+    "defusedxml"
+    "pydantic"
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 

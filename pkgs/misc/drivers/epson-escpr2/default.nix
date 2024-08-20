@@ -1,16 +1,23 @@
-{ lib, stdenv, fetchurl, cups, rpm, cpio }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  cups,
+  rpm,
+  cpio,
+}:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.10";
+  version = "1.2.13";
 
   src = fetchurl {
-    # To find new versions, visit
-    # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
-    # some printer like for instance "WF-7210" to get to the most recent
-    # version.
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/15/87/52/84d8972472981a5337b96610c39c8c7586256b55/epson-inkjet-printer-escpr2-1.2.10-1.src.rpm";
-    sha256 = "sha256-vrAVarGBp8eI07WMtQSmuNpX5iS26+B2iP/b7U8mJmo=";
+    # To find the most recent version go to
+    # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
+    # and retreive the download link for source package for x86 CPU
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/00/23/60c57d2774eea9b27d2c636f0c3615b8619291b3/epson-inkjet-printer-escpr2-1.2.13-1.src.rpm";
+    sha256 = "sha256-yOZqeNrtC28OucY5HOT6OY6qqvLSGh1LTIXbIB7VNrY=";
   };
 
   unpackPhase = ''
@@ -23,10 +30,17 @@ stdenv.mkDerivation rec {
     runHook postUnpack
   '';
 
-  patches = [ ./cups-filter-ppd-dirs.patch ];
-
   buildInputs = [ cups ];
-  nativeBuildInputs = [ rpm cpio ];
+  nativeBuildInputs = [
+    autoreconfHook
+    rpm
+    cpio
+  ];
+
+  configureFlags = [
+    "--with-cupsfilterdir=${builtins.placeholder "out"}/lib/cups/filter"
+    "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
+  ];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
@@ -37,8 +51,12 @@ stdenv.mkDerivation rec {
 
       Refer to the description of epson-escpr for usage.
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ma9e ma27 shawn8901 ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      ma9e
+      ma27
+      shawn8901
+    ];
     platforms = platforms.linux;
   };
 }

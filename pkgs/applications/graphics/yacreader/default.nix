@@ -23,6 +23,6 @@ mkDerivation rec {
     homepage = "http://www.yacreader.com";
     license = lib.licenses.gpl3;
     mainProgram = "YACReader";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "whatstyle";
     homepage = "https://github.com/mikr/whatstyle";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

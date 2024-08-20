@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , autoreconfHook
 , bsd-finger
 , perl
 , talloc
-, linkOpenssl? true, openssl
+, linkOpenssl ? true, openssl
 , withCap ? true, libcap
 , withCollectd ? false, collectd
 , withJson ? false, json_c
@@ -23,11 +23,13 @@ assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.2.4";
+  version = "3.2.5";
 
-  src = fetchurl {
-    url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    hash = "sha256-/dR2lJ88mRwZ8U73GZtSLlIEiW0TnGmUY4Hc6biSKUE=";
+  src = fetchFromGitHub {
+    owner = "FreeRADIUS";
+    repo = "freeradius-server";
+    rev = "refs/tags/release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-1n447BpTqmkg5tyXe9yPzjfDoh7wMLZhwouUEzkwxKM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -76,7 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://freeradius.org/";
     description = "Modular, high performance free RADIUS suite";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sheenobu willibutz lheckemann ];
+    maintainers = with maintainers; [ sheenobu willibutz ];
     platforms = with platforms; linux;
   };
 }

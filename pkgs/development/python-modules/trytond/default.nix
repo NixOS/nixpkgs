@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
   defusedxml,
   lxml,
   relatorio,
@@ -12,7 +13,6 @@
   polib,
   python-sql,
   werkzeug,
-  wrapt,
   passlib,
   pydot,
   levenshtein,
@@ -27,17 +27,19 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.2.3";
-  format = "setuptools";
+  version = "7.2.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rpHDbWNfMRrNOH/iXKmt45FxwInIENgCiUQtcCPvQgU=";
+    hash = "sha256-Vz1bYIwhvH8SHZnmv9ZuaoOnNe378gtIWK2UQDBQxas=";
   };
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       defusedxml
       lxml
@@ -47,7 +49,6 @@ buildPythonPackage rec {
       polib
       python-sql
       werkzeug
-      wrapt
       passlib
 
       # extra dependencies

@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchpatch
-, cmake
 , meson
 , ninja
 , pkg-config

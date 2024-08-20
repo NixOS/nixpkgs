@@ -1,6 +1,5 @@
 { buildGoModule
 , fetchFromGitHub
-, installShellFiles
 , lib
 , libglvnd
 , pkg-config
@@ -10,16 +9,16 @@
 
 buildGoModule rec {
   pname = "netmaker";
-  version = "0.24.1";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Me1hux+Y3EiT9vlP4+4019JPcDEW0d5byFO6YIfKbbw=";
+    hash = "sha256-gZeIZTEO/5jKUEGRl91Px44tVTerIm1o4kIGj5Y9pb8=";
   };
 
-  vendorHash = "sha256-BlZYXLvB05BTI2gMke8I2ob4jYSrixfpBUqKzNcHisI=";
+  vendorHash = "sha256-ZaHgB9nxOYOVE/kjb62f3Kyow9mpXFUc1Gtvsnu28k8=";
 
   inherit subPackages;
 

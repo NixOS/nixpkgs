@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   antlr4-python3-runtime,
   asciimatics,
   buildPythonPackage,
@@ -19,10 +20,8 @@
   pytestCheckHook,
   pythonOlder,
   antlr4,
-  pythonRelaxDepsHook,
   pyyaml,
   setuptools,
-  six,
   urwid,
   parameterized,
   wcwidth,
@@ -31,8 +30,8 @@
 
 buildPythonPackage rec {
   pname = "python-fx";
-  version = "0.3.1";
-  format = "setuptools";
+  version = "0.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -40,21 +39,20 @@ buildPythonPackage rec {
     owner = "cielong";
     repo = "pyfx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BXKH3AlYMNbMREW5Qx72PrbuZdXlmVS+knWWu/y9PsA=";
+    hash = "sha256-Q5ihWnoa7nf4EkrY4SgrwjaNvTva4RdW9GRbnbsPXPc=";
   };
 
   postPatch = ''
-    rm src/pyfx/model/common/jsonpath/*.{g4,interp,tokens}
-    antlr -Dlanguage=Python3 -visitor -o src/pyfx/model/common/jsonpath/ *.g4
+    rm src/pyfx/model/common/jsonpath/*.py # upstream checks in generated files, remove to ensure they were regenerated
+    antlr -Dlanguage=Python3 -visitor src/pyfx/model/common/jsonpath/*.g4
+    rm src/pyfx/model/common/jsonpath/*.{g4,interp,tokens} # no need to install
   '';
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
-    antlr4
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ antlr4 ];
 
   propagatedBuildInputs = [
     antlr4-python3-runtime
@@ -72,7 +70,6 @@ buildPythonPackage rec {
     pyfiglet
     pyperclip
     pyyaml
-    six
     urwid
     wcwidth
     yamale
@@ -83,20 +80,17 @@ buildPythonPackage rec {
     parameterized
   ];
 
-  # antlr4 issue prevents us from running the tests
-  # https://github.com/antlr/antlr4/issues/4041
-  doCheck = false;
+  # FAILED tests/test_event_loops.py::TwistedEventLoopTest::test_run - AssertionError: 'callback called with future outcome: True' not found in ['...
+  doCheck = !stdenv.isDarwin;
 
-  # pythonImportsCheck = [
-  #   "pyfx"
-  # ];
+  pythonImportsCheck = [ "pyfx" ];
 
   meta = with lib; {
     description = "Module to view JSON in a TUI";
-    mainProgram = "pyfx";
     homepage = "https://github.com/cielong/pyfx";
     changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pyfx";
   };
 }

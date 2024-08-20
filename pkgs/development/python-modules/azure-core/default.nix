@@ -20,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.30.1";
+  version = "1.30.2";
   pname = "azure-core";
   pyproject = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jic6JUEx+EJp6OpEZPNWDHMfKcDB9prJkBCEXyOcGo8=";
+    hash = "sha256-oU3CEO/NYIghqkctn7jo0DXSm2iZOBkUe8KQqKwiRHI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -99,6 +99,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

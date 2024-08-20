@@ -1,7 +1,7 @@
 { lib, fetchurl, gettext, wrapGAppsHook3
 
 # Native dependencies
-, python3, gtk3, gobject-introspection, gnome
+, python3, gtk3, gobject-introspection, adwaita-icon-theme
 , gtksourceview4
 , glib-networking
 
@@ -21,17 +21,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-eiRLQZr60BvjqqnoYEY+LswgW6e+S9mTLvBKVCXrCzI=";
+    hash = "sha256-TxWyUDoBvscKa2ogPrFlzLC2q+5RMyMnAiOpQdpFP4M=";
   };
 
   format = "pyproject";
 
   buildInputs = [
-    gtk3 gnome.adwaita-icon-theme
+    gtk3
+    adwaita-icon-theme
     gtksourceview4
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]

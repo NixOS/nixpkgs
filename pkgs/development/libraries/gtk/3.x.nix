@@ -30,7 +30,6 @@
 , libepoxy
 , libxkbcommon
 , libxml2
-, gmp
 , gnome
 , gsettings-desktop-schemas
 , sassc
@@ -64,7 +63,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.42";
+  version = "3.24.43";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -78,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
   in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-UPifYVCS1N0Bu9dZcZ+L04Dl8Un2/XipRyXi3hEjd+I=";
+    hash = "sha256-fgTwZIUVA0uAa3SuXXdNh8/7GiqWxGjLW+R21Rvy88c=";
   };
 
   patches = [

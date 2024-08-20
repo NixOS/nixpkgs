@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/gnu-efi/";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

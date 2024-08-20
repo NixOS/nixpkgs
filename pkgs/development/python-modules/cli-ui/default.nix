@@ -3,7 +3,6 @@
   python3Packages,
   fetchPypi,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   poetry-core,
   colorama,
@@ -24,7 +23,6 @@ python3Packages.buildPythonPackage rec {
 
   pythonRelaxDeps = [ "tabulate" ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ poetry-core ];
 

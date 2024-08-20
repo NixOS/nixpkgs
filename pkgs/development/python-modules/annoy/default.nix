@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   h5py,
   numpy,
-  pynose,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -16,9 +16,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nL/r7+Cl+EPropxr5MhNYB9PQa1N7QSG8biMOwdznBU=";
+  src = fetchFromGitHub {
+    owner = "spotify";
+    repo = "annoy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oJHW4lULRun2in35pBGOKg44s5kgLH2BKiMOzVu4rf4=";
   };
 
   postPatch = ''
@@ -32,7 +34,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     numpy
-    pynose
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    rm -rf annoy
+  '';
+
+  disabledTestPaths = [
+    # network access
+    "test/accuracy_test.py"
   ];
 
   pythonImportsCheck = [ "annoy" ];

@@ -1,16 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   basemap,
-  cython,
-  geos,
-  numpy,
-  matplotlib,
-  pyproj,
-  pyshp,
-  python,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +23,6 @@ buildPythonPackage rec {
       mit
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

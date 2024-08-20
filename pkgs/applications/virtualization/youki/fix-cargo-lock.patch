@@ -1,40 +1,82 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index cfef78c0..7cad3faa 100644
+index ffbcdc33..62659a4d 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -1879,7 +1879,7 @@ checksum = "13e3bf6590cbc649f4d1a3eefc9d5d6eb746f5200ffb04e5e142700b8faa56e7"
+@@ -1915,7 +1915,7 @@ checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
  
  [[package]]
  name = "libcgroups"
--version = "0.3.1"
-+version = "0.3.2"
+-version = "0.3.2"
++version = "0.3.3"
  dependencies = [
   "anyhow",
   "clap",
-@@ -1904,7 +1904,7 @@ dependencies = [
+@@ -1940,7 +1940,7 @@ dependencies = [
  
  [[package]]
  name = "libcontainer"
--version = "0.3.1"
-+version = "0.3.2"
+-version = "0.3.2"
++version = "0.3.3"
  dependencies = [
   "anyhow",
-  "bitflags 2.4.2",
-@@ -1947,7 +1947,7 @@ dependencies = [
+  "bitflags 2.5.0",
+@@ -1983,7 +1983,7 @@ dependencies = [
  
  [[package]]
  name = "liboci-cli"
--version = "0.3.1"
-+version = "0.3.2"
+-version = "0.3.2"
++version = "0.3.3"
  dependencies = [
   "clap",
  ]
-@@ -5712,7 +5712,7 @@ dependencies = [
+@@ -3881,9 +3881,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.34"
++version = "0.3.36"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c8248b6521bb14bc45b4067159b9b6ad792e2d6d754d6c41fb50e29fefe38749"
++checksum = "5dfd88e563464686c916c7e46e623e520ddc6d79fa6641390f2e3fa86e83e885"
+ dependencies = [
+  "deranged",
+  "itoa",
+@@ -3893,7 +3893,7 @@ dependencies = [
+  "powerfmt",
+  "serde",
+  "time-core",
+- "time-macros 0.2.17",
++ "time-macros 0.2.18",
+ ]
+ 
+ [[package]]
+@@ -3914,9 +3914,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.17"
++version = "0.2.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7ba3a3ef41e6672a2f0f001392bb5dcd3ff0a9992d618ca761a11c3121547774"
++checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
+ dependencies = [
+  "num-conv",
+  "time-core",
+@@ -4287,7 +4287,7 @@ dependencies = [
+  "anyhow",
+  "cfg-if",
+  "rustversion",
+- "time 0.3.34",
++ "time 0.3.36",
+ ]
+ 
+ [[package]]
+@@ -5678,7 +5678,7 @@ dependencies = [
  
  [[package]]
  name = "youki"
--version = "0.3.1"
-+version = "0.3.2"
+-version = "0.3.2"
++version = "0.3.3"
  dependencies = [
   "anyhow",
   "caps",

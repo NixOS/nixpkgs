@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fpletz philiptaron ];
     platforms = with lib.platforms; linux;
   };

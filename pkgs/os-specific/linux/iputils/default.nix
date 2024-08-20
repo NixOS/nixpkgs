@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl2Plus bsd3 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos lheckemann ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

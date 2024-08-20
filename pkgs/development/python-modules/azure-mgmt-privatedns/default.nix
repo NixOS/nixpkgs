@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure DNS Private Zones Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

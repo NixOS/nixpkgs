@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pywaze";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "pywaze";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sWI9kUR0SSqE97an/YfvhQqmrK+OEWXRzG4MBYyp8Jg=";
+    hash = "sha256-XE+VdxUjq8KBSIU6rUlBweKEkZD3gqJuy9J4u9JVy7Q=";
   };
 
   postPatch = ''

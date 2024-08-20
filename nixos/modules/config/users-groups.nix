@@ -1,8 +1,43 @@
 { config, lib, utils, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    any
+    attrNames
+    attrValues
+    concatMap
+    concatStrings
+    elem
+    filter
+    filterAttrs
+    flatten
+    flip
+    foldr
+    getAttr
+    hasAttr
+    id
+    length
+    listToAttrs
+    literalExpression
+    mapAttrs'
+    mapAttrsToList
+    match
+    mkAliasOptionModuleMD
+    mkDefault
+    mkIf
+    mkMerge
+    mkOption
+    mkRenamedOptionModule
+    optional
+    optionals
+    sort
+    stringAfter
+    stringLength
+    trace
+    types
+    xor
+    ;
+
   ids = config.ids;
   cfg = config.users;
 
@@ -55,7 +90,7 @@ let
 
       name = mkOption {
         type = types.passwdEntry types.str;
-        apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
+        apply = x: assert (stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
@@ -113,7 +148,7 @@ let
 
       group = mkOption {
         type = types.str;
-        apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
+        apply = x: assert (stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "";
         description = "The user's primary group.";
       };
@@ -462,13 +497,13 @@ let
 
   idsAreUnique = set: idAttr: !(foldr (name: args@{ dup, acc }:
     let
-      id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
-      exists = builtins.hasAttr id acc;
-      newAcc = acc // (builtins.listToAttrs [ { name = id; value = true; } ]);
+      id = toString (getAttr idAttr (getAttr name set));
+      exists = hasAttr id acc;
+      newAcc = acc // (listToAttrs [ { name = id; value = true; } ]);
     in if dup then args else if exists
-      then builtins.trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
+      then trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
       else { dup = false; acc = newAcc; }
-    ) { dup = false; acc = {}; } (builtins.attrNames set)).dup;
+    ) { dup = false; acc = {}; } (attrNames set)).dup;
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
@@ -696,7 +731,7 @@ in {
       '';
     } else ""; # keep around for backwards compatibility
 
-    systemd.services.linger-users = lib.mkIf ((builtins.length lingeringUsers) > 0) {
+    systemd.services.linger-users = lib.mkIf ((length lingeringUsers) > 0) {
       wantedBy = ["multi-user.target"];
       after = ["systemd-logind.service"];
       requires = ["systemd-logind.service"];
@@ -862,7 +897,7 @@ in {
       [
         {
         assertion = (user.hashedPassword != null)
-        -> (builtins.match ".*:.*" user.hashedPassword == null);
+        -> (match ".*:.*" user.hashedPassword == null);
         message = ''
             The password hash of user "${user.name}" contains a ":" character.
             This is invalid and would break the login system because the fields
@@ -927,7 +962,7 @@ in {
         given above which can lead to surprising results. To resolve this warning,
         set at most one of the options above to a non-`null` value.
       '')
-      ++ builtins.filter (x: x != null) (
+      ++ filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the
@@ -950,7 +985,7 @@ in {
         in
         if (allowsLogin user.hashedPassword
             && user.hashedPassword != ""  # login without password
-            && builtins.match mcf user.hashedPassword == null)
+            && match mcf user.hashedPassword == null)
         then ''
           The password hash of user "${user.name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please

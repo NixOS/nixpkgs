@@ -24,7 +24,17 @@ pnpmConfigHook() {
 
     echo "Installing dependencies"
 
-    pnpm install --offline --frozen-lockfile --ignore-script
+    if [[ -n "$pnpmWorkspace" ]]; then
+        pnpmInstallFlags+=("--filter=$pnpmWorkspace")
+    fi
+    runHook prePnpmInstall
+
+    pnpm install \
+        --offline \
+        --ignore-scripts \
+        "${pnpmInstallFlags[@]}" \
+        --frozen-lockfile
+
 
     echo "Patching scripts"
 

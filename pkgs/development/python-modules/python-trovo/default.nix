@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Python wrapper for the Trovo API";
     homepage = "https://codeberg.org/wolfangaukang/python-trovo";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

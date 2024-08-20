@@ -15,7 +15,6 @@
   flask-sockets,
   gunicorn,
   moto,
-  numpy,
   pyramid,
   pytest-asyncio,
   pytestCheckHook,

@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, buildGo122Module
+, buildGo123Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go_1_22
 , git
+, go_1_23
 , enumer
 , mockgen
 , nodejs
@@ -14,27 +14,22 @@
 , nixosTests
 }:
 
-let
-  buildGoModule = buildGo122Module;
-  go = go_1_22;
-in
-
-buildGoModule rec {
+buildGo123Module rec {
   pname = "evcc";
-  version = "0.127.1";
+  version = "0.130.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-wyx0/exXi+LWC3w4VZa9AWpenSHkqn7R91HnTxO68HY=";
+    hash = "sha256-+B2OQOf7BgYzJKvX9cu6SkIzfkD9z3Dk4pfVJmhTQzg=";
   };
 
-  vendorHash = "sha256-MdfLJpPEi6Cr34W6eJSraKJwBPtR66HM2tJIbPE9mZs=";
+  vendorHash = "sha256-Oj5+bmhlZHyOfcJf10EK8mvJauIWk88k0qj2NBkRvFQ=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-6Dxf32myqRbKIlYFcQhkuqZVz+lVvmeJ5lqiWPCQAzA=";
+    hash = "sha256-8DfLh6RhBI6GeTSIvmXCZ8Yudt5TYnimUoAdbOYfWfw=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +40,7 @@ buildGoModule rec {
   overrideModAttrs = _: {
     nativeBuildInputs = [
       enumer
-      go
+      go_1_23
       git
       cacert
       mockgen
@@ -78,11 +73,13 @@ buildGoModule rec {
     skippedTests = [
       # network access
       "TestOctopusConfigParse"
+      "TestTemplates/ac-elwa-2"
       "TestTemplates/allinpower"
       "TestTemplates/electricitymaps"
       "TestTemplates/elering"
       "TestTemplates/energinet"
       "TestTemplates/grünstromindex"
+      "TestTemplates/keba-modbus"
       "TestTemplates/pun"
       "TestTemplates/entsoe"
       "TestTemplates/ngeso"

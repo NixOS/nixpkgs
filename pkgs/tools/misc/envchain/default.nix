@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sorah/envchain";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "envchain";
   };
 }

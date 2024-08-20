@@ -23,28 +23,28 @@
 , zsh
 , fish
 , nixosTests
-, go_1_22
-, buildGo122Module
+, go
+, buildGoModule
 , nix-update-script
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.35.1";
+  version = "0.35.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Hp8phZIVvg1oH6ajSmpcQ0uDXRzMQjVBIRYqpgro/24=";
+    hash = "sha256-5ZkQfGlW7MWYCJZSwK/u8x9jKrZEqupsNvW30DLipDM=";
   };
 
-  goModules = (buildGo122Module {
+  goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-mpyotGzv8UU9pg/3UNZBx0Rkm5kzMzIlDSHuhtNALfw=";
+    vendorHash = "sha256-NzDA9b3RAfMx+Jj7cSF8pEsKUkoBECBUXl2QFSmkmwM=";
   }).goModules;
 
   buildInputs = [
@@ -80,7 +80,7 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
-    go_1_22
+    go
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.

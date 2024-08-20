@@ -14,7 +14,7 @@ in {
 
       enable = lib.mkEnableOption "File Roller, an archive manager for GNOME";
 
-      package = lib.mkPackageOption pkgs [ "gnome" "file-roller" ] { };
+      package = lib.mkPackageOption pkgs "file-roller" { };
 
     };
 

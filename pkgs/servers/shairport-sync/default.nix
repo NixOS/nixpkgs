@@ -40,13 +40,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shairport-sync";
-  version = "4.3.3";
+  version = "4.3.4";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     rev = "refs/tags/${version}";
-    hash = "sha256-sxYzFmI1Geoqckw+7XMXyvkizNVSlfvpWI7vMbCPT0U=";
+    hash = "sha256:1y8dh1gdffq38hgy6x1228l51l6p56iaiqlflw7w1dcbgw15llcd";
   };
 
   nativeBuildInputs = [
@@ -60,11 +60,6 @@ stdenv.mkDerivation rec {
     "${glib.dev}"
   ] ++ optional enableAirplay2 [
     unixtools.xxd
-  ];
-
-  makeFlags = [
-    # Workaround for https://github.com/mikebrady/shairport-sync/issues/1705
-    "AR=${stdenv.cc.bintools.targetPrefix}ar"
   ];
 
   buildInputs = [

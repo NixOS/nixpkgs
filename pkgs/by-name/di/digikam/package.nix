@@ -1,149 +1,205 @@
-{ stdenv, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook3
+{
+  stdenv,
+  config,
+  lib,
+  fetchFromGitLab,
+  fetchgit,
 
-# For `digitaglinktree`
-, perl, sqlite
+  cmake,
+  ninja,
+  extra-cmake-modules,
+  flex,
+  bison,
+  wrapGAppsHook3,
 
-, libsForQt5
+  exiftool,
+  opencv,
+  libtiff,
+  libpng,
+  libjpeg,
+  libheif,
+  libjxl,
+  boost,
+  lcms2,
+  expat,
+  exiv2,
+  libxml2,
+  libxslt,
+  ffmpeg,
+  jasper,
+  eigen,
+  lensfun,
+  liblqr1,
+  libgphoto2,
+  libusb1,
+  imagemagick,
+  x265,
+  libGLX,
+  libGLU,
 
-, bison
-, boost
-, eigen
-, exiv2
-, ffmpeg_4
-, flex
-, graphviz
-, imagemagick
-, lcms2
-, lensfun
-, libgphoto2
-, liblqr1
-, libusb1
-, libheif
-, libGL
-, libGLU
-, opencv
-, pcre
-, x265
-, jasper
+  kdePackages,
 
-, bash
-# For panorama and focus stacking
-, enblend-enfuse
-, hugin
-, gnumake
+  # For `digitaglinktree`
+  perl,
+  sqlite,
 
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+  runtimeShell,
+  # For panorama and focus stacking
+  enblend-enfuse,
+  hugin,
+  gnumake,
 }:
 
-stdenv.mkDerivation rec {
-  pname   = "digikam";
-  version = "8.3.0";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}-1.tar.xz";
-    hash = "sha256-BbFF/38vIAX6IbxXnBUqsjyBkbZ4/ylEyPBAbWud5tg=";
+let
+  testData = fetchgit {
+    url = "https://invent.kde.org/graphics/digikam-test-data.git";
+    rev = "d02dd20b23cc279792325a0f03d21688547a7a59";
+    fetchLFS = true;
+    hash = "sha256-SvsmcniDRorwu9x9OLtHD9ftgquyoE5Kl8qDgqi1XdQ=";
   };
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "digikam";
+  version = "8.4.0";
+
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "graphics";
+    repo = "digikam";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GJYlxJkvFEXppVk0yC9ojszylfAGt3eBMAjNUu60XDY=";
+  };
+
+  patches = [ ./disable-tests-download.patch ];
 
   strictDeps = true;
 
-  depsBuildBuild = [ cmake ];
-
   nativeBuildInputs = [
     cmake
-    doxygen
+    ninja
     extra-cmake-modules
-    libsForQt5.kdoctools
-    libsForQt5.wrapQtAppsHook
+    flex
+    bison
+    kdePackages.wrapQtAppsHook
     wrapGAppsHook3
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  ];
+
+  # Based on <https://www.digikam.org/api/index.html#externaldeps>,
+  # but it doesn’t have everything, so you also have to check the
+  # CMake files…
+  #
+  # We list non‐Qt dependencies first to override Qt’s propagated
+  # build inputs.
 
   buildInputs = [
-    bison
-    boost
-    eigen
-    exiv2
-    ffmpeg_4
-    flex
-    graphviz
-    imagemagick
-    lcms2
-    lensfun
-    libgphoto2
-    libheif
-    liblqr1
-    libusb1
-    libGL
-    libGLU
     opencv
-    pcre
-    x265
+    libtiff
+    libpng
+    # TODO: Figure out how on earth to get it to pick up libjpeg8 for
+    # lossy DNG support.
+    libjpeg
+    libheif
+    libjxl
+    boost
+    lcms2
+    expat
+    exiv2
+    libxml2
+    libxslt
+    # Qt WebEngine uses and propagates FFmpeg, and if it’s a
+    # different version it causes linker warnings.
+    #ffmpeg
     jasper
-  ] ++ (with libsForQt5; [
-    libkipi
-    libksane
-    libqtav
+    eigen
+    lensfun
+    liblqr1
+    libgphoto2
+    libusb1
+    imagemagick
+    x265
+    libGLX
+    libGLU
 
-    qtbase
-    qtxmlpatterns
-    qtsvg
-    qtwebengine
-    qtnetworkauth
+    kdePackages.qtbase
+    kdePackages.qtnetworkauth
+    kdePackages.qtscxml
+    kdePackages.qtsvg
+    kdePackages.qtwayland
+    kdePackages.qtwebengine
+    kdePackages.qt5compat
+    kdePackages.qtmultimedia
 
-    akonadi-contacts
-    kcalendarcore
-    kconfigwidgets
-    kcoreaddons
-    kfilemetadata
-    knotifications
-    knotifyconfig
-    ktextwidgets
-    kwidgetsaddons
-    kxmlgui
+    kdePackages.kconfig
+    kdePackages.kxmlgui
+    kdePackages.ki18n
+    kdePackages.kwindowsystem
+    kdePackages.kservice
+    kdePackages.solid
+    kdePackages.kcoreaddons
+    kdePackages.knotifyconfig
+    kdePackages.knotifications
+    kdePackages.threadweaver
+    kdePackages.kiconthemes
+    kdePackages.kfilemetadata
+    kdePackages.kcalendarcore
+    kdePackages.kio
+    kdePackages.sonnet
+    # libksane and akonadi-contacts do not yet work when building for
+    # Qt 6.
+  ];
 
-    breeze-icons
-    marble
-    oxygen
-    threadweaver
-  ]) ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-  ]);
+  checkInputs = [ kdePackages.qtdeclarative ];
+
+  postConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    ln -s ${testData} $cmakeDir/test-data
+  '';
 
   postPatch = ''
     substituteInPlace \
       core/dplugins/bqm/custom/userscript/userscript.cpp \
       core/utilities/import/backend/cameracontroller.cpp \
-      --replace-fail \"/bin/bash\" \"${lib.getExe bash}\"
+      --replace-fail '"/bin/bash"' ${lib.escapeShellArg "\"${runtimeShell}\""}
   '';
 
   cmakeFlags = [
-    "-DENABLE_MYSQLSUPPORT=1"
-    "-DENABLE_INTERNALMYSQL=1"
-    "-DENABLE_MEDIAPLAYER=1"
-    "-DENABLE_QWEBENGINE=on"
-    "-DENABLE_APPSTYLES=on"
-    "-DCMAKE_CXX_FLAGS=-I${libsForQt5.libksane}/include/KF5" # fix `#include <ksane_version.h>`
+    (lib.cmakeBool "BUILD_WITH_QT6" true)
+    (lib.cmakeBool "ENABLE_KFILEMETADATASUPPORT" true)
+    #(lib.cmakeBool "ENABLE_AKONADICONTACTSUPPORT" true)
+    (lib.cmakeBool "ENABLE_MEDIAPLAYER" true)
+    (lib.cmakeBool "ENABLE_APPSTYLES" true)
   ];
+
+  # Tests segfault for some reason…
+  # TODO: Get them working.
+  doCheck = false;
 
   dontWrapGApps = true;
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
-    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}/${pname})
+    qtWrapperArgs+=(--prefix PATH : ${
+      lib.makeBinPath [
+        gnumake
+        hugin
+        enblend-enfuse
+        exiftool
+      ]
+    })
+    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}/digikam)
     substituteInPlace $out/bin/digitaglinktree \
-      --replace "/usr/bin/perl" "${perl}/bin/perl" \
-      --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
+      --replace "/usr/bin/perl" "${lib.getExe perl}" \
+      --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
 
-  meta = with lib; {
-    description = "Photo Management Program";
-    license = licenses.gpl2;
-    homepage = "https://www.digikam.org";
-    maintainers = with maintainers; [ spacefault ];
-    platforms = platforms.linux;
+  meta = {
+    description = "Photo management application";
+    homepage = "https://www.digikam.org/";
+    changelog = "${finalAttrs.src.meta.homepage}-/blob/master/project/NEWS.${finalAttrs.version}";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "digikam";
   };
-}
+})

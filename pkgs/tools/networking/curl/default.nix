@@ -49,21 +49,15 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.8.0";
+  version = "8.9.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-D1i7lfwzDIpG7rPfVwGw2Qydm/zEK9HNCHkdElUdRAA=";
+    hash = "sha256-/wmyeRylbSX9XD86SSfc58ip3EGCIAxIfKiJ+6H91BI=";
   };
-
-  patches = lib.optionals (lib.versionOlder finalAttrs.version "8.7.2") [
-    # https://github.com/curl/curl/pull/13219
-    # https://github.com/newsboat/newsboat/issues/2728
-    ./8.7.1-compression-fix.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -84,25 +78,25 @@ stdenv.mkDerivation (finalAttrs: {
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
-  propagatedBuildInputs = with lib;
-    optional brotliSupport brotli ++
-    optional c-aresSupport c-aresMinimal ++
-    optional gnutlsSupport gnutls ++
-    optional gsaslSupport gsasl ++
-    optional gssSupport libkrb5 ++
-    optional http2Support nghttp2 ++
-    optionals http3Support [ nghttp3 ngtcp2 ] ++
-    optional idnSupport libidn2 ++
-    optional ldapSupport openldap ++
-    optional opensslSupport openssl ++
-    optional pslSupport libpsl ++
-    optional rtmpSupport rtmpdump ++
-    optional scpSupport libssh2 ++
-    optional wolfsslSupport wolfssl ++
-    optional rustlsSupport rustls-ffi ++
-    optional zlibSupport zlib ++
-    optional zstdSupport zstd ++
-    optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  propagatedBuildInputs =
+    lib.optional brotliSupport brotli ++
+    lib.optional c-aresSupport c-aresMinimal ++
+    lib.optional gnutlsSupport gnutls ++
+    lib.optional gsaslSupport gsasl ++
+    lib.optional gssSupport libkrb5 ++
+    lib.optional http2Support nghttp2 ++
+    lib.optionals http3Support [ nghttp3 ngtcp2 ] ++
+    lib.optional idnSupport libidn2 ++
+    lib.optional ldapSupport openldap ++
+    lib.optional opensslSupport openssl ++
+    lib.optional pslSupport libpsl ++
+    lib.optional rtmpSupport rtmpdump ++
+    lib.optional scpSupport libssh2 ++
+    lib.optional wolfsslSupport wolfssl ++
+    lib.optional rustlsSupport rustls-ffi ++
+    lib.optional zlibSupport zlib ++
+    lib.optional zstdSupport zstd ++
+    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation
       CoreServices
       SystemConfiguration
@@ -155,6 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--without-ca-path"
     ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
       "--without-ssl"
+    ] ++ lib.optionals (gnutlsSupport && !stdenv.isDarwin) [
+      "--with-ca-path=/etc/ssl/certs"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
@@ -212,15 +208,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    changelog = "https://curl.se/changes.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+  meta = {
+    changelog = "https://curl.se/ch/${finalAttrs.version}.html";
     description = "Command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
-    license = licenses.curl;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.all;
+    license = lib.licenses.curl;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.all;
     # Fails to link against static brotli or gss
-    broken = (stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin")) || rustlsSupport;
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin");
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
   };

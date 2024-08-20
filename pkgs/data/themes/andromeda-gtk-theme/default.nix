@@ -2,22 +2,22 @@
 
 stdenvNoCC.mkDerivation {
   pname = "andromeda-gtk-theme";
-  version = "0-unstable-2024-06-08";
+  version = "0-unstable-2024-06-24";
 
   srcs = [
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "Andromeda-gtk";
-      rev = "8efb8ffef7118adf7a22d34a287594499d62b9b8";
-      hash = "sha256-AlPSD6tPNYY8iqPFS5IVOO5Zd3UqR3uS5h4l48UZ+dw=";
+      rev = "1d86d5cab146a1841bfe2e5c4f0a109b315cfd98";
+      hash = "sha256-YzmNo7WZjF/BLKgT2wJXk0ms8bb5AydFcfPzFmRrhkU=";
       name = "Andromeda";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "Andromeda-gtk";
-      rev = "b8c1a8bd0ba8d3e35dcd43f3fc3c177844b02c9c";
-      hash = "sha256-51IWJtbAHA8jNbrGbudiwqQ9SC4dpj9CTHqovNWOtc8=";
+      rev = "7b0f5508269695054306eec10bd56ef5598ddf4a";
+      hash = "sha256-Bi5G3zs1bFYbOf74864eZHPUIJvBbByQNtDfqkNUSxo=";
       name = "Andromeda-standard-buttons";
     })
   ];
@@ -56,6 +56,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/EliverLara/Andromeda-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jakedevs ];
+    maintainers = with maintainers; [ jakedevs romildo ];
   };
 }

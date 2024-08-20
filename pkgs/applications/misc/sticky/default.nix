@@ -6,7 +6,7 @@
 , ninja
 , python3
 , wrapGAppsHook3
-, cinnamon
+, xapp
 , glib
 , gspell
 , gtk3
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.20";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-HzTXaJgDu72pWM0mGNNBy2yFB0u0rqATFK9JzyOw8oE=";
+    hash = "sha256-JrzBME1d4qvGjF2zdiqCX7h+sFadLsRQqZKnQj7elHs=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cinnamon.xapp
+    xapp
     glib
     gspell
     gtk3
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3.pkgs; [
     pygobject3
-    xapp
+    python-xapp
   ];
 
   dontWrapGApps = true;

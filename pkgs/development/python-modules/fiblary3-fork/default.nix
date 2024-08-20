@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy3k,
   fetchPypi,
   fixtures,
   jsonpatch,
@@ -12,7 +11,6 @@
   requests,
   requests-mock,
   six,
-  sphinx,
   testtools,
 }:
 

@@ -46,6 +46,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pg8000 >= 1.10" "pg8000"
+    substituteInPlace tests/test_postgresql.py \
+      --replace-fail "self.assertRegexpMatches" "self.assertRegex"
   '';
 
   pythonImportsCheck = [ "testing.postgresql" ];

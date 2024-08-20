@@ -1,0 +1,25 @@
+From cd8c6561079ee4c53b4bed390edd75a730ac685d Mon Sep 17 00:00:00 2001
+From: Tim Schumacher <timschumi@gmx.de>
+Date: Thu, 4 Jul 2024 16:26:36 +0200
+Subject: [PATCH] Don't install systemd unit files using absolute paths
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index a188f16..7807abe 100644
+--- a/meson.build
++++ b/meson.build
+@@ -54,7 +54,7 @@ executable('gsr-kms-server', 'kms/server/kms_server.c', dependencies : dependenc
+ executable('gpu-screen-recorder', src, dependencies : dep, install : true)
+ 
+ if get_option('systemd') == true
+-    install_data(files('extra/gpu-screen-recorder.service'), install_dir : '/usr/lib/systemd/user')
++    install_data(files('extra/gpu-screen-recorder.service'), install_dir : 'lib/systemd/user')
+ endif
+ 
+ if get_option('capabilities') == true
+-- 
+2.45.1
+

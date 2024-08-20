@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vpl-gpu-rt";
-  version = "24.2.3";
+  version = "24.2.5";
 
   outputs = [ "out" "dev" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "vpl-gpu-rt";
     rev = "intel-onevpl-${version}";
-    sha256 = "sha256-n2lkt7zRlpbPedNxa21EQvFdYyOAPF//TsY4srbGHQE=";
+    sha256 = "sha256-WYlA8+i8TTFHsU4+doLcv75F9MR2V/BEuNGGLgM4p1s=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

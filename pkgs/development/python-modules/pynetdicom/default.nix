@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "pynetdicom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gAgNSvNn5VsctqhbT/CzFVhwCEpZwGb1pOh0JwkuAW8=";
+    hash = "sha256-cEe0/mzmMnPoLQMx5AsJocGxCUVE512k9KlEmjzjzn4=";
   };
 
   build-system = [ poetry-core ];
@@ -88,7 +87,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/pydicom/pynetdicom/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    # Tests are not passing on Darwin/Aarch64, thus it's assumed that it doesn't work
-    broken = stdenv.isDarwin || stdenv.isAarch64;
   };
 }

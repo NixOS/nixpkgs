@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.1.1";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "pylint-dev";
     repo = "pylint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LmpLt2GCzYU73BUpORHaFbGqkxyYqoPoKZpUJSChqKQ=";
+    hash = "sha256-J+68YwjVhaMPlvLCMI/BdnUCQPDYU9u0pIvOYlbzWvs=";
   };
 
   build-system = [ setuptools ];
@@ -106,7 +106,7 @@ buildPythonPackage rec {
       "test_py3k_jobs_option"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Bug and style checker for Python";
     homepage = "https://pylint.readthedocs.io/en/stable/";
     changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
@@ -119,7 +119,8 @@ buildPythonPackage rec {
       - symilar: an independent similarities checker
       - epylint: Emacs and Flymake compatible Pylint
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    mainProgram = "pylint";
   };
 }

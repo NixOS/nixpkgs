@@ -1,29 +1,31 @@
-{ lib
-, clangStdenv
-, fetchFromGitLab
-, fetchpatch
-, cmake
-, pkg-config
-, spdlog
-, nlohmann_json
-, systemd
-, libbpf
-, elfutils
-, bpftools
-, pcre2
-, zlib
+{
+  lib,
+  clangStdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  spdlog,
+  nlohmann_json,
+  systemd,
+  libbpf,
+  elfutils,
+  bpftools,
+  pcre2,
+  zlib,
+  withBpf ? true,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "ananicy-cpp";
   version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
+    hash = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
   };
 
   patches = [
@@ -33,6 +35,7 @@ clangStdenv.mkDerivation rec {
       url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/6ea2dccceec39b6c4913f617dad81d859aa20f24.patch";
       hash = "sha256-C+7x/VpVwewXEPwibi7GxGfjuhDkhcjTyGbZHlYL2Bs=";
     })
+    ./match-wrappers.patch
   ];
 
   strictDeps = true;
@@ -40,6 +43,7 @@ clangStdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optionals withBpf [
     bpftools
   ];
 
@@ -48,23 +52,29 @@ clangStdenv.mkDerivation rec {
     spdlog
     nlohmann_json
     systemd
+    zlib
+  ] ++ lib.optionals withBpf [
     libbpf
     elfutils
-    zlib
   ];
 
   # BPF A call to built-in function '__stack_chk_fail' is not supported.
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [
+    "stackprotector"
+    "zerocallusedregs"
+  ];
 
   cmakeFlags = [
-    "-DUSE_EXTERNAL_JSON=ON"
-    "-DUSE_EXTERNAL_SPDLOG=ON"
-    "-DUSE_EXTERNAL_FMTLIB=ON"
-    "-DUSE_BPF_PROC_IMPL=ON"
-    "-DBPF_BUILD_LIBBPF=OFF"
-    "-DENABLE_SYSTEMD=ON"
-    "-DENABLE_REGEX_SUPPORT=ON"
-    "-DVERSION=${version}"
+    (lib.mapAttrsToList lib.cmakeBool {
+      "USE_EXTERNAL_JSON" = true;
+      "USE_EXTERNAL_SPDLOG" = true;
+      "USE_EXTERNAL_FMTLIB" = true;
+      "USE_BPF_PROC_IMPL" = withBpf;
+      "BPF_BUILD_LIBBPF" = false;
+      "ENABLE_SYSTEMD" = true;
+      "ENABLE_REGEX_SUPPORT" = true;
+    })
+    (lib.cmakeFeature "VERSION" finalAttrs.version)
   ];
 
   postInstall = ''
@@ -75,12 +85,13 @@ clangStdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.com/ananicy-cpp/ananicy-cpp";
     description = "Rewrite of ananicy in c++ for lower cpu and memory usage";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       artturin
       johnrtitor
+      diniamo
     ];
     mainProgram = "ananicy-cpp";
   };
-}
+})

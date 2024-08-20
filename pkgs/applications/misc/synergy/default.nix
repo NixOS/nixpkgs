@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "symless";
     repo = "synergy-core";
     rev = version;
-    sha256 = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
+    hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };
 
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/symless/synergy-core/blob/${version}/ChangeLog";
     mainProgram = lib.optionalString (!withGUI) "synergyc";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ talyz ivar ];
+    maintainers = with maintainers; [ talyz ];
     platforms = platforms.unix;
   };
 }

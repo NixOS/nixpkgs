@@ -3,17 +3,17 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  flask,
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.18.2";
+  version = "0.18.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "vt-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-Uspd422JlBKlsD/K7NciYhYUb12wInN/Z7zTw7aYP28=";
+    hash = "sha256-Zu4lUniXfKaZ1SvX3YCzMLa76HgUWpmddV2N9buNS3o=";
   };
 
   postPatch = ''
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
+    flask
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook

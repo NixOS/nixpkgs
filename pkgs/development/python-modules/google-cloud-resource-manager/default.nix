@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.12.3";
+  version = "1.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gJhRgkEZg05PIxCyxPOGIcHRayuxTVufEy5px501Xn8=";
+    hash = "sha256-PtqRSpJekkZe+A+qq34PepMS1IbdThI9LHbgS6xoj/A=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-resource-manager";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-resource-manager-v${version}/packages/google-cloud-resource-manager/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

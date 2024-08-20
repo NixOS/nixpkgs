@@ -5,14 +5,13 @@
   fetchFromGitHub,
   poetry-core,
   pythonOlder,
-  pythonRelaxDepsHook,
   rapidfuzz,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "syncedlyrics";
-  version = "0.10.1";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,12 +20,11 @@ buildPythonPackage rec {
     owner = "rtcq";
     repo = "syncedlyrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jqd68Npt7qq9aMWO3AVR4JRAs9avO4x9u+MC/brU1Cw=";
+    hash = "sha256-rKYze8Z7F6cEkpex6UCFUW9+mf2UWT+T86C5COhYQHY=";
   };
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "rapidfuzz" ];

@@ -1,39 +1,36 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , doxygen
 , qt6Packages
 , lshw
 , libuchardet
-, spdlog
 , dtkcommon
-, systemd
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, dtk6log
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6core";
-  version = "6.0.15";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6core";
     rev = finalAttrs.version;
-    hash = "sha256-zUJFilafR0hNH/Owmuyh6BLBFPbBuFKcHv40fena0GM=";
+    hash = "sha256-zyhqkxxWB5U37eBxINNxcbnF5NpImg+E7H1VhfJDz60=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
-    (fetchpatch {
-      name = "fix-build-on-qt-6_7_1.patch";
-      url = "https://github.com/linuxdeepin/dtkcore/commit/10bd3842bbde41fbc61c35b81d280075d053119b.patch";
-      hash = "sha256-xZ3BhiMB6S5NJtPUEjtChCB9Jr1BI0mu7AMjyNMqt9w=";
-    })
   ];
+
+  postPatch = ''
+    substituteInPlace misc/DtkCoreConfig.cmake.in \
+      --subst-var-by PACKAGE_TOOL_INSTALL_DIR ${placeholder "out"}/libexec/dtk6/DCore/bin
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -49,11 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtbase
     lshw
     libuchardet
-    spdlog
-  ]
-  ++ lib.optional withSystemd systemd;
+  ];
 
-  propagatedBuildInputs = [ dtkcommon ];
+  propagatedBuildInputs = [ dtkcommon dtk6log ];
 
   cmakeFlags = [
     "-DDTK_VERSION=${finalAttrs.version}"
@@ -63,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDSG_PREFIX_PATH='/run/current-system/sw'"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
     "-DD_DSG_APP_DATA_FALLBACK=/var/dsg/appdata"
-    "-DBUILD_WITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
   ];
 
   preConfigure = ''

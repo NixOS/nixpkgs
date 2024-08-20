@@ -3,12 +3,12 @@
   stdenv,
   buildPythonPackage,
   callPackage,
-  cargo,
+  setuptools,
+  bcrypt,
   certifi,
   cffi,
   cryptography-vectors ? (callPackage ./vectors.nix { }),
   fetchPypi,
-  fetchpatch2,
   isPyPy,
   libiconv,
   libxcrypt,
@@ -18,38 +18,28 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  rustc,
   rustPlatform,
   Security,
-  setuptoolsRustBuildHook,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "42.0.5"; # Also update the hash in vectors.nix
+  version = "43.0.0"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b+B+7JXf1HfrlTCu9b6tNP7IGbOq9sW9bSBWXaYHv+E=";
+    hash = "sha256-uIB1raLVGqnxgoNTLJ9g5yFwBBu6iNfzfknLsQJ1KZ4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-Pw3ftpcDMfZr/w6US5fnnyPVsFSB9+BuIKazDocYjTU=";
+    hash = "sha256-TEQy8PrIaZshiBFTqR/OJp3e/bVM1USjcmpDYcjPJPM=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # skip overflowing tests on 32 bit; https://github.com/pyca/cryptography/pull/10366
-      url = "https://github.com/pyca/cryptography/commit/d741901dddd731895346636c0d3556c6fa51fbe6.patch";
-      hash = "sha256-eC+MZg5O8Ia5CbjRE4y+JhaFs3Q5c62QtPHr3x9T+zw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -58,12 +48,11 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
-  nativeBuildInputs = [
+  build-system = [
     rustPlatform.cargoSetupHook
-    setuptoolsRustBuildHook
-    cargo
-    rustc
+    rustPlatform.maturinBuildHook
     pkg-config
+    setuptools
   ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs =
@@ -74,7 +63,9 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  propagatedBuildInputs = lib.optionals (!isPyPy) [ cffi ];
+  dependencies = lib.optionals (!isPyPy) [ cffi ];
+
+  optional-dependencies.ssh = [ bcrypt ];
 
   nativeCheckInputs = [
     certifi
@@ -82,7 +73,7 @@ buildPythonPackage rec {
     pretend
     pytestCheckHook
     pytest-xdist
-  ];
+  ] ++ optional-dependencies.ssh;
 
   pytestFlagsArray = [ "--disable-pytest-warnings" ];
 
@@ -90,6 +81,10 @@ buildPythonPackage rec {
     # save compute time by not running benchmarks
     "tests/bench"
   ];
+
+  passthru = {
+    vectors = cryptography-vectors;
+  };
 
   meta = with lib; {
     description = "Package which provides cryptographic recipes and primitives";

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-5Aa/uHWrU4bpWd28Uddnuhmi6guHy09W9AU8sAfea6I=";
   };
 
-  cargoSha256 = "sha256-sH9rraPNAIlW2KQVaZfYa10c1HHQpDgedY1+9e94RLE=";
+  cargoHash = "sha256-sH9rraPNAIlW2KQVaZfYa10c1HHQpDgedY1+9e94RLE=";
 
   meta = with lib; {
     description = " A better way of working with structured data on the command line";

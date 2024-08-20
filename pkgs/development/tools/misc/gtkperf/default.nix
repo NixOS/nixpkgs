@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     mainProgram = "gtkperf";
     homepage = "https://gtkperf.sourceforge.net/";
     license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

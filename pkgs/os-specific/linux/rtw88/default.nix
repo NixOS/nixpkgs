@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "unstable-2023-07-23";
+  version = "0-unstable-2024-07-27";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "9b6fe04a741a6b0a1edc5ca134927784bff033a5";
-    hash = "sha256-OzaIy+WTrljwAhC73wEIRUXrkz1NrGNJAS3zofQyV6E=";
+    rev = "610e04fc38343dcdcef95475c1579efc07572f1f";
+    hash = "sha256-54XhluBnspjyKR+OjYRa5g66N8F0d/oV3x89IV3zdT0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

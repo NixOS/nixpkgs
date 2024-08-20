@@ -18,12 +18,16 @@ let
           "ManageForeignRoutes"
           "RouteTable"
           "IPv6PrivacyExtensions"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -119,10 +123,12 @@ let
           "VNetHeader"
           "User"
           "Group"
+          "KeepCarrier"
         ])
         (assertValueOneOf "MultiQueue" boolValues)
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
+        (assertValueOneOf "KeepCarrier" boolValues)
       ];
 
       # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
@@ -632,6 +638,7 @@ let
           "LinkLocalAddressing"
           "IPv6LinkLocalAddressGenerationMode"
           "IPv6StableSecretAddress"
+          "IPv4LLStartAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -649,17 +656,23 @@ let
           "DNSDefaultRoute"
           "NTP"
           "IPForward"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
           "IPMasquerade"
           "IPv6PrivacyExtensions"
           "IPv6AcceptRA"
           "IPv6DuplicateAddressDetection"
           "IPv6HopLimit"
+          "IPv4ReversePathFilter"
+          "IPv4AcceptLocal"
+          "IPv4RouteLocalnet"
           "IPv4ProxyARP"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
           "IPv6SendRA"
           "DHCPPrefixDelegation"
           "IPv6MTUBytes"
+          "KeepMaster"
           "Bridge"
           "Bond"
           "VRF"
@@ -693,7 +706,9 @@ let
         (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertValueOneOf "IPForward" (boolValues ++ ["ipv4" "ipv6"]))
+        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
         (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv6AcceptRA" boolValues)
@@ -701,11 +716,15 @@ let
         (assertMinimum "IPv6DuplicateAddressDetection" 0)
         (assertInt "IPv6HopLimit")
         (assertMinimum "IPv6HopLimit" 0)
+        (assertValueOneOf "IPv4ReversePathFilter" ["no" "strict" "loose"])
+        (assertValueOneOf "IPv4AcceptLocal" boolValues)
+        (assertValueOneOf "IPv4RouteLocalnet" boolValues)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPPrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
+        (assertValueOneOf "KeepMaster" boolValues)
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
         (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
@@ -759,8 +778,7 @@ let
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
-        (assertInt "FirewallMark")
-        (assertRange "FirewallMark" 1 4294967295)
+        (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
         (assertInt "Priority")
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
@@ -999,6 +1017,7 @@ let
           "BootServerAddress"
           "BootServerName"
           "BootFilename"
+          "IPv6OnlyPreferredSec"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -2824,6 +2843,7 @@ let
         "systemd-networkd-wait-online.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
+        "systemd-networkd-persistent-storage.service"
       ];
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;

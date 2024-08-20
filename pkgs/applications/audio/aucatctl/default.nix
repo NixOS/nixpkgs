@@ -5,7 +5,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1";
 
   src = fetchurl {
-    url = "http://www.sndio.org/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "http://www.sndio.org/aucatctl-${finalAttrs.version}.tar.gz";
     sha256 = "524f2fae47db785234f166551520d9605b9a27551ca438bd807e3509ce246cf0";
   };
 

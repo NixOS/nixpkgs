@@ -9,7 +9,6 @@
   pytest-vcr,
   pytestCheckHook,
   python-dateutil,
-  pythonAtLeast,
   pythonOlder,
   requests,
   vcrpy,
@@ -62,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DataDog/datadogpy";
     changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,32 +1,30 @@
 { lib
-, buildGo121Module
+, buildGoModule
 , fetchFromGitHub
-, stdenv
 }:
 
-# JuiceFS 1.1.2 doesn't build with Go 1.22. Fixed in upstream. This can be
-# reverted in future releases. https://github.com/juicedata/juicefs/issues/4339
-buildGo121Module rec {
+buildGoModule rec {
   pname = "juicefs";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "juicedata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Sf68N5ZKveKM6xZEqF7Ah0KGgOx1cGZpJ2lYkUlgpI0=";
+    hash = "sha256-qPdrcWCD8BYwRwnynNhcti7eUskgHP1kAS6KiS0LHsc=";
   };
 
-  vendorHash = "sha256-ofUo/3EQPhXPNeD/3to5oFir/3eAaf9WBHR4DOzcxBQ=";
+  vendorHash = "sha256-tKbn/dFnYTc0fYwYUrrpdN1hzx047yQSFdTG94CifhM=";
 
-  ldflags = [ "-s" "-w" ];
+  excludedPackages = [ "sdk/java/libjfs" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/juicedata/juicefs/pkg/version.version=${version}"
+  ];
 
   doCheck = false; # requires network access
-
-  # we dont need the libjfs binary
-  postFixup = ''
-    rm $out/bin/libjfs
-  '';
 
   postInstall = ''
     ln -s $out/bin/juicefs $out/bin/mount.juicefs
@@ -37,6 +35,5 @@ buildGo121Module rec {
     homepage = "https://www.juicefs.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
-    broken = stdenv.isDarwin;
   };
 }

@@ -12,7 +12,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mousam";
-  version = "1.3.1";
+  version = "1.3.2";
   # built with meson, not a python format
   pyproject = false;
 
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "amit9838";
     repo = "mousam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QFEn7o3DRJyRLbEfb86AsS/ifYqzs3b5n2fZa/9Mm1A=";
+    hash = "sha256-1gFuMh5Poypmgyk2bpi9v6iK7WkO5KHLs+WsoDpJPeg=";
   };
 
   nativeBuildInputs = [

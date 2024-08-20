@@ -14,6 +14,7 @@ import argparse
 import yaml
 import json
 
+FAKE_HASH = 'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
 
 NIXPKGS_ROOT = subprocess.Popen(['git',
                                  'rev-parse',
@@ -85,21 +86,22 @@ def nix_build_to_fail(code):
     return stderr
 
 
-def get_engine_hashes(engine_version):
+def get_engine_hashes(engine_version, flutter_version):
     code = load_code("get-engine-hashes.nix",
                      nixpkgs_root=NIXPKGS_ROOT,
+                     flutter_version=flutter_version,
                      engine_version=engine_version)
 
     stderr = nix_build_to_fail(code)
 
     pattern = re.compile(
-        r"/nix/store/.*-flutter-engine-source-(.+?)-(.+?).drv':\n\s+specified: .*\n\s+got:\s+(.+?)\n")
+        rf"/nix/store/.*-flutter-engine-source-{engine_version}-(.+?-.+?)-(.+?-.+?).drv':\n\s+specified: .*\n\s+got:\s+(.+?)\n")
     matches = pattern.findall(stderr)
     result_dict = {}
 
     for match in matches:
-        _, system, got = match
-        result_dict[system] = got
+        flutter_platform, architecture, got = match
+        result_dict.setdefault(flutter_platform, {})[architecture] = got
 
     def sort_dict_recursive(d):
         return {
@@ -200,6 +202,22 @@ def get_pubspec_lock(flutter_compact_version, flutter_src):
 
     return yaml.safe_load(pubspec_lock_yaml)
 
+def get_engine_swiftshader_rev(engine_version):
+    with urllib.request.urlopen(f"https://github.com/flutter/engine/raw/{engine_version}/DEPS") as f:
+        deps = f.read().decode('utf-8')
+        pattern = re.compile(r"Var\('swiftshader_git'\) \+ '\/SwiftShader\.git' \+ '@' \+ \'([0-9a-fA-F]{40})\'\,")
+        rev = pattern.findall(deps)[0]
+        return rev
+
+def get_engine_swiftshader_hash(engine_swiftshader_rev):
+    code = load_code(
+        "get-engine-swiftshader.nix",
+        engine_swiftshader_rev=engine_swiftshader_rev,
+        hash="")
+
+    stderr = nix_build_to_fail(code)
+    pattern = re.compile(r"got:\s+(.+?)\n")
+    return pattern.findall(stderr)[0]
 
 def write_data(
         nixpkgs_flutter_version_directory,
@@ -207,6 +225,8 @@ def write_data(
         channel,
         engine_hash,
         engine_hashes,
+        engine_swiftshader_hash,
+        engine_swiftshader_rev,
         dart_version,
         dart_hash,
         flutter_hash,
@@ -216,6 +236,8 @@ def write_data(
         f.write(json.dumps({
             "version": flutter_version,
             "engineVersion": engine_hash,
+            "engineSwiftShaderHash": engine_swiftshader_hash,
+            "engineSwiftShaderRev": engine_swiftshader_rev,
             "channel": channel,
             "engineHashes": engine_hashes,
             "dartVersion": dart_version,
@@ -360,6 +382,8 @@ def main():
         pubspec_lock={},
         artifact_hashes={},
         engine_hashes={},
+        engine_swiftshader_hash=FAKE_HASH,
+        engine_swiftshader_rev='0',
         **common_data_args)
 
     pubspec_lock = get_pubspec_lock(flutter_compact_version, flutter_src)
@@ -368,6 +392,8 @@ def main():
         pubspec_lock=pubspec_lock,
         artifact_hashes={},
         engine_hashes={},
+        engine_swiftshader_hash=FAKE_HASH,
+        engine_swiftshader_rev='0',
         **common_data_args)
 
     artifact_hashes = get_artifact_hashes(flutter_compact_version)
@@ -376,14 +402,29 @@ def main():
         pubspec_lock=pubspec_lock,
         artifact_hashes=artifact_hashes,
         engine_hashes={},
+        engine_swiftshader_hash=FAKE_HASH,
+        engine_swiftshader_rev='0',
         **common_data_args)
 
-    engine_hashes = get_engine_hashes(engine_hash)
+    engine_hashes = get_engine_hashes(engine_hash, flutter_version)
 
     write_data(
         pubspec_lock=pubspec_lock,
         artifact_hashes=artifact_hashes,
         engine_hashes=engine_hashes,
+        engine_swiftshader_hash=FAKE_HASH,
+        engine_swiftshader_rev='0',
+        **common_data_args)
+
+    engine_swiftshader_rev = get_engine_swiftshader_rev(engine_hash)
+    engine_swiftshader_hash = get_engine_swiftshader_hash(engine_swiftshader_rev)
+
+    write_data(
+        pubspec_lock=pubspec_lock,
+        artifact_hashes=artifact_hashes,
+        engine_hashes=engine_hashes,
+        engine_swiftshader_hash=engine_swiftshader_hash,
+        engine_swiftshader_rev=engine_swiftshader_rev,
         **common_data_args)
 
 

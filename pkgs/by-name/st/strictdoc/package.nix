@@ -5,19 +5,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "strictdoc";
-  version = "0.0.56";
+  version = "0.0.58";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     rev = "refs/tags/${version}";
-    hash = "sha256-T2xFMExRas7mxfjmAZnv3kiHdc+eEFdCf7TG1ABzgWM=";
+    hash = "sha256-0X74Lv25pUdOUgQzqQU6p+fjuxhC/JqfKEFI7c5t67U=";
   };
 
   nativeBuildInputs = [
     python3.pkgs.hatchling
-    python3.pkgs.pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -61,6 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     "python-datauri"
     "xlsxwriter"
     "lxml"
+    "textx"
   ];
 
   pythonImportsCheck = [ "strictdoc" ];

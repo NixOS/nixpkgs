@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "coverage";
-  version = "7.4.4";
+  version = "7.5.3";
   pyproject = true;
 
   # uses f strings
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yQHfg9CXZJ4lfoA74iWSrt/VGC8Hs8yH1kC7ua/VD0k=";
+    hash = "sha256-BK78pRkNHcelOkwaWn+FaIETBteo7iMcQvtpIVVxlE8=";
   };
 
   nativeBuildInputs = [ setuptools ];

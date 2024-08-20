@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , clang
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # bpf code compilation
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
 
   nativeBuildInputs = [ clang pkg-config rustfmt ];
   buildInputs = [ elfutils zlib ];

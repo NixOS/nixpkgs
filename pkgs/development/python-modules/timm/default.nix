@@ -3,12 +3,18 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   pdm-backend,
+
+  # dependencies
   huggingface-hub,
   pyyaml,
   safetensors,
   torch,
   torchvision,
+
+  # checks
   expecttest,
   pytestCheckHook,
   pytest-timeout,
@@ -16,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.3";
+  version = "1.0.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h2J1v2zXUMGRKBBqq+RnxrXKOzlD5RRrVoODWSuj9Ms=";
+    hash = "sha256-z7v1CTwIqdF8xhfGa2mtFi0sFjhOhM7X/q1OQ5qHA7c=";
   };
 
   build-system = [ pdm-backend ];

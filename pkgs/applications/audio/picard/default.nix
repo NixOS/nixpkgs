@@ -1,5 +1,5 @@
 { lib
-, python3Packages
+, python312Packages
 , fetchFromGitHub
 
 , chromaprint
@@ -11,7 +11,7 @@
 }:
 
 let
-  pythonPackages = python3Packages;
+  pythonPackages = python312Packages;
   pyqt5 =
     if enablePlayback then
       pythonPackages.pyqt5-multimedia
@@ -20,19 +20,21 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.11";
+  # nix-update --commit picard --version-regex 'release-(.*)'
+  version = "2.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-2RGKHJKJ/QXR6Rehch4r1UtI+frRXa4G+n0bUmCGSu8=";
+    hash = "sha256-wKPE4lj3DIlY+X5A/MqhnwyrhPTXGjmUnLK1VWXUOas=";
   };
 
   nativeBuildInputs = [
     gettext
     qt5.wrapQtAppsHook
+    pythonPackages.pytestCheckHook
   ] ++ lib.optionals (pyqt5.multimediaEnabled) [
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -65,6 +67,7 @@ pythonPackages.buildPythonApplication rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+  doCheck = true;
 
   # In order to spare double wrapping, we use:
   preFixup = ''
@@ -73,12 +76,13 @@ pythonPackages.buildPythonApplication rec {
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
     description = "Official MusicBrainz tagger";
     mainProgram = "picard";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

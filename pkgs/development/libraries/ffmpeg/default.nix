@@ -12,18 +12,14 @@ let
           CoreImage
           VideoToolbox
           ;
+        inherit (darwin) xcode;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );
 
   v4 = {
-    version = "4.4.4";
-    hash = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
-  };
-
-  v5 = {
-    version = "5.1.4";
-    hash = "sha256-2jUL1/xGUf7aMooST2DW41KE7bC+BtgChXmj0sAJZ90=";
+    version = "4.4.5";
+    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
   };
 
   v6 = {
@@ -41,10 +37,6 @@ rec {
   ffmpeg_4 = mkFFmpeg v4 "small";
   ffmpeg_4-headless = mkFFmpeg v4 "headless";
   ffmpeg_4-full = mkFFmpeg v4 "full";
-
-  ffmpeg_5 = mkFFmpeg v5 "small";
-  ffmpeg_5-headless = mkFFmpeg v5 "headless";
-  ffmpeg_5-full = mkFFmpeg v5 "full";
 
   ffmpeg_6 = mkFFmpeg v6 "small";
   ffmpeg_6-headless = mkFFmpeg v6 "headless";

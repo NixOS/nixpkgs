@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "losant-rest";
-  version = "1.19.7";
+  version = "1.19.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Losant";
     repo = "losant-rest-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gn8YTnCAmAcmQxpgtitk2eRy3spveuU0peeHu/iSnCE=";
+    hash = "sha256-rokoecBjBrk0iYbsGFkpSVZK5UcEw62TRGwLl8uaSAw=";
   };
 
   build-system = [ setuptools ];

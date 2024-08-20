@@ -26,6 +26,6 @@ mkDerivation {
     mainProgram = "kde-inotify-survey";
     homepage = "https://invent.kde.org/system/kde-inotify-survey";
     license = lib.licenses.gpl2Plus;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

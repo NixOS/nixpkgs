@@ -5,14 +5,25 @@
   fetchPypi,
   buildPythonPackage,
   typing-extensions,
+  darwin,
 }:
 let
   version = "16.0.19";
   format = "setuptools";
-  devkit = fetchurl {
-    url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-    hash = "sha256-yNXNqv8eCbpdQKFShpAh6rUCEuItrOSNNLOjESimPdk=";
-  };
+
+  devkit = {
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-arm64.tar.xz";
+      hash = "sha256-5VAZnpHQ5wjl7IM96GhIKOfFYHFDKKOoSjN1STna2UA=";
+    };
+
+    x86_64-linux = fetchurl {
+      url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
+      hash = "sha256-yNXNqv8eCbpdQKFShpAh6rUCEuItrOSNNLOjESimPdk=";
+    };
+  }.${stdenv.hostPlatform.system}
+    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
 in
 buildPythonPackage rec {
   pname = "frida-python";
@@ -32,7 +43,13 @@ buildPythonPackage rec {
     popd
   '';
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
+
   propagatedBuildInputs = [ typing-extensions ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+  ];
 
   pythonImportsCheck = [ "frida" ];
 
@@ -45,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://www.frida.re";
     license = lib.licenses.wxWindows;
     maintainers = with lib.maintainers; [ s1341 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "x86_64-linux" ];
   };
 }

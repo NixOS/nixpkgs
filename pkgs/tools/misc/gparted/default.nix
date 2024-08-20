@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, gettext, coreutils, gnused, gnome
+, adwaita-icon-theme
 , gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
 , gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook3, substituteAll
-, mtools, dosfstools
+, mtools, dosfstools, xhost
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--disable-doc" ];
+  configureFlags = [ "--disable-doc" "--enable-xhost-root" ];
 
-  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome.adwaita-icon-theme  ];
+  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin adwaita-icon-theme  ];
   nativeBuildInputs = [ gettext pkg-config wrapGAppsHook3 ];
 
   preConfigure = ''
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix PATH : "${lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep mtools dosfstools ]}"
+       --prefix PATH : "${lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep mtools dosfstools xhost ]}"
     )
   '';
 

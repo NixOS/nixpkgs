@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jf";

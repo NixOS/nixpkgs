@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.4";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "v${version}";
-    hash = "sha256-HO7kvJB4GDdAtb0jq8XPU94sP8QbyYlxAmhpLAshMng=";
+    hash = "sha256-7OGUlyBvxX/wra4GYnhmSni/7xloCXUKEu0xa2bbn2A=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-EZvFslntBjpxsjXYyfPGNa2SmYth56cjy8zg+fmiCGo=";
+    npmDepsHash = "sha256-hQOpkbw8RDATnORh8Z1ziUhBcXb5xVplVOvueC/3RwA=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -59,14 +59,18 @@ python3.pkgs.buildPythonApplication rec {
     "opencv-python-headless"
     # using `psycopg2` instead
     "psycopg2-binary"
-    # package request: https://github.com/NixOS/nixpkgs/issues/317065
-    "rapidocr-onnxruntime"
+    "docker"
+    "pytest"
+    "pytest-docker"
   ];
 
   dependencies = with python3.pkgs; [
     aiohttp
+    alembic
+    anthropic
     apscheduler
     argon2-cffi
+    authlib
     bcrypt
     beautifulsoup4
     black
@@ -87,18 +91,22 @@ python3.pkgs.buildPythonApplication rec {
     langchain-community
     langfuse
     markdown
+    openai
     opencv4
     openpyxl
     pandas
     passlib
     peewee
     peewee-migrate
+    psutil
     psycopg2
     pydub
     pyjwt
+    pymongo
     pymysql
     pypandoc
     pypdf
+    python-dotenv
     python-jose
     python-multipart
     python-pptx
@@ -106,8 +114,11 @@ python3.pkgs.buildPythonApplication rec {
     pytube
     pyxlsb
     rank-bm25
+    rapidocr-onnxruntime
+    redis
     requests
     sentence-transformers
+    tiktoken
     unstructured
     uvicorn
     validators
@@ -116,8 +127,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python3.pkgs; [ hatchling ];
-
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -128,7 +137,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Full-stack of open-webui. open-webui is a user-friendly WebUI for LLMs (Formerly Ollama WebUI)";
+    description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
     changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

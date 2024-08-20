@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/managedservices/azure-mgmt-managedservices";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-managedservices_${version}/sdk/managedservices/azure-mgmt-managedservices/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

@@ -1,35 +1,39 @@
-{ lib
-, SDL2
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, libGL
-, libarchive
-, libpcap
-, libsForQt5
-, libslirp
-, pkg-config
-, stdenv
-, unstableGitUpdater
-, wayland
-, zstd
+{
+  lib,
+  SDL2,
+  cmake,
+  enet,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  libGL,
+  libarchive,
+  libpcap,
+  libslirp,
+  pkg-config,
+  qt6,
+  stdenv,
+  unstableGitUpdater,
+  wayland,
+  zstd,
 }:
 
 let
-  inherit (libsForQt5)
+  inherit (qt6)
     qtbase
     qtmultimedia
-    wrapQtAppsHook;
+    qtwayland
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "0.9.5-unstable-2024-06-08";
+  version = "0.9.5-unstable-2024-08-11";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "8e9b88d01da0d21c3c35db051d7e44d8ee0c7715";
-    hash = "sha256-zlOK5yhg9rmLMDnCxQ9CDAy+qWZdvKwTaKxzna1zxxk=";
+    rev = "e290c42360f5f2ae7182c5430234545f3b066876";
+    hash = "sha256-idsUxEsR9MPAY3arH4UNEsB6Cds4yZUaZOilqUQCnDE";
   };
 
   nativeBuildInputs = [
@@ -38,23 +42,39 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    SDL2
-    extra-cmake-modules
-    libarchive
-    libslirp
-    libGL
-    qtbase
-    qtmultimedia
-    wayland
-    zstd
-  ];
+  buildInputs =
+    [
+      SDL2
+      enet
+      extra-cmake-modules
+      libarchive
+      libslirp
+      libGL
+      qtbase
+      qtmultimedia
+      zstd
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      wayland
+      qtwayland
+    ];
+
+  cmakeFlags = [ (lib.cmakeBool "USE_QT6" true) ];
 
   strictDeps = true;
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
-  ];
+  qtWrapperArgs =
+    lib.optionals stdenv.isLinux [
+      "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpcap
+          wayland
+        ]
+      }"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+    ];
 
   passthru = {
     updateScript = unstableGitUpdater { };
@@ -88,6 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
       benley
       shamilton
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

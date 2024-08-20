@@ -70,8 +70,7 @@
 , enableNoSemanticInterposition ? true
 
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
-# enabling LTO on *-darwin causes python3 to fail when linking.
-, enableLTO ? stdenv.is64bit && stdenv.isLinux
+, enableLTO ? stdenv.isDarwin || (stdenv.is64bit && stdenv.isLinux)
 
 # enable asserts to ensure the build remains reproducible
 , reproducibleBuild ? false
@@ -367,7 +366,11 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     };
   in [
     "${mingw-patch}/*.patch"
-  ]);
+  ]) ++ optionals isPy312 [
+    # backport fix for various platforms; armv7l, riscv64, s390
+    # https://github.com/python/cpython/pull/121178
+    ./3.12/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
+  ];
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
@@ -397,9 +400,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--without-ensurepip"
     "--with-system-expat"
-  ] ++ optionals (!(stdenv.isDarwin && pythonAtLeast "3.12")) [
-    #  ./Modules/_decimal/_decimal.c:4673:6: error: "No valid combination of CONFIG_64, CONFIG_32 and _PyHASH_BITS"
-    # https://hydra.nixos.org/build/248410479/nixlog/2/tail
     "--with-system-libmpdec"
   ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
@@ -417,6 +417,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
+  ] ++ optionals (stdenv.isDarwin && configd == null) [
+    # Make conditional on Darwin for now to avoid causing Linux rebuilds.
+    "py_cv_module__scproxy=n/a"
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (libxcrypt != null) [
@@ -468,6 +471,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
     # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
     sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
+  '' + optionalString (pythonAtLeast "3.11") ''
+    # Also override the auto-detection in `configure`.
+    substituteInPlace configure \
+      --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${if stdenv.isAarch64 then "uint128" else "x64"}'
   '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
@@ -658,7 +665,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.python.org";
     changelog = let
       majorMinor = versions.majorMinor version;
-      dashedVersion = replaceStrings [ "." "a" ] [ "-" "-alpha-" ] version;
+      dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
     in
       if sourceVersion.suffix == "" then
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"

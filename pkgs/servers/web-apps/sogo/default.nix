@@ -4,15 +4,15 @@
 , enableActiveSync ? false
 , libwbxml }:
 gnustep.stdenv.mkDerivation rec {
-  pname = "SOGo";
-  version = "5.9.1";
+  pname = "sogo";
+  version = "5.10.0";
 
   # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
-    owner = "inverse-inc";
+    owner = "Alinto";
     repo = pname;
     rev = "SOGo-${version}";
-    hash = "sha256-b6BZZ61wY0Akt1Q6+Bq6JXAx/67MwBNbzHr3sB0NuRg=";
+    hash = "sha256-ZmpOI1zk/TkRNFmwTXugVb9IvxYSP4LgNrApSytdI7s=";
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
@@ -45,7 +45,7 @@ gnustep.stdenv.mkDerivation rec {
     "--enable-mfa"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-int -Wno-error=return-type";
 
   preFixup = ''
     # Create gnustep.conf
@@ -77,7 +77,7 @@ gnustep.stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
   };
 }
 

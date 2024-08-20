@@ -24,7 +24,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
+      url = "https://www.openssl.org/source/openssl-${version}.tar.gz";
       inherit hash;
     };
 
@@ -143,6 +143,15 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
+      # /dev/crypto support has been dropped in OpenBSD 5.7.
+      #
+      # OpenBSD's ports does this too,
+      # https://github.com/openbsd/ports/blob/a1147500c76970fea22947648fb92a093a529d7c/security/openssl/3.3/Makefile#L25.
+      #
+      # https://github.com/openssl/openssl/pull/10565 indicated the
+      # intent was that this would be configured properly automatically,
+      # but that doesn't appear to be the case.
+      ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
       ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
       # This is necessary in order to avoid openssl adding -march
       # flags which ultimately conflict with those added by
@@ -218,19 +227,19 @@ let
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.openssl.org/";
       changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
       description = "Cryptographic library that implements the SSL and TLS protocols";
-      license = licenses.openssl;
+      license = lib.licenses.openssl;
       mainProgram = "openssl";
-      maintainers = with maintainers; [ thillux ];
+      maintainers = with lib.maintainers; [ thillux ] ++ lib.teams.stridtech.members;
       pkgConfigModules = [
         "libcrypto"
         "libssl"
         "openssl"
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     } // extraMeta;
   });
 
@@ -267,8 +276,8 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.13";
-    hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
+    version = "3.0.14";
+    hash = "sha256-7soDXU3U6E/CWEbZUtpil0hK+gZQpvhMaC453zpBI8o=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -276,6 +285,8 @@ in {
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
+
+      ./3.3/CVE-2024-5535.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
@@ -284,14 +295,14 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 
   openssl_3_2 = common {
-    version = "3.2.1";
-    hash = "sha256-g8cyn+UshQZ3115dCwyiRTCbl+jsvP3B39xKufrDWzk=";
+    version = "3.2.2";
+    hash = "sha256-GXFJwY2enyksQ/BACsq6EuX1LKz+BQ89GZJ36nOOwuc=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -300,6 +311,8 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.3/CVE-2024-5535.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./3.2/use-etc-ssl-certs-darwin.patch
        else ./3.2/use-etc-ssl-certs.patch)
@@ -307,14 +320,14 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 
   openssl_3_3 = common {
-    version = "3.3.0";
-    hash = "sha256-U+ZrBDMipgar8Ah+dpmg4DOjf6E/65dC3zXDozsY+wI=";
+    version = "3.3.1";
+    hash = "sha256-d3zVlihMiDN1oqehG/XSeG/FQTJV76sgxQ1v/m0CC34=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -323,6 +336,8 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.3/CVE-2024-5535.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./3.2/use-etc-ssl-certs-darwin.patch
        else ./3.2/use-etc-ssl-certs.patch)
@@ -330,8 +345,8 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 }

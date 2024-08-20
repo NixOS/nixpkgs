@@ -48,6 +48,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/tmux/tmux/commit/4f5a944ae3e8f7a230054b6c0b26f423fa738e71.patch";
       hash = "sha256-HlUeU5ZicPe7Ya8A1HpunxfVOE2BF6jOHq3ZqTuU5RE=";
     })
+    # https://github.com/tmux/tmux/issues/3983
+    # fix tmux crashing when neovim is used in a ssh session
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/aa17f0e0c1c8b3f1d6fc8617613c74f07de66fae.patch";
+      hash = "sha256-jhWGnC9tsGqTTA5tU+i4G3wlwZ7HGz4P0UHl17dVRU4=";
+    })
+    # https://github.com/tmux/tmux/issues/3905
+    # fix tmux hanging on shutdown
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/3823fa2c577d440649a84af660e4d3b0c095d248.patch";
+      hash = "sha256-FZDy/ZgVdwUAam8g5SfGBSnMhp2nlHHfrO9eJNIhVPo=";
+    })
   ];
 
   nativeBuildInputs = [

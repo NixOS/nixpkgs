@@ -4,7 +4,7 @@
 , cmake
 , libGLU
 , libGL
-, freeglut
+, libglut
 , Cocoa
 , OpenGL
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
+  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL libglut ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   postPatch = ''

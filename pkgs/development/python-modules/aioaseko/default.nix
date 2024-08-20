@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aioaseko";
-  version = "0.1.1";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "milanmeu";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-bjPl0yrRaTIEEuPV8NbWu2hx/es5bcu2tDBZV+95fUc=";
+    hash = "sha256-X2H+5roq5yNXET23Q3QNmYmG1oAFfvuvSsInsJi42/s=";
   };
 
   nativeBuildInputs = [ setuptools ];

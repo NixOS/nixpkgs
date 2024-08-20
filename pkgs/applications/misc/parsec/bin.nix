@@ -16,13 +16,12 @@
 , libXfixes
 , libpulseaudio
 , libva
-, ffmpeg_5
+, ffmpeg_4
 , libpng
 , libjpeg8
 , curl
 , vulkan-loader
-, gnome
-, zenity ? gnome.zenity
+, zenity
 }:
 
 stdenvNoCC.mkDerivation {
@@ -58,7 +57,7 @@ stdenvNoCC.mkDerivation {
     alsa-lib
     libpulseaudio
     libva
-    ffmpeg_5
+    ffmpeg_4
     libpng
     libjpeg8
     curl

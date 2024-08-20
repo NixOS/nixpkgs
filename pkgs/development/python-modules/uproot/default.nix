@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.7";
+  version = "5.3.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ptfT31eUNSpVaZfXAyRcIc2T2p82rXmzUyySSVbI9lI=";
+    hash = "sha256-2cTa6AaN4BMJuzLhU9G4e0yl1kqyxblLWsSaIOHYS+o=";
   };
 
   build-system = [
@@ -94,18 +94,15 @@ buildPythonPackage rec {
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0088_read_with_http.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
-
-    # FileNotFoundError: uproot-issue-1043.root
-    "tests/test_1043_const_std_string.py"
   ];
 
   pythonImportsCheck = [ "uproot" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
     changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

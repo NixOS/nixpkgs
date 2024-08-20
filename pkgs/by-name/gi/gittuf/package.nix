@@ -1,22 +1,22 @@
-{ lib, fetchFromGitHub, buildGoModule, git }:
+{ lib, fetchFromGitHub, buildGoModule, git, openssh }:
 
 buildGoModule rec {
   pname = "gittuf";
-  version = "0.4.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "gittuf";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BXqxVtdxUbcl2cK4kYEBZIbMCKOjPvuoTnDh8L6+mO8=";
+    hash = "sha256-mes+6Bs6KhLkcHRzI07ciT1SuSJU/YxjXt0MCDeVCUk=";
   };
 
-  vendorHash = "sha256-yRUgtUeoTthxSGZ6VX/MOVeY0NUXq0Nf+XlysHqcpWw=";
+  vendorHash = "sha256-7z7+ycV6e24JUlLIxRCAgJwxRcRgGWBYPgbXgGqatEE=";
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${version}" ];
 
-  nativeCheckInputs = [ git ];
-  checkFlags = [ "-skip=TestLoadRepository" ];
+  nativeCheckInputs = [ git openssh ];
+  checkFlags = [ "-skip=TestLoadRepository" "-skip=TestSSH" ];
 
   postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
 

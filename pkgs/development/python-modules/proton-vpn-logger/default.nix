@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "General purpose logging package for the entire ProtonVPN Linux client";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-logger";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

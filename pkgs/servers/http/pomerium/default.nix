@@ -13,15 +13,15 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.26.0";
+  version = "0.26.1";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-AkpfLKPirl8fz4s0hQI15aSgI2PZFPakAzC+j66MVY0=";
+    hash = "sha256-lMI6dVCTInqHsz4N0HsOVUQo8TkheAwr54FW46r+DUA=";
   };
 
-  vendorHash = "sha256-kabWL7yqNkI2JRPmVv0tp0nIfVDwT9QbbDIbdM8sL5s=";
+  vendorHash = "sha256-AHlnhAh4RBz8aJoFJjbX/MUDHq81xK7b7gvCyuV3gjU=";
 
   ui = mkYarnPackage {
     inherit version;

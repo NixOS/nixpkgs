@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "greynoise";
-  version = "2.1.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "GreyNoise-Intelligence";
     repo = "pygreynoise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bMQfGkCjMBimNaYzSi78GaLiDiLdmxMB8RfFCVTxD5U=";
+    hash = "sha256-17NieDQ57qVT2i4S26vLS9N6zALZ+eTtCCcBbhQ8fhQ=";
   };
 
   propagatedBuildInputs = [

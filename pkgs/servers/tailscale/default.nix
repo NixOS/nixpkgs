@@ -10,10 +10,12 @@
 , shadow
 , procps
 , nixosTests
+, installShellFiles
+, tailscale-nginx-auth
 }:
 
 let
-  version = "1.68.0";
+  version = "1.70.0";
 in
 buildGoModule {
   pname = "tailscale";
@@ -23,7 +25,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-GTl5RCwIoDuzbaigy0/++xaPPEMLRDbBi/z82xCDOZY=";
+    hash = "sha256-rB/zaJavA3OH1HK7Rfpta/QmQzi0xsEYTvW5JzzTAlI=";
   };
 
   patches = [
@@ -35,9 +37,9 @@ buildGoModule {
     })
   ];
 
-  vendorHash = "sha256-SUjoeOFYz6zbEgv/vND7kEXbuWlZDrUKF2Dmqsf/KVw=";
+  vendorHash = "sha256-NtNjH2Vo1Leh98VIOkpyALErhC+6H5BE/uaPkwlejoo=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
@@ -62,20 +64,27 @@ buildGoModule {
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
-
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    local INSTALL="$out/bin/tailscale"
+    installShellCompletion --cmd tailscale \
+      --bash <($out/bin/tailscale completion bash) \
+      --fish <($out/bin/tailscale completion fish) \
+      --zsh <($out/bin/tailscale completion zsh)
   '';
 
   passthru.tests = {
     inherit (nixosTests) headscale;
+    inherit tailscale-nginx-auth;
   };
 
   meta = with lib; {
     homepage = "https://tailscale.com";
     description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
+    changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ mbaillie jk mfrw ];
+    maintainers = with maintainers; [ mbaillie jk mfrw pyrox0 ];
   };
 }

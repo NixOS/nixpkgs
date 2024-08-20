@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     repo = "glslViewer";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-Ve3wmX5+kABCu8IRe4ySrwsBJm47g1zvMqDbqrpQl88=";
+    hash = "sha256-Ve3wmX5+kABCu8IRe4ySrwsBJm47g1zvMqDbqrpQl88=";
   };
   nativeBuildInputs = [cmake ninja pkg-config];
   buildInputs =

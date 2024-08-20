@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "6.8";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v6/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
     hash = "sha256-EcxWULUYCdmUg8z64kdEouUc0WGZ9f8MkX6E/OaVhw8=";
   };
 

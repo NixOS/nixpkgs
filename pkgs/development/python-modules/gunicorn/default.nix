@@ -17,32 +17,28 @@
   setproctitle,
 
   pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "21.2.0";
+  version = "22.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
-    rev = version;
-    hash = "sha256-xP7NNKtz3KNrhcAc00ovLZRx2h6ZqHbwiFOpCiuwf98=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xIXQMAdTZEBORu6789tLpT1OpBL+aveL/MfDj4f4bes=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=gunicorn --cov-report=xml" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
+  dependencies = [ packaging ];
 
-  propagatedBuildInputs = [ packaging ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gevent = [ gevent ];
     eventlet = [ eventlet ];
     tornado = [ tornado ];
@@ -54,14 +50,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+    pytest-cov
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  meta = with lib; {
-    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
-    homepage = "https://github.com/benoitc/gunicorn";
+  meta = {
     description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/benoitc/gunicorn";
+    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "gunicorn";
   };
 }

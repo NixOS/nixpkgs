@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.vmime.org/";
     description = "Free mail library for C++";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

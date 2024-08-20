@@ -5,7 +5,6 @@
 , nixosTests
 , rustPlatform
 , rustc
-, stdenv
 , wasm-bindgen-cli
 , wasm-pack
 , which
@@ -19,15 +18,15 @@ let
     cargoHash = "sha256-vcpxcRlW1OKoD64owFF6mkxSqmNrvY+y3Ckn5UwEQ50=";
   };
 
-  commonDerivationAttrs = rec {
+  commonDerivationAttrs = {
     pname = "lldap";
-    version = "0.5.0";
+    version = "0.5.1-unstable-2024-08-09";
 
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      rev = "v${version}";
-      hash = "sha256-2MEfwppkS9l3iHPNlkJB4tJnma0xMi0AckLv6wpzy1Y=";
+      rev = "4138963bee15f5423629c081ec88805d43b8235c";
+      hash = "sha256-g/Y+StSQQiA+1O0yh2xIhBHO9/MjM4QW1DNQIABTHdI=";
     };
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
@@ -39,6 +38,7 @@ let
         "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
       };
     };
+
   };
 
   frontend = rustPlatform.buildRustPackage (commonDerivationAttrs // {
@@ -61,11 +61,10 @@ let
   });
 
 in rustPlatform.buildRustPackage (commonDerivationAttrs // {
-
   cargoBuildFlags = [ "-p" "lldap" "-p" "lldap_migration_tool" "-p" "lldap_set_password" ];
 
   patches = [
-    ./static-frontend-path.patch
+    ./0001-parameterize-frontend-location.patch
   ];
 
   postPatch = ''
@@ -85,9 +84,6 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    # See comment about wasm32-unknown-unknown in rustc.nix.
-    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-      !stdenv.hostPlatform.gcc.thumb or true;
     maintainers = with maintainers; [ bendlas ];
     mainProgram = "lldap";
   };

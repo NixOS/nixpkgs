@@ -1,28 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   nose,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "hkdf";
   version = "0.0.3";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1jhxk5vhxmxxjp3zj526ry521v9inzzl8jqaaf0ma65w6k332ak2";
+  src = fetchFromGitHub {
+    owner = "casebeer";
+    repo = "python-hkdf";
+    rev = "cc3c9dbf0a271b27a7ac5cd04cc1485bbc3b4307";
+    hash = "sha256-i3vJzUI7dpZbgZkz7Agd5RAeWisNWftdk/mkJBZkkLg=";
   };
+
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "hkdf" ];
 
   nativeCheckInputs = [ nose ];
 
   checkPhase = ''
-    nosetests
-  '';
+    runHook preCheck
 
-  # no tests in PyPI tarball
-  doCheck = false;
+    nosetests
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)";

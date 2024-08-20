@@ -37,7 +37,7 @@ in
         description = "The port to bind to.";
       };
 
-      enableUnixSocket = mkEnableOption "Unix Domain Socket at /run/memcached/memcached.sock instead of listening on an IP address and port. The `listen` and `port` options are ignored.";
+      enableUnixSocket = mkEnableOption "Unix Domain Socket at /run/memcached/memcached.sock instead of listening on an IP address and port. The `listen` and `port` options are ignored";
 
       maxMemory = mkOption {
         type = types.ints.unsigned;

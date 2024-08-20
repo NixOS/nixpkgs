@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.4.3";
+  version = "1.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+1BOYZn+jehbqp0xzs9ndod4Uf5Yhn3mAzF+x8xzmYc=";
+    pname = "google_cloud_appengine_logging";
+    inherit version;
+    hash = "sha256-3n12bl1nsZ/Fgzl0tQWzLSpbvfsoP9lB4yDnz9rky4M=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus

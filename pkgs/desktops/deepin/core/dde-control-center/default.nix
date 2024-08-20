@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-control-center";
-  version = "6.0.44";
+  version = "6.0.59";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-NN2CSIYByxeTZraK48lAsQSJYAOTDHzKT1FOa+VWMo0=";
+    hash = "sha256-OniY/B/9319AYYFFPnsUMNrnc0yVGG3rfCLPjgNFyag=";
   };
 
   postPatch = ''
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     librsvg
     gtest
   ];
+
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   cmakeFlags = [
     "-DCVERSION=${version}"

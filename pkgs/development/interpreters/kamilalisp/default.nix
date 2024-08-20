@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "kamilalisp";
+  pname = "kamilalisp";
   version = "0.3.0.1";
 
   src = fetchurl {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -pv $out/share/java $out/bin
-    cp ${src} $out/share/java/${name}-${version}.jar
+    cp ${src} $out/share/java/kamilalisp-${version}.jar
     makeWrapper ${jre}/bin/java $out/bin/kamilalisp \
-      --add-flags "-jar $out/share/java/${name}-${version}.jar" \
+      --add-flags "-jar $out/share/java/kamilalisp-${version}.jar" \
       --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on' \
       --set _JAVA_AWT_WM_NONREPARENTING 1
   '';

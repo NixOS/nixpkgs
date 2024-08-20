@@ -14,7 +14,6 @@
   requests-mock,
   stestr,
   multiprocess,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +33,6 @@ buildPythonPackage rec {
       --replace test_jenkins_open_no_timeout dont_test_jenkins_open_no_timeout
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "setuptools" ];
 
   buildInputs = [ mock ];

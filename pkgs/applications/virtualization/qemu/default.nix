@@ -1,37 +1,40 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
-, pixman, vde2, alsa-lib, texinfo, flex
+, pixman, vde2, alsa-lib, flex, pcre2
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson
 , sigtool
 , makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
-, guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !toolsOnly
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !toolsOnly, numactl
-, seccompSupport ? stdenv.isLinux && !toolsOnly, libseccomp
-, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !toolsOnly
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libpulseaudio
-, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, pipewire
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, SDL2, SDL2_image
-, jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !toolsOnly, gtk3, gettext, vte, wrapGAppsHook3
-, vncSupport ? !nixosTestRunner && !toolsOnly, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner && !toolsOnly, libcacard
-, spiceSupport ? true && !nixosTestRunner && !toolsOnly, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner && !toolsOnly, ncurses
+, guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !minimal, numactl
+, seccompSupport ? stdenv.isLinux && !minimal, libseccomp
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !minimal
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, libpulseaudio
+, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, pipewire
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, SDL2, SDL2_image
+, jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, libjack2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !minimal, gtk3, gettext, vte, wrapGAppsHook3
+, vncSupport ? !nixosTestRunner && !minimal, libjpeg, libpng
+, smartcardSupport ? !nixosTestRunner && !minimal, libcacard
+, spiceSupport ? true && !nixosTestRunner && !minimal, spice, spice-protocol
+, ncursesSupport ? !nixosTestRunner && !minimal, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
-, rutabagaSupport ? openGLSupport && !toolsOnly && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx, rutabaga_gfx
+, rutabagaSupport ? openGLSupport && !minimal && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx, rutabaga_gfx
 , virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? !toolsOnly, libiscsi
+, libiscsiSupport ? !minimal, libiscsi
 , smbdSupport ? false, samba
-, tpmSupport ? !toolsOnly
-, uringSupport ? stdenv.isLinux, liburing
-, canokeySupport ? !toolsOnly, canokey-qemu
-, capstoneSupport ? !toolsOnly, capstone
-, enableDocs ? true
+, tpmSupport ? !minimal
+, uringSupport ? stdenv.isLinux && !userOnly, liburing
+, canokeySupport ? !minimal, canokey-qemu
+, capstoneSupport ? !minimal, capstone
+, pluginsSupport ? !stdenv.hostPlatform.isStatic
+, enableDocs ? !minimal || toolsOnly
+, enableTools ? !minimal || toolsOnly
+, enableBlobs ? !minimal || toolsOnly
 , hostCpuOnly ? false
 , hostCpuTargets ? (if toolsOnly
                     then [ ]
@@ -41,6 +44,8 @@
                     else null)
 , nixosTestRunner ? false
 , toolsOnly ? false
+, userOnly ? false
+, minimal ? toolsOnly || userOnly
 , gitUpdater
 , qemu-utils # for tests attribute
 }:
@@ -54,12 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
-    + lib.optionalString toolsOnly "-utils";
-  version = "9.0.1";
+    + lib.optionalString toolsOnly "-utils"
+    + lib.optionalString userOnly "-user";
+  version = "9.0.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-0PTbD70VHAzxb4SusqUA9ulQCXMlRvRNr6uNIEm7uAU=";
+    hash = "sha256-qMP1lq7Olto7AMr7dLqvoNFFFer7jtHuP39cLQ6/ArY=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -67,17 +73,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper removeReferencesTo
-    pkg-config flex bison dtc meson ninja
+    pkg-config flex bison meson ninja
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
+    python3Packages.python
   ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
+    ++ lib.optionals enableDocs [ python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
     ++ lib.optionals hexagonSupport [ glib ]
-    ++ lib.optionals stdenv.isDarwin [ sigtool ];
+    ++ lib.optionals stdenv.isDarwin [ sigtool ]
+    ++ lib.optionals (!userOnly) [ dtc ]
+    # workaround, remove once this patch lands: https://lore.kernel.org/qemu-devel/20240805104921.4035256-1-hi@alyssa.is/
+    ++ lib.optionals (hexagonSupport && stdenv.hostPlatform.isStatic) [ pcre2 ];
 
-  buildInputs = [ dtc zlib glib pixman
-    vde2 texinfo lzo snappy libtasn1
+  buildInputs = [ zlib glib pixman
+    vde2 lzo snappy libtasn1
     gnutls nettle curl libslirp
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
@@ -94,7 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals smartcardSupport [ libcacard ]
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.isLinux [ libaio libcap_ng libcap attr ]
+    ++ lib.optionals stdenv.isLinux [ libcap_ng libcap attr ]
+    ++ lib.optionals (stdenv.isLinux && !userOnly) [ libaio ]
     ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
@@ -105,9 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals smbdSupport [ samba ]
     ++ lib.optionals uringSupport [ liburing ]
     ++ lib.optionals canokeySupport [ canokey-qemu ]
-    ++ lib.optionals capstoneSupport [ capstone ];
+    ++ lib.optionals capstoneSupport [ capstone ]
+    ++ lib.optionals (!userOnly) [ dtc ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
@@ -158,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
     (lib.enableFeature enableDocs "docs")
-    "--enable-tools"
+    (lib.enableFeature enableTools "tools")
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
@@ -170,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional usbredirSupport "--enable-usb-redir"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
     ++ lib.optionals stdenv.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
-    ++ lib.optional stdenv.isLinux "--enable-linux-aio"
+    ++ lib.optional (stdenv.isLinux && !userOnly) "--enable-linux-aio"
     ++ lib.optional gtkSupport "--enable-gtk"
     ++ lib.optional xenSupport "--enable-xen"
     ++ lib.optional cephSupport "--enable-rbd"
@@ -182,7 +195,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
-    ++ lib.optional capstoneSupport "--enable-capstone";
+    ++ lib.optional capstoneSupport "--enable-capstone"
+    ++ lib.optional (!pluginsSupport) "--disable-plugins"
+    ++ lib.optional (!enableBlobs) "--disable-install-blobs"
+    ++ lib.optional userOnly "--disable-system"
+    ++ lib.optional stdenv.hostPlatform.isStatic "--static";
 
   dontWrapGApps = true;
 
@@ -206,6 +223,11 @@ stdenv.mkDerivation (finalAttrs: {
     for f in $out/bin/qemu-system-*; do
       wrapGApp $f
     done
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # HACK: Otherwise the result will have the entire buildInputs closure
+    # injected by the pkgsStatic stdenv
+    # <https://github.com/NixOS/nixpkgs/issues/83667>
+    rm -f $out/nix-support/propagated-build-inputs
   '';
   preBuild = "cd build";
 
@@ -249,7 +271,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = lib.optionalString (!toolsOnly) ''
+  postInstall = lib.optionalString (!minimal) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
@@ -278,7 +300,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
   }
   # toolsOnly: Does not have qemu-kvm and there's no main support tool
-  // lib.optionalAttrs (!toolsOnly) {
+  # userOnly: There's one qemu-<arch> for every architecture
+  // lib.optionalAttrs (!toolsOnly && !userOnly) {
     mainProgram = "qemu-kvm";
+  }
+  # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
+  // lib.optionalAttrs userOnly {
+    platforms = with platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+    description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
   };
 })

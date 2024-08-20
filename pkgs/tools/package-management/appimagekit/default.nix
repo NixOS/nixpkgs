@@ -12,7 +12,7 @@ let
     owner = "AppImage";
     repo = "AppImageKit";
     rev = "8bbf694455d00f48d835f56afaa1dabcd9178ba6";
-    sha256 = "sha256-pqg+joomC5CI9WdKP/h/XKPsruMgZEaIOjPLOqnNPZw=";
+    hash = "sha256-pqg+joomC5CI9WdKP/h/XKPsruMgZEaIOjPLOqnNPZw=";
     fetchSubmodules = true;
   };
 

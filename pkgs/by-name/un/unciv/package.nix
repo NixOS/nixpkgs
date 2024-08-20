@@ -20,7 +20,7 @@ let
   };
 
   desktopIcon = fetchurl {
-    url = "https://github.com/yairm210/Unciv/blob/4.11.16/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
+    url = "https://github.com/yairm210/Unciv/blob/4.13.0-patch1/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
     hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
   };
 
@@ -33,11 +33,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.11.16";
+  version = "4.13.0-patch1";
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-hvWXqPT+GeMaBa7so0S1KjsH5fpnbcbEIWsq6KUbFTk=";
+    hash = "sha256-bZXBgSjmW+fBdDfG7cqKkF4VLYw7Iq2mw5j6iDh2ZhY=";
   };
 
   dontUnpack = true;

@@ -24,7 +24,6 @@
 , zip
 
 , dvdisasterSupport ? true, dvdisaster ? null
-, thumbnailSupport ? true, libgnomeui ? null
 , udevSupport ? true, udev ? null
 , dbusSupport ? true, dbus ? null
 }:
@@ -72,8 +71,7 @@ in stdenv.mkDerivation rec {
  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
   ++ optionals udevSupport [ udev ]
-  ++ optionals dbusSupport [ dbus ]
-  ++ optionals thumbnailSupport [ libgnomeui ];
+  ++ optionals dbusSupport [ dbus ];
 
   enableParallelBuilding = true;
 

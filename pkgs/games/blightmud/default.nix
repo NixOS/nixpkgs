@@ -6,27 +6,35 @@
 , alsa-lib
 , openssl
 , withTTS ? false
-, speechd
+, speechd-minimal
+, darwin
 }:
-
+let
+  inherit (darwin.apple_sdk.frameworks)
+    CoreAudio AudioUnit AVFoundation AppKit;
+in
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e9Uo0IJYL9/6/nNL27zfUYnsTwDaOJOcR2CY6t++jDE=";
+    hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
   };
 
-  cargoHash = "sha256-QSgTpmSojZrwZ0RsUL6c2xO310RZX3gkyGl6oNf6pYI=";
+  cargoHash = "sha256-84m5dihmiEGrFCajqaMW05MQtBceLodBzqtjW+zh6kg=";
 
   buildFeatures = lib.optional withTTS "tts";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ alsa-lib openssl ] ++ lib.optionals withTTS [ speechd ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals (withTTS && stdenv.isLinux) [ speechd-minimal ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals (withTTS && stdenv.isDarwin) [ AVFoundation AppKit ]
+    ++ lib.optionals stdenv.isDarwin [ CoreAudio AudioUnit ];
 
   checkFlags =
     let
@@ -44,6 +52,9 @@ rustPlatform.buildRustPackage rec {
         "timer_test"
         "validate_assertion_fail"
         "regex_smoke_test"
+        "test_tls_init_verify_err"
+        "test_tls_init_no_verify"
+        "test_tls_init_verify"
       ];
       skipFlag = test: "--skip " + test;
     in
@@ -64,6 +75,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Blightmud/Blightmud";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cpu ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

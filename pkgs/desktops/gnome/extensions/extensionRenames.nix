@@ -35,6 +35,7 @@
   "kernel-indicator@elboulangero.gitlab.com" = null;
   "kernel-indicator@pvizc.gitlab.com" = "kernel-indicator";
 
+  "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
   "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
   "FuzzyClock@johngoetz" = "fuzzy-clock";
 

@@ -10,7 +10,6 @@
   pyrdfa3,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   rdflib,
   setuptools,
   six,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "extruct";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "extruct";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6lAb17EoR0FKyIOb9hk1jcpmPtZ7vClfuCrDZ83XBeg=";
+    hash = "sha256-CfhIqbhrZkJ232grhHxrmj4H1/Bq33ZXe8kovSOWSK0=";
   };
 
   nativeBuildInputs = [ setuptools ];

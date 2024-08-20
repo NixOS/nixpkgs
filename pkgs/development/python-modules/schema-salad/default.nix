@@ -4,12 +4,12 @@
   buildPythonPackage,
   cachecontrol,
   fetchFromGitHub,
+  fetchpatch,
   importlib-resources,
   mistune,
   mypy,
   mypy-extensions,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   rdflib,
   requests,
@@ -56,6 +56,11 @@ buildPythonPackage rec {
     ]
     ++ cachecontrol.optional-dependencies.filecache
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+
+  patches = [ (fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/common-workflow-language/schema_salad/pull/840.patch";
+    hash = "sha256-fke75FCCn23LAMJ5bDWJpuBR6E9XIpjmzzXSbjqpxn8=";
+  } ) ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pycodegen;
 

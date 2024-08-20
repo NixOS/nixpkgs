@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "tomlkit" ];
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   build-system = with python3Packages; [ poetry-core ];
 

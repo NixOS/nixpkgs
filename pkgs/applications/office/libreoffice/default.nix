@@ -1,8 +1,10 @@
 { stdenv
 , fetchurl
+, fetchgit
+, fetchpatch2
 , lib
 , pam
-, python3
+, python311
 , libxslt
 , perl
 , perlPackages
@@ -47,7 +49,7 @@
 , libGLU
 , libGL
 , bsh
-, CoinMP
+, coinmp
 , libwps
 , libabw
 , libargon2
@@ -86,7 +88,7 @@
 , glm
 , gst_all_1
 , gdb
-, gnome
+, adwaita-icon-theme
 , glib
 , ncurses
 , libepoxy
@@ -97,7 +99,8 @@
 , libetonyek
 , liborcus
 , libpng
-, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "ko" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
+, withFonts ? false
 , withHelp ? true
 , kdeIntegration ? false
 , qtbase ? null
@@ -142,14 +145,14 @@
 , sonnet ? null
 }:
 
-assert builtins.elem variant [ "fresh" "still" ];
+assert builtins.elem variant [ "fresh" "still" "collabora" ];
 
 let
   inherit (lib)
     flatten flip
     concatMapStrings concatStringsSep
     getDev getLib
-    optionals optionalString;
+    optionals optionalAttrs optionalString;
 
   fontsConf = makeFontsConf {
     fontDirectories = [
@@ -197,8 +200,8 @@ let
       }) // {
         inherit (x) md5name md5;
       }) srcsAttributes.deps;
-    translations = fetchurl srcsAttributes.translations;
-    help = fetchurl srcsAttributes.help;
+    translations = srcsAttributes.translations { inherit fetchurl fetchgit; };
+    help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };
 
   qtMajor = lib.versions.major qtbase.version;
@@ -221,7 +224,8 @@ let
 in stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
   inherit version;
-  src = fetchurl srcsAttributes.main;
+
+  src = srcsAttributes.main { inherit fetchurl fetchgit; };
 
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
@@ -231,12 +235,16 @@ in stdenv.mkDerivation (finalAttrs: {
       ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
     '')}
 
+  '' + (if (variant != "collabora") then ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
 
     tar -xf ${srcs.help}
     tar -xf ${srcs.translations}
-  '';
+  '' else ''
+    cp -r --no-preserve=mode ${srcs.help}/. $sourceRoot/helpcontent2/
+    cp -r --no-preserve=mode ${srcs.translations}/. $sourceRoot/translations/
+  '');
 
   patches = [
     # Skip some broken tests:
@@ -244,6 +252,11 @@ in stdenv.mkDerivation (finalAttrs: {
     # - the remaining tests have notes in the patch
     # FIXME: get rid of this ASAP
     ./skip-broken-tests.patch
+    (fetchpatch2 {
+      name = "icu74-compat.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/main/libreoffice-7.5.8.2-icu-74-compatibility.patch?ref_type=heads.patch";
+      hash = "sha256-OGBPIVQj8JTYlkKywt4QpH7ULAzKmet5jTLztGpIS0Y=";
+    })
   ] ++ lib.optionals (variant == "still") [
     # Remove build config to reduce the amount of `-dev` outputs in the
     # runtime closure. This behavior was introduced by upstream in commit
@@ -251,11 +264,14 @@ in stdenv.mkDerivation (finalAttrs: {
     ./0001-Strip-away-BUILDCONFIG.patch
     # See above
     ./skip-broken-tests-still.patch
-  ] ++ lib.optionals (variant == "fresh") [
+  ] ++ lib.optionals (variant == "fresh" || variant == "collabora") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
     # See above
     ./skip-broken-tests-fresh.patch
+  ] ++ lib.optionals (variant == "collabora") [
+    ./fix-unpack-collabora.patch
+    ./skip-broken-tests-collabora.patch
   ];
 
   postPatch = ''
@@ -268,6 +284,9 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+
+    # Fix for Python 3.12
+    substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
   '';
 
   nativeBuildInputs = [
@@ -288,7 +307,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # See: https://www.mail-archive.com/libreoffice@lists.freedesktop.org/msg334080.html
     (libpng.override { apngSupport = false; })
     perlPackages.ArchiveZip
-    CoinMP
+    coinmp
     perlPackages.IOCompress
     abseil-cpp
     ant
@@ -311,7 +330,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     glm
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gperf
     gpgme
     graphite2
@@ -372,7 +391,7 @@ in stdenv.mkDerivation (finalAttrs: {
     perl
     poppler
     postgresql
-    python3
+    python311
     sane-backends
     unixODBC
     unzip
@@ -464,7 +483,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # Modified on every upgrade, though
     "--disable-odk"
     "--disable-firebird-sdbc"
-    "--without-fonts"
+    (lib.withFeature withFonts "fonts")
     "--without-doxygen"
 
     # TODO: package these as system libraries
@@ -525,7 +544,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--keep-going"  # easier to debug test failures
   ];
 
-  postInstall = ''
+  postInstall = optionalString (variant != "collabora") ''
     mkdir -p $out/share/icons
 
     cp -r sysui/desktop/icons/hicolor $out/share/icons
@@ -553,6 +572,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit srcs;
     jdk = jre';
+    python = python311; # for unoconv
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
@@ -624,5 +644,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    mainProgram = "libreoffice";
   };
 })

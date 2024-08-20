@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/warsaw/flufl.i18n";
     changelog = "https://gitlab.com/warsaw/flufl.i18n/-/raw/${version}/docs/NEWS.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

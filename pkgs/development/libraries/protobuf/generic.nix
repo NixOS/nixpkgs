@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     homepage = "https://protobuf.dev/";
-    maintainers = with lib.maintainers; [ jonringer ];
+    maintainers = [ ];
     mainProgram = "protoc";
   };
 })

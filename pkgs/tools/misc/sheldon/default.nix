@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vGFR8NL3bOCUuNr0KQuAbjQMxvFbN/T9aVmf7Wxt9JU=";
   };
 
-  cargoSha256 = "sha256-wVB+yL+h90f7NnASDaX5gxT5z45M8I1rxIJwY8uyB4k=";
+  cargoHash = "sha256-wVB+yL+h90f7NnASDaX5gxT5z45M8I1rxIJwY8uyB4k=";
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     "--skip lock_and_source_profiles"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sheldon \
       --bash <($out/bin/sheldon completions --shell bash) \
       --zsh <($out/bin/sheldon completions --shell zsh)

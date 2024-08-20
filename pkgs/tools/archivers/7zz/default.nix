@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchzip
 
   # Only used for Linux's x86/x86_64
 , uasm
@@ -25,32 +25,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "24.06";
+  version = "24.07";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
-      free = "sha256-X3uqGnJGQpW5MOaTtgWYwwrhS84e+piX7Gc+e8Pll00=";
-      unfree = "sha256-KqFmDHc1JbLthNbNf/BoDHhuwIk7h+TbRGVNy39ayLU=";
+      free = "sha256-D41Sf437WYRQMdVW7hwcnZI0UG67IJsTTMfxlpkk36M=";
+      unfree = "sha256-iKCs893IFG0I6a2kpUe0qiuCX+YUxIgMIBRykc9XYjA=";
     }.${if enableUnfree then "unfree" else "free"};
-    downloadToTemp = (!enableUnfree);
+    stripRoot = false;
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
     # https://fedoraproject.org/wiki/Licensing:Unrar
     postFetch = lib.optionalString (!enableUnfree) ''
-      mkdir tmp
-      tar xf $downloadedFile -C ./tmp
-      rm -r ./tmp/CPP/7zip/Compress/Rar*
-      tar cfJ $out -C ./tmp . \
-        --sort=name \
-        --mtime="@$SOURCE_DATE_EPOCH" \
-        --owner=0 --group=0 --numeric-owner \
-        --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime
-    '';
+      rm -r $out/CPP/7zip/Compress/Rar*
+   '';
   };
-
-  sourceRoot = ".";
 
   patches = [
     ./fix-cross-mingw-build.patch

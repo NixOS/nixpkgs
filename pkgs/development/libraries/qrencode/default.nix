@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       such as a mobile phone with CCD.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ adolfogc yana ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "qrencode";
   };

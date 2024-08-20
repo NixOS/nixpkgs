@@ -1,49 +1,73 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  isPy27,
   fetchFromGitHub,
-  setuptools,
+  poetry-core,
+  poetry-dynamic-versioning,
   pytestCheckHook,
-  pytest-cov,
+  testfixtures,
+  anytree,
+  beartype,
+  gensim,
+  graspologic-native,
   hyppo,
+  joblib,
   matplotlib,
   networkx,
   numpy,
+  pot,
   scikit-learn,
   scipy,
   seaborn,
+  statsmodels,
+  typing-extensions,
+  umap-learn,
 }:
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
-  disabled = isPy27;
-
   src = fetchFromGitHub {
-    owner = "microsoft";
+    owner = "graspologic-org";
     repo = "graspologic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hd3OyV95N8vhc4s50HbKkrcUOeSegn66Dkw7dixim00=";
+    hash = "sha256-taX/4/uCQXW7yFykVHY78hJIGThEIycHwrEOZ3h1LPY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "scipy" ];
+
+  dependencies = [
+    anytree
+    beartype
+    gensim
+    graspologic-native
     hyppo
+    joblib
     matplotlib
     networkx
     numpy
+    pot
     scikit-learn
     scipy
     seaborn
+    statsmodels
+    typing-extensions
+    umap-learn
   ];
+
+  env.NUMBA_CACHE_DIR = "$TMPDIR";
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    testfixtures
   ];
   pytestFlagsArray = [
     "tests"
@@ -52,12 +76,16 @@ buildPythonPackage rec {
   ];
   disabledTests = [ "gridplot_outputs" ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SIGABRT
+    "tests/test_plot.py"
+    "tests/test_plot_matrix.py"
+  ];
+
   meta = with lib; {
-    homepage = "https://graspologic.readthedocs.io";
+    homepage = "https://graspologic-org.github.io/graspologic";
     description = "Package for graph statistical algorithms";
-    license = licenses.asl20; # changing to `licenses.mit` in next release
+    license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
-    # graspologic-native is not available
-    broken = true;
   };
 }

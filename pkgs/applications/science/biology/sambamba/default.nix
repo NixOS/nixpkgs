@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "biod";
     repo = "sambamba";
     rev = "v${version}";
-    sha256 = "sha256-3O9bHGpMuCgdR2Wm7Dv1VUjMT1QTn8K1hdwgjvwhFDw=";
+    hash = "sha256-3O9bHGpMuCgdR2Wm7Dv1VUjMT1QTn8K1hdwgjvwhFDw=";
     fetchSubmodules = true;
   };
 

@@ -30,7 +30,7 @@ are written into `$XDG_CONFIG_HOME/systemd/user`.
  1 file changed, 3 insertions(+)
 
 diff --git a/src/systemctl/systemctl-edit.c b/src/systemctl/systemctl-edit.c
-index 367afa20f7..5777154d01 100644
+index 15398f8364..8d440cee59 100644
 --- a/src/systemctl/systemctl-edit.c
 +++ b/src/systemctl/systemctl-edit.c
 @@ -322,6 +322,9 @@ int verb_edit(int argc, char *argv[], void *userdata) {
@@ -40,6 +40,6 @@ index 367afa20f7..5777154d01 100644
 +        if (!arg_runtime && arg_runtime_scope == RUNTIME_SCOPE_SYSTEM)
 +                return log_error_errno(SYNTHETIC_ERRNO(EINVAL), "The unit-directory '/etc/systemd/system' is read-only on NixOS, so it's not possible to edit system-units directly. Use 'systemctl edit --runtime' instead.");
 +
-         if (!on_tty())
+         if (!on_tty() && !arg_stdin)
                  return log_error_errno(SYNTHETIC_ERRNO(EINVAL), "Cannot edit units if not on a tty.");
  

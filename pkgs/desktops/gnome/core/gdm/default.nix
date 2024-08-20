@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
     hash = "sha256-TuNFQioWU3FQzYQkUM2lKyyoaYS8Ue4gzcAl3PS9Jos=";
   };
 

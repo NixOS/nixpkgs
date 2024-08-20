@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lssecret";
+  pname = "lssecret";
   version = "unstable-2022-12-02";
 
   src = fetchFromGitLab {
     owner = "GrantMoyer";
-    repo = name;
+    repo = "lssecret";
     rev = "20fd771a";
     hash = "sha256-yU70WZj4EC/sFJxyq2SQ0YQ6RCQHYiW/aQiYWo7+ujk=";
   };

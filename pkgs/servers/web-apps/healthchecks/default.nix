@@ -6,6 +6,7 @@
 }:
 let
   py = python3.override {
+    self = py;
     packageOverrides = final: prev: {
       django = prev.django_5;
     };
@@ -13,14 +14,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "3.3";
+  version = "3.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-XQ8nr9z9Yjwr1irExIgYiGX2knMXX701i6BwvXsVP+E=";
+    sha256 = "sha256-hiuw7XfCDy+9fzuQMaeN9+XsENeBI1RNXy8IM1HIFhI=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -92,7 +93,7 @@ py.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/healthchecks/healthchecks";
-    description = "Cron monitoring tool written in Python & Django ";
+    description = "Cron monitoring tool written in Python & Django";
     license = licenses.bsd3;
     maintainers = with maintainers; [ phaer ];
   };

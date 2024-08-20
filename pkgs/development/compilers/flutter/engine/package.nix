@@ -4,15 +4,20 @@
   writeText,
   symlinkJoin,
   targetPlatform,
-  hostPlatform,
+  buildPlatform,
   darwin,
   clang,
   llvm,
-  tools ? callPackage ./tools.nix { inherit hostPlatform; },
+  tools ? callPackage ./tools.nix { inherit buildPlatform; },
   stdenv,
   stdenvNoCC,
+  dart,
+  fetchgit,
   runCommand,
+  llvmPackages,
+  llvmPackages_15,
   patchelf,
+  openbox,
   xorg,
   libglvnd,
   libepoxy,
@@ -28,36 +33,67 @@
   gtk3,
   pkg-config,
   ninja,
-  python3,
+  python312,
+  python39,
   git,
   version,
   flutterVersion,
   dartSdkVersion,
+  swiftshaderHash,
+  swiftshaderRev,
   hashes,
   patches,
   url,
   runtimeMode ? "release",
-  isOptimized ? true,
+  isOptimized ? runtimeMode != "debug",
 }:
-with lib;
 let
   expandSingleDep =
     dep: lib.optionals (lib.isDerivation dep) ([ dep ] ++ map (output: dep.${output}) dep.outputs);
 
-  expandDeps = deps: flatten (map expandSingleDep deps);
+  expandDeps = deps: lib.flatten (map expandSingleDep deps);
 
-  constants = callPackage ./constants.nix { inherit targetPlatform; };
+  constants = callPackage ./constants.nix { platform = targetPlatform; };
+
+  python3 = if lib.versionAtLeast flutterVersion "3.20" then python312 else python39;
 
   src = callPackage ./source.nix {
     inherit
       tools
+      flutterVersion
       version
       hashes
       url
+      targetPlatform
+      buildPlatform
       ;
   };
+
+  swiftshader = fetchgit {
+    url = "https://swiftshader.googlesource.com/SwiftShader.git";
+    hash = swiftshaderHash;
+    rev = swiftshaderRev;
+
+    postFetch = ''
+      rm -rf $out/third_party/llvm-project
+    '';
+  };
+
+  llvm = symlinkJoin {
+    name = "llvm";
+    paths = with llvmPackages; [
+      clang
+      llvmPackages.llvm
+    ];
+  };
+
+  outName = "host_${runtimeMode}${lib.optionalString (!isOptimized) "_unopt"}";
+
+  dartPath = "${
+    if (lib.versionAtLeast flutterVersion "3.23") then "flutter/third_party" else "third_party"
+  }/dart";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flutter-engine-${runtimeMode}${lib.optionalString (!isOptimized) "-unopt"}";
   inherit
     version
@@ -65,14 +101,20 @@ stdenv.mkDerivation {
     patches
     isOptimized
     dartSdkVersion
-    src;
+    src
+    outName
+    swiftshader
+    ;
+
+  setOutputFlags = false;
+  doStrip = isOptimized;
 
   toolchain = symlinkJoin {
     name = "flutter-engine-toolchain-${version}";
 
     paths =
       expandDeps (
-        optionals (stdenv.isLinux) [
+        lib.optionals (stdenv.isLinux) [
           gtk3
           wayland
           libepoxy
@@ -97,7 +139,7 @@ stdenv.mkDerivation {
           xorg.xorgproto
           zlib
         ]
-        ++ optionals (stdenv.isDarwin) [
+        ++ lib.optionals (stdenv.isDarwin) [
           clang
           llvm
         ]
@@ -107,10 +149,22 @@ stdenv.mkDerivation {
         stdenv.cc.libc_lib
       ];
 
+    # Needed due to Flutter expecting everything to be relative to $out
+    # and not true absolute path (ie relative to "/").
     postBuild = ''
-      ln -s /nix $out/nix
+      mkdir -p $(dirname $(dirname "$out/$out"))
+      ln -s $(dirname "$out") $out/$(dirname "$out")
     '';
   };
+
+  NIX_CFLAGS_COMPILE = [
+    "-I${finalAttrs.toolchain}/include"
+  ] ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
+
+  nativeCheckInputs = lib.optionals stdenv.isLinux [
+    xorg.xorgserver
+    openbox
+  ];
 
   nativeBuildInputs =
     [
@@ -119,9 +173,10 @@ stdenv.mkDerivation {
       git
       pkg-config
       ninja
+      dart
     ]
     ++ lib.optionals (stdenv.isLinux) [ patchelf ]
-    ++ optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.isDarwin) [
       darwin.system_cmds
       darwin.xcode
       tools.xcode-select
@@ -130,65 +185,35 @@ stdenv.mkDerivation {
 
   buildInputs = [ gtk3 ];
 
-  patchtools =
-    let
-      buildtoolsPath =
-        if lib.versionAtLeast flutterVersion "3.21" then "flutter/buildtools" else "buildtools";
-    in
-    [
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-apply-replacements"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-doc"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-format"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-include-fixer"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-refactor"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-scan-deps"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-tidy"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clangd"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/dsymutil"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/find-all-symbols"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/lld"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-ar"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-bolt"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-cov"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-cxxfilt"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-debuginfod-find"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-dwarfdump"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-dwp"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-gsymutil"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-ifs"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-libtool-darwin"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-lipo"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-ml"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-mt"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-nm"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-objcopy"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-objdump"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-pdbutil"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-profdata"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-rc"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-readobj"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-size"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-symbolizer"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-undname"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-xray"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/sancov"
-      "flutter/prebuilts/${constants.alt-platform}/dart-sdk/bin/dartaotruntime"
-      "flutter/prebuilts/${constants.alt-platform}/dart-sdk/bin/dart"
-      "flutter/third_party/gn/gn"
-      "third_party/dart/tools/sdks/dart-sdk/bin/dart"
-    ];
+  patchtools = [ "flutter/third_party/gn/gn" ];
 
   dontPatch = true;
 
   patchgit = [
-    "third_party/dart"
+    dartPath
     "flutter"
     "."
   ] ++ lib.optional (lib.versionAtLeast flutterVersion "3.21") "flutter/third_party/skia";
 
   postUnpack = ''
     pushd ${src.name}
+
+    cp ${./pkg-config.py} src/build/config/linux/pkg-config.py
+
+    cp -pr --reflink=auto $swiftshader src/flutter/third_party/swiftshader
+    chmod -R u+w -- src/flutter/third_party/swiftshader
+
+    ln -s ${llvmPackages_15.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
+
+    mkdir -p src/flutter/buildtools/${constants.alt-platform}
+    ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
+
+    mkdir -p src/buildtools/${constants.alt-platform}
+    ln -s ${llvm} src/buildtools/${constants.alt-platform}/clang
+
+    mkdir -p src/${dartPath}/tools/sdks
+    ln -s ${dart} src/${dartPath}/tools/sdks/dart-sdk
+
     ${lib.optionalString (stdenv.isLinux) ''
       for patchtool in ''${patchtools[@]}; do
         patchelf src/$patchtool --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
@@ -197,19 +222,17 @@ stdenv.mkDerivation {
 
     for dir in ''${patchgit[@]}; do
       pushd src/$dir
-      rev=$(cat .git/HEAD)
       rm -rf .git
       git init
       git add .
       git config user.name "nobody"
       git config user.email "nobody@local.host"
-      git commit -a -m "$rev"
+      git commit -a -m "$dir" --quiet
       popd
     done
 
-    src/flutter/prebuilts/${constants.alt-platform}/dart-sdk/bin/dart src/third_party/dart/tools/generate_package_config.dart
-    cp ${./pkg-config.py} src/build/config/linux/pkg-config.py
-    echo "${dartSdkVersion}" >src/third_party/dart/sdk/version
+    dart src/${dartPath}/tools/generate_package_config.dart
+    echo "${dartSdkVersion}" >src/${dartPath}/sdk/version
 
     rm -rf src/third_party/angle/.git
     python3 src/flutter/tools/pub_get_offline.py
@@ -230,10 +253,12 @@ stdenv.mkDerivation {
       "--embedder-for-target"
       "--no-goma"
     ]
-    ++ optionals (targetPlatform.isx86_64 == false) [
+    ++ lib.optionals (targetPlatform.isx86_64 == false) [
       "--linux"
       "--linux-cpu ${constants.alt-arch}"
-    ];
+    ]
+    ++ lib.optional (!isOptimized) "--unoptimized"
+    ++ lib.optional (runtimeMode == "debug") "--no-stripped";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
   configurePhase =
@@ -250,8 +275,9 @@ stdenv.mkDerivation {
         --runtime-mode $runtimeMode \
         --out-dir $out \
         --target-sysroot $toolchain \
-        --target-dir host_$runtimeMode${lib.optionalString (!isOptimized) "_unopt --unoptimized"} \
-        --verbose
+        --target-dir $outName \
+        --target-triple ${targetPlatform.config} \
+        --enable-fontconfig
 
       runHook postConfigure
     '';
@@ -260,41 +286,37 @@ stdenv.mkDerivation {
     runHook preBuild
 
     export TERM=dumb
-    for tool in flatc scenec gen_snapshot dart impellerc shader_archiver gen_snapshot_product; do
-      ninja -C $out/out/host_$runtimeMode${
-        lib.optionalString (!isOptimized) "_unopt"
-      } -j$NIX_BUILD_CORES $tool
-      ${lib.optionalString (stdenv.isLinux) ''
-        patchelf $out/out/host_$runtimeMode${
-          lib.optionalString (!isOptimized) "_unopt"
-        }/$tool --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
-      ''}
-    done
 
-    ninja -C $out/out/host_$runtimeMode${lib.optionalString (!isOptimized) "_unopt"} -j$NIX_BUILD_CORES
-
-    ${lib.optionalString (stdenv.isLinux) ''
-      patchelf $out/out/host_$runtimeMode${
-        lib.optionalString (!isOptimized) "_unopt"
-      }/dart-sdk/bin/dartaotruntime \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
-    ''}
+    ninja -C $out/out/$outName -j$NIX_BUILD_CORES
 
     runHook postBuild
   '';
 
-  # Link sources so we can set $FLUTTER_ENGINE to this derivation
+  # Tests are broken
+  doCheck = false;
+  checkPhase = ''
+    ln -s $out/out src/out
+    touch src/out/run_tests.log
+    sh src/flutter/testing/run_tests.sh $outName
+    rm src/out/run_tests.log
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    for dir in $(find $src/src -mindepth 1 -maxdepth 1); do
-      ln -sf $dir $out/$(basename $dir)
-    done
+    rm -rf $out/out/$outName/{obj,gen,exe.unstripped,lib.unstripped,zip_archives}
+    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,display_list_rendertests,flutter_tester,toolchain.ninja}
+    find $out/out/$outName -name '*_unittests' -delete
+    find $out/out/$outName -name '*_benchmarks' -delete
 
     runHook postInstall
   '';
 
-  meta = {
+  passthru = {
+    dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
+  };
+
+  meta = with lib; {
     # Very broken on Darwin
     broken = stdenv.isDarwin;
     description = "The Flutter engine";
@@ -307,5 +329,5 @@ stdenv.mkDerivation {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-  };
-}
+  } // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+})

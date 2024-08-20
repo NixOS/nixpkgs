@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "5.2";
+  version = "6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "BTrees";
     inherit version;
-    hash = "sha256-bkoK8BpLvslan5Mbr1xUWXn0NBoTp2Yf+KSXr089g4E=";
+    hash = "sha256-9puM3TNDThPhgCFruCrgt80x+t+3zFWWlcs3MZyjX/A=";
   };
 
   propagatedBuildInputs = [
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Scalable persistent components";
     homepage = "http://packages.python.org/BTrees";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

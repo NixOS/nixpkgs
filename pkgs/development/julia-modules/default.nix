@@ -35,9 +35,7 @@ packageNames:
 let
   util = callPackage ./util.nix {};
 
-in
 
-let
   # Some Julia packages require access to Python. Provide a Nixpkgs version so it
   # doesn't try to install its own.
   pythonToUse = let

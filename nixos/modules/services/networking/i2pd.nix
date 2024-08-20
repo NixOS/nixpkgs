@@ -183,37 +183,45 @@ let
   in
     pkgs.writeText "i2pd.conf" (concatStringsSep "\n" opts);
 
-  tunnelConf = let opts = [
-    notice
-    (flip map
-      (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
-      (tun: let outTunOpts = [
-        (sec tun.name)
-        "type = client"
-        (intOpt "port" tun.port)
-        (strOpt "destination" tun.destination)
+  tunnelConf = let
+    mkOutTunnel = tun:
+      let
+        outTunOpts = [
+          (sec tun.name)
+          "type = client"
+          (intOpt "port" tun.port)
+          (strOpt "destination" tun.destination)
         ] ++ (optionals (tun ? destinationPort) (optionalNullInt "destinationport" tun.destinationPort))
-        ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
-        ++ (optionals (tun ? address) (optionalNullString "address" tun.address))
-        ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
-        ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
-        ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
-        ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
-        ++ (optionals (tun ? crypto.tagsToSend) (optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend));
-        in concatStringsSep "\n" outTunOpts))
-    (flip map
-      (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
-      (tun: let inTunOpts = [
-        (sec tun.name)
-        "type = server"
-        (intOpt "port" tun.port)
-        (strOpt "host" tun.address)
-      ] ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
-        ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
-        ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
-        ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
-        in concatStringsSep "\n" inTunOpts))];
-    in pkgs.writeText "i2pd-tunnels.conf" opts;
+          ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+          ++ (optionals (tun ? address) (optionalNullString "address" tun.address))
+          ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
+          ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
+          ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
+          ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
+          ++ (optionals (tun ? crypto.tagsToSend) (optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend));
+      in
+        concatStringsSep "\n" outTunOpts;
+
+    mkInTunnel = tun:
+      let
+        inTunOpts = [
+          (sec tun.name)
+          "type = server"
+          (intOpt "port" tun.port)
+          (strOpt "host" tun.address)
+        ] ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
+          ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+          ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
+          ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
+      in
+        concatStringsSep "\n" inTunOpts;
+
+    allOutTunnels = collect (tun: tun ? port && tun ? destination) cfg.outTunnels;
+    allInTunnels = collect (tun: tun ? port && tun ? address) cfg.inTunnels;
+
+    opts = [ notice ] ++ (map mkOutTunnel allOutTunnels) ++ (map mkInTunnel allInTunnels);
+  in
+    pkgs.writeText "i2pd-tunnels.conf" (concatStringsSep "\n" opts);
 
   i2pdFlags = concatStringsSep " " (
     optional (cfg.address != null) ("--host=" + cfg.address) ++ [

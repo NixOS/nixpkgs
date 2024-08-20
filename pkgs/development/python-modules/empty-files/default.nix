@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Null Object pattern for files";
     homepage = "https://github.com/approvals/EmptyFiles.Python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

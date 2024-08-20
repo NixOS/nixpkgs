@@ -16,11 +16,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "hepmc3";
-  version = "3.2.7";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "sha256-WH+qZVbMVMzYmtNUIUYbR2HXgJvBei5y9QNNrqFCIys=";
+    sha256 = "sha256-b4dgke3PfubQwNsE4IAFbonvwaYavmI1XZfOjnNXadY=";
   };
 
   nativeBuildInputs = [

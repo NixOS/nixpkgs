@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   hatchling,
   hatch-vcs,
   aiohttp,
@@ -129,8 +128,6 @@ buildPythonPackage {
     rev = "refs/tags/v${version}";
     hash = "sha256-giZteSikwS9YEcVMPCC9h2khbBgvUPRW1biAyixO13Y=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "cattrs"

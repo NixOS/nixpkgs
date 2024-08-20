@@ -5,10 +5,10 @@
   beautifulsoup4,
   buildPythonPackage,
   click,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch2,
   pytest-xdist,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   requests,
   saneyaml,
@@ -18,21 +18,31 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "31.0.3";
-  format = "pyproject";
+  version = "31.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ura55/m/iesqN6kSYmdHB1sbthSHXaFWiQ76wVmyl0E=";
+  src = fetchFromGitHub {
+    owner = "nexB";
+    repo = "commoncode";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4ZgyNlMj1i1fRru4wgDOyP3qzbne8D2eH/tFI60kgrE=";
   };
+
+  patches = [
+    # https://github.com/nexB/commoncode/pull/66
+    (fetchpatch2 {
+      url = "https://github.com/nexB/commoncode/commit/4f87b3c9272dcf209b9c4b997e98b58e0edaf570.patch";
+      hash = "sha256-loUtAww+SK7kMt5uqZmLQ8Wg/OqB7LWVA4BiztnwHsA=";
+    })
+  ];
 
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     beautifulsoup4
     click
@@ -62,11 +72,6 @@ buildPythonPackage rec {
       "test_searchable_paths"
     ];
 
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/nexB/commoncode/issues/36
-    "src/commoncode/fetch.py"
-  ];
-
   pythonImportsCheck = [ "commoncode" ];
 
   meta = with lib; {
@@ -74,6 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nexB/commoncode";
     changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,8 +3,8 @@
 , enableQT             ? false # deprecated name
 , enableQt             ? enableQT
 , enableXM             ? false
-, mesa
-, enableOpenGLX11      ? !mesa.meta.broken
+, libGLX
+, enableOpenGLX11      ? !libGLX.meta.broken
 , enablePython         ? false
 , enableRaytracerX11   ? false
 
@@ -48,12 +48,12 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.2.1";
+  version = "11.2.2";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-g122VD1csugBZ1lYllvpaHf2bWkHu1IZVLWYt4Xerl4=";
+    hash = "sha256-0k9lc1uKCgOcAPlDSZHpnvEZuGxRDQ8qshFV24KjSR0=";
   };
 
   # Fix broken paths in a .pc
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
   ] ++ lib.optionals (enableOpenGLX11 && stdenv.isDarwin) [
-    "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
-    "-DXQuartzGL_gl_LIBRARY=${libGL}/lib/libGL.dylib"
+    "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
+    "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
     "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
   ] ++ lib.optionals enableInventor [

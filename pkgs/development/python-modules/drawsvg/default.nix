@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "drawsvg";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "cduck";
     repo = "drawsvg";
     rev = "refs/tags/${version}";
-    hash = "sha256-LoA5yYeHO4GqS3dk7EMg1ZC42HBgmM6rSfigWMc4yUQ=";
+    hash = "sha256-JC7u6bEB7RCJVLeYnNqACmddLI5F5PyaaBxaAZ+N/5s=";
   };
 
   build-system = [ setuptools ];

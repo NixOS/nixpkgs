@@ -283,7 +283,10 @@ in {
   ];
 
   composerRepository = php.mkComposerRepository {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
+    composerNoDev = true;
+    composerNoPlugins = true;
+    composerNoScripts = true;
     # Specifying a custom composer.lock since it is not present in the sources.
     composerLock = ./composer.lock;
     # The composer vendor hash

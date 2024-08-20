@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Kerenoc";
     repo = "GCstar";
     rev = "v${version}";
-    sha256 = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
+    hash = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];

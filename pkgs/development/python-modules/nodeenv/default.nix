@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "nodeenv";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ekalinin";
     repo = "nodeenv";
     rev = "refs/tags/${version}";
-    hash = "sha256-85Zr4RbmNeW3JAdtvDblWaPTivWWUJKh+mJbtsGJVO4=";
+    hash = "sha256-nud8HSfx1ri0UZf25VPCy7swfaSM13u5+HzozK+ikeY=";
   };
 
   build-system = [
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ekalinin/nodeenv";
     changelog = "https://github.com/ekalinin/nodeenv/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

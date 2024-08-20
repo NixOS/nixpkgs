@@ -6,6 +6,7 @@ argparse,,,,,,
 basexx,,,,,,
 binaryheap,,,,,,vcunat
 busted,,,,,,
+busted-htest,,,,,,mrcjkb
 cassowary,,,,,,alerque
 cldr,,,,,,alerque
 compat53,,,,,,vcunat
@@ -34,6 +35,7 @@ ldoc,,,,,,
 lgi,,,,,,
 linenoise,https://raw.githubusercontent.com/hoelzro/lua-linenoise/master/linenoise-0.9-1.rockspec,,,,,
 ljsyscall,,,,,5.1,lblasc
+llscheck,,,,,,mrcjkb
 lmathx,,,,,5.3,alexshpilkin
 lmpfrlib,,,,,5.3,alexshpilkin
 loadkit,,,,,,alerque
@@ -82,6 +84,7 @@ luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-treesitter-parser,,,,,,mrcjkb
+luarocks-build-treesitter-parser-cpp,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasnip,,,,,,
 luasocket,,,,,,
@@ -97,9 +100,10 @@ lua-utils.nvim,,,,,,mrcjkb
 lua-yajl,,,,,,pstn
 lua-iconv,,,,7.0.0,,
 luuid,,,,20120509-2,,
-luv,,,,1.44.2-1,,
+luv,,,,1.48.0-2,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 lyaml,,,,,,lblasc
+lz.n,,,,,,mrcjkb
 magick,,,,,5.1,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
@@ -135,7 +139,6 @@ telescope.nvim,,,,,5.1,
 telescope-manix,,,,,,
 tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
-toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb
 tree-sitter-norg,,,,,5.1,mrcjkb
 vstruct,,,,,,

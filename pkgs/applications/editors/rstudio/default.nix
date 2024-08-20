@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivation
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , copyDesktopItems
@@ -38,7 +37,7 @@
 
 let
   pname = "RStudio";
-  version = "2024.04.1+748";
+  version = "2024.04.2+764";
   RSTUDIO_VERSION_MAJOR = lib.versions.major version;
   RSTUDIO_VERSION_MINOR = lib.versions.minor version;
   RSTUDIO_VERSION_PATCH = lib.versions.patch version;
@@ -50,7 +49,7 @@ let
     owner = "rstudio";
     repo = "rstudio";
     rev = "v" + version;
-    hash = "sha256-fzxbhN9NdM0E2rxezj2BMEZ8obUbX0Zw8haDNmfAkWs=";
+    hash = "sha256-j258eW1MYQrB6kkpjyolXdNuwQ3zSWv9so4q0QLsZuw=";
   };
 
   mathJaxSrc = fetchurl {
@@ -134,48 +133,38 @@ in
       ./pandoc-nix-path.patch
       ./use-system-quarto.patch
       ./ignore-etc-os-release.patch
-
-      (fetchpatch {
-        name = "use-system-yaml-patch";
-        url = "https://github.com/rstudio/rstudio/commit/04de8ca8b83dcc7fee9fd65e6ef58c372489d5ef.patch";
-        hash = "sha256-FHSSOPsw6AAYBj/fgNT6idyxvRj3SG+fbla0UDjug1Y=";
-      })
-
     ];
 
     postPatch = ''
-      substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}
-
-      substituteInPlace src/cpp/CMakeLists.txt \
-        --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
+      substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace-fail '@R@' ${R}
 
       substituteInPlace src/gwt/build.xml \
-        --replace '@node@' ${nodejs} \
-        --replace './lib/quarto' ${quartoSrc}
+        --replace-fail '@node@' ${nodejs} \
+        --replace-fail './lib/quarto' ${quartoSrc}
 
       substituteInPlace src/cpp/conf/rsession-dev.conf \
-        --replace '@node@' ${nodejs}
+        --replace-fail '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
-        --replace '@libclang@' ${llvmPackages.libclang.lib} \
-        --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
+        --replace-fail '@libclang@' ${llvmPackages.libclang.lib} \
+        --replace-fail '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
 
       substituteInPlace src/cpp/session/CMakeLists.txt \
-        --replace '@pandoc@' ${pandoc} \
-        --replace '@quarto@' ${quarto}
+        --replace-fail '@pandoc@' ${pandoc} \
+        --replace-fail '@quarto@' ${quarto}
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
-        --replace '@pandoc@' ${pandoc}/bin \
-        --replace '@quarto@' ${quarto}
+        --replace-fail '@pandoc@' ${pandoc}/bin \
+        --replace-fail '@quarto@' ${quarto}
     '';
 
-    hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
+    hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
     # These dicts contain identically-named dict files, so we only keep the
     # -large versions in case of clashes
-    largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d.name) hunspellDictionaries;
-    otherDicts = with lib; filter
-      (d: !(hasAttr "dictFileName" d &&
-        elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
+    largeDicts = lib.filter (d: lib.hasInfix "-large-wordlist" d.name) hunspellDictionaries;
+    otherDicts = lib.filter
+      (d: !(lib.hasAttr "dictFileName" d &&
+        lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
       hunspellDictionaries;
     dictionaries = largeDicts ++ otherDicts;
 
@@ -189,10 +178,10 @@ in
 
       unzip -q ${mathJaxSrc} -d dependencies/mathjax-27
 
-     # As of Chocolate Cosmos, node 18.19.1 is used for runtime
+     # As of Chocolate Cosmos, node 18.20.3 is used for runtime
      # 18.18.2 is still used for build
      # see https://github.com/rstudio/rstudio/commit/facb5cf1ab38fe77813aaf36590804e4f865d780
-     mkdir -p dependencies/common/node/18.19.1
+     mkdir -p dependencies/common/node/18.20.3
 
       mkdir -p dependencies/pandoc/${pandoc.version}
       cp ${pandoc}/bin/pandoc dependencies/pandoc/${pandoc.version}/pandoc

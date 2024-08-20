@@ -15,6 +15,11 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/bindings/python";
 
+  patches = [
+    # Python 3.12 compatibility: Drop removed `distutils` import in favor of `sysconfig`
+    ./avoid-distutils-python312.patch
+  ];
+
   prePatch = ''
     ln -s ${unicorn-emu}/lib/libunicorn.* prebuilt/
   '';

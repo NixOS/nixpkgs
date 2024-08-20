@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , pkg-config
 , gobject-introspection
 , meson
@@ -24,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fprintd";
-  version = "1.94.2";
+  version = "1.94.3";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -32,16 +31,8 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ePhcIZyXoGr8XlBuzKjpibU9D/44iCXYBlpVR9gcswQ=";
+    sha256 = "sha256-shH+ctQAx4fpTMWTmo3wB45ZS38Jf8RknryPabfZ6QE=";
   };
-
-  patches = [
-    # backport upstream patch fixing tests
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/ae04fa989720279e5558c3b8ff9ebe1959b1cf36.patch";
-      sha256 = "sha256-jW5vlzrbZQ1gUDLBf7G50GnZfZxhlnL2Eu+9Bghdwdw=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

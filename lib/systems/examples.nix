@@ -60,23 +60,23 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rust.rustcTarget = "armv7-linux-androideabi";
-    sdkVer = "28";
-    ndkVer = "24";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rust.rustcTarget = "aarch64-linux-android";
-    sdkVer = "28";
-    ndkVer = "24";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "30";
-    ndkVer = "24";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
@@ -353,6 +353,12 @@ rec {
 
   wasi32 = {
     config = "wasm32-unknown-wasi";
+    useLLVM = true;
+  };
+
+  wasm32-unknown-none = {
+    config = "wasm32-unknown-none";
+    rust.rustcTarget = "wasm32-unknown-unknown";
     useLLVM = true;
   };
 

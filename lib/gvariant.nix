@@ -1,4 +1,4 @@
-/*
+/**
   A partial and basic implementation of GVariant formatted strings.
   See [GVariant Format Strings](https://docs.gtk.org/glib/gvariant-format-strings.html) for details.
 
@@ -41,17 +41,28 @@ let
     variant = "v";
   };
 
-  /* Check if a value is a GVariant value
-
-     Type:
-       isGVariant :: Any -> Bool
-  */
-  isGVariant = v: v._type or "" == "gvariant";
-
 in
 rec {
 
-  inherit type isGVariant;
+  inherit type;
+
+  /**
+    Check if a value is a GVariant value
+
+
+    # Inputs
+
+    `v`
+
+    : value to check
+
+    # Type
+
+    ```
+    isGVariant :: Any -> Bool
+    ```
+  */
+  isGVariant = v: v._type or "" == "gvariant";
 
   intConstructors = [
     {
@@ -100,11 +111,22 @@ rec {
     }
   ];
 
-  /* Returns the GVariant value that most closely matches the given Nix value.
-     If no GVariant value can be found unambiguously then error is thrown.
+  /**
+    Returns the GVariant value that most closely matches the given Nix value.
+    If no GVariant value can be found unambiguously then error is thrown.
 
-     Type:
-       mkValue :: Any -> gvariant
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkValue :: Any -> gvariant
+    ```
   */
   mkValue = v:
     if builtins.isBool v then
@@ -132,14 +154,32 @@ rec {
     else
       throw "The GVariant type of “${builtins.typeOf v}” can't be inferred.";
 
-  /* Returns the GVariant array from the given type of the elements and a Nix list.
+  /**
+    Returns the GVariant array from the given type of the elements and a Nix list.
 
-     Type:
-       mkArray :: [Any] -> gvariant
 
-     Example:
-       # Creating a string array
-       lib.gvariant.mkArray [ "a" "b" "c" ]
+    # Inputs
+
+    `elems`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkArray :: [Any] -> gvariant
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.gvariant.mkArray` usage example
+
+    ```nix
+    # Creating a string array
+    lib.gvariant.mkArray [ "a" "b" "c" ]
+    ```
+
+    :::
   */
   mkArray = elems:
     let
@@ -153,31 +193,67 @@ rec {
         "@${self.type} [${concatMapStringsSep "," toString self.value}]";
     };
 
-  /* Returns the GVariant array from the given empty Nix list.
+  /**
+    Returns the GVariant array from the given empty Nix list.
 
-     Type:
-       mkEmptyArray :: gvariant.type -> gvariant
 
-     Example:
-       # Creating an empty string array
-       lib.gvariant.mkEmptyArray (lib.gvariant.type.string)
+    # Inputs
+
+    `elemType`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkEmptyArray :: gvariant.type -> gvariant
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.gvariant.mkEmptyArray` usage example
+
+    ```nix
+    # Creating an empty string array
+    lib.gvariant.mkEmptyArray (lib.gvariant.type.string)
+    ```
+
+    :::
   */
   mkEmptyArray = elemType: mkPrimitive (type.arrayOf elemType) [ ] // {
     __toString = self: "@${self.type} []";
   };
 
 
-  /* Returns the GVariant variant from the given Nix value. Variants are containers
-     of different GVariant type.
+  /**
+    Returns the GVariant variant from the given Nix value. Variants are containers
+    of different GVariant type.
 
-     Type:
-       mkVariant :: Any -> gvariant
 
-     Example:
-       lib.gvariant.mkArray [
-         (lib.gvariant.mkVariant "a string")
-         (lib.gvariant.mkVariant (lib.gvariant.mkInt32 1))
-       ]
+    # Inputs
+
+    `elem`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkVariant :: Any -> gvariant
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.gvariant.mkVariant` usage example
+
+    ```nix
+    lib.gvariant.mkArray [
+      (lib.gvariant.mkVariant "a string")
+      (lib.gvariant.mkVariant (lib.gvariant.mkInt32 1))
+    ]
+    ```
+
+    :::
   */
   mkVariant = elem:
     let gvarElem = mkValue elem;
@@ -185,23 +261,43 @@ rec {
       __toString = self: "<${toString self.value}>";
     };
 
-  /* Returns the GVariant dictionary entry from the given key and value.
+  /**
+    Returns the GVariant dictionary entry from the given key and value.
 
-     Type:
-       mkDictionaryEntry :: String -> Any -> gvariant
 
-     Example:
-       # A dictionary describing an Epiphany’s search provider
-       [
-         (lib.gvariant.mkDictionaryEntry "url" (lib.gvariant.mkVariant "https://duckduckgo.com/?q=%s&t=epiphany"))
-         (lib.gvariant.mkDictionaryEntry "bang" (lib.gvariant.mkVariant "!d"))
-         (lib.gvariant.mkDictionaryEntry "name" (lib.gvariant.mkVariant "DuckDuckGo"))
-       ]
+    # Inputs
+
+    `name`
+
+    : The key of the entry
+
+    `value`
+
+    : The value of the entry
+
+    # Type
+
+    ```
+    mkDictionaryEntry :: String -> Any -> gvariant
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.gvariant.mkDictionaryEntry` usage example
+
+    ```nix
+    # A dictionary describing an Epiphany’s search provider
+    [
+      (lib.gvariant.mkDictionaryEntry "url" (lib.gvariant.mkVariant "https://duckduckgo.com/?q=%s&t=epiphany"))
+      (lib.gvariant.mkDictionaryEntry "bang" (lib.gvariant.mkVariant "!d"))
+      (lib.gvariant.mkDictionaryEntry "name" (lib.gvariant.mkVariant "DuckDuckGo"))
+    ]
+    ```
+
+    :::
   */
   mkDictionaryEntry =
-    # The key of the entry
     name:
-    # The value of the entry
     value:
     let
       name' = mkValue name;
@@ -212,10 +308,25 @@ rec {
       __toString = self: "@${self.type} {${name'},${value'}}";
     };
 
-  /* Returns the GVariant maybe from the given element type.
+  /**
+    Returns the GVariant maybe from the given element type.
 
-     Type:
-       mkMaybe :: gvariant.type -> Any -> gvariant
+
+    # Inputs
+
+    `elemType`
+
+    : 1\. Function argument
+
+    `elem`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    mkMaybe :: gvariant.type -> Any -> gvariant
+    ```
   */
   mkMaybe = elemType: elem:
     mkPrimitive (type.maybeOf elemType) elem // {
@@ -226,24 +337,57 @@ rec {
           "just ${toString self.value}";
     };
 
-  /* Returns the GVariant nothing from the given element type.
+  /**
+    Returns the GVariant nothing from the given element type.
 
-     Type:
-       mkNothing :: gvariant.type -> gvariant
+
+    # Inputs
+
+    `elemType`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkNothing :: gvariant.type -> gvariant
+    ```
   */
   mkNothing = elemType: mkMaybe elemType null;
 
-  /* Returns the GVariant just from the given Nix value.
+  /**
+    Returns the GVariant just from the given Nix value.
 
-     Type:
-       mkJust :: Any -> gvariant
+
+    # Inputs
+
+    `elem`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkJust :: Any -> gvariant
+    ```
   */
   mkJust = elem: let gvarElem = mkValue elem; in mkMaybe gvarElem.type gvarElem;
 
-  /* Returns the GVariant tuple from the given Nix list.
+  /**
+    Returns the GVariant tuple from the given Nix list.
 
-     Type:
-       mkTuple :: [Any] -> gvariant
+
+    # Inputs
+
+    `elems`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkTuple :: [Any] -> gvariant
+    ```
   */
   mkTuple = elems:
     let
@@ -255,20 +399,42 @@ rec {
         "@${self.type} (${concatMapStringsSep "," toString self.value})";
     };
 
-  /* Returns the GVariant boolean from the given Nix bool value.
+  /**
+    Returns the GVariant boolean from the given Nix bool value.
 
-     Type:
-       mkBoolean :: Bool -> gvariant
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkBoolean :: Bool -> gvariant
+    ```
   */
   mkBoolean = v:
     mkPrimitive type.boolean v // {
       __toString = self: if self.value then "true" else "false";
     };
 
-  /* Returns the GVariant string from the given Nix string value.
+  /**
+    Returns the GVariant string from the given Nix string value.
 
-     Type:
-       mkString :: String -> gvariant
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkString :: String -> gvariant
+    ```
   */
   mkString = v:
     let sanitize = s: replaceStrings [ "\n" ] [ "\\n" ] (escape [ "'" "\\" ] s);
@@ -276,72 +442,129 @@ rec {
       __toString = self: "'${sanitize self.value}'";
     };
 
-  /* Returns the GVariant object path from the given Nix string value.
+  /**
+    Returns the GVariant object path from the given Nix string value.
 
-     Type:
-       mkObjectpath :: String -> gvariant
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkObjectpath :: String -> gvariant
+    ```
   */
   mkObjectpath = v:
     mkPrimitive type.string v // {
       __toString = self: "objectpath '${escape [ "'" ] self.value}'";
     };
 
-  /* Returns the GVariant uchar from the given Nix int value.
+  /**
+    Returns the GVariant uchar from the given Nix int value.
 
-     Type:
-       mkUchar :: Int -> gvariant
+    # Type
+
+    ```
+    mkUchar :: Int -> gvariant
+    ```
   */
   mkUchar = mkPrimitive type.uchar;
 
-  /* Returns the GVariant int16 from the given Nix int value.
+  /**
+    Returns the GVariant int16 from the given Nix int value.
 
-     Type:
-       mkInt16 :: Int -> gvariant
+    # Type
+
+    ```
+    mkInt16 :: Int -> gvariant
+    ```
   */
   mkInt16 = mkPrimitive type.int16;
 
-  /* Returns the GVariant uint16 from the given Nix int value.
+  /**
+    Returns the GVariant uint16 from the given Nix int value.
 
-     Type:
-       mkUint16 :: Int -> gvariant
+    # Type
+
+    ```
+    mkUint16 :: Int -> gvariant
+    ```
   */
   mkUint16 = mkPrimitive type.uint16;
 
-  /* Returns the GVariant int32 from the given Nix int value.
+  /**
+    Returns the GVariant int32 from the given Nix int value.
 
-     Type:
-       mkInt32 :: Int -> gvariant
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkInt32 :: Int -> gvariant
+    ```
   */
   mkInt32 = v:
     mkPrimitive type.int32 v // {
       __toString = self: toString self.value;
     };
 
-  /* Returns the GVariant uint32 from the given Nix int value.
+  /**
+    Returns the GVariant uint32 from the given Nix int value.
 
-     Type:
-       mkUint32 :: Int -> gvariant
+    # Type
+
+    ```
+    mkUint32 :: Int -> gvariant
+    ```
   */
   mkUint32 = mkPrimitive type.uint32;
 
-  /* Returns the GVariant int64 from the given Nix int value.
+  /**
+    Returns the GVariant int64 from the given Nix int value.
 
-     Type:
-       mkInt64 :: Int -> gvariant
+    # Type
+
+    ```
+    mkInt64 :: Int -> gvariant
+    ```
   */
   mkInt64 = mkPrimitive type.int64;
 
-  /* Returns the GVariant uint64 from the given Nix int value.
+  /**
+    Returns the GVariant uint64 from the given Nix int value.
 
-     Type:
-       mkUint64 :: Int -> gvariant
+    # Type
+
+    ```
+    mkUint64 :: Int -> gvariant
+    ```
   */
   mkUint64 = mkPrimitive type.uint64;
 
-  /* Returns the GVariant double from the given Nix float value.
+  /**
+    Returns the GVariant double from the given Nix float value.
 
-     Type:
-       mkDouble :: Float -> gvariant
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    mkDouble :: Float -> gvariant
+    ```
   */
   mkDouble = v:
     mkPrimitive type.double v // {

@@ -28,6 +28,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/qjebbs/vscode-plantuml";
     changelog = "https://marketplace.visualstudio.com/items/jebbs.plantuml/changelog";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.victormignot ];
+    maintainers = [ ];
   };
 }

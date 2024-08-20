@@ -38,12 +38,13 @@ in
     xwayland.enable = lib.mkEnableOption "XWayland" // { default = true; };
 
     systemd.setPath.enable = lib.mkEnableOption null // {
-      default = true;
+      default = lib.versionOlder cfg.package.version "0.41.2";
+      defaultText = lib.literalExpression ''lib.versionOlder cfg.package.version "0.41.2"'';
       example = false;
       description = ''
         Set environment path of systemd to include the current system's bin directory.
         This is needed in Hyprland setups, where opening links in applications do not work.
-        Enabled by default.
+        Enabled by default for Hyprland versions older than 0.41.2.
       '';
     };
   };
@@ -63,13 +64,13 @@ in
 
       systemd = lib.mkIf cfg.systemd.setPath.enable {
         user.extraConfig = ''
-          DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin:/etc/profiles/per-user/%u/bin:/run/wrappers/bin"
+          DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
         '';
       };
     }
 
     (import ./wayland-session.nix {
-      inherit lib pkgs;
+      inherit lib;
       enableXWayland = cfg.xwayland.enable;
       enableWlrPortal = lib.mkDefault false; # Hyprland has its own portal, wlr is not needed
     })

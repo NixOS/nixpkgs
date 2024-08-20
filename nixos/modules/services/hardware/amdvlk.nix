@@ -31,11 +31,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    hardware.opengl = {
+    hardware.graphics = {
       enable = true;
-      driSupport = true;
       extraPackages = [ cfg.package ];
-      driSupport32Bit = cfg.support32Bit.enable;
       extraPackages32 = [ cfg.support32Bit.package ];
     };
 

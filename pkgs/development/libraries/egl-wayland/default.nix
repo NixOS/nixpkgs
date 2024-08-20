@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.13";
+  version = "1.1.15";
 
   outputs = [ "out" "dev" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    hash = "sha256-NA+jr27aYu0XPG9sxnBtjeBTFHmV7TENRsFy8dDdNUc=";
+    hash = "sha256-7spfmYwJ6U97x83219/kMwdJXS2vir+U0MUnYWJOLB4=";
   };
 
   postPatch = ''

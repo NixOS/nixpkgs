@@ -14,6 +14,8 @@ in
 
     security.polkit.enable = mkEnableOption "polkit";
 
+    security.polkit.package = mkPackageOption pkgs "polkit" { };
+
     security.polkit.debug = mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
 
     security.polkit.extraConfig = mkOption {
@@ -57,13 +59,13 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.polkit.bin pkgs.polkit.out ];
+    environment.systemPackages = [ cfg.package.bin cfg.package.out ];
 
-    systemd.packages = [ pkgs.polkit.out ];
+    systemd.packages = [ cfg.package.out ];
 
     systemd.services.polkit.serviceConfig.ExecStart = [
       ""
-      "${pkgs.polkit.out}/lib/polkit-1/polkitd ${optionalString (!cfg.debug) "--no-debug"}"
+      "${cfg.package.out}/lib/polkit-1/polkitd ${optionalString (!cfg.debug) "--no-debug"}"
     ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
@@ -82,7 +84,7 @@ in
         ${cfg.extraConfig}
       ''; #TODO: validation on compilation (at least against typos)
 
-    services.dbus.packages = [ pkgs.polkit.out ];
+    services.dbus.packages = [ cfg.package.out ];
 
     security.pam.services.polkit-1 = {};
 
@@ -91,13 +93,13 @@ in
         { setuid = true;
           owner = "root";
           group = "root";
-          source = "${pkgs.polkit.bin}/bin/pkexec";
+          source = "${cfg.package.bin}/bin/pkexec";
         };
       polkit-agent-helper-1 =
         { setuid = true;
           owner = "root";
           group = "root";
-          source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+          source = "${cfg.package.out}/lib/polkit-1/polkit-agent-helper-1";
         };
     };
 

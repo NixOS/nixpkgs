@@ -1,6 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, mkYarnPackage, nixosTests, writeText, python3 }:
+{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarnConfigHook, nixosTests, writeText, python3 }:
 
 let
+  pname = "powerdns-admin";
   version = "0.4.2";
   src = fetchFromGitHub {
     owner = "PowerDNS-Admin";
@@ -23,44 +24,32 @@ let
     ./0001-Fix-flask-2.3-issue.patch
   ];
 
-  assets = mkYarnPackage {
-    inherit src version;
-    packageJSON = ./package.json;
+  assets = stdenv.mkDerivation {
+    pname = "${pname}-assets";
+    inherit version src;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
       hash = "sha256-rXIts+dgOuZQGyiSke1NIG7b4lFlR/Gfu3J6T3wP3aY=";
     };
 
-    # Copied from package.json, see also
-    # https://github.com/NixOS/nixpkgs/pull/214952
-    packageResolutions = {
-      "@fortawesome/fontawesome-free" = "6.3.0";
-    };
-
-    nativeBuildInputs = pythonDeps;
+    nativeBuildInputs = [
+      yarnConfigHook
+    ] ++ pythonDeps;
     patches = all_patches ++ [
       ./0002-Remove-cssrewrite-filter.patch
     ];
     buildPhase = ''
-      # The build process expects the directory to be writable
-      # with node_modules at a specific path
-      # https://github.com/PowerDNS-Admin/PowerDNS-Admin/blob/master/.yarnrc
-
-      approot=deps/powerdns-admin-assets
-
-      ln -s $node_modules $approot/powerdnsadmin/static/node_modules
-      SESSION_TYPE=filesystem FLASK_APP=$approot/powerdnsadmin/__init__.py flask assets build
+      SESSION_TYPE=filesystem FLASK_APP=./powerdnsadmin/__init__.py flask assets build
     '';
     installPhase = ''
       # https://github.com/PowerDNS-Admin/PowerDNS-Admin/blob/54b257768f600c5548a1c7e50eac49c40df49f92/docker/Dockerfile#L43
       mkdir $out
-      cp -r $approot/powerdnsadmin/static/{generated,assets,img} $out
-      find $node_modules -name webfonts -exec cp -r {} $out \;
-      find $node_modules -name fonts -exec cp -r {} $out \;
-      find $node_modules/icheck/skins/square -name '*.png' -exec cp {} $out/generated \;
+      cp -r powerdnsadmin/static/{generated,assets,img} $out
+      find powerdnsadmin/static/node_modules -name webfonts -exec cp -r {} $out \; -printf "Copying %P\n"
+      find powerdnsadmin/static/node_modules -name fonts -exec cp -r {} $out \; -printf "Copying %P\n"
+      find powerdnsadmin/static/node_modules/icheck/skins/square -name '*.png' -exec cp {} $out/generated \;
     '';
-    distPhase = "true";
   };
 
   assetsPy = writeText "assets.py" ''
@@ -73,9 +62,7 @@ let
     assets.register('css_main', 'generated/main.css')
   '';
 in stdenv.mkDerivation {
-  pname = "powerdns-admin";
-
-  inherit src version;
+  inherit pname version src;
 
   nativeBuildInputs = [ python.pkgs.wrapPython ];
 

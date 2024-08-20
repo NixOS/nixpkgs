@@ -6,25 +6,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.2.1";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
-    rev = "v${version}";
-    hash = "sha256-OUwznn71xl8oWkw90fT1NYYZOuD83k+B5zLhygp1VQQ=";
+    rev = "v${version}-version";
+    hash = "sha256-ZdcV2t2F2UgjGC+aTfynP2DbPRgzOIADDebY64nj3NA=";
   };
 
   postPatch = ''
     sed -i '/addopts/d' setup.cfg
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     defusedxml
     passlib
     vobject

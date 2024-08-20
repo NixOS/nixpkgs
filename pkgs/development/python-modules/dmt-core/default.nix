@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   LD_LIBRARY_PATH = "${stdenv.cc.cc.lib}/lib/";
 
-  preCheck = ''
+  checkPhase = ''
     export XDG_CONFIG_HOME=$PWD/config
     mkdir -p $XDG_CONFIG_HOME/DMT
     touch $XDG_CONFIG_HOME/DMT/DMT_config.yaml
@@ -73,6 +73,6 @@ buildPythonPackage rec {
     description = "Tool to help modeling engineers extract model parameters, run circuit and TCAD simulations and automate infrastructure";
     homepage = "https://gitlab.com/dmt-development/dmt-core";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ jasonodoom ];
+    maintainers = with lib.maintainers; [ jasonodoom jleightcap ];
   };
 }

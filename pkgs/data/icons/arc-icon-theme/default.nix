@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, autoreconfHook, gtk3, gnome, moka-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub, autoreconfHook, gtk3, adwaita-icon-theme, moka-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "arc-icon-theme";
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     moka-icon-theme
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];

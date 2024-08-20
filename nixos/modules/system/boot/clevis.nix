@@ -48,7 +48,7 @@ in
 
     assertions = (attrValues (mapAttrs
       (device: _: {
-        assertion = (any (fs: fs.device == device && (elem fs.fsType supportedFs)) config.system.build.fileSystems) || (hasAttr device config.boot.initrd.luks.devices);
+        assertion = (any (fs: fs.device == device && (elem fs.fsType supportedFs) || (fs.fsType == "zfs" && hasPrefix "${device}/" fs.device)) config.system.build.fileSystems) || (hasAttr device config.boot.initrd.luks.devices);
         message = ''
           No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
       })

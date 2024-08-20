@@ -1,4 +1,5 @@
 { appstream-glib
+, blueprint-compiler
 , desktop-file-utils
 , fetchFromGitHub
 , gettext
@@ -13,22 +14,24 @@
 , ninja
 , pkg-config
 , python3
+, python3Packages
 , stdenv
 , wrapGAppsHook4
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "webfont-kit-generator";
-  version = "1.0.3";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "webfont-kit-generator";
     rev = finalAttrs.version;
-    hash = "sha256-aD/1moWIiU4zpLTW+VHH9n/sj10vCZ8UzB2ey3mR0/k=";
+    hash = "sha256-RrmzHgRnpgQUNECgYA/AJfoxKpX1HQ5I1Pqjb3MK+P4=";
   };
 
   nativeBuildInputs = [
     appstream-glib
+    blueprint-compiler
     desktop-file-utils
     gettext
     gobject-introspection
@@ -46,9 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libsoup_3
     (python3.withPackages (ps: with ps; [
+      brotli
       fonttools
       pygobject3
     ]))
+  ];
+
+  propagatedBuildInputs = [
+    python3Packages.pygobject3
+    python3Packages.brotli
   ];
 
   meta = with lib; {

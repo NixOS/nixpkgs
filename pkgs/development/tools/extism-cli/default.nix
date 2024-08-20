@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "extism-cli";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "extism";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b+X0pFrKhcfzucUM8akV061zslkdF1Jc9X1aqCqXagU=";
+    hash = "sha256-kAdvQtc3FWXQffL1KRg4peeAJ+0439n609jTV9u11aA=";
   };
 
-  vendorHash = "sha256-5QSZDPRMlLVyOQGCSxNC5BBiuegschkHA0sWvOVAODI=";
+  vendorHash = "sha256-yQ6LGWNVWxrUqFskt22+G9OfbcKfHXh1bf4uNoATsxg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,9 +27,9 @@ buildGoModule rec {
   postInstall = ''
     local INSTALL="$out/bin/extism"
     installShellCompletion --cmd extism \
-      --bash <($out/bin/containerlab completion bash) \
-      --fish <($out/bin/containerlab completion fish) \
-      --zsh <($out/bin/containerlab completion zsh)
+      --bash <($out/bin/extism completion bash) \
+      --fish <($out/bin/extism completion fish) \
+      --zsh <($out/bin/extism completion zsh)
   '';
 
   meta = with lib; {

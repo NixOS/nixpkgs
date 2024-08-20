@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfe";
-  version = "1.46.1";
+  version = "1.46.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/xfe/xfe-${version}.tar.xz";
-    sha256 = "sha256-NTpowZCl4OTWrK2txh7f7t9WxGRdfM0M3KIyHq3nJUg=";
+    sha256 = "sha256-6hNNda4BKCY9E02uFYJnt0JySNp/is1ZqjFlOwQcRWs=";
   };
 
   nativeBuildInputs = [ pkg-config intltool ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/xfe/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

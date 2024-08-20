@@ -11,7 +11,6 @@
   fonttools,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools-scm,
   skia-pathops,
   ufolib2,
@@ -19,19 +18,18 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.2.4";
+  version = "3.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LkrYKERPJrKsWAYnlJJlybNy93J+uStaHv35jcZpTrU=";
+    hash = "sha256-fA5It0mr6sjAQECGPOsS//lZJ9OqKelfhdzV770sMHQ=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "cffsubr" ];
@@ -70,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/ufo2ft";
     changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

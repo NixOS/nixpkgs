@@ -46,8 +46,6 @@ in
           TRUNK_LINK_FAILURE_MODE = 0;
           NVSWITCH_FAILURE_MODE = 0;
           ABORT_CUDA_JOBS_ON_FM_EXIT = 1;
-          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         };
         defaultText = lib.literalExpression ''
           {
@@ -69,8 +67,6 @@ in
             TRUNK_LINK_FAILURE_MODE=0;
             NVSWITCH_FAILURE_MODE=0;
             ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-            TOPOLOGY_FILE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-            DATABASE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
           }
         '';
         description = ''
@@ -100,8 +96,15 @@ in
         Enabling this fixes screen tearing when using Optimus via PRIME (see
         {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
-        work with SLI
-      '';
+        work with SLI.
+
+        Enabling this and using version 545 or newer of the proprietary NVIDIA
+        driver causes it to provide its own framebuffer device, which can cause
+        Wayland compositors to work when they otherwise wouldn't.
+      '' // {
+        default = lib.versionAtLeast cfg.package.version "535";
+        defaultText = lib.literalExpression "lib.versionAtLeast cfg.package.version \"535\"";
+      };
 
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;
@@ -253,7 +256,9 @@ in
 
       open = lib.mkEnableOption ''
         the open source NVIDIA kernel module
-      '';
+      '' // {
+        defaultText = lib.literalExpression ''lib.versionAtLeast config.hardware.nvidia.package.version "560"'';
+      };
     };
   };
 
@@ -297,11 +302,13 @@ in
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
           '';
-          hardware.opengl = {
+          hardware.graphics = {
             extraPackages = [ nvidia_x11.out ];
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
+
+          hardware.nvidia.open = lib.mkDefault (lib.versionAtLeast nvidia_x11.version "560");
         })
 
         # X11
@@ -467,9 +474,8 @@ in
             "egl/egl_external_platform.d".source = "/run/opengl-driver/share/egl/egl_external_platform.d/";
           };
 
-          hardware.opengl = {
+          hardware.graphics = {
             extraPackages = [ pkgs.nvidia-vaapi-driver ];
-            extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
           };
 
           environment.systemPackages =
@@ -566,15 +572,21 @@ in
           boot = {
             extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
             # nvidia-uvm is required by CUDA applications.
-            kernelModules = lib.optionals config.services.xserver.enable [
-              "nvidia"
-              "nvidia_modeset"
-              "nvidia_drm"
-            ];
+            kernelModules =
+              lib.optionals config.services.xserver.enable [
+                "nvidia"
+                "nvidia_modeset"
+                "nvidia_drm"
+              ]
+              # With the open driver, nvidia-uvm does not automatically load as
+              # a softdep of the nvidia module, so we explicitly load it for now.
+              # See https://github.com/NixOS/nixpkgs/issues/334180
+              ++ lib.optionals (config.services.xserver.enable && cfg.open) [ "nvidia_uvm" ];
 
-            # If requested enable modesetting via kernel parameter.
+            # If requested enable modesetting via kernel parameters.
             kernelParams =
               lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
+              ++ lib.optional ((offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545") "nvidia-drm.fbdev=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
               ++ lib.optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
@@ -628,7 +640,14 @@ in
                     TimeoutStartSec = 240;
                     ExecStart =
                       let
-                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
+                        # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
+                        # unsuitable to be mentioned in the configuration defaults, but they _can_
+                        # be overridden in `cfg.datacenter.settings` if needed.
+                        fabricManagerConfDefaults = {
+                          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                        };
+                        nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (fabricManagerConfDefaults // cfg.datacenter.settings);
                       in
                       "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
                     LimitCORE = "infinity";

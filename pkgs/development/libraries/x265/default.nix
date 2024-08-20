@@ -1,7 +1,7 @@
 { lib
+, gccStdenv
 , stdenv
 , fetchurl
-, fetchpatch
 , cmake
 , nasm
 
@@ -30,7 +30,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  version = "3.5";
+  version = "3.6";
 
   outputs = [ "out" "dev" ];
 
@@ -38,35 +38,16 @@ stdenv.mkDerivation rec {
   # whether we fetch a source tarball or a tag from the git repo
   src = fetchurl {
     url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${version}.tar.gz";
-    hash = "sha256-5wozNcrKy7oLOiDsb+zWeDkyKI68gWOtdLzJYGR3yug=";
+    hash = "sha256-ZjUx80HFOJ9GDXMOYuEKT8yjQoyiyhCWk4Z7xf4uKAc=";
   };
 
-  sourceRoot = "x265_${version}/source";
-
-  patches = [
-    # More aliases for ARM platforms + do not force CLFAGS for ARM :
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/arm-r1.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
-      sha256 = "1hgzq5vxkwh0nyikxjfz8gz3jvx2nq3yy12mz3fn13qvzdlb5ilp";
-    })
-    # use proper check to avoid undefined symbols when enabling assembly on ARM :
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/neon.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
-      sha256 = "1mmshpbyldrfqxfmdajqal4l647zvlrwdai8pxw99qg4v8gajfii";
-    })
-    # More complete PPC64 matches :
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/x265-3.3-ppc64.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
-      sha256 = "1mvw678xfm0vr59n5jilq56qzcgk1gmcip2afyafkqiv21nbms8c";
-    })
-    # Namespace functions for multi-bitdepth builds so that libraries are self-contained (and tests succeeds) :
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/test-ns.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
-      sha256 = "0zg3g53l07yh7ar5c241x50y5zp7g8nh8rh63ad4bdpchpc2f52d";
-    })
-    # Fix detection of NEON (and armv6 build) :
-    ./fix-neon-detection.patch
+  # TODO: apply patch unconditionally in staging. It's conditional to
+  # save rebuild on staging-next.
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ./darwin-__rdtsc.patch
   ];
+
+  sourceRoot = "x265_${version}/source";
 
   postPatch = ''
     substituteInPlace cmake/Version.cmake \
@@ -89,7 +70,9 @@ stdenv.mkDerivation rec {
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-  ];
+  ]
+    # Clang does not support the endfunc directive so use GCC.
+    ++ lib.optional (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc";
 
   cmakeStaticLibFlags = [
     "-DHIGH_BIT_DEPTH=ON"
@@ -115,9 +98,13 @@ stdenv.mkDerivation rec {
       ${mkFlag (!stdenv.hostPlatform.isStatic) "ENABLE_SHARED"}
       -DHIGH_BIT_DEPTH=OFF
       -DENABLE_HDR10_PLUS=ON
-      ${mkFlag (isCross && stdenv.hostPlatform.isAarch) "CROSS_COMPILE_ARM"}
+      ${mkFlag (isCross && stdenv.hostPlatform.isAarch32) "CROSS_COMPILE_ARM"}
       ${mkFlag cliSupport "ENABLE_CLI"}
       ${mkFlag unittestsSupport "ENABLE_TESTS"}
+    )
+  '' + lib.optionalString isCross ''
+    cmakeFlagsArray+=(
+      ${mkFlag (isCross && stdenv.hostPlatform.isAarch64) "CROSS_COMPILE_ARM64"}
     )
   '';
 

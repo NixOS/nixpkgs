@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   h5py,
   nibabel,
   numpy,
@@ -23,7 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-Lty4aPzSlwRJSqCXeIVICF+gudYqto1OS4cVZyrB2nY=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   buildInputs = [
     setuptools-scm
     toml

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, substituteAll
+{ lib, stdenv, fetchurl, fetchpatch2, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, pkg-config
 , rpmSupport ? stdenv.isLinux, rpm
@@ -14,23 +14,24 @@
 # '';
 # See also <https://nixos.org/nixpkgs/manual/#sec-language-gnome>.
 , gtkSupport ? true, glib, gtk3
-, videoSupport ? true, ffmpeg_4, libmpeg2
+, videoSupport ? true, libmpeg2
 }:
 
 stdenv.mkDerivation rec {
   pname = "libextractor";
-  version = "1.11";
+  version = "1.13";
 
   src = fetchurl {
     url = "mirror://gnu/libextractor/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FvYzq4dGo4VHxKHaP0WRGSsIJa2DxDNvBXW4WEPYvY8=";
+    hash = "sha256-u48xLFHSAlciQ/ETxrYtghAwGrMMuu5gT5g32HjN91U=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "libextractor-exiv2-0.28.patch";
-      url = "https://git.pld-linux.org/?p=packages/libextractor.git;a=blob_plain;f=libextractor-exiv2-0.28.patch;h=d763b65f2578f1127713de8dc82f432d34f95a85;hb=0e7de1c6794e8c331a1a1a6a829993c7cd217d3a";
-      hash = "sha256-szAv2A+NmiQyj2+R7BO6fHX588vlTgljPtrnMR6mgGY=";
+    # 0008513: test_exiv2 fails with Exiv2 0.28
+    # https://bugs.gnunet.org/view.php?id=8513
+    (fetchpatch2 {
+      url = "https://sources.debian.org/data/main/libe/libextractor/1%3A1.13-4/debian/patches/exiv2-0.28.diff";
+      hash = "sha256-Re5iwlSyEpWu3PcHibaRKSfmdyHSZGMOdMZ6svTofvs=";
     })
   ] ++ lib.optionals gstreamerSupport [
 
@@ -58,14 +59,7 @@ stdenv.mkDerivation rec {
      ++ lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ lib.optionals gtkSupport [ glib gtk3 ]
-     ++ lib.optionals videoSupport [ ffmpeg_4 libmpeg2 ];
-
-  configureFlags = [
-    "--disable-ltdl-install"
-    "--with-ltdl-include=${libtool}/include"
-    "--with-ltdl-lib=${libtool.lib}/lib"
-    "--enable-xpdf"
-  ];
+     ++ lib.optionals videoSupport [ libmpeg2 ];
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.

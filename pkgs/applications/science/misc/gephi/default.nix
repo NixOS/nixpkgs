@@ -1,11 +1,6 @@
 { lib, fetchFromGitHub, jdk11, maven, jogl }:
 
-let
-  mavenJdk11 = maven.override {
-    jdk = jdk11;
-  };
-in
-mavenJdk11.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "gephi";
   version = "0.10.1";
 
@@ -16,6 +11,7 @@ mavenJdk11.buildMavenPackage rec {
     hash = "sha256-ZNSEaiD32zFfF2ISKa1CmcT9Nq6r5i2rNHooQAcVbn4=";
   };
 
+  mvnJdk = jdk11;
   mvnHash = "sha256-/2/Yb26Ry0NHQQ3j0LXnjwC0wQqJiztvTgWixyMJqvg=";
 
   nativeBuildInputs = [ jdk11 ];

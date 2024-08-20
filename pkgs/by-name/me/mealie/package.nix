@@ -1,20 +1,21 @@
 { lib
+, stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
-, stdenv
 , writeShellScript
 }:
 
 let
-  version = "1.7.0";
+  version = "1.11.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     rev = "v${version}";
-    hash = "sha256-z7kLBDzvzPWY7XmpROMpw3LcDpsl+hA+w1SdhrD/yNU=";
+    hash = "sha256-tBbvmM66zCNpKqeekPY48j0t5PjLHeyQ8+kJ6755ivo=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -31,24 +32,40 @@ let
       rev = "c56dd9f29469c8a9f34456b8c0d6ae0476110516";
       hash = "sha256-XNps3ZApU8m07bfPEnvip1w+3hLajdn9+L5+IpEaP0c=";
     };
+
+    # Can remove once the `register` keyword is removed from source files
+    # Configure overwrites CXXFLAGS so patch it in the Makefile
+    postConfigure = lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace Makefile \
+        --replace-fail "CXXFLAGS = " "CXXFLAGS = -std=c++14 "
+    '';
   };
-in pythonpkgs.buildPythonPackage rec {
+in
+
+pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
 
-  nativeBuildInputs = [
-    pythonpkgs.poetry-core
-    pythonpkgs.pythonRelaxDepsHook
-    makeWrapper
+  patches = [
+    # Pull in https://github.com/mealie-recipes/mealie/pull/4002 manually until
+    # it lands in an upstream mealie release.
+    # See https://github.com/NixOS/nixpkgs/issues/321623.
+    ( fetchpatch {
+        url = "https://github.com/mealie-recipes/mealie/commit/65ece35966120479db903785b22e9f2645f72aa4.patch";
+        hash = "sha256-4Nc0dFJrZ7ElN9rrq+CFpayKsrRjRd24fYraUFTzcH8=";
+    })
   ];
+
+  build-system = with pythonpkgs; [ poetry-core ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   dontWrapPythonPrograms = true;
 
-  doCheck = false;
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with pythonpkgs; [
+  dependencies = with pythonpkgs; [
     aiofiles
     alembic
     aniso8601
@@ -85,8 +102,16 @@ in pythonpkgs.buildPythonPackage rec {
   ];
 
   postPatch = ''
+    rm -rf dev # Do not need dev scripts & code
+
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
+
+    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
+      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
+
+    substituteInPlace mealie/db/init_db.py \
+      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
   '';
 
   postInstall = let
@@ -98,25 +123,33 @@ in pythonpkgs.buildPythonPackage rec {
       ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
     '';
   in ''
-    mkdir -p $out/config $out/bin $out/libexec
+    mkdir -p $out/bin $out/libexec
     rm -f $out/bin/*
 
-    substitute ${src}/alembic.ini $out/config/alembic.ini \
+    substitute ${src}/alembic.ini $out/alembic.ini \
       --replace-fail 'script_location = alembic' 'script_location = ${src}/alembic'
 
     makeWrapper ${start_script} $out/bin/mealie \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
+      --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
       --set LD_LIBRARY_PATH "${crfpp}/lib" \
       --set STATIC_FILES "${frontend}" \
       --set PATH "${lib.makeBinPath [ crfpp ]}"
 
     makeWrapper ${init_db} $out/libexec/init_db \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
+      --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
       --set OUT "$out"
   '';
 
-  checkInputs = with python.pkgs; [
-    pytestCheckHook
+  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # KeyError: 'alembic_version'
+    "tests/unit_tests/services_tests/backup_v2_tests/test_backup_v2.py"
+    "tests/unit_tests/services_tests/backup_v2_tests/test_alchemy_exporter.py"
+    # sqlite3.OperationalError: no such table
+    "tests/unit_tests/services_tests/scheduler/tasks/test_create_timeline_events.py"
+    "tests/unit_tests/test_ingredient_parser.py"
+    "tests/unit_tests/test_security.py"
   ];
 
   passthru.tests = {

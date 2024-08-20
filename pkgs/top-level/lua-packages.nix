@@ -115,7 +115,7 @@ rec {
       description = "New FFI-based API for lua-nginx-module";
       homepage = "https://github.com/openresty/lua-resty-core";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }) {};
 
@@ -134,7 +134,7 @@ rec {
       description = "Lua-land LRU Cache based on LuaJIT FFI";
       homepage = "https://github.com/openresty/lua-resty-lrucache";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }) {};
 
@@ -173,7 +173,7 @@ rec {
   }) {};
 
   nfd = callPackage ../development/lua-modules/nfd {
-    inherit (pkgs.gnome) zenity;
+    inherit (pkgs) zenity;
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 

@@ -8,7 +8,7 @@
 , enchant
 , gucharmap
 , python3
-, gnome
+, adwaita-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gtk
     libxml2
     enchant

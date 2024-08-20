@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
     installShellFiles
   ] ++ (with python3Packages; [
     setuptools
-    pythonRelaxDepsHook
   ]);
 
   pythonRelaxDeps = [

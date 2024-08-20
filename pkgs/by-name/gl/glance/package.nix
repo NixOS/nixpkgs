@@ -1,32 +1,39 @@
-{ lib,
-buildGoModule,
-fetchFromGitHub,
-nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "glance";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
-    repo = pname;
+    repo = "glance";
     rev = "v${version}";
-    hash = "sha256-37DmLZ8ESJwB2R8o5WjeypKsCQwarF3x8UYz1OQT/tM=";
+    hash = "sha256-ebHSnzTRmWw2YBnVIR4h2zdZvbUHbKVzmQYPHDTvZDQ=";
   };
 
   vendorHash = "sha256-Okme73vLc3Pe9+rNlmG8Bj1msKaVb5PaIBsAAeTer6s=";
 
   excludedPackages = [ "scripts/build-and-ship" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      service = nixosTests.glance;
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/glanceapp/glance";
     changelog = "https://github.com/glanceapp/glance/releases/tag/v${version}";
     description = "Self-hosted dashboard that puts all your feeds in one place";
     mainProgram = "glance";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ dvn0 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ dvn0 ];
   };
 }

@@ -44,11 +44,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, version ? "3.10.10.0"
+, version ? "3.10.11.0"
 }:
 
 let
-  sourceSha256 = "sha256-pEVWhXDjOevrduDbZQbiDbODZY8PpsGY4O8yxrwlCcs=";
+  sourceSha256 = "sha256-QOZXUj+ZmfpazsrHEs8Gx3WSmoHG/zO43NEpyhIjpN8=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -103,11 +103,11 @@ let
         libunwind
         thrift
       ];
-      pythonRuntime = with python.pkgs; [
+      pythonRuntime = [
         python.pkgs.thrift
         # For gr-perf-monitorx
-        matplotlib
-        networkx
+        python.pkgs.matplotlib
+        python.pkgs.networkx
       ];
       cmakeEnableFlag = "GR_CTRLPORT";
     };
@@ -156,6 +156,7 @@ let
       pythonRuntime = with python.pkgs; [
         scipy
         pyqtgraph
+        pyqt5
       ];
     };
     gr-analog = {
@@ -311,9 +312,9 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
-      ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+      remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+      remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;
 }))

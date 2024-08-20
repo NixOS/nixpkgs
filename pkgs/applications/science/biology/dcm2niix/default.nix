@@ -21,15 +21,15 @@ let
     sha256 = "sha256-8HNFUGx2uuEb8UrGUiqkN+uVDX83YIisT2uO1Z7GCxc=";
   };
 in
-stdenv.mkDerivation rec {
-  version = "1.0.20230411";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.0.20240202";
   pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
-    rev = "v${version}";
-    sha256 = "sha256-kOVEoqrk4l6sH8iDVx1QmOYP5tCufxsWnCnn9BibZ08=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-vJUPv/6KNCsU8UjwfktHdTlsweG7+UGgAEZeESfBkD8=";
   };
 
   patches = lib.optionals withCloudflareZlib [
@@ -55,15 +55,16 @@ stdenv.mkDerivation rec {
     "-DZLIB_IMPLEMENTATION=Cloudflare"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DICOM to NIfTI converter";
     mainProgram = "dcm2niix";
     longDescription = ''
       dcm2niix is designed to convert neuroimaging data from the DICOM format to the NIfTI format.
     '';
     homepage = "https://www.nitrc.org/projects/dcm2nii";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman rbreslow ];
-    platforms = platforms.all;
+    changelog = "https://github.com/rordenlab/dcm2niix/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ashgillman rbreslow ];
+    platforms = lib.platforms.all;
   };
-}
+})

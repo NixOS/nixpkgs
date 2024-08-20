@@ -1,23 +1,20 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
   bison,
-  mpi,
+  bzip2,
+  cmake,
+  fetchFromGitLab,
   flex,
+  gfortran,
+  lib,
+  mpi,
+  stdenv,
   zlib,
+  xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scotch";
   version = "7.0.4";
-
-  buildInputs = [
-    bison
-    mpi
-    flex
-    zlib
-  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
@@ -27,14 +24,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uaox4Q9pTF1r2BZjvnU2LE6XkZw3x9mGSKLdRVUobGU=";
   };
 
-  preConfigure = ''
-    cd src
-    ln -s Make.inc/Makefile.inc.x86-64_pc_linux2 Makefile.inc
-  '';
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
 
-  buildFlags = [ "scotch ptscotch" ];
-
-  installFlags = [ "prefix=\${out}" ];
+  buildInputs = [
+    bison
+    bzip2
+    mpi
+    flex
+    xz
+    zlib
+  ];
 
   meta = {
     description = "Graph and mesh/hypergraph partitioning, graph clustering, and sparse matrix ordering";
@@ -45,6 +47,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.labri.fr/perso/pelegrin/scotch";
     license = lib.licenses.cecill-c;
     maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.linux;
   };
 })

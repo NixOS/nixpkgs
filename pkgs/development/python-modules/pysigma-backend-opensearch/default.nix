@@ -7,7 +7,6 @@
   pysigma-backend-elasticsearch,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
 }:
 
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     pysigma

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests, olm }:
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
-  version = "1.0.7952";
+  version = "1.0.8043";
 
   src = fetchurl {
     url = "https://download.jitsi.org/jitsi-meet/src/jitsi-meet-${version}.tar.bz2";
-    sha256 = "K3CBISTOza8xhF4/DmqdTZaPL9zwu4ej+yqJXBawFEk=";
+    sha256 = "XJlfCMQXnHjfHQhK916RXsdPzrU2U2IaOMiXIHL1sCI=";
   };
 
   dontBuild = true;
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.all;
+    inherit (olm.meta) knownVulnerabilities;
   };
 }

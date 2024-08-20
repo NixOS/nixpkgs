@@ -51,13 +51,13 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.03";
+  version = "24.05";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EYf8GhXhsAx0Wxz9ibDZEV4E5scL3GPiu3Nje7N5C/I=";
+    hash = "sha256-akwLIB5YUbnDiaQXX/K5YLXzWlTYWZG51dtxbSFxPt0=";
   };
 
   stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
@@ -74,6 +74,8 @@ buildPythonPackage rec {
     })
   ];
 
+  env.OSL_LOCATION = "${osl}";
+
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
     "-DPXR_BUILD_DRACO_PLUGIN=ON"
@@ -84,6 +86,7 @@ buildPythonPackage rec {
     "-DPXR_BUILD_TESTS=OFF"
     "-DPXR_BUILD_TUTORIALS=OFF"
     "-DPXR_BUILD_USD_IMAGING=ON"
+    "-DPYSIDE_BIN_DIR=${pyside-tools-uic}/bin"
     (lib.cmakeBool "PXR_BUILD_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)

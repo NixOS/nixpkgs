@@ -3,20 +3,27 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyhomeworks";
-  version = "0.0.6";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "Eqbm8274B2hBuF+mREe8lqGhpzZExPJ29jzvwB5RNR8=";
+    hash = "sha256-RwaVjOhMztQsKD+F++PLcwa0gqfC+8aQmloMVnQJjv8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=69.2.0" "setuptools"
+  '';
+
+  build-system = [ setuptools ];
 
   # Project has no real tests
   doCheck = false;

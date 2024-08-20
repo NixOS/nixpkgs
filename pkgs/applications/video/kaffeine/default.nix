@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, kio
 , cmake
 , extra-cmake-modules
 , libvlc

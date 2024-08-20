@@ -30,6 +30,6 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://files.ax86.net/terminus-ttf";
     license = licenses.ofl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

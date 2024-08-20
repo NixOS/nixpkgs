@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   fetchPypi,
   buildPythonPackage,
   wandb,

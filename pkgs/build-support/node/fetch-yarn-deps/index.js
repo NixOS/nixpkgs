@@ -39,7 +39,7 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 				const h = hash.read()
 				if (expectedHash === undefined){
 					console.log(`Warning: lockfile url ${url} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
-				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h}`))
+				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${url}`))
 				resolve()
 			})
                         res.on('error', e => reject(e))
@@ -104,11 +104,14 @@ const downloadPkg = (pkg, verbose) => {
 	const [ url, hash ] = pkg.resolved.split('#')
 	if (verbose) console.log('downloading ' + url)
 	const fileName = urlToName(url)
+	const s = url.split('/')
 	if (url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')) {
-		const s = url.split('/')
 		return downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[s.length-1])
-	} else if (url.startsWith('https://github.com/') && url.endsWith('.tar.gz')) {
-		const s = url.split('/')
+	} else if (url.startsWith('https://github.com/') && url.endsWith('.tar.gz') &&
+		(
+			s.length <= 5 ||    // https://github.com/owner/repo.tgz#feedface...
+			s[5] == "archive"   // https://github.com/owner/repo/archive/refs/tags/v0.220.1.tar.gz
+		)) {
 		return downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[s.length-1].replace(/.tar.gz$/, ''))
 	} else if (isGitUrl(url)) {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)

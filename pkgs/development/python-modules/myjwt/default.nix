@@ -13,7 +13,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   questionary,
   requests,
   requests-mock,
@@ -21,22 +20,17 @@
 
 buildPythonPackage rec {
   pname = "myjwt";
-  version = "1.6.1";
+  version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
     rev = "refs/tags/${version}";
-    hash = "sha256-qdDA8DpJ9kAPTvCkQcPBHNlUqxwsS0vAESglvUygXhg=";
+    hash = "sha256-jqBnxo7Omn5gLMCQ7SNbjo54nyFK7pn94796z2Qc9lg=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "1.6.0" "${version}"
-  '';
 
   pythonRelaxDeps = [
     "cryptography"
@@ -46,7 +40,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

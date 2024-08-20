@@ -26,6 +26,7 @@
 , gdbm
 , cyrus_sasl
 , gnome
+, adwaita-icon-theme
 , librsvg
 , desktop-file-utils
 , mtools
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gmp
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gtk3
     json-glib
     libapparmor

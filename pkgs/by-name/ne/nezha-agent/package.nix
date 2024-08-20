@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "nezha-agent";
-  version = "0.16.11";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
-    rev = "v${version}";
-    hash = "sha256-mcTS+PjFa5niWhe8pmWmuYpx+Y9ZWX0hpcLEodN/SIs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LmWfs3aL+1lsX4ix2FjDP5g+A0wgcfziXdw5SaKlAdk=";
   };
 
-  vendorHash = "sha256-L6QdodI8Ur1H6Zc24KSTYAHfzvW2aq9SYwCVgjvSDII=";
+  vendorHash = "sha256-frPAhiexFSt+KobMbf32h8xv7HMcPl5koEgSs8Nz3cs=";
 
   ldflags = [
     "-s"
@@ -36,10 +36,10 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Agent of Nezha Monitoring";
     homepage = "https://github.com/nezhahq/agent";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ moraxyc ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ moraxyc ];
   };
 }

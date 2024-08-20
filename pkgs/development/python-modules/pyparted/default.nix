@@ -5,7 +5,6 @@
   buildPythonPackage,
   isPyPy,
   pkgs,
-  python,
   six,
   pytestCheckHook,
 }:

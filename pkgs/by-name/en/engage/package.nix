@@ -2,6 +2,7 @@
 , installShellFiles
 , rustPlatform
 , fetchFromGitLab
+, stdenv
 }:
 
 let
@@ -25,7 +26,8 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  postInstall = "installShellCompletion --cmd ${pname} "
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+    "installShellCompletion --cmd ${pname} "
     + builtins.concatStringsSep
       " "
       (builtins.map
@@ -35,7 +37,8 @@ rustPlatform.buildRustPackage {
           "fish"
           "zsh"
         ]
-      );
+      )
+    );
 
   meta = {
     description = "Task runner with DAG-based parallelism";

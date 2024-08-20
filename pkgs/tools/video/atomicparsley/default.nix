@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "atomicparsley";
-  version = "20221229.172126.d813aa6";
+  version = "20240608.083822.1ed9031";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3otyOpDdiltZ0SR1hImfIDBi53PKuAvh93yq1X3Xkmo=";
+    sha256 = "sha256-VhrOMpGNMkNNYjcfCqlHI8gdApWr1ThtcxDwQ6gyV/g=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -2,8 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   cython,
   versioneer,
+
+  # dependencies
   cons,
   etuples,
   filelock,
@@ -11,7 +15,8 @@
   minikanren,
   numpy,
   scipy,
-  typing-extensions,
+
+  # checks
   jax,
   jaxlib,
   numba,
@@ -23,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.22.1";
+  version = "2.25.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -32,13 +37,12 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-FG95+3g+DcqQkyJX3PavfyUWTINFLrgAPTaHYN/jk90=";
+    hash = "sha256-+82zQtC20Q2u3/ujnt8UfmK4oYCpH6Eo2TTlk2g3z+s=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "versioneer[toml]==0.28" "versioneer[toml]"
-  '';
+  pythonRelaxDeps = [
+    "scipy"
+  ];
 
   build-system = [
     cython
@@ -53,7 +57,6 @@ buildPythonPackage rec {
     minikanren
     numpy
     scipy
-    typing-extensions
   ];
 
   nativeCheckInputs = [

@@ -46,6 +46,6 @@ stdenv.mkDerivation  {
     maintainers = with lib.maintainers; [
       dmytrokyrychuk
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 }

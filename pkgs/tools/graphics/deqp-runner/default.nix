@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.freedesktop.org/anholt/deqp-runner";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ Benjamin-L ];
+    maintainers = [ ];
   };
 }

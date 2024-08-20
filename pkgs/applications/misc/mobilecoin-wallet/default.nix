@@ -2,22 +2,19 @@
 
 let
   pname = "mobilecoin-wallet";
-  version = "1.8.0";
-  name = "${pname}-${version}";
+  version = "1.9.1";
   src = fetchurl {
     url = "https://github.com/mobilecoinofficial/desktop-wallet/releases/download/v${version}/MobileCoin.Wallet-${version}.AppImage";
-    hash = "sha256-XGU/xxsMhOBAh+MeMtL2S707yH8HnoO9w5l7zqjO6rs=";
+    hash = "sha256-UCBQRcGFHMQlLGvChrrMmM0MYv7AZtlkngFK4ptIPU0=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-
     mkdir -p $out/share/${pname}
     cp -a ${appimageContents}/locales $out/share/${pname}
     cp -a ${appimageContents}/resources $out/share/${pname}
@@ -33,7 +30,7 @@ in appimageTools.wrapType2 {
     description = "User-friendly desktop wallet with support for transaction history, encrypted contact book, gift codes, and payments";
     homepage = "https://github.com/mobilecoinofficial/desktop-wallet";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     mainProgram = "mobilecoin-wallet";
     platforms = [ "x86_64-linux" ];
   };

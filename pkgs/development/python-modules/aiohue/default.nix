@@ -14,26 +14,27 @@
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "4.7.1";
+  version = "4.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "aiohue";
     rev = "refs/tags/${version}";
-    hash = "sha256-/9kATmBNhKXt2PWB1pRdMJr+QzP23ajQK+jA8BuJ7J4=";
+    hash = "sha256-ZMrB09DXyjPlQ0hOSi+3aI2eSGDAFfhBDPfBsvNpaE4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awesomeversion
     aiohttp
     asyncio-throttle

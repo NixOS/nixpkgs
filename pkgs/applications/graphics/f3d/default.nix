@@ -4,18 +4,24 @@
 , cmake
 , help2man
 , gzip
+# There is a f3d overriden with EGL enabled vtk in top-level/all-packages.nix
+# compiling with EGL enabled vtk will result in f3d running in headless mode
+# See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
 , vtk_9
 , autoPatchelfHook
-, libX11
-, libGL
 , Cocoa
 , OpenGL
+, python3Packages
+, opencascade-occt
+, assimp
+, fontconfig
 , withManual ? !stdenv.isDarwin
+, withPythonBinding ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "2.4.0";
+  version = "2.5.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -23,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mqkPegbGos38S50CoV4Qse9Z4wZ327UmIwmSrrP35uI=";
+    hash = "sha256-Mw40JyXZj+Q4a9dD5UnkUSdUfQGaV92gor8ynn86VJ8=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +43,19 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = [
+    vtk_9
+    opencascade-occt
+    assimp
+    fontconfig
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+    OpenGL
+  ] ++ lib.optionals withPythonBinding [
+    python3Packages.python
+    # Using C++ header files, not Python import
+    python3Packages.pybind11
+  ];
 
   cmakeFlags = [
     # conflict between VTK and Nixpkgs;
@@ -45,8 +63,13 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DF3D_MODULE_EXTERNAL_RENDERING=ON"
+    "-DF3D_PLUGIN_BUILD_ASSIMP=ON"
+    "-DF3D_PLUGIN_BUILD_OCCT=ON"
   ] ++ lib.optionals withManual [
     "-DF3D_LINUX_GENERATE_MAN=ON"
+  ] ++ lib.optionals withPythonBinding [
+    "-DF3D_BINDINGS_PYTHON=ON"
   ];
 
   meta = with lib; {

@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, glib, zlib, libpng, cmake, libxml2, python3 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake, python3 }:
 
 let
-  version = "0.3.3";
+  version = "0.3.4";
   pname = "lensfun";
 
   # Fetch a more recent version of the repo containing a more recent lens
@@ -9,8 +9,8 @@ let
   lensfunDatabase = fetchFromGitHub {
     owner = "lensfun";
     repo = "lensfun";
-    rev = "ec9412d27d5fa8f377848a59c768b12c243cb80d";
-    sha256 = "sha256-/u/3oQzac/dQrgFaiYvzT5uQ108XarkXnA2DByA5sic=";
+    rev = "a1510e6f33ce9bc8b5056a823c6d5bc6b8cba033";
+    sha256 = "sha256-qdONyKk873Tq11M33JmznhJMAGd4dqp5KdXdVhfy/Ak=";
   };
 
 in
@@ -21,19 +21,11 @@ stdenv.mkDerivation {
     owner = "lensfun";
     repo = "lensfun";
     rev = "v${version}";
-    sha256 = "0ixf0f7qv0mc7zrw9w1sb60w833g4rqrfj8cjxwzv2vimqcksccz";
+    sha256 = "sha256-FyYilIz9ssSHG6S02Z2bXy7fjSY51+SWW3v8bm7sLvY=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-compilation-with-clang.patch";
-      url = "https://github.com/lensfun/lensfun/commit/5c2065685a22f19f8138365c0e5acf0be8329c02.patch";
-      sha256 = "sha256-tAOCNL37pKE7hfQCu+hUTKLFnRHWF5Dplqf+GaucG+4=";
-    })
-  ];
-
   # replace database with a more recent snapshot
-  # the mastr branch uses version 2 profiles, while 0.3.3 requires version 1 profiles,
+  # the master branch uses version 2 profiles, while 0.3.3 requires version 1 profiles,
   # so we run the conversion tool the project provides,
   # then untar the verson 1 profiles into the source dir before we build
   prePatch = ''
@@ -45,17 +37,20 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    cmake pkg-config
-    python3 python3.pkgs.lxml # For the db converison
+    cmake
+    pkg-config
+    python3
+    python3.pkgs.setuptools
+    python3.pkgs.lxml # For the db converison
   ];
 
   buildInputs = [ glib zlib libpng ];
 
-  cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" ];
+  cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" "-DCMAKE_BUILD_TYPE=RELEASE" ];
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli paperdigits ];
     license = lib.licenses.lgpl3;
     description = "Opensource database of photographic lenses and their characteristics";
     homepage = "https://lensfun.github.io";

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-repo2docker";
-  version = "2024.03.0";
+  version = "2024.07.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "repo2docker";
     rev = "refs/tags/${version}";
-    hash = "sha256-D8sgeyfQjEkBYck/CikAVNZzUSl1R9uXSv75DTXT5U0=";
+    hash = "sha256-ZzZBuJBPDG4to1fSYn2xysupXbPS9Q6wqWr3Iq/Vds8=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://repo2docker.readthedocs.io/";
     changelog = "https://github.com/jupyterhub/repo2docker/blob/${src.rev}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

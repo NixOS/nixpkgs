@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tqdm,
   typer,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2024.2.6.16";
+  version = "2024.8.16.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,14 +27,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "coinmetrics_api_client";
-    hash = "sha256-rCj8nG7iQFJKs3Mic2wRZKBqx9T0lCPH5Po8k0nLppg=";
+    hash = "sha256-HYNmDN3gzmQ7gcUSSXI7/TwDDFPDZJUSu9P0Xz1z2Tk=";
   };
 
   pythonRelaxDeps = [ "typer" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

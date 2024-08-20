@@ -33,7 +33,7 @@ buildPythonApplication rec {
     description = "Tool helps to deploy a kubernetes cluster with Ansible";
     platforms = platforms.all;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "kargo";
   };
 }

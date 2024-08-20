@@ -12,6 +12,7 @@
 
   # tests
   pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +31,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ wcwidth ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH

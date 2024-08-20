@@ -7,7 +7,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gsasl/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://gnu/gsasl/gsasl-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-1FtWLhO9E7n8ILNy9LUyaXQM9iefg28JzhG50yvO4HU=";
   };
 

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   click,
-  colorama,
   coverage,
   fetchPypi,
   pdm-backend,
@@ -33,11 +32,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     typing-extensions
-  ];
+  # Build includes the standard optional by default
+  # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
+  ] ++ optional-dependencies.standard;
 
-  passthru.optional-dependencies = {
-    all = [
-      colorama
+  optional-dependencies = {
+    standard = [
       shellingham
       rich
     ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytest-sugar
     pytest-xdist
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d);

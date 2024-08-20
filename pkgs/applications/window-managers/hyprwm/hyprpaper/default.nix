@@ -2,63 +2,73 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, cairo
+, expat
 , file
+, fribidi
 , hyprlang
+, libdatrie
 , libGL
 , libjpeg
+, libselinux
+, libsepol
+, libthai
 , libwebp
-, mesa
+, libXdmcp
 , pango
+, pcre
+, pcre2
 , pkg-config
+, util-linux
 , wayland
 , wayland-protocols
-, wayland-scanner
+, hyprwayland-scanner
+, hyprutils
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = finalAttrs.pname;
+    repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-l13c8ALA7ZKDgluYA1C1OfkDGYD6e1/GR6LJnxCLRhA=";
+    hash = "sha256-HIK7XJWQCM0BAnwW5uC7P0e7DAkVTy5jlxQ0NwoSy4M=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wayland-scanner
+    hyprwayland-scanner
   ];
 
   buildInputs = [
+    cairo
+    expat
     file
+    fribidi
     hyprlang
+    libdatrie
     libGL
     libjpeg
+    libselinux
+    libsepol
+    libthai
     libwebp
-    mesa
+    libXdmcp
     pango
+    pcre
+    pcre2
+    util-linux
     wayland
     wayland-protocols
+    hyprutils
   ];
 
   prePatch = ''
     substituteInPlace src/main.cpp \
       --replace GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
-  '';
-
-  preConfigure = ''
-    make protocols
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ./hyprpaper -t $out/bin
-
-    runHook postInstall
   '';
 
   meta = with lib; {

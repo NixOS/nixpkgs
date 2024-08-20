@@ -95,7 +95,7 @@ in
     services.teeworlds = {
       enable = mkEnableOption "Teeworlds Server";
 
-      package = mkPackageOptionMD pkgs "teeworlds-server" { };
+      package = mkPackageOption pkgs "teeworlds-server" { };
 
       openPorts = mkOption {
         type = types.bool;

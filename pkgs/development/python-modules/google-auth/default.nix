@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.29.0";
+  version = "2.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zy3/My0HMidVD/x0V4aKxCGNbFALFV/mzBfSsTYCw2A=";
+    hash = "sha256-q2MKEyD2cgkJrXan29toQc31xmsyjWkAJ+SGe9+xZog=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -103,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -13,21 +13,21 @@
 let
   # josh-ui requires javascript dependencies, haven't tried to figure it out yet
   cargoFlags = [ "--workspace" "--exclude" "josh-ui" ];
+  version = "24.08.14";
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "josh";
-  version = "23.12.04";
-  JOSH_VERSION = "r${version}";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = JOSH_VERSION;
-    sha256 = "10fspcafqnv6if5c1h8z9pf9140jvvlrch88w62wsg4w2vhaii0v";
+    rev = "v${version}";
+    hash = "sha256-6U1nhERpPQAVgQm6xwRlHIhslYBLd65DomuGn5yRiSs=";
   };
 
-  cargoSha256 = "1j0vl3h6f65ldg80bgryh1mz423lcrcdkn8rmajya1850pfxk3w3";
+  cargoHash = "sha256-s6+Bd4ucwUinrcbjNvlDsf9LhWc/U9SAvBRW7JAmxVA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,6 +43,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = cargoFlags;
   cargoTestFlags = cargoFlags;
+
+  # used to teach josh itself about its version number
+  env.JOSH_VERSION = "r${version}";
 
   postInstall = ''
     wrapProgram "$out/bin/josh-proxy" --prefix PATH : "${git}/bin"

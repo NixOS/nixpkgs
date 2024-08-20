@@ -19,7 +19,7 @@ mkDerivation rec {
     owner = "davidar";
     repo = "tensor";
     rev = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
-    sha256 = "sha256-aR6TsfUxsxoSDaIWYgRCwd7BCgekSEqY6LpDoQ5DNqY=";
+    hash = "sha256-aR6TsfUxsxoSDaIWYgRCwd7BCgekSEqY6LpDoQ5DNqY=";
     fetchSubmodules = true;
   };
 

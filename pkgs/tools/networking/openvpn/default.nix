@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.10";
+  version = "2.6.12";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-GZO7t7nttDBibqokVz+IH9PfZC9Cf8uCSxrtH8obzJs=";
+    hash = "sha256-HGEP3etobjTxNnw0fgJ+QY4HUjoQ9NjOSiwq8vYaGSk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://openvpn.net/community-downloads/";
     homepage = "https://openvpn.net/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ viric peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
     mainProgram = "openvpn";
   };

@@ -1,13 +1,29 @@
-{ lib, stdenv, runCommand, appleDerivation', launchd, bootstrap_cmds, swift-corelibs-foundation, xnu, xpc, ppp, IOKit, eap8021x, Security
+{ lib, stdenv, stdenvNoCC, appleDerivation', launchd, bootstrap_cmds, swift-corelibs-foundation, xnu, xpc, ppp, IOKit, eap8021x, Security
 , headersOnly ? false }:
 
 let
-  privateHeaders = runCommand "swift-corelibs-foundation-private" { } ''
-    mkdir -p $out/include/CoreFoundation
+  # Copy the headers out of CF instead of building it to avoid an infinite recursion.
+  privateHeaders = stdenvNoCC.mkDerivation {
+    pname = "swift-corelibs-foundation-private";
+    inherit (swift-corelibs-foundation) version src;
 
-    cp ${swift-corelibs-foundation}/Library/Frameworks/CoreFoundation.framework/PrivateHeaders/* \
-      $out/include/CoreFoundation
-  '';
+    buildCommand = ''
+      unpackFile "$src"
+
+      mkdir -p "$out/include/CoreFoundation"
+
+      declare -a privateHeaders=(
+        Base.subproj/CFRuntime.h
+        PlugIn.subproj/CFBundlePriv.h
+        RunLoop.subproj/CFRunLoop.h
+        String.subproj/CFStringDefaultEncoding.h
+      )
+
+      for header in "''${privateHeaders[@]}"; do
+        cp source/CoreFoundation/$header $out/include/CoreFoundation
+      done
+    '';
+  };
 in
 appleDerivation' stdenv {
   meta.broken = stdenv.cc.nativeLibc;

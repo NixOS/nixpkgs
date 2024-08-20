@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.10.3";
+  version = "3.10.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,13 +40,13 @@ buildPythonPackage rec {
     owner = "ijl";
     repo = "orjson";
     rev = "refs/tags/${version}";
-    hash = "sha256-bK6wA8P/IXEbiuJAx7psd0nUUKjR1jX4scFfJr1MBAk=";
+    hash = "sha256-K3wCzwaGOsaiCm2LW4Oc4XOnp6agrdTxCxqEIMq0fuU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ilGq+/gPSuNwURUWy2ZxInzmUv+PxYMxd8esxrMpr2o=";
+    hash = "sha256-SNdwqb47dJ084TMNsm2Btks1UCDerjSmSrQQUiGbx50=";
   };
 
   maturinBuildFlags = [ "--interpreter ${python.executable}" ];

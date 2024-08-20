@@ -70,11 +70,19 @@ in
   # Whether to compile with SUID support
   enableSuid ? false,
   starterSuidPath ? null,
-  # newuidmapPath and newgidmapPath are to support --fakeroot
-  # where those SUID-ed executables are unavailable from the FHS system PATH.
+  # Extra system-wide /**/bin paths to prefix,
+  # useful to specify directories containing binaries with SUID bit set.
+  # The paths take higher precedence over the FHS system PATH specified
+  # inside the upstream source code.
+  # Include "/run/wrappers/bin" by default for the convenience of NixOS users.
+  systemBinPaths ? [ "/run/wrappers/bin" ],
   # Path to SUID-ed newuidmap executable
+  # Deprecated in favour of systemBinPaths
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
   newuidmapPath ? null,
   # Path to SUID-ed newgidmap executable
+  # Deprecated in favour of systemBinPaths
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
   newgidmapPath ? null,
   # External LOCALSTATEDIR
   externalLocalStateDir ? null,
@@ -99,18 +107,30 @@ in
   vendorHash ? _defaultGoVendorArgs.vendorHash,
   deleteVendor ? _defaultGoVendorArgs.deleteVendor,
   proxyVendor ? _defaultGoVendorArgs.proxyVendor,
-}:
+}@args:
 
 let
+  # Backward compatibility for privileged-un-utils.
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
   privileged-un-utils =
     if ((newuidmapPath == null) && (newgidmapPath == null)) then
       null
     else
-      (runCommandLocal "privileged-un-utils" { } ''
-        mkdir -p "$out/bin"
-        ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
-        ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
-      '');
+      lib.warn
+        "${pname}: arguments newuidmapPath and newgidmapPath is deprecated in favour of systemBinPaths."
+        (
+          runCommandLocal "privileged-un-utils" { } ''
+            mkdir -p "$out/bin"
+            ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
+            ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
+          ''
+        );
+
+  # Backward compatibility for privileged-un-utils.
+  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
+  systemBinPaths =
+    lib.optional (privileged-un-utils != null) (lib.makeBinPath [ privileged-un-utils ])
+    ++ args.systemBinPaths or [ "/run/wrappers/bin" ];
 
   concatMapStringAttrsSep =
     sep: f: attrs:
@@ -196,8 +216,9 @@ in
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  # Packages to prefix to the Apptainer/Singularity container runtime default PATH
-  # Use overrideAttrs to override
+  # Packages to provide fallback bin paths
+  # to the Apptainer/Singularity container runtime default PATHs.
+  # Override with `<pkg>.overrideAttrs`.
   defaultPathInputs = [
     bash
     coreutils
@@ -206,7 +227,6 @@ in
     fuse2fs # Mount ext3 filesystems
     go
     mount # mount
-    privileged-un-utils
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
   ] ++ lib.optional enableNvidiaContainerCli nvidia-docker;
@@ -228,7 +248,7 @@ in
             lib.concatStringsSep " " [
               "--replace-fail"
               (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-              (addShellDoubleQuotes ''$inputsDefaultPath''${inputsDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}'')
+              (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
             ]
           ) originalDefaultPaths
         }
@@ -267,8 +287,11 @@ in
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+    # Respect PATH from the environment/the user.
+    # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "$inputsDefaultPath"
+      --suffix PATH : "$systemDefaultPath" \
+      --suffix PATH : "$inputsDefaultPath"
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
@@ -303,29 +326,27 @@ in
     ''}
   '';
 
-  meta =
-    with lib;
-    {
-      description = "Application containers for linux" + extraDescription;
-      longDescription = ''
-        Singularity (the upstream) renamed themselves to Apptainer
-        to distinguish themselves from a fork made by Sylabs Inc.. See
+  meta = {
+    description = "Application containers for linux" + extraDescription;
+    longDescription = ''
+      Singularity (the upstream) renamed themselves to Apptainer
+      to distinguish themselves from a fork made by Sylabs Inc.. See
 
-        https://sylabs.io/2021/05/singularity-community-edition
-        https://apptainer.org/news/community-announcement-20211130
-      '';
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
-        jbedo
-        ShamrockLee
-      ];
-      mainProgram = projectName;
-    }
-    // extraMeta;
+      https://sylabs.io/2021/05/singularity-community-edition
+      https://apptainer.org/news/community-announcement-20211130
+    '';
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      jbedo
+      ShamrockLee
+    ];
+    mainProgram = projectName;
+  } // extraMeta;
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {
+      systemDefaultPath = lib.concatStringsSep ":" systemBinPaths;
       inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
       passthru = prevAttrs.passthru or { } // {
         inherit sourceFilesWithDefaultPaths;

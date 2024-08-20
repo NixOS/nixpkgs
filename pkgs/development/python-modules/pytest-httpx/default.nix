@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
 }:
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
   ];

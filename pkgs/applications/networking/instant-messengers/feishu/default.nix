@@ -1,4 +1,4 @@
-{ addOpenGLRunpath
+{ addDriverRunpath
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -55,7 +55,6 @@
 , stdenv
 , systemd
 , wayland
-, wrapGAppsHook3
 , xdg-utils
 , writeScript
 
@@ -66,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/7e382fc2/Feishu-linux_x64-7.15.13.deb";
-      sha256 = "sha256-CyQmQKfyYcWqpty5LxTNqm73AVnPdm7biBwICkbBEco=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/88a232d5/Feishu-linux_x64-7.18.11.deb";
+      sha256 = "sha256-EneDVW8eQ6J+M49hn9xLtvlqiDOx4Rs8VMLt1cqSbak=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/4c8c2fbf/Feishu-linux_arm64-7.15.13.deb";
-      sha256 = "sha256-nxtu5xOafZ1tlN/f0+5VF2I6ISfHmPJTztOI+AQwp9c=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/f29ac73d/Feishu-linux_arm64-7.18.11.deb";
+      sha256 = "sha256-ghAWPQgVEBSom7zBHUKb56O3EZR4rOnQlz9BRSJBNp4=";
     };
   };
 
@@ -132,7 +131,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.15.13";
+  version = "7.18.11";
   pname = "feishu";
 
   src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -176,10 +175,10 @@ stdenv.mkDerivation {
     # Wrap feishu and vulcan
     # Feishu is the main executable, vulcan is the builtin browser
     for executable in $out/opt/bytedance/feishu/{feishu,vulcan/vulcan}; do
+      # FIXME: Add back NIXOS_OZONE_WL support once upstream fixes the crash on native Wayland (see #318035)
       wrapProgram $executable \
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addOpenGLRunpath.driverLink}/share \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addDriverRunpath.driverLink}/share \
         ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done
 

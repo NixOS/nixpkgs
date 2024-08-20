@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.2.2";
 
   src = fetchzip {
-    url = "mirror://sourceforge/freetts/${finalAttrs.pname}-${finalAttrs.version}-src.zip";
+    url = "mirror://sourceforge/freetts/freetts-${finalAttrs.version}-src.zip";
     hash = "sha256-+bhM0ErEZVnmcz5CBqn/AeGaOhKnCjZzGeqgO/89wms=";
     stripRoot = false;
   };

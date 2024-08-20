@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, libxslt, texliveBasic
+{ lib, stdenv, fetchurl, python311, libxslt, texliveBasic
 , enableAllFeatures ? false, imagemagick, fig2dev, inkscape, fontconfig, ghostscript
 
 , tex ? texliveBasic.withPackages (ps: with ps; [ # satisfy all packages that ./configure mentions
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yd09nypswy3q4scri1dg7dr99d7gd6r2dwx0xm81l9f4y32gs0n";
   };
 
-  buildInputs = [ python3 libxslt tex ]
+  buildInputs = [ python311 libxslt tex ]
     ++ lib.optionals enableAllFeatures [ imagemagick fig2dev ];
 
   # TODO: dblatex tries to execute texindy command, but nixpkgs doesn't have
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    ${python3.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
+    ${python311.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
   '';
 
   passthru = { inherit tex; };

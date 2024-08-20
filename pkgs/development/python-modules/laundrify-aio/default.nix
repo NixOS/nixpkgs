@@ -3,25 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
   aiohttp,
   pyjwt,
 }:
 
 buildPythonPackage rec {
   pname = "laundrify-aio";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.2.2";
+  pyproject = true;
+
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laundrify";
     repo = "laundrify-pypi";
-    rev = "v${version}";
-    hash = "sha256-mIdw2167H4Ume/DqV+fjRiBrph+8Jj5EEUALDDj4ah8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iFQ0396BkGWM7Ma/I0gbXucd2/yPmEVF4IC3/bMK2SA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     pyjwt
   ];

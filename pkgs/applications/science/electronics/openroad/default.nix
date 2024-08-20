@@ -15,7 +15,6 @@
 , clp       # for or-tools
 , eigen
 , glpk
-, gtest
 , lcov
 , lemon-graph
 , libjpeg

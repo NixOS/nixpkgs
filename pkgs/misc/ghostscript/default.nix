@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     ./doc-no-ref.diff
   ];
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [ "out" "man" "doc" "fonts" ];
 
   enableParallelBuilding = true;
 
@@ -133,7 +133,9 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    ln -s "${fonts}" "$out/share/ghostscript/fonts"
+    mkdir -p $fonts/share/fonts
+    cp -rv ${fonts}/* "$fonts/share/fonts/"
+    ln -s "$fonts/share/fonts" "$out/share/ghostscript/fonts"
   '' + lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
@@ -190,7 +192,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [ lib.maintainers.tobim ];
     mainProgram = "gs";
   };
 }

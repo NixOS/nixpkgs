@@ -1,5 +1,5 @@
 { lib
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , fetchFromGitHub
 , intel-compute-runtime
@@ -9,19 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.17.6";
+  version = "1.17.25";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vtijha0nXHEp5oLnmdtbD80Qa2dgMykZXhQ2yfbk+mY=";
+    hash = "sha256-nC0Bp6Ggs5MDxBbrHVIh73LBb5yyMOUFuLXF06nvLkE=";
   };
 
-  nativeBuildInputs = [ cmake addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake addDriverRunpath ];
 
   postFixup = ''
-    addOpenGLRunpath $out/lib/libze_loader.so
+    addDriverRunpath $out/lib/libze_loader.so
   '';
 
   passthru.tests = {

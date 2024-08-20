@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://zodb-docs.readthedocs.io/";
     changelog = "https://github.com/zopefoundation/ZODB/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -2,41 +2,121 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  sassc,
   gnome-themes-extra,
   gtk-engine-murrine,
+  unstableGitUpdater,
+  colorVariants ? [ ],
+  sizeVariants ? [ ],
+  themeVariants ? [ ],
+  tweakVariants ? [ ],
+  iconVariants ? [ ],
 }:
-stdenvNoCC.mkDerivation {
+
+let
   pname = "gruvbox-gtk-theme";
-  version = "0-unstable-2024-06-12";
+  colorVariantList = [
+    "dark"
+    "light"
+  ];
+  sizeVariantList = [
+    "compact"
+    "standard"
+  ];
+  themeVariantList = [
+    "default"
+    "green"
+    "grey"
+    "orange"
+    "pink"
+    "purple"
+    "red"
+    "teal"
+    "yellow"
+    "all"
+  ];
+  tweakVariantList = [
+    "medium"
+    "soft"
+    "black"
+    "float"
+    "outline"
+    "macos"
+  ];
+  iconVariantList = [
+    "Dark"
+    "Light"
+  ];
+in
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib.checkListOfEnum
+  "${pname}: sizeVariants"
+  sizeVariantList
+  sizeVariants
+  lib.checkListOfEnum
+  "${pname}: themeVariants"
+  themeVariantList
+  themeVariants
+  lib.checkListOfEnum
+  "${pname}: tweakVariants"
+  tweakVariantList
+  tweakVariants
+  lib.checkListOfEnum
+  "${pname}: iconVariants"
+  iconVariantList
+  iconVariants
 
-  src = fetchFromGitHub {
-    owner = "Fausto-Korpsvart";
-    repo = "Gruvbox-GTK-Theme";
-    rev = "1a0f6672283e1846ec307addd4647f2daad29402";
-    hash = "sha256-bbL4bHAdkmReogUQML9sMpSallZ7wrgbK3R64xiAYRo=";
-  };
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname;
+    version = "0-unstable-2024-07-22";
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+    src = fetchFromGitHub {
+      owner = "Fausto-Korpsvart";
+      repo = "Gruvbox-GTK-Theme";
+      rev = "f14a99e1369a6348a4ecd4a5b2d9c067b83f7b2a";
+      hash = "sha256-WuZX2A5nLk8vMlK0ZlDlbeb79wCCWrGUf2CbqfnbUzk=";
+    };
 
-  buildInputs = [ gnome-themes-extra ];
+    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  dontBuild = true;
+    nativeBuildInputs = [ sassc ];
+    buildInputs = [ gnome-themes-extra ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
-    runHook postInstall
-  '';
+    dontBuild = true;
 
-  meta = {
-    description = "Gtk theme based on the Gruvbox colour pallete";
-    homepage = "https://www.pling.com/p/1681313/";
-    license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      luftmensch-luftmensch
-      math-42
-    ];
-  };
-}
+    passthru.updateScript = unstableGitUpdater { };
+
+    postPatch = ''
+      patchShebangs themes/install.sh
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/themes
+      cd themes
+      ./install.sh -n Gruvbox \
+      ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
+      ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
+      ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
+      ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
+      -d "$out/share/themes"
+      cd ../icons
+      ${lib.optionalString (iconVariants != [ ]) ''
+        mkdir -p $out/share/icons
+        cp -a ${toString (map (v: "Gruvbox-${v}") iconVariants)} $out/share/icons/
+      ''}
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "GTK theme based on the Gruvbox colour palette";
+      homepage = "https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme";
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
+        luftmensch-luftmensch
+        math-42
+        d3vil0p3r
+      ];
+    };
+  }

@@ -14,13 +14,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.12.1";
+  version = "5.16.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-emy2Qvx05D8omSc3Ivx66EnThW/tr77UGQu3qhat/fc=";
+    hash = "sha256-uJJX5lI0YFXygWLeaOuYxjgyswJcjSujPcqHn1aKn8M=";
   };
 
   # Use system openssl.
@@ -74,7 +74,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pimeys tomhoule ivan aqrln ];
+    mainProgram = "prisma";
+    maintainers = with maintainers; [ pimeys tomhoule aqrln ];
   };
 }
 

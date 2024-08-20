@@ -7,7 +7,6 @@
   pythonOlder,
   requests,
   requests-mock,
-  setuptools-scm,
   urllib3,
 }:
 

@@ -4,7 +4,7 @@
 , dpkg
 , makeWrapper
 , callPackage
-, addOpenGLRunpath
+, addDriverRunpath
 , electron
 , withTetrioPlus ? false
 , tetrio-plus ? null
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     makeShellWrapper '${lib.getExe electron}' $out/bin/tetrio \
-      --prefix LD_LIBRARY_PATH : ${addOpenGLRunpath.driverLink}/lib \
+      --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags $out/share/TETR.IO/app.asar
   '';

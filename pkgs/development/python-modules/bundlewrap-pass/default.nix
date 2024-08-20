@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/bundlewrap-pass";
     description = "Use secrets from pass in your BundleWrap repo";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hexchen ];
+    maintainers = [ ];
   };
 }

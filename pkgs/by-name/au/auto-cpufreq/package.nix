@@ -95,6 +95,6 @@ python3Packages.buildPythonPackage rec {
     description = "Automatic CPU speed & power optimizer for Linux";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ Technical27 ];
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
 }

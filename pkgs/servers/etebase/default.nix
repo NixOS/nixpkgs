@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
-, withLdap ? true
 , python3
+, withLdap ? false
 , withPostgres ? true
 , nix-update-script
 , nixosTests
@@ -9,12 +9,13 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pydantic = super.pydantic_1;
     };
   };
 in
-python.pkgs.buildPythonPackage rec {
+python.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
   version = "0.13.1";
 

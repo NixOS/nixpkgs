@@ -7,17 +7,17 @@
   fetchFromGitHub,
   playwrightcapture,
   poetry-core,
+  pydantic,
   pythonOlder,
   redis,
   requests,
-  pythonRelaxDepsHook,
   sphinx,
   ua-parser,
 }:
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.9.5";
+  version = "1.10.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,23 +26,24 @@ buildPythonPackage rec {
     owner = "ail-project";
     repo = "LacusCore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PSxNBgehKOWjf6y/RidIegE+P5rg9OzU4p8ZZrXAdq4=";
+    hash = "sha256-WO0aAvSm0fE7AjgFxnLc5Sej0Ub7v8LruSgrwdFlUPE=";
   };
 
   pythonRelaxDeps = [
+    "pydantic"
     "redis"
     "requests"
   ];
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     async-timeout
     defang
     dnspython
     playwrightcapture
+    pydantic
     redis
     requests
     sphinx

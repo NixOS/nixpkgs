@@ -11,7 +11,6 @@
   pytest-doctestplus,
   pytest-filter-subpackage,
   pytest-mock,
-  pytest-openfiles,
   pytest-remotedata,
   setuptools,
   setuptools-scm,
@@ -46,7 +45,6 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-filter-subpackage
     pytest-mock
-    pytest-openfiles
     pytest-remotedata
   ];
 
@@ -57,6 +55,6 @@ buildPythonPackage rec {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

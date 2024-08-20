@@ -64,7 +64,7 @@ in lib.init bootStages ++ [
         cc = if crossSystem.useiOSPrebuilt or false
                then buildPackages.darwin.iosSdkPkgs.clang
              else if crossSystem.useAndroidPrebuilt or false
-               then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
+               then buildPackages."androidndkPkgs_${crossSystem.androidNdkVersion}".clang
              else if targetPlatform.isGhcjs
                # Need to use `throw` so tryEval for splicing works, ugh.  Using
                # `null` or skipping the attribute would cause an eval failure
@@ -75,6 +75,10 @@ in lib.init bootStages ++ [
                then buildPackages.llvmPackages.libcxxClang
              else if crossSystem.useLLVM or false
                then buildPackages.llvmPackages.clang
+             else if crossSystem.useZig or false
+               then buildPackages.zig.cc
+             else if crossSystem.useArocc or false
+               then buildPackages.arocc
              else buildPackages.gcc;
 
         extraNativeBuildInputs = old.extraNativeBuildInputs

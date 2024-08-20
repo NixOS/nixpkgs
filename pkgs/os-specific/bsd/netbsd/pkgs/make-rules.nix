@@ -4,20 +4,16 @@
   stdenv,
   bsdSetupHook,
   netbsdSetupHook,
-  rsync,
 }:
 
 mkDerivation {
   path = "share/mk";
-  sha256 = "0w9x77cfnm6zwy40slradzi0ip9gz80x6lk7pvnlxzsr2m5ra5sy";
-  version = "9.2";
   noCC = true;
 
   buildInputs = [ ];
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
-    rsync
   ];
 
   dontBuild = true;

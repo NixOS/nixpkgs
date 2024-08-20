@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Pre-authentication encoding (PAE) implementation in Python";
     homepage = "https://github.com/MatthiasValvekens/python-pae";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

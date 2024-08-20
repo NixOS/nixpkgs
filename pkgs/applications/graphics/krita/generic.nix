@@ -28,12 +28,6 @@ mkDerivation rec {
       url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
       hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
     })
-    # Fixes build with libjxl 0.9.0
-    (fetchpatch {
-      name = "fix-build-with-libjxl-0.9.0.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/ace7edcca6ad322581ab39620f21ccf3ffbd3b5a.diff";
-      hash = "sha256-dXk4+HNS0+Ie/8V4+Oj4rBJrJbNHG57gIzPymXLEc9M=";
-    })
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip ];

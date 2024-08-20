@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pyannotate,
@@ -32,10 +31,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_annotate" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Generate PyAnnotate annotations from your pytest tests";
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

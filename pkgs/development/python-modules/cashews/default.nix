@@ -9,7 +9,7 @@
   lib,
   pytest,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-rerunfailures,
   pytestCheckHook,
   redis,
@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "cashews";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Krukov";
     repo = "cashews";
     rev = "refs/tags/${version}";
-    hash = "sha256-VzIW6/xhKk+ZWd29BYQp6sjpBst8IVz8t/hCLc2LFT4=";
+    hash = "sha256-7T9M8ioeTjW7OmcHyxZ6awNfp9kVU8Hi+Lgy17jXxK4=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     hypothesis
     pytest
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-rerunfailures
     pytestCheckHook
   ];

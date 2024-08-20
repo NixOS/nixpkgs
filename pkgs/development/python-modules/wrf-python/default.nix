@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   pythonOlder,
@@ -54,6 +53,5 @@ buildPythonPackage rec {
     homepage = "http://wrf-python.rtfd.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mhaselsteiner ];
-    broken = stdenv.isDarwin;
   };
 }

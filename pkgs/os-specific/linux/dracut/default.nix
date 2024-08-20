@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dracutdevs/dracut/wiki";
     description = "Event driven initramfs infrastructure";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

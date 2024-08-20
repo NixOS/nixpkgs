@@ -37,6 +37,9 @@ buildPythonPackage rec {
     graphql-relay
   ];
 
+  # snaphottest->fastdiff->wasmer dependency chain does not support 3.12.
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     pytest7CheckHook
     pytest-asyncio
@@ -55,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/graphql-python/graphene";
     changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

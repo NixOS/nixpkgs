@@ -12,7 +12,7 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 , gtk3
 , gtk4
@@ -62,7 +62,7 @@
 
 # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
 , vulkanSupport ? false
-, addOpenGLRunpath
+, addDriverRunpath
 , enableVulkan ? vulkanSupport
 }:
 
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
     glib gsettings-desktop-schemas gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
@@ -187,7 +187,7 @@ stdenv.mkDerivation {
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
       ${optionalString vulkanSupport ''
-      --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
+      --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
       ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )

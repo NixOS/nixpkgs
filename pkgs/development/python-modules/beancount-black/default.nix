@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "beancount-black";
-  version = "1.0.2";
+  version = "1.0.4";
 
   disabled = pythonOlder "3.9";
   format = "pyproject";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beancount-black";
-    rev = version;
-    hash = "sha256-SoAic9UYKE9lhMpl44VosJmmjKJjDrKOyMeUO931Ztg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GrdQCxVsAzCusxxfQHF48doWG8OVrqBayCFof9RHTkE=";
   };
 
   buildInputs = [ poetry-core ];

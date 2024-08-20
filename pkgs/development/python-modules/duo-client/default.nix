@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/duosecurity/duo_client_python";
     changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,15 +1,15 @@
 { stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper
-, nixosTests, rclone }:
+, nixosTests, rclone, python3 }:
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.16.4";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-TSUhrtSgGIPM/cUzA6WDtCpqCyjtnM5BZDhK6udR0Ek=";
+    hash = "sha256-fd67ZehmgHHd+R/V4hJCREWoY3lFKSTfvbLRgJ0PSAM=";
   };
 
   patches = [
@@ -17,11 +17,13 @@ buildGoModule rec {
     ./0001-Skip-testing-restore-with-permission-failure.patch
   ];
 
-  vendorHash = "sha256-E+Erf8AdlMBdep1g2SpI8JKIdJuKqmyWEUmh8Rs5R/o=";
+  vendorHash = "sha256-tU2msDHktlU0SvvxLQCU64p8DpL8B0QiliVCuHlLTHQ=";
 
   subPackages = [ "cmd/restic" ];
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  nativeCheckInputs = [ python3 ];
 
   passthru.tests.restic = nixosTests.restic;
 

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     rev = "v${version}";
-    hash = "sha256-6HqZBJeUaYykTZLSrqQN0Rt6rvnvzb53T56oy06wIUw=";
+    hash = "sha256-VD10BO7bxTmD1A1AZsiEiYBsVhAKlXxdHNMmXqpvpKM=";
   };
 
-  cargoHash = "sha256-Zais+yGfrzxKrKA4uAG65uzhamnuYxQEKkIaeiOlcLQ=";
+  cargoHash = "sha256-7MK0iLBpjvWE7UH5Tb3qIm2XnEVsAvBy34Ed4wHagZQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

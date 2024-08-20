@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nmap-formatter";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "vdjagilev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JqSsFEZmmVOnNza9xh+JrlWxE4XdA1GSX9yw2NIPYhQ=";
+    hash = "sha256-2XbqpvtlNAYrgtaMnFklYRoHCj3nkltEZlwbZzvfdFU=";
   };
 
-  vendorHash = "sha256-MiBY4kWBZM2ZcW3SMqQ+7gKFnFt78wMI9S3OfCgth5g=";
+  vendorHash = "sha256-PKoe4rpwPy3omfRRhN70iEJJ/sHliIwxPUHGxRJqrf4=";
 
   meta = with lib; {
     description = "Tool that allows you to convert nmap output";
