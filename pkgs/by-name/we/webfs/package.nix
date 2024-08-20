@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.21";
 
   src = fetchurl {
-    url = "https://www.kraxel.org/releases/webfs/${pname}-${version}.tar.gz";
+    url = "https://www.kraxel.org/releases/webfs/webfs-${version}.tar.gz";
     sha256 = "98c1cb93473df08e166e848e549f86402e94a2f727366925b1c54ab31064a62a";
   };
 
