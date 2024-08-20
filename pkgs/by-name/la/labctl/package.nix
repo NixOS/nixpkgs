@@ -1,29 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "labctl";
-  version = "0.0.22";
+  version = "0.0.22-unstable-2024-05-10";
 
   src = fetchFromGitHub {
     owner = "labctl";
     repo = "labctl";
-    rev = "v${version}";
-    hash = "sha256-84t7qhLafNyPLgHmFQUsizEn6Us44dDTercGEm9lup4=";
+    rev = "1a8b11402def10819d36b9f7f44e82612ef22674";
+    hash = "sha256-px5jrfllo6teJaNrqIQVyqMwArCw625xSVM7V/xW/IA=";
   };
-
-  patches = [
-    # Fix build failure with Go 1.21 by updating go4.org/unsafe/assume-no-moving-gc
-    # See https://github.com/labctl/labctl/pull/4
-    (fetchpatch {
-      url = "https://github.com/labctl/labctl/commit/615d05e94b991362beddce71c7ee34eae7fc93ff.patch";
-      hash = "sha256-4JrXSsg8rfuH6i8XyLd/qO6AibkRMDBIpfT8r1yS75c=";
-    })
-  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
