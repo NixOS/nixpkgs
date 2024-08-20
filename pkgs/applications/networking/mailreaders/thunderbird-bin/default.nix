@@ -203,6 +203,7 @@ stdenv.mkDerivation {
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    versionSuffix = "esr";
   };
 
   passthru = {
