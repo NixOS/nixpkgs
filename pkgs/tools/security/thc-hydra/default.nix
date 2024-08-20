@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
   in ''
     substituteInPlace configure \
-      --replace '$LIBDIRS' "${makeDirs "lib" "lib"}" \
-      --replace '$INCDIRS' "${makeDirs "dev" "include"}" \
-      --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
-      --replace "libcurses.so" "libncurses.so" \
-      --replace "-lcurses" "-lncurses"
+      --replace-fail '$LIBDIRS' "${makeDirs "lib" "lib"}" \
+      --replace-fail '$INCDIRS' "${makeDirs "dev" "include"}" \
+      --replace-fail "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
+      --replace-fail "libcurses.so" "libncurses.so" \
+      --replace-fail "-lcurses" "-lncurses"
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-undef-prefix";
