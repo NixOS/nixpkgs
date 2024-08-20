@@ -3086,7 +3086,7 @@ self: super: {
     # 2024-08-09: The stackage versions of safe-coloured-text* are old and broken
     safe-coloured-text = unmarkBroken self.safe-coloured-text_0_3_0_2;
     safe-coloured-text-gen = unmarkBroken self.safe-coloured-text-gen_0_0_0_3;
-    safe-coloured-text-layout = unmarkBroken self.safe-coloured-text-layout_0_2_0_0;
+    safe-coloured-text-layout = unmarkBroken self.safe-coloured-text-layout_0_2_0_1;
     safe-coloured-text-layout-gen = unmarkBroken self.safe-coloured-text-layout-gen_0_0_0_1;
     safe-coloured-text-terminfo = unmarkBroken self.safe-coloured-text-terminfo_0_3_0_0;
   })));
