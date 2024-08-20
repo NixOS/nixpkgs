@@ -1,29 +1,27 @@
-{ stdenv, fetchurl, emacs, lib }:
+{
+  melpaBuild,
+  fetchzip,
+  lib,
+}:
 
-stdenv.mkDerivation rec {
+melpaBuild rec {
   pname = "session-management-for-emacs";
+  ename = "session";
   version = "2.2a";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://sourceforge/emacs-session/session-${version}.tar.gz";
-    sha256 = "37dfba7420b5164eab90dafa9e8bf9a2c8f76505fe2fefa14a64e81fa76d0144";
+    hash = "sha256-lc6NIX+lx97qCs5JqG7x0iVE6ki09Gy7DEQuPW2c+7s=";
   };
 
-  buildInputs = [ emacs ];
-
-  installPhase = ''
-    mkdir -p "$out/share/emacs/site-lisp"
-    cp lisp/*.el "$out/share/emacs/site-lisp/"
-  '';
-
-  meta = with lib; {
-    /* installation: add to your ~/.emacs
+  meta = {
+    /*
+      installation: add to your ~/.emacs
       (require 'session)
       (add-hook 'after-init-hook 'session-initialize)
     */
     description = "Small session management for emacs";
     homepage = "https://emacs-session.sourceforge.net/";
-    license = licenses.gpl2;
-    maintainers = [ ];
+    license = lib.licenses.gpl2;
   };
 }

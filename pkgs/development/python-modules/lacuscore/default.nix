@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.10.9";
+  version = "1.10.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "ail-project";
     repo = "LacusCore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6DBfmojU9p0QAojYxFSciQkc8uvQtRw37Fc8Mp5Eu/8=";
+    hash = "sha256-WO0aAvSm0fE7AjgFxnLc5Sej0Ub7v8LruSgrwdFlUPE=";
   };
 
   pythonRelaxDeps = [

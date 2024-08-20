@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "gocd-agent";
@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     url = "https://download.go.cd/binaries/${version}-${rev}/generic/go-agent-${version}-${rev}.zip";
     sha256 = "sha256-L2MOkbVHoQu99lKrbnsNkhuU0SZ8VANSK72GZrGLbiQ=";
   };
+
+  passthru.tests = { inherit (nixosTests) gocd-agent; };
+
   meta = with lib; {
     description = "Continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";

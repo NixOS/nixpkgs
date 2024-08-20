@@ -6,6 +6,5 @@
 mkKdeDerivation {
   pname = "kcodecs";
 
-  extraNativeBuildInputs = [qttools];
-  extraBuildInputs = [gperf];
+  extraNativeBuildInputs = [qttools gperf];
 }

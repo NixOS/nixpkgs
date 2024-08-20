@@ -21,16 +21,17 @@
 , pango
 , pkg-config
 , nltk-data
+, xorg
 }:
 
 let
-  version = "2.11.2";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2VmV8Z8TDacc4qZePG87ZgnBydLdm+anpmk8gFKbSLM=";
+    hash = "sha256-qqOTW7qgaZfNFYgVIDdwVh9KlT3Z6g8EALMOv39aRVc=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -75,7 +76,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-gbHavMUmsZaRSfBkdrrNpTO0R8zacb8110U8n5Y09oU=";
+    npmDepsHash = "sha256-dze03mkWMA2o3v3aoPTrDtUndTdP7Tk4gvFp4nq80po=";
 
     nativeBuildInputs = [
       pkg-config
@@ -121,6 +122,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
+    xorg.lndir
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -194,9 +196,9 @@ python.pkgs.buildPythonApplication rec {
   in ''
     runHook preInstall
 
-    mkdir -p $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx/static/frontend
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
-    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
+    lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "${pythonPath}" \

@@ -88,7 +88,7 @@ in buildGoModule rec {
   '';
 
   passthru = {
-    data-compressed = lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"." (compressDrvWeb gitea.data);
+    data-compressed = lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"." (compressDrvWeb gitea.data {});
 
     tests = nixosTests.gitea;
   };

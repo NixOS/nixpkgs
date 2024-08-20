@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, enableUnfree ? true }:
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true }:
 
 stdenv.mkDerivation rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
         --replace 'DESTINATION ''${PG_PKGLIBDIR}' "DESTINATION \"$out/lib\""
     done
   '';
+
+  passthru.tests = { inherit (nixosTests) timescaledb; };
 
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";

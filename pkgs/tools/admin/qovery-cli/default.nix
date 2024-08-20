@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "qovery-cli";
-  version = "1.2.0";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gsyobjo5LPoTnvy76Absa0xog/iMzbz40PS4AOycRos=";
+    hash = "sha256-bTlbrL2pP6KB2g3bMsvyT24/7Sc4I707KL3hJktsWpA=";
   };
 
   vendorHash = "sha256-z7O0IAXGCXV63WjaRG+7c7q/rlqkV12XWNLhsduvk6s=";

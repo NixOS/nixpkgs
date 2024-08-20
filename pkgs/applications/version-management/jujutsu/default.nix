@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , rustPlatform
 , Security
 , SystemConfiguration
@@ -28,7 +29,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1lONtpataRi0yE6LpN6oNnC3OAW918v8GFCUwinYJWI=";
   };
 
-  cargoHash = "sha256-dRbOTxlFXfmeHUKH2UeN84OwlQ1urCND/Nfk9vSeLwA=";
+  cargoPatches = [
+    # cargo: bump `git2` to 0.19.0
+    (fetchpatch2 {
+      url = "https://github.com/martinvonz/jj/commit/38f6ee89183d886e432472c5888908c9900c9c18.patch?full_index=1";
+      hash = "sha256-BVcak7uIEhwoO0f9hf0GVKKSVmp/ueKD5C9F8J0iL3w=";
+    })
+  ];
+
+  cargoHash = "sha256-FxcvLT0YnXcjDCKxuyijYsVSMLjx1glDzmFH5ctSx6s=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
   useNextest = false; # nextest is the upstream integration framework, but is problematic for test skipping

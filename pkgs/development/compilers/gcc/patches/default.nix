@@ -145,9 +145,11 @@ in
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
 ++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
   "14" = [ (fetchpatch {
+    # There are no upstream release tags in https://github.com/iains/gcc-14-branch.
+    # 04696df09633baf97cdbbdd6e9929b9d472161d3 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.2.0
     name = "gcc-14-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/82b5c1cd38826ab67ac7fc498a8fe74376a40f4a/gcc/gcc-14.1.0.diff";
-    sha256 = "sha256-jCY65l1DGdESNyzEmD8FFC/xMmqeqBIQF+BhT4uTBBU=";
+    url = "https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r0.diff";
+    hash = "sha256-GEUz7KdGzd2WJ0gjX3Uddq2y9bWKdZpT3E9uZ09qLs4=";
   }) ];
   "13" = [ (fetchpatch {
     name = "gcc-13-darwin-aarch64-support.patch";

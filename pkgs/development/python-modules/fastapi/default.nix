@@ -17,9 +17,9 @@
   dirty-equals,
   flask,
   passlib,
+  pyjwt,
   pytest-asyncio,
   pytestCheckHook,
-  python-jose,
   sqlalchemy,
   trio,
 
@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.111.0";
+  version = "0.112.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-DQYjK1dZuL7cF6quyNkgdd/GYmWm7k6YlF7YEjObQlI=";
+    hash = "sha256-M09yte0BGC5w3AZSwDUr9qKUrotqVklO8mwyms9B95Y=";
   };
 
   build-system = [ pdm-backend ];
@@ -87,17 +87,23 @@ buildPythonPackage rec {
     dirty-equals
     flask
     passlib
+    pyjwt
     pytestCheckHook
     pytest-asyncio
-    python-jose
     trio
     sqlalchemy
-  ] ++ optional-dependencies.all ++ python-jose.optional-dependencies.cryptography;
+  ] ++ optional-dependencies.all;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
+    "-W ignore::pytest.PytestUnraisableExceptionWarning"
+  ];
+
+  disabledTests = [
+    # Coverage test
+    "test_fastapi_cli"
   ];
 
   disabledTestPaths = [

@@ -5,6 +5,7 @@
   makeWrapper,
   jre_headless,
   gawk,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nexus;
+  };
 
   meta = {
     description = "Repository manager for binary software components";

@@ -162,9 +162,9 @@ stdenv.mkDerivation {
 
   gradleFlags = [ "-Pbuildversion=${buildVersion}" "-Dorg.gradle.java.home=${jdk}" ];
 
-  buildPhase = with lib; optionalString enableServer ''
+  buildPhase = lib.optionalString enableServer ''
     gradle server:dist
-  '' + optionalString enableClient ''
+  '' + lib.optionalString enableClient ''
     pushd ../Arc
     gradle jnigenBuild
     gradle jnigenJarNativesDesktop
@@ -181,7 +181,7 @@ stdenv.mkDerivation {
     gradle desktop:dist
   '';
 
-  installPhase = with lib; let
+  installPhase = let
     installClient = ''
       install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
       mkdir -p $out/bin
@@ -189,7 +189,7 @@ stdenv.mkDerivation {
         --add-flags "-jar $out/share/mindustry.jar" \
         ${lib.optionalString stdenv.isLinux "--suffix PATH : ${lib.makeBinPath [zenity]}"} \
         --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
+        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + lib.optionalString enableWayland '' \
         --set SDL_VIDEODRIVER wayland \
         --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
       '' + ''
@@ -214,8 +214,8 @@ stdenv.mkDerivation {
     '';
   in ''
     runHook preInstall
-  '' + optionalString enableClient installClient
-     + optionalString enableServer installServer
+  '' + lib.optionalString enableClient installClient
+     + lib.optionalString enableServer installServer
      + ''
     runHook postInstall
   '';
@@ -228,17 +228,17 @@ stdenv.mkDerivation {
 
   passthru.tests.nixosTest = nixosTests.mindustry;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
     description = "Sandbox tower defense game";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode  # deps
     ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chkno fgaz thekostins ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ chkno fgaz thekostins ];
+    platforms = lib.platforms.all;
     # TODO alsa-lib is linux-only, figure out what dependencies are required on Darwin
     broken = enableClient && stdenv.isDarwin;
   };

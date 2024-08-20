@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.9";
+  version = "5.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-63Hxy6AccP/x8WCGrLJNbZrrMoMNZG2JifmKKa6uJLo=";
+    hash = "sha256-EL1DS/2jKWOf6VKUcMTCeTgGTBOZhAJOamJRPlCv9Cc=";
   };
 
   build-system = [ setuptools ];
@@ -159,6 +159,9 @@ buildPythonPackage rec {
 
     # https://github.com/getmoto/moto/issues/7786
     "tests/test_dynamodb/test_dynamodb_import_table.py"
+
+    # Infinite recursion with pycognito
+    "tests/test_cognitoidp/test_cognitoidp.py"
   ];
 
   meta = with lib; {

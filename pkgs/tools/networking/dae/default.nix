@@ -3,6 +3,7 @@
   clang,
   fetchFromGitHub,
   buildGoModule,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "dae";
@@ -45,6 +46,10 @@ buildGoModule rec {
     substituteInPlace $out/lib/systemd/system/dae.service \
       --replace /usr/bin/dae $out/bin/dae
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) dae;
+  };
 
   meta = with lib; {
     description = "Linux high-performance transparent proxy solution based on eBPF";

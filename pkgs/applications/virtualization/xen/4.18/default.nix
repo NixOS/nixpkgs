@@ -15,6 +15,8 @@ let
   upstreamPatchList = lib.lists.flatten [
     upstreamPatches.QUBES_REPRODUCIBLE_BUILDS
     upstreamPatches.XSA_458
+    upstreamPatches.XSA_460
+    upstreamPatches.XSA_461
   ];
 in
 

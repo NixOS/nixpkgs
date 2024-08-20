@@ -289,9 +289,9 @@ let
           celery
           channels
           channels-redis
+          codespell
           colorama
           dacite
-          daphne
           deepmerge
           defusedxml
           django
@@ -324,7 +324,6 @@ let
           packaging
           paramiko
           psycopg
-          pycryptodome
           pydantic
           pydantic-scim
           pyjwt
@@ -344,13 +343,15 @@ let
           uvicorn
           watchdog
           webauthn
-          websockets
           wsproto
           xmlsec
           zxcvbn
         ]
-        ++ uvicorn.optional-dependencies.standard
-        ++ [ codespell ];
+        ++ channels.optional-dependencies.daphne
+        ++ django-storages.optional-dependencies.s3
+        ++ opencontainers.optional-dependencies.reggie
+        ++ psycopg.optional-dependencies.c
+        ++ uvicorn.optional-dependencies.standard;
 
         postInstall = ''
           mkdir -p $out/web $out/website

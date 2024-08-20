@@ -60,6 +60,7 @@
     meta.maintainers = with lib.maintainers; [ obreitwi ];
   };
 
+
   ssh = mkAzExtension rec {
     pname = "ssh";
     version = "2.0.5";
@@ -72,6 +73,16 @@
         oschmod
       ]);
     meta.maintainers = with lib.maintainers; [ gordon-bp ];
+
+  storage-preview = mkAzExtension rec {
+    pname = "storage-preview";
+    version = "1.0.0b2";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_preview-${version}-py2.py3-none-any.whl";
+    sha256 = "2de8fa421622928a308bb70048c3fdf40400bad3b34afd601d0b3afcd8b82764";
+    description = "Provides a preview for upcoming storage features";
+    propagatedBuildInputs = with python3Packages; [ azure-core ];
+    meta.maintainers = with lib.maintainers; [ katexochen ];
+
   };
 
   # Removed extensions

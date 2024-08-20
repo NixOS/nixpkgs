@@ -1,4 +1,11 @@
-{ lib, stdenv, runtimeShell, fetchFromGitHub, gradle_7, openjdk17 }:
+{ lib
+, stdenv
+, makeWrapper
+, fetchFromGitHub
+, gradle_7
+, openjdk17
+}:
+
 let
   pname = "fastddsgen";
   version = "3.3.0";
@@ -17,7 +24,11 @@ stdenv.mkDerivation {
     hash = "sha256-oqbSIzsYUwD8bTqGKZ9he9d18EDq9mHZFoNUp0RK0qU=";
   };
 
-  nativeBuildInputs = [ gradle openjdk17 ];
+  nativeBuildInputs = [
+    gradle
+    openjdk17
+    makeWrapper
+  ];
 
   mitmCache = gradle.fetchDeps {
     inherit pname;
@@ -33,12 +44,12 @@ stdenv.mkDerivation {
 
     gradle install --install_path=$out
 
-    # Override the default start script to use absolute java path
-    cat  <<EOF >$out/bin/fastddsgen
-    #!${runtimeShell}
-    exec ${openjdk17}/bin/java -jar "$out/share/fastddsgen/java/fastddsgen.jar" "\$@"
-    EOF
-    chmod a+x "$out/bin/fastddsgen"
+    # Override the default start script to use absolute java path.
+    # Make the unwrapped "cpp" available in the path, since the wrapped "cpp"
+    # passes additional flags and produces output incompatible with fastddsgen.
+    makeWrapper ${openjdk17}/bin/java $out/bin/fastddsgen \
+      --add-flags "-jar $out/share/fastddsgen/java/fastddsgen.jar" \
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc ]}
 
     runHook postInstall
   '';
