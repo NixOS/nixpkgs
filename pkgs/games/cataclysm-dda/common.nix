@@ -56,6 +56,12 @@ stdenv.mkDerivation {
     "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
+  doCheck = true;
+  # tests all use the same user profile dir
+  enableParallelChecking = false;
+  # tests fail with default locale
+  LC_ALL = "C.UTF-8";
+
   postInstall = optionalString tiles
   ( if !stdenv.isDarwin
     then patchDesktopFile
