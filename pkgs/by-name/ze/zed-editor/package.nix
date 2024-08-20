@@ -125,6 +125,9 @@ rustPlatform.buildRustPackage rec {
         "${src}/assets/fonts/zed-sans"
       ];
     };
+    # Setting this environment variable allows to disable auto-updates
+    # https://zed.dev/docs/development/linux#notes-for-packaging-zed
+    ZED_UPDATE_EXPLANATION = "zed has been installed using nix. Auto-updates have thus been disabled.";
   };
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";
