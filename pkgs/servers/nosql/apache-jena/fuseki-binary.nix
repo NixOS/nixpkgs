@@ -11,10 +11,10 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-jena-fuseki";
-  version = "4.9.0";
+  version = "5.1.0";
   src = fetchurl {
     url = "mirror://apache/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
-    hash = "sha256-t25Q0lb+ecR12cDD1p6eZnzLxW0kZpPOFGvo5YK7AlI=";
+    hash = "sha256-GcwXcLVM2txPC+kkHjEIpqK9dTkQEN9Jkka0EaJRO7Q=";
   };
   nativeBuildInputs = [
     makeWrapper

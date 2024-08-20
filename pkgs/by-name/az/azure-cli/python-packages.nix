@@ -55,6 +55,8 @@ let
           msal-extensions
           msal
           msrestazure
+          oras
+          oschmod
           packaging
           paramiko
           pkginfo

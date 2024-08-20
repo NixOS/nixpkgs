@@ -15,6 +15,7 @@
 , dde-qt-dbus-factory
 , dde-dock
 , gsettings-qt
+, polkit-qt
 , procps
 , libpcap
 , libnl
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-system-monitor";
-  version = "6.0.13";
+  version = "6.0.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-QwZPvEOYypSmbe3deqLRsI3VL/CgVc+Ql3JlsMZ9MqY=";
+    hash = "sha256-LcXc8yI81YslVjof74TvOm6eWiN4UaHgUFU+HSCNZxQ=";
   };
 
   postPatch = ''
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     dde-qt-dbus-factory
     dde-dock
     gsettings-qt
+    polkit-qt
     procps
     libpcap
     libnl

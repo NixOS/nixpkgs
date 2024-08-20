@@ -5,7 +5,7 @@
 , x11Support ? graphicsSupport, libX11
 , mouseSupport ? !stdenv.isDarwin, gpm-ncurses
 , perl, man, pkg-config, buildPackages, w3m
-, testers
+, testers, updateAutotoolsGnuConfigScriptsHook
 }:
 
 let
@@ -53,7 +53,9 @@ in stdenv.mkDerivation rec {
     sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
   '';
 
-  nativeBuildInputs = [ pkg-config gettext ];
+  # updateAutotoolsGnuConfigScriptsHook necessary to build on FreeBSD native pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ pkg-config gettext updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ ncurses boehmgc zlib ]
     ++ lib.optional sslSupport openssl
     ++ lib.optional mouseSupport gpm-ncurses

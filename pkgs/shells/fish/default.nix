@@ -249,7 +249,7 @@ let
       make test
     '';
 
-    postInstall = with lib; ''
+    postInstall = ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
@@ -262,7 +262,7 @@ let
              "$out/share/fish/functions/prompt_pwd.fish"
       sed -i "s|nroff|${groff}/bin/nroff|"                 \
              "$out/share/fish/functions/__fish_print_help.fish"
-      sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
+      sed -e "s|clear;|${lib.getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
@@ -270,7 +270,7 @@ let
           -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
              $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
-    '' + optionalString usePython ''
+    '' + lib.optionalString usePython ''
       cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
       function __fish_anypython
           echo ${python3.interpreter}
@@ -278,18 +278,18 @@ let
       end
       EOF
 
-    '' + optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.isLinux ''
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
       done
 
-    '' + optionalString (!stdenv.isDarwin) ''
+    '' + lib.optionalString (!stdenv.isDarwin) ''
       sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
               "$out/share/fish/tools/create_manpage_completions.py"
       sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
               "$out/share/fish/functions/man.fish"
-    '' + optionalString useOperatingSystemEtc ''
+    '' + lib.optionalString useOperatingSystemEtc ''
       tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
     '' + ''
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}

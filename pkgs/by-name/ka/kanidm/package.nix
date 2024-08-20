@@ -13,6 +13,14 @@
 , pam
 , bashInteractive
 , rust-jemalloc-sys
+, kanidm
+# If this is enabled, kanidm will be built with two patches allowing both
+# oauth2 basic secrets and admin credentials to be provisioned.
+# This is NOT officially supported (and will likely never be),
+# see https://github.com/kanidm/kanidm/issues/1747.
+# Please report any provisioning-related errors to
+# https://github.com/oddlama/kanidm-provision/issues/ instead.
+, enableSecretProvisioning ? false
 }:
 
 let
@@ -32,6 +40,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-8ZENe576gqm+FkQPCgz6mScqdacHilARFWmfe+kDL2A=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
+
+  patches = lib.optionals enableSecretProvisioning [
+    ./patches/oauth2-basic-secret-modify.patch
+    ./patches/recover-account.patch
+  ];
 
   postPatch =
     let
@@ -94,10 +107,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
-      inherit (nixosTests) kanidm;
+      inherit (nixosTests) kanidm kanidm-provisioning;
     };
 
     updateScript = nix-update-script { };
+    inherit enableSecretProvisioning;
+    withSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
   };
 
   meta = with lib; {

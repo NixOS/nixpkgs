@@ -213,7 +213,6 @@ goBuild (
     passthru.tests =
       {
         inherit ollama;
-        service = nixosTests.ollama;
         version = testers.testVersion {
           inherit version;
           package = ollama;
@@ -221,6 +220,7 @@ goBuild (
       }
       // lib.optionalAttrs stdenv.isLinux {
         inherit ollama-rocm ollama-cuda;
+        service = nixosTests.ollama;
         service-cuda = nixosTests.ollama-cuda;
         service-rocm = nixosTests.ollama-rocm;
       };

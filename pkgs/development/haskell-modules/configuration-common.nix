@@ -19,6 +19,9 @@ in
 with haskellLib;
 
 self: super: {
+  # enable list-transformer, jailbreaking is necessary until next release >0.13.0: https://github.com/ivanperez-keera/dunai/issues/427
+  dunai = doJailbreak (addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai));
+
   # Make sure that Cabal 3.10.* can be built as-is
   Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
@@ -145,12 +148,6 @@ self: super: {
     ];
   }) super.vector;
 
-  # Almost guaranteed failure due to floating point imprecision with QuickCheck-2.14.3
-  # https://github.com/haskell/math-functions/issues/73
-  math-functions = overrideCabal (drv: {
-    testFlags = drv.testFlags or [] ++ [ "-p" "! /Kahan.t_sum_shifted/" ];
-  }) super.math-functions;
-
   # Too strict bounds on base
   # https://github.com/lspitzner/butcher/issues/7#issuecomment-1681394943
   butcher = doJailbreak super.butcher;
@@ -166,7 +163,7 @@ self: super: {
   };
 
   # 2024-07-09: rhine 1.4.* needs newer monad-schedule than stackage (and is only consumer)
-  monad-schedule = assert super.monad-schedule.version == "0.1.2.2"; doDistribute self.monad-schedule_0_2;
+  monad-schedule = assert super.monad-schedule.version == "0.1.2.2"; doDistribute self.monad-schedule_0_2_0_1;
 
   aeson =
     # aeson's test suite includes some tests with big numbers that fail on 32bit
@@ -412,7 +409,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      hash = "sha256-/NbwuVTx517DGyr2k1AdQqJaVEc8lrtuO9EliiCZdps=";
+      sha256 = "1y25ac341d77dkb94qny3h5id2xlpqh9hrjr0s6pp66xghbcvzn4";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -575,9 +572,6 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
-  # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
-  streamly-bytestring = doJailbreak super.streamly-bytestring;
-
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
 
@@ -586,9 +580,6 @@ self: super: {
 
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
-
-  # 2023-04-20: Restrictive bytestring bound in tests.
-  storablevector = doJailbreak super.storablevector;
 
   matterhorn = doJailbreak super.matterhorn;
 
@@ -781,13 +772,6 @@ self: super: {
   webdriver-angular = dontCheck super.webdriver-angular;
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
-
-  # 2023-01-11: Too strict bounds on optparse-applicative
-  # https://github.com/Gabriella439/bench/issues/49
-  bench = doJailbreak super.bench;
-
-  # 2023-06-26: Test failure: https://hydra.nixos.org/build/224869905
-  comfort-blas = dontCheck super.comfort-blas;
 
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
@@ -1253,7 +1237,6 @@ self: super: {
 
   # 2023-07-14: Restrictive upper bounds: https://github.com/luke-clifton/shh/issues/76
   shh = doJailbreak super.shh;
-  shh-extras = doJailbreak super.shh-extras;
 
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
@@ -1297,9 +1280,15 @@ self: super: {
     '';
   }) super.hpack;
 
-  # Upstream stack-0.15.7 is compiled with hpack-0.36.0, and we make sure to
-  # keep the same hpack version in Nixpkgs.
-  stack = super.stack.override { hpack = self.hpack_0_36_0; };
+  stack = super.stack.overrideScope (lself: lsuper: {
+    # stack-3.1.1 requires the latest versions of these libraries
+    pantry = lself.pantry_0_10_0;
+    tar = lself.tar_0_6_3_0;
+
+    # Upstream stack-3.1.1 is compiled with hpack-0.37.0, and we make sure to
+    # keep the same hpack version in Nixpkgs.
+    hpack = self.hpack_0_37_0;
+  });
 
   # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
@@ -1507,8 +1496,6 @@ self: super: {
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
-  # 2021-10-04: too strict upper bound on Hakyll
-  hakyll-filestore = doJailbreak super.hakyll-filestore;
 
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
@@ -1884,11 +1871,6 @@ self: super: {
 
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
-
-  # 2020-11-19: jailbreaking because of pretty-simple bound out of date
-  # https://github.com/kowainik/stan/issues/408
-  # Tests disabled because of: https://github.com/kowainik/stan/issues/409
-  stan = doJailbreak (dontCheck super.stan);
 
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
@@ -2277,12 +2259,11 @@ self: super: {
   };
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
-  # 2023-07-03: allow lattices-2.2, waiting on https://github.com/haskell-CI/haskell-ci/pull/664
   # 2024-03-21: pins specific version of ShellCheck
-  haskell-ci = doJailbreak (super.haskell-ci.overrideScope (self: super: {
+  haskell-ci = super.haskell-ci.overrideScope (self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
     ShellCheck = self.ShellCheck_0_9_0;
-  }));
+  });
 
   # ShellCheck < 0.10.0 needs to be adjusted for changes in fgl >= 5.8
   # https://github.com/koalaman/shellcheck/issues/2677
@@ -2374,10 +2355,6 @@ self: super: {
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
-
-  # 2022-08-30 Too strict bounds on finite-typelits
-  # https://github.com/jumper149/blucontrol/issues/1
-  blucontrol = doJailbreak super.blucontrol;
 
   # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
   # Can't use fetchpatch as it required tweaking the line endings as the .cabal
@@ -2637,10 +2614,6 @@ self: super: {
   # has been resolved.
   lucid-htmx = doJailbreak super.lucid-htmx;
 
-  # Too strict bounds on hspec
-  # https://github.com/klapaucius/vector-hashtables/issues/11
-  vector-hashtables = doJailbreak super.vector-hashtables;
-
   # doctest-parallel is broken with v1-style cabal-install / Setup.hs
   # https://github.com/martijnbastiaan/doctest-parallel/issues/22
   doctest-parallel = dontCheck super.doctest-parallel;
@@ -2857,27 +2830,6 @@ self: super: {
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
-  # https://github.com/UnkindPartition/tasty/pull/420#issuecomment-2187406691
-  # Note also 1.5.1 was faux-revoked because of this. See
-  # https://github.com/UnkindPartition/tasty/issues/426
-  tasty_1_5_1 = lib.pipe super.tasty_1_5_1 [
-    (appendPatch
-      (fetchpatch2 {
-        name = "tasty-1.5.1-revert-cr-sufficient-to-clear-line";
-        url = "https://github.com/UnkindPartition/tasty/commit/b152a0bc63166a4592e1f3639ef09e78a43f2b57.diff";
-        hash = "sha256-tlFCyEnIp8geNlJSkye32tUOaPMwkdqLHBMzpAwSDVQ=";
-        revert = true;
-        stripLen = 1;
-      })
-    )
-    (overrideCabal
-      (drv: assert drv.revision == "1"; {
-          revision = null;
-          editedCabalFile = null;
-      })
-    )
-  ];
-
   postgrest = lib.pipe super.postgrest [
     # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
@@ -2917,16 +2869,12 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/pull/220972#issuecomment-1484017192
   ffmpeg-light = super.ffmpeg-light.override { ffmpeg = pkgs.ffmpeg_4; };
 
-  # posix-api has had broken tests since 2020 (until at least 2023-01-11)
-  # raehik has a fix pending: https://github.com/andrewthad/posix-api/pull/14
-  posix-api = dontCheck super.posix-api;
+  # 2024-08-15: primitive >=0.9 && <0.10
+  posix-api = doJailbreak super.posix-api;
 
   # bytestring <0.11.0, optparse-applicative <0.13.0
   # https://github.com/kseo/sfnt2woff/issues/1
   sfnt2woff = doJailbreak super.sfnt2woff;
-
-  # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
-  diagrams-gtk = doJailbreak super.diagrams-gtk;
 
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
@@ -3082,7 +3030,7 @@ self: super: {
   cornelis = dontCheck super.cornelis;
 
   lzma = doJailbreak (super.lzma.overrideScope (self: super: {
-    tasty = super.tasty_1_5_1;
+    tasty = super.tasty_1_5;
   }));
 
   # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
@@ -3107,12 +3055,6 @@ self: super: {
   # Doesn't officially support hedgehog > 1.3 yet: https://github.com/coot/free-algebras/pull/33
   free-algebras = doJailbreak super.free-algebras;
 
-  # https://github.com/haskell-works/avro/pull/195
-  avro = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/haskell-works/avro/commit/5f6eb1ec8c8bac325d84b44757d4e2f8608d6939.patch";
-    sha256 = "sha256-1QEaoO8BTdvfFzMrybrf0v7cK0NbYrWOj4Mqexr+ylc=";
-  }) super.avro;
-
   pdftotext = overrideCabal (drv: {
       postPatch = ''
         # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
@@ -3132,5 +3074,31 @@ self: super: {
     dontCheck # Hackage release trails a good deal behind master
     doJailbreak
   ];
+
+  # 2024-08-09: Apply optparse-applicative compat fix from master branch
+  # https://github.com/NorfairKing/feedback/commit/9368468934a4d8bd94709bdcb1116210b162bab8
+  feedback = overrideCabal (drv: assert drv.version == "0.1.0.5"; {
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace src/Feedback/Loop/OptParse.hs \
+        --replace-fail '(uncurry loopConfigLine)' '(pure . uncurry loopConfigLine)'
+    '';
+  }) (doDistribute (super.feedback.overrideScope (self: super: {
+    # 2024-08-09: The stackage versions of safe-coloured-text* are old and broken
+    safe-coloured-text = unmarkBroken self.safe-coloured-text_0_3_0_2;
+    safe-coloured-text-gen = unmarkBroken self.safe-coloured-text-gen_0_0_0_3;
+    safe-coloured-text-layout = unmarkBroken self.safe-coloured-text-layout_0_2_0_0;
+    safe-coloured-text-layout-gen = unmarkBroken self.safe-coloured-text-layout-gen_0_0_0_1;
+    safe-coloured-text-terminfo = unmarkBroken self.safe-coloured-text-terminfo_0_3_0_0;
+  })));
+
+  quickcheck-state-machine = overrideCabal (drv: {
+    # 2024-08-18: Remove a test which fails to build due to API changes.
+    #   This is fixed in quickcheck-state-machine-0.10.0.
+    postPatch = assert drv.version == "0.8.0"; ''
+      sed -i '/SQLite/d' quickcheck-state-machine.cabal
+      sed -i -e '/import.*SQLite/d' -e 's/\[.*prop_parallel_sqlite/[/' test/Spec.hs
+      ${drv.postPatch or ""}
+     '';
+  }) super.quickcheck-state-machine;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

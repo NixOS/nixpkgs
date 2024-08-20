@@ -6,7 +6,7 @@
   isPy27,
   six,
   blinker,
-  nose,
+  pytestCheckHook,
   pillow,
   coverage,
 }:
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
     pillow
     coverage
     blinker

@@ -41,40 +41,38 @@ let
             }
 
             # can't check whether `fullScriptPath` is a directory, in pure-evaluation mode
-            (
-              with lib;
-              optionalAttrs
-                (
-                  !any (s: hasSuffix s drv.passthru.scriptName) [
-                    ".js"
-                    ".lua"
-                    ".so"
-                  ]
-                )
-                {
-                  single-main-in-script-dir =
-                    runCommand "mpvScripts.${name}.passthru.tests.single-main-in-script-dir"
-                      {
-                        meta.maintainers = with lib.maintainers; [ nicoo ];
-                        preferLocalBuild = true;
+            (lib.optionalAttrs
+              (
+                !lib.any (s: lib.hasSuffix s drv.passthru.scriptName) [
+                  ".js"
+                  ".lua"
+                  ".so"
+                ]
+              )
+              {
+                single-main-in-script-dir =
+                  runCommand "mpvScripts.${name}.passthru.tests.single-main-in-script-dir"
+                    {
+                      meta.maintainers = with lib.maintainers; [ nicoo ];
+                      preferLocalBuild = true;
+                    }
+                    ''
+                      die() {
+                        echo "$@" >&2
+                        exit 1
                       }
-                      ''
-                        die() {
-                          echo "$@" >&2
-                          exit 1
-                        }
 
-                        cd "${drv}/${scriptPath}"  # so the glob expands to filenames only
-                        mains=( main.* )
-                        if [ "''${#mains[*]}" -eq 1 ]; then
-                          touch $out
-                        elif [ "''${#mains[*]}" -eq 0 ]; then
-                          die "'${scriptPath}' contains no 'main.*' file"
-                        else
-                          die "'${scriptPath}' contains multiple 'main.*' files:" "''${mains[*]}"
-                        fi
-                      '';
-                }
+                      cd "${drv}/${scriptPath}"  # so the glob expands to filenames only
+                      mains=( main.* )
+                      if [ "''${#mains[*]}" -eq 1 ]; then
+                        touch $out
+                      elif [ "''${#mains[*]}" -eq 0 ]; then
+                        die "'${scriptPath}' contains no 'main.*' file"
+                      else
+                        die "'${scriptPath}' contains multiple 'main.*' files:" "''${mains[*]}"
+                      fi
+                    '';
+              }
             )
           ];
         };
@@ -140,13 +138,12 @@ let
   };
 in
 
-with lib;
-pipe scope [
-  (makeScope newScope)
+lib.pipe scope [
+  (lib.makeScope newScope)
   (
     self:
     assert builtins.intersectAttrs self aliases == { };
-    self // optionalAttrs config.allowAliases aliases
+    self // lib.optionalAttrs config.allowAliases aliases
   )
-  recurseIntoAttrs
+  lib.recurseIntoAttrs
 ]

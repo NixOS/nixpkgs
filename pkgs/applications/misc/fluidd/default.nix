@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{ lib, stdenvNoCC, fetchurl, unzip, nixosTests }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "fluidd";
@@ -24,6 +24,8 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share/fluidd
     cp -r fluidd $out/share/fluidd/htdocs
   '';
+
+  passthru.tests = { inherit (nixosTests) fluidd; };
 
   meta = with lib; {
     description = "Klipper web interface";

@@ -7,6 +7,8 @@
   buildPythonPackage,
   cachetools,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
   poetry-core,
   pytest-asyncio,
   pytest-xdist,
@@ -19,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.18.0";
+  version = "0.20.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-wled";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0BJgbyDhCPFlHxlEry7Rh/j0nv3D3kRhIqCSW+Irhqk=";
+    hash = "sha256-7P/V83dGkfJJjZxZtiEwQXIY7CeBZ/fmvTdEjDirKj0=";
   };
 
   postPatch = ''
@@ -45,6 +47,8 @@ buildPythonPackage rec {
     awesomeversion
     backoff
     cachetools
+    mashumaro
+    orjson
     yarl
   ];
 

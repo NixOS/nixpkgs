@@ -1,6 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, nixosTests
 }:
 buildGoModule rec {
   pname = "nar-serve";
@@ -16,6 +17,8 @@ buildGoModule rec {
   vendorHash = "sha256-td9NYHGYJYPlIj2tnf5I/GnJQOOgODc6TakHFwxyvLQ=";
 
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) nar-serve; };
 
   meta = with lib; {
     description = "Serve NAR file contents via HTTP";

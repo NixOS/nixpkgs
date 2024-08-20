@@ -866,7 +866,7 @@ let
           { name = "limits"; enable = cfg.limits != []; control = "required"; modulePath = "${package}/lib/security/pam_limits.so"; settings = {
             conf = "${makeLimitsConf cfg.limits}";
           }; }
-          { name = "motd"; enable = cfg.showMotd && (config.users.motd != null || config.users.motdFile != null); control = "optional"; modulePath = "${package}/lib/security/pam_motd.so"; settings = {
+          { name = "motd"; enable = cfg.showMotd && (config.users.motd != "" || config.users.motdFile != null); control = "optional"; modulePath = "${package}/lib/security/pam_motd.so"; settings = {
             inherit motd;
           }; }
           { name = "apparmor"; enable = cfg.enableAppArmor && config.security.apparmor.enable; control = "optional"; modulePath = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so"; settings = {
@@ -1478,9 +1478,9 @@ in
     '';
 
     users.motd = mkOption {
-      default = null;
+      default = "";
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
-      type = types.nullOr types.lines;
+      type = types.lines;
       description = "Message of the day shown to users when they log in.";
     };
 
@@ -1498,7 +1498,7 @@ in
   config = {
     assertions = [
       {
-        assertion = config.users.motd == null || config.users.motdFile == null;
+        assertion = config.users.motd == "" || config.users.motdFile == null;
         message = ''
           Only one of users.motd and users.motdFile can be set.
         '';

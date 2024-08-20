@@ -1,8 +1,8 @@
 diff --git a/setuptools/_distutils/cygwinccompiler.py b/setuptools/_distutils/cygwinccompiler.py
-index 539f09d8f..a3d3020cb 100644
+index 7b812fd05..c122a4318 100644
 --- a/setuptools/_distutils/cygwinccompiler.py
 +++ b/setuptools/_distutils/cygwinccompiler.py
-@@ -99,14 +99,19 @@ class CygwinCCompiler(UnixCCompiler):
+@@ -99,14 +99,18 @@ class CygwinCCompiler(UnixCCompiler):
          self.cxx = os.environ.get('CXX', 'g++')
  
          self.linker_dll = self.cc
@@ -10,19 +10,18 @@ index 539f09d8f..a3d3020cb 100644
          shared_option = "-shared"
  
          self.set_executables(
-             compiler='%s -mcygwin -O -Wall' % self.cc,
-             compiler_so='%s -mcygwin -mdll -O -Wall' % self.cc,
-+            compiler_so_cxx='%s -mcygwin -mdll -O -Wall' % self.cxx,
-             compiler_cxx='%s -mcygwin -O -Wall' % self.cxx,
-             linker_exe='%s -mcygwin' % self.cc,
+             compiler=f'{self.cc} -mcygwin -O -Wall',
+             compiler_so=f'{self.cc} -mcygwin -mdll -O -Wall',
++            compiler_so_cxx=f'{self.cxx} -mcygwin -mdll -O -Wall',
+             compiler_cxx=f'{self.cxx} -mcygwin -O -Wall',
+             linker_exe=f'{self.cc} -mcygwin',
              linker_so=(f'{self.linker_dll} -mcygwin {shared_option}'),
-+            linker_exe_cxx='%s -mcygwin' % self.cxx,
-+            linker_so_cxx=('%s -mcygwin %s' %
-+                (self.linker_dll_cxx, shared_option)),
++            linker_exe_cxx=f'{self.cxx} -mcygwin',
++            linker_so_cxx=(f'{self.cxx} -mcygwin {shared_option}'),
          )
  
          # Include the appropriate MSVC runtime library if Python was built
-@@ -138,9 +143,12 @@ class CygwinCCompiler(UnixCCompiler):
+@@ -138,9 +142,12 @@ class CygwinCCompiler(UnixCCompiler):
                  raise CompileError(msg)
          else:  # for other files use the C-compiler
              try:
@@ -38,24 +37,24 @@ index 539f09d8f..a3d3020cb 100644
              except DistutilsExecError as msg:
                  raise CompileError(msg)
  
-@@ -276,9 +284,12 @@ class Mingw32CCompiler(CygwinCCompiler):
+@@ -276,9 +283,12 @@ class Mingw32CCompiler(CygwinCCompiler):
          self.set_executables(
-             compiler='%s -O -Wall' % self.cc,
-             compiler_so='%s -mdll -O -Wall' % self.cc,
-+            compiler_so_cxx='%s -mdll -O -Wall' % self.cxx,
-             compiler_cxx='%s -O -Wall' % self.cxx,
-             linker_exe='%s' % self.cc,
+             compiler=f'{self.cc} -O -Wall',
+             compiler_so=f'{self.cc} -shared -O -Wall',
++            compiler_so_cxx=f'{self.cxx} -mdll -O -Wall',
+             compiler_cxx=f'{self.cxx} -O -Wall',
+             linker_exe=f'{self.cc}',
              linker_so=f'{self.linker_dll} {shared_option}',
-+            linker_exe_cxx='%s' % self.cxx,
-+            linker_so_cxx='%s %s' % (self.linker_dll_cxx, shared_option)
++            linker_exe_cxx=f'{self.cxx}',
++            linker_so_cxx=f'{self.linker_dll_cxx} {shared_option}',
          )
  
      def runtime_library_dir_option(self, dir):
 diff --git a/setuptools/_distutils/sysconfig.py b/setuptools/_distutils/sysconfig.py
-index 1a38e9fa7..034ed6566 100644
+index 7ebe67687..a995edf80 100644
 --- a/setuptools/_distutils/sysconfig.py
 +++ b/setuptools/_distutils/sysconfig.py
-@@ -300,6 +300,7 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -304,6 +304,7 @@ def customize_compiler(compiler):  # noqa: C901
              cflags,
              ccshared,
              ldshared,
@@ -63,7 +62,7 @@ index 1a38e9fa7..034ed6566 100644
              shlib_suffix,
              ar,
              ar_flags,
-@@ -309,11 +310,14 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -313,11 +314,14 @@ def customize_compiler(compiler):  # noqa: C901
              'CFLAGS',
              'CCSHARED',
              'LDSHARED',
@@ -78,7 +77,7 @@ index 1a38e9fa7..034ed6566 100644
          if 'CC' in os.environ:
              newcc = os.environ['CC']
              if 'LDSHARED' not in os.environ and ldshared.startswith(cc):
-@@ -325,19 +329,27 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -329,19 +333,27 @@ def customize_compiler(compiler):  # noqa: C901
              cxx = os.environ['CXX']
          if 'LDSHARED' in os.environ:
              ldshared = os.environ['LDSHARED']
@@ -107,7 +106,7 @@ index 1a38e9fa7..034ed6566 100644
          if 'AR' in os.environ:
              ar = os.environ['AR']
          if 'ARFLAGS' in os.environ:
-@@ -346,13 +358,17 @@ def customize_compiler(compiler):  # noqa: C901
+@@ -350,13 +362,17 @@ def customize_compiler(compiler):  # noqa: C901
              archiver = ar + ' ' + ar_flags
  
          cc_cmd = cc + ' ' + cflags
@@ -127,7 +126,7 @@ index 1a38e9fa7..034ed6566 100644
          )
  
 diff --git a/setuptools/_distutils/unixccompiler.py b/setuptools/_distutils/unixccompiler.py
-index 0248bde87..9508e6cff 100644
+index 7e68596b2..7214dbd20 100644
 --- a/setuptools/_distutils/unixccompiler.py
 +++ b/setuptools/_distutils/unixccompiler.py
 @@ -118,9 +118,12 @@ class UnixCCompiler(CCompiler):
@@ -144,7 +143,7 @@ index 0248bde87..9508e6cff 100644
          'archiver': ["ar", "-cr"],
          'ranlib': None,
      }
-@@ -184,8 +187,13 @@ class UnixCCompiler(CCompiler):
+@@ -187,8 +190,13 @@ class UnixCCompiler(CCompiler):
  
      def _compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):
          compiler_so = compiler_fixup(self.compiler_so, cc_args + extra_postargs)
@@ -159,7 +158,7 @@ index 0248bde87..9508e6cff 100644
          except DistutilsExecError as msg:
              raise CompileError(msg)
  
-@@ -253,7 +261,8 @@ class UnixCCompiler(CCompiler):
+@@ -256,7 +264,8 @@ class UnixCCompiler(CCompiler):
                  # building an executable or linker_so (with shared options)
                  # when building a shared library.
                  building_exe = target_desc == CCompiler.EXECUTABLE

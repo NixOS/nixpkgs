@@ -86,6 +86,8 @@ buildPythonPackage rec {
     "test_delete_pattern_calls_scan_iter_with_count_if_itersize_given"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Full featured redis cache backend for Django";
     homepage = "https://github.com/jazzband/django-redis";

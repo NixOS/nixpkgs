@@ -5,6 +5,7 @@
 , pkg-config
 , libpcap
 , zlib
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) moosefs; };
 
   meta = with lib; {
     homepage = "https://moosefs.com";

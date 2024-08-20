@@ -25,15 +25,15 @@ gcc9Stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
-  buildInputs = with lib;
+  buildInputs =
     [ perl flex bison readline libexif ]
-    ++ optional x11Support SDL
-    ++ optional svgSupport inkscape
-    ++ optional asciiArtSupport aalib
-    ++ optional gifSupport giflib
-    ++ optional tiffSupport libtiff
-    ++ optional jpegSupport libjpeg
-    ++ optional pngSupport libpng;
+    ++ lib.optional x11Support SDL
+    ++ lib.optional svgSupport inkscape
+    ++ lib.optional asciiArtSupport aalib
+    ++ lib.optional gifSupport giflib
+    ++ lib.optional tiffSupport libtiff
+    ++ lib.optional jpegSupport libjpeg
+    ++ lib.optional pngSupport libpng;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 

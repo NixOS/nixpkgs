@@ -2089,14 +2089,14 @@ buildLuarocksPackage {
 luarocks-build-treesitter-parser-cpp = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "luarocks-build-treesitter-parser-cpp";
-  version = "1.0.0-1";
+  version = "2.0.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luarocks-build-treesitter-parser-cpp-1.0.0-1.rockspec";
-    sha256 = "0vvw3ai42jif2z2ir6l14jkjq138djbn04wnjblm3vilaz5k0sfv";
+    url    = "mirror://luarocks/luarocks-build-treesitter-parser-cpp-2.0.0-1.rockspec";
+    sha256 = "13jwyg9y5n3zh55pisyms6kh8n59gwh9q9nslxkbdrb149y5wlr4";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp/archive/v1.0.0.zip";
-    sha256 = "0j1f3wq19zng8ay6pniphb7m0xp131i9alqpdf0szpyq8y00w2s1";
+    url    = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp/archive/v2.0.0.zip";
+    sha256 = "1rldmmimz3bhhh5yrx15wsdiymfmjyl3j8y71xz4mi4m16in470d";
   };
 
   disabled = luaOlder "5.1";

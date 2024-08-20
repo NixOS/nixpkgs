@@ -767,7 +767,7 @@ rec {
   # writePython3 "test_python3" { libraries = [ pkgs.python3Packages.pyyaml ]; } ''
   #   import yaml
   #
-  #   y = yaml.load("""
+  #   y = yaml.safe_load("""
   #     - test: success
   #   """)
   #   print(y[0]['test'])
@@ -784,7 +784,7 @@ rec {
   # writePyPy3 "test_pypy3" { libraries = [ pkgs.pypy3Packages.pyyaml ]; } ''
   #   import yaml
   #
-  #   y = yaml.load("""
+  #   y = yaml.safe_load("""
   #     - test: success
   #   """)
   #   print(y[0]['test'])
