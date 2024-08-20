@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: (lib.recursiveUpdate {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase = ''
     mkdir -p "$out/share/gauge-plugins/${pname}/${finalAttrs.version}"
