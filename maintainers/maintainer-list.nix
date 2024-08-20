@@ -3429,6 +3429,12 @@
     githubId = 977929;
     name = "Cody Allen";
   };
+  Celibistrial = {
+    email = "ryan80222@gmail.com";
+    github = "Celibistrial";
+    githubId = 82810795;
+    name = "Gaurav Choudhury";
+  };
   centromere = {
     email = "nix@centromere.net";
     github = "centromere";
@@ -5640,7 +5646,7 @@
     matrix = "@e1mo:chaos.jetzt";
     github = "e1mo";
     githubId = 61651268;
-    name = "Moritz Fromm";
+    name = "Nina Fromm";
     keys = [ { fingerprint = "67BE E563 43B6 420D 550E  DF2A 6D61 7FD0 A85B AADA"; } ];
   };
   eadwu = {

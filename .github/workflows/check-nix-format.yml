@@ -83,7 +83,7 @@ jobs:
 
           if (( "${#unformattedFiles[@]}" > 0 )); then
             echo "Some new/changed Nix files are not properly formatted"
-            echo "Please run the following in \`nix-shell\`:"
+            echo "Please go to the Nixpkgs root directory, run \`nix-shell\`, then:"
             echo "nixfmt ${unformattedFiles[*]@Q}"
             exit 1
           fi

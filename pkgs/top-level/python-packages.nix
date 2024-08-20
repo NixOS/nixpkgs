@@ -6752,6 +6752,8 @@ self: super: with self; {
 
   langchain = callPackage ../development/python-modules/langchain { };
 
+  langchain-aws = callPackage ../development/python-modules/langchain-aws { };
+
   langchain-azure-dynamic-sessions = callPackage ../development/python-modules/langchain-azure-dynamic-sessions { };
 
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
@@ -6775,6 +6777,12 @@ self: super: with self; {
   langfuse = callPackage ../development/python-modules/langfuse { };
 
   langgraph = callPackage ../development/python-modules/langgraph { };
+
+  langgraph-checkpoint = callPackage ../development/python-modules/langgraph-checkpoint { };
+
+  langgraph-checkpoint-postgres = callPackage ../development/python-modules/langgraph-checkpoint-postgres { };
+
+  langgraph-checkpoint-sqlite = callPackage ../development/python-modules/langgraph-checkpoint-sqlite { };
 
   langgraph-cli = callPackage ../development/python-modules/langgraph-cli { };
 
@@ -14711,6 +14719,8 @@ self: super: with self; {
   somajo = callPackage ../development/python-modules/somajo { };
 
   somfy-mylink-synergy = callPackage ../development/python-modules/somfy-mylink-synergy { };
+
+  somweb = callPackage ../development/python-modules/somweb { };
 
   sonarr = callPackage ../development/python-modules/sonarr { };
 
