@@ -766,6 +766,7 @@ mapAliases ({
   libjpeg_drop = libjpeg_original; # Added 2020-06-05
   liblastfm = libsForQt5.liblastfm; # Added 2020-06-14
   libmongo-client = throw "'libmongo-client' has been removed, upstream gone"; # Added 2023-06-22
+  liboop = throw "liboop has been removed as it is unmaintained upstream."; # Added 2024-08-14
   libpulseaudio-vanilla = libpulseaudio; # Added 2022-04-20
   libquotient = libsForQt5.libquotient; # Added 2023-11-11
   librarian-puppet-go = throw "'librarian-puppet-go' has been removed, as it's upstream is unmaintained"; # Added 2024-06-10
@@ -911,6 +912,7 @@ mapAliases ({
   llvm_11 = throw "llvm_11 has been removed from nixpkgs"; # Added 2024-01-24
 
   lobster-two = google-fonts; # Added 2021-07-22
+  lsh = throw "lsh has been removed as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decade"; # Added 2024-08-14
   luxcorerender = throw "'luxcorerender' has been removed as it's unmaintained and broken in nixpkgs since a while ago"; # Added 2023-06-07
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
   lxd = lib.warn "lxd has been renamed to lxd-lts" lxd-lts; # Added 2024-04-01

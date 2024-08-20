@@ -10140,10 +10140,6 @@ with pkgs;
 
   lsb-release = callPackage ../os-specific/linux/lsb-release { };
 
-  # lsh installs `bin/nettle-lfib-stream' and so does Nettle.  Give the
-  # former a lower priority than Nettle.
-  lsh = lowPrio (callPackage ../tools/networking/lsh { });
-
   lunatic = callPackage ../development/interpreters/lunatic { };
 
   lux = callPackage ../tools/video/lux { };
@@ -22067,8 +22063,6 @@ with pkgs;
   liboil = callPackage ../development/libraries/liboil { };
 
   libomxil-bellagio = callPackage ../development/libraries/libomxil-bellagio { };
-
-  liboop = callPackage ../development/libraries/liboop { };
 
   libopenaptx = callPackage ../development/libraries/libopenaptx { };
 
