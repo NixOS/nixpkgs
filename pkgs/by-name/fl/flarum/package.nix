@@ -1,6 +1,8 @@
-{ lib
-, php
-, fetchFromGitHub
+{
+  lib,
+  php,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -14,15 +16,24 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-kigUZpiHTM24XSz33VQYdeulG1YI5s/M02V7xue72VM=";
   };
 
+  patches = [
+    # Add useful extensions from https://github.com/FriendsOfFlarum
+    # Extensions included: fof/upload, fof/polls, fof/subscribed
+    ./fof-extensions.patch
+  ];
+
   composerLock = ./composer.lock;
   composerStrictValidation = false;
-  vendorHash = "sha256-gQkjuatItw93JhI7FVfg5hYxkC1gsRQ3c2C2+MhI/Jg=";
+  vendorHash = "sha256-z3KVGmILw8MZ4aaSf6IP/0l16LI/Y2yMzY2KMHf4qSg=";
 
   meta = with lib; {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";
     description = "Flarum is a delightfully simple discussion platform for your website";
     homepage = "https://github.com/flarum/flarum";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ fsagbuya jasonodoom ];
+    maintainers = with maintainers; [
+      fsagbuya
+      jasonodoom
+    ];
   };
 })

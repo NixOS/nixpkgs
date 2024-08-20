@@ -1,0 +1,16 @@
+diff --git a/composer.json b/composer.json
+index c63b5f8..5ad1186 100644
+--- a/composer.json
++++ b/composer.json
+@@ -37,7 +37,10 @@
+         "flarum/sticky": "*",
+         "flarum/subscriptions": "*",
+         "flarum/suspend": "*",
+-        "flarum/tags": "*"
++        "flarum/tags": "*",
++        "fof/polls": "*",
++        "fof/subscribed": "*",
++        "fof/upload": "*"
+     },
+     "config": {
+         "preferred-install": "dist",
