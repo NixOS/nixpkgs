@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "2.14.17";
+  version = "3.0.14";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -10,15 +10,15 @@ let
   suffix = {
     x86_64-linux = ".AppImage";
     x86_64-darwin = ".dmg";
-    aarch64-darwin = "-arm64.dmg";
+    aarch64-darwin = "-arm64.DMG";
   }.${system} or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-u4wEchyljurmwVZsRnmUBITZUR6SxDxyGczZjXNsJkg=";
-      x86_64-darwin = "sha256-KjNwAnJZGX/DvHDPw15vGlSbJ47s6YT59EalARt1mx4=";
-      aarch64-darwin = "sha256-OYpsHPI+7riMVNAp2JpBlmdFdJUSNqNvBmeYHDw6yzY=";
+      x86_64-linux = "sha256-9/PfpuUAbFUIU9/3yMQV4jZEPm/eQ3UcNwwE/wvfloM=";
+      x86_64-darwin = "sha256-FOs0oZ3bLoJyalN91/LALMSgU/rkbBpjcnf6fRkQktg=";
+      aarch64-darwin = "sha256-FRuRdYXy/3mjB4UcuowWSVx3yfVm3MSsdE+elphnEtc=";
     }.${system} or throwSystem;
   };
 
