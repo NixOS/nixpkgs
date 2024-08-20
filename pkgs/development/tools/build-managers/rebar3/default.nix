@@ -12,6 +12,7 @@
   git,
   gnused,
   nix,
+  pkgsBuildHost,
   rebar3-nix,
 }:
 
@@ -19,6 +20,7 @@ let
   version = "3.26.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
+  escript = "${pkgsBuildHost.beam_minimal.interpreters.erlang}/bin/escript";
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
     inherit version erlang;
@@ -51,7 +53,7 @@ let
     '';
 
     buildPhase = ''
-      HOME=. escript bootstrap
+      HOME=. ${escript} bootstrap
     '';
 
     checkPhase = ''
