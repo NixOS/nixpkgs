@@ -68,6 +68,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       runHook postCheck
     '';
 
+    patches = [
+      ./sort_paths.patch
+    ];
+
     installPhase = ''
       runHook preInstall
 
