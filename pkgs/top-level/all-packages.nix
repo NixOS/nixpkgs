@@ -29609,6 +29609,8 @@ with pkgs;
 
   dmenu-rs = callPackage ../applications/misc/dmenu-rs { };
 
+  dmenu-rs-full = callPackage ../applications/misc/dmenu-rs-full { };
+
   dmensamenu = callPackage ../applications/misc/dmensamenu {
     inherit (python3Packages) buildPythonApplication requests;
   };

@@ -2,6 +2,7 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
+, aspell
 , cargo
 , expat
 , fontconfig
@@ -10,11 +11,16 @@
 , m4
 , pkg-config
 , python3
+, xclip
+, xdg-utils
 }:
 
-# The dmenu-rs package has extensive plugin support. However, this derivation
-# builds without any plugins enabled. If you'd like to a version builts with
-# all the plugins available in the upstream repository, see dmenu-rs-full.
+# This version of the dmenu-rs package is built with all the plugins that have
+# been checked into the upstream repository. If you'd like to further
+# customize dmenu-rs, either disabling specific plugins or enabling additional
+# plugins from outside of the dmenu-rs repository, you'll have to build it
+# from the source.
+# See: https://github.com/Shizcow/dmenu-rs#plugins
 stdenv.mkDerivation rec {
   pname = "dmenu-rs";
   version = "5.5.3";
@@ -36,10 +42,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    aspell
     expat
     fontconfig
     libXft
     libXinerama
+    xclip
+    xdg-utils
   ];
 
   # The dmenu-rs repository does not include a Cargo.lock because of its
@@ -51,8 +60,15 @@ stdenv.mkDerivation rec {
   };
 
   # Copy the Cargo.lock stored here in nixpkgs into the build directory.
+  # TODO why do we need the chmod +w now? Note, it's required for make to write to the cargo ... maybe we can get around this somehow
   postPatch = ''
     cp ${./Cargo.lock} src/Cargo.lock
+    chmod +w src/Cargo.lock
+  '';
+
+  # Configures the build to include all plugins in the dmenu-rs repository.
+  preBuild = ''
+    sed -i -E "s/PLUGINS =/PLUGINS = $(find src/plugins/ -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | tr "\n" " ")/" config.mk
   '';
 
   cargoRoot = "src";
@@ -65,7 +81,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Pixel perfect port of dmenu, rewritten in Rust with extensive plugin support";
+    description = "A pixel perfect port of dmenu, rewritten in Rust with extensive plugin support (plugins enabled)";
     homepage = "https://github.com/Shizcow/dmenu-rs";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ benjaminedwardwebb ];
