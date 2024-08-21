@@ -2,8 +2,6 @@
 
 let
   cfg = config.services.prometheus.exporters.redfish;
-
-
   inherit (lib)
     mkOption
     types
@@ -12,15 +10,12 @@ let
     concatStringsSep
     optionalAttrs
     ;
-
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "redfish-config.yml" cfg.settings;
 in
 {
   port = 9610;
-
   extraOpts = {
-
     settings = mkOption {
       type = settingsFormat.type;
       default = {};
@@ -30,7 +25,7 @@ in
         for supported values.
       '';
     };
-    
+
     loglevel = mkOption {
       type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
       default = "info";
@@ -55,7 +50,6 @@ in
       '';
     };
   };
-
 
   serviceOpts = {
     serviceConfig = {
