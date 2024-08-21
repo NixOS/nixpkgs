@@ -149,6 +149,8 @@ in flutter316.buildFlutterApplication rec {
   '';
   patchFlags = [ "-p1" "-d" ".." ];
 
+  patches = [ ./make-build-reproducible.patch ];
+
   postPatch = ''
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""
     # The supplied Cargo.lock doesn't work with our fetcher so copy over the fixed version
