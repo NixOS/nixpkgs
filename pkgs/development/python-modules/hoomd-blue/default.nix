@@ -20,16 +20,16 @@ let
   withMPI = (mpi != null);
 in
 buildPythonPackage rec {
-  version = "2.3.4";
+  version = "4.8.2";
   pname = "hoomd-blue";
   pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "hoomd-blue";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-VAUpiuBp+hw/kgfoFvgNY1nvtF4YC1uoHQOq3YJLxEY=";
+    hash = "sha256-TpShA3tP2gJ8y/A5Mx9QRoBGadiSdGnsZLVHcV3LvBQ=";
   };
 
   passthru = {
