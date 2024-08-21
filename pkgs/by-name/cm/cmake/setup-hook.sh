@@ -9,7 +9,7 @@ fixCmakeFiles() {
     echo "fixing cmake files..."
     find "$1" -type f \( -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
         while read fn; do
-            sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
+            sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' <"$fn" >"$fn.tmp"
             mv "$fn.tmp" "$fn"
         done
 }
@@ -74,7 +74,7 @@ cmakeConfigurePhase() {
     if [[ -z "$shareDocName" ]]; then
         local cmakeLists="${cmakeDir}/CMakeLists.txt"
         if [[ -f "$cmakeLists" ]]; then
-            local shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' < "$cmakeLists" | head -n1)"
+            local shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' <"$cmakeLists" | head -n1)"
         fi
         # The argument sometimes contains garbage or variable interpolation.
         # When that is the case, let’s fall back to the derivation name.
