@@ -2708,6 +2708,14 @@
     githubId = 5700358;
     name = "Thomas Blank";
   };
+  bleetube = {
+    email = "git@blee.tube";
+    matrix = "@blee:satstack.cloud";
+    name = "Brian Lee";
+    github = "bleetube";
+    githubId = 77934086;
+    keys = [ { fingerprint = "4CA3 48F6 8FE1 1777 8EDA 3860 B9A2 C1B0 25EC 2C55"; } ];
+  };
   blinry = {
     name = "blinry";
     email = "mail@blinry.org";
@@ -3428,6 +3436,12 @@
     github = "ceedubs";
     githubId = 977929;
     name = "Cody Allen";
+  };
+  Celibistrial = {
+    email = "ryan80222@gmail.com";
+    github = "Celibistrial";
+    githubId = 82810795;
+    name = "Gaurav Choudhury";
   };
   centromere = {
     email = "nix@centromere.net";
@@ -5640,7 +5654,7 @@
     matrix = "@e1mo:chaos.jetzt";
     github = "e1mo";
     githubId = 61651268;
-    name = "Moritz Fromm";
+    name = "Nina Fromm";
     keys = [ { fingerprint = "67BE E563 43B6 420D 550E  DF2A 6D61 7FD0 A85B AADA"; } ];
   };
   eadwu = {
@@ -7676,6 +7690,12 @@
     github = "goodrone";
     githubId = 1621335;
     name = "Andrew Trachenko";
+  };
+  gordon-bp = {
+    email = "gordy@hanakano.com";
+    github = "Gordon-BP";
+    githubId = 77560236;
+    name = "Gordon Clark";
   };
   gotcha = {
     email = "gotcha@bubblenet.be";

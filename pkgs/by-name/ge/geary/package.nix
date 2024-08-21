@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/geary/${lib.versions.major version}/geary-${version}.tar.xz";
     sha256 = "r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
   };
 
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "geary";
     };
   };
 

@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.7";
+  version = "0.2.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-r0YSJkYPcwjHyw1xST5Zrgg9USjN9GOsvhV97imSFCQ=";
+    hash = "sha256-HsKWGiWA6uKmRQOMw3efXkjwbBuvDHhf5waNvnvBdG4=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -58,7 +58,6 @@ buildPythonPackage rec {
     langchain-core
     langchain
     langsmith
-    numpy
     pyyaml
     requests
     sqlalchemy
@@ -67,6 +66,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     cli = [ typer ];
+    numpy = [ numpy ];
   };
 
   pythonImportsCheck = [ "langchain_community" ];

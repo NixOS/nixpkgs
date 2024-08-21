@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ful1e5";
-    repo = pname;
+    repo = "fuchsia-cursor";
     rev = "v${version}";
     hash = "sha256-WnDtUsjRXT7bMppgwU5BIDqphP69DmPzQM/0qXES5tM=";
   };

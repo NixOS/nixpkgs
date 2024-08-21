@@ -22,7 +22,7 @@ let
       nativeBuildInputs = [ appimageTools.appimage-exec ];
     }
     ''
-      appimage-exec.sh -x $out ${src}/${pname}-${version}/${pname}
+      appimage-exec.sh -x $out ${src}/jetbrains-toolbox-${version}/jetbrains-toolbox
 
       # JetBrains ship a broken desktop file. Despite registering a custom
       # scheme handler for jetbrains:// URLs, they never mark the command as
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-    makeWrapper ${appimage}/bin/${pname} $out/bin/${pname} \
+    makeWrapper ${appimage}/bin/jetbrains-toolbox $out/bin/jetbrains-toolbox \
       --append-flags "--update-failed" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
 
