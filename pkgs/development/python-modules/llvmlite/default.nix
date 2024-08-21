@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   passthru.llvm = llvm;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/numba/llvmlite/blob/v${version}/CHANGE_LOG";
     description = "Lightweight LLVM python binding for writing JIT compilers";
     downloadPage = "https://github.com/numba/llvmlite";
     homepage = "http://llvmlite.pydata.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }
