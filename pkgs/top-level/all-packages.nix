@@ -37256,8 +37256,6 @@ with pkgs;
     p4est-sc = p4est-sc-dbg;
   };
 
-  parmetis = callPackage ../development/libraries/science/math/parmetis { };
-
   QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
 
   scs = callPackage ../development/libraries/science/math/scs { };
