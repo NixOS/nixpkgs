@@ -17,10 +17,11 @@
 , withDebug ? false
 , withEbpf ? false
 , withNetworkViewer ? (!stdenv.isDarwin)
+, withLogsManagement ? false
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.46.1";
+  version = "1.46.3";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -28,9 +29,9 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-tFjczhJ7bIEUDZx3MxYBu4tGkJhoQn5V79D4sLV2o8U="
+      then "sha256-VyFqwkB9/cLxuXkxS5fSP48fjSWofuqemJIiZDDsdMU="
       # we delete the v2 GUI after fetching
-      else "sha256-uW3jRiJjFIFSfmmavM3KVF985F8nMKa+lQAgNBZvKyE=";
+      else "sha256-/Sqdi/u2IgNP55RZ6KjbkcHwq2903ZuSOvC8w+8+zvE=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -94,8 +95,6 @@ stdenv.mkDerivation rec {
        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
     mv $out/libexec/netdata/plugins.d/debugfs.plugin \
        $out/libexec/netdata/plugins.d/debugfs.plugin.org
-    mv $out/libexec/netdata/plugins.d/logs-management.plugin \
-       $out/libexec/netdata/plugins.d/logs-management.plugin.org
     ${lib.optionalString withSystemdJournal ''
       mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
          $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
@@ -107,6 +106,10 @@ stdenv.mkDerivation rec {
     ${lib.optionalString withNetworkViewer ''
       mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
          $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+    ''}
+    ${lib.optionalString withLogsManagement ''
+      mv $out/libexec/netdata/plugins.d/logs-management.plugin \
+         $out/libexec/netdata/plugins.d/logs-management.plugin.org
     ''}
     ${lib.optionalString (!withCloudUi) ''
       rm -rf $out/share/netdata/web/index.html
@@ -156,6 +159,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
     (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
     (lib.cmakeBool "ENABLE_JEMALLOC" true)
+    (lib.cmakeBool "ENABLE_PLUGIN_LOGS_MANAGEMENT" withLogsManagement)
     # Suggested by upstream.
     "-G Ninja"
   ];
@@ -194,7 +198,7 @@ stdenv.mkDerivation rec {
         license = lib.licenses.gpl3Only;
       };
     }).goModules;
-    inherit withIpmi withNetworkViewer;
+    inherit withIpmi withNetworkViewer withLogsManagement;
     tests.netdata = nixosTests.netdata;
   };
 
