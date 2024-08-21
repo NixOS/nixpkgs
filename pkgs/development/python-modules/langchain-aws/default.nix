@@ -8,7 +8,7 @@
   poetry-core,
   pytestCheckHook,
   pytest-asyncio,
-  nix-update-script,
+  langchain-standard-tests,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +27,6 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "--snapshot-warn-unused" "" \
       --replace-fail "--cov=langchain_aws" ""
-
-    ln -s ${langchain-core.src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
   '';
 
   sourceRoot = "${src.name}/libs/aws";
@@ -42,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    langchain-standard-tests
     pytest-asyncio
     pytestCheckHook
   ];

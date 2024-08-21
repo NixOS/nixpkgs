@@ -6768,6 +6768,8 @@ self: super: with self; {
 
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
+  langchain-standard-tests = callPackage ../development/python-modules/langchain-standard-tests { };
+
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
 
   langcodes = callPackage ../development/python-modules/langcodes { };
