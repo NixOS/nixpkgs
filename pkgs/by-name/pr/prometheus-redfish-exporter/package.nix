@@ -31,7 +31,7 @@ buildGoModule rec {
     mainProgram = "redfish_exporter";
     homepage = "https://github.com/jenningsloy318/redfish_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Underknowledge ];
+    maintainers = with maintainers; [ underknowledge ];
     platforms = platforms.linux;
   };
 }
