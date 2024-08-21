@@ -13,7 +13,6 @@
   imageio-ffmpeg,
   lightparam,
   matplotlib,
-  nose,
   numba,
   numpy,
   opencv4,
@@ -74,7 +73,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
     pyserial
   ];
