@@ -5,9 +5,7 @@
 , pkg-config
 , openssl
 , stdenv
-, CoreServices
-, Libsystem
-, SystemConfiguration
+, darwin
 , nix-update-script
 , testers
 , rye
@@ -41,11 +39,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ]
-  ++ lib.optionals stdenv.isDarwin [
-    CoreServices
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [
+    frameworks.CoreServices
+    frameworks.SystemConfiguration
     Libsystem
-    SystemConfiguration
-  ];
+  ]);
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rye \
