@@ -87,9 +87,9 @@
   };
   amg = mkAzExtension rec {
     pname = "amg";
-    version = "1.3.6";
+    version = "2.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/amg-${version}-py3-none-any.whl";
-    sha256 = "52fbff96d56e381e636f6b2e9f8be80ac7eef766153ba8225a183b73d2972f25";
+    sha256 = "b28952d967b9a1e0d81dac280bdff23b44fdbb06dedd66cdf99477bdd7541d6c";
     description = "Microsoft Azure Command-Line Tools Azure Managed Grafana Extension";
   };
   amlfs = mkAzExtension rec {
