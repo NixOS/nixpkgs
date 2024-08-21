@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
-  langchain,
   langchain-core,
+  langchain-standard-tests,
   openai,
   tiktoken,
   lark,
@@ -38,10 +38,7 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/libs/partners/openai";
 
   preConfigure = ''
-    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
-
     substituteInPlace pyproject.toml \
-      --replace-fail "path = \"../../standard-tests\"" "path = \"./langchain_standard_tests\"" \
       --replace-fail "--cov=langchain_openai" ""
   '';
 
@@ -55,6 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    langchain-standard-tests
     lark
     pandas
     pytest-asyncio
