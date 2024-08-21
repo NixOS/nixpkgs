@@ -107,7 +107,7 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
         if not EDITOR:
             f.write("editor 0\n")
         if REBOOT_FOR_BITLOCKER:
-            f.write("reboot-for-bitlocker yes\n");
+            f.write("reboot-for-bitlocker yes\n")
         f.write(f"console-mode {CONSOLE_MODE}\n")
         f.flush()
         os.fsync(f.fileno())
