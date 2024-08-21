@@ -1,4 +1,4 @@
-{ fetchgit, fetchhg, fetchzip, lib }:
+{ lib, repoRevToNameMaybe, fetchgit, fetchhg, fetchzip }:
 
 let
   inherit (lib)
@@ -13,7 +13,7 @@ makeOverridable (
 , repo, rev
 , domain ? "sr.ht"
 , vc ? "git"
-, name ? "source"
+, name ? repoRevToNameMaybe repo rev "sourcehut"
 , fetchSubmodules ? false
 , ... # For hash agility
 } @ args:

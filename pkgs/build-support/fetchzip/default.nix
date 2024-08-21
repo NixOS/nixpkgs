@@ -5,11 +5,14 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ lib, fetchurl, withUnzip ? true, unzip, glibcLocalesUtf8 }:
+{ lib, repoRevToNameMaybe, fetchurl
+, withUnzip ? true, unzip
+, glibcLocalesUtf8
+}:
 
-{ name ? "source"
-, url ? ""
+{ url ? ""
 , urls ? []
+, name ? repoRevToNameMaybe (if url != "" then url else builtins.head urls) null "unpacked"
 , nativeBuildInputs ? []
 , postFetch ? ""
 , extraPostFetch ? ""
@@ -22,7 +25,8 @@
 , extension ? null
 
 # the rest are given to fetchurl as is
-, ... } @ args:
+, ...
+} @ args:
 
 assert (extraPostFetch != "") -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." true;
 
