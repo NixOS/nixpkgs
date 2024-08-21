@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dippi";
-  version = "4.0.6";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "dippi";
     rev = version;
-    hash = "sha256-oZy8WfaAPABZRm8dm4zpI4v9RwT46F6WL6Wj767FcZg=";
+    hash = "sha256-BYI3WqMDxzERlqtq7ISQ+U1FTrpKh5OJBMo/AsdmdlQ=";
   };
 
   nativeBuildInputs = [
