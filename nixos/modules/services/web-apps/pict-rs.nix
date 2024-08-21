@@ -86,7 +86,7 @@ in
         } else {
           PICTRS__REPO__PATH = if cfg.repoPath != null then cfg.repoPath else "${cfg.dataDir}/sled-repo";
           PICTRS__STORE__PATH = if cfg.storePath != null then cfg.storePath else "${cfg.dataDir}/files";
-          PICTRS__SERVER__ADDR = "${cfg.address}:${toString cfg.port}";
+          PICTRS__SERVER__ADDRESS = "${cfg.address}:${toString cfg.port}";
         };
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
