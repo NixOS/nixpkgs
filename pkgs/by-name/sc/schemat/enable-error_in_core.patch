@@ -1,0 +1,10 @@
+diff --git a/src/main.rs b/src/main.rs
+index eddf879..3465aa7 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,4 +1,4 @@
+-#![feature(allocator_api, iter_intersperse)]
++#![feature(allocator_api, iter_intersperse, error_in_core)]
+ 
+ mod ast;
+ mod context;
