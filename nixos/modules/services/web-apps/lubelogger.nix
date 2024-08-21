@@ -5,59 +5,75 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.lubelogger;
 in
 {
+  meta.maintainers = with lib.maintainers; [ lyndeno ];
+
   options = {
     services.lubelogger = {
-      enable = mkEnableOption "Lubelogger, a self-hosted, open-source, web-based vehicle maintenance and fuel milage tracker";
+      enable = lib.mkEnableOption "Lubelogger, a self-hosted, open-source, web-based vehicle maintenance and fuel milage tracker";
 
-      package = mkPackageOption pkgs "lubelogger" { };
+      package = lib.mkPackageOption pkgs "lubelogger" { };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         description = "Path to Lubelogger config and metadata inside of /var/lib.";
         default = "lubelogger";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         description = "The TCP port Lubelogger will listen on.";
         default = 5000;
-        readOnly = true; # Lubelogger does not allow you to configure the port it runs on
-        type = types.port;
+        type = lib.types.port;
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         description = "User account under which Lubelogger runs.";
-        default = "audiobookshelf";
-        type = types.str;
+        default = "lubelogger";
+        type = lib.types.str;
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         description = "Group under which Lubelogger runs.";
         default = "lubelogger";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         description = "Open ports in the firewall for the Lubelogger web interface.";
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
+      };
+
+      settings = lib.mkOption {
+        type = lib.types.submodule { freeformType = with lib.types; attrsOf str; };
+        default = { };
+        example = {
+          LUBELOGGER_ALLOWED_FILE_EXTENSIONS = "";
+          LUBELOGGER_LOGO_URL = "";
+        };
+        description = ''
+          Additional configuration for LubeLogger, see
+          <https://docs.lubelogger.com/Environment%20Variables>
+          for supported values.
+        '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.lubelogger = {
-      description = "Lubeloger is a self-hosted vehicle maintenance and fuel mileage tracker";
+      description = "Lubelogger is a self-hosted vehicle maintenance and fuel mileage tracker";
 
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment.DOTNET_CONTENTROOT = "/var/lib/${cfg.dataDir}";
+      environment = {
+        DOTNET_CONTENTROOT = "/var/lib/${cfg.dataDir}";
+        Kestrel__Endpoints__Http__Url = "http://localhost:${cfg.port}";
+      } // cfg.settings;
 
       serviceConfig = {
         Type = "simple";
@@ -79,7 +95,7 @@ in
       };
     };
 
-    users.users = mkIf (cfg.user == "lubelogger") {
+    users.users = lib.mkIf (cfg.user == "lubelogger") {
       lubelogger = {
         isSystemUser = true;
         group = cfg.group;
@@ -87,8 +103,8 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "lubelogger") { lubelogger = { }; };
+    users.groups = lib.mkIf (cfg.group == "lubelogger") { lubelogger = { }; };
 
-    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 }
