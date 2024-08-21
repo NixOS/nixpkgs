@@ -28,6 +28,8 @@ let
 
     isExecutable = true;
 
+    inherit (builtins) storeDir;
+
     inherit (pkgs) python3;
 
     systemd = config.systemd.package;
