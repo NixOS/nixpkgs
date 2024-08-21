@@ -20,13 +20,13 @@
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "11.3.6";
+  version = "11.3.14.2";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     rev = "v${version}";
-    hash = "sha256-LH8p14oMjqo648h0TYClutPx19v5cWa9ffUlxuPWX5o=";
+    hash = "sha256-MsCUTXN9lwJ7YvYvrgyqapa1iZ/roMCTz3mqMhhPh14=";
   };
 
   sourceRoot = "${src.name}/Source";
@@ -73,7 +73,7 @@ buildDotnetModule rec {
 
   preFixup = ''
     # remove binaries for other platform, like upstream does
-    pushd $out/lib/${pname}
+    pushd $out/lib/libation
     rm -f *.x86.dll *.x64.dll
     ${lib.optionalString (stdenv.system != "x86_64-linux") "rm -f *.x64.so"}
     ${lib.optionalString (stdenv.system != "aarch64-linux") "rm -f *.arm64.so"}
@@ -81,9 +81,9 @@ buildDotnetModule rec {
     ${lib.optionalString (stdenv.system != "aarch64-darwin") "rm -f *.arm64.dylib"}
     popd
 
-    wrapDotnetProgram $out/lib/${pname}/Libation $out/bin/libation
-    wrapDotnetProgram $out/lib/${pname}/LibationCli $out/bin/libationcli
-    wrapDotnetProgram $out/lib/${pname}/Hangover $out/bin/hangover
+    wrapDotnetProgram $out/lib/libation/Libation $out/bin/libation
+    wrapDotnetProgram $out/lib/libation/LibationCli $out/bin/libationcli
+    wrapDotnetProgram $out/lib/libation/Hangover $out/bin/hangover
   '';
 
   meta = {

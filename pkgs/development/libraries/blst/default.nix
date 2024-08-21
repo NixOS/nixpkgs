@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation ( finalAttrs: {
   pname = "blst";

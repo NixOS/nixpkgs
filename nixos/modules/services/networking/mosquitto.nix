@@ -483,7 +483,7 @@ let
 
     listeners = mkOption {
       type = listOf listenerOptions;
-      default = {};
+      default = [];
       description = ''
         Listeners to configure on this broker.
       '';

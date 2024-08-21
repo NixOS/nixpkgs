@@ -1,14 +1,15 @@
-{ buildNpmPackage
-, fetchFromGitHub
-, nodePackages
-, python3
-, stdenv
-, cctools
-, IOKit
-, lib
-, nixosTests
-, enableLocalIcons ? false
-, nix-update-script
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodePackages,
+  python3,
+  stdenv,
+  cctools,
+  IOKit,
+  lib,
+  nixosTests,
+  enableLocalIcons ? false,
+  nix-update-script,
 }:
 let
   dashboardIcons = fetchFromGitHub {
@@ -27,16 +28,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-j5DGi5bLoUOoeu8RupiN+qeixNcpPAu3XG4PidZ5Bsg=";
+    hash = "sha256-jUKXAqq6Oj8CmOuBUlsf0zDIcK+3MX/czzNDmakN9VM=";
   };
 
-  npmDepsHash = "sha256-jYZUVwrOxoAbfHHSBkN5IlYhC6yZVVwRoZErkbYrjUs=";
+  npmDepsHash = "sha256-YjcF8FkURnTurcJ0Iq0ghv/bhu5sFA860jXrn3TkRds=";
 
   preBuild = ''
     mkdir -p config
@@ -48,15 +49,9 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ cctools ];
 
-  buildInputs = [
-    nodePackages.node-gyp-build
-  ] ++ lib.optionals stdenv.isDarwin [
-    IOKit
-  ];
+  buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   env.PYTHON = "${python3}/bin/python";
 

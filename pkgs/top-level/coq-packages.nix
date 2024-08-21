@@ -26,6 +26,7 @@ let
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres {};
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
+      coinduction = callPackage ../development/coq-modules/coinduction {};
       CoLoR = callPackage ../development/coq-modules/CoLoR (
         (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
           bignums = self.bignums.override { version = "8.13.0"; };
@@ -100,6 +101,7 @@ let
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
+      MenhirLib = callPackage ../development/coq-modules/MenhirLib {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
       metacoq-template-coq = self.metacoq.template-coq;
       metacoq-pcuic        = self.metacoq.pcuic;
@@ -121,6 +123,8 @@ let
       smpl = callPackage ../development/coq-modules/smpl { };
       smtcoq = callPackage ../development/coq-modules/smtcoq { };
       ssprove = callPackage ../development/coq-modules/ssprove {};
+      stalmarck-tactic = callPackage ../development/coq-modules/stalmarck {};
+      stalmarck = self.stalmarck-tactic.stalmarck;
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};

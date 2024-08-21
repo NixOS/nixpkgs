@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.17.4"; # note: `conan` package may require a hardcoded one
+  version = "1.18.0"; # note: `conan` package may require a hardcoded one
   format = "setuptools";
   pname = "patch-ng";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kja1nn08w0k8k6j4kad48k581hh9drvjjb8x60v9j13sxdvqyk2";
+    sha256 = "sha256-2gZ2KNbV/Z3FpV6rN5UdRr2VZhtyGfqzZLcRNmq8xpA=";
   };
 
   meta = with lib; {

@@ -3,98 +3,57 @@
 , fetchurl
 , wrapGAppsHook3
 , makeDesktopItem
+, alsa-lib
 , atk
 , cairo
-, coreutils
-, curl
-, cups
 , dbus-glib
-, dbus
-, dconf
-, fontconfig
-, freetype
 , gdk-pixbuf
 , glib
-, glibc
 , gtk3
-, libX11
-, libXScrnSaver
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrender
-, libXt
-, libnotify
-, adwaita-icon-theme
-, libGLU
 , libGL
-, nspr
-, nss
+, libva
+, xorg
+, mesa
 , pango
-, gsettings-desktop-schemas
+, pciutils
 }:
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "6.0.35";
+  version = "7.0";
 
   src = fetchurl {
-    url =
-      "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    hash = "sha256-HAVLmamEPuFf0548/iEXes+f4XnQ7kU1u9hyOYhVyZ0=";
+    url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
+    hash = "sha256-0CAiK8HY/udup51zB6I2o4jvOHvSJGm+5JehHk8F/Io=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
-  buildInputs =
-    [ gsettings-desktop-schemas glib gtk3 adwaita-icon-theme dconf ];
-
-  dontConfigure = true;
-  dontBuild = true;
-  dontStrip = true;
   dontPatchELF = true;
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc
+    alsa-lib
     atk
     cairo
-    curl
-    cups
     dbus-glib
-    dbus
-    fontconfig
-    freetype
     gdk-pixbuf
     glib
-    glibc
     gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libxcb
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrender
-    libXt
-    libnotify
-    libGLU
     libGL
-    nspr
-    nss
+    libva
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXtst
+    xorg.libxcb
+    mesa
     pango
+    pciutils
   ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
-
-  postPatch = ''
-    sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js
-  '';
 
   desktopItem = makeDesktopItem {
     name = "zotero";
@@ -111,22 +70,29 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    # Copy package contents to the output directory
     mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
     cp -r * "$prefix/usr/lib/zotero-bin-${version}"
     mkdir -p "$out/bin"
     ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
 
-    # install desktop file and icons.
+    # Install desktop file and icons
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications/
-    for size in 16 32 48 256; do
-      install -Dm444 chrome/icons/default/default$size.png \
+    for size in 32 64 128; do
+      install -Dm444 icons/icon''${size}.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
     done
+    install -Dm444 icons/symbolic.svg \
+      $out/share/icons/hicolor/symbolic/apps/zotero-symbolic.svg
 
+    runHook postInstall
+  '';
+
+  postFixup = ''
     for executable in \
-      zotero-bin plugin-container \
-      updater minidump-analyzer
+      zotero-bin plugin-container updater vaapitest \
+      minidump-analyzer glxtest
     do
       if [ -e "$out/usr/lib/zotero-bin-${version}/$executable" ]; then
         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -136,23 +102,15 @@ stdenv.mkDerivation rec {
     find . -executable -type f -exec \
       patchelf --set-rpath "$libPath" \
         "$out/usr/lib/zotero-bin-${version}/{}" \;
-
-    runHook postInstall
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ coreutils ]}
-    )
   '';
 
   meta = with lib; {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
+    mainProgram = "zotero";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ i077 ];
-    mainProgram = "zotero";
+    maintainers = with maintainers; [ atila justanotherariel ];
   };
 }

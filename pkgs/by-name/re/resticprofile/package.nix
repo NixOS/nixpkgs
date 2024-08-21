@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "resticprofile";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CUTDlSpP0ztr3sEKT0ppFnWx/bcVuY1oIKWJNZylDoM=";
+    hash = "sha256-HHFeWsEO1KUzL5Y6Iwy7MylA//JYzY3h1EwKrUHfXpY=";
   };
 
   postPatch = ''
@@ -50,11 +50,8 @@ buildGoModule rec {
     rm priority/ioprio_test.go # tries to set nice(2) IO priority
     rm restic/downloader_test.go # tries to use network
     rm schedule/schedule_test.go # tries to use systemctl
-
-    # `config/path_test.go` expects `$HOME` to be the same as `~nixbld` which is `$NIX_BUILD_TOP`
-    export HOME="$NIX_BUILD_TOP"
-    # `util/tempdir_test.go` expects `$HOME/.cache` to exist
-    mkdir "$HOME/.cache"
+    rm config/path_test.go # expects normal environment
+    rm util/tempdir_test.go # expects normal environment
   '';
 
   installPhase = ''

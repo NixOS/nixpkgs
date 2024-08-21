@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "ezjsonm-encoding";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/lthms/ezjsonm-encoding/releases/download/${version}/ezjsonm-encoding-${version}.tbz";
-    hash = "sha256-e5OPcbbQLr16ANFNZ5i10LjlHgwcRTCYhyvOhVk22yI=";
+    hash = "sha256-qR8Nn3pL1K33qTBLkElaqsTjLjudtI8IMe0GEK08qW4=";
   };
 
   propagatedBuildInputs = [ ezjsonm ];

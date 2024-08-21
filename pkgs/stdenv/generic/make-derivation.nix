@@ -115,6 +115,8 @@ let
     "format"
     "fortify"
     "fortify3"
+    "shadowstack"
+    "pacret"
     "pic"
     "pie"
     "relro"
@@ -354,7 +356,7 @@ else let
           then attrs.name + hostSuffix
           else
             # we cannot coerce null to a string below
-            assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
+            assert assertMsg (attrs ? version && attrs.version != null) "The `version` attribute cannot be null.";
             "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
     }) // {
@@ -570,14 +572,17 @@ let
   checkedEnv =
     let
       overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+      prettyPrint = lib.generators.toPretty {};
+      makeError = name: "  - ${name}: in `env`: ${prettyPrint env.${name}}; in derivation arguments: ${prettyPrint derivationArg.${name}}";
+      errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
     in
     assert assertMsg envIsExportable
       "When using structured attributes, `env` must be an attribute set of environment variables.";
     assert assertMsg (overlappingNames == [ ])
-      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${concatStringsSep ", " overlappingNames}";
+      "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
     mapAttrs
       (n: v: assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
-        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+        "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}."; v)
       env;
 
   # Fixed-output derivations may not reference other paths, which means that

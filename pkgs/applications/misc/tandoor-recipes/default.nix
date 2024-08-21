@@ -6,6 +6,7 @@
 let
   # python-ldap-3.4.4 does not work with python3(12)
   python = python311.override {
+    self = python;
     packageOverrides = self: super: {
       validators = super.validators.overridePythonAttrs (_: rec {
         version = "0.20.0";

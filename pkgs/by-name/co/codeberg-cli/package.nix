@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd berg \
       --bash <($out/bin/berg completion bash) \
       --fish <($out/bin/berg completion fish) \

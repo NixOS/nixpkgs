@@ -12,7 +12,11 @@ let
     inherit fetchpatch;
   };
 
-  upstreamPatchList = lib.lists.flatten [ upstreamPatches.QUBES_REPRODUCIBLE_BUILDS ];
+  upstreamPatchList = lib.lists.flatten [
+    upstreamPatches.QUBES_REPRODUCIBLE_BUILDS
+    upstreamPatches.XSA_460
+    upstreamPatches.XSA_461
+  ];
 in
 
 callPackage (import ../generic.nix {
@@ -23,7 +27,10 @@ callPackage (import ../generic.nix {
     xen = {
       rev = "026c9fa29716b0ff0f8b7c687908e71ba29cf239";
       hash = "sha256-Q6x+2fZ4ITBz6sKICI0NHGx773Rc919cl+wzI89UY+Q=";
-      patches = [ ./0000-xen-ipxe-src-4.19.patch ] ++ upstreamPatchList;
+      patches = [
+        ./0000-xen-ipxe-src-4.19.patch
+        ./0001-xen-fig-geneneration-4.19.patch
+      ] ++ upstreamPatchList;
     };
     qemu = {
       rev = "0df9387c8983e1b1e72d8c574356f572342c03e6";

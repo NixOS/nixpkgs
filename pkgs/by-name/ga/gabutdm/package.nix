@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gabutdm";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "gabutakut";
     repo = "gabutdm";
     rev = version;
-    hash = "sha256-0PBNKacgKT5xcd0mnn0y9ltmxEAbP+S7MLtt/Zau8vs=";
+    hash = "sha256-FKOgoJ0QreYk3PgvUoQMczC3tXkthw86/Y3pnm6tTQk=";
   };
 
   nativeBuildInputs = [

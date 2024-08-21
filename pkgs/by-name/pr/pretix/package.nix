@@ -11,7 +11,18 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
+      bleach = super.bleach.overridePythonAttrs (oldAttrs: rec {
+        version = "5.0.1";
+
+        src = fetchPypi {
+          pname = "bleach";
+          inherit version;
+          hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
+        };
+      });
+
       django = super.django_4;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
@@ -83,8 +94,8 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "bleach"
     "importlib-metadata"
+    "kombu"
     "pillow"
     "protobuf"
     "python-bidi"

@@ -26,6 +26,7 @@
 , writeTextFile
 , xkeyboard_config
 , xorg
+, nixosTests
 , runCommand
 , buildEnv
 }:
@@ -180,6 +181,8 @@ let
           cp -r "${gnome-flashback}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
             "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d"
         '';
+
+      tests = { inherit (nixosTests) gnome-flashback; };
     };
 
     meta = with lib; {

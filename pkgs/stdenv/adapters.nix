@@ -99,7 +99,11 @@ rec {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else (mkDerivationSuper args).overrideAttrs (args: {
+      else (mkDerivationSuper args).overrideAttrs (args: if args ? env.NIX_CFLAGS_LINK then {
+        env = args.env // {
+          NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK + " -static";
+        };
+      } else {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
       } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [

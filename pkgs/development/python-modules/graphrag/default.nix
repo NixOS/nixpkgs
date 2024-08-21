@@ -14,6 +14,7 @@
   environs,
   fastparquet,
   graspologic,
+  json-repair,
   lancedb,
   networkx,
   nltk,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.1.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hIAQOIqm9S9AtssE6UxcXfaIbSt3+506ueMrlathNaQ=";
+    hash = "sha256-QPUxDMKO2qxF5qrk+vJCrJxyGwVWv7655YAVCis+XwM=";
   };
 
   build-system = [
@@ -57,7 +58,11 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "aiofiles"
     "azure-identity"
+    "json-repair"
+    "lancedb"
     "scipy"
+    "tenacity"
+    "textual"
     "tiktoken"
   ];
 
@@ -72,6 +77,7 @@ buildPythonPackage rec {
     environs
     fastparquet
     graspologic
+    json-repair
     lancedb
     networkx
     nltk
@@ -111,11 +117,13 @@ buildPythonPackage rec {
     "test_find"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
+    "test_sort_context_max_tokens"
   ];
 
   meta = {
     description = "Modular graph-based Retrieval-Augmented Generation (RAG) system";
     homepage = "https://github.com/microsoft/graphrag";
+    changelog = "https://github.com/microsoft/graphrag/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

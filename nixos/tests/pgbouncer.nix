@@ -1,20 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... } :
-let
-  testAuthFile = pkgs.writeTextFile {
-    name = "authFile";
-    text = ''
-      "testuser" "testpass"
-    '';
-  };
-in
-{
+import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "pgbouncer";
-  meta = with pkgs.lib.maintainers; {
+
+  meta = with lib.maintainers; {
     maintainers = [ _1000101 ];
   };
-  nodes = {
-    one = { config, pkgs, ... }: {
 
+  nodes = {
+    one = { pkgs, ... }: {
       systemd.services.postgresql = {
         postStart = ''
           ${pkgs.postgresql}/bin/psql -U postgres -c "ALTER ROLE testuser WITH LOGIN PASSWORD 'testpass'";
@@ -26,10 +18,7 @@ in
         postgresql = {
           enable = true;
           ensureDatabases = [ "testdb" ];
-          ensureUsers = [
-          {
-            name = "testuser";
-          }];
+          ensureUsers = [{ name = "testuser"; }];
           authentication = ''
             local testdb testuser scram-sha-256
           '';
@@ -37,10 +26,19 @@ in
 
         pgbouncer = {
           enable = true;
-          listenAddress = "localhost";
-          databases = { test = "host=/run/postgresql/ port=5432 auth_user=testuser dbname=testdb"; };
-          authType = "scram-sha-256";
-          authFile = testAuthFile;
+          openFirewall = true;
+          settings = {
+            pgbouncer = {
+              listen_addr = "localhost";
+              auth_type = "scram-sha-256";
+              auth_file = builtins.toFile "pgbouncer-users.txt" ''
+                "testuser" "testpass"
+              '';
+            };
+            databases = {
+              test = "host=/run/postgresql port=5432 auth_user=testuser dbname=testdb";
+            };
+          };
         };
       };
     };

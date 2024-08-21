@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, version, hashes }:
+{ stdenv, fetchurl, version, hashes }:
 let
   toGoKernel = platform:
     if platform.isDarwin then "darwin"

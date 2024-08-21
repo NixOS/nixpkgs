@@ -117,12 +117,12 @@ in stdenv.mkDerivation {
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 gtk4 libkrb5 ];
 
-  in with lib; ''
+  in ''
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --add-flags ${escapeShellArg commandLineArgs}
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

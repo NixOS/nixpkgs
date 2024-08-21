@@ -9,7 +9,6 @@
   # is released we can switch to latest binutils.
   libbfd_2_38,
   libopcodes_2_38,
-  buildPackages,
   autoreconfHook
 }:
 

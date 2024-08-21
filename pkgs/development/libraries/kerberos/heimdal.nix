@@ -17,7 +17,6 @@
 , db
 , libedit
 , pam
-, krb5
 , libmicrohttpd
 , cjson
 

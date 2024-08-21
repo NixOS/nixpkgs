@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "xdoctest";
-  version = "1.1.5";
+  version = "1.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Erotemic";
     repo = "xdoctest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lC4xX5V5iasQdR4tkLEvtMe/OjSp6+A7D2QGX6TFY4E=";
+    hash = "sha256-L/RtD/e0ubW3j4623HQGfowXQYZjl7dDfwwbfxm3ll8=";
   };
 
   nativeBuildInputs = [

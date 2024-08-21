@@ -11,7 +11,7 @@
 
 with python3Packages; buildPythonApplication rec {
   pname = "platformio";
-  version = "6.1.11";
+  version = "6.1.15";
   pyproject = true;
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
@@ -19,7 +19,7 @@ with python3Packages; buildPythonApplication rec {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    hash = "sha256-NR4UyAt8q5sUGtz1Sy6E8Of7y9WrH9xpcAWzLBeDQmo=";
+    hash = "sha256-w5JUAqQRNxq8ZrX8ffny2K7xWBkGr2H3+apYqCPXw9c=";
   };
 
   outputs = [ "out" "udev" ];
@@ -132,6 +132,7 @@ with python3Packages; buildPythonApplication rec {
     # requires internet connection
     "test_api_cache"
     "test_ping_internet_ips"
+    "test_metadata_dump"
   ];
 
   pytestFlagsArray = [

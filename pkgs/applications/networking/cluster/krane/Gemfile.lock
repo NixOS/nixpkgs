@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.1.3.3)
+    activesupport (7.1.3.4)
       base64
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -11,21 +11,22 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     base64 (0.2.0)
     bigdecimal (3.1.8)
     colorize (0.8.1)
-    concurrent-ruby (1.2.3)
+    concurrent-ruby (1.3.3)
     connection_pool (2.4.1)
     domain_name (0.6.20240107)
     drb (2.2.1)
     ejson (1.4.1)
-    faraday (2.9.0)
+    faraday (2.10.1)
       faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
+      logger
+    faraday-net_http (3.1.1)
       net-http
-    ffi (1.16.3)
+    ffi (1.17.0)
     ffi-compiler (1.3.2)
       ffi (>= 1.15.5)
       rake
@@ -45,16 +46,16 @@ GEM
       http-form_data (~> 2.2)
       llhttp-ffi (~> 0.5.0)
     http-accept (1.7.0)
-    http-cookie (1.0.5)
+    http-cookie (1.0.6)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     jsonpath (1.1.5)
       multi_json
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
-    krane (3.6.0)
+    krane (3.6.1)
       activesupport (>= 5.0)
       colorize (~> 0.8)
       concurrent-ruby (~> 1.1)
@@ -65,7 +66,7 @@ GEM
       multi_json
       statsd-instrument (>= 2.8, < 4)
       thor (>= 1.0, < 2.0)
-    kubeclient (4.11.0)
+    kubeclient (4.12.0)
       http (>= 3.0, < 6.0)
       jsonpath (~> 1.0)
       recursive-open-struct (~> 1.1, >= 1.1.1)
@@ -73,19 +74,20 @@ GEM
     llhttp-ffi (0.5.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
+    logger (1.6.0)
     mime-types (3.5.2)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2024.0507)
-    minitest (5.23.1)
+    mime-types-data (3.2024.0806)
+    minitest (5.24.1)
     multi_json (1.15.0)
     mutex_m (0.2.0)
     net-http (0.4.1)
       uri
     netrc (0.11.0)
     os (1.1.4)
-    public_suffix (5.0.5)
+    public_suffix (6.0.1)
     rake (13.2.1)
-    recursive-open-struct (1.1.3)
+    recursive-open-struct (1.2.2)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -96,7 +98,7 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
-    statsd-instrument (3.7.0)
+    statsd-instrument (3.8.0)
     thor (1.3.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -109,4 +111,4 @@ DEPENDENCIES
   krane
 
 BUNDLED WITH
-   2.5.9
+   2.5.16

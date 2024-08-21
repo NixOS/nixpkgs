@@ -1,5 +1,4 @@
 { clangStdenv
-, stdenvNoCC
 , lib
 , fetchurl
 , dotnetCorePackages
@@ -20,7 +19,6 @@
 , swiftPackages
 , openssl
 , getconf
-, makeWrapper
 , python3
 , xmlstarlet
 , nodejs

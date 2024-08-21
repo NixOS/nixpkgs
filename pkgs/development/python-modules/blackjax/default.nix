@@ -1,23 +1,30 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  pytest-xdist,
-  pytestCheckHook,
+
+  # build-system
   setuptools-scm,
+
+  # dependencies
   fastprogress,
   jax,
   jaxlib,
   jaxopt,
   optax,
   typing-extensions,
+
+  # checks
+  pytestCheckHook,
+  pytest-xdist,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +33,7 @@ buildPythonPackage rec {
     owner = "blackjax-devs";
     repo = "blackjax";
     rev = "refs/tags/${version}";
-    hash = "sha256-W89L/3bpvecZdCpLCQOppev+fPc+SXd/T+zZLBH2wJs=";
+    hash = "sha256-f1piE79TLVLtIe9/DaLhXss/ifhU719nEylyl70SVJc=";
   };
 
   build-system = [ setuptools-scm ];

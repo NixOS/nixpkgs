@@ -78,6 +78,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
@@ -101,11 +102,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "273";
+  version = "276";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-TccR/Vxq6Zf9tEvknLWewPVvJqo8pVSIi1+KxKMASq4=";
+    hash = "sha256-Tfl8WZRcarcf59fhUclM6NF6NWO7SgzdLrWEBhk88+Y=";
   };
 
   outputs = [

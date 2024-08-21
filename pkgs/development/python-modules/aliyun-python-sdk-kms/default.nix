@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-kms";
-  version = "2.16.3";
+  version = "2.16.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wxt9JOFTJxowQ+gB57a2s/DbR+lag8jRDNq4wRZi/Dk=";
+    hash = "sha256-DVuxZcB7apcpOXU6EoUHOT9IAReS7g7E9ZtgIeq9l1I=";
   };
 
   build-system = [ setuptools ];

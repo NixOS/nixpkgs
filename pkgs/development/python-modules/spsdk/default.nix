@@ -36,19 +36,20 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     rev = "refs/tags/${version}";
-    hash = "sha256-2CFxJAP87ysly0i4AfODbwUt5W287+OK7fatdPco7e4=";
+    hash = "sha256-qFgG9jdF667EtMqXGGk/oxTEi+6J2s/3gKokP+JaFVw=";
   };
 
   build-system = [ setuptools-scm ];
 
   pythonRelaxDeps = [
+    "cryptography"
     "requests"
     "packaging"
     "typing-extensions"

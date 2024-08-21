@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "2.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "timmo001";
@@ -33,6 +33,11 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-1v58I9WOyyrp9n+qdvVeMZ3EObqP/06XCOZYS0nEvPU=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
+  '';
 
   build-system = [
     incremental
@@ -53,15 +58,11 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "aioazuredevops.client"
-    "aioazuredevops.core"
-  ];
+  pythonImportsCheck = [ "aioazuredevops" ];
 
   meta = with lib; {
     changelog = "https://github.com/timmo001/aioazuredevops/releases/tag/${version}";
     description = "Get data from the Azure DevOps API";
-    mainProgram = "aioazuredevops";
     homepage = "https://github.com/timmo001/aioazuredevops";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

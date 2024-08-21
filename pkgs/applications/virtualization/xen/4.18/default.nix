@@ -15,6 +15,8 @@ let
   upstreamPatchList = lib.lists.flatten [
     upstreamPatches.QUBES_REPRODUCIBLE_BUILDS
     upstreamPatches.XSA_458
+    upstreamPatches.XSA_460
+    upstreamPatches.XSA_461
   ];
 in
 
@@ -26,7 +28,10 @@ callPackage (import ../generic.nix {
     xen = {
       rev = "d152a0424677d8b78e00ed1270a583c5dafff16f";
       hash = "sha256-pHCjj+Bcy4xQfB9xHU9fccFwVdP2DXrUhdszwGvrdmY=";
-      patches = [ ./0000-xen-ipxe-src-4.18.patch ] ++ upstreamPatchList;
+      patches = [
+        ./0000-xen-ipxe-src-4.18.patch
+        ./0001-xen-fig-geneneration-4.18.patch
+      ] ++ upstreamPatchList;
     };
     qemu = {
       rev = "0df9387c8983e1b1e72d8c574356f572342c03e6";

@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
 
     mkdir -p $out/share/find-billy
-    godot3-headless --export-pack 'Linux/X11' $out/share/${pname}/${pname}.pck
-    makeWrapper ${godot3}/bin/godot3 $out/bin/${pname} \
+    godot3-headless --export-pack 'Linux/X11' $out/share/find-billy/find-billy.pck
+    makeWrapper ${godot3}/bin/godot3 $out/bin/find-billy \
       --add-flags "--main-pack" \
-      --add-flags "$out/share/${pname}/${pname}.pck"
+      --add-flags "$out/share/find-billy/find-billy.pck"
 
     runHook postBuild
   '';
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     just build-icons
-    install -D ${pname}.desktop -t $out/share/applications
+    install -D find-billy.desktop -t $out/share/applications
 
     runHook postInstall
   '';

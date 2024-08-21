@@ -8,6 +8,7 @@
 , matrix-sdk-crypto-nodejs
 , nixosTests
 , nix-update-script
+, yarn
 }:
 
 let
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     fixup-yarn-lock
     nodejs-slim
-    nodejs.pkgs.yarn
+    yarn
     nodejs.pkgs.node-gyp-build
   ];
 

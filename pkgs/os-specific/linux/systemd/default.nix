@@ -6,7 +6,7 @@
 , pkgsCross
 , fetchFromGitHub
 , fetchzip
-, fetchpatch
+, fetchpatch2
 , buildPackages
 , makeBinaryWrapper
 , ninja
@@ -184,7 +184,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "256.2";
+  version = "256.4";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -202,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-fyHzL+oe192YYuwyoTrov10IlrB0NSfY/XKVWzJrQEI=";
+    hash = "sha256-dugBiRgDFpB0eKhhIT3LkA8FhClM0lvvwCMJ+dKtjPM=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -232,17 +232,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
 
-    # https://github.com/systemd/systemd/pull/33258
-    # Remove after 256.3
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/compare/b268a71069786a45460807967e669d505ba3c5a2..f26b2ec46118a4493608618da2253bb9dfc6b517.patch";
-      hash = "sha256-OmuPDm3NykrDeNTA3NcYt9iTXEUFwKJ5apPP4KqtABg=";
-    })
-
-    # https://github.com/systemd/systemd/pull/33400
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/compare/051d462b42fe6c27824046c15cd3c84fa5afe05b..5e2d802c018f0b6d5dd58745f64d6958fa261096.patch";
-      hash = "sha256-drGAnx+ECixOjIP0DUSbCG/emUgoVips9WQL5ny3NKQ=";
+    # https://github.com/systemd/systemd/issues/33392
+    (fetchpatch2 {
+      url = "https://github.com/systemd/systemd/commit/f8b02a56febf14adf2474875a1b6625f1f346a6f.patch?full_index=1";
+      hash = "sha256-qRW92gPtACjk+ifptkw5mujhHlkCF56M3azGIjLiMKE=";
+      revert = true;
     })
   ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5, taskwarrior }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5, taskwarrior2 }:
 
 stdenv.mkDerivation rec {
   version = "2020-12-17";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
     DESTDIR=$out PREFIX= MANPREFIX=/share/man make install
 
-    wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior}/bin
+    wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior2}/bin
   '';
 
 

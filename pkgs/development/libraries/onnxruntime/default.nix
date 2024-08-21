@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , Foundation
-, abseil-cpp
+, abseil-cpp_202401
 , cmake
 , cpuinfo
 , eigen
@@ -29,6 +29,8 @@
 
 let
   version = "1.18.1";
+
+  abseil-cpp = abseil-cpp_202401;
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;

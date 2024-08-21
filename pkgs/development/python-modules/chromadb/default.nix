@@ -46,11 +46,12 @@
   typing-extensions,
   uvicorn,
   zstd,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.3";
+  version = "0.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -59,13 +60,13 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-czDL2b+Jj7mrYZCTfnaZArkOHBaWyTV0BTE2wvykHps=";
+    hash = "sha256-wzfzuWuNqLAjfAZC38p1iTtJHez/pJ9Ncgeo23o1dMo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-eTVT1yowuDsajjceWojdUdX466FKneUt1i5QipBFdp4=";
+    hash = "sha256-0OE2i29oE6RpJRswQWI8+5dbA6lOWd3nhqe1RGlnjhk=";
   };
 
   pythonRelaxDeps = [
@@ -156,6 +157,10 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
+  };
 
   meta = with lib; {
     description = "AI-native open-source embedding database";

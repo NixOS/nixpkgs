@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 *.ttf -t $out/share/fonts/${pname}
+    install -Dm644 *.ttf -t $out/share/fonts/udev-gothic
     runHook postInstall
   '';
 

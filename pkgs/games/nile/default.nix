@@ -15,14 +15,14 @@
 
 buildPythonApplication rec {
   pname = "nile";
-  version = "1.1.0-unstable-2024-07-15";
+  version = "1.1.1-unstable-2024-08-07";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "nile";
-    rev = "55287cd81b7993e9ed86e5efb9d71566de02bd40";
-    hash = "sha256-sobhVggh8/BuKZWh39T0VJxg6kqADbC4AzeA32FQWN0=";
+    rev = "9ce614f82a550a714ae55c4365658dba7bb1bb15";
+    hash = "sha256-7EzU8aUYiYe1eXFs6nE1qchlMzIKh2U09uIGmiN32xM=";
   };
 
   disabled = pythonOlder "3.8";

@@ -73,6 +73,7 @@
       powerpc64-linux = import ./bootstrap-files/powerpc64-unknown-linux-gnuabielfv2.nix;
       powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
       riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
+      s390x-linux = import ./bootstrap-files/s390x-unknown-linux-gnu.nix;
     };
     musl = {
       aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-musl.nix;
@@ -139,14 +140,11 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = (import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
-    inherit system bootstrapFiles;
-    extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
-      __contentAddressed = true;
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-    };
-  }) // { passthru.isFromBootstrapFiles = true; };
+  bootstrapTools = import ./bootstrap-tools {
+    inherit (localSystem) libc system;
+    inherit lib bootstrapFiles config;
+    isFromBootstrapFiles = true;
+  };
 
   getLibc = stage: stage.${localSystem.libc};
 
@@ -502,7 +500,7 @@ in
     assert            isFromBootstrapFiles prevStage.coreutils;
     assert            isFromBootstrapFiles prevStage.gnugrep;
     assert        isBuiltByNixpkgsCompiler prevStage.patchelf;
-    assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [ gmp isl_0_20 libmpc mpfr ]);
+    assert lib.all isBuiltByNixpkgsCompiler [ prevStage.gmp prevStage.isl_0_20 prevStage.libmpc prevStage.mpfr ];
     stageFun prevStage {
     name = "bootstrap-stage3";
 
@@ -636,19 +634,24 @@ in
       disallowedRequisites = [ bootstrapTools.out ];
 
       # Mainly avoid reference to bootstrap tools
-      allowedRequisites = with prevStage; with lib;
+      allowedRequisites = let
+        inherit (prevStage) gzip bzip2 xz zlib bash binutils coreutils diffutils findutils
+          gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file glibc
+          attr acl libidn2 libunistring linuxHeaders gcc fortify-headers gcc-unwrapped
+          ;
+      in
         # Simple executable tools
-        concatMap (p: [ (getBin p) (getLib p) ]) [
+        lib.concatMap (p: [ (lib.getBin p) (lib.getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
-        ++ map getLib (
+        ++ map lib.getLib (
             [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
             ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
           )
         # More complicated cases
-        ++ (map (x: getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
+        ++ (map (x: lib.getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
         ++  [ linuxHeaders # propagated from .dev
               binutils gcc gcc.cc gcc.cc.lib
               gcc.expand-response-params # != (prevStage.)expand-response-params
@@ -656,9 +659,9 @@ in
           ]
         ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
         ++ [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
-        ++ (with gcc-unwrapped.passthru; [
-          gmp libmpc mpfr isl
-        ])
+        ++ [
+          gcc-unwrapped.gmp gcc-unwrapped.libmpc gcc-unwrapped.mpfr gcc-unwrapped.isl
+        ]
       ;
 
       overrides = self: super: {

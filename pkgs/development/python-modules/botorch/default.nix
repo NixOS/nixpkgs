@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gpytorch,
@@ -46,9 +47,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [ "test_all_cases_covered" ];
+  pytestFlagsArray = [
+    # tests tend to get stuck on busy hosts, increase verbosity to find out
+    # which specific tests get stuck
+    "-vvv"
+  ];
+
+  disabledTests =
+    [ "test_all_cases_covered" ]
+    ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
+      # stuck tests on hydra
+      "test_moo_predictive_entropy_search"
+    ];
 
   pythonImportsCheck = [ "botorch" ];
+
+  # needs lots of undisturbed CPU time or prone to getting stuck
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";

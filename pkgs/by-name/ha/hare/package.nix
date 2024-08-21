@@ -3,7 +3,6 @@
   stdenv,
   fetchFromSourcehut,
   harec,
-  gitUpdater,
   scdoc,
   tzdata,
   mailcap,
@@ -154,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
     tests =
       lib.optionalAttrs enableCrossCompilation {
         crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };

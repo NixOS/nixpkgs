@@ -1,4 +1,13 @@
-/* This file defines the composition for CRAN (R) packages. */
+/* This file defines the composition for R packages. */
+
+let
+  importJSON = f: builtins.fromJSON (builtins.readFile f);
+
+  biocPackagesGenerated =  importJSON ./bioc-packages.json;
+  biocAnnotationPackagesGenerated = importJSON ./bioc-annotation-packages.json;
+  biocExperimentPackagesGenerated = importJSON ./bioc-experiment-packages.json;
+  cranPackagesGenerated = importJSON ./cran-packages.json;
+in
 
 { R, pkgs, overrides }:
 
@@ -46,7 +55,7 @@ let
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = {name, biocVersion, ...}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
+    mkHomepage = {name, biocVersion}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
     mkUrls = {name, version, biocVersion}: [
       "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
       "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
@@ -68,7 +77,7 @@ let
     hydraPlatforms = [];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, ...}: "https://cran.r-project.org/web/packages/${name}/";
+    mkHomepage = {name}: "https://cran.r-project.org/web/packages/${name}/";
     mkUrls = {name, version}: [
       "mirror://cran/${name}_${version}.tar.gz"
       "mirror://cran/Archive/${name}/${name}_${version}.tar.gz"
@@ -287,10 +296,18 @@ let
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
   _self = { inherit buildRPackage; } //
-          import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
-          import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
-          import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
-          import ./cran-packages.nix { inherit self; derive = deriveCran; };
+          mkPackageSet deriveBioc biocPackagesGenerated //
+          mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated //
+          mkPackageSet deriveBiocExp biocExperimentPackagesGenerated //
+          mkPackageSet deriveCran cranPackagesGenerated;
+
+  # Takes in a generated JSON file's imported contents
+  # and transforms it by swapping each element of the depends array with the dependency's derivation
+  # and passing this new object to the provided derive function
+  mkPackageSet = derive: packagesJSON: lib.mapAttrs (
+    k: v: derive packagesJSON.extraArgs (v // { depends = lib.map (name: builtins.getAttr name self) v.depends; })
+  ) packagesJSON.packages;
+
 
   # tweaks for the individual packages and "in self" follow
 
@@ -782,6 +799,7 @@ let
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = [ pkgs.eigen ];
+    DGP4LCF = [ pkgs.lapack pkgs.blas ];
   };
 
   packagesRequiringX = [

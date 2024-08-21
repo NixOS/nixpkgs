@@ -10,6 +10,8 @@ in
     services.cloudflare-dyndns = {
       enable = mkEnableOption "Cloudflare Dynamic DNS Client";
 
+      package = mkPackageOption pkgs "cloudflare-dyndns" { };
+
       apiTokenFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -95,7 +97,7 @@ in
               ++ optional cfg.deleteMissing "--delete-missing"
               ++ optional cfg.proxied "--proxied";
           in
-          "${pkgs.cloudflare-dyndns}/bin/cloudflare-dyndns ${toString args}";
+          "${getExe cfg.package} ${toString args}";
       };
     } // optionalAttrs (cfg.frequency != null) {
       startAt = cfg.frequency;

@@ -12,17 +12,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     rev = "v${version}";
-    hash = "sha256-03ckR2FpSlaAZlhjyX3ob+7W5Pq8OLri7jT+XIM7oeQ=";
+    hash = "sha256-fWfBXcJq8WBYPu0/VKksbC5q9lKzf0psjBNMlAq/iig=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-xEUq3Cc15bUAXpUoZw8tNQo6tW3/VXeuOtjIW4zrh1Q=";
+  cargoHash = "sha256-+T5+rG4mxhAB/67DXQ6y+uK7A1Mbksc2BYaz4yOkLcA=";
 
   nativeBuildInputs = [
     pkg-config

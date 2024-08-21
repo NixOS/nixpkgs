@@ -34,14 +34,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/public/presets/toml/*.toml $presetdir
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd starship \
       --bash <($out/bin/starship completions bash) \
       --fish <($out/bin/starship completions fish) \
       --zsh <($out/bin/starship completions zsh)
-
-    presetdir=$out/share/starship/presets/
-    mkdir -p $presetdir
-    cp docs/public/presets/toml/*.toml $presetdir
   '';
 
   cargoHash = "sha256-yJ32HFaRpujJ9mQa+07b5cQcl1ATO/56dpm1IeKcbzs=";

@@ -5,6 +5,8 @@
   cryptography,
   cython,
   poetry-core,
+  pytest-benchmark,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -12,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.19.3";
+  version = "1.19.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ofcGdHHd1P+R9ykJGtwHURTzHCeiJ603EqtgUgLPnmM=";
+    hash = "sha256-VoldKrlD/1Crw0tJcHoMGiLR8uTUI25IlwZ/1AICx84=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
@@ -36,12 +38,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bluetooth_data_tools --cov-report=term-missing:skip-covered" ""
-  '';
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "bluetooth_data_tools" ];
 
