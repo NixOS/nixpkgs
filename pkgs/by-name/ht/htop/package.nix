@@ -1,14 +1,16 @@
 { lib, fetchFromGitHub, stdenv, autoreconfHook, pkg-config
 , ncurses
-, IOKit
+, darwin
 , libcap
 , libnl
 , sensorsSupport ? stdenv.isLinux, lm_sensors
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
+let
+  inherit (darwin) IOKit;
+in
 assert systemdSupport -> stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   pname = "htop";
   version = "3.3.0";
