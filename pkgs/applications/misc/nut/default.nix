@@ -7,6 +7,7 @@
 , freeipmi
 , gd
 , i2c-tools
+, libgpiod_1
 , libmodbus
 , libtool
 , libusb1
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
       src = ./hardcode-paths.patch;
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
+      libgpiod = "${libgpiod_1}/lib";
       libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
       libmodbus = "${libmodbus}/lib";
@@ -49,14 +51,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libmodbus libtool i2c-tools net-snmp gd ];
+  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libgpiod_1 libmodbus libtool i2c-tools net-snmp gd ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
   configureFlags =
     [ "--with-all"
       "--with-ssl"
-      "--without-gpio"
       "--without-powerman" # Until we have it ...
       "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
       "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
