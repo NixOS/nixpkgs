@@ -58,15 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace t_modules/t_phazor.py \
       --replace 'lib/libphazor.so' '../../lib/libphazor.so'
 
-    patchShebangs compile-phazor.sh
-
     substituteInPlace compile-phazor.sh --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
 
     substituteInPlace extra/tauonmb.desktop --replace 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
   postBuild = ''
-    ./compile-phazor.sh
+    bash ./compile-phazor.sh
   '';
 
   nativeBuildInputs = [
