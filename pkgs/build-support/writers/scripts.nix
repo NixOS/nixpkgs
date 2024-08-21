@@ -717,6 +717,7 @@ rec {
     {
       libraries ? [ ],
       flakeIgnore ? [ ],
+      doCheck ? true,
       ...
     }@args:
     let
@@ -728,6 +729,7 @@ rec {
       (builtins.removeAttrs args [
         "libraries"
         "flakeIgnore"
+        "doCheck"
       ])
       // {
         interpreter =
@@ -735,7 +737,7 @@ rec {
             if libraries == [ ] then python.interpreter else (python.withPackages (ps: libraries)).interpreter
           else
             python.interpreter;
-        check = optionalString python.isPy3k (
+        check = optionalString (python.isPy3k && doCheck) (
           writeDash "pythoncheck.sh" ''
             exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
           ''
