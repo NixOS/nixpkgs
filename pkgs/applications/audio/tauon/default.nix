@@ -47,20 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace tauon.py \
-      --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'install_directory = os.path.dirname(os.path.abspath(__file__))' 'install_directory = "${placeholder "out"}/share/tauon"'
+      --replace-fail 'install_mode = False' 'install_mode = True' \
+      --replace-fail 'install_directory = os.path.dirname(os.path.abspath(__file__))' 'install_directory = "${placeholder "out"}/share/tauon"'
 
     substituteInPlace t_modules/t_main.py \
-      --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so' \
-      --replace 'lib/libphazor.so' '../../lib/libphazor.so'
+      --replace-fail 'install_mode = False' 'install_mode = True' \
+      --replace-fail 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so'
 
     substituteInPlace t_modules/t_phazor.py \
-      --replace 'lib/libphazor.so' '../../lib/libphazor.so'
+      --replace-fail 'lib/libphazor.so' '../../lib/libphazor.so'
 
-    substituteInPlace compile-phazor.sh --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
+    substituteInPlace compile-phazor.sh --replace-fail 'gcc' '${stdenv.cc.targetPrefix}cc'
 
-    substituteInPlace extra/tauonmb.desktop --replace 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
+    substituteInPlace extra/tauonmb.desktop --replace-fail 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
   postBuild = ''
