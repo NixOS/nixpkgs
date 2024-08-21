@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchgit,
+  fetchFromGitHub,
   cmake,
   pkgconfig,
   python,
@@ -24,10 +24,12 @@ buildPythonPackage rec {
   pname = "hoomd-blue";
   pyproject = false; # Built with cmake
 
-  src = fetchgit {
-    url = "https://bitbucket.org/glotzer/hoomd-blue";
+  src = fetchFromGitHub {
+    owner = "glotzerlab";
+    repo = "hoomd-blue";
     rev = "v${version}";
-    sha256 = "0in49f1dvah33nl5n2qqbssfynb31pw1ds07j8ziryk9w252j1al";
+    fetchSubmodules = true;
+    hash = "sha256-VAUpiuBp+hw/kgfoFvgNY1nvtF4YC1uoHQOq3YJLxEY=";
   };
 
   passthru = {
