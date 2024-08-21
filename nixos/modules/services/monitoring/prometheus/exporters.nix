@@ -62,6 +62,7 @@ let
     "nginxlog"
     "node"
     "nut"
+    "nvidia-gpu"
     "openldap"
     "pgbouncer"
     "php-fpm"
