@@ -1,15 +1,15 @@
 {
-  lib,
-  stdenv,
   autoPatchelfHook,
   fetchurl,
+  glib,
   glib-networking,
-  glibc,
-  gcc-unwrapped,
   gtk3,
-  openjdk17,
+  lib,
   libsecret,
   makeDesktopItem,
+  openjdk17,
+  stdenvNoCC,
+  swt,
   webkitgtk,
   wrapGAppsHook3,
   gitUpdater,
@@ -25,11 +25,15 @@ let
   };
 
   runtimeLibs = lib.makeLibraryPath [
+    glib
+    glib-networking
     gtk3
+    libsecret
+    swt
     webkitgtk
   ];
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "PortfolioPerformance";
   version = "0.70.3";
 
@@ -43,12 +47,8 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gcc-unwrapped
-    glib-networking
-    glibc
-    libsecret
-  ];
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/portfolio
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --prefix CLASSPATH : "${swt}/jars/swt.jar" \
       --prefix PATH : ${openjdk17}/bin
 
     # Create desktop item

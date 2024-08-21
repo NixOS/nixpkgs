@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyeapi";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arista-eosplus";
     repo = "pyeapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GZBoCoAqij54rZezRDF/ihJDQ5T6FFyDSRXGV3//avQ=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-KDtL+ed9t9QoHVSVR2RQ+1Pll6CJuPrCamNem3keZRo=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client for Arista eAPI";
     homepage = "https://github.com/arista-eosplus/pyeapi";
-    changelog = "https://github.com/arista-eosplus/pyeapi/releases/tag/v${version}";
+    changelog = "https://github.com/arista-eosplus/pyeapi/releases/tag/v.${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ astro ];
   };
