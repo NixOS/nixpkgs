@@ -5,6 +5,7 @@
   testers,
   wstunnel,
   nixosTests,
+  nix-update-script,
 }:
 
 let
@@ -29,9 +30,12 @@ rustPlatform.buildRustPackage {
     "--skip=tcp::tests::test_proxy_connection"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = wstunnel; };
-    nixosTest = nixosTests.wstunnel;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion { package = wstunnel; };
+      nixosTest = nixosTests.wstunnel;
+    };
   };
 
   meta = {
