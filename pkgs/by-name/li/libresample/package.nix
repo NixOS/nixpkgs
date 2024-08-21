@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
     description = "Real-time library for sampling rate conversion library";
     license = lib.licenses.lgpl2Plus;
     homepage = "https://ccrma.stanford.edu/~jos/resample/Free_Resampling_Software.html";
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [
+      lib.maintainers.sander
+      lib.maintainers.emily
+    ];
     platforms = lib.platforms.unix;
   };
 }
