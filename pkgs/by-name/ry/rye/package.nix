@@ -1,14 +1,21 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, openssl
-, stdenv
-, darwin
-, nix-update-script
-, testers
-, rye
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  installShellFiles,
+  pkg-config,
+
+  # buildInputs
+  openssl,
+  stdenv,
+  darwin,
+
+  # passthru
+  nix-update-script,
+  testers,
+  rye,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,16 +41,21 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [
-    frameworks.CoreServices
-    frameworks.SystemConfiguration
-    Libsystem
-  ]);
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk;
+      [
+        frameworks.CoreServices
+        frameworks.SystemConfiguration
+        Libsystem
+      ]
+    );
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rye \
