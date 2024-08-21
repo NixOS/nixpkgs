@@ -17576,6 +17576,13 @@
       { fingerprint = "C0A7 A9BB 115B C857 4D75  EA99 BBB7 A680 1DF1 E03F"; }
     ];
   };
+  ritiek = {
+    name = "Ritiek Malhotra";
+    email = "ritiekmalhotra123@gmail.com";
+    matrix = "@ritiek:matrix.org";
+    github = "ritiek";
+    githubId = 20314742;
+  };
   rixed = {
     email = "rixed-github@happyleptic.org";
     github = "rixed";
