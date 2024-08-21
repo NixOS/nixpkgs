@@ -21,22 +21,22 @@
 }:
 
 let
-  rcversion = "2";
+  rcversion = "1";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.3.12";
+  version = "3.4.2";
 
   src =
     let
       urls = {
         "x86_64-linux" = {
           url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-amd64-${finalAttrs.version}-linux${rcversion}.deb";
-          hash = "sha256-iflKD7NPuZvhxviNW8xmtCOYgdRz1rXiG42ycWCjXiY=";
+          hash = "sha256-qY5rCvOgf1/Z00XZ6yAn6zKdUZ+6l4PCthPU44XLKhc=";
         };
         "aarch64-linux" = {
           url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-arm64-${finalAttrs.version}-linux${rcversion}.deb";
-          hash = "sha256-C9eCvuf/TwXQiYjZ88xSiyaqi8+cppmrLiSYTyQCkmg=";
+          hash = "sha256-VbPjTz4xYGaVO3uOG6lQNQrVEmx3+H/+y8+r0O55aUg=";
         };
       };
     in

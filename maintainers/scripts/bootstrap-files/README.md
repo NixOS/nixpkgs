@@ -6,9 +6,9 @@ binaries (without the reliance on external inputs):
 - `bootstrap-tools`: an archive with the compiler toolchain and other
   helper tools enough to build the rest of the `nixpkgs`.
 - initial binaries needed to unpack `bootstrap-tools.*`. On `linux`
-  it's just `busybox`, on `darwin` it is unpack.nar.xz which contains
-  the binaries and script needed to unpack the tools. These binaries
-  can be executed directly from the store.
+  it's just `busybox`, on `darwin` and `freebsd` it is unpack.nar.xz
+  which contains the binaries and script needed to unpack the tools.
+  These binaries can be executed directly from the store.
 
 These are called "bootstrap files".
 

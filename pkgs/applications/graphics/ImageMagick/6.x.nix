@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
     knownVulnerabilities = [
       "CVE-2019-13136"

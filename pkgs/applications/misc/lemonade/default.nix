@@ -30,7 +30,7 @@ buildGoModule rec {
     description = "Remote utility tool that to copy, paste and open browsers over TCP";
     homepage = "https://github.com/lemonade-command/lemonade/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "lemonade";
   };
 }

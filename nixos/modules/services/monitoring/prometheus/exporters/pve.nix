@@ -114,6 +114,13 @@ in
           Collect PVE onboot status
         '';
       };
+      replication = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Collect PVE replication info
+        '';
+      };
     };
   };
   serviceOpts = {
@@ -128,6 +135,7 @@ in
           --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
           --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
           --${optionalString (!cfg.collectors.config) "no-"}collector.config \
+          --${optionalString (!cfg.collectors.replication) "no-"}collector.replication \
           ${optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
           ${optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
           --config.file %d/configFile \

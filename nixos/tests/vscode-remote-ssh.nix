@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ lib, ... }@args: let
   inherit (pkgs.vscode.passthru) rev vscodeServer;
 in {
   name = "vscode-remote-ssh";
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes = let
     serverAddress = "192.168.0.2";

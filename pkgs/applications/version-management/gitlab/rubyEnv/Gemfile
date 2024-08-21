@@ -48,6 +48,7 @@ gem 'gitlab-secret_detection', path: 'gems/gitlab-secret_detection', feature_cat
 gem 'responders', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 gem 'sprockets', '~> 3.7.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'sprockets-rails', '~>  3.5.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 gem 'view_component', '~> 3.12.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
@@ -58,7 +59,7 @@ gem 'neighbor', '~> 0.3.2', feature_category: :duo_chat
 
 gem 'rugged', '~> 1.6' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'faraday', '~> 1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'faraday', '~> 1.10.3' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'marginalia', '~> 1.11.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Authorization
@@ -73,6 +74,7 @@ gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'vendor/gems/devise-pbkdf2-en
 gem 'bcrypt', '~> 3.1', '>= 3.1.14' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'doorkeeper', '~> 5.6', '>= 5.6.6' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'doorkeeper-openid_connect', '~> 1.8', '>= 1.8.7' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'doorkeeper-device_authorization_grant', '~> 1.0.0', feature_category: :system_access
 gem 'rexml', '~> 3.2.6' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'ruby-saml', '~> 1.15.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'omniauth', '~> 2.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -140,9 +142,9 @@ gem 'grape-path-helpers', '~> 2.0.1', feature_category: :api
 gem 'rack-cors', '~> 2.0.1', require: 'rack/cors' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # GraphQL API
-gem 'graphql', '~> 2.3.4', feature_category: :api
-gem 'graphql-docs', '~> 4.0.0', group: [:development, :test], feature_category: :api
-gem 'graphiql-rails', '~> 1.8.0', feature_category: :api
+gem 'graphql', '~> 2.3.5', feature_category: :api
+gem 'graphql-docs', '~> 5.0.0', group: [:development, :test], feature_category: :api
+gem 'graphiql-rails', '~> 1.10', feature_category: :api
 gem 'apollo_upload_server', '~> 2.1.6', feature_category: :api
 gem 'graphlient', '~> 0.6.0', feature_category: :importers # Used by BulkImport feature (group::import)
 
@@ -206,9 +208,9 @@ gem 'seed-fu', '~> 2.3.7' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'elasticsearch-model', '~> 7.2' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'elasticsearch-api',   '7.13.3' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'aws-sdk-core', '~> 3.197.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-core', '~> 3.199.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'aws-sdk-cloudformation', '~> 1' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'aws-sdk-s3', '~> 1.151.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-s3', '~> 1.154.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'faraday_middleware-aws-sigv4', '~>0.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive connections # rubocop:todo Gemfile/MissingFeatureCategory
 
@@ -225,23 +227,23 @@ gem 'wikicloth', '0.8.1' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'asciidoctor', '~> 2.0.18' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'asciidoctor-include-ext', '~> 0.4.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'asciidoctor-plantuml', '~> 0.0.16' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'asciidoctor-kroki', '~> 0.8.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'rouge', '~> 4.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'asciidoctor-kroki', '~> 0.10.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rouge', '~> 4.3.0', feature_category: :shared
 gem 'truncato', '~> 0.7.12' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'nokogiri', '~> 1.16' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'gitlab-glfm-markdown', '~> 0.0.17', feature_category: :team_planning
 
 # Calendar rendering
-gem 'icalendar' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'icalendar', '~> 2.10.1', feature_category: :system_access
 
 # Diffs
 gem 'diffy', '~> 3.4' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'diff_match_patch', '~> 0.1.0', path: 'vendor/gems/diff_match_patch', feature_category: :team_planning
 
 # Application server
-gem 'rack', '~> 2.2.8.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rack', '~> 2.2.9' # rubocop:todo Gemfile/MissingFeatureCategory
 # https://github.com/zombocom/rack-timeout/blob/master/README.md#rails-apps-manually
-gem 'rack-timeout', '~> 0.6.3', require: 'rack/timeout/base' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rack-timeout', '~> 0.7.0', require: 'rack/timeout/base' # rubocop:todo Gemfile/MissingFeatureCategory
 
 group :puma do
   gem 'puma', '= 6.4.0', require: false, feature_category: :shared
@@ -255,7 +257,7 @@ gem 'state_machines-activerecord', '~> 0.8.0' # rubocop:todo Gemfile/MissingFeat
 gem 'acts-as-taggable-on', '~> 10.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Background jobs
-gem 'sidekiq', path: 'vendor/gems/sidekiq-7.1.6', require: 'sidekiq', feature_category: :scalability
+gem 'sidekiq', '~> 7.1.6', feature_category: :scalability
 gem 'sidekiq-cron', '~> 1.12.0', feature_category: :scalability
 gem 'gitlab-sidekiq-fetcher',
   path: 'vendor/gems/sidekiq-reliable-fetch',
@@ -306,7 +308,7 @@ gem 'jira-ruby', '~> 2.3.0', feature_category: :integrations
 gem 'atlassian-jwt', '~> 0.2.1', feature_category: :integrations
 
 # Slack integration
-gem 'slack-messenger', '~> 2.3.4', feature_category: :integrations
+gem 'slack-messenger', '~> 2.3.5', feature_category: :integrations
 
 # FogBugz integration
 gem 'ruby-fogbugz', '~> 0.3.0', feature_category: :importers
@@ -331,7 +333,7 @@ gem 'licensee', '~> 9.16' # rubocop:todo Gemfile/MissingFeatureCategory
 # Detect and convert string character encoding
 # We forked charlock_holmes at https://gitlab.com/gitlab-org/ruby/gems/charlock_holmes
 # but changed it's name to 'static_holmes' in the gemspec file.
-gem 'static_holmes', '~> 0.7.7', require: 'charlock_holmes' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'static_holmes', '~> 0.7.11', require: 'charlock_holmes', feature_category: :shared
 
 # Detect mime content type from content
 gem 'ruby-magic', '~> 0.6' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -372,7 +374,7 @@ gem 'pg_query', '~> 5.1.0', feature_category: :database
 gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'gitlab-http', path: 'gems/gitlab-http' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'premailer-rails', '~> 1.10.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'premailer-rails', '~> 1.12.0', feature_category: :notifications
 gem 'gitlab-labkit', '~> 0.36.0', feature_category: :shared
 gem 'thrift', '>= 0.16.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
@@ -386,6 +388,8 @@ gem 'gettext', '~> 3.4', '>= 3.4.9',
 
 gem 'batch-loader', '~> 2.0.5' # rubocop:todo Gemfile/MissingFeatureCategory
 
+gem 'tty-prompt', '~> 0.23', require: false, feature_category: :shared
+
 # Perf bar
 gem 'peek', '~> 1.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
@@ -398,6 +402,9 @@ gem 'snowplow-tracker', '~> 0.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
 # Metrics
 gem 'webrick', '~> 1.8.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'prometheus-client-mmap', '~> 1.1', '>= 1.1.1', require: 'prometheus/client' # rubocop:todo Gemfile/MissingFeatureCategory
+
+# Event-driven reactor for Ruby
+gem 'async', '~> 2.12.1' # rubocop:disable Gemfile/MissingFeatureCategory -- This is general utility gem
 
 # OpenTelemetry
 group :opentelemetry do
@@ -436,7 +443,7 @@ group :development do
   gem 'rubocop', feature_category: :tooling
   gem 'solargraph', '~> 0.47.2', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'letter_opener_web', '~> 2.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'letter_opener_web', '~> 3.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'lookbook', '~> 2.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
   # Better errors handler
@@ -446,7 +453,7 @@ group :development do
 
   gem 'listen', '~> 3.7' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'ruby-lsp', "~> 0.16.7", require: false, feature_category: :tooling
+  gem 'ruby-lsp', "~> 0.17.0", require: false, feature_category: :tooling
 
   gem 'ruby-lsp-rails', "~> 0.3.6", feature_category: :tooling
 
@@ -458,8 +465,7 @@ end
 group :development, :test do
   gem 'deprecation_toolkit', '~> 1.5.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'bullet', '~> 7.1.2' # rubocop:todo Gemfile/MissingFeatureCategory
-  # Locked on 3.3.0.5 until inspec-core is updated in Omnibus: https://github.com/inspec/inspec/pull/7030
-  gem 'parser', '= 3.3.0.5', feature_category: :shared
+  gem 'parser', '= 3.3.3.0', feature_category: :shared
   gem 'pry-byebug' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'pry-rails', '~> 0.3.9' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'pry-shell', '~> 0.6.4' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -511,7 +517,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 4.7.0', require: false, feature_category: :tooling
+  gem 'gitlab-dangerfiles', '~> 4.8.0', require: false, feature_category: :tooling
 end
 
 group :development, :test, :coverage do
@@ -559,10 +565,10 @@ group :test do
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'gitlab_quality-test_tooling', '~> 1.28.0', require: false, feature_category: :tooling
+  gem 'gitlab_quality-test_tooling', '~> 1.31.0', require: false, feature_category: :tooling
 end
 
-gem 'octokit', '~> 8.1', feature_category: :importers
+gem 'octokit', '~> 9.0', feature_category: :importers
 
 gem 'gitlab-mail_room', '~> 0.0.24', require: 'mail_room', feature_category: :shared
 
@@ -594,7 +600,7 @@ gem 'ssh_data', '~> 1.3' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'spamcheck', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 17.0.1', feature_category: :gitaly
+gem 'gitaly', '~> 17.1.0', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.5.0', feature_category: :deployment_management
@@ -647,7 +653,7 @@ gem 'valid_email', '~> 0.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # JSON
 gem 'jsonb_accessor', '~> 1.3.10' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'json', '~> 2.6.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'json', '~> 2.7.2', feature_category: :shared
 gem 'json_schemer', '~> 0.2.18' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'oj', '~> 3.13.21' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'oj-introspect', '~> 0.7' # rubocop:todo Gemfile/MissingFeatureCategory

@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , meson
 , mesonEmulatorHook
+, appstream
 , ninja
 , pkg-config
 , cmake
@@ -36,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.0.2";
+  version = "1.0.3";
 
   outputs = [ "out" "dev" "installedTests" ];
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0NzZku6TQyyaTOAMWZD459RayhsH8cotlOaSKkVY/EQ=";
+    sha256 = "sha256-pniZq+rR9wW86QqfRw4WZiBo1F16aSAb1J2RjI4aqE0=";
   };
 
   patches = [
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     gperf
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+    appstream
   ];
 
   buildInputs = [

@@ -29,7 +29,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # With v8 the config tests are are blocking
+  # With v8 the config tests are blocking
   doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

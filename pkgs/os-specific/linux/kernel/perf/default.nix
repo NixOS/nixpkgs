@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , kernel
 , elfutils
 , python3
@@ -59,6 +60,23 @@ stdenv.mkDerivation {
   version = kernel.version;
 
   inherit (kernel) src;
+
+  # Fix 6.10.0 holding pkg-config completely wrong.
+  # Patches from perf-tools-next, should be in 6.11 or hopefully backported.
+  patches = lib.optionals (lib.versionAtLeast kernel.version "6.10") [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=0f0e1f44569061e3dc590cd0b8cb74d8fd53706b";
+      hash = "sha256-9u/zhbsDgwOr4T4k9td/WJYRuSHIfbtfS+oNx8nbOlM=";
+    })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=366e17409f1f17ad872259ce4a4f8a92beb4c4ee";
+      hash = "sha256-NZK1u40qvMwWcgkgJPGpEax2eMo9xHrCQxSYYOK0rbo=";
+    })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=1d302f626c2a23e4fd05bb810eff300e8f2174fd";
+      hash = "sha256-KhCmof8LkyTcBBpfMEtolL3m3kmC5rukKzQvufVKCdI=";
+    })
+  ];
 
   postPatch = ''
     # Linux scripts
@@ -159,7 +177,7 @@ stdenv.mkDerivation {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
     mainProgram = "perf";
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ tobim ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5";
   };

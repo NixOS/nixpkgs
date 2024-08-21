@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Fatal1ty/aioapns";
     changelog = "https://github.com/Fatal1ty/aioapns/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

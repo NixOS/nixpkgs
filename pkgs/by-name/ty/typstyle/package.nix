@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.11.29";
+  version = "0.11.31";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7BjbML7mz5ohEdh+x6qL8pH2BTFW8WdtB0g91NHFIBY=";
+    hash = "sha256-RJeeYN5bw161UcORKPUkdNExyoWdL6w4ey/p/UCPSG0=";
   };
 
-  cargoHash = "sha256-bcOfgiQ7mT7HE1hUXfBlj6SzMUtS5Ar2X9kjFGKPR2w=";
+  cargoHash = "sha256-hBOoFIQxLqrJG7jR0ONlWSzxEVl9ctsR85REJtODZWw=";
 
   nativeBuildInputs = [
     pkg-config

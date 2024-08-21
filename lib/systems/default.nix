@@ -179,7 +179,7 @@ let
       hasSharedLibraries = with final;
         (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
-         || isCygwin || isMinGW                                        # Windows
+         || isCygwin || isMinGW || isWindows                           # Windows
          || isWasm                                                     # WASM
         ) && !isStatic;
 

@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "inxi";
   };
 }

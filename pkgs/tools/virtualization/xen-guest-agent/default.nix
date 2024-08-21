@@ -3,7 +3,7 @@
   fetchFromGitLab,
   rustPlatform,
   llvmPackages,
-  xen-light,
+  xen-slim,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xen-guest-agent";
@@ -20,14 +20,14 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-    BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${xen-light}/include";
-    RUSTFLAGS = "-L ${xen-light}/lib";
+    BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${xen-slim.dev}/include";
+    RUSTFLAGS = "-L ${xen-slim.out}/lib";
   };
 
-  nativeBuildInputs = [llvmPackages.clang xen-light];
+  nativeBuildInputs = [llvmPackages.clang xen-slim.out];
 
   postFixup = ''
-    patchelf $out/bin/xen-guest-agent --add-rpath ${xen-light}/lib
+    patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib
   '';
 
   meta = with lib; {

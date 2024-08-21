@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pydexcom";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "gagebenne";
     repo = "pydexcom";
     rev = "refs/tags/${version}";
-    hash = "sha256-46+Ml73F6EUbMwRJB93FD+No/g65RJwnCnFzH4Pb5ek=";
+    hash = "sha256-gMUdVdO2Yy41Nl+mn9dEegb6/IRBwoBviPhuz3CMfS8=";
   };
 
   nativeBuildInputs = [

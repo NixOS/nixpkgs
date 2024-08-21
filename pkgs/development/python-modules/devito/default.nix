@@ -3,6 +3,7 @@
   stdenv,
   anytree,
   buildPythonPackage,
+  setuptools,
   cached-property,
   cgen,
   click,
@@ -25,8 +26,8 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.10";
-  format = "setuptools";
+  version = "4.8.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -34,17 +35,20 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-r3HsVZo+2WnjxIToGTOR/xp1l4G2a3+sHslBA8iEdSo=";
+    hash = "sha256-c8/b2dRwfH4naSVRaRon6/mBDva7RSDmi/TJUJp26g0=";
   };
 
-  pythonRemoveDeps = [
-    "codecov"
-    "flake8"
-    "pytest-runner"
-    "pytest-cov"
-  ];
+  # packaging.metadata.InvalidMetadata: 'python_version_3.8_' is invalid for 'provides-extra'
+  postPatch = ''
+    substituteInPlace requirements-testing.txt \
+      --replace-fail 'pooch; python_version >= "3.8"' "pooch"
+  '';
+
+  pythonRemoveDeps = [ "pip" ];
 
   pythonRelaxDeps = true;
+
+  build-system = [ setuptools ];
 
   dependencies = [
     anytree

@@ -4,10 +4,16 @@
   buildPythonPackage,
   dotmap,
   fetchFromGitHub,
+  hypothesis,
   packaging,
+  parse,
   pexpect,
+  platformdirs,
+  ppk2-api,
+  print-color,
   protobuf,
-  pygatt,
+  pyarrow,
+  pyparsing,
   pypubsub,
   pyqrcode,
   pyserial,
@@ -19,6 +25,7 @@
   setuptools,
   tabulate,
   timeago,
+  webencodings,
 }:
 
 buildPythonPackage rec {
@@ -35,15 +42,22 @@ buildPythonPackage rec {
     hash = "sha256-s56apVx7+EXkdw3FUjyGKGFjP+IVbO0/VDB4urXEtXQ=";
   };
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
     bleak
     dotmap
     packaging
+    parse
     pexpect
+    platformdirs
+    ppk2-api
+    print-color
     protobuf
-    pygatt
+    pyarrow
+    pyparsing
     pypubsub
     pyqrcode
     pyserial
@@ -52,6 +66,7 @@ buildPythonPackage rec {
     setuptools
     tabulate
     timeago
+    webencodings
   ];
 
   passthru.optional-dependencies = {
@@ -59,9 +74,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytap2
+    hypothesis
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -79,6 +94,7 @@ buildPythonPackage rec {
     "test_main_support"
     "test_MeshInterface"
     "test_message_to_json_shows_all"
+    "test_node"
     "test_SerialInterface_single_port"
     "test_support_info"
     "test_TCPInterface"

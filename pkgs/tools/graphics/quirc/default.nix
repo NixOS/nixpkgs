@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, SDL_gfx, SDL, libjpeg, libpng, opencv
-, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch2, SDL_gfx, SDL, libjpeg, libpng
+, opencv, pkg-config }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quirc";
@@ -25,28 +25,35 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL -I${SDL_gfx}/include/SDL";
 
-  # Disable building of linux-only demos on darwin systems
-  patches = lib.optionals stdenv.isDarwin [ ./0001-dont-build-demos.patch ];
-
-  buildPhase = lib.optionalString stdenv.isDarwin ''
-    runHook preBuild
-    make libquirc.so
-    make qrtest
-    runHook postBuild
-  '';
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/dlbeer/quirc/commit/2c350d8aaf37246e538a2c93b2cce8c78600d2fc.patch?full_index=1";
+      hash = "sha256-ZTcy/EoOBoyOjtXjmT+J/JcbX8lxGKmbWer23lymbWo=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/dlbeer/quirc/commit/257c6c94d99960819ecabf72199e5822f60a3bc5.patch?full_index=1";
+      hash = "sha256-WLQK7vy34VmgJzppTnRjAcZoSGWVaXQSaGq9An8W0rw=";
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable building of linux-only demos on darwin systems
+    ./0001-Don-t-build-demos.patch
+  ];
 
   preInstall = ''
     mkdir -p "$out"/{bin,lib,include}
 
     # install all binaries
-    find -maxdepth 1 -type f -executable ! -name '*.so.*' | xargs cp -t "$out"/bin
+    find -maxdepth 1 -type f -executable ! -name '*.so.*' ! -name '*.dylib' \
+      | xargs cp -t "$out"/bin
   '';
 
   postInstall = ''
     # don't install static library
     rm $out/lib/libquirc.a
-
-    ln -s $out/lib/libquirc.so.* $out/lib/libquirc.so
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Set absolute install name to avoid the need for DYLD_LIBRARY_PATH
+    dylib=$out/lib/libquirc.${finalAttrs.version}.dylib
+    ${stdenv.cc.targetPrefix}install_name_tool -id "$dylib" "$dylib"
   '';
 
   meta = {

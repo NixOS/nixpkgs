@@ -50,6 +50,6 @@ stdenv.mkDerivation {
     mainProgram = "qtwirediff";
     homepage = "https://github.com/aaptel/qtwirediff";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

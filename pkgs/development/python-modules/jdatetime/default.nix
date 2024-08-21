@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Jalali datetime binding";
     homepage = "https://github.com/slashmili/python-jalali";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

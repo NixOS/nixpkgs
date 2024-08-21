@@ -20,7 +20,7 @@ buildGoModule rec {
     description = "Set of rewrite proxies and gateways for UnifiedPush";
     homepage = "https://github.com/UnifiedPush/common-proxies";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "up_rewrite";
   };
 }

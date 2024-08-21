@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "grpcio-reflection";
-  version = "1.64.1";
+  version = "1.65.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_reflection";
     inherit version;
-    hash = "sha256-43511hl02iKjtcJgSZKqLyFjlx6jeK2Fa047YyEJ88c=";
+    hash = "sha256-jGuWDD9DBoHoivWfafq1pXW3eyn1xqHXFuqsXPHBpJ0=";
   };
 
   build-system = [ setuptools ];

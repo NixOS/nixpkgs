@@ -155,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--without-ca-path"
     ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
       "--without-ssl"
+    ] ++ lib.optionals (gnutlsSupport && !stdenv.isDarwin) [
+      "--with-ca-path=/etc/ssl/certs"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
@@ -220,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
     # Fails to link against static brotli or gss
-    broken = (stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin")) || rustlsSupport;
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin");
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
   };

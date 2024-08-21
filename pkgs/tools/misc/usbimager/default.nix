@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "bztsrc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
+    hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
   sourceRoot = "${src.name}/src";

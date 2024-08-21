@@ -67,7 +67,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "stone";
   };
 }

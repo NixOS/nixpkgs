@@ -6,7 +6,6 @@
   pythonOlder,
   rich,
   setuptools,
-  typer,
   typing-extensions,
 }:
 

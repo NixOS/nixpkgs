@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-credential-oauth";
-  version = "0.12.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "hickford";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iDnTjrVDH8qBYkvNjLHYmTaK8vScluDM4+W/5Rdo+Xc=";
+    hash = "sha256-pJ1Snq79bQvhE+D7U8pMmK4YyvoZIwv29kr5640jpns=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -19,7 +19,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-nbwrVihcH+ARLHylsjogsv3LVP+0+YtQ+7cozB7pAWo=";
+  vendorHash = "sha256-ujsfEmDOOGCNErtBW5EyefQ+jXhfnAiwteYm8F7RLVE=";
 
   postInstall = ''
     installManPage $src/git-credential-oauth.1

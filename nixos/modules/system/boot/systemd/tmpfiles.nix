@@ -200,6 +200,10 @@ in
           rm -f $out/${removePrefix "tmpfiles.d/" name}
         '') config.system.build.etc.passthru.targets;
       }) + "/*";
+      "mtab" = {
+        mode = "direct-symlink";
+        source = "/proc/mounts";
+      };
     };
 
     systemd.tmpfiles.packages = [
@@ -244,13 +248,11 @@ in
       "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
       "d  /run/lock                          0755 root root - -"
       "d  /var/db                            0755 root root - -"
-      "L  /etc/mtab                          -    -    -    - ../proc/mounts"
       "L  /var/lock                          -    -    -    - ../run/lock"
       # Boot-time cleanup
       "R! /etc/group.lock                    -    -    -    - -"
       "R! /etc/passwd.lock                   -    -    -    - -"
       "R! /etc/shadow.lock                   -    -    -    - -"
-      "R! /etc/mtab*                         -    -    -    - -"
       "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
       "R! /nix/var/nix/temproots             -    -    -    - -"
     ];

@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "13.12.0";
+  version = "13.14.2";
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     rev = "v${version}";
-    hash = "sha256-w6tzqbNma7gTnUXOkPtcENO2XcchTXqueZlg08C8vF8=";
+    hash = "sha256-Y5PoiBX/ql7gbNpCklZieFsoIzxhyau40MTGXDYyxYs=";
   };
 
-  npmDepsHash = "sha256-7/5cZOYMQ3b77aRZkBA5jTDm+PnepzdW6I8RyBNr7oo=";
+  npmDepsHash = "sha256-Z83Llre5ajVuGNt7LBr0tjWxRXTajne2U3fZuBwPjIg=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -39,6 +39,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
     mainProgram = "firebase";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

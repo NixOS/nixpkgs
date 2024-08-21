@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchurl
-, astring, ptime, rresult, qcheck
+, ptime, qcheck
 }:
 
 buildDunePackage rec {

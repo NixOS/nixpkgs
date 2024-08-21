@@ -17,7 +17,7 @@
   packaging,
   pathspec,
   protobuf,
-  python3,
+  python,
   pythonOlder,
   pytz,
   pyyaml,
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru = {
-    withAdapters = python3.pkgs.callPackage ./with-adapters.nix { };
+    withAdapters = python.pkgs.callPackage ./with-adapters.nix { };
   };
 
   meta = with lib; {

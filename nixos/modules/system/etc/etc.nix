@@ -247,6 +247,30 @@ in
           --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
           $tmpEtcMount
 
+        # Before moving the new /etc overlay under the old /etc, we have to
+        # move mounts on top of /etc to the new /etc mountpoint.
+        findmnt /etc --submounts --list --noheading --kernel --output TARGET | while read -r mountPoint; do
+          if [[ "$mountPoint" = "/etc" ]]; then
+            continue
+          fi
+
+          tmpMountPoint="$tmpEtcMount/''${mountPoint:5}"
+            ${if config.system.etc.overlay.mutable then ''
+              if [[ -f "$mountPoint" ]]; then
+                touch "$tmpMountPoint"
+              elif [[ -d "$mountPoint" ]]; then
+                mkdir -p "$tmpMountPoint"
+              fi
+            '' else ''
+              if [[ ! -e "$tmpMountPoint" ]]; then
+                echo "Skipping undeclared mountpoint in environment.etc: $mountPoint"
+                continue
+              fi
+            ''
+          }
+          mount --bind "$mountPoint" "$tmpMountPoint"
+        done
+
         # Move the new temporary /etc mount underneath the current /etc mount.
         #
         # This should eventually use util-linux to perform this move beneath,
@@ -255,8 +279,7 @@ in
         ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
 
         # Unmount the top /etc mount to atomically reveal the new mount.
-        umount /etc
-
+        umount --recursive /etc
       fi
     '' else ''
       # Set up the statically computed bits of /etc.

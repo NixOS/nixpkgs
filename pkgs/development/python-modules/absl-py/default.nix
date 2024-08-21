@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Abseil Python Common Libraries";
     homepage = "https://github.com/abseil/abseil-py";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

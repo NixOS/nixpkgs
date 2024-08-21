@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage Documentation/git-absorb.1
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd git-absorb \
       --bash <($out/bin/git-absorb --gen-completions bash) \
       --fish <($out/bin/git-absorb --gen-completions fish) \

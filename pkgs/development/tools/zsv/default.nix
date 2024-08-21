@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/liquidaty/zsv";
     changelog = "https://github.com/liquidaty/zsv/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

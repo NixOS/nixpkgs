@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maxmind/GeoIP2-python";
     changelog = "https://github.com/maxmind/GeoIP2-python/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

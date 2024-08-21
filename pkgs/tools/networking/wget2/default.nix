@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "gnuwget";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
+    hash = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
   };
 
   # wget2_noinstall contains forbidden reference to /build/

@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-hKk5pcop8rb5Q+IVchcl+XhMc3DCBBPn5P+AkAb9XxI=";
   };
 
-  cargoSha256 = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
+  cargoHash = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
 
   # lld: error: unknown argument '-Wl,--undefined=AUDITABLE_VERSION_INFO'
   # https://github.com/cloud-hypervisor/rust-hypervisor-firmware/issues/249

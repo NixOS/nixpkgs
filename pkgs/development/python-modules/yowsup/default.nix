@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Python WhatsApp library";
     mainProgram = "yowsup-cli";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

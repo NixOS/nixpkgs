@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioazuredevops = super.aioazuredevops.overridePythonAttrs (old: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          owner = "timmo001";
+          repo = "aioazuredevops";
+          rev = "refs/tags/${version}";
+          hash = "sha256-rnvWjsTRBoojsuNG3uSdBlyycE4XSrhgjmb77jy7fxY=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -148,16 +158,6 @@ let
         dependencies = with self; [
           requests
         ];
-      });
-
-      ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
-        pname = "ha-av";
-        version = "10.1.1";
-
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
-        };
       });
 
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
@@ -309,6 +309,16 @@ let
         };
       });
 
+      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.10";
+        src = fetchFromGitHub {
+          owner = "freekode";
+          repo = "pyopenweathermap";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-wEcE4IYVvxEwW5Hhz+DqDIqbjd5/O1hEr7dGgiuMI00=";
+        };
+      });
+
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -455,10 +465,13 @@ let
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
+      homeassistant = self.toPythonModule home-assistant;
+      pytest-homeassistant-custom-component = self.callPackage ./pytest-homeassistant-custom-component.nix { };
     })
   ];
 
   python = python312.override {
+    self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -476,7 +489,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.7.2";
+  hassVersion = "2024.7.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -494,13 +507,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-FML1JZFj2xebcQvXJmBu02Eczz3ejg4r7PfnpBiDc50=";
+    hash = "sha256-PHKFQmlwdS0+XpD5Pd+Xwv5KNB2kJKouh9jfBH3aUIU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-okukdAbBXJCaDpnOCDY91dsLQdm5pMJ1SKXV9A68eoQ=";
+    hash = "sha256-NJ5gD6k05ahIPCwktJgTz9zczxgnfuLesfjR58fbRL4=";
   };
 
   build-system = with python.pkgs; [
@@ -649,6 +662,13 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_translation.py::test_caching"
     # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
     "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
+    # Services were renamed to Actions in language strings, but the tests are lagging behind
+    "--deselect=tests/test_core.py::test_serviceregistry_service_that_not_exists"
+    "--deselect=tests/test_core.py::test_services_call_return_response_requires_blocking"
+    "--deselect=tests/test_core.py::test_serviceregistry_return_response_arguments"
+    "--deselect=tests/helpers/test_script.py::test_parallel_error"
+    "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
+    "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
     # tests are located in tests/
     "tests"
   ];

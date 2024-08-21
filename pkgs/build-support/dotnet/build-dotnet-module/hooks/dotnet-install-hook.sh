@@ -3,21 +3,21 @@ dotnetInstallHook() {
 
     runHook preInstall
 
-    local -r hostRuntimeId=@runtimeId@
     local -r dotnetInstallPath="${dotnetInstallPath-$out/lib/$pname}"
     local -r dotnetBuildType="${dotnetBuildType-Release}"
-    local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
 
     if [[ -n $__structuredAttrs ]]; then
         local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
         local dotnetFlagsArray=( "${dotnetFlags[@]}" )
         local dotnetInstallFlagsArray=( "${dotnetInstallFlags[@]}" )
         local dotnetPackFlagsArray=( "${dotnetPackFlags[@]}" )
+        local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
     else
         local dotnetProjectFilesArray=($dotnetProjectFiles)
         local dotnetFlagsArray=($dotnetFlags)
         local dotnetInstallFlagsArray=($dotnetInstallFlags)
         local dotnetPackFlagsArray=($dotnetPackFlags)
+        local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
     fi
 
     if [[ -n ${dotnetSelfContainedBuild-} ]]; then
@@ -33,36 +33,53 @@ dotnetInstallHook() {
         dotnetInstallFlagsArray+=("-p:UseAppHost=true")
     fi
 
+    if [[ -n ${enableParallelBuilding-} ]]; then
+        local -r maxCpuFlag="$NIX_BUILD_CORES"
+    else
+        local -r maxCpuFlag="1"
+    fi
+
     dotnetPublish() {
         local -r projectFile="${1-}"
 
-        runtimeIdFlagsArray=()
-        if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
-            runtimeIdFlagsArray+=("--runtime" "$dotnetRuntimeId")
-        fi
+        for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+            runtimeIdFlagsArray=()
+            if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+                runtimeIdFlagsArray+=("--runtime" "$runtimeId")
+            fi
 
-        dotnet publish ${1+"$projectFile"} \
-            -p:ContinuousIntegrationBuild=true \
-            -p:Deterministic=true \
-            --output "$dotnetInstallPath" \
-            --configuration "$dotnetBuildType" \
-            --no-build \
-            "${runtimeIdFlagsArray[@]}" \
-            "${dotnetInstallFlagsArray[@]}" \
-            "${dotnetFlagsArray[@]}"
+            dotnet publish ${1+"$projectFile"} \
+                -maxcpucount:"$maxCpuFlag" \
+                -p:ContinuousIntegrationBuild=true \
+                -p:Deterministic=true \
+                -p:OverwriteReadOnlyFiles=true \
+                --output "$dotnetInstallPath" \
+                --configuration "$dotnetBuildType" \
+                --no-build \
+                "${runtimeIdFlagsArray[@]}" \
+                "${dotnetInstallFlagsArray[@]}" \
+                "${dotnetFlagsArray[@]}"
+        done
     }
+
+    local -r pkgs=$PWD/.nuget-pack
 
     dotnetPack() {
         local -r projectFile="${1-}"
-        dotnet pack ${1+"$projectFile"} \
-            -p:ContinuousIntegrationBuild=true \
-            -p:Deterministic=true \
-            --output "$out/share" \
-            --configuration "$dotnetBuildType" \
-            --no-build \
-            --runtime "$dotnetRuntimeId" \
-            "${dotnetPackFlagsArray[@]}" \
-            "${dotnetFlagsArray[@]}"
+
+        for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+            dotnet pack ${1+"$projectFile"} \
+                   -maxcpucount:"$maxCpuFlag" \
+                   -p:ContinuousIntegrationBuild=true \
+                   -p:Deterministic=true \
+                   -p:OverwriteReadOnlyFiles=true \
+                   --output "$pkgs" \
+                   --configuration "$dotnetBuildType" \
+                   --no-build \
+                   --runtime "$runtimeId" \
+                   "${dotnetPackFlagsArray[@]}" \
+                   "${dotnetFlagsArray[@]}"
+        done
     }
 
     if (( ${#dotnetProjectFilesArray[@]} == 0 )); then
@@ -84,6 +101,20 @@ dotnetInstallHook() {
             done
         fi
     fi
+
+    local -r unpacked="$pkgs/.unpacked"
+    for nupkg in "$pkgs"/*.nupkg; do
+        rm -rf "$unpacked"
+        unzip -qd "$unpacked" "$nupkg"
+        chmod -R +rw "$unpacked"
+        echo {} > "$unpacked"/.nupkg.metadata
+        local id version
+        id=$(xq -r '.package.metadata.id|ascii_downcase' "$unpacked"/*.nuspec)
+        version=$(xq -r '.package.metadata.version|ascii_downcase' "$unpacked"/*.nuspec)
+        mkdir -p "$out/share/nuget/packages/$id"
+        mv "$unpacked" "$out/share/nuget/packages/$id/$version"
+        # TODO: should we fix executable flags here?
+    done
 
     runHook postInstall
 

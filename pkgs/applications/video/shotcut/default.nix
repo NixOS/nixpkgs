@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://shotcut.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ goibhniu woffs peti ];
+    maintainers = with maintainers; [ woffs peti ];
     platforms = platforms.unix;
     mainProgram = "shotcut";
   };

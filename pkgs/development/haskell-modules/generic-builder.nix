@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs
+, jailbreak-cabal, hscolour, cpphs, runCommand
 , ghcWithHoogle, ghcWithPackages
 , nodejs
 }:
@@ -149,6 +149,35 @@ assert stdenv.hostPlatform.isWindows -> enableStaticLibraries == false;
 assert stdenv.hostPlatform.isWasm -> enableStaticLibraries == false;
 
 let
+
+  # This is a workaround for the 2024-07-20 staging-next cycle to avoid causing mass rebuilds.
+  # todo(@reckenrode) Remove this workaround and remove `NIX_COREFOUNDATION_RPATH`, the related hooks, and ld-wrapper support.
+  nixCoreFoundationRpathWorkaround = stdenv.mkDerivation {
+    name = "nix-corefoundation-rpath-workaround";
+    buildCommand = ''
+      mkdir -p "$out/nix-support"
+      cat <<-EOF > "$out/nix-support/setup-hook"
+      removeUseSystemCoreFoundationFrameworkHook() {
+        unset NIX_COREFOUNDATION_RPATH
+        local _hook
+        for _hook in envBuildBuildHooks envBuildHostHooks envBuildTargetHooks envHostHostHooks envHostTargetHooks envTargetTargetHooks; do
+          local _index=0
+          local _var="\$_hook[@]"
+          for _var in "\''${!_var}"; do
+            if [ "\$_var" = "useSystemCoreFoundationFramework" ]; then
+              unset "\$_hook[\$_index]"
+            fi
+            ((++_index))
+          done
+          unset _index
+          unset _var
+        done
+        unset _hook
+      }
+      addEnvHooks "\$hostOffset" removeUseSystemCoreFoundationFrameworkHook
+      EOF
+    '';
+  };
 
   inherit (lib) optional optionals optionalString versionAtLeast
                        concatStringsSep enableFeature optionalAttrs;
@@ -430,7 +459,8 @@ stdenv.mkDerivation ({
   inherit depsBuildBuild nativeBuildInputs;
   buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs
     # For patchShebangsAuto in fixupPhase
-    ++ optionals stdenv.hostPlatform.isGhcjs [ nodejs ];
+    ++ optionals stdenv.hostPlatform.isGhcjs [ nodejs ]
+    ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [ nixCoreFoundationRpathWorkaround ];
   propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
@@ -790,8 +820,8 @@ stdenv.mkDerivation ({
           lib.optionals (!isCross) setupHaskellDepends);
 
         ghcCommandCaps = lib.toUpper ghcCommand';
-      in stdenv.mkDerivation {
-        inherit name shellHook;
+      in runCommand name {
+        inherit shellHook;
 
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;
         nativeBuildInputs =
@@ -799,8 +829,6 @@ stdenv.mkDerivation ({
           collectedToolDepends;
         buildInputs =
           otherBuildInputsSystem;
-        phases = ["installPhase"];
-        installPhase = "echo $nativeBuildInputs $buildInputs > $out";
         LANG = "en_US.UTF-8";
         LOCALE_ARCHIVE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
@@ -810,7 +838,7 @@ stdenv.mkDerivation ({
         "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
           then "${ghcEnv}/lib/HaLVM-${ghc.version}"
           else "${ghcEnv}/${ghcLibdir}";
-      };
+      } "echo $nativeBuildInputs $buildInputs > $out";
 
     env = envFunc { };
 

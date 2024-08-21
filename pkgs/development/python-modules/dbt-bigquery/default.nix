@@ -10,12 +10,11 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-bigquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5sqKvYXKBze6t0yNaeYvwyS919CHMXCv3RRzNnBxfec=";
+    hash = "sha256-SYQAFvu7nw54X4jxicEA9+lnvMgj/Yp460xz3BFGYCM=";
   };
 
   pythonRelaxDeps = [ "agate" ];

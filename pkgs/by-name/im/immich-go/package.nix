@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, immich-go }:
 buildGoModule rec {
   pname = "immich-go";
-  version = "0.19.1";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "simulot";
     repo = "immich-go";
     rev = "${version}";
-    hash = "sha256-IFNl6qlhXfrdNcHhgoqHZxcWPp8TSpSplirPxSqvjPA=";
+    hash = "sha256-mN/3ctEX5R7UepJUs3Ble0s2c0gRxHe5CDey9MoE4YA=";
 
     # Inspired by: https://github.com/NixOS/nixpkgs/blob/f2d7a289c5a5ece8521dd082b81ac7e4a57c2c5c/pkgs/applications/graphics/pdfcpu/default.nix#L20-L32
     # The intention here is to write the information into files in the `src`'s
@@ -24,7 +24,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-MKWlMoJZ0OECa7Ej26m4D6JYWjnnRuh0rdBUUPnF6SY=";
+  vendorHash = "sha256-Y6awfvbKV0G3VFXCUHLSwUkGaMkTaacruSz8KVi6NoQ=";
 
   # options used by upstream:
   # https://github.com/simulot/immich-go/blob/0.13.2/.goreleaser.yaml

@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to work with the PDF file format";
     platforms = lib.platforms.all;
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
-    maintainers = [];
+    maintainers = [ ];
   };
 })

@@ -30,8 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       pycups
       typer
       validators
-    ]
-    ++ typer.optional-dependencies.all;
+    ];
 
   # Project has no tests
   doCheck = false;

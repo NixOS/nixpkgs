@@ -16,7 +16,7 @@
 , libXfixes
 , libpulseaudio
 , libva
-, ffmpeg_5
+, ffmpeg_4
 , libpng
 , libjpeg8
 , curl
@@ -57,7 +57,7 @@ stdenvNoCC.mkDerivation {
     alsa-lib
     libpulseaudio
     libva
-    ffmpeg_5
+    ffmpeg_4
     libpng
     libjpeg8
     curl

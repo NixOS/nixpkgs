@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "http://pydub.com";
     changelog = "https://github.com/jiaaro/pydub/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

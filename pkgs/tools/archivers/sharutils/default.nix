@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "https://www.gnu.org/software/sharutils/";
     license = licenses.gpl3Plus;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

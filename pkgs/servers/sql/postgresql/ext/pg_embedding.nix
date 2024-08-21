@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PostgreSQL extension implementing the HNSW algorithm for vector similarity search";
     homepage = "https://github.com/neondatabase/pg_embedding";
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
   };

@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Generate source code for Python classes from a JSON schema";
     homepage = "https://github.com/microsoft/jschema-to-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdecl";
-  version = "18.0";
+  version = "18.2";
 
   src = fetchFromGitHub {
     owner = "paul-j-lucas";
     repo = "cdecl";
     rev = "refs/tags/cdecl-${finalAttrs.version}";
-    hash = "sha256-w/x1cAldQh/aVZ9pjt5Vg8jDwCVtqTiKanXcDA6cpPU=";
+    hash = "sha256-6mj5M4SI0TG+N4exu3xdAqh8a98VOFtS1DbuRIYmW+Y=";
   };
 
   strictDeps = true;

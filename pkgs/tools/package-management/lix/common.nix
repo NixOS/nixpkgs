@@ -188,7 +188,6 @@ stdenv.mkDerivation {
   mesonFlags =
     [
       # LTO optimization
-      (lib.mesonBool "b_lto" (!stdenv.isDarwin))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
@@ -202,13 +201,6 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
     ];
-
-  # Needed for Meson to find Boost.
-  # https://github.com/NixOS/nixpkgs/issues/86131.
-  env = {
-    BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-  };
 
   postInstall =
     ''

@@ -9,7 +9,6 @@
 , gmp
 , libiconv
 , xz
-, gcc-unwrapped
 , readline
 , zlib
 , python3

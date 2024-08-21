@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/networktocode/ntc-templates";
     changelog = "https://github.com/networktocode/ntc-templates/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

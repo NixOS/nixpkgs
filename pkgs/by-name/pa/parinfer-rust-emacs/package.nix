@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   lib,
-  llvmPackages,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {

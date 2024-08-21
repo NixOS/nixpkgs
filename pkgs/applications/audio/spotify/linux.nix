@@ -14,14 +14,14 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.37.701.ge66eb7bc";
+  version = "1.2.42.290.g242057a2";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "76";
+  rev = "78";
 
   deps = [
     alsa-lib
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     name = "spotify-${version}-${rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    hash = "sha512-k7aw1QM3NCFkm0tXcHgYyeEBagGFpCL6JdWlFruJszPloiCy5vopOsD4PdqyiSEs0rSUP0rLxX2UBs3XuI5cUA==";
+    hash = "sha512-3kT7SA2Q1OxgDa5duivIiHaxcROBAFjDnTx6rw2ya6o5yOVygseS02zBgWg2Qd8jq0721KbYC83u9M+MWtWhhA==";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 makeShellWrapper squashfsTools ];

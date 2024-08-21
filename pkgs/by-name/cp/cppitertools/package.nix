@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace CMakeLists.txt \
         --replace-fail "  DIRECTORY ." "  DIRECTORY . EXCLUDE_FROM_ALL"
     ''
-    + lib.optionalString finalAttrs.doCheck ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
       # Required for tests.
       cp ${lib.getDev catch2}/include/catch2/catch.hpp test/
     '';

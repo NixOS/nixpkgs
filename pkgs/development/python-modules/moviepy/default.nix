@@ -16,7 +16,7 @@
   scipy,
   setuptools,
   tqdm,
-  youtube-dl,
+  yt-dlp,
 }:
 
 buildPythonPackage rec {
@@ -56,7 +56,7 @@ buildPythonPackage rec {
       scikit-image
       scikit-learn
       scipy
-      youtube-dl
+      yt-dlp
     ];
   };
 
@@ -94,6 +94,6 @@ buildPythonPackage rec {
     homepage = "https://zulko.github.io/moviepy/";
     changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

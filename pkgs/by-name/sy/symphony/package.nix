@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cmake
 , coin-utils
 , coinmp
 , gfortran

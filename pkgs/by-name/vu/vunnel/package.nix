@@ -18,10 +18,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "defusedxml"
     "ijson"
     "sqlalchemy"
   ];
-
 
   build-system = with python3.pkgs; [
     poetry-core

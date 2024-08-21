@@ -5,6 +5,7 @@
   fetchpatch,
   alsa-lib,
   libpulseaudio,
+  nix-update-script,
   testers,
   audioBackend ? "pulseaudio",
 }:
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       command = "flite --help";
       package = finalAttrs.finalPackage;
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {

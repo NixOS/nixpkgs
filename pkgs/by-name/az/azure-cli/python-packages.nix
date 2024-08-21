@@ -1,9 +1,7 @@
 {
-  lib,
   stdenv,
   python3,
   fetchPypi,
-  fetchpatch,
   src,
   version,
 }:
@@ -23,6 +21,7 @@ let
     });
 
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       inherit buildAzureCliPackage;
 
@@ -86,6 +85,8 @@ let
           "azure.cli.telemetry"
           "azure.cli.core"
         ];
+
+        meta.downloadPage = "https://github.com/Azure/azure-cli/tree/azure-cli-${version}/src/azure-cli-core/";
       };
 
       azure-cli-telemetry = buildAzureCliPackage {
@@ -106,56 +107,36 @@ let
           cd azure
           HOME=$TMPDIR pytest -k 'not test_create_telemetry_note_file_from_scratch'
         '';
+
+        meta.downloadPage = "https://github.com/Azure/azure-cli/blob/azure-cli-${version}/src/azure-cli-telemetry/";
       };
 
-      azure-keyvault-keys =
-        overrideAzureMgmtPackage super.azure-keyvault-keys "4.9.0b3" "tar.gz"
-          "sha256-qoseyf6WqBEG8vPc1hF17K46AWk8Ba8V9KRed4lOlGo=";
-      azure-mgmt-applicationinsights =
-        overrideAzureMgmtPackage super.azure-mgmt-applicationinsights "1.0.0" "zip"
-          "sha256-woeix9703hn5LAwxugKGf6xvW433G129qxkoi7RV/Fs=";
-      azure-mgmt-batch =
-        overrideAzureMgmtPackage super.azure-mgmt-batch "17.3.0" "tar.gz"
-          "sha256-/JSIGmrNuKlTPzcbb3stPq6heJ65VQFLJKkI1t/nWZE=";
+      # AttributeError: type object 'WorkspacesOperations' has no attribute 'begin_delete'
       azure-mgmt-batchai =
         overrideAzureMgmtPackage super.azure-mgmt-batchai "7.0.0b1" "zip"
           "sha256-mT6vvjWbq0RWQidugR229E8JeVEiobPD3XA/nDM3I6Y=";
-      azure-mgmt-botservice =
-        overrideAzureMgmtPackage super.azure-mgmt-botservice "2.0.0b3" "zip"
-          "sha256-XZGQOeMw8usyQ1tl8j57fZ3uqLshomHY9jO/rbpQOvM=";
+
+      # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
         overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
           "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
-      azure-mgmt-compute =
-        overrideAzureMgmtPackage super.azure-mgmt-compute "31.0.0" "tar.gz"
-          "sha256-WlscT8GhnssCKhLe0b6LGxVfaXnQP7nvwEZC9gZkS78=";
-      azure-mgmt-core =
-        overrideAzureMgmtPackage super.azure-mgmt-core "1.3.2" "zip"
-          "sha256-B/Sv6COlXXBLBI1h7f3BMYwFHtWfJEAyEmNQvpXp1QE=";
+
+      # ImportError: cannot import name 'SqlDedicatedGatewayServiceResourceCreateUpdateProperties' from 'azure.mgmt.cosmosdb.models'
       azure-mgmt-cosmosdb =
         overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "9.5.1" "tar.gz"
           "sha256-TlXTlz8RzwLPeoBVruhmFSM9fL47siegfBdrrIvH7wI=";
-      azure-mgmt-datalake-store =
-        overrideAzureMgmtPackage super.azure-mgmt-datalake-store "0.5.0" "zip"
-          "sha256-k3bTVJVmHRn4rMVgT2ewvFlJOxg1u8SA+aGVL5ABekw=";
+
+      # ValueError: The operation 'azure.mgmt.devtestlabs.operations#VirtualMachinesOperations.delete' is invalid.
       azure-mgmt-devtestlabs =
         overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
           "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=";
-      azure-mgmt-dns =
-        overrideAzureMgmtPackage super.azure-mgmt-dns "8.0.0" "zip"
-          "sha256-QHwtrLM1E/++nKS+Wt216dS64Mt++mE8P31THve/jeg=";
+
+      # ImportError: cannot import name 'ResourceSku' from 'azure.mgmt.eventgrid.models'
       azure-mgmt-eventgrid =
         overrideAzureMgmtPackage super.azure-mgmt-eventgrid "10.2.0b2" "zip"
           "sha256-QcHY1wCwQyVOEdUi06/wEa4dqJH5Ccd33gJ1Sju0qZA=";
-      azure-mgmt-eventhub =
-        overrideAzureMgmtPackage super.azure-mgmt-eventhub "10.1.0" "zip"
-          "sha256-MZqhSBkwypvEefhoEWEPsBUFidWYD7qAX6edcBDDSSA=";
-      azure-mgmt-extendedlocation =
-        overrideAzureMgmtPackage super.azure-mgmt-extendedlocation "1.0.0b2" "zip"
-          "sha256-mjfH35T81JQ97jVgElWmZ8P5MwXVxZQv/QJKNLS3T8A=";
-      azure-mgmt-iotcentral =
-        overrideAzureMgmtPackage super.azure-mgmt-iotcentral "10.0.0b1" "zip"
-          "sha256-1CiZuTXYhIb74eGQZUJHHzovYNnnVd3Ydu1UCy2Bu00=";
+
+      # ValueError: The operation 'azure.mgmt.kusto.operations#ClustersOperations.delete' is invalid.
       azure-mgmt-kusto =
         (overrideAzureMgmtPackage super.azure-mgmt-kusto "0.3.0" "zip"
           "sha256-nri3eB/UQQ7p4gfNDDmDuvnlhBS1tKGISdCYVuNrrN4="
@@ -166,75 +147,41 @@ let
               self.msrestazure
             ];
           });
-      azure-mgmt-maps =
-        overrideAzureMgmtPackage super.azure-mgmt-maps "2.0.0" "zip"
-          "sha256-OE4X92potwCk+YhHiUXDqXIXEcBAByWv38tjz4ToXw4=";
+
+      # ValueError: The operation 'azure.mgmt.media.operations#MediaservicesOperations.create_or_update' is invalid.
       azure-mgmt-media =
         overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
           "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
-      azure-mgmt-monitor =
-        overrideAzureMgmtPackage super.azure-mgmt-monitor "5.0.0" "zip"
-          "sha256-eL9KJowxTF7hZJQQQCNJZ7l+rKPFM8wP5vEigt3ZFGE=";
-      azure-mgmt-netapp =
-        overrideAzureMgmtPackage super.azure-mgmt-netapp "10.1.0" "zip"
-          "sha256-eJiWTOCk2C79Jotku9bKlu3vU6H8004hWrX+h76MjQM=";
-      azure-mgmt-policyinsights =
-        overrideAzureMgmtPackage super.azure-mgmt-policyinsights "1.1.0b4" "zip"
-          "sha256-aB16xyrhNYHJeitvdCeV+kik21B2LC+5/OSDQIGwTpI=";
-      azure-mgmt-privatedns =
-        overrideAzureMgmtPackage super.azure-mgmt-privatedns "1.0.0" "zip"
-          "sha256-tg8W5D97KRWCxfV7rhsIMJbYMD6dmVjiwpInpVzCfEU=";
+
+      # AttributeError: module 'azure.mgmt.rdbms.postgresql_flexibleservers.operations' has no attribute 'BackupsOperations'
       azure-mgmt-rdbms =
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b16" "tar.gz"
           "sha256-HDktzv8MOs5VRQArbS3waMhjbwVgZMmvch7PXen5DjE=";
-      azure-mgmt-recoveryservicesbackup =
-        overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "9.1.0" "tar.gz"
-          "sha256-Hp/UBsDJ7iYn9aNx8BL4dzQvf8bzOyVk/NFNbwZjzQ8=";
-      azure-mgmt-redis =
-        overrideAzureMgmtPackage super.azure-mgmt-redis "14.3.0" "tar.gz"
-          "sha256-eoMbY4oNzYXkn3uFUhxecJQD+BxYkGTbWhAWSgAoLyA=";
+
+      # ModuleNotFoundError: No module named 'azure.mgmt.resource.deploymentstacks'
       azure-mgmt-resource =
         overrideAzureMgmtPackage super.azure-mgmt-resource "23.1.1" "tar.gz"
           "sha256-ILawBrVE/bGWB/P2o4EQViXgu2D78wNvOYhcRkbTND4=";
-      azure-mgmt-search =
-        overrideAzureMgmtPackage super.azure-mgmt-search "9.0.0" "zip"
-          "sha256-Gc+qoTa1EE4/YmJvUSqVG+zZ50wfohvWOe/fLJ/vgb0=";
-      azure-mgmt-security =
-        overrideAzureMgmtPackage super.azure-mgmt-security "6.0.0" "tar.gz"
-          "sha256-zq/BhpiZBnEQvYMMXMmLybjzLY6oQMofaTsaX1Kl+LA=";
-      azure-mgmt-servicefabric =
-        overrideAzureMgmtPackage super.azure-mgmt-servicefabric "2.1.0" "tar.gz"
-          "sha256-oIQzBJVUQ2yQhEvIqWgg6INplITm/8mQMv0lcfjF99Y=";
-      azure-mgmt-servicelinker =
-        overrideAzureMgmtPackage super.azure-mgmt-servicelinker "1.2.0b2" "tar.gz"
-          "sha256-PpEFMM8ri9OgAa79dGhvPKy5YFfDZZustBUDieQrtZU=";
+
+      # ImportError: cannot import name 'Replica' from 'azure.mgmt.signalr.models'
       azure-mgmt-signalr =
         overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b1" "tar.gz"
           "sha256-oK2ceBEoQ7gAeG6mye+x8HPzQU9bUNRPVJtRW2GL4xg=";
+
+      # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
       azure-mgmt-sql =
         overrideAzureMgmtPackage super.azure-mgmt-sql "4.0.0b17" "tar.gz"
           "sha256-i9VNbYJ3TgzURbtYYrXw+ez4ubK7BH39/EIL5kqb9Xg=";
+
+      # ValueError: The operation 'azure.mgmt.sqlvirtualmachine.operations#SqlVirtualMachinesOperations.begin_create_or_update' is invalid.
       azure-mgmt-sqlvirtualmachine =
         overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "1.0.0b5" "zip"
           "sha256-ZFgJflgynRSxo+B+Vso4eX1JheWlDQjfJ9QmupXypMc=";
-      azure-mgmt-storage =
-        overrideAzureMgmtPackage super.azure-mgmt-storage "21.2.0" "tar.gz"
-          "sha256-KHyYQLAb6TGBnUA9p+1SvWL9B3sFKd1HDm28T+3ksg0=";
+
+      # ModuleNotFoundError: No module named 'azure.mgmt.synapse.operations._kusto_pool_attached_database_configurations_operations'
       azure-mgmt-synapse =
         overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
           "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
-      azure-mgmt-trafficmanager =
-        overrideAzureMgmtPackage super.azure-mgmt-trafficmanager "1.0.0" "zip"
-          "sha256-R0F2HoA0bE7dTLPycTaOqYBj+ATQFeJFwv4EjtK1lqg=";
-      azure-storage-common =
-        overrideAzureMgmtPackage super.azure-storage-common "1.4.2" "tar.gz"
-          "sha256-Tsh8dTfUV+yVJS4ORkd+LBzPM3dP/v0F2FRGgssK5AE=";
-      azure-synapse-accesscontrol =
-        overrideAzureMgmtPackage super.azure-synapse-accesscontrol "0.5.0" "zip"
-          "sha256-g14ySiByqPgkJGRH8EnIRJO9Q6H2usS5FOeMCQiUuwQ=";
-      azure-synapse-spark =
-        overrideAzureMgmtPackage super.azure-synapse-spark "0.2.0" "zip"
-          "sha256-OQ5brhweEIrtN2iP4I5NacdC9t3YUiGIVhhqSs3FMuI=";
     };
   };
 in

@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, ocaml
 , buildDunePackage
 }:
 

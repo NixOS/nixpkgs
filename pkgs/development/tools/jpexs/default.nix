@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jpexs";
-  version = "18.4.1";
+  version = "20.1.0";
 
   src = fetchzip {
     url = "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version${version}/ffdec_${version}.zip";
-    sha256 = "sha256-aaEL3xJZkFw78zo3IyauWJM9kOo0rJTUSKmWsv9xQZ8=";
+    hash = "sha256-ytGtylhyNSdKfuPclZRJasOb/cskW65hMd4NM/q+/Ko=";
     stripRoot = false;
   };
 

@@ -1,8 +1,8 @@
 {
+  lib,
   mkDerivation,
   libutil,
   libxo,
-  ...
 }:
 mkDerivation {
   path = "sbin/mount";
@@ -10,4 +10,6 @@ mkDerivation {
     libutil
     libxo
   ];
+
+  meta.platforms = lib.platforms.freebsd;
 }

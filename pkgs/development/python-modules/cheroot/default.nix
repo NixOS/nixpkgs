@@ -100,6 +100,6 @@ buildPythonPackage rec {
     mainProgram = "cheroot";
     homepage = "https://github.com/cherrypy/cheroot";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

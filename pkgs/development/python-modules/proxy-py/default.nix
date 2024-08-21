@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.4";
+  version = "2.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QWwIbNt2MtRfQaX7uZJzYmS++2MH+gTjWO0aEKYSETI=";
+    hash = "sha256-pn4YYGntG9C8mhECb7PYgN5wwicdlPcZu6Xn2M3iIKA=";
   };
 
   postPatch = ''

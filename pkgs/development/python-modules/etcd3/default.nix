@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Python client for the etcd API v3";
     homepage = "https://github.com/kragniz/python-etcd3";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

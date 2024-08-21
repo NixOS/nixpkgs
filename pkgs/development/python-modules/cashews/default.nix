@@ -9,7 +9,7 @@
   lib,
   pytest,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-rerunfailures,
   pytestCheckHook,
   redis,
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     hypothesis
     pytest
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-rerunfailures
     pytestCheckHook
   ];

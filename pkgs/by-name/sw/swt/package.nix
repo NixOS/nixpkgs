@@ -1,7 +1,6 @@
 {
   atk,
   fetchzip,
-  glib,
   gtk2,
   jdk,
   lib,

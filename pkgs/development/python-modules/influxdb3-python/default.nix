@@ -4,7 +4,6 @@
   certifi,
   fetchFromGitHub,
   pyarrow,
-  pytestCheckHook,
   python-dateutil,
   pythonOlder,
   reactivex,

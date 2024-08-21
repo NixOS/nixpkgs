@@ -7,12 +7,14 @@
 , tzdata
 , unicode-emoji
 , unicode-character-database
-, darwin
 , cmake
+, dav1d
 , ninja
 , pkg-config
+, libaom
 , libavif
 , libxcrypt
+, libyuv
 , python3
 , qt6Packages
 , woff2
@@ -119,9 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = with qt6Packages; [
+    dav1d
     ffmpeg
+    libaom
     libavif
     libxcrypt
+    libyuv
     qtbase
     qtmultimedia
     skia
@@ -154,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
-  # On linux we end up wraping some non-Qt apps, like headless-browser.
+  # On linux we end up wrapping some non-Qt apps, like headless-browser.
   dontWrapQtApps = stdenv.isDarwin;
 
   passthru.tests = {

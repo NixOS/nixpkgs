@@ -4,9 +4,7 @@
   fetchPypi,
   fonttools,
   pytestCheckHook,
-  python,
   rustPlatform,
-  unzip,
 }:
 
 buildPythonPackage rec {

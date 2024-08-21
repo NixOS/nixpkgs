@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Python driver for MongoDB";
     homepage = "https://github.com/mongodb/mongo-python-driver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

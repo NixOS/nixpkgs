@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-UAKEyJFdgwJ4Jz3lTG6vmxEkIVLSikWOEBjYV6o72nQ=";
+    hash = "sha256-UAKEyJFdgwJ4Jz3lTG6vmxEkIVLSikWOEBjYV6o72nQ=";
     fetchSubmodules = true;
   };
 

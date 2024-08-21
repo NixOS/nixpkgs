@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     mainProgram = "hsts";
     homepage = "https://gitlab.com/rockdaboot/libhsts";
     license = with licenses; [ mit bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -16,7 +16,7 @@ mkDerivation rec {
     owner = "web-eid";
     repo = "web-eid-app";
     rev = "v${version}";
-    sha256 = "sha256-CaMf7cRhZ8K6YAUG38B+ijNOKaOmaACqNabNfHZGT68=";
+    hash = "sha256-CaMf7cRhZ8K6YAUG38B+ijNOKaOmaACqNabNfHZGT68=";
     fetchSubmodules = true;
   };
 

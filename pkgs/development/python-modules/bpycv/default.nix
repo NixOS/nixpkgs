@@ -4,16 +4,13 @@
   beautifulsoup4,
   blender,
   boxx,
-  bpycv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchPypi,
   minexr,
   opencv4,
-  python3Packages,
   requests,
   runCommand,
-  writeText,
   zcs,
 }:
 

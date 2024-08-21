@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.libtom.net/LibTomCrypt/";
     changelog = "https://github.com/libtom/libtomcrypt/raw/v${version}/changes";
     license = with licenses; [ publicDomain wtfpl ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

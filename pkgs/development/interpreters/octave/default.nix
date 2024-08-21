@@ -93,12 +93,12 @@ let
   # To avoid confusion later in passthru
   allPkgs = pkgs;
 in stdenv.mkDerivation (finalAttrs: {
-    version = "8.4.0";
+    version = "9.2.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-      sha256 = "sha256-azjdl1FnhCSus6nWZkMrHzeOs5caISkKkM09NRGdVq0=";
+      sha256 = "sha256-BjZVSwWZaZfkMcqtRCLAA4bS18aJAEcnAP7PX/63yZE=";
     };
 
     buildInputs = [
@@ -204,7 +204,7 @@ in stdenv.mkDerivation (finalAttrs: {
       inherit enableQt enableReadline enableJava;
       buildEnv = callPackage ./build-env.nix {
         octave = finalAttrs.finalPackage;
-        inherit octavePackages wrapOctave;
+        inherit wrapOctave;
         inherit (octavePackages) computeRequiredOctavePackages;
       };
       withPackages = import ./with-packages.nix { inherit buildEnv octavePackages; };

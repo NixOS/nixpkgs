@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     in "https://github.com/rncbc/qtractor/blob/qtractor_${version'}/ChangeLog";
     license = licenses.gpl2Plus;
     mainProgram = "qtractor";
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

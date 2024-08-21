@@ -3,8 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+
+  # build-system
   setuptools,
-  # propagated build inputs
+
+  # dependencies
   filelock,
   huggingface-hub,
   numpy,
@@ -16,7 +19,8 @@
   tokenizers,
   safetensors,
   tqdm,
-  # optional dependencies
+
+  # optional-dependencies
   diffusers,
   scikit-learn,
   tensorflow,
@@ -55,7 +59,7 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.42.4";
+  version = "4.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -64,7 +68,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v5p63D8j1CNx3dCPa121auny5StEUpNK9IkPSugzAjg=";
+    hash = "sha256-i3KKfkYvKRYrs/kiwBJdyFzMiXKwyBEeUuZcHszip3k=";
   };
 
   build-system = [ setuptools ];
@@ -82,7 +86,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies =
+  optional-dependencies =
     let
       audio = [
         librosa

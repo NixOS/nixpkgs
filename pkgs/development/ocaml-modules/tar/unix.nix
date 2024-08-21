@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , tar
 , cstruct-lwt
 , lwt

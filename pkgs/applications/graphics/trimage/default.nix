@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
 
 , python3
 , installShellFiles

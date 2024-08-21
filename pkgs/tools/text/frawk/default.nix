@@ -6,7 +6,6 @@
 , zlib
 , features ? [ "default" ]
 , llvmPackages_12
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,10 +14,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
+    hash = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
   };
 
-  cargoSha256 = "sha256-Xk+iH90Nb2koCdGmVSiRl8Nq26LlFdJBuKmvcbgnkgs=";
+  cargoHash = "sha256-Xk+iH90Nb2koCdGmVSiRl8Nq26LlFdJBuKmvcbgnkgs=";
 
   buildInputs = [ libxml2 ncurses zlib ];
 

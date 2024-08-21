@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.2.5";
+  version = "3.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PUPk92wugtIZWXP8vq8bJNxqTDhDENKdNhW1kNEcL3E=";
+    hash = "sha256-fA5It0mr6sjAQECGPOsS//lZJ9OqKelfhdzV770sMHQ=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/ufo2ft";
     changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

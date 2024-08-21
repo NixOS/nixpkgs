@@ -44,6 +44,6 @@ buildPythonPackage rec {
     mainProgram = "nltk";
     homepage = "http://nltk.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

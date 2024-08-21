@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Logging utilities";
     homepage = "https://bitbucket.org/vinay.sajip/logutils/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

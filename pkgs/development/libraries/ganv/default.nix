@@ -1,27 +1,51 @@
-{ lib, stdenv, fetchgit, graphviz, gtk2, gtkmm2, pkg-config, python3, wafHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  graphviz,
+  gtk2,
+  gtkmm2,
+  meson,
+  ninja,
+  cmake,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ganv";
-  version = "unstable-2019-12-30";
+  version = "1.8.2-unstable-2024-07-04";
 
-  src = fetchgit {
-    url = "https://gitlab.com/drobilla/${pname}.git";
-    fetchSubmodules = true;
-    rev = "90bd022f8909f92cc5290fdcfc76c626749e1186";
-    sha256 = "01znnalirbqxpz62fbw2c14c8xn117jc92xv6dhb3hln92k9x37f";
+  src = fetchFromGitLab {
+    owner = "drobilla";
+    repo = "ganv";
+    rev = "4d2e04dbcabd0b5d715ea7eeeb909f4088055763";
+    hash = "sha256-DzODtYI8uwP65ck8Q90QEnjQbvPobepeQVgNZZjF+jk=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook python3 gtk2 ];
-  buildInputs = [ graphviz gtkmm2 ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    cmake
+  ];
+
+  buildInputs = [
+    gtk2
+    gtkmm2
+    graphviz
+  ];
 
   strictDeps = true;
 
-  meta = with lib; {
+  # libintl detection does not work even if provided
+  mesonAutoFeatures = "disabled";
+
+  meta = {
     description = "Interactive Gtk canvas widget for graph-based interfaces";
     mainProgram = "ganv_bench";
     homepage = "http://drobilla.net";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ t4ccer ];
+    platforms = lib.platforms.linux;
   };
-  }
+}

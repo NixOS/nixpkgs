@@ -14,7 +14,7 @@ in
 {
   options.services.deconz = {
 
-    enable = lib.mkEnableOption "deCONZ, a Zigbee gateway for use with ConBee hardware (https://phoscon.de/en/conbee2)";
+    enable = lib.mkEnableOption "deCONZ, a Zigbee gateway for use with ConBee/RaspBee hardware (https://phoscon.de/)";
 
     package = lib.mkOption {
       type = lib.types.package;

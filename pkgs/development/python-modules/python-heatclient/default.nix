@@ -5,6 +5,7 @@
   fetchPypi,
   iso8601,
   keystoneauth1,
+  openstackdocstheme,
   osc-lib,
   oslo-i18n,
   oslo-serialization,
@@ -16,6 +17,8 @@
   pyyaml,
   requests,
   requests-mock,
+  setuptools,
+  sphinxHook,
   stestr,
   testscenarios,
 }:
@@ -23,7 +26,7 @@
 buildPythonPackage rec {
   pname = "python-heatclient";
   version = "3.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -32,7 +35,15 @@ buildPythonPackage rec {
     hash = "sha256-B1F40HYHFF91mkxwySR/kqCvlwLLtBgqwUvw2byOc9g=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    openstackdocstheme
+    setuptools
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
     cliff
     iso8601
     keystoneauth1
@@ -54,10 +65,14 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     stestr run -e <(echo "
       heatclient.tests.unit.test_common_http.HttpClientTest.test_get_system_ca_file
       heatclient.tests.unit.test_deployment_utils.TempURLSignalTest.test_create_temp_url
     ")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "heatclient" ];

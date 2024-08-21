@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   pythonOlder,
-  pythonAtLeast,
   ninja,
   ignite,
   numpy,

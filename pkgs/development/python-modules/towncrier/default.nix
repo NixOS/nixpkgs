@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "23.11.0";
+  version = "24.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E5N8JH4/iuIKxE2JXPX5amCtRs/cwWcXWVMNeDfZ7l0=";
+    hash = "sha256-V6BX+u2ryt8aYvb5utcmrlZsHzGkETON24MWmT9YOz0=";
   };
 
   postPatch = ''
@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/towncrier/";
     changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

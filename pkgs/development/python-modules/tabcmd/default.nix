@@ -10,7 +10,7 @@
   pyinstaller-versionfile,
   pytest-order,
   pytestCheckHook,
-  python3,
+  python,
   pythonOlder,
   requests,
   setuptools,
@@ -79,7 +79,7 @@ buildPythonPackage rec {
     cp -r build/lib/tabcmd/__main__.py $out/bin/
 
     # Create a 'tabcmd' script with python3 shebang
-    echo "#!${python3}/bin/python3" > $out/bin/tabcmd
+    echo "#!${python.interpreter}" > $out/bin/tabcmd
 
     # Append __main__.py contents
     cat $out/bin/__main__.py >> $out/bin/tabcmd
@@ -91,11 +91,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tabcmd" ];
 
   meta = with lib; {
+    broken = true;
     description = "Command line client for working with Tableau Server";
     homepage = "https://github.com/tableau/tabcmd";
     changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tabcmd";
   };
 }

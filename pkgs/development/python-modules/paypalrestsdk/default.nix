@@ -42,6 +42,6 @@ buildPythonPackage rec {
       fullName = "PayPal SDK License";
       url = "https://github.com/paypal/PayPal-Python-SDK/blob/master/LICENSE";
     };
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

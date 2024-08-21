@@ -60,11 +60,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.48.2";
+  version = "1.48.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    hash = "sha256-PZBxzGKWTd8OMfXQbwYD4XVouMlRFK4ndwNYGt1ahqE=";
+    hash = "sha256-5lxJbgZjGkl3x5XA8khZjDnDQOVjXXz1TsMHKsyZiZU=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't install test binary
     sed -i tests/tst_plugin.pro \
       -e '/TARGET = tst_plugin/a INSTALLS -= target'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i accounts-qml-module.pro -e '/tests/d'
   '';
 

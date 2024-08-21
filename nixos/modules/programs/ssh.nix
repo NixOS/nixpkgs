@@ -293,9 +293,9 @@ in
 
         # Generated options from other settings
         Host *
-        AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
 
+        ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}
         ${lib.optionalString cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"}
         ${lib.optionalString (cfg.forwardX11 != null) "ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}"}
 

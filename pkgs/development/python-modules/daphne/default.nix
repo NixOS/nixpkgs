@@ -58,7 +58,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/django/daphne";
     changelog = "https://github.com/django/daphne/blob/${version}/CHANGELOG.txt";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "daphne";
   };
 }

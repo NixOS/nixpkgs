@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/botservice/azure-mgmt-botservice";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-botservice_${version}/sdk/botservice/azure-mgmt-botservice";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
 , pkg-config, which, buildPackages
+, testers
 # for `.pkgs` attribute
 , callPackage
 # Updater dependencies
@@ -44,7 +45,13 @@ let
       (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = lib.optionals (!enableNpm) [ "--without-npm" ];
-  self = stdenv.mkDerivation {
+
+  package = stdenv.mkDerivation (finalAttrs:
+  let
+    /** the final package fixed point, after potential overrides */
+    self = finalAttrs.finalPackage;
+  in
+  {
     inherit pname version;
 
     src = fetchurl {
@@ -60,8 +67,6 @@ let
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
-    CC_host = "cc";
-    CXX_host = "c++";
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
 
     # NB: technically, we do not need bash in build inputs since all scripts are
@@ -106,6 +111,11 @@ let
 
     dontDisableStatic = true;
 
+    configureScript = writeScript "nodejs-configure" ''
+      export CC_host="$CC_FOR_BUILD" CXX_host="$CXX_FOR_BUILD"
+      exec ${python.executable} configure.py "$@"
+    '';
+
     enableParallelBuilding = true;
 
     # Don't allow enabling content addressed conversion as `nodejs`
@@ -128,7 +138,11 @@ let
 
     inherit patches;
 
-    doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
+    __darwinAllowLocalNetworking = true; # for tests
+
+    # TODO: what about tests when cross-compiling?
+    # Note that currently stdenv does not run check phase if build ≠ host.
+    doCheck = true;
 
     # Some dependencies required for tools/doc/node_modules (and therefore
     # test-addons, jstest and others) target are not included in the tarball.
@@ -138,6 +152,12 @@ let
       "build-node-api-tests"
       "tooltest"
       "cctest"
+    ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
+      # There are some test failures on macOS before v20 that are not worth the
+      # time to debug for a version that would be eventually removed in less
+      # than a year (Node.js 18 will be EOL at 2025-04-30). Note that these
+      # failures are specific to Nix sandbox on macOS and should not affect
+      # actual functionality.
     ] ++ lib.optionals (!stdenv.isDarwin) [
       # TODO: JS test suite is too flaky on Darwin; revisit at a later date.
       "test-ci-js"
@@ -146,9 +166,48 @@ let
     checkFlags = [
       # Do not create __pycache__ when running tests.
       "PYTHONDONTWRITEBYTECODE=1"
+    ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
       "FLAKY_TESTS=skip"
       # Skip some tests that are not passing in this context
-      "CI_SKIP_TESTS=test-setproctitle,test-tls-cli-max-version-1.3,test-tls-client-auth,test-child-process-exec-env,test-fs-write-stream-eagain,test-tls-sni-option,test-https-foafssl,test-child-process-uid-gid,test-process-euid-egid,test-process-initgroups,test-process-uid-gid,test-process-setgroups"
+      "CI_SKIP_TESTS=${lib.concatStringsSep "," ([
+        "test-child-process-exec-env"
+        "test-child-process-uid-gid"
+        "test-fs-write-stream-eagain"
+        "test-https-foafssl"
+        "test-process-euid-egid"
+        "test-process-initgroups"
+        "test-process-setgroups"
+        "test-process-uid-gid"
+        "test-setproctitle"
+        "test-tls-cli-max-version-1.3"
+        "test-tls-client-auth"
+        "test-tls-sni-option"
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Disable tests that don’t work under macOS sandbox.
+        "test-macos-app-sandbox"
+        "test-os"
+        "test-os-process-priority"
+        # This is a bit weird, but for some reason fs watch tests fail with
+        # sandbox.
+        "test-fs-promises-watch"
+        "test-fs-watch"
+        "test-fs-watch-encoding"
+        "test-fs-watch-non-recursive"
+        "test-fs-watch-recursive-add-file"
+        "test-fs-watch-recursive-add-file-to-existing-subfolder"
+        "test-fs-watch-recursive-add-file-to-new-folder"
+        "test-fs-watch-recursive-add-file-with-url"
+        "test-fs-watch-recursive-add-folder"
+        "test-fs-watch-recursive-assert-leaks"
+        "test-fs-watch-recursive-promise"
+        "test-fs-watch-recursive-symlink"
+        "test-fs-watch-recursive-sync-write"
+        "test-fs-watch-recursive-update-file"
+        "test-fs-watchfile"
+        "test-runner-run"
+        "test-runner-watch-mode"
+        "test-watch-mode-files_watcher"
+      ])}"
     ];
 
     postInstall = ''
@@ -209,6 +268,13 @@ let
       EOF
     '';
 
+    passthru.tests = {
+      version = testers.testVersion {
+        package = self;
+        version = "v${version}";
+      };
+    };
+
     passthru.updateScript = import ./update.nix {
       inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
       inherit lib;
@@ -220,7 +286,7 @@ let
       homepage = "https://nodejs.org";
       changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu aduh95 ];
+      maintainers = with maintainers; [ aduh95 ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
@@ -235,5 +301,5 @@ let
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version
-  };
-in self
+  });
+in package

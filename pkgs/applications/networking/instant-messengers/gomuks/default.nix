@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, substituteAll
 , buildGoModule
 , fetchFromGitHub
 , makeDesktopItem
@@ -13,16 +12,16 @@
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gLyjqmGZudj8PmsYUGXHOjetZzi6u5CFI7Y50y2XAzk=";
+    sha256 = "sha256-bDJXo8d9K5UO599HDaABpfwc9/dJJy+9d24KMVZHyvI=";
   };
 
-  vendorHash = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
+  vendorHash = "sha256-0my58bVKLWbdTwhAnXMruNjujd07NXFn4bkRe1cUYpE=";
 
   doCheck = false;
 

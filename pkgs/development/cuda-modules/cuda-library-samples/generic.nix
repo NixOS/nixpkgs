@@ -3,7 +3,7 @@
   backendStdenv,
   fetchFromGitHub,
   cmake,
-  addOpenGLRunpath,
+  addDriverRunpath,
   cudatoolkit,
   cutensor,
 }:
@@ -20,12 +20,12 @@ let
     version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
     nativeBuildInputs = [
       cmake
-      addOpenGLRunpath
+      addDriverRunpath
     ];
     buildInputs = [ cudatoolkit ];
     postFixup = ''
       for exe in $out/bin/*; do
-        addOpenGLRunpath $exe
+        addDriverRunpath $exe
       done
     '';
     meta = {

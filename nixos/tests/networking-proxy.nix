@@ -12,7 +12,7 @@ let default-config = {
 in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "networking-proxy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [  ];
+    maintainers = [ ];
   };
 
   nodes = {

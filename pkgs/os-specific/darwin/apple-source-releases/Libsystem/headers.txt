@@ -1,7 +1,9 @@
 AssertMacros.h
 Availability.h
 AvailabilityInternal.h
+AvailabilityInternalLegacy.h
 AvailabilityMacros.h
+AvailabilityVersions.h
 Block.h
 Block_private.h
 CommonCrypto/CommonBaseXX.h
@@ -1050,8 +1052,7 @@ os/overflow.h
 os/semaphore_private.h
 os/trace.h
 os/tsd.h
-os/voucher_activity_private.h
-os/voucher_private.h
+os_availability.modulemap
 osfmk/UserNotification/KUNCUserNotifications.h
 osfmk/UserNotification/UNDReply.defs
 osfmk/UserNotification/UNDRequest.defs

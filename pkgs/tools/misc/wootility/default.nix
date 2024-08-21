@@ -1,20 +1,20 @@
 { appimageTools
 , fetchurl
 , lib
-, xorg
-, udev
-, wooting-udev-rules
 , makeWrapper
 }:
 
-appimageTools.wrapType2 rec {
+let
   pname = "wootility";
-  version = "4.6.20";
-
+  version = "4.6.21";
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
-    sha256 = "sha256-JodmF3TThPpXXx1eOnYmYAJ4x5Ylcf35bw3R++5/Buk=";
+    sha256 = "sha256-ockTQLZWbYvsLzv+D0exD5W/yMaIdse4/JQshbkVzAU=";
   };
+in
+
+appimageTools.wrapType2 {
+  inherit pname version src;
 
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
@@ -34,20 +34,16 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiPkgs = extraPkgs;
-  extraPkgs =
-    pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([
-      udev
-      wooting-udev-rules
-      xorg.libxkbfile
-    ]);
+  extraPkgs = pkgs: with pkgs; ([
+    xorg.libxkbfile
+  ]);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wooting.io/wootility";
     description = "Customization and management software for Wooting keyboards";
-    platforms = [ "x86_64-linux" ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ davidtwco sodiboo ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ davidtwco sodiboo ];
     mainProgram = "wootility";
   };
 }

@@ -8,7 +8,6 @@
   pythonOlder,
   requests,
   setuptools,
-  urllib3,
 }:
 
 buildPythonPackage rec {

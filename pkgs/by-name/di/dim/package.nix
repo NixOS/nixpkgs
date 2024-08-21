@@ -6,7 +6,7 @@
   buildNpmPackage,
   darwin,
   makeWrapper,
-  ffmpeg_5,
+  ffmpeg,
   git,
   pkg-config,
   sqlite,
@@ -48,6 +48,10 @@ rustPlatform.buildRustPackage rec {
     # the working dir and PATH instead.
     ./relative-paths.diff
 
+    # Bump the first‐party nightfall dependency to the latest Git
+    # revision for FFmpeg >= 6 support.
+    ./bump-nightfall.patch
+
     # Upstream has some unused imports that prevent things from compiling...
     # Remove for next release.
     (fetchpatch {
@@ -56,6 +60,10 @@ rustPlatform.buildRustPackage rec {
       hash = "sha256-Gk+RHWtCKN7McfFB3siIOOhwi3+k17MCQr4Ya4RCKjc=";
     })
   ];
+
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   postConfigure = ''
     ln -ns $frontend ui/build
@@ -82,7 +90,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "mp4-0.8.2" = "sha256-OtVRtOTU/yoxxoRukpUghpfiEgkKoJZNflMQ3L26Cno=";
-      "nightfall-0.3.12-rc4" = "sha256-DtSXdIDg7XBgzEYzHdzjrHdM1ESKTQdgByeerH5TWwU=";
+      "nightfall-0.3.12-rc4" = "sha256-AbSuLe3ySOla3NB+mlfHRHqHuMqQbrThAaUZ747GErE=";
     };
   };
 
@@ -101,7 +109,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/dim \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg_5 ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   meta = {

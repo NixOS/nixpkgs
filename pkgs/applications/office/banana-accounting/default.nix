@@ -1,6 +1,5 @@
 { autoPatchelfHook
 , cairo
-, config
 , e2fsprogs
 , fetchurl
 , gmp

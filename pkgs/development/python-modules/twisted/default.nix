@@ -73,6 +73,12 @@ buildPythonPackage rec {
       url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
+
+    # https://github.com/twisted/twisted/security/advisories/GHSA-cf56-g6w6-pqq2
+    ./CVE-2024-41671.patch
+
+    # https://github.com/twisted/twisted/security/advisories/GHSA-c8m8-j448-xjx7
+    ./CVE-2024-41810.patch
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -226,6 +232,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

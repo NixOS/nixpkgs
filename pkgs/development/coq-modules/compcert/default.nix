@@ -1,5 +1,5 @@
 { lib, mkCoqDerivation
-, coq, flocq, compcert
+, coq, flocq
 , ocamlPackages, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
 , version ? null
@@ -66,8 +66,8 @@ compcert = mkCoqDerivation {
     -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
     -toolprefix ${tools}/bin/ \
     -use-external-Flocq \
-    ${target}
-  '';
+    ${target} \
+  '';  # don't remove the \ above, the command gets appended in override below
 
   installTargets = "documentation install";
   installFlags = []; # trust ./configure
@@ -100,8 +100,8 @@ compcert = mkCoqDerivation {
     platforms   = builtins.attrNames targets;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
-}; in
-compcert.overrideAttrs (o:
+};
+patched_compcert = compcert.overrideAttrs (o:
   {
     patches = with lib.versions; lib.switch [ coq.version o.version ] [
       { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
@@ -210,5 +210,8 @@ compcert.overrideAttrs (o:
         ];
       }
     ] [];
-  }
+  }); in
+patched_compcert.overrideAttrs (o:
+  lib.optionalAttrs (coq.version != null && coq.version == "dev")
+  { configurePhase = "${o.configurePhase} -ignore-ocaml-version -ignore-coq-version"; }
 )

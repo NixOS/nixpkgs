@@ -94,7 +94,7 @@ let
       mainProgram = "nomad-autoscaler";
       homepage = "https://github.com/hashicorp/nomad-autoscaler";
       license = licenses.mpl20;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 

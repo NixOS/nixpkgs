@@ -5,13 +5,12 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tplink-omada-client";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit version;
-    hash = "sha256-P7kb8gzPjRwl6KpKbh/k7QqjGU6m+HVBbMCuoabG+5M=";
+    hash = "sha256-2YGUm37i3gAKXLygtjLYVB+kGk0+84pY70CUyU3BzbY=";
   };
 
   build-system = [ hatchling ];

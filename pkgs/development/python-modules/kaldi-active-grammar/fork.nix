@@ -7,7 +7,7 @@
   icu,
   pkg-config,
   fetchFromGitHub,
-  python3,
+  python,
   openblas,
   zlib,
   gfortran,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    python3
+    python
     gfortran
   ];
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     description = "Speech Recognition Toolkit";
     homepage = "https://kaldi-asr.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

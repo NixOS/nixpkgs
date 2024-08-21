@@ -36,6 +36,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
+  pythonRelaxDeps = [ "mizani" ];
+
   dependencies = [
     matplotlib
     mizani
@@ -105,11 +107,11 @@ buildPythonPackage rec {
     "tests/test_lint_and_format.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
     changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

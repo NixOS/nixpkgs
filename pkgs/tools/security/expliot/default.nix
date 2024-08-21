@@ -4,6 +4,7 @@
 }:
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
 
       cmd2 = super.cmd2.overridePythonAttrs (oldAttrs: rec {

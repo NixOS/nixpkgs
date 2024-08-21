@@ -187,7 +187,7 @@ mkDerivation {
       find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
       popd
 
-      mkdir $BSDSRCDIR/lib/libcompiler_rt/i386
+      mkdir $BSDSRCDIR/lib/libcompiler_rt/i386 $BSDSRCDIR/lib/libcompiler_rt/cpu_model
       make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags
       make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags install
 
@@ -195,7 +195,7 @@ mkDerivation {
       make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags install
 
       ln -s $BSDSRCDIR/lib/libc/libc.so.7 $BSDSRCDIR/lib/libc/libc.so  # not sure
-      mkdir $BSDSRCDIR/lib/libgcc_s/i386
+      mkdir $BSDSRCDIR/lib/libgcc_s/i386 $BSDSRCDIR/lib/libgcc_s/cpu_model
       make -C $BSDSRCDIR/lib/libgcc_s $makeFlags
       make -C $BSDSRCDIR/lib/libgcc_s $makeFlags install
 

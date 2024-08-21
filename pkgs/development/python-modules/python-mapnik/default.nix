@@ -5,6 +5,7 @@
   substituteAll,
   isPyPy,
   python,
+  setuptools,
   pillow,
   pycairo,
   pkg-config,
@@ -21,7 +22,6 @@
   zlib,
   libxml2,
   sqlite,
-  nose,
   pytestCheckHook,
   darwin,
   sparsehash,
@@ -30,7 +30,7 @@
 buildPythonPackage rec {
   pname = "python-mapnik";
   version = "3.0.16-unstable-2024-02-22";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapnik";
@@ -55,12 +55,14 @@ buildPythonPackage rec {
 
   stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
     mapnik # for mapnik_config
     pkg-config
   ];
 
-  buildInputs = [
+  dependencies = [
     mapnik
     boost
     cairo
@@ -94,10 +96,7 @@ buildPythonPackage rec {
     export XMLPARSER=libxml2
   '';
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck =
     ''
@@ -130,7 +129,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Mapnik";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     homepage = "https://mapnik.org";
     license = licenses.lgpl21Plus;
   };

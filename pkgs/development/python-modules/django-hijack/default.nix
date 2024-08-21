@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.5.4";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
     rev = "refs/tags/${version}";
-    hash = "sha256-d8rKn4Hab7y/e/VLhVfr3A3TUhoDtjP7RhCj+o6IbyE=";
+    hash = "sha256-uece+tR3Nd32nfKn1gtcWqckN4z5iUP+C0dJxyDPXBA=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export DJANGO_SETTINGS_MODULE=hijack.tests.test_app.settings
+    export DJANGO_SETTINGS_MODULE=tests.test_app.settings
   '';
 
   # needed for npmDeps update

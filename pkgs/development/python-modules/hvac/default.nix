@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ianunruh/hvac";
     changelog = "https://github.com/hvac/hvac/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

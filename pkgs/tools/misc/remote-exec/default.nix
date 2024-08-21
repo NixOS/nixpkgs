@@ -8,6 +8,7 @@
 , toml
 , watchdog
 , pytestCheckHook
+, pytest-cov-stub
 , rsync
 }:
 
@@ -44,11 +45,6 @@ buildPythonApplication rec {
     watchdog
   ];
 
-  # disable pytest --cov
-  preCheck = ''
-    rm setup.cfg
-  '';
-
   doCheck = true;
 
   nativeCheckInputs = [
@@ -57,6 +53,7 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [

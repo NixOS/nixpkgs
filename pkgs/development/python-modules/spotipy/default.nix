@@ -5,7 +5,6 @@
   pythonOlder,
   redis,
   requests,
-  six,
   urllib3,
 }:
 

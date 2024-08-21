@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Chowdhury-DSP";
     repo = "ChowKick";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
+    hash = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
     fetchSubmodules = true;
   };
 

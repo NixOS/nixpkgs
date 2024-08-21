@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     description = "Dynamic image creation library";
     license = licenses.free; # some custom license
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -82,6 +82,11 @@ buildPythonPackage rec {
     pytest-dependency
   ];
 
+  disabledtests = [
+    # flaky, timing sensitive
+    "test_timing"
+  ];
+
   meta = with lib; {
     description = "Embedded control & testing library";
     homepage = "https://labgrid.org";

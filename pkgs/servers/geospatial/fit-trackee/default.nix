@@ -7,6 +7,7 @@
 }:
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy_1_4;
 
@@ -25,29 +26,27 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fit-trackee";
-  version = "0.7.31";
-  format = "pyproject";
+  version = "0.8.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
-    rev = "v${version}";
-    hash = "sha256-qKUdpuxslhS6k9EiWvbU/0hSXH1y9mjhXs02pugTF3g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BY4bBz9yBgAJ28iriqweAWm7Df5jh/W7bNlInmjMU5Q=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail psycopg2-binary psycopg2 \
-      --replace-fail 'flask = "^3.0.2"' 'flask = "*"' \
-      --replace-fail 'pyopenssl = "^24.0.0"' 'pyopenssl = "*"' \
-      --replace-fail 'sqlalchemy = "=1.4.51"' 'sqlalchemy = "*"'
+      --replace-fail 'gunicorn = "^22.0.0"' 'gunicorn = "*"' \
+      --replace-fail psycopg2-binary psycopg2
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     python3.pkgs.poetry-core
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     authlib
     babel
     dramatiq
@@ -95,11 +94,12 @@ python.pkgs.buildPythonApplication rec {
     export TMP=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted outdoor activity tracker :bicyclist";
     homepage = "https://github.com/SamR1/FitTrackee";
     changelog = "https://github.com/SamR1/FitTrackee/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

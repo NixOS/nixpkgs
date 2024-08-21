@@ -3,7 +3,6 @@
   blockdiag,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -27,14 +26,9 @@ buildPythonPackage rec {
 
   dependencies = [ blockdiag ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
+  patches = [ ./fix_test_generate.patch ];
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "src/seqdiag/tests/" ];
 
   pythonImportsCheck = [ "seqdiag" ];

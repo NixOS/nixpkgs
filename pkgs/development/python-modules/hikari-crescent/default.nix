@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hikari-crescent";
-  version = "0.6.6";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hikari-crescent";
     repo = "hikari-crescent";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PZAmz7Wofg6jnF25p/8leJQ9PeZaE3q5q2GUJG7NEB0=";
+    hash = "sha256-0eDPdN+3lalgHiBNXuZUEJllAKFxdKK6paTFNHU5jIM=";
   };
 
   build-system = [ poetry-core ];
@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_handle_resp" ];
 
-  meta = with lib; {
+  meta = {
     description = "A command handler for Hikari that keeps your project neat and tidy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/hikari-crescent/hikari-crescent";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "hikari-crescent";
   };
 }

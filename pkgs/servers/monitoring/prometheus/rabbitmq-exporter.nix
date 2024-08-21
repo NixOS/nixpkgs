@@ -25,6 +25,6 @@ buildGoModule rec {
     mainProgram = "rabbitmq_exporter";
     homepage = "https://github.com/kbudde/rabbitmq_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9L02ox2T+dBRx+mmFpy5Bktsyp3C/havfZoDaNevIMw=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sentry-cli \
         --bash <($out/bin/sentry-cli completions bash) \
         --fish <($out/bin/sentry-cli completions fish) \

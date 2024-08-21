@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , python3
-, x509-limbo
 }:
 
 python3.pkgs.buildPythonPackage {
@@ -39,7 +38,7 @@ python3.pkgs.buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://x509-limbo.com/";
-    description = "Suite of testvectors for X.509 certificate path validation and tools for building them ";
+    description = "Suite of testvectors for X.509 certificate path validation and tools for building them";
     mainProgram = "limbo";
 
     license = licenses.asl20;

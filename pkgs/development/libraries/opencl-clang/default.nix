@@ -2,7 +2,6 @@
 , stdenv
 , applyPatches
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , git
 , llvmPackages_14
@@ -54,26 +53,20 @@ let
     };
   };
 
-  version = "unstable-2023-06-12";
+  version = "unstable-2024-06-06";
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "intel";
       repo = "opencl-clang";
       # https://github.com/intel/opencl-clang/compare/ocl-open-140
-      rev = "cf95b338d14685e4f3402ab1828bef31d48f1fd6";
-      hash = "sha256-To1RlQX9IJ+1zAwEXaW7ua3VNfjK9mu7pgsRPsfa8g8=";
+      rev = "66a54cbef6726c4e791986779a60d7a45b09c9c9";
+      hash = "sha256-vM2IlF/e3b2GIXMaHYre+iQn4WKsFIU3x90Ee5KVHtI=";
     };
 
     patches = [
       # Build script tries to find Clang OpenCL headers under ${llvm}
       # Work around it by specifying that directory manually.
       ./opencl-headers-dir.patch
-
-      # fix CMake throwing errors
-      (fetchpatch {
-        url = "https://github.com/intel/opencl-clang/commit/321e3b99c1a8d54c8475f5ae998452069cc5eb71.patch";
-        hash = "sha256-cATbH+AMVtcabhl3EkzAH7w3wGreUV53hQYHVUUEP4g=";
-      })
     ];
 
     postPatch = ''
@@ -111,7 +104,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/intel/opencl-clang/";
     description = "Clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     # error: invalid value 'CL3.0' in '-cl-std=CL3.0'
     broken = stdenv.isDarwin;

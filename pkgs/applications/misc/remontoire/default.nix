@@ -7,7 +7,6 @@
 , gtk3
 , json-glib
 , libgee
-, librsvg
 , meson
 , ninja
 , pkg-config

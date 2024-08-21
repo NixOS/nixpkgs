@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "JavaScript minifier";
     homepage = "https://github.com/tikitu/jsmin/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

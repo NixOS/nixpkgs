@@ -2,46 +2,66 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
+  numpy,
+  pybind11,
+  setuptools,
+
+  # dependencies
   clarabel,
   cvxopt,
   ecos,
-  fetchPypi,
-  numpy,
   osqp,
-  pytestCheckHook,
-  pythonOlder,
   scipy,
   scs,
-  setuptools,
-  wheel,
-  pybind11,
+
+  # checks
+  pytestCheckHook,
+
   useOpenmp ? (!stdenv.isDarwin),
 }:
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.4.3";
-  format = "pyproject";
+  version = "1.5.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sbB4yMBZI60Sjn2BSwvhwzesBSYqeLdXqOb5V2SK2VM=";
+  src = fetchFromGitHub {
+    owner = "cvxpy";
+    repo = "cvxpy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g4JVgykGNFT4ZEi5f8hkVjd7eUVJ+LxvPvmiVa86r1Y=";
   };
+
+  patches = [
+    # Fix invalid uses of the scipy library
+    # https://github.com/cvxpy/cvxpy/pull/2508
+    (fetchpatch {
+      name = "scipy-1-14-compat";
+      url = "https://github.com/cvxpy/cvxpy/pull/2508/commits/c343f4381c69f7e6b51a86b3eee8b42fbdda9d6a.patch";
+      hash = "sha256-SqIdPs9K+GuCLCEJMHUQ+QGWNH5B3tKuwr46tD9Ao2k=";
+    })
+  ];
 
   # we need to patch out numpy version caps from upstream
   postPatch = ''
-    sed -i 's/\(numpy>=[0-9.]*\),<[0-9.]*;/\1;/g' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" "numpy"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  build-system = [
+    numpy
     pybind11
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     clarabel
     cvxopt
     ecos
@@ -77,12 +97,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cvxpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
     changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

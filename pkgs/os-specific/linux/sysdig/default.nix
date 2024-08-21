@@ -26,10 +26,11 @@
   clang,
   libbpf,
   bpftools,
+  fetchurl,
 }:
 
 let
-  # Compare with https://github.com/draios/sysdig/blob/0.38.0/cmake/modules/falcosecurity-libs.cmake
+  # Compare with https://github.com/draios/sysdig/blob/0.38.1/cmake/modules/falcosecurity-libs.cmake
   libsRev = "0.17.2";
   libsHash = "sha256-BTLXtdU7GjOJReaycHvXkSd2vtybnCn0rTR7OEsvaMQ=";
 
@@ -41,7 +42,7 @@ let
     hash = "sha256-wvFdjsDtKH7CpbEpQjzWtLC4RVOU9+D2rSK0Xo1cJqo=";
   };
 
-  # https://github.com/draios/sysdig/blob/0.38.0/cmake/modules/driver.cmake
+  # https://github.com/draios/sysdig/blob/0.38.1/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
@@ -49,7 +50,14 @@ let
     hash = "sha256-FIlnJsNgofGo4HETEEpW28wpC3U9z5AZprwFR5AgFfA=";
   };
 
-  version = "0.38.0";
+  # "main.c" from master after (https://github.com/falcosecurity/libs/pull/1884)
+  # Remove when an upstream release includes the driver update
+  driverKernel610MainC = fetchurl {
+    url = "https://raw.githubusercontent.com/falcosecurity/libs/fa26daf65bb4117ecfe099fcad48ea75fe86d8bb/driver/main.c";
+    hash = "sha256-VI/tOSXs5OcEDehSqICF3apmSnwe4QCmbkHz+DGH4uM=";
+  };
+
+  version = "0.38.1";
 in
 stdenv.mkDerivation {
   pname = "sysdig";
@@ -59,7 +67,7 @@ stdenv.mkDerivation {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    hash = "sha256-y6WArSz57w8vb3A3nHT37G6D8++6en2jQfeIS4YCD9U=";
+    hash = "sha256-oufRTr5TFdpF50pmem2L3bBFIfwxCR8f1xi0A328iHo=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +117,7 @@ stdenv.mkDerivation {
 
     cp -r ${driver} driver-src
     chmod -R +w driver-src
+    cp ${driverKernel610MainC} driver-src/driver/main.c
 
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"

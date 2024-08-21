@@ -53,7 +53,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jnrbsn/daemonocle";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

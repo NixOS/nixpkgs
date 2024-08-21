@@ -5,26 +5,45 @@
   lib,
   makeWrapper,
   nix-update-script,
-  python3Packages,
+  python3,
   squashfsTools,
   stdenv,
 }:
-python3Packages.buildPythonApplication rec {
+
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
+        version = "0.11.2";
+        src = fetchFromGitHub {
+          owner = "NowanIlfideme";
+          repo = "pydantic-yaml";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
+        };
+        dependencies = with self; [
+          deprecated
+          importlib-metadata
+          pydantic_1
+          ruamel-yaml
+          types-deprecated
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.2.12";
+  version = "8.3.2";
 
   pyproject = true;
-
-  # Somewhere deep in the dependency tree is 'versioningit', which depends
-  # on pydantic 2. Snapcraft will soon migrate to pydantic 2, and disabling
-  # this doesn't seem to affect the functionality of the application.
-  catchConflicts = false;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-1PwIbMweeYGi+jLfhFB3LYThqaN2VW7zdyzjD1m57ow=";
+    hash = "sha256-JlmVnSpbMjMpJBXyRxF/LqJ+0e5fty6BK+sCPJ2Uw9I=";
   };
 
   patches = [
@@ -68,13 +87,14 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace snapcraft_legacy/internal/xattrs.py \
-      --replace-fail 'distutils.util' 'setuptools.dist'
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-cov>=4.0",' "" \
+      --replace-fail "--cov=snapcraft" ""
   '';
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python.pkgs; [
     attrs
     catkin-pkg
     click
@@ -93,27 +113,38 @@ python3Packages.buildPythonApplication rec {
     lxml
     macaroonbakery
     mypy-extensions
+    overrides
+    packaging
     progressbar
     pyelftools
     pygit2
     pylxd
+    pymacaroons
     python-apt
     python-gnupg
+    pyxdg
+    pyyaml
     raven
     requests-toolbelt
+    requests-unixsocket
     simplejson
     snap-helpers
     tabulate
+    toml
     tinydb
+    typing-extensions
+    urllib3
+    validators
   ];
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
+  build-system = with python.pkgs; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
     "jsonschema"
     "pygit2"
     "urllib3"
+    "validators"
   ];
 
   postInstall = ''
@@ -121,10 +152,9 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       pytest-check
-      pytest-cov
       pytest-mock
       pytest-subprocess
       pytestCheckHook
@@ -148,6 +178,7 @@ python3Packages.buildPythonApplication rec {
     "test_classic_linter_filter"
     "test_classic_linter"
     "test_complex_snap_yaml"
+    "test_core24_try_command"
     "test_get_base_configuration_snap_channel"
     "test_get_base_configuration_snap_instance_name_default"
     "test_get_base_configuration_snap_instance_name_not_running_as_snap"

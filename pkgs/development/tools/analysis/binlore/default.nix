@@ -56,58 +56,169 @@ let
     #   in here, but I'm erring on the side of flexibility
     #   since this form will make it easier to pilot other
     #   uses of binlore.
-    callback = lore: drv: overrides: ''
+    callback = lore: drv: ''
       if [[ -d "${drv}/bin" ]] || [[ -d "${drv}/lib" ]] || [[ -d "${drv}/libexec" ]]; then
         echo generating binlore for $drv by running:
         echo "${yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${yallback}/bin/yallback ${lore.yallback}"
       else
         echo "failed to generate binlore for $drv (none of ${drv}/{bin,lib,libexec} exist)"
       fi
-    '' +
-    /*
-    Override lore for some packages. Unsure, but for now:
-    1. start with the ~name (pname-version)
-    2. remove characters from the end until we find a match
-       in overrides/
-    3. execute the override script with the list of expected
-       lore types
-    */
-    ''
-      i=''${#identifier}
-      filter=
-      while [[ $i > 0 ]] && [[ -z "$filter" ]]; do
-        if [[ -f "${overrides}/''${identifier:0:$i}" ]]; then
-          filter="${overrides}/''${identifier:0:$i}"
-          echo using "${overrides}/''${identifier:0:$i}" to generate overriden binlore for $drv
-          break
-        fi
-        ((i--)) || true # don't break build
-      done # || true # don't break build
+
       if [[ -d "${drv}/bin" ]] || [[ -d "${drv}/lib" ]] || [[ -d "${drv}/libexec" ]]; then
-        ${yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${yallback}/bin/yallback ${lore.yallback} "$filter"
+        ${yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${yallback}/bin/yallback ${lore.yallback}
       fi
     '';
   };
-  overrides = (src + "/overrides");
 
 in rec {
+  /*
+    Output a directory containing lore for multiple drvs.
+
+    This will `make` lore for drv in drvs and then combine lore
+    of the same type across all packages into a single file.
+
+    When drvs are also specified in the strip argument, corresponding
+    lore is made relative by stripping the path of each drv from
+    matching entries. (This is mainly useful in a build process that
+    uses a chain of two or more derivations where the output of one
+    is the source for the next. See resholve for an example.)
+  */
   collect = { lore ? loreDef, drvs, strip ? [ ] }: (runCommand "more-binlore" { } ''
     mkdir $out
     for lorefile in ${toString lore.types}; do
       cat ${lib.concatMapStrings (x: x + "/$lorefile ") (map (make lore) (map lib.getBin (builtins.filter lib.isDerivation drvs)))} > $out/$lorefile
-      substituteInPlace $out/$lorefile ${lib.concatMapStrings (x: "--replace '${x}/' '' ") strip}
+      substituteInPlace $out/$lorefile ${lib.concatMapStrings (x: "--replace-quiet '${x}/' '' ") strip}
     done
   '');
-  # TODO: echo for debug, can be removed at some point
+
+  /*
+    Output a directory containing lore for a single drv.
+
+    This produces lore for the derivation (via lore.callback) and
+    appends any lore that the derivation itself wrote to nix-support
+    or which was overridden in drv.binlore.<outputName> (passthru).
+
+    > *Note*: Since the passthru is attached to all outputs, binlore
+    > is an attrset namespaced by outputName to support packages with
+    > executables in more than one output.
+
+    Since the last entry wins, the effective priority is:
+    drv.binlore.<outputName> > $drv/nix-support > lore generated here by callback
+  */
   make = lore: drv: runCommand "${drv.name}-binlore" {
-      identifier = drv.name;
       drv = drv;
     } (''
     mkdir $out
     touch $out/{${builtins.concatStringsSep "," lore.types}}
 
-    ${lore.callback lore drv overrides}
+    ${lore.callback lore drv}
+    '' +
+    # append lore from package's $out and drv.binlore.${drv.outputName} (last entry wins)
+    ''
+    for lore_type in ${builtins.toString lore.types}; do
+      if [[ -f "${drv}/nix-support/$lore_type" ]]; then
+        cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
+      fi
+      '' + lib.optionalString (builtins.hasAttr "binlore" drv && builtins.hasAttr drv.outputName drv.binlore) ''
+      if [[ -f "${drv.binlore."${drv.outputName}"}/$lore_type" ]]; then
+        cat "${drv.binlore."${drv.outputName}"}/$lore_type" >> "$out/$lore_type"
+      fi
+      '' + ''
+    done
 
     echo binlore for $drv written to $out
   '');
+
+  /*
+    Utility function for creating override lore for drv.
+
+    We normally attach this lore to `drv.passthru.binlore.<outputName>`.
+
+    > *Notes*:
+    > - Since the passthru is attached to all outputs, binlore is an
+    >   attrset namespaced by outputName to support packages with
+    >   executables in more than one output. You'll generally just use
+    >   `out` or `bin`.
+    > - We can reconsider the passthru attr name if someone adds
+    >   a new lore provider. We settled on `.binlore` for now to make it
+    >   easier for people to figure out what this is for.
+
+    The lore argument should be a Shell script (string) that generates
+    the necessary lore. You can use arbitrary Shell, but this function
+    includes a shell DSL you can use to declare/generate lore in most
+    cases. It has the following functions:
+
+    - `execer <verdict> [<path>...]`
+    - `wrapper <wrapper_path> <original_path>`
+
+    Writing every override explicitly in a Nix list would be tedious
+    for large packages, but this small shell DSL enables us to express
+    many overrides efficiently via pathname expansion/globbing.
+
+    Here's a very general example of both functions:
+
+    passthru.binlore.out = binlore.synthesize finalAttrs.finalPackage ''
+      execer can bin/hello bin/{a,b,c}
+      wrapper bin/hello bin/.hello-wrapped
+    '';
+
+    And here's a specific example of how pathname expansion enables us
+    to express lore for the single-binary variant of coreutils while
+    being both explicit and (somewhat) efficient:
+
+    passthru = {} // optionalAttrs (singleBinary != false) {
+      binlore.out = binlore.synthesize coreutils ''
+        execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
+        execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+      '';
+    };
+
+    Caution: Be thoughtful about using a bare wildcard (*) glob here.
+    We should generally override lore only when a human understands if
+    the executable will exec arbitrary user-passed executables. A bare
+    glob can match new executables added in future package versions
+    before anyone can audit them.
+  */
+  synthesize = drv: loreSynthesizingScript: runCommand "${drv.name}-lore-override" {
+    drv = drv;
+  } (''
+    execer(){
+      local verdict="$1"
+
+      shift
+
+      for path in "$@"; do
+        if [[ -f "$PWD/$path" ]]; then
+          echo "$verdict:$PWD/$path"
+        else
+          echo "error: Tried to synthesize execer lore for missing file: $PWD/$path" >&2
+          exit 2
+        fi
+      done
+    } >> $out/execers
+
+    wrapper(){
+      local wrapper="$1"
+      local original="$2"
+
+      if [[ ! -f "$wrapper" ]]; then
+        echo "error: Tried to synthesize wrapper lore for missing wrapper: $PWD/$wrapper" >&2
+        exit 2
+      fi
+
+      if [[ ! -f "$original" ]]; then
+        echo "error: Tried to synthesize wrapper lore for missing original: $PWD/$original" >&2
+        exit 2
+      fi
+
+      echo "$PWD/$wrapper:$PWD/$original"
+
+    } >> $out/wrappers
+
+    mkdir $out
+
+    # lore override commands are relative to the drv root
+    cd $drv
+
+  '' + loreSynthesizingScript);
 }

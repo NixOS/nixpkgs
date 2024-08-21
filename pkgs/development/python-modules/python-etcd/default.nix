@@ -1,41 +1,52 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  nose,
-  mock,
-  pyopenssl,
+  fetchFromGitHub,
+  setuptools,
   urllib3,
   dnspython,
+  pytestCheckHook,
+  etcd_3_4,
+  mock,
+  pyopenssl,
+  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-etcd";
-  version = "0.4.5";
-  format = "setuptools";
+  version = "0.5.0-unstable-2023-10-31";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f1b5ebb825a3e8190494f5ce1509fde9069f2754838ed90402a8c11e1f52b8cb";
+  src = fetchFromGitHub {
+    owner = "jplana";
+    repo = "python-etcd";
+    rev = "5aea0fd4461bd05dd96e4ad637f6be7bceb1cee5";
+    hash = "sha256-eVirStLOPTbf860jfkNMWtGf+r0VygLZRjRDjBMCVKg=";
   };
 
-  buildInputs = [
-    nose
-    mock
-    pyopenssl
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     urllib3
     dnspython
   ];
 
-  postPatch = ''
-    sed -i '19s/dns/"dnspython"/' setup.py
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    etcd_3_4
+    mock
+    pyopenssl
+  ];
 
-  # Some issues with etcd not in path even though most tests passed
-  doCheck = false;
+  # arm64 is an unsupported platform on etcd 3.4. should be able to be removed on >= etcd 3.5
+  doCheck = !stdenv.isAarch64;
+
+  preCheck = ''
+    for file in "test_auth" "integration/test_simple"; do
+      substituteInPlace src/etcd/tests/$file.py \
+        --replace-fail "assertEquals" "assertEqual"
+    done
+  '';
 
   meta = with lib; {
     description = "Python client for Etcd";

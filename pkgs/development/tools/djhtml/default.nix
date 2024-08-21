@@ -23,6 +23,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/rtts/djhtml";
     description = "Django/Jinja template indenter";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

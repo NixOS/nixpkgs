@@ -4,6 +4,9 @@
   libheif,
   libjxl,
   libavif,
+  dav1d,
+  libaom,
+  libyuv,
   libraw,
   openexr_3,
 }:
@@ -12,5 +15,5 @@ mkKdeDerivation {
 
   extraCmakeFlags = ["-DKIMAGEFORMATS_HEIF=1"];
   extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [libheif libjxl libavif libraw openexr_3];
+  extraBuildInputs = [libheif libjxl libavif dav1d libaom libyuv libraw openexr_3];
 }

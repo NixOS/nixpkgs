@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     owner = "nsnam";
     repo = "ns-3-dev";
     rev = "ns-3.${version}";
-    sha256 = "sha256-2d8xCCfxRpcCZgt7ne17F7cUo/wIxLyvjQs3izNUnmY=";
+    hash = "sha256-2d8xCCfxRpcCZgt7ne17F7cUo/wIxLyvjQs3izNUnmY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config pythonEnv ];

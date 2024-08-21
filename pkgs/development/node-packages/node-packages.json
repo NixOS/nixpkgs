@@ -1,7 +1,6 @@
 [
   "@angular/cli"
 , "@antfu/ni"
-, "@astrojs/language-server"
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
@@ -12,7 +11,6 @@
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
 , "@uppy/companion"
-, "@vue/cli"
 , {"@webassemblyjs/cli": "1.11.1"}
 , {"@webassemblyjs/repl": "1.11.1"}
 , "@webassemblyjs/wasm-strip"
@@ -32,7 +30,6 @@
 , "coc-clangd"
 , "coc-cmake"
 , "coc-css"
-, "coc-diagnostic"
 , "coc-docker"
 , "coc-emmet"
 , "coc-eslint"
@@ -79,7 +76,6 @@
 , "coc-yaml"
 , "coc-yank"
 , "code-theme-converter"
-, "concurrently"
 , "conventional-changelog-cli"
 , "cpy-cli"
 , "create-cycle-app"
@@ -108,7 +104,6 @@
 , "ganache"
 , "gatsby-cli"
 , "@gitbeaker/cli"
-, "grammarly-languageserver"
 , "graphql"
 , "graphql-cli"
 , "graphql-language-service-cli"
@@ -157,7 +152,6 @@
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
-, "node-pre-gyp"
 , "node-red"
 , "node2nix"
 , "np"

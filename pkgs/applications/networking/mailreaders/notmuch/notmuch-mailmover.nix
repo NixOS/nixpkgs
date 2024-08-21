@@ -1,6 +1,5 @@
 { notmuch
 , lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles

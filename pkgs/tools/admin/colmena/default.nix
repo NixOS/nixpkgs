@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
   };
 
-  cargoSha256 = "sha256-rk2atWWJIR95duUXxAiARegjeCyfAsqTDwEr5P0eIr8=";
+  cargoHash = "sha256-rk2atWWJIR95duUXxAiARegjeCyfAsqTDwEr5P0eIr8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd colmena \
       --bash <($out/bin/colmena gen-completions bash) \
       --zsh <($out/bin/colmena gen-completions zsh) \

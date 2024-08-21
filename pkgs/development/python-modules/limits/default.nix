@@ -99,6 +99,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alisaifee/limits";
     changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

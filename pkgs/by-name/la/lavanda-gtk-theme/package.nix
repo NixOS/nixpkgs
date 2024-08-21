@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lavanda-gtk-theme";
-  version = "2023-10-22";
+  version = "2024-04-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "Lavanda-gtk-theme";
     rev = version;
-    hash = "sha256-J243VVEqzg6o5dYLSCKPxWhUj5EKCnhvCHdia8EIfeQ=";
+    hash = "sha256-2ryhdgLHSNXdV9QesdB0rpXkr3i2vVqXWDDC5fNuL1c=";
   };
 
   nativeBuildInputs = [

@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Matplotlib Inline Back-end for IPython and Jupyter";
     homepage = "https://github.com/ipython/matplotlib-inline";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

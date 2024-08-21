@@ -1,6 +1,5 @@
 { lib, stdenv, fetchgit, autoreconfHook, pkg-config, gettext, python3
 , ncurses, swig, glib, util-linux, cryptsetup, nss, gpgme
-, autoconf, automake, libtool
 , buildPackages
 }:
 
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     mainProgram = "volume_key";
     homepage = "https://pagure.io/volume_key/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

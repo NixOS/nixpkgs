@@ -214,10 +214,10 @@
 
     src = fetchurl {
       url = {
-        x86_64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/${finalAttrs.pname}/${finalAttrs.pname}_${finalAttrs.version}_amd64.deb";
-        aarch64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/${finalAttrs.pname}/${finalAttrs.pname}_${finalAttrs.version}_arm64.deb";
-        x86_64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/${finalAttrs.pname}-${finalAttrs.version}-amd64.tar.gz";
-        aarch64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/${finalAttrs.pname}-${finalAttrs.version}-arm64.tar.gz";
+        x86_64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/msodbcsql${finalAttrs.versionMajor}/msodbcsql${finalAttrs.versionMajor}_${finalAttrs.version}_amd64.deb";
+        aarch64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/msodbcsql${finalAttrs.versionMajor}/msodbcsql${finalAttrs.versionMajor}_${finalAttrs.version}_arm64.deb";
+        x86_64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/msodbcsql${finalAttrs.versionMajor}-${finalAttrs.version}-amd64.tar.gz";
+        aarch64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/msodbcsql${finalAttrs.versionMajor}-${finalAttrs.version}-arm64.tar.gz";
       }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
       hash = {
         x86_64-linux = "sha256:1f0rmh1aynf1sqmjclbsyh2wz5jby0fixrwz71zp6impxpwvil52";

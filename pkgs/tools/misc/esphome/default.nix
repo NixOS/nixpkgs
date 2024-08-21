@@ -12,6 +12,7 @@
 
 let
   python = python3Packages.python.override {
+    self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
     };
@@ -19,14 +20,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.6.6";
+  version = "2024.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/EGj6kEgUhQefdFz/IllKWeVGLhC3STiOOsy3Pq4pIM=";
+    hash = "sha256-D81VmT2E84Q4sOzZy/98mbx69vAskpwYlwqtXNjkBvs=";
   };
 
   nativeBuildInputs = with python.pkgs; [

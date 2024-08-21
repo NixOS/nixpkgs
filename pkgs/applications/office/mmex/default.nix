@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Easy-to-use personal finance software";
     homepage = "https://www.moneymanagerex.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
     mainProgram = "mmex";
   };

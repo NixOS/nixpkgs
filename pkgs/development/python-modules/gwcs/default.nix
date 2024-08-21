@@ -13,7 +13,6 @@
   scipy,
   setuptools-scm,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://vite.gforge.inria.fr/";
     license = lib.licenses.cecill20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

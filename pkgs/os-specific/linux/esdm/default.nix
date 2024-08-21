@@ -59,13 +59,13 @@ assert cryptoBackend == "openssl" || cryptoBackend == "botan" || cryptoBackend =
 
 stdenv.mkDerivation rec {
   pname = "esdm";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "esdm";
     rev = "v${version}";
-    sha256 = "sha256-UH6ws/hfHdcmbLETyZ0b4wDm8nHPdLsot3ZhIljpUlw=";
+    hash = "sha256-Z8cIjNI+Qi6O2e72vbEefbCCXyIA+lcEMDzWJReGrUs=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "1.68.2";
+  version = "1.70.0";
 in
 buildGoModule {
   pname = "tailscale";
@@ -25,7 +25,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-VI5k8PnPP8r2rIkW7AeQod7JmoHWuSLiaxkZXXv+0T8=";
+    hash = "sha256-rB/zaJavA3OH1HK7Rfpta/QmQzi0xsEYTvW5JzzTAlI=";
   };
 
   patches = [
@@ -37,7 +37,7 @@ buildGoModule {
     })
   ];
 
-  vendorHash = "sha256-SUjoeOFYz6zbEgv/vND7kEXbuWlZDrUKF2Dmqsf/KVw=";
+  vendorHash = "sha256-NtNjH2Vo1Leh98VIOkpyALErhC+6H5BE/uaPkwlejoo=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
@@ -64,15 +64,14 @@ buildGoModule {
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
-
+    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
+    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/tailscale"
     installShellCompletion --cmd tailscale \
       --bash <($out/bin/tailscale completion bash) \
       --fish <($out/bin/tailscale completion fish) \
       --zsh <($out/bin/tailscale completion zsh)
-
-    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
-    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
 
   passthru.tests = {
@@ -83,8 +82,9 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://tailscale.com";
     description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
+    changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ mbaillie jk mfrw ];
+    maintainers = with maintainers; [ mbaillie jk mfrw pyrox0 ];
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mighty JavaScript engine";
     homepage = "https://github.com/quickjs-ng/quickjs";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "qjs";
   };

@@ -17,8 +17,7 @@
 }:
 
 let
-  useGccGoBootstrap = stdenv.buildPlatform.isMusl;
-  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap121.nix { };
+  goBootstrap = buildPackages.callPackage ./bootstrap121.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo122Module; };
 
@@ -117,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Wasi does not support CGO
   CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
 
-  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild
@@ -186,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi;
+    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };
 })

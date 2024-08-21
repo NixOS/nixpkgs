@@ -60,9 +60,6 @@
       (!(targetPlatform.isAarch && targetPlatform.isStatic))
     ])
   ]) "pie"
-
-# Darwin code signing support utilities
-, postLinkSignHook ? null, signingUtils ? null
 }:
 
 assert propagateDoc -> bintools ? man;
@@ -123,6 +120,7 @@ let
     else if targetPlatform.libc == "nblibc"           then "${sharedLibraryLoader}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${sharedLibraryLoader}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${sharedLibraryLoader}/lib/ld-linux-x86-64.so.2"
+    else if targetPlatform.system == "s390x-linux"    then "${sharedLibraryLoader}/lib/ld64.so.1"
     # ELFv1 (.1) or ELFv2 (.2) ABI
     else if targetPlatform.isPower64                  then "${sharedLibraryLoader}/lib/ld64.so.*"
     # ARM with a wildcard, which can be "" or "-armhf".
@@ -357,7 +355,7 @@ stdenvNoCC.mkDerivation {
     ##
 
     # TODO(@sternenseemann): make a generic strip wrapper?
-    + optionalString (bintools.isGNU or false) ''
+    + optionalString (bintools.isGNU or false || bintools.isCCTools or false) ''
       wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
         "${bintools_bin}/bin/${targetPrefix}strip"
     ''
@@ -395,24 +393,6 @@ stdenvNoCC.mkDerivation {
         substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
       ''
     )
-
-    ##
-    ## Code signing on Apple Silicon
-    ##
-    + optionalString (targetPlatform.isDarwin && targetPlatform.isAarch64) ''
-      echo 'source ${postLinkSignHook}' >> $out/nix-support/post-link-hook
-
-      export signingUtils=${signingUtils}
-
-      wrap \
-        ${targetPrefix}install_name_tool \
-        ${./darwin-install_name_tool-wrapper.sh} \
-        "${bintools_bin}/bin/${targetPrefix}install_name_tool"
-
-      wrap \
-        ${targetPrefix}strip ${./darwin-strip-wrapper.sh} \
-        "${bintools_bin}/bin/${targetPrefix}strip"
-    ''
 
     ##
     ## Extra custom steps

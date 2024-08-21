@@ -35,6 +35,6 @@ buildPythonPackage rec {
     '';
     homepage = "http://travisbrown.ca/projects/nitpick/docs/nitpick.html";
     license = with lib.licenses; gpl2;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

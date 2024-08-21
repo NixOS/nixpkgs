@@ -1,9 +1,7 @@
 { lib
 , stdenv
-, runCommand
 , fetchFromGitHub
 , fetchYarnDeps
-, writeText
 , jq
 , yarn
 , fixup-yarn-lock

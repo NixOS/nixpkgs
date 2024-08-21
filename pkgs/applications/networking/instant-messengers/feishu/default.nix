@@ -1,4 +1,4 @@
-{ addOpenGLRunpath
+{ addDriverRunpath
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -55,7 +55,6 @@
 , stdenv
 , systemd
 , wayland
-, wrapGAppsHook3
 , xdg-utils
 , writeScript
 
@@ -179,7 +178,7 @@ stdenv.mkDerivation {
       # FIXME: Add back NIXOS_OZONE_WL support once upstream fixes the crash on native Wayland (see #318035)
       wrapProgram $executable \
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addOpenGLRunpath.driverLink}/share \
+        --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addDriverRunpath.driverLink}/share \
         ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done
 

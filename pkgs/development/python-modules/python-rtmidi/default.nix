@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SpotlightKid/python-rtmidi";
     changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

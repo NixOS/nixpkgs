@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , runCommand
 , glib
 , gtk3

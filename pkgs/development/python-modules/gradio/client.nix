@@ -14,7 +14,6 @@
   httpx,
   huggingface-hub,
   packaging,
-  requests,
   typing-extensions,
   websockets,
   # checkInputs
@@ -28,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.0.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +39,7 @@ buildPythonPackage rec {
     # not to be confused with @gradio/client@${version}
     rev = "refs/tags/gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-nbOWg2ZPcXTft7e4tR5p5xecVU62en0hEdXqAgLDZF4=";
+    hash = "sha256-l5WHNerSYNXrFGOpAqxxh0JLiFpatxq6a62q83tEavo=";
   };
   prePatch = ''
     cd client/python

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "zamaudio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wT1BXQrcD+TI+trqx0ZVUmVLZMTDQgJI3dAvN54wy6Y=";
+    hash = "sha256-wT1BXQrcD+TI+trqx0ZVUmVLZMTDQgJI3dAvN54wy6Y=";
     fetchSubmodules = true;
   };
 

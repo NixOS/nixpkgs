@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.33";
+  version = "1.9.34";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "psd-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Y4VLfGwopfeIppxwvGKSuelUDAXg67rM/ES9BrTP24=";
+    hash = "sha256-UFdprXoHFsbH3Tbui44n8FTdbkynnYVL1LHtFzFInio=";
   };
 
   postPatch = ''

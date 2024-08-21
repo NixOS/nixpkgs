@@ -4,8 +4,10 @@
   stdenv,
   makeWrapper,
   gitUpdater,
-  python311Packages,
+  python3Packages,
+  python311Packages ? null, # Ignored. Kept for compatibility with the release
   tk,
+  addDriverRunpath,
 
   darwin,
 
@@ -18,6 +20,9 @@
   openblas,
 
   cublasSupport ? config.cudaSupport,
+  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+  # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
+  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
 
   clblastSupport ? stdenv.isLinux,
   clblast,
@@ -27,11 +32,6 @@
   vulkan-loader,
 
   metalSupport ? stdenv.isDarwin && stdenv.isAarch64,
-
-  # You can find list of x86_64 options here: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-  # For ARM here: https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
-  # If you set "march" to "native", specify "mtune" as well; otherwise, it will be set to "generic". (credit to: https://lemire.me/blog/2018/07/25/it-is-more-complicated-than-i-thought-mtune-march-in-gcc/)
-  # For example, if you have an AMD Ryzen CPU, you will set "march" to "x86-64" and "mtune" to "znver2"
   march ? "",
   mtune ? "",
 }:
@@ -39,41 +39,51 @@
 let
   makeBool = option: bool: (if bool then "${option}=1" else "");
 
+  libraryPathWrapperArgs = lib.optionalString config.cudaSupport ''
+    --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
+  '';
+
+  darwinFrameworks =
+    if (stdenv.isDarwin && stdenv.isx86_64) then
+      darwin.apple_sdk.frameworks
+    else
+      darwin.apple_sdk_11_0.frameworks;
+
   effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.68";
+  version = "1.72";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-zqRlQ8HgT4fmGHD6uxxa2duZrx9Vhxd+gm1XQ7w9ay0=";
+    hash = "sha256-DePcBVNXIWIlOXyNeNMUFFIQxQuwqG8KBUh2/X7R6X8=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     makeWrapper
-    python311Packages.wrapPython
+    python3Packages.wrapPython
   ];
 
-  pythonInputs = builtins.attrValues { inherit (python311Packages) tkinter customtkinter packaging; };
+  pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
     ++ lib.optionals effectiveStdenv.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Accelerate
-      darwin.apple_sdk_11_0.frameworks.CoreVideo
-      darwin.apple_sdk_11_0.frameworks.CoreGraphics
-      darwin.apple_sdk_11_0.frameworks.CoreServices
+      darwinFrameworks.Accelerate
+      darwinFrameworks.CoreVideo
+      darwinFrameworks.CoreGraphics
+      darwinFrameworks.CoreServices
     ]
     ++ lib.optionals metalSupport [
-      darwin.apple_sdk_11_0.frameworks.MetalKit
-      darwin.apple_sdk_11_0.frameworks.Foundation
-      darwin.apple_sdk_11_0.frameworks.MetalPerformanceShaders
+      darwinFrameworks.MetalKit
+      darwinFrameworks.Foundation
+      darwinFrameworks.MetalPerformanceShaders
     ]
     ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
@@ -91,14 +101,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pythonPath = finalAttrs.pythonInputs;
 
   darwinLdFlags = lib.optionals stdenv.isDarwin [
-    "-F${darwin.apple_sdk_11_0.frameworks.CoreServices}/Library/Frameworks"
-    "-F${darwin.apple_sdk_11_0.frameworks.Accelerate}/Library/Frameworks"
+    "-F${darwinFrameworks.CoreServices}/Library/Frameworks"
+    "-F${darwinFrameworks.Accelerate}/Library/Frameworks"
     "-framework CoreServices"
     "-framework Accelerate"
   ];
   metalLdFlags = lib.optionals metalSupport [
-    "-F${darwin.apple_sdk_11_0.frameworks.Foundation}/Library/Frameworks"
-    "-F${darwin.apple_sdk_11_0.frameworks.Metal}/Library/Frameworks"
+    "-F${darwinFrameworks.Foundation}/Library/Frameworks"
+    "-F${darwinFrameworks.Metal}/Library/Frameworks"
     "-framework Foundation"
     "-framework Metal"
   ];
@@ -106,7 +116,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
 
   env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") "-march=${march}" + lib.optionalString (mtune != "") "-mtune=${mtune}";
+    lib.optionalString (march != "") (
+      lib.warn "koboldcpp: the march argument is only kept for compatibility; use overrideAttrs intead" "-march=${march}"
+    )
+    + lib.optionalString (mtune != "") (
+      lib.warn "koboldcpp: the mtune argument is only kept for compatibility; use overrideAttrs intead" "-mtune=${mtune}"
+    );
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)
@@ -114,6 +129,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
+    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
   ];
 
   installPhase = ''
@@ -133,10 +149,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # Remove an unused argument, mainly intended for Darwin to reduce warnings
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-warn " -s " " "
+  '';
+
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-    --prefix PATH ${lib.makeBinPath [ tk ]}
+      --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

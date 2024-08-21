@@ -58,7 +58,7 @@ stdenv'.mkDerivation rec {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-D5ee5m2ZTKVqZDH07nzJuFEbZBQ4xW7m4nYnJQe0EaA=";
+    hash = "sha256-D5ee5m2ZTKVqZDH07nzJuFEbZBQ4xW7m4nYnJQe0EaA=";
     fetchSubmodules = true;
   };
 

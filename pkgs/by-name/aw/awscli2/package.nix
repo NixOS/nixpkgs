@@ -59,14 +59,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.17.5"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.17.18"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y8qXAKEDW82dZSNx88X2PSPY88VkBgwK67Ya0hHk3tU=";
+    hash = "sha256-HxFtMFeGR6XAMsP5LM0tvJ/ECWVpveIhWRTKvf8uYA0=";
   };
 
   postPatch = ''

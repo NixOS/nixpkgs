@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, buildPackages
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -29,17 +28,17 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.31.2";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-e0zXxIdAtJZXJdP/S6lHRnPm5Rsf638Fhox8XcqOWrk=";
+    hash = "sha256-zoXruGoWitx6kietF3HKTYCtUrXp5SOrf2FEGgVPzkQ=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-HZiyAgsTEBQv+Qp0T9RXTV1lkxvIGh7Q45rd45cfvjo=";
+  vendorHash = "sha256-rJ8AfJkIpxDkk+9Tf7ORnn7ueJB1kjJUBiLMDV5tias=";
 
   patches = [
     ./0001-GNUmakefile.patch
@@ -111,7 +110,7 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
-    make build/release
+    make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
       --prefix PATH : ${lib.makeBinPath runtimeDeps }

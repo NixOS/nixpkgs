@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-generate
-, setuptools-scm
-, colorama
-, jinja2
-, jsonschema
-, pygls
-, tree-sitter0_21
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-generate,
+  setuptools-scm,
+  colorama,
+  jinja2,
+  jsonschema,
+  pygls,
+  tree-sitter,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,16 +34,9 @@ buildPythonPackage rec {
     jinja2
     jsonschema
     pygls
-    # The build won't fail if we had used tree-sitter (version > 0.21), but
-    # this package is only a dependency of autotools-language-server which also
-    # depends on tree-sitter-languages which must use tree-sitter0_21 and not
-    # tree-sitter. Hence we avoid different tree-sitter versions dependency
-    # mismatch by defaulting here to this lower version.
-    tree-sitter0_21
+    tree-sitter
   ];
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "lsp_tree_sitter" ];
 

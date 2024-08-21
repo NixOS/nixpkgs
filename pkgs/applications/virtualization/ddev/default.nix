@@ -38,6 +38,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "ddev";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
   SDL2,
-  addOpenGLRunpath,
+  addDriverRunpath,
   boost,
   cmake,
   cubeb,
@@ -48,13 +48,13 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.0-88";
+  version = "2.0-92";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZXJrxfTgwDmHUk3UqA4H4MSEvNNq9lXHXxf9rgWqkro=";
+    hash = "sha256-bjt+2RzmG8iKcdyka4HsHM5NEzCwGah4s9eiywSHXbw=";
   };
 
   patches = [
@@ -66,13 +66,14 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     SDL2
-    addOpenGLRunpath
+    addDriverRunpath
     wrapGAppsHook3
     cmake
     glslang
     nasm
     ninja
     pkg-config
+    wxGTK32
   ];
 
   buildInputs = [

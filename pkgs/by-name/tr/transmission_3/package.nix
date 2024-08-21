@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
 , openssl

@@ -70,10 +70,10 @@ in
           }
         else
           assert lib.assertMsg (lib.isAttrs value) ''
-            Value of invalid type provided to `hocon.lib.mkSubstition`: ${lib.typeOf value}
+            Value of invalid type provided to `hocon.lib.mkSubstitution`: ${lib.typeOf value}
           '';
           assert lib.assertMsg (value ? "value") ''
-            Argument to `hocon.lib.mkSubstition` is missing a `value`:
+            Argument to `hocon.lib.mkSubstitution` is missing a `value`:
             ${builtins.toJSON value}
           '';
           {

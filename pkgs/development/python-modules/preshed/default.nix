@@ -3,7 +3,6 @@
   buildPythonPackage,
   cymem,
   cython,
-  python,
   fetchPypi,
   murmurhash,
   pytestCheckHook,
@@ -43,6 +42,6 @@ buildPythonPackage rec {
     description = "Cython hash tables that assume keys are pre-hashed";
     homepage = "https://github.com/explosion/preshed";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

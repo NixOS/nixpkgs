@@ -26,6 +26,6 @@ buildGoModule rec {
     '';
     homepage = "https://harmonist.tuxfamily.org/";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

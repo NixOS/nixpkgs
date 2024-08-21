@@ -17,7 +17,6 @@
 , db
 , libedit
 , pam
-, krb5
 , libmicrohttpd
 , cjson
 
@@ -26,7 +25,7 @@
 , SystemConfiguration
 
 , curl
-, jdk
+, jdk_headless
 , unzip
 , which
 
@@ -83,7 +82,7 @@ stdenv.mkDerivation {
   doCheck = true;
   nativeCheckInputs = [
     curl
-    jdk
+    jdk_headless
     unzip
     which
   ];

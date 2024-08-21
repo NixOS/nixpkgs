@@ -13,7 +13,7 @@
   adaptor ? "sql",
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "crabfit-api";
   version = "0-unstable-2023-08-02";
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jy8BrJSHukRenPbZHw4nPx3cSi7E2GSg//WOXDh90mY=";
   };
 
-  sourceRoot = "source/api";
+  sourceRoot = "${src.name}/api";
 
   patches = [
     (fetchpatch {
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage {
     description = "Enter your availability to find a time that works for everyone";
     homepage = "https://github.com/GRA0007/crab.fit";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "crabfit-api";
   };
 }

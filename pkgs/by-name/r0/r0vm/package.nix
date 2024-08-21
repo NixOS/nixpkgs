@@ -10,12 +10,12 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "r0vm";
-  version = "1.0.2";
+  version = "1.0.5";
   src = fetchFromGitHub {
     owner = "risc0";
     repo = "risc0";
     rev = "v${version}";
-    sha256 = "sha256-niYPHcTh0tO51paac6rXtwkYoTOAMqdVrHwSnGRObck=";
+    sha256 = "sha256-jtROtI5/4W2pNvn1ZYR/wQAZmECTr7YxuZGu2Ns9paw=";
   };
 
   buildAndTestSubdir = "risc0/r0vm";
@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  cargoHash = "sha256-rhczkxTtyw54VsqbLJ2wp3VQ0WV3NW+gwEAgYfpoHSw=";
+  cargoHash = "sha256-WLd/cUiaIR04CIOaf9JwFmAY4fU9yH2QHDuT3Q54Gvg=";
 
   postPatch =
     let
-      # see https://github.com/risc0/risc0/blob/v1.0.2/risc0/circuit/recursion/build.rs
+      # see https://github.com/risc0/risc0/blob/v1.0.5/risc0/circuit/recursion/build.rs
       sha256Hash = "4e8496469e1efa00efb3630d261abf345e6b2905fb64b4f3a297be88ebdf83d2";
       recursionZkr = fetchurl {
         name = "recursion_zkr.zip";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   basemap-data,
   cython,
   geos,
@@ -68,7 +67,7 @@ buildPythonPackage rec {
       coastlines, lakes, rivers and political boundaries. See
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = with licenses; [
       mit
       lgpl21

@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     asciidoc
     docbook_xml_dtd_45
@@ -51,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    uthash
   ];
 
   buildInputs = [
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pcre2
     pixman
+    uthash
     xcbutil
     xcbutilimage
     xcbutilrenderutil

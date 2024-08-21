@@ -13,11 +13,9 @@
   markdown-it-py,
   mdurl,
   pygments,
-  pytest,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  reptor,
   requests,
   rich,
   setuptools,
@@ -32,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.20";
+  version = "0.21";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +39,7 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-6DuIJScNiSaEez4vMRuA5Thr8zmvH0j3oiZmQhONSdY=";
+    hash = "sha256-XJCysRGCg5V3ftSsu611mS8btbdebs1EOPTp1Z/6PJ0=";
   };
 
   pythonRelaxDeps = true;

@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://emcee.readthedocs.io/";
     changelog = "https://github.com/dfm/emcee/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

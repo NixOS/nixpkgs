@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.21.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = finalAttrs.version;
-    sha256 = "sha256-X9H5nxbYFSMfxZMxs3iWwCgdrJ2FTVWW7tlgQek3WIg=";
+    sha256 = "sha256-0eOYxyMt2M2lkhoWOhoUQgP/1LYY3QQqSF5TdRUuCbs=";
   };
 
   outputs = [ "dev" "out" ];

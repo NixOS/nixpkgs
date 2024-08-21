@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = lib.optionals finalAttrs.doCheck [
+  buildInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     valgrind
   ];
 

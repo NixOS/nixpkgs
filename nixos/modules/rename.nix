@@ -67,6 +67,7 @@ in
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
     (mkRemovedOptionModule [ "services" "homeassistant-satellite"] "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`.")
+    (mkRemovedOptionModule [ "services" "hydron" ] "The `services.hydron` module has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability.")
     (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
@@ -85,6 +86,7 @@ in
     '')
     (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "railcar" ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "replay-sorcery" ] "the corresponding package has been removed from nixpkgs as it is unmaintained upstream. Consider using `gpu-screen-recorder` or `obs-studio` instead.")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
@@ -106,6 +108,7 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xmr-stak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
     (mkRemovedOptionModule [ "services" "racoon" ] ''
       The racoon module has been removed, because the software project was abandoned upstream.
@@ -115,7 +118,6 @@ in
     (mkRemovedOptionModule [ "services" "virtuoso" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "openfire" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
-    (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
     (mkRemovedOptionModule [ "services" "prayer" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "restya-board" ] "The corresponding package was removed from nixpkgs.")

@@ -61,6 +61,7 @@
       libmediawiki = null;
 
       alpaka = self.callPackage ./misc/alpaka {};
+      applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 {};
       kdiagram = self.callPackage ./misc/kdiagram {};
       kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client {};
       kirigami-addons = self.callPackage ./misc/kirigami-addons {};

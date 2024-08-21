@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.5.1";
+  version = "0.6.0";
 in
 buildGoModule {
   pname = "vault-unseal";
@@ -14,10 +14,10 @@ buildGoModule {
     owner = "lrstanley";
     repo = "vault-unseal";
     rev = "v${version}";
-    hash = "sha256-vjU4080uCId/73F7CJKDtk9b1siCPIZOaSczKMNf0LE=";
+    hash = "sha256-lryjinTzJNty2euvWP5rNyf7BZxlTD4x6zIEERF4vag=";
   };
 
-  vendorHash = "sha256-SEA74Tk0R3BHyLMZEgKatfLGbX7l8Zyn/JkQVfEckI4=";
+  vendorHash = "sha256-vbVUIiFBmjH1ROKNBeV19NeHI1msqgJ1RonVh/Lp/CE=";
 
   meta = {
     changelog = "https://github.com/lrstanley/vault-unseal/releases/tag/v${version}";

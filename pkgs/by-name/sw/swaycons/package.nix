@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vyZcfBH2mry8Yd41QPX4+yLv0nS9J1yrgg7lpslJs7M=";
   };
 
-  cargoSha256 = "sha256-cdZ7DpH//c9TulvPYd6aaXpQHYC1b+T7BrxAyr56Pf0=";
+  cargoHash = "sha256-cdZ7DpH//c9TulvPYd6aaXpQHYC1b+T7BrxAyr56Pf0=";
 
   meta = with lib; {
     description = "Window Icons in Sway with Nerd Fonts!";

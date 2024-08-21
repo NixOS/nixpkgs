@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
   pname = "kibi";
   version = "0.2.2";
 
-  cargoSha256 = "sha256-ebUCkcUACganeq5U0XU4VIGClKDZGhUw6K3WBgTUUUw=";
+  cargoHash = "sha256-ebUCkcUACganeq5U0XU4VIGClKDZGhUw6K3WBgTUUUw=";
 
   src = fetchFromGitHub {
     owner = "ilai-deutel";

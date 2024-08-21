@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       property.  It is intended for use by people who discover and report
       bugs in compilers and other tools that process C/C++ code.
     '';
-    maintainers = [ maintainers.dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

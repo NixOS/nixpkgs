@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "goss";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KP0i+ePmkx43MdokVQO3CvTsdIFO7rCWLd8vJVC9Qf0=";
+    hash = "sha256-xabGzCTzWwT8568xg6sdlE32OYPXlG9Fei0DoyAoXgo=";
   };
 
-  vendorHash = "sha256-VLIDAlLO6COGDKDN12bYIBluFVgqPEmm8QRfSNPfLJY=";
+  vendorHash = "sha256-BPW4nC9gxDbyhA5UOfFAtOIusNvwJ7pQiprZsqTiak0=";
 
   CGO_ENABLED = 0;
 

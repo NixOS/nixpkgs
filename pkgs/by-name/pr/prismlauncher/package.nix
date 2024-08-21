@@ -3,7 +3,7 @@
   stdenv,
   symlinkJoin,
   prismlauncher-unwrapped,
-  addOpenGLRunpath,
+  addDriverRunpath,
   flite,
   gamemode,
   glfw,
@@ -132,7 +132,7 @@ symlinkJoin {
     in
     [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]
     ++ lib.optionals stdenv.isLinux [
-      "--set LD_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
+      "--set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"
     ];
 

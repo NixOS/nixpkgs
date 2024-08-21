@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchpatch,
-  fetchPypi,
-  nose,
-  parameterized,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -12,22 +10,19 @@
 
 buildPythonPackage rec {
   pname = "pprintpp";
-  version = "0.4.0";
+  version = "0.4.0-unstable-2022-05-31";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6oJhCOLH9J3G1mx1KXPD/JdJFCp5jWslTh4wHP28ZAM=";
+  src = fetchFromGitHub {
+    owner = "joaonc";
+    repo = "pprintpp2";
+    rev = "303f0652c9420f2cf0a0f4fe1907377508a17b3d"; # no tags
+    hash = "sha256-rjOf38m5mzIyJ3aVrD0+WQuzIyFjfa/4zmpFGGhF2hs=";
   };
 
   patches = [
-    # Replace nose-parameterized with parameterized, https://github.com/wolever/pprintpp/pull/21
-    (fetchpatch {
-      url = "https://github.com/wolever/pprintpp/commit/873217674cc824b4c1cfdad4867c560c60e8d806.patch";
-      hash = "sha256-Y+2yVUkDHkwo49ynNHYXVXJpX4DfVYJ0CWKgzFX/HWc=";
-    })
     # Remove "U" move from open(), https://github.com/wolever/pprintpp/pull/31
     (fetchpatch {
       name = "remove-u.patch";
@@ -38,25 +33,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [
-    nose
-    parameterized
-    pytestCheckHook
-  ];
-
   pythonImportsCheck = [ "pprintpp" ];
 
-  pytestFlagsArray = [ "test.py" ];
-
-  disabledTests = [
-    # AttributeError: 'EncodedFile' object has no attribute 'getvalue'
-    "test_pp"
-    "test_pp_pprint"
-    "test_fmt"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Drop-in replacement for pprint that's actually pretty";

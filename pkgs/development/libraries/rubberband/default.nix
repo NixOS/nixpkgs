@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
     platforms = platforms.all;
   };
 }

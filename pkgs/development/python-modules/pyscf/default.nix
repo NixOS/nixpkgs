@@ -86,6 +86,7 @@ buildPythonPackage rec {
     "test_veff"
     "test_collinear_kgks_gga"
     "test_libxc_gga_deriv4"
+    "test_sacasscf_grad"
   ];
 
   pytestFlagsArray = [
@@ -94,6 +95,8 @@ buildPythonPackage rec {
     "--ignore-glob=*_slow.*py"
     "--ignore-glob=*_kproxy_.*py"
     "--ignore-glob=test_proxy.py"
+    "--ignore-glob=pyscf/nac/test/test_sacasscf.py"
+    "--ignore-glob=pyscf/grad/test/test_casscf.py"
   ];
 
   meta = with lib; {

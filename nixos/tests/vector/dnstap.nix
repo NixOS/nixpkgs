@@ -49,7 +49,7 @@ in
         settings = {
           server = {
             interface = [ "0.0.0.0" "::" ];
-            access-control = [ "192.168.1.0/24 allow" ];
+            access-control = [ "192.168.0.0/24 allow" "::/0 allow" ];
 
             domain-insecure = "local";
             private-domain = "local";

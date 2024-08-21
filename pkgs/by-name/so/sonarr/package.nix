@@ -17,12 +17,12 @@
 , prefetch-yarn-deps
 }:
 let
-  version = "4.0.5.1710";
+  version = "4.0.8.1874";
   src = fetchFromGitHub {
     owner = "Sonarr";
     repo = "Sonarr";
     rev = "v${version}";
-    hash = "sha256-9mrt5/6v8odPv1rwJoT6laXGlh3blgZAL97tsllj7MY=";
+    hash = "sha256-4WjeuVqzuUmgbKIjcQOJCNrTnT9Wn6kpVxS+1T1hqyQ=";
   };
 in
 buildDotnetModule {

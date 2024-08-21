@@ -52,5 +52,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/DavidAnson/markdownlint-cli2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+    mainProgram = "markdownlint-cli2";
   };
 })

@@ -11,10 +11,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchgit {
     url = "https://gitee.com/openeuler/stratovirt.git";
     rev = "v${version}";
-    sha256 = "sha256-1Ex6ahKBoVRikSqrgHGYaBFzWkPFDm8bGVyB7KmO8tI=";
+    hash = "sha256-1Ex6ahKBoVRikSqrgHGYaBFzWkPFDm8bGVyB7KmO8tI=";
   };
 
-  cargoSha256 = "sha256-uuZCbmt3eIlKurwMOV7LezVSjOVG/90OdT2PC8YLi3I=";
+  cargoHash = "sha256-uuZCbmt3eIlKurwMOV7LezVSjOVG/90OdT2PC8YLi3I=";
 
   nativeBuildInputs = [
     pkg-config

@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     pname = "melody_cli";
     inherit version;
-    sha256 = "sha256-sJVZ4dRP6mAx9g7iqwI3L2cMa5x4qQuzKWPXvOOq6q8=";
+    hash = "sha256-sJVZ4dRP6mAx9g7iqwI3L2cMa5x4qQuzKWPXvOOq6q8=";
   };
 
   cargoHash = "sha256-8UWz+gYUxf2UNWZCnhQlGiSX6kPsHPlYcdl7wD3Rchs=";

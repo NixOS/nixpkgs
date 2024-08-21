@@ -12,7 +12,11 @@ let
       name = "vanilla-${escapeVersion version}";
       value = callPackage ./derivation.nix {
         inherit (value) version url sha1;
-        jre_headless = getJavaVersion (if value.javaVersion == null then 8 else value.javaVersion); # versions <= 1.6 will default to 8
+        jre_headless = getJavaVersion (
+          if value.javaVersion == null then 8
+          else if value.javaVersion == 16 then 17
+          else value.javaVersion
+        ); # versions <= 1.6 will default to 8
       };
     })
     versions;

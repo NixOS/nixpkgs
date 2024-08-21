@@ -213,6 +213,7 @@ in {
     };
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+    programs.kde-pim.enable = mkDefault true;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
@@ -237,6 +238,8 @@ in {
     systemd.packages = [kdePackages.drkonqi];
     systemd.services."drkonqi-coredump-processor@".wantedBy = ["systemd-coredump@.service"];
 
+    xdg.icons.enable = true;
+
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [kdePackages.xdg-desktop-portal-kde];
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
@@ -253,6 +256,7 @@ in {
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami
+        libplasma
         plasma5support
         qtsvg
         qtvirtualkeyboard

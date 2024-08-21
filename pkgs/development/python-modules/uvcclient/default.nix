@@ -2,21 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  nose,
+  setuptools,
   mock,
+  pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "uvcclient";
-  version = "0.11.0";
-  format = "setuptools";
+  version = "0.11.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = pname;
-    rev = "58e7a53815482b7778481f81cde95f53a60bb6f6";
-    sha256 = "0k8aswrk1n08w6pi6dg0zdzsmk23cafihkrss9ywg3i85w7q43x2";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0OUdBygL2AAtccL5hdyL+0PIRK4o+lNN3droWDysDeI=";
   };
 
   postPatch = ''
@@ -24,17 +24,12 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    nose
     mock
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    nosetests
-  '';
 
   meta = with lib; {
     description = "Client for Ubiquiti's Unifi Camera NVR";

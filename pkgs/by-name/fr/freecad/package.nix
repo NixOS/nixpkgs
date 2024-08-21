@@ -21,7 +21,7 @@
 , ode
 , opencascade-occt_7_6
 , pkg-config
-, python3Packages
+, python311Packages
 , runCommand  # for passthru.tests
 , spaceNavSupport ? stdenv.isLinux
 , stdenv
@@ -34,7 +34,7 @@
 
 let
   opencascade-occt = opencascade-occt_7_6;
-  boost = python3Packages.boost;
+  boost = python311Packages.boost;
   inherit (libsForQt5)
     qtbase
     qttools
@@ -43,7 +43,7 @@ let
     qtxmlpatterns
     soqt
     wrapQtAppsHook;
-  inherit (python3Packages)
+  inherit (python311Packages)
     gitpython
     matplotlib
     pivy
@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ viric gebner AndersonTorres ];
+    maintainers = with lib.maintainers; [ gebner AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     cmake
     qt5.wrapQtAppsHook
   ];

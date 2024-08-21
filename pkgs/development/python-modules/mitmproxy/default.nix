@@ -21,7 +21,7 @@
   mitmproxy-rs,
   msgpack,
   passlib,
-  protobuf,
+  protobuf5,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -30,7 +30,7 @@
   setuptools,
   sortedcontainers,
   tornado,
-  urwid-mitmproxy,
+  urwid,
   wsproto,
   zstandard,
   # Additional check requirements
@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.3.1";
+  version = "10.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,15 +54,12 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rIyRY1FolbdoaI4OgFG7D2/mot8NiRHalgittPzledw=";
+    hash = "sha256-1OMVgV6dFKoG/upv+RWbYqftqejeQLBlsycuy2+Na6E=";
   };
 
 
   pythonRelaxDeps = [
-    "aioquic"
-    "cryptography"
-    "pyperclip"
-    "tornado"
+    "urwid"
   ];
 
   propagatedBuildInputs = [
@@ -81,7 +78,7 @@ buildPythonPackage rec {
     mitmproxy-rs
     msgpack
     passlib
-    protobuf
+    protobuf5
     publicsuffix2
     pyopenssl
     pyparsing
@@ -90,7 +87,7 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     tornado
-    urwid-mitmproxy
+    urwid
     wsproto
     zstandard
   ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
@@ -126,6 +123,23 @@ buildPythonPackage rec {
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox
     "test_wireguard"
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test_errorcheck"
+    "test_errorcheck"
+    "test_dns"
+    "test_order"
+  ];
+
+  disabledTestPaths = [
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test/mitmproxy/addons/test_dns_resolver.py"
+    "test/mitmproxy/tools/test_dump.py"
+    "test/mitmproxy/tools/test_main.py"
+    "test/mitmproxy/tools/web/test_app.py"
+    "test/mitmproxy/tools/web/test_app.py" # 2 out of 31 tests work
+    "test/mitmproxy/tools/web/test_master.py"
   ];
 
   dontUsePytestXdist = true;

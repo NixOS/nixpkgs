@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     description = "App That Opens Apps";
     homepage = "https://www.mothersruin.com/software/Apparency/";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "appy";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

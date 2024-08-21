@@ -32,7 +32,7 @@ let
       fastcgi_split_path_info ^(${regexLocation cfg})(/.+)$;
       fastcgi_param PATH_INFO $fastcgi_path_info;
     ''
-    }fastcgi_pass unix:${config.services.fcgiwrap."cgit-${name}".socket.address};
+    }fastcgi_pass unix:${config.services.fcgiwrap.instances."cgit-${name}".socket.address};
   '';
 
   cgitrcLine = name: value: "${name}=${
@@ -171,7 +171,7 @@ in
       groups.${cfg.group} = { };
     }));
 
-    services.fcgiwrap = flip mapAttrs' cfgs (name: cfg:
+    services.fcgiwrap.instances = flip mapAttrs' cfgs (name: cfg:
       nameValuePair "cgit-${name}" {
         process = { inherit (cfg) user group; };
         socket = { inherit (config.services.nginx) user group; };

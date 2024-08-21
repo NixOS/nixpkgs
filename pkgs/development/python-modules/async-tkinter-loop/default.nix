@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python3Packages,
   poetry-core,
   tkinter,
   typing-extensions,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

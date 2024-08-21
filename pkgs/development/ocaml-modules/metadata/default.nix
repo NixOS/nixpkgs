@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, pkg-config, ogg, flac }:
+{ lib, buildDunePackage, fetchFromGitHub }:
 
 buildDunePackage rec {
   pname = "metadata";
@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-metadata";
-    description = "Library to read metadata from files in various formats. ";
+    description = "Library to read metadata from files in various formats.";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dandellion ];
   };

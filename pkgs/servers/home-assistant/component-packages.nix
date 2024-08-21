@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.7.2";
+  version = "2024.7.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -209,19 +209,22 @@
       apprise
     ];
     "aprilaire" = ps: with ps; [
-    ]; # missing inputs: pyaprilaire
+      pyaprilaire
+    ];
     "aprs" = ps: with ps; [
       aprslib
       geopy
     ];
     "apsystems" = ps: with ps; [
-    ]; # missing inputs: apsystems-ez1
+      apsystems-ez1
+    ];
     "aquacell" = ps: with ps; [
+      aioaquacell
       fnv-hash-fast
       ifaddr
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: aioaquacell
+    ];
     "aqualogic" = ps: with ps; [
       aqualogic
     ];
@@ -267,7 +270,8 @@
       pexpect
     ];
     "arve" = ps: with ps; [
-    ]; # missing inputs: asyncarve
+      asyncarve
+    ];
     "arwn" = ps: with ps; [
       paho-mqtt_1
     ];
@@ -363,7 +367,8 @@
       pybalboa
     ];
     "bang_olufsen" = ps: with ps; [
-    ]; # missing inputs: mozart-api
+      mozart-api
+    ];
     "bayesian" = ps: with ps; [
     ];
     "bbox" = ps: with ps; [
@@ -551,7 +556,8 @@
     "bswitch" = ps: with ps; [
     ];
     "bt_home_hub_5" = ps: with ps; [
-    ]; # missing inputs: bthomehub5-devicelist
+      bthomehub5-devicelist
+    ];
     "bt_smarthub" = ps: with ps; [
       btsmarthub-devicelist
     ];
@@ -623,7 +629,8 @@
       zeroconf
     ];
     "ccm15" = ps: with ps; [
-    ]; # missing inputs: py-ccm15
+      py-ccm15
+    ];
     "cert_expiry" = ps: with ps; [
     ];
     "channels" = ps: with ps; [
@@ -768,6 +775,7 @@
       aiodhcpwatcher
       aiodiscover
       async-upnp-client
+      av
       bleak
       bleak-retry-connector
       bluetooth-adapters
@@ -776,7 +784,6 @@
       cached-ipaddress
       dbus-fast
       fnv-hash-fast
-      ha-av
       ha-ffmpeg
       habluetooth
       hass-nabucasa
@@ -1030,7 +1037,8 @@
     "eight_sleep" = ps: with ps; [
     ];
     "electrasmart" = ps: with ps; [
-    ]; # missing inputs: pyElectra
+      pyelectra
+    ];
     "electric_kiwi" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -1064,7 +1072,8 @@
       pyemby
     ];
     "emoncms" = ps: with ps; [
-    ]; # missing inputs: pyemoncms
+      pyemoncms
+    ];
     "emoncms_history" = ps: with ps; [
     ];
     "emonitor" = ps: with ps; [
@@ -1087,7 +1096,8 @@
       sqlalchemy
     ];
     "energenie_power_sockets" = ps: with ps; [
-    ]; # missing inputs: pyegps
+      pyegps
+    ];
     "energie_vanons" = ps: with ps; [
     ];
     "energy" = ps: with ps; [
@@ -1481,7 +1491,7 @@
       aio-georss-gdacs
     ];
     "generic" = ps: with ps; [
-      ha-av
+      av
       pillow
     ];
     "generic_hygrostat" = ps: with ps; [
@@ -2150,7 +2160,8 @@
     "iss" = ps: with ps; [
     ]; # missing inputs: pyiss
     "ista_ecotrend" = ps: with ps; [
-    ]; # missing inputs: pyecotrend-ista
+      pyecotrend-ista
+    ];
     "isy994" = ps: with ps; [
       pyisy
     ];
@@ -2271,7 +2282,8 @@
       pykmtronic
     ];
     "knocki" = ps: with ps; [
-    ]; # missing inputs: knocki
+      knocki
+    ];
     "knx" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
@@ -3346,7 +3358,8 @@
     "pepco" = ps: with ps; [
     ];
     "permobil" = ps: with ps; [
-    ]; # missing inputs: mypermobil
+      mypermobil
+    ];
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
@@ -3684,7 +3697,8 @@
       praw
     ];
     "refoss" = ps: with ps; [
-    ]; # missing inputs: refoss-ha
+      refoss-ha
+    ];
     "rejseplanen" = ps: with ps; [
       rjpl
     ];
@@ -3749,7 +3763,8 @@
       vacuum-map-parser-roborock
     ];
     "rocketchat" = ps: with ps; [
-    ]; # missing inputs: rocketchat-API
+      rocketchat-api
+    ];
     "roku" = ps: with ps; [
       rokuecp
     ];
@@ -4178,12 +4193,14 @@
       zeroconf
     ];
     "solaredge" = ps: with ps; [
+      aiosolaredge
       stringcase
-    ]; # missing inputs: aiosolaredge
+    ];
     "solaredge_local" = ps: with ps; [
     ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [
-    ]; # missing inputs: solarlog_cli
+      solarlog-cli
+    ];
     "solax" = ps: with ps; [
       solax
     ];
@@ -4233,7 +4250,8 @@
       spiderpy
     ];
     "splunk" = ps: with ps; [
-    ]; # missing inputs: hass-splunk
+      hass-splunk
+    ];
     "spotify" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -4293,9 +4311,10 @@
       stookalert
     ];
     "stookwijzer" = ps: with ps; [
-    ]; # missing inputs: stookwijzer
+      stookwijzer
+    ];
     "stream" = ps: with ps; [
-      ha-av
+      av
       numpy_1
       pyturbojpeg
     ];
@@ -4450,10 +4469,12 @@
     ];
     "telegram" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "telegram_bot" = ps: with ps; [
       python-telegram-bot
-    ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
+    ]
+    ++ python-telegram-bot.optional-dependencies.socks;
     "tellduslive" = ps: with ps; [
       tellduslive
     ];
@@ -4877,8 +4898,9 @@
       hassil
       home-assistant-intents
       mutagen
+      voip-utils
       webrtc-noise-gain
-    ]; # missing inputs: voip-utils
+    ];
     "volkszaehler" = ps: with ps; [
       volkszaehler
     ];
@@ -5266,9 +5288,13 @@
     "apple_tv"
     "application_credentials"
     "apprise"
+    "aprilaire"
     "aprs"
+    "apsystems"
+    "aquacell"
     "aranet"
     "arcam_fmj"
+    "arve"
     "aseko_pool_live"
     "assist_pipeline"
     "asterisk_mbox"
@@ -5288,6 +5314,7 @@
     "backup"
     "baf"
     "balboa"
+    "bang_olufsen"
     "bayesian"
     "binary_sensor"
     "blackbird"
@@ -5317,6 +5344,7 @@
     "camera"
     "canary"
     "cast"
+    "ccm15"
     "cert_expiry"
     "clicksend_tts"
     "climate"
@@ -5386,6 +5414,7 @@
     "edl21"
     "efergy"
     "eight_sleep"
+    "electrasmart"
     "elgato"
     "elkm1"
     "elmax"
@@ -5393,6 +5422,7 @@
     "emulated_hue"
     "emulated_kasa"
     "emulated_roku"
+    "energenie_power_sockets"
     "energy"
     "energyzero"
     "enigma2"
@@ -5561,6 +5591,7 @@
     "ipp"
     "iqvia"
     "isal"
+    "ista_ecotrend"
     "isy994"
     "izone"
     "jellyfin"
@@ -5574,6 +5605,7 @@
     "kira"
     "kitchen_sink"
     "kmtronic"
+    "knocki"
     "knx"
     "kodi"
     "konnected"
@@ -5741,6 +5773,7 @@
     "panel_iframe"
     "peco"
     "pegel_online"
+    "permobil"
     "persistent_notification"
     "person"
     "philips_js"
@@ -5792,6 +5825,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "refoss"
     "remote"
     "renault"
     "renson"
@@ -5870,6 +5904,8 @@
     "snips"
     "snmp"
     "snooz"
+    "solaredge"
+    "solarlog"
     "solax"
     "soma"
     "somfy_mylink"
@@ -5893,6 +5929,7 @@
     "steam_online"
     "steamist"
     "stookalert"
+    "stookwijzer"
     "stream"
     "streamlabswater"
     "stt"
@@ -5925,6 +5962,8 @@
     "tcp"
     "technove"
     "tedee"
+    "telegram"
+    "telegram_bot"
     "tellduslive"
     "temper"
     "template"
@@ -6002,6 +6041,7 @@
     "vlc_telnet"
     "vodafone_station"
     "voicerss"
+    "voip"
     "volumio"
     "volvooncall"
     "vulcan"

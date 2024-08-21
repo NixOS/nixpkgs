@@ -445,6 +445,7 @@ in {
           "${removeSuffix "/" cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
+      proxyTimeout = mkDefault "120s";
     };
 
     environment.systemPackages = [ (pkgs.buildEnv {

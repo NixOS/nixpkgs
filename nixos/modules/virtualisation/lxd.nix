@@ -166,10 +166,6 @@ in {
       };
     };
 
-    # TODO: remove once LXD gets proper support for cgroupsv2
-    # (currently most of the e.g. CPU accounting stuff doesn't work)
-    systemd.enableUnifiedCgroupHierarchy = false;
-
     systemd.sockets.lxd = {
       description = "LXD UNIX socket";
       wantedBy = [ "sockets.target" ];
@@ -214,6 +210,7 @@ in {
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
+        Delegate = true; # LXD needs to manage cgroups in its subtree
 
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to

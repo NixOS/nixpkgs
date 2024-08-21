@@ -30,7 +30,7 @@ let
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "3.35.3348";
+    x86_64-linux = "3.36.3462";
   }.${system} or throwSystem;
 
   hash = let
@@ -38,7 +38,7 @@ let
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "sha256-KtDUuAzD53mFJ0+yywp0Q2/hx9MGsOhFjRLWsZAd+h0=";
+    x86_64-linux = "sha256-tlX15AT4PcrmD2Vna99TGqo0b/8xv2YOAt03aCqSeXg=";
   }.${system} or throwSystem;
 
   meta = with lib; {

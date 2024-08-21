@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage {
   # to nix-daemon to import NARs, which is not possible in the build sandbox.
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     if [[ -f $out/bin/attic ]]; then
       installShellCompletion --cmd attic \
         --bash <($out/bin/attic gen-completions bash) \

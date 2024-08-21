@@ -3,12 +3,26 @@
 with lib;
 
 let
-  forEachInstance = f: flip mapAttrs' config.services.fcgiwrap (name: cfg:
-    nameValuePair "fcgiwrap-${name}" (f cfg)
+  forEachInstance = f: flip mapAttrs' config.services.fcgiwrap.instances (
+    name: cfg: nameValuePair "fcgiwrap-${name}" (f cfg)
   );
 
 in {
-  options.services.fcgiwrap = mkOption {
+  imports = forEach [
+    "enable"
+    "user"
+    "group"
+    "socketType"
+    "socketAddress"
+    "preforkProcesses"
+  ] (attr: mkRemovedOptionModule [ "services" "fcgiwrap" attr ] ''
+      The global shared fcgiwrap instance is no longer supported due to
+      security issues.
+      Isolated instances should instead be configured through
+      `services.fcgiwrap.instances.*'.
+  '');
+
+  options.services.fcgiwrap.instances = mkOption {
     description = "Configuration for fcgiwrap instances.";
     default = { };
     type = types.attrsOf (types.submodule ({ config, ... }: { options = {
@@ -54,7 +68,6 @@ in {
         default = null;
         description = ''
           User to be set as owner of the UNIX socket.
-          Defaults to the process running user.
         '';
       };
 
@@ -63,7 +76,6 @@ in {
         default = null;
         description = ''
           Group to be set as owner of the UNIX socket.
-          Defaults to the process running group.
         '';
       };
 
@@ -84,6 +96,14 @@ in {
   config = {
     assertions = concatLists (mapAttrsToList (name: cfg: [
       {
+        assertion = cfg.socket.type == "unix" -> cfg.socket.user != null;
+        message = "Socket owner is required for the UNIX socket type.";
+      }
+      {
+        assertion = cfg.socket.type == "unix" -> cfg.socket.group != null;
+        message = "Socket owner is required for the UNIX socket type.";
+      }
+      {
         assertion = cfg.socket.user != null -> cfg.socket.type == "unix";
         message = "Socket owner can only be set for the UNIX socket type.";
       }
@@ -95,7 +115,7 @@ in {
         assertion = cfg.socket.mode != null -> cfg.socket.type == "unix";
         message = "Socket mode can only be set for the UNIX socket type.";
       }
-    ]) config.services.fcgiwrap);
+    ]) config.services.fcgiwrap.instances);
 
     systemd.services = forEachInstance (cfg: {
       after = [ "nss-user-lookup.target" ];

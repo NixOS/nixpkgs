@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
     platforms = jdk.meta.platforms;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "lein";
   };
 }

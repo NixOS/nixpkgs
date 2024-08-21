@@ -3,7 +3,6 @@
   fetchPypi,
   gitUpdater,
   python3Packages,
-  stdenv,
   testers,
 }:
 

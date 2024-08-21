@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "ddf4c57ebbe3a2e46099087570898ab5c1e1f279";
-    sha256 = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
+    hash = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
     fetchSubmodules = true;
   };
 

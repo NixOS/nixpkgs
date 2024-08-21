@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "sha256-UlSqwM8GQKeG8/K0t5DbM034NQOeBg+ujNi/MMsVCuM=";
+    hash = "sha256-UlSqwM8GQKeG8/K0t5DbM034NQOeBg+ujNi/MMsVCuM=";
     fetchSubmodules = true;
   };
 

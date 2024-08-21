@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "lib4sbom";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UQZZYTRDbUqSH6F8hjhp9L70025cRO3zXQ8Aoznotg4=";
+    hash = "sha256-sjfOCG1E5Of+HPcfRsBwEKmGkhUOIkAARWja81FL2PY=";
   };
 
   dependencies = [

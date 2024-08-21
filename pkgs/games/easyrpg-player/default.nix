@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
     homepage = "https://easyrpg.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ yana ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = lib.optionalString stdenv.hostPlatform.isDarwin "EasyRPG Player";
   };

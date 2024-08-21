@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://mido.readthedocs.io";
     changelog = "https://github.com/mido/mido/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

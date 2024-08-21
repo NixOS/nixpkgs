@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "symless";
     repo = "synergy-core";
     rev = version;
-    sha256 = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
+    hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };
 

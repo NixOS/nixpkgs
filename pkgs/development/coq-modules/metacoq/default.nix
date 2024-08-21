@@ -1,6 +1,6 @@
-{ lib, fetchzip,
+{ lib,
   mkCoqDerivation, single ? false,
-  coqPackages, coq, equations, version ? null }@args:
+  coq, equations, version ? null }@args:
 
 let
   repo  = "metacoq";
@@ -15,7 +15,7 @@ let
       { case = "8.16"; out = "1.1-8.16"; }
       { case = "8.17"; out = "1.3.1-8.17"; }
       { case = "8.18"; out = "1.3.1-8.18"; }
-      { case = "8.19"; out = "1.3.1-8.19"; }
+      { case = "8.19"; out = "1.3.2-8.19"; }
     ] null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";
@@ -32,11 +32,12 @@ let
     "1.3.1-8.17".sha256 = "sha256-l0/QLC7V3zSk/FsaE2eL6tXy2BzbcI5MAk/c+FESwnc=";
     "1.3.1-8.18".sha256 = "sha256-L6Ym4Auwqaxv5tRmJLSVC812dxCqdUU5aN8+t5HVYzY=";
     "1.3.1-8.19".sha256 = "sha256-fZED/Uel1jt5XF83dR6HfyhSkfBdLkET8C/ArDgsm64=";
+    "1.3.2-8.19".sha256 = "sha256-e5Pm1AhaQrO6JoZylSXYWmeXY033QflQuCBZhxGH8MA=";
   };
   releaseRev = v: "v${v}";
 
   # list of core metacoq packages sorted by dependency order
-  packages = if lib.versionAtLeast coq.coq-version "8.17"
+  packages = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev"
      then [ "utils" "common" "template-coq" "pcuic" "safechecker" "template-pcuic" "erasure" "quotation" "safechecker-plugin" "erasure-plugin" "all" ]
      else [ "template-coq" "pcuic" "safechecker" "erasure" "all" ];
 
@@ -57,7 +58,7 @@ let
         mlPlugin = true;
         propagatedBuildInputs = [ equations coq.ocamlPackages.zarith ] ++ metacoq-deps;
 
-        patchPhase =  if lib.versionAtLeast coq.coq-version "8.17" then ''
+        patchPhase = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev" then ''
           patchShebangs ./configure.sh
           patchShebangs ./template-coq/update_plugin.sh
           patchShebangs ./template-coq/gen-src/to-lower.sh

@@ -9,7 +9,7 @@ buildGoModule rec {
     repo = "mustache";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-A7LIkidhpFmhIjiDu9KdmSIdqFNsV3N8J2QEo7yT+DE=";
+    hash = "sha256-A7LIkidhpFmhIjiDu9KdmSIdqFNsV3N8J2QEo7yT+DE=";
   };
 
   vendorHash = "sha256-FYdsLcW6FYxSgixZ5US9cBPABOAVwidC3ejUNbs1lbA=";

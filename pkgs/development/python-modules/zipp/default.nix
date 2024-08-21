@@ -43,7 +43,7 @@ let
       description = "Pathlib-compatible object wrapper for zip files";
       homepage = "https://github.com/jaraco/zipp";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "wcmatch";
-  version = "8.5.2";
+  version = "9.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pwIiuG3qgvs4Ldh7cyeMEHVsE4vW+PcU4hgxKIh7nrI=";
+    hash = "sha256-Vn1msRrXQ4SVTIr4b2B4V8O9+TaCNJrTIGYjGr1VbJI=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Wilcard File Name matching library";
     homepage = "https://github.com/facelessuser/wcmatch";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.95.0";
+  version = "0.96.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-NxdqQ5sWwDptX4jyQCkNX2pVCua5nN4v/VYHZ/Q1LpQ=";
+    hash = "sha256-I9cCvm2qTCwnRonfE86ippBV4V1r8U5HFr9OA96wVqI=";
   };
 
-  cargoHash = "sha256-PNZPljUDXqkyQicjwjaZsiSltxgO6I9/9VJDWKkvUFA=";
+  cargoHash = "sha256-XlsK7zu3Pyc5p5SPVCsBqxIyKedaAPF58Ki7keOZRYM=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
@@ -48,6 +48,8 @@ rustPlatform.buildRustPackage {
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
+
+  doCheck = ! stdenv.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tfupdate";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "tfupdate";
     rev = "v${version}";
-    sha256 = "sha256-RewBCiUNdXA30gwcnBu+wBoMNbVjaIWkCQV+Bat6l0o=";
+    sha256 = "sha256-/wkCd73SrspHccbOZV6lq0Htk+Vjgbu2uTZLiEeZAdc=";
   };
 
-  vendorHash = "sha256-fs61aMsRGF2zmyLro5ySWi3P1qPPgvISTqCvuVWAvz0=";
+  vendorHash = "sha256-/ZNWVuGInZY/t0s317FQstEPeJpTKWMXUVo8cE44GkI=";
 
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted

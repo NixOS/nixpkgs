@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -17,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rawpython";
-    repo = pname;
+    repo = "remi";
     rev = version;
     hash = "sha256-VQn+Uzp6oGSit8ot0e8B0C2N41Q8+J+o91skyVN1gDA=";
   };
@@ -42,7 +41,11 @@ buildPythonPackage rec {
         "self.assertEqual("
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    setuptools # pkg_resources is referenced at runtime
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -57,10 +60,10 @@ buildPythonPackage rec {
     "editor.widgets"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic, lightweight and websocket-based webui library";
     homepage = "https://github.com/rawpython/remi";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ pbsds ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

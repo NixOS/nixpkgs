@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , aqbanking
 , boost
 , cmake
@@ -28,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.6";
+  version = "5.8";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-tLQsYmNQ8+effKHyFzVFzGPd7hrd8kYLGh8iIhvyG9E=";
+    hash = "sha256-osgj+3ALnUWYaS7IE5SVm944jY7xke/k6iwCQmu1JZM=";
   };
 
   nativeBuildInputs = [
@@ -79,12 +78,6 @@ stdenv.mkDerivation rec {
     # this patch disables a flaky test
     # see https://bugs.gnucash.org/show_bug.cgi?id=799289
     ./0005-disable-test-lots.patch
-    # Fix importing QIF by backporting a fix. remove on next release
-    # https://bugs.gnucash.org/show_bug.cgi?id=799262
-    (fetchpatch {
-      url = "https://github.com/Gnucash/gnucash/commit/b33b864c2fa0ba72d1940465e7fa962dd36833c9.patch";
-      hash = "sha256-A8pYW6CcNFBGC/MDijnuFJdlNAzSDS6Tcj+haCcEI/M=";
-    })
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
@@ -108,7 +101,7 @@ stdenv.mkDerivation rec {
       owner = "Gnucash";
       repo = "gnucash-docs";
       rev = version;
-      hash = "sha256-rQZoau466Bi/YpPj1XpSsm67FgTYhiMfZfogTtn+m1k=";
+      hash = "sha256-3b1Nue3eEefDi4WI+o3ATfrsQ+H/I+QwTr4Nuc9J7Zg=";
     };
 
     nativeBuildInputs = [ cmake ];

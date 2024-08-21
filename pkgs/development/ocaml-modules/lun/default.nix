@@ -15,6 +15,6 @@ buildDunePackage rec {
     description = "Optics in OCaml";
     homepage = "https://git.robur.coop/robur/lun";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

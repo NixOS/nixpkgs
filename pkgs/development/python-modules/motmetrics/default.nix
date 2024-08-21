@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Bar_chart: Benchmark multiple object trackers (MOT) in Python";
     homepage = "https://github.com/cheind/py-motmetrics";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

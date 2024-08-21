@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "hasherezade";
     repo = "pe-bear";
     rev = "v${version}";
-    sha256 = "sha256-We3XxSsGL1mTK5DgI2wgRm7OaziI/cZRiLd+qrvZ7SE=";
+    hash = "sha256-We3XxSsGL1mTK5DgI2wgRm7OaziI/cZRiLd+qrvZ7SE=";
     fetchSubmodules = true;
   };
 

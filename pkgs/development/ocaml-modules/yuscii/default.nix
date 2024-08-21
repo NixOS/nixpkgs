@@ -34,6 +34,6 @@ buildDunePackage rec {
     description = "Simple mapper between UTF-7 to Unicode according RFC2152";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/yuscii";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -22,21 +22,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-4sW/WxoN5jAomA/aFAAH8z8CAB7zsevpBllSwaQWSmU=";
+    hash = "sha256-zdm2ADBIsW0QGgxnuDkp2nQjWtMxe3pT9LXhw6juQ34=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ovr_overlay-0.0.0" = "sha256-d38LqhKOp9tHbiK4eU7OPdFvkExqaJN1tB6y2qqPm9U=";
+      "libmonado-rs-0.1.0" = "sha256-ja7OW/YSmfzaQoBhu6tec9v8fyNDknLekE2eY7McLPE=";
+      "openxr-0.18.0" = "sha256-ktkbhmExstkNJDYM/HYOwAwv3acex7P9SP0KMAOKhQk=";
+      "ovr_overlay-0.0.0" = "sha256-5IMEI0IPTacbA/1gibYU7OT6r+Bj+hlQjDZ3Kg0L2gw=";
       "vulkano-0.34.0" = "sha256-o1KP/mscMG5j3U3xtei/2nMNEh7jLedcW1P0gL9Y1Rc=";
-      "wlx-capture-0.3.11" = "sha256-CmFnVfA3MAYXSejn9GpuaNCRu4HiX0CN0j3aN4Pxvjw=";
+      "wlx-capture-0.3.12" = "sha256-rZTJp7VhUvE/6lwESW2jKeGweFut6BvcxouG/nyl+GE=";
     };
   };
 

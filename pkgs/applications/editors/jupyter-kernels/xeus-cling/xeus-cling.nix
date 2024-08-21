@@ -1,10 +1,7 @@
 { lib
-, callPackage
 , clangStdenv
 , cmake
 , fetchFromGitHub
-, gcc
-, git
 , llvmPackages_13
 # Libraries
 , argparse

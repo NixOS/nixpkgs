@@ -82,6 +82,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thebigmunch/tbm-utils";
     changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

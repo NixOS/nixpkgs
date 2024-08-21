@@ -6,6 +6,10 @@
   packaging,
   pytestCheckHook,
   setuptools,
+
+  # for passthru.tests
+  aiobotocore,
+  moto,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +32,10 @@ buildPythonPackage rec {
     pytestCheckHook
     packaging
   ];
+
+  passthru.tests = {
+    inherit aiobotocore moto;
+  };
 
   meta = with lib; {
     description = "Flask extension adding a decorator for CORS support";

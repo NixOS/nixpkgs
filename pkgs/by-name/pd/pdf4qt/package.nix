@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
 , lcms
 , cmake
 , pkg-config

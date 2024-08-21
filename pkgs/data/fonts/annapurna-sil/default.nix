@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "annapurna-sil";
-  version = "2.000";
+  version = "2.100";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/annapurna/AnnapurnaSIL-${version}.zip";
-    hash = "sha256-tvh1E9uGCikJgjmbn28gD7rUgBdKjtvdwgoRIeccGq8=";
+    hash = "sha256-TFaCchtd9SRGsU9r+m8QOvZfc7/FJxwclkSfbLwf6/4=";
   };
 
   installPhase = ''

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   numpy,
   scipy,
   sympy,
@@ -28,9 +27,6 @@ buildPythonPackage rec {
     scipy
     sympy
   ];
-
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     nose

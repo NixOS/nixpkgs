@@ -35,6 +35,7 @@ ldoc,,,,,,
 lgi,,,,,,
 linenoise,https://raw.githubusercontent.com/hoelzro/lua-linenoise/master/linenoise-0.9-1.rockspec,,,,,
 ljsyscall,,,,,5.1,lblasc
+llscheck,,,,,,mrcjkb
 lmathx,,,,,5.3,alexshpilkin
 lmpfrlib,,,,,5.3,alexshpilkin
 loadkit,,,,,,alerque
@@ -83,6 +84,7 @@ luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-treesitter-parser,,,,,,mrcjkb
+luarocks-build-treesitter-parser-cpp,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasnip,,,,,,
 luasocket,,,,,,

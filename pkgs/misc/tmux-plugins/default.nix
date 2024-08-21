@@ -479,6 +479,35 @@ in rec {
     };
   };
 
+  pass = mkTmuxPlugin {
+    pluginName = "pass";
+    version = "0-unstable-2020-02-28";
+    rtpFilePath = "plugin.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "rafi";
+      repo = "tmux-pass";
+      rev = "76b1c98911d56928063a41bc93a2d9e81818ef4c";
+      sha256 = "sha256-bamz4IZrozo5R7jt+z7YKyrogawPqsZ9cTJi9osjVoA=";
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      rm $target/README.md
+      rm -r $target/test
+
+      wrapProgram $target/scripts/main.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath ( [
+          findutils fzf gnugrep gnused ncurses pkgs.pass tmux
+        ] )}
+    '';
+
+    meta = with lib; {
+      description = "Password-store browser using fzf in tmux";
+      homepage = "https://github.com/rafi/tmux-pass";
+      license = licenses.unlicense;
+    };
+  };
+
   plumb = mkTmuxPlugin rec {
     pluginName = "plumb";
     version = "0.1.1";
@@ -704,6 +733,26 @@ in rec {
       repo = "tmux-colors-solarized";
       rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
       sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+    };
+  };
+
+  tmux-floax = mkTmuxPlugin {
+    pluginName = "tmux-floax";
+    rtpFilePath = "floax.tmux";
+    version = "0-unstable-2024-07-24";
+    src = fetchFromGitHub {
+      owner = "omerxx";
+      repo = "tmux-floax";
+      rev = "46c0a6a8c3cf79b83d1b338f547acbbd1d306301";
+      hash = "sha256-bALZfVWcoAzcTeWwkBHhi7TzUQJicOBTNdeJh3O/Bj8=";
+    };
+    meta = {
+      description = "Floating pane for Tmux";
+      homepage = "https://github.com/omerxx/tmux-floax";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ redyf ];
+      mainProgram = "tmux-floax";
+      platforms = lib.platforms.all;
     };
   };
 

@@ -1,9 +1,11 @@
 { config
+, uthash
 , lib
 , stdenv
+, nv-codec-headers-12
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , fdk_aac
 , ffmpeg
@@ -39,7 +41,6 @@
 , withFdk ? true
 , pipewire
 , libdrm
-, libajantv2
 , librist
 , libva
 , srt
@@ -48,6 +49,8 @@
 , nlohmann_json
 , websocketpp
 , asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
 , libdatachannel
 , libvpl
 , qrcodegencpp
@@ -60,13 +63,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "30.1.2";
+  version = "30.2.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    sha256 = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
+    hash = "sha256-yMtLN/86+3wuNR+gGhsaxN4oGIC21bAcjbQfyTuXIYc=";
     fetchSubmodules = true;
   };
 
@@ -85,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     cmake
     pkg-config
     wrapGAppsHook3
@@ -111,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvlc
     mbedtls
     pciutils
-    libajantv2
     librist
     libva
     srt
@@ -122,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdatachannel
     libvpl
     qrcodegencpp
+    uthash
+    nv-codec-headers-12
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
@@ -153,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
+    (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -165,6 +170,8 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libX11
       libvlc
       libGL
+    ] ++ optionals decklinkSupport [
+      blackmagic-desktop-video
     ];
   in ''
     # Remove libcef before patchelf, otherwise it will fail
@@ -177,8 +184,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/lib*.so
-    addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addDriverRunpath $out/lib/lib*.so
+    addDriverRunpath $out/lib/obs-plugins/*.so
 
     # Link libcef again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/

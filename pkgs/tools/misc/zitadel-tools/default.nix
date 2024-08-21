@@ -36,7 +36,7 @@ buildGoModule rec {
     description = "Helper tools for zitadel";
     homepage = "https://github.com/zitadel/zitadel-tools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "zitadel-tools";
   };
 }
