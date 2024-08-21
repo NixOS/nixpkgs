@@ -6,6 +6,7 @@
 , darwin
 , nixosTests
 , nix-update-script
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,10 +29,13 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  nativeBuildInputs = [ versionCheckHook ];
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  doInstallCheck = true;
 
   env = {
     OPENSSL_NO_VENDOR = 1;
