@@ -76,7 +76,7 @@ buildFHSEnv {
   '';
 
   meta = with lib; {
-    description = "An audio sample player";
+    description = "Audio sample player";
     longDescription = ''
         Decent Sampler is an audio sample player.
         Allowing you to play sample libraries in the DecentSampler format

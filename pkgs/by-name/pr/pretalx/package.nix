@@ -3,11 +3,13 @@
 , gettext
 , python3
 , fetchFromGitHub
+, plugins ? [ ]
 , nixosTests
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.0";
@@ -27,21 +29,22 @@ let
     };
   };
 
-  version = "2024.1.0";
+  version = "2024.2.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-rFOlovybaEZnv5wBx6Dv8bVkP1D+CgYAKRXuNb6hLKQ=";
+    hash = "sha256-D0ju9aOVy/new9GWqyFalZYCisdmM7irWSbn2TVCJYQ=";
   };
 
   meta = with lib; {
     description = "Conference planning tool: CfP, scheduling, speaker management";
+    mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/en/latest/changelog.html";
     license = licenses.asl20;
-    maintainers = teams.c3d2.members;
+    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
     platforms = platforms.linux;
   };
 
@@ -51,7 +54,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-B9R3Nn4tURNxzeyLDHscqHxYOQK9AcmDnyNq3k5WQQs=";
+    npmDepsHash = "sha256-EAdeXdcC3gHun6BOHzvqpzv9+oDl1b/VTeNkYLiD+hA=";
 
     npmBuildScript = "build";
 
@@ -80,7 +83,31 @@ python.pkgs.buildPythonApplication rec {
     gettext
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "celery"
+    "css-inline"
+    "cssutils"
+    "defusedxml"
+    "django-compressor"
+    "django-csp"
+    "django-filter"
+    "django-hierarkey"
+    "djangorestframework"
+    "markdown"
+    "pillow"
+    "publicsuffixlist"
+    "python-dateutil"
+    "reportlab"
+    "requests"
+    "rules"
+    "whitenoise"
+  ];
+
+  dependencies = with python.pkgs; [
     beautifulsoup4
     bleach
     celery
@@ -88,6 +115,7 @@ python.pkgs.buildPythonApplication rec {
     csscompressor
     cssutils
     defusedcsv
+    defusedxml
     django
     django-bootstrap4
     django-compressor
@@ -115,9 +143,12 @@ python.pkgs.buildPythonApplication rec {
     vobject
     whitenoise
     zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml;
+  ]
+  ++ beautifulsoup4.optional-dependencies.lxml
+  ++ django.optional-dependencies.argon2
+  ++ plugins;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     mysql = with python.pkgs; [
       mysqlclient
     ];
@@ -170,7 +201,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # tries to run npm run i18n:extract
@@ -193,6 +224,12 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) pretalx;
     };
+    plugins = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
+        inherit (python.pkgs) callPackage;
+        directory = ./plugins;
+      }
+    );
   };
 
   inherit meta;

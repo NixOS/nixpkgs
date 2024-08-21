@@ -10,12 +10,12 @@ in {
   options = {
     services.netatalk = {
 
-      enable = mkEnableOption (lib.mdDoc "the Netatalk AFP fileserver");
+      enable = mkEnableOption "the Netatalk AFP fileserver";
 
       port = mkOption {
         type = types.port;
         default = 548;
-        description = lib.mdDoc "TCP port to be used for AFP.";
+        description = "TCP port to be used for AFP.";
       };
 
       settings = mkOption {
@@ -32,7 +32,7 @@ in {
             "read only" = true;
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Netatalk. See
           {manpage}`afp.conf(5)`.
         '';
@@ -41,7 +41,7 @@ in {
       extmap = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           File name extension mappings.
           See {manpage}`extmap.conf(5)`. for more information.
         '';

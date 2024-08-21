@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope-proxy
-, zope-testrunner
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope-proxy,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.deferredimport";
     inherit version;
-    sha256 = "sha256-Orvw4YwfF2WRTs0dQbVJ5NBFshso5AZfsMHeCtc2ssM=";
+    hash = "sha256-Orvw4YwfF2WRTs0dQbVJ5NBFshso5AZfsMHeCtc2ssM=";
   };
 
   propagatedBuildInputs = [ zope-proxy ];

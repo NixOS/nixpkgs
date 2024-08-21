@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "nixops-aws";
-  version = "unstable-2024-02-29";
+  version = "1.0.0-unstable-2024-02-29";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,12 +45,15 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_aws" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "AWS plugin for NixOps";
     homepage = "https://github.com/NixOS/nixops-aws";
     license = licenses.lgpl3Only;
+    broken = true; # fails with `nose-1.3.7 not supported for interpreter python3.12`
     maintainers = nixops.meta.maintainers;
   };
 }

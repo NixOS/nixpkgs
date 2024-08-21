@@ -24,7 +24,7 @@ let
     "kikit-library" = {
       makeTarget = "pcm-lib";
       resultZip = "pcm-kikit-lib.zip";
-      description = "KiKit uses these symbols and footprints to annotate your boards (e.g., to place a tab in a panel).";
+      description = "KiKit uses these symbols and footprints to annotate your boards (e.g., to place a tab in a panel)";
     };
   };
   targetSpec = targetSpecs.${addonName};

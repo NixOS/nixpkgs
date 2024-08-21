@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , python3
 }:
@@ -23,7 +22,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "http://openttdcoop.org/";
     description = "Compiler for OpenTTD NML files";
-    license = licenses.gpl2;
+    mainProgram = "nmlc";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ToxicFrog ];
   };
 }

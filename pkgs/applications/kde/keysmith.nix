@@ -31,9 +31,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "OTP client for Plasma Mobile and Desktop";
+    mainProgram = "keysmith";
     license = licenses.gpl3;
     homepage = "https://github.com/KDE/keysmith";
-    maintainers = with maintainers; [ samueldr shamilton ];
+    maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
   };
 }

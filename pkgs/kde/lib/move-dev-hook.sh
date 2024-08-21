@@ -2,7 +2,10 @@
 # shellcheck disable=SC2154
 
 moveKF6DevTools() {
-    moveToOutput "${qtPluginPrefix}/designer" "${!outputDev}"
+    if [ -n "$devtools" ]; then
+        mkdir -p "$devtools"
+        moveToOutput "${qtPluginPrefix}/designer" "$devtools"
+    fi
 }
 
 postInstallHooks+=('moveKF6DevTools')

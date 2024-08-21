@@ -6,7 +6,7 @@
 with lib;
 {
   options.services.github-runners = mkOption {
-    description = mdDoc ''
+    description = ''
       Multiple GitHub Runners.
     '';
     example = {
@@ -30,7 +30,7 @@ with lib;
         enable = mkOption {
           default = false;
           example = true;
-          description = mdDoc ''
+          description = ''
             Whether to enable GitHub Actions runner.
 
             Note: GitHub recommends using self-hosted runners with private repositories only. Learn more here:
@@ -41,7 +41,7 @@ with lib;
 
         url = mkOption {
           type = types.str;
-          description = mdDoc ''
+          description = ''
             Repository to add the runner to.
 
             Changing this option triggers a new runner registration.
@@ -59,7 +59,7 @@ with lib;
 
         tokenFile = mkOption {
           type = types.path;
-          description = mdDoc ''
+          description = ''
             The full path to a file which contains either
 
             * a fine-grained personal access token (PAT),
@@ -102,7 +102,7 @@ with lib;
 
         name = mkOption {
           type = types.nullOr types.str;
-          description = mdDoc ''
+          description = ''
             Name of the runner to configure. If null, defaults to the hostname.
 
             Changing this option triggers a new runner registration.
@@ -113,7 +113,7 @@ with lib;
 
         runnerGroup = mkOption {
           type = types.nullOr types.str;
-          description = mdDoc ''
+          description = ''
             Name of the runner group to add this runner to (defaults to the default runner group).
 
             Changing this option triggers a new runner registration.
@@ -123,7 +123,7 @@ with lib;
 
         extraLabels = mkOption {
           type = types.listOf types.str;
-          description = mdDoc ''
+          description = ''
             Extra labels in addition to the default (unless disabled through the `noDefaultLabels` option).
 
             Changing this option triggers a new runner registration.
@@ -134,7 +134,7 @@ with lib;
 
         noDefaultLabels = mkOption {
           type = types.bool;
-          description = mdDoc ''
+          description = ''
             Disables adding the default labels. Also see the `extraLabels` option.
 
             Changing this option triggers a new runner registration.
@@ -144,7 +144,7 @@ with lib;
 
         replace = mkOption {
           type = types.bool;
-          description = mdDoc ''
+          description = ''
             Replace any existing runner with the same name.
 
             Without this flag, registering a new runner with the same name fails.
@@ -154,7 +154,7 @@ with lib;
 
         extraPackages = mkOption {
           type = types.listOf types.package;
-          description = mdDoc ''
+          description = ''
             Extra packages to add to `PATH` of the service to make them available to workflows.
           '';
           default = [ ];
@@ -162,7 +162,7 @@ with lib;
 
         extraEnvironment = mkOption {
           type = types.attrs;
-          description = mdDoc ''
+          description = ''
             Extra environment variables to set for the runner, as an attrset.
           '';
           example = {
@@ -173,7 +173,7 @@ with lib;
 
         serviceOverrides = mkOption {
           type = types.attrs;
-          description = mdDoc ''
+          description = ''
             Modify the systemd service. Can be used to, e.g., adjust the sandboxing options.
             See {manpage}`systemd.exec(5)` for more options.
           '';
@@ -188,7 +188,7 @@ with lib;
 
         ephemeral = mkOption {
           type = types.bool;
-          description = mdDoc ''
+          description = ''
             If enabled, causes the following behavior:
 
             - Passes the `--ephemeral` flag to the runner configuration script
@@ -208,7 +208,7 @@ with lib;
 
         user = mkOption {
           type = types.nullOr types.str;
-          description = mdDoc ''
+          description = ''
             User under which to run the service.
 
             If this option and the `group` option is set to `null`,
@@ -222,7 +222,7 @@ with lib;
 
         group = mkOption {
           type = types.nullOr types.str;
-          description = mdDoc ''
+          description = ''
             Group under which to run the service.
 
             The effect of this option depends on the value of the `user` option:
@@ -241,7 +241,7 @@ with lib;
 
         workDir = mkOption {
           type = with types; nullOr str;
-          description = mdDoc ''
+          description = ''
             Working directory, available as `$GITHUB_WORKSPACE` during workflow runs
             and used as a default for [repository checkouts](https://github.com/actions/checkout).
             The service cleans this directory on every service start.
@@ -256,7 +256,7 @@ with lib;
         nodeRuntimes = mkOption {
           type = with types; nonEmptyListOf (enum [ "node20" ]);
           default = [ "node20" ];
-          description = mdDoc ''
+          description = ''
             List of Node.js runtimes the runner should support.
           '';
         };

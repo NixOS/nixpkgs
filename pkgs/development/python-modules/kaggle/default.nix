@@ -1,36 +1,49 @@
-{ buildPythonPackage
-, bleach
-, certifi
-, fetchPypi
-, lib
-, python-dateutil
-, python-slugify
-, six
-, requests
-, tqdm
-, urllib3
+{
+  bleach,
+  buildPythonPackage,
+  certifi,
+  charset-normalizer,
+  fetchPypi,
+  hatchling,
+  idna,
+  lib,
+  python-dateutil,
+  python-slugify,
+  requests,
+  setuptools,
+  six,
+  text-unidecode,
+  tqdm,
+  urllib3,
+  webencodings,
 }:
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.6.6";
-  format = "setuptools";
+  version = "1.6.17";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-24hxXMBhivJTtq/eIYga6ejm9ksxCs+yc/0T9KV1Igc=";
+    hash = "sha256-Q5p96h1QOfMg/WrV7CG2iNz6cNQFy0IJW4H0HtxAG4E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     bleach
     certifi
+    charset-normalizer
+    idna
     python-dateutil
     python-slugify
     requests
+    setuptools
     six
+    text-unidecode
     tqdm
     urllib3
-    bleach
+    webencodings
   ];
 
   # Tests try to access the network.
@@ -44,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
+    mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbalatsko ];

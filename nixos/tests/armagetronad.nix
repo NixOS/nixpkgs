@@ -1,4 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   user = "alice";
@@ -7,8 +12,8 @@ let
     { pkgs, ... }:
 
     { imports = [ ./common/user-account.nix ./common/x11.nix ];
-      hardware.opengl.driSupport = true;
-      virtualisation.memorySize = 256;
+      hardware.graphics.enable = true;
+      virtualisation.memorySize = 384;
       environment = {
         systemPackages = [ pkgs.armagetronad ];
         variables.XAUTHORITY = "/home/${user}/.Xauthority";
@@ -16,7 +21,8 @@ let
       test-support.displayManager.auto.user = user;
     };
 
-in {
+in
+makeTest {
   name = "armagetronad";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ numinit ];
@@ -202,7 +208,7 @@ in {
         barrier.wait()
 
       # Get to the Server Bookmarks screen on both clients. This takes a while so do it asynchronously.
-      barrier = threading.Barrier(3, timeout=120)
+      barrier = threading.Barrier(len(clients) + 1, timeout=240)
       for client in clients:
         threading.Thread(target=client_setup, args=(client, servers, barrier)).start()
       barrier.wait()
@@ -269,4 +275,4 @@ in {
         srv.node.wait_until_fails(f"ss --numeric --udp --listening | grep -q {srv.port}")
     '';
 
-})
+}

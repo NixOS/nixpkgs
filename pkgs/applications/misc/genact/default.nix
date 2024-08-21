@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/genact --print-manpage > genact.1
     installManPage genact.1
 
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A nonsense activity generator";
+    description = "Nonsense activity generator";
     homepage = "https://github.com/svenstaro/genact";
     changelog = "https://github.com/svenstaro/genact/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -22,7 +22,7 @@ formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:
+{ lib, pkgs, buildPackages }:
 
 self: let
 
@@ -30,11 +30,6 @@ self: let
     elpaBuild = args: self.elpaBuild (args // {
       meta = (args.meta or {}) // { broken = true; };
     });
-  };
-
-  elpaBuild = import ../../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo writeText gcc;
-    inherit (self) emacs;
   };
 
   # Use custom elpa url fetcher with fallback/uncompress
@@ -63,9 +58,6 @@ self: let
       cl-print = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
-      seq = if lib.versionAtLeast self.emacs.version "27"
-            then null
-            else super.seq;
       # Compilation instructions for the Ada executables:
       # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
@@ -80,14 +72,14 @@ self: let
 
         sourceRoot = "ada-mode-${self.ada-mode.version}";
 
-        nativeBuildInputs = [
+        nativeBuildInputs = old.nativeBuildInputs ++ [
           buildPackages.gnat
           buildPackages.gprbuild
           buildPackages.dos2unix
           buildPackages.re2c
         ];
 
-        buildInputs = [
+        buildInputs = old.buildInputs ++ [
           pkgs.gnatPackages.gnatcoll-xref
         ];
 
@@ -174,11 +166,24 @@ self: let
         '';
       });
 
+      # native compilation for tests/seq-tests.el never ends
+      # delete tests/seq-tests.el to workaround this
+      seq = super.seq.overrideAttrs (old: {
+        dontUnpack = false;
+        postUnpack = (old.postUnpack or "") + "\n" + ''
+          local content_directory=$(echo seq-*)
+          rm --verbose $content_directory/tests/seq-tests.el
+          src=$PWD/$content_directory.tar
+          tar --create --verbose --file=$src $content_directory
+        '';
+      });
+
 
     };
 
     elpaPackages = super // overrides;
 
-  in elpaPackages // { inherit elpaBuild; });
+  in elpaPackages);
 
-in (generateElpa { }) // { __attrsFailEvaluation = true; }
+in
+generateElpa { }

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A collection of hacks to efficiently run LaTeX via ssh";
+    description = "Collection of hacks to efficiently run LaTeX via ssh";
     longDescription = ''
       sshlatex is a tool which uploads LaTeX source files to a remote, runs
       LaTeX there, and streams the resulting PDF file to the local host.

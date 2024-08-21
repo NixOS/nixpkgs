@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fake-useragent
-, faker
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, scrapy
+{
+  lib,
+  buildPythonPackage,
+  fake-useragent,
+  faker,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  scrapy,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     scrapy
   ];
 
-  pythonImportsCheck = [
-    "scrapy_fake_useragent"
-  ];
+  pythonImportsCheck = [ "scrapy_fake_useragent" ];
 
   disabledTests = [
     # AttributeError: 'RetryUserAgentMiddleware' object has no attribute 'EXCEPTIONS_TO_RETRY'
@@ -54,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alecxe/scrapy-fake-useragent";
     changelog = "https://github.com/alecxe/scrapy-fake-useragent/blob/master/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

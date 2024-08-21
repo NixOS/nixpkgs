@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, wtforms
-, poetry-core
-, pytestCheckHook
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  wtforms,
+  poetry-core,
+  pytestCheckHook,
+  lxml,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-TJJ3KOeC9JXnxK0YpnfeBNq1KHwaAZ4+t9CXbc+85Ro=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    wtforms
-  ];
+  propagatedBuildInputs = [ wtforms ];
 
   nativeCheckInputs = [
     pytestCheckHook

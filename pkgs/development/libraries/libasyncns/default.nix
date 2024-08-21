@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://0pointer.de/lennart/projects/libasyncns/";
-    description = "A C library for Linux/Unix for executing name service queries asynchronously";
+    description = "C library for Linux/Unix for executing name service queries asynchronously";
     license = licenses.lgpl21;
     platforms = platforms.unix;
   };

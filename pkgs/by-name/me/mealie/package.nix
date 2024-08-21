@@ -1,30 +1,26 @@
 { lib
+, stdenv
 , callPackage
 , fetchFromGitHub
 , fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
-, stdenv
 , writeShellScript
 }:
 
 let
-  version = "1.2.0";
+  version = "1.11.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     rev = "v${version}";
-    sha256 = "sha256-Kc49XDWcZLeJaYgiAO2/mHeVSOLMeiPr3U32e0IYfdU=";
+    hash = "sha256-tBbvmM66zCNpKqeekPY48j0t5PjLHeyQ8+kJ6755ivo=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages.override {
-    overrides = self: super: {
-      pydantic = python3Packages.pydantic_1;
-    };
-  };
+  pythonpkgs = python3Packages;
   python = pythonpkgs.python;
 
   crfpp = stdenv.mkDerivation {
@@ -36,52 +32,46 @@ let
       rev = "c56dd9f29469c8a9f34456b8c0d6ae0476110516";
       hash = "sha256-XNps3ZApU8m07bfPEnvip1w+3hLajdn9+L5+IpEaP0c=";
     };
-  };
 
-  mealie_patch = { name, commit, hash }: fetchpatch {
-    inherit name hash;
-    url = "https://github.com/mealie-recipes/mealie/commit/${commit}.patch";
+    # Can remove once the `register` keyword is removed from source files
+    # Configure overwrites CXXFLAGS so patch it in the Makefile
+    postConfigure = lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace Makefile \
+        --replace-fail "CXXFLAGS = " "CXXFLAGS = -std=c++14 "
+    '';
   };
+in
 
-in pythonpkgs.buildPythonPackage rec {
+pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
 
   patches = [
-    # See https://github.com/mealie-recipes/mealie/pull/3102
-    # Replace hardcoded paths in code with environment variables (meant for inside Docker only)
-    # So we can configure easily where the data is stored on the server
-    (mealie_patch {
-      name = "model-path.patch";
-      commit = "e445705c5d26b895d806b96b2f330d4e9aac3723";
-      hash = "sha256-cf0MwvT81lNBTjvag8UUEbXkBu8Jyi/LFwUcs4lBVcY=";
+    # Pull in https://github.com/mealie-recipes/mealie/pull/4002 manually until
+    # it lands in an upstream mealie release.
+    # See https://github.com/NixOS/nixpkgs/issues/321623.
+    ( fetchpatch {
+        url = "https://github.com/mealie-recipes/mealie/commit/65ece35966120479db903785b22e9f2645f72aa4.patch";
+        hash = "sha256-4Nc0dFJrZ7ElN9rrq+CFpayKsrRjRd24fYraUFTzcH8=";
     })
-    (mealie_patch {
-      name = "alembic-cfg-path.patch";
-      commit = "06c528bfac0708af66aa0629f2e2232ddf07768f";
-      hash = "sha256-IOgdZK7dmWeX2ox16J9v+bOS7nHgCMvCJy6RNJLj0p8=";
-    })
-    ./mealie-logs-to-stdout.patch
   ];
 
-  nativeBuildInputs = [
-    pythonpkgs.poetry-core
-    pythonpkgs.pythonRelaxDepsHook
-    makeWrapper
-  ];
+  build-system = with pythonpkgs; [ poetry-core ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   dontWrapPythonPrograms = true;
 
-  doCheck = false;
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with pythonpkgs; [
+  dependencies = with pythonpkgs; [
     aiofiles
     alembic
     aniso8601
     appdirs
     apprise
+    authlib
     bcrypt
     extruct
     fastapi
@@ -90,15 +80,16 @@ in pythonpkgs.buildPythonPackage rec {
     httpx
     jinja2
     lxml
+    openai
     orjson
     paho-mqtt
-    passlib
     pillow
+    pillow-heif
     psycopg2
+    pydantic-settings
     pyhumps
-    pytesseract
+    pyjwt
     python-dotenv
-    python-jose
     python-ldap
     python-multipart
     python-slugify
@@ -111,8 +102,19 @@ in pythonpkgs.buildPythonPackage rec {
   ];
 
   postPatch = ''
+    rm -rf dev # Do not need dev scripts & code
+
     substituteInPlace mealie/__init__.py \
-      --replace-fail '__version__ = ' '__version__ = "${version}" #'
+      --replace-fail '__version__ = ' '__version__ = "v${version}" #'
+
+    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
+      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
+
+    substituteInPlace mealie/db/init_db.py \
+      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
+
+    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
+      --replace-fail '"script_location", path.join(PROJECT_DIR, "alembic")' '"script_location", "${src}/alembic"'
   '';
 
   postInstall = let
@@ -124,25 +126,33 @@ in pythonpkgs.buildPythonPackage rec {
       ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
     '';
   in ''
-    mkdir -p $out/config $out/bin $out/libexec
+    mkdir -p $out/bin $out/libexec
     rm -f $out/bin/*
 
-    substitute ${src}/alembic.ini $out/config/alembic.ini \
+    substitute ${src}/alembic.ini $out/alembic.ini \
       --replace-fail 'script_location = alembic' 'script_location = ${src}/alembic'
 
     makeWrapper ${start_script} $out/bin/mealie \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
+      --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
       --set LD_LIBRARY_PATH "${crfpp}/lib" \
       --set STATIC_FILES "${frontend}" \
       --set PATH "${lib.makeBinPath [ crfpp ]}"
 
     makeWrapper ${init_db} $out/libexec/init_db \
-      --set PYTHONPATH "$out/${python.sitePackages}:${python.pkgs.makePythonPath propagatedBuildInputs}" \
+      --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
       --set OUT "$out"
   '';
 
-  checkInputs = with python.pkgs; [
-    pytestCheckHook
+  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # KeyError: 'alembic_version'
+    "tests/unit_tests/services_tests/backup_v2_tests/test_backup_v2.py"
+    "tests/unit_tests/services_tests/backup_v2_tests/test_alchemy_exporter.py"
+    # sqlite3.OperationalError: no such table
+    "tests/unit_tests/services_tests/scheduler/tasks/test_create_timeline_events.py"
+    "tests/unit_tests/test_ingredient_parser.py"
+    "tests/unit_tests/test_security.py"
   ];
 
   passthru.tests = {
@@ -150,7 +160,7 @@ in pythonpkgs.buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A self hosted recipe manager and meal planner";
+    description = "Self hosted recipe manager and meal planner";
     longDescription = ''
       Mealie is a self hosted recipe manager and meal planner with a REST API and a reactive frontend
       application built in NuxtJS for a pleasant user experience for the whole family. Easily add recipes into your
@@ -160,7 +170,7 @@ in pythonpkgs.buildPythonPackage rec {
     homepage = "https://mealie.io";
     changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi ];
+    maintainers = with maintainers; [ litchipi anoa ];
     mainProgram = "mealie";
   };
 }

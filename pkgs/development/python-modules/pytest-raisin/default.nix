@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-BI0SWy671DYDTPH4iO811ku6SzpH4ho7eQFUA8PmxW8=";
   };
 
-  nativeBuildInputs = [
-    flit
-  ];
+  nativeBuildInputs = [ flit ];
 
-  propagatedBuildInputs = [
-    pytest
-  ];
+  propagatedBuildInputs = [ pytest ];
 
   # tests cause circular pytest-raisin already registered with pytest error
   doCheck = false;

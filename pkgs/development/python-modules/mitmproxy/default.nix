@@ -1,51 +1,51 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
   # Mitmproxy requirements
-, aioquic
-, asgiref
-, blinker
-, brotli
-, certifi
-, cryptography
-, flask
-, h11
-, h2
-, hyperframe
-, kaitaistruct
-, ldap3
-, mitmproxy-macos
-, mitmproxy-rs
-, msgpack
-, passlib
-, protobuf
-, publicsuffix2
-, pyopenssl
-, pyparsing
-, pyperclip
-, ruamel-yaml
-, setuptools
-, sortedcontainers
-, tornado
-, urwid-mitmproxy
-, wsproto
-, zstandard
+  aioquic,
+  asgiref,
+  blinker,
+  brotli,
+  certifi,
+  cryptography,
+  flask,
+  h11,
+  h2,
+  hyperframe,
+  kaitaistruct,
+  ldap3,
+  mitmproxy-macos,
+  mitmproxy-rs,
+  msgpack,
+  passlib,
+  protobuf5,
+  publicsuffix2,
+  pyopenssl,
+  pyparsing,
+  pyperclip,
+  ruamel-yaml,
+  setuptools,
+  sortedcontainers,
+  tornado,
+  urwid,
+  wsproto,
+  zstandard,
   # Additional check requirements
-, hypothesis
-, parver
-, pytest-asyncio
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, requests
+  hypothesis,
+  parver,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.2.4";
+  version = "10.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,17 +53,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6TPhxprrP6Bgc1yAhN3pBdr98WpvfGnVNvkNtFxROgE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1OMVgV6dFKoG/upv+RWbYqftqejeQLBlsycuy2+Na6E=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
-    "aioquic"
-    "cryptography"
+    "urwid"
   ];
 
   propagatedBuildInputs = [
@@ -82,7 +78,7 @@ buildPythonPackage rec {
     mitmproxy-rs
     msgpack
     passlib
-    protobuf
+    protobuf5
     publicsuffix2
     pyopenssl
     pyparsing
@@ -91,12 +87,10 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     tornado
-    urwid-mitmproxy
+    urwid
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [
-    mitmproxy-macos
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis
@@ -122,11 +116,30 @@ buildPythonPackage rec {
     "test_commands_exist"
     "test_contentview_flowview"
     "test_flowview"
+    "test_get_hex_editor"
     "test_integration"
+    "test_spawn_editor"
     "test_statusbar"
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox
     "test_wireguard"
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test_errorcheck"
+    "test_errorcheck"
+    "test_dns"
+    "test_order"
+  ];
+
+  disabledTestPaths = [
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test/mitmproxy/addons/test_dns_resolver.py"
+    "test/mitmproxy/tools/test_dump.py"
+    "test/mitmproxy/tools/test_main.py"
+    "test/mitmproxy/tools/web/test_app.py"
+    "test/mitmproxy/tools/web/test_app.py" # 2 out of 31 tests work
+    "test/mitmproxy/tools/web/test_master.py"
   ];
 
   dontUsePytestXdist = true;

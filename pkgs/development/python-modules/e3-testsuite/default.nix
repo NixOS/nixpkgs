@@ -1,9 +1,9 @@
-{ buildPythonPackage
-, e3-core
-, fetchFromGitHub
-, lib
-, setuptools
-, stdenv
+{
+  buildPythonPackage,
+  e3-core,
+  fetchFromGitHub,
+  lib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-V20tX0zi2DRHO42udUcW/CDMyBxh1uSTgac0zZGubsI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    e3-core
-  ];
+  propagatedBuildInputs = [ e3-core ];
 
   pythonImportsCheck = [ "e3" ];
 

@@ -56,16 +56,3 @@ index 11fb4b6b7..e00e4807b 100644
                                 NULL);
  
        if (!g_subprocess_wait_check (proc, NULL, &error))
-diff --git a/subprojects/extensions-tool/src/command-pack.c b/subprojects/extensions-tool/src/command-pack.c
-index f2cfcd51a..2a9a7efdf 100644
---- a/subprojects/extensions-tool/src/command-pack.c
-+++ b/subprojects/extensions-tool/src/command-pack.c
-@@ -168,7 +168,7 @@ extension_pack_add_schemas (ExtensionPack  *pack,
- #else
-   dstpath = g_file_get_path (dstdir);
-   proc = g_subprocess_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE, error,
--                           "glib-compile-schemas", "--strict", dstpath, NULL);
-+                           "@glib_compile_schemas@", "--strict", dstpath, NULL);
- 
-   if (!g_subprocess_wait_check (proc, NULL, error))
-     return FALSE;

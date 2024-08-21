@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pycryptodomex
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pycryptodomex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,21 +24,13 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pycryptodomex
-  ];
+  propagatedBuildInputs = [ pycryptodomex ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyzipper"
-  ];
+  pythonImportsCheck = [ "pyzipper" ];
 
   disabledTests = [
     # Tests are parsing CLI output

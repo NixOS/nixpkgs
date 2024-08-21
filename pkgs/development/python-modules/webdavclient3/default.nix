@@ -1,5 +1,13 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib, python-dateutil, lxml, requests
-, pytestCheckHook }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  lib,
+  python-dateutil,
+  lxml,
+  requests,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "webdavclient3";
@@ -13,7 +21,11 @@ buildPythonPackage rec {
     sha256 = "bcd22586bb0d58abc26ca56054fd04228e704bd36073c3080f4597c1556c880d";
   };
 
-  propagatedBuildInputs = [ python-dateutil lxml requests ];
+  propagatedBuildInputs = [
+    python-dateutil
+    lxml
+    requests
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -24,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy to use WebDAV Client for Python 3.x";
+    mainProgram = "wdc";
     homepage = "https://github.com/ezhov-evgeny/webdav-client-python-3";
     license = licenses.mit;
     maintainers = with maintainers; [ dmrauh ];

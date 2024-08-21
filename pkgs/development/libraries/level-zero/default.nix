@@ -1,26 +1,32 @@
 { lib
-, stdenv
-, fetchFromGitHub
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
+, fetchFromGitHub
+, intel-compute-runtime
+, openvino
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.16.1";
+  version = "1.17.25";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iPWEZ9aJ3uI4cAKRgur78zdVwGtD6q1TqwNpK+mg5hw=";
+    hash = "sha256-nC0Bp6Ggs5MDxBbrHVIh73LBb5yyMOUFuLXF06nvLkE=";
   };
 
-  nativeBuildInputs = [ cmake addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake addDriverRunpath ];
 
   postFixup = ''
-    addOpenGLRunpath $out/lib/libze_loader.so
+    addDriverRunpath $out/lib/libze_loader.so
   '';
+
+  passthru.tests = {
+    inherit intel-compute-runtime openvino;
+  };
 
   meta = with lib; {
     description = "oneAPI Level Zero Specification Headers and Loader";

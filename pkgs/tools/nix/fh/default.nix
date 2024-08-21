@@ -6,28 +6,32 @@
 , darwin
 , gcc
 , libcxx
+, cacert
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.9";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-G2bLYand61E/s652Q+5XSfXdM6XUWixiXRRMd3HvfM4=";
+    hash = "sha256-HC/PNdBOm4mR2p6qI2P+aS+lFabKWSiPhiBSJUsmcv4=";
   };
 
-  cargoHash = "sha256-c3XxJQf2uHvj1X/djKyQg2AtrXdROyIVwLeYxFgHDNI=";
+  cargoHash = "sha256-pWPFiDRF9avZSSUtxDaTfl9ZVUEcnO/CY0VWByaGimo=";
 
   nativeBuildInputs = [
     installShellFiles
     rustPlatform.bindgenHook
   ];
 
+  checkInputs = [ cacert ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
     gcc.cc.lib
   ];
 
@@ -35,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   };
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fh \
       --bash <($out/bin/fh completion bash) \
       --fish <($out/bin/fh completion fish) \
@@ -45,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "The official FlakeHub CLI";
+    description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
     changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
     license = licenses.asl20;

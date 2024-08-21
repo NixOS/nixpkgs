@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, setuptools
-, pytestCheckHook
-, pytest-django
-, mock
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  setuptools,
+  pytestCheckHook,
+  pytest-django,
+  mock,
+  nose,
 }:
 
 buildPythonPackage rec {

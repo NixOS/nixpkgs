@@ -16,6 +16,7 @@ permissions:
 
 jobs:
   action:
+    name: set-ofborg-pending
     if: github.repository_owner == 'NixOS'
     permissions:
       statuses: write

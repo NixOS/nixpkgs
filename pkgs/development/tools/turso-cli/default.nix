@@ -8,16 +8,16 @@
 }:
 buildGoModule rec {
   pname = "turso-cli";
-  version = "0.89.0";
+  version = "0.96.3";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
     rev = "v${version}";
-    hash = "sha256-BFL5D4GkcYdHkEc5448jgQflhhncePYfHMTprPynvmU=";
+    hash = "sha256-3noPhWS5Sh6KZs4u310HbNybL58yIcdM7jD0R+UvZ0s=";
   };
 
-  vendorHash = "sha256-oxlIaSSLZ6JirvUPOIHirp43G5qrDFJhNd6HjA9UYKo=";
+  vendorHash = "sha256-c8dX60GPZSNMoCaF51jLWJK+aNDmw6TdzlBYS+vSuEY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,7 +39,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "This is the command line interface (CLI) to Turso.";
+    description = "This is the command line interface (CLI) to Turso";
     homepage = "https://turso.tech";
     mainProgram = "turso";
     license = licenses.mit;

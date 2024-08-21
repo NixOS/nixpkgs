@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A free platform-based fighting game";
+    description = "Free platform-based fighting game";
     longDescription = ''
       Hikou no mizu (ハイクの水) is a free platform-based fighting game,
       licensed under the GNU GPL v3 (program) and the LAL (graphics).

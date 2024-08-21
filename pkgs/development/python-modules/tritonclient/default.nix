@@ -1,14 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, python-rapidjson
-, numpy
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  python-rapidjson,
+  numpy,
   # optional dependencies
-, grpcio
-, packaging
-, aiohttp
-, geventhttpclient
+  grpcio,
+  packaging,
+  aiohttp,
+  geventhttpclient,
 }:
 
 let
@@ -37,9 +38,7 @@ buildPythonPackage {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tritonclient"
-  ];
+  pythonImportsCheck = [ "tritonclient" ];
 
   passthru = {
     optional-dependencies = {
@@ -62,4 +61,3 @@ buildPythonPackage {
     platforms = platforms.linux;
   };
 }
-

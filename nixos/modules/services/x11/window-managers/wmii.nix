@@ -7,7 +7,7 @@ let
 in
 {
   options = {
-    services.xserver.windowManager.wmii.enable = mkEnableOption (lib.mdDoc "wmii");
+    services.xserver.windowManager.wmii.enable = mkEnableOption "wmii";
   };
 
   config = mkIf cfg.enable {

@@ -5,20 +5,20 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nix-your-shell";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/LsTCH16EgoTUCSo4Hzxl/W69+aqLfe/Ld+WQos4Ozo=";
+    hash = "sha256-gjOvAy15y4WJ4LMmiF17nuY6aAsC1V7/zZ+nt+xDh24=";
   };
 
-  cargoHash = "sha256-Z0r/HDAK1+1wHaLZ+HPbS72vsuK7GLdBZm6j5p+KARs=";
+  cargoHash = "sha256-EyE/Sv8cY/e8uf4b/7M3kJhd/l+dZS62np58xICF77U=";
 
   meta = with lib; {
     mainProgram = "nix-your-shell";
-    description = "A `nix` and `nix-shell` wrapper for shells other than `bash`";
+    description = "`nix` and `nix-shell` wrapper for shells other than `bash`";
     homepage = "https://github.com/MercuryTechnologies/nix-your-shell";
     license = [ licenses.mit ];
     maintainers = [ maintainers._9999years ];

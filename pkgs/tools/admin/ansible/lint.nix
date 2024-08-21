@@ -6,12 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "24.2.1";
+  version = "24.7.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-w2Gd6q34UsNT3s/3JCWJvRM54pJxVS5ON7+o9n20xWs=";
+    inherit version;
+    pname = "ansible_lint";
+    hash = "sha256-yi7cfk6AzxnfSyjL9MEY92HObN1qXvnIVh5FTtevWiQ=";
   };
 
   postPatch = ''
@@ -23,7 +24,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     ansible-compat
     black
     filelock
+    importlib-metadata
     jsonschema
     packaging
     pyyaml
@@ -88,6 +89,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Best practices checker for Ansible";
+    mainProgram = "ansible-lint";
     homepage = "https://github.com/ansible/ansible-lint";
     changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = licenses.mit;

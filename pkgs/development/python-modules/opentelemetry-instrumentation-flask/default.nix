@@ -1,15 +1,16 @@
-{ buildPythonPackage
-, flask
-, hatchling
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-instrumentation-wsgi
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, opentelemetry-util-http
-, packaging
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  flask,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-instrumentation-wsgi,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  opentelemetry-util-http,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage {

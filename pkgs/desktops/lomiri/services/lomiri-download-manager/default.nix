@@ -55,10 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # pkg_get_variable doesn't let us substitute prefix pkg-config variable from systemd
+    # Substitute systemd's prefix in pkg-config call
     substituteInPlace CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR "${placeholder "out"}/lib/systemd/user")' \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+
+    # For our automatic pkg-config output patcher to work, prefix must be used here
+    substituteInPlace src/{common/public,downloads/client,downloads/common,uploads/common}/*.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}'
+    substituteInPlace src/downloads/client/lomiri-download-manager-client.pc.in \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
   '';
 
   strictDeps = true;

@@ -13,7 +13,7 @@
 , fftw
 , flann
 , gettext
-, glew-egl
+, glew
 , ilmbase
 , lcms2
 , lensfun
@@ -30,7 +30,7 @@
 , perlPackages
 , sqlite
 , vigra
-, wrapGAppsHook
+, wrapGAppsHook3
 , wxGTK
 , zlib
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     fftw
     flann
     gettext
-    glew-egl
+    glew
     ilmbase
     lcms2
     lensfun
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];

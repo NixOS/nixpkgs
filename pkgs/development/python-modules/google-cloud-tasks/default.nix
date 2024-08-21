@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.16.3";
+  version = "2.16.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2JH+cAbbTWEig4qm3krKbgB3urIk7crmhGZq4+MDxF8=";
+    hash = "sha256-YQM8Ht19xao7n75cjetkvgxQ4LrunZRl8/i3WyzaVbk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -58,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-tasks";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-tasks-v${version}/packages/google-cloud-tasks/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

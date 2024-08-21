@@ -1,12 +1,14 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, wrapGAppsHook
+, wrapGAppsHook3
+, quickemu
+, zenity
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "quickgui";
   version = "1.2.8";
 
@@ -18,11 +20,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    wrapGAppsHook
+    quickemu
+    zenity
   ];
+
+  strictDeps = true;
 
   unpackCmd = "dpkg-deb -x $curSrc source";
 
@@ -30,19 +36,32 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mv usr $out
-    substituteInPlace $out/share/applications/quickgui.desktop \
-      --replace "/usr" $out
 
     runHook postInstall
   '';
 
-  meta = {
-    description = "A Flutter frontend for quickemu";
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ quickemu zenity ]}
+    )
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/applications/quickgui.desktop \
+      --replace "/usr" $out
+
+    # quickgui PR 88
+    echo "Categories=System;" >> $out/share/applications/quickgui.desktop
+  '';
+
+  meta = with lib; {
+    description = "Flutter frontend for quickemu";
     homepage = "https://github.com/quickemu-project/quickgui";
     changelog = "https://github.com/quickemu-project/quickgui/releases/tag/v${version}";
-    maintainers = [ lib.maintainers.heyimnova ];
-    platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ heyimnova ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
     mainProgram = "quickgui";
   };
 }

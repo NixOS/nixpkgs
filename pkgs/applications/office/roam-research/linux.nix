@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "A note-taking tool for networked thought";
+    description = "Note-taking tool for networked thought";
     homepage = "https://roamresearch.com/";
     maintainers = with lib.maintainers; [ dbalan ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

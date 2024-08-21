@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-# build inputs
-, typing-extensions
-, typing-inspect
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  # build inputs
+  typing-extensions,
+  typing-inspect,
 }:
 let
   pname = "pyre-extensions";

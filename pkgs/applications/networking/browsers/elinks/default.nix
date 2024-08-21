@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Full-featured text-mode web browser";
+    mainProgram = "elinks";
     homepage = "https://github.com/rkd77/elinks";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;

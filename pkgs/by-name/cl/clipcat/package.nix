@@ -1,25 +1,34 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , protobuf
 , installShellFiles
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.16.4";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gYg1czSwUm1zJUkw5SMk6C4yDfHcwjWnnHJftDLNvfs=";
+    hash = "sha256-95y/HiLmhqt1DFmAxLg/W7lr/9dfVtce4+tx+vG2Nuw=";
   };
 
-  cargoHash = "sha256-e32DGV7/ueT25Lx318aGZEHRnUGxCn0J5/K3dgT02Ug=";
+  cargoHash = "sha256-z2t7kq2ogMHJGF7xQnzc11B42gUZFTVokVkbw35CeY0=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   nativeBuildInputs = [
     protobuf
+
     installShellFiles
   ];
 
@@ -29,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_x11_primary"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for cmd in clipcatd clipcatctl clipcat-menu clipcat-notify; do
       installShellCompletion --cmd $cmd \
         --bash <($out/bin/$cmd completions bash) \
@@ -42,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     description = "Clipboard Manager written in Rust Programming Language";
     homepage = "https://github.com/xrelkd/clipcat";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ xrelkd ];
     mainProgram = "clipcatd";
   };

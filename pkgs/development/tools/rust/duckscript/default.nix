@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, fetchurl
-, runCommand
 , fetchCrate
 , rustPlatform
 , Security
@@ -28,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-bBqcHETEWooMgQeqPOZIK/77DdTtGq1JusBKoRj5K6w=";
 
   meta = with lib; {
-    description = "Simple, extendable and embeddable scripting language.";
+    description = "Simple, extendable and embeddable scripting language";
     homepage = "https://github.com/sagiegurari/duckscript";
     license = licenses.asl20;
     maintainers = with maintainers; [ mkg20001 ];

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, translatehtml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  translatehtml,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YSTqqd+Kv2QVlAjA0lf4IRx7rJ1DmvB0JIReBv3yZcM=";
+    hash = "sha256-YSTqqd+Kv2QVlAjA0lf4IRx7rJ1DmvB0JIReBv3yZcM=";
   };
 
   propagatedBuildInputs = [

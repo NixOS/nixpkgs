@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.3.1";
+  version = "0.3.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-1YFTBzFr11FUfwgdGJgyF1lWvrfQ6ZPIkYAG7vySfFA=";
+    hash = "sha256-JqLKFVM/EnVAPF7erINpHdaaDG+g2nbB0iE/hB1gml8=";
   };
 
-  cargoHash = "sha256-wL1DKZ1QhBKB4Gy2rbwe4y/hR4A/wiiVqGAIcM+Om8E=";
+  cargoHash = "sha256-wFf6M99IJAZ7YlPBKUZA2mgAS/LNB128GIjDHxr4pMo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool for managing cargo workspaces and their crates, inspired by lerna";
+    description = "Tool for managing cargo workspaces and their crates, inspired by lerna";
     longDescription = ''
       A tool that optimizes the workflow around cargo workspaces with
       git and cargo by providing utilities to version, publish, execute

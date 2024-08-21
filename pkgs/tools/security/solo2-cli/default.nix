@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "cli" ];
 
   meta = with lib; {
-    description = "A CLI tool for managing SoloKeys' Solo2 USB security keys";
+    description = "CLI tool for managing SoloKeys' Solo2 USB security keys";
     homepage = "https://github.com/solokeys/solo2-cli";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ lukegb ];

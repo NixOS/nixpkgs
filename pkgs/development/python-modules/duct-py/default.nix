@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duct" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # This test completely empties the environment then tries to run a Python command.
@@ -30,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library for running child processes";
+    description = "Python library for running child processes";
     homepage = "https://github.com/oconnor663/duct.py";
     license = licenses.mit;
     maintainers = with maintainers; [ zmitchell ];

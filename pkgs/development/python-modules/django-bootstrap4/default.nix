@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# non-propagates
-, django
+  # non-propagates
+  django,
 
-# dependencies
-, beautifulsoup4
+  # dependencies
+  beautifulsoup4,
 
-# tests
-, python
+  # tests
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "24.1";
+  version = "24.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TCHie5h/VRJ9NSg7wKnWotFHm328kxIp+xFXEa8wL1c=";
+    hash = "sha256-sZY/0f1PbYQu9fN65H6H7xLvsdE9AXK0cMt9TyAKuUw=";
   };
 
   nativeBuildInputs = [
@@ -33,17 +34,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 ];
 
-  pythonImportsCheck = [
-    "bootstrap4"
-  ];
+  pythonImportsCheck = [ "bootstrap4" ];
 
-  nativeCheckInputs = [
-    (django.override { withGdal = true; })
-  ];
+  nativeCheckInputs = [ (django.override { withGdal = true; }) ];
 
   checkPhase = ''
     runHook preCheck

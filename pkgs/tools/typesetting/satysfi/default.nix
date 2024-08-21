@@ -64,10 +64,10 @@ in
 
     meta = with lib; {
       homepage = "https://github.com/gfngfn/SATySFi";
-      description = "A statically-typed, functional typesetting system";
+      description = "Statically-typed, functional typesetting system";
       changelog = "https://github.com/gfngfn/SATySFi/blob/v${version}/CHANGELOG.md";
       license = licenses.lgpl3Only;
-      maintainers = [ maintainers.mt-caret maintainers.marsam ];
+      maintainers = [ maintainers.mt-caret ];
       platforms = platforms.all;
       mainProgram = "satysfi";
     };

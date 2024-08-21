@@ -177,7 +177,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     platforms   = platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license     = licenses.mit;
   };
 }

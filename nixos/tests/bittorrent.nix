@@ -21,7 +21,7 @@ let
 
   download-dir = "/var/lib/transmission/Downloads";
   transmissionConfig = { ... }: {
-    environment.systemPackages = [ pkgs.transmission ];
+    environment.systemPackages = [ pkgs.transmission_3 ];
     services.transmission = {
       enable = true;
       settings = {
@@ -36,7 +36,7 @@ in
 {
   name = "bittorrent";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ domenkozar eelco rob bobvanderlinden ];
+    maintainers = [ domenkozar rob bobvanderlinden ];
   };
 
   nodes = {

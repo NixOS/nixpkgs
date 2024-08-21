@@ -1,28 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytz
-, requests
-, six
-, tenacity
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  packaging,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "5.18.0";
-  format = "setuptools";
+  version = "5.23.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ngox5vu0nRKwBwNutpKVITQ9a+4iNvhFmRWCG676LLs=";
+    hash = "sha256-ieV9ADoRYwOjTeZwCGI5E2fdVkIiq3H4Ux33Ann8AZM=";
   };
 
-  propagatedBuildInputs = [
-    pytz
-    requests
-    six
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"jupyterlab~=3.0;python_version>='3.6'\"," ""
+  '';
+
+  env.SKIP_NPM = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    packaging
     tenacity
   ];
+
+  pythonImportsCheck = [ "plotly" ];
 
   # No tests in archive
   doCheck = false;
@@ -32,6 +41,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/plotly/plotly.py";
     homepage = "https://plot.ly/python/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Data AcQuisition library (DAQ), for packet I/O";
+    mainProgram = "daq-modules-config";
     homepage = "https://www.snort.org";
     maintainers = with lib.maintainers; [ aycanirican ];
     license = lib.licenses.gpl2;

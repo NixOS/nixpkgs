@@ -16,14 +16,13 @@
   "armv6l-linux"
   "armv7l-linux"
   "i686-linux"
-  "mipsel-linux"
+  # "mipsel-linux" is excluded because it is not bootstrapped
 
   # Other platforms with sufficient support in stdenv which is not formally
   # mandated by their platform tier.
   "aarch64-darwin"
-  "armv5tel-linux"
+  # "armv5tel-linux" is excluded because it is not bootstrapped
   "powerpc64le-linux"
   "riscv64-linux"
-
-  # "x86_64-freebsd" is excluded because it is mostly broken
+  "x86_64-freebsd"
 ]

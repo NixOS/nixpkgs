@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ply
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ply,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,20 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-J+8RGENM/+eaTNvoC54XXPP+aWmazlssjnZAY88J/F0=";
   };
 
-  propagatedBuildInputs = [
-    ply
-  ];
+  propagatedBuildInputs = [ ply ];
 
-  pythonImportsCheck = [
-    "slimit"
-  ];
+  pythonImportsCheck = [ "slimit" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "SlimIt -  a JavaScript minifier/parser in Python";
+    mainProgram = "slimit";
     homepage = "https://github.com/rspivak/slimit";
     changelog = "https://github.com/rspivak/slimit/blob/${src.rev}/CHANGES";
     license = licenses.mit;

@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.110.0";
+  version = "1.120.0";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.8";
@@ -19,11 +19,10 @@ python3.pkgs.buildPythonApplication rec {
     owner = "aws";
     repo = "aws-sam-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FJHHEsdi2uGP9/GxrANsVEuxZiS4M4BPBGoARQBQpkA=";
+    hash = "sha256-XFVh7e9ooIBhWRkVovPdrSuyosBMQ84PDRjV2o0x9ns=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
@@ -36,13 +35,15 @@ python3.pkgs.buildPythonApplication rec {
     "docker"
     "jsonschema"
     "pyopenssl"
+    "requests"
     "rich"
     "ruamel-yaml"
     "tomlkit"
     "tzlocal"
+    "watchdog"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aws-lambda-builders
     aws-sam-translator
     boto3
@@ -117,6 +118,9 @@ python3.pkgs.buildPythonApplication rec {
     "tests/regression"
     "tests/smoke"
     "tests/unit/lib/telemetry"
+    "tests/unit/hook_packages/terraform/hooks/prepare/"
+    "tests/unit/lib/observability/cw_logs/"
+    "tests/unit/lib/build_module/"
     # Disable flaky tests
     "tests/unit/lib/samconfig/test_samconfig.py"
   ];

@@ -37,6 +37,12 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dyZ4JtDBxsTDe9uQDWxJe7M74X7m+5wpEHm+i+s9hwo=";
   };
 
+  patches = [
+    # gdk-pixbuf-csource no longer supports bmp so convert to png
+    # patch GNUMakefile to use graphicsmagick to convert bmp -> png
+    ./convert-bmp-to-png.diff
+  ];
+
   buildInputs = [
     flac
     libvorbis
@@ -77,9 +83,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # broken, see: https://github.com/NixOS/nixpkgs/issues/19098
-    "LTO=0"
   ];
 
   buildFlags = [

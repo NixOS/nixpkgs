@@ -1,8 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, autoreconfHook
-, autoconf-archive
+, fetchpatch
+, meson
+, ninja
 , flex
 , pkg-config
 , perl
@@ -10,6 +11,12 @@
 , dbus
 , polkit
 , systemdLibs
+, udev
+, dbusSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, udevSupport ? dbusSupport
+, libusb1
+, Foundation
 , IOKit
 , testers
 , nix-update-script
@@ -17,9 +24,12 @@
 , polkitSupport ? false
 }:
 
+assert polkitSupport -> dbusSupport;
+assert systemdSupport -> dbusSupport;
+
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.0.1";
+  version = "2.2.3";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -28,30 +38,46 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-7NGlU4byGxtGBticewg8K4FUiDSQZAiB7Q/y+LaqKPo=";
+    hash = "sha256-hKyxXqZaqg8KGFoBWhRHV1/50uoxqiG0RsYtgw2BuQ4=";
   };
 
-  configureFlags = [
-    "--enable-confdir=/etc"
-    # The OS should care on preparing the drivers into this location
-    "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    (lib.enableFeature stdenv.isLinux "libsystemd")
-    (lib.enableFeature polkitSupport "polkit")
-  ] ++ lib.optionals stdenv.isLinux [
-    "--enable-ipcdir=/run/pcscd"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  # fix build with macOS 11 SDK
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/rousseau/PCSC/-/commit/f41fdaaf7c82bc270af6d7439c6da037bf149be8.patch";
+      revert = true;
+      hash = "sha256-8A76JfYqcILi52X9l/uIpJXeRJDf2dkrNEToOsxGZXk=";
+    })
   ];
 
-  makeFlags = [
-    "POLICY_DIR=$(out)/share/polkit-1/actions"
+  mesonFlags = [
+    (lib.mesonOption "sysconfdir" "/etc")
+    # The OS should care on preparing the drivers into this location
+    (lib.mesonOption "usbdropdir" "/var/lib/pcsc/drivers")
+    (lib.mesonBool "libsystemd" systemdSupport)
+    (lib.mesonBool "polkit" polkitSupport)
+    (lib.mesonOption "ipcdir" "/run/pcscd")
+  ] ++ lib.optionals systemdSupport [
+    (lib.mesonOption "systemdunit" "system")
+  ] ++ lib.optionals (!udevSupport) [
+    (lib.mesonBool "libudev" false)
   ];
 
   # disable building pcsc-wirecheck{,-gen} when cross compiling
   # see also: https://github.com/LudovicRousseau/PCSC/issues/25
-  postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    substituteInPlace src/Makefile.am \
-      --replace "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
-                "noinst_PROGRAMS = testpcsc"
+  postPatch = ''
+    substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
+      --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
+  '' + lib.optionalString systemdSupport ''
+    substituteInPlace meson.build \
+      --replace-fail \
+        "systemdsystemunitdir = systemd.get_variable(pkgconfig : 'systemd' + unit + 'unitdir')" \
+        "systemdsystemunitdir = '${placeholder "out"}/lib/systemd/system'"
+  '' + lib.optionalString polkitSupport ''
+    substituteInPlace meson.build \
+      --replace-fail \
+        "install_dir : polkit_dep.get_variable('policydir')" \
+        "install_dir : '${placeholder "out"}/share/polkit-1/actions'"
   '';
 
   postInstall = ''
@@ -59,36 +85,41 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/pcsc-spy "$dev"
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
-    autoreconfHook
-    autoconf-archive
+    meson
+    ninja
     flex
     pkg-config
     perl
   ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ systemdLibs ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ]
-    ++ lib.optionals polkitSupport [ dbus polkit ];
+    ++ lib.optionals systemdSupport [ systemdLibs ]
+    ++ lib.optionals (!systemdSupport && udevSupport) [ udev ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation IOKit ]
+    ++ lib.optionals dbusSupport [ dbus ]
+    ++ lib.optionals polkitSupport [ polkit ]
+    ++ lib.optionals (!udevSupport) [ libusb1 ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "pcscd --version";
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "pcscd --version";
+      };
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
     changelog = "https://salsa.debian.org/rousseau/PCSC/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "pcscd";
-    maintainers = [ maintainers.anthonyroussel ];
-    platforms = with platforms; unix;
+    maintainers = [ lib.maintainers.anthonyroussel ];
+    pkgConfigModules = [ "libpcsclite" ];
+    platforms = lib.platforms.unix;
   };
 })

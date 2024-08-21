@@ -33,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for web fuzzing";
+    mainProgram = "ffuf";
     longDescription = ''
       FFUF, or “Fuzz Faster you Fool” is an open source web fuzzing tool,
       intended for discovering elements and content within web applications

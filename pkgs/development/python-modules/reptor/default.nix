@@ -1,38 +1,36 @@
-{ lib
-, asgiref
-, buildPythonPackage
-, certifi
-, charset-normalizer
-, cvss
-, deepl
-, django
-, fetchFromGitHub
-, gql
-, idna
-, markdown-it-py
-, mdurl
-, pygments
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, reptor
-, requests
-, rich
-, setuptools
-, sqlparse
-, termcolor
-, tomli
-, tomli-w
-, tomlkit
-, urllib3
-, xmltodict
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  certifi,
+  charset-normalizer,
+  cvss,
+  deepl,
+  django,
+  fetchFromGitHub,
+  gql,
+  idna,
+  markdown-it-py,
+  mdurl,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  sqlparse,
+  termcolor,
+  tomli,
+  tomli-w,
+  tomlkit,
+  urllib3,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.13";
+  version = "0.21";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,17 +39,15 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-7jFS3GCaPeGBBxB++XTtIYh+m0uXTm5NHuLeIen0KYc=";
+    hash = "sha256-XJCysRGCg5V3ftSsu611mS8btbdebs1EOPTp1Z/6PJ0=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+
+  dependencies = [
     asgiref
     certifi
     charset-normalizer
@@ -74,12 +70,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    ghostwriter = [
-      gql
-    ] ++ gql.optional-dependencies.aiohttp;
-    translate = [
-      deepl
-    ];
+    ghostwriter = [ gql ] ++ gql.optional-dependencies.aiohttp;
+    translate = [ deepl ];
   };
 
   nativeCheckInputs = [
@@ -91,9 +83,7 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "reptor"
-  ];
+  pythonImportsCheck = [ "reptor" ];
 
   disabledTestPaths = [
     # Tests want to use pip install dependencies
@@ -104,11 +94,11 @@ buildPythonPackage rec {
     # Tests need network access
     "TestDummy"
     "TestIntegration"
-
   ];
 
   meta = with lib; {
     description = "Module to do automated pentest reporting with SysReptor";
+    mainProgram = "reptor";
     homepage = "https://github.com/Syslifters/reptor";
     changelog = "https://github.com/Syslifters/reptor/releases/tag/${version}";
     license = licenses.mit;

@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Wait for a host to come up/go down";
     homepage = "https://ytrizja.de/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.fogti ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

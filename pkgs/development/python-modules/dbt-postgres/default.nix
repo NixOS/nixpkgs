@@ -1,30 +1,40 @@
-{ lib
-, agate
-, buildPythonPackage
-, dbt-core
-, psycopg2
-, pythonOlder
-, setuptools
+{
+  lib,
+  agate,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dbt-adapters,
+  dbt-common,
+  dbt-core,
+  hatchling,
+  psycopg2,
+  pythonOlder,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "dbt-postgres";
+  version = "1.8.2";
   pyproject = true;
 
-  inherit (dbt-core) version src;
+  disabled = pythonOlder "3.8";
 
-  disabled = pythonOlder "3.7";
-
-  sourceRoot = "${dbt-core.src.name}/plugins/postgres";
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = "dbt-postgres";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-E7Y2lY8aCiAZx5sLWwpOBLTrdOsCQAdWWJTvR2jGOaA=";
+  };
 
   env.DBT_PSYCOPG2_NAME = "psycopg2";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [ "psycopg2-binary" ];
+
+  dependencies = [
     agate
+    dbt-adapters
+    dbt-common
     dbt-core
     psycopg2
   ];
@@ -32,9 +42,7 @@ buildPythonPackage {
   # tests exist for the dbt tool but not for this package specifically
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dbt.adapters.postgres"
-  ];
+  pythonImportsCheck = [ "dbt.adapters.postgres" ];
 
   meta = with lib; {
     description = "Plugin enabling dbt to work with a Postgres database";

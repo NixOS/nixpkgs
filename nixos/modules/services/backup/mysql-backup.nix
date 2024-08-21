@@ -20,7 +20,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c ${cfg.gzipOptions} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -37,12 +37,12 @@ in
 
     services.mysqlBackup = {
 
-      enable = mkEnableOption (lib.mdDoc "MySQL backups");
+      enable = mkEnableOption "MySQL backups";
 
       calendar = mkOption {
         type = types.str;
         default = "01:15:00";
-        description = lib.mdDoc ''
+        description = ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
@@ -50,7 +50,7 @@ in
       user = mkOption {
         type = types.str;
         default = defaultUser;
-        description = lib.mdDoc ''
+        description = ''
           User to be used to perform backup.
         '';
       };
@@ -58,7 +58,7 @@ in
       databases = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of database names to dump.
         '';
       };
@@ -66,7 +66,7 @@ in
       location = mkOption {
         type = types.path;
         default = "/var/backup/mysql";
-        description = lib.mdDoc ''
+        description = ''
           Location to put the gzipped MySQL database dumps.
         '';
       };
@@ -74,8 +74,16 @@ in
       singleTransaction = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create database dump in a single transaction
+        '';
+      };
+
+      gzipOptions = mkOption {
+        default = "--no-name --rsyncable";
+        type = types.str;
+        description = ''
+          Command line options to use when invoking `gzip`.
         '';
       };
     };

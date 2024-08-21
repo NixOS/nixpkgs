@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , fetchpatch
 , buildPythonApplication
@@ -19,7 +18,7 @@
 , pygobject3
 , pyxdg
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
@@ -55,7 +54,7 @@ buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
 
     # Python packages
     dbus-python
@@ -96,6 +95,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Change the frequency limits of your cpu and its governor";
+    mainProgram = "cpupower-gui";
     homepage = "https://github.com/vagnum08/cpupower-gui/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ unode ];

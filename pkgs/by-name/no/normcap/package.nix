@@ -25,7 +25,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.5.4";
+  version = "0.5.8";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -34,13 +34,13 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bYja05U/JBwSij1J2LxN+c5Syrb4qzWSZY5+HNmC9Zo=";
+    hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
   };
 
   postPatch = ''
     # disable coverage testing
     substituteInPlace pyproject.toml \
-      --replace "addopts = [" "addopts_ = ["
+      --replace-fail "addopts = [" "addopts_ = ["
   '';
 
   pythonRemoveDeps = [
@@ -52,12 +52,11 @@ ps.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    ps.pythonRelaxDepsHook
     ps.hatchling
     ps.babel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ps.pyside6
     ps.jeepney
   ];
@@ -76,7 +75,7 @@ ps.buildPythonApplication rec {
     ps.toml
   ] ++ lib.optionals stdenv.isLinux [
     ps.pytest-xvfb
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   preCheck = ''
@@ -97,6 +96,8 @@ ps.buildPythonApplication rec {
   disabledTests = [
     # requires a wayland session (no xclip support)
     "test_wl_copy"
+    # RuntimeError: Please destroy the QApplication singleton before creating a new QApplication instance
+    "test_get_application"
     # times out, unknown why
     "test_update_checker_triggers_checked_signal"
     # touches network
@@ -124,6 +125,9 @@ ps.buildPythonApplication rec {
     "tests/tests_gui/test_downloader.py"
     # fails to import, causes pytest to freeze
     "tests/tests_gui/test_language_manager.py"
+    # RuntimeError("Internal C++ object (PySide6.QtGui.QHideEvent) already deleted.")
+    # AttributeError("'LoadingIndicator' object has no attribute 'timer'")
+    "tests/tests_gui/test_loading_indicator.py"
   ] ++ lib.optionals stdenv.isDarwin [
     # requires a display
     "tests/integration/test_normcap.py"

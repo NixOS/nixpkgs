@@ -32,17 +32,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "diffsitter";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rB580TlM0/HXYgPvWtm7KMtXrw6i996HyvCrNr3QmNA=";
+    hash = "sha256-ta7JcSPEgpJwieYvtZnNMFvsYvz4FuxthhmKMYe2XUE=";
     fetchSubmodules = false;
   };
 
-  cargoHash = "sha256-8ajCXoB+mVhHrstVG+QkWYfXJqDk4+XPcO6yjR4TqpQ=";
+  cargoHash = "sha256-VbdV4dftCxxKLJr9TEuCe9tvSGbc62AUwlDZdaNRNhw=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/afnanenayet/diffsitter";
-    description = "A tree-sitter based AST difftool to get meaningful semantic diffs";
+    description = "Tree-sitter based AST difftool to get meaningful semantic diffs";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
   };

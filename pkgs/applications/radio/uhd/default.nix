@@ -8,15 +8,8 @@
 , boost
 , ncurses
 , enableCApi ? true
-# Although we handle the Python API's dependencies in pythonEnvArg, this
-# feature is currently disabled as upstream attempts to run `python setup.py
-# install` by itself, and it fails because the Python's environment's prefix is
-# not a writable directly. Adding support for this feature would require using
-# python's pypa/build nad pypa/install hooks directly, and currently it is hard
-# to do that because it all happens after a long buildPhase of the C API.
-, enablePythonApi ? false
+, enablePythonApi ? true
 , python3
-, buildPackages
 , enableExamples ? false
 , enableUtils ? true
 , libusb1
@@ -38,13 +31,7 @@
 }:
 
 let
-  onOffBool = b: if b then "ON" else "OFF";
-  inherit (lib) optionals;
-  # Later used in pythonEnv generation. Python + mako are always required for the build itself but not necessary for runtime.
-  pythonEnvArg = (ps: with ps; [ mako ]
-    ++ optionals (enablePythonApi) [ numpy setuptools ]
-    ++ optionals (enableUtils) [ requests six ]
-  );
+  inherit (lib) optionals cmakeBool;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,7 +59,30 @@ stdenv.mkDerivation (finalAttrs: {
     # hash.
     sha256 = "17g503mhndaabrdl7qai3rdbafr8xx8awsyr7h2bdzwzprzmh4m3";
   };
+  # This are the minimum required Python dependencies, this attribute might
+  # be useful if you want to build a development environment with a python
+  # interpreter able to import the uhd module.
+  pythonPath = optionals (enablePythonApi || enableUtils) [
+    python3.pkgs.numpy
+    python3.pkgs.setuptools
+  ] ++ optionals (enableUtils) [
+    python3.pkgs.requests
+    python3.pkgs.six
+
+    /* These deps are needed for the usrp_hwd.py utility, however even if they
+    would have been added here, the utility wouldn't have worked because it
+    depends on an old python library mprpc that is not supported for Python >
+    3.8. See also report upstream:
+    https://github.com/EttusResearch/uhd/issues/744
+
+    python3.pkgs.gevent
+    python3.pkgs.pyudev
+    python3.pkgs.pyroute2
+
+    */
+  ];
   passthru = {
+    runtimePython = python3.withPackages (ps: finalAttrs.pythonPath);
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
@@ -83,66 +93,91 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
     "-DENABLE_USB=ON"
-    "-DENABLE_TESTS=ON" # This installs tests as well so we delete them via postPhases
-    "-DENABLE_EXAMPLES=${onOffBool enableExamples}"
-    "-DENABLE_UTILS=${onOffBool enableUtils}"
-    "-DENABLE_C_API=${onOffBool enableCApi}"
-    "-DENABLE_PYTHON_API=${onOffBool enablePythonApi}"
-    "-DENABLE_DPDK=${onOffBool enableDpdk}"
+    # Regardless of doCheck, we want to build the tests to help us gain
+    # confident that the package is OK.
+    "-DENABLE_TESTS=ON"
+    (cmakeBool "ENABLE_EXAMPLES" enableExamples)
+    (cmakeBool "ENABLE_UTILS" enableUtils)
+    (cmakeBool "ENABLE_C_API" enableCApi)
+    (cmakeBool "ENABLE_PYTHON_API" enablePythonApi)
+    /*
+
+    Otherwise python tests fail. Using a dedicated pythonEnv for either or both
+    nativeBuildInputs and buildInputs makes upstream's cmake scripts fail to
+    install the Python API as reported on our end at [1] (we don't want
+    upstream to think we are in a virtual environment because we use
+    python3.withPackages...).
+
+    Putting simply the python dependencies in the nativeBuildInputs and
+    buildInputs as they are now from some reason makes the `python` in the
+    checkPhase fail to find the python dependencies, as reported at [2]. Even
+    using nativeCheckInputs with the python dependencies, or using a
+    `python3.withPackages` wrapper in nativeCheckInputs, doesn't help, as the
+    `python` found in $PATH first is the one from nativeBuildInputs.
+
+    [1]: https://github.com/NixOS/nixpkgs/pull/307435
+    [2]: https://discourse.nixos.org/t/missing-python-package-in-checkphase/9168/
+
+    Hence we use upstream's provided cmake flag to control which python
+    interpreter they will use to run the the python tests.
+
+    */
+    "-DRUNTIME_PYTHON_EXECUTABLE=${lib.getExe finalAttrs.passthru.runtimePython}"
+    (cmakeBool "ENABLE_DPDK" enableDpdk)
     # Devices
-    "-DENABLE_OCTOCLOCK=${onOffBool enableOctoClock}"
-    "-DENABLE_MPMD=${onOffBool enableMpmd}"
-    "-DENABLE_B100=${onOffBool enableB100}"
-    "-DENABLE_B200=${onOffBool enableB200}"
-    "-DENABLE_USRP1=${onOffBool enableUsrp1}"
-    "-DENABLE_USRP2=${onOffBool enableUsrp2}"
-    "-DENABLE_X300=${onOffBool enableX300}"
-    "-DENABLE_N300=${onOffBool enableN300}"
-    "-DENABLE_N320=${onOffBool enableN320}"
-    "-DENABLE_E300=${onOffBool enableE300}"
-    "-DENABLE_E320=${onOffBool enableE320}"
-  ]
+    (cmakeBool "ENABLE_OCTOCLOCK" enableOctoClock)
+    (cmakeBool "ENABLE_MPMD" enableMpmd)
+    (cmakeBool "ENABLE_B100" enableB100)
+    (cmakeBool "ENABLE_B200" enableB200)
+    (cmakeBool "ENABLE_USRP1" enableUsrp1)
+    (cmakeBool "ENABLE_USRP2" enableUsrp2)
+    (cmakeBool "ENABLE_X300" enableX300)
+    (cmakeBool "ENABLE_N300" enableN300)
+    (cmakeBool "ENABLE_N320" enableN320)
+    (cmakeBool "ENABLE_E300" enableE300)
+    (cmakeBool "ENABLE_E320" enableE320)
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
-    ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
-  ;
-
-  pythonEnv = python3.withPackages pythonEnvArg;
+  ] ++ optionals stdenv.isAarch32 [
+    "-DCMAKE_CXX_FLAGS=-Wno-psabi"
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     # Present both here and in buildInputs for cross compilation.
-    (buildPackages.python3.withPackages pythonEnvArg)
+    python3
+    python3.pkgs.mako
+    # We add this unconditionally, but actually run wrapPythonPrograms only if
+    # python utilities are enabled
+    python3.pkgs.wrapPython
   ];
-  buildInputs = [
+  buildInputs = finalAttrs.pythonPath ++ [
     boost
     libusb1
-  ]
-    # However, if enableLibuhd_Python_api *or* enableUtils is on, we need
-    # pythonEnv for runtime as well. The utilities' runtime dependencies are
-    # handled at the environment
-    ++ optionals (enableExamples) [ ncurses ncurses.dev ]
-    ++ optionals (enablePythonApi || enableUtils) [ finalAttrs.pythonEnv ]
-    ++ optionals (enableDpdk) [ dpdk ]
-  ;
+  ] ++ optionals (enableExamples) [
+    ncurses ncurses.dev
+  ] ++ optionals (enableDpdk) [
+    dpdk
+  ];
 
   # many tests fails on darwin, according to ofborg
   doCheck = !stdenv.isDarwin;
 
   # Build only the host software
   preConfigure = "cd host";
-  # TODO: Check if this still needed, perhaps relevant:
-  # https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html#build_instructions_unix_arm
   patches = [
-    # Disable tests that fail in the sandbox
+    # Disable tests that fail in the sandbox, last checked at version 4.6.0.0
     ./no-adapter-tests.patch
   ];
 
-  postPhases = [ "installFirmware" "removeInstalledTests" ]
-    ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [ "moveUdevRules" ]
-  ;
+  postPhases = [
+    "installFirmware"
+    "removeInstalledTests"
+  ] ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [
+    "moveUdevRules"
+  ];
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
   installFirmware = ''
@@ -162,6 +197,10 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
 
+  # Wrap the python utilities with our pythonPath definition
+  postFixup = lib.optionalString (enablePythonApi && enableUtils) ''
+    wrapPythonPrograms
+  '';
   disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
     python3
   ];

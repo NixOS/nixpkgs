@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A lightweight overlay bar for Wayland";
+    description = "Lightweight overlay bar for Wayland";
     longDescription = ''
       A lightweight overlay volume/backlight/progress/anything bar for Wayland,
       inspired by xob.

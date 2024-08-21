@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libsoup, webkitgtk, gtk3, glib-networking
-, gsettings-desktop-schemas, wrapGAppsHook
+, gsettings-desktop-schemas, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Eq4riJSznKpkW9JJDnTCLxZ9oMJTmWkIoGphOiCcSAg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
+  nativeBuildInputs = [ wrapGAppsHook3 pkg-config ];
   buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
 
   passthru = {
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    description = "A Vim-like browser";
+    description = "Vim-like browser";
+    mainProgram = "vimb";
     longDescription = ''
       A fast and lightweight vim like web browser based on the webkit web
       browser engine and the GTK toolkit. Vimb is modal like the great vim
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://fanglingsu.github.io/vimb/";
     license = lib.licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

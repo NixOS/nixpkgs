@@ -7,17 +7,17 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
-  version = "1.8.4";
+  version = "1.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbQA-dev";
     repo = "nbQA";
     rev = "refs/tags/${version}";
-    hash = "sha256-clxIe97pWeA9IGt+650tJfxTmU+qbrL/9B2VRVIML+s=";
+    hash = "sha256-zn+e/svaxeJU9P1sIaRrVuKW0+FM0GLKZTUx3PfuThk=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     ruff = [ ruff ];
   };
 
-  propagatedBuildInputs = with python3.pkgs;
+  dependencies = with python3.pkgs;
     [
       autopep8
       ipython
@@ -59,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ (with python3.pkgs; [
       autoflake
+      distutils
       flake8
       isort
       jupytext
@@ -89,12 +90,12 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_include_exclude.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nbQA-dev/nbQA";
     changelog = "https://nbqa.readthedocs.io/en/latest/history.html";
     description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
-    license = licenses.mit;
-    maintainers = with maintainers; [ l0b0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ l0b0 ];
     mainProgram = "nbqa";
   };
 }

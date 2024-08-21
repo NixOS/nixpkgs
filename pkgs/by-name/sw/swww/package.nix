@@ -1,25 +1,31 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, lz4
-, libxkbcommon
-, installShellFiles
-, scdoc
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  lz4,
+  libxkbcommon,
+  installShellFiles,
+  scdoc,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swww";
-  version = "0.8.2";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n7YdUmIZGu7W7cX6OvVW+wbkKjFvont4hEAhZXYDQd8=";
+    hash = "sha256-ldy9HhIsWdtTdvtRLV3qDT80oX646BI4Q+YX5wJXbsc=";
   };
 
-  cargoHash = "sha256-lZC71M3lbsI+itMydAp5VCz0cpSHo/FpkQFC1NlN4DU=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "bitcode-0.6.0" = "sha256-D1Jv9k9m6m7dXjU8s4YMEMC39FOUN7Ix9SvLKhM1yh0=";
+    };
+  };
 
   buildInputs = [
     lz4
@@ -47,12 +53,15 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_swww
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
     homepage = "https://github.com/LGFae/swww";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mateodd25 donovanglover ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      mateodd25
+      donovanglover
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "swww";
   };
 }

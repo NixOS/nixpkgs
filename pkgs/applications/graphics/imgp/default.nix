@@ -31,6 +31,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "High-performance CLI batch image resizer & rotator";
+    mainProgram = "imgp";
     homepage = "https://github.com/jarun/imgp";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

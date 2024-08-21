@@ -5,7 +5,7 @@
 , cairo
 , dconf
 , glib
-, gnome
+, gnome-common
 , gtk3
 , libwnck
 , libX11
@@ -21,7 +21,7 @@
 , file
 , gnome-menus
 , libgee
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoreconfHook
 }:
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    gnome.gnome-common
+    gnome-common
     libxml2 # xmllint
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Elegant, simple, clean dock";
+    mainProgram = "plank";
     homepage = "https://launchpad.net/plank";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

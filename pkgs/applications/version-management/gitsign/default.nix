@@ -1,16 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal, testers, gitsign }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, gitMinimal, testers, gitsign }:
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.8.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+oJBpERU2WbfmS7MyBbJKrh4kzY+rgSw4uKAU1y5kR4=";
+    hash = "sha256-JNCz5MVqn8PeTfYUVowIVZwtpfD+Gx9yBckter6PfXA=";
   };
-  vendorHash = "sha256-Z46eDqUc8Mdq9lEMx1YOuSh5zPIMQrSkbto33AmgANU=";
+  vendorHash = "sha256-QW+ZWYEXkhSQR4HvmPLENzY/VEfjEX43mBPhmhsEBMI=";
 
   subPackages = [
     "."

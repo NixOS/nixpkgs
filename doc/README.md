@@ -62,7 +62,7 @@ Allow linking arbitrary place in the text (e.g. individual list items, sentences
 They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
 ```markdown
-- []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGAppsHook` will prepend it to `XDG_DATA_DIRS`.
+- []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGApps*` hook will prepend it to `XDG_DATA_DIRS`.
 ```
 
 #### Automatic links
@@ -106,12 +106,12 @@ This is a warning
 
 The following are supported:
 
-- [`caution`](https://tdg.docbook.org/tdg/5.0/caution.html)
-- [`important`](https://tdg.docbook.org/tdg/5.0/important.html)
-- [`note`](https://tdg.docbook.org/tdg/5.0/note.html)
-- [`tip`](https://tdg.docbook.org/tdg/5.0/tip.html)
-- [`warning`](https://tdg.docbook.org/tdg/5.0/warning.html)
-- [`example`](https://tdg.docbook.org/tdg/5.0/example.html)
+- `caution`
+- `important`
+- `note`
+- `tip`
+- `warning`
+- `example`
 
 Example admonitions require a title to work.
 If you don't provide one, the manual won't be built.
@@ -251,24 +251,41 @@ You, as the writer of documentation, are still in charge of its content.
   For example:
 
   ```markdown
-  # pkgs.coolFunction
+  # pkgs.coolFunction {#pkgs.coolFunction}
 
-  Description of what `coolFunction` does.
+  `pkgs.coolFunction` *`name`* *`config`*
 
-  ## Inputs
+  Description of what `callPackage` does.
 
-  `coolFunction` expects a single argument which should be an attribute set, with the following possible attributes:
 
-  `name` (String)
+  ## Inputs {#pkgs-coolFunction-inputs}
+
+  If something's special about `coolFunction`'s general argument handling, you can say so here.
+  Otherwise, just describe the single argument or start the arguments' definition list without introduction.
+
+  *`name`* (String)
 
   : The name of the resulting image.
 
-  `tag` (String; _optional_)
+  *`config`* (Attribute set)
 
-  : Tag of the generated image.
+  : Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
 
-    _Default:_ the output path's hash.
+    `outputHash` (String; _optional_)
+
+    : A brief explanation including when and when not to pass this attribute.
+
+    : _Default:_ the output path's hash.
   ```
+
+  Checklist:
+  - Start with a synopsis, to show the order of positional arguments.
+  - Metavariables are in emphasized code spans: ``` *`arg1`* ```. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
+  - Attribute names are regular code spans: ``` `attr1` ```. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
+  - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
+  - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
+  - Nix types aren't in code spans, because they are not code
+  - Nix types are capitalized, to distinguish them from the camelCase [Module System](#module-system) types, which _are_ code and behave like functions.
 
 #### Examples
 
@@ -293,7 +310,7 @@ Though this is not shown in the rendered documentation on nixos.org.
 
 #### Figures
 
-To define a referencable figure use the following fencing:
+To define a referenceable figure use the following fencing:
 
 ```markdown
 ::: {.figure #nixos-logo}
@@ -345,4 +362,4 @@ Typographic replacements are enabled. Check the [list of possible replacement pa
 
 ## Getting help
 
-If you need documentation-specific help or reviews, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on your pull request.
+If you need documentation-specific help or reviews, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on your pull request.

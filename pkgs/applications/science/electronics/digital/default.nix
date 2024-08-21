@@ -3,17 +3,18 @@
 }:
 
 let
+  pname = "digital";
   pkgDescription = "A digital logic designer and circuit simulator.";
   version = "0.30";
   buildDate = "2023-02-03T08:00:56+01:00"; # v0.30 commit date
 
   desktopItem = makeDesktopItem {
     type = "Application";
-    name = "Digital";
-    desktopName = pkgDescription;
+    name = pname;
+    desktopName = "Digital";
     comment = "Easy-to-use digital logic designer and circuit simulator";
-    exec = "digital";
-    icon = "digital";
+    exec = pname;
+    icon = pname;
     categories = [ "Education" "Electronics" ];
     mimeTypes = [ "text/x-digital" ];
     terminal = false;
@@ -28,8 +29,7 @@ let
   mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=${version} -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
 in
 maven.buildMavenPackage rec {
-  pname = "digital";
-  inherit version jre;
+  inherit pname version jre;
 
   src = fetchFromGitHub {
     owner = "hneemann";
@@ -44,6 +44,8 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/java
 
@@ -53,6 +55,13 @@ maven.buildMavenPackage rec {
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
       --add-flags "-jar $out/share/java/Digital.jar"
+
+    install -Dm644 src/main/svg/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
+    for size in 16 32 48 64 128; do
+      install -Dm644 src/main/resources/icons/icon"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
+    done
+
+    runHook postInstall
   '';
 
   desktopItems = [ desktopItem ];
@@ -60,6 +69,7 @@ maven.buildMavenPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hneemann/Digital";
     description = pkgDescription;
+    mainProgram = "digital";
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ Dettorer ];

@@ -15,9 +15,7 @@ let
   }.${stdenv.hostPlatform.system};
 
   installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
-in
 
-let
   desktopItem = makeDesktopItem {
     name = "dropbox";
     exec = "dropbox";

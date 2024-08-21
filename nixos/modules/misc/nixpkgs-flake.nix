@@ -20,7 +20,7 @@ in
 
       example = ''builtins.fetchTarball { name = "source"; sha256 = "${lib.fakeHash}"; url = "https://github.com/nixos/nixpkgs/archive/somecommit.tar.gz"; }'';
 
-      description = mdDoc ''
+      description = ''
         The path to the nixpkgs sources used to build the system. This is automatically set up to be
         the store path of the nixpkgs flake used to build the system if using
         `nixpkgs.lib.nixosSystem`, and is otherwise null by default.
@@ -40,7 +40,7 @@ in
       default = cfg.source != null;
       defaultText = "config.nixpkgs.flake.source != null";
 
-      description = mdDoc ''
+      description = ''
         Whether to set {env}`NIX_PATH` to include `nixpkgs=flake:nixpkgs` such that `<nixpkgs>`
         lookups receive the version of nixpkgs that the system was built with, in concert with
         {option}`nixpkgs.flake.setFlakeRegistry`.
@@ -60,7 +60,7 @@ in
       default = cfg.source != null;
       defaultText = "config.nixpkgs.flake.source != null";
 
-      description = mdDoc ''
+      description = ''
         Whether to pin nixpkgs in the system-wide flake registry (`/etc/nix/registry.json`) to the
         store path of the sources of nixpkgs used to build the NixOS system.
 

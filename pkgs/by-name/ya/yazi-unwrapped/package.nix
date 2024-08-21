@@ -1,46 +1,57 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
 
-, installShellFiles
-, stdenv
-, Foundation
-
-, nix-update-script
+  installShellFiles,
+  stdenv,
+  Foundation,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.2.4";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
-    repo = pname;
+    repo = "yazi";
     rev = "v${version}";
-    hash = "sha256-c8fWWCOVBqQVdQch9BniCaJPrVEOCv35lLH8/hMIbvE=";
+    hash = "sha256-tK2dm+WIEJGSq/PbRyagt7x43nd/o1HxP8HMj23HfnQ=";
   };
 
-  cargoHash = "sha256-VeDyO+KCD3Axse4iPIoRxIvoAn3L33e2ObBZFV/REeg=";
+  cargoHash = "sha256-Lb9gu4/i+vPH3dhdzIn9V2s6fKooxEefcN2T/oDqVmg=";
 
   env.YAZI_GEN_COMPLETIONS = true;
+  env.VERGEN_GIT_SHA = "Nixpkgs";
+  env.VERGEN_BUILD_DATE = "2024-08-15";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
+  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \
       --bash ./yazi-boot/completions/yazi.bash \
       --fish ./yazi-boot/completions/yazi.fish \
       --zsh  ./yazi-boot/completions/_yazi
+
+    install -Dm444 assets/yazi.desktop -t $out/share/applications
+    install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript.command = [ ./update.sh ];
 
-  meta = with lib; {
+  meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
     homepage = "https://github.com/sxyazi/yazi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xyenon matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      xyenon
+      matthiasbeyer
+      linsui
+      eljamm
+      uncenter
+    ];
     mainProgram = "yazi";
   };
 }

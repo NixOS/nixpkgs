@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "yaegi";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "traefik";
     repo = "yaegi";
     rev = "v${version}";
-    hash = "sha256-AplNd9+Z+bVC4/2aFKwhabMvumF9IPcSX8X8H0z/ADA=";
+    hash = "sha256-jpLx2z65KeCPC4AQgFmUUphmmiT4EeHwrYn3/rD4Rzg=";
   };
 
   vendorHash = null;
@@ -36,7 +36,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A Go interpreter";
+    description = "Go interpreter";
+    mainProgram = "yaegi";
     homepage = "https://github.com/traefik/yaegi";
     changelog = "https://github.com/traefik/yaegi/releases/tag/${src.rev}";
     license = licenses.asl20;

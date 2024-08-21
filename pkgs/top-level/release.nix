@@ -9,6 +9,7 @@
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
+, system ? builtins.currentSystem
 , officialRelease ? false
   # The platform doubles for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
@@ -21,6 +22,8 @@
     "x86_64-apple-darwin"
     "x86_64-unknown-linux-gnu"
     "x86_64-unknown-linux-musl"
+    # we can uncomment that once our bootstrap tarballs are fixed
+    #"x86_64-unknown-freebsd"
   ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
@@ -28,14 +31,6 @@
 , nixpkgsArgs ? { config = {
     allowUnfree = false;
     inHydra = true;
-    permittedInsecurePackages = [
-      # *Exceptionally*, those packages will be cached with their *secure* dependents
-      # because they will reach EOL in the middle of the 23.05 release
-      # and it will be too much painful for our users to recompile them
-      # for no real reason.
-      # Remove them for 23.11.
-      "openssl-1.1.1w"
-    ];
   }; }
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`
@@ -54,7 +49,7 @@
 
 let
   release-lib = import ./release-lib.nix {
-    inherit supportedSystems scrubJobs nixpkgsArgs;
+    inherit supportedSystems scrubJobs nixpkgsArgs system;
   };
 
   inherit (release-lib) mapTestOn pkgs;
@@ -78,11 +73,12 @@ let
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
   nonPackageJobs =
-    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
+      release-checks = import ./nixpkgs-basic-release-checks.nix { inherit pkgs nixpkgs supportedSystems; };
+
+      manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-
-      manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
@@ -91,6 +87,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
           constituents =
             [ jobs.tarball
+              jobs.release-checks
               jobs.cabal2nix.x86_64-darwin
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -121,7 +118,8 @@ let
               jobs.gimp.x86_64-darwin
               jobs.emacs.x86_64-darwin
               jobs.wireshark.x86_64-darwin
-              jobs.transmission-gtk.x86_64-darwin
+              jobs.transmission_3-gtk.x86_64-darwin
+              jobs.transmission_4-gtk.x86_64-darwin
 
               # Tests
               /*
@@ -140,6 +138,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.release-checks
               jobs.metrics
               jobs.manual
               jobs.lib-tests
@@ -159,6 +158,7 @@ let
               # Ensure that X11/GTK are in order.
               jobs.firefox-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
+              jobs.devenv.x86_64-linux
 
               /*
               TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
@@ -182,6 +182,7 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
               jobs.cachix.x86_64-darwin
+              jobs.devenv.x86_64-darwin
               jobs.go.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
@@ -209,6 +210,7 @@ let
               jobs.stdenv.aarch64-darwin
               jobs.cargo.aarch64-darwin
               jobs.cachix.aarch64-darwin
+              jobs.devenv.aarch64-darwin
               jobs.go.aarch64-darwin
               jobs.python3.aarch64-darwin
               jobs.nixpkgs-review.aarch64-darwin
@@ -234,7 +236,7 @@ let
                 };
               };
             in {
-              inherit (bootstrap) build dist test;
+              inherit (bootstrap) build test;
             }
           else if hasSuffix "-darwin" config then
             let
@@ -243,10 +245,20 @@ let
               };
             in {
               # Lightweight distribution and test
-              inherit (bootstrap) build dist test;
+              inherit (bootstrap) build test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
               # TODO: Re-enable once the new bootstrap-tools are in place.
               #inherit (bootstrap.test-pkgs) stdenv;
+            }
+          else if hasSuffix "-freebsd" config then
+            let
+              bootstrap = import ../stdenv/freebsd/make-bootstrap-tools.nix {
+                pkgs = import ../.. {
+                  localSystem = { inherit config; };
+                };
+              };
+            in {
+              inherit (bootstrap) build;  # test does't exist yet
             }
           else
             abort "No bootstrap implementation for system: ${config}"
@@ -270,6 +282,7 @@ let
         "ghc92"
         "ghc94"
         "ghc96"
+        "ghc98"
       ] (compilerName: {
         inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
           haskell-language-server;
@@ -278,6 +291,8 @@ let
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsArocc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsZig.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 

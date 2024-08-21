@@ -13,12 +13,43 @@ set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
 
 # https://stackoverflow.com/a/246128/6605742
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 cd "$DIR"/modules
 
 pass=0
 fail=0
+
+# loc
+#   prints the location of the call of to the function that calls it
+# loc n
+#   prints the location n levels up the call stack
+loc() {
+    local caller depth
+    depth=1
+    if [[ $# -gt 0 ]]; then
+        depth=$1
+    fi
+    # ( lineno fnname file ) of the caller
+    caller=( $(caller $depth) )
+    echo "${caller[2]}:${caller[0]}"
+}
+
+line() {
+    echo "----------------------------------------"
+}
+logStartFailure() {
+    line
+}
+logEndFailure() {
+    line
+    echo
+}
+
+logFailure() {
+    # bold red
+    printf '\033[1;31mTEST FAILED\033[0m at %s\n' "$(loc 2)"
+}
 
 evalConfig() {
     local attr=$1
@@ -31,7 +62,7 @@ reportFailure() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
+    echo "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
     evalConfig "$attr" "$@" || true
     ((++fail))
 }
@@ -42,8 +73,12 @@ checkConfigOutput() {
     if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
-        echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
+        logStartFailure
+        echo "ACTUAL:"
         reportFailure "$@"
+        echo "EXPECTED: result matching '$outputContains'"
+        logFailure
+        logEndFailure
     fi
 }
 
@@ -52,14 +87,22 @@ checkConfigError() {
     local err=""
     shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
-        echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
+        logStartFailure
+        echo "ACTUAL: exit code 0, output:"
         reportFailure "$@"
+        echo "EXPECTED: non-zero exit code"
+        logFailure
+        logEndFailure
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
-            echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
+            logStartFailure
+            echo "ACTUAL:"
             reportFailure "$@"
+            echo "EXPECTED: error matching '$errorContains'"
+            logFailure
+            logEndFailure
         fi
     fi
 }
@@ -94,6 +137,8 @@ checkConfigOutput '^true$' config.result ./module-argument-default.nix
 # gvariant
 checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
+checkConfigOutput '"ok"' config.result ./specialArgs-lib.nix
+
 # https://github.com/NixOS/nixpkgs/pull/131205
 # We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix
@@ -102,6 +147,18 @@ checkConfigError 'It seems as if you.re trying to declare an option by placing i
 checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' config.sub ./error-mkOption-in-submodule-config.nix
 checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
 checkConfigError '.*A definition for option .bad. is not of type .non-empty .list of .submodule...\.' config.bad ./error-nonEmptyListOf-submodule.nix
+
+# types.attrTag
+checkConfigOutput '^true$' config.okChecks ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError. is not of type .attribute-tagged union' config.intStrings.syntaxError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError2. is not of type .attribute-tagged union' config.intStrings.syntaxError2 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError3. is not of type .attribute-tagged union' config.intStrings.syntaxError3 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError4. is not of type .attribute-tagged union' config.intStrings.syntaxError4 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.mergeError. is not of type .attribute-tagged union' config.intStrings.mergeError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.badTagError. is not of type .attribute-tagged union' config.intStrings.badTagError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.badTagTypeError\.left. is not of type .signed integer.' config.intStrings.badTagTypeError.left ./types-attrTag.nix
+checkConfigError 'A definition for option .nested\.right\.left. is not of type .signed integer.' config.nested.right.left ./types-attrTag.nix
+checkConfigError 'In attrTag, each tag value must be an option, but tag int was a bare type, not wrapped in mkOption.' config.opt.int ./types-attrTag-wrong-decl.nix
 
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix

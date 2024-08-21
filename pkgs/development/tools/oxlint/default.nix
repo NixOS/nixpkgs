@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.2.13";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "web-infra-dev";
     repo = "oxc";
     rev = "oxlint_v${version}";
-    hash = "sha256-R6RKAOmLjPO1vsM/YMQZpggO98GtecNb+nUf3jC2/+o=";
+    hash = "sha256-rjp1k3cnDSr/hKXNru7XQ6n5Wz97j2EULnHwg3HAm3g=";
   };
 
-  cargoHash = "sha256-+bbTPbCKWN+iJkbtDfEE2CuRdLJNAIoAB0+sSd0kgR4=";
+  cargoHash = "sha256-3IebdIKw3lV+Qy6F7ZgWMchPLzrluGSeWTV9l5to8iM=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {
-    description = "A suite of high-performance tools for JavaScript and TypeScript written in Rust";
+    description = "Suite of high-performance tools for JavaScript and TypeScript written in Rust";
     homepage = "https://github.com/web-infra-dev/oxc";
     changelog = "https://github.com/web-infra-dev/oxc/releases/tag/${src.rev}";
     license = licenses.mit;

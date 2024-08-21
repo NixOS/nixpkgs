@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.18.0";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
     rev = "v${version}";
-    hash = "sha256-kNlFmCqWEfU2ktAMxXNKe6dmAV25voHjHYaovBYsOu8=";
+    hash = "sha256-BjHAHj3EGE1L+EQdniS4OGOViOmcRDR5RhgmYK2zmVY=";
   };
 
-  cargoHash = "sha256-JWYuolHh/qdWF+i6WTgz/uDrkQ6V+SDFhEzGGkUA0E4=";
+  cargoHash = "sha256-ZbSdPi90Nl15YYN1tx9iNsdAjh6x02XKGG73IlOKdXo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd zola \
       --bash <($out/bin/zola completion bash) \
       --fish <($out/bin/zola completion fish) \
@@ -46,7 +46,8 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = zola; };
 
   meta = with lib; {
-    description = "A fast static site generator with everything built-in";
+    description = "Fast static site generator with everything built-in";
+    mainProgram = "zola";
     homepage = "https://www.getzola.org/";
     changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;

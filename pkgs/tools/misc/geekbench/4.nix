@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
-, addOpenGLRunpath
+, addDriverRunpath
 , makeWrapper
 , ocl-icd
 , vulkan-loader
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     for f in geekbench4 geekbench_x86_64 ; do
       wrapProgram $out/bin/$f \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-          addOpenGLRunpath.driverLink
+          addDriverRunpath.driverLink
           ocl-icd
           vulkan-loader
        ]}"

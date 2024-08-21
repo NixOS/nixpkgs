@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Yet another rss reader";
+    mainProgram = "yarr";
     homepage = "https://github.com/nkanaev/yarr";
     changelog = "https://github.com/nkanaev/yarr/blob/v${version}/doc/changelog.txt";
     license = licenses.mit;

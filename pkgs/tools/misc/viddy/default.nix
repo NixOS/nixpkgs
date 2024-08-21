@@ -21,7 +21,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A modern watch command";
+    description = "Modern watch command";
     homepage = "https://github.com/sachaos/viddy";
     license = licenses.mit;
     maintainers = with maintainers; [ j-hui ];

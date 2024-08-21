@@ -2,23 +2,24 @@
 
 buildNpmPackage rec {
   pname = "stylelint";
-  version = "16.2.1";
+  version = "16.8.1";
 
   src = fetchFromGitHub {
     owner = "stylelint";
     repo = "stylelint";
     rev = version;
-    hash = "sha256-ncJ5oCXe23+an2nFOafMEypFUkwRVW3hZf5pWCKkBNE=";
+    hash = "sha256-LhLA1JxaTtdoXfylaDLiyW2gi0xy2l5Rm3B67+z1Wdc=";
   };
 
-  npmDepsHash = "sha256-0+jrfXoM6yqkd43lot3JPB+HBTz3XXzqAulGketRsxU=";
+  npmDepsHash = "sha256-xi6we8XOGaLqwTLrF0Enpx7jQgbHOSItuqzlvvNNBWQ=";
 
   dontNpmBuild = true;
 
   meta = with lib; {
     description = "Mighty CSS linter that helps you avoid errors and enforce conventions";
+    mainProgram = "stylelint";
     homepage = "https://stylelint.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -45,8 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "DNS Loadbalancer";
+    mainProgram = "dnsdist";
     homepage = "https://dnsdist.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ jojosch ];
   };
 }

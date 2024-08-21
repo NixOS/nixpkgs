@@ -1,19 +1,20 @@
-{ buildPythonPackage
-# pkgs dependencies
-, check
-, cppunit
-, pkg-config
-, subunit
-, pythonOlder
+{
+  buildPythonPackage,
+  # pkgs dependencies
+  check,
+  cppunit,
+  pkg-config,
+  subunit,
+  pythonOlder,
 
-# python dependencies
-, extras
-, fixtures
-, hypothesis
-, pytestCheckHook
-, setuptools
-, testscenarios
-, testtools
+  # python dependencies
+  extras,
+  fixtures,
+  hypothesis,
+  pytestCheckHook,
+  setuptools,
+  testscenarios,
+  testtools,
 }:
 
 buildPythonPackage {
@@ -32,7 +33,10 @@ buildPythonPackage {
     setuptools
   ];
 
-  buildInputs = [ check cppunit ];
+  buildInputs = [
+    check
+    cppunit
+  ];
 
   propagatedBuildInputs = [
     extras
@@ -46,9 +50,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "python/subunit"
-  ];
+  pytestFlagsArray = [ "python/subunit" ];
 
   disabledTestPaths = [
     # these tests require testtools and don't work with pytest

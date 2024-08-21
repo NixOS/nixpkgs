@@ -18,7 +18,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = trace.meta // {
-    description = "A simple backend for trace, emitting Catapult JSON into a file";
+    description = "Simple backend for trace, emitting Catapult JSON into a file";
   };
 
 }

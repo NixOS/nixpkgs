@@ -145,7 +145,7 @@ in
 
       max-free = cfg.max-free;
 
-      trusted-users = [ "root" user ];
+      trusted-users = [ user ];
     };
 
     services = {
@@ -167,6 +167,8 @@ in
         # This installCredentials script is written so that it's as easy as
         # possible for a user to audit before confirming the `sudo`
         installCredentials = hostPkgs.writeShellScript "install-credentials" ''
+          set -euo pipefail
+
           KEYS="''${1}"
           INSTALL=${hostPkgs.coreutils}/bin/install
           "''${INSTALL}" -g nixbld -m 600 "''${KEYS}/${user}_${keyType}" ${privateKey}
@@ -176,6 +178,9 @@ in
         hostPkgs = config.virtualisation.host.pkgs;
 
         script = hostPkgs.writeShellScriptBin "create-builder" (
+          ''
+            set -euo pipefail
+          '' +
           # When running as non-interactively as part of a DarwinConfiguration the working directory
           # must be set to a writeable directory.
         (if cfg.workingDirectory != "." then ''

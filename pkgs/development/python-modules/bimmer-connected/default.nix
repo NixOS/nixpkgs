@@ -1,52 +1,51 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pbr
-, httpx
-, pillow
-, pycryptodome
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python
-, respx
-, setuptools
-, time-machine
-, tzdata
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pbr,
+  httpx,
+  pillow,
+  pycryptodome,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python,
+  respx,
+  setuptools,
+  time-machine,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.14.6";
+  version = "0.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-/FL9czp5x/BcKSXXzT19kgGiPFd61BpU7HLtgyyHlIs=";
+    hash = "sha256-rklWek0XDedJXxVlRLLVMOkU0wMOlv8+Uzn8aVAmc2k=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools
   ];
 
   PBR_VERSION = version;
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     pycryptodome
     pyjwt
   ];
 
   passthru.optional-dependencies = {
-    china = [
-      pillow
-    ];
+    china = [ pillow ];
   };
 
   postInstall = ''
@@ -67,15 +66,15 @@ buildPythonPackage rec {
 
   preCheck = ''
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+    export PATH=$out/bin:$PATH
   '';
 
-  pythonImportsCheck = [
-    "bimmer_connected"
-  ];
+  pythonImportsCheck = [ "bimmer_connected" ];
 
   meta = with lib; {
     changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";
     description = "Library to read data from the BMW Connected Drive portal";
+    mainProgram = "bimmerconnected";
     homepage = "https://github.com/bimmerconnected/bimmer_connected";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];

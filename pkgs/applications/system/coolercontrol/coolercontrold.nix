@@ -1,7 +1,9 @@
 { rustPlatform
 , buildNpmPackage
 , testers
+, libdrm
 , coolercontrol
+, runtimeShell
 }:
 
 { version
@@ -14,13 +16,26 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-Ybqr36AkcPnGJeFcCqg/zuWcaooZ1gJPCi5IbgXmeJ0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "nvml-wrapper-0.10.0" = "sha256-pMiULWT+nJXcDfLDeACG/DaPF5+AbzpoIUWWWz8mQ+0=";
+    };
+  };
 
-  # copy the frontend static resources to a directory for embedding
+  buildInputs = [
+    libdrm
+  ];
+
   postPatch = ''
+    # copy the frontend static resources to a directory for embedding
     mkdir -p ui-build
     cp -R ${coolercontrol.coolercontrol-ui-data}/* ui-build/
     substituteInPlace build.rs --replace '"./resources/app"' '"./ui-build"'
+
+    # Hardcode a shell
+    substituteInPlace src/repositories/utils.rs \
+      --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
   '';
 
   postInstall = ''

@@ -22,26 +22,26 @@ let
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption (lib.mdDoc "ankisyncd");
+      enable = mkEnableOption "ankisyncd, a standalone unofficial anky sync server";
 
       package = mkPackageOption pkgs "ankisyncd" { };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "ankisyncd host";
+        description = "ankisyncd host";
       };
 
       port = mkOption {
         type = types.port;
         default = 27701;
-        description = lib.mdDoc "ankisyncd port";
+        description = "ankisyncd port";
       };
 
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to open the firewall for the specified port.";
+        description = "Whether to open the firewall for the specified port.";
       };
     };
 

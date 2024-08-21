@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pybind11
-, setuptools
-, wheel
-, numpy
-, matplotlib
-, pytorch-msssim
-, scipy
-, torch
-, torchvision
-, ipywidgets
-, jupyter
-, plotly
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pybind11,
+  setuptools,
+  wheel,
+  numpy,
+  matplotlib,
+  pytorch-msssim,
+  scipy,
+  torch,
+  torchvision,
+  ipywidgets,
+  jupyter,
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -81,7 +82,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A PyTorch library and evaluation platform for end-to-end compression research";
+    description = "PyTorch library and evaluation platform for end-to-end compression research";
     homepage = "https://github.com/InterDigitalInc/CompressAI";
     license = licenses.bsd3Clear;
     maintainers = with maintainers; [ GaetanLepage ];

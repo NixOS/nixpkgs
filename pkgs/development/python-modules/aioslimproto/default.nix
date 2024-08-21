@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
       --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,9 +39,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aioslimproto"
-  ];
+  pythonImportsCheck = [ "aioslimproto" ];
 
   meta = with lib; {
     description = "Module to control Squeezebox players";

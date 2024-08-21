@@ -77,7 +77,7 @@ resholve.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A popular script for managing ZFS snapshot replication";
+    description = "Popular script for managing ZFS snapshot replication";
     homepage = "https://github.com/allanjude/zxfer";
     changelog = "https://github.com/allanjude/zxfer/releases/tag/v${version}";
     license = licenses.bsd2;

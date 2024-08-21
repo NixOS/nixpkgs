@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mypy-extensions
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mypy-extensions,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     mypy-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "pyannotate_runtime"
@@ -35,8 +34,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Auto-generate PEP-484 annotations";
+    mainProgram = "pyannotate";
     homepage = "https://github.com/dropbox/pyannotate";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

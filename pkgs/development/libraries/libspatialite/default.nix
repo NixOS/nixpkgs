@@ -11,6 +11,7 @@
 , proj
 , sqlite
 , libiconv
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -34,10 +35,11 @@ stdenv.mkDerivation rec {
     freexl
     geos
     librttopo
-    libxml2
+    (libxml2.override { enableHttp = true; })
     minizip
     proj
     sqlite
+    zlib
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];

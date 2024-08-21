@@ -17,7 +17,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3.pkgs.poetry-core
-    python3.pkgs.pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -35,7 +34,8 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "frogmouth" ];
 
   meta = with lib; {
-    description = "A Markdown browser for your terminal";
+    description = "Markdown browser for your terminal";
+    mainProgram = "frogmouth";
     homepage = "https://github.com/Textualize/frogmouth";
     changelog = "https://github.com/Textualize/frogmouth/blob/${src.rev}/ChangeLog.md";
     license = licenses.mit;

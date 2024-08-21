@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cmake,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    cmake
-  ];
+  nativeCheckInputs = [ cmake ];
 
   dontUseCmakeConfigure = true;
 
@@ -41,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "EditorConfig File Locator and Interpreter for Python";
+    mainProgram = "editorconfig";
     homepage = "https://github.com/editorconfig/editorconfig-core-py";
     license = licenses.psfl;
     maintainers = with maintainers; [ nickcao ];

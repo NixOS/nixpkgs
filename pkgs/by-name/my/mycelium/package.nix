@@ -2,24 +2,28 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, openssl
 , darwin
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mycelium";
-  version = "0.4.3";
+  version = "0.5.3";
+
+  sourceRoot = "${src.name}/myceliumd";
 
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
     rev = "v${version}";
-    hash = "sha256-bA3ci+vqXBCPBaxMvfUdFcqdaZbAw/+r5UbH/as/fnc=";
+    hash = "sha256-nyHHuwOHaIh8WCxaQb7QoTReV09ydhHLYwEVHQg2Hek=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tun-0.6.1" = "sha256-DelNPCOWvVSMS2BNGA2Gw/Mn9c7RdFNR21/jo1xf+xk=";
+      "tun-0.6.1" = "sha256-tJx/qRwPcZOAfxyjZUHKLKsLu+loltVUOCP8IzWMryM=";
     };
   };
 
@@ -27,6 +31,14 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+    OPENSSL_DIR = "${lib.getDev openssl}";
+  };
+
+  passthru.tests = { inherit (nixosTests) mycelium; };
 
   meta = with lib; {
     description = "End-2-end encrypted IPv6 overlay network";

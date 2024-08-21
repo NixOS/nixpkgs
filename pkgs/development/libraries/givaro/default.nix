@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/linbox-team/givaro/commit/c7744bb133496cd7ac04688f345646d505e1bf52.patch";
       hash = "sha256-aAA5o8Va10v0Pqgcpx7qM0TAZiNQgXoR6N9xecj7tDA=";
     })
+    (fetchpatch {
+      name = "clang-16.patch";
+      url = "https://github.com/linbox-team/givaro/commit/a81d44b3b57c275bcb04ab00db79be02561deaa2.patch";
+      hash = "sha256-sSk+VWffoEjZRTJcHRISLHPyW6yuvI1u8knBOfxNUIE=";
+    })
   ];
 
   enableParallelBuilding = true;
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = [
-    "--disable-optimization"
+    "--without-archnative"
   ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
@@ -54,7 +59,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "A C++ library for arithmetic and algebraic computations";
+    description = "C++ library for arithmetic and algebraic computations";
+    mainProgram = "givaro-config";
     license = lib.licenses.cecill-b;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

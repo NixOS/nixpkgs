@@ -28,6 +28,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Tool to automate hash length extension attacks";
+    mainProgram = "hash_extender";
     homepage = "https://github.com/iagox86/hash_extender";
     license = licenses.bsd3;
     maintainers = with maintainers; [ oxzi ];

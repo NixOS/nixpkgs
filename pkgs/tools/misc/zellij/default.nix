@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.39.2";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    hash = "sha256-FSLbRfxSWY0a9H9iHT3oQ2SXwB70AwyH0Cm8sDZGaUk=";
+    hash = "sha256-n8cwsCeKWzTw/psvLL3chBr8EcwGoeKB8JeiLSLna1k=";
   };
 
-  cargoHash = "sha256-a5dFtK5czOGqE6mKeeI0kkY2da1kS3IRZ1NTluZ9Syc=";
+  cargoHash = "sha256-TyIQaovmpiu7USURA//+IQWNT95rrVk0x9TRspXYUNk=";
 
   nativeBuildInputs = [
     mandown
@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
     mandown docs/MANPAGE.md > zellij.1
     installManPage zellij.1
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd $pname \
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \
@@ -59,11 +60,11 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = zellij; };
 
   meta = with lib; {
-    description = "A terminal workspace with batteries included";
+    description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
     changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh _0x4A6F abbe thehedgeh0g ];
+    maintainers = with maintainers; [ therealansh _0x4A6F abbe pyrox0 ];
     mainProgram = "zellij";
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, dateutils
-, fetchFromGitHub
-, poetry-core
-, pyaml
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  dateutils,
+  fetchFromGitHub,
+  poetry-core,
+  pyaml,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,12 +24,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pyaml"
-  ];
+  pythonRelaxDeps = [ "pyaml" ];
 
   propagatedBuildInputs = [
     dateutils
@@ -39,12 +36,11 @@ buildPythonPackage rec {
   # Module has no unit tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "thelogrus"
-  ];
+  pythonImportsCheck = [ "thelogrus" ];
 
   meta = with lib; {
     description = "Python 3 version of logrus";
+    mainProgram = "human-time";
     homepage = "https://github.com/unixorn/thelogrus";
     changelog = "https://github.com/unixorn/thelogrus/blob/${version}/ChangeLog.md";
     license = licenses.asl20;

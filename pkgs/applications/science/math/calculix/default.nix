@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.calculix.de/";
     description = "Three-dimensional structural finite element program";
+    mainProgram = "ccx";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;

@@ -12,7 +12,8 @@
 let inherit (callPackage ./generic.nix args) src version library_deps;
 in
 
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0" && !lib.versionAtLeast version "0.23")
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0" && !lib.versionAtLeast version "0.23"
+          || lib.versionAtLeast ocaml.version "5.2" && !lib.versionAtLeast version "0.26.2")
   "ocamlformat ${version} is not available for OCaml ${ocaml.version}"
 
 buildDunePackage {
@@ -31,7 +32,7 @@ buildDunePackage {
   meta = {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code";
-    maintainers = with lib.maintainers; [ Zimmi48 marsam Julow ];
+    maintainers = with lib.maintainers; [ Zimmi48 Julow ];
     license = lib.licenses.mit;
     mainProgram = "ocamlformat";
   };

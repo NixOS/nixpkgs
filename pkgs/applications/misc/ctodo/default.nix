@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://ctodo.apakoh.dk/";
-    description = "A simple ncurses-based task list manager";
+    description = "Simple ncurses-based task list manager";
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;

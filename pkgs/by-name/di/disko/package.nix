@@ -8,13 +8,13 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "disko";
-  version = "1.4.1";
+  pname = "disko";
+  version = "1.6.1";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "disko";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HeWFrRuHpnAiPmIr26OKl2g142HuGerwoO/XtW53pcI=";
+    hash = "sha256-5CNvkH0Nf7yMwgKhjUNg/lUK40C7DXB4zKOuA2jVO90=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bash ];

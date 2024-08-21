@@ -51,7 +51,7 @@ let
   };
 
   mkCc = cc:
-    if stdenv.isAarch64 then cc
+    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then cc
     else
       cc.override {
         bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
@@ -59,7 +59,7 @@ let
       };
 
   mkStdenv = stdenv:
-    if stdenv.isAarch64 then stdenv
+    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then stdenv
     else
       let
         darwinMinVersion = "10.12";
@@ -105,6 +105,8 @@ let
     # conflicting LLVM modules.
     objc4 = stdenv.objc4 or (callPackage ./libobjc.nix { });
 
+    sdkRoot = pkgs.callPackage ../apple-sdk/sdkRoot.nix { sdkVersion = "11.0"; };
+
     # questionable aliases
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
@@ -143,5 +145,16 @@ let
       });
       xcbuild = xcodebuild;
     }));
+
+    darwin-stubs = stdenvNoCC.mkDerivation {
+      pname = "darwin-stubs";
+      inherit (MacOSX-SDK) version;
+
+      buildCommand = ''
+        mkdir -p "$out"
+        ln -s ${MacOSX-SDK}/System "$out/System"
+        ln -s ${MacOSX-SDK}/usr "$out/usr"
+      '';
+    };
   };
 in packages

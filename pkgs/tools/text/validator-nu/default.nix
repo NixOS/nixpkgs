@@ -6,18 +6,19 @@
 , python3
 , stdenvNoCC
 , lib
+, testers
 }:
 
 let
   pname = "validator-nu";
-  version = "22.9.29";
+  version = "23.4.11-unstable-2023-12-18";
 
   src = fetchFromGitHub {
     owner = "validator";
     repo = "validator";
-    rev = version;
+    rev = "c3a401feb6555affdc891337f5a40af238f9ac2d";
     fetchSubmodules = true;
-    hash = "sha256-NH/OyaKGITAL2yttB1kmuKVuZuYzhVuS0Oohj1N4icI=";
+    hash = "sha256-pcA3HXduzFKzoOHhor12qvzbGSSvo3k3Bpy2MvvQlCI=";
   };
 
   deps = stdenvNoCC.mkDerivation {
@@ -40,10 +41,16 @@ let
   };
 
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   nativeBuildInputs = [ git jdk_headless makeWrapper python3 ];
+
+  postPatch = ''
+    substituteInPlace build/build.py --replace-warn \
+      'validatorVersion = "%s.%s.%s" % (year, month, day)' \
+      'validatorVersion = "${finalAttrs.version}"'
+  '';
 
   buildPhase = ''
     ln -s '${deps}/dependencies' '${deps}/extras' .
@@ -51,18 +58,27 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin" "$out/share/java"
     mv build/dist/vnu.jar "$out/share/java/"
     makeWrapper "${jre_headless}/bin/java" "$out/bin/vnu" \
       --add-flags "-jar '$out/share/java/vnu.jar'"
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
+  meta = {
     description = "Helps you catch problems in your HTML/CSS/SVG";
     homepage = "https://validator.github.io/validator/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ andersk ivan ];
     mainProgram = "vnu";
-    sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode fromSource ];
   };
-}
+})

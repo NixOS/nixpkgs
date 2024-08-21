@@ -1,6 +1,7 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
+, fetchpatch
 , wafHook
 , pkg-config
 , bison
@@ -34,6 +35,7 @@
 , python3Packages
 , nixosTests
 , libiconv
+, testers
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -48,24 +50,25 @@
 , enablePam ? (!stdenv.isDarwin), pam
 }:
 
-with lib;
-
 let
   # samba-tool requires libxcrypt-legacy algorithms
   python = python3Packages.python.override {
+    self = python;
     libxcrypt = libxcrypt-legacy;
   };
   wrapPython = python3Packages.wrapPython.override {
     inherit python;
   };
+
+  inherit (lib) optional optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.19.5";
+  version = "4.20.1";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-DiQFtM7CnQRZYh9DQKGnSvdx7Hz/7f9DJQytfx+HYF4=";
+    url = "mirror://samba/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
+    hash = "sha256-+Tw69SlTQNCBBsfA3PuF5PhQV9/RRYeqiBe+sxr/iPc=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -76,6 +79,12 @@ stdenv.mkDerivation rec {
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
     ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+    (fetchpatch {
+      # workaround for https://github.com/NixOS/nixpkgs/issues/303436
+      name = "samba-reproducible-builds.patch";
+      url = "https://gitlab.com/raboof/samba/-/commit/9995c5c234ece6888544cdbe6578d47e83dea0b5.patch";
+      hash = "sha256-TVKK/7wGsfP1pVf8o1NwazobiR8jVJCCMj/FWji3f2A=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -165,6 +174,8 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ] ++ optionals stdenv.buildPlatform.is32bit [
     # By default `waf configure` spawns as many as available CPUs. On
     # 32-bit systems with many CPUs (like `i686` chroot on `x86_64`
@@ -189,7 +200,7 @@ stdenv.mkDerivation rec {
 
   # Save asn1_compile and compile_et so they are available to run on the build
   # platform when cross-compiling
-  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p "$dev/bin"
     cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';
@@ -232,16 +243,38 @@ stdenv.mkDerivation rec {
     lib.optionals (buildPackages.python3Packages.python != python3Packages.python)
       [ buildPackages.python3Packages.python ];
 
-  passthru = {
-    tests.samba = nixosTests.samba;
+  passthru.tests = {
+    samba = nixosTests.samba;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    version = testers.testVersion {
+      command = "${finalAttrs.finalPackage}/bin/smbd -V";
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
     homepage = "https://www.samba.org";
-    description = "The standard Windows interoperability suite of programs for Linux and Unix";
+    description = "Standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;
     broken = enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
+    pkgConfigModules = [
+      "dcerpc_samr"
+      "dcerpc"
+      "ndr_krb5pac"
+      "ndr_nbt"
+      "ndr_standard"
+      "ndr"
+      "netapi"
+      "samba-credentials"
+      "samba-hostconfig"
+      "samba-util"
+      "samdb"
+      "smbclient"
+      "wbclient"
+    ];
   };
-}
+})

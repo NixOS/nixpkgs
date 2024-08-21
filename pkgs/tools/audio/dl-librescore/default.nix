@@ -3,21 +3,21 @@
 , buildNpmPackage
 , fetchFromGitHub
 , python3
-, darwin
+, cctools
 }:
 
 buildNpmPackage rec {
   pname = "dl-librescore";
-  version = "0.35.1";
+  version = "0.35.17";
 
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
     rev = "v${version}";
-    hash = "sha256-W/55Bbq5yiocNLOU1+j1TwkGawyF8sObtMmPW3ph35A=";
+    hash = "sha256-u09aquwZIT2XxxaqirrMU5Q3PpXbj70bcI3pOflxVAE=";
   };
 
-  npmDepsHash = "sha256-Boa/WnptJYJNRdcLgua5GmLT2H9tBpZR+vvAFZC1s4k=";
+  npmDepsHash = "sha256-LZgVQNFXUqFbzXKdXk8wsMDBqApmtXFLRUw6zIKDAqs=";
 
   # see https://github.com/LibreScore/dl-librescore/pull/32
   # TODO can be removed with next update
@@ -31,7 +31,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     python3
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   meta = {
@@ -39,6 +39,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/LibreScore/dl-librescore";
     license = lib.licenses.mit;
     mainProgram = "dl-librescore";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

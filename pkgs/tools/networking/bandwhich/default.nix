@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.22.2";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/uG1xjhxnIkS3rq7Tv1q1v8X7p1baDB8OiSEV9OLyfo=";
+    hash = "sha256-8PUtlhy8rsQw3TqgpxWiVettGhncHetWCZcrDXjsR5M=";
   };
 
   cargoLock = {
@@ -30,6 +30,10 @@ rustPlatform.buildRustPackage rec {
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.isDarwin;
 
+  postPatch = ''
+    ln --force -s ${./Cargo.lock} Cargo.lock
+  '';
+
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files
     mkdir -p $BANDWHICH_GEN_DIR
@@ -43,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI utility for displaying current network utilization";
+    description = "CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
       referencing it with the /proc filesystem on linux or lsof on MacOS. It is

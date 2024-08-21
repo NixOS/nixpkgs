@@ -1,21 +1,27 @@
-{ lib, buildLua, fetchFromGitHub, unstableGitUpdater, yt-dlp }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  yt-dlp,
+}:
 
 buildLua rec {
   pname = "mpv-playlistmanager";
-  version = "unstable-2024-02-26";
+  version = "0-unstable-2024-07-28";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-playlistmanager";
-    rev = "1911dc053951169c98cfcfd9f44ef87d9122ca80";
-    hash = "sha256-pcdOMhkivLF5B86aNuHrqj77DuYLAFGlwFwY7jxkDkE=";
+    rev = "54ed4421f9db5df22524d37e565fe4bb2d12117e";
+    hash = "sha256-RAIyPgqDjKkKcBAzIehpqxCNkWt0Gyxvfo8ycXkjAe0=";
   };
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   postPatch = ''
     substituteInPlace playlistmanager.lua \
-      --replace 'youtube_dl_executable = "youtube-dl",' \
-      'youtube_dl_executable = "${lib.getBin yt-dlp}/bin/yt-dlp"',
+      --replace-fail 'youtube_dl_executable = "yt-dlp",' \
+      'youtube_dl_executable = "${lib.getExe yt-dlp}"',
   '';
 
   meta = with lib; {

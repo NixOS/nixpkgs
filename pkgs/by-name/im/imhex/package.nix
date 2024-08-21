@@ -1,36 +1,39 @@
-{ lib
-, stdenv
-, cmake
-, llvm
-, fetchFromGitHub
-, fetchpatch
-, mbedtls
-, gtk3
-, pkg-config
-, capstone
-, dbus
-, libGLU
-, glfw3
-, file
-, perl
-, python3
-, jansson
-, curl
-, fmt_8
-, nlohmann_json
-, yara
-, rsync
+{
+  lib,
+  stdenv,
+  cmake,
+  llvm,
+  fetchFromGitHub,
+  mbedtls,
+  gtk3,
+  pkg-config,
+  capstone,
+  dbus,
+  libGLU,
+  libGL,
+  glfw3,
+  file,
+  perl,
+  python3,
+  jansson,
+  curl,
+  fmt_8,
+  nlohmann_json,
+  yara,
+  rsync,
+  autoPatchelfHook,
 }:
 
 let
-  version = "1.32.2";
-  patterns_version = "1.32.2";
+  version = "1.35.3";
+  patterns_version = "1.35.3";
 
   patterns_src = fetchFromGitHub {
+    name = "ImHex-Patterns-source-${patterns_version}";
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${patterns_version}";
-    hash = "sha256-K+LiQvykCrOwhEVy37lh7VSf5YJyBQtLz8AGFsuRznQ=";
+    hash = "sha256-h86qoFMSP9ehsXJXOccUK9Mfqe+DVObfSRT4TCtK0rY=";
   };
 
 in
@@ -39,24 +42,23 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchFromGitHub {
+    name = "ImHex-source-${version}";
     fetchSubmodules = true;
     owner = "WerWolv";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MYOZHQMYbbP01z0FyoCgTzwY1/71eUCmJYYfYvN9+so=";
+    repo = "ImHex";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8vhOOHfg4D9B9yYgnGZBpcjAjuL4M4oHHax9ad5PJtA=";
   };
 
-  patches = [
-    # Backport fixes (and fix to fix) for default plugin not being loaded.
-    (fetchpatch {
-      url = "https://github.com/WerWolv/PatternLanguage/compare/ImHex-v1.32.2..1adcdd358d3772681242267ddd3459c9d0913796.patch";
-      stripLen = 1;
-      extraPrefix = "lib/external/pattern_language/";
-      hash = "sha256-aGvt7vQ6PtFE3sw4rAXUP7Pq8cL29LEKyC0rJKkxOZI=";
-    })
+  nativeBuildInputs = [
+    autoPatchelfHook
+    cmake
+    llvm
+    python3
+    perl
+    pkg-config
+    rsync
   ];
-
-  nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
 
   buildInputs = [
     capstone
@@ -71,6 +73,14 @@ stdenv.mkDerivation rec {
     mbedtls
     nlohmann_json
     yara
+  ];
+
+  # autoPatchelfHook only searches for *.so and *.so.*, and won't find *.hexpluglib
+  # however, we will append to RUNPATH ourselves
+  autoPatchelfIgnoreMissingDeps = [ "*.hexpluglib" ];
+  appendRunpaths = [
+    (lib.makeLibraryPath [ libGL ])
+    "${placeholder "out"}/lib/imhex/plugins"
   ];
 
   cmakeFlags = [
@@ -93,7 +103,10 @@ stdenv.mkDerivation rec {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
     license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ luis kashw2 cafkafk ];
+    maintainers = with maintainers; [
+      kashw2
+      cafkafk
+    ];
     platforms = platforms.linux;
   };
 }

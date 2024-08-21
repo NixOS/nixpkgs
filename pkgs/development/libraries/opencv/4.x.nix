@@ -80,6 +80,12 @@
 , doxygen
 , graphviz-nox
 
+, runAccuracyTests ? true
+, runPerformanceTests ? false
+# Modules to enable via BUILD_LIST to build a customized opencv.
+# An empty lists means this setting is ommited which matches upstreams default.
+, enabledModules ? [ ]
+
 , AVFoundation
 , Cocoa
 , VideoDecodeAcceleration
@@ -222,9 +228,9 @@ let
   };
 
   # See opencv/cmake/OpenCVDownload.cmake
-  installExtraFiles = extra: with lib; ''
+  installExtraFiles = extra: ''
     mkdir -p "${extra.dst}"
-  '' + concatStrings (flip mapAttrsToList extra.files (name: md5: ''
+  '' + lib.concatStrings (lib.flip lib.mapAttrsToList extra.files (name: md5: ''
     ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
   ''));
   installExtraFile = extra: ''
@@ -234,8 +240,6 @@ let
 
   opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
-  runAccuracyTests = true;
-  runPerformanceTests = false;
   printEnabled = enabled: if enabled then "ON" else "OFF";
   withOpenblas = (enableBlas && blas.provider.pname == "openblas");
   #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
@@ -254,6 +258,7 @@ effectiveStdenv.mkDerivation {
   outputs = [
     "out"
     "cxxdev"
+  ] ++ lib.optionals (runAccuracyTests || runPerformanceTests) [
     "package_tests"
   ];
   cudaPropagateToOutput = "cxxdev";
@@ -327,15 +332,15 @@ effectiveStdenv.mkDerivation {
   ] ++ lib.optionals (enableFfmpeg && effectiveStdenv.isDarwin) [
     bzip2
     VideoDecodeAcceleration
-  ] ++ lib.optionals (enableGStreamer && effectiveStdenv.isLinux) (with gst_all_1; [
+  ] ++ lib.optionals (enableGStreamer && effectiveStdenv.isLinux) [
     elfutils
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
     libunwind
     orc
     zstd
-  ]) ++ lib.optionals enableOvis [
+  ] ++ lib.optionals enableOvis [
     ogre
   ] ++ lib.optionals enableGPhoto2 [
     libgphoto2
@@ -366,30 +371,21 @@ effectiveStdenv.mkDerivation {
   ] ++ lib.optionals enableDocs [
     doxygen
     graphviz-nox
-  ] ++ lib.optionals enableCuda (with cudaPackages; [
-    cuda_cudart.lib
-    cuda_cudart.dev
-    cuda_cccl.dev # <thrust/*>
-    libnpp.dev # npp.h
-    libnpp.lib
-    libnpp.static
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.libnpp # npp.h
     nvidia-optical-flow-sdk
   ] ++ lib.optionals enableCublas [
     # May start using the default $out instead once
     # https://github.com/NixOS/nixpkgs/issues/271792
     # has been addressed
-    libcublas.static
-    libcublas.lib
-    libcublas.dev # cublas_v2.h
+    cudaPackages.libcublas # cublas_v2.h
   ] ++ lib.optionals enableCudnn [
-    cudnn.dev # cudnn.h
-    cudnn.lib
-    cudnn.static
+    cudaPackages.cudnn # cudnn.h
   ] ++ lib.optionals enableCufft [
-    libcufft.dev # cufft.h
-    libcufft.lib
-    libcufft.static
-  ]);
+    cudaPackages.libcufft # cufft.h
+  ];
 
   propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
 
@@ -479,6 +475,8 @@ effectiveStdenv.mkDerivation {
     "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
+  ] ++ lib.optionals (enabledModules != [ ]) [
+    "-DBUILD_LIST=${lib.concatStringsSep "," enabledModules}"
   ];
 
   postBuild = lib.optionalString enableDocs ''
@@ -551,11 +549,11 @@ effectiveStdenv.mkDerivation {
     };
   } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
-    license = with licenses; if enableUnfree then unfree else bsd3;
-    maintainers = with maintainers; [ basvandijk ];
-    platforms = with platforms; linux ++ darwin;
+    license = if enableUnfree then lib.licenses.unfree else lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ basvandijk ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

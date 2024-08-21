@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-sdk
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, wrapt
-, pytestCheckHook
-, grpcio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  wrapt,
+  pytestCheckHook,
+  grpcio,
 }:
 
 buildPythonPackage {
@@ -22,14 +22,11 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-grpc";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     opentelemetry-api
     opentelemetry-instrumentation
-    opentelemetry-sdk
     opentelemetry-semantic-conventions
     wrapt
   ];
@@ -56,5 +53,7 @@ buildPythonPackage {
   meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-grpc";
     description = "OpenTelemetry Instrumentation for grpc";
+    # https://github.com/open-telemetry/opentelemetry-python-contrib/issues/2483
+    broken = lib.versionAtLeast grpcio.version "1.63";
   };
 }

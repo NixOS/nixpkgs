@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     "test_recv_"
   ];
 
-  pythonImportsCheck = [
-    "smbprotocol"
-  ];
+  pythonImportsCheck = [ "smbprotocol" ];
 
   meta = with lib; {
     description = "Python SMBv2 and v3 Client";

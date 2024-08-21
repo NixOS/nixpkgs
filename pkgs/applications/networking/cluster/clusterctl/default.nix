@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "clusterctl";
-  version = "1.6.3";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cluster-api";
     rev = "v${version}";
-    hash = "sha256-gyZxEzktbYtQSm1gm4wWJriMo/MjDdgaAxjA7J3jeQ0=";
+    hash = "sha256-x82ek6KsfmVjG9P9EaGlvbncGaORqMB2lMxannZT4YE=";
   };
 
-  vendorHash = "sha256-bMM4d1ji03bICsd6uBqu+0n4rB/SiKjtevQzV0DYHiE=";
+  vendorHash = "sha256-z859ZjuvY53HqHXNo8zZkK9XAtMOxh57FeXgGfno3G0=";
 
   subPackages = [ "cmd/clusterctl" ];
 
@@ -29,6 +29,7 @@ buildGoModule rec {
 
     installShellCompletion --cmd clusterctl \
       --bash <($out/bin/clusterctl completion bash) \
+      --fish <($out/bin/clusterctl completion fish) \
       --zsh <($out/bin/clusterctl completion zsh)
   '';
 
@@ -38,11 +39,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kubernetes-sigs/cluster-api/releases/tag/${src.rev}";
     description = "Kubernetes cluster API tool";
+    mainProgram = "clusterctl";
     homepage = "https://cluster-api.sigs.k8s.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
 }

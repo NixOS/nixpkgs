@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ts";
-  version = "1.0.2";
+  version = "1.0.3";
 
   installPhase=''make install "PREFIX=$out"'';
 
@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://viric.name/~viric/soft/ts/ts-${version}.tar.gz";
-    sha256 = "sha256-9zRSrtgOL5p3ZIg+k1Oqf0DmXTwZmtHzvmD9WLWOr+w=";
+    sha256 = "sha256-+oMzEVQ9xTW2DLerg8ZKte4xEo26qqE93jQZhOVCtCg=";
   };
 
   meta = with lib; {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/ts";
     description = "Task spooler - batch queue";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ viric ];
+    license = licenses.gpl2Only;
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "ts";
   };

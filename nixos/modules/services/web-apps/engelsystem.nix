@@ -3,15 +3,13 @@
 let
   inherit (lib) mkDefault mkEnableOption mkIf mkOption types mkPackageOption;
   cfg = config.services.engelsystem;
-  phpExt = pkgs.php.withExtensions
-    ({ enabled, all }: with all; [ filter mysqlnd mysqli pdo pdo_mysql mbstring ] ++ enabled);
 in {
   options = {
     services.engelsystem = {
       enable = mkOption {
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable engelsystem, an online tool for coordinating volunteers
           and shifts on large events.
         '';
@@ -21,7 +19,7 @@ in {
       domain = mkOption {
         type = types.str;
         example = "engelsystem.example.com";
-        description = lib.mdDoc "Domain to serve on.";
+        description = "Domain to serve on.";
       };
 
       package = mkPackageOption pkgs "engelsystem" { };
@@ -29,7 +27,7 @@ in {
       createDatabase = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create a local database automatically.
           This will override every database setting in {option}`services.engelsystem.config`.
         '';
@@ -67,7 +65,7 @@ in {
         min_password_length = 6;
         default_locale = "de_DE";
       };
-      description = lib.mdDoc ''
+      description = ''
         Options to be added to config.php, as a nix attribute set. Options containing secret data
         should be set to an attribute set containing the attribute _secret - a string pointing to a
         file containing the value the option should be set to. See the example to get a better
@@ -101,7 +99,6 @@ in {
       '';
 
     services.phpfpm.pools.engelsystem = {
-      phpPackage = phpExt;
       user = "engelsystem";
       settings = {
         "listen.owner" = config.services.nginx.user;

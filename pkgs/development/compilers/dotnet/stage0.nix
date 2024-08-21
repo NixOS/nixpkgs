@@ -1,15 +1,14 @@
 { stdenv
-, stdenvNoCC
 , callPackage
 , lib
 , writeShellScript
-, pkgsBuildHost
 , mkNugetDeps
 , nix
 , cacert
 , nuget-to-nix
 , dotnetCorePackages
 , xmlstarlet
+, patchNupkgs
 
 , releaseManifestFile
 , tarballHash
@@ -21,15 +20,15 @@ let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  dotnetSdk = pkgsBuildHost.callPackage bootstrapSdk {};
-
-  patchNupkgs = pkgsBuildHost.callPackage ./patch-nupkgs.nix {};
-
-  signAppHost = callPackage ./sign-apphost.nix {};
+  dotnetSdk = callPackage bootstrapSdk {};
 
   deps = mkNugetDeps {
     name = "dotnet-vmr-deps";
     sourceFile = depsFile;
+  };
+
+  sdkPackages = dotnetSdk.packages.override {
+    installable = true;
   };
 
   vmr = (mkVMR {
@@ -38,6 +37,7 @@ let
     prebuiltPackages = mkNugetDeps {
       name = "dotnet-vmr-deps";
       sourceFile = depsFile;
+      installable = true;
     };
 
     nativeBuildInputs =
@@ -51,17 +51,22 @@ let
         -s //Project -t elem -n Import \
         -i \$prev -t attr -n Project -v "${./patch-restored-packages.proj}" \
         src/*/Directory.Build.targets
-    '' + lib.optionalString stdenv.isDarwin ''
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n Import \
-        -i \$prev -t attr -n Project -v "${signAppHost}" \
-        src/runtime/Directory.Build.targets
     '';
 
     postConfigure = old.postConfigure or "" + ''
-      [[ ! -v prebuiltPackages ]] || ln -sf "$prebuiltPackages"/* prereqs/packages/prebuilt/
+      [[ ! -v prebuiltPackages ]] || \
+        ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+      ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
     '';
+
+    buildFlags =
+      old.buildFlags
+      ++ lib.optionals (lib.versionAtLeast old.version "9") [
+        # We need to set this as long as we have something in deps.nix. Currently
+        # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
+        # artifacts.
+        "-p:SkipErrorOnPrebuilts=true"
+      ];
 
     passthru = old.passthru or {} // { fetch-deps =
       let

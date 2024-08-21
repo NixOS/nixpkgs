@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     nodes = {
       node = {...}: {
         environment.systemPackages = with pkgs; [
-          mongodb-4_4
+          # remember to update mongodb.passthru.tests if you change this
           mongodb-5_0
         ];
       };
@@ -42,7 +42,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
     testScript = ''
       node.start()
     ''
-      + runMongoDBTest pkgs.mongodb-4_4
       + runMongoDBTest pkgs.mongodb-5_0
       + ''
         node.shutdown()

@@ -1,18 +1,31 @@
-{ lib
-, buildPythonApplication
-, buildPythonPackage
-, fetchFromGitHub
-, makeWrapper
-, pytestCheckHook
-, python3
-, pythonOlder
-, ruff
-, setuptools
+{
+  lib,
+  buildPythonApplication,
+  buildPythonPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  ruff,
+  setuptools,
+  click-default-group,
+  numpy,
+  openai,
+  pip,
+  pluggy,
+  pydantic,
+  python-ulid,
+  pyyaml,
+  sqlite-migrate,
+  cogapp,
+  pytest-httpx,
+  sqlite-utils,
 }:
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.13.1";
+    version = "0.14";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -21,18 +34,14 @@ let
       owner = "simonw";
       repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-Nq6pduzl8IK+nA3pctst/W4ux7+P6mBFTEHMF+vtBQw=";
+      hash = "sha256-CgGVFUsntVkF0zORAtYQQMAeGtIwBbj9hE0Ei1OCGq4=";
     };
 
-    patches = [
-      ./001-disable-install-uninstall-commands.patch
-    ];
+    patches = [ ./001-disable-install-uninstall-commands.patch ];
 
-    nativeBuildInputs = [
-      setuptools
-    ];
+    nativeBuildInputs = [ setuptools ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    propagatedBuildInputs = [
       click-default-group
       numpy
       openai
@@ -46,7 +55,7 @@ let
       sqlite-utils
     ];
 
-    nativeCheckInputs = with python3.pkgs; [
+    nativeCheckInputs = [
       cogapp
       numpy
       pytest-httpx
@@ -60,11 +69,11 @@ let
       "tests/"
     ];
 
-    pythonImportsCheck = [
-      "llm"
-    ];
+    pythonImportsCheck = [ "llm" ];
 
-    passthru = {inherit withPlugins;};
+    passthru = {
+      inherit withPlugins;
+    };
 
     meta = with lib; {
       homepage = "https://github.com/simonw/llm";
@@ -72,37 +81,37 @@ let
       changelog = "https://github.com/simonw/llm/releases/tag/${version}";
       license = licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [aldoborrero];
+      maintainers = with maintainers; [ aldoborrero ];
     };
   };
 
-  withPlugins = plugins: buildPythonApplication {
-    inherit (llm) pname version;
-    format = "other";
+  withPlugins =
+    plugins:
+    buildPythonApplication {
+      inherit (llm) pname version;
+      format = "other";
 
-    disabled = pythonOlder "3.8";
+      disabled = pythonOlder "3.8";
 
-    dontUnpack = true;
-    dontBuild = true;
-    doCheck = false;
+      dontUnpack = true;
+      dontBuild = true;
+      doCheck = false;
 
-    nativeBuildInputs = [
-      makeWrapper
-    ];
+      nativeBuildInputs = [ makeWrapper ];
 
-    installPhase = ''
-      makeWrapper ${llm}/bin/llm $out/bin/llm \
-        --prefix PYTHONPATH : "${llm}/${python3.sitePackages}:$PYTHONPATH"
-      ln -sfv ${llm}/lib $out/lib
-    '';
+      installPhase = ''
+        makeWrapper ${llm}/bin/llm $out/bin/llm \
+          --prefix PYTHONPATH : "${llm}/${python.sitePackages}:$PYTHONPATH"
+        ln -sfv ${llm}/lib $out/lib
+      '';
 
-    propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
+      propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
 
-    passthru = llm.passthru // {
-      withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      passthru = llm.passthru // {
+        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      };
+
+      inherit (llm) meta;
     };
-
-    inherit (llm) meta;
-  };
 in
-  llm
+llm

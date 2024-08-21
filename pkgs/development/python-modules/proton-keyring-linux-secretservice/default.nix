@@ -1,30 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, proton-keyring-linux
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  proton-keyring-linux,
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-keyring-linux-secretservice";
-  version = "0.0.1-unstable-2023-04-14";
+  version = "0.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-keyring-linux-secretservice";
-    rev = "973d2646ec4d04bc270df53058df892950244e70";
-    hash = "sha256-JlhvJBpbewT2c8k31CPMUlvvo/orWW1qfylFZLnDxeY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IZPT2bL/1YD2TH/djwIQHUE1RRbYMTkQDacjjoqDQWo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    proton-keyring-linux
-  ];
+  propagatedBuildInputs = [ proton-keyring-linux ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -33,14 +30,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "proton.keyring_linux" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "ProtonVPN component to access Linux's keyring secret service API";
     homepage = "https://github.com/ProtonVPN/python-proton-keyring-linux-secretservice";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

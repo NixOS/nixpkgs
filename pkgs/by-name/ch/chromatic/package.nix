@@ -26,10 +26,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-E3v3UoQumBBYDOiXMfCRh5J7bfUCkettHth7SAresCE=";
   };
 
+  patches = [
+    # solve error[E0310]: the parameter type `T` may not live long enough
+    # in rust-serialize crate
+    ./rustc_serialize_update.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-M3UMeGkLf57/I/9BIkyiMpOvjbKQJrOk+axf05vRoW0=";
+    patches = [ ./rustc_serialize_update.patch ];
+    hash = "sha256-1Zb0J2tO/gIifDymmoXxZf6RNV8foE9QiQqZcrHrWzE=";
   };
 
   nativeBuildInputs = [

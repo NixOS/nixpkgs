@@ -1,30 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, isPy3k
-, cryptography
-, charset-normalizer
-, pythonOlder
-, typing-extensions
-, pytestCheckHook
-, setuptools
-, substituteAll
-, ocrmypdf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  charset-normalizer,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  substituteAll,
+  ocrmypdf,
 }:
 
 buildPythonPackage rec {
   pname = "pdfminer-six";
-  version = "20231228";
+  version = "20240706";
   pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = version;
-    hash = "sha256-LXPECQQojD3IY9zRkrDBufy4A8XUuYiRpryqUx/I3qo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-aY7GQADRxeiclr6/G3RRgrPcl8rGiC85JYEIjIa+vG0=";
   };
 
   patches = [
@@ -34,16 +32,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
     cryptography
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
   ];
 
   postInstall = ''
@@ -57,9 +50,7 @@ buildPythonPackage rec {
     "pdfminer.high_level"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   passthru = {
     tests = {
@@ -68,9 +59,10 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/pdfminer/pdfminer.six/blob/${src.rev}/CHANGELOG.md";
     description = "PDF parser and analyzer";
     homepage = "https://github.com/pdfminer/pdfminer.six";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy marsam ];
+    maintainers = with maintainers; [ psyanticy ];
   };
 }

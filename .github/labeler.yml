@@ -12,9 +12,25 @@
   - any:
     - changed-files:
       - any-glob-to-any-file:
-        - pkgs/desktops/cinnamon/**/*
         - nixos/modules/services/x11/desktop-managers/cinnamon.nix
         - nixos/tests/cinnamon.nix
+        - nixos/tests/cinnamon-wayland.nix
+        - pkgs/by-name/ci/cinnamon-*/**/*
+        - pkgs/by-name/cj/cjs/**/*
+        - pkgs/by-name/mu/muffin/**/*
+        - pkgs/by-name/ne/nemo/**/*
+        - pkgs/by-name/ne/nemo-*/**/*
+
+"6.topic: dotnet":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/dotnet.section.md
+        - maintainers/scripts/update-dotnet-lockfiles.nix
+        - pkgs/build-support/dotnet/**/*
+        - pkgs/development/compilers/dotnet/**/*
+        - pkgs/test/dotnet/**/*
+        - pkgs/top-level/dotnet-packages.nix
 
 "6.topic: emacs":
   - any:
@@ -23,9 +39,9 @@
         - nixos/modules/services/editors/emacs.nix
         - nixos/modules/services/editors/emacs.xml
         - nixos/tests/emacs-daemon.nix
+        - pkgs/applications/editors/emacs/build-support/**/*
         - pkgs/applications/editors/emacs/elisp-packages/**/*
         - pkgs/applications/editors/emacs/**/*
-        - pkgs/build-support/emacs/**/*
         - pkgs/top-level/emacs-packages.nix
 
 "6.topic: Enlightenment DE":
@@ -63,6 +79,13 @@
         - lib/systems/flake-systems.nix
         - nixos/modules/config/nix-flakes.nix
 
+"6.topic: flutter":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/build-support/flutter/*.nix
+        - pkgs/development/compilers/flutter/**/*.nix
+
 "6.topic: GNOME":
   - any:
     - changed-files:
@@ -95,6 +118,14 @@
         - pkgs/top-level/haskell-packages.nix
         - pkgs/top-level/release-haskell.nix
 
+"6.topic: julia":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/julia.section.md
+        - pkgs/development/compilers/julia/**/*
+        - pkgs/development/julia-modules/**/*
+
 "6.topic: jupyter":
   - any:
     - changed-files:
@@ -104,6 +135,14 @@
         - nixos/modules/services/development/jupyter/**/*
         - pkgs/applications/editors/jupyter-kernels/**/*
         - pkgs/applications/editors/jupyter/**/*
+
+"6.topic: k3s":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/services/cluster/k3s/**/*
+        - nixos/tests/k3s/**/*
+        - pkgs/applications/networking/cluster/k3s/**/*
 
 "6.topic: kernel":
   - any:
@@ -118,10 +157,17 @@
       - any-glob-to-any-file:
         - lib/**
 
+"6.topic: llvm/clang":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/development/compilers/llvm/**/*
+
 "6.topic: lua":
   - any:
     - changed-files:
       - any-glob-to-any-file:
+        - pkgs/development/tools/misc/luarocks/*
         - pkgs/development/interpreters/lua-5/**/*
         - pkgs/development/interpreters/luajit/**/*
         - pkgs/development/lua-modules/**/*
@@ -184,6 +230,7 @@
         - pkgs/development/node-packages/**/*
         - pkgs/development/tools/yarn/*
         - pkgs/development/tools/yarn2nix-moretea/**/*
+        - pkgs/development/tools/pnpm/**/*
         - pkgs/development/web/nodejs/*
 
 "6.topic: ocaml":
@@ -295,6 +342,22 @@
         - pkgs/test/texlive/**
         - pkgs/tools/typesetting/tex/**/*
 
+"6.topic: testing":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        # NOTE: Let's keep the scope limited to test frameworks that are
+        #       *developed in this repo*;
+        #       - not individual tests
+        #       - not packages for test frameworks
+        - pkgs/build-support/testers/**
+        - nixos/lib/testing/**
+        - nixos/lib/test-driver/**
+        - nixos/tests/nixos-test-driver/**
+        - nixos/lib/testing-python.nix      # legacy
+        - nixos/tests/make-test-python.nix  # legacy
+        # lib/debug.nix has a test framework (runTests) but it's not the main focus
+
 "6.topic: vim":
   - any:
     - changed-files:
@@ -345,3 +408,8 @@
     - changed-files:
       - any-glob-to-any-file:
         - nixos/modules/**/*
+"8.has: maintainer-list (update)":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - maintainers/maintainer-list.nix

@@ -1,16 +1,17 @@
-{ lib
-, atomicwrites
-, buildPythonPackage
-, click
-, fetchPypi
-, gitpython
-, networkx
-, pydot
-, pygithub
-, pythonOlder
-, pyyaml
-, toml
-, tqdm
+{
+  lib,
+  atomicwrites,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  gitpython,
+  networkx,
+  pydot,
+  pygithub,
+  pythonOlder,
+  pyyaml,
+  toml,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -40,12 +41,11 @@ buildPythonPackage rec {
   # Requires internet access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mathlibtools"
-  ];
+  pythonImportsCheck = [ "mathlibtools" ];
 
   meta = with lib; {
     description = "Supporting tool for Lean's mathlib";
+    mainProgram = "leanproject";
     homepage = "https://github.com/leanprover-community/mathlib-tools";
     changelog = "https://github.com/leanprover-community/mathlib-tools/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;

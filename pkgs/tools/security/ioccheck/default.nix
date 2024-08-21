@@ -5,6 +5,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       emoji = super.emoji.overridePythonAttrs rec {
         version = "1.7.0";
@@ -46,7 +47,6 @@ in py.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with py.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -88,6 +88,7 @@ in py.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for researching IOCs";
+    mainProgram = "ioccheck";
     homepage = "https://github.com/ranguli/ioccheck";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

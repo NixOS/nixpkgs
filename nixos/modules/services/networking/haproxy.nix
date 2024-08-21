@@ -17,26 +17,26 @@ with lib;
   options = {
     services.haproxy = {
 
-      enable = mkEnableOption (lib.mdDoc "HAProxy, the reliable, high performance TCP/HTTP load balancer.");
+      enable = mkEnableOption "HAProxy, the reliable, high performance TCP/HTTP load balancer";
 
       package = mkPackageOption pkgs "haproxy" { };
 
       user = mkOption {
         type = types.str;
         default = "haproxy";
-        description = lib.mdDoc "User account under which haproxy runs.";
+        description = "User account under which haproxy runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "haproxy";
-        description = lib.mdDoc "Group account under which haproxy runs.";
+        description = "Group account under which haproxy runs.";
       };
 
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Contents of the HAProxy configuration file,
           {file}`haproxy.conf`.
         '';

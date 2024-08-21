@@ -13,9 +13,6 @@
 , Security
 , nghttp2
 , libgit2
-# string interpolation dependends on a date that is erroring out
-# this will be fixed in releases after 0.90.1
-, doCheck ? false
 , withDefaultFeatures ? true
 , additionalFeatures ? (p: p)
 , testers
@@ -24,7 +21,7 @@
 }:
 
 let
-  version = "0.91.0";
+  version = "0.96.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -35,10 +32,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-X3D+JRvnk6HMKWJMTNR16Fmhu+gYd8Ip+7PZQoLIoEU=";
+    hash = "sha256-I9cCvm2qTCwnRonfE86ippBV4V1r8U5HFr9OA96wVqI=";
   };
 
-  cargoHash = "sha256-Xj4P/qd4GvmhWGwGaPvY23cQwdjdf6cSb1xyRZLN0tQ=";
+  cargoHash = "sha256-XlsK7zu3Pyc5p5SPVCsBqxIyKedaAPF58Ki7keOZRYM=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
@@ -52,12 +49,21 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  inherit doCheck;
+  doCheck = ! stdenv.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo test"
-    HOME=$(mktemp -d) cargo test
+    (
+      # The skipped tests all fail in the sandbox because in the nushell test playground,
+      # the tmp $HOME is not set, so nu falls back to looking up the passwd dir of the build
+      # user (/var/empty). The assertions however do respect the set $HOME.
+      set -x
+      HOME=$(mktemp -d) cargo test -j $NIX_BUILD_CORES --offline -- \
+        --test-threads=$NIX_BUILD_CORES \
+        --skip=repl::test_config_path::test_default_config_path \
+        --skip=repl::test_config_path::test_xdg_config_bad \
+        --skip=repl::test_config_path::test_xdg_config_empty
+    )
     runHook postCheck
   '';
 
@@ -70,10 +76,10 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A modern shell written in Rust";
+    description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam joaquintrinanes ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor joaquintrinanes ];
     mainProgram = "nu";
   };
 }

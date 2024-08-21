@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -16,7 +15,6 @@
 , mesa
 , xorg
 , libpng
-, ffmpeg_4
 , ffmpeg
 , hwdata
 , seatd
@@ -24,6 +22,7 @@
 , glslang
 , libliftoff
 , libdisplay-info
+, lcms2
 , nixosTests
 
 , enableXWayland ? true
@@ -98,7 +97,7 @@ let
       passthru.tests.tinywl = nixosTests.tinywl;
 
       meta = {
-        description = "A modular Wayland compositor library";
+        description = "Modular Wayland compositor library";
         longDescription = ''
           Pluggable, composable, unopinionated modules for building a Wayland
           compositor; or about 50,000 lines of code you were going to write anyway.
@@ -113,36 +112,32 @@ let
 
 in
 rec {
-  wlroots_0_15 = generic {
-    version = "0.15.1";
-    hash = "sha256-MFR38UuB/wW7J9ODDUOfgTzKLse0SSMIRYTpEaEdRwM=";
-    extraBuildInputs = [
-      ffmpeg_4
-    ];
-  };
-
-  wlroots_0_16 = generic {
-    version = "0.16.2";
-    hash = "sha256-JeDDYinio14BOl6CbzAPnJDOnrk4vgGNMN++rcy2ItQ=";
-    postPatch = ''
-      substituteInPlace backend/drm/meson.build \
-        --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
-    '';
-    extraBuildInputs = [
-      ffmpeg_4
-    ];
-  };
-
   wlroots_0_17 = generic {
-    version = "0.17.2";
-    hash = "sha256-Of9qykyVnBURc5A2pvCMm7sLbnuuG7OPWLxodQLN2Xg=";
+    version = "0.17.4";
+    hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
     extraBuildInputs = [
       ffmpeg
-      hwdata
       libliftoff
       libdisplay-info
     ];
   };
 
-  wlroots = wlroots_0_17;
+  wlroots_0_18 = generic {
+    version = "0.18.0";
+    hash = "sha256-LiRnvu7qCbfSg+ONWVCtWwdzxxFZHfbgmy7zApCIW40=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
+    extraBuildInputs = [
+      ffmpeg
+      libliftoff
+      libdisplay-info
+      lcms2
+    ];
+  };
+
+  wlroots = wlroots_0_18;
 }

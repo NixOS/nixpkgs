@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, numpy
-, cvxopt
-, python
-, networkx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  numpy,
+  cvxopt,
+  python,
+  networkx,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
   };
 
   # Needed only for the tests
-  nativeCheckInputs = [
-    networkx
-  ];
+  nativeCheckInputs = [ networkx ];
 
   propagatedBuildInputs = [
     numpy
@@ -34,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Python interface to conic optimization solvers";
+    description = "Python interface to conic optimization solvers";
     homepage = "https://gitlab.com/picos-api/picos";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tobiasBora ];

@@ -16,14 +16,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "13.3.0";
+  version = "14.0.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-owiMVeH7m4LoM8c4qjLyFx3v/+Flzt+C+O8qEuXazvc=";
+    hash = "sha256-5fNypt1zezBWmt0eLDGxL7PmRUSuzQ3s4Aymz9ZMXT0=";
   };
 
-  cargoHash = "sha256-WtNH62DBo6WFOUcHnZxn0Jco4SUmhO0+1wXPRB2wxic=";
+  cargoHash = "sha256-NKo3Ry2bok7jxblrHjFJB24FFm62zclCxae+SxoYQqc=";
 
   nativeBuildInputs = [
     cmake
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A cargo subcommand for checking and applying updates to installed executables";
+    description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
     license = licenses.mit;

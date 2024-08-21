@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://odamex.net/";
-    description = "A client/server port for playing old-school Doom online";
+    description = "Client/server port for playing old-school Doom online";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ MP2E ];
+    maintainers = [ ];
   };
 }

@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Navigation and insight in Go";
+    mainProgram = "motion";
     longDescription = ''
       Motion is a tool that was designed to work with editors. It is providing
       contextual information for a given offset(option) from a file or

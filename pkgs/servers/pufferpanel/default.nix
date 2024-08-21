@@ -58,7 +58,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper go-swag ];
 
-  vendorHash = "sha256-itiWROoIhnMbG9evH6X7kjClC4VdpX983d/SCwr4HbY=";
+  vendorHash = "sha256-1U7l7YW1fu5M0/pPHTLamLsTQdEltesRODUn21SuP8w=";
   proxyVendor = true;
 
   # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).
@@ -98,10 +98,10 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A free, open source game management panel";
+    description = "Free, open source game management panel";
     homepage = "https://www.pufferpanel.com/";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ ckie tie ];
+    maintainers = with maintainers; [ tie ];
     mainProgram = "pufferpanel";
   };
 }

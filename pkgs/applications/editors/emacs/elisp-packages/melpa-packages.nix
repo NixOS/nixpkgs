@@ -23,6 +23,11 @@ formats commits for you.
 
 */
 
+let
+  # Read ./recipes-archive-melpa.json in an outer let to make sure we only do this once.
+  defaultArchive = builtins.fromJSON (builtins.readFile ./recipes-archive-melpa.json);
+in
+
 { lib, pkgs }: variant: self:
 let
   dontConfigure = pkg:
@@ -57,7 +62,7 @@ let
     if pkg != null then dontConfigure (externalSrc pkg pkgs.rtags)
     else null;
 
-  generateMelpa = lib.makeOverridable ({ archiveJson ? ./recipes-archive-melpa.json
+  generateMelpa = lib.makeOverridable ({ archiveJson ? defaultArchive
                                        }:
     let
       inherit (import ./libgenerated.nix lib self) melpaDerivation;
@@ -66,7 +71,7 @@ let
           (s: s != null)
           (map
             (melpaDerivation variant)
-            (lib.importJSON archiveJson)
+            (if builtins.isList archiveJson then archiveJson else lib.importJSON archiveJson)
           )
         )
       );
@@ -194,7 +199,7 @@ let
           stripDebugList = [ "share" ];
         });
 
-        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: lib.optionalAttrs (lib.versionOlder old.version "20240808.2016") {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
@@ -247,7 +252,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/109
           CXXFLAGS = "-std=c++17";
 
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -316,9 +321,8 @@ let
           '';
           dontUseCmakeBuildDir = true;
           doCheck = pkgs.stdenv.isLinux;
-          packageRequires = [ self.emacs ];
-          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
+          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -508,14 +512,29 @@ let
 
         rime = super.rime.overrideAttrs (old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
-          preBuild = (old.preBuild or "") + ''
+          preBuild = (old.preBuild or "") +
+          (if pkgs.stdenv.isDarwin then
+            ''
+              export MODULE_FILE_SUFFIX=".dylib"
+              make lib
+              mkdir -p /tmp/build/rime-lib
+              cp *.dylib /tmp/build/rime-lib
+            ''
+          else
+          ''
             make lib
             mkdir -p /build/rime-lib
             cp *.so /build/rime-lib
-          '';
-          postInstall = (old.postInstall or "") + ''
+          '');
+          postInstall = (old.postInstall or "") +
+          (if pkgs.stdenv.isDarwin then
+          ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /tmp/build/rime-lib/*.dylib
+          ''
+          else
+          ''
             install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
-          '';
+          '');
         });
 
         shm = super.shm.overrideAttrs (attrs: {
@@ -525,7 +544,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
-          nativeBuildInputs = [ pkgs.pkg-config ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
           postPatch = ''
             substituteInPlace telega-customize.el \
@@ -581,7 +600,7 @@ let
             export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -667,7 +686,7 @@ let
         };
 
         vterm = super.vterm.overrideAttrs (old: {
-          nativeBuildInputs = [ pkgs.cmake ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake ];
           buildInputs = old.buildInputs ++ [ self.emacs pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"
@@ -735,5 +754,4 @@ let
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
-(generateMelpa { })
-// { __attrsFailEvaluation = true; }
+generateMelpa { }

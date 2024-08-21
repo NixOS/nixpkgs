@@ -15,18 +15,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-back";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-HD4PLdkE573nPWqFwffUmcHw8VYIl5rLiPKWrbnwpCI=";
+    sha256 = "sha256-CjcoXlKiPVPJMOdrBKjxiNauTZvLcId5Lb8DzbgBbBg=";
   };
 
   nativeBuildInputs = [ make pkg-config wrapGNUstepAppsHook ];
   buildInputs = [ cairo base gui fontconfig freetype libXft libXmu ];
 
   meta = {
-    description = "A generic backend for GNUstep";
+    description = "Generic backend for GNUstep";
+    mainProgram = "gpbs";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];

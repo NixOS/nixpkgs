@@ -1,21 +1,21 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "timoni";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
     rev = "v${version}";
-    hash = "sha256-zQawfzwQNQvtta7lIOtePGI67Y4iXzEBGqd5YiOKAVY=";
+    hash = "sha256-g0B5UbveQ6KYqfXGF5bsGJfUuZ3q1TNEaC1GwtNAig8=";
   };
 
-  vendorHash = "sha256-xQgSABaWY5FWHh2kcBB36fm3povFNpU18PjD4J6M4QM=";
+  vendorHash = "sha256-XeqHETKWw74edsWCOKC+bhIt0NZz5mgrTShoQk1hb5Y=";
 
   subPackages = [ "cmd/timoni" ];
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +41,8 @@ buildGo122Module rec {
   meta = with lib; {
     homepage = "https://timoni.sh";
     changelog = "https://github.com/stefanprodan/timoni/releases/tag/${src.rev}";
-    description = "A package manager for Kubernetes, powered by CUE and inspired by Helm";
+    description = "Package manager for Kubernetes, powered by CUE and inspired by Helm";
+    mainProgram = "timoni";
     license = licenses.asl20;
     maintainers = with maintainers; [ votava ];
   };

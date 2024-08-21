@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Documentation generator for multiple programming languages.";
+    description = "Documentation generator for multiple programming languages";
     longDescription = ''
       Natural Docs is an open source documentation generator for multiple
       programming languages. You document your code in a natural syntax that

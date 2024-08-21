@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "mystmd";
-  version = "1.1.46";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mystmd";
     rev = "mystmd@${version}";
-    hash = "sha256-rMmq2xArkbVIZRFGCYSl9D65LxUdyiZMR6CbYJbKNSw=";
+    hash = "sha256-aZUDIQs4n2s842tq23pU/ZUW+1fF4XXEmgnapdZH8wQ=";
   };
 
-  npmDepsHash = "sha256-cwuKexK0S3pW0rJpjfbAHu7/MLSs8axbyX6BWJq2Ieo=";
+  npmDepsHash = "sha256-IXdmzuQaBEbwjXssYaDLvxyTl+i2U/JTalg8lSGvuR0=";
 
   dontNpmInstall = true;
 
@@ -36,7 +36,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/executablebooks/mystmd";
     changelog = "https://github.com/executablebooks/mystmd/blob/${src.rev}/packages/myst-cli/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "myst";
   };
 }

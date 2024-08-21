@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "sql_exporter";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "justwatchcom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Cp8+vVGyAwYcrBiEN1SmUnHqWFGtuypvzfDROJgOn28=";
+    sha256 = "sha256-K7UDmV56VW4TM5YUl+xUWmE8GUAYbWowm/hU7xBG+Hs=";
   };
 
   vendorHash = null;
@@ -30,6 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Flexible SQL exporter for Prometheus";
+    mainProgram = "sql_exporter";
     homepage = "https://github.com/justwatchcom/sql_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ justinas ];

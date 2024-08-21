@@ -8,4 +8,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [_7zz];
   extraBuildInputs = [qtsvg];
+  meta.mainProgram = "granatier";
 }

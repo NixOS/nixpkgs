@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "catnip";
-  version = "1.8.0";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "noriah";
     repo = "catnip";
     rev = "v${version}";
-    hash = "sha256-eVEoQrI8NycEV/dPUNFqkzgjOYaGmH1+lLRRkOybXDU=";
+    hash = "sha256-9gneteQIzbMNjg/08uq+pCbs2a32He2gL+hovxcJFzE=";
   };
 
   vendorHash = "sha256-Hj453+5fhbUL6YMeupT5D6ydaEMe+ZQNgEYHtCUtTx4=";

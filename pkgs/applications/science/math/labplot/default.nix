@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , cmake
 , extra-cmake-modules
@@ -52,6 +53,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # Disable Vector BLF since it depends on DBC parser which fails to be detected
     "-DENABLE_VECTOR_BLF=OFF"
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "matio-fix-compilation-for-latest-version-1.5.27.patch";
+      url = "https://github.com/KDE/labplot/commit/d6142308ffa492d9f7cea00fad3b4cd1babfd00c.patch";
+      hash = "sha256-qD5jj6GxBKbQezKJb1Z8HnwFO84WJBGQDawS/6o/wHE=";
+    })
   ];
 
   nativeBuildInputs = [

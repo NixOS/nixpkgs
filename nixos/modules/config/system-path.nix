@@ -63,7 +63,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
-        description = lib.mdDoc ''
+        description = ''
           The set of packages that appear in
           /run/current-system/sw.  These packages are
           automatically available to all users, and are
@@ -84,7 +84,7 @@ in
               ${defaultPackagesText}
         '';
         example = [];
-        description = lib.mdDoc ''
+        description = ''
           Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
           minimal NixOS installation.
@@ -103,14 +103,14 @@ in
         # to work.
         default = [];
         example = ["/"];
-        description = lib.mdDoc "List of directories to be symlinked in {file}`/run/current-system/sw`.";
+        description = "List of directories to be symlinked in {file}`/run/current-system/sw`.";
       };
 
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "dev" "info" ];
-        description = lib.mdDoc ''
+        description = ''
           Entries listed here will be appended to the `meta.outputsToInstall` attribute for each package in `environment.systemPackages`, and the files from the corresponding derivation outputs symlinked into {file}`/run/current-system/sw`.
 
           For example, this can be used to install the `dev` and `info` outputs for all packages in the system environment, if they are available.
@@ -122,7 +122,7 @@ in
       extraSetup = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
+        description = "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
       };
 
     };
@@ -131,7 +131,7 @@ in
 
       path = mkOption {
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           The packages you want in the boot environment.
         '';
       };
@@ -153,10 +153,8 @@ in
         "/sbin"
         "/share/emacs"
         "/share/hunspell"
-        "/share/nano"
         "/share/org"
         "/share/themes"
-        "/share/vim-plugins"
         "/share/vulkan"
         "/share/kservices5"
         "/share/kservicetypes5"

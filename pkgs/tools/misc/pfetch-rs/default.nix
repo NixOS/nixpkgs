@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pfetch-rs";
-  version = "2.9.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "Gobidev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tpJk31Z7QzZNLmEv/L1008tf6hpJJI6b7E1o/kwbJe0=";
+    hash = "sha256-1Br/mO7hisTFxiPJs5vOC+idENYMqfzJEmPBXOFGc58=";
   };
 
-  cargoHash = "sha256-CQVPEUpblypDyr48MrLY3roGunOxem0eM1OtbcKlnsw=";
+  cargoHash = "sha256-/gYL32kUA4gKTGogMrOghQ3XYFjw3GsDhzynUC/OyXY=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
 
   meta = with lib; {
-    description = "A rewrite of the pfetch system information tool in Rust";
+    description = "Rewrite of the pfetch system information tool in Rust";
     homepage = "https://github.com/Gobidev/pfetch-rs";
     changelog = "https://github.com/Gobidev/pfetch-rs/releases/tag/v${version}";
     license = licenses.mit;

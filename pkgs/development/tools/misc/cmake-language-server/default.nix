@@ -12,7 +12,7 @@
 
 buildPythonApplication rec {
   pname = "cmake-language-server";
-  version = "0.1.9";
+  version = "0.1.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     owner = "regen100";
     repo = "cmake-language-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8ypl0YA6ep8/jBL3tsutSgCW13NZTZzaNafaOamcT08=";
+    hash = "sha256-9fnyDJm8rUl+7g4FrdMykPpQOcww2M6IPWH/3qVeJX4=";
   };
 
   patches = [

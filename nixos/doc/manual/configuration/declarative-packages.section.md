@@ -7,7 +7,9 @@ following line to `configuration.nix` enables the Mozilla Thunderbird
 email application:
 
 ```nix
-environment.systemPackages = [ pkgs.thunderbird ];
+{
+  environment.systemPackages = [ pkgs.thunderbird ];
+}
 ```
 
 The effect of this specification is that the Thunderbird package from

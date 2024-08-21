@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , wxGTK
 , Cocoa
@@ -12,19 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "unstable-2024-03-14";
+  version = "0-unstable-2024-06-29";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "4910f91cc067b1022d773a40d5762b0ebd47d0f3";
-    sha256 = "We3+Y2V2izsgem0fJ0/2pPj5tyjXhOEuubP7lIhnEQ0=";
+    rev = "0d3eff693f23929e8b53317b08df9da2d610994f";
+    hash = "sha256-c5HMxFxDD439kKguW8Mwkjmnavh2MSSiODTgrnZcbjo=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     makeWrapper
   ];
 
@@ -45,11 +45,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
   };
 
   meta = with lib; {
     description = "Free Form Data Organizer";
+    mainProgram = "treesheets";
 
     longDescription = ''
       The ultimate replacement for spreadsheets, mind mappers, outliners,
@@ -61,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://strlen.com/treesheets/";
-    maintainers = with maintainers; [ obadz avery ];
+    maintainers = with maintainers; [ obadz ];
     platforms = platforms.unix;
     license = licenses.zlib;
   };

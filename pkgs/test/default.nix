@@ -12,11 +12,12 @@ with pkgs;
         # Are throw aliases.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
-        (filter (n: n != "llvmPackages_git"))
         (filter (n: n != "llvmPackages_6"))
         (filter (n: n != "llvmPackages_7"))
         (filter (n: n != "llvmPackages_8"))
+        (filter (n: n != "llvmPackages_9"))
         (filter (n: n != "llvmPackages_10"))
+        (filter (n: n != "llvmPackages_11"))
       ];
       tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
         clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
@@ -81,6 +82,8 @@ with pkgs;
     inherit gccTests;
   };
 
+  devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
+
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 
@@ -102,6 +105,8 @@ with pkgs;
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
+
+  compress-drv = callPackage ../build-support/compress-drv/test.nix { };
 
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchtorrent = callPackages ../build-support/fetchtorrent/tests.nix { };
@@ -172,11 +177,13 @@ with pkgs;
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
-  nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
+  nixpkgs-check-by-name = throw "tests.nixpkgs-check-by-name is now specified in a separate repository: https://github.com/NixOS/nixpkgs-check-by-name";
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
   systemd = callPackage ./systemd { };
+
+  replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
 
   substitute = recurseIntoAttrs (callPackage ./substitute { });
 }

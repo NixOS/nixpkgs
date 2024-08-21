@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -a contrib/git-* $out/bin/
   '';
 
-  wrapperPath = with lib; makeBinPath ([
+  wrapperPath = lib.makeBinPath ([
     coreutils
     git
     gnugrep
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A script to automatically synchronize a git repository";
+    description = "Script to automatically synchronize a git repository";
     homepage = "https://github.com/simonthum/git-sync";
     maintainers = with lib.maintainers; [ imalison ];
     license = lib.licenses.cc0;

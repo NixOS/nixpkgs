@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage    = "https://redmine.lighttpd.net/projects/spawn-fcgi";
     description = "Provides an interface to external programs that support the FastCGI interface";
+    mainProgram = "spawn-fcgi";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

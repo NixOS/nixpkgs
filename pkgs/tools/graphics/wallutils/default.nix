@@ -13,13 +13,13 @@
 
 buildGoModule rec {
   pname = "wallutils";
-  version = "5.12.7";
+  version = "5.12.9";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    hash = "sha256-7UqZr/DEiHDgg3XwvsKk/gc6FNtLh3aj5NWVz/A3J4o=";
+    hash = "sha256-kayzaNOV2xTjbMeGUJ1jMLGxcVZzYkMLr6qWlAupPKM=";
   };
 
   vendorHash = null;
@@ -48,17 +48,19 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  preCheck =
-    let skippedTests = [
-      "TestClosest" # Requiring Wayland or X
-      "TestEveryMinute" # Blocking
-      "TestNewSimpleEvent" # Blocking
-    ]; in
-    ''
-      export XDG_RUNTIME_DIR=`mktemp -d`
+  preCheck = ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+  '';
 
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+  checkFlags =
+    let
+      skippedTests = [
+        "TestClosest" # Requiring Wayland or X
+        "TestEveryMinute" # Blocking
+        "TestNewSimpleEvent" # Blocking
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";

@@ -17,7 +17,7 @@ buildDunePackage rec {
   meta = with lib; {
     inherit (dune_3.meta) homepage;
     description = "API for writing dynamic Dune actions";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

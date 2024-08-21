@@ -1,11 +1,12 @@
-{ lib
-, cbc
-, amply
-, buildPythonPackage
-, fetchFromGitHub
-, pyparsing
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  cbc,
+  amply,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,16 +34,13 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pulp"
-  ];
+  pythonImportsCheck = [ "pulp" ];
 
   meta = with lib; {
     description = "Module to generate MPS or LP files";
+    mainProgram = "pulptest";
     homepage = "https://github.com/coin-or/pulp";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

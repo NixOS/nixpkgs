@@ -1,58 +1,60 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, google-api-python-client
-, google-auth-oauthlib
-, jupyterhub
-, mwoauth
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, requests-mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  google-api-python-client,
+  google-auth-oauthlib,
+  jsonschema,
+  jupyterhub,
+  mwoauth,
+  pyjwt,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  ruamel-yaml,
+  setuptools,
+  tornado,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.2.1";
+  version = "16.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qJrreq2GhJxrX9keZOYVzjihs0RCymad+MGErW5ecPc=";
+    hash = "sha256-gFhhOCcmorkrLxrup9fICh5ueCrc64fxfuZXTQG1tMk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=oauthenticator" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    jsonschema
     jupyterhub
+    pyjwt
+    requests
+    ruamel-yaml
+    tornado
+    traitlets
   ];
 
   passthru.optional-dependencies = {
-    azuread = [
-      pyjwt
-    ];
     googlegroups = [
       google-api-python-client
       google-auth-oauthlib
     ];
-    mediawiki = [
-      mwoauth
-    ];
+    mediawiki = [ mwoauth ];
   };
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
@@ -73,15 +75,13 @@ buildPythonPackage rec {
     "test_openshift"
   ];
 
-  pythonImportsCheck = [
-    "oauthenticator"
-  ];
+  pythonImportsCheck = [ "oauthenticator" ];
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers";
-    homepage =  "https://github.com/jupyterhub/oauthenticator";
+    homepage = "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

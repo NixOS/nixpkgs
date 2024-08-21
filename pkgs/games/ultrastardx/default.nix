@@ -1,7 +1,6 @@
 { lib, stdenv
 , autoreconfHook
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , lua
 , fpc
@@ -31,13 +30,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2024.3.0";
+  version = "2024.5.1";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    hash = "sha256-0+7PMSnQoNu6tcR9MB6b94fWlMRvH10ySUhdSicWU8U=";
+    hash = "sha256-HtvKy3uQwIO2BiLUqIcv9crf9Ngq0dmYOm6E8Gm2EHs=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -68,8 +67,8 @@ in stdenv.mkDerivation rec {
       -i src/lib/ffmpeg-4.0/swscale.pas
   '';
 
-  preBuild = with lib;
-    let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
+  preBuild =
+    let items = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
     in ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';
@@ -80,6 +79,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
+    mainProgram = "ultrastardx";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];
     platforms = platforms.linux;

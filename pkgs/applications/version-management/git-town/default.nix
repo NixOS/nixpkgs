@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "11.1.0";
+  version = "15.1.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-QQ+sIZzkzecs+pZBzsmCL048JZpMPvdYi0PRtMN4AhY=";
+    hash = "sha256-e4lOyYQHsVOmOYKQ+3B2EdneWL8NEzboTlRKtO8Wdjg=";
   };
 
   vendorHash = null;
@@ -19,7 +19,8 @@ buildGoModule rec {
 
   ldflags =
     let
-      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}"; in
+      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}";
+    in
     [
       "-s"
       "-w"
@@ -28,27 +29,31 @@ buildGoModule rec {
     ];
 
   nativeCheckInputs = [ git ];
-  preCheck =
+
+  preCheck = ''
+    HOME=$(mktemp -d)
+
+    # this runs tests requiring local operations
+    rm main_test.go
+  '';
+
+  checkFlags =
     let
+      # Disable tests requiring local operations
       skippedTests = [
         "TestGodog"
-        "TestRunner_CreateChildFeatureBranch"
-        "TestShellRunner_RunStringWith_Dir"
-        "TestMockingShell_MockCommand"
-        "TestShellRunner_RunStringWith_Input"
+        "TestMockingRunner/MockCommand"
+        "TestMockingRunner/QueryWith"
+        "TestTestCommands/CreateChildFeatureBranch"
       ];
     in
-    ''
-      HOME=$(mktemp -d)
-      # Disable tests requiring local operations
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --cmd git-town \
-      --bash <($out/bin/git-town completion bash) \
-      --fish <($out/bin/git-town completion fish) \
-      --zsh <($out/bin/git-town completion zsh)
+      --bash <($out/bin/git-town completions bash) \
+      --fish <($out/bin/git-town completions fish) \
+      --zsh <($out/bin/git-town completions zsh)
 
     wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
@@ -56,14 +61,14 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = git-town;
     command = "git-town --version";
-    version = "v${version}";
+    inherit version;
   };
 
   meta = with lib; {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ allonsy blaggacao ];
+    maintainers = with maintainers; [ allonsy blaggacao gabyx ];
     mainProgram = "git-town";
   };
 }

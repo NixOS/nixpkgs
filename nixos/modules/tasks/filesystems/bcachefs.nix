@@ -57,7 +57,9 @@ let
   # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
   firstDevice = fs: lib.head (lib.splitString ":" fs.device);
 
-  openCommand = name: fs: if config.boot.initrd.clevis.enable && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices) then ''
+  useClevis = fs: config.boot.initrd.clevis.enable && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices);
+
+  openCommand = name: fs: if useClevis fs then ''
     if clevis decrypt < /etc/clevis/${firstDevice fs}.jwe | bcachefs unlock ${firstDevice fs}
     then
       printf "unlocked ${name} using clevis\n"
@@ -92,8 +94,19 @@ let
         # As is, RemainAfterExit doesn't accomplish anything.
         RemainAfterExit = true;
       };
-      script = ''
-        ${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"
+      script = let
+        unlock = ''${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"'';
+        unlockInteractively = ''${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${unlock}'';
+      in if useClevis fs then ''
+        if ${config.boot.initrd.clevis.package}/bin/clevis decrypt < "/etc/clevis/${device}.jwe" | ${unlock}
+        then
+          printf "unlocked ${name} using clevis\n"
+        else
+          printf "falling back to interactive unlocking...\n"
+          ${unlockInteractively}
+        fi
+      '' else ''
+        ${unlockInteractively}
       '';
     };
   };

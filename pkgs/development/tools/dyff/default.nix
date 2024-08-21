@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dyff";
-  version = "1.7.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "sha256-4jW8KJqdhrx79Q5ioyMGOlmLosTEkEIrdBwMjfiIcsY=";
+    sha256 = "sha256-y5gep3v+totupFbsAuGhySUbcESmQeGHWteQFFXj2Kw=";
   };
 
-  vendorHash = "sha256-JhjngBZK3vWlKzCCkTWJf/VrBXUW6T4FcUivn5CMBjE=";
+  vendorHash = "sha256-cRPAjFVvjCgT+m8ceAQJt5ZE8ax7jefzdVWPGM45LpY=";
 
   subPackages = [
     "cmd/dyff"
@@ -41,7 +41,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A diff tool for YAML files, and sometimes JSON";
+    description = "Diff tool for YAML files, and sometimes JSON";
+    mainProgram = "dyff";
     longDescription = ''
       dyff is inspired by the way the old BOSH v1 deployment output reported
       changes from one version to another by only showing the parts of a YAML

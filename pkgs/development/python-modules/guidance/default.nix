@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pybind11
-, setuptools
-, wheel
-, aiohttp
-, diskcache
-, fastapi
-, gptcache
-, msal
-, numpy
-, openai
-, ordered-set
-, platformdirs
-, protobuf
-, pyformlang
-, requests
-, tiktoken
-, torch
-, uvicorn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pybind11,
+  setuptools,
+  wheel,
+  aiohttp,
+  diskcache,
+  fastapi,
+  gptcache,
+  msal,
+  numpy,
+  openai,
+  ordered-set,
+  platformdirs,
+  protobuf,
+  pyformlang,
+  requests,
+  tiktoken,
+  torch,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     hash = "sha256-dvIJeSur3DdNBhrEPNPghxqmDEEig59Iz83LWksim6U=";
   };
 
-  nativeBuildInputs = [
-    pybind11
-  ];
+  nativeBuildInputs = [ pybind11 ];
 
   build-system = [
     setuptools
@@ -96,7 +95,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A guidance language for controlling large language models";
+    description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
     changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.rev}";
     license = licenses.mit;

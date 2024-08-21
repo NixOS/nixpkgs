@@ -5,6 +5,7 @@
 , docutils
 , ell
 , enableExperimental ? false
+, fetchpatch
 , fetchurl
 , glib
 , json_c
@@ -18,17 +19,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.72";
+  version = "5.76";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SZ1/o0WplsG7ZQ9cZ0nh2SkRH6bs4L4OmGh/7mEkU24=";
+    hash = "sha256-VeLGRZCa2C2DPELOhewgQ04O8AcJQbHqtz+s3SQLvWM=";
   };
 
-  patches =
+  patches = [
+    # hog-lib: Fix passing wrong parameters to bt_uhid_get_report_reply
+    (fetchpatch {
+      url = "https://github.com/bluez/bluez/commit/5ebaeab4164f80539904b9a520d9b7a8307e06e2.patch";
+      hash = "sha256-f1A8DmRPfm+zid4XMj1zsfcLZ0WTEax3YPbydKZF9RE=";
+    })
+  ]
     # Disable one failing test with musl libc, also seen by alpine
     # https://github.com/bluez/bluez/issues/726
-    lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
+    ++ lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
       (fetchurl {
         url = "https://git.alpinelinux.org/aports/plain/main/bluez/disable_aics_unit_testcases.patch?id=8e96f7faf01a45f0ad8449c1cd825db63a8dfd48";
         hash = "sha256-1PJkipqBO3qxxOqRFQKfpWlne1kzTCgtnTFYI1cFQt4=";
@@ -50,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     docutils
     pkg-config
-    python3.pkgs.pygments
     python3.pkgs.wrapPython
   ];
 
@@ -138,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
 
     # Add extra configuration
-    mkdir $out/etc/bluetooth
+    rm $out/etc/bluetooth/{main,input,network}.conf
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
 
     # https://github.com/NixOS/nixpkgs/issues/204418

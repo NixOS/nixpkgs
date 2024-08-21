@@ -25,26 +25,26 @@
 , stdenv
 , util-linuxMinimal
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 , xmlto
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roxterm";
-  version = "3.15.0";
+  version = "3.14.3";
 
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
     rev = finalAttrs.version;
-    hash = "sha256-mmfnpZTCsLJ4EPxsKZXeHBZnpvc2n1TCEPmiIHmnxKc=";
+    hash = "sha256-NSOGq3rN+9X4WA8Q0gMbZ9spO/dbZkzeo4zEno/Kgcs=";
   };
 
   nativeBuildInputs = [
     cmake
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

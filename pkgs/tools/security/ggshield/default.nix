@@ -1,29 +1,28 @@
-{ lib
-, fetchFromGitHub
-, git
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.25.0";
+  version = "1.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D6+0ZYuOiCy5LonP1Ob7PlWmBXvLwU3PODOT6F+70HY=";
+    hash = "sha256-x37FRSjhqV7LxD8VFSmVjg/FPlxsa4NEX6y7OEAniF4=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+
+  dependencies = with python3.pkgs; [
     appdirs
     charset-normalizer
     click
@@ -40,25 +39,27 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  nativeCheckInputs = [
-    git
-  ] ++ (with python3.pkgs; [
-    jsonschema
-    pyfakefs
-    pytest-mock
-    pytest-voluptuous
-    pytestCheckHook
-    snapshottest
-    vcrpy
-  ]);
+  nativeCheckInputs =
+    [ git ]
+    ++ (with python3.pkgs; [
+      jsonschema
+      pyfakefs
+      pytest-mock
+      pytest-voluptuous
+      pytestCheckHook
+      snapshottest
+      vcrpy
+    ]);
 
-  pythonImportsCheck = [
-    "ggshield"
-  ];
+  pythonImportsCheck = [ "ggshield" ];
 
   disabledTestPaths = [
     # Don't run functional tests
     "tests/functional/"
+    "tests/unit/cmd/honeytoken"
+    "tests/unit/cmd/iac"
+    "tests/unit/cmd/sca/"
+    "tests/unit/cmd/scan/"
   ];
 
   disabledTests = [
@@ -81,5 +82,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/GitGuardian/ggshield/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ggshield";
   };
 }

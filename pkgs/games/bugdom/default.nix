@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, IOKit, Foundation, cmake, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, SDL2, IOKit, Foundation, OpenGL, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "bugdom";
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     Foundation
+    OpenGL
   ];
 
   nativeBuildInputs = [
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A port of Bugdom, a 1999 Macintosh game by Pangea Software, for modern operating systems";
+    description = "Port of Bugdom, a 1999 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/Bugdom";
     license = with licenses; [ cc-by-sa-40 ];
     maintainers = with maintainers; [ lux ];

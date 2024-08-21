@@ -11,20 +11,19 @@
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.8.9";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8t+AOTlX34BIftRTZgHwUW3nCPxy8NtbIIocT9YlLbU=";
+    hash = "sha256-+BQWmb09kCAjJioutD9xOWxQoZtBrTJFp0yAun/nDCc=";
   };
 
-  vendorHash = "sha256-7FHosBMB5pzsvpHXhWEo8fgD4Rn6+CFoBNFHA+V1e6o=";
+  vendorHash = "sha256-LCA59LijHLpM1bo4/yuFGrnk0g9DSXEZwmBUspGylV8=";
 
   tags = [
     "with_quic"
-    "with_grpc"
     "with_dhcp"
     "with_wireguard"
     "with_ech"
@@ -32,7 +31,6 @@ buildGoModule rec {
     "with_reality_server"
     "with_acme"
     "with_clash_api"
-    "with_v2ray_api"
     "with_gvisor"
   ];
 
@@ -53,8 +51,8 @@ buildGoModule rec {
       --zsh  <(${emulator} $out/bin/sing-box completion zsh )
 
     substituteInPlace release/config/sing-box{,@}.service \
-      --replace "/usr/bin/sing-box" "$out/bin/sing-box" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/bin/sing-box" "$out/bin/sing-box" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
     install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
   '';
 
@@ -65,7 +63,7 @@ buildGoModule rec {
 
   meta = with lib;{
     homepage = "https://sing-box.sagernet.org";
-    description = "The universal proxy platform";
+    description = "Universal proxy platform";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nickcao ];
     mainProgram = "sing-box";

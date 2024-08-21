@@ -5,13 +5,15 @@
 , makeWrapper
 , xorg # for lndir
 , runCommand
-, substituteAll
-# For Emulating wrapGAppsHook
+# For Emulating wrapGAppsHook3
 , gsettings-desktop-schemas
 , hicolor-icon-theme
 , dconf
 , librsvg
 , gdk-pixbuf
+# some scripts need these when used in conjuction with firejail
+, coreutils
+, gnugrep
 # Configuration options for the wrapper
 , extraMakeWrapperArgs ? []
 , dbusVerify ? stdenv.isLinux
@@ -32,6 +34,7 @@ let
     "--prefix" "XDG_DATA_DIRS" ":" "${hicolor-icon-theme}/share"
     "--prefix" "GST_PLUGIN_SYSTEM_PATH_1_0" ":"
       "${lib.makeSearchPath "lib/girepository-1.0" unwrapped.gst_packages}"
+    "--suffix" "PATH" ":" "${lib.makeBinPath [ coreutils gnugrep ]}"
   ] ++ lib.optionals unwrapped.kdeIntegration [
     "--prefix" "QT_PLUGIN_PATH" ":" "${
       lib.makeSearchPath
@@ -46,9 +49,13 @@ let
     # Add dictionaries from all NIX_PROFILES
     "--run" (lib.escapeShellArg ''
       for PROFILE in $NIX_PROFILES; do
-          HDIR="$PROFILE/share/hunspell"
-          if [ -d "$HDIR" ]; then
-              export DICPATH=$DICPATH''${DICPATH:+:}$HDIR
+          HU_DIR="$PROFILE/share/hunspell"
+          HY_DIR="$PROFILE/share/hyphen"
+          if [ -d "$HU_DIR" ]; then
+              export DICPATH=$DICPATH''${DICPATH:+:}$HU_DIR
+          fi
+          if [ -d "$HY_DIR" ]; then
+              export DICPATH=$DICPATH''${DICPATH:+:}$HY_DIR
           fi
       done
     '')

@@ -3,7 +3,7 @@
 import ./make-test-python.nix ( { pkgs, nftables, ... } : {
   name = "firewall" + pkgs.lib.optionalString nftables "-nftables";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes =
@@ -36,7 +36,7 @@ import ./make-test-python.nix ( { pkgs, nftables, ... } : {
     };
 
   testScript = { nodes, ... }: let
-    newSystem = nodes.walled2.config.system.build.toplevel;
+    newSystem = nodes.walled2.system.build.toplevel;
     unit = if nftables then "nftables" else "firewall";
   in ''
     start_all()

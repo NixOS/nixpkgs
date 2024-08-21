@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "roxctl";
-  version = "4.3.5";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
     rev = version;
-    sha256 = "sha256-zTZ03Qtb3ndBf1MunhYS8rzPReExzEPGxCh1JexkwuA=";
+    sha256 = "sha256-EYhp07G4a3dhnNrWzz6BtFpcgoYHosGdY2sDUYcS9QA=";
   };
 
-  vendorHash = "sha256-Sl5eIK8PWeGi2V7q/Qm5Gfjj1A9nQPtM0BGdO6inPxk=";
+  vendorHash = "sha256-Z7EkKVrwTzoD1BwaPhLr6XVtq/dctPJwH+KgyN3ZbUU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command-line client of the StackRox Kubernetes Security Platform";
+    mainProgram = "roxctl";
     license = licenses.asl20;
     homepage = "https://www.stackrox.io";
     maintainers = with maintainers; [ stehessel ];

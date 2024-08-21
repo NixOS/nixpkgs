@@ -9,12 +9,12 @@
 , libsecret
 , mesa
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "8.1.2";
+  version = "8.12.9";
 
   src = fetchurl {
     # find the latest version with
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_167.snap";
-    hash = "sha512-M/cyLfSnoCFJcdGXlA5/kH/MuyRpYcfBoyp6y6KSsTyh8Goq6niGZAQcCdIjNX8KVUvmcTWISsx8so4W5BrkCw==";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_194.snap";
+    hash = "sha512-48SHa0KQzbDRD9Z6qb63jH+8/jcjGefSjqsCK52Ob2vnzDDBdsmrRLmFDs/K/FBIjzFV4GAjQx61v9jQtvAsmA==";
   };
 
   desktopItem = makeDesktopItem {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
-  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook3 ];
 
   buildInputs = [
     alsa-lib
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform SSH client with cloud data sync and more";
+    description = "Cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

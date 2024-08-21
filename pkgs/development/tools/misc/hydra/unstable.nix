@@ -121,15 +121,15 @@ let
       ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "2023-12-24";
+  version = "2024-07-09";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "02e453fc8c39751843220eaecdeaf7d539b7e765";
-    hash = "sha256-hIXRgu2MGqFYCALDKAiP+8lE859zftRe4OVIgGOTkvc=";
+    rev = "d7986226f0666d5aa0032fdcdb9f38eef6a91dd3";
+    hash = "sha256-9DW0tAiAOfglua76t3viSvIw1gR1EETf0HTAmZklc3I=";
   };
 
   buildInputs = [
@@ -208,7 +208,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Change 5s timeout for init to 30s
     substituteInPlace t/lib/HydraTestContext.pm \
-      --replace 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
+      --replace-fail 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
   '';
 
   preCheck = ''
@@ -228,13 +228,11 @@ stdenv.mkDerivation rec {
         wrapProgram $i \
             --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
             --prefix PATH ':' $out/bin:$hydraPath \
-            --set-default HYDRA_RELEASE ${version} \
+            --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
             --set NIX_RELEASE ${nix.name or "unknown"}
     done
   '';
-
-  dontStrip = true;
 
   doCheck = true;
 
@@ -248,6 +246,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann mindavi ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ mindavi ] ++ teams.helsinki-systems.members;
   };
-}
+})

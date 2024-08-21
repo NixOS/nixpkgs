@@ -5,18 +5,18 @@ let
 in
 {
   options.services.windmill = {
-    enable = lib.mkEnableOption (lib.mdDoc "windmill service");
+    enable = lib.mkEnableOption "windmill service";
 
     serverPort = lib.mkOption {
       type = lib.types.port;
       default = 8001;
-      description = lib.mdDoc "Port the windmill server listens on.";
+      description = "Port the windmill server listens on.";
     };
 
     lspPort = lib.mkOption {
       type = lib.types.port;
       default = 3001;
-      description = lib.mdDoc "Port the windmill lsp listens on.";
+      description = "Port the windmill lsp listens on.";
     };
 
     database = {
@@ -24,19 +24,19 @@ in
         type = lib.types.str;
         # the simplest database setup is to have the database named like the user.
         default = "windmill";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
 
       user = lib.mkOption {
         type = lib.types.str;
         # the simplest database setup is to have the database user like the name.
         default = "windmill";
-        description = lib.mdDoc "Database user.";
+        description = "Database user.";
       };
 
       urlPath = lib.mkOption {
         type = lib.types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the database url windmill should connect to. This is not deducted from database user and name as it might contain a secret
         '';
         example = "config.age.secrets.DATABASE_URL_FILE.path";
@@ -44,13 +44,13 @@ in
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Whether to create a local database automatically.";
+        description = "Whether to create a local database automatically.";
       };
     };
 
     baseUrl = lib.mkOption {
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         The base url that windmill will be served on.
       '';
       example = "https://windmill.example.com";
@@ -59,7 +59,7 @@ in
     logLevel = lib.mkOption {
       type = lib.types.enum [ "error" "warn" "info" "debug" "trace" ];
       default = "info";
-      description = lib.mdDoc "Log level";
+      description = "Log level";
     };
   };
 

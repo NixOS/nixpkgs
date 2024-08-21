@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , libnotify
 , makeWrapper
 , mpv
@@ -19,15 +20,26 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RpKkQ7xhM2XqfZdXra0ju0cTBL3Al9NMVQ/oleFydDs=";
   };
 
+  patches = [
+    # Adds missing function declarations required by newer versions of clang.
+    (fetchpatch {
+      url = "https://github.com/gabrielzschmitz/Tomato.C/commit/ad6d4c385ae39d655a716850653cd92431c1f31e.patch";
+      hash = "sha256-3ormv59Ce4rOmeyL30QET3CCUIOrRYMquub+eIQsMW8=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "sudo " ""
+      --replace-fail "sudo " ""
+    # Need to define _ISOC99_SOURCE to use `snprintf` on Darwin
+    substituteInPlace config.mk \
+      --replace-fail -D_POSIX_C_SOURCE -D_ISOC99_SOURCE
     substituteInPlace notify.c \
-      --replace "/usr/local" "${placeholder "out"}"
+      --replace-fail "/usr/local" "${placeholder "out"}"
     substituteInPlace util.c \
-      --replace "/usr/local" "${placeholder "out"}"
+      --replace-fail "/usr/local" "${placeholder "out"}"
     substituteInPlace tomato.desktop \
-      --replace "/usr/local" "${placeholder "out"}"
+      --replace-fail "/usr/local" "${placeholder "out"}"
   '';
 
   nativeBuildInputs = [
@@ -41,8 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  installFlags = [
+  makeFlags = [
     "PREFIX=${placeholder "out"}"
+  ];
+
+  installFlags = [
     "CPPFLAGS=$NIX_CFLAGS_COMPILE"
     "LDFLAGS=$NIX_LDFLAGS"
   ];

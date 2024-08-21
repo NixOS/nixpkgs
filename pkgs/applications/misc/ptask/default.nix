@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, makeWrapper, gtk3, json_c, taskwarrior }:
+{ lib, stdenv, fetchurl, pkg-config, makeWrapper, gtk3, json_c, taskwarrior2 }:
 
 stdenv.mkDerivation rec {
   pname = "ptask";
@@ -18,12 +18,13 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/ptask" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --prefix PATH : "${taskwarrior}/bin"
+      --prefix PATH : "${taskwarrior2}/bin"
   '';
 
   meta = with lib; {
     homepage = "http://wpitchoune.net/ptask/";
     description = "GTK-based GUI for taskwarrior";
+    mainProgram = "ptask";
     license = licenses.gpl2;
     maintainers = [ maintainers.spacefrogg ];
     platforms = platforms.linux;

@@ -36,7 +36,11 @@ lib.makeScope newScope (self: with self; {
 
   github-copilot-cli-fish = callPackage ./github-copilot-cli-fish.nix { };
 
+  git-abbr = callPackage ./git-abbr.nix { };
+
   grc = callPackage ./grc.nix { };
+
+  gruvbox = callPackage ./gruvbox.nix { };
 
   humantime-fish = callPackage ./humantime-fish.nix { };
 

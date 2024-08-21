@@ -11,16 +11,14 @@ in
 {
   options = {
     services.tabby = {
-      enable = lib.mkEnableOption (
-        lib.mdDoc "Self-hosted AI coding assistant using large language models"
-      );
+      enable = lib.mkEnableOption "Self-hosted AI coding assistant using large language models";
 
       package = lib.mkPackageOption pkgs "tabby" { };
 
       port = lib.mkOption {
         type = types.port;
         default = 11029;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the bind port on which the tabby server HTTP interface listens.
         '';
       };
@@ -28,7 +26,7 @@ in
       model = lib.mkOption {
         type = types.str;
         default = "TabbyML/StarCoder-1B";
-        description = lib.mdDoc ''
+        description = ''
           Specify the model that tabby will use to generate completions.
 
           This model will be downloaded automatically if it is not already present.
@@ -60,7 +58,7 @@ in
         type = types.nullOr (types.enum [ "cpu" "rocm" "cuda" "metal" ]);
         default = null;
         example = "rocm";
-        description = lib.mdDoc ''
+        description = ''
           Specifies the device to use for hardware acceleration.
 
           -   `cpu`: no acceleration just use the CPU
@@ -85,7 +83,7 @@ in
       settings = lib.mkOption {
         inherit (format) type;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Tabby scheduler configuration
 
           See for more details:
@@ -108,7 +106,7 @@ in
       usageCollection = lib.mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable sending anonymous usage data.
 
           See for more details:
@@ -120,7 +118,7 @@ in
         type = types.str;
         default = "5hours";
         example = "5hours";
-        description = lib.mdDoc ''
+        description = ''
           Run tabby scheduler to generate the index database at this interval.
           Updates by default every 5 hours. This value applies to
           `OnUnitInactiveSec`

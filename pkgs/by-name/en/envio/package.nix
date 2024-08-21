@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://envio-cli.github.io/home";
     changelog   = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
+    mainProgram = "envio";
     longDescription = ''
       Envio is a command-line tool that simplifies the management of
       environment variables across multiple profiles. It allows users to easily

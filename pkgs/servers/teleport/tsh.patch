@@ -1,8 +1,8 @@
-diff --git a/tool/tsh/tsh.go b/tool/tsh/tsh.go
-index f73b0a4e46..6848286781 100644
---- a/tool/tsh/tsh.go
-+++ b/tool/tsh/tsh.go
-@@ -1065,10 +1065,11 @@ func Run(ctx context.Context, args []string, opts ...cliOption) error {
+diff --git a/tool/tsh/common/tsh.go b/tool/tsh/common/tsh.go
+index 5de21c69d0..3995c19e3c 100644
+--- a/tool/tsh/common/tsh.go
++++ b/tool/tsh/common/tsh.go
+@@ -1084,10 +1084,11 @@ func Run(ctx context.Context, args []string, opts ...CliOption) error {
  
  	var err error
  

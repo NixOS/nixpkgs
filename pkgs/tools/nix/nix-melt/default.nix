@@ -15,7 +15,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5V9sPbBb9t4B6yiLrYF+hx6YokGDH6+UsVQBhgqxMbY=";
   };
 
-  cargoHash = "sha256-yBoaLqynvYC9ebC0zjd2FmSSd53xzn4ralihtCFubAw=";
+  cargoPatches = [
+    ./0001-fix-build-for-rust-1.80.patch
+  ];
+
+  cargoHash = "sha256-SzBsSr8bpzhc0GIcTkm9LZgJ66LEBe3QA8I7NdaJ0T8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,7 +35,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A ranger-like flake.lock viewer";
+    description = "Ranger-like flake.lock viewer";
+    mainProgram = "nix-melt";
     homepage = "https://github.com/nix-community/nix-melt";
     changelog = "https://github.com/nix-community/nix-melt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;

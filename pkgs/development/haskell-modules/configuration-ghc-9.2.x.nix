@@ -65,31 +65,25 @@ self: super: {
     algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
   });
 
-  hls-cabal-plugin = super.hls-cabal-plugin.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
 
-  ormolu = self.ormolu_0_5_2_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
+  haskell-language-server = lib.pipe super.haskell-language-server [
+    (disableCabalFlag "fourmolu")
+    (disableCabalFlag "ormolu")
+    (disableCabalFlag "cabal")
+    (disableCabalFlag "stylishHaskell")
+    (d: d.override {
+      ormolu = null;
+      fourmolu = null;
+      stan = null;
+    })
+  ];
 
-  stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
-
-  haskell-language-server = lib.pipe (super.haskell-language-server.override {
-    hls-ormolu-plugin = null;
-    hls-stylish-haskell-plugin = null;
-    hls-fourmolu-plugin = null;
-    # Not buildable if GHC > 9.2.3, so we ship no compatible GHC
-    hls-stan-plugin = null;
-  }) [
-     (disableCabalFlag "fourmolu")
-     (disableCabalFlag "ormolu")
-     (disableCabalFlag "stylishHaskell")
-    ];
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   primitive-unlifted = super.primitive-unlifted_0_1_3_1;
+  # Too strict lower bound on base
+  primitive-addr = doJailbreak super.primitive-addr;
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
@@ -98,9 +92,6 @@ self: super: {
   # https://github.com/haskell-infra/hackage-trustees/issues/347
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
-
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
 
   # Needs to match ghc version
   ghc-tags = doDistribute self.ghc-tags_1_5;
@@ -117,9 +108,6 @@ self: super: {
   # https://github.com/NixOS/cabal2nix/issues/554
   # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
   clash-prelude = dontDistribute (markBroken super.clash-prelude);
-
-  # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
-  hiedb = dontCheck super.hiedb;
 
   # Too strict upper bound on bytestring, relevant for GHC 9.2.6 specifically
   # https://github.com/protolude/protolude/issues/127#issuecomment-1428807874

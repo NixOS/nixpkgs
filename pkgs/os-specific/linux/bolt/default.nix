@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Thunderbolt 3 device management daemon";
+    mainProgram = "boltctl";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ callahad ];

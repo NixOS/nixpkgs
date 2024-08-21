@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, flask, elasticsearch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  elasticsearch,
+}:
 
 buildPythonPackage rec {
   pname = "flask-elastic";
@@ -12,7 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-XwGm/FQbXSV2qbAlHyAbT4DLcQnIseDm1Qqdb5zjE0M=";
   };
 
-  propagatedBuildInputs = [ flask elasticsearch ];
+  propagatedBuildInputs = [
+    flask
+    elasticsearch
+  ];
   doCheck = false; # no tests
 
   meta = with lib; {

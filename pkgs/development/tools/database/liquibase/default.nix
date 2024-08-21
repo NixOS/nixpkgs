@@ -25,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "liquibase";
-  version = "4.26.0";
+  version = "4.29.1";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-RoULX9IcVI+WklPLvJfcbIRhmKgiVYHjr1NGrIqn2/I=";
+    hash = "sha256-MFJP8cG+GqxGt3S8x+LVSI6yF8F06f+C8LrCRP65sRc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Version Control for your database";
+    mainProgram = "liquibase";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

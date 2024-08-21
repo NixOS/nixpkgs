@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pytestCheckHook
-, pythonRelaxDepsHook
-, poetry-core
-, jsonschema
-, numpy
-, pydicom
-, simpleitk
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  pytestCheckHook,
+  poetry-core,
+  jsonschema,
+  numpy,
+  pydicom,
+  simpleitk,
 }:
 
 buildPythonPackage rec {
@@ -36,13 +36,10 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonRelaxDeps = [
-    "jsonschema"
-  ];
+  pythonRelaxDeps = [ "jsonschema" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -52,13 +49,9 @@ buildPythonPackage rec {
     simpleitk
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pydicom_seg"
-  ];
+  pythonImportsCheck = [ "pydicom_seg" ];
 
   meta = with lib; {
     description = "Medical segmentation file reading and writing";

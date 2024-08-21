@@ -1,24 +1,25 @@
-{ lib
-, azure-storage-blob
-, boto3
-, buildPythonPackage
-, cryptography
-, django
-, dropbox
-, fetchFromGitHub
-, google-cloud-storage
-, libcloud
-, moto
-, paramiko
-, pytestCheckHook
-, pythonOlder
-, rsa
-, setuptools
+{
+  lib,
+  azure-storage-blob,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  django,
+  dropbox,
+  fetchFromGitHub,
+  google-cloud-storage,
+  libcloud,
+  moto,
+  paramiko,
+  pytestCheckHook,
+  pythonOlder,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.14.2";
+  version = "1.14.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,39 +28,21 @@ buildPythonPackage rec {
     owner = "jschneier";
     repo = "django-storages";
     rev = "refs/tags/${version}";
-    hash = "sha256-V0uFZvnBi0B31b/j/u3Co6dd9XcdVefiSkl3XmCTJG4=";
+    hash = "sha256-nlM/XPot3auLzNsnHCVtog2WmiaibDRgbPOw9A5F9QI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   passthru.optional-dependencies = {
-    azure = [
-      azure-storage-blob
-    ];
-    boto3 = [
-      boto3
-    ];
-    dropbox = [
-      dropbox
-    ];
-    google = [
-      google-cloud-storage
-    ];
-    libcloud = [
-      libcloud
-    ];
-    s3 = [
-      boto3
-    ];
-    sftp = [
-      paramiko
-    ];
+    azure = [ azure-storage-blob ];
+    boto3 = [ boto3 ];
+    dropbox = [ dropbox ];
+    google = [ google-cloud-storage ];
+    libcloud = [ libcloud ];
+    s3 = [ boto3 ];
+    sftp = [ paramiko ];
   };
 
   nativeCheckInputs = [
@@ -69,15 +52,18 @@ buildPythonPackage rec {
     rsa
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "storages"
-  ];
+  pythonImportsCheck = [ "storages" ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   disabledTests = [
     # AttributeError: 'str' object has no attribute 'universe_domain'
     "test_storage_save_gzip"
+  ];
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/test_s3.py"
   ];
 
   meta = with lib; {

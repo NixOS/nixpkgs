@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , doxygen
-, freeglut
+, libglut
 , freetype
 , libGL
 , libGLU
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ] else [
     libGL
     libGLU
-    freeglut
+    libglut
   ]);
 
   configureFlags = [

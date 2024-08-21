@@ -21,7 +21,7 @@
 , upower
 , wirelesstools
 , hicolor-icon-theme
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Applets for use with the MATE panel";
+    mainProgram = "mate-cpufreq-selector";
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.linux;

@@ -19,7 +19,7 @@
 , pkg-config
 , vala
 , polkit
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     # Add support for AppStream 1.0.
     # https://github.com/elementary/appcenter/pull/2099
+    # nixpkgs-update: no auto update
     rev = "fce55d9373bfb82953191b32e276a2129ffcb8c1";
     hash = "sha256-7VYiE1RkaqN1Yg4pFUBs6k8QjoljYFDgQ9jCTLG3uyk=";
   };
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
-    description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
+    description = "Open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;

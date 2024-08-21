@@ -72,6 +72,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     mainProgram = "pass_secret_service";
-    maintainers = with lib.maintainers; [ jluttine aidalgol ];
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

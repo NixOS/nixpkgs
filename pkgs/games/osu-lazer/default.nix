@@ -17,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.312.1";
+  version = "2024.817.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    hash = "sha256-7xxuVcBtC79EiDz+/x0IqbPofpgwMdz87XjRLqkCBb8=";
+    hash = "sha256-X6YaNHwNtHSqjV4oKQmYUd1aadbHSmr3EZDoq6epAkE=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -74,10 +74,12 @@ buildDotnetModule rec {
     name = "osu";
     exec = "osu!";
     icon = "osu!";
-    comment = meta.description;
+    comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     type = "Application";
     categories = [ "Game" ];
   })];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
@@ -91,5 +93,4 @@ buildDotnetModule rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };
-  passthru.updateScript = ./update.sh;
 }

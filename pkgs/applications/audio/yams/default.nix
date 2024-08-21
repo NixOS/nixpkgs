@@ -23,6 +23,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/Berulacks/yams";
     description = "Last.FM scrobbler for MPD";
+    mainProgram = "yams";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ccellado ];
   };

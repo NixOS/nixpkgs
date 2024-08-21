@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     bash-completion
   ];
 
-  buildInputs = with lib; [
+  buildInputs = [
     gsl
     popt
     upower
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     geoclue2
     libconfig
     libmodule
-  ] ++ optional withGeoclue geoclue2
-    ++ optional withUpower upower;
+  ] ++ lib.optional withGeoclue geoclue2
+    ++ lib.optional withUpower upower;
 
   cmakeFlags = [
     "-DSESSION_BUS_DIR=${placeholder "out"}/share/dbus-1/services"
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A C daemon that turns your webcam into a light sensor";
+    description = "C daemon that turns your webcam into a light sensor";
     homepage = "https://github.com/FedeDP/Clight";
     platforms = platforms.linux;
     license = licenses.gpl3;

@@ -2,9 +2,10 @@
 , lib
 , binutils
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , boost
 , cereal
 , cgal
@@ -15,6 +16,7 @@
 , expat
 , glew
 , glib
+, glib-networking
 , gmp
 , gtk3
 , hicolor-icon-theme
@@ -23,11 +25,11 @@
 , mpfr
 , nanosvg
 , nlopt
-, opencascade-occt
+, opencascade-occt_7_6
 , openvdb
 , pcre
 , qhull
-, tbb_2021_8
+, tbb_2021_11
 , wxGTK32
 , xorg
 , libbgcode
@@ -37,6 +39,7 @@
 , wxGTK-override ? null
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.2.0";
@@ -61,24 +64,36 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_8; };
+  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/master/media-gfx/prusaslicer/files/prusaslicer-2.8.0-missing-includes.patch";
+      hash = "sha256-/R9jv9zSP1lDW6IltZ8V06xyLdxfaYrk3zD6JRFUxHg=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/master/media-gfx/prusaslicer/files/prusaslicer-2.8.0-fixed-linking.patch";
+      hash = "sha256-G1JNdVH+goBelag9aX0NctHFVqtoYFnqjwK/43FVgvM=";
+    })
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.7.2";
+  version = "2.8.0";
+  inherit patches;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-IZRw6qEe4hM/Sfhx0je11vaMHeuW/e4ZP5zMTuptb2k=";
+    hash = "sha256-A/uxNIEXCchLw3t5erWdhqFAeh6nudcMfASi+RoJkFg=";
     rev = "version_${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -92,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     glew
     glib
+    glib-networking
     gmp
     gtk3
     hicolor-icon-theme
@@ -104,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     openvdb_tbb_2021_8
     pcre
     qhull
-    tbb_2021_8
+    tbb_2021_11
     wxGTK-override'
     xorg.libX11
     libbgcode
@@ -191,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ moredread tweber tmarkus ];
     platforms = platforms.unix;
   } // lib.optionalAttrs (stdenv.isDarwin) {

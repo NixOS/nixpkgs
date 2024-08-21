@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,20 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-2H7yvLze1o7pa8NMGAm2lFfs7JsMTdRxZYoSvTkQAtE=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsonpath"
-  ];
+  pythonImportsCheck = [ "jsonpath" ];
 
-  pytestFlagsArray = [
-    "test/test*.py"
-  ];
+  pytestFlagsArray = [ "test/test*.py" ];
 
   meta = with lib; {
-    description = "An XPath for JSON";
+    description = "XPath for JSON";
     homepage = "https://github.com/json-path/JsonPath";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];

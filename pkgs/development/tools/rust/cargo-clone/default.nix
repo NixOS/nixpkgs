@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , stdenv
+, CoreServices
 , Security
 , SystemConfiguration
 }:
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
     Security
     SystemConfiguration
   ];
@@ -32,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A cargo subcommand to fetch the source code of a Rust crate";
+    description = "Cargo subcommand to fetch the source code of a Rust crate";
+    mainProgram = "cargo-clone";
     homepage = "https://github.com/janlikar/cargo-clone";
     changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

@@ -1,4 +1,4 @@
-{ alephone, fetchurl, unrar }:
+{ alephone, fetchurl }:
 
 alephone.makeWrapper rec {
   pname = "marathon-evil";
@@ -11,7 +11,7 @@ alephone.makeWrapper rec {
   };
 
   meta = {
-    description = "The first conversion for Marathon Infinity";
+    description = "First conversion for Marathon Infinity";
     homepage = "https://alephone.lhowon.org/scenarios.html";
   };
 

@@ -2,26 +2,13 @@
 , tzdata, wire
 , yarn, nodejs, python3, cacert
 , jq, moreutils
-, nix-update-script, nixosTests
+, nix-update-script, nixosTests, xcbuild
+, faketty
 }:
 
-let
-  # We need dev dependencies to run webpack, but patch away
-  # `cypress` (and @grafana/e2e which has a direct dependency on cypress).
-  # This attempts to download random blobs from the Internet in
-  # postInstall. Also, it's just a testing framework, so not worth the hassle.
-  patchAwayGrafanaE2E = ''
-    find . -name package.json | while IFS=$'\n' read -r pkg_json; do
-      <"$pkg_json" jq '. + {
-        "devDependencies": .devDependencies | del(."@grafana/e2e") | del(.cypress)
-      }' | sponge "$pkg_json"
-    done
-    rm -r packages/grafana-e2e
-  '';
-in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.0";
+  version = "11.1.4";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -29,25 +16,32 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-Rp2jGspbmqJFzSbiVy2/5oqQJnAdGG/T+VNBHVsHSwg=";
+    hash = "sha256-KK6LDq9CHSrif2LOWW20PswiDk1zLwx3/QV3Q06tzbo=";
+  };
+
+  # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+  } // lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    # Fix error: no member named 'aligned_alloc' in the global namespace.
+    # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
+    NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
   };
 
   offlineCache = stdenv.mkDerivation {
     name = "${pname}-${version}-yarn-offline-cache";
-    inherit src;
+    inherit src env;
     nativeBuildInputs = [
       yarn nodejs cacert
       jq moreutils python3
-    ];
-    postPatch = ''
-      ${patchAwayGrafanaE2E}
-    '';
+    # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
+    ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
       runHook preBuild
       export HOME="$(mktemp -d)"
       yarn config set enableTelemetry 0
       yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux" ]'
+      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
       yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
       yarn
       runHook postBuild
@@ -56,18 +50,22 @@ buildGoModule rec {
     dontInstall = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-QdyXSPshzugkDTJoUrJlHNuhPAyR9gae5Cbk8Q8FSl4=";
+    outputHash = rec {
+      x86_64-linux = "sha256-2VnhZBWLdYQhqKCxM63fCAwQXN4Zrh2wCdPBLCCUuvg=";
+      aarch64-linux = x86_64-linux;
+      aarch64-darwin = "sha256-MZE3/PHynL6SHOxJgOG41pi2X8XeutruAOyUFY9Lmsc=";
+      x86_64-darwin = aarch64-darwin;
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-cNkMVLXp3hPMcW0ilOM0VlrrDX/IsZaze+/6qlTfmRs=";
+  vendorHash = "sha256-vd3hb7+lmhQPTZO/Xqi59XSPGj5sd218xQAD1bRbUz8=";
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ];
+  proxyVendor = true;
 
-  postPatch = ''
-    ${patchAwayGrafanaE2E}
-  '';
+  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
+    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -75,10 +73,8 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/plugins/plugindef
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/kindsys/report.go
     # Setup node_modules
     export HOME="$(mktemp -d)"
 
@@ -91,7 +87,7 @@ buildGoModule rec {
 
     yarn config set enableTelemetry 0
     yarn config set cacheFolder $offlineCache
-    yarn --immutable-cache
+    yarn install --immutable-cache
 
     # The build OOMs on memory constrained aarch64 without this
     export NODE_OPTIONS=--max_old_space_size=4096
@@ -99,7 +95,9 @@ buildGoModule rec {
 
   postBuild = ''
     # After having built all the Go code, run the JS builders now.
-    yarn run build
+
+    # Workaround for https://github.com/nrwl/nx/issues/22445
+    faketty yarn run build
     yarn run plugins:build-bundled
   '';
 
@@ -135,10 +133,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     homepage = "https://grafana.com";
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     mainProgram = "grafana-server";
   };
 }

@@ -1,36 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, pythonRelaxDepsHook
-, dparse
-, packaging
-, pydantic
-, ruamel-yaml
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  dparse,
+  packaging,
+  pydantic,
+  ruamel-yaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "safety-schemas";
-  version = "0.0.2";
+  version = "0.0.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "safety_schemas";
     inherit version;
-    hash = "sha256-fRsEDsBkgPBc/2tF6nqT4JyJQt+GT7DQHd62fDI8+ow=";
+    hash = "sha256-s5VU+cAQ5PEffJ5Xc+sx0slsFk96WVwnOpiwdND7mPQ=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "dparse"
-  ];
+  pythonRelaxDeps = [ "dparse" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dparse
     packaging
     pydantic

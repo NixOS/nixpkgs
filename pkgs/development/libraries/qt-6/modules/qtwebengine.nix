@@ -3,6 +3,7 @@
 , qtwebchannel
 , qtpositioning
 , qtwebsockets
+, fetchpatch2
 , buildPackages
 , bison
 , coreutils
@@ -49,7 +50,7 @@
 , systemd
 , pipewire
 , gn
-, ffmpeg_4
+, ffmpeg_7
 , lib
 , stdenv
 , glib
@@ -122,9 +123,6 @@ qtModule {
   hardeningDisable = [ "format" ];
 
   patches = [
-    # removes macOS 12+ dependencies
-    ../patches/qtwebengine-darwin-no-low-latency-flag.patch
-    ../patches/qtwebengine-darwin-no-copy-certificate-chain.patch
     # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
@@ -134,6 +132,14 @@ qtModule {
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
+
+    # Support FFmpeg 7
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-webengine/-/raw/6bee5464ac6340e925e08c7ed023026e727ae9d5/qtwebengine-ffmpeg-7.patch";
+      hash = "sha256-OdCIu1KMW3YcpCnfUP1uD7OJRl6Iwap9X4aJhGpoaNs=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+    })
   ];
 
   postPatch = ''
@@ -231,7 +237,7 @@ qtModule {
     lcms2
 
     libevent
-    ffmpeg_4
+    ffmpeg_7
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     zlib
@@ -314,10 +320,12 @@ qtModule {
   '';
 
   meta = with lib; {
-    description = "A web engine based on the Chromium web browser";
+    description = "Web engine based on the Chromium web browser";
     platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;
+    # Not compatible with macOS 11 without massive patching
+    broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "12";
   };
 }

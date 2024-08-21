@@ -3,10 +3,8 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, gmp
-, libmpc
-, mpfr
 , stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,16 +18,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0c0MsjrHRitg+5VEHB9/iSuiqcPztF+2inDZa9fQpwU=";
   };
 
-  cargoSha256 = "sha256-q8s6HAJhKnMhsgZk5plR+ar3CpLKNqjrD14roDWLwfo=";
+  cargoHash = "sha256-q8s6HAJhKnMhsgZk5plR+ar3CpLKNqjrD14roDWLwfo=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl gmp libmpc mpfr ];
+
+  buildInputs = [ openssl ]
+                ++ lib.optionals stdenv.isDarwin [
+                  darwin.apple_sdk.frameworks.SystemConfiguration
+                ];
 
   CARGO_FEATURE_USE_SYSTEM_LIBS = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A modern Prolog implementation written mostly in Rust";
+    description = "Modern Prolog implementation written mostly in Rust";
+    mainProgram = "scryer-prolog";
     homepage = "https://github.com/mthom/scryer-prolog";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ malbarbo wkral ];

@@ -1,8 +1,9 @@
-{ lib
-, aioserial
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aioserial,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
       --replace "aioserial==1.3.0" "aioserial"
   '';
 
-  propagatedBuildInputs = [
-    aioserial
-  ];
+  propagatedBuildInputs = [ aioserial ];
 
   # Project has no tests
   doCheck = false;

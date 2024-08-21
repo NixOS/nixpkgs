@@ -4,9 +4,8 @@
 , python3
 , meson
 , ninja
-, eudev
 , systemd
-, enableSystemd ? true
+, enableSystemd ? true # enableSystemd=false maintained by maintainers.qyliss.
 , pkg-config
 , docutils
 , doxygen
@@ -28,31 +27,19 @@
 , lilv
 , makeFontsConf
 , nixosTests
-, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
 , valgrind
-, libcameraSupport ? true
 , libcamera
 , libdrm
-, gstreamerSupport ? true
 , gst_all_1
-, ffmpegSupport ? true
 , ffmpeg
-, bluezSupport ? true
 , bluez
 , sbc
 , libfreeaptx
 , liblc3
 , fdk_aac
 , libopus
-, ldacbtSupport ? bluezSupport && lib.meta.availableOn stdenv.hostPlatform ldacbt
 , ldacbt
-, nativeHspSupport ? true
-, nativeHfpSupport ? true
-, nativeModemManagerSupport ? true
 , modemmanager
-, ofonoSupport ? true
-, hsphfpdSupport ? true
-, pulseTunnelSupport ? true
 , libpulseaudio
 , zeroconfSupport ? true
 , avahi
@@ -63,20 +50,15 @@
 , x11Support ? true
 , libcanberra
 , xorg
-, mysofaSupport ? true
 , libmysofa
-, tinycompress
-, ffadoSupport ? x11Support && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffadoSupport ? x11Support && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
 , ffado
 , libselinux
 }:
 
-# Bluetooth codec only makes sense if general bluetooth enabled
-assert ldacbtSupport -> bluezSupport;
-
 stdenv.mkDerivation(finalAttrs: {
   pname = "pipewire";
-  version = "1.0.3";
+  version = "1.2.2";
 
   outputs = [
     "out"
@@ -92,7 +74,7 @@ stdenv.mkDerivation(finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-QVw7Q+RNo8BBy/uxoZeSQQn/vQcIl1bOiA9fYMR0+oI=";
+    sha256 = "sha256-neLQ41p2f2QyOS3r2VxanaHbiVj6nnnkT7kx/On0azM=";
   };
 
   patches = [
@@ -116,36 +98,40 @@ stdenv.mkDerivation(finalAttrs: {
 
   buildInputs = [
     alsa-lib
+    bluez
     dbus
+    fdk_aac
+    ffmpeg
     glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libcamera
     libjack2
+    libfreeaptx
+    liblc3
+    libmysofa
+    libopus
+    libpulseaudio
     libusb1
     libselinux
     libsndfile
     lilv
+    modemmanager
     ncurses
     readline
-    udev
-    tinycompress
-  ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    sbc
+  ] ++ (if enableSystemd then [ systemd ] else [ udev ])
   ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
-  ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
-  ++ lib.optionals libcameraSupport [ libcamera libdrm ]
-  ++ lib.optional ffmpegSupport ffmpeg
-  ++ lib.optionals bluezSupport [ bluez libfreeaptx liblc3 sbc fdk_aac libopus ]
-  ++ lib.optional ldacbtSupport ldacbt
-  ++ lib.optional nativeModemManagerSupport modemmanager
-  ++ lib.optional pulseTunnelSupport libpulseaudio
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ldacbt) ldacbt
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
   ++ lib.optional rocSupport roc-toolkit
-  ++ lib.optionals vulkanSupport [ vulkan-headers vulkan-loader ]
+  ++ lib.optionals vulkanSupport [ libdrm vulkan-headers vulkan-loader ]
   ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
-  ++ lib.optional mysofaSupport libmysofa
   ++ lib.optional ffadoSupport ffado;
 
   # Valgrind binary is required for running one optional test.
-  nativeCheckInputs = lib.optional withValgrind valgrind;
+  nativeCheckInputs =  lib.optional (lib.meta.availableOn stdenv.hostPlatform valgrind) valgrind;
 
   mesonFlags = [
     (lib.mesonEnable "docs" true)
@@ -153,25 +139,29 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "installed_tests" true)
     (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
     (lib.mesonOption "libjack-path" "${placeholder "jack"}/lib")
-    (lib.mesonEnable "libcamera" libcameraSupport)
+    (lib.mesonEnable "libcamera" true)
     (lib.mesonEnable "libffado" ffadoSupport)
     (lib.mesonEnable "roc" rocSupport)
-    (lib.mesonEnable "libpulse" pulseTunnelSupport)
+    (lib.mesonEnable "libpulse" true)
     (lib.mesonEnable "avahi" zeroconfSupport)
-    (lib.mesonEnable "gstreamer" gstreamerSupport)
+    (lib.mesonEnable "gstreamer" true)
+    (lib.mesonEnable "gstreamer-device-provider" true)
+    (lib.mesonEnable "systemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
     (lib.mesonEnable "udev" (!enableSystemd))
-    (lib.mesonEnable "ffmpeg" ffmpegSupport)
-    (lib.mesonEnable "bluez5" bluezSupport)
-    (lib.mesonEnable "bluez5-backend-hsp-native" nativeHspSupport)
-    (lib.mesonEnable "bluez5-backend-hfp-native" nativeHfpSupport)
-    (lib.mesonEnable "bluez5-backend-native-mm" nativeModemManagerSupport)
-    (lib.mesonEnable "bluez5-backend-ofono" ofonoSupport)
-    (lib.mesonEnable "bluez5-backend-hsphfpd" hsphfpdSupport)
+    (lib.mesonEnable "ffmpeg" true)
+    (lib.mesonEnable "pw-cat-ffmpeg" true)
+    (lib.mesonEnable "bluez5" true)
+    (lib.mesonEnable "bluez5-backend-hsp-native" true)
+    (lib.mesonEnable "bluez5-backend-hfp-native" true)
+    (lib.mesonEnable "bluez5-backend-native-mm" true)
+    (lib.mesonEnable "bluez5-backend-ofono" true)
+    (lib.mesonEnable "bluez5-backend-hsphfpd" true)
     # source code is not easily obtainable
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
-    (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
-    (lib.mesonEnable "bluez5-codec-ldac" ldacbtSupport)
+    (lib.mesonEnable "bluez5-codec-lc3" true)
+    (lib.mesonEnable "bluez5-codec-ldac" (lib.meta.availableOn stdenv.hostPlatform ldacbt))
+    (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
     (lib.mesonOption "session-managers" "")
@@ -179,11 +169,12 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "x11" x11Support)
     (lib.mesonEnable "x11-xfixes" x11Support)
     (lib.mesonEnable "libcanberra" x11Support)
-    (lib.mesonEnable "libmysofa" mysofaSupport)
+    (lib.mesonEnable "libmysofa" true)
     (lib.mesonEnable "sdl2" false) # required only to build examples, causes dependency loop
     (lib.mesonBool "rlimits-install" false) # installs to /etc, we won't use this anyway
     (lib.mesonEnable "compress-offload" true)
     (lib.mesonEnable "man" true)
+    (lib.mesonEnable "snap" false) # we don't currently have a working snapd
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -204,7 +195,7 @@ stdenv.mkDerivation(finalAttrs: {
 
   meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
-    changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${version}";
+    changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${finalAttrs.version}";
     homepage = "https://pipewire.org/";
     license = licenses.mit;
     platforms = platforms.linux;

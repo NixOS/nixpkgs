@@ -39,7 +39,7 @@ let
         license = licenses.asl20;
         changelog = "https://github.com/uber/h3/raw/v${version}/CHANGELOG.md";
         platforms = platforms.all;
-        maintainers = with maintainers; [ kalbasit marsam ];
+        maintainers = with maintainers; [ kalbasit ];
       };
     };
 in

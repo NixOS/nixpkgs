@@ -37,7 +37,7 @@
 , gnome-settings-daemon
 , xorgserver
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gi-docgen
 , sysprof
 , libsysprof-capture
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     gi-docgen
     xorgserver
     gobject-introspection
@@ -184,7 +184,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A window manager for GNOME";
+    description = "Window manager for GNOME";
+    mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2Plus;
     maintainers = teams.pantheon.members;

@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, grequests
-, hawkauthlib
-, mock
-, pybrowserid
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  grequests,
+  hawkauthlib,
+  mock,
+  pybrowserid,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pyfxa";
   version = "0.7.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,7 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-DMFZl1hbYNaScOTWkAbK2nKti6wD5SS5A30q7TW5vO4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     hawkauthlib
     pybrowserid
@@ -45,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fxa"
-  ];
+  pythonImportsCheck = [ "fxa" ];
 
   disabledTestPaths = [
     # Requires network access
@@ -57,8 +58,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Firefox Accounts client library";
+    mainProgram = "fxa-client";
     homepage = "https://github.com/mozilla/PyFxA";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

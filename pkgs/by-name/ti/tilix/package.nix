@@ -13,7 +13,7 @@
 , gettext
 , gtkd
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , libunwind
 , appstream
 , nixosTests
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     appstream
   ];
 

@@ -14,7 +14,7 @@
 , libxshmfence
 , makeDesktopItem
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , gcc-unwrapped
 , udev
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
     makeWrapper
     dpkg
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

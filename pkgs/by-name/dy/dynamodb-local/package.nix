@@ -19,17 +19,18 @@ let
       "java.xml"
       "java.desktop"
       "java.management"
+      "java.naming"
     ];
     jdk = jdk_headless;
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
-  version = "2.3.0";
+  version = "2.5.2";
 
   src = fetchurl {
-    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-03-14.tar.gz";
-    hash = "sha256-BmLbmT63CaETgu1a/Tcf0KyF+Xwol67yKVwSMa9fJbw=";
+    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-06-20.tar.gz";
+    hash = "sha256-9SlgKNZFuy0/mf7eCjaUWVbrc4YXRDDnXADm+xs0540=";
   };
 
   sourceRoot = ".";
@@ -72,7 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service.";
+    description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service";
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html";
     license = licenses.unfree;
     mainProgram = "dynamodb-local";

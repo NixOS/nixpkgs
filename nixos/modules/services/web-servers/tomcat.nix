@@ -15,16 +15,24 @@ in
 
   options = {
     services.tomcat = {
-      enable = lib.mkEnableOption (lib.mdDoc "Apache Tomcat");
+      enable = lib.mkEnableOption "Apache Tomcat";
 
       package = lib.mkPackageOption pkgs "tomcat9" {
         example = "tomcat10";
       };
 
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 8080;
+        description = ''
+          The TCP port Tomcat should listen on.
+        '';
+      };
+
       purifyOnStart = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           On startup, the `baseDir` directory is populated with various files,
           subdirectories and symlinks. If this option is enabled, these items
           (except for the `logs` and `work` subdirectories) are first removed.
@@ -36,7 +44,7 @@ in
       baseDir = lib.mkOption {
         type = lib.types.path;
         default = "/var/tomcat";
-        description = lib.mdDoc ''
+        description = ''
           Location where Tomcat stores configuration files, web applications
           and logfiles. Note that it is partially cleared on each service startup
           if `purifyOnStart` is enabled.
@@ -46,63 +54,63 @@ in
       logDirs = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.path;
-        description = lib.mdDoc "Directories to create in baseDir/logs/";
+        description = "Directories to create in baseDir/logs/";
       };
 
       extraConfigFiles = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.path;
-        description = lib.mdDoc "Extra configuration files to pull into the tomcat conf directory";
+        description = "Extra configuration files to pull into the tomcat conf directory";
       };
 
       extraEnvironment = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "ENVIRONMENT=production" ];
-        description = lib.mdDoc "Environment Variables to pass to the tomcat service";
+        description = "Environment Variables to pass to the tomcat service";
       };
 
       extraGroups = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.str;
         example = [ "users" ];
-        description = lib.mdDoc "Defines extra groups to which the tomcat user belongs.";
+        description = "Defines extra groups to which the tomcat user belongs.";
       };
 
       user = lib.mkOption {
         type = lib.types.str;
         default = "tomcat";
-        description = lib.mdDoc "User account under which Apache Tomcat runs.";
+        description = "User account under which Apache Tomcat runs.";
       };
 
       group = lib.mkOption {
         type = lib.types.str;
         default = "tomcat";
-        description = lib.mdDoc "Group account under which Apache Tomcat runs.";
+        description = "Group account under which Apache Tomcat runs.";
       };
 
       javaOpts = lib.mkOption {
         type = lib.types.either (lib.types.listOf lib.types.str) lib.types.str;
         default = "";
-        description = lib.mdDoc "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
+        description = "Parameters to pass to the Java Virtual Machine which spawns Apache Tomcat";
       };
 
       catalinaOpts = lib.mkOption {
         type = lib.types.either (lib.types.listOf lib.types.str) lib.types.str;
         default = "";
-        description = lib.mdDoc "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
+        description = "Parameters to pass to the Java Virtual Machine which spawns the Catalina servlet container";
       };
 
       sharedLibs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        description = lib.mdDoc "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
+        description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
       };
 
       serverXml = lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Verbatim server.xml configuration.
           This is mutually exclusive with the virtualHosts options.
         '';
@@ -111,14 +119,14 @@ in
       commonLibs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        description = lib.mdDoc "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
+        description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
       };
 
       webapps = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ tomcat.webapps ];
         defaultText = lib.literalExpression "[ config.services.tomcat.package.webapps ]";
-        description = lib.mdDoc "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
+        description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
       };
 
       virtualHosts = lib.mkOption {
@@ -126,16 +134,16 @@ in
           options = {
             name = lib.mkOption {
               type = lib.types.str;
-              description = lib.mdDoc "name of the virtualhost";
+              description = "name of the virtualhost";
             };
             aliases = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              description = lib.mdDoc "aliases of the virtualhost";
+              description = "aliases of the virtualhost";
               default = [ ];
             };
             webapps = lib.mkOption {
               type = lib.types.listOf lib.types.path;
-              description = lib.mdDoc ''
+              description = ''
                 List containing web application WAR files and/or directories containing
                 web applications and configuration files for the virtual host.
               '';
@@ -144,13 +152,13 @@ in
           };
         });
         default = [ ];
-        description = lib.mdDoc "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
+        description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 
       logPerVirtualHost = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable logging per virtual host.";
+        description = "Whether to enable logging per virtual host.";
       };
 
       jdk = lib.mkPackageOption pkgs "jdk" { };
@@ -161,7 +169,7 @@ in
         services = lib.mkOption {
           default = [ ];
           type = lib.types.listOf lib.types.str;
-          description = lib.mdDoc "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
+          description = "List containing AAR files or directories with AAR files which are web services to be deployed on Axis2";
         };
       };
     };
@@ -244,8 +252,12 @@ in
             hostElementsString = lib.concatMapStringsSep "\n" hostElementForVirtualHost cfg.virtualHosts;
             hostElementsSedString = lib.replaceStrings ["\n"] ["\\\n"] hostElementsString;
           in ''
-            # Create a modified server.xml which also includes all virtual hosts
-            sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\\"${lib.escapeShellArg hostElementsSedString} \
+            # Create a modified server.xml which listens on the given port,
+            # and also includes all virtual hosts.
+            # The host modification must be last here,
+            # else if hostElementsSedString is empty sed gets confused as to what to append
+            sed -e 's/<Connector port="8080"/<Connector port="${toString cfg.port}"/' \
+                -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\\"${lib.escapeShellArg hostElementsSedString} \
                   ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
           ''
         }

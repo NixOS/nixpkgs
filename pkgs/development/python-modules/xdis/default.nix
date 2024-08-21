@@ -1,55 +1,46 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.0.5";
+  version = "6.1.0";
   format = "setuptools";
 
-  # No support for Python 3.11, https://github.com/rocky/python-xdis/issues/98
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     rev = "refs/tags/${version}";
-    hash = "sha256-3mL0EuPHF/dithovrYvMjweYGwGhrN75N9MRfLjNC34=";
+    hash = "sha256-KgKTO99T2/be1sBs5rY3Oy7/Yl9WGgdG3hqqkZ7D7ZY=";
   };
-
-  postPatch = ''
-    # Our Python release is not in the test matrix
-    substituteInPlace xdis/magics.py \
-      --replace "3.10.4" "3.10.5 3.10.6 3.10.7 3.10.8 3.10.10 3.10.11 3.10.12 3.10.13 3.10.14"
-  '';
 
   propagatedBuildInputs = [
     click
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xdis"
-  ];
+  pythonImportsCheck = [ "xdis" ];
 
-  # import file mismatch:
-  # imported module 'test_disasm' has this __file__ attribute:
-  #   /build/source/pytest/test_disasm.py
-  # which is not the same as the test file we want to collect:
-  #   /build/source/test_unit/test_disasm.py
   disabledTestPaths = [
+    # import file mismatch:
+    # imported module 'test_disasm' has this __file__ attribute:
+    #   /build/source/pytest/test_disasm.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/test_unit/test_disasm.py
     "test_unit/test_disasm.py"
+
+    # Doesn't run on non-2.7 but has global-level mis-import
+    "test_unit/test_dis27.py"
   ];
 
   disabledTests = [

@@ -40,7 +40,7 @@ maven.buildMavenPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ majiir ];
   };
-}:
+}
 ```
 
 This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stdenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.

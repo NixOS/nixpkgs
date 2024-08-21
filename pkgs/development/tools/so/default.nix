@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-4IZNOclQj3ZLE6WRddn99CrV8OoyfkRBXnA4oEyMxv8=";
   };
 
-  cargoSha256 = "sha256-hHXA/n/HQeBaD4QZ2b6Okw66poBRwNTpQWF0qBhLp/o=";
+  cargoHash = "sha256-hHXA/n/HQeBaD4QZ2b6Okw66poBRwNTpQWF0qBhLp/o=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A TUI interface to the StackExchange network";
+    description = "TUI interface to the StackExchange network";
+    mainProgram = "so";
     homepage = "https://github.com/samtay/so";
     license = licenses.mit;
     maintainers = with maintainers; [ mredaelli ];

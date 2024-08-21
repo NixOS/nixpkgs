@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GUPnP/";
+    homepage = "https://gitlab.gnome.org/GNOME/gupnp-dlna";
     description = "Library to ease DLNA-related bits for applications using GUPnP";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;

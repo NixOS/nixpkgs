@@ -1,6 +1,7 @@
 { callPackage
 , kernel ? null
 , stdenv
+, lib
 , linuxKernel
 , nixosTests
 , ...
@@ -14,17 +15,19 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_2_2";
   # check the release notes for compatible kernels
-  kernelCompatible = kernel.kernelOlder "6.8";
+  kernelCompatible = kernel.kernelOlder "6.10";
 
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_7;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
   # this package should point to the latest release.
-  version = "2.2.3";
+  version = "2.2.5";
 
   tests = [
     nixosTests.zfs.installer
     nixosTests.zfs.series_2_2
   ];
 
-  hash = "sha256-Bzkow15OitUUQ+mTYhCXgTrQl+ao/B4feleHY/rSSjg=";
+  maintainers = with lib.maintainers; [ adamcstephens amarshall ];
+
+  hash = "sha256-BkwcNPk+jX8CXp5xEVrg4THof7o/5j8RY2SY6+IPNTg=";
 }

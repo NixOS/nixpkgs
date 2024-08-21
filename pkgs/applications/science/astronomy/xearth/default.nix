@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "sets the X root window to an image of the Earth";
+    mainProgram = "xearth";
     homepage = "https://xearth.org";
     longDescription =
       '' Xearth  sets  the X root window to an image of the Earth, as seen from your favorite vantage point in space,

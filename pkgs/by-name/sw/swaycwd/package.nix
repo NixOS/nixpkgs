@@ -10,7 +10,7 @@ buildNimPackage (finalAttrs: {
 
   src = fetchFromGitLab {
     owner = "cab404";
-    repo = finalAttrs.pname;
+    repo = "swaycwd";
     rev = "v${finalAttrs.version}";
     hash = "sha256-R/LnojbA0vBQVivGLaoM0+M4qVJ7vjf4kggB59i896w=";
   };

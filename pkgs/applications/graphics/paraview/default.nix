@@ -1,18 +1,38 @@
-{ lib, stdenv, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
-, qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, ninja, mpi, python3, tbb, libGLU, libGL
-, withDocs ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchurl,
+  boost,
+  cmake,
+  ffmpeg,
+  wrapQtAppsHook,
+  qtbase,
+  qtx11extras,
+  qttools,
+  qtxmlpatterns,
+  qtsvg,
+  gdal,
+  gfortran,
+  libXt,
+  makeWrapper,
+  ninja,
+  mpi,
+  python3,
+  tbb,
+  libGLU,
+  libGL,
+  withDocs ? true,
 }:
 
 let
-  version = "5.11.2";
+  version = "5.12.1";
 
   docFiles = [
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewTutorial-${version}.pdf";
       name = "Tutorial.pdf";
-      hash = "sha256-KIcd5GG+1L3rbj4qdLbc+eDa5Wy4+nqiVIxfHu5Tdpg=";
+      hash = "sha256-ETA799peqP9RAjcqPBwVb8egKfQJAuIXNgso+k8o50Q=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewGettingStarted-${version}.pdf";
@@ -26,7 +46,8 @@ let
     })
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -35,7 +56,7 @@ in stdenv.mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    hash = "sha256-fe/4xxxlkal08vE971FudTnESFfGMYzuvSyAMS6HSxI=";
+    hash = "sha256-jbqMqj3D7LTwQ+hHIPscCHw4TfY/BR2HuVmMYom2+dA=";
     fetchSubmodules = true;
   };
 
@@ -86,13 +107,10 @@ in stdenv.mkDerivation rec {
     qtsvg
   ];
 
-  patches = [
-    ./dont-redefine-strlcat.patch
-  ];
-
-  env.CXXFLAGS = "-include cstdint";
-
-  postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in
+  postInstall =
+    let
+      docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc";
+    in
     lib.optionalString withDocs ''
       mkdir -p ${docDir};
       for docFile in ${lib.concatStringsSep " " docFiles}; do
@@ -101,14 +119,21 @@ in stdenv.mkDerivation rec {
     '';
 
   propagatedBuildInputs = [
-    (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
+    (python3.withPackages (
+      ps: with ps; [
+        numpy
+        matplotlib
+        mpi4py
+      ]
+    ))
   ];
 
-  meta = with lib; {
-    homepage = "https://www.paraview.org/";
+  meta = {
+    homepage = "https://www.paraview.org";
     description = "3D Data analysis and visualization application";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ guibert ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ guibert ];
+    changelog = "https://www.kitware.com/paraview-${lib.concatStringsSep "-" (lib.versions.splitVersion version)}-release-notes";
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,6 +1,5 @@
-diff --git a/src/kdenlivesettings.kcfg b/src/kdenlivesettings.kcfg
-index 029849e5f..8befe4888 100644
---- a/src/kdenlivesettings.kcfg
+diff -u b/src/kdenlivesettings.kcfg b/src/kdenlivesettings.kcfg
+--- b/src/kdenlivesettings.kcfg
 +++ b/src/kdenlivesettings.kcfg
 @@ -517,7 +517,7 @@
    <group name="env">
@@ -44,3 +43,10 @@ index 029849e5f..8befe4888 100644
      </entry>
  
      <entry name="processingthreads" type="Int">
+@@ -657,5 +657,5 @@
+     <entry name="glaxnimatePath" type="String">
+       <label>Path to the Glaxnimate application.</label>
+-      <default></default>
++      <default>@glaxnimate@/bin/glaxnimate</default>
+     </entry>
+     <entry name="nice_tasks" type="Bool">

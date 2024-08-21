@@ -3,7 +3,6 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
-  fetchFromGitLab,
   libsForQt5,
   qt6Packages,
   cmark,
@@ -65,16 +64,23 @@
       kdiagram = self.callPackage ./misc/kdiagram {};
       kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client {};
       kirigami-addons = self.callPackage ./misc/kirigami-addons {};
+      kio-extras-kf5 = self.callPackage ./misc/kio-extras-kf5 {};
       kio-fuse = self.callPackage ./misc/kio-fuse {};
       ktextaddons = self.callPackage ./misc/ktextaddons {};
       kunifiedpush = self.callPackage ./misc/kunifiedpush {};
+      kup = self.callPackage ./misc/kup {};
       kweathercore = self.callPackage ./misc/kweathercore {};
+      marknote = self.callPackage ./misc/marknote {};
       mpvqt = self.callPackage ./misc/mpvqt {};
       oxygen-icons = self.callPackage ./misc/oxygen-icons {};
       phonon = self.callPackage ./misc/phonon {};
       phonon-vlc = self.callPackage ./misc/phonon-vlc {};
       polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 {};
       pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt {};
+
+      applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 {};
+      karousel = self.callPackage ./third-party/karousel {};
+      kzones = self.callPackage ./third-party/kzones {};
     }
   );
 in

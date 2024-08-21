@@ -31,6 +31,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Isometric 3D RPG similar to game Diablo";
+    mainProgram = "freedroidRPG";
 
     longDescription = ''
       <para>
@@ -69,7 +70,7 @@ in stdenv.mkDerivation {
 
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };

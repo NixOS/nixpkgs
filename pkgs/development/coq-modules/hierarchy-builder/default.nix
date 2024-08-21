@@ -5,7 +5,7 @@ let hb = mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.18" "8.19"; out = "1.7.0"; }
+    { case = range "8.18" "8.20"; out = "1.7.0"; }
     { case = range "8.16" "8.18"; out = "1.6.0"; }
     { case = range "8.15" "8.18"; out = "1.5.0"; }
     { case = range "8.15" "8.17"; out = "1.4.0"; }

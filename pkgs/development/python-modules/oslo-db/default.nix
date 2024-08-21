@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, alembic
-, debtcollector
-, oslo-config
-, oslo-context
-, oslo-i18n
-, oslo-utils
-, oslotest
-, pbr
-, psycopg2
-, setuptools
-, sqlalchemy
-, stevedore
-, stestr
-, testresources
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  alembic,
+  debtcollector,
+  oslo-config,
+  oslo-context,
+  oslo-i18n,
+  oslo-utils,
+  oslotest,
+  pbr,
+  psycopg2,
+  setuptools,
+  sqlalchemy,
+  stevedore,
+  stestr,
+  testresources,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "15.0.0";
+  version = "16.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.db";
     inherit version;
-    hash = "sha256-6QJDUgX1xQtw7mNYY8i06lS9Hr4ABpXAZeMN1C2Xb/o=";
+    hash = "sha256-8bNUjR8eEfLYEZfBwXix0lO2A474iDYdMQp2Aa7BfoE=";
   };
 
   nativeBuildInputs = [

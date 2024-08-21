@@ -5,7 +5,7 @@
 , SDL2
 , perl
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     perl
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

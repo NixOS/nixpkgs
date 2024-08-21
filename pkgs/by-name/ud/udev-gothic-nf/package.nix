@@ -11,12 +11,12 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 *.ttf -t $out/share/fonts/${pname}
+    install -Dm644 *.ttf -t $out/share/fonts/udev-gothic-nf
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A programming font that combines BIZ UD Gothic, JetBrains Mono and nerd-fonts";
+    description = "Programming font that combines BIZ UD Gothic, JetBrains Mono and nerd-fonts";
     homepage = "https://github.com/yuru7/udev-gothic";
     license = licenses.ofl;
     maintainers = with maintainers; [ haruki7049 ];

@@ -1,12 +1,12 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtksourceview3
 , libappindicator-gtk3
 , libnotify
-, gnome
+, zenity
 , wmctrl
 }:
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   # Tests appear to be broken with import errors within the project structure
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [
     gtksourceview3
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   runtimeDeps = [
-    gnome.zenity
+    zenity
     wmctrl
   ];
 

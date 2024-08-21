@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "nixops-vbox";
-  version = "unstable-2023-08-10";
+  version = "1.0.0-unstable-2023-08-10";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,7 +34,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixopsvbox" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "NixOps plugin for VirtualBox VMs";

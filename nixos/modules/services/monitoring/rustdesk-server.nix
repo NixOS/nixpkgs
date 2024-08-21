@@ -4,7 +4,7 @@ let
   UDPPorts = [21116];
 in {
   options.services.rustdesk-server = with lib; with types; {
-    enable = mkEnableOption "RustDesk, a remote access and remote control software, allowing maintenance of computers and other devices.";
+    enable = mkEnableOption "RustDesk, a remote access and remote control software, allowing maintenance of computers and other devices";
 
     package = mkPackageOption pkgs "rustdesk-server" {};
 
@@ -53,15 +53,14 @@ in {
         Slice = "system-rustdesk.slice";
         User  = "rustdesk";
         Group = "rustdesk";
+        DynamicUser = "yes";
         Environment = [];
         WorkingDirectory = "/var/lib/rustdesk";
         StateDirectory   = "rustdesk";
         StateDirectoryMode = "0750";
         LockPersonality = true;
-        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
-        PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -71,10 +70,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
         RestrictNamespaces = true;
-        RestrictSUIDSGID = true;
       };
     };
   in lib.mkIf cfg.enable {

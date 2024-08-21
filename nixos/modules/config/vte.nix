@@ -23,7 +23,7 @@ in
     programs.bash.vteIntegration = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Bash integration for VTE terminals.
         This allows it to preserve the current directory of the shell
         across terminals.
@@ -33,7 +33,7 @@ in
     programs.zsh.vteIntegration = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Zsh integration for VTE terminals.
         This allows it to preserve the current directory of the shell
         across terminals.

@@ -15,7 +15,7 @@
 , gtk3
 , mate-desktop
 , hicolor-icon-theme
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "An image viewing and cataloging program for the MATE desktop";
+    description = "Image viewing and cataloging program for the MATE desktop";
+    mainProgram = "eom";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

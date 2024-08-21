@@ -1,9 +1,8 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.artifactory;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9531;
@@ -11,14 +10,14 @@ in
     scrapeUri = mkOption {
       type = types.str;
       default = "http://localhost:8081/artifactory";
-      description = lib.mdDoc ''
+      description = ''
         URI on which to scrape JFrog Artifactory.
       '';
     };
 
     artiUsername = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Username for authentication against JFrog Artifactory API.
       '';
     };
@@ -26,7 +25,7 @@ in
     artiPassword = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Password for authentication against JFrog Artifactory API.
         One of the password or access token needs to be set.
       '';
@@ -35,7 +34,7 @@ in
     artiAccessToken = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Access token for authentication against JFrog Artifactory API.
         One of the password or access token needs to be set.
       '';

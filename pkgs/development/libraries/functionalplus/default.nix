@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "functionalplus";
-  version = "0.2.23";
+  version = "0.2.25";
 
   src = fetchFromGitHub {
     owner = "Dobiasd";
     repo = "FunctionalPlus";
     rev = "v${version}";
-    sha256 = "sha256-WDufVO0vQyu7O3w9tq+19JioRUFgYlnTbO/AQzg0FnM=";
+    sha256 = "sha256-eKCOi5g8YdKgxaI/mLlqB2m1zwrU9DOSrQF+PW2DBBQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Dobiasd/FunctionalPlus";
     license = licenses.boost;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

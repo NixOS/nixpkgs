@@ -6,7 +6,7 @@
 , openssl
 , zeromq
 , cppzmq
-, tbb_2021_8
+, tbb_2021_11
 , spdlog
 , libsodium
 , fmt
@@ -24,19 +24,20 @@
 , extra-cmake-modules
 , wayland
 , wayland-protocols
+, wayland-scanner
 , enableX11 ? stdenv.isLinux
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.9.4";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-D+7a+3Vxrt+XUq7c2F2eqi8ZGQ2eZd37aTqighWEKPs=";
+    hash = "sha256-qo9Rwnx6Oh8DRcCBUMS3JVdNyx1iZSB2Z1qfptUoPFQ=";
   };
 
   strictDeps = true;
@@ -44,13 +45,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optionals enableWayland [
+    wayland-scanner
   ];
 
   buildInputs = [
     openssl
     zeromq
     cppzmq
-    tbb_2021_8
+    tbb_2021_11
     spdlog
     libsodium
     fmt

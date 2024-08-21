@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,20 +26,14 @@ buildPythonPackage rec {
       --replace " --cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zamg"
-  ];
+  pythonImportsCheck = [ "zamg" ];
 
   meta = with lib; {
     description = "Library to read weather data from ZAMG Austria";

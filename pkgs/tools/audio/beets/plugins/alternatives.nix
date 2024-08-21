@@ -2,26 +2,30 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "unstable-2021-02-01";
+  version = "0.11.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
-    rev = "288299e3aa9a1602717b04c28696fce5ce4259bf";
-    sha256 = "sha256-Xl7AHr33hXQqQDuFbWuj8HrIugeipJFPmvNXpCkU/mI=";
+    rev = "v${version}";
+    sha256 = "sha256-ORmF7YOQD4LvKiYo4Rzz+mzppOEvLics58aOK/IKcHc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "addopts = --cov --cov-report=term --cov-report=html" ""
-  '';
-
-  nativeBuildInputs = [ beets ];
+  nativeBuildInputs = [
+    beets
+    python3Packages.poetry-core
+  ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    pytest-cov
     mock
+    typeguard
   ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Beets plugin to manage external files";

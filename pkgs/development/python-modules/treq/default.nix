@@ -1,19 +1,20 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 
-# build-system
-, incremental
-, setuptools
+  # build-system
+  incremental,
+  setuptools,
 
-# dependenices
-, attrs
-, hyperlink
-, requests
-, twisted
+  # dependenices
+  attrs,
+  hyperlink,
+  requests,
+  twisted,
 
-# tests
-, httpbin
+  # tests
+  httpbin,
 }:
 
 buildPythonPackage rec {
@@ -56,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/treq";
     description = "Requests-like API built on top of twisted.web's Agent";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

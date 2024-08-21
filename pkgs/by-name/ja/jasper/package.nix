@@ -1,10 +1,11 @@
 { lib
 , cmake
 , fetchFromGitHub
-, freeglut
+, libglut
 , libGL
 , libheif
 , libjpeg
+, darwin
 , pkg-config
 , stdenv
 , enableHEIFCodec ? true
@@ -14,19 +15,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.1";
+  version = "4.2.4";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-SE3zB+8zZuuT+W6QYTuQhM+dBgYuFzYK4a7QaquGB60=";
+    hash = "sha256-YliWVuNEtq/Rgra+WnorSOFoAYwYmPmPRv0r734FJ1c=";
   };
 
-  # Splitting outputs going bad on Darwin
-  outputs = if stdenv.isDarwin
-            then [ "out" ]
-            else [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [ "out" "dev" "doc" "lib" "man" ];
 
   nativeBuildInputs = [
     cmake
@@ -39,8 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableJPGCodec [
     libjpeg
   ] ++ lib.optionals enableOpenGL [
-    freeglut
+    libglut
     libGL
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
   ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
@@ -57,6 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling
+  # https://github.com/jasper-software/jasper/blob/87668487/CMakeLists.txt#L415
+  # workaround taken from
+  # https://github.com/openembedded/meta-openembedded/blob/907b9c0a/meta-oe/recipes-graphics/jasper/jasper_4.1.1.bb#L16
+  preConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    cmakeFlagsArray+=(-DJAS_STDC_VERSION="$(echo __STDC_VERSION__ | $CXX -E -P -)")
+  '';
 
   meta = {
     homepage = "https://jasper-software.github.io/jasper/";
@@ -82,9 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jasper";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    # The value of __STDC_VERSION__ cannot be automatically determined when
-    # cross-compiling.
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
 # TODO: investigate opengl support

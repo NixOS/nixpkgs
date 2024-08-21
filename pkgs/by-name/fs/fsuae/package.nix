@@ -12,6 +12,7 @@
 , lua
 , openal
 , pkg-config
+, strip-nondeterminism
 , stdenv
 , zip
 , zlib
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs:{
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    strip-nondeterminism
     zip
   ];
 
@@ -50,9 +52,14 @@ stdenv.mkDerivation (finalAttrs:{
 
   strictDeps = true;
 
+  # Make sure that the build timestamp is not included in the archive
+  postFixup = ''
+    strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
+  '';
+
   meta = {
     homepage = "https://fs-uae.net";
-    description = "An accurate, customizable Amiga Emulator";
+    description = "Accurate, customizable Amiga Emulator";
     longDescription = ''
       FS-UAE integrates the most accurate Amiga emulation code available from
       WinUAE. FS-UAE emulates A500, A500+, A600, A1200, A1000, A3000 and A4000

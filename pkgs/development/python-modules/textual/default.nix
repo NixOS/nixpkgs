@@ -1,50 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, jinja2
-, markdown-it-py
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, rich
-, syrupy
-, time-machine
-, tree-sitter
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  markdown-it-py,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  syrupy,
+  time-machine,
+  tree-sitter,
+  tree-sitter-languages,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.47.1";
+  version = "0.72.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
-    repo = pname;
+    repo = "textual";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RFaZKQ+0o6ZvfZxx95a1FjSHVJ0VOIAfzkdxYQXYBKU=";
+    hash = "sha256-iNl9bos1GBLmHRvSgqYD8b6cptmmMktXkDXQbm3xMtc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
+  dependencies = [
     markdown-it-py
     rich
     typing-extensions
-  ] ++ markdown-it-py.optional-dependencies.plugins
-    ++ markdown-it-py.optional-dependencies.linkify;
+  ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     syntax = [
       tree-sitter
-      # tree-sitter-languages
+      tree-sitter-languages
     ];
   };
 
@@ -54,25 +51,24 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     time-machine
-  ] ++ passthru.optional-dependencies.syntax;
+    tree-sitter
+  ];
 
   disabledTestPaths = [
-    # snapshot tests require syrupy<4
+    # Snapshot tests require syrupy<4
     "tests/snapshot_tests/test_snapshots.py"
   ];
 
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
-    "test_softbreak_split_links_rendered_correctly"
 
-    # requires tree-sitter-languages which is not packaged in nixpkgs
+    # Requirements for tests are not quite ready
     "test_register_language"
+    "test_language_binary_missing"
   ];
 
-  pythonImportsCheck = [
-    "textual"
-  ];
+  pythonImportsCheck = [ "textual" ];
 
   __darwinAllowLocalNetworking = true;
 

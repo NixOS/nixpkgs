@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, blessed
-, docopt
-, pillow
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  blessed,
+  docopt,
+  pillow,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Display images on a kitty terminal with optional resizing";
+    mainProgram = "pixcat";
     homepage = "https://github.com/mirukan/pixcat";
     license = licenses.lgpl3;
     maintainers = [ maintainers.tilcreator ];

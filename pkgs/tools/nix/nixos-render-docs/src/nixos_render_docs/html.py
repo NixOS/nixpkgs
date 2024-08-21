@@ -181,7 +181,7 @@ class HTMLRenderer(Renderer):
         if hstyle:
             hstyle = f'style="{escape(hstyle, True)}"'
         if anchor := cast(str, token.attrs.get('id', '')):
-            anchor = f'<span id="{escape(anchor, True)}"></span>'
+            anchor = f'id="{escape(anchor, True)}"'
         result = self._close_headings(hlevel)
         tag = self._heading_tag(token, tokens, i)
         toc_fragment = self._build_toc(tokens, i)
@@ -192,8 +192,7 @@ class HTMLRenderer(Renderer):
             f' <div class="titlepage">'
             f'  <div>'
             f'   <div>'
-            f'    <{htag} class="title" {hstyle}>'
-            f'     {anchor}'
+            f'    <{htag} {anchor} class="title" {hstyle}>'
         )
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         heading = self._headings[-1]
@@ -220,13 +219,13 @@ class HTMLRenderer(Renderer):
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if id := cast(str, token.attrs.get('id', '')):
             id = f'id="{escape(id, True)}"' if id else ''
-        return f'<div class="example"><span {id} ></span>'
+        return f'<div class="example"><span {id} ></span><details>'
     def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '</div></div><br class="example-break" />'
+        return '</div></details></div><br class="example-break" />'
     def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '<p class="title"><strong>'
+        return '<summary><span class="title"><strong>'
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return '</strong></p><div class="example-contents">'
+        return '</strong></span></summary><div class="example-contents">'
     def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         src = self._pull_image(cast(str, token.attrs['src']))
         alt = f'alt="{escape(token.content, True)}"' if token.content else ""

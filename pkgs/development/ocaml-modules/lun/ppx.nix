@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchurl, fmt, lun, ppxlib }:
+{ lib, buildDunePackage, fmt, lun, ppxlib }:
 
 buildDunePackage {
   pname = "ppx_lun";

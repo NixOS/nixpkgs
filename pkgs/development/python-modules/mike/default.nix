@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, importlib-metadata
-, importlib-resources
-, jinja2
-, mkdocs
-, pythonOlder
-, pyyaml
-, unittestCheckHook
-, verspec
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  importlib-metadata,
+  importlib-resources,
+  jinja2,
+  mkdocs,
+  pythonOlder,
+  pyyaml,
+  unittestCheckHook,
+  verspec,
 }:
 
 buildPythonPackage rec {
@@ -47,14 +48,13 @@ buildPythonPackage rec {
   # Difficult to setup
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mike"
-  ];
+  pythonImportsCheck = [ "mike" ];
 
   meta = with lib; {
     description = "Manage multiple versions of your MkDocs-powered documentation";
+    mainProgram = "mike";
     homepage = "https://github.com/jimporter/mike";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

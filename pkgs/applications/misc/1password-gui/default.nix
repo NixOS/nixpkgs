@@ -1,69 +1,97 @@
-{ stdenv
-, callPackage
-, channel ? "stable"
-, fetchurl
-, lib
-# This is only relevant for Linux, so we need to pass it through
-, polkitPolicyOwners ? [ ] }:
+{
+  stdenv,
+  callPackage,
+  channel ? "stable",
+  fetchurl,
+  lib,
+  # This is only relevant for Linux, so we need to pass it through
+  polkitPolicyOwners ? [ ],
+}:
 
 let
-
   pname = "1password";
-  version = if channel == "stable" then "8.10.27" else "8.10.28-11.BETA";
+  version = if channel == "stable" then "8.10.36" else "8.10.38-13.BETA";
 
   sources = {
     stable = {
       x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-xQQXPDC8mvQyC+z3y0n5KpRpLjrBeslwXPf28wfKVSM=";
+        hash = "sha256-yUSU0np6li5zLfFOnebpv0+s1UQ6BdgI+28OvcxS3H8=";
       };
       aarch64-linux = {
         url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-c26G/Zp+1Y6ZzGYeybFBJOB2gDx3k+4/Uu7sMlXHYjM=";
+        hash = "sha256-KG0PJ/gwBd9+qYyraRqS/D58Y58VwLd8yCnYzPVWQAY=";
       };
       x86_64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-9LrSJ9PLRXFbA7xkBbqFIZVtAuy7UrDBh7e6rlLqrM0=";
+        hash = "sha256-vYhmA9N1izPRo3HPDouOpjJzMwK7LkCHuyYxBGkIPKM=";
       };
       aarch64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-4oqpsRZ10y2uh2gp4QyHfUdKER8v8n8mjNFVwKRYkpo=";
+        hash = "sha256-v1eCh/cOpA5XcmamAqreKHRQ+waoBQtvvmNO4wvFq6A=";
       };
     };
     beta = {
       x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-pchfBeZcXoyfSHutQqgAWkf6uzTEIQ/AbKDOC2N+BN8=";
+        hash = "sha256-SeB1Em2WuYvslBv//TROYTAB1asYFhC22IwhcwGi+Qs=";
       };
       aarch64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-rcjoyuEL8p4nCvjboPF0BV1lV5/+zo/rP9AP0ORB0N0=";
+        hash = "sha256-Ik5gL5FCxNANOKx/MSH7dCz3XEdLr7jxykaWhMQKUVw=";
       };
       x86_64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-D3kYUpL69HMQnjJyzQ2/Ahiyt94uwxM86n7U9uQ/mVs=";
+        hash = "sha256-8cNxhRAOrn/A++APOMUxwrD3+a++ksRMzlmmnQ8J8/c=";
       };
       aarch64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-FJbFsMS/f7PHTvu9PxDgFQB3v47AsyESdKctr+S1LXk=";
+        hash = "sha256-YkZbuCFvWHksLQYKJ3LQD2YDXj9qwHF4Gg8JbxBZsuc=";
       };
     };
   };
 
   src = fetchurl {
-    inherit (sources.${channel}.${stdenv.system}) url hash;
+    inherit
+      (sources.${channel}.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"))
+      url
+      hash
+      ;
   };
 
-  meta = with lib; {
+  meta = {
+    # Requires to be installed in "/Application" which is not possible for now (https://github.com/NixOS/nixpkgs/issues/254944)
+    broken = stdenv.isDarwin;
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel amaxine sebtm ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      timstott
+      savannidgerinel
+      sebtm
+    ];
     platforms = builtins.attrNames sources.${channel};
     mainProgram = "1password";
   };
 
-in if stdenv.isDarwin
-then callPackage ./darwin.nix { inherit pname version src meta; }
-else callPackage ./linux.nix { inherit pname version src meta polkitPolicyOwners; }
+in
+if stdenv.isDarwin then
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+  }
+else
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      src
+      meta
+      polkitPolicyOwners
+      ;
+  }

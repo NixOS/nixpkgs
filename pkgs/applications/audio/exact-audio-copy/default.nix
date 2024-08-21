@@ -76,7 +76,7 @@ symlinkJoin {
   paths = [ wrapper desktopItem ];
 
   meta = with lib; {
-    description = "A precise CD audio grabber for creating perfect quality rips using CD and DVD drives";
+    description = "Precise CD audio grabber for creating perfect quality rips using CD and DVD drives";
     homepage = "https://www.exactaudiocopy.de/";
     changelog = "https://www.exactaudiocopy.de/en/index.php/resources/whats-new/whats-new/";
     license = licenses.unfree;

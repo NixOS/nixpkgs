@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://dougal-s.github.io/Aether/";
-    description = "An algorithmic reverb LV2 based on Cloudseed";
+    description = "Algorithmic reverb LV2 based on Cloudseed";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     license = licenses.mit;

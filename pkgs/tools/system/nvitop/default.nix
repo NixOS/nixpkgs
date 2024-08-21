@@ -16,7 +16,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "nvidia-ml-py" ];
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     cachetools
@@ -30,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An interactive NVIDIA-GPU process viewer, the one-stop solution for GPU process management";
+    description = "Interactive NVIDIA-GPU process viewer, the one-stop solution for GPU process management";
     homepage = "https://github.com/XuehaiPan/nvitop";
     changelog = "https://github.com/XuehaiPan/nvitop/releases/tag/v${version}";
     license = licenses.gpl3;

@@ -1,52 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
   # Python Inputs
-, jupyter-packaging
-, jupyterlab
-, setuptools
-, wheel
-, ipyvue
+  setuptools,
+  ipyvue,
 }:
 
 buildPythonPackage rec {
   pname = "ipyvuetify";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nFN+IYKZ3jIZSx2pSda5a//mwA82u2A1QJ8khf64gec=";
+    hash = "sha256-h97mqq3zFu4n7Ymnmz08P14PLltjjaBoFzYEhTJUWsE=";
   };
 
   # drop pynpm which tries to install node_modules
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "jupyter_packaging~=0.7.9" "jupyter_packaging" \
-      --replace-fail "jupyterlab~=3.0" "jupyterlab" \
+      --replace-fail '"jupyterlab~=4.0",' "" \
       --replace-fail '"pynpm"' ""
-
-    substituteInPlace setup.py \
-      --replace-fail "from pynpm import NPMPackage" "" \
-      --replace-fail "from generate_source import generate_source" "" \
-      --replace-fail 'setup(cmdclass={"egg_info": js_prerelease(egg_info)})' 'setup()'
   '';
 
-  nativeBuildInputs = [
-    jupyter-packaging
-    jupyterlab
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ ipyvue ];
+  dependencies = [ ipyvue ];
 
-  doCheck = false;  # no tests on PyPi/GitHub
+  doCheck = false; # no tests on PyPi/GitHub
   pythonImportsCheck = [ "ipyvuetify" ];
 
   meta = with lib; {
-    description = "Jupyter widgets based on Vuetify UI Components.";
+    description = "Jupyter widgets based on Vuetify UI Components";
     homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];

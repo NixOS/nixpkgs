@@ -1,37 +1,36 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, django
-, django-rq
-, fetchFromGitHub
-, flit-core
-, freezegun
-, google-cloud-translate
-, polib
-, python
-, pythonOlder
-, typing-extensions
-, wagtail
-, wagtail-modeladmin
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  django,
+  django-rq,
+  fetchFromGitHub,
+  flit-core,
+  freezegun,
+  google-cloud-translate,
+  polib,
+  python,
+  pythonOlder,
+  typing-extensions,
+  wagtail,
+  wagtail-modeladmin,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.8.2";
+  version = "1.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBqGFD6piMn9d7Ls/GBeBfeQty/MDvlQY0GP66BA2QE=";
+    hash = "sha256-ENdUXfvQOfd9cgHr6fd5Hf+8AJXFix3YbsYJQfpu4ZE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     django
@@ -49,9 +48,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    google = [
-      google-cloud-translate
-    ];
+    google = [ google-cloud-translate ];
   };
 
   checkPhase = ''

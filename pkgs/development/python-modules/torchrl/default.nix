@@ -1,37 +1,56 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, ninja
-, setuptools
-, wheel
-, which
-, cloudpickle
-, numpy
-, torch
-, ale-py
-, gym
-, pygame
-, gymnasium
-, mujoco
-, moviepy
-, git
-, hydra-core
-, tensorboard
-, tqdm
-, wandb
-, packaging
-, tensordict
-, imageio
-, pytest-rerunfailures
-, pytestCheckHook
-, pyyaml
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  ninja,
+  setuptools,
+  which,
+
+  # dependencies
+  cloudpickle,
+  numpy,
+  packaging,
+  tensordict,
+  torch,
+
+  # optional-dependencies
+  ale-py,
+  gym,
+  pygame,
+  torchsnapshot,
+  gymnasium,
+  mujoco,
+  h5py,
+  huggingface-hub,
+  minari,
+  pandas,
+  pillow,
+  requests,
+  scikit-learn,
+  torchvision,
+  tqdm,
+  moviepy,
+  git,
+  hydra-core,
+  tensorboard,
+  wandb,
+
+  # checks
+  imageio,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  pyyaml,
+  scipy,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.3.1";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,17 +59,16 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "rl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lETW996IKPUGgZpe+cyzrXvVmDSwj5G4XFreFmGxReQ=";
+    hash = "sha256-uDpOdOuHTqKFKspHOpl84kD9adEKZjvO2GnYuL27H5c=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     ninja
     setuptools
-    wheel
     which
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     numpy
     packaging
@@ -58,19 +76,29 @@ buildPythonPackage rec {
     torch
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     atari = [
       ale-py
       gym
       pygame
     ];
+    checkpointing = [ torchsnapshot ];
     gym-continuous = [
       gymnasium
       mujoco
     ];
-    rendering = [
-      moviepy
+    offline-data = [
+      h5py
+      huggingface-hub
+      minari
+      pandas
+      pillow
+      requests
+      scikit-learn
+      torchvision
+      tqdm
     ];
+    rendering = [ moviepy ];
     utils = [
       git
       hydra-core
@@ -85,9 +113,7 @@ buildPythonPackage rec {
     export D4RL_DATASET_DIR=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "torchrl"
-  ];
+  pythonImportsCheck = [ "torchrl" ];
 
   # We have to delete the source because otherwise it is used instead of the installed package.
   preCheck = ''
@@ -96,17 +122,20 @@ buildPythonPackage rec {
     export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [
-    gymnasium
-    imageio
-    pytest-rerunfailures
-    pytestCheckHook
-    pyyaml
-    scipy
-  ]
-  ++ passthru.optional-dependencies.atari
-  ++ passthru.optional-dependencies.gym-continuous
-  ++ passthru.optional-dependencies.rendering;
+  nativeCheckInputs =
+    [
+      h5py
+      gymnasium
+      imageio
+      pytest-rerunfailures
+      pytestCheckHook
+      pyyaml
+      scipy
+      torchvision
+    ]
+    ++ optional-dependencies.atari
+    ++ optional-dependencies.gym-continuous
+    ++ optional-dependencies.rendering;
 
   disabledTests = [
     # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
@@ -129,13 +158,23 @@ buildPythonPackage rec {
     "test_trans_parallel_env_check"
     "test_trans_serial_env_check"
     "test_transform_env"
+
+    # undeterministic
+    "test_distributed_collector_updatepolicy"
+    "test_timeit"
+
+    # On a 24 threads system
+    # assert torch.get_num_threads() == max(1, init_threads - 3)
+    # AssertionError: assert 23 == 21
+    "test_auto_num_threads"
   ];
 
-  meta = with lib; {
-    description = "A modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
+  meta = {
+    description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    # ~3k tests fail with: RuntimeError: internal error
   };
 }

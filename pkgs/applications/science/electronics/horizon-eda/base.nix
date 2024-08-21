@@ -9,12 +9,14 @@
 , libgit2
 , librsvg
 , libuuid
-, opencascade-occt
+, opencascade-occt_7_6
 , pkg-config
 , podofo
 , sqlite
 }:
-
+let
+  opencascade-occt = opencascade-occt_7_6;
+in
 # This base is used in horizon-eda and python3Packages.horizon-eda
 rec {
   pname = "horizon-eda";
@@ -49,7 +51,7 @@ rec {
   CASROOT = opencascade-occt;
 
   meta = with lib; {
-    description = "A free EDA software to develop printed circuit boards";
+    description = "Free EDA software to develop printed circuit boards";
     homepage = "https://horizon-eda.org";
     maintainers = with maintainers; [ guserav jue89 ];
     license = licenses.gpl3Plus;

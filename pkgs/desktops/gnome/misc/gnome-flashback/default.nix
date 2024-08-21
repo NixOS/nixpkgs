@@ -22,20 +22,21 @@
 , systemd
 , upower
 , pam
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeTextFile
 , xkeyboard_config
 , xorg
+, nixosTests
 , runCommand
 , buildEnv
 }:
 let
   pname = "gnome-flashback";
-  version = "3.50.0";
+  version = "3.52.1";
 
   # From data/sessions/Makefile.am
   requiredComponentsCommon = enableGnomePanel:
-    [ "gnome-flashback" ]
+    [ ]
     ++ lib.optional enableGnomePanel "gnome-panel";
   requiredComponentsGsd = [
     "org.gnome.SettingsDaemon.A11ySettings"
@@ -62,13 +63,13 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "sha256-0ExDSCICLJ+n5gh05cjNIGDI88BwPBnytAMr4lQnKv4=";
+      hash = "sha256-ugRhPNrbYr2iBkN8BHKZ4WAlzeG9gJXglKp3dpx4YDo=";
     };
 
     # make .desktop Execs absolute
     postPatch = ''
       patch -p0 <<END_PATCH
-      +++ data/applications/gnome-flashback.desktop.in.in
+      +++ data/applications/gnome-flashback.desktop.in
       @@ -4 +4 @@
       -Exec=gnome-flashback
       +Exec=$out/bin/gnome-flashback
@@ -90,7 +91,7 @@ let
       gettext
       libxml2
       pkg-config
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [
@@ -180,11 +181,14 @@ let
           cp -r "${gnome-flashback}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
             "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d"
         '';
+
+      tests = { inherit (nixosTests) gnome-flashback; };
     };
 
     meta = with lib; {
       description = "GNOME 2.x-like session for GNOME 3";
-      homepage = "https://wiki.gnome.org/Projects/GnomeFlashback";
+      mainProgram = "gnome-flashback";
+      homepage = "https://gitlab.gnome.org/GNOME/gnome-flashback";
       license = licenses.gpl2;
       maintainers = teams.gnome.members;
       platforms = platforms.linux;

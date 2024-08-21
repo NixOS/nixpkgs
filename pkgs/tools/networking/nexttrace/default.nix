@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "nexttrace";
-  version = "1.2.8";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "nxtrace";
     repo = "NTrace-core";
     rev = "v${version}";
-    sha256 = "sha256-fd6d9wtapztPZpbRn73q35D6LfHpfjF4KRBgokWIWYc=";
+    sha256 = "sha256-Hws8bq2NVBBS3ngzCT5mPNThHDOK5waX4TxK4zlsNC0=";
   };
-  vendorHash = "sha256-xGE2iUCWMNfiI18N8dyubuhhaY5JD/sy1uRSDyTSqVA=";
+  vendorHash = "sha256-DHGPWHOEobBqb2QpUh7WAEViOQKQ8+8PDLPBi812H+k=";
 
   doCheck = false; # Tests require a network connection.
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An open source visual route tracking CLI tool";
+    description = "Open source visual route tracking CLI tool";
     homepage = "https://mtr.moe";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sharzy ];

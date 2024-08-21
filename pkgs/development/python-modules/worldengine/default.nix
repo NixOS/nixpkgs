@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gdal
-, h5py
-, noise
-, numpy
-, protobuf
-, purepng
-, pyplatec
-, six
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gdal,
+  h5py,
+  noise,
+  numpy,
+  protobuf,
+  purepng,
+  pyplatec,
+  six,
+  isPy27,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -64,9 +65,7 @@ buildPythonPackage rec {
   doCheck = !isPy27; # google namespace clash
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "TestSerialization"
-  ];
+  disabledTests = [ "TestSerialization" ];
 
   meta = with lib; {
     broken = true;

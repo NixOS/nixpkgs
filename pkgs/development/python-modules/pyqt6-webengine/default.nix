@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, lndir
-, sip
-, pyqt-builder
-, qt6Packages
-, pythonOlder
-, pyqt6
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  lndir,
+  sip,
+  pyqt-builder,
+  qt6Packages,
+  pythonOlder,
+  pyqt6,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6-webengine";
-  version = "6.6.0";
+  version = "6.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt6_WebEngine";
     inherit version;
-    hash = "sha256-1QuYTD+F5AnmkrFWEychUi1OjPm2wl4M+Sfuot+zlIc=";
+    hash = "sha256-aO3HrbbZ4nX13pVogeecyg1x+tQ5q+qhDYI7/1rFUAE=";
   };
 
   # fix include path and increase verbosity
@@ -44,7 +45,10 @@ buildPythonPackage rec {
     export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   dontWrapQtApps = true;
 
@@ -57,13 +61,9 @@ buildPythonPackage rec {
     pyqt-builder
   ];
 
-  buildInputs = with qt6Packages; [
-    qtwebengine
-  ];
+  buildInputs = with qt6Packages; [ qtwebengine ];
 
-  propagatedBuildInputs = [
-    pyqt6
-  ];
+  propagatedBuildInputs = [ pyqt6 ];
 
   passthru = {
     inherit sip;
@@ -85,6 +85,9 @@ buildPythonPackage rec {
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ LunNova nrdxp ];
+    maintainers = with maintainers; [
+      LunNova
+      nrdxp
+    ];
   };
 }

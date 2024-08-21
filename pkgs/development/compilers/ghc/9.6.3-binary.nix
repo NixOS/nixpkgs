@@ -282,6 +282,12 @@ stdenv.mkDerivation rec {
       isScript "$i" || continue
       sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
+  '' + lib.optionalString stdenv.targetPlatform.isDarwin ''
+    # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
+    # detects `llvm-ar` even though the resulting archives are not supported by ld64.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
   '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
@@ -390,7 +396,7 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     # HACK: since we can't encode the libc / abi in platforms, we need
     # to make the platform list dependent on the evaluation platform

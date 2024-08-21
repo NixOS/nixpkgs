@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, buildPackages
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -21,7 +20,7 @@ let
 
   # only doing this because only on darwin placing clang.cc in nativeBuildInputs
   # doesn't build
-  bootstrapTools = runCommand "tinygo-bootstap-tools" { } ''
+  bootstrapTools = runCommand "tinygo-bootstrap-tools" { } ''
     mkdir -p $out
     ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
   '';
@@ -29,17 +28,17 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.31.1";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-YocRTgGSyjnQsYd4a2nCQ0vdQi/z2gHPguix5xIkkgc=";
+    hash = "sha256-zoXruGoWitx6kietF3HKTYCtUrXp5SOrf2FEGgVPzkQ=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-HZiyAgsTEBQv+Qp0T9RXTV1lkxvIGh7Q45rd45cfvjo=";
+  vendorHash = "sha256-rJ8AfJkIpxDkk+9Tf7ORnn7ueJB1kjJUBiLMDV5tias=";
 
   patches = [
     ./0001-GNUmakefile.patch
@@ -111,7 +110,7 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
-    make build/release
+    make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
       --prefix PATH : ${lib.makeBinPath runtimeDeps }

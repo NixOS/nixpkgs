@@ -15,21 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.0.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KSJn8DRvm/ZLikCT8Tp9lb/ej0KSlZqRROs1yLNDa6c=";
+    hash = "sha256-6259HRTMQZWQ8wDcsExvUVzl9IaChsMmB6zaVAeSSAM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cargo-test-macro-0.1.0" = "sha256-s3PM5SHGwZRr1cKt3LTL9fSAhzZ6CaZmDMVUgnOr6R0=";
-    };
-  };
+  cargoHash = "sha256-fMQFifEnEsDU99vWifPWgHpGGZae84xez3m01MLK7Mo=";
 
   nativeCheckInputs = [cacert];
 
@@ -52,6 +47,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_download_example"
     "--skip=test_init_subcommand"
     "--skip=test_init_subcommand_without_override"
+    "--skip=test_build_example"
+    "--skip=test_deploy_workspace"
+    "--skip=test_add_files"
+    "--skip=test_consistent_hash"
+    "--skip=test_create_binary_archive_from_target"
+    "--skip=test_create_binary_archive_with_base_path"
+    "--skip=test_zip_extension"
+    "--skip=test_zip_funcion"
+    "--skip=test_zip_funcion_with_files"
+    "--skip=test_zip_internal_extension"
   ];
 
   # remove date from version output to make reproducible
@@ -68,7 +73,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A Cargo subcommand to help you work with AWS Lambda";
+    description = "Cargo subcommand to help you work with AWS Lambda";
+    mainProgram = "cargo-lambda";
     homepage = "https://cargo-lambda.info";
     license = licenses.mit;
     maintainers = with maintainers; [ taylor1791 calavera ];

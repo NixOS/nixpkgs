@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pythonOlder,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -18,19 +20,13 @@ buildPythonPackage rec {
     sha256 = "06fm9rn31cb4b61hzy63cnwfjpppgyy517k8a04gzcv9g60n7xbh";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov pyisbn --cov-report term-missing --no-cov-on-fail" ""
-  '';
-
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  pythonImportsCheck = [
-    "pyisbn"
-  ];
+  pythonImportsCheck = [ "pyisbn" ];
 
   meta = with lib; {
     description = "Python module for working with 10- and 13-digit ISBNs";

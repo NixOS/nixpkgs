@@ -22,7 +22,7 @@ buildNimPackage (final: prev: {
   meta = with lib;
     final.src.meta
     // {
-      description = "The Nim language server implementation (based on nimsuggest)";
+      description = "Nim language server implementation (based on nimsuggest)";
       homepage = "https://github.com/nim-lang/langserver";
       license = licenses.mit;
       mainProgram = "nimlangserver";

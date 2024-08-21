@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences }:
 
 let
-  dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
+  dialect = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
 in
 
 stdenv.mkDerivation rec {
@@ -53,16 +53,17 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lsof-org/lsof";
-    description = "A tool to list open files";
+    description = "Tool to list open files";
+    mainProgram = "lsof";
     longDescription = ''
       List open files. Can show what process has opened some file,
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    license = licenses.purdueBsd;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.purdueBsd;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.unix;
   };
 }

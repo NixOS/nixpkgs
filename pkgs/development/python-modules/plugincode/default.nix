@@ -1,13 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, click
-, commoncode
-, pluggy
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  click,
+  commoncode,
+  pluggy,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     click
@@ -39,9 +38,8 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pythonImportsCheck = [
-    "plugincode"
-  ];
+  # wants to read /etc/os-release and crashes because that is not available in the sandbox
+  # pythonImportsCheck = [ "plugincode" ];
 
   disabledTests = [
     # We don't want black as an input

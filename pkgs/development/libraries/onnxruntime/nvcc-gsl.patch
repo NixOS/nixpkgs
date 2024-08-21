@@ -1,8 +1,8 @@
 diff --git a/cmake/external/onnxruntime_external_deps.cmake b/cmake/external/onnxruntime_external_deps.cmake
-index 9effd1a2db..faff5e8de7 100644
+index 775576a..ccea13c 100644
 --- a/cmake/external/onnxruntime_external_deps.cmake
 +++ b/cmake/external/onnxruntime_external_deps.cmake
-@@ -280,21 +280,12 @@ if (NOT WIN32)
+@@ -367,22 +367,12 @@ if (NOT WIN32)
    endif()
  endif()
  
@@ -12,6 +12,7 @@ index 9effd1a2db..faff5e8de7 100644
 -    URL ${DEP_URL_microsoft_gsl}
 -    URL_HASH SHA1=${DEP_SHA1_microsoft_gsl}
 -    PATCH_COMMAND ${Patch_EXECUTABLE} --binary --ignore-whitespace -p1 < ${PROJECT_SOURCE_DIR}/patches/gsl/1064.patch
+-    FIND_PACKAGE_ARGS 4.0 NAMES Microsoft.GSL
 -  )
 -else()
 -  FetchContent_Declare(

@@ -42,8 +42,10 @@ The first steps to all these are the same:
     will be safer to use the `nixos-*` channels instead:
 
     ```ShellSession
-    $ nix-channel --add https://nixos.org/channels/nixos-version nixpkgs
+    $ nix-channel --add https://nixos.org/channels/nixos-<version> nixpkgs
     ```
+
+    Where `<version>` corresponds to the latest version available on [channels.nixos.org](https://channels.nixos.org/).
 
     You may want to throw in a `nix-channel --update` for good measure.
 
@@ -89,12 +91,14 @@ The first steps to all these are the same:
     want to add something like this to your `configuration.nix`:
 
     ```nix
-    boot.loader.grub.extraEntries = ''
-      menuentry "Ubuntu" {
-        search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
-        configfile "($ubuntu)/boot/grub/grub.cfg"
-      }
-    '';
+    {
+      boot.loader.grub.extraEntries = ''
+        menuentry "Ubuntu" {
+          search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
+          configfile "($ubuntu)/boot/grub/grub.cfg"
+        }
+      '';
+    }
     ```
 
     (You can find the appropriate UUID for your partition in
@@ -121,7 +125,7 @@ The first steps to all these are the same:
     :::
 
     ```ShellSession
-    $ sudo PATH="$PATH" NIX_PATH="$NIX_PATH" `which nixos-install` --root /mnt
+    $ sudo PATH="$PATH" `which nixos-install` --root /mnt
     ```
 
     Again, please refer to the `nixos-install` step in
@@ -164,7 +168,9 @@ The first steps to all these are the same:
     `sudo passwd -l root` if you use `sudo`)
 
     ```nix
-    users.users.root.initialHashedPassword = "";
+    {
+      users.users.root.initialHashedPassword = "";
+    }
     ```
 
 1.  Build the NixOS closure and install it in the `system` profile:

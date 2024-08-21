@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, ipython
-, mock
-, pytestCheckHook
-, pythonOlder
-, sh
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  ipython,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  sh,
 }:
 
 buildPythonPackage rec {
@@ -29,14 +30,13 @@ buildPythonPackage rec {
     sh
   ];
 
-  disabledTests = [
-    "cli"
-  ];
+  disabledTests = [ "cli" ];
 
   pythonImportsCheck = [ "dotenv" ];
 
   meta = with lib; {
     description = "Add .env support to your django/flask apps in development and deployments";
+    mainProgram = "dotenv";
     homepage = "https://github.com/theskumar/python-dotenv";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ erikarvstedt ];

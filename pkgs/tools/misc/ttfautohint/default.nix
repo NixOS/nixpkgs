@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "ttfautohint";
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/freetype/ttfautohint-${version}.tar.gz";
     sha256 = "0zpqgihn3yh3v51ynxwr8asqrijvs4gv686clwv7bm8sawr4kfw7";
   };
 
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "An automatic hinter for TrueType fonts";
+    description = "Automatic hinter for TrueType fonts";
+    mainProgram = "ttfautohint";
     longDescription = ''
       A library and two programs which take a TrueType font as the
       input, remove its bytecode instructions (if any), and return a
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.freetype.org/ttfautohint";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 

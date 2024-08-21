@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
-, altair
-, ipytablewidgets
-, ipywidgets
-, jupyter
-, jupyter-core
-, jupyterlab
-, pandas
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  pythonOlder,
+  altair,
+  ipytablewidgets,
+  ipywidgets,
+  jupyter,
+  jupyter-core,
+  jupyterlab,
+  pandas,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,12 +38,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pandas"
-  ];
+  pythonRelaxDeps = [ "pandas" ];
 
   propagatedBuildInputs = [
     ipytablewidgets
@@ -53,12 +50,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    widget = [
-      ipywidgets
-    ];
-    jupyterlab = [
-      jupyterlab
-    ];
+    widget = [ ipywidgets ];
+    jupyterlab = [ jupyterlab ];
   };
 
   nativeCheckInputs = [
@@ -74,7 +67,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vega" ];
 
   meta = with lib; {
-    description = "An IPython/Jupyter widget for Vega and Vega-Lite";
+    description = "IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:
 

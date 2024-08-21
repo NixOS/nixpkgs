@@ -21,14 +21,14 @@
 
 mkDerivation rec {
   pname = "kaidan";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-F5GhN9hAF2e8b0T3peUnLk8CVd+nq4YR8k52x6ZOoLM=";
+    hash = "sha256-2UzXWd/fR5UwGywebYGWhh817x+VC76zmVaVZSBOg7M=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
@@ -57,6 +57,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "User-friendly and modern chat app, using XMPP";
+    mainProgram = "kaidan";
     longDescription = ''
        Kaidan is a user-friendly and modern chat app for every device. It uses
        the open communication protocol XMPP (Jabber). Unlike other chat apps,

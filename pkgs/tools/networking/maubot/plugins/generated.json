@@ -1,37 +1,4 @@
 {
-  "URLDownload": {
-    "attrs": {
-      "meta": {
-        "changelog": "https://codeberg.org/LukeLR/matrix-url-download/releases",
-        "description": "A plugin for the maubot bot framework implementing URL downloads in matrix rooms.",
-        "downloadPage": "https://codeberg.org/LukeLR/matrix-url-download/releases",
-        "homepage": "https://codeberg.org/LukeLR/matrix-url-download"
-      }
-    },
-    "gitea": {
-      "domain": "codeberg.org",
-      "hash": "sha256-JLYhoQKxsYO46mqRJZEcWTHck6bli6itYGu8ZPbxyjg=",
-      "owner": "LukeLR",
-      "repo": "matrix-url-download",
-      "rev": "3a006d98faa6950edab1a45b7a8c6a6d7d908bff"
-    },
-    "manifest": {
-      "config": true,
-      "database": true,
-      "database_type": "asyncpg",
-      "extra_files": [
-        "base-config.yaml"
-      ],
-      "id": "de.lukelr.urldownload",
-      "license": "LGPL-3.0-only",
-      "main_class": "URLDownloadBot",
-      "maubot": "0.1.0",
-      "modules": [
-        "urldownload"
-      ],
-      "version": "0.0.3"
-    }
-  },
   "activity-tracker": {
     "attrs": {
       "meta": {
@@ -312,10 +279,10 @@
       }
     },
     "github": {
-      "hash": "sha256-iRo4oFOOXgISALFskPZUonV4cBn7HmBACdi5uhgQq8o=",
+      "hash": "sha256-XOhjSrgbVUwMO6/v/Znoc5l/k2n6Zi42Ydhv9/vyX7E=",
       "owner": "williamkray",
       "repo": "maubot-chatgpt",
-      "rev": "f3974dc3818da170a3f1e091359d31f3140245e0"
+      "rev": "d313920165f8fca7a04314a73bb1dca30c67d9f5"
     },
     "manifest": {
       "config": true,
@@ -329,7 +296,7 @@
       "modules": [
         "gpt"
       ],
-      "version": "0.0.9"
+      "version": "0.0.10"
     }
   },
   "choose": {
@@ -955,7 +922,7 @@
   "ldap-ad-inviterbot": {
     "attrs": {
       "meta": {
-        "changelog": "https://github.com/SAPUCC/inviterbot/blob/v0.1.5/CHANGELOG.md",
+        "changelog": "https://github.com/SAPUCC/inviterbot/blob/v0.1.6/CHANGELOG.md",
         "description": "A plugin to sync users from Microsoft Azure AD and LDAP into matrix rooms. (Membership, Power-Levels)",
         "downloadPage": "https://github.com/SAPUCC/inviterbot/releases",
         "homepage": "https://github.com/SAPUCC/inviterbot",
@@ -963,10 +930,10 @@
       }
     },
     "github": {
-      "hash": "sha256-Ve420Mfa+Ikxp0P/8b6rZIu54VOfKhH3sWDNNMClj9E=",
+      "hash": "sha256-vnSOYdIbUnR9O6pCYO+TdA2qBbgrrc9RaomdWuVKW8o=",
       "owner": "SAPUCC",
       "repo": "inviterbot",
-      "rev": "v0.1.5"
+      "rev": "v0.1.6"
     },
     "manifest": {
       "config": true,
@@ -984,7 +951,7 @@
       "modules": [
         "inviter"
       ],
-      "version": "0.1.5"
+      "version": "0.1.6"
     }
   },
   "local-stt": {
@@ -1137,6 +1104,36 @@
         "emoji>=2.0"
       ],
       "version": "0.1.0"
+    }
+  },
+  "openai-translate": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/tcpipuk/maubot-openai-translate/releases",
+        "description": "Translate messages using OpenAI's GPT API",
+        "downloadPage": "https://github.com/tcpipuk/maubot-openai-translate/releases",
+        "homepage": "https://github.com/tcpipuk/maubot-openai-translate"
+      }
+    },
+    "github": {
+      "hash": "sha256-+aDQF/hW66M25zsvIsjNt7K2l32rV1g3fPrb45XdHVU=",
+      "owner": "tcpipuk",
+      "repo": "maubot-openai-translate",
+      "rev": "v0.3.0"
+    },
+    "manifest": {
+      "config": true,
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "xyz.maubot.openaitranslate",
+      "license": "AGPL-3.0-or-later",
+      "main_class": "OpenAITranslate",
+      "maubot": "0.1.0",
+      "modules": [
+        "openaitranslate"
+      ],
+      "version": "0.3.0"
     }
   },
   "ovgumensabot": {
@@ -1322,6 +1319,35 @@
         "reddit"
       ],
       "version": "0.3.6"
+    }
+  },
+  "reacjibot": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/ajkessel/reacjibot/releases",
+        "description": "Allows users to define emoji-reactions that cause messages to be cross-posted to arbitrary rooms",
+        "downloadPage": "https://github.com/ajkessel/reacjibot/releases",
+        "homepage": "https://github.com/ajkessel/reacjibot"
+      }
+    },
+    "github": {
+      "hash": "sha256-GfroQ7iaBfN8WClORrkYccPHq8FsKupZtYKJvHGZg1o=",
+      "owner": "ajkessel",
+      "repo": "reacjibot",
+      "rev": "v0.7.4"
+    },
+    "manifest": {
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "org.rosi-kessel.reacjibot",
+      "license": "MIT",
+      "main_class": "ReacjiBot",
+      "maubot": "0.1.0",
+      "modules": [
+        "reacjibot"
+      ],
+      "version": "0.7.4"
     }
   },
   "reactbot": {
@@ -1801,6 +1827,32 @@
       "version": "0.1.0.6"
     }
   },
+  "timer": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/pedantic-git/maubot-timer/releases",
+        "description": "Start a countdown timer for the specified number of seconds",
+        "downloadPage": "https://github.com/pedantic-git/maubot-timer/releases",
+        "homepage": "https://github.com/pedantic-git/maubot-timer"
+      }
+    },
+    "github": {
+      "hash": "sha256-cAS/4092O6d4ok8T2dbpvvgzpejQUPYM6mBtSvUaUpw=",
+      "owner": "pedantic-git",
+      "repo": "maubot-timer",
+      "rev": "ff656142feb018f33290113ca09facf0a45eab6e"
+    },
+    "manifest": {
+      "id": "mx.quinn.timer",
+      "license": "MIT",
+      "main_class": "Timer",
+      "maubot": "0.1.0",
+      "modules": [
+        "timer"
+      ],
+      "version": "1.0.0"
+    }
+  },
   "tmdb": {
     "attrs": {
       "meta": {
@@ -2030,6 +2082,39 @@
         "urban"
       ],
       "version": "1.0.2"
+    }
+  },
+  "urldownload": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://codeberg.org/LukeLR/matrix-url-download/releases",
+        "description": "A plugin for the maubot bot framework implementing URL downloads in matrix rooms.",
+        "downloadPage": "https://codeberg.org/LukeLR/matrix-url-download/releases",
+        "homepage": "https://codeberg.org/LukeLR/matrix-url-download"
+      }
+    },
+    "gitea": {
+      "domain": "codeberg.org",
+      "hash": "sha256-JLYhoQKxsYO46mqRJZEcWTHck6bli6itYGu8ZPbxyjg=",
+      "owner": "LukeLR",
+      "repo": "matrix-url-download",
+      "rev": "3a006d98faa6950edab1a45b7a8c6a6d7d908bff"
+    },
+    "manifest": {
+      "config": true,
+      "database": true,
+      "database_type": "asyncpg",
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "de.lukelr.urldownload",
+      "license": "LGPL-3.0-only",
+      "main_class": "URLDownloadBot",
+      "maubot": "0.1.0",
+      "modules": [
+        "urldownload"
+      ],
+      "version": "0.0.3"
     }
   },
   "urlpreview": {

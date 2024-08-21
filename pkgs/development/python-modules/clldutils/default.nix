@@ -1,21 +1,22 @@
-{ lib
-, attrs
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, git
-, lxml
-, markdown
-, markupsafe
-, mock
-, postgresql
-, pylatexenc
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, setuptools
-, tabulate
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  git,
+  lxml,
+  markdown,
+  markupsafe,
+  mock,
+  postgresql,
+  pylatexenc,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs

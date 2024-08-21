@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyqt5
-, pytestCheckHook
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyqt5,
+  pytestCheckHook,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qasync" ];
 
-  disabledTestPaths = [
-    "tests/test_qeventloop.py"
-  ];
+  disabledTestPaths = [ "tests/test_qeventloop.py" ];
 
   meta = {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation of the PEP 3156 event-loop";

@@ -93,7 +93,6 @@ let
 
   windowsCommon = recursiveUpdate gnuCommon {
     boehmgc = nativePlatforms;
-    guile_1_8 = nativePlatforms;
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
@@ -259,6 +258,7 @@ in
 
   x86_64-freebsd = mapTestOnCross systems.examples.x86_64-freebsd common;
   x86_64-netbsd = mapTestOnCross systems.examples.x86_64-netbsd common;
+  x86_64-openbsd = mapTestOnCross systems.examples.x86_64-openbsd common;
 
   # we test `embedded` instead of `linuxCommon` because very few packages
   # successfully cross-compile to Redox so far
@@ -266,14 +266,18 @@ in
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
-    tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
-    meta = {
+    linuxTools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+    freebsdTools = import ../stdenv/freebsd/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+    linuxMeta = {
       maintainers = [ maintainers.dezgeg ];
     };
-    mkBootstrapToolsJob = drv:
+    freebsdMeta = {
+      maintainers = [ maintainers.rhelmot ];
+    };
+    mkBootstrapToolsJob = meta: drv:
       assert elem drv.system supportedSystems;
       hydraJob' (addMetaAttrs meta drv);
-  in mapAttrsRecursiveCond (as: !isDerivation as) (name: mkBootstrapToolsJob)
+    linux = mapAttrsRecursiveCond (as: !isDerivation as) (name: mkBootstrapToolsJob linuxMeta)
     # The `bootstrapTools.${platform}.bootstrapTools` derivation
     # *unpacks* the bootstrap-files using their own `busybox` binary,
     # so it will fail unless buildPlatform.canExecute hostPlatform.
@@ -281,7 +285,10 @@ in
     # attribute, so there is no way to detect this -- we must add it
     # as a special case.  We filter the "test" attribute (only from
      # *cross*-built bootstrapTools) for the same reason.
-    (mapAttrs (_: v: removeAttrs v ["bootstrapTools" "test"]) tools);
+     (mapAttrs (_: v: removeAttrs v ["bootstrapTools" "test"]) linuxTools);
+    freebsd = mapAttrsRecursiveCond (as: !isDerivation as) (name: mkBootstrapToolsJob freebsdMeta)
+     freebsdTools;
+  in linux // freebsd;
 
   # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
   mips64el-nixCrossStatic = mapTestOnCross systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;

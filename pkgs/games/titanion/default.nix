@@ -84,6 +84,7 @@ in stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/ttn_e.html";
     description = "Strike down super high-velocity swooping insects";
+    mainProgram = "titanion";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

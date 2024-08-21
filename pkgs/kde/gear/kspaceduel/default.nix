@@ -6,4 +6,5 @@ mkKdeDerivation {
   pname = "kspaceduel";
 
   extraBuildInputs = [qtsvg];
+  meta.mainProgram = "kspaceduel";
 }

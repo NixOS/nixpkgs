@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small, embeddable multi-platform programming library";
+    description = "Small, embeddable multi-platform programming library";
     longDescription = ''
       S-Lang is an interpreted language that was designed from the start to be
       easily embedded into a program to provide it with a powerful extension

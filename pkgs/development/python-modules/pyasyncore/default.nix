@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-ptqOsbkY7XYZT5sh6vctfxZ7BZPX2eLjo6XwZfcmtgk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "asyncore"
-  ];
+  pythonImportsCheck = [ "asyncore" ];
 
   doCheck = false; # no tests
 
@@ -30,6 +27,6 @@ buildPythonPackage rec {
     description = "Make asyncore available for Python 3.12 onwards";
     homepage = "https://github.com/simonrob/pyasyncore";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -26,31 +26,22 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
-  pythonRelaxDeps = [
-    "httpx"
-  ];
+  pythonRelaxDeps = [ "httpx" ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytest_httpx"
-  ];
+  pythonImportsCheck = [ "pytest_httpx" ];
 
   meta = with lib; {
     description = "Send responses to httpx";

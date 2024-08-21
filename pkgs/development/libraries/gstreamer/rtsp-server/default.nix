@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.22.9";
+  version = "1.24.3";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-gIrxSPiUBP90hQ+MpScr7Uv+Z/liAjHcRRT9B+sm0KQ=";
+    hash = "sha256-YmKOzKeLj1tRxZpNYCxl6SBf/FDDyDzWH6sfY0i2NWU=";
   };
 
   outputs = [
@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bkchr lilyinstarlight ];
+    maintainers = with maintainers; [ bkchr ];
   };
 }

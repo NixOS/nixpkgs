@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     description = "C++ library for building bitcoin applications";
     homepage = "https://libbitcoin.info/";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     # AGPL with a lesser clause
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
   };
 }

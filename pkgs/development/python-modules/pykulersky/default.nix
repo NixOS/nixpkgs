@@ -1,12 +1,13 @@
-{ lib
-, bleak
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,12 +35,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pykulersky"
-  ];
+  pythonImportsCheck = [ "pykulersky" ];
 
   meta = with lib; {
     description = "Python module to control Brightech Kuler Sky Bluetooth LED devices";
+    mainProgram = "pykulersky";
     homepage = "https://github.com/emlove/pykulersky";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

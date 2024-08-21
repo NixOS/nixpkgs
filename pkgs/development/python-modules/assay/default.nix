@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+}:
 
 buildPythonPackage rec {
   pname = "assay";

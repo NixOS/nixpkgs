@@ -8,31 +8,35 @@
 , go
 , wrapQtAppsHook
 , qtbase
-, qtquickcontrols2
+, qtdeclarative
+, qtsvg
+, qtwayland
 , kconfig
 , kcoreaddons
 , kguiaddons
 , ki18n
-, kirigami2
+, kirigami
 , kirigami-addons
 , knotifications
+, nlohmann_json
+, qqc2-desktop-style
 }:
 
 let
-  version = "0.9.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-nY6DEHkDVWIlvc64smXb9KshrhNgNLKiilYydbMKCqc=";
+    hash = "sha256-jACcTRIdzYiSLy7zw5QuDu9tZfee9ufhlEecbTbSr+4=";
   };
 
   goDeps = (buildGoModule {
-    pname = "tailwrap";
+    pname = "ktailctl-go-wrapper";
     inherit src version;
-    modRoot = "tailwrap";
-    vendorHash = "sha256-Y9xhoTf3vCtiNi5qOPg020EQmASo58BZI3rAoUEC8qE=";
+    modRoot = "src/wrapper";
+    vendorHash = "sha256-V4Bn5/VaoFOZlNGBedA4Ly8Kocw0BWyfIHv8IU6Eay4=";
   }).goModules;
 in
 stdenv.mkDerivation {
@@ -40,7 +44,7 @@ stdenv.mkDerivation {
   inherit version src;
 
   postPatch = ''
-    cp -r --reflink=auto ${goDeps} tailwrap/vendor
+    cp -r --reflink=auto ${goDeps} src/wrapper/vendor
   '';
 
   # needed for go build to work
@@ -63,22 +67,26 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase
-    qtquickcontrols2
+    qtdeclarative
+    qtsvg
+    qtwayland
     kconfig
     kcoreaddons
     kguiaddons
     ki18n
-    kirigami2
+    kirigami
     kirigami-addons
     knotifications
+    nlohmann_json
+    qqc2-desktop-style
   ];
 
   meta = with lib; {
-    description = "A GUI to monitor and manage Tailscale on your Linux desktop";
+    description = "GUI to monitor and manage Tailscale on your Linux desktop";
     homepage = "https://github.com/f-koehler/KTailctl";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ k900 ];
     mainProgram = "ktailctl";
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }

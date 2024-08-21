@@ -4,6 +4,7 @@
 , lib
 , micronucleus
 , rustPlatform
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,13 +18,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-FAIOtGfGow+0DrPPEBEfvaiinNZLQlGWKJ4DkMj63OA=";
   };
 
-  cargoSha256 = "sha256-IeQnI6WTzxSI/VzoHtVukZtB1jX98wzLOT01NMLD5wQ=";
+  cargoHash = "sha256-IeQnI6WTzxSI/VzoHtVukZtB1jX98wzLOT01NMLD5wQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ micronucleus ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd elf2nucleus \
       --bash <($out/bin/elf2nucleus --completions bash) \
       --fish <($out/bin/elf2nucleus --completions fish) \
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Integrate micronucleus into the cargo buildsystem, flash an AVR firmware from an elf file";
+    mainProgram = "elf2nucleus";
     homepage = "https://github.com/kpcyrd/elf2nucleus";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.marble ];

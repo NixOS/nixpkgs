@@ -1,13 +1,14 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, css-html-js-minify
-, fetchPypi
-, lxml
-, python-slugify
-, pythonOlder
-, sphinx
-, unidecode
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  css-html-js-minify,
+  fetchPypi,
+  lxml,
+  python-slugify,
+  pythonOlder,
+  sphinx,
+  unidecode,
 }:
 
 buildPythonPackage rec {
@@ -34,12 +35,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [
-    "sphinx_material"
-  ];
+  pythonImportsCheck = [ "sphinx_material" ];
 
   meta = with lib; {
-    description = "A material-based, responsive theme inspired by mkdocs-material";
+    description = "Material-based, responsive theme inspired by mkdocs-material";
     homepage = "https://bashtage.github.io/sphinx-material";
     license = licenses.mit;
     maintainers = with maintainers; [ FlorianFranzen ];

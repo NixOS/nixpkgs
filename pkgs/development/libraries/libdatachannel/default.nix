@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, srcOnly
 , cmake
 , ninja
 , pkg-config
@@ -14,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdatachannel";
-  version = "0.20.2";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "libdatachannel";
     rev = "v${version}";
-    hash = "sha256-bBSsD845iwCMA7TdMBxzezjNbMaGwvRq6rvY/8NLYRU=";
+    hash = "sha256-3fax57oaJvOgbTDPCiiUdtsfAGhICfPkuMihawq06SA=";
   };
 
   outputs = [ "out" "dev" ];

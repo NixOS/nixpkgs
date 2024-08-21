@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ffmpeg-headless
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ffmpeg-headless,
 }:
 
 buildPythonPackage rec {
@@ -35,5 +36,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];
   };
-
 }

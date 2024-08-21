@@ -8,12 +8,12 @@ with lib; let
 in
 {
   options.services.handheld-daemon = {
-    enable = mkEnableOption "Enable Handheld Daemon";
+    enable = mkEnableOption "Handheld Daemon";
     package = mkPackageOption pkgs "handheld-daemon" { };
 
     user = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The user to run Handheld Daemon with.
       '';
     };

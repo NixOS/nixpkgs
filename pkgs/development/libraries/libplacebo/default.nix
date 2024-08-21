@@ -15,31 +15,30 @@
 , libdovi
 , xxHash
 , fast-float
+, vulkanSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "6.338.2";
+  version = "7.349.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gE6yKnFvsOFh8bFYc7b+bS+zmdDU7jucr0HwhdDeFzU=";
+    hash = "sha256-mIjQvc7SRjE1Orb2BkHK+K1TcRQvzj2oUOCUT4DzIuA=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    vulkan-headers
     python3Packages.jinja2
     python3Packages.glad2
   ];
 
   buildInputs = [
-    vulkan-loader
     shaderc
     lcms2
     libGL
@@ -47,17 +46,21 @@ stdenv.mkDerivation rec {
     libunwind
     libdovi
     xxHash
+    vulkan-headers
+  ] ++ lib.optionals vulkanSupport [
+    vulkan-loader
   ] ++ lib.optionals (!stdenv.cc.isGNU) [
     fast-float
   ];
 
-  mesonFlags = with lib; [
-    (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-    (mesonBool "demos" false) # Don't build and install the demo programs
-    (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
-    (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-  ] ++ optionals stdenv.isDarwin [
-    (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
+  mesonFlags = [
+    (lib.mesonBool "demos" false) # Don't build and install the demo programs
+    (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+    (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+    (lib.mesonEnable "vk-proc-addr" vulkanSupport)
+    (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+  ] ++ lib.optionals stdenv.isDarwin [
+    (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   postPatch = ''
@@ -76,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ primeos tadeokondrak ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.all;
   };
 }

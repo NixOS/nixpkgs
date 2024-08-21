@@ -20,4 +20,5 @@ mkKdeDerivation {
     korganizer
     zanshin
   ];
+  meta.mainProgram = "kontact";
 }

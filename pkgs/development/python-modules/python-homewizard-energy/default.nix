@@ -1,19 +1,22 @@
-{ lib
-, aiohttp
-, aresponses
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  multidict,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "4.3.1";
+  version = "6.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +25,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LpxXTzUb+N15lGno3pAhRSEJCb4NmwBcGQ/PshI9gYA=";
+    hash = "sha256-etbYZKTNdlQCDc7LXir4D7LtRzYx9jhXZc1bJvsEb8E=";
   };
 
   postPatch = ''
@@ -30,13 +33,13 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
+    backoff
+    multidict
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -48,9 +51,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "homewizard_energy"
-  ];
+  pythonImportsCheck = [ "homewizard_energy" ];
 
   meta = with lib; {
     description = "Library to communicate with HomeWizard Energy devices";

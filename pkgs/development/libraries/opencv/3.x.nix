@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf_21
@@ -16,7 +15,7 @@
 , enableContrib   ? true
 
 , enableCuda      ? config.cudaSupport
-, cudaPackages ? { }
+, cudaPackages
 , enableUnfree    ? false
 , enableIpp       ? false
 , enablePython    ? false, pythonPackages ? null
@@ -39,7 +38,7 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
-  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages) backendStdenv cudatoolkit;
   inherit (cudaPackages.cudaFlags) cudaCapabilities;
 
   version = "3.4.18";
@@ -135,9 +134,9 @@ let
   };
 
   # See opencv/cmake/OpenCVDownload.cmake
-  installExtraFiles = extra : with lib; ''
+  installExtraFiles = extra : ''
     mkdir -p "${extra.dst}"
-  '' + concatStrings (mapAttrsToList (name : md5 : ''
+  '' + lib.concatStrings (lib.mapAttrsToList (name : md5 : ''
     ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
   '') extra.files);
 
@@ -198,7 +197,7 @@ stdenv.mkDerivation {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
-    ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
+    ++ lib.optionals enableGStreamer [ gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
     ++ lib.optional enableOvis ogre
     ++ lib.optional enableGPhoto2 libgphoto2
     ++ lib.optional enableDC1394 libdc1394
@@ -241,7 +240,7 @@ stdenv.mkDerivation {
     (opencvFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
     "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
     "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
@@ -293,11 +292,13 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
-    license = with licenses; if enableUnfree then unfree else bsd3;
-    maintainers = with maintainers; [mdaiter basvandijk];
-    platforms = with platforms; linux ++ darwin;
+    # OpenCV 3 won't build with CUDA 12+
+    broken = enableCuda && cudaPackages.cudaAtLeast "12";
+    license = if enableUnfree then lib.licenses.unfree else lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [mdaiter basvandijk];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

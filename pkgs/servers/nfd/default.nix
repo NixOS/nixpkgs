@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "named-data";
     repo = lib.toUpper pname;
     rev = "NFD-${version}";
-    sha256 = "sha256-epY5qtET7rsKL3KIKvxfa+wF+AGZbYs+zRhy8SnIffk=";
+    hash = "sha256-epY5qtET7rsKL3KIKvxfa+wF+AGZbYs+zRhy8SnIffk=";
     fetchSubmodules = true;
   };
 

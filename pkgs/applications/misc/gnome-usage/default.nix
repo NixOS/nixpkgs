@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-usage";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "5nfE/iwBSXqE/x4RV+kTHp+ZmfGnjTUjSvHXfYJ18pQ=";
+    hash = "sha256-GGrajgAYjIn4yrVPNZmO2XpG6rb9shiRAoNhvzhqybI=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A nice way to view information about use of system resources, like memory and disk space";
+    description = "Nice way to view information about use of system resources, like memory and disk space";
+    mainProgram = "gnome-usage";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-usage";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

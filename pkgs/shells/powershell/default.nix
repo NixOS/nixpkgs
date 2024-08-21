@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.4.1";
+  version = "7.4.4";
 
   src = passthru.sources.${stdenv.hostPlatform.system}
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -84,19 +84,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-Q10TWUPw8eOmb+76AlHXPp6AdvUS3pxGnNsgXFvnGWc=";
+        hash = "sha256-guRxvkxaUjVj1XxmIlM4Rm9DKxRujd0EjLmzVXBgPZw=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-cZwRVEofYyLyxY9Vkf96u3dorvl+8KOC43Efifoq3iI=";
+        hash = "sha256-NNjn0S3xY0GfymYC5UZCHBqrz2yPi7RALdTgOxpMRDc=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-H63q4MY00o8OIISTv7VBnSZd8FdwLEuoCyErZE2X3AA=";
+        hash = "sha256-4vlRwZFjGfBZtdJs4Jek+Kwhwecf4W8x/UmX/yaiviQ=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-i+q6xEMbdem2fG2fr9iwLMAZ8h8jDqPZSuwTSMUFKdM=";
+        hash = "sha256-SUNSAMQ/5v+D8+YvmQm0Bi7YF6MdBpf7V2EepPrKYzs=";
       };
     };
     tests.version = testers.testVersion {
@@ -114,8 +114,7 @@ stdenv.mkDerivation rec {
       fi
 
       for platform in ${lib.escapeShellArgs meta.platforms}; do
-        update-source-version "powershell" "0" "${lib.fakeHash}" --source-key="sources.$platform"
-        update-source-version "powershell" "$NEW_VERSION" --source-key="sources.$platform"
+        update-source-version "powershell" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };

@@ -37,7 +37,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A General Framework for Graph Optimization";
+    description = "General Framework for Graph Optimization";
     homepage = "https://github.com/RainerKuemmerle/g2o";
     license = with licenses; [ bsd3 lgpl3 gpl3 ];
     maintainers = with maintainers; [ lopsided98 ];

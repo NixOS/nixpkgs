@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-mIkhXVuSgcsQf4be7NT0R8rkN9tdgim41gqjbq3ndPA=";
 
   meta = with lib; {
+    changelog = "https://github.com/kejadlen/git-together/releases/tag/${src.rev}";
     description = "Better commit attribution while pairing without messing with your git workflow";
     homepage = "https://github.com/kejadlen/git-together";
     license = licenses.mit;

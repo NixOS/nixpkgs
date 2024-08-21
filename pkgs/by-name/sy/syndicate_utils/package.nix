@@ -1,16 +1,34 @@
-{ lib, buildNimPackage, fetchFromGitea }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitea,
+  libxml2,
+  libxslt,
+  openssl,
+  pkg-config,
+  postgresql,
+  sqlite,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "syndicate_utils";
-  version = "20231130";
+  version = "20240509";
 
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "ehmry";
     repo = "syndicate_utils";
     rev = finalAttrs.version;
-    hash = "sha256-a9EjHSrLyWoP4qUQM+fRjZrNavQfT+SUO44pnPK1j/Q=";
+    hash = "sha256-Sy6Ad0nNr/0y5W4z3SzlwfsA8hiXzlOPDOGdwbCYROs=";
   };
+
+  buildInputs = [
+    postgresql.out
+    sqlite
+    libxml2
+    libxslt
+    openssl
+  ];
 
   lockFile = ./lock.json;
 

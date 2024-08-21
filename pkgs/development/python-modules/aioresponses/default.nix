@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, pbr
-, setuptools
+  # build-system
+  pbr,
+  setuptools,
 
-# dependencies
-, aiohttp
+  # dependencies
+  aiohttp,
 
-# tests
-, ddt
-, pytestCheckHook
+  # tests
+  ddt,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "aioresponses"
-  ];
+  pythonImportsCheck = [ "aioresponses" ];
 
   nativeCheckInputs = [
     ddt
@@ -52,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A helper to mock/fake web requests in python aiohttp package";
+    description = "Helper to mock/fake web requests in python aiohttp package";
     homepage = "https://github.com/pnuckowski/aioresponses";
     license = lib.licenses.mit;
   };

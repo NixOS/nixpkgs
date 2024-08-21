@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/ocaml-freestanding";
     platforms = builtins.map ({ arch, os }: "${arch}-${os}")
-      (cartesianProductOfSets {
+      (cartesianProduct {
           arch = [ "aarch64" "x86_64" ];
           os = [ "linux" ];
       } ++ [

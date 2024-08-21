@@ -6,7 +6,6 @@
 , curl
 , pkg-config
 , openssl
-, llvmPackages
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";
@@ -50,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
 
   meta = with lib; {
-    description = "A Decentralized Operating System for Zero-Knowledge Applications";
+    description = "Decentralized Operating System for Zero-Knowledge Applications";
     homepage = "https://snarkos.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

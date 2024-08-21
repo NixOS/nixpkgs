@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, autoreconfHook }:
+{ lib, stdenv, fetchurl, buildPackages, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "apr";
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apr.apache.org/";
-    description = "The Apache Portable Runtime library";
+    description = "Apache Portable Runtime library";
+    mainProgram = "apr-1-config";
     platforms = platforms.all;
     license = licenses.asl20;
     maintainers = [ maintainers.eelco ];

@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, buildPackages
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, trivy
+{
+  lib,
+  stdenv,
+  buildPackages,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  trivy,
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.49.1";
+  version = "0.54.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "trivy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+wgnj7mDIJ5UPGfD7vogdcbUeBdvTenL/a0Ew4CfuvE=";
+    hash = "sha256-lzLwIa+JCqQQSpA0AFyikpODb6u9oSaEqGGx0ckL+V8=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-IL3FHgOYQYJIqJKr2eEeM/NzO+SeYucGSNUUY62kHNA=";
+  vendorHash = "sha256-TSnwCulL4aI/SgL+WKoLwAnmKrUAfXgl+EV/HFt4j1U=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -39,7 +40,11 @@ buildGoModule rec {
 
   postInstall =
     let
-      trivy = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then placeholder "out" else buildPackages.trivy;
+      trivy =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.trivy;
     in
     ''
       installShellCompletion --cmd trivy \
@@ -59,7 +64,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/aquasecurity/trivy";
     changelog = "https://github.com/aquasecurity/trivy/releases/tag/v${version}";
-    description = "A simple and comprehensive vulnerability scanner for containers, suitable for CI";
+    description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     longDescription = ''
       Trivy is a simple and comprehensive vulnerability scanner for containers
       and other artifacts. A software vulnerability is a glitch, flaw, or
@@ -69,6 +74,9 @@ buildGoModule rec {
     '';
     mainProgram = "trivy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
   };
 }

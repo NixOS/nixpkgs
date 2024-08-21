@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, django
-, netaddr
-, six
-, fetchFromGitHub
-, pythonOlder
-, djangorestframework
-# required for tests
-, postgresql
-, postgresqlTestHook
-, psycopg2
-, pytestCheckHook
-, pytest-django
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  django,
+  netaddr,
+  six,
+  fetchFromGitHub,
+  pythonOlder,
+  djangorestframework,
+  # required for tests
+  postgresql,
+  postgresqlTestHook,
+  psycopg2,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jimfunk/django-postgresql-netfields";
     changelog = "https://github.com/jimfunk/django-postgresql-netfields/blob/v${version}/CHANGELOG";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

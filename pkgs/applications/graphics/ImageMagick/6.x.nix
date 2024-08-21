@@ -36,13 +36,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "6.9.12-68";
+  version = "6.9.13-10";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = finalAttrs.version;
-    sha256 = "sha256-slQcA0cblxtG/1DiJx5swUh7Kfwgz5HG70eqJFLaQJI=";
+    sha256 = "sha256-AdlJaCJOrN+NkkzzzgELtgAr5iZ9dvlVYVc7tYiM+R8=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")
     (lib.withFeature liblqr1Support "lqr")
-    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
+    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM
@@ -115,30 +115,36 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://legacy.imagemagick.org/";
     changelog = "https://legacy.imagemagick.org/script/changelog.php";
-    description = "A software suite to create, edit, compose, or convert bitmap images";
+    description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
     knownVulnerabilities = [
-      "CVE-2018-16328"
-      "CVE-2018-16329"
       "CVE-2019-13136"
       "CVE-2019-17547"
       "CVE-2020-25663"
       "CVE-2020-27768"
-      "CVE-2021-3596"
-      "CVE-2021-3596"
-      "CVE-2021-3596"
-      "CVE-2021-3610"
-      "CVE-2021-20244"
+      "CVE-2020-27769"
+      "CVE-2020-27829"
+      "CVE-2021-20243"
       "CVE-2021-20244"
       "CVE-2021-20310"
       "CVE-2021-20311"
       "CVE-2021-20312"
       "CVE-2021-20313"
+      "CVE-2021-3596"
       "CVE-2022-0284"
       "CVE-2022-2719"
+      "CVE-2023-1289"
+      "CVE-2023-2157"
+      "CVE-2023-34151"
+      "CVE-2023-34152"
+      "CVE-2023-34153"
+      "CVE-2023-3428"
+      "CVE-2023-34474"
+      "CVE-2023-34475"
+      "CVE-2023-5341"
     ];
   };
 })

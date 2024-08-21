@@ -44,7 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.mirbsd.org/mksh.htm";
+    changelog = "https://www.mirbsd.org/mksh.htm#clog";
     description = "MirBSD Korn Shell";
+    mainProgram = "mksh";
     longDescription = ''
       The MirBSD Korn Shell is a DFSG-free and OSD-compliant (and OSI
       approved) successor to pdksh, developed as part of the MirOS

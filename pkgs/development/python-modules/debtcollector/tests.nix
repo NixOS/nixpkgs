@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, debtcollector
-, stestr
+{
+  buildPythonPackage,
+  debtcollector,
+  stestr,
 }:
 
 buildPythonPackage {

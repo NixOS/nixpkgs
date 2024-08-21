@@ -1,5 +1,5 @@
 {lib, stdenv, substituteAll, fetchFromGitHub, pkg-config, gettext, glib, gtk3, gmtk, dbus, dbus-glib
-, libnotify, libpulseaudio, mplayer, wrapGAppsHook }:
+, libnotify, libpulseaudio, mplayer, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-mplayer";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qvy9fllvg1mad6y1j79iaqa6khs0q2cb0z62yfg4srbr07fi8xr";
   };
 
-  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook3 ];
   buildInputs = [ glib gtk3 gmtk dbus dbus-glib libnotify libpulseaudio ];
 
   patches = [
@@ -30,9 +30,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Gnome MPlayer, a simple GUI for MPlayer";
+    mainProgram = "gnome-mplayer";
     homepage = "https://sites.google.com/site/kdekorte2/gnomemplayer";
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -110,7 +110,10 @@ in
       };
 
       collector = {
-        enable = mkEnableOption "the Scrutiny metrics collector";
+        enable = mkEnableOption "the Scrutiny metrics collector" // {
+          default = cfg.enable;
+          defaultText = lib.literalExpression "config.services.scrutiny.enable";
+        };
 
         package = mkPackageOption pkgs "scrutiny-collector" { };
 
@@ -140,8 +143,8 @@ in
 
             options.api.endpoint = mkOption {
               type = str;
-              default = "http://localhost:${toString cfg.settings.web.listen.port}";
-              defaultText = literalExpression ''"http://localhost:''${config.services.scrutiny.settings.web.listen.port}"'';
+              default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}";
+              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}"'';
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
@@ -195,6 +198,8 @@ in
       systemd = {
         services.scrutiny-collector = {
           description = "Scrutiny Collector Service";
+          after = lib.optional cfg.enable "scrutiny.service";
+          wants = lib.optional cfg.enable "scrutiny.service";
           environment = {
             COLLECTOR_VERSION = "1";
             COLLECTOR_API_ENDPOINT = cfg.collector.settings.api.endpoint;

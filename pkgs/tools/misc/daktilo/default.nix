@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "daktilo";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "daktilo";
     rev = "v${version}";
-    hash = "sha256-kbJwBOUODtHdngbfa6HbbQJ0kgW6f64c0EG3y8wLymw=";
+    hash = "sha256-gIBWonJGX6IpxyBeMulcfQEExsG1GrBVQLZbBBA1ruc=";
   };
 
-  cargoHash = "sha256-u9vL2HAUgP43ZDwIEK2u/I+KUEjQsfXda03gnGJ1Krc=";
+  cargoHash = "sha256-lBlzXTkhsEboTby5tH7WfsvZxUwtw7sLYVJRozjI1D4=";
 
   nativeBuildInputs = [
     installShellFiles

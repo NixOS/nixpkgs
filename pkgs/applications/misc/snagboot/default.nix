@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pythonRelaxDepsHook
 , python3
 , snagboot
 , testers
@@ -21,7 +20,6 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [

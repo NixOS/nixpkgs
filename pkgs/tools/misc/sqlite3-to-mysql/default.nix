@@ -9,24 +9,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.1.7";
+  version = "2.3.0";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "techouse";
-    repo = pname;
+    repo = "sqlite3-to-mysql";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TglHny0HgVth3o73GQYddh9sdyQ0L+4J4dJBAeJToiM=";
+    hash = "sha256-XmjPGY8+WiuWkfWvzHsLbgopV0qBtqC2jjMeBU/XtFw=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     hatchling
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     click
     mysql-connector
     pytimeparse2
@@ -40,6 +39,8 @@ python3Packages.buildPythonApplication rec {
     unidecode
     packaging
     mysql80
+    python-dateutil
+    types-python-dateutil
   ];
 
   pythonRelaxDeps = [
@@ -58,11 +59,11 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
-    description = "A simple Python tool to transfer data from SQLite 3 to MySQL";
+  meta = {
+    description = "Simple Python tool to transfer data from SQLite 3 to MySQL";
     homepage = "https://github.com/techouse/sqlite3-to-mysql";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "sqlite3mysql";
   };
 }

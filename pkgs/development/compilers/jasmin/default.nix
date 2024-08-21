@@ -5,7 +5,7 @@
 , ant
 , jdk8
 , makeWrapper
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 , callPackage
 }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''
@@ -51,7 +51,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An assembler for the Java Virtual Machine";
+    description = "Assembler for the Java Virtual Machine";
     downloadPage = "https://sourceforge.net/projects/jasmin/files/latest/download";
     homepage = "https://jasmin.sourceforge.net/";
     license = licenses.bsd3;

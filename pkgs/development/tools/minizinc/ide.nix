@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.8.3";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    hash = "sha256-/x4mWjAk24s6Ax22Q15WUPLLwm7YrzwaoMIINjQr5zU=";
+    hash = "sha256-rE3Mq2lEcO5s4S8RMW7mQyp04gYwKW+e8cWnWqfVq9E=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
+    mainProgram = "MiniZincIDE";
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
       language. It is high-level enough to express most

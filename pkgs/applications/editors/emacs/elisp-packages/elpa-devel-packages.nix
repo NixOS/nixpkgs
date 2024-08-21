@@ -22,7 +22,7 @@ formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:
+{ lib, pkgs, buildPackages }:
 
 self: let
 
@@ -30,11 +30,6 @@ self: let
     elpaBuild = args: self.elpaBuild (args // {
       meta = (args.meta or {}) // { broken = true; };
     });
-  };
-
-  elpaBuild = import ../../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo writeText gcc;
-    inherit (self) emacs;
   };
 
   # Use custom elpa url fetcher with fallback/uncompress
@@ -83,10 +78,22 @@ self: let
           rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
         '';
       });
+
+      # native compilation for tests/seq-tests.el never ends
+      # delete tests/seq-tests.el to workaround this
+      seq = super.seq.overrideAttrs (old: {
+        dontUnpack = false;
+        postUnpack = (old.postUnpack or "") + "\n" + ''
+          local content_directory=$(echo seq-*)
+          rm --verbose $content_directory/tests/seq-tests.el
+          src=$PWD/$content_directory.tar
+          tar --create --verbose --file=$src $content_directory
+        '';
+      });
     };
 
     elpaDevelPackages = super // overrides;
 
-  in elpaDevelPackages // { inherit elpaBuild; });
+  in elpaDevelPackages);
 
-in (generateElpa { }) // { __attrsFailEvaluation = true; }
+in generateElpa { }

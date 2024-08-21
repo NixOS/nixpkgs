@@ -3,6 +3,7 @@
 , rustPlatform
 , libarchive
 , openssl
+, rust-jemalloc-sys
 , sqlite
 , pkg-config
 , nixosTests
@@ -10,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixseparatedebuginfod";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod";
     rev = "v${version}";
-    hash = "sha256-KQzMLAl/2JYy+EVBIhUTouOefOX6OCE3iIZONFMQivk=";
+    hash = "sha256-sVQ6UgQvSTEIxXPxISeTI9tqAdJlxQpLxq1h4I31r6k=";
   };
 
-  cargoHash = "sha256-UzPWJfkVLqCuMdNcAfQS38lgtWCO9HhCf5ZCqzWQ6jY=";
+  cargoHash = "sha256-abHczsRzWDST6ji7yi/Iox1o8QHGjt5T7/KDwsYGYMk=";
 
   # tests need a working nix install with access to the internet
   doCheck = false;
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libarchive
     openssl
+    rust-jemalloc-sys
     sqlite
   ];
 

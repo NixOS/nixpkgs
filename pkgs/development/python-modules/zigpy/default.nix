@@ -1,25 +1,33 @@
-{ lib
-, aiohttp
-, aiosqlite
-, aioresponses
-, buildPythonPackage
-, crccheck
-, cryptography
-, freezegun
-, fetchFromGitHub
-, pycryptodome
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  aiosqlite,
+  async-timeout,
+  attrs,
+  buildPythonPackage,
+  crccheck,
+  cryptography,
+  fetchFromGitHub,
+  freezegun,
+  frozendict,
+  importlib-resources,
+  jsonschema,
+  pycryptodome,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.63.4";
+  version = "0.65.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,28 +36,33 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-0wenUUkhgodsBID+ZT9JRoJeGDTqAChAIpj+9/Q3FMM=";
+    hash = "sha256-+z25W3ubw1TJbrRghsYzcuUZUHaL5xPMeZceJ1aUrKw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    aiosqlite
-    crccheck
-    cryptography
-    pyserial-asyncio
-    pycryptodome
-    voluptuous
-  ];
+  dependencies =
+    [
+      attrs
+      aiohttp
+      aiosqlite
+      crccheck
+      cryptography
+      frozendict
+      jsonschema
+      pyserial-asyncio
+      typing-extensions
+      pycryptodome
+      voluptuous
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aioresponses
@@ -60,10 +73,13 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # # Our two manual scans succeeded and the periodic one was attempted
-    # assert len(mock_scan.mock_calls) == 3
-    # AssertionError: assert 4 == 3
-    "test_periodic_scan_priority"
+    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+    "test_quirks_v2"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ "test_periodic_scan_priority" ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/ota/test_ota_providers.py"
   ];
 
   pythonImportsCheck = [

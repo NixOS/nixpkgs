@@ -1,20 +1,24 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin rec {
   pname = "puffer";
-  version = "unstable-2022-10-07";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "nickeb96";
     repo = "puffer-fish";
-    rev = "fd0a9c95da59512beffddb3df95e64221f894631";
-    hash = "sha256-aij48yQHeAKCoAD43rGhqW8X/qmEGGkg8B4jSeqjVU0=";
+    rev = "v${version}";
+    hash = "sha256-2niYj0NLfmVIQguuGTA7RrPIcorJEPkxhH6Dhcy+6Bk=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Text Expansions for Fish";
     homepage = "https://github.com/nickeb96/puffer-fish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ quantenzitrone ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ quantenzitrone ];
   };
 }

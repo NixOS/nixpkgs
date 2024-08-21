@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-8YcJXvR0cdL9PlP74Qh6uN2XZoN16sz/yeeZlBsk5N8=";
 
-  GOWORK = "off";
+  env.GOWORK = "off";
 
   nativeBuildInputs = [
     installShellFiles

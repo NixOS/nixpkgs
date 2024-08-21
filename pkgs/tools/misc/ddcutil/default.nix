@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.ddcutil.com/";
     description = "Query and change Linux monitor settings using DDC/CI and USB";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
     changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";

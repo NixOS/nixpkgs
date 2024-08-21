@@ -16,8 +16,10 @@
 , pkg-config
 , udev
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 , darwin
+, vulkan-loader
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,9 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isDarwin [
     libicns
   ];
@@ -64,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.apple_sdk_11_0.frameworks.OpenAL
   ];
 
+  appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
+
   enableParallelBuilding = true;
 
   makeFlags = lib.optionals stdenv.isLinux [
@@ -83,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
+    mainProgram = "ares";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
     platforms = lib.platforms.unix;

@@ -17,7 +17,7 @@ let caml_ld_library_path =
 ; in
 
 buildDunePackage rec {
-  version = "5.1.0";
+  version = "5.1.2";
   pname = "ocsigenserver";
 
   minimalOCamlVersion = "4.08";
@@ -26,7 +26,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = "refs/tags/${version}";
-    hash = "sha256-6xO+4eYSp6rlgPT09L7cvlaz6kYYuUPRa3K/TgZmaqE=";
+    hash = "sha256-piWHA4RMO370TETC9FtISyBvS1Uhk5CAGAtZleJTpjU=";
   };
 
   nativeBuildInputs = [ makeWrapper which ];
@@ -61,7 +61,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "http://ocsigen.org/ocsigenserver/";
-    description = "A full featured Web server";
+    description = "Full featured Web server";
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';

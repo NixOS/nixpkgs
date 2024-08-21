@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "heroku";
-  version = "8.10.0";
+  version = "9.1.0";
 
   src = fetchzip {
-    url = "https://cli-assets.heroku.com/versions/8.10.0/25f0948/heroku-v8.10.0-25f0948-linux-x64.tar.xz";
-    hash = "sha256-t2EQeOc6gi5lb7xrAc3WSqwUaczXN5pZXl0QkZ0Gk74=";
+    url = "https://cli-assets.heroku.com/versions/9.1.0/e1e5252/heroku-v9.1.0-e1e5252-linux-x64.tar.xz";
+    hash = "sha256-r3X1DN9s1cgFlyivVaMLDgFrMdIJmn4Y+UG1+o4T8t4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,7 +38,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://devcenter.heroku.com/articles/heroku-cli";
     description = "Everything you need to get started using Heroku";
-    maintainers = with lib.maintainers; [ aflatter mirdhyn marsam ];
+    mainProgram = "heroku";
+    maintainers = with lib.maintainers; [ aflatter mirdhyn ];
     license = lib.licenses.mit;
     platforms = with lib.platforms; unix;
   };

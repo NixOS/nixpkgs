@@ -2,8 +2,6 @@
 
 { config, lib, options, pkgs, ... }:
 
-with lib;
-
 let
 
   cfge = config.environment;
@@ -11,9 +9,9 @@ let
   cfg = config.programs.zsh;
   opt = options.programs.zsh;
 
-  zshAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias -- ${k}=${escapeShellArg v}")
-      (filterAttrs (k: v: v != null) cfg.shellAliases)
+  zshAliases = builtins.concatStringsSep "\n" (
+    lib.mapAttrsToList (k: v: "alias -- ${k}=${lib.escapeShellArg v}")
+      (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
   zshStartupNotes = ''
@@ -42,51 +40,51 @@ in
 
     programs.zsh = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure zsh as an interactive shell. To enable zsh for
           a particular user, use the {option}`users.users.<name?>.shell`
           option for that user. To enable zsh system-wide use the
           {option}`users.defaultUserShell` option.
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      shellAliases = mkOption {
+      shellAliases = lib.mkOption {
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Set of aliases for zsh shell, which overrides {option}`environment.shellAliases`.
           See {option}`environment.shellAliases` for an option format description.
         '';
-        type = with types; attrsOf (nullOr (either str path));
+        type = with lib.types; attrsOf (nullOr (either str path));
       };
 
-      shellInit = mkOption {
+      shellInit = lib.mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during zsh shell initialisation.
         '';
-        type = types.lines;
+        type = lib.types.lines;
       };
 
-      loginShellInit = mkOption {
+      loginShellInit = lib.mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during zsh login shell initialisation.
         '';
-        type = types.lines;
+        type = lib.types.lines;
       };
 
-      interactiveShellInit = mkOption {
+      interactiveShellInit = lib.mkOption {
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Shell script code called during interactive zsh shell initialisation.
         '';
-        type = types.lines;
+        type = lib.types.lines;
       };
 
-      promptInit = mkOption {
+      promptInit = lib.mkOption {
         default = ''
           # Note that to manually override this in ~/.zshrc you should run `prompt off`
           # before setting your PS1 and etc. Otherwise this will likely to interact with
@@ -94,86 +92,86 @@ in
           # a lot of different prompt variables.
           autoload -U promptinit && promptinit && prompt suse && setopt prompt_sp
         '';
-        description = lib.mdDoc ''
+        description = ''
           Shell script code used to initialise the zsh prompt.
         '';
-        type = types.lines;
+        type = lib.types.lines;
       };
 
-      histSize = mkOption {
+      histSize = lib.mkOption {
         default = 2000;
-        description = lib.mdDoc ''
+        description = ''
           Change history size.
         '';
-        type = types.int;
+        type = lib.types.int;
       };
 
-      histFile = mkOption {
+      histFile = lib.mkOption {
         default = "$HOME/.zsh_history";
-        description = lib.mdDoc ''
+        description = ''
           Change history file.
         '';
-        type = types.str;
+        type = lib.types.str;
       };
 
-      setOptions = mkOption {
-        type = types.listOf types.str;
+      setOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [
           "HIST_IGNORE_DUPS"
           "SHARE_HISTORY"
           "HIST_FCNTL_LOCK"
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
-        description = lib.mdDoc ''
+        description = ''
           Configure zsh options. See
           {manpage}`zshoptions(1)`.
         '';
       };
 
-      enableCompletion = mkOption {
+      enableCompletion = lib.mkOption {
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable zsh completion for all interactive zsh shells.
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      enableBashCompletion = mkOption {
+      enableBashCompletion = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable compatibility with bash's programmable completion system.
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      enableGlobalCompInit = mkOption {
+      enableGlobalCompInit = lib.mkOption {
         default = cfg.enableCompletion;
-        defaultText = literalExpression "config.${opt.enableCompletion}";
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression "config.${opt.enableCompletion}";
+        description = ''
           Enable execution of compinit call for all interactive zsh shells.
 
           This option can be disabled if the user wants to extend its
           `fpath` and a custom `compinit`
           call in the local config is required.
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      enableLsColors = mkOption {
+      enableLsColors = lib.mkOption {
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable extra colors in directory listings (used by `ls` and `tree`).
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    programs.zsh.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
+    programs.zsh.shellAliases = builtins.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
     environment.etc.zshenv.text =
       ''
@@ -239,9 +237,9 @@ in
         if [ -n "$__ETC_ZSHRC_SOURCED" -o -n "$NOSYSZSHRC" ]; then return; fi
         __ETC_ZSHRC_SOURCED=1
 
-        ${optionalString (cfg.setOptions != []) ''
+        ${lib.optionalString (cfg.setOptions != []) ''
           # Set zsh options.
-          setopt ${concatStringsSep " " cfg.setOptions}
+          setopt ${builtins.concatStringsSep " " cfg.setOptions}
         ''}
 
         # Alternative method of determining short and full hostname.
@@ -249,19 +247,19 @@ in
 
         # Setup command line history.
         # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
-        SAVEHIST=${toString cfg.histSize}
-        HISTSIZE=${toString cfg.histSize}
+        SAVEHIST=${builtins.toString cfg.histSize}
+        HISTSIZE=${builtins.toString cfg.histSize}
         HISTFILE=${cfg.histFile}
 
         # Configure sane keyboard defaults.
         . /etc/zinputrc
 
-        ${optionalString cfg.enableGlobalCompInit ''
+        ${lib.optionalString cfg.enableGlobalCompInit ''
           # Enable autocompletion.
           autoload -U compinit && compinit
         ''}
 
-        ${optionalString cfg.enableBashCompletion ''
+        ${lib.optionalString cfg.enableBashCompletion ''
           # Enable compatibility with bash's completion system.
           autoload -U bashcompinit && bashcompinit
         ''}
@@ -271,7 +269,7 @@ in
 
         ${cfg.interactiveShellInit}
 
-        ${optionalString cfg.enableLsColors ''
+        ${lib.optionalString cfg.enableLsColors ''
           # Extra colors for directory listings.
           eval "$(${pkgs.coreutils}/bin/dircolors -b)"
         ''}
@@ -302,11 +300,11 @@ in
     environment.etc.zinputrc.text = builtins.readFile ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
-      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
+      ++ lib.optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
-    environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
+    environment.pathsToLink = lib.optional cfg.enableCompletion "/share/zsh";
 
-    #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
+    #users.defaultUserShell = lib.mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
       [

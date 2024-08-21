@@ -20,8 +20,7 @@
     };
   in ''
     if [ ! -e /etc/nixos/configuration.nix ]; then
-      mkdir -p /etc/nixos
-      cp ${config} /etc/nixos/configuration.nix
+      install -m 0644 -D ${config} /etc/nixos/configuration.nix
     fi
   '';
 

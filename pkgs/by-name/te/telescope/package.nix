@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.9";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    hash = "sha256-eGntAAaKSwusm3e0zDXZmV9D5uX/uThPvQ5OjPNsxZ8=";
+    hash = "sha256-MVZ/pvDAETacQiEMEXM0gYM20LXqNiHtMfFGqS1vipY=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Telescope is a w3m-like browser for Gemini";
-    homepage = "https://telescope.omarpolo.com/";
+    homepage = "https://www.telescope-browser.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ heph2 ];
     platforms = platforms.unix;

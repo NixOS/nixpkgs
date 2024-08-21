@@ -4,7 +4,6 @@
 , appstream-glib
 , desktop-file-utils
 , gettext
-, glib
 , gobject-introspection
 , gtk3
 , gtk4
@@ -73,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A minimalist file manager for those who want to use Linux mobile devices";
+    description = "Minimalist file manager for those who want to use Linux mobile devices";
     homepage = "https://github.com/tchx84/Portfolio";
     changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

@@ -1,80 +1,92 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
-, hatch-fancy-pypi-readme
+  # build-system
+  hatchling,
+  hatch-fancy-pypi-readme,
 
-# native dependencies
-, libxcrypt
+  # native dependencies
+  libxcrypt,
 
-# dependencies
-, annotated-types
-, pydantic-core
-, typing-extensions
+  # dependencies
+  annotated-types,
+  pydantic-core,
+  typing-extensions,
 
-# tests
-, cloudpickle
-, email-validator
-, dirty-equals
-, faker
-, pytestCheckHook
-, pytest-mock
+  # tests
+  cloudpickle,
+  email-validator,
+  dirty-equals,
+  pytestCheckHook,
+  pytest-mock,
+  eval-type-backport,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.5.3";
+  version = "2.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YTNV67uKGRag6ICkNjjY9YrOiKFB1hSZkKcUXjSrhwM=";
+    hash = "sha256-9Tbm5Y1wSPa3lTdI8y95csYHua7nKUIYAfxSn+3J5zI=";
   };
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [
-    libxcrypt
-  ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     annotated-types
     pydantic-core
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    email = [
-      email-validator
-    ];
+  optional-dependencies = {
+    email = [ email-validator ];
   };
 
-  nativeCheckInputs = [
-    cloudpickle
-    dirty-equals
-    faker
-    pytest-mock
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      cloudpickle
+      dirty-equals
+      pytest-mock
+      pytestCheckHook
+      rich
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
     substituteInPlace pyproject.toml \
-      --replace "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
-      --replace "'--benchmark-group-by', 'group'," "" \
-      --replace "'--benchmark-warmup', 'on'," "" \
-      --replace "'--benchmark-disable'," ""
+      --replace-fail "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
+      --replace-fail "'--benchmark-group-by', 'group'," "" \
+      --replace-fail "'--benchmark-warmup', 'on'," "" \
+      --replace-fail "'--benchmark-disable'," ""
   '';
+
+  pytestFlagsArray = [
+    # suppress warnings with pytest>=8
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince20"
+    "-Wignore::pydantic.json_schema.PydanticJsonSchemaWarning"
+  ];
+
+  disabledTests = [
+    # disable failing test with pytest>=8
+    "test_assert_raises_validation_error"
+  ];
 
   disabledTestPaths = [
     "tests/benchmarks"

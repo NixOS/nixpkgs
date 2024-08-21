@@ -1,16 +1,14 @@
-{ stdenv
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, future
-, packbits
-, pillow
-, pyusb
-, pytest
-, mock
-, click
-, attrs
-, lib
+{
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  future,
+  packbits,
+  pillow,
+  pyusb,
+  click,
+  attrs,
+  lib,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-H1xXoDnwEsnCBDl/RwAB9267dINCHr3phdDLPGFOhmA=";
   };
 
-  propagatedBuildInputs = [ future packbits pillow pyusb click attrs ];
+  propagatedBuildInputs = [
+    future
+    packbits
+    pillow
+    pyusb
+    click
+    attrs
+  ];
 
   patches = [
     (fetchpatch {

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, boost-histogram
-, dask
-, hatchling
-, hatch-vcs
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  boost-histogram,
+  dask,
+  hatchling,
+  hatch-vcs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,9 @@ buildPythonPackage rec {
     dask
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dask_histogram"
-  ];
+  pythonImportsCheck = [ "dask_histogram" ];
 
   meta = with lib; {
     description = "Histograms with task scheduling";

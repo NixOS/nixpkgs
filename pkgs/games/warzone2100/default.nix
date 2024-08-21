@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version  = "4.4.2";
+  version  = "4.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-O5Yqxqp1vKYr8uvAZ1SdsI/kocOzg0KRCirCqqvLrN4=";
+    hash = "sha256-+bOS0wJzTZN0bXp0KKL7OO4QWY6TYhZi1R5vJolBdDQ=";
   };
 
   buildInputs = [
@@ -122,7 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A free RTS game, originally developed by Pumpkin Studios";
+    description = "Free RTS game, originally developed by Pumpkin Studios";
+    mainProgram = "warzone2100";
     longDescription = ''
         Warzone 2100 is an open source real-time strategy and real-time tactics
       hybrid computer game, originally developed by Pumpkin Studios and

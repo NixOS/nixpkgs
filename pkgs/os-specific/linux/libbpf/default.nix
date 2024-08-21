@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.3.0";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    sha256 = "sha256-wVCBLJK9nlS1N9/DrQtogoZmgWW4ECqInSeQTjUFhcY=";
+    hash = "sha256-GQbx3LaGrFTwEtUsP7V/Y1Keoa4dSmDxhmSTsML+tVk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   # outputs = [ "out" "dev" ];
 
   meta = with lib; {
-    description = "Upstream mirror of libbpf";
+    description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
     homepage = "https://github.com/libbpf/libbpf";
     license = with licenses; [ lgpl21 /* or */ bsd2 ];
     maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];

@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/wizbright/waybox";
-    description = "An openbox clone on Wayland";
+    description = "Openbox clone on Wayland";
     license = lib.licenses.mit;
     mainProgram = "waybox";
     maintainers = with lib.maintainers; [ AndersonTorres ];

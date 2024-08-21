@@ -15,6 +15,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "polyphonic additive synthesizer";
+    mainProgram = "padthv1_jack";
     homepage = "http://padthv1.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, segno
-, setuptools
-, trustme
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  segno,
+  setuptools,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "72";
+  version = "80";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,22 +25,20 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "aiounifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PrFI5ncHW4r2Re1BIqRZlz8ns6d5p6y6PASCleSmyNc=";
+    hash = "sha256-320ptaKT+6mKUj9y+MvGovp4/XVbYIlDTb9lLXY7c1w=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools==" "setuptools>=" \
-      --replace "wheel==" "wheel>="
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel==" "wheel>="
 
     sed -i '/--cov=/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     orjson
     segno
@@ -53,19 +52,16 @@ buildPythonPackage rec {
     trustme
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "aiounifi"
-  ];
+  pythonImportsCheck = [ "aiounifi" ];
 
   meta = with lib; {
     description = "Python library for communicating with Unifi Controller API";
     homepage = "https://github.com/Kane610/aiounifi";
     changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "aiounifi";
   };
 }

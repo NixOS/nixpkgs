@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, can
-, cobs
-, libpcap
-, nunavut
-, numpy
-, pyserial
-, pytestCheckHook
-, pytest-asyncio
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python-can,
+  cobs,
+  libpcap,
+  nunavut,
+  numpy,
+  pyserial,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -34,24 +34,18 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    transport-can-pythoncan = [
-      can
-    ] ++ can.optional-dependencies.serial;
+    transport-can-pythoncan = [ python-can ] ++ python-can.optional-dependencies.serial;
     transport-serial = [
       cobs
       pyserial
     ];
-    transport-udp = [
-      libpcap
-    ];
+    transport-udp = [ libpcap ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ] ++ builtins.foldl' (x: y: x ++ y) [ ]
-    (builtins.attrValues passthru.optional-dependencies)
-  ;
+  ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -82,12 +76,10 @@ buildPythonPackage rec {
     "tests/transport"
   ];
 
-  pythonImportsCheck = [
-    "pycyphal"
-  ];
+  pythonImportsCheck = [ "pycyphal" ];
 
   meta = with lib; {
-    description = "A full-featured implementation of the Cyphal protocol stack in Python";
+    description = "Full-featured implementation of the Cyphal protocol stack in Python";
     longDescription = ''
       Cyphal is an open technology for real-time intravehicular distributed computing and communication based on modern networking standards (Ethernet, CAN FD, etc.).
     '';

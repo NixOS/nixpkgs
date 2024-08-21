@@ -60,11 +60,18 @@ self: super: {
   system-cxx-std-lib = null;
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  # For GHC < 9.2, os-string is not required.
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   hashable = addBuildDepends [
     self.data-array-byte
     self.base-orphans
-  ] super.hashable;
+  ] (super.hashable.override {
+    os-string = null;
+  });
+  hashable-time = doDistribute (unmarkBroken super.hashable-time);
+
+  # Too strict lower bounds on base
+  primitive-addr = doJailbreak super.primitive-addr;
 
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
@@ -75,9 +82,6 @@ self: super: {
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;
-
-  # Jailbreaking because monoidal-containers hasn’t bumped it's base dependency for 8.10.
-  monoidal-containers = doJailbreak super.monoidal-containers;
 
   # Jailbreak to fix the build.
   brick = doJailbreak super.brick;
@@ -114,6 +118,10 @@ self: super: {
     # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
     algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
   });
+
+  # Uses haddock placement that isn't supported by the versions of haddock
+  # bundled with GHC < 9.0.
+  wai-extra = dontHaddock super.wai-extra;
 
   # Overly-strict bounds introducted by a revision in version 0.3.2.
   text-metrics = doJailbreak super.text-metrics;

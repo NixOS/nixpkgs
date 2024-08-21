@@ -33,11 +33,11 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4J3Xjm22HQG5MhEI/t7bzNbsCrNS3Vuv24sEHw73npk=";
+    hash = "sha256-fv+bH0fjcuVrs2nx2+GP5JEBeJtea8/beJDgNGtkE4M=";
   };
 
   nativeBuildInputs = [
@@ -70,10 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     maintainers = with maintainers; [
-      kiwi
       arthsmn
     ];
     description = "Desktop Publishing (DTP) and Layout program";
+    mainProgram = "scribus";
     homepage = "https://www.scribus.net";
     # There are a lot of licenses...
     # https://github.com/scribusproject/scribus/blob/20508d69ca4fc7030477db8dee79fd1e012b52d2/COPYING#L15-L19

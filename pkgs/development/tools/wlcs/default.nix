@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       compositor and back again.
     '';
     homepage = "https://github.com/MirServer/wlcs";
-    changelog = "https://github.com/MirServer/wlcs/releases/tag/v${version}";
+    changelog = "https://github.com/MirServer/wlcs/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;

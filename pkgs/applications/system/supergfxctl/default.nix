@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "supergfxctl";
-  version = "5.1.2";
+  version = "5.2.1";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "supergfxctl";
     rev = version;
-    hash = "sha256-HJGyjFeN3bq+ArCGfFHAMnjW76wSnNyxPWR0ELcyjLg=";
+    hash = "sha256-gjMLyT3pvQhmjz9SFbYlDAqg+tCX5ORkCkcnyBzO5ws=";
   };
 
-  cargoSha256 = "sha256-wPqCXbpSYXwsUi1mv9ZBSxdhDgDqsjKxnPzQcURlnDU=";
+  cargoHash = "sha256-ndugyiAYPDyue2Ajxx22BNvYc9iBTxZqP5OxaqmC7U0=";
 
   postPatch = ''
     substituteInPlace data/supergfxd.service --replace /usr/bin/supergfxd $out/bin/supergfxd
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A GPU switching utility, mostly for ASUS laptops";
+    description = "GPU switching utility, mostly for ASUS laptops";
     homepage = "https://gitlab.com/asus-linux/supergfxctl";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];

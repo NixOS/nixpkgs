@@ -1,23 +1,24 @@
-{ lib
-, anysqlite
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-fancy-pypi-readme
-, hatchling
-, httpx
-, moto
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, redis
-, trio
+{
+  lib,
+  anysqlite,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpx,
+  moto,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  redis,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.24";
+  version = "0.0.30";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,31 +27,21 @@ buildPythonPackage rec {
     owner = "karpetrosyan";
     repo = "hishel";
     rev = "refs/tags/${version}";
-    hash = "sha256-wup1rQ5MHjsBaTdfueP9y7QhutoO0xYeexZPDQpUEJk=";
+    hash = "sha256-+ine7Q60dT9GyFWGHtbH6G1E4TzTQaY5y9Yxxxbgnp8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  dependencies = [ httpx ];
 
   passthru.optional-dependencies = {
-    redis = [
-      redis
-    ];
-    s3 = [
-      boto3
-    ];
-    sqlite = [
-      anysqlite
-    ];
-    yaml = [
-      pyyaml
-    ];
+    redis = [ redis ];
+    s3 = [ boto3 ];
+    sqlite = [ anysqlite ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
@@ -60,13 +51,17 @@ buildPythonPackage rec {
     trio
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "hishel"
-  ];
+  pythonImportsCheck = [ "hishel" ];
 
   disabledTests = [
     # Tests require a running Redis instance
     "test_redis"
+  ];
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'mock_s3' from 'moto'
+    "tests/_async/test_storages.py"
+    "tests/_sync/test_storages.py"
   ];
 
   meta = with lib; {
@@ -77,4 +72,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

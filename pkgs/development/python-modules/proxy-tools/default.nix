@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-zLN1H1KcBH4tilhEDYayBTA88P6BRveE0cvNlPCigBA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # no tests in pypi
   doCheck = false;

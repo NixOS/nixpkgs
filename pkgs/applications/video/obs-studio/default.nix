@@ -1,9 +1,11 @@
 { config
+, uthash
 , lib
 , stdenv
+, nv-codec-headers-12
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , fdk_aac
 , ffmpeg
@@ -24,7 +26,7 @@
 , libvlc
 , libGL
 , mbedtls
-, wrapGAppsHook
+, wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
 , swig4
@@ -39,7 +41,6 @@
 , withFdk ? true
 , pipewire
 , libdrm
-, libajantv2
 , librist
 , libva
 , srt
@@ -62,13 +63,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "30.1.0";
+  version = "30.2.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
-    repo = finalAttrs.pname;
+    repo = "obs-studio";
     rev = finalAttrs.version;
-    sha256 = "sha256-9rf3UGazEL5Obd6tqDwM5LOC6D1X6HNzs5sn5z1tOCA=";
+    hash = "sha256-yMtLN/86+3wuNR+gGhsaxN4oGIC21bAcjbQfyTuXIYc=";
     fetchSubmodules = true;
   };
 
@@ -87,10 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ]
   ++ optional scriptingSupport swig4;
@@ -113,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvlc
     mbedtls
     pciutils
-    libajantv2
     librist
     libva
     srt
@@ -124,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdatachannel
     libvpl
     qrcodegencpp
+    uthash
+    nv-codec-headers-12
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
@@ -155,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
+    (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -181,8 +184,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/lib*.so
-    addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addDriverRunpath $out/lib/lib*.so
+    addDriverRunpath $out/lib/obs-plugins/*.so
 
     # Link libcef again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/
@@ -198,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ eclairevoyant jb55 MP2E materus fpletz ];
+    maintainers = with maintainers; [ eclairevoyant jb55 materus fpletz ];
     license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

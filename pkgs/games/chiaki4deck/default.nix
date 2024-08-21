@@ -1,12 +1,12 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
+, fetchpatch2
 , stdenv
 , cmake
 , pkg-config
 , protobuf
 , python3
-, ffmpeg_6
+, ffmpeg
 , libopus
 , wrapQtAppsHook
 , qtbase
@@ -18,8 +18,11 @@
 , SDL2
 , libevdev
 , udev
+, curlFull
 , hidapi
+, json_c
 , fftw
+, miniupnpc
 , speexdsp
 , libplacebo
 , vulkan-loader
@@ -33,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.6.4";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-x//E3HgS9NHQW7IHEJYWnAnfw2umcktcL0/28BPh1PY=";
+    hash = "sha256-9EF+Mm6nZeo3XYH8KO7e22cJ4e9TWUEinhkm+Z213RU=";
     fetchSubmodules = true;
   };
 
@@ -55,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg_6
+    ffmpeg
     libopus
     qtbase
     qtmultimedia
@@ -65,8 +68,11 @@ stdenv.mkDerivation rec {
     qtwebengine
     protobuf
     SDL2
+    curlFull
     hidapi
+    json_c
     fftw
+    miniupnpc
     libevdev
     udev
     speexdsp
@@ -79,8 +85,15 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
+  # handle library name discrepancy when curl not built with cmake
+  postPatch = ''
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail 'libcurl_shared' 'libcurl'
+  '';
+
   cmakeFlags = [
     "-Wno-dev"
+    (lib.cmakeFeature "CHIAKI_USE_SYSTEM_CURL" "true")
   ];
 
   qtWrapperArgs = [
@@ -102,6 +115,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://streetpea.github.io/chiaki4deck/";
     description = "Fork of Chiaki (Open Source Playstation Remote Play) with Enhancements for Steam Deck";
+    # Includes OpenSSL linking exception that we currently have no way
+    # to represent.
+    #
+    # See also: <https://github.com/spdx/license-list-XML/issues/939>
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;

@@ -1,34 +1,33 @@
 # FIXME: make gdk-pixbuf dependency optional
-{ stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, lib
-, substituteAll
-, makeFontsConf
-, freefont_ttf
-, pikepdf
-, pytestCheckHook
-, cairo
-, cffi
-, flit-core
-, numpy
-, withXcffib ? false
-, xcffib
-, glib
-, gdk-pixbuf
+{
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  lib,
+  substituteAll,
+  pikepdf,
+  pytestCheckHook,
+  cairo,
+  cffi,
+  flit-core,
+  numpy,
+  withXcffib ? false,
+  xcffib,
+  glib,
+  gdk-pixbuf,
 }:
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "1.6.1";
+  version = "1.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eOa75HNXZAxFPQvpKfpJzQXM4uEobz0qHKnL2n79uLc=";
+    hash = "sha256-LkjuhkiE7Eo6NL+oyauZmfaIKG63FKFaQ+ydBow2VXs=";
   };
 
   patches = [
@@ -43,12 +42,12 @@ buildPythonPackage rec {
     ./fix_test_scaled_font.patch
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [ cairo cffi ]
-    ++ lib.optional withXcffib xcffib;
+  propagatedBuildInputs = [
+    cairo
+    cffi
+  ] ++ lib.optional withXcffib xcffib;
 
   nativeCheckInputs = [
     numpy
@@ -56,15 +55,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cairocffi"
-  ];
+  pythonImportsCheck = [ "cairocffi" ];
 
   meta = with lib; {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
   };
 }

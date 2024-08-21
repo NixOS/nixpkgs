@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CPU/GPU miner in c for bitcoin";
+    mainProgram = "cgminer";
     homepage = "https://github.com/ckolivas/cgminer";
     license = licenses.gpl3;
     maintainers = with maintainers; [ offline mmahut ];

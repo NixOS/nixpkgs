@@ -18,7 +18,7 @@ in
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs supportedSystems;
+    inherit nixpkgs;
     officialRelease = false;
   };
 
@@ -82,7 +82,6 @@ in
   libxml2 = all;
   libxslt = all;
   lout = linux;
-  lsh = linux;
   lsof = linux;
   ltrace = linux;
   lvm2 = linux;

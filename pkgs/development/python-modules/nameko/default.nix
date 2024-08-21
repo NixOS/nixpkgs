@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# install_requires
-, dnspython
-, eventlet
-, kombu
-, mock
-, packaging
-, path
-, pyyaml
-, requests
-, setuptools
-, six
-, werkzeug
-, wrapt
+  # install_requires
+  dnspython,
+  eventlet,
+  kombu,
+  mock,
+  packaging,
+  path,
+  pyyaml,
+  requests,
+  setuptools,
+  six,
+  werkzeug,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -31,14 +32,12 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "path.py" "path"
+    substituteInPlace setup.py --replace-fail "path.py" "path"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dnspython
     eventlet
     kombu
@@ -57,12 +56,11 @@ buildPythonPackage rec {
   # and most of the tests are network based
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nameko"
-  ];
+  pythonImportsCheck = [ "nameko" ];
 
   meta = with lib; {
-    description = "A microservices framework that lets service developers concentrate on application logic and encourages testability";
+    description = "Microservices framework that lets service developers concentrate on application logic and encourages testability";
+    mainProgram = "nameko";
     homepage = "https://www.nameko.io/";
     changelog = "https://github.com/nameko/nameko/releases/tag/v${version}";
     license = licenses.asl20;

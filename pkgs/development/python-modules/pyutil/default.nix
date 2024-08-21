@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, simplejson
-, twisted
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  simplejson,
+  twisted,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    jsonutil = [
-      simplejson
-    ];
+    jsonutil = [ simplejson ];
     # Module not available
     # randcookie = [
     #   zbase32
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "pyutil"
-  ];
+  pythonImportsCheck = [ "pyutil" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/tpltnt/pyutil/issues/10
@@ -74,5 +71,4 @@ buildPythonPackage rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ prusnak ];
   };
-
 }

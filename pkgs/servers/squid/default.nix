@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "6.8";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v6/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
     hash = "sha256-EcxWULUYCdmUg8z64kdEouUc0WGZ9f8MkX6E/OaVhw8=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
+    description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
     homepage = "http://www.squid-cache.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
+{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
 
 with python3.pkgs;
 
@@ -34,6 +34,7 @@ buildPythonApplication rec {
     pyperclip
     asttokens
     send2trash
+    dbus-next
   ];
 
   preInstall = ''

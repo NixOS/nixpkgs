@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, beautifulsoup4
-, boto3
-, lxml
-, pdoc
-, pytestCheckHook
-, requests-mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools-scm,
+  beautifulsoup4,
+  boto3,
+  lxml,
+  pdoc,
+  pytestCheckHook,
+  requests-mock,
+  typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "91";
+  version = "95";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   pyproject = true;
 
@@ -24,16 +26,14 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W8NP5h9fHyTJj6TIpBunoPcNOu8eWV1rA8ZaoGUnmBQ=";
+    hash = "sha256-OClJjttOb21NnukOapEtXn/XNw9p6SUe3MY68FR9GWc=";
   };
 
   postPatch = ''
     rm bx_py_utils_tests/publish.py
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ setuptools-scm ];
 
   pythonImportsCheck = [
     "bx_py_utils.anonymize"
@@ -63,6 +63,7 @@ buildPythonPackage rec {
     pdoc
     pytestCheckHook
     requests-mock
+    typeguard
   ];
 
   disabledTests = [
@@ -71,16 +72,17 @@ buildPythonPackage rec {
     "test_assert_html_snapshot_by_css_selector"
   ];
 
-  disabledTestPaths = [
-    "bx_py_utils_tests/tests/test_project_setup.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # processify() doesn't work under darwin
-    # https://github.com/boxine/bx_py_utils/issues/80
-    "bx_py_utils_tests/tests/test_processify.py"
-  ];
+  disabledTestPaths =
+    [ "bx_py_utils_tests/tests/test_project_setup.py" ]
+    ++ lib.optionals stdenv.isDarwin [
+      # processify() doesn't work under darwin
+      # https://github.com/boxine/bx_py_utils/issues/80
+      "bx_py_utils_tests/tests/test_processify.py"
+    ];
 
   meta = {
     description = "Various Python utility functions";
+    mainProgram = "publish";
     homepage = "https://github.com/boxine/bx_py_utils";
     changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.rev}";
     license = lib.licenses.mit;

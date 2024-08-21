@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A stub code generator and COM binding for Objective Caml";
+    description = "Stub code generator and COM binding for Objective Caml";
+    mainProgram = "camlidl";
     homepage = "https://xavierleroy.org/camlidl/";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.roconnor ];

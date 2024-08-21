@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-js-asset
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-js-asset,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     django-js-asset
   ];
 
-  pythonImportsCheck = [
-    "mptt"
-  ];
+  pythonImportsCheck = [ "mptt" ];
 
   checkPhase = ''
     runHook preCheck

@@ -1,5 +1,5 @@
 f: {
-  system,
+  system ? builtins.currentSystem,
   pkgs ? import ../.. { inherit system; config = {}; overlays = []; },
   ...
 } @ args:

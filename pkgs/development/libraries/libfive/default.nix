@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "libfive";
-  version = "0-unstable-2024-02-14";
+  version = "0-unstable-2024-06-23";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "7af5f43684a8a497ac8610d39f7fca935364a9b9";
-    hash = "sha256-GQzsHKeKsCWKOVfBrTuUFq2XasPxhsN+19stWY0WtVc=";
+    rev = "302553e6aa6ca3cb13b2a149f57b6182ce2406dd";
+    hash = "sha256-8J0Pe3lmZCg2YFffmIynxW35w4mHl5cSlLSenm50CWg=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config python.pkgs.pythonImportsCheckHook ];
@@ -96,7 +96,9 @@ stdenv.mkDerivation {
     "libfive.stdlib"
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "";
+  };
 
   meta = with lib; {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";

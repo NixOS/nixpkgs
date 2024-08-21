@@ -8,7 +8,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , libgtop
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-nettool";
-    description = "A collection of networking tools";
+    description = "Collection of networking tools";
+    mainProgram = "gnome-nettool";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

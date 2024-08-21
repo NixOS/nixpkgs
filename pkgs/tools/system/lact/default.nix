@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , blueprint-compiler
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , gtk4
 , libdrm
@@ -14,21 +14,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     rev = "v${version}";
-    hash = "sha256-Ts2byWYn1MwQCJPQfwTxezsa/fnwlgVOZyNDUXWgZ0s=";
+    hash = "sha256-ehJYUZ4Bdttqzs3/SSvhJRzPO7CPbeP8ormXQ7NUzXI=";
   };
 
-  cargoHash = "sha256-7zGZu3q2CF/xzWjbicEb/JOt6pXEC2Skg7eR2syvUmY=";
+  cargoHash = "sha256-jG1DfFwpmSSVMu3zKpxg25uTrELcD43bkGbcZI2NOzk=";
 
   nativeBuildInputs = [
     blueprint-compiler
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

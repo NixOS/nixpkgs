@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, requests
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  requests,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,27 +22,20 @@ buildPythonPackage rec {
     hash = "sha256-dW/1wwnFDjYpym1ZaSZ7mOLpkHxsvuAHC8zBRekxWaw=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "i18naddress"
-  ];
+  pythonImportsCheck = [ "i18naddress" ];
 
   meta = with lib; {
     description = "Google's i18n address data packaged for Python";
+    mainProgram = "update-validation-files";
     homepage = "https://github.com/mirumee/google-i18n-address";
     changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

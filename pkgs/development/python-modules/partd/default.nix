@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, locket
-, toolz
+  # dependencies
+  locket,
+  toolz,
 
-# optional-dependencies
-, blosc2
-, numpy
-, pandas
-, pyzmq
+  # optional-dependencies
+  blosc2,
+  numpy,
+  pandas,
+  pyzmq,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     locket
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Appendable key-value storage";

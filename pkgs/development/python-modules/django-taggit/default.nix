@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, django
-, djangorestframework
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  django,
+  djangorestframework,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-7c19seDzXDBOCCovYx3awuFu9SlgKVJOt5KvdDDKtMw=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "taggit"
-  ];
+  pythonImportsCheck = [ "taggit" ];
 
-  nativeCheckInputs = [
-    djangorestframework
-  ];
+  nativeCheckInputs = [ djangorestframework ];
 
   checkPhase = ''
     # prove we're running tests against installed package, not build dir

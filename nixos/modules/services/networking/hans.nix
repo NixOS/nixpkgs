@@ -19,7 +19,7 @@ in
     services.hans = {
       clients = mkOption {
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Each attribute of this option defines a systemd service that
           runs hans. Many or none may be defined.
           The name of each service is
@@ -41,21 +41,21 @@ in
             server = mkOption {
               type = types.str;
               default = "";
-              description = lib.mdDoc "IP address of server running hans";
+              description = "IP address of server running hans";
               example = "192.0.2.1";
             };
 
             extraConfig = mkOption {
               type = types.str;
               default = "";
-              description = lib.mdDoc "Additional command line parameters";
+              description = "Additional command line parameters";
               example = "-v";
             };
 
             passwordFile = mkOption {
               type = types.str;
               default = "";
-              description = lib.mdDoc "File that contains password";
+              description = "File that contains password";
             };
 
           };
@@ -66,33 +66,33 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "enable hans server";
+          description = "enable hans server";
         };
 
         ip = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "The assigned ip range";
+          description = "The assigned ip range";
           example = "198.51.100.0";
         };
 
         respondToSystemPings = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc "Force hans respond to ordinary pings";
+          description = "Force hans respond to ordinary pings";
         };
 
         extraConfig = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "Additional command line parameters";
+          description = "Additional command line parameters";
           example = "-v";
         };
 
         passwordFile = mkOption {
           type = types.str;
           default = "";
-          description = lib.mdDoc "File that contains password";
+          description = "File that contains password";
         };
       };
 
@@ -141,5 +141,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = [ ];
 }

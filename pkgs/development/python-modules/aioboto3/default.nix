@@ -1,24 +1,24 @@
-{ lib
-, aiobotocore
-, aiofiles
-, boto3
-, buildPythonPackage
-, chalice
-, cryptography
-, dill
-, fetchFromGitHub
-, moto
-, poetry-core
-, poetry-dynamic-versioning
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiobotocore,
+  aiofiles,
+  buildPythonPackage,
+  chalice,
+  cryptography,
+  dill,
+  fetchFromGitHub,
+  moto,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "12.3.0";
+  version = "13.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,39 +27,35 @@ buildPythonPackage rec {
     owner = "terrycain";
     repo = "aioboto3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GDuxy/V+j0LRJ2lbcRHMEAga+pdCbYIWhEt3ItrHMB4=";
+    hash = "sha256-g86RKQxTcfG1CIH3gfgn9Vl9JxUkeC1ztmLk4q/MVn0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "aiobotocore" ];
+
+  dependencies = [
     aiobotocore
+    aiofiles
   ] ++ aiobotocore.optional-dependencies.boto3;
 
-  passthru.optional-dependencies = {
-    chalice = [
-      chalice
-    ];
-    s3cse = [
-      cryptography
-    ];
+  optional-dependencies = {
+    chalice = [ chalice ];
+    s3cse = [ cryptography ];
   };
 
   nativeCheckInputs = [
-    aiofiles
     dill
     moto
     pytest-asyncio
     pytestCheckHook
     requests
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "aioboto3"
-  ];
+  pythonImportsCheck = [ "aioboto3" ];
 
   disabledTests = [
     # Our moto package is not ready to support more tests

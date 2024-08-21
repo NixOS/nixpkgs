@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, simplejson
-, six
-, typechecks
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  simplejson,
+  six,
+  typechecks,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-AXlgIc1B7bkR+joXn6ZSxk/t848CWlgVZp8WIsSZFKQ=";
   };
 
-  propagatedBuildInputs = [ simplejson six typechecks ];
+  propagatedBuildInputs = [
+    simplejson
+    six
+    typechecks
+  ];
 
   pythonImportsCheck = [ "serializable" ];
 

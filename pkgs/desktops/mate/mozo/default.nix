@@ -6,7 +6,7 @@
 , mate-menus
 , gtk3
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , mateUpdateScript
 }:
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [
@@ -46,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "MATE Desktop menu editor";
+    mainProgram = "mozo";
     homepage = "https://github.com/mate-desktop/mozo";
     license = with licenses; [ lgpl2Plus ];
     platforms = platforms.unix;

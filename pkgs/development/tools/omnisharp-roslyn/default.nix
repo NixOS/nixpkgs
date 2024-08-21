@@ -11,13 +11,13 @@ let
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.39.11";
+  version = "1.39.12";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-b7LC3NJyw0ek3y6D3p4bKVH4Od2gXmW5/8fCCY9n3iE=";
+    repo = "omnisharp-roslyn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WQIBNqUqvVA0UhSoPdf179X+GYKp4LhPvYeEAet6TnY=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
@@ -79,15 +79,15 @@ let finalPackage = buildDotnetModule rec {
     no-sdk = with-sdk null;
   };
 
-  meta = with lib; {
+  meta = {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # dependencies
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ tesq0 ericdallo corngood mdarocha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tesq0 ericdallo corngood mdarocha ];
     mainProgram = "OmniSharp";
   };
 }; in finalPackage

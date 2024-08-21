@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, appdirs
-, buildPythonPackage
-, cachelib
-, colorama
-, cssselect
-, fetchFromGitHub
-, keep
-, lxml
-, pygments
-, pyquery
-, requests
-, rich
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  appdirs,
+  buildPythonPackage,
+  cachelib,
+  colorama,
+  cssselect,
+  fetchFromGitHub,
+  keep,
+  lxml,
+  pygments,
+  pyquery,
+  requests,
+  rich,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -43,21 +44,15 @@ buildPythonPackage rec {
     rich
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    "test_colorize"
-  ];
+  disabledTests = [ "test_colorize" ];
 
-  pythonImportsCheck = [
-    "howdoi"
-  ];
+  pythonImportsCheck = [ "howdoi" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
@@ -65,6 +60,6 @@ buildPythonPackage rec {
     description = "Instant coding answers via the command line";
     homepage = "https://github.com/gleitz/howdoi";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

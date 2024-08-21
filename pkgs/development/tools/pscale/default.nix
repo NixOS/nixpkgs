@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "pscale";
-  version = "0.185.0";
+  version = "0.207.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-UzNfNuOt6ZmzxVx/H8aEmQL6b4PPyNkQzxSqhBtoLT8=";
+    sha256 = "sha256-T01Vo8W21Gu2e7W87LFM/7NGsqHgWt+L4mXmPAEyB70=";
   };
 
-  vendorHash = "sha256-oENe7OGAW/i5LJbqPn7PJDemdxfSsLwmpER28R6zza4=";
+  vendorHash = "sha256-5Uul5c8Lwu6SJ7DlLU8+k2Pxa3V/DhqdvK5xY2g6S40=";
 
   ldflags = [
     "-s" "-w"
@@ -40,7 +40,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "The CLI for PlanetScale Database";
+    description = "CLI for PlanetScale Database";
+    mainProgram = "pscale";
     changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
     homepage = "https://www.planetscale.com/";
     license = licenses.asl20;

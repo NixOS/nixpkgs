@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.7";
+  version = "6.10";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IJAgHho/8yhG9P5CHBFjsV9EC7OOMTVdCfgtOUmSKvc=";
+    hash = "sha256-dl7HGqHeL+NzY8HkDHt2afwdQMRLtdOLqOjNgsTtzwc=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     # -kk
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
-  configureFlags = [ "--enable-mpers=check" ];
+  configureFlags = [ "--enable-mpers=check" ]
+    ++ lib.optional stdenv.cc.isClang "CFLAGS=-Wno-unused-function";
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://strace.io/";
-    description = "A system call tracer for Linux";
+    description = "System call tracer for Linux";
     license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ma27 qyliss ];

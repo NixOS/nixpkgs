@@ -39,9 +39,10 @@ clangStdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Application for drawing and editing pixel-art images";
+    mainProgram = "PikoPixel";
     homepage = "https://twilightedge.com/mac/pikopixel/";
     downloadPage = "https://twilightedge.com/mac/pikopixel/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

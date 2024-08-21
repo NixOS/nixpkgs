@@ -64,6 +64,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command line management for Google Workspace";
+    mainProgram = "gam";
     homepage = "https://github.com/GAM-team/GAM/wiki";
     changelog = "https://github.com/GAM-team/GAM/releases/tag/v${version}";
     license = licenses.asl20;

@@ -1,43 +1,34 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, certvalidator
-, fetchFromGitHub
-, fetchpatch2
-, mscerts
-, oscrypto
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certvalidator,
+  fetchFromGitHub,
+  mscerts,
+  oscrypto,
+  pyasn1,
+  pyasn1-modules,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "signify";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = "signify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+UhZF+QYuv8pq/sTu7GDPUrlPNNixFgVZL+L0ulj/ko=";
+    hash = "sha256-29SyzqtZ1cI+1xrSPLFr63vwB5st/9i5b3FYtJn6eok=";
   };
 
-  patches = [
-    # https://github.com/ralphje/signify/pull/42
-    (fetchpatch2 {
-      url = "https://github.com/ralphje/signify/commit/38cad57bf86f7498259b47bfef1354aec27c0955.patch";
-      hash = "sha256-dLmHSlj2Cj6jbbrZStgK2Rh/H5vOaIbi5lut5RAbd+s=";
-    })
-  ];
-
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -46,15 +37,12 @@ buildPythonPackage rec {
     oscrypto
     pyasn1
     pyasn1-modules
+    typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "signify"
-  ];
+  pythonImportsCheck = [ "signify" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/ralphje/signify/blob/${src.rev}/docs/changelog.rst";

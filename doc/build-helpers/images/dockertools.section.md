@@ -185,13 +185,26 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   _Default value:_ `"gz"`.\
   _Possible values:_ `"none"`, `"gz"`, `"zstd"`.
 
+`includeNixDB` (Boolean; _optional_)
+
+: Populate the nix database in the image with the dependencies of `copyToRoot`.
+  The main purpose is to be able to use nix commands in the container.
+
+  :::{.caution}
+  Be careful since this doesn't work well in combination with `fromImage`. In particular, in a multi-layered image, only the Nix paths from the lower image will be in the database.
+
+  This also neglects to register the store paths that are pulled into the image as a dependency of one of the other values, but aren't a dependency of `copyToRoot`.
+  :::
+
+  _Default value:_ `false`.
+
 `contents` **DEPRECATED**
 
 : This attribute is deprecated, and users are encouraged to use `copyToRoot` instead.
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-buildImage-passthru-outputs}
 
-`buildImage` defines a few [`passthru`](#var-stdenv-passthru) attributes:
+`buildImage` defines a few [`passthru`](#chap-passthru) attributes:
 
 `buildArgs` (Attribute Set)
 
@@ -574,15 +587,28 @@ This allows the function to produce reproducible images.
 
   _Default value:_ `true`
 
+`includeNixDB` (Boolean; _optional_)
+
+: Populate the nix database in the image with the dependencies of `copyToRoot`.
+  The main purpose is to be able to use nix commands in the container.
+
+  :::{.caution}
+  Be careful since this doesn't work well in combination with `fromImage`. In particular, in a multi-layered image, only the Nix paths from the lower image will be in the database.
+
+  This also neglects to register the store paths that are pulled into the image as a dependency of one of the other values, but aren't a dependency of `copyToRoot`.
+  :::
+
+  _Default value:_ `false`.
+
 `passthru` (Attribute Set; _optional_)
 
-: Use this to pass any attributes as [passthru](#var-stdenv-passthru) for the resulting derivation.
+: Use this to pass any attributes as [`passthru`](#chap-passthru) for the resulting derivation.
 
   _Default value:_ `{}`
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-streamLayeredImage-passthru-outputs}
 
-`streamLayeredImage` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+`streamLayeredImage` also defines its own [`passthru`](#chap-passthru) attributes:
 
 `imageTag` (String)
 
@@ -1177,6 +1203,7 @@ dockerTools.buildImage {
     hello
     dockerTools.binSh
   ];
+}
 ```
 
 After building the image and loading it in Docker, we can create a container based on it and enter a shell inside the container.

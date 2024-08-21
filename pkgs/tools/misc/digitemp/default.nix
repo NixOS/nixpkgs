@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D -m555 -t $out/bin digitemp_*
-    install -D -m444 -t $out/share/doc/${pname} FAQ README
+    install -D -m444 -t $out/share/doc/digitemp FAQ README
     runHook postInstall
   '';
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.digitemp.com";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.fogti ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

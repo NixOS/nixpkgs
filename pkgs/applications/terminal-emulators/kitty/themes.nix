@@ -1,17 +1,18 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, unstableGitUpdater
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "kitty-themes";
-  version = "unstable-2023-12-28";
+  version = "0-unstable-2024-08-14";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty-themes";
-    rev = "46d9dfe230f315a6a0c62f4687f6b3da20fd05e4";
-    hash = "sha256-jlYim4YXByT6s6ce0TydZuhX0Y1ZDcAq2XKNONisSzE=";
+    rev = "cdf1ed4134815f58727f8070f997552f86b58892";
+    hash = "sha256-vt5y3Ai1KMgRhFrkfhA8G9Ve6BEFrgkCF3ssGlOdekw=";
   };
 
   dontConfigure = true;
@@ -26,11 +27,15 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
+
   meta = {
     homepage = "https://github.com/kovidgoyal/kitty-themes";
     description = "Themes for the kitty terminal emulator";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
   };
 }

@@ -4,11 +4,11 @@ let
   cfg = config.services.transfer-sh;
   inherit (lib)
     mkDefault mkEnableOption mkPackageOption mkIf mkOption
-    types mapAttrs isBool getExe boolToString mdDoc optionalAttrs;
+    types mapAttrs isBool getExe boolToString optionalAttrs;
 in
 {
   options.services.transfer-sh = {
-    enable = mkEnableOption (mdDoc "Easy and fast file sharing from the command-line");
+    enable = mkEnableOption "Easy and fast file sharing from the command-line";
 
     package = mkPackageOption pkgs "transfer-sh" { };
 
@@ -20,7 +20,7 @@ in
         BASEDIR = "/var/lib/transfer.sh";
         TLS_LISTENER_ONLY = false;
       };
-      description = mdDoc ''
+      description = ''
         Additional configuration for transfer-sh, see
         <https://github.com/dutchcoders/transfer.sh#usage-1>
         for supported values.
@@ -32,14 +32,14 @@ in
     provider = mkOption {
       type = types.enum [ "local" "s3" "storj" "gdrive" ];
       default = "local";
-      description = mdDoc "Storage providers to use";
+      description = "Storage providers to use";
     };
 
     secretFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/transfer-sh.env";
-      description = mdDoc ''
+      description = ''
         Path to file containing environment variables.
         Useful for passing down secrets.
         Some variables that can be considered secrets are:

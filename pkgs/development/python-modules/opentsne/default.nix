@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, numpy
-, oldest-supported-numpy
-, scipy
-, scikit-learn
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  numpy,
+  oldest-supported-numpy,
+  scipy,
+  scikit-learn,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 let
@@ -40,9 +41,7 @@ let
       scikit-learn
     ];
 
-    pythonImportsCheck = [
-      "openTSNE"
-    ];
+    pythonImportsCheck = [ "openTSNE" ];
 
     doCheck = false;
 
@@ -57,7 +56,10 @@ let
         doInstall = false;
 
         doCheck = true;
-        nativeCheckInputs = [ pytestCheckHook self ];
+        nativeCheckInputs = [
+          pytestCheckHook
+          self
+        ];
       });
     };
 
@@ -69,4 +71,5 @@ let
       maintainers = with maintainers; [ lucasew ];
     };
   };
-in self
+in
+self

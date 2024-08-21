@@ -2,7 +2,7 @@
 , stdenv
 , yarn
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , electron
 , fetchFromGitHub
@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.47";
+  version = "3.1.49";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-refFd/d4y8657FltEvogQVAEl48c5gtrwpuGa8vluqE=";
+    hash = "sha256-Br+VkBHgwM/Zu1aypzlVYHB/v8T/KV+B6XUNJn/EbYM=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-1JXd1pDGEFDG+ogXbEpl4WMYXwksJJJBx20ZPykc7OM=";
+    hash = "sha256-ntXZ4gRXRqiPQxdwXDsLxGdBqUV5eboy9ntTlJsz9FA=";
   };
 
   patches = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs
     makeWrapper
     copyDesktopItems

@@ -17,7 +17,7 @@ buildPythonApplication rec {
     owner = "arpa2";
     repo = "quick-der";
     rev = "v${version}";
-    sha256 = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
+    hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ buildPythonApplication rec {
   doCheck = false; # Flaky tests
 
   meta = with lib; {
-    description = "An ASN.1 compiler with a backend for Quick DER";
+    description = "ASN.1 compiler with a backend for Quick DER";
     homepage = "https://gitlab.com/arpa2/quick-der";
     license = licenses.bsd3;
     platforms = platforms.linux;

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiooui";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "aiooui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/RZ8nZatlfo3AJvg/4JgyAHtrnoj50uxbhqr+ToCTJ4=";
+    hash = "sha256-dsMVKfY9o1krzp100/7JtClgPrpsFTVNwMnYMqOVFIU=";
   };
 
   postPatch = ''
@@ -30,18 +31,14 @@ buildPythonPackage rec {
       --replace-fail '"setuptools>=65.4.1", ' ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiooui"
-  ];
+  pythonImportsCheck = [ "aiooui" ];
 
   meta = with lib; {
     description = "Async OUI lookups";

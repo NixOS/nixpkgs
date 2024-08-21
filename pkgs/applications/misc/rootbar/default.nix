@@ -7,7 +7,7 @@
 , json_c
 , libpulseaudio
 , wayland
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapGAppsHook
+    meson ninja pkg-config wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://hg.sr.ht/~scoopta/rootbar";
-    description = "A bar for Wayland WMs";
+    description = "Bar for Wayland WMs";
+    mainProgram = "rootbar";
     longDescription = ''
       Root Bar is a bar for wlroots based wayland compositors such as sway and
       was designed to address the lack of good bars for wayland.

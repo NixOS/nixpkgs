@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp perlPackages.JSON perlPackages.LWPProtocolHttps nixUnstable nixUnstable.perl-bindings
+#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp perlPackages.JSON perlPackages.LWPProtocolHttps nix nix.perl-bindings
 
 # This command uploads tarballs to tarballs.nixos.org, the
 # content-addressed cache used by fetchurl as a fallback for when

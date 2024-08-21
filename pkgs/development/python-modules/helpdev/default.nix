@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  psutil,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Extracts information about the Python environment easily";
+    mainProgram = "helpdev";
     license = lib.licenses.mit;
   };
-
 }

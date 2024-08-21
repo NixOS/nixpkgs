@@ -13,14 +13,14 @@ let
 
   partitionAssertions = lib.mapAttrsToList (fileName: definition:
     let
-      maxLabelLength = 36; # GPT_LABEL_MAX defined in systemd's gpt.h
+      inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
       labelLength = builtins.stringLength definition.Label;
     in
     {
-      assertion = definition ? Label -> maxLabelLength >= labelLength;
+      assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
       message = ''
         The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
-        characters long, but the maximum label length supported by systemd is ${toString maxLabelLength}.
+        characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
       '';
     }
   ) cfg.partitions;
@@ -28,8 +28,8 @@ in
 {
   options = {
     boot.initrd.systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table at boot time in the initrd.
           systemd-repart only works with GPT partition tables.
 
@@ -40,7 +40,7 @@ in
 
       device = lib.mkOption {
         type = with lib.types; nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           The device to operate on.
 
           If `device == null`, systemd-repart will operate on the device
@@ -53,8 +53,8 @@ in
     };
 
     systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table.
           systemd-repart only works with GPT partition tables.
 
@@ -76,7 +76,7 @@ in
             SizeMaxBytes = "2G";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
           configuration can use all upstream options. See <link

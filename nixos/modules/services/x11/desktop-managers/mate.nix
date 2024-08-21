@@ -16,40 +16,40 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the MATE desktop environment";
+        description = "Enable the MATE desktop environment";
       };
 
-      debug = mkEnableOption (lib.mdDoc "mate-session debug messages");
+      debug = mkEnableOption "mate-session debug messages";
 
       extraPanelApplets = mkOption {
         default = [ ];
         example = literalExpression "with pkgs.mate; [ mate-applets ]";
         type = types.listOf types.package;
-        description = lib.mdDoc "Extra applets to add to mate-panel.";
+        description = "Extra applets to add to mate-panel.";
       };
 
       extraCajaExtensions = mkOption {
         default = [ ];
         example = lib.literalExpression "with pkgs.mate; [ caja-extensions ]";
         type = types.listOf types.package;
-        description = lib.mdDoc "Extra extensions to add to caja.";
+        description = "Extra extensions to add to caja.";
       };
 
-      enableWaylandSession = mkEnableOption (lib.mdDoc "MATE Wayland session");
+      enableWaylandSession = mkEnableOption "MATE Wayland session";
     };
 
     environment.mate.excludePackages = mkOption {
       default = [];
       example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which MATE packages to exclude from the default environment";
+      description = "Which MATE packages to exclude from the default environment";
     };
 
   };
 
   config = mkMerge [
     (mkIf (cfg.enable || cfg.enableWaylandSession) {
-      services.xserver.displayManager.sessionPackages = [
+      services.displayManager.sessionPackages = [
         pkgs.mate.mate-session-manager
       ];
 
@@ -84,11 +84,12 @@ in
       programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
       services.gnome.at-spi2-core.enable = true;
+      services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
       services.gvfs.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
 
       security.pam.services.mate-screensaver.unixAuth = true;
 
@@ -103,7 +104,7 @@ in
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${pkgs.mate.mate-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
       environment.systemPackages = [ pkgs.mate.mate-wayland-session ];
-      services.xserver.displayManager.sessionPackages = [ pkgs.mate.mate-wayland-session ];
+      services.displayManager.sessionPackages = [ pkgs.mate.mate-wayland-session ];
     })
   ];
 }

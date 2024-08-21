@@ -17,7 +17,7 @@ in
     environment = mkOption {
       type = with types; attrsOf (nullOr (oneOf [ bool int str ]));
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Environment variables to set.
 
         Livebook is configured through the use of environment variables. The
@@ -47,7 +47,7 @@ in
     environmentFile = mkOption {
       type = with types; nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Additional dnvironment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`LIVEBOOK_PASSWORD` (which is used to specify the
@@ -75,7 +75,7 @@ in
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to make available to the Livebook service.
       '';
       example = literalExpression "with pkgs; [ gcc gnumake ]";
@@ -89,6 +89,13 @@ in
         EnvironmentFile = cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/livebook start";
         KillMode = "mixed";
+
+        # Fix for the issue described here:
+        # https://github.com/livebook-dev/livebook/issues/2691
+        #
+        # Without this, the livebook service fails to start and gets
+        # stuck running a `cat /dev/urandom | tr | fold` pipeline.
+        IgnoreSIGPIPE = false;
       };
       environment = mapAttrs (name: value:
         if isBool value then boolToString value else toString value)
@@ -98,5 +105,8 @@ in
     };
   };
 
-  meta.doc = ./livebook.md;
+  meta = {
+    doc = ./livebook.md;
+    maintainers = with lib.maintainers; [ munksgaard scvalex ];
+  };
 }

@@ -10,7 +10,7 @@
 , gupnp
 , imagemagick
 , mate-desktop
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Set of extensions for Caja file manager";
+    mainProgram = "caja-sendto";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -12,17 +12,17 @@ in
   options = {
 
     services.spamassassin = {
-      enable = mkEnableOption (lib.mdDoc "the SpamAssassin daemon");
+      enable = mkEnableOption "the SpamAssassin daemon";
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to run the SpamAssassin daemon in debug mode";
+        description = "Whether to run the SpamAssassin daemon in debug mode";
       };
 
       config = mkOption {
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           The SpamAssassin local.cf config
 
           If you are using this configuration:
@@ -57,7 +57,7 @@ in
 
       initPreConf = mkOption {
         type = with types; either str path;
-        description = lib.mdDoc "The SpamAssassin init.pre config.";
+        description = "The SpamAssassin init.pre config.";
         apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
         ''

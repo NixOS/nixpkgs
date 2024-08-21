@@ -1,54 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, pytestCheckHook
-, attrs
-, importlib-resources
-, jinja2
-, looseversion
-, matplotlib
-, nibabel
-, nilearn
-, nipype
-, nitransforms
-, numpy
-, packaging
-, pandas
-, pybids
-, pyyaml
-, scikit-image
-, scipy
-, seaborn
-, svgutils
-, templateflow
-, traits
-, transforms3d
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
+  attrs,
+  importlib-resources,
+  jinja2,
+  looseversion,
+  matplotlib,
+  nibabel,
+  nilearn,
+  nipype,
+  nitransforms,
+  numpy,
+  packaging,
+  pandas,
+  pybids,
+  pyyaml,
+  scikit-image,
+  scipy,
+  seaborn,
+  svgutils,
+  templateflow,
+  traits,
+  transforms3d,
 }:
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.10.1";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZOn3KSaPAA8zTdyexrjF9Wkb5C5qA/5eSJahg2DcX20=";
+    hash = "sha256-29ZxLuKrvgCIOMMCUpi0HHhlNlgqUrUrSCiikwecmKw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace '"traits < 6.4"' '"traits"'
-  '';
+  pythonRelaxDeps = [ "traits" ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     importlib-resources
     jinja2
@@ -93,6 +92,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Common workflows for MRI (anatomical, functional, diffusion, etc.)";
+    mainProgram = "niworkflows-boldref";
     homepage = "https://github.com/nipreps/niworkflows";
     changelog = "https://github.com/nipreps/niworkflows/blob/${src.rev}/CHANGES.rst";
     license = licenses.asl20;

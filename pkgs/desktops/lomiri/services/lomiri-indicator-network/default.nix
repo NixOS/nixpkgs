@@ -47,11 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Queried via pkg-config, would need to override a prefix variable
-    # Needs CMake 3.28 or higher to do as part of the call, https://github.com/NixOS/nixpkgs/pull/275284
+    # Override original prefixes
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir)' 'set(DBUS_SESSION_BUS_SERVICES_DIR "''${CMAKE_INSTALL_SYSCONFDIR}/dbus-1/services")' \
-      --replace 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
+      --replace-fail 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir)' 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir DEFINE_VARIABLES datadir=''${CMAKE_INSTALL_FULL_SYSCONFDIR})' \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
   '';
 
   strictDeps = true;
@@ -97,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
-    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # just in case something needs it
     (lib.cmakeBool "BUILD_DOC" true) # lacks QML docs, needs qdoc: https://github.com/NixOS/nixpkgs/pull/245379
   ];

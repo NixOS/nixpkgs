@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, django
-, djangorestframework
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  django,
+  djangorestframework,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -25,14 +26,12 @@ buildPythonPackage rec {
   # incompatible with newer django versions
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rest_framework_recursive"
-  ];
+  pythonImportsCheck = [ "rest_framework_recursive" ];
 
   meta = with lib; {
-    description = " Recursive Serialization for Django REST framework ";
+    description = " Recursive Serialization for Django REST framework";
     homepage = "https://github.com/heywbj/django-rest-framework-recursive";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

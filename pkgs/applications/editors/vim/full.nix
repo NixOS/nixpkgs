@@ -4,8 +4,7 @@
 , libICE
 , vimPlugins
 , makeWrapper
-, wrapGAppsHook
-, runtimeShell
+, wrapGAppsHook3
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc
@@ -135,7 +134,7 @@ in stdenv.mkDerivation {
   ++ lib.optional wrapPythonDrv makeWrapper
   ++ lib.optional nlsSupport gettext
   ++ lib.optional perlSupport perl
-  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook
+  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook3
   ;
 
   buildInputs = [

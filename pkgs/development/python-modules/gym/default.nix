@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, cloudpickle
-, gym-notices
-, importlib-metadata
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  cloudpickle,
+  gym-notices,
+  importlib-metadata,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gym" ];
 
   meta = with lib; {
-    description = "A toolkit for developing and comparing your reinforcement learning agents";
+    description = "Toolkit for developing and comparing your reinforcement learning agents";
     homepage = "https://gym.openai.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];

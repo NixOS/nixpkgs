@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildGoModule
 , nixosTests
+, smartmontools
 }:
 
 buildGoModule rec {
@@ -17,6 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-WUB2FgBl4Tybz7T0yvcSYIlG75NEhXpn1F0yuB9F21g=";
 
+  postPatch = ''
+    substituteInPlace main.go README.md \
+      --replace-fail /usr/sbin/smartctl ${lib.getExe smartmontools}
+  '';
+
   ldflags = [
     "-X github.com/prometheus/common/version.Version=${version}"
   ];
@@ -25,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Export smartctl statistics for Prometheus";
+    mainProgram = "smartctl_exporter";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
     license = licenses.lgpl3;
     platforms = platforms.linux;

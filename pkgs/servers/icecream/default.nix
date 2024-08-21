@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Distributed compiler with a central scheduler to share build load";
     inherit (src.meta) homepage;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux ++ darwin;
   };

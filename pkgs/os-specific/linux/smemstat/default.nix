@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Memory usage monitoring tool";
+    mainProgram = "smemstat";
     homepage = "https://github.com/ColinIanKing/smemstat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];
   };

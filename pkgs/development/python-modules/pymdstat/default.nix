@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymdstat" ];
 
   meta = with lib; {
-    description = "A pythonic library to parse Linux /proc/mdstat file";
+    description = "Pythonic library to parse Linux /proc/mdstat file";
     homepage = "https://github.com/nicolargo/pymdstat";
     maintainers = with maintainers; [ rhoriguchi ];
     license = licenses.mit;

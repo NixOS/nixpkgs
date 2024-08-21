@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, pytest-xdist
-, pytestCheckHook
-, absl-py
-, cvxpy
-, jax
-, jaxlib
-, matplotlib
-, numpy
-, optax
-, scipy
-, scikit-learn
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  pytest-xdist,
+  pytestCheckHook,
+  setuptools,
+  absl-py,
+  cvxpy,
+  jax,
+  jaxlib,
+  matplotlib,
+  numpy,
+  optax,
+  scipy,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
   pname = "jaxopt";
   version = "0.8.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -41,7 +43,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     absl-py
     jax
     jaxlib
@@ -66,18 +70,37 @@ buildPythonPackage rec {
     "jaxopt.tree_util"
   ];
 
-  disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # https://github.com/google/jaxopt/issues/577
-    "test_binary_logit_log_likelihood"
-    "test_solve_sparse"
-    "test_logreg_with_intercept_manual_loop3"
-  ];
+  disabledTests =
+    [
+      # https://github.com/google/jaxopt/issues/592
+      "test_solve_sparse"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # https://github.com/google/jaxopt/issues/577
+      "test_binary_logit_log_likelihood"
+      "test_solve_sparse"
+      "test_logreg_with_intercept_manual_loop3"
 
-  meta = with lib; {
+      # https://github.com/google/jaxopt/issues/593
+      # Makes the test suite crash
+      "test_dtype_consistency"
+      # AssertionError: Array(0.01411963, dtype=float32) not less than or equal to 0.01
+      "test_multiclass_logreg6"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Fatal Python error: Aborted
+      "test_dtype_consistency"
+
+      # AssertionError (flaky numerical tests)
+      "test_logreg_with_intercept_manual_loop3"
+      "test_binary_logit_log_likelihood"
+    ];
+
+  meta = {
     homepage = "https://jaxopt.github.io";
     description = "Hardware accelerated, batchable and differentiable optimizers in JAX";
     changelog = "https://github.com/google/jaxopt/releases/tag/jaxopt-v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

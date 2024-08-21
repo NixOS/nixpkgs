@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, nixosTests }:
+{ lib, python3, fetchFromGitHub, nixosTests, wrapGAppsNoGuiHook, gobject-introspection, glib }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "targetcli";
@@ -11,7 +11,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-9QYo7jGk9iWr26j0qPQCqYsJ+vLXAsO4Xs7+7VT9/yc=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ configshell rtslib ];
+  nativeBuildInputs = [ wrapGAppsNoGuiHook gobject-introspection ];
+  buildInputs = [ glib ];
+
+  propagatedBuildInputs = with python3.pkgs; [ configshell rtslib pygobject3 ];
 
   postInstall = ''
     install -D targetcli.8 -t $out/share/man/man8/
@@ -23,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A command shell for managing the Linux LIO kernel target";
+    description = "Command shell for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/targetcli-fb";
     license = licenses.asl20;
     maintainers = lib.teams.helsinki-systems.members;

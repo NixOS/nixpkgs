@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   qtdeclarative,
-  qqc2-desktop-style,
   kirigami-addons,
   pkg-config,
   bison,
@@ -16,10 +15,10 @@ mkKdeDerivation {
   extraNativeBuildInputs = [pkg-config bison flex];
   extraBuildInputs = [
     qtdeclarative
-    qqc2-desktop-style
     kirigami-addons
     gmp
     mpfr
     libqalculate
   ];
+  meta.mainProgram = "kalk";
 }

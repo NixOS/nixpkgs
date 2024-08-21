@@ -12,29 +12,67 @@ let
   modules = builtins.fromJSON (builtins.readFile lockfile);
   modulesVersion = modules.lockFileVersion;
 
-  # a foldl' for json values
-  foldlJSON = op: acc: value:
-    let
-      # preorder, visit the current node first
-      acc' = op acc value;
+  # A foldl' for moduleDepGraph repoSpecs.
+  # We take any RepoSpec object under .moduleDepGraph.<moduleName>.repoSpec
+  foldlModuleDepGraph = op: acc: value:
+    if builtins.isAttrs value && value ? moduleDepGraph && builtins.isAttrs value.moduleDepGraph
+    then
+      lib.foldlAttrs
+        (_acc: moduleDepGraphName: module: (
+          if builtins.isAttrs module && module ? repoSpec
+          then op _acc { inherit moduleDepGraphName; } module.repoSpec
+          else _acc
+        ))
+        acc
+        value.moduleDepGraph
+    else acc;
 
-      # then visit child values, ignoring attribute names
-      children =
-        if builtins.isList value then
-          lib.foldl' (foldlJSON op) acc' value
-        else if builtins.isAttrs value then
-          lib.foldlAttrs (_acc: _name: foldlJSON op _acc) acc' value
-        else
-          acc';
-    in
-    # like foldl', force evaluation of intermediate results
-    builtins.seq acc' children;
+  # a foldl' for moduleExtensions generatedRepoSpecs
+  # We take any RepoSpec object under .moduleExtensions.<moduleExtensionName>.general.generatedRepoSpecs.<generatedRepoName>
+  foldlGeneratedRepoSpecs = op: acc: value:
+    if builtins.isAttrs value && value ? moduleExtensions
+    then
+      lib.foldlAttrs
+        (_acc: moduleExtensionName: moduleExtension: (
+          if builtins.isAttrs moduleExtension
+            && moduleExtension ? general
+            && builtins.isAttrs moduleExtension.general
+            && moduleExtension.general ? generatedRepoSpecs
+            && builtins.isAttrs moduleExtension.general.generatedRepoSpecs
+          then
+            lib.foldlAttrs
+              (__acc: moduleExtensionGeneratedRepoName: repoSpec: (
+                op __acc { inherit moduleExtensionName moduleExtensionGeneratedRepoName; } repoSpec
+              ))
+              _acc
+              moduleExtension.general.generatedRepoSpecs
+          else _acc
+        ))
+        acc
+        value.moduleExtensions
+    else acc;
 
   # remove the "--" prefix, abusing undocumented negative substring length
   sanitize = str:
     if modulesVersion < 3
     then builtins.substring 2 (-1) str
     else str;
+
+  unmangleName = mangledName:
+    if mangledName ? moduleDepGraphName
+    then builtins.replaceStrings [ "@" ] [ "~" ] mangledName.moduleDepGraphName
+    else
+    # given moduleExtensionName = "@scope~//path/to:extension.bzl%extension"
+    # and moduleExtensionGeneratedRepoName = "repoName"
+    # return "scope~extension~repoName"
+      let
+        isMainModule = lib.strings.hasPrefix "//" mangledName.moduleExtensionName;
+        moduleExtensionParts = builtins.split "^@*([a-zA-Z0-9_~]*)//.*%(.*)$" mangledName.moduleExtensionName;
+        match = if (builtins.length moduleExtensionParts >= 2) then builtins.elemAt moduleExtensionParts 1 else [ "unknownPrefix" "unknownScope" "unknownExtension" ];
+        scope = if isMainModule then "_main" else builtins.elemAt match 0;
+        extension = builtins.elemAt match 1;
+      in
+      "${scope}~${extension}~${mangledName.moduleExtensionGeneratedRepoName}";
 
   # We take any "attributes" object that has a "sha256" field. Every value
   # under "attributes" is assumed to be an object, and all the "attributes"
@@ -55,9 +93,10 @@ let
   #
   # !REMINDER! This works on a best-effort basis, so try to keep it from
   # failing loudly. Prefer warning traces.
-  extract_source = f: acc: value:
+  extract_source = f: acc: mangledName: value:
     let
       attrs = value.attributes;
+      name = unmangleName mangledName;
       entry = hash: urls: name: {
         ${hash} = fetchurl {
           name = "source"; # just like fetch*, to get some deduplication
@@ -72,11 +111,10 @@ let
         let
           validUrls = builtins.isList urls
             && builtins.all (url: builtins.isString url && builtins.substring 0 4 url == "http") urls;
-          validName = builtins.isString attrs.name;
           validHash = builtins.isString hash;
-          valid = validUrls && validName && validHash;
+          valid = validUrls && validHash;
         in
-        if valid then acc // entry hash urls attrs.name
+        if valid then acc // entry hash urls name
         else acc;
       withToplevelValue = acc: insert acc
         (attrs.integrity or attrs.sha256)
@@ -94,15 +132,16 @@ let
       addSources = acc: withToplevelValue (withRemotePatches (withArchives acc));
     in
     if builtins.isAttrs value && value ? attributes
-      && builtins.isAttrs attrs && attrs ? name
+      && value ? ruleClassName
+      && builtins.isAttrs attrs
       && (attrs ? sha256 || attrs ? integrity)
       && (attrs ? urls || attrs ? url)
-      && f attrs.name
+      && f name
     then addSources acc
     else acc;
 
   requiredSourcePredicate = n: requiredDepNamePredicate (sanitize n);
-  requiredDeps = foldlJSON (extract_source requiredSourcePredicate) { } modules;
+  requiredDeps = foldlModuleDepGraph (extract_source requiredSourcePredicate) { } modules // foldlGeneratedRepoSpecs (extract_source requiredSourcePredicate) { } modules;
 
   command = ''
     mkdir -p $out/content_addressable/sha256

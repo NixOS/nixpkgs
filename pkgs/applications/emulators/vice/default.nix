@@ -20,7 +20,7 @@
 , runtimeShell
 , xa
 , file
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     file
     flex
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

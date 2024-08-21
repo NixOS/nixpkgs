@@ -3,7 +3,6 @@
 , util-linux, getopt
 , dejavu_fonts
 }:
-with lib;
 let
   version = "1.13.4";
   gopt = if stdenv.isLinux then util-linux else getopt;
@@ -29,13 +28,13 @@ stdenv.mkDerivation {
     mv vcs $out/bin/vcs
     substituteAllInPlace $out/bin/vcs
     chmod +x $out/bin/vcs
-    wrapProgram $out/bin/vcs --argv0 vcs --set PATH "${makeBinPath runtimeDeps}"
+    wrapProgram $out/bin/vcs --argv0 vcs --set PATH "${lib.makeBinPath runtimeDeps}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Generates contact sheets from video files";
     homepage = "http://p.outlyer.net/vcs";
-    license = licenses.cc-by-nc-sa-30;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ elitak ];
     platforms = with platforms; unix;
     mainProgram = "vcs";

@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An In-System-Programming (ISP) tool & library for Bouffalo Labs RISC-V Microcontrollers and SoCs";
+    description = "In-System-Programming (ISP) tool & library for Bouffalo Labs RISC-V Microcontrollers and SoCs";
     license = licenses.mit;
     mainProgram = "blisp";
     homepage = "https://github.com/pine64/blisp";

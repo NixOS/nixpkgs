@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, linien-common
-, linien-client
-, pytestCheckHook
+{
+  buildPythonPackage,
+  linien-common,
+  linien-client,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {

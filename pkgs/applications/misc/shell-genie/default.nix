@@ -21,19 +21,18 @@ buildPythonPackage rec {
     "typer"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorama
     openai
     pyperclip
     rich
     shellingham
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   # No tests available
   doCheck = false;
@@ -47,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dylanjcastillo/shell-genie";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "shell-genie";
   };
 }

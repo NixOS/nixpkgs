@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatch-jupyter-builder
-, hatch-nodejs-version
-, hatchling
-, jsonschema
-, jupyter-events
-, jupyter-server
-, jupyter-server-fileid
-, jupyter-ydoc
-, jupyterlab
-, pycrdt-websocket
-, pytest-jupyter
-, pytestCheckHook
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  jsonschema,
+  jupyter-events,
+  jupyter-server,
+  jupyter-server-fileid,
+  jupyter-ydoc,
+  jupyterlab,
+  pycrdt-websocket,
+  pytest-jupyter,
+  pytestCheckHook,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "2.0.3";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,21 +28,21 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-Ptc83sPZCMB6gqyr3cN/Lb2if5ps29aQBArLe6CtUMI=";
+    hash = "sha256-uLbNYzszaSLnU4VcaDr5KBcRN+Xm/B471s+W9qJibsk=";
   };
 
   postPatch = ''
     sed -i "/^timeout/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatch-nodejs-version
     hatchling
     jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     jupyter-events
     jupyter-server
@@ -56,17 +57,20 @@ buildPythonPackage rec {
     websockets
   ];
 
-  pythonImportsCheck = [
-    "jupyter_collaboration"
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
+  pythonImportsCheck = [ "jupyter_collaboration" ];
 
   preCheck = ''
     export HOME=$TEMP
   '';
+
+  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
+
+  disabledTests = [
+    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    "test_dirty"
+    # causes a hang
+    "test_rooms"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

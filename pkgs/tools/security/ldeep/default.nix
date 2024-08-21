@@ -5,27 +5,29 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ldeep";
-  version = "1.0.53";
+  version = "1.0.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "franc-pentest";
     repo = "ldeep";
     rev = "refs/tags/${version}";
-    hash = "sha256-67jVpzvdjEcjFmTRE2YjPr4AO1iN+PakwoKcjvimt8g=";
+    hash = "sha256-vAuhzrBPbJCaQMuivpLzVTAR5F1ththTq9hij8ZI4aM=";
   };
 
   pythonRelaxDeps = [
     "cryptography"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    cython
-    pythonRelaxDepsHook
-    setuptools
+  build-system = with python3.pkgs; [
+    pdm-backend
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+    cython
+  ];
+
+  dependencies = with python3.pkgs; [
     commandparse
     cryptography
     dnspython
@@ -39,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
-  # no tests are present
+  # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [
@@ -50,7 +52,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "In-depth LDAP enumeration utility";
     homepage = "https://github.com/franc-pentest/ldeep";
     changelog = "https://github.com/franc-pentest/ldeep/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ldeep";
   };
 }

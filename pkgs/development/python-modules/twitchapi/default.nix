@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, aiohttp
-, python-dateutil
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  python-dateutil,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "4.2.0";
+  version = "4.2.1";
 
   disabled = pythonOlder "3.7";
 
@@ -20,12 +21,10 @@ buildPythonPackage rec {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QAxLYujnsudaiz9UepwrBA835Pct5h4VcE9ZrbkwMmg=";
+    hash = "sha256-DT8Q8x+OvrxnoLWwdS/Gv8x5cepJPIF1ZPyOumnwq2E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -49,6 +48,8 @@ buildPythonPackage rec {
     description = "Python implementation of the Twitch Helix API, its Webhook, PubSub and EventSub";
     homepage = "https://github.com/Teekeks/pyTwitchAPI";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda wolfangaukang ];
+    maintainers = with maintainers; [
+      dotlambda
+    ];
   };
 }

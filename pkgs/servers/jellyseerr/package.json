@@ -1,6 +1,6 @@
 {
   "name": "jellyseerr",
-  "version": "1.7.0",
+  "version": "1.9.2",
   "private": true,
   "scripts": {
     "dev": "nodemon -e ts --watch server --watch overseerr-api.yml -e .json,.ts,.yml -x ts-node -r tsconfig-paths/register --files --project server/tsconfig.json server/index.ts",
@@ -44,6 +44,7 @@
     "axios-rate-limit": "1.3.0",
     "bcrypt": "5.1.0",
     "bowser": "2.11.0",
+    "cacheable-lookup": "^7.0.0",
     "connect-typeorm": "1.1.4",
     "cookie-parser": "1.4.6",
     "copy-to-clipboard": "3.3.3",

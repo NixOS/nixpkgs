@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
 
 
   meta = with lib; {
-    description = "Alternative to git-crypt using age instead of GPG.";
+    description = "Alternative to git-crypt using age instead of GPG";
     homepage = "https://github.com/vlaci/git-agecrypt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kuznetsss ];

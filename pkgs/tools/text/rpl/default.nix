@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rpl";
-  version = "1.15.6";
+  version = "1.15.7";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4vUnFfxiPvyg9gtwiQE3nHZBnqBtBVwhM3KQzkjzw/I=";
+    hash = "sha256-Xq3GLa1TnS4nobPHHCkFUEo9vgI4DGyY2/hQWtkwNRA=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +29,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Replace strings in files";
+    mainProgram = "rpl";
     homepage = "https://github.com/rrthomas/rpl";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ cbley ];
   };
 }

@@ -16,12 +16,12 @@ let
   '';
 in {
   options.services.zeyple = {
-    enable = mkEnableOption (lib.mdDoc "Zeyple, an utility program to automatically encrypt outgoing emails with GPG");
+    enable = mkEnableOption "Zeyple, an utility program to automatically encrypt outgoing emails with GPG";
 
     user = mkOption {
       type = types.str;
       default = "zeyple";
-      description = lib.mdDoc ''
+      description = ''
         User to run Zeyple as.
 
         ::: {.note}
@@ -35,7 +35,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "zeyple";
-      description = lib.mdDoc ''
+      description = ''
         Group to use to run Zeyple.
 
         ::: {.note}
@@ -49,7 +49,7 @@ in {
     settings = mkOption {
       type = ini.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Zeyple configuration. refer to
         <https://github.com/infertux/zeyple/blob/master/zeyple/zeyple.conf.example>
         for details on supported values.
@@ -58,13 +58,13 @@ in {
 
     keys = mkOption {
       type = with types; listOf path;
-      description = lib.mdDoc "List of public key files that will be imported by gpg.";
+      description = "List of public key files that will be imported by gpg.";
     };
 
     rotateLogs = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc "Whether to enable rotation of log files.";
+      description = "Whether to enable rotation of log files.";
     };
   };
 

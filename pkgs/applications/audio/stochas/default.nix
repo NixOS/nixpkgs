@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "surge-synthesizer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-L7dzUUQNCwcuQavUx9hBH0FX5KSocfeYUv5qBcPD2Vg=";
+    hash = "sha256-L7dzUUQNCwcuQavUx9hBH0FX5KSocfeYUv5qBcPD2Vg=";
     fetchSubmodules = true;
   };
 

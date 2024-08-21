@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, faker
-, fetchFromGitHub
-, mock
-, six
-, pytestCheckHook
-, python-memcached
-, pythonOlder
-, zstd
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  faker,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  python-memcached,
+  pythonOlder,
+  setuptools,
+  zstd,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "pymemcache";
   version = "4.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pinterest";
-    repo = pname;
+    repo = "pymemcache";
     rev = "v${version}";
     hash = "sha256-WgtHhp7lE6StoOBfSy9+v3ODe/+zUC7lGrc2S4M68+M=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     faker
@@ -48,11 +47,10 @@ buildPythonPackage rec {
     "test_compressed_complex"
   ];
 
-  pythonImportsCheck = [
-    "pymemcache"
-  ];
+  pythonImportsCheck = [ "pymemcache" ];
 
   meta = with lib; {
+    changelog = "https://github.com/pinterest/pymemcache/blob/${src.rev}/ChangeLog.rst";
     description = "Python memcached client";
     homepage = "https://pymemcache.readthedocs.io/";
     license = with licenses; [ asl20 ];

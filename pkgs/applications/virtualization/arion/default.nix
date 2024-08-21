@@ -54,7 +54,7 @@ let
       mv $out/bin/arion $out/libexec
       makeWrapper $out/libexec/arion $out/bin/arion \
         --unset PYTHONPATH \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose_1 ]} \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose ]} \
         ;
     '';
   };

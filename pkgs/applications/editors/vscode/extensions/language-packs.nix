@@ -4,7 +4,12 @@ with vscode-utils;
 
 let
 
-  buildVscodeLanguagePack = { language, version ? "1.76.2023030809", sha256 }:
+  buildVscodeLanguagePack =
+    {
+      language,
+      version ? "1.76.2023030809",
+      sha256,
+    }:
     buildVscodeMarketplaceExtension {
       mktplcRef = {
         name = "vscode-language-pack-${language}";
@@ -15,7 +20,6 @@ let
         license = lib.licenses.mit;
       };
     };
-
 in
 
 # See list of core language packs at https://github.com/Microsoft/vscode-loc

@@ -1,7 +1,7 @@
 { lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, xz, dejagnu, sourceHighlight, libiconv
@@ -30,11 +30,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "14.1";
+  version = "15.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-1m31EnYUNFH8v/RkzIcj1o8enfRaai1WNaVOcWQ+24A=";
+    hash = "sha256-OCVOrNRXITS8qcWlqk1MpWTLvTDDadiB9zP7a5AzVPI=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  configureFlags = with lib; [
+  configureFlags = [
     # Set the program prefix to the current targetPrefix.
     # This ensures that the prefix always conforms to
     # nixpkgs' expectations instead of relying on the build
@@ -139,8 +139,10 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
-    description = "The GNU Project debugger";
+  meta = {
+    mainProgram = "gdb";
+
+    description = "GNU Project debugger";
 
     longDescription = ''
       GDB, the GNU Project debugger, allows you to see what is going
@@ -153,7 +155,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     # GDB upstream does not support ARM darwin
-    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
-    maintainers = with maintainers; [ pierron globin lsix ];
+    platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ ["x86_64-darwin"];
+    maintainers = with lib.maintainers; [ pierron globin lsix ];
   };
 }

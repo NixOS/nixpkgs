@@ -1,12 +1,13 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, filelock
-, pytest
-, mypy
-, setuptools
-, setuptools-scm
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  filelock,
+  pytest,
+  mypy,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     attrs
@@ -38,10 +37,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pytest_mypy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mypy static type checker plugin for Pytest";
     homepage = "https://github.com/dbader/pytest-mypy";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

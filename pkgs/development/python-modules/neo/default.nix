@@ -1,45 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, numpy
-, packaging
-, quantities
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  packaging,
+  quantities,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  pillow,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.13.0";
+  version = "0.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VnXR+jgaU8LH7ri16SnsA5neILsLUkU+G5nsbWbckfM=";
+    hash = "sha256-aYDZVC55XVNR/VtdnTlBBKR/MNDvfwUR+spqe14ncrw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     quantities
   ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
+    pillow
+    which
   ];
 
-  checkPhase = ''
-    nosetests --exclude=iotest
-  '';
-
-  pythonImportsCheck = [
-    "neo"
+  disabledTestPaths = [
+    # Requires network and export HOME dir
+    "neo/test/rawiotest/test_maxwellrawio.py"
   ];
+
+  pythonImportsCheck = [ "neo" ];
 
   meta = with lib; {
     description = "Package for representing electrophysiology data";

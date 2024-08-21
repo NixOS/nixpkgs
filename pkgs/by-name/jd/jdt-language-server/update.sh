@@ -15,7 +15,7 @@ filename=$(curl -s "$prefix/latest.txt")
 newtimestamp=$(echo $filename | sed "s|^.*-$newver-||;s|\.tar\.gz$||")
 newhash="$(nix-hash --to-sri --type sha256 $(nix-prefetch-url "$prefix/$filename"))";
 
-sed -i default.nix \
+sed -i package.nix \
     -e "/^  version =/ s|\".*\"|\"$newver\"|" \
     -e "/^  timestamp =/ s|\".*\"|\"$newtimestamp\"|" \
     -e "/^    hash =/ s|\".*\"|\"$newhash\"|" \

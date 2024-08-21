@@ -1,17 +1,18 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, fetchpatch
-, dask
-, urllib3
-, geojson
-, verlib2
-, pueblo
-, pandas
-, pythonOlder
-, sqlalchemy
-, pytestCheckHook
-, pytz
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  fetchpatch,
+  dask,
+  urllib3,
+  geojson,
+  verlib2,
+  pueblo,
+  pandas,
+  pythonOlder,
+  sqlalchemy,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -73,7 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
-    description = "A Python client library for CrateDB";
+    description = "Python client library for CrateDB";
     changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];

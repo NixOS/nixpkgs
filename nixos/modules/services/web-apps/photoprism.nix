@@ -26,12 +26,12 @@ in
 
   options.services.photoprism = {
 
-    enable = lib.mkEnableOption (lib.mdDoc "Photoprism web server");
+    enable = lib.mkEnableOption "Photoprism web server";
 
     passwordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Admin password file.
       '';
     };
@@ -39,7 +39,7 @@ in
     address = lib.mkOption {
       type = lib.types.str;
       default = "localhost";
-      description = lib.mdDoc ''
+      description = ''
         Web interface address.
       '';
     };
@@ -47,7 +47,7 @@ in
     port = lib.mkOption {
       type = lib.types.port;
       default = 2342;
-      description = lib.mdDoc ''
+      description = ''
         Web interface port.
       '';
     };
@@ -56,7 +56,7 @@ in
       type = lib.types.path;
       default = null;
       example = "/data/photos";
-      description = lib.mdDoc ''
+      description = ''
         Storage path of your original media files (photos and videos).
       '';
     };
@@ -64,7 +64,7 @@ in
     importPath = lib.mkOption {
       type = lib.types.str;
       default = "import";
-      description = lib.mdDoc ''
+      description = ''
         Relative or absolute to the `originalsPath` from where the files should be imported.
       '';
     };
@@ -72,7 +72,7 @@ in
     storagePath = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/photoprism";
-      description = lib.mdDoc ''
+      description = ''
         Location for sidecar, cache, and database files.
       '';
     };
@@ -82,7 +82,7 @@ in
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         See [the getting-started guide](https://docs.photoprism.app/getting-started/config-options/) for available options.
       '';
       example = {

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,21 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-t8MtM5IDayFFxAsxA+cyLbaGYqsJtyZ6/hUyqdk/ZA8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "src/zope/deprecation/tests.py"
-  ];
+  pytestFlagsArray = [ "src/zope/deprecation/tests.py" ];
 
-  pythonImportsCheck = [
-    "zope.deprecation"
-  ];
+  pythonImportsCheck = [ "zope.deprecation" ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.deprecation";
@@ -42,5 +35,4 @@ buildPythonPackage rec {
     license = licenses.zpl21;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

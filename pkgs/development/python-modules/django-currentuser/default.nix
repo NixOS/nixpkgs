@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python3
-, pythonOlder
-, django
-, hatchling
-, pyhamcrest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  django,
+  hatchling,
+  pyhamcrest,
 }:
 let
   version = "0.6.1";
@@ -37,7 +38,7 @@ buildPythonPackage {
 
   checkPhase = ''
     runHook preCheck
-    ${python3.interpreter} manage.py test testapp
+    ${python.interpreter} manage.py test testapp
     runHook postCheck
   '';
 

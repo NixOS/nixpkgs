@@ -26,7 +26,7 @@ let
   self = {
     addonDir = "/share/kodi/addons";
 
-    rel = "Nexus";
+    rel = kodi.kodiReleaseName;
 
     inherit callPackage kodi hasKodiAddon requiredKodiAddons;
 
@@ -61,6 +61,8 @@ let
 
     controller-topology-project = callPackage ../applications/video/kodi/addons/controller-topology-project { };
 
+    formula1 = callPackage ../applications/video/kodi/addons/formula1 { };
+
     iagl = callPackage ../applications/video/kodi/addons/iagl { };
 
     invidious = callPackage ../applications/video/kodi/addons/invidious { };
@@ -79,6 +81,8 @@ let
 
     libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
 
+    jellycon = callPackage ../applications/video/kodi/addons/jellycon { };
+
     jellyfin = callPackage ../applications/video/kodi/addons/jellyfin { };
 
     joystick = callPackage ../applications/video/kodi/addons/joystick { };
@@ -94,6 +98,10 @@ let
     orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
 
     radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
+
+    raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
+
+    skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 
     svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
@@ -116,6 +124,8 @@ let
     pvr-vdr-vnsi = callPackage ../applications/video/kodi/addons/pvr-vdr-vnsi { };
 
     osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
+
+    upnext = callPackage ../applications/video/kodi/addons/upnext { };
 
     vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
 
@@ -173,6 +183,8 @@ let
 
     myconnpy = callPackage ../applications/video/kodi/addons/myconnpy { };
 
+    plugin-cache = callPackage ../applications/video/kodi/addons/plugin-cache { };
+
     requests = callPackage ../applications/video/kodi/addons/requests { };
 
     requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
@@ -182,6 +194,8 @@ let
     sendtokodi = callPackage ../applications/video/kodi/addons/sendtokodi { };
 
     signals = callPackage ../applications/video/kodi/addons/signals { };
+
+    simplecache = callPackage ../applications/video/kodi/addons/simplecache { };
 
     simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
 

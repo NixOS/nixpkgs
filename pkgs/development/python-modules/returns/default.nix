@@ -1,23 +1,24 @@
-{ lib
-, anyio
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, httpx
-, hypothesis
-, poetry-core
-, pytest-aio
-, pytest-subtests
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, trio
-, typing-extensions
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  httpx,
+  hypothesis,
+  poetry-core,
+  pytest-aio,
+  pytest-subtests,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  trio,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.22.0";
+  version = "0.23.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "dry-python";
     repo = "returns";
     rev = "refs/tags/${version}";
-    hash = "sha256-0eFirhBsj8SWfoAPWEMuFa+EvBgHKpNeKVj3qJ4L6hE=";
+    hash = "sha256-4ZP/wvPgqQQec/BaXuL9r7BEc2G+LztMdFul0NeEJTc=";
   };
 
   postPatch = ''
@@ -35,13 +36,9 @@ buildPythonPackage rec {
       -e '/--mypy.*/d'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   nativeCheckInputs = [
     anyio
@@ -59,13 +56,9 @@ buildPythonPackage rec {
     rm -rf returns/contrib/mypy
   '';
 
-  pythonImportsCheck = [
-    "returns"
-  ];
+  pythonImportsCheck = [ "returns" ];
 
-  pytestFlagsArray = [
-    "--ignore=typesafety"
-  ];
+  pytestFlagsArray = [ "--ignore=typesafety" ];
 
   meta = with lib; {
     description = "Make your functions return something meaningful, typed, and safe!";

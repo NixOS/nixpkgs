@@ -4,32 +4,33 @@
 , installShellFiles
 , rustPlatform
 , libiconv
+, buildPackages
 , darwin
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "18.1.0";
+  version = "18.3.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-ddj8vHFTRBzeueSvY9kS1ZIcAID8k3MXrQkUVt04rQg=";
+    hash = "sha256-Q3UI1IUD5Jz2O4xj3mFM7DqY3lTy3WhWYPa8QjJHTKE=";
   };
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.isLinux
-    then "sha256-LKHBXm9ZThX96JjxJb8d7cRdhWL1t/3aG3Qq1TYBC74="
-    else "sha256-RSkC062XB5zy3lmI0OQhJfJ6FqFWXhpMPNIIqbrrlso=";
+    then "sha256-K4Vw/d0ZOROWujWr76I3QvfKefLhXLeFufUrgStAyjQ="
+    else "sha256-8NAfE7cGFT64ntNXK9RT0D/MbDJweN7vvsG/KlrY4K4=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
-    "client" "sync" "server" "clipboard"
+    "client" "sync" "server" "clipboard" "daemon"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +42,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk_11_0.frameworks.SystemConfiguration
   ];
 
-  postInstall = ''
+  preBuild = ''
+    export PROTOC=${buildPackages.protobuf}/bin/protoc
+    export PROTOC_INCLUDE="${buildPackages.protobuf}/include";
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atuin \
       --bash <($out/bin/atuin gen-completions -s bash) \
       --fish <($out/bin/atuin gen-completions -s fish) \
@@ -60,6 +66,9 @@ rustPlatform.buildRustPackage rec {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+    "--skip=store::var::tests::build_vars"
+    # Tries to touch files
+    "--skip=build_aliases"
   ];
 
   meta = with lib; {

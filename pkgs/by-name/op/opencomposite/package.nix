@@ -1,37 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-
-, cmake
-
-, glm
-, libGL
-, openxr-loader
-, python3
-, vulkan-headers
-, vulkan-loader
-, xorg
-
-, nix-update-script
+{
+  cmake,
+  fetchFromGitLab,
+  glm,
+  jsoncpp,
+  lib,
+  libGL,
+  openxr-loader,
+  python3,
+  stdenv,
+  unstableGitUpdater,
+  vulkan-headers,
+  vulkan-loader,
+  xorg,
 }:
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "unstable-2024-03-04";
+  version = "0-unstable-2024-07-23";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "1bfdf67358add5f573efedbec1fa65d18b790e0e";
-    hash = "sha256-qF5oMI9B5a1oE2gQb/scbom/39Efccja0pTPHHaHMA8=";
+    rev = "632e5cc50b913e93194ca2970e6f13021182579f";
+    hash = "sha256-KQmNyGRlbUrntTPNn5rzTyyR+Bvh3EfSqBgyNGGDo04=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     glm
+    jsoncpp
     libGL
     openxr-loader
     python3
@@ -41,8 +39,9 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_OPENXR=ON"
-    "-DUSE_SYSTEM_GLM=ON"
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
+    (lib.cmakeBool "USE_SYSTEM_OPENXR" true)
+    (lib.cmakeBool "USE_SYSTEM_GLM" true)
   ];
 
   installPhase = ''
@@ -52,14 +51,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch=openxr" ];
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+    branch = "openxr";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";
     homepage = "https://gitlab.com/znixian/OpenOVR";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ Scrumplex ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

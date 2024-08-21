@@ -9,6 +9,7 @@
 , libXi
 , libXinerama
 , libXrandr
+, libXxf86vm
 , makeDesktopItem
 , mesa
 , pkg-config
@@ -38,6 +39,7 @@ buildGoModule rec {
     libXi
     libXinerama
     libXrandr
+    libXxf86vm
     mesa
   ];
 

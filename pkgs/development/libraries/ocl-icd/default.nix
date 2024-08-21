@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , ruby
 , opencl-headers
-, addOpenGLRunpath
 , autoreconfHook
 , windows
 }:
@@ -36,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OpenCL ICD Loader for ${opencl-headers.name}";
+    mainProgram = "cllayerinfo";
     homepage    = "https://github.com/OCL-dev/ocl-icd";
     license     = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;

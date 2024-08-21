@@ -48,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "5.17.11.31580";
-  versions.x86_64-darwin = "5.17.11.31580";
-  versions.x86_64-linux = "5.17.11.3835";
+  versions.aarch64-darwin = "6.1.10.38818";
+  versions.x86_64-darwin = "6.1.10.38818";
+  versions.x86_64-linux = "6.1.10.1400";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-oCCZksH5sgfPVxh6I7ZpIMvkMX0+HnL1R9voNRjTUP4=";
+      hash = "sha256-E8r0bctM5whwEMppzO9hR3W+k+BmrV0gVx+J02KYmuk=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-6bIUfS6bZWh7fEq2xY++nIbnmE5DJxte6sjyoSKUMzU=";
+      hash = "sha256-HMSBV/B/nTkcU8src6Wdz8uZnz455guSAMGm5ha7mIA=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-eIa8ESoYi0gPbJbqahqKKvnM7rGPT+WeMIYCyFEWHGE=";
+      hash = "sha256-c3WywWmblz9Wg3RMtovCBcR/mYyaWkmuoCqqGvHBxwo=";
     };
   };
 
@@ -151,10 +151,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup =  lib.optionalString stdenv.isDarwin ''
+    makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
+  '' + lib.optionalString stdenv.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
-        --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
+        --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
     for i in aomhost zopen zoom ZoomLauncher; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
@@ -179,7 +181,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
-    # Backwards compatiblity: we used to call it zoom-us
+    # Backwards compatibility: we used to call it zoom-us
     ln -s $out/bin/{zoom,zoom-us}
   '';
 

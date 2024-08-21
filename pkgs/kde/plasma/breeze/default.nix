@@ -41,4 +41,5 @@ mkKdeDerivation {
     mkdir -p $qt5/${libsForQt5.qtbase.qtPluginPrefix}/styles
     mv $out/${qtbase.qtPluginPrefix}/styles/breeze5.so $qt5/${libsForQt5.qtbase.qtPluginPrefix}/styles
   '';
+  meta.mainProgram = "breeze-settings6";
 }

@@ -25,13 +25,9 @@ let
     #
     # The following selects the correct Clang version, matching the version
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
-    clang = let
-      # https://github.com/NixOS/nixpkgs/issues/295322
-      clangNoMarch = swiftLlvmPackages.clang.override { disableMarch = true; };
-    in
-    if pkgs.stdenv.isDarwin
+    clang = if pkgs.stdenv.isDarwin
       then
-        clangNoMarch.override rec {
+        swiftLlvmPackages.clang.override rec {
           libc = apple_sdk.Libsystem;
           bintools = pkgs.bintools.override { inherit libc; };
           # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
@@ -39,17 +35,9 @@ let
           # that can happen when a Swift application dynamically links different versions
           # of libc++ and libc++abi than libraries it links are using.
           inherit (llvmPackages) libcxx;
-          extraPackages = [
-            llvmPackages.libcxxabi
-            # Use the compiler-rt associated with clang, but use the libc++abi from the stdenv
-            # to avoid linking against two different versions (for the same reasons as above).
-            (swiftLlvmPackages.compiler-rt.override {
-              inherit (llvmPackages) libcxxabi;
-            })
-          ];
         }
       else
-        clangNoMarch;
+        swiftLlvmPackages.clang;
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`. These are similar to
@@ -70,7 +58,7 @@ let
     xcbuild = xcodebuild;
 
     swift-unwrapped = callPackage ./compiler {
-      inherit (darwin) DarwinTools cctools sigtool;
+      inherit (darwin) DarwinTools sigtool;
       inherit (apple_sdk) MacOSX-SDK CLTools_Executables;
       inherit (apple_sdk.frameworks) CoreServices Foundation Combine;
     };
@@ -97,7 +85,7 @@ let
     };
 
     swiftpm = callPackage ./swiftpm {
-      inherit (darwin) DarwinTools cctools;
+      inherit (darwin) DarwinTools;
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
       swift = swiftNoSwiftDriver;
     };
@@ -119,6 +107,8 @@ let
     };
 
     swift-format = callPackage ./swift-format { };
+
+    swiftpm2nix = callPackage ./swiftpm2nix { };
 
   };
 

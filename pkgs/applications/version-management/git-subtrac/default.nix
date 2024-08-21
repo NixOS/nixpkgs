@@ -19,7 +19,7 @@ buildGoModule rec {
     description = "Keep the content for your git submodules all in one place: the parent repo";
     homepage = "https://github.com/apenwarr/git-subtrac";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "git-subtrac";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rhoas }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, installShellFiles, testers, rhoas }:
 
 buildGoModule rec {
   pname = "rhoas";
@@ -24,11 +24,11 @@ buildGoModule rec {
   # Networking tests fail.
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rhoas \
-      --bash <($out/bin/rhoas completion bash) \
-      --fish <($out/bin/rhoas completion fish) \
-      --zsh <($out/bin/rhoas completion zsh)
+      --bash <(HOME=$TMP $out/bin/rhoas completion bash) \
+      --fish <(HOME=$TMP $out/bin/rhoas completion fish) \
+      --zsh <(HOME=$TMP $out/bin/rhoas completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion {

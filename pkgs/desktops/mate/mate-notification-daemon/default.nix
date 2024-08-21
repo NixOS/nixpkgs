@@ -12,7 +12,7 @@
 , libxml2
 , mate-desktop
 , mate-panel
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libxml2 # for xmllint
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Notification daemon for MATE Desktop";
+    mainProgram = "mate-notification-properties";
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
     license = with licenses; [ gpl2Plus gpl3Plus ];
     platforms = platforms.unix;

@@ -20,6 +20,10 @@
   doCheck = true;
   checkTarget = "test";
 
+  useDuneifVersion = v:
+    (lib.versionAtLeast v "1.8.0" || v == "dev")
+    && (lib.versionAtLeast coq.version "8.20" || coq.version == "dev");
+
   passthru.tests.HelloWorld = callPackage ./test.nix {};
 
   meta = with lib; {
@@ -29,5 +33,4 @@
   };
 }).overrideAttrs (o: lib.optionalAttrs (lib.versionAtLeast o.version "1.8.0" || o.version == "dev") {
   doCheck = false;
-  useDune = true;
 })

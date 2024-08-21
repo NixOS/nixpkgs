@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpc-qt";
-  version = "23.12";
+  version = "24.06";
 
   src = fetchFromGitHub {
     owner = "mpc-qt";
     repo = "mpc-qt";
     rev = "v${version}";
-    hash = "sha256-v22o5QtCY9Z8bPoIkwypG0oTBEPqPFeKZ8cWO+pKCD0=";
+    hash = "sha256-kEG7B99io3BGjN94nEX1pN10Bcjj21rb46Vcn2OtpN8=";
   };
 
   nativeBuildInputs = [

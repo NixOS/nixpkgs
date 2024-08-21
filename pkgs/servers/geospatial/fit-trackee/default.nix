@@ -7,6 +7,7 @@
 }:
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy_1_4;
 
@@ -25,31 +26,36 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fit-trackee";
-  version = "0.7.31";
-  format = "pyproject";
+  version = "0.8.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
-    rev = "v${version}";
-    hash = "sha256-qKUdpuxslhS6k9EiWvbU/0hSXH1y9mjhXs02pugTF3g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lTDS+HfYG6ayXDotu7M2LUrw+1ZhQ0ftw0rTn4Mr3rQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail psycopg2-binary psycopg2 \
-      --replace-fail 'flask = "^3.0.2"' 'flask = "*"' \
-      --replace-fail 'pyopenssl = "^24.0.0"' 'pyopenssl = "*"' \
-      --replace-fail 'sqlalchemy = "=1.4.51"' 'sqlalchemy = "*"'
+      --replace-fail psycopg2-binary psycopg2
   '';
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  build-system = [
+    python.pkgs.poetry-core
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  pythonRelaxDeps = [
+    "flask-limiter"
+    "gunicorn"
+    "pyjwt"
+    "pyopenssl"
+  ];
+
+  dependencies = with python.pkgs; [
     authlib
     babel
+    click
     dramatiq
     flask
     flask-bcrypt
@@ -68,7 +74,8 @@ python.pkgs.buildPythonApplication rec {
     sqlalchemy
     staticmap
     ua-parser
-  ] ++ dramatiq.optional-dependencies.redis;
+  ] ++ dramatiq.optional-dependencies.redis
+    ++ flask-limiter.optional-dependencies.redis;
 
   pythonImportsCheck = [ "fittrackee" ];
 
@@ -77,6 +84,7 @@ python.pkgs.buildPythonApplication rec {
     freezegun
     postgresqlTestHook
     postgresql
+    time-machine
   ];
 
   pytestFlagsArray = [
@@ -84,22 +92,19 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postgresqlTestSetupPost = ''
-    export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABAS?host=$PGHOST
-  '';
-
-  postInstall = ''
-    mkdir -p $out/var/share/fittrackee-instance
+    export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
   preCheck = ''
     export TMP=$(mktemp -d)
   '';
 
-  meta = with lib; {
-    description = "Self-hosted outdoor activity tracker :bicyclist";
+  meta = {
+    description = "Self-hosted outdoor activity tracker";
     homepage = "https://github.com/SamR1/FitTrackee";
     changelog = "https://github.com/SamR1/FitTrackee/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

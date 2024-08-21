@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maccy";
-  version = "0.28.0";
+  version = "0.31.0";
 
   src = fetchurl {
     url = "https://github.com/p0deje/Maccy/releases/download/${finalAttrs.version}/Maccy.app.zip";
-    hash = "sha256-dxjt5skIHN6VlkWpcmj+ZSovVARuQETKoyKMkMtUhHQ=";
+    hash = "sha256-vjfFtlX0b3howUc2bTR/pqXwnzjXpK6qPR8+81sANTs=";
   };
 
   dontUnpack = true;
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://maccy.app";
     license = licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.darwin;
   };
 })

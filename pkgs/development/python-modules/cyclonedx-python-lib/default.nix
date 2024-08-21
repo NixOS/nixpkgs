@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, ddt
-, fetchFromGitHub
-, importlib-metadata
-, jsonschema
-, license-expression
-, lxml
-, packageurl-python
-, py-serializable
-, pythonRelaxDepsHook
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requirements-parser
-, sortedcontainers
-, setuptools
-, toml
-, types-setuptools
-, types-toml
-, xmldiff
+{
+  lib,
+  buildPythonPackage,
+  ddt,
+  fetchFromGitHub,
+  importlib-metadata,
+  jsonschema,
+  license-expression,
+  lxml,
+  packageurl-python,
+  py-serializable,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requirements-parser,
+  sortedcontainers,
+  setuptools,
+  toml,
+  types-setuptools,
+  types-toml,
+  xmldiff,
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "6.4.3";
+  version = "7.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,15 +32,14 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9enilHkZ07loBisKObUmVLhJeXgY/HUiVrf2scPFB60=";
+    hash = "sha256-4778eTsgHxVnbJiFvZdOIXtRUeZ0S3nANEGC3eNlEpU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = [ "py-serializable" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     importlib-metadata
     license-expression
     packageurl-python
@@ -53,29 +52,32 @@ buildPythonPackage rec {
     types-toml
   ];
 
+  passthru.optional-dependencies = {
+    validation = [
+      jsonschema
+      lxml
+    ];
+    json-validation = [
+      jsonschema
+    ];
+    xml-validation = [
+      lxml
+    ];
+  };
+
   nativeCheckInputs = [
     ddt
-    jsonschema
-    lxml
     pytestCheckHook
     xmldiff
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "cyclonedx"
-  ];
-
-  pythonRelaxDeps = [
-    "py-serializable"
-  ];
+  pythonImportsCheck = [ "cyclonedx" ];
 
   preCheck = ''
     export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
   '';
 
-  pytestFlagsArray = [
-    "tests/"
-  ];
+  pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [
     # These tests require network access

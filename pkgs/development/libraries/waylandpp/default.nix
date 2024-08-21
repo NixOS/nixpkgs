@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Wayland C++ binding";
+    mainProgram = "wayland-scanner++";
     homepage = "https://github.com/NilsBrause/waylandpp/";
     license = with lib.licenses; [ bsd2 hpnd ];
     maintainers = with lib.maintainers; [ minijackson ];

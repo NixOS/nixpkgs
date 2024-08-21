@@ -15,16 +15,17 @@ let
 in
 buildGoModule rec {
   pname = "k3d";
-  version = "5.6.0";
+  version = "5.7.3";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KIYwuDPkxhtQy989XW+DcI5NJPhfLP07mYUFc180Sdw=";
+    hash = "sha256-G9z4yJ7Oa2zmxYTRIMCiXlBPLlc3vGPUqUOoIohDKU8=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-lFmIRtkUiohva2Vtg4AqHaB5McVOWW5+SFShkNqYVZ8=";
+  deleteVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -60,7 +61,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/k3d-io/k3d/";
     changelog = "https://github.com/k3d-io/k3d/blob/v${version}/CHANGELOG.md";
-    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
+    description = "Helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
+    mainProgram = "k3d";
     longDescription = ''
       k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
 

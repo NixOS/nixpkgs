@@ -8,7 +8,7 @@ let
 in
 {
   options.services.intune = {
-    enable = lib.mkEnableOption (lib.mdDoc "Microsoft Intune");
+    enable = lib.mkEnableOption "Microsoft Intune";
   };
 
 

@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.71.5";
+  version = "0.71.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "core.sr.ht";
     rev = version;
-    hash = "sha256-YIoKOiTi/9X4bSiG+GvnwzvKYhbfywrv/dTjxaJOOTQ=";
+    hash = "sha256-rDpm2HJOWScvIxOmHcat6y4CWdBE9T2gE/jZskYAFB0=";
     fetchSubmodules = true;
   };
 

@@ -9,7 +9,7 @@
 , SDL2
 , fontconfig
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , darwin
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
     rev = version;
-    sha256 = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
+    hash = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook3 ];
   buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ];
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux SDL/ImGui edition software for viewing .brd files";
+    mainProgram = "openboardview";
     homepage = "https://github.com/OpenBoardView/OpenBoardView";
     license = licenses.mit;
     platforms = platforms.unix;

@@ -1,6 +1,6 @@
 { lib, ... }:
 rec {
-  /*
+  /**
     `fix f` computes the fixed point of the given function `f`. In other words, the return value is `x` in `x = f x`.
 
     `f` must be a lazy function.
@@ -63,27 +63,52 @@ rec {
     See [`extends`](#function-library-lib.fixedPoints.extends) for an example use case.
     There `self` is also often called `final`.
 
-    Type: fix :: (a -> a) -> a
 
-    Example:
-      fix (self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; })
-      => { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+    # Inputs
 
-      fix (self: [ 1 2 (elemAt self 0 + elemAt self 1) ])
-      => [ 1 2 3 ]
+    `f`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    fix :: (a -> a) -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fixedPoints.fix` usage example
+
+    ```nix
+    fix (self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; })
+    => { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+
+    fix (self: [ 1 2 (elemAt self 0 + elemAt self 1) ])
+    => [ 1 2 3 ]
+    ```
+
+    :::
   */
   fix = f: let x = f x; in x;
 
-  /*
+  /**
     A variant of `fix` that records the original recursive attribute set in the
     result, in an attribute named `__unfix__`.
 
     This is useful in combination with the `extends` function to
     implement deep overriding.
+
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
   */
   fix' = f: let x = f x // { __unfix__ = f; }; in x;
 
-  /*
+  /**
     Return the fixpoint that `f` converges to when called iteratively, starting
     with the input `x`.
 
@@ -92,7 +117,22 @@ rec {
     0
     ```
 
-    Type: (a -> a) -> a -> a
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
+
+    `x`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    (a -> a) -> a -> a
+    ```
   */
   converge = f: x:
     let
@@ -102,7 +142,7 @@ rec {
       then x
       else converge f x';
 
-  /*
+  /**
     Extend a function using an overlay.
 
     Overlays allow modifying and extending fixed-point functions, specifically ones returning attribute sets.
@@ -217,32 +257,50 @@ rec {
     ```
     :::
 
-    Type:
-      extends :: (Attrs -> Attrs -> Attrs) # The overlay to apply to the fixed-point function
-              -> (Attrs -> Attrs) # A fixed-point function
-              -> (Attrs -> Attrs) # The resulting fixed-point function
 
-    Example:
-      f = final: { a = 1; b = final.a + 2; }
+    # Inputs
 
-      fix f
-      => { a = 1; b = 3; }
+    `overlay`
 
-      fix (extends (final: prev: { a = prev.a + 10; }) f)
-      => { a = 11; b = 13; }
+    : The overlay to apply to the fixed-point function
 
-      fix (extends (final: prev: { b = final.a + 5; }) f)
-      => { a = 1; b = 6; }
+    `f`
 
-      fix (extends (final: prev: { c = final.a + final.b; }) f)
-      => { a = 1; b = 3; c = 4; }
+    : The fixed-point function
+
+    # Type
+
+    ```
+    extends :: (Attrs -> Attrs -> Attrs) # The overlay to apply to the fixed-point function
+            -> (Attrs -> Attrs) # A fixed-point function
+            -> (Attrs -> Attrs) # The resulting fixed-point function
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fixedPoints.extends` usage example
+
+    ```nix
+    f = final: { a = 1; b = final.a + 2; }
+
+    fix f
+    => { a = 1; b = 3; }
+
+    fix (extends (final: prev: { a = prev.a + 10; }) f)
+    => { a = 11; b = 13; }
+
+    fix (extends (final: prev: { b = final.a + 5; }) f)
+    => { a = 1; b = 6; }
+
+    fix (extends (final: prev: { c = final.a + final.b; }) f)
+    => { a = 1; b = 3; c = 4; }
+    ```
+
+    :::
   */
   extends =
-    # The overlay to apply to the fixed-point function
     overlay:
-    # The fixed-point function
     f:
-    # Wrap with parenthesis to prevent nixdoc from rendering the `final` argument in the documentation
     # The result should be thought of as a function, the argument of that function is not an argument to `extends` itself
     (
       final:
@@ -252,10 +310,29 @@ rec {
       prev // overlay final prev
     );
 
-  /*
+  /**
     Compose two extending functions of the type expected by 'extends'
     into one where changes made in the first are available in the
     'super' of the second
+
+
+    # Inputs
+
+    `f`
+
+    : 1\. Function argument
+
+    `g`
+
+    : 2\. Function argument
+
+    `final`
+
+    : 3\. Function argument
+
+    `prev`
+
+    : 4\. Function argument
   */
   composeExtensions =
     f: g: final: prev:
@@ -263,7 +340,7 @@ rec {
           prev' = prev // fApplied;
       in fApplied // g final prev';
 
-  /*
+  /**
     Compose several extending functions of the type expected by 'extends' into
     one where changes made in preceding functions are made available to
     subsequent ones.
@@ -276,7 +353,7 @@ rec {
   composeManyExtensions =
     lib.foldr (x: y: composeExtensions x y) (final: prev: {});
 
-  /*
+  /**
     Create an overridable, recursive attribute set. For example:
 
     ```
@@ -298,9 +375,20 @@ rec {
   */
   makeExtensible = makeExtensibleWithCustomName "extend";
 
-  /*
+  /**
     Same as `makeExtensible` but the name of the extending attribute is
     customized.
+
+
+    # Inputs
+
+    `extenderName`
+
+    : 1\. Function argument
+
+    `rattrs`
+
+    : 2\. Function argument
   */
   makeExtensibleWithCustomName = extenderName: rattrs:
     fix' (self: (rattrs self) // {

@@ -1,4 +1,4 @@
-{ pkgs, gccStdenv, lib, coreutils,
+{ gccStdenv, lib, coreutils,
   openssl, zlib, sqlite,
   version, git-version, src,
   gambit-support,

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hyperopt
-, mock
-, numpy
-, poetry-core
-, prometheus-client
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hyperopt,
+  mock,
+  numpy,
+  poetry-core,
+  prometheus-client,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-swnl0phdOsBSP8AX/OySI/aYI9z60Ss3SsJox/mb9KY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     hyperopt
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     "tests/integration/test_metrics.py"
   ];
 
-  pythonImportsCheck = [
-    "gradient_utils"
-  ];
+  pythonImportsCheck = [ "gradient_utils" ];
 
   meta = with lib; {
     description = "Python utils and helpers library for Gradient";

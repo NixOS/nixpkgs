@@ -17,20 +17,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.102.0";
+  version = "1.113.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-RJsuvNqqUiiVw6uKkG81rqo1ZoszUHK4UIJh8MReFqo=";
+    hash = "sha256-8Ts2QOSugPU8Do1Mpusez9tSqiaB+UzCWWY4XJk/KRM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-PoPJnSZ9QpcpVbqDMlqwgAqu0K8oornpihErLHXb6Gc=";
+    hash = "sha256-Jlnv3GAobrXaO5fBq6oI9Gq8phz2/jFc+QIUYsUyeNo=";
   };
 
   postPatch = ''
@@ -74,6 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     jsonschema
     matrix-common
     msgpack
+    python-multipart
     netaddr
     packaging
     phonenumbers

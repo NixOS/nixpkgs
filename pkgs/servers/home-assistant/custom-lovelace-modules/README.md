@@ -9,5 +9,7 @@ configured.
 The entrypoint used can be overridden in `passthru` like this:
 
 ```nix
-passthru.entrypoint = "demo-card-bundle.js";
+{
+  passthru.entrypoint = "demo-card-bundle.js";
+}
 ```

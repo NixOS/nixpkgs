@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signaturepdf";
-  version = "1.5.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "24eme";
-    repo = "${pname}";
+    repo = "signaturepdf";
     rev = "v${version}";
-    hash = "sha256-5isvVyT8s2ZAhLP4x/jjxDssBQ2WAvYDkGOWf3NcjHM=";
+    hash = "sha256-WPcnG1iRT4l4S/CSZkj75lIiyzVLsrSyH3GUJa7Tedc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/signaturepdf $out/bin
 
     cp --target-directory=$out/share/signaturepdf --recursive \
-      app.php config locale public templates vendor
+      app.php config locale public templates vendor lib
 
     makeWrapper ${lib.getExe php} $out/bin/signaturepdf \
       --inherit-argv0 \
@@ -48,10 +48,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Web software for signing PDFs and also organize pages, edit metadata and compress pdf";
+    mainProgram = "signaturepdf";
     homepage = "https://pdf.24eme.fr/";
     changelog =
       "https://github.com/24eme/signaturepdf/releases/tag/v${version}";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ DamienCassou ];
   };

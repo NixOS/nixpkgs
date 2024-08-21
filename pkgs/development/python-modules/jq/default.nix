@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, jq
-, oniguruma
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  jq,
+  oniguruma,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
 
   env.JQPY_USE_SYSTEM_LIBS = 1;
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   buildInputs = [
     jq
@@ -37,18 +36,14 @@ buildPythonPackage rec {
     cython jq.pyx
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # intentional behavior change in jq 1.7.1 not reflected upstream
     "test_given_json_text_then_strings_containing_null_characters_are_preserved"
   ];
 
-  pythonImportsCheck = [
-    "jq"
-  ];
+  pythonImportsCheck = [ "jq" ];
 
   meta = with lib; {
     description = "Python bindings for jq, the flexible JSON processor";

@@ -8,37 +8,37 @@ in
 {
   options = {
     services.antennas = {
-      enable = mkEnableOption (lib.mdDoc "Antennas");
+      enable = mkEnableOption "Antennas";
 
       tvheadendUrl = mkOption {
         type        = types.str;
         default     = "http://localhost:9981";
-        description = lib.mdDoc "URL of Tvheadend.";
+        description = "URL of Tvheadend.";
       };
 
       antennasUrl = mkOption {
         type        = types.str;
         default     = "http://127.0.0.1:5004";
-        description = lib.mdDoc "URL of Antennas.";
+        description = "URL of Antennas.";
       };
 
       tunerCount = mkOption {
         type        = types.int;
         default     = 6;
-        description = lib.mdDoc "Numbers of tuners in tvheadend.";
+        description = "Numbers of tuners in tvheadend.";
       };
 
       deviceUUID = mkOption {
         type        = types.str;
         default     = "2f70c0d7-90a3-4429-8275-cbeeee9cd605";
-        description = lib.mdDoc "Device tuner UUID. Change this if you are running multiple instances.";
+        description = "Device tuner UUID. Change this if you are running multiple instances.";
       };
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.antennas = {
-      description = "Antennas HDHomeRun emulator for Tvheadend. ";
+      description = "Antennas HDHomeRun emulator for Tvheadend.";
       wantedBy    = [ "multi-user.target" ];
 
       # Config
@@ -50,10 +50,7 @@ in
       };
 
       serviceConfig = {
-         ExecStart = "${pkgs.antennas}/bin/antennas";
-
-        # Antennas expects all resources like html and config to be relative to it's working directory
-        WorkingDirectory = "${pkgs.antennas}/libexec/antennas/deps/antennas/";
+        ExecStart = "${pkgs.antennas}/bin/antennas";
 
         # Hardening
         CapabilityBoundingSet = [ "" ];

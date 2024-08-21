@@ -33,7 +33,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A Fountain export tool with some extras";
+    description = "Fountain export tool with some extras";
     homepage = "https://github.com/Wraparound/wrap";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.austinbutler ];

@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Quality Tetrahedral Mesh Generator and 3D Delaunay Triangulator";
+    mainProgram = "tetgen";
     homepage = "http://tetgen.org/";
     license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "plumber";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "streamdal";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-H1tyMedYKj1bePNcaEWYP3njHw57cJ0jgxwC7zDXQvk=";
+    hash = "sha256-20rc9TLiCkt9k/Gtr5aoheGiiqOp1eURSqg4p1jTnkE=";
   };
 
   vendorHash = null;
@@ -27,7 +27,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A CLI devtool for interacting with data in message systems like Kafka, RabbitMQ, GCP PubSub and more";
+    description = "CLI devtool for interacting with data in message systems like Kafka, RabbitMQ, GCP PubSub and more";
+    mainProgram = "plumber";
     homepage = "https://github.com/streamdal/plumber";
     license = licenses.mit;
     maintainers = with maintainers; [ svrana ];

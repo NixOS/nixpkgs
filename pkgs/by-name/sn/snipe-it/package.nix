@@ -8,16 +8,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "snipe-it";
-  version = "6.3.3";
+  version = "7.0.7";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = "snipe-it";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ePE55mK8woopNuRXox51I0sJGBmjF6XDfjE+k+ncoJ0=";
+    hash = "sha256-cka3ZczRYXmzeokiUg2WarArvW507AVsCIadPlVUYWo=";
   };
 
-  vendorHash = "sha256-wO+hKttiI7T7C+4oSl8G0I4pQEfZpXjYspUhoaaLrAQ=";
+  vendorHash = "sha256-nwzPmelTvInx055lyuhiTioWyF0JSCjNa2Ky8yQXwtc=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"
@@ -45,7 +45,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A free open source IT asset/license management system";
+    description = "Free open source IT asset/license management system";
     longDescription = ''
       Snipe-IT was made for IT asset management, to enable IT departments to track
       who has which laptop, when it was purchased, which software licenses and accessories
@@ -53,7 +53,7 @@ php.buildComposerProject (finalAttrs: {
       Details for snipe-it can be found on the official website at https://snipeitapp.com/.
     '';
     homepage = "https://snipeitapp.com/";
-    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${version}";
+    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${finalAttrs.version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ yayayayaka ];
     platforms = platforms.linux;

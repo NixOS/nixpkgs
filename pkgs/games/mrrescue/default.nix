@@ -49,7 +49,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Arcade-style fire fighting game";
-    maintainers = with maintainers; [ ];
+    mainProgram = "mrrescue";
+    maintainers = [ ];
     platforms = platforms.linux;
     license = licenses.zlib;
     downloadPage = "http://tangramgames.dk/games/mrrescue";

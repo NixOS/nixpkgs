@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, xz, bash
+{ stdenv, lib, fetchurl, libiconv, bash, updateAutotoolsGnuConfigScriptsHook
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   LDFLAGS = lib.optionalString stdenv.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
-     "--disable-csharp" "--with-xz"
+     "--disable-csharp"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its
@@ -51,8 +51,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    xz
-    xz.bin
+    updateAutotoolsGnuConfigScriptsHook
   ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
     bash
@@ -97,7 +96,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gettext/";
 
-    maintainers = with maintainers; [ zimbatm vrthra ];
+    maintainers = with maintainers; [ zimbatm ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://superhighfives.com/pika";
-    description = "An open-source colour picker app for macOS";
+    description = "Open-source colour picker app for macOS";
     platforms = platforms.darwin;
     license = licenses.mit;
     maintainers = with maintainers; [ arkivm ];
