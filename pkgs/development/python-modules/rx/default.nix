@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
-  nose,
 }:
 
 buildPythonPackage rec {
@@ -19,8 +18,6 @@ buildPythonPackage rec {
     pname = "Rx";
     sha256 = "b657ca2b45aa485da2f7dcfd09fac2e554f7ac51ff3c2f8f2ff962ecd963d91c";
   };
-
-  nativeCheckInputs = [ nose ];
 
   doCheck = false; # PyPI tarball does not provides tests
 
