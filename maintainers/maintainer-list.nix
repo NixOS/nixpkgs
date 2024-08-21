@@ -8713,6 +8713,12 @@
     githubId = 7481521;
     name = "Balázs Lengyel";
   };
+  ilaumjd = {
+    email = "ilaumjd@gmail.com";
+    github = "ilaumjd";
+    githubId = 16514431;
+    name = "Ilham AM";
+  };
   ilian = {
     email = "ilian@tuta.io";
     github = "ilian";
