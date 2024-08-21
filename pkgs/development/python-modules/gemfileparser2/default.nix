@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "gemfileparser2";
-  version = "0.9.3";
+  version = "0.9.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BFKJZOf0W2b0YNbKIwnrmoKGvtP8A6R9PrUt7kYC/Dk=";
+    hash = "sha256-ezfioBwlZMGb1cEzzwa1afXUrTnxsgpzX0CNOTyVzgY=";
   };
 
   dontConfigure = true;
