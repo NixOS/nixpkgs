@@ -10,18 +10,17 @@
   libICE,
   libSM,
   libX11,
-  nexusmods-app,
   runCommand,
   pname ? "nexusmods-app",
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   inherit pname;
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
   };
@@ -55,7 +54,8 @@ buildDotnetModule rec {
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}"
-    "--set APPIMAGE ${placeholder "out"}/bin/${meta.mainProgram}" # Make associating with nxm links work on Linux
+    # Make associating with nxm links work on Linux
+    "--set APPIMAGE ${placeholder "out"}/bin/NexusMods.App"
   ];
 
   runtimeDeps = [
@@ -65,7 +65,7 @@ buildDotnetModule rec {
     libX11
   ];
 
-  executables = [ meta.mainProgram ];
+  executables = [ "NexusMods.App" ];
 
   doCheck = true;
 
@@ -93,15 +93,10 @@ buildDotnetModule rec {
       let
         runTest =
           name: script:
-          runCommand "${pname}-test-${name}"
-            {
-              # TODO: use finalAttrs when buildDotnetModule has support
-              nativeBuildInputs = [ nexusmods-app ];
-            }
-            ''
-              ${script}
-              touch $out
-            '';
+          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+            ${script}
+            touch $out
+          '';
       in
       {
         serve = runTest "serve" ''
@@ -123,7 +118,7 @@ buildDotnetModule rec {
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${src.rev}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0
@@ -158,4 +153,4 @@ buildDotnetModule rec {
       }
     '';
   };
-}
+})
