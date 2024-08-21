@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.39";
+  version = "1.40";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "emborg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DK98VAYSwN+UKuwwbd2O+gF2PDQPosbXo9D2Zrwe/yU=";
+    hash = "sha256-1cgTKYt2/HiPxsar/nIr4kk2dRMYCJZQilhr+zs1AEg=";
   };
 
   nativeBuildInputs = [ flit-core ];
