@@ -47,7 +47,7 @@ let
   };
 
 in rec {
-  thunderbird = thunderbird-115;
+  thunderbird = thunderbird-128;
 
   thunderbird-115 = common {
     version = "115.13.0";
