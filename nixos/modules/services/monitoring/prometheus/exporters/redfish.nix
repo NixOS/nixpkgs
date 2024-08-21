@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.redfish;
@@ -10,7 +16,7 @@ let
     concatStringsSep
     optionalAttrs
     ;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "redfish-config.yml" cfg.settings;
 in
 {
@@ -18,7 +24,7 @@ in
   extraOpts = {
     settings = mkOption {
       type = settingsFormat.type;
-      default = {};
+      default = { };
       description = ''
         Configuration for redfish_exporter, see
         <https://github.com/jenningsloy318/redfish_exporter>
@@ -27,7 +33,13 @@ in
     };
 
     loglevel = mkOption {
-      type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
+      type = types.enum [
+        "debug"
+        "info"
+        "warn"
+        "error"
+        "fatal"
+      ];
       default = "info";
       description = ''
         Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal].
