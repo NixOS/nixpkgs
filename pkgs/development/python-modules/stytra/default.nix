@@ -87,6 +87,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/portugueslab/stytra";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tbenst ];
-    broken = true; # incompatible with pyqtgraph>0.13.0: https://github.com/portugueslab/stytra/issues/87
   };
 }
