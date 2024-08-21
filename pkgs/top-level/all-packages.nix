@@ -39169,8 +39169,6 @@ with pkgs;
 
   vhs = callPackage ../applications/misc/vhs { };
 
-  vgmstream = callPackage ../applications/audio/vgmstream { };
-
   viddy = callPackage ../tools/misc/viddy { };
 
   viennarna = callPackage ../applications/science/molecular-dynamics/viennarna { };
