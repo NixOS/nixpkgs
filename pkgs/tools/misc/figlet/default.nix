@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.figlet.org/";
     license = lib.licenses.afl21;
     maintainers = with lib.maintainers; [ ehmry ];
+    mainProgram = "figlet";
     platforms = lib.platforms.unix;
   };
 }
