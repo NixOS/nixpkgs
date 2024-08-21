@@ -122,6 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lucus16 thoughtpolice ];
     platforms =
       lib.platforms.linux
-      ++ stdenv.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];
+      ++ lib.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];
   };
 })
