@@ -30,7 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-zJ6zyS9DNhlJ1wbXHZRtNMDytF/Beh9DDHKB8S9HFwk=";
   };
 
-  sourceRoot = "${src.name}/python";
+  buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    cd python/tests
+    cd python/python/tests
   '';
 
   disabledTests = [
