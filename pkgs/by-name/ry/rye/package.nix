@@ -1,27 +1,32 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, openssl
-, stdenv
-, CoreServices
-, Libsystem
-, SystemConfiguration
-, nix-update-script
-, testers
-, rye
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  installShellFiles,
+  pkg-config,
+
+  # buildInputs
+  openssl,
+  stdenv,
+  darwin,
+
+  # passthru
+  nix-update-script,
+  testers,
+  rye,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.38.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-mTVpNyFEovaOdOBTcASSRejKfSs50cqpDuStDAkcdkQ=";
+    hash = "sha256-qDXD5vNoIppe1EWKxr1tssgAelEKoMdZ/y7Dq979PwI=";
   };
 
   cargoLock = {
@@ -36,16 +41,21 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
-
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    Libsystem
-    SystemConfiguration
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
   ];
+
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk;
+      [
+        frameworks.CoreServices
+        frameworks.SystemConfiguration
+        Libsystem
+      ]
+    );
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rye \
