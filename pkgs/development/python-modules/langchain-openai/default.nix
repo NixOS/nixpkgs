@@ -84,10 +84,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-  };
-
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";
     description = "Integration package connecting OpenAI and LangChain";
