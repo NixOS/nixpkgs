@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    description = "Program which generates ASCII pictures of a cow with a message";
+  meta = {
     homepage = "https://cowsay.diamonds";
-    changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ anthonyroussel ];
+    description = "Program which generates ASCII pictures of a cow with a message";
+    changelog = "https://github.com/cowsay-org/cowsay/blob/main/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
     mainProgram = "cowsay";
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    inherit (perl.meta) platforms;
   };
 })
