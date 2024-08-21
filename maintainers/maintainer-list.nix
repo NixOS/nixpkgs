@@ -21369,6 +21369,12 @@
     githubId = 29992205;
     keys = [ { fingerprint = "6684 4E7D D213 C75D 8828  6215 C714 A58B 6C1E 0F52"; } ];
   };
+  underknowledge = {
+    name = "Underknowledge";
+    email = "blackhole@underknowledge.cc";
+    github = "underknowledge";
+    githubId = 20793849;
+  };
   unhammer = {
     email = "unhammer@fsfe.org";
     github = "unhammer";
