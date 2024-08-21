@@ -143,9 +143,9 @@
   };
   azure-firewall = mkAzExtension rec {
     pname = "azure-firewall";
-    version = "1.1.0";
+    version = "1.2.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-${version}-py2.py3-none-any.whl";
-    sha256 = "562cc396c6afa1ef996c35b7bed801b3fd9677e4c6923f1148cb09255b24d1ef";
+    sha256 = "5468cc09b8ea7918176b5e95aa3c24c7ad9b7d1b68c47d16bf522a053fd811e8";
     description = "Manage Azure Firewall resources";
   };
   azurelargeinstance = mkAzExtension rec {
