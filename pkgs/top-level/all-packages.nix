@@ -5554,7 +5554,7 @@ with pkgs;
 
   logseq = callPackage ../by-name/lo/logseq/package.nix {
     # electron version from: https://github.com/logseq/logseq/blob/0.10.9/package.json#L116
-    electron = electron_27;
+    electron = electron_28;
   };
 
   long-shebang = callPackage ../misc/long-shebang { };
