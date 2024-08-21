@@ -11992,6 +11992,8 @@ self: super: with self; {
 
   pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
 
+  pyopengltk = callPackage ../development/python-modules/pyopengltk { };
+
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
   pyopenuv = callPackage ../development/python-modules/pyopenuv { };
