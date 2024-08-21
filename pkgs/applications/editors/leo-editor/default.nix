@@ -14,7 +14,7 @@ mkDerivation rec {
   dontBuild = true;
 
   nativeBuildInputs = [ wrapQtAppsHook makeWrapper python3 ];
-  propagatedBuildInputs = with python3.pkgs; [ pyqt5 docutils ];
+  propagatedBuildInputs = with python3.pkgs; [ pyqt6 docutils ];
 
   desktopItem = makeDesktopItem {
     name = "leo-editor";
