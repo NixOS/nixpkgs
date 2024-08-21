@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     rm -f *.dsp
     rm -f *.lib
     mkdir -p $out/lib/lv2
@@ -33,7 +35,9 @@ stdenv.mkDerivation rec {
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
- '';
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Some simple utility lv2 plugins";

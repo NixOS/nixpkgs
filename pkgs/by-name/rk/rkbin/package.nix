@@ -16,8 +16,12 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv bin doc $out/
+
+    runHook postInstall
   '';
 
   passthru = {

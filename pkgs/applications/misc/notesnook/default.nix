@@ -69,8 +69,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications/Notesnook.app
       cp -R . $out/Applications/Notesnook.app
+
+      runHook postInstall
     '';
   };
 in

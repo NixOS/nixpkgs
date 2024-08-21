@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D rslsync "$out/bin/rslsync"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

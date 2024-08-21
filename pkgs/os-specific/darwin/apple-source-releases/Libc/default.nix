@@ -8,6 +8,8 @@ appleDerivation' stdenvNoCC {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     export SRCROOT=$PWD
     export DSTROOT=$out
     export PUBLIC_HEADERS_FOLDER_PATH=include
@@ -17,6 +19,8 @@ appleDerivation' stdenvNoCC {
     cp ${./CrashReporterClient.h} $out/include/CrashReporterClient.h
 
     cp ${Libc_10-9}/include/NSSystemDirectories.h $out/include
+
+    runHook postInstall
   '';
 
   appleHeaders = builtins.readFile ./headers.txt;

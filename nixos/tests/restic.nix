@@ -22,12 +22,16 @@ import ./make-test-python.nix (
       name = "test-files-to-backup";
       unpackPhase = "true";
       installPhase = ''
+        runHook preInstall
+
         mkdir $out
         echo some_file > $out/some_file
         echo some_other_file > $out/some_other_file
         mkdir $out/a_dir
         echo a_file > $out/a_dir/a_file
         echo a_file_2 > $out/a_dir/a_file_2
+
+        runHook postInstall
       '';
     };
 

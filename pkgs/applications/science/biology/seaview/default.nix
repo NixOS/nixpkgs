@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fltk libjpeg ];
 
   patchPhase = "sed -i 's#PATH=/bin:/usr/bin rm#'${coreutils}/bin/rm'#' seaview.cxx";
-  installPhase = "mkdir -p $out/bin; cp seaview $out/bin";
+  installPhase = "runHook preInstall; mkdir -p $out/bin; cp seaview $out/bin; runHook postInstall";
 
   meta = with lib; {
     description = "GUI for molecular phylogeny";

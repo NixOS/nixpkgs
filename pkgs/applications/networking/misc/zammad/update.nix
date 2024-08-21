@@ -13,10 +13,14 @@
 stdenv.mkDerivation rec {
   name = "zammad-update-script";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${./update.sh} $out/bin/update.sh
     patchShebangs $out/bin/update.sh
     wrapProgram $out/bin/update.sh --prefix PATH : ${lib.makeBinPath buildInputs}
+
+    runHook postInstall
   '';
   dontUnpack = true;
 

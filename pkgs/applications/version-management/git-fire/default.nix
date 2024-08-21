@@ -12,7 +12,11 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 $src/git-fire $out/bin/git-fire
+
+    runHook postInstall
   '';
 
   meta = with lib; {

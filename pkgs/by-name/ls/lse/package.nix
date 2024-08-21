@@ -22,10 +22,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp lse.sh $out/bin/lse.sh
     wrapProgram $out/bin/lse.sh \
       --prefix PATH : ${lib.makeBinPath [ bash ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

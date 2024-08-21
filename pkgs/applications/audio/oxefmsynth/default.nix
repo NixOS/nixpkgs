@@ -8,7 +8,7 @@ let
       url = "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${name}.zip";
       sha256 = "0da16iwac590wphz2sm5afrfj42jrsnkr1bxcy93lj7a369ildkj";
     };
-    installPhase = "cp -r . $out";
+    installPhase = "runHook preInstall; cp -r . $out; runHook postInstall";
   };
 
 in stdenv.mkDerivation rec {
@@ -29,8 +29,12 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lxvst
     install -Dm644 oxevst64.so -t $out/lib/lxvst
+
+    runHook postInstall
   '';
 
   meta = with lib; {

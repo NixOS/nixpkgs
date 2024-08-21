@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "./build.py";
 
-  installPhase = "./install.py";
+  installPhase = "runHook preInstall; ./install.py; runHook postInstall";
 
   meta = with lib; {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";

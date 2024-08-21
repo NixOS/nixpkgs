@@ -28,6 +28,8 @@ stdenv.mkDerivation {
   buildPhase = "sh build-linux.sh";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share
     cp nw $out/bin
     cp font24.raw $out/share
@@ -36,6 +38,8 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH ":" ${libglut}/lib \
       --prefix LD_LIBRARY_PATH ":" ${libGLU}/lib \
       --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
+
+    runHook postInstall
   '';
 
   meta = with lib; {

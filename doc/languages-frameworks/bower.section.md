@@ -102,7 +102,7 @@ pkgs.stdenv.mkDerivation {
     ${pkgs.nodePackages.gulp}/bin/gulp build # note 4
   '';
 
-  installPhase = "mv gulpdist $out";
+  installPhase = "runHook preInstall; mv gulpdist $out; runHook postInstall";
 }
 ```
 

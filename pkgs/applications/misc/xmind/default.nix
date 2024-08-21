@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
       then "XMind_i386"
       else "XMind_amd64";
   in ''
+    runHook preInstall
+
     mkdir -p $out/{bin,libexec/configuration/,share/{applications/,fonts/,icons/hicolor/scalable/apps/}}
     cp -r ${targetDir}/{configuration,p2,XMind{,.ini}} $out/libexec
     cp -r {plugins,features} $out/libexec/
@@ -68,6 +70,8 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/XMind
 
     ln -s ${jre8} $out/libexec/jre
+
+    runHook postInstall
   '';
 
   meta = with lib; {

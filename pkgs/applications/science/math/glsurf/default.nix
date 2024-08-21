@@ -55,12 +55,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/doc/glsurf
     cp ./src/glsurf.opt $out/bin/glsurf
     cp ./doc/doc.pdf $out/share/doc/glsurf
     cp -r ./examples $out/share/doc/glsurf
 
     wrapProgram "$out/bin/glsurf" --set CC "${cc}/bin/${cc.targetPrefix}cc"
+
+    runHook postInstall
   '';
 
   meta = {

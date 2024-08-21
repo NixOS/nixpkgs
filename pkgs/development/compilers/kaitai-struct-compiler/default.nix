@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src/bin/kaitai-struct-compiler $out/bin/kaitai-struct-compiler
     ln -s $out/bin/kaitai-struct-compiler $out/bin/ksc
     cp -R $src/lib $out/lib
     wrapProgram $out/bin/kaitai-struct-compiler --prefix PATH : ${lib.makeBinPath [ openjdk8 ] }
+
+    runHook postInstall
   '';
 
   meta = with lib; {

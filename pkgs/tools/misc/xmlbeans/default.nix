@@ -25,9 +25,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     chmod +x bin/*
     cp -r bin/ lib/ $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

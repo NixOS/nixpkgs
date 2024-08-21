@@ -23,10 +23,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{share/doc,share/quantumminigolf,bin}
     cp README THANKS LICENSE "$out/share/doc"
     cp -r fonts gfx tracks "$out/share/quantumminigolf"
     cp quantumminigolf "$out/bin"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

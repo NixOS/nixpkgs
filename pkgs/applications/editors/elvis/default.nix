@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/elvis $out/share/elvis/doc
     cp elvis ref elvtags elvfmt $out/bin
     cp -R data/* $out/share/elvis
@@ -37,6 +39,8 @@ stdenv.mkDerivation rec {
     for a in doc/*.man; do
       cp $a $out/share/man/man1/`basename $a .man`.1
     done
+
+    runHook postInstall
   '';
 
   configureFlags = [ "--ioctl=termios" ];

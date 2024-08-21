@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{include,lib}
     mkdir -p $out/lib/pkgconfig
   '' + lib.optionalString stdenv.isLinux ''
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/pkgconfig/libui.pc \
       --subst-var-by out $out \
       --subst-var-by version "${version}"
+
+    runHook postInstall
   '';
   postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -id $out/lib/libui.A.dylib $out/lib/libui.A.dylib

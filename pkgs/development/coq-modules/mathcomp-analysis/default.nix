@@ -84,7 +84,7 @@ let
     patched-derivation1 = derivation.overrideAttrs (o:
       lib.optionalAttrs (o.pname != null && o.pname != "mathcomp-analysis" &&
          o.version != null && o.version != "dev" && lib.versions.isLt "0.6" o.version)
-      { preBuild = ""; buildPhase = "echo doing nothing"; installPhase = "echo doing nothing"; }
+      { preBuild = ""; buildPhase = "echo doing nothing"; installPhase = "runHook preInstall; echo doing nothing; runHook postInstall"; }
     );
     patched-derivation2 = patched-derivation1.overrideAttrs (o:
       lib.optionalAttrs (o.pname != null && o.pname == "mathcomp-analysis" &&

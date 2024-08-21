@@ -37,11 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/PythonQt
     cp -r ./lib $out
     cp -r ./src/* $out/include/PythonQt
     cp -r ./build $out/include/PythonQt
     cp -r ./extensions $out/include/PythonQt
+
+    runHook postInstall
   '';
 
   preFixup = lib.optionalString stdenv.isDarwin ''

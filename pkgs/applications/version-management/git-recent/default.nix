@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   buildPhase = null;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp git-recent $out/bin
     wrapProgram $out/bin/git-recent \
       --prefix PATH : "${lib.makeBinPath [ git less util-linux ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

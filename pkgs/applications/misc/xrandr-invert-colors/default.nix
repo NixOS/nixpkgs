@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ libXrandr ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv xrandr-invert-colors.bin xrandr-invert-colors
     install xrandr-invert-colors $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

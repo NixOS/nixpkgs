@@ -47,8 +47,12 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 xdelta3 $out/bin/xdelta3
     install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib vector${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension sql/vector-*.sql
     install -D -t $out/share/postgresql/extension vector.control
+
+    runHook postInstall
   '';
 
   meta = with lib; {

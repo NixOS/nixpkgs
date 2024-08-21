@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}
     makeWrapper "${mono}/bin/mono" $out/bin/duplicati-cli \
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
       --add-flags "$out/share/${pname}-${version}/Duplicati.Server.exe" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
           sqlite ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

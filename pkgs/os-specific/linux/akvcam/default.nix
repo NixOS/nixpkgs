@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m644 -b -D akvcam.ko $out/lib/modules/${kernel.modDirVersion}/akvcam.ko
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

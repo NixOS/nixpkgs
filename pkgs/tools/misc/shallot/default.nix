@@ -36,8 +36,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./shallot $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

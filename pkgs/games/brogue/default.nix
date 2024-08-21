@@ -39,11 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -m 555 -D bin/brogue $out/bin/brogue
     install -m 444 -D ${finalAttrs.desktopItem}/share/applications/brogue.desktop $out/share/applications/brogue.desktop
     install -m 444 -D bin/brogue-icon.png $out/share/icons/hicolor/256x256/apps/brogue.png
     mkdir -p $out/share/brogue
     cp -r bin/fonts $out/share/brogue/
+
+    runHook postInstall
   '';
 
   # fix crash; shouldn’t be a security risk because it’s an offline game

@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp rofi-power-menu $out/bin/rofi-power-menu
     cp dmenu-power-menu $out/bin/dmenu-power-menu
+
+    runHook postInstall
   '';
 
   meta = with lib; {

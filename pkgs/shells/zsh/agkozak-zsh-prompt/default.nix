@@ -16,10 +16,14 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     plugindir="$out/share/zsh/site-functions"
 
     mkdir -p "$plugindir"
     cp -r -- lib/*.zsh agkozak-zsh-prompt.plugin.zsh prompt_agkozak-zsh-prompt_setup "$plugindir"/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

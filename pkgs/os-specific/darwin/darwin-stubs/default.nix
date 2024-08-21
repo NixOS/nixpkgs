@@ -12,7 +12,11 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv * $out
+
+    runHook postInstall
   '';
 }

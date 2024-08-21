@@ -130,8 +130,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/static/
       cp -r static/dist $out/static
+
+      runHook postInstall
     '';
   };
 

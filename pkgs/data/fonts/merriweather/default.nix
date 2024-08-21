@@ -18,11 +18,15 @@ stdenvNoCC.mkDerivation rec {
   # Python dependencies to package (fontmake, gftools)
 
   installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/opentype/${pname} fonts/otf/*.otf
     install -m444 -Dt $out/share/fonts/truetype/${pname} fonts/ttfs/*.ttf
     install -m444 -Dt $out/share/fonts/woff/${pname} fonts/woff/*.woff
     install -m444 -Dt $out/share/fonts/woff2/${pname} fonts/woff2/*.woff2
     # TODO: install variable version?
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -100,9 +100,13 @@ let
       nativeBuildInputs = [ makeWrapper ];
 
       installPhase = ''
+        runHook preInstall
+
         makeWrapper ${llm}/bin/llm $out/bin/llm \
           --prefix PYTHONPATH : "${llm}/${python.sitePackages}:$PYTHONPATH"
         ln -sfv ${llm}/lib $out/lib
+
+        runHook postInstall
       '';
 
       propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;

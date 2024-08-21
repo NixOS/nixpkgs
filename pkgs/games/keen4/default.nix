@@ -11,6 +11,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/keen4
     mv * $out/share/keen4
 
@@ -40,6 +42,8 @@ stdenv.mkDerivation {
     done
     EOF
     chmod +x $out/bin/keen4
+
+    runHook postInstall
   '';
 
   meta = {

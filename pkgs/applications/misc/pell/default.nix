@@ -12,12 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share
     cp pell $out/bin
     cp resources/online.mp3 $out/share
     cp resources/offline.mp3 $out/share
     chmod +x $out/bin/pell
+
+    runHook postInstall
   '';
 
   postFixup = ''

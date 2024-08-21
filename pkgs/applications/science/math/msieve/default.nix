@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "all" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     cp msieve $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

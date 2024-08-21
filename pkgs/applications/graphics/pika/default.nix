@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   sourceRoot = "Pika.app";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/Applications/Pika.app"
     cp -R . "$out/Applications/Pika.app"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

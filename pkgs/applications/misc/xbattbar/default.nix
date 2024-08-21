@@ -29,11 +29,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/libexec
     install -m 0755 xbattbar $out/bin/
     install -m 0755 xbattbar-check-acpi $out/libexec/
     install -m 0755 xbattbar-check-sys $out/libexec/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

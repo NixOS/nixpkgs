@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     find . -maxdepth 1 -perm -111 -type f -not -name "*.sh" \
       -exec install -vD {} "$out"/bin/{} \;
 
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
       substituteInPlace $file --replace "\$BF_DIR" $out/libexec
     done
     substituteInPlace $out/libexec/bf.sh --replace "\$BF_JAR_DIR" $out/share/java
+
+    runHook postInstall
   '';
 
   postFixup = ''

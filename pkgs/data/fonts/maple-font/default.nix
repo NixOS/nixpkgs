@@ -19,9 +19,13 @@ let
       sourceRoot = ".";
       nativeBuildInputs = [ unzip ];
       installPhase = ''
+        runHook preInstall
+
         find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
         find . -name '*.otf'    -exec install -Dt $out/share/fonts/opentype {} \;
         find . -name '*.woff2'  -exec install -Dt $out/share/fonts/woff2 {} \;
+
+        runHook postInstall
       '';
 
       meta = with lib; {

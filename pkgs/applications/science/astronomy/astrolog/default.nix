@@ -38,6 +38,8 @@ stdenv.mkDerivation {
       sha256 = "001bmqyldsbk4bdliqfl4a9ydrh1ff13wccvfniwaxlmvkridx2q";
     };
   in ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/astrolog
     cp *.as $out/astrolog
     install astrolog $out/bin
@@ -52,6 +54,8 @@ stdenv.mkDerivation {
       mkdir -p $out/ephemeris
       cp -r ${moonsEphemeris}/*.se1 $out/ephemeris
     ''}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

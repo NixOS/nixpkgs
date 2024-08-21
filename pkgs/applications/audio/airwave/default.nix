@@ -31,7 +31,7 @@ let
       sha256 = "0r29fv6yhm2m5yznn8m4my7fq01w1lpphax4sshagy6b1dgjlv3w";
     };
     nativeBuildInputs = [ unzip ];
-    installPhase = "cp -r . $out";
+    installPhase = "runHook preInstall; cp -r . $out; runHook postInstall";
     meta.license = lib.licenses.unfree;
   };
 

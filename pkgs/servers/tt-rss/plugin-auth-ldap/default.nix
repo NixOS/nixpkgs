@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D plugins/auth_ldap/init.php $out/auth_ldap/init.php
+
+    runHook postInstall
   '';
 
   meta = with lib; {

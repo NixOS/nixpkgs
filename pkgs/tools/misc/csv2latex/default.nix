@@ -10,9 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+  runHook preInstall
+
   mkdir -p $out/bin
   make PREFIX=$out install
-  '';
+
+  runHook postInstall
+'';
 
   meta = with lib; {
     description = "Command-line CSV to LaTeX file converter";

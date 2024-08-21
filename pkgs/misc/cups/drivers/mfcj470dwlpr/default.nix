@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
 
     substituteInPlace $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
@@ -32,7 +34,9 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
     --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused coreutils ] }
-    '';
+
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "http://www.brother.com/";

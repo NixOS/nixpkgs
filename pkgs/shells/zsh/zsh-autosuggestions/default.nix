@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ zsh ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D zsh-autosuggestions.zsh \
       $out/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Fish shell autosuggestions for Zsh";

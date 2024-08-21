@@ -69,6 +69,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pysvn" ];
 
   installPhase = ''
+    runHook preInstall
+
     dest=$(toPythonPath $out)/pysvn
     mkdir -p $dest
     cp pysvn/__init__.py $dest/
@@ -76,6 +78,8 @@ buildPythonPackage rec {
     mkdir -p $out/share/doc
     mv -v ../Docs $out/share/doc/pysvn-${version}
     rm -v $out/share/doc/pysvn-${version}/generate_cpp_docs_from_html_docs.py
+
+    runHook postInstall
   '';
 
   meta = with lib; {

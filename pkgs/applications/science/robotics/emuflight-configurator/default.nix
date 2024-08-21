@@ -15,12 +15,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/${pname}
 
     cp -r . $out/share/${pname}/
     install -m 444 -D icon/emu_icon_128.png $out/share/icons/hicolor/128x128/apps/${pname}.png
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/share/${pname}
+
+    runHook postInstall
   '';
 
   desktopItems = [

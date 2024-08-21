@@ -14,7 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/bin/trunk
+
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;

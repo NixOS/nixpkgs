@@ -13,8 +13,12 @@ tcl.mkTclDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/bin
     install -m 755 $src $out/bin/2048
+
+    runHook postInstall
   '';
 
   meta = {

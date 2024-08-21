@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   buildFlags = [ "OSTYPE=linux" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -vD mp3gain "$out/bin/mp3gain"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

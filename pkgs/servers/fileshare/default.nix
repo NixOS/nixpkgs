@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "BUILD=release" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/release/fileshare $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
+    runHook preInstall
+
     rm bin/*.bat || true
 
     mkdir -p $out/bin $out/opt/flink
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
     env.java.home: ${jre}
     env.log.dir: /tmp/flink-logs
     EOF
+
+    runHook postInstall
   '';
 
   meta = with lib; {

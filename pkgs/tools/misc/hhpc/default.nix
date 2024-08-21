@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 ];
 
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp hhpc $out/bin/
-  '';
+
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "Hides the mouse pointer in X11";

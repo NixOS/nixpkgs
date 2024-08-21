@@ -26,9 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -dr etc $out
     cp -dr usr/lib64 $out/lib
+
+    runHook postInstall
   '';
 
   preFixup = ''

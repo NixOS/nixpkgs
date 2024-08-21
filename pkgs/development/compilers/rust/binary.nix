@@ -44,6 +44,8 @@ rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       ./install.sh --prefix=$out \
         --components=${installComponents}
 
@@ -52,6 +54,8 @@ rec {
       # the wrong libraries in a bootstrap-build causing failures that
       # are very hard to track down. For details, see
       # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
+
+      runHook postInstall
     '';
 
     # The strip tool in cctools 973.0.1 and up appears to break rlibs in the
@@ -90,12 +94,16 @@ rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"
+
+      runHook postInstall
     '';
   };
 }

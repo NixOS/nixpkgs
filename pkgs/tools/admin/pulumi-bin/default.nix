@@ -13,6 +13,8 @@ in stdenv.mkDerivation {
   srcs = map fetchurl data.pulumiPkgs.${stdenv.hostPlatform.system};
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin/ *
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
@@ -21,6 +23,8 @@ in stdenv.mkDerivation {
       --bash <($out/bin/pulumi completion bash) \
       --fish <($out/bin/pulumi completion fish) \
       --zsh  <($out/bin/pulumi completion zsh)
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];

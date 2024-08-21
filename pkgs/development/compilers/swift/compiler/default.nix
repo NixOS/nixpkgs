@@ -179,11 +179,15 @@ let
     dontUnpack = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib/swift
       cp -r \
         "${MacOSX-SDK}/usr/lib/swift/Swift.swiftmodule" \
         "${MacOSX-SDK}/usr/lib/swift/libswiftCore.tbd" \
         $out/lib/swift/
+
+      runHook postInstall
     '';
   };
 
@@ -592,6 +596,8 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # Undo the clang and swift wrapping we did for the build.
     # (This happened via patches to cmake files.)
     cd $SWIFT_BUILD_ROOT
@@ -647,6 +653,8 @@ in stdenv.mkDerivation {
     # TODO: Is there no source code for this available?
     cp -r ${CLTools_Executables}/usr/lib/arc $out/lib/arc
     ''}
+
+    runHook postInstall
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''

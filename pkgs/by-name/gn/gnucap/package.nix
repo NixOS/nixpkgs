@@ -64,8 +64,12 @@ stdenv.mkDerivation rec {
         dontUnpack = true;
 
         installPhase = ''
+          runHook preInstall
+
           mkdir -p $out/bin
           cp ${wrapper} $out/bin/gnucap
+
+          runHook postInstall
         '';
 
         inherit meta;

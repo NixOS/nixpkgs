@@ -47,8 +47,12 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
+    runHook preInstall
+
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-Jam.desktop --replace /usr/ $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

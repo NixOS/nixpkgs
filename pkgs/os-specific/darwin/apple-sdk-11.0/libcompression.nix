@@ -8,8 +8,12 @@ let self = stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp ${MacOSX-SDK}/usr/lib/libcompression* $out/lib
+
+    runHook postInstall
   '';
 
   passthru = {

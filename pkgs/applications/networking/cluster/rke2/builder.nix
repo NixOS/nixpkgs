@@ -72,6 +72,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D $GOPATH/bin/rke2 $out/bin/rke2
     wrapProgram $out/bin/rke2 \
       --prefix PATH : ${lib.makeBinPath buildInputs}
@@ -80,6 +82,8 @@ buildGoModule rec {
     wrapProgram $out/bin/rke2-killall.sh \
       --prefix PATH : ${lib.makeBinPath [ systemd gnugrep gnused ]} \
       --prefix PATH : ${lib.makeBinPath buildInputs}
+
+    runHook postInstall
   '';
 
   doCheck = false;

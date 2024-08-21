@@ -22,8 +22,12 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp hash_extender $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

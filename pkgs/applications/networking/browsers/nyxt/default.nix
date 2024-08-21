@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/applications/
     sed "s/VERSION/$version/" $src/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
     for i in 16 32 128 256 512; do
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ xclip wl-clipboard ]} \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${GST_PLUGIN_SYSTEM_PATH_1_0}" \
       --argv0 nyxt "''${gappsWrapperArgs[@]}"
+
+    runHook postInstall
   '';
 
   checkPhase = ''

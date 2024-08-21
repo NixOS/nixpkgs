@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       throw "And Yet It Moves nix package only supports linux and intel cpu's.";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{opt/andyetitmoves,bin}
     cp -r * $out/opt/andyetitmoves/
 
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
     exec ./lib/$binName
     EOF
     chmod +x $out/bin/$binName
+
+    runHook postInstall
   '';
 
   buildInputs = [ libvorbis libogg libtheora SDL libXft SDL_image zlib libX11 libpng openal ];

@@ -19,9 +19,13 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     substituteAll ${./remove-references-to.sh} $out/bin/remove-references-to
     chmod a+x $out/bin/remove-references-to
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString darwinCodeSign ''

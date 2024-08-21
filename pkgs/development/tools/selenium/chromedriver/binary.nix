@@ -43,7 +43,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m555 -D "chromedriver" $out/bin/chromedriver
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion { package = chromedriver; };

@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
       unzip "$src"
   '';
   installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/include
       cp *.h $out/include
-  '';
+
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://math.nist.gov/tnt/";

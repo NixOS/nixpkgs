@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out CHEZ=${chez}/bin/scheme
+
+    runHook postInstall
   '';
 
   doCheck = false;

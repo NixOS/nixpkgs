@@ -89,6 +89,8 @@ let
     dontPatchShebangs = true;
 
     installPhase = ''
+      runHook preInstall
+
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
         --set-default JAVA_HOME "$out/jbr" \
@@ -183,6 +185,8 @@ let
         ncurses5
         zlib
       ]}"
+
+      runHook postInstall
     '';
   };
 

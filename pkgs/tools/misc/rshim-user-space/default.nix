@@ -45,10 +45,14 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap.sh";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/bin
     cp -a src/rshim "$out"/bin/
   '' + lib.optionalString withBfbInstall ''
     cp -a scripts/bfb-install "$out"/bin/
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString withBfbInstall ''

@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D zenpower.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon/zenpower/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

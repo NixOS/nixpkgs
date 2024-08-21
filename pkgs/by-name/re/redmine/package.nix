@@ -32,6 +32,8 @@ in
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/share
       cp -r . $out/share/redmine
       for i in config files log plugins public/plugin_assets public/themes tmp; do
@@ -40,6 +42,8 @@ in
       done
 
       makeWrapper ${rubyEnv.wrappedRuby}/bin/ruby $out/bin/rdm-mailhandler.rb --add-flags $out/share/redmine/extra/mail_handler/rdm-mailhandler.rb
+
+      runHook postInstall
     '';
 
     passthru.tests.redmine = nixosTests.redmine;

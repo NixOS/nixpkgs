@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ env ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${env}/bin/jsduck $out/bin/jsduck
+
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "jsduck";

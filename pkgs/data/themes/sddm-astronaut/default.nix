@@ -21,10 +21,14 @@ stdenvNoCC.mkDerivation rec {
       basePath = "$out/share/sddm/themes/sddm-astronaut-theme";
     in
     ''
+      runHook preInstall
+
       mkdir -p ${basePath}
       cp -r $src/* ${basePath}
     '' + lib.optionalString (themeConfig != null) ''
       ln -sf ${configFile} ${basePath}/theme.conf.user
+
+      runHook postInstall
     '';
 
   meta = {

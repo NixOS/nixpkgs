@@ -4,7 +4,11 @@
 # headers are needed by Libsystem.
 appleDerivation' stdenvNoCC {
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp -R include/malloc $out/include/
+
+    runHook postInstall
   '';
 }

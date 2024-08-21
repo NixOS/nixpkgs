@@ -36,10 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
     mkdir -p $out/bin $out/lib
     cp build/nial $out/bin/
     cp -r niallib $out/lib/
+
+    runHook postInstall
   '';
 
   meta = {

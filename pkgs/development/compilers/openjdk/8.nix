@@ -111,6 +111,8 @@ let
     doCheck = false; # fails with "No rule to make target 'y'."
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
 
       mv build/*/images/j2sdk-image $out/lib/openjdk
@@ -169,6 +171,8 @@ let
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
       ln -s $jre/lib/openjdk/jre $out/jre
+
+      runHook postInstall
     '';
 
     propagatedBuildInputs = [ setJavaClassPath ];

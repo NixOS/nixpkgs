@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/themes/gruvbox-dark
     rm -rf README.md LICENSE .github
     cp -r * $out/share/themes/gruvbox-dark
+
+    runHook postInstall
   '';
 
   meta = with lib; {

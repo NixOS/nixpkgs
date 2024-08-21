@@ -42,7 +42,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -ar usr $out
+
+    runHook postInstall
   '';
 
   meta = {

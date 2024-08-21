@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = "rm *.o";
-  installPhase = "mkdir -p $out/sbin; cp 915resolution $out/sbin/";
+  installPhase = "runHook preInstall; mkdir -p $out/sbin; cp 915resolution $out/sbin/; runHook postInstall";
 
   meta = with lib; {
     homepage = "http://915resolution.mango-lang.org/";

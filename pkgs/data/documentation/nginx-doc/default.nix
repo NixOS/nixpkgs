@@ -25,8 +25,12 @@ stdenv.mkDerivation {
 
   # /en subdirectory must exist, relative links expect it.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc/nginx
     mv libxslt/en $out/share/doc/nginx
+
+    runHook postInstall
   '';
 
   meta = with lib; {

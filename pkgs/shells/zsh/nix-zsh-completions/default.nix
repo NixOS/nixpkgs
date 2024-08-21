@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh/{site-functions,plugins/nix}
     cp _* $out/share/zsh/site-functions
     cp *.zsh $out/share/zsh/plugins/nix
+
+    runHook postInstall
   '';
 
   meta = with lib; {

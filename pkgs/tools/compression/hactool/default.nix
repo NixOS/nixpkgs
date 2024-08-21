@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D hactool $out/bin/hactool
+
+    runHook postInstall
   '';
 
   meta = with lib; {

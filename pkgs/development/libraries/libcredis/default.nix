@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   # credis build system has no install actions, provide our own.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/lib"
     mkdir -p "$out/include"
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
     cp -v credis-test "$out/bin/"
     cp -v *.a *.so "$out/lib/"
     cp -v *.h "$out/include/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

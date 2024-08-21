@@ -37,6 +37,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/etc;
     make setup
     cd $out;
@@ -46,6 +48,8 @@ stdenv.mkDerivation {
       mv -iv djbdns-man/*.$n man/man$n;
     done;
     rm -rv djbdns-man;
+
+    runHook postInstall
   '';
 
   passthru.tests = {

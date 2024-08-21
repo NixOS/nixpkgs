@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
         --set INSTALL4J_JAVA_HOME "${openjdk17}" \
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     ${lib.concatStrings (map (name: ''
       substitute ${./. + "/${name}.desktop"} $out/share/applications/${name}.desktop --subst-var out
     '') [ "LicenseManager" "MarvinSketch" "MarvinView" ])}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

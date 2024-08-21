@@ -30,10 +30,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D ${lib.optionalString stdenv.isDarwin "wxsqliteplus.app/Contents/MacOS/"}wxsqliteplus $out/bin/wxsqliteplus
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv wxsqliteplus.app $out/Applications/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

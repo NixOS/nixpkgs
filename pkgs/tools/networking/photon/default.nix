@@ -18,12 +18,16 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ requests urllib3 tld ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/photon}
     cp -R photon.py core plugins $out/share/photon
 
     makeWrapper ${python3Packages.python.interpreter} $out/bin/photon \
       --set PYTHONPATH "$PYTHONPATH:$out/share/photon" \
       --add-flags "-O $out/share/photon/photon.py"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -33,6 +33,8 @@ let
     dontStrip = 1;
 
     installPhase = ''
+      runHook preInstall
+
       cd ..
 
       mv $sourceRoot $out
@@ -56,6 +58,8 @@ let
       cat <<EOF >> $out/nix-support/setup-hook
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
+
+      runHook postInstall
     '';
 
     # FIXME: use multiple outputs or return actual JRE package

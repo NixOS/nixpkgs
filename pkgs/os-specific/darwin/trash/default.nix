@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
   buildPhase = "make all docs";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
     install -m 0755 trash $out/bin
     install -m 0444 trash.1 $out/share/man/man1
+
+    runHook postInstall
   '';
 
   meta = {

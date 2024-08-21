@@ -37,9 +37,13 @@ stdenv.mkDerivation rec {
   buildFlags = [ "bpftool" "bpf_asm" "bpf_dbg" ];
 
   installPhase = ''
+    runHook preInstall
+
     make -C bpftool install
     install -Dm755 -t $out/bin bpf_asm
     install -Dm755 -t $out/bin bpf_dbg
+
+    runHook postInstall
   '';
 
   meta = with lib; {

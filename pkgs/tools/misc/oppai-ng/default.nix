@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D oppai $out/bin/oppai
     install -D oppai.c $out/include/oppai.c
     install -D liboppai.so $out/lib/liboppai.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {

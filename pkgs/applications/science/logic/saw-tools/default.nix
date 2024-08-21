@@ -29,6 +29,8 @@ stdenv.mkDerivation {
   src = saw-bin;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/share
 
     mv bin $out/bin
@@ -39,6 +41,8 @@ stdenv.mkDerivation {
 
     # Add a clang symlink for easy building with a suitable compiler.
     ln -s ${clang}/bin/clang $out/bin/saw-clang
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

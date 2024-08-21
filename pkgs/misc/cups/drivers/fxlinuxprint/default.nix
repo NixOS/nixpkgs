@@ -25,12 +25,16 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv etc $out
     mv usr/lib $out
 
     mkdir -p $out/share/cups/model
     mv usr/share/ppd/FujiXerox/* $out/share/cups/model
+
+    runHook postInstall
   '';
 
   meta = with lib; {

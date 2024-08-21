@@ -202,6 +202,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/cp2k
 
     cp exe/${arch}/* $out/bin
@@ -217,6 +219,8 @@ stdenv.mkDerivation rec {
       --set OMP_NUM_THREADS 1
 
     cp -r data/* $out/share/cp2k
+
+    runHook postInstall
   '';
 
   passthru = { inherit mpi; };

@@ -23,11 +23,15 @@ buildPythonPackage rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/persistent-evdev.py $out/bin
 
     mkdir -p $out/etc/udev/rules.d
     cp udev/60-persistent-input-uinput.rules $out/etc/udev/rules.d
+
+    runHook postInstall
   '';
 
   # has no tests

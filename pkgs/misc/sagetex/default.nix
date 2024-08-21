@@ -31,9 +31,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     path="$out/tex/latex/sagetex"
     mkdir -p "$path"
     cp -va *.sty *.cfg *.def "$path/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

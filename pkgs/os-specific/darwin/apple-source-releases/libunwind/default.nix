@@ -5,8 +5,12 @@ appleDerivation {
 
   # install headers only
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp -R include $out/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {

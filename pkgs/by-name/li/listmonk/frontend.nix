@@ -26,8 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R dist/* $out
+
+    runHook postInstall
   '';
 
   inherit meta;

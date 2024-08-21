@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   sourceRoot = "MonitorControl.app";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/Applications/MonitorControl.app"
     cp -R . "$out/Applications/MonitorControl.app"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

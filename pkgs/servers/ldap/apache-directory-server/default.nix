@@ -12,11 +12,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/apacheds
     install -D $src/lib/*.jar $out/share/apacheds
     classpath=$(jars=($out/share/apacheds/*.jar); IFS=:; echo "''${jars[*]}")
     makeWrapper ${jdk11}/bin/java $out/bin/apache-directory-server \
       --add-flags "-classpath $classpath org.apache.directory.server.UberjarMain"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

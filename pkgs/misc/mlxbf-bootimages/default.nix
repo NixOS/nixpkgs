@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   # Only install /lib. /usr only contains the licenses which are also available
   # in /lib.
   installPhase = ''
+    runHook preInstall
+
     find lib -type f -exec install -D {} $out/{} \;
+
+    runHook postInstall
   '';
 
   meta = with lib; {

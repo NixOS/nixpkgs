@@ -14,8 +14,12 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 -t $out/bin/ encled
     install -Dm0644 -t $out/share/man/man8 encled.8
+
+    runHook postInstall
   '';
 
   meta = {

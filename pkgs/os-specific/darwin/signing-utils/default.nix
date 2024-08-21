@@ -15,7 +15,11 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     substituteAll ${./utils.sh} $out
+
+    runHook postInstall
   '';
 
   # Substituted variables

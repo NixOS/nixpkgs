@@ -35,9 +35,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp x86info $out/bin
     cp lsmsr/lsmsr $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

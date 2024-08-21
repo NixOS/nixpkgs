@@ -24,10 +24,14 @@ buildGoModule rec {
   vendorHash = null;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/gobetween $out/bin
     cp -r share $out/share
     cp -r config $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

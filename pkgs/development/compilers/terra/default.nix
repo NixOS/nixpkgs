@@ -83,12 +83,16 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $bin/bin bin/terra
     install -Dm755 -t $out/lib lib/terra${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm644 -t $static/lib lib/libterra_s.a
 
     mkdir -pv $dev/include
     cp -rv include/terra $dev/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -47,12 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     ls *.otf *.ttf
   '';
   installPhase = ''
+    runHook preInstall
+
     find -name \*.otf -exec mkdir -p $out/share/fonts/opentype/NerdFonts \; -exec mv {} $out/share/fonts/opentype/NerdFonts \;
     find -name \*.ttf -exec mkdir -p $out/share/fonts/truetype/NerdFonts \; -exec mv {} $out/share/fonts/truetype/NerdFonts \;
     ${lib.optionalString (! enableWindowsFonts) ''
       rm -rfv $out/share/fonts/opentype/NerdFonts/*Windows\ Compatible.*
       rm -rfv $out/share/fonts/truetype/NerdFonts/*Windows\ Compatible.*
     ''}
+
+    runHook postInstall
   '';
   passthru.updateScript = ./update.sh;
 

@@ -75,8 +75,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r LICENSE THIRD_PARTY_TF_C_LICENSES lib include $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

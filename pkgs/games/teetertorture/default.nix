@@ -19,9 +19,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/teetertorture
     cp teetertorture $out/bin
     cp -R data/* $out/share/teetertorture
+
+    runHook postInstall
   '';
 
   meta = {

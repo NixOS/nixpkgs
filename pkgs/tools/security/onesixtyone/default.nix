@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D onesixtyone $out/bin/onesixtyone
+
+    runHook postInstall
   '';
 
   meta = with lib; {

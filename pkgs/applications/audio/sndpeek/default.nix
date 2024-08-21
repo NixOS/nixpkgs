@@ -29,8 +29,12 @@ stdenv.mkDerivation rec {
   buildFlags = [ "linux-alsa" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv sndpeek $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

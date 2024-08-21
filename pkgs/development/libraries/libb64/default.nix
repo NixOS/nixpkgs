@@ -46,10 +46,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out $out/lib $out/bin $out/include
     cp -r include/* $out/include/
     cp base64/base64 $out/bin/
     cp src/libb64.a src/cencode.o src/cdecode.o $out/lib/
+
+    runHook postInstall
   '';
 
   meta = {

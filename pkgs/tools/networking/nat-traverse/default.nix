@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     cp nat-traverse $out/bin
     gzip -c nat-traverse.1 > $out/share/man/man1/nat-traverse.1.gz
+
+    runHook postInstall
   '';
 
   meta = with lib; {

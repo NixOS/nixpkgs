@@ -139,6 +139,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/dist
     mv ~/dist $out
     mv ~/node_modules $out/node_modules
@@ -166,6 +168,8 @@ stdenv.mkDerivation rec {
       --type file --search-path $out/client/dist --threads $NIX_BUILD_CORES \
       --exec gzip -9 -n -c {} > {}.gz \;\
       --exec brotli --best -f {} -o {}.br
+
+    runHook postInstall
   '';
 
   passthru.tests.peertube = nixosTests.peertube;

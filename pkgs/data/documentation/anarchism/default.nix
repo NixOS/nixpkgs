@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/doc/anarchism $out/share/applications $out/share/icons/hicolor/scalable/apps
     cp -r {html,markdown} $out/share/doc/anarchism
     cp debian/anarchism.svg $out/share/icons/hicolor/scalable/apps
     cp debian/anarchism.desktop $out/share/applications
+
+    runHook postInstall
   '';
 
   meta = with lib; {

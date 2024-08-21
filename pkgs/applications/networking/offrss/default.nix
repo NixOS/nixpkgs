@@ -5,8 +5,12 @@ stdenv.mkDerivation rec {
   version = "1.3";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp offrss $out/bin
+
+    runHook postInstall
   '';
 
   buildInputs = [ curl libmrss ]

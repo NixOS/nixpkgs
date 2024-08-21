@@ -36,9 +36,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     cp PatternPlayer_debian_RtAudio_sdl20 $out/bin/picoloop
     cp {font.*,LICENSE} $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

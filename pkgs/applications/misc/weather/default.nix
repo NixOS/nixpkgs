@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   # Upstream doesn't provide a setup.py or alike, so we follow:
   # http://fungi.yuggoth.org/weather/doc/install.rst#id3
   installPhase = ''
+    runHook preInstall
+
     site_packages=$out/${python3.sitePackages}
     install -Dt $out/bin -m 755 weather
     install -Dt $site_packages weather.py
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
 
     installManPage weather.1 weatherrc.5
+
+    runHook postInstall
   '';
 
   meta = with lib; {

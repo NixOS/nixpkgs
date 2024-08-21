@@ -22,9 +22,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv bin lib $out
     wrapProgram $out/bin/hexgui --prefix PATH : ${lib.makeBinPath [ jdk ]}
+
+    runHook postInstall
   '';
 
   meta = {

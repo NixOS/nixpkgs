@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/jpegrescan
     mv README.md $out/share/jpegrescan/
     mkdir $out/bin
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jpegrescan \
       --prefix PATH : "${libjpeg_original}/bin:" \
       --prefix PERL5LIB : $PERL5LIB
+
+    runHook postInstall
   '';
 
   propagatedBuildInputs = [ perlPackages.FileSlurp ];

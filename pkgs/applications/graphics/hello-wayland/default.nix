@@ -20,10 +20,14 @@ stdenv.mkDerivation {
   buildInputs = [ wayland wayland-protocols ];
 
   installPhase = ''
+    runHook preInstall
+
     runHook preBuild
     mkdir -p $out/bin
     install hello-wayland $out/bin
     runHook postBuild
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

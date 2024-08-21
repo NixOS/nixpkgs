@@ -50,9 +50,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gradle makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm444 build/libs/apksigner.jar -t $out/lib
     makeWrapper "${jdk_headless}/bin/java" "$out/bin/apksigner" \
       --add-flags "-jar $out/lib/apksigner.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

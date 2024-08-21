@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGL libGLU libglut libX11 ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 twilight $out/bin/twilight
+
+    runHook postInstall
   '';
 
   meta = with lib; {

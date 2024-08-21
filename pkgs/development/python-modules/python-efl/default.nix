@@ -40,7 +40,11 @@ buildPythonPackage rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out --single-version-externally-managed
+
+    runHook postInstall
   '';
 
   doCheck = false;

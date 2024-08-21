@@ -27,10 +27,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/doc/hmetis $out/lib
     mv $binaryFiles $out/bin
     mv manual.pdf $out/share/doc/hmetis
     mv libhmetis.a $out/lib
+
+    runHook postInstall
   '';
 
   meta = with lib; {

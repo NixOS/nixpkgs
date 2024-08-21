@@ -21,6 +21,10 @@ buildNpmPackage {
   npmDepsHash = "sha256-+36quezGArqIM9dM+UihwcIgmE3EVmJQThuicLgDW4A=";
 
   installPhase = ''
+    runHook preInstall
+
     cp -rv dist/ $out
+
+    runHook postInstall
   '';
 }

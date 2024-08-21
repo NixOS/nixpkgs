@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
     make BACKEND=elf64 COPPER=stage3/copper-elf64 copper-elf64
   '';
   installPhase = ''
+    runHook preInstall
+
     make BACKEND=elf64 install prefix=$out
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "Simple imperative language, statically typed with type inference and genericity";

@@ -19,7 +19,11 @@ buildNpmPackage rec {
   npmFlags = [ "--legacy-peer-deps" ];
 
   installPhase = ''
+    runHook preInstall
+
     cp -R out $out
+
+    runHook postInstall
   '';
 
   env = {

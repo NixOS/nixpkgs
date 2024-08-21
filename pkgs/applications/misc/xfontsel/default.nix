@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
   # directory will contain them.
   # hack: Copying the XFontSel app-defaults file to $HOME makes xfontsel work.
   installPhase = ''
+    runHook preInstall
+
     make install appdefaultdir=$out/share/X11/app-defaults
     wrapProgram $out/bin/xfontsel \
       --set XAPPLRESDIR $out/share/X11/app-defaults
+
+    runHook postInstall
   '';
 
   meta = with lib; {

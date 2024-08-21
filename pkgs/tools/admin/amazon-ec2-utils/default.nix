@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin/ ebsnvme-id
     install -Dm755 -t $out/bin/ ec2-metadata
     install -Dm755 -t $out/bin/ ec2nvme-nsid
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/lib/udev/rules.d/ 60-cdrom_id.rules
 
     installManPage doc/*.8
+
+    runHook postInstall
   '';
 
   postFixup = ''

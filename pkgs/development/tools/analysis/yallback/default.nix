@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dv yallback $out/bin/yallback
     wrapProgram $out/bin/yallback --prefix PATH : ${lib.makeBinPath [ coreutils ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

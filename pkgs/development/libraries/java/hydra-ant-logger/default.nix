@@ -31,9 +31,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     runHook preBuild
     install -Dm644 *.jar -t $out/share/java
     runHook postBuild
+
+    runHook postInstall
   '';
 
   meta = {

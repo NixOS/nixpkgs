@@ -44,8 +44,12 @@ let
 
     # override npmInstallHook
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp -R ./public $out/
+
+      runHook postInstall
     '';
   };
 in

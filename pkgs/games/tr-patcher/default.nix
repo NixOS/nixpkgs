@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 lib/tr-patcher-all.jar $out/lib/tr-patcher.jar
     install -Dm644 ${translation-file} $out/lib/Translation.txt
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/tr-patcher \
     --add-flags "-jar $out/lib/tr-patcher.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

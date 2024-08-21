@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cp -p * "$out/bin"
   '';
 
-  installPhase = "true";
+  installPhase = "runHook preInstall; true; runHook postInstall";
 
   dontPatchELF = true;
   dontStrip = true;

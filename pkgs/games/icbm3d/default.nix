@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp icbm3d $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

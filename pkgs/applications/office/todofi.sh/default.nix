@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 todofi.sh -t $out/bin
+
+    runHook postInstall
   '';
 
   postFixup = ''

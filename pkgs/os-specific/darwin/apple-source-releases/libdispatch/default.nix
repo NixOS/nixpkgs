@@ -4,6 +4,8 @@ appleDerivation' stdenvNoCC (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/dispatch $out/include/os
 
     # Move these headers so CF can find <os/voucher_private.h>
@@ -20,6 +22,8 @@ appleDerivation' stdenvNoCC (finalAttrs: {
                  #else
                  typedef void* dispatch_block_t;
                  #endif'
+
+    runHook postInstall
   '';
 
   appleHeaders = ''

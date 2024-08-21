@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D ${libname} $out/lib/${libname}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

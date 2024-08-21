@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D autopair.zsh $out/share/zsh/${pname}/autopair.zsh
+
+    runHook postInstall
   '';
 
   meta = with lib; {

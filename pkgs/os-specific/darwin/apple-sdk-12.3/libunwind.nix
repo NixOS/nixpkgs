@@ -14,6 +14,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ buildPackages.darwin.checkReexportsHook ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/mach-o
 
     cp \
@@ -24,5 +26,7 @@ stdenvNoCC.mkDerivation {
     cp \
       ${darwin-stubs}/usr/include/mach-o/compact_unwind_encoding.h \
       $out/include/mach-o
+
+    runHook postInstall
   '';
 }

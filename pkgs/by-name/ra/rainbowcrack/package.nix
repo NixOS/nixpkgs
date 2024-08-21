@@ -33,10 +33,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 $out/rainbowcrack-1.8-linux64/*.txt $out/share/rainbowcrack
     install -Dm755 $out/rainbowcrack-1.8-linux64/rt* $out/rainbowcrack-1.8-linux64/rcrack $out/bin
     chmod +x $out/bin/*
     rm -rf $out/rainbowcrack-1.8-linux64
+
+    runHook postInstall
   '';
 
   runtimeDependencies = [ alglib ];

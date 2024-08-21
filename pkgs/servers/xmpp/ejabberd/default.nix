@@ -62,6 +62,8 @@ in stdenv.mkDerivation rec {
     makeFlags = [ "deps" ];
 
     installPhase = ''
+      runHook preInstall
+
       for i in deps/*; do
         ( cd $i
           git reset --hard
@@ -74,6 +76,8 @@ in stdenv.mkDerivation rec {
       rm deps/.got
 
       cp -r deps $out
+
+      runHook postInstall
     '';
 
     dontPatchELF = true;

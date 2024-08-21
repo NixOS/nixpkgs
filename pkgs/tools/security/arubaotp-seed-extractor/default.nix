@@ -28,6 +28,8 @@ python3Packages.buildPythonApplication {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     libdir="$out/${python3Packages.python.sitePackages}/arubaotp-seed-extractor"
     mkdir -p "$libdir"
     cp scripts/* "$libdir"
@@ -35,6 +37,8 @@ python3Packages.buildPythonApplication {
     wrapPythonProgramsIn "$libdir" "$pythonPath"
     mkdir -p $out/bin
     ln -s "$libdir/main.py" $out/bin/arubaotp-seed-extractor
+
+    runHook postInstall
   '';
 
   meta = with lib; {

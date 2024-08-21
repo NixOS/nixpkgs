@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     find . -name gnuk.bin -exec cp {} $out \;
@@ -41,6 +43,8 @@ stdenv.mkDerivation {
     echo "$out/bin/stlinkv2 -u \$@" >> $out/bin/unlock
     echo "$out/bin/stlinkv2 -b \$@ $out/gnuk.bin" >> $out/bin/flash
     chmod +x $out/bin/{unlock,flash}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

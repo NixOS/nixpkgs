@@ -34,7 +34,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m0555 rescript-editor-analysis.exe $out/bin/rescript-editor-analysis.exe
+
+    runHook postInstall
   '';
 
   meta = {

@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/
     cp -r ip/. $out/
+
+    runHook postInstall
   '';
 
   passthru.tests = {

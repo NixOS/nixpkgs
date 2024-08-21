@@ -30,7 +30,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp util/stumpish/stumpish $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

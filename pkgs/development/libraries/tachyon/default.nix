@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd ../compile/${arch}
     mkdir -p "$out"/{bin,lib,include,share/doc/tachyon,share/tachyon}
     cp tachyon "$out"/bin
@@ -67,6 +69,8 @@ stdenv.mkDerivation rec {
     cp src/*.h "$out/include/"
     cp Changes Copyright README "$out/share/doc/tachyon"
     cp -r scenes "$out/share/tachyon/scenes"
+
+    runHook postInstall
   '';
   meta = {
     description = "Parallel / Multiprocessor Ray Tracing System";

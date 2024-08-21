@@ -43,6 +43,8 @@ buildPythonApplication {
 
   installPhase =
     ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     cp ${./updater.py} $out/bin/luarocks-packages-updater
     cp ${../../../../maintainers/scripts/pluginupdate.py} $out/lib/pluginupdate.py
@@ -55,6 +57,8 @@ buildPythonApplication {
       --set LUA_54 ${lua5_4}
     )
     wrapPythonProgramsIn "$out"
+
+    runHook postInstall
   '';
 
   shellHook = ''

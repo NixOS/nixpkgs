@@ -24,7 +24,11 @@ buildGoModule rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out
+
+    runHook postInstall
   '';
 
   nativeCheckInputs = [ fish zsh ];

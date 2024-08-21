@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
     for bin in nv{-fabricmanager,switch-audit};do
     ${patchelf}/bin/patchelf \
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
     for d in include lib;do
       mv $d $out/.
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

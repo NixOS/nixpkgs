@@ -46,7 +46,11 @@ in stdenv.mkDerivation {
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     touch $out
+
+    runHook postInstall
   '';
 
   checkPhase = lib.optionalString cudaSupport ''

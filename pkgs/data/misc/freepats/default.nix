@@ -9,7 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "12iw36rd94zirll96cd5k0va7p5hxmf2shvjlhzihcmjaw8flq82";
   };
 
-  installPhase = ''mkdir "$out"; cp -r . "$out"'';
+  installPhase = ''
+  runHook preInstall
+
+  mkdir "$out"; cp -r . "$out"
+
+  runHook postInstall
+'';
 
   meta = with lib; {
     description = "Instrument patches, for MIDI synthesizers";

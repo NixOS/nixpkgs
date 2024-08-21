@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec
     mkdir -p $out/bin
     cp $src $out/libexec/$jarName
     makeWrapper "${jre}/bin/java" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -72,12 +72,16 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 keeper $out/bin/keeper
     install -Dm755 appconfig.txt $out/share/appconfig.txt
 
     cp -r data_free $out/share
     cp -r data_contrib $out/share
     ${lib.optionalString unfree_assets "cp -r data $out/share"}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

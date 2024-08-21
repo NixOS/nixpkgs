@@ -17,12 +17,16 @@ stdenv.mkDerivation rec {
   postPatch = "patchShebangs .";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/share/man/man1"
     install -vD duply "$out/bin"
     wrapProgram "$out/bin/duply" --prefix PATH : \
         ${lib.makeBinPath [ coreutils python3 duplicity gawk gnupg bash gnugrep txt2man which ]}
     "$out/bin/duply" txt2man > "$out/share/man/man1/duply.1"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3Packages.wrapPython installShellFiles ];
   propagatedBuildInputs = with python3Packages; [ pyserial ];
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -rT $src $out
     installManPage *.1
+
+    runHook postInstall
   '';
   postFixupPhase = ''
     wrapPythonPrograms

@@ -81,6 +81,8 @@ let
         namePaths = map (p: "${p.pname},${p}/${python3.sitePackages}") withExtensions;
       in
       ''
+        runHook preInstall
+
         for line in ${lib.concatStringsSep " " namePaths}; do
           name=$(echo $line | cut -d',' -f1)
           path=$(echo $line | cut -d',' -f2)
@@ -89,6 +91,8 @@ let
             ln -s $path/$f $out/$name/$f
           done
         done
+
+        runHook postInstall
       '';
   };
 in

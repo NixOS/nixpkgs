@@ -19,8 +19,12 @@ stdenv.mkDerivation {
     unpackFile $src;
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp  xflux "$out/bin"
+
+    runHook postInstall
   '';
   postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "$libPath" "$out/bin/xflux"

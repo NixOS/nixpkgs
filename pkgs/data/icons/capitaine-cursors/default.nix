@@ -42,9 +42,13 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -dm 0755 $out/share/icons
     cp -pr dist/dark $out/share/icons/capitaine-cursors
     cp -pr dist/light $out/share/icons/capitaine-cursors-white
+
+    runHook postInstall
   '';
 
   meta = with lib; {

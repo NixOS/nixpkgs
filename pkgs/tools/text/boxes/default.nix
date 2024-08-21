@@ -30,9 +30,13 @@ gccStdenv.mkDerivation rec {
   makeFlags = [ "CC=${gccStdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin out/boxes
     install -Dm644 -t $out/share/boxes boxes-config
     install -Dm644 -t $out/share/man/man1 doc/boxes.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

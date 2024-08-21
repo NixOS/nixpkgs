@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     sed -ie "s| cs | ${coursier}/bin/cs |" scala-runner
     cp scala-runner $out/lib
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/scala-runner $out/bin/scalac
     ln -s $out/lib/scala-runner $out/bin/scalap
     ln -s $out/lib/scala-runner $out/bin/scaladoc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

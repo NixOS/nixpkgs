@@ -21,10 +21,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D bin/NuSMV $out/bin/NuSMV
     install -m755 -D bin/ltl2smv $out/bin/ltl2smv
     cp -r include $out/include
     cp -r share $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

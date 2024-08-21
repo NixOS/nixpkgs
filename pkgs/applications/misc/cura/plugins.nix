@@ -20,8 +20,12 @@ let
       ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/lib/cura/plugins/OctoPrintPlugin
         cp -rv . $out/lib/cura/plugins/OctoPrintPlugin/
+
+        runHook postInstall
       '';
 
       meta = with lib; {
@@ -59,8 +63,12 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/lib/cura/plugins/RawMouse
         cp -rv . $out/lib/cura/plugins/RawMouse/
+
+        runHook postInstall
       '';
 
       meta = with lib; {

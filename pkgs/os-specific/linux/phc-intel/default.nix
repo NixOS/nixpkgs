@@ -32,8 +32,12 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -m 755   -d $out/lib/modules/${kernel.modDirVersion}/extra/
     install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

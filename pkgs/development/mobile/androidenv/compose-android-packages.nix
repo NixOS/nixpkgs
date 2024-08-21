@@ -49,7 +49,11 @@ let
       ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
     '';
     installPhase = ''
+      runHook preInstall
+
       mv repo.json $out
+
+      runHook postInstall
     '';
   };
 

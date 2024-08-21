@@ -55,8 +55,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp vkquake "$out/bin"
+
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -63,8 +63,12 @@ stdenv.mkDerivation {
     sconsFlags+=" Prefix=$out"
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r build$out/* $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

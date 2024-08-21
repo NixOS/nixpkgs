@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/ihp-new -t $out/bin
     wrapProgram $out/bin/ihp-new \
       --suffix PATH ":" "${lib.makeBinPath [ git ]}";
+
+    runHook postInstall
   '';
 
   meta = with lib; {

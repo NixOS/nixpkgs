@@ -47,8 +47,12 @@ buildGoModule rec {
       name = "${repro-get.pname}-${builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf repro-get.drvPath))}";
       subPackages = [ "pkg/version" ];
       installPhase = ''
+        runHook preInstall
+
         rm -rf $out
         touch $out
+
+        runHook postInstall
       '';
       preCheck = "";
       outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";

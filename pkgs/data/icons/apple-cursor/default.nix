@@ -29,8 +29,12 @@ in stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     install -dm 0755 $out/share/icons
     cp -r macOS* $out/share/icons/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

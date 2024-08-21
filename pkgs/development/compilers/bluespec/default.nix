@@ -114,6 +114,8 @@ in stdenv.mkDerivation rec {
   checkTarget = "check-smoke"; # this is the shortest check but "check-suite" tests much more
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv inst/bin $out
     mv inst/lib $out
@@ -123,6 +125,8 @@ in stdenv.mkDerivation rec {
     mv inst/README $doc/share/doc/bsc
     mv inst/ReleaseNotes.* $doc/share/doc/bsc
     mv inst/doc/*.pdf $doc/share/doc/bsc
+
+    runHook postInstall
   '';
 
   meta = {

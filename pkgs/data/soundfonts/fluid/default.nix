@@ -12,7 +12,11 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 "FluidR3 GM2-2.SF2" $out/share/soundfonts/FluidR3_GM2-2.sf2
+
+    runHook postInstall
   '';
 
   meta = with lib; {

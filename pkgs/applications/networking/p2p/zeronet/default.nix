@@ -22,8 +22,12 @@ python3Packages.buildPythonApplication rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     cp -r plugins src tools *.py $out/share/
+
+    runHook postInstall
   '';
 
   postFixup = ''

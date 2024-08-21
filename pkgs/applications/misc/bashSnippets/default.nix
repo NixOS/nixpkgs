@@ -34,11 +34,15 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/bin "$out"/share/man/man1
     ./install.sh all
     for file in "$out"/bin/*; do
       wrapProgram "$file" --prefix PATH : "${deps}"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -18,7 +18,11 @@ let
     npmDepsHash = "sha256-rhUdWt1X5/F0uvT8gI1T9ei6Y+HK1tKj2fuTKlMAwJk=";
 
     installPhase = ''
+      runHook preInstall
+
       cp -r dist $out
+
+      runHook postInstall
     '';
   };
 in

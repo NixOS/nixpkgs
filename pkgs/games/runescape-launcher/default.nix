@@ -80,6 +80,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/share
       dpkg -x $src $out
 
@@ -92,6 +94,8 @@ let
       cp -r $out/usr/share $out/
 
       rm -r $out/usr
+
+      runHook postInstall
     '';
 
 

@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   # The -Xmx1000M comes suggested from their download page:
   # https://www.cs.waikato.ac.nz/ml/weka/downloading.html
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/share/weka
     cp -Rv * $out/share/weka
 
     makeWrapper ${jre}/bin/java $out/bin/weka \
       --add-flags "-Xmx1000M -jar $out/share/weka/weka.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

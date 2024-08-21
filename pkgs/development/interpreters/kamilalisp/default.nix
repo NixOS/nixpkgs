@@ -19,12 +19,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/share/java $out/bin
     cp ${src} $out/share/java/kamilalisp-${version}.jar
     makeWrapper ${jre}/bin/java $out/bin/kamilalisp \
       --add-flags "-jar $out/share/java/kamilalisp-${version}.jar" \
       --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on' \
       --set _JAVA_AWT_WM_NONREPARENTING 1
+
+    runHook postInstall
   '';
 
   meta = {

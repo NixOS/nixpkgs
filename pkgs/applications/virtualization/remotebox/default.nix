@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/bin
 
     substituteInPlace remotebox --replace "\$Bin/" "\$Bin/../"
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
 
     mkdir -pv $out/share/applications
     cp -pv packagers-readme/*.desktop $out/share/applications
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/* $out/bin/
 
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
         --set RUBYLIB $out/lib \
         --prefix PATH : ${zfs}/bin
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

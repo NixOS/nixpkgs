@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D $src $out/bin/lamdera
+
+    runHook postInstall
   '';
 
   meta = with lib; {

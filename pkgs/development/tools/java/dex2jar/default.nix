@@ -23,6 +23,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     f=$out/share/dex2jar/
 
     mkdir -p $f $out/bin
@@ -32,6 +34,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       n=$(basename ''${i%.sh})
       makeWrapper $i $out/bin/$n --prefix PATH : ${lib.makeBinPath [ jre ] }
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

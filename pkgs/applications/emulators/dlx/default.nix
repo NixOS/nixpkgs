@@ -13,11 +13,15 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/dlx $out/share/dlx/{examples,doc} $out/bin
     mv masm mon dasm $out/bin/
     mv *.i auto.a $out/include/dlx/
     mv *.a *.m $out/share/dlx/examples/
     mv README.txt MANUAL.TXT $out/share/dlx/doc/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

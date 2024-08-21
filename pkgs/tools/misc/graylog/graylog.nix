@@ -21,12 +21,16 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) graylog; };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r {graylog.jar,bin,plugin} $out
   '' + lib.optionalString (lib.versionOlder version "4.3") ''
     cp -r lib $out
   '' + ''
     wrapProgram $out/bin/graylogctl $makeWrapperArgs
+
+    runHook postInstall
   '';
 
   meta = with lib; {

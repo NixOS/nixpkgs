@@ -12,8 +12,12 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -dm 0755 $out/share/icons
     cp -pr Bibata_* $out/share/icons/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

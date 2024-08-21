@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libdeflate isa-l ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D fastp $out/bin/fastp
+
+    runHook postInstall
   '';
 
   meta = with lib; {

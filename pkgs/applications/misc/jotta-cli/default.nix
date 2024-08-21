@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
     };
 
   installPhase = ''
+    runHook preInstall
+
     install -D usr/bin/jotta-cli usr/bin/jottad -t $out/bin/
     mkdir -p $out/share/bash-completion/completions
+
+    runHook postInstall
   '';
 
   postFixup = ''

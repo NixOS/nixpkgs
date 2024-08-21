@@ -30,10 +30,14 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.isDarwin;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/doc/confluent-cli}
     cp confluent $out/bin/
     cp LICENSE $out/share/doc/confluent-cli/
     cp -r legal $out/share/doc/confluent-cli/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

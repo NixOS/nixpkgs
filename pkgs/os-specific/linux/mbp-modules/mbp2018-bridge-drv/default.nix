@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build  \
       INSTALL_MOD_PATH=$out M=$(pwd) modules_install $makeFlags
+
+    runHook postInstall
   '';
 
   meta = with lib; {

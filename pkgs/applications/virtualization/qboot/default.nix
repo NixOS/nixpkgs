@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ meson ninja ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp bios.bin bios.bin.elf $out/.
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "stackprotector" "pic" ];

@@ -18,9 +18,13 @@ stdenv.mkDerivation  rec {
   buildInputs =  [ pythonEnv gtk3 libwnck wrapGAppsHook3 ];
 
   installPhase = ''
+    runHook preInstall
+
     sed -i 's/python/python3/g' clipster
     mkdir -p $out/bin/
     cp clipster $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

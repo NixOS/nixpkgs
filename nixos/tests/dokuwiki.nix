@@ -10,7 +10,7 @@ let
       rev = "v${version}";
       hash = "sha256-B3Yd4lxdwqfCnfmZdp+i/Mzwn/aEuZ0ovagDxuR6lxo=";
     };
-    installPhase = "mkdir -p $out; cp -R * $out/";
+    installPhase = "runHook preInstall; mkdir -p $out; cp -R * $out/; runHook postInstall";
   };
 
 
@@ -22,7 +22,7 @@ let
       url = "https://github.com/real-or-random/dokuwiki-plugin-icalevents/releases/download/${version}/dokuwiki-plugin-icalevents-${version}.zip";
       hash = "sha256-IPs4+qgEfe8AAWevbcCM9PnyI0uoyamtWeg4rEb+9Wc=";
     };
-    installPhase = "mkdir -p $out; cp -R * $out/";
+    installPhase = "runHook preInstall; mkdir -p $out; cp -R * $out/; runHook postInstall";
   };
 
   acronymsFile = pkgs.writeText "acronyms.local.conf" ''

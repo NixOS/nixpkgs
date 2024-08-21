@@ -33,9 +33,13 @@ stdenv.mkDerivation {
   swiftpmFlags = [ "--product swift-format" ];
 
   installPhase = ''
+    runHook preInstall
+
     binPath="$(swiftpmBinPath)"
     mkdir -p $out/bin
     cp $binPath/swift-format $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -15,12 +15,16 @@ stdenv.mkDerivation rec {
   sourceRoot = "snpEff";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/snpeff
     cp *.jar *.config $out/libexec/snpeff
 
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/snpeff --add-flags "-jar $out/libexec/snpeff/snpEff.jar"
     makeWrapper ${jre}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

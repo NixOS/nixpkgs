@@ -27,6 +27,8 @@ let
     sourceRoot = ".";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
 
       cp -R System/Library $out
@@ -40,6 +42,8 @@ let
       ln -s libcupsmime.1.tbd  libcupsmime.tbd
       ln -s libcupsppdc.1.tbd  libcupsppdc.tbd
       popd
+
+      runHook postInstall
     '';
 
     meta = with lib; {
@@ -70,6 +74,8 @@ let
     extraTBDFiles = [];
 
     installPhase = ''
+      runHook preInstall
+
       linkFramework() {
         local path="$1"
         local nested_path="$1"
@@ -159,6 +165,8 @@ let
           fi
         done
       done
+
+      runHook postInstall
     '';
 
     propagatedBuildInputs = builtins.attrValues deps;
@@ -174,6 +182,8 @@ let
     name = "apple-framework-${name}";
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Library/Frameworks/
       cp -r ${darwin-stubs}/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework \
         $out/Library/Frameworks
@@ -192,6 +202,8 @@ let
       ln -s Versions/Current/* .
 
       # NOTE there's no re-export checking here, this is probably wrong
+
+      runHook postInstall
     '';
   };
 in rec {
@@ -201,11 +213,15 @@ in rec {
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         pushd $out/include >/dev/null
         cp -r "${lib.getDev sdk}/include/xpc" $out/include/xpc
         cp "${lib.getDev sdk}/include/launch.h" $out/include/launch.h
         popd >/dev/null
+
+        runHook postInstall
       '';
     };
 
@@ -221,10 +237,14 @@ in rec {
       ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include $out/lib
         ln -s "${lib.getDev sdk}/include/Xplugin.h" $out/include/Xplugin.h
         cp ${darwin-stubs}/usr/lib/libXplugin.1.tbd $out/lib
         ln -s libXplugin.1.tbd $out/lib/libXplugin.tbd
+
+        runHook postInstall
       '';
     };
 
@@ -233,11 +253,15 @@ in rec {
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         pushd $out/include >/dev/null
         ln -s "${lib.getDev sdk}/include/utmp.h"
         ln -s "${lib.getDev sdk}/include/utmpx.h"
         popd >/dev/null
+
+        runHook postInstall
       '';
     };
 
@@ -246,10 +270,14 @@ in rec {
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include $out/lib
         ln -s "${lib.getDev sdk}/include/sandbox.h" $out/include/sandbox.h
         cp "${darwin-stubs}/usr/lib/libsandbox.1.tbd" $out/lib
         ln -s libsandbox.1.tbd $out/lib/libsandbox.tbd
+
+        runHook postInstall
       '';
     };
 
@@ -316,10 +344,14 @@ in rec {
 
     System = lib.overrideDerivation super.System (drv: {
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/Library/Frameworks/System.framework/Versions/B
         ln -s $out/Library/Frameworks/System.framework/Versions/{B,Current}
         ln -s ${pkgs.darwin.Libsystem}/lib/libSystem.B.tbd $out/Library/Frameworks/System.framework/Versions/B/System.tbd
         ln -s $out/Library/Frameworks/System.framework/{Versions/Current/,}System.tbd
+
+        runHook postInstall
       '';
     });
 

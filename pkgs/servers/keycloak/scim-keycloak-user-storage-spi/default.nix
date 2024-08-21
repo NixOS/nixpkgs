@@ -17,7 +17,11 @@ maven.buildMavenPackage {
   mvnHash = "sha256-xbGlVZl3YtbF372kCDh+UdK5pLe6C6WnGgbEXahlyLw=";
 
   installPhase = ''
+    runHook preInstall
+
     install -D "target/scim-user-spi-0.0.1-SNAPSHOT.jar" "$out/scim-user-spi-0.0.1-SNAPSHOT.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

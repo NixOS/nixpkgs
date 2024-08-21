@@ -34,7 +34,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -r helmholtz~/ $out/
+
+    runHook postInstall
   '';
 
   meta = {

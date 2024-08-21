@@ -39,7 +39,11 @@ in stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     buildDir "${toString libs}" "${toString (map lib.getLib allPkgs)}"
     buildDir "${toString bins}" "${toString (map lib.getBin allPkgs)}"
+
+    runHook postInstall
   '';
 }

@@ -15,7 +15,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "r" ];
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 open-wbo_release $out/bin/open-wbo
+
+    runHook postInstall
   '';
 
   meta = with lib; {

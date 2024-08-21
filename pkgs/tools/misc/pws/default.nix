@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
       gemdir = ./.;
     };
   in ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${env}/bin/pws $out/bin/pws \
       --set PATH '"${xsel}/bin/:$PATH"'
+
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "pws";

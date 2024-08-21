@@ -83,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]);
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out
     # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
     wrapPythonPrograms
@@ -99,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp $out/build/debian/tribler/usr/share/pixmaps/tribler_big.xpm $out/share/icons/tribler.xpm
     mkdir -p $out/share/copyright/tribler
     mv $out/LICENSE $out/share/copyright/tribler
+
+    runHook postInstall
   '';
 
   shellHook = ''

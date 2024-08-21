@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   buildPhase = "ant make";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -a lib $out/
     rm -rf $out/lib/native/solaris
@@ -62,6 +64,8 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "$libPath" "$file" && \
           patchelf --shrink-rpath "$file"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -33,11 +33,15 @@ buildDunePackage rec {
        dontUnpack = true;
 
        installPhase = ''
+         runHook preInstall
+
          mkdir -p "$out"/${path}
          for e in OCAMLPATH CAML_LD_LIBRARY_PATH; do
            [[ -v "$e" ]] || continue
            printf %s "''${!e}" > "$out"/${path}/$e
          done
+
+         runHook postInstall
        '';
      };
 

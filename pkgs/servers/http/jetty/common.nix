@@ -15,8 +15,12 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv etc lib modules start.jar $out
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater {

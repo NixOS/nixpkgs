@@ -49,6 +49,8 @@ let
       buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib openssl protobuf zlib snappy libtirpc ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir $out
         mv * $out/
       '' + lib.optionalString stdenv.isLinux ''
@@ -114,7 +116,9 @@ let
           designed to detect and handle failures at the application layer,
           so delivering a highly-availabile service on top of a cluster of
           computers, each of which may be prone to failures.
-        '';
+
+        runHook postInstall
+      '';
         maintainers = with maintainers; [ illustris ];
         platforms = attrNames platformAttrs;
       } (attrByPath [ stdenv.system "meta" ] {} platformAttrs);

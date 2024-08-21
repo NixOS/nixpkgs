@@ -44,8 +44,12 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D ../emulationstation $out/bin/emulationstation
     cp -r ../resources/ $out/bin/resources/
+
+    runHook postInstall
   '';
 
   meta = {

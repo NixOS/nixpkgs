@@ -20,6 +20,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     CUPSDIR="$out/lib/cups"
     CUPSDATADIR="$out/share/cups"
 
@@ -28,6 +30,8 @@ stdenv.mkDerivation {
     install -s rastertocarps $CUPSDIR/filter
     install -m 644 carps.drv $CUPSDATADIR/drv/
     install -m 644 carps.usb-quirks $CUPSDATADIR/usb/
+
+    runHook postInstall
   '';
 
   buildInputs = [ cups ];

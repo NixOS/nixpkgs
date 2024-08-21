@@ -39,10 +39,14 @@ stdenv.mkDerivation {
   #doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     binPath="$(swiftpmBinPath)"
     mkdir -p $out/bin $out/share/docc
     cp $binPath/docc $out/bin/
     ln -s $renderArtifact/dist $out/share/docc/render
+
+    runHook postInstall
   '';
 
   # Canary to verify output of our Swift toolchain does not depend on the Swift

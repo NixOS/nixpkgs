@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp xkblayout-state $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

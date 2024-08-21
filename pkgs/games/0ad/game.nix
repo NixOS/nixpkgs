@@ -103,6 +103,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     popd
 
     # Copy executables.
@@ -120,6 +122,8 @@ stdenv.mkDerivation rec {
     # Copy icon.
     install -D build/resources/0ad.png     $out/share/icons/hicolor/128x128/apps/0ad.png
     install -D build/resources/0ad.desktop $out/share/applications/0ad.desktop
+
+    runHook postInstall
   '';
 
   meta = with lib; {

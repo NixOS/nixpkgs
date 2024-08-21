@@ -46,10 +46,14 @@ stdenv.mkDerivation rec {
   allowSubstitutes = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     for i in $(cat $pathsPath); do
       ${xorg.lndir}/bin/lndir -silent $i $out
     done
+
+    runHook postInstall
   '';
 
   preFixup = ''

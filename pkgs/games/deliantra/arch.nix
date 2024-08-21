@@ -10,9 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"
     export DELIANTRA_DATADIR="$out"
     ${deliantra-server}/bin/cfutil --install-arch .
+
+    runHook postInstall
   '';
 
   meta = with lib; {

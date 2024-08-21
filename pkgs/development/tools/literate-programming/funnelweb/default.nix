@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin
     install fw $out/bin/fw
+
+    runHook postInstall
   '';
 
   meta = with lib; {

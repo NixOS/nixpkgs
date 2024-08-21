@@ -17,7 +17,7 @@ stdenv.mkDerivation ({
 
   buildPhase = "cd src; make; cd -";
 
-  installPhase = "cd src; make install; cd -; cp -vr $PWD $out";
+  installPhase = "runHook preInstall; cd src; make install; cd -; cp -vr $PWD $out; runHook postInstall";
 
   meta = {
     description = "Test Environment Toolkit is used in test applications like The Open Group's UNIX Certification program and the Free Standards Group's LSB Certification program";

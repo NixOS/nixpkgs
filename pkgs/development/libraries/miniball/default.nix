@@ -12,8 +12,12 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp $src $out/include/miniball.hpp
+
+    runHook postInstall
   '';
 
   meta = {

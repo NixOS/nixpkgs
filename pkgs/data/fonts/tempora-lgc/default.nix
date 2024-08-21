@@ -26,8 +26,12 @@ stdenv.mkDerivation {
   inherit nativeBuildInputs;
   inherit srcs;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/fonts/opentype/public"
     cp ${toString srcs} "$out/share/fonts/opentype/public"
+
+    runHook postInstall
   '';
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

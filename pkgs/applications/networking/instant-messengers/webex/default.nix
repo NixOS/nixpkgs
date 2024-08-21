@@ -147,6 +147,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin" "$out/share/applications"
     cp -r opt "$out"
 
@@ -154,6 +156,8 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/webex
 
     mv "$out/opt/Webex/bin/webex.desktop" "$out/share/applications/webex.desktop"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "webex-update-script" ''

@@ -16,11 +16,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/man
 
     cp samtools $out/bin
     cp samtools.1 $out/share/man
+
+    runHook postInstall
   '';
 
   meta = with lib; {

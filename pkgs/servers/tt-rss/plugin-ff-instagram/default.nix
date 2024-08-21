@@ -12,9 +12,13 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/ff_instagram
 
     cp *.php $out/ff_instagram
+
+    runHook postInstall
   '';
 
   meta = with lib; {

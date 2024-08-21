@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     for file in poly class cws nef mori; do
       cp -p $file.x "$out/bin/$file-${dim}d.x"
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
     for file in poly class cws nef mori; do
       ln -sf $file-6d.x $file.x
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

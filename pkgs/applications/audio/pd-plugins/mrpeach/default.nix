@@ -38,12 +38,16 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for D in net osc
     do
       cd $D
       make install
       cd ..
     done
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

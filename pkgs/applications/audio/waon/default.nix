@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftw gtk2 libao libsamplerate libsndfile ncurses ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin waon pv gwaon
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml isabelle cvc3 perl wget which ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv "$out"
     export HOME="$out"
     export PATH=$out/bin:$PATH
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
     ./configure --prefix $out
     make all
     make install
+
+    runHook postInstall
   '';
 
   meta = {

@@ -49,11 +49,15 @@ rec {
     # build tools that build in the source directory, instead of
     # having a separate build directory such as the Linux kernel.
     installPhase = ''
+      runHook preInstall
+
       runHook preCheckpointInstall
       mkdir -p $out/outputs
       cp -r ./* $out/outputs/
       runHook postCheckpointInstall
       unset postPhases
+
+      runHook postInstall
     '';
 
     dontFixup = true;

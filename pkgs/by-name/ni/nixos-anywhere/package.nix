@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0755 src/nixos-anywhere.sh $out/bin/nixos-anywhere
     install -D -m 0755 src/get-facts.sh $out/bin/get-facts.sh
 
@@ -46,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/numtide/nixos-anywhere/issues/62
     wrapProgram $out/bin/nixos-anywhere \
       --prefix PATH : ${lib.makeBinPath runtimeDeps} --suffix PATH : ${lib.makeBinPath [ openssh ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

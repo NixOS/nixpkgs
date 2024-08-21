@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
+    runHook preInstall
+
     install -vD bin/freebayes bin/bamleftalign scripts/* -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

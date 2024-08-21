@@ -23,8 +23,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/rizin
     mv installdir $out/share/rizin/sigdb
+
+    runHook postInstall
   '';
 
   meta = with lib; {

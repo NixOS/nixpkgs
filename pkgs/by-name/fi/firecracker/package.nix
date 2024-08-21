@@ -51,9 +51,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -D firecracker $out/bin/firecracker
     install -D jailer      $out/bin/jailer
+
+    runHook postInstall
   '';
 
   meta = with lib; {

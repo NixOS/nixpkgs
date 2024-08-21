@@ -76,10 +76,14 @@ py.pkgs.buildPythonApplication rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/healthchecks
     cp -r . $out/opt/healthchecks
     chmod +x $out/opt/healthchecks/manage.py
     cp ${localSettings} $out/opt/healthchecks/hc/local_settings.py
+
+    runHook postInstall
   '';
 
   passthru = {

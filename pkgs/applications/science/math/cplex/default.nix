@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     ln -s $out/opl/bin/x86-64_linux/oplrun\
       $out/opl/bin/x86-64_linux/oplrunjava\
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
       $out/cplex/bin/x86-64_linux/cplex\
       $out/cpoptimizer/bin/x86-64_linux/cpoptimizer\
       $out/bin
+
+    runHook postInstall
   '';
 
   fixupPhase =

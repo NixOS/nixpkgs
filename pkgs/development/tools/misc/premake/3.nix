@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/premake $out/bin/premake
+
+    runHook postInstall
   '';
 
   premake_cmd = "premake";

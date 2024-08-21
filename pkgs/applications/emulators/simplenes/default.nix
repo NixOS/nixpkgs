@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ sfml ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./SimpleNES $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

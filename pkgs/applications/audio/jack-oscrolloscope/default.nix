@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL libjack2 libGLU libGL ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv jack_oscrolloscope $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

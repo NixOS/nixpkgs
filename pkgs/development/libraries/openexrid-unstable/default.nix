@@ -39,10 +39,14 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+      runHook preInstall
+
       find $out
       mv $out/include $dev/
       mv $out/lib $lib/
-  '';
+
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing";

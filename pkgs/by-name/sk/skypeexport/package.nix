@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ boost ];
 
   preConfigure = "cd src/SkypeExport/_gccbuild/linux";
-  installPhase = "install -Dt $out/bin SkypeExport";
+  installPhase = "runHook preInstall; install -Dt $out/bin SkypeExport; runHook postInstall";
 
   meta = with lib; {
     description = "Export Skype history to HTML";

@@ -20,11 +20,15 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ prometheus-client bitcoinlib riprova ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bitcoind-monitor.py $out/bin/
 
     mkdir -p $out/share/${pname}
     cp -r dashboard README.md $out/share/${pname}/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

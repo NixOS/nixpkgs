@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     dpkg-deb -x ${src} ./
   '';
 
-  installPhase = "cp -ar usr $out";
+  installPhase = "runHook preInstall; cp -ar usr $out; runHook postInstall";
 
   postFixup = ''
     sed -e "s|/usr/bin|$out/bin|g" -i $out/share/applications/FAHControl.desktop

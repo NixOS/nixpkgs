@@ -101,6 +101,8 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     export NIX_STATE_DIR=$(mktemp -d)
     nix-instantiate --eval --strict --json ${./lib-function-locations.nix} \
       --arg nixpkgsPath "./." \
@@ -139,5 +141,7 @@ stdenvNoCC.mkDerivation {
     ) libsets}
 
     echo '```' >> "$out/index.md"
+
+    runHook postInstall
   '';
 }

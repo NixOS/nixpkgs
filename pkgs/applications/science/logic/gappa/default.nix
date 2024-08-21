@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp mpfr boost.dev ];
 
   buildPhase = "./remake";
-  installPhase = "./remake install";
+  installPhase = "runHook preInstall; ./remake install; runHook postInstall";
 
   meta = {
     homepage = "http://gappa.gforge.inria.fr/";

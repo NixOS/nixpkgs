@@ -14,10 +14,14 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 wd.plugin.zsh $out/share/wd/wd.plugin.zsh
     install -Dm755 wd.sh $out/share/wd/wd.sh
     installManPage wd.1
     installShellCompletion --zsh _wd.sh
+
+    runHook postInstall
   '';
 
   meta = with lib; {

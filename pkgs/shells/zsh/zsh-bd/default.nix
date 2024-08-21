@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh-bd
     cp {.,$out/share/zsh-bd}/bd.zsh
     cd $out/share/zsh-bd
     ln -s bd{,.plugin}.zsh
+
+    runHook postInstall
   '';
 
   meta = {

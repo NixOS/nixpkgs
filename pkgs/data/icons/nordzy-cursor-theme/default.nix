@@ -15,8 +15,12 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons
     cp -r Nordzy-cursors{,-white,-lefthand} $out/share/icons
+
+    runHook postInstall
   '';
 
   meta = with lib; {

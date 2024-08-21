@@ -15,11 +15,15 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -dm 755 $out/share/icons
     mv dist-dark $out/share/icons/graphite-dark
     mv dist-light $out/share/icons/graphite-light
     mv dist-dark-nord $out/share/icons/graphite-dark-nord
     mv dist-light-nord $out/share/icons/graphite-light-nord
+
+    runHook postInstall
   '';
 
   meta = with lib; {

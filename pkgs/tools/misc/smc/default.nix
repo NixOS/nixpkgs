@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   # Prebuilt Java package.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/share/smc"
     mkdir -p "$out/share/smc/lib"
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     ${jre}/bin/java -jar "$out/share/java/Smc.jar" "\$@"
     EOF
     chmod a+x "$out/bin/smc"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

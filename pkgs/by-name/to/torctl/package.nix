@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,etc/{systemd,bash_completion.d}}
     cp -R torctl $out/bin
     cp -R bash-completion $out/etc/bash_completion.d/
     cp -R service $out/etc/systemd/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

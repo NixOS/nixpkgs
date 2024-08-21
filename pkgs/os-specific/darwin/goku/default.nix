@@ -30,11 +30,15 @@ stdenv.mkDerivation rec {
   sourceRoot = if stdenv.isAarch64 then "goku" else ".";
 
   installPhase = ''
+    runHook preInstall
+
     chmod +x goku
     chmod +x gokuw
     mkdir -p $out/bin
     cp goku $out/bin
     cp gokuw $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

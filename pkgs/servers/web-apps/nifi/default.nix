@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jdk11 ];
 
   installPhase = ''
+    runHook preInstall
+
     cp -r ../$sourceRoot $out
     rm -f $out/bin/*bat
     rm -rf $out/extensions
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
       --replace "/bin/sh" "${stdenv.shell}"
     substituteInPlace $out/bin/nifi-env.sh \
       --replace "#export JAVA_HOME=/usr/java/jdk1.8.0/" "export JAVA_HOME=${jdk11}"
+
+    runHook postInstall
   '';
 
   passthru = {

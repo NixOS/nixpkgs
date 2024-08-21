@@ -31,41 +31,43 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     addDeps()
     {
-	if [ -f $1/nix-support/dotnet-assemblies ]
-	then
-	    for i in $(cat $1/nix-support/dotnet-assemblies)
-	    do
-		windowsPath=$(cygpath --windows $i)
-		assemblySearchPaths="$assemblySearchPaths;$windowsPath"
+      if [ -f $1/nix-support/dotnet-assemblies ]
+      then
+      for i in $(cat $1/nix-support/dotnet-assemblies)
+      do
+        windowsPath=$(cygpath --windows $i)
+        assemblySearchPaths="$assemblySearchPaths;$windowsPath"
 
-		addDeps $i
-	    done
-	fi
+        addDeps $i
+      done
+      fi
     }
 
     for i in ${toString assemblyInputs}
     do
-	windowsPath=$(cygpath --windows $i)
-	echo "Using assembly path: $windowsPath"
+  windowsPath=$(cygpath --windows $i)
+  echo "Using assembly path: $windowsPath"
 
-	if [ "$assemblySearchPaths" = "" ]
-	then
-	    assemblySearchPaths="$windowsPath"
-	else
-	    assemblySearchPaths="$assemblySearchPaths;$windowsPath"
-	fi
+  if [ "$assemblySearchPaths" = "" ]
+  then
+      assemblySearchPaths="$windowsPath"
+  else
+      assemblySearchPaths="$assemblySearchPaths;$windowsPath"
+  fi
 
-	addDeps $i
+  addDeps $i
     done
 
     echo "Assembly search paths are: $assemblySearchPaths"
 
     if [ "$assemblySearchPaths" != "" ]
     then
-	echo "Using assembly search paths args: $assemblySearchPathsArg"
-	export AssemblySearchPaths=$assemblySearchPaths
+  echo "Using assembly search paths args: $assemblySearchPathsArg"
+  export AssemblySearchPaths=$assemblySearchPaths
     fi
 
     mkdir -p $out
@@ -81,5 +83,7 @@ stdenv.mkDerivation {
     do
         echo $i >> $out/nix-support/dotnet-assemblies
     done
+
+    runHook postInstall
   '';
 }

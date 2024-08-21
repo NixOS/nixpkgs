@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fftwSinglePrec lv2 ];
 
-  installPhase = "make install-system";
+  installPhase = "runHook preInstall; make install-system; runHook postInstall";
 
   meta = with lib; {
     homepage = "http://plugin.org.uk";

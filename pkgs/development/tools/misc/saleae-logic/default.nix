@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     # Copy prebuilt app to $out
     mkdir "$out"
     cp -r * "$out"
@@ -85,6 +87,8 @@ stdenv.mkDerivation rec {
     # Install provided udev rules
     mkdir -p "$out/etc/udev/rules.d"
     cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

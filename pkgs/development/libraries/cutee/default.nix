@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   buildFlags = [ "cutee" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp cutee $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

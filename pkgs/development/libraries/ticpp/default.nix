@@ -19,11 +19,15 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DBUILD_TICPP_DLL=1" ];
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
     mkdir -p $out/lib
     install build/*.{a,so} $out/lib
     mkdir -p $out/include
     install *.h $out/include
+
+    runHook postInstall
   '';
 
   meta = {

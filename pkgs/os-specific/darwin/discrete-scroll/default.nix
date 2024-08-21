@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./dc $out/bin/discretescroll
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -22,6 +22,8 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 discocss $out/bin/discocss
   '' + lib.optionalString discordAlias ''
     wrapProgram $out/bin/discocss --set DISCOCSS_DISCORD_BIN ${discord}/bin/Discord
@@ -29,6 +31,8 @@ stdenvNoCC.mkDerivation rec {
     ln -s $out/bin/discocss $out/bin/discord
     mkdir -p $out/share
     ln -s ${discord}/share/* $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -31,11 +31,15 @@ buildPerlPackage {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/bin
     cp -r . $out/lib/ham
 
     makeWrapper $out/lib/ham/ham $out/bin/ham --argv0 ham \
       --prefix PATH : ${openssh}/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

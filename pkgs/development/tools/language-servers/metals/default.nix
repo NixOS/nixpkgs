@@ -27,10 +27,14 @@ stdenv.mkDerivation rec {
   extraJavaOpts = "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     makeWrapper ${jre}/bin/java $out/bin/metals \
       --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

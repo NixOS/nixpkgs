@@ -37,12 +37,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin/ cedille
     install -Dm755 -t $out/bin/ core/cedille-core
     install -Dm644 -t $out/share/info docs/info/cedille-info-main.info
 
     mkdir -p $out/lib/
     cp -r lib/ $out/lib/cedille/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

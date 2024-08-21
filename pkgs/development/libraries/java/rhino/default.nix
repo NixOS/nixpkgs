@@ -37,8 +37,12 @@ stdenv.mkDerivation rec {
   # FIXME: Install javadoc as well.
   installPhase =
     ''
+      runHook preInstall
+
       mkdir -p "$out/share/java"
       cp -v *.jar "$out/share/java"
+
+      runHook postInstall
     '';
 
   meta = with lib; {

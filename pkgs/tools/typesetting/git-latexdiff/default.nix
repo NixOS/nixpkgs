@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $prefix/bin
     mv git-latexdiff $prefix/bin
     chmod +x $prefix/bin/git-latexdiff
+
+    runHook postInstall
   '';
 
   meta = with lib; {

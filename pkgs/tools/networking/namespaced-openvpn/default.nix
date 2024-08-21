@@ -37,8 +37,12 @@ buildPythonPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp namespaced-openvpn seal-unseal-gateway $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

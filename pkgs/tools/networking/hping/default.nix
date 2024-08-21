@@ -40,12 +40,16 @@ stdenv.mkDerivation rec {
   configureFlags = [ (if withTcl then "TCLSH=${tcl}/bin/tclsh" else "--no-tcl") ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 hping3 -t $out/sbin
     ln -s $out/sbin/hping3 $out/sbin/hping
     ln -s $out/sbin/hping3 $out/sbin/hping2
     install -Dm644 docs/hping3.8 -t $out/share/man/man8
     ln -s hping3.8.gz $out/share/man/man8/hping.8.gz
     ln -s hping3.8.gz $out/share/man/man8/hping2.8.gz
+
+    runHook postInstall
   '';
 
   meta = with lib; {

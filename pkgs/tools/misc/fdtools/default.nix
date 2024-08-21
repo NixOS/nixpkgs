@@ -41,6 +41,8 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $bin/bin
     tools=( grabconsole multitee pipecycle recvfd seek0 sendfd setblock setstate statfile vc-get vc-lock vc-switch )
 
@@ -75,6 +77,8 @@ in stdenv.mkDerivation {
 
     # we don’t use this, but nixpkgs requires it
     touch $out
+
+    runHook postInstall
   '';
 
   meta = {

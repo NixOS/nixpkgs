@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ fontforge python3Packages.fonttools python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     find . -name '*Narrow*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
     install -m444 -Dt $out/doc/${pname}-${version} AUTHORS ChangeLog COPYING License.txt README.rst
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -31,6 +31,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # install lpr
     dpkg-deb -x ${lprdeb} $out
 
@@ -67,6 +69,8 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/cupswrapper/cupswrapperhl3140cw \
       --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
+
+    runHook postInstall
   '';
 
   meta = {

@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
 
   # Don't install `x11docker-gui`, because requires `kaptain` dependency
   installPhase = ''
+    runHook preInstall
+
     install -D x11docker "$out/bin/x11docker";
     wrapProgram "$out/bin/x11docker" \
       --prefix PATH : "${lib.makeBinPath [ getopt gnugrep gawk ps mount iproute2 nx-libs xorg.xdpyinfo xorg.xhost xorg.xinit ]}"
+
+    runHook postInstall
   '';
 
   meta = {

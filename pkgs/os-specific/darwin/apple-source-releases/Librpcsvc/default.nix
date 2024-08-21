@@ -4,6 +4,8 @@ appleDerivation {
   buildInputs = [ developer_cmds ];
 
   installPhase = ''
+    runHook preInstall
+
     export DSTROOT=$out
     export SRCROOT=$PWD
     export OBJROOT=$PWD
@@ -12,6 +14,8 @@ appleDerivation {
 
     mv $out/usr/* $out
     rmdir $out/usr/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

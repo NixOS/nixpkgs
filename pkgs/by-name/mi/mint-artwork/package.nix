@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     # note: we fuck up a bunch of stuff but idc
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
 
     mv etc $out/etc
     mv usr/share $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

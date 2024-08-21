@@ -69,6 +69,8 @@ buildBazelPackage rec {
 
   buildAttrs = {
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/bin"
 
       install bazel-bin/common/tools/verible-patch-tool "$out/bin"
@@ -83,6 +85,8 @@ buildBazelPackage rec {
       install $V_TOOLS_DIR/preprocessor/verible-verilog-preprocessor "$out/bin"
       install $V_TOOLS_DIR/project/verible-verilog-project "$out/bin"
       install $V_TOOLS_DIR/syntax/verible-verilog-syntax "$out/bin"
+
+      runHook postInstall
     '';
   };
 

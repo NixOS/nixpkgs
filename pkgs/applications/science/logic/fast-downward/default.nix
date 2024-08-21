@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 builds/release/bin/downward $out/libexec/fast-downward/downward
     cp -r builds/release/bin/translate $out/libexec/fast-downward/
     install -Dm755 fast-downward.py $out/bin/fast-downward
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/${python3.sitePackages}/driver/arguments.py \
       --replace 'args.build = "release"' "args.build = \"$out/libexec/fast-downward\""
+
+    runHook postInstall
   '';
 
   meta = with lib; {

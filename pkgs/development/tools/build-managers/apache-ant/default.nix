@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
+      runHook preInstall
+
       mkdir -p $out/bin $out/lib/ant
       mv * $out/lib/ant/
 
@@ -76,6 +78,8 @@ stdenv.mkDerivation rec {
       EOF
 
       chmod +x $out/bin/ant
+
+      runHook postInstall
     ''; # */
 
   meta = {

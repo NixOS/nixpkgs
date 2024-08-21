@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp src/slack "$out/bin/.slack-wrapped"
 
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
     WRAPPER
 
     chmod +x "$out/bin/slack"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -58,8 +58,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv spectre $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

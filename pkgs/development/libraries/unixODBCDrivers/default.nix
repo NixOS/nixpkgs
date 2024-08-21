@@ -153,9 +153,13 @@
     buildPhase = "";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       mkdir -p $out/lib
       cp -r opt/microsoft/msodbcsql${versionMajor}/lib64 opt/microsoft/msodbcsql${versionMajor}/share $out/
+
+      runHook postInstall
     '';
 
     postFixup = ''
@@ -284,9 +288,13 @@
     # - Manually patchelf with `unixODCB` libraries
     # - Disable automatic `patchELF` phase
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
       cp opt/amazon/redshiftodbc/lib/64/* $out/lib
       patchelf --set-rpath ${unixODBC}/lib/ $out/lib/libamazonredshiftodbc64.so
+
+      runHook postInstall
     '';
 
     dontPatchELF = true;

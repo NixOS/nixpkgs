@@ -16,8 +16,12 @@ in stdenv.mkDerivation {
   outputHash = "sha256-7BQmDJBo7rzv0rgfRiUAR3HvKkUHQ6x0umhBRhAAyzM=";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -v "$out"
     cp -rv * "$out"
+
+    runHook postInstall
   '';
 
   meta = {

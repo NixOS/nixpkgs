@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ xorg.mkfontscale ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m 644 -D otb/*.otb pcf/*.pcf -t "$out/share/fonts/misc"
     install -m 644 -D psf/*.psf -t "$out/share/consolefonts"
     mkfontdir "$out/share/fonts/misc"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

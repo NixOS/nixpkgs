@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share $out/bin
     cp -ar LightBurn $out/share/LightBurn
     ln -s $out/share/LightBurn/AppRun $out/bin/LightBurn
+
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;

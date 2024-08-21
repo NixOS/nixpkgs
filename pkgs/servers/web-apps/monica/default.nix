@@ -17,11 +17,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R * $out/
     rm -rf $out/storage
     ln -s ${dataDir}/.env $out/.env
     ln -s ${dataDir}/storage $out/storage
+
+    runHook postInstall
   '';
 
   passthru.tests.monica = nixosTests.monica;

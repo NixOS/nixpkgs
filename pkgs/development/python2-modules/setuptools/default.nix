@@ -39,8 +39,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       echo "Moving sdist..."
       mv dist/${name} $out
+
+      runHook postInstall
     '';
   };
 in buildPythonPackage rec {

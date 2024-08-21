@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D safeupdate${postgresql.dlSuffix} -t $out/lib
+
+    runHook postInstall
   '';
 
   meta = with lib; {

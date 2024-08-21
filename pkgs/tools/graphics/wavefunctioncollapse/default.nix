@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     grep -m1 -B999 '^[*][/]' Main.cs > COPYING.MIT
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/doc/wavefunctioncollapse,share/wavefunctioncollapse}
     cp README.md COPYING.MIT "$out"/share/doc/wavefunctioncollapse
     cp wavefunctioncollapse.exe "$out"/bin
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
     echo "chmod u+w ." >> "$out/bin/wavefunctioncollapse"
     echo "'${mono}/bin/mono' '$out/bin/wavefunctioncollapse.exe' \"\$@\"" >>  "$out/bin/wavefunctioncollapse"
     chmod a+x "$out/bin/wavefunctioncollapse"
+
+    runHook postInstall
   '';
   buildInputs = [mono];
   meta = {

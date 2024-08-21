@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelf makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib}
 
     cp -R * $out/
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     for f in $out/lib/*; do
       patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib curl xorg.libX11 stdenv.cc.libc xorg.libXcursor "$out" ]}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" $f
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

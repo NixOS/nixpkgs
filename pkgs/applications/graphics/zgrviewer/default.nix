@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   buildInputs = [jre];
   buildPhase = "";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/java/zvtm/plugins,share/doc/zvtm}
 
     cp overview.html *.license.* "$out/share/doc/zvtm"
@@ -19,6 +21,8 @@ stdenv.mkDerivation rec {
     echo '#!${runtimeShell}' > "$out/bin/zgrviewer"
     echo "${jre}/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
+
+    runHook postInstall
   '';
   meta = {
     # Quicker to unpack locally than load Hydra

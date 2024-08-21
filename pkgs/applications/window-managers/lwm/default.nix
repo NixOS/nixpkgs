@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -dm755 $out/bin $out/share/man/man1
     install -m755 lwm $out/bin/lwm
     install -m644 lwm.man $out/share/man/man1/lwm.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

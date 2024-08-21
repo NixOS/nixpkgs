@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D testssl.sh $out/bin/testssl.sh
     cp -r etc $out
 
     wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -36,10 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2 $out/lib/vst3
     cd ChowCentaur/ChowCentaur_artefacts/Release
     cp -r LV2/ChowCentaur.lv2 $out/lib/lv2
     cp -r VST3/ChowCentaur.vst3 $out/lib/vst3
+
+    runHook postInstall
   '';
 
   meta = with lib; {

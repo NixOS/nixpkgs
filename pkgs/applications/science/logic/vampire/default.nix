@@ -41,7 +41,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m0755 -D vampire_z3_rel* $out/bin/vampire
+
+    runHook postInstall
   '';
 
   meta = with lib; {

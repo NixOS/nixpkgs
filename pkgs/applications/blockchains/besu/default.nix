@@ -13,6 +13,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r bin $out/
     mkdir -p $out/lib
@@ -20,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     wrapProgram $out/bin/${pname} \
       --set JAVA_HOME "${jre}" \
       --suffix ${if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${lib.makeLibraryPath buildInputs}
+
+    runHook postInstall
   '';
 
   passthru.tests = {

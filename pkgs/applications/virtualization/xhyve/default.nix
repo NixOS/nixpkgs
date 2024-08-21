@@ -23,8 +23,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CFLAGS+=-Wno-shift-sign-overflow" ''CFLAGS+=-DVERSION=\"${version}\"'' ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp build/xhyve $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

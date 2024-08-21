@@ -29,10 +29,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/bin
     cp bastet "$out"/bin/
     mkdir -p "$out"/share/man/man6
     cp bastet.6 "$out"/share/man/man6
+
+    runHook postInstall
   '';
 
   meta = with lib; {

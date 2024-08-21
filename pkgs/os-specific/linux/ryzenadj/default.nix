@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pciutils cmake ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D libryzenadj.so $out/lib/libryzenadj.so
     install -D ryzenadj $out/bin/ryzenadj
+
+    runHook postInstall
   '';
 
   meta = with lib; {

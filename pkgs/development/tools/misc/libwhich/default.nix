@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin libwhich
+
+    runHook postInstall
   '';
 
   meta = with lib; {

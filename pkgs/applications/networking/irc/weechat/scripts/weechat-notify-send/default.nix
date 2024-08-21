@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -D notify_send.py $out/share/notify_send.py
     substituteInPlace $out/share/notify_send.py \
       --replace "'notify-send'" "'${libnotify}/bin/notify-send'"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

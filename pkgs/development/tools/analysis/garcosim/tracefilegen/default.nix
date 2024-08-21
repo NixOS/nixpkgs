@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   patches = [ ./gcc7.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 TraceFileGen $out/bin/TraceFileGen
     mkdir -p $out/share/doc/${pname}-${version}/
     cp -ar $src/Documentation/html $out/share/doc/${pname}-${version}/.
+
+    runHook postInstall
   '';
 
   meta = with lib; {

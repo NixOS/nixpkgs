@@ -40,7 +40,11 @@
     cabal v2-build --offline --verbose constraints cereal --ghc-options="-O0 -j$NIX_BUILD_CORES"
   '';
   installPhase = ''
+    runHook preInstall
+
     touch $out
+
+    runHook postInstall
   '';
 }).overrideAttrs (oldAttrs: {
   meta =

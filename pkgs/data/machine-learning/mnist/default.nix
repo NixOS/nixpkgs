@@ -23,11 +23,15 @@ in
     pname = "mnist";
     version = "2018-11-16";
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       ln -s "${srcs.train-images}" "$out/${srcs.train-images.name}"
       ln -s "${srcs.train-labels}" "$out/${srcs.train-labels.name}"
       ln -s "${srcs.test-images}" "$out/${srcs.test-images.name}"
       ln -s "${srcs.test-labels}" "$out/${srcs.test-labels.name}"
+
+      runHook postInstall
     '';
     dontUnpack = true;
     meta = with lib; {

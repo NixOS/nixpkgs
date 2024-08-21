@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin prettyping
+
+    runHook postInstall
   '';
 
   meta = with lib; {

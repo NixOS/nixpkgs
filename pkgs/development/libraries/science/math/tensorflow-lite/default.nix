@@ -56,6 +56,8 @@ buildBazelPackage rec {
 
   buildAttrs = {
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/{bin,lib}
 
       # copy the libs and binaries into the output dir
@@ -71,6 +73,8 @@ buildBazelPackage rec {
         # remove executable bit from headers
         chmod -x "$path"
       done
+
+      runHook postInstall
     '';
   };
 

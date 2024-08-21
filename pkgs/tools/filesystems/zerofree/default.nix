@@ -17,10 +17,14 @@ in stdenv.mkDerivation rec {
   buildInputs = [ e2fsprogs installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/zerofree
     cp zerofree $out/bin
     cp COPYING $out/share/zerofree/COPYING
     installManPage ${manpage}
+
+    runHook postInstall
   '';
 
   meta = {

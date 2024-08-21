@@ -46,8 +46,12 @@ let
     doCheck = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp rebar3 $out/bin/rebar3
+
+      runHook postInstall
     '';
 
     meta = {
@@ -126,6 +130,8 @@ let
       # add plugins to the code path.
 
       installPhase = ''
+        runHook preInstall
+
         erl -noshell -eval '
           {ok, Escript} = escript:extract("${rebar3Patched}/bin/rebar3", []),
           {archive, Archive} = lists:keyfind(archive, 1, Escript),
@@ -139,6 +145,8 @@ let
           --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames} rebar_ignore_deps" \
           --suffix-each ERL_LIBS ":" "$out/lib ${toString pluginLibDirs}" \
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
+
+        runHook postInstall
       '';
     };
 in { inherit rebar3 rebar3WithPlugins; }

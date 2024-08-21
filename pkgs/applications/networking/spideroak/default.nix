@@ -28,6 +28,8 @@ in stdenv.mkDerivation {
   unpackCmd = "tar -xzf $curSrc";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     cp -r "./"* "$out"
     mkdir "$out/bin"
@@ -46,6 +48,8 @@ in stdenv.mkDerivation {
       --set SpiderOak_EXEC_SCRIPT $out/bin/spideroak
 
     sed -i 's/^Exec=.*/Exec=spideroak/' $out/share/applications/SpiderOakONE.desktop
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ patchelf makeWrapper ];

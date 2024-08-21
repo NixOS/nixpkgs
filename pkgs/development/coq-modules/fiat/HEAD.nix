@@ -21,9 +21,13 @@ mkCoqDerivation rec {
   buildPhase = "make -j$NIX_BUILD_CORES";
 
   installPhase = ''
+    runHook preInstall
+
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Fiat
     cp -pR src/* $COQLIB/user-contrib/Fiat
+
+    runHook postInstall
   '';
 
   meta = {

@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${type}-Edit $out/bin/${pname}
+
+    runHook postInstall
   '';
   preFixup = let
     # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation

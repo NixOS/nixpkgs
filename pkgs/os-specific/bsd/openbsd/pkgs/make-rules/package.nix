@@ -37,7 +37,11 @@ mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -r share/mk $out
+
+    runHook postInstall
   '';
 
   meta.platforms = lib.platforms.unix;

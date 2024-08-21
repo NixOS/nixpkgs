@@ -22,11 +22,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{share/wiremock,bin}
     cp ${finalAttrs.src} "$out/share/wiremock/wiremock.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags "-jar $out/share/wiremock/wiremock.jar"
+
+    runHook postInstall
   '';
 
   passthru = {

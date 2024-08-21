@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
   configurePhase = "configurePhase";
   buildPhase = "buildPhase";
   checkPhase = "checkPhase";
-  installPhase = "installPhase";
+  installPhase = "runHook preInstall; installPhase; runHook postInstall";
 
   postPatch = ''
     # Have to do this here instead of in preConfigure because

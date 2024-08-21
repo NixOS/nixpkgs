@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "--directory=src/build" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/* $out/bin/
     rm $out/bin/gurobi.sh
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     ln -s $out/lib/gurobi.jar $out/share/java/
     ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
+
+    runHook postInstall
   '';
 
   passthru.libSuffix = lib.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version);

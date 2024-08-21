@@ -36,10 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib h3/h3.so
     install -D -t $out/share/postgresql/extension h3/h3-*.sql h3/h3.control
     install -D -t $out/lib h3_postgis/h3_postgis.so
     install -D -t $out/share/postgresql/extension h3_postgis/h3_postgis-*.sql h3_postgis/h3_postgis.control
+
+    runHook postInstall
   '';
 
   passthru.tests.extension = stdenv.mkDerivation {
@@ -63,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath
       runHook postCheck
     '';
-    installPhase = "touch $out";
+    installPhase = "runHook preInstall; touch $out; runHook postInstall";
   };
 
   meta = with lib; {

@@ -45,6 +45,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 tomb $out/bin/tomb
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
@@ -66,6 +68,8 @@ stdenvNoCC.mkDerivation rec {
           util-linux
         ]
       }
+
+    runHook postInstall
   '';
 
   passthru = {

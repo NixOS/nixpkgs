@@ -92,6 +92,8 @@ in stdenvNoCC.mkDerivation ({
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for f in $(find . -name 'mkl*.pc') ; do
       bn=$(basename $f)
       substituteInPlace $f \
@@ -137,6 +139,8 @@ in stdenvNoCC.mkDerivation ({
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/libcblas${shlibExt}".3"
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapack${shlibExt}".3"
     ln -s $out/lib/libmkl_rt${shlibExt} $out/lib/liblapacke${shlibExt}".3"
+
+    runHook postInstall
   '';
 
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the

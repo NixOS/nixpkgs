@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp ../golly ../bgolly "$out/bin"
 
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/golly"
     cp -r ../{Help,Patterns,Scripts,Rules} "$out/share/golly"
+
+    runHook postInstall
   '';
 
   meta = {

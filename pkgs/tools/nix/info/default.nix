@@ -35,8 +35,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./nix-info $out/bin/nix-info
+
+    runHook postInstall
   '';
 
   preferLocalBuild = true;

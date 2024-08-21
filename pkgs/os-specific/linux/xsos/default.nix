@@ -36,10 +36,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a xsos $out/bin
     wrapProgram "$out/bin/xsos" --prefix PATH : ${lib.makeBinPath binPath}
     installShellCompletion --bash --name xsos.bash xsos-bash-completion.bash
+
+    runHook postInstall
   '';
 
   meta = with lib; {

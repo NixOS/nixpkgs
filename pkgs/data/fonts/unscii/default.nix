@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # install fonts for use in X11 and GTK applications
     install -m444 -Dt "$out/share/fonts/misc"     *.pcf.gz
     install -m444 -Dt "$out/share/fonts/opentype" *.otf
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     install -m444 -Dt "$extra/share/fonts/web"      *.woff
     install -m444 -Dt "$extra/share/fonts/misc"     *.hex
     mkfontscale "$extra"/share/fonts/*
+
+    runHook postInstall
   '';
 
   outputs = [ "out" "extra" ];

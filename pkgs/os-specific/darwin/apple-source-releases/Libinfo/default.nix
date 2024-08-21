@@ -2,6 +2,8 @@
 
 appleDerivation' stdenvNoCC {
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace xcodescripts/install_files.sh \
       --replace "/usr/local/" "/" \
       --replace "/usr/" "/" \
@@ -10,6 +12,8 @@ appleDerivation' stdenvNoCC {
 
     export DSTROOT=$out
     sh xcodescripts/install_files.sh
+
+    runHook postInstall
   '';
 
   appleHeaders = ''

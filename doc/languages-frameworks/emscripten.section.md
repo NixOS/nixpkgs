@@ -61,7 +61,11 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
     emmake make
   '';
   installPhase = ''
+    runHook preInstall
+
     emmake make install
+
+    runHook postInstall
   '';
   checkPhase = ''
     echo "================= testing zlib using node ================="
@@ -132,6 +136,8 @@ pkgs.buildEmscriptenPackage rec {
   outputs = [ "out" "doc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     mkdir -p $doc/share/${name}
 
@@ -145,6 +151,8 @@ pkgs.buildEmscriptenPackage rec {
     cp *.json $out/share
     cp *.rng $out/share
     cp README.md $doc/share/${name}
+
+    runHook postInstall
   '';
   checkPhase = ''
 

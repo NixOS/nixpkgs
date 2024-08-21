@@ -23,9 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ SDL SDL_image SDL_mixer zlib ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m 555 -D meritous $out/bin/meritous
     mkdir -p $out/share/meritous
     cp -r dat/* $out/share/meritous/
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "stackprotector" "fortify" ];

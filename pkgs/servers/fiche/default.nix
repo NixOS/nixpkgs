@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 fiche -t $out/bin
+
+    runHook postInstall
   '';
 
   doCheck = true;

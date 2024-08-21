@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp tpacpi-bat $out/bin
+
+    runHook postInstall
   '';
 
   postPatch = ''

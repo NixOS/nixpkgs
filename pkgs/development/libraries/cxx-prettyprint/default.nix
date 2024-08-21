@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/include"
     cp prettyprint.hpp "$out/include"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

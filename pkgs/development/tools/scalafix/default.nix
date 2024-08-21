@@ -30,12 +30,16 @@ stdenv.mkDerivation (
     dontUnpack = true;
 
     installPhase = ''
+      runHook preInstall
+
       makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
         --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
 
       installShellCompletion --cmd ${finalAttrs.pname} \
         --bash <($out/bin/${finalAttrs.pname} --bash) \
         --zsh  <($out/bin/${finalAttrs.pname} --zsh)
+
+      runHook postInstall
     '';
 
     passthru.tests = {

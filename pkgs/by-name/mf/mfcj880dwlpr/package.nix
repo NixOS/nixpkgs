@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
     substituteInPlace $out/opt/brother/Printers/mfcj880dw/lpd/filtermfcj880dw \
       --replace-fail /opt "$out/opt"
@@ -80,7 +82,9 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused gawk ] }
     wrapProgram $out/opt/brother/Printers/mfcj880dw/lpd/filtermfcj880dw \
       --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused file ghostscript a2ps ] }
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description  = "Brother MFC-J880DW LPR driver";

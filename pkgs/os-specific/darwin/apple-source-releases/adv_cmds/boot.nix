@@ -75,6 +75,8 @@ in appleDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     bsdmake -C usr-share-locale.tproj install DESTDIR="$locale/share/locale"
 
     # need to get rid of runtime dependency on flex
@@ -85,6 +87,8 @@ in appleDerivation {
     install -d 0755 $ps/bin
     install ps $ps/bin/ps
     touch "$out"
+
+    runHook postInstall
   '';
 
   outputs = [

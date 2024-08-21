@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # install otb and bdf fonts
     fontDir="$out/share/fonts"
     install -m 644 -D *.bdf *.otb -t "$fontDir"
     mkfontdir "$fontDir"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

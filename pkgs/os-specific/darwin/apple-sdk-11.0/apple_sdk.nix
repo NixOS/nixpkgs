@@ -41,6 +41,8 @@ let
       nativeBuildInputs = [ buildPackages.darwin.rewrite-tbd ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/Library/Frameworks
 
         cp -r ${MacOSX-SDK}${standardFrameworkPath name private} $out/Library/Frameworks
@@ -63,6 +65,8 @@ let
             -r ${builtins.storeDir} \
             "$tbd"
         done
+
+        runHook postInstall
       '';
 
       propagatedBuildInputs = builtins.attrValues deps;
@@ -90,11 +94,15 @@ in rec {
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         pushd $out/include >/dev/null
         cp -r "${MacOSX-SDK}/usr/include/xpc" $out/include/xpc
         cp "${MacOSX-SDK}/usr/include/launch.h" $out/include/launch.h
         popd >/dev/null
+
+        runHook postInstall
       '';
     };
 
@@ -107,10 +115,14 @@ in rec {
       ];
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include $out/lib
         ln -s "${MacOSX-SDK}/include/Xplugin.h" $out/include/Xplugin.h
         cp ${MacOSX-SDK}/usr/lib/libXplugin.1.tbd $out/lib
         ln -s libXplugin.1.tbd $out/lib/libXplugin.tbd
+
+        runHook postInstall
       '';
     };
 
@@ -119,11 +131,15 @@ in rec {
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         pushd $out/include >/dev/null
         ln -s "${MacOSX-SDK}/include/utmp.h"
         ln -s "${MacOSX-SDK}/include/utmpx.h"
         popd >/dev/null
+
+        runHook postInstall
       '';
     };
 
@@ -134,10 +150,14 @@ in rec {
       dontBuild = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include $out/lib
         ln -s "${MacOSX-SDK}/usr/include/sandbox.h" $out/include/sandbox.h
         cp "${MacOSX-SDK}/usr/lib/libsandbox.1.tbd" $out/lib
         ln -s libsandbox.1.tbd $out/lib/libsandbox.tbd
+
+        runHook postInstall
       '';
     };
 
@@ -145,8 +165,12 @@ in rec {
       name = "apple-lib-libDER";
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         cp -r ${MacOSX-SDK}/usr/include/libDER $out/include
+
+        runHook postInstall
       '';
     };
 
@@ -154,8 +178,12 @@ in rec {
       name = "apple-lib-simd";
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/include
         cp -r ${MacOSX-SDK}/usr/include/simd $out/include
+
+        runHook postInstall
       '';
     };
   };

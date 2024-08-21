@@ -9,6 +9,8 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications $out/bin
 
     # Install Qt applications.
@@ -20,5 +22,7 @@ stdenv.mkDerivation {
     mv p4vc $out/bin
     substituteInPlace $out/bin/p4vc \
       --replace /Applications $out/Applications
+
+    runHook postInstall
   '';
 }

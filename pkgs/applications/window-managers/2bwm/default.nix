@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcb xcbutilkeysyms xcbutilwm libX11 xcbutil xcbutilxrm ];
 
-  installPhase = "make install DESTDIR=$out PREFIX=\"\"";
+  installPhase = "runHook preInstall; make install DESTDIR=$out PREFIX=\"\"; runHook postInstall";
 
   meta = with lib; {
     homepage = "https://github.com/venam/2bwm";

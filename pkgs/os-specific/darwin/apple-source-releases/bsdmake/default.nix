@@ -39,10 +39,14 @@ appleDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d 0644 $out/bin
     install -m 0755 bsdmake $out/bin
     install -d 0644 $out/share/mk
     install -m 0755 mk/* $out/share/mk
+
+    runHook postInstall
   '';
 
   preFixup = ''

@@ -2,8 +2,12 @@
 
 appleDerivation' stdenvNoCC {
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp notify.h      $out/include
     cp notify_keys.h $out/include
+
+    runHook postInstall
   '';
 }

@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
   buildInputs = postgresql.buildInputs ++ [ postgresql ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
     install -D -t $out/lib src/monitor/pgautofailover.so
     install -D -t $out/share/postgresql/extension src/monitor/*.sql
     install -D -t $out/share/postgresql/extension src/monitor/pgautofailover.control
+
+    runHook postInstall
   '';
 
   meta = with lib; {

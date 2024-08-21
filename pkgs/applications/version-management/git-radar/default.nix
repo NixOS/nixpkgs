@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp git-radar fetch.sh prompt.bash prompt.zsh radar-base.sh $out
     ln -s $out/git-radar $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

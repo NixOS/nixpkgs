@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  installPhase = "install -D $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar";
+  installPhase = "runHook preInstall; install -D $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar; runHook postInstall";
 
   meta = with lib; {
     homepage = "https://github.com/SeleniumHQ/htmlunit-driver";

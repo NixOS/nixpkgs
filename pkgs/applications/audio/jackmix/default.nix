@@ -31,7 +31,11 @@ mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D jackmix/jackmix $out/bin/jackmix
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -17,6 +17,8 @@ buildPythonPackage {
 
   installPhase =
     ''
+      runHook preInstall
+
       # Move the tkinter module
       mkdir -p $out/${py.sitePackages}
       mv lib/${py.libPrefix}/lib-dynload/_tkinter* $out/${py.sitePackages}/
@@ -26,6 +28,8 @@ buildPythonPackage {
       old_rpath=$(patchelf --print-rpath $out/${py.sitePackages}/_tkinter*)
       new_rpath=$(sed "s#${py}#${python}#g" <<< "$old_rpath" )
       patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
+
+      runHook postInstall
     '';
 
   meta = py.meta // {

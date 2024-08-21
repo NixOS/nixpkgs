@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 cdpr $out/bin/cdpr
+
+    runHook postInstall
   '';
 
   meta = with lib; {

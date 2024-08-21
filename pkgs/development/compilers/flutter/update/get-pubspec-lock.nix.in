@@ -25,6 +25,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -r ./pubspec.lock $out
+
+    runHook postInstall
   '';
 }

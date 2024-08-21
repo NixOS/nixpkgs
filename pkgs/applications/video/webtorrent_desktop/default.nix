@@ -21,6 +21,8 @@ buildNpmPackage {
   makeCacheWritable = true;
   npmRebuildFlags = [ "--ignore-scripts" ];
   installPhase = ''
+    runHook preInstall
+
     ## Rebuild node_modules for production
     ## after babel compile has finished
     rm -r node_modules
@@ -46,6 +48,8 @@ buildNpmPackage {
     sed "s#/opt/webtorrent-desktop#$out/bin#" \
       < static/linux/share/applications/webtorrent-desktop.desktop \
       > $out/share/applications/webtorrent-desktop.desktop
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -159,10 +159,14 @@ python3.pkgs.buildPythonApplication rec {
 
   # setuptools to get distutils with python 3.12
   installPhase = ''
+    runHook preInstall
+
     ${(python3.withPackages (p: [ p.setuptools ])).interpreter} setup.py install --prefix="$out"
 
     cp onboard-default-settings.gschema.override.example $out/share/glib-2.0/schemas/10_onboard-default-settings.gschema.override
     glib-compile-schemas $out/share/glib-2.0/schemas/
+
+    runHook postInstall
   '';
 
   # Remove ubuntu icons.

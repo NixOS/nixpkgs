@@ -22,8 +22,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp sixpair $out/bin/sixpair
+
+    runHook postInstall
   '';
 
   meta = {

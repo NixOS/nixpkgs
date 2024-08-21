@@ -167,6 +167,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D d8 $out/bin/d8
     install -D -m644 obj/libv8_monolith.a $out/lib/libv8.a
     install -D -m644 icudtl.dat $out/share/v8/icudtl.dat
@@ -181,6 +183,8 @@ stdenv.mkDerivation rec {
     Libs: -L$out/lib -lv8 -pthread
     Cflags: -I$out/include
     EOF
+
+    runHook postInstall
   '';
 
   meta = with lib; {

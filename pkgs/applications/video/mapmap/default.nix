@@ -54,12 +54,16 @@ mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp mapmap $out/bin/mapmap
     mkdir -p $out/share/applications/
     sed 's|Icon=/usr/share/icons/hicolor/scalable/apps/mapmap.svg|Icon=mapmap|g' resources/texts/mapmap.desktop > $out/share/applications/mapmap.desktop
     mkdir -p $out/share/icons/hicolor/scalable/apps/
     cp resources/images/logo/mapmap.* $out/share/icons/hicolor/scalable/apps/
+
+    runHook postInstall
   '';
 
   # RPATH in /tmp hack

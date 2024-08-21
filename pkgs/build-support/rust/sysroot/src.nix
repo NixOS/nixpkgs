@@ -11,6 +11,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     export RUSTC_SRC=${rustPlatform.rustLibSrc.override { }}
   ''
   + lib.optionalString (originalCargoToml != null) ''
@@ -22,5 +24,7 @@ stdenv.mkDerivation {
     echo '#![no_std]' > $out/src/lib.rs
     cp Cargo.toml $out/Cargo.toml
     cp ${./Cargo.lock} $out/Cargo.lock
+
+    runHook postInstall
   '';
 }

@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out -p
     make PREFIX=$out/ install
 
     wrapProgram $out/bin/pipes.sh \
       --set PATH "${lib.makeBinPath [ coreutils ncurses ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

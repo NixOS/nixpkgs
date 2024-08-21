@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/$pname"
     cp -rt "$out/share/$pname" api_export_files
     cp -rt "$out" lib
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper "$JAVA_HOME/bin/javac" "$out/bin/javacardc" \
       --prefix CLASSPATH : "$out/lib/api.jar"
+
+    runHook postInstall
   '';
 
   meta = {

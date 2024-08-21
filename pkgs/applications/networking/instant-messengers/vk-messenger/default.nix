@@ -50,12 +50,16 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cd usr
       cp -r --parents bin $out
       cp -r --parents share/vk $out
       cp -r --parents share/applications $out
       cp -r --parents share/pixmaps $out
+
+      runHook postInstall
     '';
   };
 
@@ -67,8 +71,12 @@ let
     sourceRoot = ".";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
+
+      runHook postInstall
     '';
   };
 in if stdenv.isDarwin then darwin else linux

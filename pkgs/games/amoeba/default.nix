@@ -30,9 +30,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib expat freetype gtk3 libvorbis libGLU xorg.libXxf86vm ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp amoeba $out/bin/
     installManPage ../debian/amoeba.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

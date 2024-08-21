@@ -20,8 +20,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       '';
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out
         mv * $out/
+
+        runHook postInstall
       '';
     };
 

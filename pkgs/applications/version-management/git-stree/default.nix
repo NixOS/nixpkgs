@@ -12,9 +12,13 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/bash-completion/completions
     install -m 0755 git-stree $out/bin/
     install -m 0644 git-stree-completion.bash $out/share/bash-completion/completions/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

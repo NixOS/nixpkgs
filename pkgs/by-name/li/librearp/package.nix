@@ -37,9 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/vst3
     cd LibreArp_artefacts/Release
     cp -r VST3/LibreArp.vst3 $out/lib/vst3
+
+    runHook postInstall
   '';
 
   meta = with lib; {

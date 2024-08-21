@@ -29,9 +29,13 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib *${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
+
+    runHook postInstall
   '';
 
   passthru.tests = stdenv.mkDerivation {
@@ -59,7 +63,11 @@ stdenv.mkDerivation rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       touch $out
+
+      runHook postInstall
     '';
   };
 

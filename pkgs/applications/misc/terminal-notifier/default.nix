@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     mkdir -p $out/bin
     cp -r terminal-notifier.app $out/Applications
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
     exec ./Contents/MacOS/terminal-notifier "\$@"
     EOF
     chmod +x $out/bin/terminal-notifier
+
+    runHook postInstall
   '';
 
   meta = with lib; {

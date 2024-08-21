@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     dpkg-deb -x ${cupsdeb} $out
     dpkg-deb -x ${lprdeb} $out
@@ -58,7 +60,9 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
       --prefix PATH ":" ${ lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";

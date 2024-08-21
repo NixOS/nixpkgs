@@ -19,7 +19,11 @@ buildDunePackage rec {
   outputs = [ "lib" "bin" "out" ];
 
   installPhase = ''
+    runHook preInstall
+
     dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib/
+
+    runHook postInstall
   '';
 
   meta = {

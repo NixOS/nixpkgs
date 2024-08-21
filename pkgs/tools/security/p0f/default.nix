@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/sbin $out/etc
 
     cp ./p0f                $out/sbin
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     cp ./tools/p0f-client   $out/sbin
     cp ./tools/p0f-sendsyn  $out/sbin
     cp ./tools/p0f-sendsyn6 $out/sbin
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "format" ];

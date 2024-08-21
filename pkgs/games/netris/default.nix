@@ -19,8 +19,12 @@ stdenv.mkDerivation {
   dontAddPrefix = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./netris $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

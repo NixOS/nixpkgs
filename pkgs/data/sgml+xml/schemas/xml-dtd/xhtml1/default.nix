@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
+      runHook preInstall
+
       mkdir -p $out/xml/dtd/xhtml1
       cp DTD/*.ent DTD/*.dtd $out/xml/dtd/xhtml1
 
@@ -23,6 +25,8 @@ stdenv.mkDerivation {
           eval a=($x)
           xmlcatalog --noout --add public "''${a[1]}" "''${a[2]}" $cat
       done
+
+      runHook postInstall
     ''; # */
 
   meta = {

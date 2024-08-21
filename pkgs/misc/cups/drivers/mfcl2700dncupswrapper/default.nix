@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
 
     basedir=${mfcl2700dnlpr}/opt/brother/Printers/MFCL2700DN
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
 
     ln $dir/cupswrapper/brother_lpdwrapper_MFCL2700DN $out/lib/cups/filter
     ln $dir/cupswrapper/brother-MFCL2700DN-cups-en.ppd $out/share/cups/model
+
+    runHook postInstall
   '';
 
   meta = {

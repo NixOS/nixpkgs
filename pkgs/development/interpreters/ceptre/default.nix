@@ -15,8 +15,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ mlton ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ceptre $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

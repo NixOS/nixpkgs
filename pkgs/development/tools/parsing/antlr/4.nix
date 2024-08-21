@@ -37,6 +37,8 @@ let
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p "$out"/{share/java,bin}
         ln -s "$src" "$out/share/java/antlr-${version}-complete.jar"
 
@@ -52,6 +54,8 @@ let
         chmod a+x "$out/bin/antlr" "$out/bin/antlr-parse" "$out/bin/grun"
         ln -s "$out/bin/antlr"{,4}
         ln -s "$out/bin/antlr"{,4}-parse
+
+        runHook postInstall
       '';
 
       inherit jre;

@@ -22,11 +22,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m644 etc/zsh/keephack $out/etc/zsh/keephack
     install -D -m644 etc/zsh/zshrc $out/etc/zsh/zshrc
 
     install -D -m644 doc/grmlzshrc.5 $out/share/man/man5/grmlzshrc.5
     ln -s grmlzshrc.5.gz $out/share/man/man5/grml-zsh-config.5.gz
+
+    runHook postInstall
   '';
 
   meta = with lib; {

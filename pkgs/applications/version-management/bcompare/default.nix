@@ -32,6 +32,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/{bin,lib,share}
 
       cp -R usr/{bin,lib,share} $out/
@@ -46,6 +48,8 @@ let
 
       # Create symlink bzip2 library
       ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/beyondcompare/libbz2.so.1.0
+
+      runHook postInstall
     '';
 
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -73,8 +77,12 @@ let
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications/BCompare.app
       cp -R . $out/Applications/BCompare.app
+
+      runHook postInstall
     '';
   };
 

@@ -129,8 +129,12 @@ stdenv.mkDerivation rec {
   buildPhase = "# do nothing";
 
   installPhase = ''
+    runHook preInstall
+
     cp -r . "$out"
     tar xkzf ${configure-src} -C "$out"
     rm "$out/configure"
+
+    runHook postInstall
   '';
 }

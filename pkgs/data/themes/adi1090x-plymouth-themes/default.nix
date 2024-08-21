@@ -40,11 +40,15 @@ in
     unpackCmd = "tar xzf $curSrc";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/plymouth/themes
       for theme in ${toString selectedThemes}; do
         mv $theme $out/share/plymouth/themes/$theme
       done
       find $out/share/plymouth/themes/ -name \*.plymouth -exec sed -i "s@\/usr\/@$out\/@" {} \;
+
+      runHook postInstall
     '';
 
     meta = with lib; {

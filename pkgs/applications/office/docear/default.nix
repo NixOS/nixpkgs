@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   buildPhase = "";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share
     cp -R * $out/share
@@ -29,7 +31,9 @@ stdenv.mkDerivation {
       --add-flags "$out/share/docear.sh"
 
     chmod 0755 $out/bin/docear
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Unique solution to academic literature management";

@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   makeFlags = lib.optionals stdenv.isAarch64 [ "arm_neon=1" "aarch64=1" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp minimap2 $out/bin
     mkdir -p $out/share/man/man1
     cp minimap2.1 $out/share/man/man1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

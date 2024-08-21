@@ -2,9 +2,13 @@
 
 appleDerivation' stdenvNoCC {
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/include
     ln -s /usr/lib/dyld $out/lib/dyld
     cp -r include $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

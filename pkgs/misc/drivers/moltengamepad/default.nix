@@ -20,8 +20,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp moltengamepad $out/bin
+
+    runHook postInstall
   '';
 
   patchPhase = ''

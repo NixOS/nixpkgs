@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./ipfetch --replace /usr/share/ipfetch $out/usr/share/ipfetch/flags
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/usr/share/ipfetch/
     cp -r flags $out/usr/share/ipfetch/
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ipfetch --prefix PATH : ${
       lib.makeBinPath [ bash wget ]
     }
+
+    runHook postInstall
   '';
 
   meta = with lib; {

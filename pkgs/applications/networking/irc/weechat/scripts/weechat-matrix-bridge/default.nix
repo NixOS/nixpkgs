@@ -29,12 +29,16 @@ stdenv.mkDerivation {
   passthru.scripts = [ "matrix.lua" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{share,lib}
 
     cp {matrix.lua,olm.lua} $out/share
     cp ${cjson}/lib/lua/${cjson.lua.luaversion}/cjson.so $out/lib/cjson.so
     cp ${olm}/lib/libolm.so $out/lib/libolm.so
     cp ${luaffi}/lib/lua/${luaffi.lua.luaversion}/ffi.so $out/lib/ffi.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {

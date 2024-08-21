@@ -14,8 +14,12 @@ stdenv.mkDerivation {
   buildInputs = [ cups ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D rastertozj $out/lib/cups/filter/rastertozj
     install -D ZJ-58.ppd $out/share/cups/model/zjiang/ZJ-58.ppd
+
+    runHook postInstall
   '';
 
   meta = with lib; {

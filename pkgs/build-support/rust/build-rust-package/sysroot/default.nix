@@ -19,6 +19,8 @@ in rustPlatform.buildRustPackage {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     export LIBS_DIR=$out/lib/rustlib/${shortTarget}/lib
     mkdir -p $LIBS_DIR
     for f in target/${shortTarget}/release/deps/*.{rlib,rmeta}; do
@@ -28,6 +30,8 @@ in rustPlatform.buildRustPackage {
     export RUST_SYSROOT=$(rustc --print=sysroot)
     host=${stdenv.buildPlatform.rust.rustcTarget}
     cp -r $RUST_SYSROOT/lib/rustlib/$host $out
+
+    runHook postInstall
   '';
 
   # allows support for cross-compilation

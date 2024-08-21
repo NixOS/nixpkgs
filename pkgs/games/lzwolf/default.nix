@@ -55,12 +55,16 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 lzwolf "$out/lib/lzwolf/lzwolf"
     for i in *.pk3; do
       install -Dm644 "$i" "$out/lib/lzwolf/$i"
     done
     mkdir -p $out/bin
     ln -s $out/lib/lzwolf/lzwolf $out/bin/lzwolf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

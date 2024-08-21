@@ -24,11 +24,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D gti $out/bin/gti
     installManPage gti.6
     installShellCompletion --cmd gti \
       --bash completions/gti.bash \
       --zsh completions/gti.zsh
+
+    runHook postInstall
   '';
 
   meta = with lib; {

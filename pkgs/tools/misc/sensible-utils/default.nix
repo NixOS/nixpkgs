@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     cp sensible-browser sensible-editor sensible-pager sensible-terminal $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/${pname}
     cp * $out/include/${pname}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

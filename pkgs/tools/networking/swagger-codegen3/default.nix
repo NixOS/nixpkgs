@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/share/java/${jarfilename}
 
     makeWrapper ${jre}/bin/java $out/bin/${pname}3 \
       --add-flags "-jar $out/share/java/${jarfilename}"
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {

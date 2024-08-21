@@ -28,12 +28,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install BUILDROOT=$out
 
     if [ ! -x $out/bin/cpuid ]; then
       echo Failed to properly patch Makefile.
       exit 1
     fi
+
+    runHook postInstall
   '';
 
   meta = with lib; {

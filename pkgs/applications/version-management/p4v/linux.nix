@@ -76,10 +76,14 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r bin lib $out
       addAutoPatchelfSearchPath $out/lib
       ln -s "${qtbase}/${qtbase.qtPluginPrefix}" $out/lib/plugins
+
+      runHook postInstall
     '';
 
     preFixup = ''

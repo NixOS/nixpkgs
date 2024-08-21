@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin zasm
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -11,10 +11,14 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r bin $out/bin
     mkdir -p $out/share/clprover
     cp -r examples $out/share/clprover/examples
+
+    runHook postInstall
   '';
 
   meta = with lib; {

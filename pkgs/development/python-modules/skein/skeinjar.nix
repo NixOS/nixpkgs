@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     unzip ${src}
     install -D ./skein/java/skein.jar $out
+
+    runHook postInstall
   '';
 }

@@ -17,11 +17,15 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-yRzM4tcYc6mweTpLnnlCeKgP00L2wRgHamtUzK9Kstc=";
 
   installPhase = ''
+    runHook preInstall
+
     export LIBDIR=$out/lib
     mkdir -p $LIBDIR
 
     make
     make install
+
+    runHook postInstall
   '';
 
   meta = with lib; {

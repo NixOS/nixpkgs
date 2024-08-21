@@ -34,9 +34,13 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     dest="$out/${python.sitePackages}/distutils"
     mkdir -p $dest
     ln -s ${python}/lib/${python.libPrefix}/distutils/* $dest
     ln -s ${distutilsCfg} $dest/distutils.cfg
+
+    runHook postInstall
   '';
 }

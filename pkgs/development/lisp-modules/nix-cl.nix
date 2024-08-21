@@ -83,8 +83,12 @@ let
         ${pkg}/bin/${program} ${toString flags} < <(echo '(compile-file "asdf.lisp")')
       '';
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out
         cp -v asdf.${faslExt} $out
+
+        runHook postInstall
       '';
     };
 
@@ -200,6 +204,8 @@ let
             concatMapStringsSep "\\|" (replaceStrings ["." "+"] ["[.]" "[+]"]) systems;
         in
       ''
+        runHook preInstall
+
         mkdir -pv $out
         cp -r * $out
 
@@ -207,6 +213,8 @@ let
         find $out -name "*.asd" \
         | grep -v "/\(${mkSystemsRegex systems}\)\.asd$" \
         | xargs rm -fv || true
+
+        runHook postInstall
       '';
 
       dontPatchShebangs = true;
@@ -289,6 +297,8 @@ let
     }).overrideAttrs(o: {
       nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
       installPhase = ''
+        runHook preInstall
+
         mkdir -pv $out/bin
         makeWrapper \
           ${o.pkg}/bin/${o.program} \
@@ -302,6 +312,8 @@ let
           --prefix CLASSPATH : "$CLASSPATH" \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
           --prefix PATH : "${makeBinPath (o.propagatedBuildInputs or [])}"
+
+        runHook postInstall
       '';
     });
 

@@ -26,7 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D fitsverify $out/bin/fitsverify
+
+    runHook postInstall
   '';
 
   meta = with lib; {

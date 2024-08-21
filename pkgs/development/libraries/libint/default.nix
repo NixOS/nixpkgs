@@ -189,8 +189,12 @@ let
     makeFlags = [ "export" ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp ${pname}-${version}.tgz $out/.
+
+      runHook postInstall
     '';
 
     enableParallelBuilding = true;

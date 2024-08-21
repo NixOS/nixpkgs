@@ -22,9 +22,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{include,lib}
     find . -name \*.h -exec cp {} $out/include \;
     find . -name \*.so -exec cp {} $out/lib \;
+
+    runHook postInstall
   '';
 
   meta = with lib; {

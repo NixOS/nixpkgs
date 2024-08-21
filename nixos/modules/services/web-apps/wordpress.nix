@@ -15,6 +15,8 @@ let
     src = cfg.package;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r * $out/
 
@@ -35,6 +37,8 @@ let
       ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
       ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
       ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
+
+      runHook postInstall
     '';
   };
 
@@ -187,7 +191,7 @@ let
                   name = "wordpress-''${pkgs.wordpress.version}-language-de";
                   sha256 = "sha256-dlas0rXTSV4JAl8f/UyMbig57yURRYRhTMtJwF9g8h0=";
                 };
-                installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
+                installPhase = "runHook preInstall; mkdir -p $out; cp -r ./wp-content/languages/* $out/; runHook postInstall";
               })
             ];
           '';

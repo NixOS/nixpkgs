@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -r ./ $out/
     chmod +x $out/bin/lfc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

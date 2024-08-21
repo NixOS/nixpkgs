@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/rpiboot
     cp rpiboot $out/bin
     cp -r msd $out/share/rpiboot
+
+    runHook postInstall
   '';
 
   meta = with lib; {

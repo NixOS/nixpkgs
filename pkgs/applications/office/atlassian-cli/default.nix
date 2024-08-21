@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/doc/atlassian-cli}
     cp -r lib $out/share/java
     cp -r README.txt license $out/share/doc/atlassian-cli
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
         --subst-var-by tool $tool
       chmod +x $out/bin/$tool
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

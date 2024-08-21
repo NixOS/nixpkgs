@@ -121,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 tauon.py $out/bin/tauon
     mkdir -p $out/share/tauon
     cp -r lib $out
@@ -132,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
     mkdir -p $out/share/icons/hicolor/scalable/apps
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
+
+    runHook postInstall
   '';
 
   meta = with lib; {

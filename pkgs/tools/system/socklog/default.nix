@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   buildPhase = "package/compile";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv command"/"* $out/bin
 
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $doc/share/doc/socklog/html
     mv doc/*.html $doc/share/doc/socklog/html/
+
+    runHook postInstall
   '';
 
   checkPhase = "package/check";

@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib/udev
     cp micronucleus $out/bin
     cp 49-micronucleus.rules $out/lib/udev
+
+    runHook postInstall
   '';
 
   meta = with lib; {

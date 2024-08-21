@@ -61,9 +61,13 @@ stdenv.mkDerivation {
   #doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     binPath="$(swiftpmBinPath)"
     mkdir -p $out/bin
     cp $binPath/sourcekit-lsp $out/bin/
+
+    runHook postInstall
   '';
 
   # Canary to verify output of our Swift toolchain does not depend on the Swift

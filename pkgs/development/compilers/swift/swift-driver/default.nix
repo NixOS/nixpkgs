@@ -67,11 +67,15 @@ stdenv.mkDerivation {
 
   # TODO: Darwin-specific installation includes more, but not sure why.
   installPhase = ''
+    runHook preInstall
+
     binPath="$(swiftpmBinPath)"
     mkdir -p $out/bin
     for executable in swift-driver swift-help swift-build-sdk-interfaces; do
       cp $binPath/$executable $out/bin/
     done
+
+    runHook postInstall
   '';
 
   meta = {

@@ -47,8 +47,12 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
+
         [ -d patches ] && cp -r patches/ $out || mkdir $out
         mkdir -p $out/clang $out/llvm
+
+        runHook postInstall
       '';
     };
   };

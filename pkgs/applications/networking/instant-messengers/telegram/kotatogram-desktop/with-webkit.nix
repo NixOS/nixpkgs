@@ -6,8 +6,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   dontUnpack = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ${kotatogram-desktop}/share $out
+
+    runHook postInstall
   '';
   postFixup = ''
     mkdir -p $out/bin

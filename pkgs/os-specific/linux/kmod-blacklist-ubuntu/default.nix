@@ -13,6 +13,8 @@ in stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     for f in modprobe.d/*.conf; do
       echo "''\n''\n## file: "`basename "$f"`"''\n''\n" >> "$out"/modprobe.conf
@@ -27,6 +29,8 @@ in stdenv.mkDerivation {
       --replace /sbin/modprobe /run/booted-system/sw/bin/modprobe \
       --replace " grep " " /run/booted-system/sw/bin/grep " \
       --replace " xargs " " /run/booted-system/sw/bin/xargs "
+
+    runHook postInstall
   '';
 
   meta = with lib; {

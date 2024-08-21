@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     find . -type f -name "*.dll" -o -name "*.exe"  -delete;
 
     substituteInPlace etc/visualvm.conf \
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
       --replace "/path/to/jdk" "${jdk.home}" \
 
     cp -r . $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

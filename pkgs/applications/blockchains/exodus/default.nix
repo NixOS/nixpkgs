@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/applications
     cp -r . $out
     ln -s $out/Exodus $out/bin/Exodus
@@ -46,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/exodus.desktop $out/share/applications
     substituteInPlace $out/share/applications/exodus.desktop \
           --replace 'Exec=bash -c "cd \`dirname %k\` && ./Exodus %u"' "Exec=Exodus %u"
+
+    runHook postInstall
   '';
 
   dontPatchELF = true;

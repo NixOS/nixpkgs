@@ -98,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = "cd Plugin";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/lib/clap $out/bin $out/share/doc/CHOWTapeModel/
     cd CHOWTapeModel_artefacts/${finalAttrs.cmakeBuildType}
     cp -r LV2/CHOWTapeModel.lv2 $out/lib/lv2
@@ -105,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r CLAP/CHOWTapeModel.clap $out/lib/clap
     cp Standalone/CHOWTapeModel  $out/bin
     cp ../../../../Manual/ChowTapeManual.pdf $out/share/doc/CHOWTapeModel/
+
+    runHook postInstall
   '';
 
   # JUCE dlopens these, make sure they are in rpath

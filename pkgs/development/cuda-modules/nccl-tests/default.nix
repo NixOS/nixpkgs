@@ -62,8 +62,12 @@ backendStdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r build/* $out/bin/
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater {

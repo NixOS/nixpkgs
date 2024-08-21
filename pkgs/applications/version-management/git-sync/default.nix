@@ -16,9 +16,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a git-* $out/bin/
     cp -a contrib/git-* $out/bin/
+
+    runHook postInstall
   '';
 
   wrapperPath = with lib; makeBinPath ([

@@ -26,9 +26,13 @@ stdenv.mkDerivation {
   LDFLAGS = "-L${cudatoolkit}/lib/stubs";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     cp gpu_burn $out/bin/
     cp compare.ptx $out/share/
+
+    runHook postInstall
   '';
 
   postFixup = ''

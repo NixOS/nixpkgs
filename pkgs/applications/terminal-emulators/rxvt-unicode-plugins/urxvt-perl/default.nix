@@ -12,12 +12,16 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace fullscreen \
       --replace "wmctrl" "${wmctrl}/bin/wmctrl"
 
     mkdir -p $out/lib/urxvt/perl
     cp fullscreen $out/lib/urxvt/perl
     cp newterm $out/lib/urxvt/perl
+
+    runHook postInstall
   '';
 
   meta = with lib; {

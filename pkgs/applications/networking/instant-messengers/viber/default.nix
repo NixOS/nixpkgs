@@ -114,6 +114,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     dpkg-deb -x $src $out
     mkdir -p $out/bin
 
@@ -141,6 +143,8 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/viber.desktop \
       --replace /opt/viber/Viber $out/opt/viber/Viber \
       --replace /usr/share/ $out/share/
+
+    runHook postInstall
   '';
 
   dontStrip = true;

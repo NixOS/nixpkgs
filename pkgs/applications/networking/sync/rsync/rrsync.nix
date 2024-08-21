@@ -20,9 +20,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp support/rrsync $out/bin
     chmod a+x $out/bin/rrsync
+
+    runHook postInstall
   '';
 
   meta = rsync.meta // {

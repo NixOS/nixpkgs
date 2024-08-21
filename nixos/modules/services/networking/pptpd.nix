@@ -84,10 +84,14 @@ with lib;
         phases       = [ "installPhase" ];
         nativeBuildInputs  = with pkgs; [ makeWrapper ];
         installPhase = ''
+          runHook preInstall
+
           mkdir -p $out/bin
           makeWrapper ${pkgs.ppp}/bin/pppd $out/bin/pppd \
             --set LD_PRELOAD    "${pkgs.libredirect}/lib/libredirect.so" \
             --set NIX_REDIRECTS "/etc/ppp=/etc/ppp-pptpd"
+
+          runHook postInstall
         '';
       };
     in {

@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     PSC_PACKAGE=$out/bin/psc-package
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
       --bash <($PSC_PACKAGE --bash-completion-script $PSC_PACKAGE) \
       --fish <($PSC_PACKAGE --fish-completion-script $PSC_PACKAGE) \
       --zsh <($PSC_PACKAGE --zsh-completion-script $PSC_PACKAGE)
+
+    runHook postInstall
   '';
 
   meta = with lib; {

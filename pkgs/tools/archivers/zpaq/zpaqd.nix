@@ -24,11 +24,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,include,lib,share/doc/zpaq}
     cp libzpaq.so "$out/lib"
     cp zpaqd "$out/bin"
     cp libzpaq.h "$out/include"
     cp readme_zpaqd.txt "$out/share/doc/zpaq"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

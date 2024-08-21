@@ -15,8 +15,12 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh-z
     cp _zshz zsh-z.plugin.zsh $out/share/zsh-z
+
+    runHook postInstall
   '';
 
   meta = with lib; {

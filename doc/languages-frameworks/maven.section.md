@@ -27,11 +27,15 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/jd-cli
     install -Dm644 jd-cli/target/jd-cli.jar $out/share/jd-cli
 
     makeWrapper ${jre}/bin/java $out/bin/jd-cli \
       --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
+
+    runHook postInstall
   '';
 
   meta = {
@@ -210,11 +214,15 @@ stdenv.mkDerivation {
 
   # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
   installPhase = ''
+    runHook preInstall
+
     find $out -type f \
       -name \*.lastUpdated -or \
       -name resolver-status.properties -or \
       -name _remote.repositories \
       -delete
+
+    runHook postInstall
   '';
 
   # don't do any fixup
@@ -269,7 +277,11 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 target/${pname}-${version}.jar $out/share/java
+
+    runHook postInstall
   '';
 }
 ```
@@ -327,6 +339,8 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     classpath=$(find ${repository} -name "*.jar" -printf ':%h/%f');
@@ -336,6 +350,8 @@ in stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
           --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
           --add-flags "Main"
+
+    runHook postInstall
   '';
 }
 ```
@@ -405,6 +421,8 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     # create a symbolic link for the repository directory
@@ -415,6 +433,8 @@ in stdenv.mkDerivation rec {
     # this should be the paths from the dependency derivation
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
           --add-flags "-jar $out/share/java/${pname}-${version}.jar"
+
+    runHook postInstall
   '';
 }
 ```

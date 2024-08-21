@@ -31,10 +31,14 @@ stdenv.mkDerivation rec {
     "make ${target} name=${platform}";
 
   installPhase = ''
+    runHook preInstall
+
     make Install dest=$out
     rm $out/README
     mkdir -p $out/share/doc
     mv $out/doc $out/share/doc/icon
+
+    runHook postInstall
   '';
 
   meta = with lib; {

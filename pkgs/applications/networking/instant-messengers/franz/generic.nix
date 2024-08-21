@@ -74,6 +74,8 @@ in stdenv.mkDerivation (rec {
   unpackPhase = "dpkg-deb -x $src .";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r opt $out
     ln -s $out/opt/${name}/${pname} $out/bin
@@ -82,6 +84,8 @@ in stdenv.mkDerivation (rec {
     cp -r usr/share $out
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace /opt/${name}/${pname} ${pname}
+
+    runHook postInstall
   '';
 
   dontWrapGApps = true;

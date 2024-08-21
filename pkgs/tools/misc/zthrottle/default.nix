@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ zsh ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D zthrottle $out/bin/zthrottle
+
+    runHook postInstall
   '';
 
   meta = with lib; {

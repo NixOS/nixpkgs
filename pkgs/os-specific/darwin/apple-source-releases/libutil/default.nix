@@ -14,6 +14,8 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
   xcbuildFlags = [ "-target" "util" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
   '' + lib.optionalString headersOnly ''
     cp *.h $out/include
@@ -25,6 +27,8 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
 
     # TODO: figure out how to get this to be right the first time around
     install_name_tool -id $out/lib/libutil.dylib $out/lib/libutil.dylib
+
+    runHook postInstall
   '';
 
   # FIXME: headers are different against headersOnly. And all the headers are NOT in macos, do we really want them?

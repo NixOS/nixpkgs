@@ -29,9 +29,13 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts/misc"
     install -m 644 -D *.psf.gz -t "$out/share/consolefonts"
     mkfontdir "$out/share/fonts/misc"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

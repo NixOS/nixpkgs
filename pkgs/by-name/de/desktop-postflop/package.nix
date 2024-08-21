@@ -28,8 +28,12 @@ rustPlatform.buildRustPackage rec {
     npmDepsHash = "sha256-HWZLicyKL2FHDjZQj9/CRwVi+uc/jHmVNxtlDuclf7s=";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -r dist/* $out
+
+      runHook postInstall
     '';
   };
 

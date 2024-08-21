@@ -20,8 +20,12 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D './${version}/bin/mas' "$out/bin/mas"
     installShellCompletion --cmd mas --bash './${version}/etc/bash_completion.d/mas'
+
+    runHook postInstall
   '';
 
   passthru.tests = {

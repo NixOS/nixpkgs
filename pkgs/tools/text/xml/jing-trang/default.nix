@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   preBuild = "ant";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{share/java,bin}
     cp ./build/*.jar ./lib/resolver.jar "$out/share/java/"
 
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     done
 
     chmod +x "$out"/bin/*
+
+    runHook postInstall
   '';
 
   doCheck = true;

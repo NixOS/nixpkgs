@@ -59,9 +59,13 @@ let
     propagatedBuildInputs = plugins ++ buildbot.propagatedBuildInputs;
 
     installPhase = ''
+      runHook preInstall
+
       makeWrapper ${buildbot}/bin/buildbot $out/bin/buildbot \
         --prefix PYTHONPATH : "${buildbot}/${python.sitePackages}:$PYTHONPATH"
       ln -sfv ${buildbot}/lib $out/lib
+
+      runHook postInstall
     '';
 
     passthru = buildbot.passthru // {

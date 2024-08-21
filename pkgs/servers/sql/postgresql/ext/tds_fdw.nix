@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     version="$(sed -En "s,^default_version *= *'([^']*)'.*,\1,p" tds_fdw.control)"
     install -D tds_fdw${postgresql.dlSuffix} -t $out/lib
     install -D sql/tds_fdw.sql    "$out/share/postgresql/extension/tds_fdw--$version.sql"
     install -D tds_fdw.control -t $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater {

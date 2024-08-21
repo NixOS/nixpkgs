@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m 644 -D *.pcf -t "$out/share/fonts"
     install -m 644 -D *.psfu -t "$out/share/kbd/consolefonts"
     mkfontdir "$out/share/fonts"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

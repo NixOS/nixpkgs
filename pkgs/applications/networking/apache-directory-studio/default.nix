@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
 
   installPhase = ''
+    runHook preInstall
+
     dest="$out/libexec/ApacheDirectoryStudio"
     mkdir -p "$dest"
     cp -r . "$dest"
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])}
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
+
+    runHook postInstall
   '';
 
   meta = with lib; {

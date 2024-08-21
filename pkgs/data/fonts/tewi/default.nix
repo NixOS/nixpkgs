@@ -37,9 +37,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     fontDir="$out/share/fonts/misc"
     install -m 644 -D *.otb out/* -t "$fontDir"
     mkfontdir "$fontDir"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

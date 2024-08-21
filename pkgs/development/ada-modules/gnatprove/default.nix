@@ -79,10 +79,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install-all
     cp -a ./install/. $out
     mkdir $out/share/gpr
     ln -s $out/lib/gnat/* $out/share/gpr/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

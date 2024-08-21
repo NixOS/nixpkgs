@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/${python.sitePackages}/hgext3rd/
     install -D $src/commitsigs.py \
                $out/${python.sitePackages}/hgext3rd/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

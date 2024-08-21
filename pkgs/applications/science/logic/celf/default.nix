@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp .heap* $out/bin/
     ./.mkexec ${smlnj}/bin/sml $out/bin celf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

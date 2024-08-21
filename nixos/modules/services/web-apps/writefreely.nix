@@ -74,6 +74,8 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       less_dir=$src/less
       css_dir=$out/static/css
 
@@ -81,6 +83,8 @@ let
       lessc $less_dir/fonts.less $css_dir/fonts.css
       lessc $less_dir/icons.less $css_dir/icons.css
       lessc $less_dir/prose.less $css_dir/prose.css
+
+      runHook postInstall
     '';
   };
 

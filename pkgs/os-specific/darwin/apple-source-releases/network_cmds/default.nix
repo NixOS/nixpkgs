@@ -24,6 +24,8 @@ appleDerivation {
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
+    runHook preInstall
+
     for f in Products/Release/*; do
       if [ -f $f ]; then
         install -D $f $out/bin/$(basename $f)
@@ -45,7 +47,9 @@ appleDerivation {
 
     # mkdir -p $out/System/Library/LaunchDaemons
     # install kdumpd.tproj/com.apple.kdumpd.plist $out/System/Library/LaunchDaemons
- '';
+
+    runHook postInstall
+  '';
 
   meta = {
     platforms = lib.platforms.darwin;

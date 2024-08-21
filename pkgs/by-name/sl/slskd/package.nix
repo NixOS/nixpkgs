@@ -38,7 +38,11 @@ let
     nodejs = nodejs_18;
     npmDepsHash = "sha256-06qQ1y870TrkXhkHYADjnWVhdyiLWEqdDt3qrJ1BBFo=";
     installPhase = ''
+      runHook preInstall
+
       cp -r build $out
+
+      runHook postInstall
     '';
   };
 

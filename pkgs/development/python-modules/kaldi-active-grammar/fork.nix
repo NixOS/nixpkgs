@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # Fixes "patchelf: wrong ELF type"
     find . -type f -name "*.o" -print0 | xargs -0 rm -f
     mkdir -p $out/{bin,lib}
@@ -100,6 +102,8 @@ stdenv.mkDerivation rec {
     patchelf \
       --set-rpath "${lib.makeLibraryPath buildInputs}:$out/lib" \
       $out/lib/*
+
+    runHook postInstall
   '';
 
   meta = with lib; {

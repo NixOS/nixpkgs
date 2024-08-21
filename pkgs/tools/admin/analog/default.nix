@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/etc $out/share/doc/$pname $out/share/man/man1 $out/share/$pname
     mv analog $out/bin/
     cp examples/big.cfg $out/etc/analog.cfg
@@ -26,6 +28,8 @@ stdenv.mkDerivation rec {
     mv docs $out/share/doc/$pname/manual
     mv how-to $out/share/doc/$pname/
     mv lang images examples $out/share/$pname/
+
+    runHook postInstall
   '';
 
   meta = {

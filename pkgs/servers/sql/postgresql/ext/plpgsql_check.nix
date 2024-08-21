@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/lib *${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
+
+    runHook postInstall
   '';
 
   passthru.tests.extension = stdenv.mkDerivation {
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
       psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION plpgsql_check;"
       runHook postCheck
     '';
-    installPhase = "touch $out";
+    installPhase = "runHook preInstall; touch $out; runHook postInstall";
   };
 
   meta = with lib; {

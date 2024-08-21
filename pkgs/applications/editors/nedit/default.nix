@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -p source/nedit source/nc $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

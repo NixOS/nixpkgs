@@ -15,8 +15,12 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 xlife -t $out/bin
     install -Dm755 lifeconv -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

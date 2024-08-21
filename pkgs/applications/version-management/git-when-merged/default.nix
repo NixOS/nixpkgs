@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D --target-directory $out/bin/ bin/git-when-merged
+
+    runHook postInstall
   '';
 
   meta = with lib; {

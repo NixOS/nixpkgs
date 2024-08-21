@@ -28,11 +28,15 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
+      runHook preInstall
+
       d=$out/libexec/perf-tools
       mkdir -p $d $out/share
       cp -prvd . $d/
       ln -s $d/bin $out/bin
       mv $d/man $out/share/
+
+      runHook postInstall
     '';
 
   meta = with lib; {

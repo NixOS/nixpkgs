@@ -8,8 +8,12 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp src/ladspa.h $out/include/ladspa.h
+
+    runHook postInstall
   '';
 
   meta = {

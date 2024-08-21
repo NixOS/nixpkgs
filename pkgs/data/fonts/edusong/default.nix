@@ -12,8 +12,12 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/
     mv *.ttf $out/share/fonts/
+
+    runHook postInstall
   '';
 
   meta = {

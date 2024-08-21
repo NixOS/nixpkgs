@@ -68,11 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     INSTALLDIR=$out/bin make install
 
     installManPage fossil.1
     installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -59,12 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/${finalAttrs.pname}-${finalAttrs.version}}
     cp -r * $out/share/${finalAttrs.pname}-${finalAttrs.version}/.
 
     makeWrapper ${python}/bin/python $out/bin/flaresolverr \
       --add-flags "$out/share/${finalAttrs.pname}-${finalAttrs.version}/src/flaresolverr.py" \
       --prefix PATH : "${lib.makeBinPath [ xorg.xvfb ]}"
+
+    runHook postInstall
   '';
 
   passthru = {

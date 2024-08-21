@@ -141,7 +141,11 @@ buildBazelPackage {
         $bazelOut/external/*_pip3/BUILD.bazel
     '';
     installPhase = ''
+      runHook preInstall
+
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy
+
+      runHook postInstall
     '';
   };
 

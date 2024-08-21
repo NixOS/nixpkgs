@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/etc/slurm/plugstack.conf.d
     install -m 755 stunnel.so $out/lib
     install -m 644 plugstack.conf $out/etc/slurm/plugstack.conf.d/stunnel.conf.example
+
+    runHook postInstall
   '';
 
   meta = with lib; {

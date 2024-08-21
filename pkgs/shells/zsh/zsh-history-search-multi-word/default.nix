@@ -16,10 +16,14 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     plugindir="$out/share/zsh/${pname}"
 
     mkdir -p "$plugindir"
     cp -r -- history-* hsmw-* "$plugindir"/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

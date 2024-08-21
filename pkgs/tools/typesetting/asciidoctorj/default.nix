@@ -12,10 +12,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     rm bin/asciidoctorj.bat
     cp -r . $out
     wrapProgram $out/bin/asciidoctorj \
       --prefix JAVA_HOME : ${jdk}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

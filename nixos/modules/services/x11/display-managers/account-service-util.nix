@@ -33,9 +33,13 @@ python3.pkgs.buildPythonApplication {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src $out/bin/set-session
     chmod +x $out/bin/set-session
+
+    runHook postInstall
   '';
 
   meta = with lib; {

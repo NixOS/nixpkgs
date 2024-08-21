@@ -84,8 +84,12 @@ in stdenv.mkDerivation {
   buildPhase = "chmod +x ./buck2";
   checkPhase = "./buck2 --version";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -D buck2 $out/bin/buck2
+
+    runHook postInstall
   '';
 
   passthru = {

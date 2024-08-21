@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib}
     mv release/gcc_linux_*/*.* $out/lib
     mv release/gcc_linux_*/* $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

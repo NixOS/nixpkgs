@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/misc
     cp *.otb $out/share/fonts/misc
 
     # create fonts.dir so NixOS xorg module adds to fp
     mkfontdir $out/share/fonts/misc
+
+    runHook postInstall
   '';
 
   meta = with lib; {

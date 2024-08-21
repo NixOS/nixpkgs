@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 snow -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -vD setup.exe "$out/bin/setup.exe"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -20,8 +20,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/prevo
     cp prevo.db $out/share/prevo/
+
+    runHook postInstall
   '';
 
   meta = {

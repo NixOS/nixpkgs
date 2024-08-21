@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     ./install.sh --prefix=$out/bin
+
+    runHook postInstall
   '';
 
   postFixup = ''

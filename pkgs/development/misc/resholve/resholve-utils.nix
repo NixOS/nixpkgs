@@ -197,7 +197,11 @@ rec {
       dontBuild = true;
 
       installPhase = ''
+        runHook preInstall
+
         cp -R $src $out
+
+        runHook postInstall
       '';
 
       # enable below for verbose debug info if needed

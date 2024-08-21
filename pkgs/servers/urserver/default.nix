@@ -29,10 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D urserver $out/bin/urserver
     wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
     cp -r remotes $out/bin/remotes
     cp -r manager $out/bin/manager
+
+    runHook postInstall
   '';
 
   meta = with lib; {

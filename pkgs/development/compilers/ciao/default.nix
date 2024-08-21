@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./ciao-boot.sh install
+
+    runHook postInstall
   '';
 
   meta = with lib; {

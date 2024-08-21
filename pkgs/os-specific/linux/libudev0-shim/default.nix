@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ udev ];
 
   installPhase = ''
+    runHook preInstall
+
     name="$(echo libudev.so.*)"
     install -Dm755 "$name" "$out/lib/$name"
     ln -s "$name" "$out/lib/libudev.so.0"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

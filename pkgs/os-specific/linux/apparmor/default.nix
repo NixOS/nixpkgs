@@ -303,8 +303,12 @@ let
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir "$out"
       cp -R ./kernel-patches/* "$out"
+
+      runHook postInstall
     '';
 
     inherit doCheck;

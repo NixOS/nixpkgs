@@ -64,6 +64,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/cups/model
     ln -s $out/opt/brother/Printers/HL2260D/cupswrapper/brother-HL2260D-cups-en.ppd $out/share/cups/model
 
@@ -75,7 +77,9 @@ stdenv.mkDerivation {
 
     wrapProgram $out/opt/brother/Printers/HL2260D/lpd/filter_HL2260D \
       --prefix PATH ":" ${ lib.makeBinPath [ ghostscript which ] }
-    '';
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";

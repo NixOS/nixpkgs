@@ -36,8 +36,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/static
       cp -R pyca/ui/static/* $out/static/
+
+      runHook postInstall
     '';
   };
 

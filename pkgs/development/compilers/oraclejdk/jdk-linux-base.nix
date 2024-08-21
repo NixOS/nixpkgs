@@ -90,6 +90,8 @@ let result = stdenv.mkDerivation rec {
   dontStrip = 1;
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
 
     if test -z "$installjdk"; then
@@ -143,6 +145,8 @@ let result = stdenv.mkDerivation rec {
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
+
+    runHook postInstall
   '';
 
   postFixup = ''

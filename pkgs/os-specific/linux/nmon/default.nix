@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
     else "UNKNOWN"
   }";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp nmon $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

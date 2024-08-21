@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ ruby ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp h $out/bin/h
     cp up $out/bin/up
+
+    runHook postInstall
   '';
 
   meta = with lib; {

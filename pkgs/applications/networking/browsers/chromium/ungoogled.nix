@@ -36,8 +36,12 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R * $out/
     wrapProgram $out/utils/patches.py --add-flags "apply" --prefix PATH : "${patch}/bin"
+
+    runHook postInstall
   '';
 }

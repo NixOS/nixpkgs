@@ -18,6 +18,8 @@ stdenvNoCC.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp *.ttf *.ttc $out/share/fonts/truetype
 
@@ -28,6 +30,8 @@ stdenvNoCC.mkDerivation {
       substitute ${./no-op.conf} $out/etc/fonts/conf.d/30-''${name,,}.conf \
         --subst-var-by fontname $name
     done
+
+    runHook postInstall
   '';
 
   meta = {

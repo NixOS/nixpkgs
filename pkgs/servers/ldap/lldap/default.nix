@@ -53,8 +53,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out
       cp -R app/{index.html,pkg,static} $out/
+
+      runHook postInstall
     '';
 
     doCheck = false;

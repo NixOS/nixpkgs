@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install DESTDIR=$out PREFIX=/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

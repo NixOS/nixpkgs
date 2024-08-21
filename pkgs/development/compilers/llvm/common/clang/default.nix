@@ -187,9 +187,13 @@ let
     pname = "clang-manpages";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/man/man1
       # Manually install clang manpage
       cp docs/man/*.1 $out/share/man/man1/
+
+      runHook postInstall
     '';
 
     outputs = [ "out" ];

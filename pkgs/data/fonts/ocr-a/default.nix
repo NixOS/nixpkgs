@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0644 $src $out/share/fonts/truetype/OCRA.ttf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

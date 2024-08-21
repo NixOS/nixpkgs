@@ -26,6 +26,8 @@ in mkDerivation rec {
     sourceRoot=pkg
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp usr/bin/rescuetime $out/bin
 
@@ -33,6 +35,8 @@ in mkDerivation rec {
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${lib.makeLibraryPath [ qt5.qtbase libXtst libXext libX11 libXScrnSaver ]}" \
       $out/bin/rescuetime
+
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "${pname}-updater" ''

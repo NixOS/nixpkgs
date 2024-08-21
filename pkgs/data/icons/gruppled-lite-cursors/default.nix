@@ -17,8 +17,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons/${theme}
     cp -r ${theme}/{cursors,index.theme} $out/share/icons/${theme}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

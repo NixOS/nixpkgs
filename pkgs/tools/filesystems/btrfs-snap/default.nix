@@ -13,6 +13,8 @@ stdenvNoCC.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp btrfs-snap $out/bin/
     wrapProgram $out/bin/btrfs-snap --prefix PATH : ${lib.makeBinPath [
@@ -21,6 +23,8 @@ stdenvNoCC.mkDerivation rec {
       gnugrep           # grep
       util-linuxMinimal # logger, mount
     ]}
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "Create and maintain the history of snapshots of btrfs filesystems";

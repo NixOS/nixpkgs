@@ -11,6 +11,8 @@ in stdenv.mkDerivation {
   patches = mumble.patches or [];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     ln -s ${mumble}/lib/libmumble.so.1 $out/lib/
 
@@ -22,6 +24,8 @@ in stdenv.mkDerivation {
     install -Dm755 auxiliary_files/run_scripts/mumble-overlay.in $out/bin/mumble-overlay
     sed -i "s,/usr/lib,$out/lib,g" $out/bin/mumble-overlay
     sed -i '2iPATH="${binPath}:$PATH"' $out/bin/mumble-overlay
+
+    runHook postInstall
   '';
 
   meta = {

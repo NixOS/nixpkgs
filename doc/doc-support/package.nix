@@ -74,6 +74,8 @@ stdenvNoCC.mkDerivation (
     '';
 
     installPhase = ''
+      runHook preInstall
+
       dest="$out/share/doc/nixpkgs"
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
@@ -84,6 +86,8 @@ stdenvNoCC.mkDerivation (
       mkdir -p $out/nix-support/
       echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
       echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
+
+      runHook postInstall
     '';
 
     passthru = {

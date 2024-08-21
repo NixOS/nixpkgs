@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     libdir="$out/${python3.sitePackages}"
     mkdir -p "$libdir"
     cp -r postiats "$libdir"
@@ -34,5 +36,7 @@ stdenv.mkDerivation rec {
     install pats-* "$out/bin"
 
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 }

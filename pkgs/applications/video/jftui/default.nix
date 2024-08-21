@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 build/jftui $out/bin/jftui
+
+    runHook postInstall
   '';
 
   meta = with lib; {

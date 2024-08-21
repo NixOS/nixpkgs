@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -r ui/build/* $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

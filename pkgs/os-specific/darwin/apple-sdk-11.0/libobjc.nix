@@ -8,11 +8,15 @@ let self = stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{include,lib/swift}
     cp -r ${MacOSX-SDK}/usr/include/objc $out/include
     cp ${MacOSX-SDK}/usr/lib/libobjc* $out/lib
     cp -r ${MacOSX-SDK}/usr/lib/swift/ObjectiveC.swiftmodule $out/lib/swift
     cp ${MacOSX-SDK}/usr/lib/swift/libswiftObjectiveC.tbd $out/lib/swift
+
+    runHook postInstall
   '';
 
   passthru = {

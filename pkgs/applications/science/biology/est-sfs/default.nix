@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/doc/${pname}
     cp est-sfs $out/bin
     cp est-sfs-documentation.pdf $out/share/doc/${pname}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

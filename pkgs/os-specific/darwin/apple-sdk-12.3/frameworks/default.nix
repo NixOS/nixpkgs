@@ -71,6 +71,8 @@ let
         nativeBuildInputs = [ buildPackages.darwin.rewrite-tbd ];
 
         installPhase = ''
+          runHook preInstall
+
           mkdir -p $out/Library/Frameworks
 
           cp -r ${darwin-stubs}${standardFrameworkPath name private} $out/Library/Frameworks
@@ -93,6 +95,8 @@ let
               -r ${builtins.storeDir} \
               "$tbd"
           done
+
+          runHook postInstall
         '';
 
         propagatedBuildInputs = lib.attrValues deps;

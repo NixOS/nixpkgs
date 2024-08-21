@@ -27,6 +27,8 @@ buildPythonApplication {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib
     cp ${./update.py} $out/bin/vim-plugins-updater
     cp ${./get-plugins.nix} $out/bin/get-plugins.nix
@@ -35,6 +37,8 @@ buildPythonApplication {
     makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [
       nix nix-prefetch-git neovim-unwrapped nurl ]}" --prefix PYTHONPATH : "${./.}:${../../../../../maintainers/scripts}" )
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 
   shellHook = ''

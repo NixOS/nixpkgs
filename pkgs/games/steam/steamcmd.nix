@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/steamcmd/linux32
     install -Dm755 steamcmd.sh $out/share/steamcmd/steamcmd.sh
     install -Dm755 linux32/* $out/share/steamcmd/linux32
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
       --subst-var-by steamRoot "${steamRoot}" \
       --subst-var-by steamRun ${steam-run}
     chmod 0755 $out/bin/steamcmd
+
+    runHook postInstall
   '';
 
   meta = with lib; {

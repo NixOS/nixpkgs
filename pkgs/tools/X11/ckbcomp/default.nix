@@ -22,8 +22,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0555 -t $out/bin Keyboard/ckbcomp
     install -Dm0444 -t $out/share/man/man1 man/ckbcomp.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

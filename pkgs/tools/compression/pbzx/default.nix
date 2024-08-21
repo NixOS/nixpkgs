@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
     ${stdenv.cc.targetPrefix}cc pbzx.c -llzma -lxar -o pbzx
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp pbzx $out/bin
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "Stream parser of Apple's pbzx compression format";

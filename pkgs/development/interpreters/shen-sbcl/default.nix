@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D bin/sbcl/shen $out/bin/shen-sbcl
+
+    runHook postInstall
   '';
 
   meta = with lib; {

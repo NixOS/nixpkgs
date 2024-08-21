@@ -72,6 +72,8 @@ rec {
     dontPatch = true;
     autoPatchelfIgnoreMissingDeps = true;
     installPhase = ''
+      runHook preInstall
+
       # https://developer.android.com/ndk/guides/other_build_systems
       mkdir -p $out
       cp -r ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double} $out/toolchain
@@ -114,6 +116,8 @@ rec {
       ln -sf $out/bin/${targetInfo.triple}-as $out/bin/as
 
       patchShebangs $out/bin
+
+      runHook postInstall
     '';
   };
 

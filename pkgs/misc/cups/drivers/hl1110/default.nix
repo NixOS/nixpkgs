@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     gcc -Wall ${srcdir}/brcupsconfig/brcupsconfig.c -o brcupsconfig4
     '';
   installPhase = ''
+    runHook preInstall
+
     # install lpr
     dpkg-deb -x ${lprdeb} $out
 
@@ -62,7 +64,8 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 \
     --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }
 
-    '';
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "http://www.brother.com/";

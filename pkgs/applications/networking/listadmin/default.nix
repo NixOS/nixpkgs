@@ -16,6 +16,8 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     install -m 755 listadmin.pl $out/bin/listadmin
     installManPage listadmin.1
@@ -24,6 +26,8 @@ stdenvNoCC.mkDerivation rec {
       --prefix PERL5LIB : "${with perl.pkgs; makeFullPerlPath [
         TextReform NetINET6Glue LWPProtocolHttps
         ]}"
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

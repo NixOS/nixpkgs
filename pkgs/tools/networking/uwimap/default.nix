@@ -49,11 +49,15 @@ stdenv.mkDerivation rec {
     "-I${openssl.dev}/include/openssl";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib $out/include/c-client
     cp c-client/*.h osdep/unix/*.h c-client/linkage.c c-client/auths.c $out/include/c-client/
     cp c-client/c-client.a $out/lib/libc-client.a
     cp mailutil/mailutil imapd/imapd dmail/dmail mlock/mlock mtest/mtest tmail/tmail \
       tools/{an,ua} $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

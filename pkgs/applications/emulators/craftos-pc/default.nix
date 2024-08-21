@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib $out/share/craftos $out/include
     DESTDIR=$out/bin make install
     cp ./craftos2-lua/src/liblua.so $out/lib
@@ -77,6 +79,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/applications
     cp resources/linux-icons/CraftOS-PC.desktop $out/share/applications/CraftOS-PC.desktop
+
+    runHook postInstall
   '';
 
   passthru.tests = {

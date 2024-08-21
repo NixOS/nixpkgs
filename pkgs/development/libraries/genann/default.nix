@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp ./genann.{h,c} $out/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {

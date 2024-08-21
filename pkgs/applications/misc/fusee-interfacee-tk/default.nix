@@ -16,6 +16,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pythonEnv ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     # The program isn't just called app, so I'm renaming it based on the repo name
@@ -27,6 +29,8 @@ in stdenv.mkDerivation rec {
     # app.py depends on these to run
     cp *.py $out/bin/
     cp intermezzo.bin $out/bin/intermezzo.bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

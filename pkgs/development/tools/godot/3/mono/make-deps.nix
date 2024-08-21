@@ -13,7 +13,13 @@ godot3-mono.overrideAttrs (self: base: {
 
   outputs = [ "out" ];
   buildPhase = " ";
-  installPhase = ''echo "No output intended. Run make-deps.sh instead." > $out'';
+  installPhase = ''
+  runHook preInstall
+
+  echo "No output intended. Run make-deps.sh instead." > $out
+
+  runHook postInstall
+'';
 
   # This script is used to update the accompanying deps.nix file, a nix expression listing the
   # nuget packages that the godot-mono code depends on, along with their sha256 hashes. This

@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/jq-zsh-plugin/
     cp jq.plugin.zsh $out/share/jq-zsh-plugin
     cp -r bin/ $out/share/jq-zsh-plugin
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/jq-zsh-plugin/bin/jq-paths --replace-fail ":-jq" ":-${jq}/bin/jq"
     substituteInPlace $out/share/jq-zsh-plugin/bin/jq-repl --replace-fail ":-jq" ":-${jq}/bin/jq"
     substituteInPlace $out/share/jq-zsh-plugin/bin/jq-repl-preview --replace-fail ":-jq" ":-${jq}/bin/jq"
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };

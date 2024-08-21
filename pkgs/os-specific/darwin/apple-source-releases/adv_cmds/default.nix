@@ -41,6 +41,8 @@ appleDerivation {
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
+    runHook preInstall
+
     for f in Products/Release/*; do
       if [ -f $f ]; then
         install -D $f $out/bin/$(basename $f)
@@ -53,6 +55,8 @@ appleDerivation {
     # from variant_links.sh
     # ln -s $out/bin/pkill $out/bin/pgrep
     # ln -s $out/share/man/man1/pkill.1 $out/share/man/man1/pgrep.1
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ xcbuild ];

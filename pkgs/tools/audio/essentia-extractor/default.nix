@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
   unpackPhase = "unpackFile $src ; export sourceRoot=.";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp streaming_extractor_music $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -18,8 +18,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # We could also properly use CMake, but we would have to heavily patch it
   # to avoid configure-time downloads of many things.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include
     cp -r include/igl $out/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ bash ];
   installPhase = ''
+    runHook preInstall
+
     install -D nix-shell.plugin.zsh --target-directory=$out/share/zsh-nix-shell
     install -D scripts/* --target-directory=$out/share/zsh-nix-shell/scripts
+
+    runHook postInstall
   '';
 
   meta = with lib; {

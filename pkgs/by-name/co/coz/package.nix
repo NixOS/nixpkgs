@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/man/man1
     make install prefix=$out
 
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
     chmod -x $out/include/coz.h
 
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 
   meta = {

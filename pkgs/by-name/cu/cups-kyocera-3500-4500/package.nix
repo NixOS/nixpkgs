@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with python3Packages; [ reportlab pypdf3 setuptools ];
 
   installPhase = ''
+    runHook preInstall
+
     # allow cups to find the ppd files
     mkdir -p $out/share/cups/model
     mv ./usr/share/kyocera${kyodialog_version_short}/ppd${kyodialog_version_short} $out/share/cups/model/Kyocera
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
     install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
+
+    runHook postInstall
   '';
 
   meta = with lib; {

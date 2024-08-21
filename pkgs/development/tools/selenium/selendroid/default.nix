@@ -24,6 +24,8 @@ stdenv.mkDerivation {
   buildInputs = [ jdk ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/lib/selendroid
     cp ${srcs.jar} $out/share/lib/selendroid/selendroid-standalone-${version}.jar
     cp ${srcs.gridPlugin} $out/share/lib/selendroid/${pluginName}.jar
@@ -36,6 +38,8 @@ stdenv.mkDerivation {
       --add-flags "org.openqa.grid.selenium.GridLauncherV3" \
       --add-flags "-role hub" \
       --add-flags "-capabilityMatcher io.selendroid.grid.SelendroidCapabilityMatcher"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

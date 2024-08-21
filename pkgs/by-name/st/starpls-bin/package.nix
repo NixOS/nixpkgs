@@ -20,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/bin/starpls
+
+    runHook postInstall
   '';
 
   meta = with lib; {

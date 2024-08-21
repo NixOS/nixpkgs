@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
 
   installPhase = ''
+    runHook preInstall
+
     install -m 644 -D $src $out/bin/ckan.exe
     makeWrapper ${mono}/bin/mono $out/bin/ckan \
       --add-flags $out/bin/ckan.exe \
       --set LD_LIBRARY_PATH $libraries
+
+    runHook postInstall
   '';
 
   meta = with lib; {

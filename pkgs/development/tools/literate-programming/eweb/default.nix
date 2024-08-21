@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 asciidoc ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin $out/share/doc/${pname}-${version}
     cp etangle.py $out/bin
     cp etangle.w etangle.html $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

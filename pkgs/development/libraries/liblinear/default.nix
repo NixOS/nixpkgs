@@ -20,6 +20,8 @@ in stdenv.mkDerivation rec {
   buildFlags = [ "lib" "predict" "train" ];
 
   installPhase = ''
+    runHook preInstall
+
     ${if stdenv.isDarwin then ''
       install -D liblinear.so.${soVersion} $out/lib/liblinear.${soVersion}.dylib
       ln -s $out/lib/liblinear.${soVersion}.dylib $out/lib/liblinear.dylib
@@ -30,6 +32,8 @@ in stdenv.mkDerivation rec {
     install -D train $bin/bin/liblinear-train
     install -D predict $bin/bin/liblinear-predict
     install -Dm444 -t $dev/include linear.h
+
+    runHook postInstall
   '';
 
   meta = with lib; {

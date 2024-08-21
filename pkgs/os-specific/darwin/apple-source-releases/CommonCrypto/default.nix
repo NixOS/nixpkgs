@@ -2,8 +2,12 @@
 
 appleDerivation' stdenvNoCC {
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/include/CommonCrypto
     cp include/* $out/include/CommonCrypto
+
+    runHook postInstall
   '';
 
   appleHeaders = ''

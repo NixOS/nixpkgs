@@ -10,9 +10,13 @@ stdenv.mkDerivation rec {
   };
   unpackCmd = ''${unzip}/bin/unzip "$src"'';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp iaca $out/bin
     patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $out/bin/iaca
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "Intel Architecture Code Analyzer";

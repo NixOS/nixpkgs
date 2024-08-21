@@ -22,10 +22,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -R opt/pdfsam-basic/ $out/
     mkdir -p "$out"/share/icons
     cp --recursive ${desktopItem}/share/applications $out/share
     cp $out/icon.svg "$out"/share/icons/pdfsam-basic.svg
+
+    runHook postInstall
   '';
 
   desktopItem = makeDesktopItem {

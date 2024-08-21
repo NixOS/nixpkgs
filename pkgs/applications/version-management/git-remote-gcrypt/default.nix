@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     prefix="$out" ./install.sh
     wrapProgram "$out/bin/git-remote-gcrypt" \
       --prefix PATH ":" "${lib.makeBinPath [ gnupg curl rsync coreutils
                                                     gawk gnused gnugrep ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

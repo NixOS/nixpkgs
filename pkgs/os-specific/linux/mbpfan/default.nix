@@ -10,9 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F9IWUcILOuLn5K4zRSU5jn+1Wk1xy0CONSI6JTXU2pA=";
   };
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/etc
     cp bin/mbpfan $out/bin
     cp mbpfan.conf $out/etc
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "Daemon that uses input from coretemp module and sets the fan speed using the applesmc module";

@@ -89,9 +89,13 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 torus-trooper $out/bin/torus-trooper
     mkdir -p $out/share/games/torus-trooper
     cp -r barrage sounds images $out/share/games/torus-trooper/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

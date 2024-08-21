@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin    # For buildEnv to setup proper symlinks. See #22653
     mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
     cp *.sql     $out/share/postgresql/extension
     cp *.control $out/share/postgresql/extension
+
+    runHook postInstall
   '';
 
   meta = with lib; {

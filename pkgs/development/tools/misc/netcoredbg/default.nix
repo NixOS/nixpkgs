@@ -65,11 +65,15 @@ stdenv.mkDerivation {
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
   buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/netcoredbg $out/bin
     cp ${unmanaged}/* $out/share/netcoredbg
     cp ./lib/netcoredbg/* $out/share/netcoredbg
     # darwin won't work unless we link all files
     ln -s $out/share/netcoredbg/* "$out/bin/"
+
+    runHook postInstall
   '';
 
   passthru = {

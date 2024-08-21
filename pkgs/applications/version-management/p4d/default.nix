@@ -32,8 +32,12 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin p4broker p4d p4p
     install -D -t $out/doc/p4d -m 0644 *.txt
+
+    runHook postInstall
   '';
 
   meta = with lib; {

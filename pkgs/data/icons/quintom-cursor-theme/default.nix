@@ -12,10 +12,14 @@ stdenvNoCC.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons
     for theme in "Quintom_Ink" "Quintom_Snow"; do
       cp -r "$theme Cursors/$theme" $out/share/icons/
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

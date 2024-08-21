@@ -28,6 +28,8 @@ appleDerivation {
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
+    runHook preInstall
+
     for f in Products/Release/*; do
       if [ -f $f ]; then
         install -D $f $out/usr/bin/$(basename $f)
@@ -41,6 +43,8 @@ appleDerivation {
     mv $out/usr/* $out
     mv $out/private/etc $out
     rmdir $out/usr $out/private
+
+    runHook postInstall
   '';
 
   meta = {

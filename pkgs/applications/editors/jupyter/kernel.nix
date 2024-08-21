@@ -35,6 +35,8 @@ in
     unpackCmd = "mkdir jupyter_kernels";
 
     installPhase =  ''
+      runHook preInstall
+
       mkdir kernels
 
       ${concatStringsSep "\n" (mapAttrsToList (kernelName: unfilteredKernel:
@@ -59,6 +61,8 @@ in
 
       mkdir $out
       cp -r kernels $out
+
+      runHook postInstall
     '';
 
     meta = {

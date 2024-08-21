@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 Main/${pname} "$out/bin/${pname}"
     install -Dm 444 Resources/Icons/VeraCrypt-256x256.xpm "$out/share/pixmaps/${pname}.xpm"
     install -Dm 444 License.txt -t "$out/share/doc/${pname}/"
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
     substitute Setup/Linux/${pname}.desktop $out/share/applications/${pname}.desktop \
       --replace "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
       --replace "Icon=veracrypt" "Icon=veracrypt.xpm"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

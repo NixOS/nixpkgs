@@ -214,7 +214,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 

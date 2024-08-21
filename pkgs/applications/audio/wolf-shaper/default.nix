@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/lv2
     mkdir -p $out/lib/dssi
     mkdir -p $out/lib/vst
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     cp -r bin/wolf-shaper-dssi*  $out/lib/dssi/
     cp -r bin/wolf-shaper-vst.so $out/lib/vst/
     cp -r bin/wolf-shaper        $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

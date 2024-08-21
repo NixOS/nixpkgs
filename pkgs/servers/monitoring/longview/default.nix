@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/usr
     mv Linode $out
     ln -s ../Linode/Longview.pl $out/bin/longview
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/Linode/Longview.pl --prefix PATH : ${perl}/bin:$out/bin \
      --suffix PERL5LIB : $out/Linode --suffix PERL5LIB : $PERL5LIB \
      --suffix PERL5LIB : $out --suffix INC : $out
+
+    runHook postInstall
   '';
 
   meta = with lib; {

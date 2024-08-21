@@ -16,7 +16,11 @@ tcl.mkTclDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 $src/nagelfar.tcl $out/bin/nagelfar
+
+    runHook postInstall
   '';
 
   meta = with lib; {

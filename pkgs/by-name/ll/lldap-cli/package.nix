@@ -36,9 +36,13 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 lldap-cli -t $out/bin
     wrapProgram $out/bin/lldap-cli \
       --prefix PATH : ${lib.makeBinPath [ bash coreutils gnugrep gnused jq curl ]}
+
+    runHook postInstall
   '';
 
   meta = {

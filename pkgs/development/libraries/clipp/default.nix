@@ -12,12 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/pkgconfig
     cp -r include $out/
     substitute ${./clipp.pc} $out/share/pkgconfig/clipp.pc \
       --subst-var out \
       --subst-var pname \
       --subst-var version
+
+    runHook postInstall
   '';
 
   meta = with lib; {

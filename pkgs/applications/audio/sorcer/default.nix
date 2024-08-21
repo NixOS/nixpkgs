@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
    '';
 
   installPhase = ''
+    runHook preInstall
+
     make install
     cp -a ../presets/* "$out/lib/lv2"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

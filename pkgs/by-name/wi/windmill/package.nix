@@ -56,8 +56,12 @@ let
     nativeBuildInputs = [ python3 pkg-config ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share
       mv build $out/share/windmill-frontend
+
+      runHook postInstall
     '';
   };
 in

@@ -69,9 +69,13 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     cp -dr --no-preserve='ownership' . $out/
     wrapProgram $out/manage.py \
       --prefix PYTHONPATH : "$PYTHONPATH:$out/thirdpart:"
+
+    runHook postInstall
   '';
 
   passthru = {

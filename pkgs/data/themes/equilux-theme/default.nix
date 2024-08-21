@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     patchShebangs install.sh
     sed -i install.sh \
       -e "s|if .*which gnome-shell.*;|if true;|" \
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/themes
     ./install.sh --dest $out/share/themes
     rm $out/share/themes/*/COPYING
+
+    runHook postInstall
   '';
 
   meta = with lib; {

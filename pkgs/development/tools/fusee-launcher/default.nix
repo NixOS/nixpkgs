@@ -26,6 +26,8 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share
     cp fusee-launcher.py $out/bin/fusee-launcher
     cp intermezzo.bin $out/share/intermezzo.bin
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/fusee-launcher \
       --add-flags "--relocator $out/share/intermezzo.bin" \
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ arm-embedded-cc makeWrapper python3Packages.wrapPython ];

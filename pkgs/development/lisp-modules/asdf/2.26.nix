@@ -22,11 +22,15 @@ stdenv.mkDerivation rec {
     ln -s ../asdf.lisp build
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/lib/common-lisp/asdf/
     mkdir -p "$out"/share/doc/asdf/
     cp -r ./* "$out"/lib/common-lisp/asdf/
     cp -r doc/* "$out"/share/doc/asdf/
     ln -s  "$out"/lib/common-lisp/{asdf/uiop,uiop}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

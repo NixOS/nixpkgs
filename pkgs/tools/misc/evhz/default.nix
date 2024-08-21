@@ -17,8 +17,12 @@ stdenv.mkDerivation {
   buildPhase = "gcc -o evhz evhz.c";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv evhz $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
