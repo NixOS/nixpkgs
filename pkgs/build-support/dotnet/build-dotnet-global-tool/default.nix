@@ -5,6 +5,8 @@
   # Name of the nuget package to install, if different from pname
 , nugetName ? pname
   # Hash of the nuget package to install, will be given on first build
+  # nugetHash uses SRI hash and should be preferred
+, nugetHash ? ""
 , nugetSha256 ? ""
   # Additional nuget deps needed by the tool package
 , nugetDeps ? (_: [])
@@ -24,7 +26,7 @@ buildDotnetModule (args // {
   nugetDeps = mkNugetDeps {
     name = pname;
     nugetDeps = { fetchNuGet }: [
-      (fetchNuGet { pname = nugetName; inherit version; sha256 = nugetSha256; })
+      (fetchNuGet { pname = nugetName; inherit version; sha256 = nugetSha256; hash = nugetHash; })
     ] ++ (nugetDeps fetchNuGet);
   };
 
