@@ -6,20 +6,22 @@
   libiconv,
   darwin,
   zlib,
+  testers,
+  tokei,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
-  version = "13.0.0-alpha.1";
+  version = "13.0.0-alpha.5";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oKgTBfwOAP4fJzgN8NBR0KcuVD0caa9Qf3dkCb0zUR8=";
+    sha256 = "sha256-o5MIwDw8/y9k+FSmSVjFHAeJ/g2F3chPrF7HhkEzCIw=";
   };
 
-  cargoHash = "sha256-NE6hw6rgSDOsmSD6JpOfBLgGKGPfPmHjpMIsqLOkH7M=";
+  cargoHash = "sha256-rEAvn8ecTrFtU2bo0vpt5BELOriqhzB8AtFmhe5gr74=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
@@ -30,6 +32,10 @@ rustPlatform.buildRustPackage rec {
 
   # enable all output formats
   buildFeatures = [ "all" ];
+
+  passthru.tests = {
+    version = testers.testVersion { package = tokei; };
+  };
 
   meta = with lib; {
     description = "Program that allows you to count your code, quickly";
