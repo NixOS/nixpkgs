@@ -18,6 +18,8 @@ buildGoModule rec {
     "-X 'main.Version=${version}'"
     "-X 'main.BuildRevision=${src.rev}'"
     "-X 'main.BuildBranch=master'"
+    "-X 'main.BuildUser=nix@nixpkgs'"
+    "-X 'main.BuildDate=unknown'"
   ];
 
   # Todo?
