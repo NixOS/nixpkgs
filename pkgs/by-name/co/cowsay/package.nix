@@ -49,10 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/cowsay-org/cowsay/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [
-      rob
-      anthonyroussel
-    ];
+    maintainers = with maintainers; [ anthonyroussel ];
     mainProgram = "cowsay";
   };
 })
