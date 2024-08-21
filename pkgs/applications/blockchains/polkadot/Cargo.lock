@@ -4124,7 +4124,7 @@ dependencies = [
 
 [[package]]
 name = "cumulus-primitives-storage-weight-reclaim"
-version = "7.0.0"
+version = "7.0.1"
 dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-proof-size-hostfunction",
@@ -4142,11 +4142,9 @@ dependencies = [
 
 [[package]]
 name = "cumulus-primitives-timestamp"
-version = "0.15.0"
+version = "0.15.1"
 dependencies = [
  "cumulus-primitives-core",
- "futures",
- "parity-scale-codec",
  "sp-inherents",
  "sp-timestamp",
 ]
@@ -5961,7 +5959,7 @@ dependencies = [
 
 [[package]]
 name = "frame-system"
-version = "37.0.0"
+version = "37.1.0"
 dependencies = [
  "cfg-if",
  "criterion",
@@ -8383,9 +8381,9 @@ dependencies = [
 
 [[package]]
 name = "memchr"
-version = "2.6.4"
+version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f665ee40bc4a3c5590afb1e9677db74a508659dfd71e126420da8274909a0167"
+checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
 name = "memfd"
@@ -12614,7 +12612,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot"
-version = "16.0.0"
+version = "16.0.1"
 dependencies = [
  "assert_cmd",
  "color-eyre",
@@ -12691,7 +12689,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-availability-distribution"
-version = "17.0.0"
+version = "17.0.1"
 dependencies = [
  "assert_matches",
  "derive_more",
@@ -13084,7 +13082,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-node-core-candidate-validation"
-version = "17.0.0"
+version = "17.1.0"
 dependencies = [
  "assert_matches",
  "async-trait",
@@ -13101,8 +13099,10 @@ dependencies = [
  "polkadot-parachain-primitives",
  "polkadot-primitives",
  "polkadot-primitives-test-helpers",
+ "sp-application-crypto",
  "sp-core",
  "sp-keyring",
+ "sp-keystore",
  "sp-maybe-compressed-blob",
  "tracing-gum",
 ]
@@ -13194,26 +13194,20 @@ dependencies = [
 
 [[package]]
 name = "polkadot-node-core-prospective-parachains"
-version = "16.0.0"
+version = "16.1.0"
 dependencies = [
  "assert_matches",
- "bitvec",
  "fatality",
  "futures",
- "parity-scale-codec",
- "polkadot-node-primitives",
  "polkadot-node-subsystem",
  "polkadot-node-subsystem-test-helpers",
- "polkadot-node-subsystem-types",
  "polkadot-node-subsystem-util",
  "polkadot-primitives",
  "polkadot-primitives-test-helpers",
+ "rand",
  "rstest",
- "sc-keystore",
- "sp-application-crypto",
  "sp-core",
- "sp-keyring",
- "sp-keystore",
+ "sp-tracing",
  "thiserror",
  "tracing-gum",
 ]
@@ -13519,7 +13513,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-node-subsystem-types"
-version = "17.0.0"
+version = "17.1.0"
 dependencies = [
  "async-trait",
  "bitvec",
@@ -13548,7 +13542,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-node-subsystem-util"
-version = "17.0.0"
+version = "17.1.0"
 dependencies = [
  "assert_matches",
  "async-trait",
@@ -13868,7 +13862,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-runtime-parachains"
-version = "16.0.0"
+version = "16.0.1"
 dependencies = [
  "assert_matches",
  "bitflags 1.3.2",
@@ -14429,7 +14423,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-service"
-version = "17.0.0"
+version = "17.0.1"
 dependencies = [
  "assert_matches",
  "async-trait",
@@ -17189,7 +17183,7 @@ dependencies = [
 
 [[package]]
 name = "sc-consensus-grandpa"
-version = "0.29.0"
+version = "0.29.1"
 dependencies = [
  "ahash 0.8.11",
  "array-bytes",
@@ -18642,12 +18636,13 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.114"
+version = "1.0.121"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5f09b1bd632ef549eaa9f60a1f8de742bdbc698e6cee2095fc84dde5f549ae0"
+checksum = "4ab380d7d9f22ef3f21ad3e6c1ebe8e4fc7a2000ccba2e4d71fc96f15b2cb609"
 dependencies = [
  "indexmap 2.2.3",
  "itoa",
+ "memchr",
  "ryu",
  "serde",
 ]
@@ -19690,7 +19685,7 @@ dependencies = [
 
 [[package]]
 name = "sp-blockchain"
-version = "37.0.0"
+version = "37.0.1"
 dependencies = [
  "futures",
  "parity-scale-codec",
