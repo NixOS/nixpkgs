@@ -7,7 +7,6 @@
   python,
   buildPythonPackage,
   setuptools,
-  numpy,
   numpy_2,
   llvmlite,
   libcxx,
@@ -68,7 +67,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    numpy_2
   ];
 
   nativeBuildInputs = lib.optionals cudaSupport [
@@ -76,10 +74,12 @@ buildPythonPackage rec {
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
+  buildInputs = [
+    # Not propagating it, because it numba can work with either numpy_2 or numpy_1
+    numpy_2
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
   dependencies = [
-    numpy
     llvmlite
     setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-metadata ];
