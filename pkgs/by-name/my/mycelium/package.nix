@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, openssl
-, darwin
-, nixosTests
-, nix-update-script
-, versionCheckHook
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  openssl,
+  darwin,
+  nixosTests,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,7 +46,9 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) mycelium; };
+    tests = {
+      inherit (nixosTests) mycelium;
+    };
   };
 
   meta = with lib; {
@@ -53,7 +56,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli matthewcroughan rvdp ];
+    maintainers = with maintainers; [
+      flokli
+      matthewcroughan
+      rvdp
+    ];
     mainProgram = "mycelium";
   };
 }
