@@ -317,6 +317,8 @@ GitHub provides reactions as a simple and quick way to provide feedback to pull 
 
 Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
 
+Please be considerate about posting reviews that _only_ ask for changes that are stylistic in nature or easily fixed in treewides, so as to avoid stalling the PR.
+
 All the review template samples provided in this section are generic and meant as examples. Their usage is optional and the reviewer is free to adapt them to their liking.
 
 To get more information about how to review specific parts of Nixpkgs, refer to the documents linked to in the [overview section][overview].
