@@ -3,6 +3,7 @@
   fetchFromGitHub,
   hyprland,
   mkHyprlandPlugin,
+  unstableGitUpdater,
 }:
 
 mkHyprlandPlugin hyprland {
@@ -26,6 +27,8 @@ mkHyprlandPlugin hyprland {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/KZDKM/Hyprspace";
