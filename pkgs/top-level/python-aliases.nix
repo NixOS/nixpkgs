@@ -138,6 +138,7 @@ mapAliases ({
   django_compat = django-compat; # added 2023-07-25
   django-compat = throw "django-compat has been removed. It provided forward/backport compat for django 1.x, which is long end of life."; # added 2023-07-26
   django_contrib_comments = django-contrib-comments; # added 2023-07-25
+  django-crontab = throw "django-crontabe has been removed beacause it is unmaintained since 2018"; # added 2024-08-21
   django-discover-runner = throw "django-discover-runner was removed because it is no longer maintained."; # added 2022-11-21
   django_environ = django-environ; # added 2021-12-25
   django_extensions = django-extensions; # added 2022-01-09
