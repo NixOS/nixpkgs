@@ -34,7 +34,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
+    substituteInPlace llvmlite/tests/test_binding.py \
+      --replace-fail "test_linux" "nope"
   '';
 
   # Set directory containing llvm-config binary
