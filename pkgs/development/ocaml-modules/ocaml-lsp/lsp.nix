@@ -23,7 +23,7 @@
 , ocaml
 , version ?
     if lib.versionAtLeast ocaml.version "4.14" then
-      "1.18.0"
+      "1.19.0"
     else if lib.versionAtLeast ocaml.version "4.13" then
       "1.10.5"
     else if lib.versionAtLeast ocaml.version "4.12" then
