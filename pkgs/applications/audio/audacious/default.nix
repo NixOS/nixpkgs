@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://audacious-media-player.org";
     downloadPage = "https://github.com/audacious-media-player/audacious";
     mainProgram = "audacious";
-    maintainers = with lib.maintainers; [ eelco ramkromberg ttuegel thiagokokada ];
+    maintainers = with lib.maintainers; [ ramkromberg ttuegel thiagokokada ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
       bsd2

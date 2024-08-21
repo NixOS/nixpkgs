@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
     description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
   };
 }

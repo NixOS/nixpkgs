@@ -296,7 +296,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.qemu.org/";
     description = "Generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eelco qyliss ];
+    maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;
   }
   # toolsOnly: Does not have qemu-kvm and there's no main support tool
