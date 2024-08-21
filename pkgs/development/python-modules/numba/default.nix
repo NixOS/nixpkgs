@@ -34,7 +34,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.60.0";
+  version = "0.61.0dev0";
   pname = "numba";
   pyproject = true;
 
@@ -55,8 +55,18 @@ buildPythonPackage rec {
     # that upstream relies on those strings to be valid, that's why we don't
     # use `forceFetchGit = true;`.` If in the future we'll observe the hash
     # changes too often, we can always use forceFetchGit, and inject the
-    # relevant strings ourselves, using `sed` commands, in extraPostFetch.
-    hash = "sha256-hUL281wHLA7wo8umzBNhiGJikyIF2loCzjLECuC+pO0=";
+    # relevant strings ourselves, using `substituteInPlace`, in postFetch.
+    hash = "sha256-KF9YQ6/FIfUQTJCAMgfIqnb/D8mdMbCC/tJvfYlSkgI=";
+    # TEMPORARY: The way upstream knows it's source version is explained above,
+    # and without this upstream sets the version in ${python.sitePackages} as
+    # 0.61.0dev0, which causes dependent packages fail to find a valid
+    # version of numba.
+    postFetch = ''
+      substituteInPlace $out/numba/_version.py \
+        --replace-fail \
+          'git_refnames = " (tag: ${version})"' \
+          'git_refnames = " (tag: 0.61.0, release0.61)"'
+    '';
   };
 
   postPatch = ''
