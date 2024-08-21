@@ -6,7 +6,6 @@
   python3Packages,
   ffmpeg,
   flac,
-  libjxl,
   librsvg,
   game-music-emu,
   gobject-introspection,
@@ -92,10 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
     with python3Packages;
     [
       beautifulsoup4
-      gst-python
       dbus-python
       isounidecode
-      libjxl
+      jxlpy
       musicbrainzngs
       mutagen
       natsort
@@ -105,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       pychromecast
       pylast
       pygobject3
-      pylyrics
       pysdl2
       requests
       send2trash
@@ -116,7 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
-    "--prefix LD_LIBRARY_PATH : ${pulseaudio}/lib"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        game-music-emu
+        pulseaudio
+      ]
+    }"
     "--prefix PYTHONPATH : $out/share/tauon"
     "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
   ];
