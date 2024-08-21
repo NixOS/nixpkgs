@@ -2,10 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  testers,
-  wstunnel,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -25,6 +24,10 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-gNx01LHIcAbedO2X/OwwnQWd9d0Qc6ahe84IRUyptcY=";
 
+  nativeBuildInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
   checkFlags = [
     # Tries to launch a test container
     "--skip=tcp::tests::test_proxy_connection"
@@ -34,7 +37,6 @@ rustPlatform.buildRustPackage {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      version = testers.testVersion { package = wstunnel; };
       nixosTest = nixosTests.wstunnel;
     };
   };
