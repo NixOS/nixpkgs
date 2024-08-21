@@ -968,7 +968,6 @@
   ./services/networking/adguardhome.nix
   ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
-  ./services/networking/antennas.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
