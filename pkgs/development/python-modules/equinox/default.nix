@@ -3,12 +3,17 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
+
+  # build-system
   hatchling,
+
+  # dependencies
   jax,
   jaxlib,
   jaxtyping,
   typing-extensions,
+
+  # checks
   beartype,
   optax,
   pytest-xdist,
@@ -17,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.4";
+  version = "0.11.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,17 +31,8 @@ buildPythonPackage rec {
     owner = "patrick-kidger";
     repo = "equinox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3OwHND1YEdg/SppqiB7pCdp6v+lYwTbtX07tmyEMWDo=";
+    hash = "sha256-r4HKn+WJmC7BrTeDDAQ1++TpQhhtLcK6HL2CoM/MGx8=";
   };
-
-  patches = [
-    # TODO: remove when next release (0.11.5) is out
-    (fetchpatch {
-      name = "make-tests-pass-with-jaxtyping-0-2-30";
-      url = "https://github.com/patrick-kidger/equinox/commit/cf942646cddffd32519d876c653d09e064bd66b8.patch";
-      hash = "sha256-q/vbvLhqT4q+BK+q5sPVY5arzXCmH5LWxt4evAwywtM=";
-    })
-  ];
 
   build-system = [ hatchling ];
 

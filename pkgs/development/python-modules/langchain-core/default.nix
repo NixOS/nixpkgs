@@ -39,13 +39,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/core";
 
-  preConfigure = ''
-    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "path = \"../standard-tests\"" "path = \"./langchain_standard_tests\""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -75,6 +68,12 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "tests/unit_tests" ];
+
+  # don't add langchain-standard-tests to nativeCheckInputs
+  # to avoid circular import
+  preCheck = ''
+    export PYTHONPATH=${src}/libs/standard-tests:$PYTHONPATH
+  '';
 
   passthru = {
     updateScript = writeScript "update.sh" ''
