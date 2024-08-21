@@ -53,10 +53,12 @@ buildDotnetModule (finalAttrs: {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}"
+    "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
     # Make associating with nxm links work on Linux
     "--set APPIMAGE ${placeholder "out"}/bin/NexusMods.App"
   ];
+
+  runtimeInputs = [ desktop-file-utils ];
 
   runtimeDeps = [
     fontconfig
