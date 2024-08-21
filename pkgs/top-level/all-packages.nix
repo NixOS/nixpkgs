@@ -22531,8 +22531,6 @@ with pkgs;
 
   lightspark = callPackage ../misc/lightspark { };
 
-  opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
-
   ligolo-ng = callPackage ../tools/networking/ligolo-ng { };
 
   linenoise = callPackage ../development/libraries/linenoise { };
