@@ -111,6 +111,6 @@ stdenv.mkDerivation {
     description = "Insight Segmentation and Registration Toolkit";
     homepage = "https://www.itk.org";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }
