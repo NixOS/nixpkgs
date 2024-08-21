@@ -18,14 +18,14 @@ let
   inherit (darwin) IOKit;
 in
 assert systemdSupport -> stdenv.isLinux;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "htop";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = "htop";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-qDhQkzY2zj2yxbgFUXwE0MGEgAFOsAhnapUuetO9WTw=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/htop-dev/htop/blob/main/ChangeLog";
     mainProgram = "htop";
   };
-}
+})
