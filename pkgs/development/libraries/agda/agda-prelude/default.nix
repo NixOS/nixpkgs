@@ -24,5 +24,6 @@ mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with maintainers; [ mudri alexarice turion ];
+    broken = true;  # currently not compatible with Agda 2.7.0
   };
 }
