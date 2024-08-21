@@ -11,7 +11,7 @@
   setuptools,
 
   # tests
-  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -46,10 +46,12 @@ buildPythonPackage rec {
     export LLVM_CONFIG=${llvm.dev}/bin/llvm-config
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.executable} runtests.py
-    runHook postCheck
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    cd $out
   '';
 
   __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
