@@ -20,6 +20,18 @@ let
   };
 
   aliases = self: super: lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib self super pkgs);
+
+  mkBootstrapStdenv =
+    stdenv:
+    stdenv.override (old: {
+      extraBuildInputs = map (
+        pkg:
+        if lib.isDerivation pkg && lib.getName pkg == "apple-sdk" then
+          pkg.override { enableBootstrap = true; }
+        else
+          pkg
+      ) (old.extraBuildInputs or [ ]);
+    });
 in
 
 makeScopeWithSplicing' {
@@ -132,6 +144,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
   };
+
+  # Removes propagated packages from the stdenv, so those packages can be built without depending upon themselves.
+  bootstrapStdenv = mkBootstrapStdenv pkgs.stdenv;
 
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
