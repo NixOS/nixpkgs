@@ -128,8 +128,8 @@ let
       jobClassLabel = toString ([""] ++ processCfg.jobClasses);
       threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
     in {
-      after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
-      requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
+      after = [ "network.target" "mastodon-init-dirs.service" ];
+      requires = [ "mastodon-init-dirs.service" ];
       description = "Mastodon sidekiq${jobClassLabel}";
       wantedBy = [ "mastodon.target" ];
       environment = env // {
@@ -154,9 +154,9 @@ let
       (map (i: {
         name = "mastodon-streaming-${toString i}";
         value = {
-          after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
-          requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
-          wantedBy = [ "mastodon.target" "mastodon-streaming.target" ];
+          after = [ "network.target" "mastodon-init-dirs.service" ];
+          requires = [ "mastodon-init-dirs.service" ];
+          wantedBy = [ "mastodon-streaming.target" ];
           description = "Mastodon streaming ${toString i}";
           environment = env // { SOCKET = "/run/mastodon-streaming/streaming-${toString i}.socket"; };
           serviceConfig = {
@@ -746,13 +746,11 @@ in {
     systemd.targets.mastodon = {
       description = "Target for all Mastodon services";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
     };
 
     systemd.targets.mastodon-streaming = {
       description = "Target for all Mastodon streaming services";
-      wantedBy = [ "multi-user.target" "mastodon.target" ];
-      after = [ "network.target" ];
+      wantedBy = [ "mastodon.target" ];
     };
 
     systemd.services.mastodon-init-dirs = {
@@ -815,8 +813,6 @@ in {
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-
-      after = [ "network.target" ];
     };
 
     systemd.services.mastodon-init-db = lib.mkIf cfg.automaticMigrations {
