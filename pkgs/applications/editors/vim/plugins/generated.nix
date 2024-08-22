@@ -11244,6 +11244,18 @@ final: prev:
     meta.homepage = "https://github.com/johmsalas/text-case.nvim/";
   };
 
+  themed-tabs-nvim = buildVimPlugin {
+    pname = "themed-tabs.nvim";
+    version = "2023-11-09";
+    src = fetchFromGitHub {
+      owner = "vhsconnect";
+      repo = "themed-tabs.nvim";
+      rev = "2ab0e463b929d717b58d10d600589e1ef642f7a4";
+      sha256 = "04i76ndixdi2vpavqb6dy0pf72a7gya4dsr6l1vyjmray45jbda0";
+    };
+    meta.homepage = "https://github.com/vhsconnect/themed-tabs.nvim/";
+  };
+
   thesaurus_query-vim = buildVimPlugin {
     pname = "thesaurus_query.vim";
     version = "2022-12-11";
@@ -15171,6 +15183,18 @@ final: prev:
       sha256 = "18jqmb08jgd53i56w4spjvr35ydqlw1hm38kdm6qgj1g5qw12i8a";
     };
     meta.homepage = "https://github.com/preservim/vim-pencil/";
+  };
+
+  vim-pets = buildVimPlugin {
+    pname = "vim-pets";
+    version = "2024-07-26";
+    src = fetchFromGitHub {
+      owner = "MeF0504";
+      repo = "vim-pets";
+      rev = "17d33f160c8fd3fb6492e7cd76f397ddaa26ad8d";
+      sha256 = "0zn6kf088kqfdf5y0x6sd8rr3skrjwppsdfxmf044qk1h07lcgcc";
+    };
+    meta.homepage = "https://github.com/MeF0504/vim-pets/";
   };
 
   vim-phabricator = buildVimPlugin {
