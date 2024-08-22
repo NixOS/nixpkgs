@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/russellbanks/Komac";
     changelog = "https://github.com/russellbanks/Komac/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kachick ];
+    maintainers = with maintainers; [ kachick HeitorAugustoLN ];
     mainProgram = "komac";
   };
 }
