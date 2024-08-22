@@ -29775,8 +29775,6 @@ with pkgs;
 
   exaile = callPackage ../applications/audio/exaile { };
 
-  exercism = callPackage ../applications/misc/exercism { };
-
   expenses = callPackage ../applications/misc/expenses { };
 
   furtherance = callPackage ../applications/misc/furtherance { };
