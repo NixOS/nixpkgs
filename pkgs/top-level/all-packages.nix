@@ -6876,8 +6876,6 @@ with pkgs;
 
   convfont = callPackage ../tools/misc/convfont { };
 
-  convmv = callPackage ../tools/misc/convmv { };
-
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
   coreutils =  callPackage ../tools/misc/coreutils { };
@@ -31506,10 +31504,6 @@ with pkgs;
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   lame = callPackage ../development/libraries/lame { };
-
-  labwc = callPackage ../by-name/la/labwc/package.nix {
-    wlroots = wlroots_0_17;
-  };
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
