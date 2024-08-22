@@ -2489,6 +2489,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+lzn-auto-require = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, lz-n }:
+buildLuarocksPackage {
+  pname = "lzn-auto-require";
+  version = "0.1.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lzn-auto-require-0.1.0-1.rockspec";
+    sha256 = "01yx40yvj6msh42cyj3vbmi3phdpiqafr0qv12yfj7garhxjidd3";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/horriblename/lzn-auto-require/archive/v0.1.0.zip";
+    sha256 = "0hkpyqw1cybrwarvxanf2drz2cbxkh77yz2qq4akhzyvidmn7ny0";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ lz-n ];
+
+  meta = {
+    homepage = "https://github.com/horriblename/lzn-auto-require";
+    description = "Auto load optional plugins via lua modules with lz.n";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "GPL-2.0";
+  };
+}) {};
+
 magick = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, lua }:
 buildLuarocksPackage {
   pname = "magick";
