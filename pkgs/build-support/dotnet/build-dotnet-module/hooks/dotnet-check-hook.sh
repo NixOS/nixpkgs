@@ -9,6 +9,7 @@ dotnetCheckHook() {
         local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
         local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
         local dotnetTestFlagsArray=( "${dotnetTestFlags[@]}" )
+        local dotnetTestFiltersArray=( "${dotnetTestFilters[@]}" )
         local dotnetDisabledTestsArray=( "${dotnetDisabledTests[@]}" )
         local dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
         local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
@@ -16,6 +17,7 @@ dotnetCheckHook() {
         local dotnetProjectFilesArray=($dotnetProjectFiles)
         local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
         local dotnetTestFlagsArray=($dotnetTestFlags)
+        local dotnetTestFiltersArray=($dotnetTestFilters)
         local dotnetDisabledTestsArray=($dotnetDisabledTests)
         local dotnetRuntimeDepsArray=($dotnetRuntimeDeps)
         local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
@@ -23,8 +25,12 @@ dotnetCheckHook() {
 
     if (( ${#dotnetDisabledTestsArray[@]} > 0 )); then
         local disabledTestsFilters=("${dotnetDisabledTestsArray[@]/#/FullyQualifiedName!=}")
+        dotnetTestFiltersArray=( "${dotnetTestFiltersArray[@]}" "${disabledTestsFilters[@]//,/%2C}" )
+    fi
+
+    if (( ${#dotnetTestFiltersArray[@]} > 0 )); then
         local OLDIFS="$IFS" IFS='&'
-        dotnetTestFlagsArray+=("--filter:${disabledTestsFilters[*]//,/%2C}")
+        dotnetTestFlagsArray+=("--filter:${dotnetTestFiltersArray[*]}")
         IFS="$OLDIFS"
     fi
 
