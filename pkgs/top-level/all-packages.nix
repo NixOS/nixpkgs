@@ -24762,9 +24762,8 @@ with pkgs;
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = import ../development/interpreters/perl { inherit callPackage; };
-  inherit (perlInterpreters) perl536 perl538 perl540;
+  inherit (perlInterpreters) perl538 perl540;
 
-  perl536Packages = recurseIntoAttrs perl536.pkgs;
   perl538Packages = recurseIntoAttrs perl538.pkgs;
   perl540Packages = recurseIntoAttrs perl540.pkgs;
 
@@ -35733,8 +35732,8 @@ with pkgs;
 
   deliantra-server = callPackage ../games/deliantra/server.nix {
     # perl538 defines 'struct object' in sv.h. many conflicts result
-    perl = perl536;
-    perlPackages = perl536Packages;
+    perl = perl540;
+    perlPackages = perl540Packages;
   };
   deliantra-arch = callPackage ../games/deliantra/arch.nix { };
   deliantra-maps = callPackage ../games/deliantra/maps.nix { };
@@ -38040,7 +38039,7 @@ with pkgs;
         curl
       ];
     });
-    perl = perl536;
+    perl = perl540;
   };
 
   megam = callPackage ../applications/science/misc/megam {
