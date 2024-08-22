@@ -13,13 +13,14 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  scipy,
   sqlalchemy,
   sqlmodel,
 }:
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.2.4";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "pgvector";
     repo = "pgvector-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XKoaEwLW59pV4Dwis7p2L65XoO2zUEa1kXxz6Lgs2d8=";
+    hash = "sha256-8F2tNUtRgeIK/1utkbL+xF/bTlJxvhn+RxerpGMUP/k=";
   };
 
   propagatedBuildInputs = [ numpy ];
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     psycopg2
     pytest-asyncio
     pytestCheckHook
+    scipy
     sqlalchemy
     sqlmodel
   ];
