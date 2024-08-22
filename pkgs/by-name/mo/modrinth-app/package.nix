@@ -75,7 +75,6 @@ symlinkJoin rec {
       description
       longDescription
       homepage
-      changelog
       license
       maintainers
       mainProgram
