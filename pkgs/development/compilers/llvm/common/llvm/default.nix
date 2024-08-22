@@ -17,6 +17,7 @@
   # TODO: Can this memory corruption bug still occur?
   # <https://github.com/llvm/llvm-project/issues/61350>
 , enableGoldPlugin ? libbfd.hasPluginAPI
+, curl
 , libbfd
 , libpfm
 , libxml2
@@ -40,6 +41,7 @@
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? lib.versionAtLeast release_version "14"
 , enableTerminfo ? true
+, enableDebuginfod ? !stdenv.isDarwin && lib.versionAtLeast release_version "14"
 }:
 
 let
@@ -120,7 +122,8 @@ stdenv.mkDerivation (rec {
   ];
 
   buildInputs = [ libxml2 libffi ]
-    ++ optional enablePFM libpfm; # exegesis
+    ++ optional enablePFM libpfm # exegesis
+    ++ optional enableDebuginfod curl;
 
   propagatedBuildInputs = (lib.optional (lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform) ncurses)
     ++ [ zlib ];
@@ -399,6 +402,8 @@ stdenv.mkDerivation (rec {
         nativeInstallFlags
       ])
     )
+  ] ++ optionals enableDebuginfod [
+    "-DLLVM_ENABLE_CURL=ON"
   ];
 
   postInstall = ''
