@@ -14,6 +14,7 @@
   pytestCheckHook,
   pythonOlder,
   scipy,
+  setuptools,
   sqlalchemy,
   sqlmodel,
 }:
@@ -21,7 +22,7 @@
 buildPythonPackage rec {
   pname = "pgvector";
   version = "0.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -32,7 +33,9 @@ buildPythonPackage rec {
     hash = "sha256-8F2tNUtRgeIK/1utkbL+xF/bTlJxvhn+RxerpGMUP/k=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     asyncpg
