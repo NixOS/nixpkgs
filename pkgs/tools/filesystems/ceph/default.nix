@@ -508,7 +508,8 @@ in rec {
         inherit (nixosTests)
           ceph-multi-node
           ceph-single-node
-          ceph-single-node-bluestore;
+          ceph-single-node-bluestore
+          ceph-single-node-bluestore-dmcrypt;
       };
     };
   };
