@@ -35,7 +35,7 @@
       fonts = {
         packages = with pkgs; [
           # Intended font & helps with OCR
-          ubuntu-classic
+          ubuntu_font_family
         ];
       };
 
