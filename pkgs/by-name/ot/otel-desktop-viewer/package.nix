@@ -17,7 +17,8 @@ buildGoModule rec {
   };
 
   # https://github.com/CtrlSpice/otel-desktop-viewer/issues/139
-  patches = [ ./version-0.1.4.patch ];
+  # https://github.com/NixOS/nixpkgs/issues/301925
+  patches = [ ./version-0.1.4.patch ./go-m1cpu-0.1.6.patch ];
 
   subPackages = [ "..." ];
 
