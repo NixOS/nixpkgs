@@ -1109,6 +1109,7 @@ mapAliases ({
   radicle-upstream = throw "'radicle-upstream' was sunset, see <https://community.radworks.org/t/2962>"; # Added 2024-05-04
   railway-travel = diebahn; # Added 2024-04-01
   rambox-pro = rambox; # Added 2022-12-12
+  rapidjson-unstable = lib.warn "'rapidjson-unstable' has been renamed to 'rapidjson'" rapidjson; # Added 2024-07-28
   rarian = throw "rarian has been removed as unused"; # Added 2023-07-05
   rccl = throw "'rccl' has been replaced with 'rocmPackages.rccl'"; # Added 2023-10-08
   rdc = throw "'rdc' has been replaced with 'rocmPackages.rdc'"; # Added 2023-10-08
