@@ -126,7 +126,7 @@ import ./make-test-python.nix (
               open = true;
               package = config.boot.kernelPackages.nvidiaPackages.stable.open;
             };
-            opengl.enable = true;
+            graphics.enable = true;
           };
           virtualisation.containers.enable = true;
         };
@@ -149,7 +149,7 @@ import ./make-test-python.nix (
               open = true;
               package = config.boot.kernelPackages.nvidiaPackages.stable.open;
             };
-            opengl.enable = true;
+            graphics.enable = true;
           };
           virtualisation.containers.enable = true;
         };
