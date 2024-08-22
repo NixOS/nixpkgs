@@ -16743,8 +16743,6 @@ with pkgs;
 
   me_cleaner = callPackage ../tools/misc/me_cleaner { };
 
-  mesos-dns = callPackage ../servers/mesos-dns { };
-
   metamath = callPackage ../development/interpreters/metamath { };
 
   minder = callPackage ../applications/misc/minder { };
