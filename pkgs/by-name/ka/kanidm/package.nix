@@ -50,6 +50,8 @@ rustPlatform.buildRustPackage rec {
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
         --replace '@htmx_ui_pkg_path@' "${placeholder "out"}/ui/hpkg" \
         --replace '@web_ui_pkg_path@' "${placeholder "out"}/ui/pkg"
+
+        substituteInPlace Cargo.toml --replace-fail 'rust-version = "1.79"' 'rust-version = "1.77"'
     '';
 
   nativeBuildInputs = [
