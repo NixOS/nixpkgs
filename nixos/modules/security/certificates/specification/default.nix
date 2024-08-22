@@ -187,6 +187,15 @@ in
     let
       out = config.output;
       openssl = cmd: args: "${pkgs.openssl}/bin/${lib-cert.openssl.toShell cmd args}";
+      mkCertScript = subName: runtimeInputs: text:
+        let
+          fullName = "certificate-${name}-${subName}";
+          app = pkgs.writeShellApplication {
+            inherit runtimeInputs text;
+            name = fullName;
+          };
+        in
+        "${app}/bin/${fullName}";
     in
     {
       _module.args = { inherit lib-cert; };
@@ -233,22 +242,16 @@ in
           mkCSR =
             let
               cfgFile = out.openssl.configFile;
-              scriptName = "certificate-${name}-mkCSR";
-              text = openssl "req" {
+            in
+            mkCertScript "mkCSR"
+              [ pkgs.openssl ]
+              (openssl "req" {
                 config = cfgFile;
                 outform = "PEM";
                 batch = true;
                 new = true;
                 key = "/dev/stdin";
-              };
-              app = pkgs.writeShellApplication {
-                inherit text;
-                name = scriptName;
-                runtimeInputs = [ pkgs.openssl ];
-              };
-            in
-            "${app}/bin/${scriptName}";
-
+              });
           doInstall =
             let
               files = config.install;
@@ -268,7 +271,6 @@ in
                     compare = true;
                   }
                 } \"${src}\" ${escapeShellArg path}";
-              scriptName = "certificate-${name}-doInstall";
               text = concatLines (
                 [
                   ''
@@ -284,14 +286,10 @@ in
                 ++ (optional (files ? authority)
                   (install "$CA" files.authority))
               );
-              app = pkgs.writeShellApplication {
-                inherit text;
-                name = scriptName;
-                runtimeInputs = [ pkgs.openssl ];
-              };
             in
-            "${app}/bin/${scriptName}";
-
+            mkCertScript "doInstall"
+              [ pkgs.openssl ]
+              text;
         };
       };
     };
