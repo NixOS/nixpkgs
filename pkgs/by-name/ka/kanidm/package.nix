@@ -20,16 +20,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.2.3";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-J02IbAY5lyoMaq6wJiHizqeFBd5hB6id2YMPxlPsASM=";
+    hash = "sha256-W5G7osV4du6w/BfyY9YrDzorcLNizRsoz70RMfO2AbY=";
   };
 
-  cargoHash = "sha256-JuTKHXpEhWga2vAZhCpyPFy4w6+9UaasD70oBcrr0Rw=";
+  cargoHash = "sha256-gJrzOK6vPPBgsQFkKrbMql00XSfKGjgpZhYJLTURxoI=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
@@ -41,13 +41,17 @@ rustPlatform.buildRustPackage rec {
         cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
         default_config_path = "/etc/kanidm/server.toml";
         default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
         web_ui_pkg_path = "@web_ui_pkg_path@";
       };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
-        --replace '@web_ui_pkg_path@' "${placeholder "out"}/ui"
+        --replace '@htmx_ui_pkg_path@' "${placeholder "out"}/ui/hpkg" \
+        --replace '@web_ui_pkg_path@' "${placeholder "out"}/ui/pkg"
+
+        substituteInPlace Cargo.toml --replace-fail 'rust-version = "1.79"' 'rust-version = "1.77"'
     '';
 
   nativeBuildInputs = [
@@ -67,8 +71,9 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     # We don't compile the wasm-part form source, as there isn't a rustc for
     # wasm32-unknown-unknown in nixpkgs yet.
-    mkdir $out
-    cp -r server/web_ui/pkg $out/ui
+    mkdir -p $out/ui
+    cp -r server/web_ui/pkg $out/ui/pkg
+    cp -r server/core/static $out/ui/hpkg
   '';
 
   preFixup = ''
@@ -86,7 +91,13 @@ rustPlatform.buildRustPackage rec {
       inherit (nixosTests) kanidm;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      # avoid spurious releases and tags such as "debs"
+      extraArgs = [
+        "-vr"
+        "v(.*)"
+      ];
+    };
   };
 
   meta = with lib; {
