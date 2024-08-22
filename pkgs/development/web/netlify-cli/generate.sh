@@ -6,7 +6,7 @@ src="$(nix-build --expr 'let pkgs = import ../../../.. {}; meta = (pkgs.lib.impo
 echo $src
 node2nix \
   --input $src/package.json \
-  --lock $src/npm-shrinkwrap.json \
+  --lock $src/package-lock.json \
   --output node-packages.nix \
   --composition composition.nix \
   --node-env node-env.nix \

@@ -6,16 +6,15 @@
 
 buildGoModule rec {
   pname = "esbuild";
-  version = "0.14.39";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
-    owner = "netlify";
+    owner = "evanw";
     repo = "esbuild";
-    rev = "5faa7ad54c99a953d05c06819298d2b6f8c82d80";
-    sha256 = "pYiwGjgFMclPYTW0Qml7Pr/knT1gywUAGANra5aojYM=";
+    rev = "v${version}";
+    hash = "sha256-L/6/SyXpiMTu/3SHM2Lp+Xy0JfJl939a6KF3IwHTC6Y=";
   };
-
-  vendorHash = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+  vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
 
   passthru = {
     tests = {
