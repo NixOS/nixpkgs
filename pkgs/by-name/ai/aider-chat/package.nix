@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.50.0";
+  version = "0.51.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "aider-chat";
@@ -22,8 +22,8 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "paul-gauthier";
     repo = "aider";
-    rev = "v${version}";
-    hash = "sha256-hRUxzljtgLGEDwHf6UtQzGQM8CgiRtgNLlVoKa2jU3o=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vomRXWL3++1R8jpjMKbsGrB+B1FWQxVbLKxuPttnspw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
