@@ -22,7 +22,7 @@ buildGoModule rec {
 
   subPackages = [ "..." ];
 
-  vendorHash = "sha256-pH16DCYeW8mdnkkRi0zqioovZu9slVc3gAdhMYu2y98=";
+  vendorHash = "sha256-X6QwAFqREROADpTrDCr45OyeNXYtoBdPfyBfjVegc4w=";
 
   ldflags = [ "-s" "-w" ];
 
