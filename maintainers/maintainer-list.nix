@@ -810,6 +810,14 @@
     github = "akho";
     githubId = 104951;
   };
+  akinokaede = {
+    name = "Kaede Akino";
+    email = "i@akinokae.de";
+    matrix = "@akinokaedechan:matrix.org";
+    github = "AkinoKaede";
+    githubId = 26006258;
+    keys = [ { fingerprint = "7EB9 8F86 532B F7D2 C83E  E7FD F8A5 9385 C0FC 9E4E"; } ];
+  };
   akkesm = {
     name = "Alessandro Barenghi";
     email = "alessandro.barenghi@tuta.io";
