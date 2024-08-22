@@ -271,13 +271,13 @@ buildFHSEnv {
         currentVersion=${lib.escapeShellArg davinci.version}
         downloadsJSON="$(curl --fail --silent https://www.blackmagicdesign.com/api/support/us/downloads.json)"
 
-        latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve \K\d+\.\d+\.\d+' | sort | tail -n 1)"
+        latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve \K\d+\.\d+(\.\d+)?' | sort | tail -n 1)"
         update-source-version davinci-resolve "$latestLinuxVersion" --source-key=davinci.src
 
         # Since the standard and studio both use the same version we need to reset it before updating studio
         sed -i -e "s/""$latestLinuxVersion""/""$currentVersion""/" "$drv"
 
-        latestStudioLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve Studio \K\d+\.\d+\.\d+' | sort | tail -n 1)"
+        latestStudioLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve Studio \K\d+\.\d+(\.\d+)?' | sort | tail -n 1)"
         update-source-version davinci-resolve-studio "$latestStudioLinuxVersion" --source-key=davinci.src
       '';
     });
