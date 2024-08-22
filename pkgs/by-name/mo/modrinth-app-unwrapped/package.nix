@@ -3,49 +3,48 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  buildGoModule,
+  cacert,
   cargo-tauri,
   darwin,
   desktop-file-utils,
-  esbuild,
   libsoup,
-  nix-update-script,
   nodejs,
   openssl,
   pkg-config,
-  pnpm_8,
+  pnpm_9,
+  turbo,
   webkitgtk,
 }:
 
 let
-  pnpm = pnpm_8;
+  pnpm = pnpm_9;
 in
 rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
-  version = "0.7.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
+    rev = "a0bd011b808cdc998ef27960f610a8d99550c914";
+    hash = "sha256-zpFJq7if5gOx7jvwpE73lqH4Vpif0MJMPIGsgtThKVk=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
+      "sqlx-0.8.0-alpha.0" = "sha256-M1bumCMTzgDcQlgSYB6ypPp794e35ZSQCLzkbrFV4qY=";
+      "tauri-plugin-single-instance-0.0.0" = "sha256-DZWTO2/LevbQJCJbeHbTc2rhesV3bNrs+BoYm2eMakA=";
     };
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    sourceRoot = "${src.name}/theseus_gui";
-    hash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
+    hash = "sha256-xD04CD3fevIKZoXpjMo3tRF2r7K2IiMh1cNS7/FNx2I=";
   };
-  pnpmRoot = "theseus_gui";
 
   nativeBuildInputs = [
+    cacert # required for turbo
     cargo-tauri
     desktop-file-utils
     nodejs
@@ -78,25 +77,7 @@ rustPlatform.buildRustPackage rec {
       .${stdenv.hostPlatform.uname.system}
         or (throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
 
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.override {
-        buildGoModule =
-          args:
-          buildGoModule (
-            args
-            // rec {
-              version = "0.20.2";
-              src = fetchFromGitHub {
-                owner = "evanw";
-                repo = "esbuild";
-                rev = "refs/tags/v${version}";
-                hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-              };
-              vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-            }
-          );
-      }
-    );
+    TURBO_BINARY_PATH = lib.getExe turbo;
   };
 
   buildPhase = ''
@@ -131,10 +112,6 @@ rustPlatform.buildRustPackage rec {
       runHook postInstall
     '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   meta = {
     description = "Modrinth's game launcher";
     longDescription = ''
@@ -142,7 +119,6 @@ rustPlatform.buildRustPackage rec {
       and keep them up to date, all in one neat little package
     '';
     homepage = "https://modrinth.com";
-    changelog = "https://github.com/modrinth/theseus/releases/tag/v${version}";
     license = with lib.licenses; [
       gpl3Plus
       unfreeRedistributable
