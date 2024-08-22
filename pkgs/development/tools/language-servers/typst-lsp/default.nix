@@ -26,9 +26,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  # In order to make typst-lsp build with rust >= 1.80, we use the patched Cargo.lock from
+  # https://github.com/nvarner/typst-lsp/pull/515
+  # TODO remove once the PR will have been merged upstream
+  postPatch = ''
+    rm Cargo.lock
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   checkFlags = [
     # requires internet access
@@ -51,8 +57,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
     license = with lib.licenses; [ asl20 mit ];
     maintainers = with lib.maintainers; [ figsoda GaetanLepage ];
-    # Incompatible with Rust >= 1.80
-    # Fix to be merged upstream: https://github.com/nvarner/typst-lsp/pull/515
-    broken = true;
   };
 }
