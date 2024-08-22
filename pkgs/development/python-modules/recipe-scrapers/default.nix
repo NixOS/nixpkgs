@@ -11,6 +11,7 @@
   responses,
   setuptools,
   pythonOlder,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +49,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "recipe_scrapers" ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) mealie tandoor-recipes;
+    };
+  };
 
   meta = with lib; {
     description = "Python package for scraping recipes data";
