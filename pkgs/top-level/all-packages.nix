@@ -14762,6 +14762,8 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
+  bunBaseline = pkgs.bun.passthru.baseline;
+
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
   ciao = callPackage ../development/compilers/ciao { };
