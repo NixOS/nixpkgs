@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "kubeaudit";
-  version = "0.22.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ebqOjnr79S1utXaTKa9Jop9GvQsoW/IBMmIeOsGuvuE=";
+    hash = "sha256-zQAM/NtDBFJZmwJYGNuYIaxv058X0URzMByPut+18TA=";
   };
 
   vendorHash = "sha256-IxrAJaltg7vo3SQRC7OokSD5SM8xiX7iG8ZxKYEe9/E=";
