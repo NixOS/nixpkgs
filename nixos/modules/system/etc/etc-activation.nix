@@ -64,7 +64,7 @@
             ] ++ lib.optionals (!config.system.etc.overlay.mutable) [
               "ro"
             ]);
-            wantedBy = [ "initrd-fs.target" ];
+            requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
             requires = lib.mkIf config.system.etc.overlay.mutable [ "rw-etc.service" ];
             after = lib.mkIf config.system.etc.overlay.mutable [ "rw-etc.service" ];
