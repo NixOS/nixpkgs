@@ -9,7 +9,6 @@
 { config, lib, ... }:
 let
   inherit (lib)
-    mkDefault
     mkIf
     mkOption
     stringAfter
@@ -21,48 +20,20 @@ let
 in
 {
   options = {
-    nix = {
-      channel = {
-        enable = mkOption {
-          description = ''
-            Whether the `nix-channel` command and state files are made available on the machine.
-
-            The following files are initialized when enabled:
-              - `/nix/var/nix/profiles/per-user/root/channels`
-              - `/root/.nix-channels`
-              - `$HOME/.nix-defexpr/channels` (on login)
-
-            Disabling this option will not remove the state files from the system.
-          '';
-          type = types.bool;
-          default = true;
-        };
-      };
-
-      nixPath = mkOption {
-        type = types.listOf types.str;
-        default =
-          if cfg.channel.enable
-          then [
-            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-            "nixos-config=/etc/nixos/configuration.nix"
-            "/nix/var/nix/profiles/per-user/root/channels"
-          ]
-          else [ ];
-        defaultText = ''
-          if nix.channel.enable
-          then [
-            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-            "nixos-config=/etc/nixos/configuration.nix"
-            "/nix/var/nix/profiles/per-user/root/channels"
-          ]
-          else [];
-        '';
+    nix.channel = {
+      enable = mkOption {
         description = ''
-          The default Nix expression search path, used by the Nix
-          evaluator to look up paths enclosed in angle brackets
-          (e.g. `<nixpkgs>`).
+          Whether the `nix-channel` command and state files are made available on the machine.
+
+          The following files are initialized when enabled:
+            - `/nix/var/nix/profiles/per-user/root/channels`
+            - `/root/.nix-channels`
+            - `$HOME/.nix-defexpr/channels` (on login)
+
+          Disabling this option will not remove the state files from the system.
         '';
+        type = types.bool;
+        default = true;
       };
     };
 
@@ -76,8 +47,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  imports = [
+    (lib.mkRenamedOptionModule ["nix" "nixPath"] ["nix" "settings" "nix-path"])
+  ];
 
+  config = mkIf cfg.enable {
     environment.extraInit =
       mkIf cfg.channel.enable ''
         if [ -e "$HOME/.nix-defexpr/channels" ]; then
@@ -92,7 +66,7 @@ in
     # NIX_PATH has a non-empty default according to Nix docs, so we don't unset
     # it when empty.
     environment.sessionVariables = {
-      NIX_PATH = cfg.nixPath;
+      NIX_PATH = cfg.settings.nix-path;
     };
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
