@@ -1408,6 +1408,7 @@ mapAliases ({
   ### Z ###
 
   zabbix40 = throw "'zabbix40' has been removed as it has reached end of life"; # Added 2024-01-07
+  zed-editor = throw "'zed-editor' has been removed from nixos-24.05 since it was outdated (and newer versions cannot be backported as they require rust>=1.80 which is not present on this channel). Please install it from a more recent nixpkgs channel like nixos-unstable.";
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
   zinc = zincsearch; # Added 2023-05-28
