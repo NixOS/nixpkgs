@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic";
-  version = "0.7.0-unstable-2024-08-10";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
