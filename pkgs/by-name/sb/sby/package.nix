@@ -39,24 +39,35 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
-    patchShebangs .
+    patchShebangs docs/source/conf.py
+    patchShebangs docs/source/conf.diff
+    patchShebangs tests/autotune/autotune_div.sh
+    patchShebangs tests/autotune/autotune_options.sh
+    patchShebangs tests/keepgoing/keepgoing_same_step.sh
+    patchShebangs tests/keepgoing/keepgoing_smtc.sh
+    patchShebangs tests/keepgoing/keepgoing_multi_step.sh
+    patchShebangs tests/junit/junit_assert.sh
+    patchShebangs tests/junit/junit_timeout_error.sh
+    patchShebangs tests/junit/junit_expect.sh
+    patchShebangs tests/junit/junit_cover.sh
+    patchShebangs tests/junit/junit_nocodeloc.sh
 
     # Fix up Yosys imports
     substituteInPlace sbysrc/sby.py \
-      --replace "##yosys-sys-path##" \
+      --replace-fail "##yosys-sys-path##" \
                 "sys.path += [p + \"/share/yosys/python3/\" for p in [\"$out\", \"${yosys}\"]]"
 
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
-      --replace '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
-      --replace ', "btormc"'             ', "${boolector}/bin/btormc"' \
-      --replace ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
+      --replace-fail '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
+      --replace-fail ', "btormc"'             ', "${boolector}/bin/btormc"' \
+      --replace-fail ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
 
     substituteInPlace sbysrc/sby_core.py \
-      --replace '##yosys-program-prefix##' '"${yosys}/bin/"'
+      --replace-fail '##yosys-program-prefix##' '"${yosys}/bin/"'
 
     substituteInPlace sbysrc/sby.py \
-      --replace '/usr/bin/env python3' '${pythonEnv}/bin/python'
+      --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
   '';
 
   buildPhase = "true";
@@ -71,14 +82,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  nativeCheckInputs = [
-    pythonEnv
-    yosys
-    boolector
-    yices
-    z3
-    aiger
-  ];
+
   checkPhase = ''
     runHook preCheck
     make test
@@ -93,7 +97,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "SymbiYosys (sby) -- Front-end for Yosys-based formal verification flows";
+    description = "Front-end for Yosys-based formal verification flows";
     homepage = "https://symbiyosys.readthedocs.io/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
