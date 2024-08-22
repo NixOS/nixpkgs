@@ -1,8 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  nix-update-script,
+  vscode-extensions,
+  testers,
+  typst-lsp,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-OubKtSHw9L4GzVzZY0AVdHY7LzKg/XQIhUfUc2OYAG0=";
   };
 
@@ -36,26 +41,42 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
-  checkFlags = [
-    # requires internet access
-    "--skip=workspace::package::external::remote_repo::test::full_download"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # both tests fail on darwin with 'Attempted to create a NULL object.'
-    "--skip=workspace::fs::local::test::read"
-    "--skip=workspace::package::external::manager::test::local_package"
-  ];
+  checkFlags =
+    [
+      # requires internet access
+      "--skip=workspace::package::external::remote_repo::test::full_download"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # both tests fail on darwin with 'Attempted to create a NULL object.'
+      "--skip=workspace::fs::local::test::read"
+      "--skip=workspace::package::external::manager::test::local_package"
+    ];
 
   # workspace::package::external::manager::test::local_package tries to access the data directory
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      vscode-extension = vscode-extensions.nvarner.typst-lsp;
+      version = testers.testVersion { package = typst-lsp; };
+    };
+  };
+
   meta = {
     description = "Brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
     mainProgram = "typst-lsp";
     changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
-    license = with lib.licenses; [ asl20 mit ];
-    maintainers = with lib.maintainers; [ figsoda GaetanLepage ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      GaetanLepage
+    ];
   };
 }
