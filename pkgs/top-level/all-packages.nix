@@ -6108,8 +6108,6 @@ with pkgs;
 
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
 
-  recyclarr = callPackage ../tools/video/recyclarr { };
-
   tsduck = callPackage ../tools/video/tsduck { };
 
   turso-cli = callPackage ../development/tools/turso-cli {};
