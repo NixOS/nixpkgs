@@ -112,9 +112,7 @@ in {
     registerToSynapse = lib.mkOption {
       type = lib.types.bool;
       default = config.services.matrix-synapse.enable;
-      defaultText = lib.literalExpression ''
-        config.services.matrix-synapse.enable
-      '';
+      defaultText = lib.literalExpression "config.services.matrix-synapse.enable";
       description = ''
         Whether to add the bridge's app service registration file to
         `services.matrix-synapse.settings.app_service_config_files`.
