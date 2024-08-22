@@ -187,10 +187,7 @@ stdenv.mkDerivation {
     changelog = "https://support.microsoft.com/en-us/skype/what-s-new-in-skype-for-windows-mac-linux-and-web-d32f674c-abb3-40a5-a0b7-ee269ca60831";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
-      panaeon
-      jraygauthier
-    ];
+    maintainers = [ lib.maintainers.mjoerg ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "skypeforlinux";
   };
