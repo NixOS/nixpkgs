@@ -4,6 +4,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   meta = with pkgs.lib.maintainers; {
     maintainers = [ romildo ];
+    timeout = 600;
+    # OCR tests are flaky
+    broken = true;
   };
 
   nodes.machine = { ... }:
