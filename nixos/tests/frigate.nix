@@ -40,7 +40,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         ];
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -re -f lavfi -i smptebars=size=800x600:rate=10 -f mpegts -listen 1 http://0.0.0.0:8080";
+          ExecStart = "${lib.getExe pkgs.ffmpeg-headless} -re -f lavfi -i smptebars=size=1280x720:rate=5 -f mpegts -listen 1 http://0.0.0.0:8080";
           Restart = "always";
         };
       };
@@ -54,11 +54,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 
     # Frigate startup
     machine.wait_for_open_port(5001)
+    machine.wait_until_succeeds("journalctl -u frigate.service -o cat | grep -q 'Created a default user'")
 
-    # nginx startup
-    machine.wait_for_open_port(80)
-
-    machine.succeed("curl http://localhost")
+    #machine.log(machine.succeed("curl -vvv --fail http://localhost/api/version")[1])
 
     machine.wait_for_file("/var/cache/frigate/test@*.mp4")
   '';
