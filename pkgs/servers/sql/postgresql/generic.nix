@@ -19,7 +19,7 @@ let
       , version, hash, muslPatches ? {}
 
       # for tests
-      , testers, nixosTests
+      , testers
 
       # JIT
       , jitSupport
@@ -119,7 +119,6 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
-
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
