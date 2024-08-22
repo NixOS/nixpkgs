@@ -110,7 +110,14 @@ rustPlatform.buildRustPackage rec {
       inherit (nixosTests) kanidm kanidm-provisioning;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { 
+      # avoid spurious releases and tags such as "debs"
+      extraArgs = [
+        "-vr"
+        "v(.*)"
+      ];
+    };
+
     inherit enableSecretProvisioning;
     withSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
   };
