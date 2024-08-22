@@ -15,6 +15,7 @@
   runCommand,
   writers,
   numba,
+  pytestCheckHook,
 
   config,
 
@@ -25,6 +26,8 @@
 
   # CUDA flags:
   cudaSupport ? config.cudaSupport,
+  testsWithoutSandbox ? false,
+  doFullCheck ? false,
 }:
 
 let
@@ -92,19 +95,27 @@ buildPythonPackage rec {
     })
   ];
 
-  # run a smoke test in a temporary directory so that
-  # a) Python picks up the installed library in $out instead of the build files
-  # b) we have somewhere to put $HOME so some caching tests work
-  # c) it doesn't take 6 CPU hours for the full suite
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-    pushd $(mktemp -d)
-    HOME=. ${python.interpreter} -m numba.runtests -m $NIX_BUILD_CORES numba.tests.test_usecases
-    popd
-
-    runHook postCheck
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
   '';
+
+  pytestFlagsArray = lib.optionals (!doFullCheck) [
+    # These are the most basic tests. Running all tests is too expensive, and
+    # some of them fail (also differently on different platforms), so it will
+    # be too hard to maintain such a `disabledTests` list.
+    "${python.sitePackages}/numba/tests/test_usecases.py"
+  ];
+
+  disabledTestPaths = lib.optionals (!testsWithoutSandbox) [
+    # See NOTE near passthru.tests.withoutSandbox
+    "${python.sitePackages}/numba/cuda/tests"
+  ];
 
   pythonImportsCheck = [ "numba" ];
 
@@ -117,23 +128,18 @@ buildPythonPackage rec {
       '';
   passthru.tests = {
     # CONTRIBUTOR NOTE: numba also contains CUDA tests, though these cannot be run in
-    # this sandbox environment. Consider running similar commands to those below outside the
-    # sandbox manually if you have the appropriate hardware; support will be detected
-    # and the corresponding tests enabled automatically.
-    # Also, the full suite currently does not complete on anything but x86_64-linux.
-    fullSuite = runCommand "${pname}-test" { } ''
-      pushd $(mktemp -d)
-      # pip and python in $PATH is needed for the test suite to pass fully
-      PATH=${
-        python.withPackages (p: [
-          p.numba
-          p.pip
-        ])
-      }/bin:$PATH
-      HOME=$PWD python -m numba.runtests -m $NIX_BUILD_CORES
-      popd
-      touch $out # stop Nix from complaining no output was generated and failing the build
-    '';
+    # this sandbox environment. Consider building the derivation below with
+    # --no-sandbox to get a view of how many tests succeed outside the sandbox.
+    withoutSandbox = numba.override {
+      doFullCheck = true;
+      cudaSupport = true;
+      testsWithoutSandbox = true;
+    };
+    withSandbox = numba.override {
+      cudaSupport = false;
+      doFullCheck = true;
+      testsWithoutSandbox = false;
+    };
   };
 
   meta = with lib; {
