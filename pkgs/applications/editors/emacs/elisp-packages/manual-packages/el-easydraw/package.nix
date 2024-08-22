@@ -21,6 +21,8 @@ melpaBuild {
 
   files = ''(:defaults "msg")'';
 
+  ignoreCompilationError = false;
+
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
