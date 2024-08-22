@@ -20,12 +20,12 @@ let
     "comfy-wide-motion-fixed" # Slab   | Wide    | Monospaced | No        |
     "comfy-wide-motion-duo" # | Slab   | Wide    | Duospaced  | Yes       |
   ];
-  version = "1.4.0";
+  version = "2.0.0";
   src = fetchFromGitHub {
     owner = "protesilaos";
     repo = "iosevka-comfy";
     rev = version;
-    sha256 = "sha256-kfEEJ6F1/dsG9CSLWcr0QOOnQxHPgPgb4QhgFrHTklE=";
+    sha256 = "sha256-wDcBaNXIzOQ3/LBuW3YUnx/fjtJMeI+jsxLRBlsd1M0=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont = set:
@@ -40,19 +40,11 @@ let
           src = fetchFromGitHub {
             owner = "be5invis";
             repo = "iosevka";
-            rev = "f6e57fbf0b1242ad3069d45c815d79b9d68871a2";
-            hash = "sha256-cS3SCKzUjVXF+n0Rt5eBLzieATB7W+hwEbzh6OQrMo4=";
+            rev = "v31.3.0";
+            hash = "sha256-WrRxVrBJeyUwv0/DYTIHLi52+k2PilC7ay0tc5yq3Pw=";
           };
 
-          npmDepsHash = "sha256-c+ltdh5e3+idclYfqp0Xh9IUwoj7XYP1uzJG6+a5gFU=";
-
-          installPhase = ''
-            runHook preInstall
-            fontdir="$out/share/fonts/truetype"
-            install -d "$fontdir"
-            install "dist/$pname/ttf"/* "$fontdir"
-            runHook postInstall
-          '';
+          npmDepsHash = "sha256-xw0GA1aIA/J5hfLQBSE+GJzXfbfWQI2k2pYdenlM9NY=";
 
           meta = with lib; {
             inherit (src.meta) homepage;
