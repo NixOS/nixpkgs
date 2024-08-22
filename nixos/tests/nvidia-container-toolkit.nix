@@ -99,7 +99,7 @@ import ./make-test-python.nix (
       maintainers = [ ereslibre ];
     };
     nodes = {
-      no-nvidia-gpus =
+      no-gpus =
         { config, ... }:
         {
           environment.systemPackages = with pkgs; [ jq ];
@@ -112,7 +112,7 @@ import ./make-test-python.nix (
           };
         };
 
-      nvidia-one-gpu =
+      one-gpu =
         { config, pkgs, ... }:
         {
           virtualisation.diskSize = 10240;
@@ -131,7 +131,7 @@ import ./make-test-python.nix (
           virtualisation.containers.enable = true;
         };
 
-      nvidia-one-gpu-invalid-host-paths =
+      one-gpu-invalid-host-paths =
         { config, pkgs, ... }:
         {
           virtualisation.diskSize = 10240;
@@ -158,19 +158,19 @@ import ./make-test-python.nix (
       start_all()
 
       with subtest("Generate an empty CDI spec for a machine with no Nvidia GPUs"):
-        no_nvidia_gpus.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
-        no_nvidia_gpus.succeed("cat /var/run/cdi/nvidia-container-toolkit.json | jq")
+        no_gpus.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
+        no_gpus.succeed("cat /var/run/cdi/nvidia-container-toolkit.json | jq")
 
       with subtest("Podman loads the generated CDI spec for a machine with an Nvidia GPU"):
-        nvidia_one_gpu.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
-        nvidia_one_gpu.succeed("cat /var/run/cdi/nvidia-container-toolkit.json | jq")
-        nvidia_one_gpu.succeed("podman load < ${testContainerImage}")
-        print(nvidia_one_gpu.succeed("podman run --pull=never --device=nvidia.com/gpu=all -v /run/opengl-driver:/run/opengl-driver:ro cdi-test:latest"))
+        one_gpu.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
+        one_gpu.succeed("cat /var/run/cdi/nvidia-container-toolkit.json | jq")
+        one_gpu.succeed("podman load < ${testContainerImage}")
+        print(one_gpu.succeed("podman run --pull=never --device=nvidia.com/gpu=all -v /run/opengl-driver:/run/opengl-driver:ro cdi-test:latest"))
 
       # Issue: https://github.com/NixOS/nixpkgs/issues/319201
       with subtest("The generated CDI spec skips specified non-existant paths in the host"):
-        nvidia_one_gpu_invalid_host_paths.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
-        nvidia_one_gpu_invalid_host_paths.fail("grep 'non-existant-path' /var/run/cdi/nvidia-container-toolkit.json")
+        one_gpu_invalid_host_paths.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
+        one_gpu_invalid_host_paths.fail("grep 'non-existant-path' /var/run/cdi/nvidia-container-toolkit.json")
     '';
   }
 )
