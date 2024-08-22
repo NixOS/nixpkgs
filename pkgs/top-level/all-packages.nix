@@ -2669,8 +2669,6 @@ with pkgs;
 
   pcem = callPackage ../applications/emulators/pcem { };
 
-  pcsxr = callPackage ../applications/emulators/pcsxr { };
-
   ppsspp-sdl = let
     argset = {
       ffmpeg = ffmpeg_4;
@@ -8803,8 +8801,6 @@ with pkgs;
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
-
-  hwinfo = callPackage ../tools/system/hwinfo { };
 
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
@@ -18846,11 +18842,6 @@ with pkgs;
   rsonpath = callPackage ../development/tools/misc/rsonpath { };
 
   rufo = callPackage ../development/tools/rufo { };
-
-  rye = darwin.apple_sdk_11_0.callPackage ../development/tools/rye {
-    inherit (darwin.apple_sdk_11_0) Libsystem;
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices SystemConfiguration;
-  };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
 
@@ -34737,8 +34728,8 @@ with pkgs;
 
   xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
 
-  xen = xenPackages.xen;
-  xen-slim = xenPackages.xen-slim;
+  xen = xenPackages.xen_4_19;
+  xen-slim = xenPackages.xen_4_19-slim;
 
   xkbset = callPackage ../tools/X11/xkbset { };
 
@@ -35338,7 +35329,7 @@ with pkgs;
 
   heroic-unwrapped = callPackage ../games/heroic {
     # Match the version used by the upstream package.
-    electron = electron_29;
+    electron = electron_31;
   };
 
   heroic = callPackage ../games/heroic/fhsenv.nix { };
@@ -37265,8 +37256,6 @@ with pkgs;
     p4est-sc = p4est-sc-dbg;
   };
 
-  parmetis = callPackage ../development/libraries/science/math/parmetis { };
-
   QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
 
   scs = callPackage ../development/libraries/science/math/scs { };
@@ -37665,8 +37654,6 @@ with pkgs;
   boolector = callPackage ../applications/science/logic/boolector { };
 
   bitwuzla = callPackage ../applications/science/logic/bitwuzla { };
-
-  symbiyosys = callPackage ../applications/science/logic/symbiyosys { };
 
   symfpu = callPackage ../applications/science/logic/symfpu { };
 

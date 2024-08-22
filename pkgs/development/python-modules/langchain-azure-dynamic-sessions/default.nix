@@ -62,10 +62,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_azure_dynamic_sessions" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-  };
-
   meta = {
     description = "Integration package connecting Azure Container Apps dynamic sessions and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/azure-dynamic-sessions";

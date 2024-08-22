@@ -4657,6 +4657,8 @@ self: super: with self; {
 
   openllm-core = callPackage ../development/python-modules/openllm-core { };
 
+  openstep-parser = callPackage ../development/python-modules/openstep-parser { };
+
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
   glyphsets = callPackage ../development/python-modules/glyphsets { };
@@ -6767,6 +6769,8 @@ self: super: with self; {
   langchain-mongodb = callPackage ../development/python-modules/langchain-mongodb { };
 
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
+
+  langchain-standard-tests = callPackage ../development/python-modules/langchain-standard-tests { };
 
   langchain-text-splitters = callPackage ../development/python-modules/langchain-text-splitters { };
 
@@ -10263,8 +10267,6 @@ self: super: with self; {
     inherit (pkgs.qt5) qtbase qmake;
     inherit (pkgs.libsForQt5) soqt;
   };
-
-  pixelmatch = callPackage ../development/python-modules/pixelmatch { };
 
   pixel-font-builder = callPackage ../development/python-modules/pixel-font-builder { };
 
@@ -14513,6 +14515,8 @@ self: super: with self; {
   sip4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
+
+  sismic = callPackage ../development/python-modules/sismic { };
 
   sisyphus-control = callPackage ../development/python-modules/sisyphus-control { };
 

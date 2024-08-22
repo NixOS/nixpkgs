@@ -8713,6 +8713,12 @@
     githubId = 7481521;
     name = "Balázs Lengyel";
   };
+  ilaumjd = {
+    email = "ilaumjd@gmail.com";
+    github = "ilaumjd";
+    githubId = 16514431;
+    name = "Ilham AM";
+  };
   ilian = {
     email = "ilian@tuta.io";
     github = "ilian";
@@ -17232,6 +17238,12 @@
     githubId = 52847440;
     name = "Ryan Burns";
   };
+  rcmlz = {
+    email = "haguga-nixos@yahoo.com";
+    github = "rcmlz";
+    githubId = 19784049;
+    name = "rcmlz";
+  };
   rcoeurjoly = {
     email = "rolandcoeurjoly@gmail.com";
     github = "RCoeurjoly";
@@ -18594,6 +18606,12 @@
     github = "SebTM";
     githubId = 17243347;
     name = "Sebastian Sellmeier";
+  };
+  sedlund = {
+    email = "scott+nixpkgs@teraton.com";
+    github = "sedlund";
+    githubId = 8109138;
+    name = "Scott Edlund";
   };
   sefidel = {
     name = "sefidel";

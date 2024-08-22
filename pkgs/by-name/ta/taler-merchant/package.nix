@@ -8,6 +8,7 @@
   libtool,
   pkg-config,
   autoreconfHook,
+  makeWrapper,
   jq,
 }:
 
@@ -36,9 +37,20 @@ stdenv.mkDerivation {
     ln -s ${taler-wallet-core}/spa.html $sourceRoot/contrib/
   '';
 
+  # Use an absolute path for `templates` and `spa` directories, else a relative
+  # path to the `taler-exchange` package is used.
+  postPatch = ''
+    substituteInPlace src/backend/taler-merchant-httpd.c \
+      --replace-fail 'TALER_TEMPLATING_init ("merchant");' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\");"
+
+    substituteInPlace src/backend/taler-merchant-httpd_spa.c \
+      --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
+  '';
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    makeWrapper
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -59,10 +71,14 @@ stdenv.mkDerivation {
     popd
   '';
 
-  configureFlags = [
-    "--with-gnunet=${gnunet}"
-    "--with-exchange=${taler-exchange}"
-  ];
+  # NOTE: The executables that need database access fail to detect the
+  # postgresql library in `$out/lib/taler`, so we need to wrap them.
+  postInstall = ''
+    for exec in dbinit httpd webhook wirewatch depositcheck exchange; do
+      wrapProgram $out/bin/taler-merchant-$exec \
+        --prefix LD_LIBRARY_PATH : "$out/lib/taler"
+    done
+  '';
 
   enableParallelBuilding = true;
 
