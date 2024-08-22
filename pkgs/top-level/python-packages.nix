@@ -10405,6 +10405,8 @@ self: super: with self; {
 
   pyixapi = callPackage ../development/python-modules/pyixapi { };
 
+  pykcs11 = callPackage ../development/python-modules/pykcs11 { };
+
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
 
   pylance = callPackage ../development/python-modules/pylance { };
