@@ -9,14 +9,14 @@
 , cubeb
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qcm";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "hypengw";
     repo = "Qcm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-dwzstlmGuY8oRxxO2BPXmSCSnE7Fbp+dyYVs17HUopA=";
   };
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})
