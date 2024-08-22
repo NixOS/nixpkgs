@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-authentication-azure";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-authentication-azure-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RA0BbIwDs3cXiH4tQsvCGUO1OAg+DWjEeWd7MEVIC8E=";
+    hash = "sha256-JoR7qjAPNqtcV35AGwbyjhIro6AnFUZXXLHLOj7InY8=";
   };
 
   build-system = [ flit-core ];
