@@ -13658,6 +13658,18 @@ final: prev:
     meta.homepage = "https://github.com/ludovicchabant/vim-gutentags/";
   };
 
+  vim-habamax = buildVimPlugin {
+    pname = "vim-habamax";
+    version = "2024-01-22";
+    src = fetchFromGitHub {
+      owner = "habamax";
+      repo = "vim-habamax";
+      rev = "8b4e045b711c7e90235a601ba2a923cdfacb2f46";
+      sha256 = "02973qssq450d4411zjscsjvwz4fc2lpqvimah06k87skp8inp47";
+    };
+    meta.homepage = "https://github.com/habamax/vim-habamax/";
+  };
+
   vim-hardtime = buildVimPlugin {
     pname = "vim-hardtime";
     version = "2022-05-06";
