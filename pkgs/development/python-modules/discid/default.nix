@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "Python binding of libdiscid";
     homepage = "https://python-discid.readthedocs.org/";
     license = licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

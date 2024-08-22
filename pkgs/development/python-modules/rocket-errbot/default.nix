@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/errbotio/rocket";
     description = "Modern, multi-threaded and extensible web server";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

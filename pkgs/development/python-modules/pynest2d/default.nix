@@ -38,6 +38,7 @@ buildPythonPackage rec {
     description = "Python bindings for libnest2d";
     homepage = "https://github.com/Ultimaker/pynest2d";
     license = licenses.lgpl3;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

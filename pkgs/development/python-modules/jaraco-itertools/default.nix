@@ -43,5 +43,6 @@ buildPythonPackage rec {
     description = "Tools for working with iterables";
     homepage = "https://github.com/jaraco/jaraco.itertools";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

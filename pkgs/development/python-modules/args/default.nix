@@ -17,5 +17,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Command Arguments for Humans";
     homepage = "https://github.com/kennethreitz/args";
+    maintainers = [ ];
   };
 }

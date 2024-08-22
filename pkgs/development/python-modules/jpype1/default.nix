@@ -36,6 +36,7 @@ buildPythonPackage rec {
       binaryBytecode
     ];
     license = licenses.asl20;
+    maintainers = [ ];
     description = "Python to Java bridge";
   };
 }

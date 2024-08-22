@@ -23,6 +23,7 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/dundeemt/pysftp";
     description = "Friendly face on SFTP";
     license = licenses.mit;
+    maintainers = [ ];
     longDescription = ''
       A simple interface to SFTP. The module offers high level abstractions
       and task based routines to handle your SFTP needs. Checkout the Cook

@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/betamax/serializers";
     description = "Set of third-party serializers for Betamax";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

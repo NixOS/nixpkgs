@@ -53,6 +53,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/andialbrecht/sqlparse";
     changelog = "https://github.com/andialbrecht/sqlparse/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
+    maintainers = [ ];
     mainProgram = "sqlformat";
   };
 }

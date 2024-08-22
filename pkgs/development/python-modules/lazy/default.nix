@@ -18,6 +18,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lazy attributes for Python objects";
     license = lib.licenses.bsd2;
+    maintainers = [ ];
     homepage = "https://github.com/stefanholek/lazy";
   };
 }

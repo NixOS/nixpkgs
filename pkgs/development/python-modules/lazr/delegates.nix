@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/lazr.delegates";
     changelog = "https://git.launchpad.net/lazr.delegates/tree/NEWS.rst?h=${version}";
     license = licenses.lgpl3Only;
+    maintainers = [ ];
   };
 }

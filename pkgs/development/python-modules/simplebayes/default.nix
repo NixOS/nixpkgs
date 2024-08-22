@@ -34,5 +34,6 @@ buildPythonPackage {
     description = "Memory-based naive bayesian text classifier";
     homepage = "https://github.com/hickeroar/simplebayes";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

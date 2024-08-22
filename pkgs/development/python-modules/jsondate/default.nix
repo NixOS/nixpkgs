@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ilya-kolpakov/jsondate";
     description = "JSON with datetime handling";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

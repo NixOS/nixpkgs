@@ -20,5 +20,6 @@ buildPythonPackage rec {
     description = "HTML/XML templating engine used by supervisor";
     homepage = "https://github.com/supervisor/meld3";
     license = licenses.free;
+    maintainers = [ ];
   };
 }

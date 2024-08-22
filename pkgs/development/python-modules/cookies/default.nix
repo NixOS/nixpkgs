@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Friendlier RFC 6265-compliant cookie parser/renderer";
     homepage = "https://github.com/sashahart/cookies";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

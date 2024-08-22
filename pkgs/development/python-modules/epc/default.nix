@@ -22,5 +22,6 @@ buildPythonPackage rec {
     description = "EPC (RPC stack for Emacs Lisp) implementation in Python";
     homepage = "https://github.com/tkf/python-epc";
     license = licenses.gpl3;
+    maintainers = [ ];
   };
 }

@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Let's write Python 3 right now!";
     homepage = "https://github.com/nandoflorestan/nine";
     license = licenses.free;
+    maintainers = [ ];
   };
 }

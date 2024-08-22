@@ -31,5 +31,6 @@ buildPythonPackage rec {
     mainProgram = "rqw";
     homepage = "http://rdflib.github.io/sparqlwrapper";
     license = licenses.w3c;
+    maintainers = [ ];
   };
 }

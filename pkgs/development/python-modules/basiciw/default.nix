@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/enkore/basiciw";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
+    maintainers = [ ];
   };
 }

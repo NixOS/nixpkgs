@@ -59,6 +59,7 @@ let
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
+      maintainers = [ ];
     };
   };
 
@@ -124,6 +125,7 @@ let
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
+      maintainers = [ ];
     };
   };
 
@@ -244,6 +246,7 @@ let
       description = "FEniCS Problem Solving Environment in Python and C++";
       homepage = "https://fenicsproject.org/";
       license = lib.licenses.lgpl3;
+      maintainers = [ ];
     };
   };
   python-dolfin = pythonPackages.buildPythonPackage rec {
@@ -287,6 +290,7 @@ let
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
+      maintainers = [ ];
     };
   };
 in

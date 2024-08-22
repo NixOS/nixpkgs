@@ -60,6 +60,7 @@ buildPythonPackage rec {
     description = "Python framework that makes developing APIs as simple as possible, but no simpler";
     homepage = "https://github.com/hugapi/hug";
     license = licenses.mit;
+    maintainers = [ ];
     # Missing support for later falcon releases
     broken = true;
   };

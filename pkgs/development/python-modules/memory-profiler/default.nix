@@ -29,5 +29,6 @@ python.pkgs.buildPythonPackage rec {
     '';
     homepage = "https://pypi.python.org/pypi/memory_profiler";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

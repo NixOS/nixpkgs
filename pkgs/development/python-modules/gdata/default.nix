@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/gdata-python-client";
     description = "Python client library for Google data APIs";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

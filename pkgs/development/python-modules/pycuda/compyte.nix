@@ -15,4 +15,8 @@ mkDerivation {
     mkdir -p $out
     cp -r * $out
   '';
+
+  meta = {
+    maintainers = [ ];
+  };
 }

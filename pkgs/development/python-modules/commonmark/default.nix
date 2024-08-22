@@ -32,5 +32,6 @@ buildPythonPackage rec {
     mainProgram = "cmark";
     homepage = "https://github.com/rolandshoemaker/CommonMark-py";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

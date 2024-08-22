@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Pure Python GeoIP API";
     homepage = "https://github.com/appliedsec/pygeoip";
     license = licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

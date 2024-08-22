@@ -34,5 +34,6 @@ buildPythonPackage rec {
       lgpl3Only # or
       bsd3
     ];
+    maintainers = [ ];
   };
 }

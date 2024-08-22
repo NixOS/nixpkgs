@@ -18,6 +18,7 @@ buildPythonPackage rec {
     description = "Implementation of JWT, JWS, JWE and JWK";
     homepage = "https://github.com/rohe/pyjwkest";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 
   src = fetchPypi {

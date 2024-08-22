@@ -26,5 +26,6 @@ buildPythonPackage rec {
     mainProgram = "jdiff";
     homepage = "https://github.com/ZoomerAnalytics/jsondiff";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

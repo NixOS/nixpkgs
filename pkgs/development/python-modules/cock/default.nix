@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pohmelie/cock";
     description = "Configuration file with click";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

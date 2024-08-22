@@ -17,6 +17,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pure-Python AES";
     license = lib.licenses.mit;
+    maintainers = [ ];
     homepage = "https://github.com/ricmoo/pyaes";
   };
 }

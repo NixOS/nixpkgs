@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/pyptlib/";
     description = "Python implementation of the Pluggable Transports for Circumvention specification for Tor";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }

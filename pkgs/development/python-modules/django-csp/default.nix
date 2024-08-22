@@ -44,5 +44,6 @@ buildPythonPackage rec {
     description = "Adds Content-Security-Policy headers to Django";
     homepage = "https://github.com/mozilla/django-csp";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

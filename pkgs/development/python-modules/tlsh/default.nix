@@ -30,6 +30,7 @@ buildPythonPackage rec {
     description = "Trend Micro Locality Sensitive Hash";
     homepage = "https://tlsh.org/";
     license = licenses.asl20;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

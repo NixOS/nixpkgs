@@ -43,5 +43,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/jsonpickle/jsonpickle";
     homepage = "http://jsonpickle.github.io/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -26,5 +26,6 @@ buildPythonPackage rec {
     description = "Stats for Python processes";
     homepage = "https://www.github.com/Cue/scales";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

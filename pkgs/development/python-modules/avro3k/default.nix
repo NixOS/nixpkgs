@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "Serialization and RPC framework";
     mainProgram = "avro";
     homepage = "https://pypi.python.org/pypi/avro3k/";
+    maintainers = [ ];
   };
 }

@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kvesteri/sqlalchemy-i18n";
     description = "Internationalization extension for SQLAlchemy models";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

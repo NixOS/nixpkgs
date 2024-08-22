@@ -26,6 +26,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mitsuhiko/pluginbase";
     description = "Support library for building plugins sytems in Python";
     license = licenses.bsd3;
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

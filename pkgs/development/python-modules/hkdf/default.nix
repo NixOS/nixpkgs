@@ -36,5 +36,6 @@ buildPythonPackage {
     description = "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)";
     homepage = "https://github.com/casebeer/python-hkdf";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }

@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "PAM interface using ctypes";
     homepage = "https://github.com/minrk/pamela";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -20,6 +20,7 @@ buildPythonPackage {
     homepage = "https://github.com/ntzrmtthihu777/pyinputevent";
     description = "Python interface to the Input Subsystem's input_event and uinput";
     license = licenses.bsd3;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

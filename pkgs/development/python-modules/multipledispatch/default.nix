@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mrocklin/multipledispatch/";
     description = "Relatively sane approach to multiple dispatch in Python";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

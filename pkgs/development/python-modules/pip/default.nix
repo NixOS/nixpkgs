@@ -113,6 +113,7 @@ let self = buildPythonPackage rec {
   meta = {
     description = "PyPA recommended tool for installing Python packages";
     license = with lib.licenses; [ mit ];
+    maintainers = [ ];
     homepage = "https://pip.pypa.io/";
     changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
   };

@@ -44,5 +44,6 @@ buildPythonPackage rec {
     description = "pyenchant: Python bindings for the Enchant spellchecker";
     homepage = "https://github.com/pyenchant/pyenchant";
     license = licenses.lgpl21;
+    maintainers = [ ];
   };
 }

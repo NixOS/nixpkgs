@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/byroot/pysrt";
     license = licenses.gpl3Only;
+    maintainers = [ ];
     description = "Python library used to edit or create SubRip files";
     mainProgram = "srt";
   };

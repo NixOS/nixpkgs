@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/readthedocs/sphinx_rtd_theme";
     changelog = "https://github.com/readthedocs/sphinx_rtd_theme/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -40,5 +40,6 @@ buildPythonPackage rec {
     description = "Click command line utilities";
     homepage = "https://github.com/hjacobs/python-clickclick/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

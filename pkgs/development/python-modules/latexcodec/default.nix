@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mcmtroffaes/latexcodec";
     description = "Lexer and codec to work with LaTeX code in Python";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

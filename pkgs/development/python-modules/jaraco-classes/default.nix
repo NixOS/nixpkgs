@@ -34,5 +34,6 @@ buildPythonPackage rec {
     description = "Utility functions for Python class constructs";
     homepage = "https://github.com/jaraco/jaraco.classes";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }
