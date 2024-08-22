@@ -54,6 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
+    mainProgram = "veilid-server";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
     maintainers = with maintainers; [ bbigras qbit ];
