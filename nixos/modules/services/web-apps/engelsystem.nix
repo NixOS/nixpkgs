@@ -163,7 +163,17 @@ in {
         Group = "engelsystem";
       };
       script = ''
-        ${cfg.package}/bin/migrate
+        versionFile="/var/lib/engelsystem/.version"
+        version=$(cat "$versionFile" 2>/dev/null || echo 0)
+
+        if [[ $version != ${cfg.package.version} ]]; then
+          # prune template cache between releases
+          rm -rfv /var/lib/engelsystem/storage/cache/*
+
+          ${cfg.package}/bin/migrate
+
+          echo ${cfg.package.version} > "$versionFile"
+        fi
       '';
       after = [ "engelsystem-init.service" "mysql.service" ];
     };
