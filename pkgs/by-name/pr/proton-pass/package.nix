@@ -8,11 +8,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-pass";
-  version = "1.20.2";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "https://proton.me/download/PassDesktop/linux/x64/ProtonPass_${finalAttrs.version}.deb";
-    hash = "sha256-4QSBKVnEH7yDXwqY+29/a+yWv89i/TVCYO26V95KA4s=";
+    hash = "sha256-ARIUHmU/YN8IoAFMkcxzGAoH31vbJLT7HfYD6a57QaY=";
   };
 
   dontConfigure = true;
@@ -44,7 +44,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Desktop application for Proton Pass";
     homepage = "https://proton.me/pass";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ massimogengarelli sebtm ];
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      massimogengarelli
+      sebtm
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "proton-pass";

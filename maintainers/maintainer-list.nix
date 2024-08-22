@@ -212,6 +212,12 @@
     githubId = 882455;
     name = "Elliot Cameron";
   };
+  _404wolf = {
+    email = "wolfmermelstein@gmail.com";
+    github = "404wolf";
+    githubId = 108041238;
+    name = "Wolf Mermelstein";
+  };
   _414owen = {
     email = "owen@owen.cafe";
     github = "414owen";
@@ -17159,11 +17165,11 @@
     name = "Szymon Scholz";
   };
   ratcornu = {
-    email = "ratcornu@skaven.org";
+    email = "ratcornu+programmation@skaven.org";
     github = "RatCornu";
     githubId = 98173832;
     name = "Balthazar Patiachvili";
-    matrix = "@ratcornu:skweel.skaven.org";
+    matrix = "@ratcornu:skaven.org";
     keys = [ { fingerprint = "1B91 F087 3D06 1319 D3D0  7F91 FA47 BDA2 6048 9ADA"; } ];
   };
   ratsclub = {
