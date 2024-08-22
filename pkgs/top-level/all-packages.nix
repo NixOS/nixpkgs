@@ -14762,8 +14762,6 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
-  bun = callPackage ../development/web/bun { };
-
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
   ciao = callPackage ../development/compilers/ciao { };
