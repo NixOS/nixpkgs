@@ -834,6 +834,12 @@
     githubId = 20405311;
     name = "Aksh Gupta";
   };
+  aksiksi = {
+    email = "assil@ksiksi.net";
+    github = "aksiksi";
+    githubId = 916621;
+    name = "Assil Ksiksi";
+  };
   akssri = {
     email = "akssri@vakra.xyz";
     github = "akssri";
@@ -15206,6 +15212,12 @@
     github = "oberblastmeister";
     githubId = 61095988;
     name = "Brian Shu";
+  };
+  oberth-effect = {
+    email = "stepan.venclik@gmail.com";
+    github = "oberth-effect";
+    githubId = 88210794;
+    name = "Štěpán Venclík";
   };
   obfusk = {
     email = "flx@obfusk.net";
