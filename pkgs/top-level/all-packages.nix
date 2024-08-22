@@ -36823,7 +36823,6 @@ with pkgs;
   };
 
   rivet = callPackage ../development/libraries/physics/rivet {
-    hepmc = hepmc2;
     imagemagick = graphicsmagick-imagemagick-compat;
   };
 
