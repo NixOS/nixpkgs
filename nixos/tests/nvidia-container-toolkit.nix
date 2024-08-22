@@ -39,7 +39,7 @@ import ./make-test-python.nix (
         name = "cdi-test";
         tag = "latest";
         config = {
-          Cmd = [ "${testCDIScript}/bin/test-cdi" ];
+          Cmd = [ (lib.getExe testCDIScript) ];
         };
         copyToRoot = (
           with pkgs.dockerTools;
