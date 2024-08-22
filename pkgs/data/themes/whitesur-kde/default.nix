@@ -4,7 +4,7 @@
 , kdeclarative
 , plasma-framework
 , plasma-workspace
-, gitUpdater
+, unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation {
@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "MacOS big sur like theme for KDE Plasma desktop";
