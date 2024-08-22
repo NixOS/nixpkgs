@@ -25,7 +25,13 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/openssl-${version}.tar.gz";
+      url = if lib.versionOlder version "3.0" then
+        let
+          versionFixed = builtins.replaceStrings ["."] ["_"] version;
+        in
+          "https://github.com/openssl/openssl/releases/download/OpenSSL_${versionFixed}/openssl-${version}.tar.gz"
+      else
+        "https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz";
       inherit hash;
     };
 
