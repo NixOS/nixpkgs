@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "metacubexd";
-  version = "1.143.0";
+  version = "1.146.1";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "metacubexd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GHyA7VO1kfmFk0tTysrEk11bToSfbuTDvf9krO9zEqQ=";
+    hash = "sha256-Vm2DPdfHx0WtB8RFq0wfCvBVdGVaX6PXrN/nAtNKv1E=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-PZnsmpVWZpd5albzMiEvsvQb2tWlt4HB40Mwz+ZCKVU=";
+    hash = "sha256-G95Iu268vnYwFsbD/kTy8n/Fu5Da9qXdy3LadbrsUHc=";
   };
 
   buildPhase = ''

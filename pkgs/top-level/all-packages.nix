@@ -30471,13 +30471,6 @@ with pkgs;
     python3Packages = python311Packages;
   };
 
-  metacubexd = callPackage ../by-name/me/metacubexd/package.nix {
-    pnpm = callPackage ../development/tools/pnpm/generic.nix {
-      version = "9.4.0";
-      hash = "sha256-tv0L/aVV5+WErX5WswxosB1aBPnuk5ifS5PKhHPEnHQ=";
-    };
-  };
-
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
