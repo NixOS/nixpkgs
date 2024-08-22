@@ -15,7 +15,11 @@ let
 
   # ROCm, if actively updated will always be at the latest version
   branch =
-    if llvmMajor == "18" then rec {
+    if llvmMajor == "19" then rec {
+      version = "19.1.0";
+      rev = "dad1f0eaab8047a4f73c50ed5f3d1694b78aae97";
+      hash = "sha256-mUvDF5y+cBnqUaHjyiiE8cJGH5MfQMqGFy6bYv9vCVY=";
+    } else if llvmMajor == "18" then rec {
       version = "18.1.0";
       rev = "v${version}";
       hash = "sha256-64guZiuO7VpaX01wNIjV7cnjEAe6ineMdY44S6sA33k=";
@@ -96,7 +100,8 @@ stdenv.mkDerivation {
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-  ] ++ lib.optional (llvmMajor != "11") "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}";
+  ] ++ lib.optional (llvmMajor != "11") "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
+    ++ lib.optional (llvmMajor == "19") "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
