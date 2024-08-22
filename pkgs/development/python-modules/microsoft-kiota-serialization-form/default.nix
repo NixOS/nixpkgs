@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Form serialization implementation for Kiota clients in Python";
     homepage = "https://github.com/microsoft/kiota-serialization-form-python";
-    changelog = "https://github.com/microsoft/kiota-serialization-form-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/kiota-serialization-form-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
