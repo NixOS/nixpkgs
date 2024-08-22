@@ -11244,6 +11244,18 @@ final: prev:
     meta.homepage = "https://github.com/johmsalas/text-case.nvim/";
   };
 
+  themed-tabs-nvim = buildVimPlugin {
+    pname = "themed-tabs.nvim";
+    version = "2023-11-09";
+    src = fetchFromGitHub {
+      owner = "vhsconnect";
+      repo = "themed-tabs.nvim";
+      rev = "2ab0e463b929d717b58d10d600589e1ef642f7a4";
+      sha256 = "04i76ndixdi2vpavqb6dy0pf72a7gya4dsr6l1vyjmray45jbda0";
+    };
+    meta.homepage = "https://github.com/vhsconnect/themed-tabs.nvim/";
+  };
+
   thesaurus_query-vim = buildVimPlugin {
     pname = "thesaurus_query.vim";
     version = "2022-12-11";
