@@ -12,8 +12,9 @@ let
     # If the attribute is not named 'test'
     # You will break all the universe on the release-*.nix side of things.
     # `discoverTests` relies on `test` existence to perform a `callTest`.
-    test = testMiscFeatures args;
-    passthru.override = args': testsForPackage (args // args');
+    test = testMiscFeatures args // {
+      passthru.override = args': testsForPackage (args // args');
+    };
   };
 
   testMiscFeatures = { nixPackage, ... }: pkgs.testers.nixosTest (
