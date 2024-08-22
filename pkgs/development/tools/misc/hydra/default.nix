@@ -230,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit nix perlDeps;
-    tests.basic = nixosTests.hydra.hydra_unstable;
+    tests.basic = nixosTests.hydra.hydra;
   };
 
   meta = with lib; {
