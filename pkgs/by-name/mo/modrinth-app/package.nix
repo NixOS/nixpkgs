@@ -4,6 +4,7 @@
   symlinkJoin,
   modrinth-app-unwrapped,
   addDriverRunpath,
+  alsa-lib,
   flite,
   glib-networking,
   jdk8,
@@ -15,7 +16,9 @@
     jdk21
   ],
   libGL,
+  libjack2,
   libpulseaudio,
+  pipewire,
   udev,
   wrapGAppsHook3,
   xorg,
@@ -51,7 +54,10 @@ symlinkJoin rec {
       flite
 
       # openal
+      alsa-lib
+      libjack2
       libpulseaudio
+      pipewire
 
       # oshi
       udev
