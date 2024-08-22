@@ -97,7 +97,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "hydra_unstable" { };
+      package = mkPackageOption pkgs "hydra" { };
 
       hydraURL = mkOption {
         type = types.str;
