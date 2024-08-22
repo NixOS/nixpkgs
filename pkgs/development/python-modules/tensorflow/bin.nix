@@ -107,6 +107,7 @@ buildPythonPackage {
     pushd dist
 
     for f in tensorflow-*+nv*.whl; do
+      # e.g. *nv24.07* -> *nv24.7*
       mv "$f" "$(sed -E 's/(nv[0-9]+)\.0*([0-9]+)/\1.\2/' <<< "$f")"
     done
 
