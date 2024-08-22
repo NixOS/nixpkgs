@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, stdenvNoCC, overrideCC, wrapCCWith, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -31,7 +31,7 @@
 , opencv
 , python3
 , openmp ? null
-}:
+}@pkgs:
 
 let blas64_ = blas64; in
 
@@ -126,8 +126,26 @@ in
 
 let
   config =
-    configs.${stdenv.hostPlatform.system}
-    or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+    configs.${pkgs.stdenv.hostPlatform.system}
+    or (throw "unsupported system: ${pkgs.stdenv.hostPlatform.system}");
+
+  mkStdenvNoCC = pkgs: pkgs.stdenvNoCC.override (lib.optionalAttrs (config.DYNAMIC_ARCH) {
+    buildPlatform = lib.removeAttrs pkgs.stdenv.buildPlatform [ "cpuModel" ];
+    hostPlatform = lib.removeAttrs pkgs.stdenv.hostPlatform [ "cpuModel" ];
+    targetPlatform = lib.removeAttrs pkgs.stdenv.targetPlatform [ "cpuModel" ];
+  });
+
+  mkCC = pkgs: pkgs.stdenv.cc.override {
+    stdenvNoCC = mkStdenvNoCC pkgs;
+  };
+
+  mkStdenv = pkgs: overrideCC pkgs.stdenv (mkCC pkgs);
+
+  gfortran =
+    wrapCCWith {
+      inherit (buildPackages.gfortran) cc;
+      stdenvNoCC = mkStdenvNoCC buildPackages;
+    };
 in
 
 let
@@ -147,7 +165,7 @@ let
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-stdenv.mkDerivation rec {
+(mkStdenv pkgs).mkDerivation rec {
   pname = "openblas";
   version = "0.3.28";
 
@@ -194,8 +212,8 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) openmp;
 
   depsBuildBuild = [
-    buildPackages.gfortran
-    buildPackages.stdenv.cc
+    gfortran
+    (mkCC buildPackages)
   ];
 
   enableParallelBuilding = true;
@@ -223,7 +241,7 @@ stdenv.mkDerivation rec {
     # https://github.com/OpenMathLib/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
     MAKE_NB_JOBS = 0;
   } // (lib.optionalAttrs stdenv.cc.isClang {
-    LDFLAGS = "-L${lib.getLib buildPackages.gfortran.cc}/lib"; # contains `libgfortran.so`; building with clang needs this, gcc has it implicit
+    LDFLAGS = "-L${lib.getLib gfortran.cc}/lib"; # contains `libgfortran.so`; building with clang needs this, gcc has it implicit
   }) // (lib.optionalAttrs singleThreaded {
     # As described on https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
