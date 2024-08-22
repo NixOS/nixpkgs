@@ -13960,11 +13960,6 @@ with pkgs;
 
   tigervnc = callPackage ../tools/admin/tigervnc { };
 
-  tightvnc = callPackage ../tools/admin/tightvnc {
-    fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
-      xorg.fontbhlucidatypewriter75dpi ];
-  };
-
   time = callPackage ../tools/misc/time { };
 
   tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
