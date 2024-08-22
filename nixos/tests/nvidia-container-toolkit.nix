@@ -6,91 +6,90 @@ import ./make-test-python.nix (
     ...
   }:
   let
-    testContainerImage =
-      let
-        testCDIScript = pkgs.writeShellScriptBin "test-cdi" ''
-          die() {
-            echo "$1"
-            exit 1
-          }
+    testCDIScript = pkgs.writeShellScriptBin "test-cdi" ''
+      die() {
+        echo "$1"
+        exit 1
+      }
 
-          check_file_referential_integrity() {
-            echo "checking $1 referential integrity"
-            ( ${pkgs.glibc.bin}/bin/ldd "$1" | ${lib.getExe pkgs.gnugrep} "not found" &> /dev/null ) && return 1
-            return 0
-          }
+      check_file_referential_integrity() {
+        echo "checking $1 referential integrity"
+        ( ${pkgs.glibc.bin}/bin/ldd "$1" | ${lib.getExe pkgs.gnugrep} "not found" &> /dev/null ) && return 1
+        return 0
+      }
 
-          check_directory_referential_integrity() {
-            ${lib.getExe pkgs.findutils} "$1" -type f -print0 | while read -d $'\0' file; do
-              if [[ $(${lib.getExe pkgs.file} "$file" | ${lib.getExe pkgs.gnugrep} ELF) ]]; then
-                check_file_referential_integrity "$file" || exit 1
-              else
-                echo "skipping $file: not an ELF file"
-              fi
-            done
-          }
+      check_directory_referential_integrity() {
+        ${lib.getExe pkgs.findutils} "$1" -type f -print0 | while read -d $'\0' file; do
+          if [[ $(${lib.getExe pkgs.file} "$file" | ${lib.getExe pkgs.gnugrep} ELF) ]]; then
+            check_file_referential_integrity "$file" || exit 1
+          else
+            echo "skipping $file: not an ELF file"
+          fi
+        done
+      }
 
-          check_directory_referential_integrity "/usr/bin" || exit 1
-          check_directory_referential_integrity "${pkgs.addDriverRunpath.driverLink}" || exit 1
-          check_directory_referential_integrity "/usr/local/nvidia" || exit 1
-        '';
-      in
-      pkgs.dockerTools.buildImage {
-        name = "cdi-test";
-        tag = "latest";
-        config = {
-          Cmd = [ (lib.getExe testCDIScript) ];
-        };
-        copyToRoot = (
-          with pkgs.dockerTools;
-          [
-            usrBinEnv
-            binSh
-          ]
-        );
+      check_directory_referential_integrity "/usr/bin" || exit 1
+      check_directory_referential_integrity "${pkgs.addDriverRunpath.driverLink}" || exit 1
+      check_directory_referential_integrity "/usr/local/nvidia" || exit 1
+    '';
+    testContainerImage = pkgs.dockerTools.buildImage {
+      name = "cdi-test";
+      tag = "latest";
+      config = {
+        Cmd = [ (lib.getExe testCDIScript) ];
       };
+      copyToRoot = with pkgs.dockerTools; [
+        usrBinEnv
+        binSh
+      ];
+    };
     emptyCDISpec = ''
-      #! ${pkgs.runtimeShell}
-      cat <<CDI_DOCUMENT
-        {
-          "cdiVersion": "0.5.0",
-          "kind": "nvidia.com/gpu",
-          "devices": [
-            {
-              "name": "all",
-              "containerEdits": {
-                "deviceNodes": [
-                  {
-                    "path": "/dev/urandom"
-                  }
-                ],
-                "hooks": [],
-                "mounts": []
-              }
+      {
+        "cdiVersion": "0.5.0",
+        "kind": "nvidia.com/gpu",
+        "devices": [
+          {
+            "name": "all",
+            "containerEdits": {
+              "deviceNodes": [
+                {
+                  "path": "/dev/urandom"
+                }
+              ],
+              "hooks": [],
+              "mounts": []
             }
-          ],
-          "containerEdits": {
-            "deviceNodes": [],
-            "hooks": [],
-            "mounts": []
           }
+        ],
+        "containerEdits": {
+          "deviceNodes": [],
+          "hooks": [],
+          "mounts": []
         }
-      CDI_DOCUMENT
+      }
     '';
     nvidia-container-toolkit = {
       enable = true;
       package = pkgs.stdenv.mkDerivation {
-        name = "nvidia-ctk-dummy";
+        pname = "nvidia-ctk-dummy";
         version = "1.0.0";
         dontUnpack = true;
         dontBuild = true;
+
+        inherit emptyCDISpec;
+        passAsFile = [ "emptyCDISpec" ];
+
         installPhase = ''
-          mkdir -p $out/bin
-          cat <<EOF > $out/bin/nvidia-ctk
-            ${emptyCDISpec}
+          mkdir -p $out/bin $out/share/nvidia-container-toolkit
+          cp "$emptyCDISpecPath" "$out/share/nvidia-container-toolkit/spec.json"
+          echo -n "$emptyCDISpec" > "$out/bin/nvidia-ctk";
+          cat << EOF > "$out/bin/nvidia-ctk"
+          #!${pkgs.runtimeShell}
+          cat "$out/share/nvidia-container-toolkit/spec.json"
           EOF
           chmod +x $out/bin/nvidia-ctk
         '';
+        meta.mainProgram = "nvidia-ctk";
       };
     };
   in
