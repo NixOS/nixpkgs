@@ -27,6 +27,8 @@ melpaBuild {
     make
   '';
 
+  ignoreCompilationError = false;
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {

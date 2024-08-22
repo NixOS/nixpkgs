@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = "aiohomekit";
     rev = "refs/tags/${version}";
-    hash = "sha256-SeK0CZesGatPQdwjr4u28m+ZIojlM02GCftX/q8Dg4g=";
+    hash = "sha256-gWuFCL78hcOflXlDwYDSu3+G/F8D5najtoTgKKzod1Y=";
   };
 
   build-system = [ poetry-core ];

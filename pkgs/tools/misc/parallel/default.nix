@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "20240722";
 
   src = fetchurl {
-    url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
+    url = "mirror://gnu/parallel/parallel-${version}.tar.bz2";
     hash = "sha256-xzNUcfd2ryi+qUZK2FpQ8u0SD3j7916tZkeu6o4OU/A=";
   };
 

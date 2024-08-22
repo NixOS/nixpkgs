@@ -8,11 +8,13 @@
   fetchFromGitHub,
   hatch-fancy-pypi-readme,
   hatchling,
+  jiter,
   httpx,
   numpy,
   pandas,
   pandas-stubs,
   pydantic,
+  inline-snapshot,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -25,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.39.0";
+  version = "1.40.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -34,7 +36,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jOtJu5Luvwnel2GLBjZHDP3MuXTWXFZKYHQfdmyEyTs=";
+    hash = "sha256-T9TdZWPC8exIY7FoLQkz+QfzWFT5BxCBHxP9SXQeT0I=";
   };
 
   build-system = [
@@ -43,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    jiter
     httpx
     pydantic
     typing-extensions
@@ -63,6 +66,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "openai" ];
 
   nativeCheckInputs = [
+    inline-snapshot
     pytestCheckHook
     pytest-asyncio
     pytest-mock

@@ -269,9 +269,9 @@ in
     '';
   };
 
-  memtest86 = makeTest {
+  memtest86 = with pkgs.lib; optionalAttrs (meta.availableOn { inherit system; } pkgs.memtest86plus) (makeTest {
     name = "systemd-boot-memtest86";
-    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+    meta.maintainers = with maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -282,7 +282,7 @@ in
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
-  };
+  });
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";

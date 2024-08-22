@@ -46,6 +46,7 @@
   typing-extensions,
   uvicorn,
   zstd,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -156,6 +157,10 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
+  };
 
   meta = with lib; {
     description = "AI-native open-source embedding database";

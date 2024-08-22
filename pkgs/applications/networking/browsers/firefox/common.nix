@@ -245,6 +245,24 @@ buildStdenv.mkDerivation {
       hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
     })
   ]
+  ++ lib.optionals (lib.versionOlder version "130" && lib.versionAtLeast version "128") [
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1898476
+    (fetchpatch {
+      name = "mozbz-1898476-1.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f9323daf7abe";
+      hash = "sha256-fvIowXJLWnm16LeiSz6EasGypTi1ilG+s/T6+lNLbMQ=";
+    })
+    (fetchpatch {
+      name = "mozbz-1898476-2.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/a264ff9e9f6f";
+      hash = "sha256-9vkI/Ho4BXvLnoRGdfTzUODcIlA6K3RjbdhZjb/LEz0=";
+    })
+    (fetchpatch {
+      name = "mozbz-1898476-3.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/eb230ecdf8eb";
+      hash = "sha256-IaLltxf5W1WEzxvbi10wphqXVQPtBiLc2zlk38CIiz4=";
+    })
+  ]
   ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch  ]
   ++ lib.optionals (lib.versionOlder version "123") [
     (fetchpatch {

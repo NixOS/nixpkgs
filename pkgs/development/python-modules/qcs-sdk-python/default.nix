@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.19.0";
+  version = "0.19.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     rev = "python/v${version}";
-    hash = "sha256-M2JG4EOpvSNy7C7uFRMNl4fvkeCXm3B5LpL8fKKJ61M=";
+    hash = "sha256-5PQLFGZmQDpX3IUwQOZhIgSbMhW+PACdH+7ztBHN20A=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quil-rs-0.26.0" = "sha256-Er4sl47i6TbcbG3JHHexrOn/Sdd5mLTl5R+eA7heBVg=";
+      "quil-rs-0.27.1" = "sha256-w97kkdwRnVVfKNTIKypl3shFQJV5Rh/kF6jp7jCiyqw=";
     };
   };
 

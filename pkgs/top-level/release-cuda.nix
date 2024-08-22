@@ -43,7 +43,8 @@ in
       inHydra = true;
     };
   },
-}:
+  ...
+}@args:
 
 assert builtins.elem variant [
   "cuda"
@@ -52,7 +53,9 @@ assert builtins.elem variant [
 ];
 
 let
-  release-lib = import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+  release-lib = import ./release-lib.nix (
+    { inherit supportedSystems nixpkgsArgs; } // builtins.removeAttrs args [ "variant" ]
+  );
 
   inherit (release-lib) lib;
   inherit (release-lib)

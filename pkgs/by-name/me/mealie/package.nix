@@ -112,6 +112,9 @@ pythonpkgs.buildPythonApplication rec {
 
     substituteInPlace mealie/db/init_db.py \
       --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
+
+    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
+      --replace-fail '"script_location", path.join(PROJECT_DIR, "alembic")' '"script_location", "${src}/alembic"'
   '';
 
   postInstall = let

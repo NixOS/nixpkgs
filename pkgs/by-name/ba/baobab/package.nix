@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/baobab/${lib.versions.major version}/baobab-${version}.tar.xz";
     hash = "sha256-zk3vXILQVnGlAJ9768+FrJhnXZ2BYNKK2RgbJppy43w=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "baobab";
     };
   };
 
