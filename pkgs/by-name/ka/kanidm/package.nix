@@ -89,7 +89,13 @@ rustPlatform.buildRustPackage rec {
       inherit (nixosTests) kanidm;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { 
+      # avoid spurious releases and tags such as "debs"
+      extraArgs = [
+        "-vr"
+        "v(.*)"
+      ];
+    };
   };
 
   meta = with lib; {
