@@ -288,7 +288,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${datadogPkg}/bin/trace-agent -config /etc/datadog-agent/datadog.yaml
+          ${datadogPkg}/bin/trace-agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
 
