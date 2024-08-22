@@ -8802,8 +8802,6 @@ with pkgs;
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
-  hwinfo = callPackage ../tools/system/hwinfo { };
-
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
@@ -37257,8 +37255,6 @@ with pkgs;
   p4est-dbg = callPackage ../development/libraries/science/math/p4est {
     p4est-sc = p4est-sc-dbg;
   };
-
-  parmetis = callPackage ../development/libraries/science/math/parmetis { };
 
   QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
 

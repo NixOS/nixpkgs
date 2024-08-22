@@ -8713,6 +8713,12 @@
     githubId = 7481521;
     name = "Balázs Lengyel";
   };
+  ilaumjd = {
+    email = "ilaumjd@gmail.com";
+    github = "ilaumjd";
+    githubId = 16514431;
+    name = "Ilham AM";
+  };
   ilian = {
     email = "ilian@tuta.io";
     github = "ilian";
@@ -18594,6 +18600,12 @@
     github = "SebTM";
     githubId = 17243347;
     name = "Sebastian Sellmeier";
+  };
+  sedlund = {
+    email = "scott+nixpkgs@teraton.com";
+    github = "sedlund";
+    githubId = 8109138;
+    name = "Scott Edlund";
   };
   sefidel = {
     name = "sefidel";

@@ -4657,6 +4657,8 @@ self: super: with self; {
 
   openllm-core = callPackage ../development/python-modules/openllm-core { };
 
+  openstep-parser = callPackage ../development/python-modules/openstep-parser { };
+
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
   glyphsets = callPackage ../development/python-modules/glyphsets { };
