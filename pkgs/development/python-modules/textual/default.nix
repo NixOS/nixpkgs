@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Textualize/textual";
     changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
   };
 }
