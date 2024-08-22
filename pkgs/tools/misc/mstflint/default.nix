@@ -25,6 +25,8 @@
 
 stdenv.mkDerivation rec {
   pname = "mstflint";
+
+  # if you update the version of this package, also update the input hash in mstflint_access!
   version = "4.29.0-1";
 
   src = fetchurl {
