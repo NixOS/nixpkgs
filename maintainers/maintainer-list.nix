@@ -2447,6 +2447,12 @@
     github = "beezow";
     githubId = 42082156;
   };
+  benchand = {
+    name = "Ben Chand";
+    email = "BenChand1995@gmail.com";
+    github = "BenChand";
+    githubId = 3618457;
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     matrix = "@bendlas:matrix.org";
