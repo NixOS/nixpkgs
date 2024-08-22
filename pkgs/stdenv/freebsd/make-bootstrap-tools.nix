@@ -15,7 +15,7 @@
         rm -f $base/nix-support/propagated-build-inputs
         for f in $requisites; do
           cd $f
-          rsync --chmod="+w" -av . $base
+          rsync --safe-links --chmod="+w" -av . $base
         done
         cd $base
 
