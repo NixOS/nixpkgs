@@ -427,7 +427,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     # the current apple sdk is too old (currently 11_0) and fails to build "metal" on x86_64-darwin
     broken = stdenv.hostPlatform.system == "x86_64-darwin";
-    maintainers = with lib.maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [
+      amarshall
+      veprbl
+    ];
     mainProgram = "blender";
   };
 })
