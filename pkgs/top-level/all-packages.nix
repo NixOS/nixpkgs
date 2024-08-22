@@ -17361,8 +17361,6 @@ with pkgs;
 
   svls = callPackage ../development/tools/language-servers/svls { };
 
-  typst-lsp = callPackage ../development/tools/language-servers/typst-lsp { };
-
   vala-language-server = callPackage ../development/tools/language-servers/vala-language-server { };
 
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
