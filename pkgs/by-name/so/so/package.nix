@@ -14,16 +14,18 @@ let
   inherit (darwin.apple_sdk.frameworks) Security;
   self = rustPlatform.buildRustPackage {
     pname = "so";
-    version = "0.4.9";
+    version = "0.4.10";
 
     src = fetchFromGitHub {
+      pname = "so-source";
+      inherit (self) version;
       owner = "samtay";
       repo = "so";
       rev = "v${self.version}";
-      hash = "sha256-4IZNOclQj3ZLE6WRddn99CrV8OoyfkRBXnA4oEyMxv8=";
+      hash = "sha256-25jZEo1C9XF4m9YzDwtecQy468nHyv2wnRuK5oY2siU=";
     };
 
-    cargoHash = "sha256-hHXA/n/HQeBaD4QZ2b6Okw66poBRwNTpQWF0qBhLp/o=";
+    cargoHash = "sha256-F9DNY0jKhH6aQRqlXq6MEMoFa1qtvAdL5lSEsql6gcI=";
 
     nativeBuildInputs = [ pkg-config ];
 
