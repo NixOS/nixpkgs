@@ -40,6 +40,21 @@
   zulip,
 }:
 
+let
+  permitInsecureOlm = map (
+    pythonPackage:
+    pythonPackage.override (
+      lib.optionalAttrs (pythonPackage.pname == "python-olm") (
+        let
+          olm = lib.findFirst (p: p.pname == "olm") null pythonPackage.buildInputs;
+        in
+        {
+          olm = olm.overrideAttrs (lib.addMetaAttrs { knownVulnerabilities = [ ]; });
+        }
+      )
+    )
+  );
+in
 buildPythonPackage rec {
   pname = "matrix-nio";
   version = "0.24.0";
@@ -83,7 +98,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.e2e;
+  ] ++ permitInsecureOlm passthru.optional-dependencies.e2e;
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
