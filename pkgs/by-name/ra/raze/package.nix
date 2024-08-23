@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "DYN_GTK" false)
     (lib.cmakeBool "DYN_OPENAL" false)
   ];
