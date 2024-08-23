@@ -7,15 +7,7 @@
 , nixosTests
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      pydantic = super.pydantic_1;
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
   version = "0.14.2";
 
@@ -30,7 +22,7 @@ python.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiofiles
     django_4
     fastapi
@@ -56,9 +48,9 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   passthru.updateScript = nix-update-script {};
-  passthru.python = python;
+  passthru.python = python3;
   # PYTHONPATH of all dependencies used by the package
-  passthru.pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+  passthru.pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
   passthru.tests = {
     nixosTest = nixosTests.etebase-server;
   };
