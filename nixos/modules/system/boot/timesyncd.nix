@@ -9,11 +9,11 @@ in
 
   options = {
 
-    services.timesyncd = {
+    services.timesyncd = with types; {
       enable = mkOption {
         default = !config.boot.isContainer;
         defaultText = literalExpression "!config.boot.isContainer";
-        type = types.bool;
+        type = bool;
         description = ''
           Enables the systemd NTP client daemon.
         '';
@@ -21,7 +21,7 @@ in
       servers = mkOption {
         default = config.networking.timeServers;
         defaultText = literalExpression "config.networking.timeServers";
-        type = types.listOf types.str;
+        type = listOf str;
         description = ''
           The set of NTP servers from which to synchronise.
           Note if this is set to an empty list, the defaults systemd itself is
@@ -31,7 +31,7 @@ in
       };
       extraConfig = mkOption {
         default = "";
-        type = types.lines;
+        type = lines;
         example = ''
           PollIntervalMaxSec=180
         '';
