@@ -5486,6 +5486,18 @@ final: prev:
     meta.homepage = "https://github.com/udalov/kotlin-vim/";
   };
 
+  kulala-nvim = buildVimPlugin {
+    pname = "kulala.nvim";
+    version = "2024-09-30";
+    src = fetchFromGitHub {
+      owner = "mistweaverco";
+      repo = "kulala.nvim";
+      rev = "3b53dbb5677b144f372ecb25cb7841fba0c85a60";
+      sha256 = "sha256-Sbeby+N8bmkof8B8BsCWzZzWhot1wjQuRwqABI2/V3M=";
+    };
+    meta.homepage = "https://github.com/mistweaverco/kulala.nvim/";
+  };
+
   lalrpop-vim = buildVimPlugin {
     pname = "lalrpop.vim";
     version = "2017-11-22";
