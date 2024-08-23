@@ -247,6 +247,31 @@ in stdenv.mkDerivation (finalAttrs: {
       --subst-var-by GIMP_GIT_VERSION "GIMP_2.99.?-g${builtins.substring 0 10 finalAttrs.src.rev}" \
       --subst-var-by GIMP_GIT_VERSION_ABBREV "${builtins.substring 0 10 finalAttrs.src.rev}" \
       --subst-var-by GIMP_GIT_LAST_COMMIT_YEAR "${builtins.head (builtins.match ".+\-unstable-([0-9]{4})-[0-9]{2}-[0-9]{2}" finalAttrs.version)}"
+
+    # Patch plug-ins so that they work in the build sandbox where /usr/bin/env is not available.
+    # Ideally, we would remove the shebang to force the plug-in to find Python using interp file
+    # but that does not appear to work.
+    grep --files-with-matches --recursive --null '#!/usr/bin/env python3' plug-ins/python |
+        while IFS= read -r -d "" plugin; do
+            substituteInPlace "$plugin" --replace-fail '#!/usr/bin/env python3' '#!${python.interpreter}'
+        done
+  '';
+
+  preBuild = ''
+    # in-build-gimp.sh used for generating splash image requires this
+    export HOME="$(mktemp -d)"
+
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When building docs, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p "$out/lib"
+    ln -s "$PWD/libgimp/libgimp-3.0.so.0" "$out/lib/libgimp-3.0.so.0"
+    ln -s "$PWD/libgimpbase/libgimpbase-3.0.so.0" "$out/lib/libgimpbase-3.0.so.0"
+    ln -s "$PWD/libgimpcolor/libgimpcolor-3.0.so.0" "$out/lib/libgimpcolor-3.0.so.0"
+    ln -s "$PWD/libgimpconfig/libgimpconfig-3.0.so.0" "$out/lib/libgimpconfig-3.0.so.0"
+    ln -s "$PWD/libgimpmath/libgimpmath-3.0.so.0" "$out/lib/libgimpmath-3.0.so.0"
+    ln -s "$PWD/libgimpmodule/libgimpmodule-3.0.so.0" "$out/lib/libgimpmodule-3.0.so.0"
   '';
 
   preCheck = ''
@@ -255,6 +280,8 @@ in stdenv.mkDerivation (finalAttrs: {
     # Fix storing recent file list in tests
     export HOME="$TMPDIR"
     export XDG_DATA_DIRS="${glib.getSchemaDataDirPath gtk3}:$XDG_DATA_DIRS"
+    # Gtk:ERROR:../gtk/gtkiconhelper.c:495:ensure_surface_for_gicon: assertion failed (error == NULL): Icon 'image-missing' not present in theme Default (gtk-icon-theme-error-quark, 0)
+    export XDG_DATA_DIRS="${adwaita-icon-theme}/share:$XDG_DATA_DIRS"
   '';
 
   checkPhase = ''
