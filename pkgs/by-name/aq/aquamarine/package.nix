@@ -32,9 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zushuLkBblDZGVo2qbiMTJ51LSkqYJpje/R2dvfec1U=";
   };
 
-  # https://github.com/hyprwm/aquamarine/pull/55
-  patches = [ ./CMakeLists-wayland.xml-is-in-wayland-scanner-pkgdata.patch ];
-
   nativeBuildInputs = [
     cmake
     hyprwayland-scanner
