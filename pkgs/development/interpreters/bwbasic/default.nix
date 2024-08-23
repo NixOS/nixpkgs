@@ -1,6 +1,6 @@
-{ lib, stdenv, dos2unix, fetchurl, unzip }:
+{ lib, gccStdenv, dos2unix, fetchurl, unzip }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "bwbasic";
   version = "3.20";
 
