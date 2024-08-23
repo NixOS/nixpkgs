@@ -94,7 +94,7 @@ let
         } ''
         DOWNLOADID=$(
           curl --silent --compressed "$DOWNLOADSURL" \
-            | jq --raw-output '.downloads[] | select(.name | test("^'"$PRODUCT $VERSION"'( Update)?$")) | .urls.Linux[0].downloadId'
+            | jq --raw-output '.downloads[] | .urls.Linux?[]? | select(.downloadTitle | test("^'"$PRODUCT $VERSION"'( Update)?$")) | .downloadId'
         )
         echo "downloadid is $DOWNLOADID"
         test -n "$DOWNLOADID"
