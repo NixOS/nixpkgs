@@ -1,8 +1,8 @@
 diff --git a/shared/utils.c b/shared/utils.c
-index 453e277..28716a5 100644
+index ce5b5e1..898d209 100644
 --- a/shared/utils.c
 +++ b/shared/utils.c
-@@ -39,7 +39,7 @@ check_ipsec_daemon(const char *path)
+@@ -59,7 +59,7 @@ require_libreswan_ipsec_auto(const char *path)
  const char *
  nm_find_ipsec(void)
  {
@@ -11,7 +11,7 @@ index 453e277..28716a5 100644
                                                 "/sbin/ipsec",
                                                 "/usr/sbin/ipsec",
                                                 "/usr/local/sbin/ipsec",
-@@ -70,7 +70,7 @@ nm_find_l2tpd(NML2tpL2tpDaemon *l2tp_daemon)
+@@ -90,7 +90,7 @@ nm_find_l2tpd(NML2tpL2tpDaemon *l2tp_daemon)
                                                 "/usr/local/sbin/kl2tpd",
                                                 NULL};
  
