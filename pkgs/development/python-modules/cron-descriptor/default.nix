@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library that converts cron expressions into human readable strings";
     homepage = "https://github.com/Salamek/cron-descriptor";
+    changelog = "https://github.com/Salamek/cron-descriptor/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ phaer ];
   };
