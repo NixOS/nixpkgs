@@ -16990,6 +16990,8 @@ self: super: with self; {
     inherit (pkgs.xorg) libX11 libXext;
   };
 
+  ufal-chu-liu-edmonds = callPackage ../development/python-modules/ufal-chu-liu-edmonds { };
+
   ufmt = callPackage ../development/python-modules/ufmt { };
 
   ufo2ft = callPackage ../development/python-modules/ufo2ft { };
