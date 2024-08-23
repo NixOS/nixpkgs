@@ -52,7 +52,7 @@ self: super: {
       cabalInstallOverlay = cself: csuper:
         {
           hackage-security = self.hackage-security_0_6_2_6;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10") {
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10.2") {
           Cabal = cself.Cabal_3_12_1_0;
           Cabal-syntax = cself.Cabal-syntax_3_12_1_0;
         };
