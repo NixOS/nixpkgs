@@ -14,7 +14,7 @@
 , buildPackages
 , qtbase ? null
 , pythonSupport ? false
-, swig2 ? null
+, swig4 ? null
 # only for passthru.tests
 , libsForQt5
 , qt6Packages
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.setuptools
     python3.pkgs.wheel
     ncurses
-    swig2
+    swig4
     which
   ];
 
