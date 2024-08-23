@@ -4,6 +4,8 @@ stdenv.mkDerivation {
   pname = "mkpasswd";
   inherit (whois) version src patches;
 
+  CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libxcrypt ];
 
