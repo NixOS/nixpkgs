@@ -1,0 +1,118 @@
+diff --git a/src/proto_unix.c b/src/proto_unix.c
+index 998f234..d38452c 100644
+--- a/src/proto_unix.c
++++ b/src/proto_unix.c
+@@ -36,11 +36,14 @@ enum {
+ 
+ static int lsock = -1;
+ 
++static char *spath = NULL;
++
+ int init_unix(void)
+ {
+ 	int s;
+ 	mode_t prev_umask;
+ 	struct sockaddr_un addr;
++	char *sock_path;
+ 
+ 	if(lsock >= 0) return 0;
+ 
+@@ -49,16 +52,18 @@ int init_unix(void)
+ 		return -1;
+ 	}
+ 
+-	unlink(SOCK_NAME);	/* in case it already exists */
++	sock_path = socket_path();
++
++	unlink(sock_path);	/* in case it already exists */
+ 
+ 	memset(&addr, 0, sizeof addr);
+ 	addr.sun_family = AF_UNIX;
+-	strcpy(addr.sun_path, SOCK_NAME);
++	strcpy(addr.sun_path, sock_path);
+ 
+ 	prev_umask = umask(0);
+ 
+ 	if(bind(s, (struct sockaddr*)&addr, sizeof addr) == -1) {
+-		logmsg(LOG_ERR, "failed to bind unix socket: %s: %s\n", SOCK_NAME, strerror(errno));
++		logmsg(LOG_ERR, "failed to bind unix socket: %s: %s\n", sock_path, strerror(errno));
+ 		close(s);
+ 		return -1;
+ 	}
+@@ -68,7 +73,7 @@ int init_unix(void)
+ 	if(listen(s, 8) == -1) {
+ 		logmsg(LOG_ERR, "listen failed: %s\n", strerror(errno));
+ 		close(s);
+-		unlink(SOCK_NAME);
++		unlink(sock_path);
+ 		return -1;
+ 	}
+ 
+@@ -82,7 +87,7 @@ void close_unix(void)
+ 		close(lsock);
+ 		lsock = -1;
+ 
+-		unlink(SOCK_NAME);
++		unlink(socket_path());
+ 	}
+ }
+ 
+@@ -173,3 +178,19 @@ int handle_uevents(fd_set *rset)
+ 
+ 	return 0;
+ }
++
++char *socket_path(void)
++{
++	char *xdg_runtime_dir;
++	if((xdg_runtime_dir = getenv("XDG_RUNTIME_DIR"))) {
++		if ( spath == NULL ) {
++			spath = malloc(strlen(xdg_runtime_dir) + strlen("/spnav.sock") + 1);
++			if ( spath != NULL ) {
++				sprintf(spath, "%s/spnav.sock", xdg_runtime_dir);
++			}
++		};
++		return spath;
++	} else {
++		return DEFAULT_SOCK_NAME;
++	}
++}
+diff --git a/src/proto_unix.h b/src/proto_unix.h
+index 045b379..ec4509c 100644
+--- a/src/proto_unix.h
++++ b/src/proto_unix.h
+@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #include "event.h"
+ #include "client.h"
+ 
++char *socket_path(void);
+ int init_unix(void);
+ void close_unix(void);
+ int get_unix_socket(void);
+diff --git a/src/spnavd.c b/src/spnavd.c
+index cbea191..03080da 100644
+--- a/src/spnavd.c
++++ b/src/spnavd.c
+@@ -344,7 +344,7 @@ static int find_running_daemon(void)
+ 	}
+ 	memset(&addr, 0, sizeof addr);
+ 	addr.sun_family = AF_UNIX;
+-	strncpy(addr.sun_path, SOCK_NAME, sizeof addr.sun_path);
++	strncpy(addr.sun_path, socket_path(), sizeof addr.sun_path);
+ 
+ 	if(connect(s, (struct sockaddr*)&addr, sizeof addr) == -1) {
+ 		close(s);
+diff --git a/src/spnavd.h b/src/spnavd.h
+index fa0a916..2d1c48b 100644
+--- a/src/spnavd.h
++++ b/src/spnavd.h
+@@ -26,8 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #define DEF_CFGFILE		"/etc/spnavrc"
+ #define DEF_LOGFILE		"/var/log/spnavd.log"
+ 
+-#define SOCK_NAME	"/var/run/spnav.sock"
+ #define PIDFILE		"/var/run/spnavd.pid"
++#define DEFAULT_SOCK_NAME	"/run/spnav.sock"
+ #define SYSLOG_ID	"spnavd"
+ 
+ /* Multiple devices support */

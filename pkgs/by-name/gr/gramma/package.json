@@ -1,0 +1,84 @@
+{
+  "name": "gramma",
+  "version": "1.6.0",
+  "license": "ISC",
+  "repository": "https://github.com/caderek/gramma",
+  "homepage": "https://caderek.github.io/gramma/",
+  "description": "Command line grammar checker",
+  "main": "src/index.js",
+  "bin": "src/cli.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./esm": "./bundle/gramma.esm.js",
+    "./esm-min": "./bundle/gramma.esm.min.js",
+    "./iife": "./bundle/gramma.min.js"
+  },
+  "types": "src/index.d.ts",
+  "scripts": {
+    "build": "rm -rf bin; yarn run build:win64; yarn run build:macos; yarn run build:linux64; yarn run build:zip; yarn run build:bundles",
+    "build:win64": "pkg -c package.json -t node16-win-x64 --out-path bin/windows64 src/cli.js",
+    "build:macos": "pkg -c package.json -t node16-macos-x64 --out-path bin/macos src/cli.js",
+    "build:linux64": "pkg -c package.json -t node16-linux-x64 --out-path bin/linux64 src/cli.js",
+    "build:bundles": "yarn run build:esm; yarn run build:esm-min; yarn run build:iife",
+    "build:esm": "esbuild src/index.js --bundle --outfile=bundle/gramma.esm.js --format=esm",
+    "build:esm-min": "esbuild src/index.js --bundle --outfile=bundle/gramma.esm.min.js --format=esm --minify",
+    "build:iife": "esbuild src/index.js --bundle --outfile=bundle/gramma.min.js --format=iife --minify --global-name=gramma",
+    "build:zip": "node scripts/zipBinaries.js",
+    "format": "prettier --write \"src/**/*.js\"",
+    "lint": "eslint src/**",
+    "test": "jest",
+    "test:ci": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage",
+    "check:langs": "node scripts/checkLanguagesSupport.js",
+    "prepare": "husky install",
+    "definitions": "tsc"
+  },
+  "keywords": [
+    "grammar",
+    "command-line",
+    "checker"
+  ],
+  "author": "Maciej Cąderek | maciej.caderek@gmail.com",
+  "dependencies": {
+    "cli-progress": "^3.9.1",
+    "decompress": "^4.2.1",
+    "decompress-unzip": "^4.0.1",
+    "dotenv": "^10.0.0",
+    "intercept-stdout": "^0.1.2",
+    "isomorphic-fetch": "^3.0.0",
+    "kleur": "^4.1.4",
+    "portfinder": "^1.0.28",
+    "progress-stream": "^2.0.0",
+    "prompts": "^2.4.1",
+    "query-string": "^7.0.1",
+    "rimraf": "^3.0.2",
+    "tcp-port-used": "^1.0.2",
+    "yargs": "^17.2.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "codacy-coverage": "^3.4.0",
+    "esbuild": "^0.13.4",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.1",
+    "gramma": "^1.5.0",
+    "husky": "^7.0.0",
+    "jest": "^27.2.4",
+    "pkg": "^5.3.3",
+    "prettier": "^2.4.1",
+    "shelljs": "^0.8.4",
+    "typescript": "^4.4.3"
+  },
+  "jest": {
+    "verbose": true,
+    "testMatch": [
+      "**/?(*.)(spec|test).?(m)js"
+    ]
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
