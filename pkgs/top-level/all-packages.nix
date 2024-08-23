@@ -2671,7 +2671,6 @@ with pkgs;
 
   ppsspp-sdl = let
     argset = {
-      ffmpeg = ffmpeg_4;
       enableQt = false;
       enableVulkan = true;
       forceWayland = false;
@@ -2681,7 +2680,6 @@ with pkgs;
 
   ppsspp-sdl-wayland = let
     argset = {
-      ffmpeg = ffmpeg_4;
       enableQt = false;
       enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
       forceWayland = true;
@@ -2691,7 +2689,6 @@ with pkgs;
 
   ppsspp-qt = let
     argset = {
-      ffmpeg = ffmpeg_4;
       enableQt = true;
       enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
       forceWayland = false;
