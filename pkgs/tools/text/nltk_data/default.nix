@@ -1,7 +1,7 @@
 { lib, newScope, fetchFromGitHub, unzip, stdenvNoCC }:
 let
   base = {
-    version = "unstable-2023-02-02";
+    version = "0-unstable-2024-07-29";
     nativeBuildInputs = [ unzip ];
     dontBuild = true;
     meta = with lib; {
@@ -17,7 +17,7 @@ let
       src = fetchFromGitHub {
         owner = "nltk";
         repo = "nltk_data";
-        rev = "5db857e6f7df11eabb5e5665836db9ec8df07e28";
+        rev = "cfe82914f3c2d24363687f1db3b05e8b9f687e2b";
         inherit hash;
         sparseCheckout = [ "packages/${location}/${pname}.zip" ];
       };
@@ -42,6 +42,11 @@ lib.makeScope newScope (self: {
     pname = "punkt";
     location = "tokenizers";
     hash = "sha256-rMkgn3xzmSJNv8//kqbPF2Xq3Gf16lgA1Wx8FPYbaQo=";
+  });
+  punkt_tab = makeNltkDataPackage ({
+    pname = "punkt_tab";
+    location = "tokenizers";
+    hash = "sha256-OzMkruoYbFKqzuimOXIpE5lhHz8tmSqOFoLT+fjdTVg=";
   });
   averaged_perceptron_tagger = makeNltkDataPackage ({
     pname = "averaged_perceptron_tagger";
