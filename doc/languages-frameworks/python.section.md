@@ -2021,8 +2021,21 @@ The following rules are desired to be respected:
   and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
+* The list of [dependencies to avoid or replace](#python-dependencies-avoid-replace) is respected.
 
 This list is useful for reviewers as well as for self-checking when submitting packages.
+
+## Dependencies to avoid or replace {#python-dependencies-avoid-replace}
+
+Some dependencies do not make sense inside a nix build and should be completely avoided or replaced by a stub.
+Below you find a listing of the most common ones.
+
+| Package | Replacement | Reason |
+|---------|-------------|--------|
+| cmake | cmake (stub) | The package normally downloads cmake from the internet. The stub provides our cmake with the usual setup hook. |
+| ninja | ninja (stub) | The package normally downloads ninja from the internet. The stub provides our ninja with the usual setup hook. |
+| pytest-cov | pytest-cov-stub | coverage is only useful for developers. |
+| pytest-runner | | Dependencies cannot be downloaded and should be provided through nativeCheckInputs. |
 
 ## Package set maintenance {#python-package-set-maintenance}
 
