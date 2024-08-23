@@ -3026,14 +3026,14 @@ buildLuarocksPackage {
 rtp-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "rtp.nvim";
-  version = "1.0.0-1";
+  version = "1.1.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rtp.nvim-1.0.0-1.rockspec";
-    sha256 = "0ddlwhk62g3yx1ysddsmlggfqv0hj7dljgczfwij1ijbz7qyp3hy";
+    url    = "mirror://luarocks/rtp.nvim-1.1.0-1.rockspec";
+    sha256 = "1wmg2rqw8jph4ymmc33j8r47p2ni7fdd3dmiiwp19symslcw71js";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/rtp.nvim/archive/v1.0.0.zip";
-    sha256 = "1kx7qzdz8rpwsjcp63wwn619nrkxn6xd0nr5pfm3g0z4072nnpzn";
+    url    = "https://github.com/nvim-neorocks/rtp.nvim/archive/v1.1.0.zip";
+    sha256 = "0n3ydd1n0mbc0m81rdbs73gpdr3m6qj735sjqdf36qv52gjcisj8";
   };
 
   disabled = luaOlder "5.1";
