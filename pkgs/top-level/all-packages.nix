@@ -39361,8 +39361,6 @@ with pkgs;
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix { };
 
-  xsser = python3Packages.callPackage ../tools/security/xsser { };
-
   xsw = callPackage ../applications/misc/xsw {
     # Enable the next line to use this in terminal.
     # Note that it requires sixel capable terminals such as mlterm
