@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin $out/share/yosys/python3
