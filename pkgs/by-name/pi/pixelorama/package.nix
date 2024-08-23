@@ -19,13 +19,14 @@
 }:
 
 let
+  presets = {
+    "i686-linux" = "Linux 32-bit";
+    "x86_64-linux" = "Linux 64-bit";
+    "aarch64-linux" = "Linux ARM64";
+  };
   preset =
-    if stdenv.isLinux then
-      if stdenv.is64bit then "Linux 64-bit" else "Linux 32-bit"
-    else if stdenv.isDarwin then
-      "macOS"
-    else
-      throw "unsupported platform";
+    presets.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot_4.version;
 in
@@ -95,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
     maintainers = with maintainers; [ felschr ];
     mainProgram = "pixelorama";
