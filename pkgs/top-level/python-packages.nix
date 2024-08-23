@@ -5147,6 +5147,8 @@ self: super: with self; {
 
   google-cloud-netapp = callPackage ../development/python-modules/google-cloud-netapp { };
 
+  google-cloud-network-connectivity = callPackage ../development/python-modules/google-cloud-network-connectivity { };
+
   google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
 
   google-cloud-os-config = callPackage ../development/python-modules/google-cloud-os-config { };
