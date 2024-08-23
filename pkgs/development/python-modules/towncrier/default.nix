@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "24.7.1";
+  version = "24.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V6BX+u2ryt8aYvb5utcmrlZsHzGkETON24MWmT9YOz0=";
+    hash = "sha256-ATQj7n7tECsvOTwofSLZX2bxo+oQpLqoLSmAAafxivM=";
   };
 
   postPatch = ''
