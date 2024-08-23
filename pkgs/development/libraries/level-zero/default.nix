@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.17.25";
+  version = "1.17.28";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nC0Bp6Ggs5MDxBbrHVIh73LBb5yyMOUFuLXF06nvLkE=";
+    hash = "sha256-rgQ7B3RZemlcurEQ8bwvlvJAypzHTOBqpowasziZCiQ=";
   };
 
   nativeBuildInputs = [ cmake addDriverRunpath ];

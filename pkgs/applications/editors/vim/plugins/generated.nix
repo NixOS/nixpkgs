@@ -9461,6 +9461,18 @@ final: prev:
     meta.homepage = "https://github.com/frigoeu/psc-ide-vim/";
   };
 
+  pum-vim = buildVimPlugin {
+    pname = "pum.vim";
+    version = "2024-08-17";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "pum.vim";
+      rev = "d9995c8f134ee84322d3dc6f12ea7f061dcacf3f";
+      sha256 = "19akkaqja5khb3nqcm7yj84735vzkwqlr37k18bj34ncm60z9knw";
+    };
+    meta.homepage = "https://github.com/Shougo/pum.vim/";
+  };
+
   purescript-vim = buildVimPlugin {
     pname = "purescript-vim";
     version = "2023-02-06";
@@ -17718,6 +17730,18 @@ final: prev:
       sha256 = "1phzragsq4pflvhjzqlxvdsmiyp7z5b68d2a0frn2rj07av0bn91";
     };
     meta.homepage = "https://github.com/inkarkat/vim-AdvancedSorters/";
+  };
+
+  vim-emacs-bindings = buildVimPlugin {
+    pname = "vim-emacs-bindings";
+    version = "2016-10-07";
+    src = fetchFromGitHub {
+      owner = "kentarosasaki";
+      repo = "vim-emacs-bindings";
+      rev = "a8037ef1b0cc0eca9aca15d4e2cab6d462aa57ee";
+      sha256 = "18bhcvs5vnrr394waz9mg2fdnrycsc2ng589s2jw892pap9zxq36";
+    };
+    meta.homepage = "https://github.com/kentarosasaki/vim-emacs-bindings/";
   };
 
   vim-docbk-snippets = buildVimPlugin {
