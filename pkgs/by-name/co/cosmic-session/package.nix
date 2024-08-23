@@ -30,11 +30,12 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace Justfile \
-      --replace '{{cargo-target-dir}}/release/cosmic-session' 'target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-session'
+      --replace-fail '{{cargo-target-dir}}/release/cosmic-session' 'target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-session'
     substituteInPlace data/start-cosmic \
-      --replace '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
-      --replace '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
-    substituteInPlace data/cosmic.desktop --replace '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
+      --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
+      --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
+    substituteInPlace data/cosmic.desktop \
+      --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
   '';
 
   buildInputs = [ bash ];
