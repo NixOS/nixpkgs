@@ -7896,10 +7896,6 @@ with pkgs;
 
   fprintd-tod = callPackage ../tools/security/fprintd/tod.nix { };
 
-  ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
-    mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
-  };
-
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };

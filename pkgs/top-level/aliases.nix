@@ -445,6 +445,7 @@ mapAliases ({
   fastnlo_toolkit = fastnlo-toolkit; # Added 2024-01-03
   fcitx5-catppuccin = catppuccin-fcitx5; # Added 2024-06-19
   inherit (luaPackages) fennel; # Added 2022-09-24
+  ferdi = throw "'ferdi' has been removed, upstream does not exist anymore and the package is insecure"; # Added 2024-08-22
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve
   ffmpeg_5 = throw "ffmpeg_5 has been removed, please use a newer version or ffmpeg_4 for compatibility"; # Added 2024-07-12
   ffmpeg_5-headless = throw "ffmpeg_5-headless has been removed, please use a newer version or ffmpeg_4-headless for compatibility"; # Added 2024-07-12
