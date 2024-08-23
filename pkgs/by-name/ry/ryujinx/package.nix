@@ -69,7 +69,10 @@ buildDotnetModule rec {
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";
-  doCheck = true;
+
+  # TODO: identify why deadlocking occurs and reenable tests
+  # see https://github.com/NixOS/nixpkgs/issues/325857
+  doCheck = false;
 
   dotnetFlags = [
     "/p:ExtraDefineConstants=DISABLE_UPDATER%2CFORCE_EXTERNAL_BASE_DIR"
