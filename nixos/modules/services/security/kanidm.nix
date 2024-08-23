@@ -423,7 +423,10 @@ in
 
             originUrl = lib.mkOption {
               description = "The origin URL of the service. OAuth2 redirects will only be allowed to sites under this origin. Must end with a slash.";
-              type = lib.types.strMatching ".*://.*/$";
+              type = let
+                originStrType = lib.types.strMatching ".*://.*/$";
+              in
+                lib.types.either originStrType (lib.types.nonEmptyListOf originStrType);
               example = "https://someservice.example.com/";
             };
 
