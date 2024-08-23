@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests/junit/junit_expect.sh
     patchShebangs tests/junit/junit_cover.sh
     patchShebangs tests/junit/junit_nocodeloc.sh
-
+    
     # Fix up Yosys imports
     substituteInPlace sbysrc/sby.py \
       --replace-fail "##yosys-sys-path##" \
@@ -64,12 +64,16 @@ stdenv.mkDerivation rec {
       --replace-fail '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
       --replace-fail ', "btormc"'             ', "${boolector}/bin/btormc"' \
       --replace-fail ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
-
+      
     substituteInPlace sbysrc/sby_core.py \
       --replace-fail '##yosys-program-prefix##' '"${yosys}/bin/"'
 
     substituteInPlace sbysrc/sby.py \
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
+    substituteInPlace sbysrc/sby_autotune.py \
+      --replace-fail '["btorsim", "--vcd"]' '"${btor2tools}/bin/btorsim", "--vcd"]'
+    substituteInPlace tests/make/required_tools.py \
+      --replace-fail '["btorsim", "--vcd"]' '"${btor2tools}/bin/btorsim", "--vcd"]'
   '';
 
   dontBuild = true;
