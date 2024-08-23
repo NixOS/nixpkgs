@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "17.2.2";
+  version = "17.3.1";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -20,10 +20,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-4K0unlvhAnTIiuyRUNm0dXG5sJsxIuo8HkUQvUK7ws4=";
+      hash = "sha256-fVKzlAt+5dImdvWbHpdGdl6OTs2KE/hMP8iSgRUrpiE=";
     };
 
-    vendorHash = "sha256-FqnGVRldhevJgBBvJcvGXzRaYWqSHzZiXIQmCNzJv+4=";
+    vendorHash = "sha256-spfSOOe+9NGu+2ZbEGb93X3HnANEXYbvP73DD6neIXQ=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
@@ -45,10 +45,20 @@ buildGoModule ({
 
   preConfigure = ''
     mkdir -p _build/bin
-    cp -r ${auxBins}/bin/* _build/bin
+
+    pushd _build/bin
+    cp -r ${auxBins}/bin/* .
+    cp -r ${git}/bin/* .
+
+    # git binary names are expected to start with "gitaly-"
+    # https://gitlab.com/gitlab-org/gitaly/-/merge_requests/7035
+    for file in git-*; do mv "$file" "gitaly-$file"; done
+    popd
   '';
 
   outputs = [ "out" ];
+
+  buildInputs = [ git ];
 
   passthru = {
     inherit git;
