@@ -37,8 +37,7 @@ buildPythonApplication rec {
     libnotify
   ];
 
-  # There are no tests as of 4.0.0a4
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "CLI for Google Calendar";
