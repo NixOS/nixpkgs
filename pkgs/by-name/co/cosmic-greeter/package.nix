@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
     "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-greeter-daemon"
   ];
 
-   postPatch = ''
+  postPatch = ''
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
