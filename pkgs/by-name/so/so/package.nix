@@ -1,5 +1,8 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, libiconv, darwin }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "so";
   version = "0.4.9";
