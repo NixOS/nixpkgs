@@ -10606,6 +10606,8 @@ self: super: with self; {
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
 
+  pytouchlinesl = callPackage ../development/python-modules/pytouchlinesl { };
+
   pyuca = callPackage ../development/python-modules/pyuca { };
 
   pyunpack = callPackage ../development/python-modules/pyunpack { };
