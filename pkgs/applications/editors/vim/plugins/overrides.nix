@@ -1412,6 +1412,8 @@
     dependencies = with self; [ nvim-lspconfig ];
   };
 
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rtp-nvim"; };
+
   rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = "rustaceanvim"; };
 
   sg-nvim = super.sg-nvim.overrideAttrs (old:
