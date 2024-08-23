@@ -1,4 +1,10 @@
-{ lib, gccStdenv, dos2unix, fetchurl, unzip }:
+{
+  lib,
+  gccStdenv,
+  dos2unix,
+  fetchurl,
+  unzip,
+}:
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "bwbasic";
@@ -9,7 +15,10 @@ gccStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7hju+rftka0a1QzKsz6wOMSr11NZXhmYKJCGfygjOfE=";
   };
 
-  nativeBuildInputs = [ dos2unix unzip ];
+  nativeBuildInputs = [
+    dos2unix
+    unzip
+  ];
 
   unpackPhase = ''
     unzip $src
