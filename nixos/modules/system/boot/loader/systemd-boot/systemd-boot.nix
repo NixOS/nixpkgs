@@ -226,7 +226,6 @@ in {
         - `"1"`: 80x50 mode, not supported by all devices
         - `"2"`: The first non-standard mode provided by the device firmware, if any
         - Any other number (as a string) - non-standard mode provided by the device firmware
-        - `"nnn"`: (Where nnn is any positive integer)
         - `"auto"`: Pick a suitable mode automatically using heuristics
         - `"max"`: Pick the highest-numbered available mode
         - `"keep"`: Keep the mode selected by firmware (the default)
