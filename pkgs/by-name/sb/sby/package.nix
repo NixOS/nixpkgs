@@ -73,12 +73,14 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share/yosys/python3
 
     cp sbysrc/sby_*.py $out/share/yosys/python3/
     cp sbysrc/sby.py $out/bin/sby
 
     chmod +x $out/bin/sby
+    runHook postInstall
   '';
 
   doCheck = true;
