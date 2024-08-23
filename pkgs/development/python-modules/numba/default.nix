@@ -12,6 +12,7 @@
   llvmlite,
   libcxx,
   importlib-metadata,
+  fetchpatch,
   substituteAll,
   runCommand,
   writers,
@@ -84,13 +85,23 @@ buildPythonPackage rec {
     setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-metadata ];
 
-  patches = lib.optionals cudaSupport [
-    (substituteAll {
-      src = ./cuda_path.patch;
-      cuda_toolkit_path = cudatoolkit;
-      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
-    })
-  ];
+  patches =
+    [
+      (fetchpatch {
+        # TODO Remove at the next release of numba (>0.60.0)
+        # https://github.com/numba/numba/pull/9683
+        name = "fix-numpy-2-0-1-compat";
+        url = "https://github.com/numba/numba/commit/afb3d168efa713c235d1bb4586722ad6e5dbb0c1.patch";
+        hash = "sha256-WB+XKxsF2r5ZdgW2Yrg9HutpgufBfk48i+5YLQnKLFY=";
+      })
+    ]
+    ++ lib.optionals cudaSupport [
+      (substituteAll {
+        src = ./cuda_path.patch;
+        cuda_toolkit_path = cudatoolkit;
+        cuda_toolkit_lib_path = lib.getLib cudatoolkit;
+      })
+    ];
 
   # run a smoke test in a temporary directory so that
   # a) Python picks up the installed library in $out instead of the build files

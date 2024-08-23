@@ -13,6 +13,8 @@ melpaBuild {
     hash = "sha256-ceCOBFfixmGVB3kaSvOv1YZThC2pleYnS8gXhLrjhA8=";
   };
 
+  ignoreCompilationError = false;
+
   meta = {
     homepage = "https://www.emacswiki.org/emacs/yes-no.el";
     description = "Specify use of `y-or-n-p' or `yes-or-no-p' on a case-by-case basis";

@@ -19,6 +19,8 @@ melpaBuild {
 
   files = ''("tools/emacs/ligo-mode.el")'';
 
+  ignoreCompilationError = false;
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {

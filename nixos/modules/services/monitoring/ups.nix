@@ -560,6 +560,9 @@ in
       };
       environment.NUT_CONFPATH = "/etc/nut";
       environment.NUT_STATEPATH = "/var/lib/nut";
+      restartTriggers = [
+        config.environment.etc."nut/ups.conf".source
+      ];
     };
 
     environment.etc = {

@@ -7,20 +7,24 @@
 }@genericDefinition:
 
 let
-  upstreamPatches = import ../patches.nix {
+  upstreamPatches = import ../generic/patches.nix {
     inherit lib;
     inherit fetchpatch;
   };
 
-  upstreamPatchList = lib.lists.flatten [
-    upstreamPatches.QUBES_REPRODUCIBLE_BUILDS
-    upstreamPatches.XSA_458
-    upstreamPatches.XSA_460
-    upstreamPatches.XSA_461
-  ];
+  upstreamPatchList = lib.lists.flatten (
+    with upstreamPatches;
+    [
+      QUBES_REPRODUCIBLE_BUILDS
+      XSA_458
+      XSA_460
+      XSA_461
+    ]
+  );
 in
 
-callPackage (import ../generic.nix {
+callPackage (import ../generic/default.nix {
+  pname = "xen";
   branch = "4.17";
   version = "4.17.4";
   latest = false;
@@ -28,10 +32,7 @@ callPackage (import ../generic.nix {
     xen = {
       rev = "d530627aaa9b6e03c7f911434bb342fca3d13300";
       hash = "sha256-4ltQUzo4XPzGT/7fGt1hnNMqBQBVF7VP+WXD9ZaJcGo=";
-      patches = [
-        ./0000-xen-ipxe-src-4.17.patch
-        ./0001-xen-fig-geneneration-4.17.patch
-      ] ++ upstreamPatchList;
+      patches = [ ] ++ upstreamPatchList;
     };
     qemu = {
       rev = "ffb451126550b22b43b62fb8731a0d78e3376c03";

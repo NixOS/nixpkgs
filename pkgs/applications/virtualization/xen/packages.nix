@@ -62,7 +62,4 @@ rec {
     withInternalIPXE = false;
     inherit (slim) meta;
   };
-
-  xen = xen_4_19;
-  xen-slim = xen_4_19-slim;
 }

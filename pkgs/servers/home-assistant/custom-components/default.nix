@@ -58,6 +58,8 @@
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
+  somweb = callPackage ./somweb {};
+
   spook = callPackage ./spook {};
 
   tuya_local = callPackage ./tuya_local {};

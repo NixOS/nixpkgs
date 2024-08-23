@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://www.ibiblio.org/pub/Linux/system/serial/${pname}-${version}.tar.gz";
+    url = "http://www.ibiblio.org/pub/Linux/system/serial/statserial-${version}.tar.gz";
     sha256 = "0rrrmxfba5yn836zlgmr8g9xnrpash7cjs7lk2m44ac50vakpks0";
   };
 

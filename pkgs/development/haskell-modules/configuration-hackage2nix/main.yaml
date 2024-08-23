@@ -32,6 +32,8 @@ default-package-overrides:
   # 2024-05-10: need to match hlegder from stackage
   - hledger-ui < 1.33
   - chs-cabal < 0.1.1.2 # Incompatible with Cabal < 3.12
+  # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
+  - hnix-store-remote < 0.7
 
 
 extra-packages:
@@ -398,10 +400,12 @@ package-maintainers:
     - strongweak
     - generic-data-functions
     - binrep
+    - rerefined
+    - symparsec
+    - bytezap
     - bytepatch
     - heystone
     - refined
-    - refined1
     - flatparse
   roberth:
     - arion-compose
@@ -736,6 +740,7 @@ unsupported-platforms:
   mptcp-pm:                                     [ platforms.darwin ]
   nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
+  network-unexceptional:                        [ platforms.darwin ] # depends on posix-api
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
   oculus:                                       [ platforms.darwin ]
   ostree-pin:                                   [ platforms.darwin ] # depends on gi-ostree
@@ -760,6 +765,7 @@ unsupported-platforms:
   sdl2-ttf:                                     [ platforms.darwin ]
   sdr:                                          [ platforms.darwin ] # depends on rtlsdr
   sensei:                                       [ platforms.darwin ]
+  sockets:                                      [ platforms.darwin ] # depends on posix-api
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
@@ -780,6 +786,7 @@ unsupported-platforms:
   xmobar:                                       [ platforms.darwin ]
   xmonad-extras:                                [ platforms.darwin ]
   xmonad-volume:                                [ platforms.darwin ]
+  xnobar:                                       [ platforms.darwin ]
   kmonad:                                       [ platforms.darwin ]
 
 supported-platforms:

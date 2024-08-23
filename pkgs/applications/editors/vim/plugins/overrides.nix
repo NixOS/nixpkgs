@@ -40,6 +40,7 @@
 , pandoc
 , parinfer-rust
 , phpactor
+, ranger
 , ripgrep
 , skim
 , sqlite
@@ -140,6 +141,11 @@
 
   advanced-git-search-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
+  };
+
+  animation-nvim = super.animation-nvim.overrideAttrs {
+    dependencies = with self; [ middleclass ];
+    nvimRequireCheck = "animation";
   };
 
   autosave-nvim = super.autosave-nvim.overrideAttrs {
@@ -783,7 +789,7 @@
     '';
   };
 
-  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs {
+  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (oa: {
     # add this to your lua config to prevent the plugin from trying to write in the
     # nix store:
     # vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json'
@@ -792,7 +798,11 @@
       gawk
     ];
     dependencies = with self; [ fzf-vim ];
-  };
+    passthru = oa.passthru // {
+
+      initLua = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
+    };
+  });
 
   fzf-lua = super.fzf-lua.overrideAttrs {
     propagatedBuildInputs = [ fzf ];
@@ -1000,6 +1010,8 @@
 
   lz-n = neovimUtils.buildNeovimPlugin { luaAttr = "lz-n"; };
 
+  lzn-auto-require = neovimUtils.buildNeovimPlugin { luaAttr = "lzn-auto-require"; };
+
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";
     version = "2023-03-13";
@@ -1071,6 +1083,11 @@
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
     meta.maintainers = with lib.maintainers; [ vcunat ];
+  };
+
+  middleclass = neovimUtils.buildNeovimPlugin {
+    luaAttr = "middleclass";
+    nvimRequireCheck = "middleclass";
   };
 
   minimap-vim = super.minimap-vim.overrideAttrs {
@@ -1183,6 +1200,10 @@
 
     doInstallCheck = true;
     nvimRequireCheck = "dapui";
+  };
+
+  nvim-dap-rr = super.nvim-dap-rr.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
   };
 
   nvim-genghis = super.nvim-genghis.overrideAttrs {
@@ -1377,6 +1398,14 @@
     dependencies = with self; [ cmd-parser-nvim ];
   };
 
+  ranger-nvim = super.ranger-nvim.overrideAttrs {
+    patches = [ ./patches/ranger.nvim/fix-paths.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/ranger-nvim.lua --replace '@ranger@' ${ranger}
+    '';
+  };
+
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter plenary-nvim ];
   };
@@ -1396,6 +1425,8 @@
   roslyn-nvim = super.roslyn-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig ];
   };
+
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rtp-nvim"; };
 
   rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = "rustaceanvim"; };
 
@@ -1506,7 +1537,7 @@
     meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
   };
 
-  sqlite-lua = super.sqlite-lua.overrideAttrs {
+  sqlite-lua = super.sqlite-lua.overrideAttrs (oa: {
     postPatch =
       let
         libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -1515,7 +1546,11 @@
         substituteInPlace lua/sqlite/defs.lua \
           --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
       '';
-  };
+
+      passthru = oa.passthru // {
+        initLua = ''vim.g.sqlite_clib_path = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}"'';
+      };
+  });
 
   ssr = super.ssr-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter ];
@@ -1699,14 +1734,19 @@
         sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
       };
     in
-    super.unicode-vim.overrideAttrs {
+    super.unicode-vim.overrideAttrs (oa: {
       # redirect to /dev/null else changes terminal color
       buildPhase = ''
         cp "${unicode-data}" autoload/unicode/UnicodeData.txt
         echo "Building unicode cache"
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
-    };
+
+      passthru = oa.passthru // {
+
+        initLua = ''vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"'';
+      };
+    });
 
   unison = super.unison.overrideAttrs {
     # Editor stuff isn't at top level
@@ -2077,7 +2117,8 @@
   };
 
   windows-nvim = super.windows-nvim.overrideAttrs {
-    dependencies = with self; [ luaPackages.middleclass animation-nvim ];
+    dependencies = with self; [ middleclass animation-nvim ];
+    nvimRequireCheck = "windows";
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {

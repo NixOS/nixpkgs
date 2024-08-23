@@ -800,6 +800,7 @@ let
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = [ pkgs.eigen ];
+    DGP4LCF = [ pkgs.lapack pkgs.blas ];
   };
 
   packagesRequiringX = [

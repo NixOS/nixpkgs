@@ -1,45 +1,41 @@
 # This module provides configuration for the PAM (Pluggable
 # Authentication Modules) system.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
-  moduleSettingsType = with types; attrsOf (nullOr (oneOf [ bool str int pathInStore ]));
+  moduleSettingsType = with lib.types; attrsOf (nullOr (oneOf [ bool str int pathInStore ]));
   moduleSettingsDescription = ''
     Boolean values render just the key if true, and nothing if false.
     Null values are ignored.
     All other values are rendered as key-value pairs.
   '';
 
-  mkRulesTypeOption = type: mkOption {
+  mkRulesTypeOption = type: lib.mkOption {
     # These options are experimental and subject to breaking changes without notice.
     description = ''
       PAM `${type}` rules for this service.
 
       Attribute keys are the name of each rule.
     '';
-    type = types.attrsOf (types.submodule ({ name, config, ... }: {
+    type = lib.types.attrsOf (lib.types.submodule ({ name, config, ... }: {
       options = {
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           description = ''
             Name of this rule.
           '';
           internal = true;
           readOnly = true;
         };
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether this rule is added to the PAM service config file.
           '';
         };
-        order = mkOption {
-          type = types.int;
+        order = lib.mkOption {
+          type = lib.types.int;
           description = ''
             Order of this rule in the service file. Rules are arranged in ascending order of this value.
 
@@ -55,20 +51,20 @@ let
             :::
           '';
         };
-        control = mkOption {
-          type = types.str;
+        control = lib.mkOption {
+          type = lib.types.str;
           description = ''
             Indicates the behavior of the PAM-API should the module fail to succeed in its authentication task. See `control` in {manpage}`pam.conf(5)` for details.
           '';
         };
-        modulePath = mkOption {
-          type = types.str;
+        modulePath = lib.mkOption {
+          type = lib.types.str;
           description = ''
             Either the full filename of the PAM to be used by the application (it begins with a '/'), or a relative pathname from the default module location. See `module-path` in {manpage}`pam.conf(5)` for details.
           '';
         };
-        args = mkOption {
-          type = types.listOf types.str;
+        args = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           description = ''
             Tokens that can be used to modify the specific behavior of the given PAM. Such arguments will be documented for each individual module. See `module-arguments` in {manpage}`pam.conf(5)` for details.
 
@@ -77,7 +73,7 @@ let
             {option}`settings` are automatically added as {option}`args`. It's recommended to use the {option}`settings` option whenever possible so that arguments can be overridden.
           '';
         };
-        settings = mkOption {
+        settings = lib.mkOption {
           type = moduleSettingsType;
           default = {};
           description = ''
@@ -90,10 +86,10 @@ let
       config = {
         inherit name;
         # Formats an attrset of settings as args for use as `module-arguments`.
-        args = concatLists (flip mapAttrsToList config.settings (name: value:
-          if isBool value
-          then optional value name
-          else optional (value != null) "${name}=${toString value}"
+        args = lib.concatLists (lib.flip lib.mapAttrsToList config.settings (name: value:
+          if lib.isBool value
+          then lib.optional value name
+          else lib.optional (value != null) "${name}=${toString value}"
         ));
       };
     }));
@@ -110,13 +106,13 @@ let
 
     options = {
 
-      name = mkOption {
+      name = lib.mkOption {
         example = "sshd";
-        type = types.str;
+        type = lib.types.str;
         description = "Name of the PAM service.";
       };
 
-      rules = mkOption {
+      rules = lib.mkOption {
         # This option is experimental and subject to breaking changes without notice.
         visible = false;
 
@@ -133,33 +129,33 @@ let
           You may freely use this option within `nixpkgs`, and future changes will account for those use sites.
           :::
         '';
-        type = types.submodule {
-          options = genAttrs [ "account" "auth" "password" "session" ] mkRulesTypeOption;
+        type = lib.types.submodule {
+          options = lib.genAttrs [ "account" "auth" "password" "session" ] mkRulesTypeOption;
         };
       };
 
-      unixAuth = mkOption {
+      unixAuth = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether users can log in with passwords defined in
           {file}`/etc/shadow`.
         '';
       };
 
-      rootOK = mkOption {
+      rootOK = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set, root doesn't need to authenticate (e.g. for the
           {command}`useradd` service).
         '';
       };
 
-      p11Auth = mkOption {
+      p11Auth = lib.mkOption {
         default = config.security.pam.p11.enable;
-        defaultText = literalExpression "config.security.pam.p11.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.pam.p11.enable";
+        type = lib.types.bool;
         description = ''
           If set, keys listed in
           {file}`~/.ssh/authorized_keys` and
@@ -168,10 +164,10 @@ let
         '';
       };
 
-      u2fAuth = mkOption {
+      u2fAuth = lib.mkOption {
         default = config.security.pam.u2f.enable;
-        defaultText = literalExpression "config.security.pam.u2f.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.pam.u2f.enable";
+        type = lib.types.bool;
         description = ''
           If set, users listed in
           {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
@@ -181,9 +177,9 @@ let
         '';
       };
 
-      usshAuth = mkOption {
+      usshAuth = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set, users with an SSH certificate containing an authorized principal
           in their SSH agent are able to log in. Specific options are controlled
@@ -194,10 +190,10 @@ let
         '';
       };
 
-      yubicoAuth = mkOption {
+      yubicoAuth = lib.mkOption {
         default = config.security.pam.yubico.enable;
-        defaultText = literalExpression "config.security.pam.yubico.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.pam.yubico.enable";
+        type = lib.types.bool;
         description = ''
           If set, users listed in
           {file}`~/.yubico/authorized_yubikeys`
@@ -206,9 +202,9 @@ let
       };
 
       googleAuthenticator = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = false;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             If set, users with enabled Google Authenticator (created
             {file}`~/.google_authenticator`) will be required
@@ -217,19 +213,19 @@ let
         };
       };
 
-      otpwAuth = mkOption {
+      otpwAuth = lib.mkOption {
         default = config.security.pam.enableOTPW;
-        defaultText = literalExpression "config.security.pam.enableOTPW";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.pam.enableOTPW";
+        type = lib.types.bool;
         description = ''
           If set, the OTPW system will be used (if
           {file}`~/.otpw` exists).
         '';
       };
 
-      googleOsLoginAccountVerification = mkOption {
+      googleOsLoginAccountVerification = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set, will use the Google OS Login PAM modules
           (`pam_oslogin_login`,
@@ -240,9 +236,9 @@ let
         '';
       };
 
-      googleOsLoginAuthentication = mkOption {
+      googleOsLoginAuthentication = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set, will use the `pam_oslogin_login`'s user
           authentication methods to authenticate users using 2FA.
@@ -251,38 +247,38 @@ let
         '';
       };
 
-      mysqlAuth = mkOption {
+      mysqlAuth = lib.mkOption {
         default = config.users.mysql.enable;
-        defaultText = literalExpression "config.users.mysql.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.users.mysql.enable";
+        type = lib.types.bool;
         description = ''
           If set, the `pam_mysql` module will be used to
           authenticate users against a MySQL/MariaDB database.
         '';
       };
 
-      fprintAuth = mkOption {
+      fprintAuth = lib.mkOption {
         default = config.services.fprintd.enable;
-        defaultText = literalExpression "config.services.fprintd.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.services.fprintd.enable";
+        type = lib.types.bool;
         description = ''
           If set, fingerprint reader will be used (if exists and
           your fingerprints are enrolled).
         '';
       };
 
-      oathAuth = mkOption {
+      oathAuth = lib.mkOption {
         default = config.security.pam.oath.enable;
-        defaultText = literalExpression "config.security.pam.oath.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.pam.oath.enable";
+        type = lib.types.bool;
         description = ''
           If set, the OATH Toolkit will be used.
         '';
       };
 
-      sshAgentAuth = mkOption {
+      sshAgentAuth = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set, the calling user's SSH agent is used to authenticate
           against the keys in the calling user's
@@ -292,9 +288,9 @@ let
       };
 
       duoSecurity = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = false;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             If set, use the Duo Security pam module
             `pam_duo` for authentication.  Requires
@@ -303,9 +299,9 @@ let
         };
       };
 
-      startSession = mkOption {
+      startSession = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If set, the service will register a new session with
           systemd's login manager.  For local sessions, this will give
@@ -315,8 +311,8 @@ let
         '';
       };
 
-      setEnvironment = mkOption {
-        type = types.bool;
+      setEnvironment = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether the service should set the environment variables
@@ -325,8 +321,8 @@ let
         '';
       };
 
-      setLoginUid = mkOption {
-        type = types.bool;
+      setLoginUid = lib.mkOption {
+        type = lib.types.bool;
         description = ''
           Set the login uid of the process
           ({file}`/proc/self/loginuid`) for auditing
@@ -337,16 +333,16 @@ let
       };
 
       ttyAudit = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Enable or disable TTY auditing for specified users
           '';
         };
 
-        enablePattern = mkOption {
-          type = types.nullOr types.str;
+        enablePattern = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
             For each user matching one of comma-separated
@@ -354,8 +350,8 @@ let
           '';
         };
 
-        disablePattern = mkOption {
-          type = types.nullOr types.str;
+        disablePattern = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
             For each user matching one of comma-separated
@@ -363,8 +359,8 @@ let
           '';
         };
 
-        openOnly = mkOption {
-          type = types.bool;
+        openOnly = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Set the TTY audit flag when opening the session,
@@ -376,9 +372,9 @@ let
         };
       };
 
-      forwardXAuth = mkOption {
+      forwardXAuth = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether X authentication keys should be passed from the
           calling user to the target user (e.g. for
@@ -386,18 +382,18 @@ let
         '';
       };
 
-      pamMount = mkOption {
+      pamMount = lib.mkOption {
         default = config.security.pam.mount.enable;
-        defaultText = literalExpression "config.security.pam.mount.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.pam.mount.enable";
+        type = lib.types.bool;
         description = ''
           Enable PAM mount (pam_mount) system to mount filesystems on user login.
         '';
       };
 
-      allowNullPassword = mkOption {
+      allowNullPassword = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to allow logging into accounts that have no password
           set (i.e., have an empty password field in
@@ -410,23 +406,23 @@ let
         '';
       };
 
-      nodelay = mkOption {
+      nodelay = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether the delay after typing a wrong password should be disabled.
         '';
       };
 
-      requireWheel = mkOption {
+      requireWheel = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to permit root access only to members of group wheel.
         '';
       };
 
-      limits = mkOption {
+      limits = lib.mkOption {
         default = [];
         type = limitsType;
         description = ''
@@ -436,15 +432,15 @@ let
         '';
       };
 
-      showMotd = mkOption {
+      showMotd = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to show the message of the day.";
       };
 
-      makeHomeDir = mkOption {
+      makeHomeDir = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to try to create home directories for users
           with `$HOME`s pointing to nonexistent
@@ -452,21 +448,21 @@ let
         '';
       };
 
-      updateWtmp = mkOption {
+      updateWtmp = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to update {file}`/var/log/wtmp`.";
       };
 
-      logFailures = mkOption {
+      logFailures = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to log authentication failures in {file}`/var/log/faillog`.";
       };
 
-      enableAppArmor = mkOption {
+      enableAppArmor = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable support for attaching AppArmor profiles at the
           user/group level, e.g., as part of a role based access
@@ -475,9 +471,9 @@ let
       };
 
       kwallet = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = false;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             If enabled, pam_wallet will attempt to automatically unlock the
             user's default KDE wallet upon login. If the user has no wallet named
@@ -486,11 +482,11 @@ let
           '';
         };
 
-        package = mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
+        package = lib.mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
           pkgsText = "pkgs.plasma5Packages";
         };
 
-        forceRun = mkEnableOption null // {
+        forceRun = lib.mkEnableOption null // {
           description = ''
             The `force_run` option is used to tell the PAM module for KWallet
             to forcefully run even if no graphical session (such as a GUI
@@ -503,15 +499,15 @@ let
         };
       };
 
-      sssdStrictAccess = mkOption {
+      sssdStrictAccess = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "enforce sssd access control";
       };
 
-      enableGnomeKeyring = mkOption {
+      enableGnomeKeyring = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           If enabled, pam_gnome_keyring will attempt to automatically unlock the
           user's default Gnome keyring upon login. If the user login password does
@@ -521,8 +517,8 @@ let
       };
 
       failDelay = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             If enabled, this will replace the `FAIL_DELAY` setting from `login.defs`.
@@ -530,17 +526,17 @@ let
             '';
         };
 
-        delay = mkOption {
+        delay = lib.mkOption {
           default = 3000000;
-          type = types.int;
+          type = lib.types.int;
           example = 1000000;
           description = "The delay time (in microseconds) on failure.";
         };
       };
 
       gnupg = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             If enabled, pam_gnupg will attempt to automatically unlock the
@@ -554,8 +550,8 @@ let
           '';
         };
 
-        noAutostart = mkOption {
-          type = types.bool;
+        noAutostart = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Don't start {command}`gpg-agent` if it is not running.
@@ -564,8 +560,8 @@ let
           '';
         };
 
-        storeOnly = mkOption {
-          type = types.bool;
+        storeOnly = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Don't send the password immediately after login, but store for PAM
@@ -574,17 +570,17 @@ let
         };
       };
 
-      zfs = mkOption {
+      zfs = lib.mkOption {
         default = config.security.pam.zfs.enable;
-        defaultText = literalExpression "config.security.pam.zfs.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.pam.zfs.enable";
+        type = lib.types.bool;
         description = ''
           Enable unlocking and mounting of encrypted ZFS home dataset at login.
         '';
       };
 
-      text = mkOption {
-        type = types.nullOr types.lines;
+      text = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         description = "Contents of the PAM service file.";
       };
 
@@ -594,34 +590,34 @@ let
     # nixos/tests/pam/pam-file-contents.nix. Please update tests there when
     # changing the derivation.
     config = {
-      name = mkDefault name;
-      setLoginUid = mkDefault cfg.startSession;
-      limits = mkDefault config.security.pam.loginLimits;
+      name = lib.mkDefault name;
+      setLoginUid = lib.mkDefault cfg.startSession;
+      limits = lib.mkDefault config.security.pam.loginLimits;
 
       text = let
         ensureUniqueOrder = type: rules:
           let
-            checkPair = a: b: assert assertMsg (a.order != b.order) "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"; b;
-            checked = zipListsWith checkPair rules (drop 1 rules);
-          in take 1 rules ++ checked;
+            checkPair = a: b: assert lib.assertMsg (a.order != b.order) "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"; b;
+            checked = lib.zipListsWith checkPair rules (lib.drop 1 rules);
+          in lib.take 1 rules ++ checked;
         # Formats a string for use in `module-arguments`. See `man pam.conf`.
         formatModuleArgument = token:
-          if hasInfix " " token
-          then "[${replaceStrings ["]"] ["\\]"] token}]"
+          if lib.hasInfix " " token
+          then "[${lib.replaceStrings ["]"] ["\\]"] token}]"
           else token;
-        formatRules = type: pipe cfg.rules.${type} [
-          attrValues
-          (filter (rule: rule.enable))
-          (sort (a: b: a.order < b.order))
+        formatRules = type: lib.pipe cfg.rules.${type} [
+          lib.attrValues
+          (lib.filter (rule: rule.enable))
+          (lib.sort (a: b: a.order < b.order))
           (ensureUniqueOrder type)
-          (map (rule: concatStringsSep " " (
+          (map (rule: lib.concatStringsSep " " (
             [ type rule.control rule.modulePath ]
             ++ map formatModuleArgument rule.args
             ++ [ "# ${rule.name} (order ${toString rule.order})" ]
           )))
-          (concatStringsSep "\n")
+          (lib.concatStringsSep "\n")
         ];
-      in mkDefault ''
+      in lib.mkDefault ''
         # Account management.
         ${formatRules "account"}
 
@@ -639,10 +635,10 @@ let
       # Samba stuff to the Samba module.  This requires that the PAM
       # module provides the right hooks.
       rules = let
-        autoOrderRules = flip pipe [
-          (imap1 (index: rule: rule // { order = mkDefault (10000 + index * 100); } ))
-          (map (rule: nameValuePair rule.name (removeAttrs rule [ "name" ])))
-          listToAttrs
+        autoOrderRules = lib.flip lib.pipe [
+          (lib.imap1 (index: rule: rule // { order = lib.mkDefault (10000 + index * 100); } ))
+          (map (rule: lib.nameValuePair rule.name (removeAttrs rule [ "name" ])))
+          lib.listToAttrs
         ];
       in {
         account = autoOrderRules [
@@ -694,7 +690,7 @@ let
           (let yubi = config.security.pam.yubico; in { name = "yubico"; enable = cfg.yubicoAuth; control = yubi.control; modulePath = "${pkgs.yubico-pam}/lib/security/pam_yubico.so"; settings = {
             inherit (yubi) mode debug;
             chalresp_path = yubi.challengeResponsePath;
-            id = mkIf (yubi.mode == "client") yubi.id;
+            id = lib.mkIf (yubi.mode == "client") yubi.id;
           }; })
           (let dp9ik = config.security.pam.dp9ik; in { name = "p9"; enable = dp9ik.enable; control = dp9ik.control; modulePath = "${pkgs.pam_dp9ik}/lib/security/pam_p9.so"; args = [
             dp9ik.authserver
@@ -709,7 +705,7 @@ let
           # We use try_first_pass the second time to avoid prompting password twice.
           #
           # The same principle applies to systemd-homed
-          (optionals ((cfg.unixAuth || config.services.homed.enable) &&
+          (lib.optionals ((cfg.unixAuth || config.services.homed.enable) &&
             (config.security.pam.enableEcryptfs
               || config.security.pam.enableFscrypt
               || cfg.pamMount
@@ -896,25 +892,25 @@ let
   # Create a limits.conf(5) file.
   makeLimitsConf = limits:
     pkgs.writeText "limits.conf"
-       (concatMapStrings ({ domain, type, item, value }:
+       (lib.concatMapStrings ({ domain, type, item, value }:
          "${domain} ${type} ${item} ${toString value}\n")
          limits);
 
   limitsType = with lib.types; listOf (submodule ({ ... }: {
     options = {
-      domain = mkOption {
+      domain = lib.mkOption {
         description = "Username, groupname, or wildcard this limit applies to";
         example = "@wheel";
         type = str;
       };
 
-      type = mkOption {
+      type = lib.mkOption {
         description = "Type of this limit";
         type = enum [ "-" "hard" "soft" ];
         default = "-";
       };
 
-      item = mkOption {
+      item = lib.mkOption {
         description = "Item this limit applies to";
         type = enum [
           "core"
@@ -938,7 +934,7 @@ let
         ];
       };
 
-      value = mkOption {
+      value = lib.mkOption {
         description = "Value of this limit";
         type = oneOf [ str int ];
       };
@@ -954,7 +950,7 @@ let
       value.source = pkgs.writeText "${name}.pam" service.text;
     };
 
-  optionalSudoConfigForSSHAgentAuth = optionalString config.security.pam.sshAgentAuth.enable ''
+  optionalSudoConfigForSSHAgentAuth = lib.optionalString config.security.pam.sshAgentAuth.enable ''
     # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
     Defaults env_keep+=SSH_AUTH_SOCK
   '';
@@ -963,26 +959,26 @@ in
 
 {
 
-  meta.maintainers = [ maintainers.majiir ];
+  meta.maintainers = [ lib.maintainers.majiir ];
 
   imports = [
-    (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
-    (mkRenamedOptionModule [ "security" "pam" "enableSSHAgentAuth" ] [ "security" "pam" "sshAgentAuth" "enable" ])
-    (mkRenamedOptionModule [ "security" "pam" "u2f" "authFile" ] [ "security" "pam" "u2f" "settings" "authfile" ])
-    (mkRenamedOptionModule [ "security" "pam" "u2f" "appId" ] [ "security" "pam" "u2f" "settings" "appid" ])
-    (mkRenamedOptionModule [ "security" "pam" "u2f" "origin" ] [ "security" "pam" "u2f" "settings" "origin" ])
-    (mkRenamedOptionModule [ "security" "pam" "u2f" "debug" ] [ "security" "pam" "u2f" "settings" "debug" ])
-    (mkRenamedOptionModule [ "security" "pam" "u2f" "interactive" ] [ "security" "pam" "u2f" "settings" "interactive" ])
-    (mkRenamedOptionModule [ "security" "pam" "u2f" "cue" ] [ "security" "pam" "u2f" "settings" "cue" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "enableSSHAgentAuth" ] [ "security" "pam" "sshAgentAuth" "enable" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "u2f" "authFile" ] [ "security" "pam" "u2f" "settings" "authfile" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "u2f" "appId" ] [ "security" "pam" "u2f" "settings" "appid" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "u2f" "origin" ] [ "security" "pam" "u2f" "settings" "origin" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "u2f" "debug" ] [ "security" "pam" "u2f" "settings" "debug" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "u2f" "interactive" ] [ "security" "pam" "u2f" "settings" "interactive" ])
+    (lib.mkRenamedOptionModule [ "security" "pam" "u2f" "cue" ] [ "security" "pam" "u2f" "settings" "cue" ])
   ];
 
   ###### interface
 
   options = {
 
-    security.pam.package = mkPackageOption pkgs "pam" { };
+    security.pam.package = lib.mkPackageOption pkgs "pam" { };
 
-    security.pam.loginLimits = mkOption {
+    security.pam.loginLimits = lib.mkOption {
       default = [];
       type = limitsType;
       example =
@@ -1012,9 +1008,9 @@ in
      '';
     };
 
-    security.pam.services = mkOption {
+    security.pam.services = lib.mkOption {
       default = {};
-      type = with types; attrsOf (submodule pamOpts);
+      type = with lib.types; attrsOf (submodule pamOpts);
       description = ''
           This option defines the PAM services.  A service typically
           corresponds to a program that uses PAM,
@@ -1024,8 +1020,8 @@ in
         '';
     };
 
-    security.pam.makeHomeDir.skelDirectory = mkOption {
-      type = types.str;
+    security.pam.makeHomeDir.skelDirectory = lib.mkOption {
+      type = lib.types.str;
       default = "/var/empty";
       example =  "/etc/skel";
       description = ''
@@ -1034,8 +1030,8 @@ in
       '';
     };
 
-    security.pam.makeHomeDir.umask = mkOption {
-      type = types.str;
+    security.pam.makeHomeDir.umask = lib.mkOption {
+      type = lib.types.str;
       default = "0077";
       example = "0022";
       description = ''
@@ -1045,13 +1041,13 @@ in
     };
 
     security.pam.sshAgentAuth = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         authenticating using a signature performed by the ssh-agent.
         This allows using SSH keys exclusively, instead of passwords, for instance on remote machines
       '';
 
-      authorizedKeysFiles = mkOption {
-        type = with types; listOf str;
+      authorizedKeysFiles = lib.mkOption {
+        type = with lib.types; listOf str;
         description = ''
           A list of paths to files in OpenSSH's `authorized_keys` format, containing
           the keys that will be trusted by the `pam_ssh_agent_auth` module.
@@ -1072,25 +1068,25 @@ in
       };
     };
 
-    security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
+    security.pam.enableOTPW = lib.mkEnableOption "the OTPW (one-time password) PAM module";
 
     security.pam.dp9ik = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
           the dp9ik pam module provided by tlsclient.
 
           If set, users can be authenticated against the 9front
           authentication server given in {option}`security.pam.dp9ik.authserver`
         '';
-      control = mkOption {
+      control = lib.mkOption {
         default = "sufficient";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           This option sets the pam "control" used for this module.
         '';
       };
-      authserver = mkOption {
+      authserver = lib.mkOption {
         default = null;
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         description = ''
           This controls the hostname for the 9front authentication server
           that users will be authenticated against.
@@ -1099,10 +1095,10 @@ in
     };
 
     security.pam.krb5 = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = config.security.krb5.enable;
-        defaultText = literalExpression "config.security.krb5.enable";
-        type = types.bool;
+        defaultText = lib.literalExpression "config.security.krb5.enable";
+        type = lib.types.bool;
         description = ''
           Enables Kerberos PAM modules (`pam-krb5`,
           `pam-ccreds`).
@@ -1119,9 +1115,9 @@ in
     };
 
     security.pam.p11 = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enables P11 PAM (`pam_p11`) module.
 
@@ -1131,9 +1127,9 @@ in
         '';
       };
 
-      control = mkOption {
+      control = lib.mkOption {
         default = "sufficient";
-        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        type = lib.types.enum [ "required" "requisite" "sufficient" "lib.optional" ];
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -1148,9 +1144,9 @@ in
     };
 
     security.pam.u2f = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enables U2F PAM (`pam-u2f`) module.
 
@@ -1168,9 +1164,9 @@ in
         '';
       };
 
-      control = mkOption {
+      control = lib.mkOption {
         default = "sufficient";
-        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        type = lib.types.enum [ "required" "requisite" "sufficient" "optional" ];
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -1182,14 +1178,14 @@ in
         '';
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = moduleSettingsType;
 
           options = {
-            authfile = mkOption {
+            authfile = lib.mkOption {
               default = null;
-              type = with types; nullOr path;
+              type = with lib.types; nullOr path;
               description = ''
                 By default `pam-u2f` module reads the keys from
                 {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
@@ -1208,9 +1204,9 @@ in
               '';
             };
 
-            appid = mkOption {
+            appid = lib.mkOption {
               default = null;
-              type = with types; nullOr str;
+              type = with lib.types; nullOr str;
               description = ''
                   By default `pam-u2f` module sets the application
                   ID to `pam://$HOSTNAME`.
@@ -1222,9 +1218,9 @@ in
               '';
             };
 
-            origin = mkOption {
+            origin = lib.mkOption {
               default = null;
-              type = with types; nullOr str;
+              type = with lib.types; nullOr str;
               description = ''
                   By default `pam-u2f` module sets the origin
                   to `pam://$HOSTNAME`.
@@ -1238,26 +1234,26 @@ in
               '';
             };
 
-            debug = mkOption {
+            debug = lib.mkOption {
               default = false;
-              type = types.bool;
+              type = lib.types.bool;
               description = ''
                 Debug output to stderr.
               '';
             };
 
-            interactive = mkOption {
+            interactive = lib.mkOption {
               default = false;
-              type = types.bool;
+              type = lib.types.bool;
               description = ''
                 Set to prompt a message and wait before testing the presence of a U2F device.
                 Recommended if your device doesn’t have a tactile trigger.
               '';
             };
 
-            cue = mkOption {
+            cue = lib.mkOption {
               default = false;
-              type = types.bool;
+              type = lib.types.bool;
               description = ''
                 By default `pam-u2f` module does not inform user
                 that he needs to use the u2f device, it just waits without a prompt.
@@ -1285,9 +1281,9 @@ in
     };
 
     security.pam.ussh = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enables Uber's USSH PAM (`pam-ussh`) module.
 
@@ -1302,9 +1298,9 @@ in
         '';
       };
 
-      caFile = mkOption {
+      caFile = lib.mkOption {
         default = null;
-        type = with types; nullOr path;
+        type = with lib.types; nullOr path;
         description = ''
           By default `pam-ussh` reads the trusted user CA keys
           from {file}`/etc/ssh/trusted_user_ca`.
@@ -1314,9 +1310,9 @@ in
         '';
       };
 
-      authorizedPrincipals = mkOption {
+      authorizedPrincipals = lib.mkOption {
         default = null;
-        type = with types; nullOr commas;
+        type = with lib.types; nullOr commas;
         description = ''
           Comma-separated list of authorized principals to permit; if the user
           presents a certificate with one of these principals, then they will be
@@ -1330,9 +1326,9 @@ in
         '';
       };
 
-      authorizedPrincipalsFile = mkOption {
+      authorizedPrincipalsFile = lib.mkOption {
         default = null;
-        type = with types; nullOr path;
+        type = with lib.types; nullOr path;
         description = ''
           Path to a list of principals; if the user presents a certificate with
           one of these principals, then they will be authorized.
@@ -1345,18 +1341,18 @@ in
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = null;
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         description = ''
           If set, then the authenticating user must be a member of this group
           to use this module.
         '';
       };
 
-      control = mkOption {
+      control = lib.mkOption {
         default = "sufficient";
-        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        type = lib.types.enum [ "required" "requisite" "sufficient" "optional" ];
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -1371,9 +1367,9 @@ in
     };
 
     security.pam.yubico = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enables Yubico PAM (`yubico-pam`) module.
 
@@ -1386,9 +1382,9 @@ in
           More information can be found [here](https://developers.yubico.com/yubico-pam/).
         '';
       };
-      control = mkOption {
+      control = lib.mkOption {
         default = "sufficient";
-        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        type = lib.types.enum [ "required" "requisite" "sufficient" "optional" ];
         description = ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
@@ -1399,22 +1395,22 @@ in
           for better understanding of this option.
         '';
       };
-      id = mkOption {
+      id = lib.mkOption {
         example = "42";
-        type = types.str;
+        type = lib.types.str;
         description = "client id";
       };
 
-      debug = mkOption {
+      debug = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Debug output to stderr.
         '';
       };
-      mode = mkOption {
+      mode = lib.mkOption {
         default = "client";
-        type = types.enum [ "client" "challenge-response" ];
+        type = lib.types.enum [ "client" "challenge-response" ];
         description = ''
           Mode of operation.
 
@@ -1428,9 +1424,9 @@ in
           More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).
         '';
       };
-      challengeResponsePath = mkOption {
+      challengeResponsePath = lib.mkOption {
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         description = ''
           If not null, set the path used by yubico pam module where the challenge expected response is stored.
 
@@ -1440,35 +1436,35 @@ in
     };
 
     security.pam.zfs = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable unlocking and mounting of encrypted ZFS home dataset at login.
         '';
       };
 
-      homes = mkOption {
+      homes = lib.mkOption {
         example = "rpool/home";
         default = "rpool/home";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Prefix of home datasets. This value will be concatenated with
           `"/" + <username>` in order to determine the home dataset to unlock.
         '';
       };
 
-      noUnmount = mkOption {
+      noUnmount = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Do not unmount home dataset on logout.
         '';
       };
     };
 
-    security.pam.enableEcryptfs = mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
-    security.pam.enableFscrypt = mkEnableOption ''
+    security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
+    security.pam.enableFscrypt = lib.mkEnableOption ''
       fscrypt, to automatically unlock directories with the user's login password.
 
       This also enables a service at security.pam.services.fscrypt which is used by
@@ -1477,17 +1473,17 @@ in
       adjust this PAM service
     '';
 
-    users.motd = mkOption {
+    users.motd = lib.mkOption {
       default = "";
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
-      type = types.lines;
+      type = lib.types.lines;
       description = "Message of the day shown to users when they log in.";
     };
 
-    users.motdFile = mkOption {
+    users.motdFile = lib.mkOption {
       default = null;
       example = "/etc/motd";
-      type = types.nullOr types.path;
+      type = lib.types.nullOr lib.types.path;
       description = "A file containing the message of the day shown to users when they log in.";
     };
   };
@@ -1518,9 +1514,9 @@ in
       }
     ];
 
-    warnings = optional
+    warnings = lib.optional
       (with lib; with config.security.pam.sshAgentAuth;
-        enable && any (s: hasPrefix "%h" s || hasPrefix "~" s) authorizedKeysFiles)
+        enable && lib.any (s: lib.hasPrefix "%h" s || lib.hasPrefix "~" s) authorizedKeysFiles)
       ''config.security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
 
         Specifying user-writeable files there result in an insecure configuration:
@@ -1531,17 +1527,17 @@ in
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
       [ package ]
-      ++ optional config.users.ldap.enable pam_ldap
-      ++ optional config.services.kanidm.enablePam config.services.kanidm.package
-      ++ optional config.services.sssd.enable pkgs.sssd
-      ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
-      ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
-      ++ optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
-      ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
-      ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+      ++ lib.optional config.users.ldap.enable pam_ldap
+      ++ lib.optional config.services.kanidm.enablePam config.services.kanidm.package
+      ++ lib.optional config.services.sssd.enable pkgs.sssd
+      ++ lib.optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
+      ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
+      ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
+      ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
+      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+      ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
-    boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
+    boot.supportedFilesystems = lib.optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
 
     security.wrappers = {
       unix_chkpwd = {
@@ -1552,7 +1548,7 @@ in
       };
     };
 
-    environment.etc = mapAttrs' makePAMService config.security.pam.services;
+    environment.etc = lib.mapAttrs' makePAMService config.security.pam.services;
 
     security.pam.services =
       { other.text =
@@ -1580,7 +1576,7 @@ in
            it complains "Cannot create session: Already running in a
            session". */
         runuser-l = { rootOK = true; unixAuth = false; };
-      } // optionalAttrs (config.security.pam.enableFscrypt) {
+      } // lib.optionalAttrs (config.security.pam.enableFscrypt) {
         # Allow fscrypt to verify login passphrase
         fscrypt = {};
       };
@@ -1588,22 +1584,22 @@ in
     security.apparmor.includes."abstractions/pam" =
       lib.concatMapStrings
         (name: "r ${config.environment.etc."pam.d/${name}".source},\n")
-        (attrNames config.security.pam.services) +
+        (lib.attrNames config.security.pam.services) +
       (with lib; pipe config.security.pam.services [
-        attrValues
+        lib.attrValues
         (catAttrs "rules")
-        (concatMap attrValues)
-        (concatMap attrValues)
-        (filter (rule: rule.enable))
-        (catAttrs "modulePath")
-        # TODO(@uninsane): replace this warning + filter with just an assertion
+        (lib.concatMap lib.attrValues)
+        (lib.concatMap lib.attrValues)
+        (lib.filter (rule: rule.enable))
+        (lib.catAttrs "modulePath")
+        # TODO(@uninsane): replace this warning + lib.filter with just an assertion
         (map (modulePath: lib.warnIfNot
-          (hasPrefix "/" modulePath)
+          (lib.hasPrefix "/" modulePath)
           ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor and will be treated as an error by future versions of nixpkgs; see <https://github.com/NixOS/nixpkgs/pull/314791>''
           modulePath
         ))
-        (filter (hasPrefix "/"))
-        unique
+        (lib.filter (lib.hasPrefix "/"))
+        lib.unique
         (map (module: "mr ${module},"))
         concatLines
       ]);

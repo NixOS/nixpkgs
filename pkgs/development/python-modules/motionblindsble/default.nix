@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "motionblindsble";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "LennP";
     repo = "motionblindsble";
     rev = "refs/tags/${version}";
-    hash = "sha256-jWd+7jRuJ8UIIZjx8+7BNCwIo+o4mxAFB2csytmnuso=";
+    hash = "sha256-GKCSPiwtE3O1vVFzamFkURc+V0w6u19B0vdvkpLY9ZE=";
   };
 
   postPatch = ''

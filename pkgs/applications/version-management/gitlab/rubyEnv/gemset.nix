@@ -2789,7 +2789,7 @@ src:
     version = "1.45.0";
   };
   google-protobuf = {
-    groups = ["default"];
+    groups = ["default" "development" "opentelemetry" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
