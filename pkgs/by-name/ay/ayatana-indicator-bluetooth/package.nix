@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
+  nixosTests,
   cmake,
   gettext,
   glib,
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
     updateScript = gitUpdater { };
+    tests.vm = nixosTests.ayatana-indicators;
   };
 
   meta = {
