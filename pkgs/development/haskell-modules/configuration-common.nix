@@ -605,10 +605,6 @@ self: super: {
   focuslist = dontCheck super.focuslist;
   search = dontCheck super.search;
 
-  # see https://github.com/LumiGuide/haskell-opencv/commit/cd613e200aa20887ded83256cf67d6903c207a60
-  opencv = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv);
-  opencv-extra = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv-extra);
-
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 
@@ -2864,10 +2860,6 @@ self: super: {
     revision = null;
     editedCabalFile = null;
   }) super.true-name);
-
-  # ffmpeg-light works against the ffmpeg-4 API, but the default ffmpeg in nixpkgs is ffmpeg-5.
-  # https://github.com/NixOS/nixpkgs/pull/220972#issuecomment-1484017192
-  ffmpeg-light = super.ffmpeg-light.override { ffmpeg = pkgs.ffmpeg_4; };
 
   # 2024-08-15: primitive >=0.9 && <0.10
   posix-api = doJailbreak super.posix-api;
