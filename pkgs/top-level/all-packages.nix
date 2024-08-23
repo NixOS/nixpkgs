@@ -9476,8 +9476,6 @@ with pkgs;
 
   lpcnetfreedv = callPackage ../development/libraries/lpcnetfreedv { };
 
-  lsd = callPackage ../tools/misc/lsd { };
-
   lsdvd = callPackage ../tools/cd-dvd/lsdvd { };
 
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
