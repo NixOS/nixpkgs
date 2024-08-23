@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     rev = version;
     hash = "sha256-ALR9Qa0AhcGyc3+7x5CEG/72+bJzhaEoIvQNL+QjldY=";
   };
-  cargoHash = "sha256-u1Y1k1I5gRzpDHhRJZCCtMTwAvtCaIy3uXQTvmtEx5w=";
+  cargoHash = "sha256-Y57VSheI94b43SwNCDdFvcNxzkA16KObBvzZ6ywYAyU=";
 
   meta = {
     description = "Service to provide closed-loop PID fan control";
