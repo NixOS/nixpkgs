@@ -10496,6 +10496,18 @@ final: prev:
     meta.homepage = "https://github.com/luukvbaal/statuscol.nvim/";
   };
 
+  stay-centered-nvim = buildVimPlugin {
+    pname = "stay-centered.nvim";
+    version = "2024-04-13";
+    src = fetchFromGitHub {
+      owner = "arnamak";
+      repo = "stay-centered.nvim";
+      rev = "91113bd82ac34f25c53d53e7c1545cb5c022ade8";
+      sha256 = "030xikkr06lslp77z1i1xn6pgndnc12z3q2i8xd9vv8jmzylaf0c";
+    };
+    meta.homepage = "https://github.com/arnamak/stay-centered.nvim/";
+  };
+
   styler-nvim = buildVimPlugin {
     pname = "styler.nvim";
     version = "2024-07-22";
