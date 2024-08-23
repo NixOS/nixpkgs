@@ -321,6 +321,7 @@
 , testers
 
 , configuration ? { }
+, pkgs # TODO
 }:
 
 /* Maintainer notes:
@@ -338,18 +339,21 @@
 
 let
   inherit (lib) optional optionals optionalString enableFeature versionOlder versionAtLeast;
+  variants = lib.genAttrs [ "headless" "small" "full" ] lib.id;
   eval = lib.evalModules {
     modules = [
       ./options.nix
       configuration
       {
         _module.args = {
-          inherit stdenv;
+          inherit stdenv pkgs version variants;
+          variant = ffmpegVariant;
         };
       }
     ];
   };
   inherit (eval) config;
+  inherit (config) features;
 in
 
 
@@ -543,8 +547,8 @@ stdenv.mkDerivation (finalAttrs: {
     /*
      *  External libraries
      */
-    (enableFeature config.alsa "alsa")
-    (enableFeature config.aom "libaom")
+    (enableFeature features.alsa.enable "alsa")
+    (enableFeature features.aom.enable "libaom")
     (enableFeature withAppKit "appkit")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
@@ -693,99 +697,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
   ++ optionals withCudaLLVM [ clang ];
 
-  buildInputs = []
-  ++ optionals config.alsa [ alsa-lib ]
-  ++ optionals config.aom [ libaom ]
-  ++ optionals withAppKit [ AppKit ]
-  ++ optionals withAribcaption [ libaribcaption ]
-  ++ optionals withAss [ libass ]
-  ++ optionals withAudioToolbox [ AudioToolbox ]
-  ++ optionals withAvFoundation [ AVFoundation ]
-  ++ optionals withAvisynth [ avisynthplus ]
-  ++ optionals withBluray [ libbluray ]
-  ++ optionals withBs2b [ libbs2b ]
-  ++ optionals withBzlib [ bzip2 ]
-  ++ optionals withCaca [ libcaca ]
-  ++ optionals withCelt [ celt ]
-  ++ optionals withChromaprint [ chromaprint ]
-  ++ optionals withCodec2 [ codec2 ]
-  ++ optionals withCoreImage [ CoreImage ]
-  ++ optionals withDav1d [ dav1d ]
-  ++ optionals withDc1394 [ libdc1394 libraw1394 ]
-  ++ optionals withDrm [ libdrm ]
-  ++ optionals withDvdnav [ libdvdnav ]
-  ++ optionals withDvdread [ libdvdread ]
-  ++ optionals withFdkAac [ fdk_aac ]
-  ++ optionals withNvcodec [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers) ]
-  ++ optionals withFlite [ flite ]
-  ++ optionals withFontconfig [ fontconfig ]
-  ++ optionals withFreetype [ freetype ]
-  ++ optionals withFrei0r [ frei0r ]
-  ++ optionals withFribidi [ fribidi ]
-  ++ optionals withGme [ game-music-emu ]
-  ++ optionals withGnutls [ gnutls ]
-  ++ optionals withGsm [ gsm ]
-  ++ optionals withHarfbuzz [ harfbuzz ]
-  ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
-  ++ optionals withJack [ libjack2 ]
-  ++ optionals withJxl [ libjxl ]
-  ++ optionals withLadspa [ ladspaH ]
-  ++ optionals withLzma [ xz ]
-  ++ optionals withMfx [ intel-media-sdk ]
-  ++ optionals withModplug [ libmodplug ]
-  ++ optionals withMp3lame [ lame ]
-  ++ optionals withMysofa [ libmysofa ]
-  ++ optionals withOgg [ libogg ]
-  ++ optionals withOpenal [ openal ]
-  ++ optionals withOpencl [ ocl-icd opencl-headers ]
-  ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
-  ++ optionals withOpengl [ libGL libGLU ]
-  ++ optionals withOpenh264 [ openh264 ]
-  ++ optionals withOpenjpeg [ openjpeg ]
-  ++ optionals withOpenmpt [ libopenmpt ]
-  ++ optionals withOpus [ libopus ]
-  ++ optionals withPlacebo [ (if (lib.versionAtLeast version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
-  ++ optionals withPulse [ libpulseaudio ]
-  ++ optionals withQrencode [ qrencode ]
-  ++ optionals withQuirc [ quirc ]
-  ++ optionals withRav1e [ rav1e ]
-  ++ optionals withRtmp [ rtmpdump ]
-  ++ optionals withSamba [ samba ]
-  ++ optionals withSdl2 [ SDL2 ]
-  ++ optionals withShaderc [ shaderc ]
-  ++ optionals withSoxr [ soxr ]
-  ++ optionals withSpeex [ speex ]
-  ++ optionals withSrt [ srt ]
-  ++ optionals withSsh [ libssh ]
-  ++ optionals withSvg [ librsvg ]
-  ++ optionals withSvtav1 [ svt-av1 ]
-  ++ optionals withTensorflow [ libtensorflow ]
-  ++ optionals withTheora [ libtheora ]
-  ++ optionals withV4l2 [ libv4l ]
-  ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
-  ++ optionals withVdpau [ libvdpau ]
-  ++ optionals withVideoToolbox [ VideoToolbox ]
-  ++ optionals withVidStab [ vid-stab ]
-  ++ optionals withVmaf [ libvmaf ]
-  ++ optionals withVoAmrwbenc [ vo-amrwbenc ]
-  ++ optionals withVorbis [ libvorbis ]
-  ++ optionals withVpl [ libvpl ]
-  ++ optionals withVpx [ libvpx ]
-  ++ optionals withVulkan [ vulkan-headers vulkan-loader ]
-  ++ optionals withWebp [ libwebp ]
-  ++ optionals withX264 [ x264 ]
-  ++ optionals withX265 [ x265 ]
-  ++ optionals withXavs [ xavs ]
-  ++ optionals withXcb [ libxcb ]
-  ++ optionals withXevd [ xevd ]
-  ++ optionals withXeve [ xeve ]
-  ++ optionals withXlib [ libX11 libXv libXext ]
-  ++ optionals withXml2 [ libxml2 ]
-  ++ optionals withXvid [ xvidcore ]
-  ++ optionals withZimg [ zimg ]
-  ++ optionals withZlib [ zlib ]
-  ++ optionals withZmq [ zeromq4 ]
-  ;
+  buildInputs = lib.pipe eval.config.features [
+    (lib.filterAttrs (n: v: v.enable))
+    (lib.filterAttrs (n: v: lib.versionAtLeast version v.version))
+    (lib.mapAttrsToList (n: v: lib.attrValues v.packages))
+    lib.flatten
+  ];
 
   buildFlags = [ "all" ]
     ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
@@ -835,6 +752,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.config = config;
+  passthru.variants = variants;
 
   meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
