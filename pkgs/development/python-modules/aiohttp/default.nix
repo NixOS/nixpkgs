@@ -5,12 +5,16 @@
   pythonOlder,
   fetchFromGitHub,
   substituteAll,
-  llhttp,
   python,
-  # build_requires
+
+  # build-system
   cython,
   setuptools,
-  # install_requires
+
+  # native dependencies
+  llhttp,
+
+  # dependencies
   aiohappyeyeballs,
   attrs,
   multidict,
@@ -20,12 +24,14 @@
   aiosignal,
   aiodns,
   brotli,
-  # tests_require
+
+  # tests
   freezegun,
   gunicorn,
   proxy-py,
+  pytest-cov-stub,
   pytest-mock,
-  pytest7CheckHook,
+  pytestCheckHook,
   python-on-whales,
   re-assert,
   trustme,
@@ -33,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.10.3";
+  version = "3.10.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,7 +48,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3dWd/IcCiPI3Ral6ULEUzOEOLkcdWVreDn7EI6eEy2k=";
+    hash = "sha256-HN2TJ8hVbClakV3ldTOn3wbrhCuf2Qn9EjWCSlSyJpw=";
   };
 
   patches = [
@@ -54,8 +60,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -i '/--cov/d' setup.cfg
-
     rm -r vendor
     patchShebangs tools
     touch .git  # tools/gen.py uses .git to find the project root
@@ -92,8 +96,9 @@ buildPythonPackage rec {
     freezegun
     gunicorn
     proxy-py
+    pytest-cov-stub
     pytest-mock
-    pytest7CheckHook
+    pytestCheckHook
     python-on-whales
     re-assert
     trustme
