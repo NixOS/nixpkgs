@@ -1,5 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , callPackage
 , lib
 , envoy
@@ -54,7 +55,14 @@ buildGoModule rec {
   ];
 
   # patch pomerium to allow use of external envoy
-  patches = [ ./external-envoy.diff ];
+  patches = [
+    ./external-envoy.diff
+    (fetchpatch {
+      name = "CVE-2024-39315.patch";
+      url = "https://github.com/pomerium/pomerium/commit/4c7c4320afb2ced70ba19b46de1ac4383f3daa48.patch";
+      hash = "sha256-Hn8jGdPSJnq0I3mhtNFIc4AfpXYVSj3FK2FKR5XUbVM=";
+    })
+  ];
 
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
