@@ -8,12 +8,13 @@ let
     }'';
 
   inputDrv = import ../.. {
-    configuration =
-      {
-        imports = [ nixos-module ];
-        nix.package = nixVersions.latest;
-        boot.isContainer = true;
-      };
+    configuration = {
+      imports = [ nixos-module ];
+      nix.package = nixVersions.latest;
+      boot.isContainer = true;
+
+      users.users.alice.isNormalUser = true;
+    };
     system = pkgs.system;
   };
 
@@ -76,7 +77,7 @@ pkgs.testers.nixosTest {
         if not match: raise Exception("Couldn't find new version in output: " + result)
 
     with subtest("nix-build-with-mismatch-daemon"):
-        machine.succeed("nix build --expr 'derivation {name =\"test\"; system = \"${pkgs.system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
+        machine.succeed("runuser -u alice -- nix build --expr 'derivation {name =\"test\"; system = \"${pkgs.system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
 
 
     with subtest("remove-new-nix"):
@@ -99,6 +100,6 @@ pkgs.testers.nixosTest {
         if not match: raise Exception("Couldn't find new version in output: " + result)
 
     with subtest("nix-build-with-new-daemon"):
-        machine.succeed("nix build --expr 'derivation {name =\"test-new\"; system = \"${pkgs.system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
+        machine.succeed("runuser -u alice -- nix build --expr 'derivation {name =\"test-new\"; system = \"${pkgs.system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
   '';
 }
