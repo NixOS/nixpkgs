@@ -158,7 +158,7 @@ import ./make-test-python.nix (
               groups.service1-admin = { };
               systems.oauth2.service1 = {
                 displayName = "Service One (changed)";
-                  # multiple origin urls
+                # multiple origin urls
                 originUrl = [
                   "https://changed-one.example.com/"
                   "https://changed-one.example.org/"
