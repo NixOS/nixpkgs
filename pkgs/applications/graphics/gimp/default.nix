@@ -304,8 +304,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gtk = gtk3;
 
     updateScript = unstableGitUpdater {
-      tagPrefix = "GIMP_";
-      tagConverter = "sed s/_/./g";
+      tagConverter = "sed s/GIMP_//;s/_/./g";
     };
   };
 
