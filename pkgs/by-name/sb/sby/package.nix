@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     aiger
   ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs docs/source/conf.py
     patchShebangs docs/source/conf.diff
     patchShebangs tests/autotune/autotune_div.sh
