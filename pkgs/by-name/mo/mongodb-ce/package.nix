@@ -45,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
       or (throw "unsupported system: ${stdenv.hostPlatform.system}")
   );
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  dontStrip = true;
 
   buildInputs = [
     # This is to avoid the following error:
