@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
-  doCheck = !stdenv.isDarwin;
+  # doCheck = !stdenv.isDarwin;
 
   passthru = {
     updateScript = unstableGitUpdater {
