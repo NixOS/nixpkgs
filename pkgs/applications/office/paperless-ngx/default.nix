@@ -271,6 +271,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
+    maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
   };
 }
