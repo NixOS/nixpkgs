@@ -31,6 +31,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/ful1e5/apple_cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ colemickens dxwil ];
   };
 }
