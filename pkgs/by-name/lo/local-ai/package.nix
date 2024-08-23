@@ -147,8 +147,8 @@ let
         src = fetchFromGitHub {
           owner = "ggerganov";
           repo = "llama.cpp";
-          rev = "ed9d2854c9de4ae1f448334294e61167b04bec2a";
-          hash = "sha256-Xu2h9Zu+Q9utfFFmDWBOEu/EXth4xWRNoTMvPF5Fo/A=";
+          rev = "fc54ef0d1c138133a01933296d50a36a1ab64735";
+          hash = "sha256-o87EhrA2Oa98pwyb6GSUgwERY0/GWJiX7kvlxDv4zb4=";
           fetchSubmodules = true;
         };
         postPatch =
@@ -186,26 +186,6 @@ let
         openclSupport = with_clblas;
         blasSupport = with_openblas;
       };
-
-  gpt4all = stdenv.mkDerivation {
-    name = "gpt4all";
-    src = fetchFromGitHub {
-      owner = "nomic-ai";
-      repo = "gpt4all";
-      rev = "27a8b020c36b0df8f8b82a252d261cda47cf44b8";
-      hash = "sha256-djq1eK6ncvhkO3MNDgasDBUY/7WWcmZt/GJsHAulLdI=";
-      fetchSubmodules = true;
-    };
-    makeFlags = [ "-C gpt4all-bindings/golang" ];
-    buildFlags = [ "libgpt4all.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    installPhase = ''
-      mkdir $out
-      tar cf - --exclude=CMakeFiles . \
-        | tar xf - -C $out
-    '';
-  };
 
   espeak-ng' = espeak-ng.overrideAttrs (self: {
     name = "espeak-ng'";
@@ -319,8 +299,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "6739eb83c3ca5cf40d24c6fe8442a761a1eb6248";
-      hash = "sha256-1yDdJVjIwYDJKn93zn4xOJXMoDTqaG2TvakjdHIMCxk=";
+      rev = "9e3c5345cd46ea718209db53464e426c3fe7a25e";
+      hash = "sha256-JOptyveuaKRLzeZ6GuB3A70IM7dk4we95g5o25XVXJI=";
     };
 
     nativeBuildInputs = [
@@ -451,12 +431,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.19.4";
+  version = "2.20.1";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-aKq6/DI+4+BvIEw6eONqPr3mZXuz7rMFN+FBypVj0Gc=";
+    hash = "sha256-FeZZC0Tg9JT9Yj0e27GOLSdHEtWl17AHK3j7epwPyY8=";
   };
 
   prepare-sources =
@@ -466,7 +446,6 @@ let
     ''
       mkdir sources
       ${cp} ${go-llama} sources/go-llama.cpp
-      ${cp} ${gpt4all} sources/gpt4all
       ${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper
       ${cp} ${go-rwkv} sources/go-rwkv.cpp
       ${cp} ${whisper-cpp.src} sources/whisper.cpp
@@ -481,7 +460,7 @@ let
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-HEKE75+ixuNbM+KEuhbQQ/NYYEzVlGYOttPavftWKhk=";
+    vendorHash = "sha256-mDxp5frUIECSHKjxaJVqIP7mnIusvdT45Xlxc9+P5tE=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -623,7 +602,6 @@ let
         go-rwkv
         go-bert
         go-llama
-        gpt4all
         go-piper
         llama-cpp-grpc
         whisper-cpp
