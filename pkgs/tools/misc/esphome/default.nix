@@ -48,9 +48,6 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==" "setuptools>="
 
-    # drop coverage testing
-    sed -i '/--cov/d' pyproject.toml
-
     # ensure component dependencies are available
     cat requirements_optional.txt >> requirements.txt
     # relax strict runtime version check
@@ -112,6 +109,7 @@ python.pkgs.buildPythonApplication rec {
     hypothesis
     mock
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
