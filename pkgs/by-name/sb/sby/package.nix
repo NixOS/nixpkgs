@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
     substituteInPlace sbysrc/sby.py \
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
     substituteInPlace sbysrc/sby_autotune.py \
-      --replace-fail '["btorsim", "--vcd"]' '"${btor2tools}/bin/btorsim", "--vcd"]'
+      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
     substituteInPlace tests/make/required_tools.py \
-      --replace-fail '["btorsim", "--vcd"]' '"${btor2tools}/bin/btorsim", "--vcd"]'
+      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
   '';
 
   dontBuild = true;
