@@ -71,32 +71,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         }
       '';
 
-      wrongConfigFile = pkgs.writeText "configuration.nix" ''
-        { lib, pkgs, ... }: {
-          imports = [
-            ./hardware-configuration.nix
-            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-          ];
-
-          boot.loader.grub = {
-            enable = true;
-            device = "/dev/vda";
-            forceInstall = true;
-          };
-
-          documentation.enable = false;
-
-          environment.systemPackages = [
-            (pkgs.writeShellScriptBin "parent" "")
-          ];
-
-          specialisation.foo-bar = {
-            inheritParentConfig = true;
-
-            configuration = { ... }: { };
-          };
-        }
-      '';
     in
     ''
       machine.start()
@@ -142,12 +116,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       with subtest("Make sure nonsense command combinations are forbidden"):
           machine.fail("nixos-rebuild boot --specialisation foo")
           machine.fail("nixos-rebuild boot -c foo")
-
-      machine.copy_from_host(
-          "${wrongConfigFile}",
-          "/etc/nixos/configuration.nix",
-      )
-      with subtest("Make sure that invalid specialisation names are rejected"):
-          machine.fail("nixos-rebuild switch")
     '';
 })

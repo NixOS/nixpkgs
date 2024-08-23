@@ -69,7 +69,6 @@ in stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath
     wrapGAppsHook3
     cmake
-    glslang
     nasm
     ninja
     pkg-config
@@ -83,6 +82,7 @@ in stdenv.mkDerivation (finalAttrs: {
     curl
     fmt_9
     glm
+    glslang
     gtk3
     hidapi
     imgui'

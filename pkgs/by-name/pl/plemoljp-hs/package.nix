@@ -12,10 +12,10 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 PlemolJP_HS/*.ttf -t $out/share/fonts/truetype/${pname}
-    install -Dm444 PlemolJP35_HS/*.ttf -t $out/share/fonts/truetype/${pname}-35
-    install -Dm444 PlemolJPConsole_HS/*.ttf -t $out/share/fonts/truetype/${pname}-console
-    install -Dm444 PlemolJP35Console_HS/*.ttf -t $out/share/fonts/truetype/${pname}-35console
+    install -Dm444 PlemolJP_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs
+    install -Dm444 PlemolJP35_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-35
+    install -Dm444 PlemolJPConsole_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-console
+    install -Dm444 PlemolJP35Console_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-35console
 
     runHook postInstall
   '';

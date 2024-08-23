@@ -24,6 +24,7 @@
 , extra-cmake-modules
 , wayland
 , wayland-protocols
+, wayland-scanner
 , enableX11 ? stdenv.isLinux
 , xorg
 }:
@@ -44,6 +45,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optionals enableWayland [
+    wayland-scanner
   ];
 
   buildInputs = [

@@ -8,17 +8,18 @@
   libtool,
   pkg-config,
   autoreconfHook,
+  makeWrapper,
   jq,
 }:
 
 let
-  version = "0.11.3";
+  version = "0.12.0";
 
   taler-wallet-core = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
-    # https://taler.net/fr/news/2024-11.html
-    rev = "v0.11.2";
-    hash = "sha256-GtR87XqmunYubh9EiY3bJIqXiXrT+re3KqWypYK3NCo=";
+    # https://taler.net/en/news/2024-23.html
+    rev = "v0.12.7";
+    hash = "sha256-5fyPPrRCKvHTgipIpKqHX3iH5f+wTuyfsAKgKmvl1nI=";
   };
 in
 stdenv.mkDerivation {
@@ -29,16 +30,27 @@ stdenv.mkDerivation {
     url = "https://git.taler.net/merchant.git";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Rak6p8cuCHPZxrXqrv3YUU3pFFw4GWf8bcd3Ur+o7Wg=";
+    hash = "sha256-BNIVlL+YPqqRZUhHOR/eH38dSHn/kNyCbMyz0ICxAMk=";
   };
 
   postUnpack = ''
     ln -s ${taler-wallet-core}/spa.html $sourceRoot/contrib/
   '';
 
+  # Use an absolute path for `templates` and `spa` directories, else a relative
+  # path to the `taler-exchange` package is used.
+  postPatch = ''
+    substituteInPlace src/backend/taler-merchant-httpd.c \
+      --replace-fail 'TALER_TEMPLATING_init ("merchant");' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\");"
+
+    substituteInPlace src/backend/taler-merchant-httpd_spa.c \
+      --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
+  '';
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    makeWrapper
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -59,10 +71,14 @@ stdenv.mkDerivation {
     popd
   '';
 
-  configureFlags = [
-    "--with-gnunet=${gnunet}"
-    "--with-exchange=${taler-exchange}"
-  ];
+  # NOTE: The executables that need database access fail to detect the
+  # postgresql library in `$out/lib/taler`, so we need to wrap them.
+  postInstall = ''
+    for exec in dbinit httpd webhook wirewatch depositcheck exchange; do
+      wrapProgram $out/bin/taler-merchant-$exec \
+        --prefix LD_LIBRARY_PATH : "$out/lib/taler"
+    done
+  '';
 
   enableParallelBuilding = true;
 

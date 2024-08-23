@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.2.2";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X4mhnKSaQQo0i10EsdaDtMgKwfBxFvOOrkDrkUM2cQI=";
+    hash = "sha256-97X9a3ietWDc5UgdgQ2ZSc7DPDEi96LxfO5aVZMNOfg=";
   };
 
   build-system = [
@@ -55,16 +55,7 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "aiofiles"
-    "azure-identity"
-    "json-repair"
-    "lancedb"
-    "scipy"
-    "tenacity"
-    "textual"
-    "tiktoken"
-  ];
+  pythonRelaxDeps = true;
 
   dependencies = [
     aiofiles
@@ -117,6 +108,7 @@ buildPythonPackage rec {
     "test_find"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
+    "test_sort_context_max_tokens"
   ];
 
   meta = {

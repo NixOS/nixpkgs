@@ -55,6 +55,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ markdown-it-py.optional-dependencies.linkify;
 
+  disabledTests = [
+    # sphinx 7.4 compat
+    "test_gettext"
+    "test_gettext_additional_targets"
+  ];
+
   pythonImportsCheck = [ "myst_parser" ];
 
   pythonRelaxDeps = [ "docutils" ];

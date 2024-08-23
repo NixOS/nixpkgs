@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "ergo";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     makeWrapper ${jre}/bin/java $out/bin/ergo --add-flags "-jar $src"
   '';
+
+  passthru.tests = { inherit (nixosTests) ergo; };
 
   meta = with lib; {
     description = "Open protocol that implements modern scientific ideas in the blockchain area";

@@ -2,21 +2,19 @@
 
 let
   pname = "anytype";
-  version = "0.42.3";
+  version = "0.42.4";
   name = "Anytype-${version}";
   src = fetchurl {
     url = "https://github.com/anyproto/anytype-ts/releases/download/v${version}/${name}.AppImage";
-    name = "Anytype-${version}.AppImage";
-    hash = "sha256-4Tz080lNQXqTq+LEax4fYV27/DDSRUalpkO46KZ1ay8=";
+    hash = "sha256-SFLjjr+L7eTqaZ2teug7mzXhIU+eVebBqrE4q5aasLk=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -33,6 +31,7 @@ in appimageTools.wrapType2 {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
     license = licenses.unfree;
+    mainProgram = "anytype";
     maintainers = with maintainers; [ running-grass ];
     platforms = [ "x86_64-linux" ];
   };

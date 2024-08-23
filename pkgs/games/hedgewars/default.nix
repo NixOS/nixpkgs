@@ -1,4 +1,4 @@
-{ stdenv, SDL2_image_2_6, SDL2_ttf, SDL2_net, fpc, haskell, ffmpeg_4, libglut
+{ stdenv, SDL2_image_2_6, SDL2_ttf, SDL2_net, fpc, haskell, ffmpeg_7, libglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools, wrapQtAppsHook
@@ -21,13 +21,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IB/l5FvYyls9gbGOwGvWu8n6fCxjvwGQBeL4C+W88hI=";
   };
 
+  patches = [
+    # Add support for ffmpeg 6.0
+    # https://github.com/hedgewars/hw/pull/74
+    ./support-ffmpeg-6.patch
+  ];
+
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image_2_6
     fpc lua5_1
     llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
-    ffmpeg_4 libglut physfs
+    ffmpeg_7 libglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
 

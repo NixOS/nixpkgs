@@ -13,13 +13,13 @@
 
 buildGoModule rec {
   pname = "wallutils";
-  version = "5.12.7";
+  version = "5.12.9";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    hash = "sha256-7UqZr/DEiHDgg3XwvsKk/gc6FNtLh3aj5NWVz/A3J4o=";
+    hash = "sha256-kayzaNOV2xTjbMeGUJ1jMLGxcVZzYkMLr6qWlAupPKM=";
   };
 
   vendorHash = null;

@@ -74,6 +74,7 @@ buildPythonPackage rec {
     "web_server"
     # Location is not writable
     "test_gen_csr"
+    "test_gen_public_key"
     # Tests run into a timeout
     "integration"
   ];

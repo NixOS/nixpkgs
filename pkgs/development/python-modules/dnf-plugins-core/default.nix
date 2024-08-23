@@ -23,7 +23,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
-  version = "4.8.0";
+  version = "4.9.0";
   format = "other";
 
   outputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "rpm-software-management";
     repo = "dnf-plugins-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-8RkTSO+F5fc3T8r79PRoW5KfEG2DmIzN2ylC9Np6LrQ=";
+    hash = "sha256-MQ7QZ5qn/0OU0slohwEP83w8NvSP2M+hpCDKvYqlezY=";
   };
 
   patches = [ ./fix-python-install-dir.patch ];

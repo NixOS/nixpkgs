@@ -6,14 +6,15 @@
   openjdk17,
   python3,
   unzip,
+  nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
-  version = "7.4.0";
+  version = "7.5.0";
 
   src = fetchzip {
-    url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-generic.zip";
-    hash = "sha256-9ZGnY7ccByexQrBmJeuxEHN2OZeCGdJdSP0lvtKRHOE=";
+    url = "https://github.com/theotherp/nzbhydra2/releases/download/v${version}/nzbhydra2-${version}-generic.zip";
+    hash = "sha256-jnClKsWSdRWCxNFO9RSnjdoDjOmtv9CrOL9KyaZ8PTc=";
     stripRoot = false;
   };
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d -m 755 "$out/lib/${pname}"
+    install -d -m 755 "$out/lib/nzbhydra2"
     cp -dpr --no-preserve=ownership "lib" "readme.md" "$out/lib/nzbhydra2"
     install -D -m 755 "nzbhydra2wrapperPy3.py" "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py"
 
@@ -36,6 +37,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nzbhydra2;
+  };
 
   meta = {
     description = "Usenet meta search";

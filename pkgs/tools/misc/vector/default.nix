@@ -67,6 +67,11 @@ rustPlatform.buildRustPackage {
     ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
     ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
 
+  # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
+  # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
+  # TODO remove when upgrading Vector
+  RUSTFLAGS = "--allow unexpected_cfgs";
+
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";

@@ -19,6 +19,7 @@ let
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics {};
       addition-chains = callPackage ../development/coq-modules/addition-chains {};
+      atbr = callPackage ../development/coq-modules/atbr {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
         then callPackage ../development/coq-modules/bignums {}
@@ -101,6 +102,7 @@ let
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
+      MenhirLib = callPackage ../development/coq-modules/MenhirLib {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
       metacoq-template-coq = self.metacoq.template-coq;
       metacoq-pcuic        = self.metacoq.pcuic;

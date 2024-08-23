@@ -7,7 +7,7 @@
   testers,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "castor";
   version = "0.17.1";
 
@@ -18,7 +18,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-ng32vuGlGffpkzf3hXu0sNbj0PCDu4DpZnMnbDV9pZk=";
   };
 
-  vendorHash = "sha256-E2NMWuUQXQ96NbKrcFnFGlxWR0tkd56MXk1bCL0N/sE=";
+  vendorHash = "sha256-0aDT0hPhoPl0U/QbstiGmUHaqDdQb1ReY2hy9FEnzwM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -8,6 +8,7 @@
 , git
 , inetutils
 , stdenv
+, nixosTests
 }:
 
 let
@@ -133,6 +134,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };
+    tests = { inherit (nixosTests) esphome; };
   };
 
   meta = with lib; {

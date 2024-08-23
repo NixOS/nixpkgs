@@ -12,6 +12,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  dwd = callPackage ./dwd { };
+
   elevenlabs_tts = callPackage ./elevenlabs_tts {};
 
   emporia_vue = callPackage ./emporia_vue {};
@@ -55,6 +57,8 @@
   smartir = callPackage ./smartir {};
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
+
+  somweb = callPackage ./somweb {};
 
   spook = callPackage ./spook {};
 

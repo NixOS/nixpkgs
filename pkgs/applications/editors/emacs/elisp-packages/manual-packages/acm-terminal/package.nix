@@ -23,6 +23,8 @@ melpaBuild {
     popon
   ];
 
+  ignoreCompilationError = false;
+
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {

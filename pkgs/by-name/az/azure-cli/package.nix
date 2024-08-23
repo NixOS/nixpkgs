@@ -223,7 +223,7 @@ py.pkgs.toPythonApplication (
     postInstall =
       ''
         substituteInPlace az.completion.sh \
-          --replace register-python-argcomplete ${py.pkgs.argcomplete}/bin/register-python-argcomplete
+          --replace-fail register-python-argcomplete ${py.pkgs.argcomplete}/bin/register-python-argcomplete
         installShellCompletion --bash --name az.bash az.completion.sh
         installShellCompletion --zsh --name _az az.completion.sh
       ''

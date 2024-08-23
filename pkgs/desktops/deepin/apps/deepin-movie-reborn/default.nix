@@ -32,27 +32,18 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "6.0.5";
+  version = "6.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-dWN2IVVpwYwzEuLtT3JvhzKiBwaBq4lzmaEhA9S1hjE=";
+    hash = "sha256-1UbrNufetedla8TMFPze1hP/R2cZN7SEYEtrK4/5/RQ=";
   };
 
   patches = [
     ./dont_use_libPath.diff
   ];
-
-  postPatch = ''
-    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/198
-    substituteInPlace src/common/diskcheckthread.cpp \
-      --replace "/usr/include/linux/cdrom.h" "linux/cdrom.h"
-    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/337
-    substituteInPlace src/libdmr/playlist_model.cpp \
-      --replace "DGuiApplicationHelper" "Dtk::Gui::DGuiApplicationHelper"
-  '';
 
   outputs = [ "out" "dev" ];
 

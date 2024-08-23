@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
@@ -45,6 +46,16 @@ pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
+
+  patches = [
+    # Pull in https://github.com/mealie-recipes/mealie/pull/4002 manually until
+    # it lands in an upstream mealie release.
+    # See https://github.com/NixOS/nixpkgs/issues/321623.
+    ( fetchpatch {
+        url = "https://github.com/mealie-recipes/mealie/commit/65ece35966120479db903785b22e9f2645f72aa4.patch";
+        hash = "sha256-4Nc0dFJrZ7ElN9rrq+CFpayKsrRjRd24fYraUFTzcH8=";
+    })
+  ];
 
   build-system = with pythonpkgs; [ poetry-core ];
 
@@ -101,6 +112,9 @@ pythonpkgs.buildPythonApplication rec {
 
     substituteInPlace mealie/db/init_db.py \
       --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
+
+    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
+      --replace-fail '"script_location", path.join(PROJECT_DIR, "alembic")' '"script_location", "${src}/alembic"'
   '';
 
   postInstall = let

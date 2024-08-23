@@ -10,6 +10,7 @@ let
     dtkgui = callPackage ./library/dtkgui { };
     dtkwidget = callPackage ./library/dtkwidget { };
     dtkdeclarative = callPackage ./library/dtkdeclarative { };
+    dtklog = callPackage ./library/dtklog { };
     deepin-pdfium = callPackage ./library/deepin-pdfium { };
     qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
     qt5integration = callPackage ./library/qt5integration { };
@@ -28,6 +29,7 @@ let
     dtk6widget = callPackage ./library/dtk6widget { };
     dtk6declarative = callPackage ./library/dtk6declarative { };
     dtk6systemsettings = callPackage ./library/dtk6systemsettings { };
+    dtk6log = callPackage ./library/dtk6log { };
     qt6platform-plugins = callPackage ./library/qt6platform-plugins { };
     qt6integration = callPackage ./library/qt6integration { };
 
@@ -59,7 +61,6 @@ let
     deepin-calculator = callPackage ./apps/deepin-calculator { };
     deepin-camera = callPackage ./apps/deepin-camera { };
     deepin-compressor = callPackage ./apps/deepin-compressor { };
-    deepin-clone = callPackage ./apps/deepin-clone { };
     deepin-draw = callPackage ./apps/deepin-draw { };
     deepin-editor = callPackage ./apps/deepin-editor { };
     deepin-image-viewer = callPackage ./apps/deepin-image-viewer { };
@@ -100,6 +101,7 @@ let
   } // lib.optionalAttrs config.allowAliases {
     dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
     dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
+    deepin-clone = throw "The 'deepin.deepin-clone' package was removed as it is broken and unmaintained."; # added 2024-08-23
     go-lib = throw "Then 'deepin.go-lib' package was removed, use 'go mod' to manage it"; # added 2024-05-31
     go-gir-generator = throw "Then 'deepin.go-gir-generator' package was removed, use 'go mod' to manage it"; # added 2024-05-31
     go-dbus-factory = throw "Then 'deepin.go-dbus-factory' package was removed, use 'go mod' to manage it"; # added 2024-05-31

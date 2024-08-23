@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, stdenvNoCC, testers, roslyn-ls, jq }:
 let
   pname = "roslyn-ls";
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 sdk_9_0 ];
   # need sdk on runtime as well
-  dotnet-runtime = dotnet-sdk;
+  dotnet-runtime = dotnetCorePackages.sdk_9_0;
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
 in

@@ -5,20 +5,20 @@
 
 buildGoModule rec {
   pname = "qcal";
-  version = "0.9.1";
+  version = "0.9.2";
   src = fetchFromSourcehut {
     owner = "~psic4t";
     repo = "qcal";
     rev = version;
-    hash = "sha256-Rj806cKCFxWB8X4EiKvyZ5/xACw+VVbo9hv8AJiB0S4=";
+    hash = "sha256-azUN4oYbD0fBZav4ogh/mELV9+IW6aAV7Oom8Wq6sYI=";
   };
-  vendorHash = "sha256-ntpSj3Ze7n1sMIMojaESi4tQtx+mrA0aiv3+MQetjZI=";
+  vendorHash = "sha256-W9g2JzShvm2hJ+fcdwsoD3B6iUU55ufN6FTTl6qK6Oo=";
 
   # Replace "config-sample.json" in error message with the absolute path
   # to that config file in the nix store
   preBuild = ''
     substituteInPlace helpers.go \
-      --replace " config-sample.json " " $out/share/qcal/config-sample.json "
+      --replace-fail " config-sample.json " " $out/share/qcal/config-sample.json "
   '';
 
   postInstall = ''
