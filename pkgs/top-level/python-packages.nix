@@ -16002,8 +16002,6 @@ self: super: with self; {
 
   trezor = callPackage ../development/python-modules/trezor { };
 
-  trfl = callPackage ../development/python-modules/trfl { };
-
   trimesh = callPackage ../development/python-modules/trimesh { };
 
   trino-python-client = callPackage ../development/python-modules/trino-python-client { };
