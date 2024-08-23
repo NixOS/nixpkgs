@@ -1201,6 +1201,8 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
+    multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
+
     multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
