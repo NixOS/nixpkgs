@@ -9,6 +9,7 @@
   boolector,
   z3,
   aiger,
+  btor2tools,
   python3Packages,
   nix-update-script,
 }:
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     yices
     z3
     aiger
+    btor2tools
   ];
 
   postPatch = ''
