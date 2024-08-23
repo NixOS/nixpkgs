@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -77,7 +76,7 @@ let
   ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.99.18-unstable-2024-05-01";
+  version = "2.99.18-unstable-2024-08-22";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -93,8 +92,8 @@ in stdenv.mkDerivation (finalAttrs: {
     name = "gimp-dev-${rev}"; # to make sure the hash is updated
     owner = "GNOME";
     repo = "gimp";
-    rev = "254d4270e6084f6794e737c561d9a5460df9df4c";
-    hash = "sha256-dCddCFCRDTT4iY+kepKKu413ezWOMEQ1m4hxBptBCfU=";
+    rev = "c57bf3c6bd58d1647f8ce21419de755d6afd01be";
+    hash = "sha256-GtOHHMBR75t+bMW/mCMdKYROoFBzsO1LTPRWYNWXnY8=";
     # For gimp-data containing assets.
     fetchSubmodules = true;
   };
@@ -119,19 +118,6 @@ in stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./tests-dbus-conf.patch;
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
-    })
-
-    # Since we pass absolute datadirs to Meson, the path is resolved incorrectly.
-    # What is more, even the assumption that iso-codes have the same datadir
-    # subdirectory as GIMP is incorrect. Though, there is not a way to obtain
-    # the correct directory at the moment. There is a MR against isocodes to fix that:
-    # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
-    ./fix-isocodes-paths.patch
-
-    # Fix build with current libjxl.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/a4f02398188bc36d1808ef802082b3856cc73741.patch";
-      hash = "sha256-I5a86tPtKs2I2dAJW17kDwGOG2I+5MblJCjb8gNT8+I=";
     })
   ];
 
