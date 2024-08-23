@@ -4,13 +4,14 @@
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "gemfileparser2";
   version = "0.9.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,13 +22,10 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  postPatch = ''
-    # https://github.com/aboutcode-org/gemfileparser2/pull/8
-    substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
-  '';
-
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
