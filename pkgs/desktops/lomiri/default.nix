@@ -18,6 +18,7 @@ let
       lomiri-camera-app = callPackage ./applications/lomiri-camera-app { };
       lomiri-clock-app = callPackage ./applications/lomiri-clock-app { };
       lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
+      lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
       lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
       lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };

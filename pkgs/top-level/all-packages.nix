@@ -6108,8 +6108,6 @@ with pkgs;
 
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
 
-  recyclarr = callPackage ../tools/video/recyclarr { };
-
   tsduck = callPackage ../tools/video/tsduck { };
 
   turso-cli = callPackage ../development/tools/turso-cli {};
@@ -6875,8 +6873,6 @@ with pkgs;
   convimg = callPackage ../tools/misc/convimg { };
 
   convfont = callPackage ../tools/misc/convfont { };
-
-  convmv = callPackage ../tools/misc/convmv { };
 
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
@@ -10877,8 +10873,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
-  nzbget = callPackage ../tools/networking/nzbget { };
-
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
   oath-toolkit = callPackage ../tools/security/oath-toolkit { };
@@ -11215,8 +11209,6 @@ with pkgs;
   payload_dumper = callPackage ../tools/archivers/payload_dumper { };
 
   payload-dumper-go = callPackage ../tools/archivers/payload-dumper-go { };
-
-  p2pvc = callPackage ../applications/video/p2pvc { };
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
@@ -16747,8 +16739,6 @@ with pkgs;
 
   me_cleaner = callPackage ../tools/misc/me_cleaner { };
 
-  mesos-dns = callPackage ../servers/mesos-dns { };
-
   metamath = callPackage ../development/interpreters/metamath { };
 
   minder = callPackage ../applications/misc/minder { };
@@ -17275,12 +17265,20 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  ansible = ansible_2_16;
-  ansible_2_16 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible = ansible_2_17;
+  ansible_2_17 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_16 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.16.8";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
+    };
+  }));
   ansible_2_15 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
     version = "2.15.9";
     src = oldAttrs.src.override {
       inherit version;
+      pname = "ansible-core";
       hash = "sha256-JfmxtaWvPAmGvTko7QhurduGdSf7XIOv7xoDz60080U=";
     };
   }));
@@ -17362,8 +17360,6 @@ with pkgs;
   rune-languageserver = callPackage ../development/tools/language-servers/rune-languageserver { };
 
   svls = callPackage ../development/tools/language-servers/svls { };
-
-  typst-lsp = callPackage ../development/tools/language-servers/typst-lsp { };
 
   vala-language-server = callPackage ../development/tools/language-servers/vala-language-server { };
 
@@ -22933,7 +22929,6 @@ with pkgs;
       { };
   inherit (nvidiaCtkPackages)
     nvidia-docker
-    nvidia-podman
     ;
 
   nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
@@ -23013,19 +23008,6 @@ with pkgs;
   };
 
   openct = callPackage ../development/libraries/openct { };
-
-  opencv2 = callPackage ../development/libraries/opencv {
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit Accelerate;
-    ffmpeg = ffmpeg_4;
-  };
-
-  opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
-    inherit (darwin.apple_sdk.frameworks)
-      AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate;
-    ffmpeg = ffmpeg_4;
-    # OpenCV3 won't build with anything newer than CUDA 11 due to API changes.
-    cudaPackages = cudaPackages_11;
-  };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin.apple_sdk.frameworks)
@@ -23188,6 +23170,8 @@ with pkgs;
     physfs;
 
   pico-sdk = callPackage ../development/libraries/pico-sdk { };
+
+  pingvin-share =  callPackage ../servers/pingvin-share { };
 
   pinocchio = callPackage ../development/libraries/pinocchio { };
 
@@ -25401,11 +25385,6 @@ with pkgs;
   petidomo = callPackage ../servers/mail/petidomo { };
 
   pict-rs = callPackage ../servers/web-apps/pict-rs { };
-
-  pict-rs_0_3 = callPackage ../servers/web-apps/pict-rs/0.3.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    ffmpeg = ffmpeg_4;
-  };
 
   popa3d = callPackage ../servers/mail/popa3d { };
 
@@ -30491,13 +30470,6 @@ with pkgs;
     python3Packages = python311Packages;
   };
 
-  metacubexd = callPackage ../by-name/me/metacubexd/package.nix {
-    pnpm = callPackage ../development/tools/pnpm/generic.nix {
-      version = "9.4.0";
-      hash = "sha256-tv0L/aVV5+WErX5WswxosB1aBPnuk5ifS5PKhHPEnHQ=";
-    };
-  };
-
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
@@ -31506,10 +31478,6 @@ with pkgs;
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   lame = callPackage ../development/libraries/lame { };
-
-  labwc = callPackage ../by-name/la/labwc/package.nix {
-    wlroots = wlroots_0_17;
-  };
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
@@ -37209,18 +37177,6 @@ with pkgs;
     cudaSupport = true;
   };
 
-  mathematica9 = callPackage ../applications/science/math/mathematica {
-    version = "9";
-  };
-
-  mathematica10 = callPackage ../applications/science/math/mathematica {
-    version = "10";
-  };
-
-  mathematica11 = callPackage ../applications/science/math/mathematica {
-    version = "11";
-  };
-
   mathmod = libsForQt5.callPackage ../applications/science/math/mathmod { };
 
   metis = callPackage ../development/libraries/science/math/metis { };
@@ -39211,8 +39167,6 @@ with pkgs;
   };
 
   vhs = callPackage ../applications/misc/vhs { };
-
-  vgmstream = callPackage ../applications/audio/vgmstream { };
 
   viddy = callPackage ../tools/misc/viddy { };
 

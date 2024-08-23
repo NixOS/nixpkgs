@@ -212,6 +212,12 @@
     githubId = 882455;
     name = "Elliot Cameron";
   };
+  _404wolf = {
+    email = "wolfmermelstein@gmail.com";
+    github = "404wolf";
+    githubId = 108041238;
+    name = "Wolf Mermelstein";
+  };
   _414owen = {
     email = "owen@owen.cafe";
     github = "414owen";
@@ -827,6 +833,12 @@
     github = "akshgpt7";
     githubId = 20405311;
     name = "Aksh Gupta";
+  };
+  aksiksi = {
+    email = "assil@ksiksi.net";
+    github = "aksiksi";
+    githubId = 916621;
+    name = "Assil Ksiksi";
   };
   akssri = {
     email = "akssri@vakra.xyz";
@@ -1893,7 +1905,7 @@
     keys = [ { fingerprint = "BF47 81E1 F304 1ADF 18CE  C401 DE16 C7D1 536D A72F"; } ];
   };
   astronaut0212 = {
-    email = "goatastronaut0212@proton.me";
+    email = "goatastronaut0212@outlook.com";
     github = "goatastronaut0212";
     githubId = 119769817;
     name = "goatastronaut0212";
@@ -15201,6 +15213,12 @@
     githubId = 61095988;
     name = "Brian Shu";
   };
+  oberth-effect = {
+    email = "stepan.venclik@gmail.com";
+    github = "oberth-effect";
+    githubId = 88210794;
+    name = "Štěpán Venclík";
+  };
   obfusk = {
     email = "flx@obfusk.net";
     matrix = "@obfusk:matrix.org";
@@ -17159,11 +17177,11 @@
     name = "Szymon Scholz";
   };
   ratcornu = {
-    email = "ratcornu@skaven.org";
+    email = "ratcornu+programmation@skaven.org";
     github = "RatCornu";
     githubId = 98173832;
     name = "Balthazar Patiachvili";
-    matrix = "@ratcornu:skweel.skaven.org";
+    matrix = "@ratcornu:skaven.org";
     keys = [ { fingerprint = "1B91 F087 3D06 1319 D3D0  7F91 FA47 BDA2 6048 9ADA"; } ];
   };
   ratsclub = {
