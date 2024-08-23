@@ -26,7 +26,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanelIndicators = [
     wingpanel-applications-menu
-    wingpanel-indicator-a11y
     wingpanel-indicator-bluetooth
     wingpanel-indicator-datetime
     wingpanel-indicator-keyboard
