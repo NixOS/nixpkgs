@@ -214,7 +214,10 @@ in {
     consoleMode = mkOption {
       default = "keep";
 
-      type = types.enum [ "0" "1" "2" "auto" "max" "keep" ];
+      type = types.oneOf [
+        (types.enum [ "0" "1" "2" "auto" "max" "keep" ])
+        (types.strMatching "[[:digit:]]+")
+      ];
 
       description = ''
         The resolution of the console. The following values are valid:
@@ -222,6 +225,8 @@ in {
         - `"0"`: Standard UEFI 80x25 mode
         - `"1"`: 80x50 mode, not supported by all devices
         - `"2"`: The first non-standard mode provided by the device firmware, if any
+        - Any other number (as a string) - non-standard mode provided by the device firmware
+        - `"nnn"`: (Where nnn is any positive integer)
         - `"auto"`: Pick a suitable mode automatically using heuristics
         - `"max"`: Pick the highest-numbered available mode
         - `"keep"`: Keep the mode selected by firmware (the default)
