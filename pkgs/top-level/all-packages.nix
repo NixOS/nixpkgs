@@ -35778,10 +35778,6 @@ with pkgs;
 
   qtads = qt5.callPackage ../games/qtads { };
 
-  grapejuice = callPackage ../games/grapejuice {
-    wine = wineWowPackages.unstable;
-  };
-
   graphwar = callPackage ../games/graphwar { };
 
   gtypist = callPackage ../games/gtypist { };
