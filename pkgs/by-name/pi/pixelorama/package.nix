@@ -21,9 +21,9 @@
 let
   preset =
     if stdenv.isLinux then
-      if stdenv.is64bit then "Linux/X11 64-bit" else "Linux/X11 32-bit"
+      if stdenv.is64bit then "Linux 64-bit" else "Linux 32-bit"
     else if stdenv.isDarwin then
-      "Mac OSX"
+      "macOS"
     else
       throw "unsupported platform";
 
@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lfim5ZiykOhI1kgsu0ni2frUVHPRIPJdrGx6TuUQcSY=";
+    hash = "sha256-rFXUy6fvGKmB+aaNgiI+NNRG0xlj1migdetnU4iVDDQ=";
   };
 
   strictDeps = true;
