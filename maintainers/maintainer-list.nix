@@ -1096,6 +1096,13 @@
     name = "alyaeanyx";
     keys = [ { fingerprint = "1F73 8879 5E5A 3DFC E2B3 FA32 87D1 AADC D25B 8DEE"; } ];
   };
+  amadalusia = {
+    email = "balkenix@outlook.com";
+    github = "amadalusia";
+    githubId = "77496597";
+    name = "Artur Manuel";
+    keys = [ { fingerprint = "CE75 09F4 6A54 9161 9B5F EACE EEDC F0D7 7ECE F174"; } ];
+  };
   amadejkastelic = {
     email = "amadejkastelic7@gmail.com";
     github = "amadejkastelic";
