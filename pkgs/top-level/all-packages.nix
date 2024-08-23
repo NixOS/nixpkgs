@@ -17414,6 +17414,7 @@ with pkgs;
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
   astyle = callPackage ../development/tools/misc/astyle { };
+  libastyle = astyle.override { asLibrary = true; };
 
   automaticcomponenttoolkit = callPackage ../development/tools/misc/automaticcomponenttoolkit { };
 
