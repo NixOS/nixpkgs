@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
     url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    hash = "sha256-RrObmN21QOm5nk0R2avgCH0ulrfiUIo2PnyYWvQaGVw=";
+    hash = "sha256-9WHiI2WlsgEhCPkrQoAunmF6lSb2n5RgQJ2+sdnSShM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
