@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = SymbiYosys, a front-end for Yosys-based formal verification flows";
+    description = "SymbiYosys, a front-end for Yosys-based formal verification flows";
     homepage = "https://symbiyosys.readthedocs.io/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
