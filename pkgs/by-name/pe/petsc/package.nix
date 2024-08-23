@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-dxHa8JUJCN4zRIXMCx7gcvbzFH2SPtkJ377ssIevjgU=";
   };
 
-  inherit mpiSupport;
-
   strictDeps = true;
   nativeBuildInputs = [
     python3
@@ -114,6 +112,10 @@ stdenv.mkDerivation rec {
   # the library is installed and available.
   doInstallCheck = true;
   installCheckTarget = "check_install";
+
+  passthru = {
+    inherit mpiSupport;
+  };
 
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";
