@@ -5,7 +5,9 @@
   fetchFromGitHub,
   netifaces,
   pyserial,
+  python,
   pythonOlder,
+  replaceVars,
   setuptools,
 }:
 
@@ -33,6 +35,12 @@ buildPythonPackage rec {
 
   # Module has no tests
   doCheck = false;
+
+  patches = [
+    (replaceVars ./fix-generated-shebang.patch {
+      python = lib.getExe (python.withPackages (ps: [ ps.pyserial ]));
+    })
+  ];
 
   pythonImportsCheck = [ "RNS" ];
 
