@@ -55,7 +55,7 @@
     commonmark
     python-magic
     protobuf
-    mautrix
+    (mautrix.override { withOlm = enableE2be; })
   ] ++ lib.optionals enableE2be passthru.optional-dependencies.e2be
   ++ lib.optionals enableMetrics passthru.optional-dependencies.metrics
   ++ lib.optionals enableSqlite passthru.optional-dependencies.sqlite;

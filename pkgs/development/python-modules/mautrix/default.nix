@@ -19,6 +19,8 @@
   aiosqlite,
   asyncpg,
   ruamel-yaml,
+
+  withOlm ? false,
 }:
 
 buildPythonPackage rec {
@@ -41,7 +43,7 @@ buildPythonPackage rec {
     aiohttp
     attrs
     yarl
-  ];
+  ] ++ lib.optionals withOlm optional-dependencies.encryption;
 
   optional-dependencies = {
     detect_mimetype = [ python-magic ];
@@ -58,7 +60,9 @@ buildPythonPackage rec {
     aiosqlite
     asyncpg
     ruamel-yaml
-  ] ++ passthru.optional-dependencies.encryption;
+  ];
+
+  disabledTestPaths = lib.optionals (!withOlm) [ "mautrix/crypto/" ];
 
   pythonImportsCheck = [ "mautrix" ];
 
