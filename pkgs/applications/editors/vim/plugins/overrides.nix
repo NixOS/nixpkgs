@@ -143,6 +143,11 @@
     dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
   };
 
+  animation-nvim = super.animation-nvim.overrideAttrs {
+    dependencies = with self; [ middleclass ];
+    nvimRequireCheck = "animation";
+  };
+
   autosave-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ plenary-nvim ];
   };
@@ -1078,6 +1083,11 @@
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
     meta.maintainers = with lib.maintainers; [ vcunat ];
+  };
+
+  middleclass = neovimUtils.buildNeovimPlugin {
+    luaAttr = "middleclass";
+    nvimRequireCheck = "middleclass";
   };
 
   minimap-vim = super.minimap-vim.overrideAttrs {
@@ -2107,7 +2117,8 @@
   };
 
   windows-nvim = super.windows-nvim.overrideAttrs {
-    dependencies = with self; [ luaPackages.middleclass animation-nvim ];
+    dependencies = with self; [ middleclass animation-nvim ];
+    nvimRequireCheck = "windows";
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
