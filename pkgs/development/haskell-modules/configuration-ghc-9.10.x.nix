@@ -16,7 +16,7 @@ self: super: {
   base = null;
   binary = null;
   bytestring = null;
-  Cabal = doDistribute self.Cabal_3_12_1_0; # GHC ships with Cabal 3.12.0.0, but there is no corresponding cabal-install
+  Cabal = null;
   Cabal-syntax = null;
   containers = null;
   deepseq = null;
