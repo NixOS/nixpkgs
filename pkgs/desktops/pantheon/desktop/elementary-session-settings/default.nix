@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , desktop-file-utils
+, gettext
 , pkg-config
 , writeScript
 , gnome-keyring
@@ -91,20 +92,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0-unstable-2024-03-29";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    # For systemd managed gnome-session support.
-    # https://github.com/NixOS/nixpkgs/issues/228946
-    # nixpkgs-update: no auto update
-    rev = "53bf57e5b32936befc3003a0f99c5b3a69349c76";
-    sha256 = "sha256-TX9V6gZiuPEKSHQoSD4+5QptuqEvuErCJ8OF2KFRf9k=";
+    rev = version;
+    sha256 = "sha256-CtArMzM6eukH/Ob0W/U4xh2vvqm17m3T0w7lhcRid74=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
+    gettext
     meson
     ninja
     pkg-config
