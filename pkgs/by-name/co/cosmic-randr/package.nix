@@ -20,10 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-XpN9X8CZUGOe6mQhWWQy766gyoiTPObKsv9J8xiDvdA=";
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
   nativeBuildInputs = [ just pkg-config ];
   buildInputs = [ wayland ];
 
