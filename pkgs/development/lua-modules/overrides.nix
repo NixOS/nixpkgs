@@ -744,6 +744,17 @@ in
     };
   })) {};
 
+  rtp-nvim  = prev.rtp-nvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
+
   rustaceanvim  = prev.rustaceanvim.overrideAttrs(oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [ final.nlua final.busted ];
