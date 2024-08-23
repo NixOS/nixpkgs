@@ -32403,7 +32403,6 @@ with pkgs;
     enableX11 = false;
     enableGL = false;
   };
-  mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17 { };
 
   muso = callPackage ../applications/audio/muso {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
