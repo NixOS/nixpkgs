@@ -9208,18 +9208,6 @@ final: prev:
     meta.homepage = "https://github.com/folke/persistence.nvim/";
   };
 
-  peskcolor-vim = buildVimPlugin {
-    pname = "peskcolor.vim";
-    version = "2016-06-11";
-    src = fetchFromGitHub {
-      owner = "andsild";
-      repo = "peskcolor.vim";
-      rev = "cba4fc739bbebacd503158f6509d9c226651f363";
-      sha256 = "15hw3casr5y3ckgcn6aq8vhk6g2hym41w51nvgf34hbj9fx1nvkq";
-    };
-    meta.homepage = "https://github.com/andsild/peskcolor.vim/";
-  };
-
   pest-vim = buildVimPlugin {
     pname = "pest.vim";
     version = "2024-04-25";
