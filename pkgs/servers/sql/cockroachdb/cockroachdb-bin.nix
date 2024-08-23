@@ -41,6 +41,6 @@ buildFHSEnv {
     description = "Scalable, survivable, strongly-consistent SQL database";
     license = licenses.bsl11;
     platforms = [ "aarch64-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ rushmorem thoughtpolice neosimsim ];
+    maintainers = with maintainers; [ rushmorem thoughtpolice ];
   };
 }

@@ -1,6 +1,9 @@
-{mkKdeDerivation}:
+{
+  mkKdeDerivation,
+  kdevelop-pg-qt,
+}:
 mkKdeDerivation {
   pname = "kdev-php";
-  # FIXME(qt5)
-  meta.broken = true;
+
+  extraNativeBuildInputs = [kdevelop-pg-qt];
 }

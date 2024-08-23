@@ -4690,6 +4690,19 @@ final: prev:
     meta.homepage = "https://github.com/rebelot/heirline.nvim/";
   };
 
+  helpview-nvim = buildVimPlugin {
+    pname = "helpview.nvim";
+    version = "2024-08-12";
+    src = fetchFromGitHub {
+      owner = "OXY2DEV";
+      repo = "helpview.nvim";
+      rev = "49398d628d74283c5a389a6ced40bd8d2daaf56c";
+      sha256 = "0b1z3gz1jpqzf71kjpkw9q3fxbjcdykxi65an6npci0acia49ga2";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/OXY2DEV/helpview.nvim/";
+  };
+
   hex-nvim = buildVimPlugin {
     pname = "hex.nvim";
     version = "2024-03-03";
@@ -5985,6 +5998,18 @@ final: prev:
       sha256 = "03saw1w5pybj6yywzi8hinciv18znimm7k0h34k4pqp5gi1jfaql";
     };
     meta.homepage = "https://github.com/mkasa/lushtags/";
+  };
+
+  luvit-meta = buildVimPlugin {
+    pname = "luvit-meta";
+    version = "2024-01-20";
+    src = fetchFromGitHub {
+      owner = "Bilal2453";
+      repo = "luvit-meta";
+      rev = "ce76f6f6cdc9201523a5875a4471dcfe0186eb60";
+      sha256 = "0a0n67day3zpfxck7yiqb496bz79gwhcvdn60b0f4bp8bysjj06c";
+    };
+    meta.homepage = "https://github.com/Bilal2453/luvit-meta/";
   };
 
   magma-nvim-goose = buildVimPlugin {
@@ -9449,6 +9474,18 @@ final: prev:
     meta.homepage = "https://github.com/frigoeu/psc-ide-vim/";
   };
 
+  pum-vim = buildVimPlugin {
+    pname = "pum.vim";
+    version = "2024-08-17";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "pum.vim";
+      rev = "d9995c8f134ee84322d3dc6f12ea7f061dcacf3f";
+      sha256 = "19akkaqja5khb3nqcm7yj84735vzkwqlr37k18bj34ncm60z9knw";
+    };
+    meta.homepage = "https://github.com/Shougo/pum.vim/";
+  };
+
   purescript-vim = buildVimPlugin {
     pname = "purescript-vim";
     version = "2023-02-06";
@@ -11230,6 +11267,18 @@ final: prev:
       sha256 = "0njcxdyn9x73s4axq01mrxi297xn1qldvnaws6wrbx1j4dyjx0yq";
     };
     meta.homepage = "https://github.com/johmsalas/text-case.nvim/";
+  };
+
+  themed-tabs-nvim = buildVimPlugin {
+    pname = "themed-tabs.nvim";
+    version = "2023-11-09";
+    src = fetchFromGitHub {
+      owner = "vhsconnect";
+      repo = "themed-tabs.nvim";
+      rev = "2ab0e463b929d717b58d10d600589e1ef642f7a4";
+      sha256 = "04i76ndixdi2vpavqb6dy0pf72a7gya4dsr6l1vyjmray45jbda0";
+    };
+    meta.homepage = "https://github.com/vhsconnect/themed-tabs.nvim/";
   };
 
   thesaurus_query-vim = buildVimPlugin {
@@ -13646,6 +13695,18 @@ final: prev:
     meta.homepage = "https://github.com/ludovicchabant/vim-gutentags/";
   };
 
+  vim-habamax = buildVimPlugin {
+    pname = "vim-habamax";
+    version = "2024-01-22";
+    src = fetchFromGitHub {
+      owner = "habamax";
+      repo = "vim-habamax";
+      rev = "8b4e045b711c7e90235a601ba2a923cdfacb2f46";
+      sha256 = "02973qssq450d4411zjscsjvwz4fc2lpqvimah06k87skp8inp47";
+    };
+    meta.homepage = "https://github.com/habamax/vim-habamax/";
+  };
+
   vim-hardtime = buildVimPlugin {
     pname = "vim-hardtime";
     version = "2022-05-06";
@@ -15147,6 +15208,18 @@ final: prev:
       sha256 = "18jqmb08jgd53i56w4spjvr35ydqlw1hm38kdm6qgj1g5qw12i8a";
     };
     meta.homepage = "https://github.com/preservim/vim-pencil/";
+  };
+
+  vim-pets = buildVimPlugin {
+    pname = "vim-pets";
+    version = "2024-07-26";
+    src = fetchFromGitHub {
+      owner = "MeF0504";
+      repo = "vim-pets";
+      rev = "17d33f160c8fd3fb6492e7cd76f397ddaa26ad8d";
+      sha256 = "0zn6kf088kqfdf5y0x6sd8rr3skrjwppsdfxmf044qk1h07lcgcc";
+    };
+    meta.homepage = "https://github.com/MeF0504/vim-pets/";
   };
 
   vim-phabricator = buildVimPlugin {
@@ -17670,6 +17743,18 @@ final: prev:
       sha256 = "1phzragsq4pflvhjzqlxvdsmiyp7z5b68d2a0frn2rj07av0bn91";
     };
     meta.homepage = "https://github.com/inkarkat/vim-AdvancedSorters/";
+  };
+
+  vim-emacs-bindings = buildVimPlugin {
+    pname = "vim-emacs-bindings";
+    version = "2016-10-07";
+    src = fetchFromGitHub {
+      owner = "kentarosasaki";
+      repo = "vim-emacs-bindings";
+      rev = "a8037ef1b0cc0eca9aca15d4e2cab6d462aa57ee";
+      sha256 = "18bhcvs5vnrr394waz9mg2fdnrycsc2ng589s2jw892pap9zxq36";
+    };
+    meta.homepage = "https://github.com/kentarosasaki/vim-emacs-bindings/";
   };
 
   vim-docbk-snippets = buildVimPlugin {

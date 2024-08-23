@@ -8,7 +8,7 @@
 
 ((buildMozillaMach rec {
   pname = "floorp";
-  packageVersion = "11.16.0";
+  packageVersion = "11.17.5";
   applicationName = "Floorp";
   binaryName = "floorp";
   branding = "browser/branding/official";
@@ -16,20 +16,21 @@
   allowAddonSideload = true;
 
   # Must match the contents of `browser/config/version.txt` in the source tree
-  version = "115.15.0";
+  version = "128.1.0";
 
   src = fetchFromGitHub {
     owner = "Floorp-Projects";
     repo = "Floorp";
     fetchSubmodules = true;
     rev = "v${packageVersion}";
-    hash = "sha256-bmB88EIc5S/EYZXiQ5Dc+LjcGB4dlwKRBBV0T0ln88E=";
+    hash = "sha256-8uONEMQI801c9txDa1ZmHQE8xQCViAJbTkxtgYRmUDE=";
   };
 
   extraConfigureFlags = [
     "--with-app-name=${pname}"
     "--with-app-basename=${applicationName}"
     "--with-unsigned-addon-scopes=app,system"
+    "--enable-proxy-bypass-protection"
   ];
 
   extraPostPatch = ''
@@ -64,7 +65,6 @@
   enableOfficialBranding = false;
   googleAPISupport = true;
   mlsAPISupport = true;
-  python3 = python311;
 }).overrideAttrs (prev: {
   MOZ_DATA_REPORTING = "";
   MOZ_TELEMETRY_REPORTING = "";

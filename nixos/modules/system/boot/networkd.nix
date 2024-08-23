@@ -20,6 +20,7 @@ let
           "IPv6PrivacyExtensions"
           "IPv4Forwarding"
           "IPv6Forwarding"
+          "UseDomains"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
@@ -28,6 +29,7 @@ let
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv4Forwarding" boolValues)
         (assertValueOneOf "IPv6Forwarding" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -652,6 +654,7 @@ let
           "Address"
           "Gateway"
           "DNS"
+          "UseDomains"
           "Domains"
           "DNSDefaultRoute"
           "NTP"
@@ -705,6 +708,7 @@ let
         (assertValueOneOf "DNSSEC" (boolValues ++ ["allow-downgrade"]))
         (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
         (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
         (assertValueOneOf "IPv4Forwarding" boolValues)

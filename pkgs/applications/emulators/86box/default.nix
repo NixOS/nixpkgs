@@ -1,5 +1,6 @@
 {
   stdenv,
+  darwin,
   lib,
   fetchFromGitHub,
   cmake,
@@ -42,29 +43,43 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ioE0EVIXv/biXXvLqwhmtZ/RJM0nLqcE+i+CU+WXBY4=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeWrapper
-    qt5.wrapQtAppsHook
-  ] ++ lib.optionals enableWayland [ extra-cmake-modules wayland-scanner ];
+  patches = [ ./darwin.patch ];
 
-  buildInputs = [
-    freetype
-    fluidsynth
-    SDL2
-    glib
-    openal
-    rtmidi
-    pcre2
-    jack2
-    libpcap
-    libslirp
-    qt5.qtbase
-    qt5.qttools
-  ] ++ lib.optional stdenv.isLinux alsa-lib
+  postPatch = ''
+    substituteAllInPlace src/qt/qt_platform.cpp
+  '';
+
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      makeWrapper
+      qt5.wrapQtAppsHook
+    ]
+    ++ lib.optionals enableWayland [
+      extra-cmake-modules
+      wayland-scanner
+    ];
+
+  buildInputs =
+    [
+      freetype
+      fluidsynth
+      SDL2
+      glib
+      openal
+      rtmidi
+      pcre2
+      jack2
+      libpcap
+      libslirp
+      qt5.qtbase
+      qt5.qttools
+    ]
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
-    ++ lib.optional enableVncRenderer libvncserver;
+    ++ lib.optional enableVncRenderer libvncserver
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.libs.xpc;
 
   cmakeFlags =
     lib.optional stdenv.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
@@ -108,12 +123,17 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapperArgs+=(--prefix ${libPathVar} : "${libPath}")
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Emulator of x86-based machines based on PCem";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
-    license = with licenses; [ gpl2Only ] ++ optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
-    maintainers = [ maintainers.jchw ];
-    platforms = platforms.linux;
+    license =
+      with lib.licenses;
+      [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
+    maintainers = with lib.maintainers; [
+      jchw
+      matteopacini
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

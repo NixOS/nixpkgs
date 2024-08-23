@@ -1004,7 +1004,10 @@
 
   lz-n = neovimUtils.buildNeovimPlugin { luaAttr = "lz-n"; };
 
+
   lze = neovimUtils.buildNeovimPlugin { luaAttr = "lze"; };
+
+  lzn-auto-require = neovimUtils.buildNeovimPlugin { luaAttr = "lzn-auto-require"; };
 
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";

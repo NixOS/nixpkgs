@@ -59,9 +59,9 @@
   };
   aks-preview = mkAzExtension rec {
     pname = "aks-preview";
-    version = "7.0.0b3";
+    version = "7.0.0b6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "04067e9050de7b3560030613232bf51d9ada4b91885285954afe77b3e40ad90a";
+    sha256 = "268457ea6463d03775caa822b4b7a70749c503b47cb2aa9c898e1186cfb423f6";
     description = "Provides a preview for upcoming AKS features";
   };
   akshybrid = mkAzExtension rec {
@@ -87,9 +87,9 @@
   };
   amg = mkAzExtension rec {
     pname = "amg";
-    version = "1.3.6";
+    version = "2.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/amg-${version}-py3-none-any.whl";
-    sha256 = "52fbff96d56e381e636f6b2e9f8be80ac7eef766153ba8225a183b73d2972f25";
+    sha256 = "b28952d967b9a1e0d81dac280bdff23b44fdbb06dedd66cdf99477bdd7541d6c";
     description = "Microsoft Azure Command-Line Tools Azure Managed Grafana Extension";
   };
   amlfs = mkAzExtension rec {
@@ -143,9 +143,9 @@
   };
   azure-firewall = mkAzExtension rec {
     pname = "azure-firewall";
-    version = "1.1.0";
+    version = "1.2.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-${version}-py2.py3-none-any.whl";
-    sha256 = "562cc396c6afa1ef996c35b7bed801b3fd9677e4c6923f1148cb09255b24d1ef";
+    sha256 = "5468cc09b8ea7918176b5e95aa3c24c7ad9b7d1b68c47d16bf522a053fd811e8";
     description = "Manage Azure Firewall resources";
   };
   azurelargeinstance = mkAzExtension rec {
@@ -171,9 +171,9 @@
   };
   bastion = mkAzExtension rec {
     pname = "bastion";
-    version = "1.0.2";
+    version = "1.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/bastion-${version}-py3-none-any.whl";
-    sha256 = "1637b37374e8956d555ee89e005ceb952aed4e754b93a8ec887a4f90ce4e36f8";
+    sha256 = "d90bc404d2f9d22435a2bd34bd1fd6094d71d6f1719763c72ee6e4835ec8a99d";
     description = "Microsoft Azure Command-Line Tools Bastion Extension";
   };
   billing-benefits = mkAzExtension rec {
@@ -318,9 +318,9 @@
   };
   dataprotection = mkAzExtension rec {
     pname = "dataprotection";
-    version = "1.5.2";
+    version = "1.5.3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-${version}-py3-none-any.whl";
-    sha256 = "534ba81cbfece53352e1862d4bfadc8a5b3fd0449178c482e13fc1925970dac3";
+    sha256 = "4671ce89e39065695f21626350dfcad5438bdbefc714cf35e85ee5eab0f96661";
     description = "Microsoft Azure Command-Line Tools DataProtectionClient Extension";
   };
   datashare = mkAzExtension rec {
@@ -444,9 +444,9 @@
   };
   fleet = mkAzExtension rec {
     pname = "fleet";
-    version = "1.2.0";
+    version = "1.2.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-${version}-py3-none-any.whl";
-    sha256 = "6e9504f22893636a14990955bfb731e77a2f681b100f2cb20cc2455ce15a2b8b";
+    sha256 = "d7e3525249c0c4e5ae0988500e36847b4363d734f7b16e7a0f9a9e54623081ae";
     description = "Microsoft Azure Command-Line Tools Fleet Extension";
   };
   fluid-relay = mkAzExtension rec {
@@ -647,9 +647,9 @@
   };
   managednetworkfabric = mkAzExtension rec {
     pname = "managednetworkfabric";
-    version = "6.2.0";
+    version = "6.4.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/managednetworkfabric-${version}-py3-none-any.whl";
-    sha256 = "3761e2319e0a6bccde79d59e2ab2d508f00e601562c0b7e4bf290ff9d9b14479";
+    sha256 = "9d41078e0654aaae36a5f0f283f51de98cc4360582920536542546ed34ca0bc4";
     description = "Support for managednetworkfabric commands based on 2023-06-15 API version";
   };
   managementpartner = mkAzExtension rec {

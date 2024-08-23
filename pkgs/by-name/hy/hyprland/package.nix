@@ -144,12 +144,12 @@ stdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
+      xorg.libXcursor
     ]
     ++ lib.optionals stdenv.hostPlatform.isBSD [ epoll-shim ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
     ++ lib.optionals enableXWayland [
       xorg.libxcb
-      xorg.libXcursor
       xorg.libXdmcp
       xorg.xcbutil
       xorg.xcbutilerrors

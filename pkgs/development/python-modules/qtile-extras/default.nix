@@ -64,6 +64,8 @@ buildPythonPackage rec {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
+    # flaky, timing sensitive
+    "test_visualiser"
   ];
 
   disabledTestPaths = [

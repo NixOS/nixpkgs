@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "QDiskInfo";
+  pname = "qdiskinfo";
   version = "0.3";
 
   src = fetchFromGitHub {

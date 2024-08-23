@@ -8,6 +8,13 @@ let allVersions = lib.flip map
   # N.B. Versions in this list should be ordered from newest to oldest.
   [
     {
+      version = "14.1.0";
+      lang = "en";
+      language = "English";
+      sha256 = "1kxdvm3i7nn3ws784y972h2br1n0y82kkkjvz7c5llssv6d3pgj8";
+      installer = "WolframEngine_14.1.0_LIN.sh";
+    }
+    {
       version = "13.3.0";
       lang = "en";
       language = "English";
