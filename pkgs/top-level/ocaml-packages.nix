@@ -64,6 +64,8 @@ let
 
     b0 = callPackage ../development/ocaml-modules/b0 { };
 
+    backoff = callPackage ../development/ocaml-modules/backoff { };
+
     bap = janeStreet_0_15.bap;
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
