@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
+, unstableGitUpdater
 , pkg-config
 , vala
 , gi-docgen
@@ -36,14 +37,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.48";
+  version = "0.4.48-unstable-2024-08-22";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/gegl-${version}.tar.xz";
-    hash = "sha256-QYwm2UvogF19mPbeDGglyia9dPystsGI2kdTPZ7igkc=";
+  # src = fetchurl {
+  #   url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/gegl-${version}.tar.xz";
+  #   hash = "sha256-QYwm2UvogF19mPbeDGglyia9dPystsGI2kdTPZ7igkc=";
+  # };
+
+  src = fetchFromGitHub rec {
+    name = "gegl-dev-${rev}"; # to make sure the hash is updated
+    owner = "GNOME";
+    repo = "gegl";
+    rev = "595748e4995298a41c7722f9fae3184a3acf08a2";
+    hash = "sha256-G/0IWAnSeQLtzxV41ZCxmM4A3DpIOvHVj3h7t6VCMPU=";
   };
 
   nativeBuildInputs = [
@@ -115,6 +124,12 @@ stdenv.mkDerivation rec {
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
   doCheck = !stdenv.isDarwin;
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagConverter = "sed s/GEGL_//;s/_/./g";
+    };
+  };
 
   meta = with lib; {
     description = "Graph-based image processing framework";
