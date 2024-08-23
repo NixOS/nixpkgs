@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchPypi,
   buildPythonPackage,
 
   # build-system
@@ -36,11 +36,9 @@ buildPythonPackage rec {
   version = "2024.2.6";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "inducer";
-    repo = "pyopencl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nP7ZAGeRXrjqDRWlc2SDP1hk1fseGeu9Zx0lOp9Pchs=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-zrm+7vC2Fi5gHAWSL+3im1CUVUpm60c8YQyrwUMIuoI=";
   };
 
   nativeBuildInputs = [
@@ -75,13 +73,12 @@ buildPythonPackage rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
-    rm -rf pyopencl
   '';
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
 
-  pythonImportsCheck = [ "pyopencl" ];
+  pythonImportsCheck = [ "pyopencl" "pyopencl.array" ];
 
   meta = with lib; {
     description = "Python wrapper for OpenCL";
