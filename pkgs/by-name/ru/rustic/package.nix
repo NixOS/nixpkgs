@@ -11,24 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic";
-  version = "0.7.0-unstable-2024-08-10";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
-    # rev = "refs/tags/v${version}";
-    rev = "1c9969c";
-    hash = "sha256-+YVF59xHb82TOn7Gl0BbX2Yx6Owsp0LiOBgEXHN9QVI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4DQNg/pYoIVQpdOp2Yx1AGUdsJbfGSL09Ll5yJTeJlU=";
   };
 
-  # With the next release please go back to `cargoHash` and remove the vendored
-  # `Cargo.lock` if possible.
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rustic_backend-0.1.1" = "sha256-6VC0DKqV9NPzwKs6SOI3dQMKrGZd2azUBMbU9dejHKs=";
-    };
-  };
+  cargoHash = "sha256-YFVxTJNzw/A0lz7mH6B+zKjeW5FYqyKHEWckCSVs4A8=";
 
   # At the time of writing, upstream defaults to "self-update", "tui", and "webdav".
   # "self-update" is a self-updater, which we don't want in nixpkgs.
