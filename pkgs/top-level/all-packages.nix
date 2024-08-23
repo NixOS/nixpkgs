@@ -7898,10 +7898,6 @@ with pkgs;
 
   fprintd-tod = callPackage ../tools/security/fprintd/tod.nix { };
 
-  ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
-    mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
-  };
-
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
@@ -17420,6 +17416,7 @@ with pkgs;
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
   astyle = callPackage ../development/tools/misc/astyle { };
+  libastyle = astyle.override { asLibrary = true; };
 
   automaticcomponenttoolkit = callPackage ../development/tools/misc/automaticcomponenttoolkit { };
 
