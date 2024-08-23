@@ -33,7 +33,8 @@ stdenv.mkDerivation {
     sourceRoot="$sourceRoot/tools/build"
   '';
 
-  patches = useBoost.boostBuildPatches or [];
+  patches = useBoost.boostBuildPatches or []
+    ++ lib.optional (useBoost ? version && lib.versionAtLeast useBoost.version "1.81") ./fix-clang-target.patch;
 
   # Upstream defaults to gcc on darwin, but we use clang.
   postPatch = ''

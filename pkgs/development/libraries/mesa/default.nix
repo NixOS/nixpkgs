@@ -10,6 +10,7 @@
 , file
 , flex
 , glslang
+, spirv-tools
 , intltool
 , jdupes
 , libdrm
@@ -138,13 +139,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-
-    # Fixes video corruption / crashes when decoding video on AMD iGPUs
-    # FIXME: remove in the next update
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/8b35da91b23afc65256b78a59d116fd09544cd28.patch";
-      hash = "sha256-z0KKBtot3VxXiS16YcmwZbeg8HSCLzEbvWdufI/fOk8=";
-    })
   ];
 
   postPatch = ''
@@ -233,7 +227,7 @@ in stdenv.mkDerivation {
     directx-headers
     elfutils
     expat
-    glslang
+    spirv-tools
     libglvnd
     libomxil-bellagio
     libunwind
@@ -282,7 +276,9 @@ in stdenv.mkDerivation {
     python3Packages.mako
     python3Packages.ply
     jdupes
-    glslang
+    # Use bin output from glslang to not propagate the dev output at
+    # the build time with the host glslang.
+    (lib.getBin glslang)
     rustc
     rust-bindgen
     rust-cbindgen

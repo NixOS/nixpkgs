@@ -538,7 +538,7 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace tests/test_config.py --replace-fail '"/usr"' '"/build/media"'
+    substituteInPlace tests/test_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     substituteInPlace pyproject.toml --replace-fail "wheel~=0.43.0" wheel
 
@@ -667,7 +667,7 @@ in python.pkgs.buildPythonApplication rec {
     export HOME="$TEMPDIR"
 
     # the tests require the existance of a media dir
-    mkdir /build/media
+    mkdir "$NIX_BUILD_TOP"/media
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH

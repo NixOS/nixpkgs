@@ -58,11 +58,13 @@ autoPatchelf() {
         local appendRunpathsArray=( "${appendRunpaths[@]}" )
         local runtimeDependenciesArray=( "${runtimeDependencies[@]}" )
         local patchelfFlagsArray=( "${patchelfFlags[@]}" )
+        local autoPatchelfFlagsArray=( "${autoPatchelfFlags[@]}" )
     else
         readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
         local appendRunpathsArray=($appendRunpaths)
         local runtimeDependenciesArray=($runtimeDependencies)
         local patchelfFlagsArray=($patchelfFlags)
+        local autoPatchelfFlagsArray=($autoPatchelfFlags)
     fi
 
     # Check if ignoreMissingDepsArray contains "1" and if so, replace it with
@@ -85,6 +87,7 @@ autoPatchelf() {
                "${extraAutoPatchelfLibs[@]}"                            \
         --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"  \
         --append-rpaths "${appendRunpathsArray[@]}"                     \
+        "${autoPatchelfFlagsArray[@]}"                                  \
         --extra-args "${patchelfFlagsArray[@]}"
 }
 

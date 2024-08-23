@@ -26,6 +26,7 @@
 , libXv
 , libdrm
 , enableWayland ? stdenv.isLinux
+, wayland-scanner
 , wayland
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals enableWayland [
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [

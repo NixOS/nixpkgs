@@ -1,5 +1,6 @@
 { mkDerivation
 , extra-cmake-modules
+, wayland-scanner
 , breeze-qt5
 , kconfig
 , kconfigwidgets
@@ -18,7 +19,7 @@
 
 mkDerivation {
   pname = "plasma-integration";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules wayland-scanner ];
   buildInputs = [
     breeze-qt5
     kconfig

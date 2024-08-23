@@ -74,19 +74,19 @@ let
           declare -p string
 
           declare -A associativeArray=(["X"]="Y")
-          [[ $(appendToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not catch prepending associativeArray" && false)
-          [[ $(prependToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not catch prepending associativeArray" && false)
+          [[ $(appendToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "appendToVar did not throw appending to associativeArray" && false)
+          [[ $(prependToVar associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "prependToVar did not throw prepending associativeArray" && false)
 
           [[ $string == "world testing-string hello" ]] || (echo "'\$string' was not 'world testing-string hello'" && false)
 
           # test appending to a unset variable
           appendToVar nonExistant created hello
-          typeset -p nonExistant
+          declare -p nonExistant
           if [[ -n $__structuredAttrs ]]; then
             [[ "''${nonExistant[@]}" == "created hello" ]]
           else
             # there's a extra " " in front here and a extra " " in the end of prependToVar
-            # shouldn't matter because these functions will mostly be used for $*Flags and the Flag variable will in most cases already exit
+            # shouldn't matter because these functions will mostly be used for $*Flags and the Flag variable will in most cases already exist
             [[ "$nonExistant" == " created hello" ]]
           fi
 
@@ -96,6 +96,65 @@ let
         '';
       } // extraAttrs);
 
+  testConcatTo = { name, stdenv', extraAttrs ? { } }:
+    stdenv'.mkDerivation
+      ({
+        inherit name;
+
+        string = "a b";
+        list = ["c" "d"];
+
+        passAsFile = [ "buildCommand" ] ++ lib.optionals (extraAttrs ? extraTest) [ "extraTest" ];
+        buildCommand = ''
+          declare -A associativeArray=(["X"]="Y")
+          [[ $(concatTo nowhere associativeArray 2>&1) =~ "trying to use" ]] || (echo "concatTo did not throw concatenating associativeArray" && false)
+
+          declare -a flagsArray
+          concatTo flagsArray string list
+          declare -p flagsArray
+          [[ "''${flagsArray[0]}" == "a" ]] || (echo "'\$flagsArray[0]' was not 'a'" && false)
+          [[ "''${flagsArray[1]}" == "b" ]] || (echo "'\$flagsArray[1]' was not 'b'" && false)
+          [[ "''${flagsArray[2]}" == "c" ]] || (echo "'\$flagsArray[2]' was not 'c'" && false)
+          [[ "''${flagsArray[3]}" == "d" ]] || (echo "'\$flagsArray[3]' was not 'd'" && false)
+
+          # test concatenating to unset variable
+          concatTo nonExistant string list
+          declare -p nonExistant
+          [[ "''${nonExistant[0]}" == "a" ]] || (echo "'\$nonExistant[0]' was not 'a'" && false)
+          [[ "''${nonExistant[1]}" == "b" ]] || (echo "'\$nonExistant[1]' was not 'b'" && false)
+          [[ "''${nonExistant[2]}" == "c" ]] || (echo "'\$nonExistant[2]' was not 'c'" && false)
+          [[ "''${nonExistant[3]}" == "d" ]] || (echo "'\$nonExistant[3]' was not 'd'" && false)
+
+          eval "$extraTest"
+
+          touch $out
+        '';
+      } // extraAttrs);
+
+  testConcatStringsSep = { name, stdenv' }:
+    stdenv'.mkDerivation
+      {
+        inherit name;
+
+        # NOTE: Testing with "&" as separator is intentional, because unquoted
+        # "&" has a special meaning in the "${var//pattern/replacement}" syntax.
+        # Cf. https://github.com/NixOS/nixpkgs/pull/318614#discussion_r1706191919
+        passAsFile = [ "buildCommand" ];
+        buildCommand = ''
+          declare -A associativeArray=(["X"]="Y")
+          [[ $(concatStringsSep ";" associativeArray 2>&1) =~ "trying to use" ]] || (echo "concatStringsSep did not throw concatenating associativeArray" && false)
+
+          string="lorem ipsum dolor sit amet"
+          stringWithSep="$(concatStringsSep "&" string)"
+          [[ "$stringWithSep" == "lorem&ipsum&dolor&sit&amet" ]] || (echo "'\$stringWithSep' was not 'lorem&ipsum&dolor&sit&amet'" && false)
+
+          array=("lorem ipsum" "dolor" "sit amet")
+          arrayWithSep="$(concatStringsSep "&" array)"
+          [[ "$arrayWithSep" == "lorem ipsum&dolor&sit amet" ]] || (echo "'\$arrayWithSep' was not 'lorem ipsum&dolor&sit amet'" && false)
+
+          touch $out
+        '';
+      };
 in
 
 {
@@ -196,6 +255,16 @@ in
     stdenv' = bootStdenv;
   };
 
+  test-concat-to = testConcatTo {
+    name = "test-concat-to";
+    stdenv' = bootStdenv;
+  };
+
+  test-concat-strings-sep = testConcatStringsSep {
+    name = "test-concat-strings-sep";
+    stdenv' = bootStdenv;
+  };
+
   test-structured-env-attrset = testEnvAttrset {
     name = "test-structured-env-attrset";
     stdenv' = bootStdenv;
@@ -253,6 +322,29 @@ in
           [[ "''${list[-1]}" == "world" ]] || (echo "last element of '\$list' was not 'world'" && false)
         '';
       };
+    };
+
+    test-concat-to = testConcatTo {
+      name = "test-concat-to-structuredAttrsByDefault";
+      stdenv' = bootStdenvStructuredAttrsByDefault;
+      extraAttrs = {
+        # test that whitespace is kept in the bash array for structuredAttrs
+        listWithSpaces = [ "c c" "d d" ];
+        extraTest = ''
+          declare -a flagsWithSpaces
+          concatTo flagsWithSpaces string listWithSpaces
+          declare -p flagsWithSpaces
+          [[ "''${flagsWithSpaces[0]}" == "a" ]] || (echo "'\$flagsWithSpaces[0]' was not 'a'" && false)
+          [[ "''${flagsWithSpaces[1]}" == "b" ]] || (echo "'\$flagsWithSpaces[1]' was not 'b'" && false)
+          [[ "''${flagsWithSpaces[2]}" == "c c" ]] || (echo "'\$flagsWithSpaces[2]' was not 'c c'" && false)
+          [[ "''${flagsWithSpaces[3]}" == "d d" ]] || (echo "'\$flagsWithSpaces[3]' was not 'd d'" && false)
+        '';
+      };
+    };
+
+    test-concat-strings-sep = testConcatStringsSep {
+      name = "test-concat-strings-sep-structuredAttrsByDefault";
+      stdenv' = bootStdenvStructuredAttrsByDefault;
     };
 
     test-golden-example-structuredAttrs =

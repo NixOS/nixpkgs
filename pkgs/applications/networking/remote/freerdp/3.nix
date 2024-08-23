@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     fuse3
     systemd
     wayland
+    wayland-scanner
   ] ++ lib.optionals stdenv.isDarwin [
     AudioToolbox
     AVFoundation
@@ -160,7 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-dev"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
-    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ] ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
     WITH_CAIRO = (cairo != null);

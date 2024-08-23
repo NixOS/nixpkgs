@@ -41,9 +41,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZjUx80HFOJ9GDXMOYuEKT8yjQoyiyhCWk4Z7xf4uKAc=";
   };
 
-  # TODO: apply patch unconditionally in staging. It's conditional to
-  # save rebuild on staging-next.
-  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  patches = [
     ./darwin-__rdtsc.patch
   ];
 
@@ -98,13 +96,13 @@ stdenv.mkDerivation rec {
       ${mkFlag (!stdenv.hostPlatform.isStatic) "ENABLE_SHARED"}
       -DHIGH_BIT_DEPTH=OFF
       -DENABLE_HDR10_PLUS=ON
-      ${mkFlag (isCross && stdenv.hostPlatform.isAarch32) "CROSS_COMPILE_ARM"}
       ${mkFlag cliSupport "ENABLE_CLI"}
       ${mkFlag unittestsSupport "ENABLE_TESTS"}
     )
   '' + lib.optionalString isCross ''
     cmakeFlagsArray+=(
-      ${mkFlag (isCross && stdenv.hostPlatform.isAarch64) "CROSS_COMPILE_ARM64"}
+      ${mkFlag (stdenv.hostPlatform.isAarch32) "CROSS_COMPILE_ARM"}
+      ${mkFlag (stdenv.hostPlatform.isAarch64) "CROSS_COMPILE_ARM64"}
     )
   '';
 

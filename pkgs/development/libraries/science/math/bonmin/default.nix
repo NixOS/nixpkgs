@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nqjAQ1NdNJ/T4p8YljEWRt/uy2aDwyBeAsag0TmRc5Q=";
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     doxygen
     gfortran
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  configureFlagsArray = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.isDarwin [
     "--with-asl-lib=-lipoptamplinterface -lamplsolver"
   ];
 
