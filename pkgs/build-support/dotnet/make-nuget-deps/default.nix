@@ -39,8 +39,28 @@ lib.makeOverridable(
           ];
 
           unpackPhase = ''
+            runHook preUnpack
+
             unzip -nq $src
             chmod -R +rw .
+
+            function unescapeNupkgPaths () {
+              for e in *
+              do
+                t="$(e=''${e/\\/\\\\} && echo -e ''${e//%/\\x})"
+                [ "$t" != "$e" ] && mv -vn "$e" "$t"
+                if [ -d "$t" ]
+                then
+                  cd "$t"
+                  unescapeNupkgPaths
+                  cd ..
+                fi
+              done
+            }
+
+            unescapeNupkgPaths
+
+            runHook postUnpack
           '';
 
           prePatch = ''
@@ -53,10 +73,14 @@ lib.makeOverridable(
           '';
 
           installPhase = ''
+            runHook preInstall
+
             dir=$out/share/nuget/packages/${lib.toLower pname}/${lib.toLower version}
             mkdir -p $dir
             cp -r . $dir
             echo {} > "$dir"/.nupkg.metadata
+
+            runHook postInstall
           '';
 
           preFixup = ''
