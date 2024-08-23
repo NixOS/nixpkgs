@@ -101,5 +101,8 @@ pkgs.testers.nixosTest {
 
     with subtest("nix-build-with-new-daemon"):
         machine.succeed("runuser -u alice -- nix build --expr 'derivation {name =\"test-new\"; system = \"${pkgs.system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
+
+    with subtest("nix-collect-garbage-with-old-nix"):
+        machine.succeed("${nixVersions.stable}/bin/nix-collect-garbage")
   '';
 }
