@@ -29,8 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     smartmontools
   ];
 
+  cmakeBuildType = "MinSizeRel";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE:STRING=MinSizeRel"
     "-DQT_VERSION_MAJOR=6"
   ];
 
