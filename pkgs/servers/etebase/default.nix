@@ -17,13 +17,13 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
-  version = "0.13.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GEieXue3Kvc4zZjfypKLmTmhNPbn/GR8g0qEqkl+wkw=";
+    hash = "sha256-W2u/d8X8luOzgy1CLNgujnwaoO1pR1QO1Ma7i4CGkdU=";
   };
 
   patches = [ ./secret.patch ];
