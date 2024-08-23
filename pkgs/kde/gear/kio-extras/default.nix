@@ -19,7 +19,7 @@
 mkKdeDerivation {
   pname = "kio-extras";
 
-  extraNativeBuildInputs = [pkg-config shared-mime-info];
+  extraNativeBuildInputs = [pkg-config gperf shared-mime-info];
   extraBuildInputs = [
     qt5compat
     qtsvg

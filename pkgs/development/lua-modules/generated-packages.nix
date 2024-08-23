@@ -2089,14 +2089,14 @@ buildLuarocksPackage {
 luarocks-build-treesitter-parser-cpp = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "luarocks-build-treesitter-parser-cpp";
-  version = "2.0.0-1";
+  version = "2.0.3-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luarocks-build-treesitter-parser-cpp-2.0.0-1.rockspec";
-    sha256 = "13jwyg9y5n3zh55pisyms6kh8n59gwh9q9nslxkbdrb149y5wlr4";
+    url    = "mirror://luarocks/luarocks-build-treesitter-parser-cpp-2.0.3-1.rockspec";
+    sha256 = "1pn8kn1kf9ak4b7hba1nd358dh146sr993gf8r10s3ywcnihmnw0";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp/archive/v2.0.0.zip";
-    sha256 = "1rldmmimz3bhhh5yrx15wsdiymfmjyl3j8y71xz4mi4m16in470d";
+    url    = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser-cpp/archive/v2.0.3.zip";
+    sha256 = "1dcjy1vy76vszm9r1ck42w8a1xw0ls0vs9xg5wzh3wnk2d1y54m3";
   };
 
   disabled = luaOlder "5.1";
@@ -2486,6 +2486,30 @@ buildLuarocksPackage {
     description = "🦥 A dead simple lazy-loading Lua library for Neovim plugins.";
     maintainers = with lib.maintainers; [ mrcjkb ];
     license.fullName = "GPL-2+";
+  };
+}) {};
+
+lzn-auto-require = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, lz-n }:
+buildLuarocksPackage {
+  pname = "lzn-auto-require";
+  version = "0.1.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lzn-auto-require-0.1.0-1.rockspec";
+    sha256 = "01yx40yvj6msh42cyj3vbmi3phdpiqafr0qv12yfj7garhxjidd3";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/horriblename/lzn-auto-require/archive/v0.1.0.zip";
+    sha256 = "0hkpyqw1cybrwarvxanf2drz2cbxkh77yz2qq4akhzyvidmn7ny0";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ lz-n ];
+
+  meta = {
+    homepage = "https://github.com/horriblename/lzn-auto-require";
+    description = "Auto load optional plugins via lua modules with lz.n";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "GPL-2.0";
   };
 }) {};
 
@@ -3002,14 +3026,14 @@ buildLuarocksPackage {
 rtp-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "rtp.nvim";
-  version = "1.0.0-1";
+  version = "1.1.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rtp.nvim-1.0.0-1.rockspec";
-    sha256 = "0ddlwhk62g3yx1ysddsmlggfqv0hj7dljgczfwij1ijbz7qyp3hy";
+    url    = "mirror://luarocks/rtp.nvim-1.1.0-1.rockspec";
+    sha256 = "1wmg2rqw8jph4ymmc33j8r47p2ni7fdd3dmiiwp19symslcw71js";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/rtp.nvim/archive/v1.0.0.zip";
-    sha256 = "1kx7qzdz8rpwsjcp63wwn619nrkxn6xd0nr5pfm3g0z4072nnpzn";
+    url    = "https://github.com/nvim-neorocks/rtp.nvim/archive/v1.1.0.zip";
+    sha256 = "0n3ydd1n0mbc0m81rdbs73gpdr3m6qj735sjqdf36qv52gjcisj8";
   };
 
   disabled = luaOlder "5.1";
@@ -3333,20 +3357,20 @@ buildLuarocksPackage {
   };
 }) {};
 
-tree-sitter-norg = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luarocks-build-treesitter-parser }:
+tree-sitter-norg = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luarocks-build-treesitter-parser-cpp }:
 buildLuarocksPackage {
   pname = "tree-sitter-norg";
-  version = "0.2.4-1";
+  version = "0.2.5-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/tree-sitter-norg-0.2.4-1.rockspec";
-    sha256 = "00mgn1kmhhrink64s1yjnz78lc7qbv0f021dsvr6z3b44srhcxb9";
+    url    = "mirror://luarocks/tree-sitter-norg-0.2.5-1.rockspec";
+    sha256 = "1w3hns9n92ygc7x3wxq3pd2kjs2nfp1arxq9zda75h2alwapjink";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorg/tree-sitter-norg/archive/v0.2.4.zip";
-    sha256 = "08bsk3v61r0xhracanjv25jccqv80ahipx0mv5a1slzhcyymv8kd";
+    url    = "https://github.com/nvim-neorg/tree-sitter-norg/archive/1aab69c95bd9d5e7c0e172ecbe5d29bcf5834612.zip";
+    sha256 = "12s4lvs2iw3v9hwfcql0phi8gxgpwfj3i6443f0mss5zn7f6w50g";
   };
 
-  nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+  nativeBuildInputs = [ luarocks-build-treesitter-parser-cpp ];
 
   meta = {
     homepage = "https://github.com/nvim-neorg/tree-sitter-norg";
