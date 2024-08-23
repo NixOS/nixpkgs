@@ -11,6 +11,8 @@
   gtk3,
   swt,
   glib,
+  webkitgtk,
+  glib-networking,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -64,11 +66,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           --prefix PATH : "${openjdk17}/bin" \
           --set JAVA_HOME "${openjdk17.home}" \
           --prefix CLASSPATH : "$out/dbeaver/plugins/*:${swt}/jars/swt.jar" \
+          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
           --prefix LD_LIBRARY_PATH : "$out/lib:${
             lib.makeLibraryPath [
               swt
               gtk3
               glib
+              webkitgtk
+              glib-networking
             ]
           }"
 
