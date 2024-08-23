@@ -22,6 +22,9 @@
   peewee,
   python-olm,
 
+  # transitive dependencies
+  olm,
+
   # tests
   aioresponses,
   faker,
@@ -41,19 +44,7 @@
 }:
 
 let
-  permitInsecureOlm = map (
-    pythonPackage:
-    pythonPackage.override (
-      lib.optionalAttrs (pythonPackage.pname == "python-olm") (
-        let
-          olm = lib.findFirst (p: p.pname == "olm") null pythonPackage.buildInputs;
-        in
-        {
-          olm = olm.overrideAttrs (lib.addMetaAttrs { knownVulnerabilities = [ ]; });
-        }
-      )
-    )
-  );
+  olm-unsafe = olm.overrideAttrs (lib.addMetaAttrs { knownVulnerabilities = [ ]; });
 in
 buildPythonPackage rec {
   pname = "matrix-nio";
@@ -98,7 +89,13 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
-  ] ++ permitInsecureOlm passthru.optional-dependencies.e2e;
+
+    # e2e
+    atomicwrites
+    cachetools
+    (python-olm.override { olm = olm-unsafe; }) # Permit vulnerabilities during tests
+    peewee
+  ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
