@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "okonomiyaki";
-  version = "1.4.0";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "enthought";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-MEll1H7l41m8uz2/WK/Ilm7Dubg0uqYwe+ZgakO1aXQ=";
+    hash = "sha256-JQZhw0H4iSdxoyS6ODICJz1vAZsOISQitX7wTgSS1xc=";
   };
 
   propagatedBuildInputs = [
