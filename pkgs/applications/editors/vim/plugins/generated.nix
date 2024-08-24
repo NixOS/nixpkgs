@@ -2874,6 +2874,18 @@ final: prev:
     meta.homepage = "https://github.com/scottmckendry/cyberdream.nvim/";
   };
 
+  darkearth-nvim = buildVimPlugin {
+    pname = "darkearth-nvim";
+    version = "2024-07-19";
+    src = fetchFromGitHub {
+      owner = "ptdewey";
+      repo = "darkearth-nvim";
+      rev = "d53cc2384d0a84889bd44361cee33019bac02c58";
+      sha256 = "0m04m4mi8f7pzsx9d92xy20b4yw10gyqk4gmxdlr46y6byfwwlyj";
+    };
+    meta.homepage = "https://github.com/ptdewey/darkearth-nvim/";
+  };
+
   dart-vim-plugin = buildVimPlugin {
     pname = "dart-vim-plugin";
     version = "2024-07-02";
