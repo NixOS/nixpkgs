@@ -3,6 +3,7 @@
   buildPackages,
   fetchurl,
   stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "mawk -W version";
+    };
+  };
 
   meta = {
     homepage = "https://invisible-island.net/mawk/mawk.html";
