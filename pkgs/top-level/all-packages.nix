@@ -16692,10 +16692,9 @@ with pkgs;
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
 
-  luarocks-packages-updater = callPackage ../development/lua-modules/updater {
-    inherit (python3Packages) buildPythonApplication ;
+  luarocks-packages-updater = callPackage ../by-name/lu/luarocks-packages-updater/package.nix {
+    pluginupdate = ../../maintainers/scripts/pluginupdate.py;
   };
-
 
   luau = callPackage ../development/interpreters/luau { };
 
