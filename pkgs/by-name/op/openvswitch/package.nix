@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.3.0";
+  version = "3.4.0";
 
   kernel = lib.optional (_kernel != null) _kernel.dev;
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "openvswitch";
     repo = "ovs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZO5qECVpsJ4lqFbGqD4eokHzkBQ3mawDVUBNdva76lo=";
+    hash = "sha256-oe6RnSEaK/mFPzTLfsyyd7wijKbv2/tlNUlXZYrb+ko=";
   };
 
   outputs = [
@@ -50,9 +50,6 @@ stdenv.mkDerivation rec {
   patches = [
     # 8: vsctl-bashcomp - argument completion FAILED (completion.at:664)
     ./patches/disable-bash-arg-completion-test.patch
-
-    # https://github.com/openvswitch/ovs/commit/9185793e75435d890f18d391eaaeab0ade6f1415
-    ./patches/fix-python313.patch
   ];
 
   nativeBuildInputs = [
