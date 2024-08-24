@@ -27,7 +27,7 @@ let
       })
       # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
       (fetchpatch {
-        url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+        url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
         hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
       })
     ];
