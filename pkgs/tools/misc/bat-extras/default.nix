@@ -68,6 +68,11 @@ let
         echo "Couldn't find any library test suites"
         exit 1
       }
+
+      # Skip the batdiff test because it's broken
+      # https://github.com/eth-p/bat-extras/issues/126
+      sed -i '/test:version/a skip "batdiff test is broken."' test/suite/batdiff.sh
+
       ./test.sh --compiled $(printf -- "--suite %q\n" "''${!test_suites[@]}")
       runHook postCheck
     '';
