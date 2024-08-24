@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.dspam;
@@ -19,7 +16,7 @@ let
     SystemLog on
     UserLog on
 
-    ${optionalString (cfg.domainSocket != null) ''
+    ${lib.optionalString (cfg.domainSocket != null) ''
       ServerDomainSocketPath "${cfg.domainSocket}"
       ClientHost "${cfg.domainSocket}"
     ''}
@@ -35,44 +32,44 @@ in {
 
     services.dspam = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the dspam spam filter.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "dspam";
         description = "User for the dspam daemon.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "dspam";
         description = "Group for the dspam daemon.";
       };
 
-      storageDriver = mkOption {
-        type = types.str;
+      storageDriver = lib.mkOption {
+        type = lib.types.str;
         default = "hash";
         description = "Storage driver backend to use for dspam.";
       };
 
-      domainSocket = mkOption {
-        type = types.nullOr types.path;
+      domainSocket = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = defaultSock;
         description = "Path to local domain socket which is used for communication with the daemon. Set to null to disable UNIX socket.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Additional dspam configuration.";
       };
 
-      maintenanceInterval = mkOption {
-        type = types.nullOr types.str;
+      maintenanceInterval = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "If set, maintenance script will be run at specified (in systemd.timer format) interval";
       };
@@ -84,16 +81,16 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      users.users = optionalAttrs (cfg.user == "dspam") {
+      users.users = lib.optionalAttrs (cfg.user == "dspam") {
         dspam = {
           group = cfg.group;
           uid = config.ids.uids.dspam;
         };
       };
 
-      users.groups = optionalAttrs (cfg.group == "dspam") {
+      users.groups = lib.optionalAttrs (cfg.group == "dspam") {
         dspam.gid = config.ids.gids.dspam;
       };
 
@@ -111,8 +108,8 @@ in {
           ExecStart = "${dspam}/bin/dspam --daemon --nofork";
           User = cfg.user;
           Group = cfg.group;
-          RuntimeDirectory = optional (cfg.domainSocket == defaultSock) "dspam";
-          RuntimeDirectoryMode = optional (cfg.domainSocket == defaultSock) "0750";
+          RuntimeDirectory = lib.optional (cfg.domainSocket == defaultSock) "dspam";
+          RuntimeDirectoryMode = lib.optional (cfg.domainSocket == defaultSock) "0750";
           StateDirectory = "dspam";
           StateDirectoryMode = "0750";
           LogsDirectory = "dspam";
@@ -124,7 +121,7 @@ in {
       };
     }
 
-    (mkIf (cfg.maintenanceInterval != null) {
+    (lib.mkIf (cfg.maintenanceInterval != null) {
       systemd.timers.dspam-maintenance = {
         description = "Timer for dspam maintenance script";
         wantedBy = [ "timers.target" ];
