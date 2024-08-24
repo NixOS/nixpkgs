@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , graphviz
 , ensureNewerSourcesHook
+, nix-update-script
 }:
 
 maven.buildMavenPackage rec {
@@ -55,6 +56,8 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/share/java/${pname}-${version}.jar" \
       --prefix PATH : "$wrappedPath"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://schemaspy.org";
