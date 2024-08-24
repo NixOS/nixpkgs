@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2154,SC2164
+
 cargoBuildHook() {
     echo "Executing cargoBuildHook"
 
@@ -7,9 +9,10 @@ cargoBuildHook() {
     # separateDebugInfo.
     export "CARGO_PROFILE_${cargoBuildType@U}_STRIP"=false
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    if [ -n "${buildAndTestSubdir-}" ]; then
         # ensure the output doesn't end up in the subdirectory
-        export CARGO_TARGET_DIR="$(pwd)/target"
+        CARGO_TARGET_DIR="$(pwd)/target"
+        export CARGO_TARGET_DIR
 
         pushd "${buildAndTestSubdir}"
     fi
@@ -37,7 +40,7 @@ cargoBuildHook() {
     echoCmd 'cargoBuildHook flags' "${flagsArray[@]}"
     @setEnv@ cargo build "${flagsArray[@]}"
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    if [ -n "${buildAndTestSubdir-}" ]; then
         popd
     fi
 

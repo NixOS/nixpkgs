@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2154,SC2164
+
 cargoCheckHook() {
     echo "Executing cargoCheckHook"
 
