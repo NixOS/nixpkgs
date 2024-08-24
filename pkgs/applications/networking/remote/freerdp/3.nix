@@ -66,9 +66,6 @@
 , remmina
 }:
 
-let
-  cmFlag = flag: if flag then "ON" else "OFF";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
   version = "3.8.0";
@@ -171,9 +168,9 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/FreeRDP/FreeRDP/issues/8526#issuecomment-1357134746
   cmakeFlags = [
     "-Wno-dev"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
-  ] ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "DOCBOOKXSL_DIR" "${docbook-xsl-nons}/xml/xsl/docbook")
+  ] ++ lib.mapAttrsToList lib.cmakeBool {
     BUILD_TESTING = false; # false is recommended by upstream
     WITH_CAIRO = cairo != null;
     WITH_CUPS = cups != null;
@@ -192,7 +189,9 @@ stdenv.mkDerivation (finalAttrs: {
     WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
     WITH_VAAPI = false; # false is recommended by upstream
     WITH_X11 = true;
-  };
+  } ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeBool "SDL_USE_COMPILED_RESOURCES" false)
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-DTARGET_OS_IPHONE=0"
