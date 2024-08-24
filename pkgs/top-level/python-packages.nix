@@ -4653,8 +4653,6 @@ self: super: with self; {
 
   openllm = callPackage ../development/python-modules/openllm { };
 
-  openllm-client = callPackage ../development/python-modules/openllm-client { };
-
   openllm-core = callPackage ../development/python-modules/openllm-core { };
 
   openstep-parser = callPackage ../development/python-modules/openstep-parser { };
