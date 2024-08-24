@@ -99,6 +99,7 @@ mapAliases (with prev; {
   The_NERD_tree       = nerdtree;
   open-browser        = open-browser-vim;
   pathogen            = vim-pathogen;
+  peskcolor-vim       = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
   polyglot            = vim-polyglot;
   prettyprint         = vim-prettyprint;
   quickrun            = vim-quickrun;

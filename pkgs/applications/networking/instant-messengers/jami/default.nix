@@ -34,6 +34,9 @@
   webrtc-audio-processing,
   zlib,
 
+  # for dhtnet
+  expected-lite,
+
   # for client
   cmake,
   git,
@@ -65,14 +68,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20240627.0";
+  version = "20240813.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-aePF1c99ju9y7JEgC+F2BPfpSAZlLd5OI5Jm6i9VlQQ=";
+    hash = "sha256-XRWbV1s87niwNiWf2KRpV+wUH6ptw3vnVXCEwqh2r7M=";
     fetchSubmodules = true;
   };
 
@@ -128,15 +131,22 @@ stdenv.mkDerivation rec {
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2024-05-17";
+    version = "unstable-2024-07-22";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "77331098ff663a5ac54fae7d0bedafe076c575a1";
-      hash = "sha256-55LEnI1YgVujCtv1dGOFtJdvnzB2SKqwEptaHasZB7I=";
+      rev = "cfe512b0632eea046f683b22e42d01eeb943d751";
+      hash = "sha256-SGidaCi5z7hO0ePJIZIkcWAkb+cKsZTdksVS7ldpjME=";
     };
+
+    postPatch = ''
+      substituteInPlace dependencies/build.py \
+        --replace-fail \
+        "wget https://raw.githubusercontent.com/martinmoene/expected-lite/master/include/nonstd/expected.hpp -O" \
+        "cp ${expected-lite}/include/nonstd/expected.hpp"
+    '';
 
     nativeBuildInputs = [
       cmake
