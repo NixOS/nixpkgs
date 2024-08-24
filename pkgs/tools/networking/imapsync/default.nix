@@ -1,20 +1,19 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, perl
-, perlPackages
-, stdenv
+{
+  lib,
+  fetchurl,
+  makeWrapper,
+  perl,
+  perlPackages,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imapsync";
-  version = "2.229";
+  version = "2.290";
 
-  src = fetchFromGitHub {
-    owner = "imapsync";
-    repo = "imapsync";
-    rev = "imapsync-${version}";
-    sha256 = "sha256-nlNePOV3Y0atEPSRByRo3dHj/WjIaefEDeWdMKTo4gc=";
+  src = fetchurl {
+    url = "https://imapsync.lamiral.info/dist/old_releases/${finalAttrs.version}/imapsync-${finalAttrs.version}.tgz";
+    hash = "sha256-uFhTxnaUDP793isfpF/7T8d4AnXDL4uN6zU8igY+EFE=";
   };
 
   postPatch = ''
@@ -44,6 +43,7 @@ stdenv.mkDerivation rec {
     MailIMAPClient
     ModuleImplementation
     ModuleScanDeps
+    NetServer
     NTLM
     PackageStash
     PackageStashXS
@@ -67,7 +67,10 @@ stdenv.mkDerivation rec {
     mainProgram = "imapsync";
     homepage = "https://imapsync.lamiral.info/";
     license = licenses.nlpl;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [
+      pSub
+      motiejus
+    ];
     platforms = platforms.unix;
   };
-}
+})
