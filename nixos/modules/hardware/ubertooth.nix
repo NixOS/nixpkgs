@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.hardware.ubertooth;
 
@@ -10,17 +7,17 @@ let
   };
 in {
   options.hardware.ubertooth = {
-    enable = mkEnableOption "Ubertooth software and its udev rules";
+    enable = lib.mkEnableOption "Ubertooth software and its udev rules";
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "ubertooth";
       example = "wheel";
       description = "Group for Ubertooth's udev rules.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ ubertoothPkg ];
 
     services.udev.packages = [ ubertoothPkg ];
