@@ -52,9 +52,9 @@ let
 
   flashbackEnabled = cfg.flashback.enableMetacity || lib.length cfg.flashback.customSessions > 0;
   flashbackWms = lib.optional cfg.flashback.enableMetacity {
-    wmName = "metacity";
+    wmName = "pkgs.metacity";
     wmLabel = "Metacity";
-    wmCommand = "${pkgs.gnome.metacity}/bin/metacity";
+    wmCommand = "${pkgs.metacity}/bin/metacity";
     enableGnomePanel = true;
   } ++ cfg.flashback.customSessions;
 
@@ -266,7 +266,6 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
-      services.gnome.gnome-online-miners.enable = true;
       services.gnome.tracker-miners.enable = mkDefault true;
       services.gnome.tracker.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;
@@ -313,7 +312,7 @@ in
             pkgs.gnome.gnome-shell
           ];
           optionalPackages = [
-            pkgs.gnome.gnome-shell-extensions
+            pkgs.gnome-shell-extensions
           ];
         in
         mandatoryPackages
@@ -375,11 +374,11 @@ in
           optionalPackages = with pkgs.gnome; [
             pkgs.adwaita-icon-theme
             nixos-background-info
-            gnome-backgrounds
+            pkgs.gnome-backgrounds
             gnome-bluetooth
-            gnome-color-manager
+            pkgs.gnome-color-manager
             gnome-control-center
-            gnome-shell-extensions
+            pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs
             pkgs.orca
@@ -396,7 +395,6 @@ in
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
     (lib.mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
-        with pkgs.gnome;
         utils.removePackagesByName
           ([
             pkgs.baobab
@@ -404,16 +402,16 @@ in
             pkgs.gnome-text-editor
             pkgs.gnome-calculator
             pkgs.gnome-calendar
-            gnome-characters
-            gnome-clocks
+            pkgs.gnome-characters
+            pkgs.gnome-clocks
             pkgs.gnome-console
-            gnome-contacts
+            pkgs.gnome-contacts
             pkgs.gnome-font-viewer
-            gnome-logs
-            gnome-maps
-            gnome-music
+            pkgs.gnome-logs
+            pkgs.gnome-maps
+            pkgs.gnome-music
             pkgs.gnome-system-monitor
-            gnome-weather
+            pkgs.gnome-weather
             pkgs.loupe
             pkgs.nautilus
             pkgs.gnome-connections
@@ -424,7 +422,7 @@ in
           ] ++ lib.optionals config.services.flatpak.enable [
             # Since PackageKit Nix support is not there yet,
             # only install gnome-software if flatpak is enabled.
-            gnome-software
+            pkgs.gnome-software
           ])
           config.environment.gnome.excludePackages;
 
@@ -456,27 +454,27 @@ in
     })
 
     (lib.mkIf serviceCfg.games.enable {
-      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
-        aisleriot
-        atomix
-        five-or-more
-        four-in-a-row
+      environment.systemPackages = utils.removePackagesByName [
+        pkgs.aisleriot
+        pkgs.atomix
+        pkgs.five-or-more
+        pkgs.four-in-a-row
         pkgs.gnome-2048
-        gnome-chess
-        gnome-klotski
-        gnome-mahjongg
-        gnome-mines
-        gnome-nibbles
-        gnome-robots
-        gnome-sudoku
-        gnome-taquin
-        gnome-tetravex
-        hitori
-        iagno
-        lightsoff
-        quadrapassel
-        swell-foop
-        tali
+        pkgs.gnome-chess
+        pkgs.gnome-klotski
+        pkgs.gnome-mahjongg
+        pkgs.gnome-mines
+        pkgs.gnome-nibbles
+        pkgs.gnome-robots
+        pkgs.gnome-sudoku
+        pkgs.gnome-taquin
+        pkgs.gnome-tetravex
+        pkgs.hitori
+        pkgs.iagno
+        pkgs.lightsoff
+        pkgs.quadrapassel
+        pkgs.swell-foop
+        pkgs.tali
       ] config.environment.gnome.excludePackages;
     })
 
@@ -490,7 +488,7 @@ in
         # it doesn't function well enough to be included
         # in default configurations.
         # https://github.com/NixOS/nixpkgs/issues/60908
-        /* gnome-boxes */
+        /* pkgs.gnome-boxes */
       ] config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;

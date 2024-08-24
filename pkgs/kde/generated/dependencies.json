@@ -618,10 +618,6 @@
     "croutons": [
       "extra-cmake-modules"
     ],
-    "crow-translate": [
-      "extra-cmake-modules",
-      "kwayland"
-    ],
     "daykountdown": [
       "extra-cmake-modules",
       "kcoreaddons",
@@ -6238,5 +6234,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "65b48b30"
+  "version": "55fdd899"
 }

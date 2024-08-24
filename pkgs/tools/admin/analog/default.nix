@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "analog";
-  version = "6.0.17";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "c-amie";
     repo = "analog-ce";
     rev = version;
-    sha256 = "sha256-89nNkIUKzlcKKy0TfthA9T27A446Fqv9hYllGjYkDP4=";
+    sha256 = "sha256-NCturEibnpl6+paUZezksHzP33WtAzfIolvBLeEHXjY=";
   };
 
   postPatch = ''
