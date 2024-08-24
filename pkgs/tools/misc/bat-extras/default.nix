@@ -28,13 +28,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "2024.02.12";
+    version = "2024.07.10";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = "bat-extras";
       rev    = "v${version}";
-      hash   = "sha256-EPDGQkwwxYFTJPJtwSkVrpBf27+VlMd/nqEkJupHlyA=";
+      hash   = "sha256-6IRAKSy5f/WcQZBcJKVSweTjHLznzdxhsyx074bXnUQ=";
       fetchSubmodules = true;
     };
 
@@ -68,6 +68,11 @@ let
         echo "Couldn't find any library test suites"
         exit 1
       }
+
+      # Skip the batdiff test because it's broken
+      # https://github.com/eth-p/bat-extras/issues/126
+      sed -i '/test:version/a skip "batdiff test is broken."' test/suite/batdiff.sh
+
       ./test.sh --compiled $(printf -- "--suite %q\n" "''${!test_suites[@]}")
       runHook postCheck
     '';
