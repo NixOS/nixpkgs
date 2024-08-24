@@ -60,6 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    echo "Removing non-deterministic files"
+
+    rm -r $(find -type d -name .turbo)
+    rm node_modules/.modules.yaml
+    rm packages/nodes-base/dist/types/nodes.json
+
+    echo "Removed non-deterministic files"
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -71,9 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  # makes libmongocrypt bindings not look for static libraries in completely wrong places
-  BUILD_TYPE = "dynamic";
 
   passthru = {
     tests = nixosTests.n8n;
