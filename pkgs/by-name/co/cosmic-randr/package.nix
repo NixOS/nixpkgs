@@ -25,10 +25,6 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
   nativeBuildInputs = [ just pkg-config ];
   buildInputs = [ wayland ];
 
