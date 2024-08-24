@@ -13,20 +13,20 @@
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
   version = "0.4.47";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
-    repo = pname;
+    repo = "scikit-hep-testdata";
     rev = "refs/tags/v${version}";
     hash = "sha256-YCzqAe+TVNbPrHPxD/OjxkjmYCb5pZO0+l68xUJp72w=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     requests
   ] ++ lib.optionals (!pythonAtLeast "3.9") [ importlib-resources ];
