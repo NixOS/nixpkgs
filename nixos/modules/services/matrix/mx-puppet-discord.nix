@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   dataDir = "/var/lib/mx-puppet-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
@@ -12,13 +9,13 @@ let
 in {
   options = {
     services.mx-puppet-discord = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         mx-puppet-discord is a discord puppeting bridge for matrix.
         It handles bridging private and group DMs, as well as Guilds (servers)
       '';
 
-      settings = mkOption rec {
-        apply = recursiveUpdate default;
+      settings = lib.mkOption rec {
+        apply = lib.recursiveUpdate default;
         inherit (settingsFormat) type;
         default = {
           bridge.port = 8434;
@@ -45,7 +42,7 @@ in {
             lineDateFormat = "MMM-D HH:mm:ss.SSS";
           };
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             bridge = {
               bindAddress = "localhost";
@@ -64,11 +61,11 @@ in {
           sample.config.yaml](https://github.com/matrix-discord/mx-puppet-discord/blob/master/sample.config.yaml).
         '';
       };
-      serviceDependencies = mkOption {
-        type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
-        defaultText = literalExpression ''
-          optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+      serviceDependencies = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
+        defaultText = lib.literalExpression ''
+          lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         '';
         description = ''
           List of Systemd services to require and wait for when starting the application service.
@@ -77,7 +74,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.mx-puppet-discord = {
       description = "Matrix to Discord puppeting bridge";
 
@@ -118,5 +115,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ govanify ];
+  meta.maintainers = with lib.maintainers; [ govanify ];
 }
