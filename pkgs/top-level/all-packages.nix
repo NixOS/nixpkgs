@@ -33351,8 +33351,6 @@ with pkgs;
 
   tart = callPackage ../applications/virtualization/tart { };
 
-  viber = callPackage ../applications/networking/instant-messengers/viber { };
-
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
   sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
