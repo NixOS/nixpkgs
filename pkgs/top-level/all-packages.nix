@@ -29199,6 +29199,8 @@ with pkgs;
 
   canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
 
+  caprine = callPackage ../applications/networking/instant-messengers/caprine { };
+
   caprine-bin = callPackage ../applications/networking/instant-messengers/caprine-bin { };
 
   carddav-util = callPackage ../tools/networking/carddav-util { };
