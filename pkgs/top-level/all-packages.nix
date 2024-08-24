@@ -34857,8 +34857,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   };
 
-  youki = callPackage ../applications/virtualization/youki { };
-
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
     ffmpegSupport = false;
