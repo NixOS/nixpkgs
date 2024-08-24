@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
   in runCommand "${src-tarball.name}-unpacked" {} ''
     gunzip -ck ${src-tarball} | tar -xvf-
     mv rcu $out
+    ln -s ${src-tarball} $out/src
   '';
 
   patches = [
