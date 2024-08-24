@@ -30,6 +30,11 @@ stdenv.mkDerivation {
     hash = "sha256-+yWVlGeUGSOK3YMHEsrpNGWR/YqWWulSJDnwsNgXW7A=";
   };
 
+  postPatch = ''
+    substituteInPlace cmake/FindBotan2.cmake \
+      --replace-fail Botan2_LDFLAGS_OTHER Botan2_LDFLAGS
+  '';
+
   nativeBuildInputs = [
     cmake
     qttools
