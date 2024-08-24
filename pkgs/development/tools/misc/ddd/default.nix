@@ -1,21 +1,13 @@
-{lib, stdenv, fetchurl, motif, ncurses, libX11, libXt}:
+{lib, stdenv, fetchurl, motif, ncurses, libX11, libXt, libXft, libXaw}:
 
 stdenv.mkDerivation rec {
   pname = "ddd";
-  version = "3.3.12";
+  version = "3.4.1";
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0p5nx387857w3v2jbgvps2p6mlm0chajcdw5sfrddcglsxkwvmis";
+    hash = "sha256-uHUXpsP5YRVmNH4oOiz5Mfo2mRm1U1NqIjXmNAL07ok=";
   };
-  buildInputs = [motif ncurses libX11 libXt];
-  configureFlags = [ "--with-x" ];
-
-  patches = [
-    # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=504868
-    ./gcc44.patch
-  ];
-
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  buildInputs = [motif ncurses libX11 libXt libXft libXaw];
 
   postInstall = ''
     install -D icons/ddd.xpm $out/share/pixmaps/ddd.xpm
