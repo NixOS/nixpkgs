@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, gitUpdater }:
 
 buildGoModule rec {
   pname = "tkey-ssh-agent";
@@ -16,6 +16,8 @@ buildGoModule rec {
   subPackages = [
     "cmd/tkey-ssh-agent"
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "SSH Agent for TKey, the flexible open hardware/software USB security key";
