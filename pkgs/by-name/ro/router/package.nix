@@ -7,6 +7,9 @@
   pkg-config,
   protobuf,
   elfutils,
+  nix-update-script,
+  testers,
+  router,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,6 +42,11 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [
     "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = router; };
+  };
 
   meta = with lib; {
     description = "Configurable, high-performance routing runtime for Apollo Federation";
