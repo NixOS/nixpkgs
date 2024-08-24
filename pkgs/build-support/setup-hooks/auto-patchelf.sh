@@ -53,19 +53,11 @@ autoPatchelf() {
         esac
     done
 
-    if [ -n "$__structuredAttrs" ]; then
-        local ignoreMissingDepsArray=( "${autoPatchelfIgnoreMissingDeps[@]}" )
-        local appendRunpathsArray=( "${appendRunpaths[@]}" )
-        local runtimeDependenciesArray=( "${runtimeDependencies[@]}" )
-        local patchelfFlagsArray=( "${patchelfFlags[@]}" )
-        local autoPatchelfFlagsArray=( "${autoPatchelfFlags[@]}" )
-    else
-        readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
-        local appendRunpathsArray=($appendRunpaths)
-        local runtimeDependenciesArray=($runtimeDependencies)
-        local patchelfFlagsArray=($patchelfFlags)
-        local autoPatchelfFlagsArray=($autoPatchelfFlags)
-    fi
+    concatTo ignoreMissingDepsArray autoPatchelfIgnoreMissingDeps
+    concatTo appendRunpathsArray appendRunpaths
+    concatTo runtimeDependenciesArray runtimeDependencies
+    concatTo patchelfFlagsArray patchelfFlags
+    concatTo autoPatchelfFlagsArray autoPatchelfFlags
 
     # Check if ignoreMissingDepsArray contains "1" and if so, replace it with
     # "*", printing a deprecation warning.
