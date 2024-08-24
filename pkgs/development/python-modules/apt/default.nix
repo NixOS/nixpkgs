@@ -4,7 +4,7 @@
   setuptools,
   wheel,
   fetchFromGitLab,
-  apt,
+  pkgs,
   dpkg,
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    apt
+    pkgs.apt
   ];
 
   nativeBuildInputs = [
