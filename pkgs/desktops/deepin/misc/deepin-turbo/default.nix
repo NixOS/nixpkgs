@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  dtkwidget,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +25,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    dtkwidget
-  ];
+  buildInputs = [ dtkwidget ];
 
   postPatch = ''
     substituteInPlace src/{booster-dtkwidget/CMakeLists.txt,booster-desktop/{CMakeLists.txt,desktop.conf},booster-generic/CMakeLists.txt} --replace "/usr" "$out"

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6Packages
-, dtk6core
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6Packages,
+  dtk6core,
 }:
 
 stdenv.mkDerivation rec {

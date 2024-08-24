@@ -1,17 +1,18 @@
-{ lib
-, runCommand
-, glib
-, gtk3
-, dde-grand-search
-, startdde
-, dde-session-shell
-, dde-file-manager
-, deepin-desktop-schemas
-, deepin-movie-reborn
-, deepin-system-monitor
-, gsettings-desktop-schemas
-, extraGSettingsOverrides ? ""
-, extraGSettingsOverridePackages ? [ ]
+{
+  lib,
+  runCommand,
+  glib,
+  gtk3,
+  dde-grand-search,
+  startdde,
+  dde-session-shell,
+  dde-file-manager,
+  deepin-desktop-schemas,
+  deepin-movie-reborn,
+  deepin-system-monitor,
+  gsettings-desktop-schemas,
+  extraGSettingsOverrides ? "",
+  extraGSettingsOverridePackages ? [ ],
 }:
 
 let

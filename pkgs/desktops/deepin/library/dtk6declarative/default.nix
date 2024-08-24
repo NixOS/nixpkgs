@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, dtk6gui
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  dtk6gui,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
-    dtk6gui
-  ] ++ (with qt6Packages ; [
-    qtbase
-    qtdeclarative
-    qtshadertools
-    qt5compat
-  ]);
+  propagatedBuildInputs =
+    [ dtk6gui ]
+    ++ (with qt6Packages; [
+      qtbase
+      qtdeclarative
+      qtshadertools
+      qt5compat
+    ]);
 
   cmakeFlags = [
     "-DDTK_VERSION=${finalAttrs.version}"
@@ -57,7 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QML2_IMPORT_PATH=${lib.getBin qt6Packages.qtdeclarative}/${qt6Packages.qtbase.qtQmlPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   meta = {
     description = "Widget development toolkit based on QtQuick/QtQml";

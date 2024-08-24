@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nixosTests
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, cmake
-, qtbase
-, qtsvg
-, qttools
-, qtx11extras
-, pkg-config
-, wrapQtAppsHook
-, libsecret
-, chrpath
-, lxqt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  cmake,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  pkg-config,
+  wrapQtAppsHook,
+  libsecret,
+  chrpath,
+  lxqt,
 }:
 
 stdenv.mkDerivation rec {
