@@ -6630,6 +6630,8 @@ self: super: with self; {
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
+  kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
+
   keba-kecontact = callPackage ../development/python-modules/keba-kecontact { };
 
   keep = callPackage ../development/python-modules/keep { };
