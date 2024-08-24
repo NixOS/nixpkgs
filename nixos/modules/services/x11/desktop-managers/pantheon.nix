@@ -160,6 +160,7 @@ in
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.libinput.enable = mkDefault true;
+      services.switcherooControl.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
       services.zeitgeist.enable = mkDefault true;
       services.geoclue2.enable = mkDefault true;
@@ -193,6 +194,7 @@ in
 
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [
+        elementary-bluetooth-daemon
         elementary-session-settings
         elementary-settings-daemon
         gala
