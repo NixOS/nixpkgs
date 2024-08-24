@@ -30,7 +30,7 @@ in buildNpmPackage rec {
   inherit pname version src;
 
   postPatch = ''
-    substituteInPlace package.json --replace 'is-ci ||' 'true ||'
+    substituteInPlace package.json --replace-fail 'is-ci ||' 'true ||'
     rm -rf site
     ln -s ${site} site
   '';
