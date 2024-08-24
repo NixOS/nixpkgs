@@ -56,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     attrs
     beautifulsoup4
     configargparse
+    distutils
     keyring
     pyasn1
     requests
