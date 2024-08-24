@@ -13,6 +13,7 @@
   libmongocrypt,
   postgresql,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = nixosTests.n8n;
+    updateScript = nix-update-script { };
   };
 
   dontStrip = true;
