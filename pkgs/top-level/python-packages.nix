@@ -4651,9 +4651,7 @@ self: super: with self; {
 
   oelint-parser = callPackage ../development/python-modules/oelint-parser { };
 
-  openllm = callPackage ../development/python-modules/openllm {
-    triton = self.triton-cuda;
-  };
+  openllm = callPackage ../development/python-modules/openllm { };
 
   openllm-client = callPackage ../development/python-modules/openllm-client { };
 
