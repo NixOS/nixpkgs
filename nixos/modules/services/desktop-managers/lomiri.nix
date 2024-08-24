@@ -24,6 +24,7 @@ in {
         lomiri-calculator-app
         lomiri-camera-app
         lomiri-clock-app
+        lomiri-docviewer-app
         lomiri-download-manager
         lomiri-filemanager-app
         lomiri-gallery-app
