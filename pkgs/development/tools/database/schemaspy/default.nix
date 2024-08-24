@@ -44,6 +44,6 @@ maven.buildMavenPackage rec {
     description = "Document your database simply and easily";
     mainProgram = "schemaspy";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [ jraygauthier anthonyroussel ];
   };
 }
