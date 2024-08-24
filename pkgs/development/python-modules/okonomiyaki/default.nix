@@ -1,39 +1,62 @@
 {
-  buildPythonPackage,
-  stdenv,
-  fetchFromGitHub,
   lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
   attrs,
   distro,
   jsonschema,
-  six,
   zipfile2,
   hypothesis,
   mock,
   packaging,
   testfixtures,
   pythonAtLeast,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "okonomiyaki";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "enthought";
-    repo = pname;
+    repo = "okonomiyaki";
     rev = "refs/tags/${version}";
     hash = "sha256-JQZhw0H4iSdxoyS6ODICJz1vAZsOISQitX7wTgSS1xc=";
   };
 
-  propagatedBuildInputs = [
-    distro
-    attrs
-    jsonschema
-    six
-    zipfile2
-  ];
+  build-system = [ setuptools ];
+
+  optional-dependencies = {
+    all = [
+      attrs
+      distro
+      jsonschema
+      zipfile2
+    ];
+    platforms = [
+      attrs
+      distro
+    ];
+    formats = [
+      attrs
+      distro
+      jsonschema
+      zipfile2
+    ];
+  };
+
+  nativeCheckInputs = [
+    hypothesis
+    mock
+    packaging
+    testfixtures
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck =
     ''
@@ -44,13 +67,6 @@ buildPythonPackage rec {
       substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
         --replace 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
     '';
-
-  checkInputs = [
-    hypothesis
-    mock
-    packaging
-    testfixtures
-  ];
 
   pythonImportsCheck = [ "okonomiyaki" ];
 
