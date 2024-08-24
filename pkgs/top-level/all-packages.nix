@@ -11113,8 +11113,6 @@ with pkgs;
   openvswitch-lts = callPackage ../by-name/op/openvswitch/lts.nix { };
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
-  ovn-lts = callPackage ../by-name/ov/ovn/lts.nix { };
-
   optifinePackages = callPackage ../tools/games/minecraft/optifine { };
 
   optifine = optifinePackages.optifine-latest;
