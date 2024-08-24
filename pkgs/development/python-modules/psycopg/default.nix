@@ -74,9 +74,14 @@ let
 
     nativeBuildInputs = [
       cython
+      # needed to find pg_config with strictDeps
       postgresql
       setuptools
       tomli
+    ];
+
+    buildInputs = [
+      postgresql
     ];
 
     # tested in psycopg
