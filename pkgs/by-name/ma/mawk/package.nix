@@ -1,6 +1,7 @@
 {
   lib,
   buildPackages,
+  directoryListingUpdater,
   fetchurl,
   stdenv,
   testers,
@@ -24,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "mawk -W version";
+    };
+    updateScript = directoryListingUpdater {
+      inherit (finalAttrs) pname version;
+      url = "https://invisible-island.net/archives/mawk/";
     };
   };
 
