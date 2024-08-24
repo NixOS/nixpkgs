@@ -354,6 +354,7 @@ mapAliases ({
   openai-triton-no-cuda = triton-no-cuda; # added 2024-07-18
   openapi-schema-pydantic = throw "openapi-schema-pydantic has been removed, since it is no longer maintained"; # added 2023-10-30
   opencv3 = throw "opencv3 has been removed as it is obsolete"; # added 2023-10-12
+  openllm = throw "openllm has moved to pkgs.openllm"; # added 2021-12-31
   openllm-client = throw "openllm-client has been removed, since it is abandoned due to a change in philosophy"; # added 2024-08-24
   openllm-core = throw "openllm-core has been removed, since it is abandoned due to a change in philosophy"; # added 2024-08-24
   opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16

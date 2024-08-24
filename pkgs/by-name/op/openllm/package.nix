@@ -1,29 +1,28 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  pythonOlder,
-  accelerate,
-  bentoml,
-  dulwich,
-  nvidia-ml-py,
-  openai,
-  psutil,
-  pyaml,
-  questionary,
-  tabulate,
-  typer,
-  uv,
+  python3,
 }:
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = _: super: {
+      cattrs = super.cattrs.overridePythonAttrs (oldAttrs: rec {
+        version = "23.1.2";
+        build-system = [ super.poetry-core ];
+        src = oldAttrs.src.override {
+          rev = "refs/tags/v${version}";
+          hash = "sha256-YO4Clbo5fmXbysxwwM2qCHJwO5KwDC05VctRVFruJcw=";
+        };
+      });
+    };
+  };
+in
 
-buildPythonPackage rec {
+python.pkgs.buildPythonApplication rec {
   pname = "openllm";
   version = "0.6.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bentoml";
@@ -39,12 +38,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "openai" ];
 
-  build-system = [
+  build-system = with python.pkgs; [
     hatch-vcs
     hatchling
   ];
 
-  dependencies = [
+  dependencies = with python.pkgs; [
     accelerate
     bentoml
     dulwich
