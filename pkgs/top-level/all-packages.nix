@@ -28438,8 +28438,6 @@ with pkgs;
 
   hasklig = callPackage ../data/fonts/hasklig { };
 
-  maligned = callPackage ../development/tools/maligned { };
-
   inter = callPackage ../data/fonts/inter { };
 
   open-fonts = callPackage ../data/fonts/open-fonts { };
