@@ -1,6 +1,9 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, gitUpdater
+, testers
+, graphqurl
 }:
 
 buildNpmPackage rec {
@@ -17,6 +20,15 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-17eRYr0vgnq7eFtlYY2CwvluwhbXWClL3onTNBkDF0c=";
 
   dontNpmBuild = true;
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      graphqurl-version = testers.testVersion {
+        package = graphqurl;
+      };
+    };
+  };
 
   meta = {
     description = "CLI and JS library for making GraphQL queries";
