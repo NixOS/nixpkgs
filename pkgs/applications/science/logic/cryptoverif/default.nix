@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml }:
+{ lib, stdenv, fetchurl, ocaml, writeScript }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptoverif";
@@ -40,10 +40,22 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = writeScript "update-cryptoverif" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl pcre2
+
+    set -eu -o pipefail
+
+    version="$(curl -s https://bblanche.gitlabpages.inria.fr/CryptoVerif/ |
+      pcre2grep -o1 '\bCryptoVerif version ([.[:alnum:]]+),')"
+
+    update-source-version "$UPDATE_NIX_ATTR_PATH" "$version"
+  '';
+
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
     mainProgram = "cryptoverif";
-    homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
+    homepage    = "https://bblanche.gitlabpages.inria.fr/CryptoVerif/";
     license     = lib.licenses.cecill-b;
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
