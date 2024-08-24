@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "man"
     "gas"
+    "libtool"
   ];
 
   src = fetchFromGitHub {
@@ -149,6 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
     for arch in arm i386 x86_64; do
       mv "$gas/libexec/as/$arch/as-$arch" "$gas/libexec/as/$arch/as"
     done
+
+    # Move libtool to its own output to allow packages to add it without pulling in all of cctools
+    moveToOutput bin/${targetPrefix}libtool "$libtool"
+    ln -s "$libtool/bin/${targetPrefix}libtool" "$out/bin/${targetPrefix}libtool"
   '';
 
   __structuredAttrs = true;
