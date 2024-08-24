@@ -373,7 +373,7 @@ let
       echo "$options" >> $out
     '';
 
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 in
 
 
@@ -643,9 +643,9 @@ in
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
+      services = [ config.systemd.services.httpd ] ++ lib.optional (vhostCertNames != []) config.systemd.services.httpd-config-reload;
     }) vhostCertNames;
 
     warnings =
@@ -795,7 +795,7 @@ in
     systemd.services.httpd-config-reload = let
       sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
       sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
-    in mkIf (sslServices != []) {
+    in mkIf (vhostCertNames != []) {
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
