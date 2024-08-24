@@ -324,6 +324,7 @@ let
       '';
       license = licenses.gpl2Only;
       maintainers = with maintainers; [ Anton-Latukha wmertens ];
+      mainProgram = "HandBrakeCLI";
       platforms = with platforms; unix;
       broken = stdenv.isDarwin;  # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
     };
