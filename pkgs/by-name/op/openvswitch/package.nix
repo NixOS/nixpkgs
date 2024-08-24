@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoconf,
   automake,
   installShellFiles,
@@ -35,9 +35,11 @@ stdenv.mkDerivation rec {
 
   kernel = lib.optional (_kernel != null) _kernel.dev;
 
-  src = fetchurl {
-    url = "https://www.openvswitch.org/releases/openvswitch-${version}.tar.gz";
-    hash = "sha256-Gvy4H7lHwL6IWGaZXWwIjmHfQ1YRFXiSBqKzP3vBsF8=";
+  src = fetchFromGitHub {
+    owner = "openvswitch";
+    repo = "ovs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZO5qECVpsJ4lqFbGqD4eokHzkBQ3mawDVUBNdva76lo=";
   };
 
   outputs = [
