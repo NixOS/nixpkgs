@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pulumi-aws";
   # Version is independant of pulumi's.
-  version = "6.49.0";
+  version = "6.49.1";
 
   pyproject = true;
   build-system = [ setuptools ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pulumi";
     repo = "pulumi-aws";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xsQVPJgO4c42GXgVGkCnZT1Jhve1InEXrt1Fpwc4UX4=";
+    hash = "sha256-THgLOVCr+LWNO1SCGUrh8L/I75d2RSNw84FcovCSsBM=";
   };
 
   sourceRoot = "${src.name}/sdk/python";

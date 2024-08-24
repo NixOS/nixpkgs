@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
@@ -38,8 +37,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pytouchlinesl" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A Python API client for Roth's TouchlineSL API";
