@@ -43,15 +43,17 @@
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "21.8.0.11";
+  version = "23.2.0.3";
 
   src = fetchurl {
-    # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
-    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    # Taking Internet Archive snapshot of a specific version to avoid breakage
+    # on new versions
+    url = "https://web.archive.org/web/20240824071651/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
     hash = "sha256-9WHiI2WlsgEhCPkrQoAunmF6lSb2n5RgQJ2+sdnSShM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ dpkg ];
 
   dontUnpack = true;
