@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "jaraco-path";
-  version = "3.7.0";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.path";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P22sA138guKTlOxSxUJ0mU41W16984yYlkZea06juOM=";
+    hash = "sha256-i6FPM4aPfpwLdde1COXZNoKel3sRK8PXnkzy50XvVdw=";
   };
 
   build-system = [ setuptools-scm ];
