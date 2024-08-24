@@ -16874,6 +16874,12 @@
     githubId = 315234;
     name = "Serge Bazanski";
   };
+  qaidvoid = {
+    email = "contact@qaidvoid.dev";
+    github = "qaidvoid";
+    githubId = 12017109;
+    name = "Rabindra Dhakal";
+  };
   qbit = {
     name = "Aaron Bieber";
     email = "aaron@bolddaemon.com";
