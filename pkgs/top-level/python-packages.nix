@@ -719,6 +719,10 @@ self: super: with self; {
 
   apsw = callPackage ../development/python-modules/apsw { };
 
+  apt = callPackage ../development/python-modules/apt {
+     apt = super.pkgs.apt;
+  };
+
   apycula = callPackage ../development/python-modules/apycula { };
 
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
