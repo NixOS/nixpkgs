@@ -1,25 +1,31 @@
-{ lib, stdenv, fetchurl, buildPackages }:
+{
+  lib,
+  buildPackages,
+  fetchurl,
+  stdenv,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mawk";
   version = "1.3.4-20240622";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/mawk/mawk-${version}.tgz"
-      "https://invisible-mirror.net/archives/mawk/mawk-${version}.tgz"
+      "https://invisible-mirror.net/archives/mawk/mawk-${finalAttrs.version}.tgz"
+      "ftp://ftp.invisible-island.net/mawk/mawk-${finalAttrs.version}.tgz"
     ];
-    sha256 = "sha256-TpF+h6ep+692mVeEpLC13A3ZVLl30JgwMPePagexp2U=";
+    hash = "sha256-TpF+h6ep+692mVeEpLC13A3ZVLl30JgwMPePagexp2U=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  meta = with lib; {
-    description = "Interpreter for the AWK Programming Language";
-    mainProgram = "mawk";
+  meta = {
     homepage = "https://invisible-island.net/mawk/mawk.html";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = with platforms; unix;
+    changelog = "https://invisible-island.net/mawk/CHANGES";
+    description = "Interpreter for the AWK Programming Language";
+    license = lib.licenses.gpl2Only;
+    mainProgram = "mawk";
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.unix;
   };
-}
+})
