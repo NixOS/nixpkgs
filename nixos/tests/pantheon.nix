@@ -10,6 +10,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
   {
     imports = [ ./common/user-account.nix ];
 
+    # Workaround ".gala-wrapped invoked oom-killer"
+    virtualisation.memorySize = 2047;
+
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
