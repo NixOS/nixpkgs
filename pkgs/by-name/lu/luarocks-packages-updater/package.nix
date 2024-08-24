@@ -1,15 +1,14 @@
-{ buildPythonApplication
-, nix
+{ nix
 , makeWrapper
 , python3Packages
 , lib
-# , nix-prefetch-git
 , nix-prefetch-scripts
 , luarocks-nix
 , lua5_1
 , lua5_2
 , lua5_3
 , lua5_4
+, pluginupdate
 }:
 let
 
@@ -25,7 +24,7 @@ let
   ];
 
 in
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "luarocks-packages-updater";
   version = "0.1";
 
@@ -45,7 +44,7 @@ buildPythonApplication {
     ''
     mkdir -p $out/bin $out/lib
     cp ${./updater.py} $out/bin/luarocks-packages-updater
-    cp ${../../../../maintainers/scripts/pluginupdate.py} $out/lib/pluginupdate.py
+    cp ${pluginupdate} $out/lib/pluginupdate.py
 
     # wrap python scripts
     makeWrapperArgs+=( --prefix PATH : "${path}" --prefix PYTHONPATH : "$out/lib" \
