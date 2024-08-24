@@ -6,7 +6,7 @@
   blueprint-compiler,
   desktop-file-utils,
   glib,
-  gnome,
+  gdm,
   libadwaita,
   meson,
   ninja,
@@ -63,6 +63,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "gdm-settings";
-    inherit (gnome.gdm.meta) platforms;
+    inherit (gdm.meta) platforms;
   };
 }
