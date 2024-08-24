@@ -7,6 +7,7 @@
 
 let
   inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (lib.attrsets) mapAttrs' filterAttrs;
   inherit (builtins) isString match typeOf;
 
 in
@@ -289,7 +290,8 @@ rec {
   /**
     Mapping of SPDX ID to the attributes in lib.licenses.
 
-    For SPDX IDs, see https://spdx.org/licenses
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
 
     # Examples
     :::{.example}
@@ -305,18 +307,19 @@ rec {
     :::
   */
   licensesSpdx =
-    lib.attrsets.mapAttrs'
+    mapAttrs'
     (_key: license: {
       name = license.spdxId;
       value = license;
     })
-    (lib.attrsets.filterAttrs (_key: license: license ? spdxId) lib.licenses);
+    (filterAttrs (_key: license: license ? spdxId) lib.licenses);
 
   /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
     or warn and fallback to `{ shortName = <license string>; }`.
 
-    For SPDX IDs, see https://spdx.org/licenses
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
 
     # Type
 
@@ -351,7 +354,8 @@ rec {
     Get the corresponding attribute in lib.licenses from the SPDX ID
     or fallback to the given default value.
 
-    For SPDX IDs, see https://spdx.org/licenses
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
 
     # Inputs
 
