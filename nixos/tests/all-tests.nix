@@ -545,6 +545,7 @@ in {
   lomiri-calculator-app = runTest ./lomiri-calculator-app.nix;
   lomiri-camera-app = runTest ./lomiri-camera-app.nix;
   lomiri-clock-app = runTest ./lomiri-clock-app.nix;
+  lomiri-docviewer-app = runTest ./lomiri-docviewer-app.nix;
   lomiri-filemanager-app = runTest ./lomiri-filemanager-app.nix;
   lomiri-gallery-app = runTest ./lomiri-gallery-app.nix;
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};

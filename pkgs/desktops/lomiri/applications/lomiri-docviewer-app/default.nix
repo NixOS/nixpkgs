@@ -5,6 +5,7 @@
   fetchpatch,
   fetchpatch2,
   gitUpdater,
+  nixosTests,
   cmake,
   content-hub,
   gettext,
@@ -140,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-docviewer-app;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
