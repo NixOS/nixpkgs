@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nchat";
-  version = "3.67";
+  version = "5.1.29";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     rev = "v${version}";
-    hash = "sha256-PhvZejtSoDptzoMP5uIe6T0Ws/bQQXVuYH9uoZo3JsI=";
+    hash = "sha256-oBiByWR7/0vJ2DM87KxLR80xPbex65jyh8rIRaxJSXc=";
   };
 
   postPatch = ''
