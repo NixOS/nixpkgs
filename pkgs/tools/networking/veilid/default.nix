@@ -7,6 +7,8 @@
 , protobuf
 , capnproto
 , cmake
+, testers
+, veilid
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,6 +53,12 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     moveToOutput "lib" "$lib"
   '';
+
+  passthru.tests = {
+    veilid-version = testers.testVersion {
+      package = veilid;
+    };
+  };
 
   meta = with lib; {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
