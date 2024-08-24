@@ -55,8 +55,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "okonomiyaki" ];
 
   meta = with lib; {
-    homepage = "https://github.com/enthought/okonomiyaki";
     description = "Experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
+    homepage = "https://github.com/enthought/okonomiyaki";
+    changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${version}";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
     broken = pythonAtLeast "3.12"; # multiple tests are failing
