@@ -1,29 +1,39 @@
 { lib
 , stdenv
-, fetchurl
-, pkg-config
-, intltool
+, fetchFromGitHub
+, autoreconfHook
 , gtk3
+, intltool
 , libintl
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxtask";
   version = "0.1.10";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
-    sha256 = "0b2fxg8jjjpk219gh7qa18g45365598nd2bq7rrq0bdvqjdxy5i2";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "lxtask";
+    rev = version;
+    hash = "sha256-8NCtcEioyaRs4bTWjv0NLu6+kgP/Z68baV2v+oW9hdo=";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+    pkg-config
+  ];
 
-  buildInputs = [ gtk3 libintl ];
+  buildInputs = [
+    gtk3
+    libintl
+  ];
 
   configureFlags = [ "--enable-gtk3" ];
 
   meta = with lib; {
-    homepage = "https://wiki.lxde.org/en/LXTask";
+    homepage = "http://lxde.sourceforge.net/";
     description = "Lightweight and desktop independent task manager";
     mainProgram = "lxtask";
     longDescription = ''
