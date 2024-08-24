@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxtask";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxtask";
     rev = version;
-    hash = "sha256-8NCtcEioyaRs4bTWjv0NLu6+kgP/Z68baV2v+oW9hdo=";
+    hash = "sha256-KPne7eWzOOSZjHlam3e6HifNk2Sx1vWnQYkXDFZGop0=";
   };
 
   nativeBuildInputs = [
