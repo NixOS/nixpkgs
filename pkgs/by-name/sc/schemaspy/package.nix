@@ -1,10 +1,11 @@
-{ lib
-, maven
-, jre
-, makeWrapper
-, fetchFromGitHub
-, graphviz
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  graphviz,
+  jre,
+  makeWrapper,
+  maven,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage rec {
@@ -39,11 +40,14 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://schemaspy.org";
     description = "Document your database simply and easily";
     mainProgram = "schemaspy";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jraygauthier anthonyroussel ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
+      jraygauthier
+      anthonyroussel
+    ];
   };
 }
