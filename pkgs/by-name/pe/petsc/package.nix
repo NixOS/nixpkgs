@@ -15,6 +15,7 @@
   hdf5,
   metis,
   parmetis,
+  withParmetis ? false,
   pkg-config,
   p4est,
   zlib, # propagated by p4est but required by petsc
@@ -35,9 +36,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-dxHa8JUJCN4zRIXMCx7gcvbzFH2SPtkJ377ssIevjgU=";
   };
 
-  inherit mpiSupport;
-  withp4est = petsc-withp4est;
-
   strictDeps = true;
   nativeBuildInputs = [
     python3
@@ -47,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     blas
     lapack
-  ] ++ lib.optional hdf5-support hdf5 ++ lib.optional withp4est p4est;
+  ] ++ lib.optional hdf5-support hdf5 ++ lib.optional petsc-withp4est p4est ++ lib.optionals withParmetis [ metis parmetis ];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
@@ -60,49 +58,42 @@ stdenv.mkDerivation rec {
   # These messages contaminate test output, which makes the quicktest suite to fail. The patch adds filtering for these messages.
   patches = [ ./filter_mpi_warnings.patch ];
 
+  configureFlags = [
+    "--with-blas=1"
+    "--with-lapack=1"
+    "--with-scalar-type=${petsc-scalar-type}"
+    "--with-precision=${petsc-precision}"
+    "--with-mpi=${if mpiSupport then "1" else "0"}"
+  ] ++ lib.optionals mpiSupport [
+    "--CC=mpicc"
+    "--with-cxx=mpicxx"
+    "--with-fc=mpif90"
+  ] ++ lib.optionals (mpiSupport && withParmetis) [
+    "--with-metis=1"
+    "--with-metis-dir=${metis}"
+    "--with-parmetis=1"
+    "--with-parmetis-dir=${parmetis}"
+  ] ++ lib.optionals petsc-optimized [
+    "--with-debugging=0"
+    "COPTFLAGS=-O3"
+    "FOPTFLAGS=-O3"
+    "CXXOPTFLAGS=-O3"
+    "CXXFLAGS=-O3"
+  ];
   preConfigure = ''
     patchShebangs ./lib/petsc/bin
-    configureFlagsArray=(
-      $configureFlagsArray
-      ${
-        if !mpiSupport then
-          ''
-            "--with-mpi=0"
-          ''
-        else
-          ''
-            "--CC=mpicc"
-            "--with-cxx=mpicxx"
-            "--with-fc=mpif90"
-            "--with-mpi=1"
-            "--with-metis=1"
-            "--with-metis-dir=${metis}"
-            "--with-parmetis=1"
-            "--with-parmetis-dir=${parmetis}"
-          ''
-      }
-      ${lib.optionalString withp4est ''
-        "--with-p4est=1"
-        "--with-zlib-include=${zlib.dev}/include"
-        "--with-zlib-lib=-L${zlib}/lib -lz"
-      ''}
-      ${lib.optionalString hdf5-support ''
-        "--with-hdf5=1"
-        "--with-hdf5-fortran-bindings=1"
-        "--with-hdf5-lib=-L${hdf5}/lib -lhdf5"
-        "--with-hdf5-include=${hdf5.dev}/include"
-      ''}
-      "--with-blas=1"
-      "--with-lapack=1"
-      "--with-scalar-type=${petsc-scalar-type}"
-      "--with-precision=${petsc-precision}"
-      ${lib.optionalString petsc-optimized ''
-        "--with-debugging=0"
-        COPTFLAGS='-O3'
-        FOPTFLAGS='-O3'
-        CXXOPTFLAGS='-O3'
-        CXXFLAGS='-O3'
-      ''}
+  '' + lib.optionalString petsc-withp4est ''
+    configureFlagsArray+=(
+      "--with-p4est=1"
+      "--with-zlib-include=${zlib.dev}/include"
+      "--with-zlib-lib=-L${zlib}/lib -lz"
+    )
+  '' + lib.optionalString hdf5-support ''
+    configureFlagsArray+=(
+      "--with-hdf5=1"
+      "--with-hdf5-fortran-bindings=1"
+      "--with-hdf5-include=${hdf5.dev}/include"
+      "--with-hdf5-lib=-L${hdf5}/lib -lhdf5"
     )
   '';
 
@@ -121,6 +112,10 @@ stdenv.mkDerivation rec {
   # the library is installed and available.
   doInstallCheck = true;
   installCheckTarget = "check_install";
+
+  passthru = {
+    inherit mpiSupport;
+  };
 
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";

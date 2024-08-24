@@ -6,6 +6,7 @@ let
     callPackage ./generic.nix (
       {
         inherit (darwin.apple_sdk.frameworks)
+          Accelerate
           AppKit
           AudioToolbox
           AVFoundation

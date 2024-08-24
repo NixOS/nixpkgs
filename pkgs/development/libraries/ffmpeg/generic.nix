@@ -328,6 +328,7 @@
 /*
  *  Darwin frameworks
  */
+, Accelerate
 , AppKit
 , AudioToolbox
 , AVFoundation
@@ -778,7 +779,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withQuirc [ quirc ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
-  ++ optionals withRubberband [ rubberband ]
+  ++ optionals withRubberband ([ rubberband ] ++ lib.optional stdenv.hostPlatform.isDarwin Accelerate)
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
   ++ optionals withShaderc [ shaderc ]
