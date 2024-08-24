@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, gitUpdater, testers, kopia }:
 
 buildGoModule rec {
   pname = "kopia";
@@ -21,6 +21,15 @@ buildGoModule rec {
     "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
     "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
   ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      kopia-version = testers.testVersion {
+        package = kopia;
+      };
+    };
+  };
 
   meta = with lib; {
     homepage = "https://kopia.io";
