@@ -37184,8 +37184,6 @@ with pkgs;
 
   QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
 
-  scs = callPackage ../development/libraries/science/math/scs { };
-
   sage = callPackage ../applications/science/math/sage { };
   sageWithDoc = sage.override { withDoc = true; };
 
