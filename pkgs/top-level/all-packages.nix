@@ -13088,8 +13088,6 @@ with pkgs;
 
   teavpn2 = callPackage ../tools/networking/teavpn2 { };
 
-  inherit (nodePackages) teck-programmer;
-
   ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
@@ -27246,8 +27244,6 @@ with pkgs;
 
   # FIXME: `tcp-wrapper' is actually not OS-specific.
   tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
-
-  teck-udev-rules = callPackage ../os-specific/linux/teck-udev-rules { };
 
   tiptop = callPackage ../os-specific/linux/tiptop { };
 
