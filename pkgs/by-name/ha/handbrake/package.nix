@@ -59,10 +59,7 @@
 , libdvdcss
 , libbluray
   # Darwin-specific
-, AudioToolbox
-, Foundation
-, libobjc
-, VideoToolbox
+, darwin
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -90,6 +87,8 @@
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) AudioToolbox Foundation VideoToolbox;
+  inherit (darwin) libobjc;
   version = "1.8.2";
 
   src = fetchFromGitHub {
