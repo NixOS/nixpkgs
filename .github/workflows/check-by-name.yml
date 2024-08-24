@@ -120,5 +120,6 @@ jobs:
           else
             exitCode=$?
             echo "To run locally: ./maintainers/scripts/check-by-name.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
+            echo "If you're having trouble, ping @NixOS/nixpkgs-check-by-name"
             exit "$exitCode"
           fi
