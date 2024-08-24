@@ -55,7 +55,7 @@ let
 
   configPath = "/etc/${etcConfigFile}";
 
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 in
 {
   imports = [
@@ -331,9 +331,9 @@ in
         message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
       }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
+      services = [ config.systemd.services.caddy ];
     }) vhostCertNames;
 
     services.caddy.globalConfig = ''
