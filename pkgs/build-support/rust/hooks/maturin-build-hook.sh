@@ -10,18 +10,20 @@ maturinBuildHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
-    (
-    set -x
-    @setEnv@ maturin build \
-        --jobs=$NIX_BUILD_CORES \
-        --offline \
-        --target @rustTargetPlatformSpec@ \
-        --manylinux off \
-        --strip \
-        --release \
-        --out "$dist" \
-        ${maturinBuildFlags-}
+    local flagsArray=(
+        "--jobs=$NIX_BUILD_CORES"
+        "--offline"
+        "--target" "@rustTargetPlatformSpec@"
+        "--manylinux" "off"
+        "--strip"
+        "--release"
+        "--out" "$dist"
     )
+
+    concatTo flagsArray maturinBuildFlags
+
+    echoCmd 'maturinBuildHook flags' "${flagsArray[@]}"
+    @setEnv@ maturin build "${flagsArray[@]}"
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then
         popd

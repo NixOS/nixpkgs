@@ -1,5 +1,3 @@
-declare -a cargoBuildFlags
-
 cargoBuildHook() {
     echo "Executing cargoBuildHook"
 
@@ -16,35 +14,28 @@ cargoBuildHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
+    local flagsArray=(
+        "-j" "$NIX_BUILD_CORES"
+        "--target" "@rustHostPlatformSpec@"
+        "--offline"
+    )
+
     if [ "${cargoBuildType}" != "debug" ]; then
-        cargoBuildProfileFlag="--profile ${cargoBuildType}"
+        flagsArray+=("--profile" "${cargoBuildType}")
     fi
 
     if [ -n "${cargoBuildNoDefaultFeatures-}" ]; then
-        cargoBuildNoDefaultFeaturesFlag=--no-default-features
+        flagsArray+=("--no-default-features")
     fi
 
     if [ -n "${cargoBuildFeatures-}" ]; then
-        if [ -n "$__structuredAttrs" ]; then
-            OLDIFS="$IFS"
-            IFS=','; cargoBuildFeaturesFlag="--features=${cargoBuildFeatures[*]}"
-            IFS="$OLDIFS"
-            unset OLDIFS
-        else
-            cargoBuildFeaturesFlag="--features=${cargoBuildFeatures// /,}"
-        fi
+        flagsArray+=("--features=$(concatStringsSep "," cargoBuildFeatures)")
     fi
 
-    (
-    set -x
-    @setEnv@ cargo build -j $NIX_BUILD_CORES \
-        --target @rustHostPlatformSpec@ \
-        --offline \
-        ${cargoBuildProfileFlag} \
-        ${cargoBuildNoDefaultFeaturesFlag} \
-        ${cargoBuildFeaturesFlag} \
-        ${cargoBuildFlags}
-    )
+    concatTo flagsArray cargoBuildFlags
+
+    echoCmd 'cargoBuildHook flags' "${flagsArray[@]}"
+    @setEnv@ cargo build "${flagsArray[@]}"
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then
         popd
