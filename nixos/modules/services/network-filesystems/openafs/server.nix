@@ -93,6 +93,87 @@ let
     )
   );
 
+  asetkeyScript =
+    let
+      cfgAuth = cfg.authentication;
+
+      # Values taken from krb5/krb5.h
+      krb5Enctypes = {
+        des-cbc-crc = 1;
+        des-cbc-md4 = 2;
+        des-cbc-md5 = 3;
+        des-cbc-raw = 4;
+        des3-cbc-sha = 5;
+        des3-cbc-raw = 6;
+        des-hmac-sha1 = 8;
+        dsa-sha1-cms = 9;
+        md5-rsa-cms = 10;
+        sha1-rsa-cms = 11;
+        rc2-cbc-env = 12;
+        rsa-env = 13;
+        rsa-es-oaep-env = 14;
+        des3-cbc-env = 15;
+        des3-cbc-sha1 = 16;
+        aes128-cts-hmac-sha1-96 = 17;
+        aes256-cts-hmac-sha1-96 = 18;
+        aes128-cts-hmac-sha256-128 = 19;
+        aes256-cts-hmac-sha384-192 = 20;
+        arcfour-hmac = 23;
+        arcfour-hmac-exp = 24;
+        camellia128-cts-cmac = 25;
+        camellia256-cts-cmac = 26;
+      };
+
+      # Stringified Awk array et["<type name>"] = <type id> of known encryption types
+      enctypeAwkArray = lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (t: n: ''et["${t}"] = ${toString n}'') krb5Enctypes
+      );
+
+      # Awk script that, given some Kerberos 5 key metadata in the format
+      # printed by ktutil's list command, extracts the key version number (KVNO)
+      # and encryption type of each key, converts the encryption type into a
+      # numeric value understood by asetkey, and uses this information to
+      # initialize the KeyFileExt database for OpenAFS.
+      awkAsetkeyScript = pkgs.writeText "asetkey-script.awk" ''
+        BEGIN {
+            ${enctypeAwkArray}
+            present = 0
+        }
+
+        # Skip over the table header and only match the configured service
+        # principal
+        (NR > 2) && ($3 == "${cfgAuth.principal}") {
+            kvno = $2
+            princ = $3
+            # The encryption type returned by ktutil is surrounded by parentheses
+            enctype = et[substr($4, 2, length($4)-2)]
+
+            # Import each key into the KeyFileExt database
+            system("${openafsBin}/bin/asetkey add rxkad_krb5 " kvno " " enctype " ${cfgAuth.keytab} " princ)
+
+            # Signal that at least one key has been found for the given principal
+            present = 1
+        }
+
+        END {
+            # If the AFS principal could not be found anywhere in the keytab, error out
+            if (0 == present) {
+               print "ERROR: no key found for principal ${cfgAuth.principal} in keytab ${cfgAuth.keytab}"
+               exit 1
+            }
+        }
+      '';
+    in
+    # The AWK script above only works with the MIT Kerberos version of
+    # ktutil. Please, do not override the ktutil binary with the Heimdal version
+    # without first extending the AWK script to handle its different output
+    # syntax.
+    pkgs.writeShellScript "asetkey-script.sh" ''
+      set -eo pipefail
+
+      echo -e "rkt ${cfgAuth.keytab}\nlist -e" | ${pkgs.krb5}/bin/ktutil | \
+        ${pkgs.gawk}/bin/awk -f ${awkAsetkeyScript}
+    '';
 in
 {
 
@@ -131,6 +212,44 @@ in
         default = [ ];
         type = with types; listOf (submodule [ { options = cellServDBConfig; } ]);
         description = "Definition of all cell-local database server machines.";
+      };
+
+      authentication = {
+        principal =
+          let
+            defaultRealmPath = "security.krb5.settings.libdefaults.default_realm";
+            defaultRealm = config."${defaultRealmPath}";
+          in
+          mkOption {
+            default = "afs/${cfg.cellName}@${defaultRealm}";
+            defaultText = literalExpression "afs/\${config.openafsServer.cellName}>@\${config.${defaultRealmPath}}";
+            type = types.str;
+            description = ''
+              The full Kerberos 5 service principal used by the AFS server.
+
+              This setting has no effect if
+              {option}`services.openafsServer.authentication.keytab` is unset or
+              set to null.
+            '';
+            example = "afs/grand.central.org@GRAND.CENTRAL.ORG";
+          };
+
+        keytab = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          description = ''
+            Path to a Kerberos 5 keytab containing the service keys used by the
+            AFS cell. If null, use the {file}`/etc/openafs/server/KeyFileExt`
+            keyring that is already present (see {manpage}`KeyFileExt(5)`).
+
+            :::{.warning}
+            Setting this option to a value other than null results in the deletion
+            of any pre-existing {file}`/etc/openafs/server/KeyFileExt` file right
+            before the AFS service is started.
+            :::
+          '';
+          example = "/etc/krb5.keytab";
+        };
       };
 
       package = mkPackageOption pkgs "openafs" { };
@@ -330,14 +449,19 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
-        unitConfig.ConditionPathExists = [
+        unitConfig.ConditionPathExists = mkIf (cfg.authentication.keytab == null) [
           "|/etc/openafs/server/KeyFileExt"
         ];
-        preStart = ''
-          mkdir -m 0755 -p /var/openafs
-          ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
-          ${optionalString useBuCellServDB "cp ${buCellServDB}"}
-        '';
+        preStart =
+          ''
+            mkdir -m 0755 -p /var/openafs
+            ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
+            ${optionalString useBuCellServDB "cp ${buCellServDB}"}
+          ''
+          + lib.optionalString (cfg.authentication.keytab != null) ''
+            rm -f /etc/openafs/server/KeyFileExt
+            ${asetkeyScript}
+          '';
         serviceConfig = {
           ExecStart = "${openafsBin}/bin/bosserver -nofork";
           ExecStop = "${openafsBin}/bin/bos shutdown localhost -wait -localauth";
