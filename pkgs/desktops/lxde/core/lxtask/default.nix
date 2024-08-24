@@ -6,6 +6,7 @@
 , intltool
 , libintl
 , pkg-config
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--enable-gtk3" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "http://lxde.sourceforge.net/";
