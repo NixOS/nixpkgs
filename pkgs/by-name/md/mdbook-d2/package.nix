@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-lZ92vvRYXEBMx6ka8RP1wXctf73QNp5rNE8n7O96AEc=";
+  # disabling tests because integration tests don't pass
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [
