@@ -2846,13 +2846,14 @@ let
         mktplcRef = {
           name = "vscord";
           publisher = "leonardssh";
-          version = "5.2.12";
-          hash = "sha256-WGDEizYG6UAqe1jnhvjfFouXDA9Yr5P+BjxPahAIsTE=";
+          version = "5.2.13";
+          hash = "sha256-Jgm3ekXFLhylX7RM6tdfi+lRLrcl4UQGmRHbr27M59M=";
         };
         meta = {
           description = "Highly customizable Discord Rich Presence extension for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=leonardssh.vscord";
           homepage = "https://github.com/leonardssh/vscord";
+          maintainers = [ lib.maintainers.ryand56 ];
           license = lib.licenses.mit;
         };
       };

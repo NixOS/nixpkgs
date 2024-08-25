@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtwayland
-, wayland
-, wayland-protocols
-, wayland-scanner
-, extra-cmake-modules
-, deepin-wayland-protocols
-, qttools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtwayland,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  extra-cmake-modules,
+  deepin-wayland-protocols,
+  qttools,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
 
   # cmake requires that the kf5 directory must not empty
   postInstall = ''
-     mkdir $out/include/KF5
+    mkdir $out/include/KF5
   '';
 
   meta = with lib; {
