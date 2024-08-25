@@ -11110,7 +11110,6 @@ with pkgs;
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
   opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
-  openvswitch-lts = callPackage ../by-name/op/openvswitch/lts.nix { };
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
   optifinePackages = callPackage ../tools/games/minecraft/optifine { };
