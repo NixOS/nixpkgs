@@ -62,15 +62,24 @@ rec {
           };
           access = mkOption {
             type = either (listOf (enum [
+              "all"
               "add"
               "cpw"
               "delete"
+              "get-keys"
               "get"
               "list"
               "modify"
             ])) (enum [ "all" ]);
             default = "all";
-            description = "The changes the principal is allowed to make.";
+            description = ''
+              The changes the principal is allowed to make.
+
+              :::{.important}
+              The "all" permission does not imply the "get-keys" permission. This
+              is consistent with the behavior of both MIT Kerberos and Heimdal.
+              :::
+            '';
           };
           target = mkOption {
             type = str;
