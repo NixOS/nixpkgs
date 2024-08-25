@@ -115,10 +115,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-supergrafx-libretro",
-            "rev": "2379eedc1d057e6b0ec465e4519e20c0fd66c5dc",
-            "hash": "sha256-zeKs0NcdZo3AY3Zv11nK4iLSq2l6jBZcAI4gbUg3gjQ="
+            "rev": "178fcb2759ee8eb461bfff199ada559e71cdc74f",
+            "hash": "sha256-JR/yOMqjbgblpAx06RkZFhwnuiCNYJ7YJfKm+7bjTQo="
         },
-        "version": "unstable-2024-08-16"
+        "version": "unstable-2024-08-23"
     },
     "beetle-vb": {
         "fetcher": "fetchFromGitHub",
