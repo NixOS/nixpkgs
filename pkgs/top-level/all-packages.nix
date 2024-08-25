@@ -39177,10 +39177,6 @@ with pkgs;
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn { };
 
-  deploy-rs = callPackage ../tools/package-management/deploy-rs {
-    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
-  };
-
   dockutil = callPackage ../os-specific/darwin/dockutil { };
 
   eiciel = callPackage ../tools/filesystems/eiciel { };
