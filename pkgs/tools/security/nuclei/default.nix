@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 buildGoModule rec {
@@ -16,6 +17,14 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-DGNjDKjFZ0EJPOJxC7nTCCts8pisomfe4eru2WAHHow=";
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-40641.patch";
+      url = "https://github.com/projectdiscovery/nuclei/commit/1c51a6bef6a5d9a5b9c4967e4984595ef4bb48cd.patch";
+      hash = "sha256-5yB37XIw7jUU80jHUCTtNHEOEw01CPyhB37eBleIe34=";
+    })
+  ];
 
   subPackages = [ "cmd/nuclei/" ];
 
