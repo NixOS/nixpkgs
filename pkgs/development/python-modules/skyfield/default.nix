@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   certifi,
   numpy,
   sgp4,
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "skyfield";
   version = "1.45";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skyfielders";
@@ -29,10 +30,12 @@ buildPythonPackage rec {
   # https://github.com/skyfielders/python-skyfield/issues/582#issuecomment-822033858
   postPatch = ''
     substituteInPlace skyfield/tests/test_planetarylib.py \
-      --replace "if IS_32_BIT" "if True"
+      --replace-fail "if IS_32_BIT" "if True"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     numpy
     sgp4

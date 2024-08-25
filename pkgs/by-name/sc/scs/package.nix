@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, blas, lapack, gfortran, fixDarwinDylibNames }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  blas,
+  lapack,
+  gfortran,
+  fixDarwinDylibNames,
+  nix-update-script,
+}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "scs";
-  version = "3.2.3";
+  version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = "cvxgrp";
     repo = "scs";
-    rev = version;
-    sha256 = "sha256-0g0r3DNgkPZgag0qtz79Wk3Cre1I2yaabFi3OgUzgfc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Y28LrYUuDaXPO8sce1pJIfG3A03rw7BumVgxCIKRn+U=";
   };
 
   # Actually link and add libgfortran to the rpath
@@ -22,7 +31,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ blas lapack gfortran.cc.lib ];
+  buildInputs = [
+    blas
+    lapack
+    gfortran.cc.lib
+  ];
 
   doCheck = true;
 
@@ -39,14 +52,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Splitting Conic Solver";
     longDescription = ''
       Numerical optimization package for solving large-scale convex cone problems
     '';
     homepage = "https://github.com/cvxgrp/scs";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bhipple ];
+    changelog = "https://github.com/cvxgrp/scs/releases/tag/${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

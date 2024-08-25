@@ -9887,12 +9887,6 @@
     githubId = 310981;
     name = "Joel Burget";
   };
-  joelkoen = {
-    email = "mail@joelkoen.com";
-    github = "joelkoen";
-    githubId = 122502655;
-    name = "Joel Koen";
-  };
   joelmo = {
     email = "joel.moberg@gmail.com";
     github = "joelmo";
