@@ -6,6 +6,7 @@
 , ninja
 , mbedtls
 , libxcrypt
+, zlib
 
 , enableCache     ? true     # Internal cache support.
 , enableIpV6      ? true
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ mbedtls libxcrypt ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
+  buildInputs = [ mbedtls libxcrypt zlib ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt --replace SETUID ""
