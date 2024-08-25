@@ -1,29 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, glib
-, gtk3
-, gtk4
-, libadwaita
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dippi";
-  version = "4.0.6";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "dippi";
     rev = version;
-    hash = "sha256-oZy8WfaAPABZRm8dm4zpI4v9RwT46F6WL6Wj767FcZg=";
+    hash = "sha256-BYI3WqMDxzERlqtq7ISQ+U1FTrpKh5OJBMo/AsdmdlQ=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +33,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-    # For post_install.py
-    python3
-    glib
-    gtk3
   ];
 
   buildInputs = [
@@ -46,19 +41,12 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  postPatch = ''
-    patchShebangs build-aux/meson/post_install.py
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/com.github.cassidyjames.dippi $out/bin/dippi
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Calculate display info like DPI and aspect ratio";
     homepage = "https://github.com/cassidyjames/dippi";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    mainProgram = "com.github.cassidyjames.dippi";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }
