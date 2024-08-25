@@ -1,6 +1,6 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
-, enableCmount ? true, fuse, fuse3, macfuse-stubs
+, enableCmount ? true, fuse2, macfuse-stubs
 , librclone
 }:
 
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   outputs = [ "out" "man" ];
 
-  buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
+  buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse2);
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   tags = lib.optionals enableCmount [ "cmount" ];
@@ -50,8 +50,8 @@ buildGoModule rec {
       # as the setuid wrapper is required as non-root on NixOS.
       ''
       wrapProgram $out/bin/rclone \
-        --suffix PATH : "${lib.makeBinPath [ fuse3 ] }" \
-        --prefix LD_LIBRARY_PATH : "${fuse3}/lib"
+        --suffix PATH : "${lib.makeBinPath [ fuse2 ] }" \
+        --prefix LD_LIBRARY_PATH : "${fuse2}/lib"
     '';
 
   passthru.tests = {
