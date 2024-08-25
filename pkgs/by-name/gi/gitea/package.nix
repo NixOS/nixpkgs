@@ -10,9 +10,7 @@
 , gitea
 , gzip
 , openssh
-, pam
 , sqliteSupport ? true
-, pamSupport ? stdenv.hostPlatform.isLinux
 , nixosTests
 , buildNpmPackage
 }:
@@ -64,10 +62,7 @@ in buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = lib.optional pamSupport pam;
-
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
 
   ldflags = [
     "-s"

@@ -7324,6 +7324,18 @@ final: prev:
     meta.homepage = "https://github.com/miversen33/netman.nvim/";
   };
 
+  netrw-nvim = buildVimPlugin {
+    pname = "netrw.nvim";
+    version = "2024-03-12";
+    src = fetchFromGitHub {
+      owner = "prichrd";
+      repo = "netrw.nvim";
+      rev = "c64f60b8a613900aad82ef1c285b892eb43e9e15";
+      sha256 = "1ng0lm2774ghgq9lk2104s6qy21qgwzz2pqkvd706b34vckbb2q3";
+    };
+    meta.homepage = "https://github.com/prichrd/netrw.nvim/";
+  };
+
   neuron-nvim = buildVimPlugin {
     pname = "neuron.nvim";
     version = "2022-02-27";
