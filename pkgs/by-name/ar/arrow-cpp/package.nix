@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
-      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
+      --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags =
