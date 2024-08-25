@@ -19130,25 +19130,6 @@ with pkgs;
 
   ttyd = callPackage ../servers/ttyd { };
 
-  turbogit = callPackage ../development/tools/turbogit {
-    libgit2 = libgit2.overrideAttrs rec {
-      version = "1.3.0";
-      src = pkgs.fetchFromGitHub {
-        owner = "libgit2";
-        repo = "libgit2";
-        rev = "v${version}";
-        hash = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
-      };
-      patches = [];
-      # tests fail on old version
-      doCheck = false;
-      meta = libgit2.meta // {
-        maintainers = [ ];
-        knownVulnerabilities = [ "CVE-2024-24575" "CVE-2024-24577" "CVE-2022-29187" "CVE 2022-24765" ];
-      };
-    };
-  };
-
   tweak = callPackage ../applications/editors/tweak { };
 
   typical = callPackage ../development/tools/misc/typical { };
