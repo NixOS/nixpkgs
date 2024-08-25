@@ -12,18 +12,19 @@
   ffmpeg,
   x264,
   libpulseaudio,
+  pipewire,
   mesa, # for libgbm
 }:
 
 stdenv.mkDerivation rec {
   pname = "wf-recorder";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ammen99";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SXPXvKXn236oO1WakkMNql3lj2flYYlmArVHGomH0/k=";
+    hash = "sha256-7/fQOkfAw5v3irD5blJOdq88j0VBrPVQQufdt9wsACk=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     x264
     libpulseaudio
+    pipewire
     mesa
   ];
 
