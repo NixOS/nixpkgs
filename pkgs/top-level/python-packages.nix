@@ -9747,7 +9747,9 @@ self: super: with self; {
 
   oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
 
-  oslo-utils = callPackage ../development/python-modules/oslo-utils { };
+  oslo-utils = callPackage ../development/python-modules/oslo-utils {
+    qemu = pkgs.qemu;
+  };
 
   oslotest = callPackage ../development/python-modules/oslotest { };
 
