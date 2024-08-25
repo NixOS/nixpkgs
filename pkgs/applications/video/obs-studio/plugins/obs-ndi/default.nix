@@ -1,11 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, obs-studio, cmake, qtbase, ndi, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  cmake,
+  qtbase,
+  ndi,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
   version = "4.14.1";
 
-  nativeBuildInputs = [ cmake qtbase ];
-  buildInputs = [ obs-studio qtbase ndi curl ];
+  nativeBuildInputs = [
+    cmake
+    qtbase
+  ];
+  buildInputs = [
+    obs-studio
+    qtbase
+    ndi
+    curl
+  ];
 
   src = fetchFromGitHub {
     owner = "Palakis";
