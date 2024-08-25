@@ -1,11 +1,21 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  overrideSDK,
   cmake,
+  mpiCheckPhaseHook,
   pkgconfig,
+  pytestCheckHook,
   python,
-  mpi ? null,
+  cereal,
+  eigen,
+  mpi,
+  mpi4py,
+  numpy,
+  pybind11,
+  rowan,
 }:
 
 let
@@ -16,10 +26,20 @@ let
     md = true;
     metal = true;
   };
-  onOffBool = b: if b then "ON" else "OFF";
   withMPI = (mpi != null);
+  # Workaround error: aligned deallocation function is only available on macOS 10.13 or newer
+  stdenvOverridden =
+    if stdenv.isDarwin then
+      overrideSDK stdenv {
+        darwinSdkVersion = "11.0";
+        darwinMinVerlsion = "10.13";
+      }
+    else
+      stdenv;
 in
-buildPythonPackage rec {
+(buildPythonPackage rec {
+  stdenv = stdenvOverridden;
+
   version = "4.8.2";
   pname = "hoomd-blue";
   pyproject = false; # Built with cmake
@@ -40,32 +60,59 @@ buildPythonPackage rec {
     cmake
     pkgconfig
   ];
-  buildInputs = lib.optionals withMPI [ mpi ];
-  propagatedBuildInputs = [ python.pkgs.numpy ] ++ lib.optionals withMPI [ python.pkgs.mpi4py ];
+
+  buildInputs = [
+    cereal
+    eigen
+    mpi
+  ];
+
+  dependencies = [
+    numpy
+    pybind11
+  ] ++ lib.optionals withMPI [ mpi4py ];
 
   dontAddPrefix = true;
+
+  # Workaround CMake's need to find MPI-related executables
+  strictDeps = false;
+
   cmakeFlags = [
-    "-DENABLE_MPI=${onOffBool withMPI}"
-    "-DBUILD_CGCMM=${onOffBool components.cgcmm}"
-    "-DBUILD_DEPRECIATED=${onOffBool components.depreciated}"
-    "-DBUILD_HPMC=${onOffBool components.hpmc}"
-    "-DBUILD_MD=${onOffBool components.md}"
-    "-DBUILD_METAL=${onOffBool components.metal}"
+    (lib.cmakeBool "ENABLE_MPI" withMPI)
+    (lib.cmakeBool "BUILD_CGCMM" components.cgcmm)
+    (lib.cmakeBool "BUILD_DEPRECIATED" components.depreciated)
+    (lib.cmakeBool "BUILD_HPMC" components.hpmc)
+    (lib.cmakeBool "BUILD_MD" components.md)
+    (lib.cmakeBool "BUILD_METAL" components.metal)
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/${python.sitePackages}"
   ];
 
-  # tests fail but have tested that package runs properly
-  doCheck = false;
-  checkTarget = "test";
+  # For buildPythonPackage,
+  # checkPhase means installCheckPhase
+  # and so does checkInputs, preCheck, etc.
+  checkInputs = [ rowan ];
+
+  nativeCheckInputs = [
+    mpiCheckPhaseHook
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "hoomd" ];
+
+  pythonImportsCheck = [ "hoomd" ];
 
   meta = with lib; {
     homepage = "http://glotzerlab.engin.umich.edu/hoomd-blue/";
     description = "HOOMD-blue is a general-purpose particle simulation toolkit";
     license = licenses.bsdOriginal;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ ];
-    # Has compilation errors since some dependencies got updated, will probably
-    # be fixed if updated by itself to the latest version.
-    broken = true;
+    maintainers = with maintainers; [ ShamrockLee ];
   };
-}
+}).overrideAttrs
+  (
+    finalAttrs: previousAttrs: {
+      # This project is built with CMake, which provides C++ tests.
+      # This means the actual doCheck (disabled by buildPythonPackage)
+      # and checkPhase (Make-based test defined by pkgs/stdenv/generic/setup.sh).
+      doCheck = true;
+    }
+  )
