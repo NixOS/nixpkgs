@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchzip {
     urls = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de/"
       "https://download.i2p2.no/releases/"
     ]);
-    hash = "sha256-9f4L1JRDTT+sBCEI/GIM9q2u1VJuiZi7DI9qgJMftd0=";
+    hash = "sha256-ntjTXdpgcTReEVxzDEoq9r3NAqS7q4m+rlJXp7is1k0=";
   };
 
   strictDeps = true;
