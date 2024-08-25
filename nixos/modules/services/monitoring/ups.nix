@@ -366,7 +366,7 @@ let
       };
 
       upsmon = mkOption {
-        type = with types; nullOr str;
+        type = with types; nullOr (enum [ "primary" "secondary" ]);
         default = null;
         description = ''
           Add the necessary actions for a upsmon process to work.
