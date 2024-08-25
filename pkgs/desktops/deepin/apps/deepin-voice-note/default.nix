@@ -12,6 +12,7 @@
   qt5platform-plugins,
   qtsvg,
   dde-qt-dbus-factory,
+  deepin-movie-reborn,
   qtmultimedia,
   qtwebengine,
   libvlc,
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-voice-note";
-  version = "6.0.15";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-k6LFMs2/OQQyeGI5WXBGWkAAY4GeP8LaA8hTXFwbaCM=";
+    hash = "sha256-GbSYXwJoNfbg+31454GjMbXRqrtk2bSZJCk18ILfAn4=";
   };
 
   patches = [ ./use_v23_dbus_interface.diff ];
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
       dtkwidget
       qt5platform-plugins
       dde-qt-dbus-factory
+      deepin-movie-reborn
       qtmultimedia
       qtwebengine
       libvlc
@@ -61,7 +63,6 @@ stdenv.mkDerivation rec {
     ++ (with gst_all_1; [
       gstreamer
       gst-plugins-base
-      gst-plugins-good
     ]);
 
   strictDeps = true;
@@ -69,18 +70,26 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
+  qtWrapperArgs = [
+    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-base
+      ]
+    }"
+  ];
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple memo software with texts and voice recordings";
     mainProgram = "deepin-voice-note";
     homepage = "https://github.com/linuxdeepin/deepin-voice-note";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }
