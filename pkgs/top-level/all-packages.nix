@@ -20885,7 +20885,7 @@ with pkgs;
   indicator-sound-switcher = callPackage ../applications/audio/indicator-sound-switcher { };
 
   indilib = darwin.apple_sdk_11_0.callPackage ../development/libraries/science/astronomy/indilib { };
-  indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
+  indi-3rdparty = recurseIntoAttrs (callPackages ../development/libraries/science/astronomy/indilib/indi-3rdparty.nix { });
 
   inih = callPackage ../development/libraries/inih { };
 
