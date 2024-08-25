@@ -10,19 +10,19 @@
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration;
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "comet-gog";
-  version = "0-unstable-2024-05-25";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "comet";
-    rev = "378ec2abdc2498e7c0c12aa50b71f6d94c3e8e3c";
-    hash = "sha256-r7ZPpJLy2fZsyNijl0+uYWQN941TCbv+Guv3wzD83IQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TdIqdNn5HnIED7LMn4qAzKPHlA5t/Q1Dn+W+ulx5qOU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-dXNAGMVayzgT96ETrph9eCbQv28EK/OOxIRV8ewpVvs=";
+  cargoHash = "sha256-gAGCpcVjOkUZa/CobOjOt07WMHpvE5/q1bw+z4yBeNE=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage {
   ];
 
   meta = {
+    changelog = "https://github.com/imLinguin/comet/releases/tag/v${version}";
     description = "Open Source implementation of GOG Galaxy's Communication Service";
     homepage = "https://github.com/imLinguin/comet";
     license = lib.licenses.gpl3Plus;
