@@ -2,8 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, CoreServices
-, SystemConfiguration
+, darwin
 }:
 
 rustPlatform.buildRustPackage {
@@ -20,8 +19,8 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-Vo/45cZM/sBAaoikhEwCvduhMQjurwSZwCjwrIQn7IA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    CoreServices
-    SystemConfiguration
+    darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   meta = with lib; {
