@@ -254,10 +254,13 @@ in
         '';
       };
 
-      open = lib.mkEnableOption ''
-        the open source NVIDIA kernel module
-      '' // {
-        defaultText = lib.literalExpression ''lib.versionAtLeast config.hardware.nvidia.package.version "560"'';
+      open = lib.mkOption {
+        example = true;
+        description = "Whether to enable the open source NVIDIA kernel module.";
+        type = lib.types.bool;
+        defaultText = lib.literalExpression ''
+          lib.mkIf (lib.versionOlder config.hardware.nvidia.package.version "560") false
+        '';
       };
     };
   };
@@ -308,7 +311,7 @@ in
           };
           environment.systemPackages = [ nvidia_x11.bin ];
 
-          hardware.nvidia.open = lib.mkDefault (lib.versionAtLeast nvidia_x11.version "560");
+          hardware.nvidia.open = lib.mkIf (lib.versionOlder nvidia_x11.version "560") (lib.mkDefault false);
         })
 
         # X11
