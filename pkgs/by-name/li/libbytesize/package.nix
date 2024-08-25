@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbytesize";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libbytesize";
     rev = finalAttrs.version;
-    hash = "sha256-IPBoYcnSQ1/ws3mzPUXxgbetZkXRWrGhtakXaVVFb6U=";
+    hash = "sha256-scOnucn7xp6KKEtkpwfyrdzcntJF2l0h0fsQotcceLc=";
   };
 
   outputs = [
