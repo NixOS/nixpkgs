@@ -9386,6 +9386,8 @@ self: super: with self; {
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
 
+  py-machineid = callPackage ../development/python-modules/py-machineid { };
+
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
@@ -14801,6 +14803,8 @@ self: super: with self; {
   sparqlwrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   sparse = callPackage ../development/python-modules/sparse { };
+
+  sparsezoo = callPackage ../development/python-modules/sparsezoo { };
 
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 

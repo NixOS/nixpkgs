@@ -9734,7 +9734,16 @@ with pkgs;
 
   nkeys = callPackage ../tools/system/nkeys { };
 
-  nyxt = callPackage ../applications/networking/browsers/nyxt { };
+  nyxt = callPackage ../applications/networking/browsers/nyxt {
+    sbcl = sbcl_2_4_6;
+    inherit (gst_all_1)
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly;
+  };
 
   nfpm = callPackage ../tools/package-management/nfpm { };
 
@@ -10212,8 +10221,6 @@ with pkgs;
   marktext = callPackage ../applications/misc/marktext { };
 
   mars-mips = callPackage ../development/tools/mars-mips { };
-
-  mawk = callPackage ../tools/text/mawk { };
 
   mb2md = callPackage ../tools/text/mb2md { };
 
@@ -11112,7 +11119,6 @@ with pkgs;
   opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
   opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
-  openvswitch-lts = callPackage ../by-name/op/openvswitch/lts.nix { };
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
   optifinePackages = callPackage ../tools/games/minecraft/optifine { };
@@ -16688,10 +16694,9 @@ with pkgs;
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
 
-  luarocks-packages-updater = callPackage ../development/lua-modules/updater {
-    inherit (python3Packages) buildPythonApplication ;
+  luarocks-packages-updater = callPackage ../by-name/lu/luarocks-packages-updater/package.nix {
+    pluginupdate = ../../maintainers/scripts/pluginupdate.py;
   };
-
 
   luau = callPackage ../development/interpreters/luau { };
 
@@ -20882,7 +20887,7 @@ with pkgs;
   indicator-sound-switcher = callPackage ../applications/audio/indicator-sound-switcher { };
 
   indilib = darwin.apple_sdk_11_0.callPackage ../development/libraries/science/astronomy/indilib { };
-  indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
+  indi-3rdparty = recurseIntoAttrs (callPackages ../development/libraries/science/astronomy/indilib/indi-3rdparty.nix { });
 
   inih = callPackage ../development/libraries/inih { };
 
@@ -22725,8 +22730,6 @@ with pkgs;
   moserial = callPackage ../tools/misc/moserial { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
-
-  nanomq = callPackage ../servers/mqtt/nanomq { };
 
   mps = callPackage ../development/libraries/mps { };
 
@@ -34839,8 +34842,6 @@ with pkgs;
   youtube-tui = callPackage ../applications/video/youtube-tui {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   };
-
-  youki = callPackage ../applications/virtualization/youki { };
 
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
