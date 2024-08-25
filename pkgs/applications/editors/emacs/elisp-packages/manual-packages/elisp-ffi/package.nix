@@ -24,7 +24,7 @@ melpaBuild {
 
   preBuild = ''
     mv ffi.el elisp-ffi.el
-    make
+    make CXX=$CXX
   '';
 
   ignoreCompilationError = false;
