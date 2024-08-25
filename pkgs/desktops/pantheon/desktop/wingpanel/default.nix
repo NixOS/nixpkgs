@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
+, wayland-scanner
 , wrapGAppsHook3
 , pkg-config
 , meson
@@ -14,6 +14,7 @@
 , granite
 , gettext
 , mutter
+, wayland
 , json-glib
 , elementary-gtk-theme
 , elementary-icon-theme
@@ -21,24 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.5";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xowGdaH0e6y0Q2xSl0kUa01rxxoEQ0qXB3sUol0YDBA=";
+    sha256 = "sha256-c77ebUTs4D5M3//AfvtWI643n1a1sPb5Z70P+4tX3y8=";
   };
 
   patches = [
     ./indicators.patch
+  ];
 
-    # Add sorting for QuickSettings
-    # https://github.com/elementary/wingpanel/pull/516
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel/commit/cae197c953f4332e67cf0a5457b4e54f8adc3424.patch";
-      hash = "sha256-P7Cl6M3qvh9pa1qIwWQV4XG5NoCQId+buzEChcUOapk=";
-    })
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -47,6 +45,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
@@ -58,6 +57,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     mutter
+    wayland
   ];
 
   preFixup = ''
