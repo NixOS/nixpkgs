@@ -368,10 +368,10 @@
         "src": {
             "owner": "libretro",
             "repo": "gpsp",
-            "rev": "74c4b82cef7793b11892c791cc2379cb87847fb8",
-            "hash": "sha256-JvQ1zJoJg++yPEeXrxQGsoObht0vE3VXwf6ohLLuvw4="
+            "rev": "f2837be54aa680c4ec0c7be0669cdcd65582cc66",
+            "hash": "sha256-Kfw4KYNH/K3y6Iy/eYu/OlInibv9JLQvOSDh429G2zg="
         },
-        "version": "unstable-2024-07-20"
+        "version": "unstable-2024-08-24"
     },
     "gw": {
         "fetcher": "fetchFromGitHub",
