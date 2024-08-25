@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   # deps
+  setuptools,
   aiohttp,
   attrs,
   yarl,
@@ -23,7 +24,7 @@
 buildPythonPackage rec {
   pname = "mautrix";
   version = "0.20.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -34,13 +35,15 @@ buildPythonPackage rec {
     hash = "sha256-g6y2u3ipSp5HoakHqd/ryPlyA+kR7zO6uY4AqfqbwiE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     attrs
     yarl
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     detect_mimetype = [ python-magic ];
     encryption = [
       python-olm
