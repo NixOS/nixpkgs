@@ -1,4 +1,11 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, apacheHttpd, jdk }:
+{
+  lib,
+  stdenv,
+  apacheHttpd,
+  autoreconfHook,
+  fetchFromGitHub,
+  jdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_jk";
@@ -11,18 +18,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-hlwlx7Sb4oeZIzHQYOC3e9xEZK9u6ZG8Q2U/XdKMe3U=";
   };
 
+  sourceRoot = "${src.name}/native";
+
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ apacheHttpd jdk ];
+  buildInputs = [
+    apacheHttpd
+    jdk
+  ];
 
   configureFlags = [
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
     "--with-java-home=${jdk}"
   ];
-
-  setSourceRoot = ''
-    sourceRoot=$(echo */native)
-  '';
 
   installPhase = ''
     runHook preInstall
