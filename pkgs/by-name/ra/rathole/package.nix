@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, nixosTests
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  nixosTests,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,21 +22,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UyQXAUPnp32THZJAs/p3bIXZjcXTvjy207QBVLCfkr8=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreServices
-  ]);
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
 
   __darwinAllowLocalNetworking = true;
 
   doCheck = false; # https://github.com/rapiz1/rathole/issues/222
 
-  passthru.tests = { inherit (nixosTests) rathole; };
+  passthru.tests = {
+    inherit (nixosTests) rathole;
+  };
 
   meta = with lib; {
     description = "Reverse proxy for NAT traversal";
