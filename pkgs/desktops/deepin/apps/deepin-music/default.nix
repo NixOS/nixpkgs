@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, dtkdeclarative
-, qt5integration
-, qt5platform-plugins
-, udisks2-qt5
-, qtmpris
-, qtmultimedia
-, kcodecs
-, ffmpeg
-, libvlc
-, taglib
-, SDL2
-, qtbase
-, gst_all_1
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  dtkwidget,
+  dtkdeclarative,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  qtmpris,
+  qtmultimedia,
+  kcodecs,
+  ffmpeg,
+  libvlc,
+  taglib,
+  SDL2,
+  qtbase,
+  gst_all_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +33,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-MLfkSO8ru8MKiwgiQ0mPO3zGlnIeSHPc0Op5jjzJ6PE=";
   };
 
-  patches = [
-    "${src}/patches/fix-library-path.patch"
-  ];
+  patches = [ "${src}/patches/fix-library-path.patch" ];
 
   nativeBuildInputs = [
     cmake
@@ -43,28 +42,28 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    dtkwidget
-    dtkdeclarative
-    qt5integration
-    qt5platform-plugins
-    udisks2-qt5
-    qtmpris
-    qtmultimedia
-    kcodecs
-    ffmpeg
-    libvlc
-    taglib
-    SDL2
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      dtkwidget
+      dtkdeclarative
+      qt5integration
+      qt5platform-plugins
+      udisks2-qt5
+      qtmpris
+      qtmultimedia
+      kcodecs
+      ffmpeg
+      libvlc
+      taglib
+      SDL2
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ]);
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${libvlc}/include/vlc/plugins"

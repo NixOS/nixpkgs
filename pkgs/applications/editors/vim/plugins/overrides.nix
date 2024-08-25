@@ -1465,6 +1465,10 @@
         mkdir -p $out/target/debug
         ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
       '';
+
+      # Build fails with rust > 1.80
+      # https://github.com/sourcegraph/sg.nvim/issues/259
+      meta.broken = true;
     });
 
   skim = buildVimPlugin {
@@ -1475,6 +1479,10 @@
 
   skim-vim = super.skim-vim.overrideAttrs {
     dependencies = [ self.skim ];
+  };
+
+  smart-open-nvim = super.smart-open-nvim.overrideAttrs {
+    dependencies = with self; [ telescope-nvim sqlite-lua ];
   };
 
   sniprun =

@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, libsForQt5
-, dtkgui
-, cups
-, gsettings-qt
-, libstartup_notification
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  libsForQt5,
+  dtkgui,
+  cups,
+  gsettings-qt,
+  libstartup_notification,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,7 +69,11 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/lib/dtk5/DWidget/bin/*; do

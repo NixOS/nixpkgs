@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, mtdev
-, cairo
-, xorg
-, qt6Packages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  mtdev,
+  cairo,
+  xorg,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation rec {
