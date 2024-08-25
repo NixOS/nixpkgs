@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-s3";
   version = "0.2.12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
@@ -23,14 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-TKv/7b3+uhY18v7p1ZSya5KJEMUv4M1NkObP9vPzMxU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace ">=2.0,<2.2" "*"
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     snakemake-interface-storage-plugins

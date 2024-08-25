@@ -83954,30 +83954,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  teck-programmer = nodeEnv.buildNodePackage {
-    name = "teck-programmer";
-    packageName = "teck-programmer";
-    version = "1.1.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/teck-programmer/-/teck-programmer-1.1.1.tgz";
-      sha512 = "bfg3TwaPBG/R2FGPyUQD/MDhWcdqvuflBzI5VsQPJD/EuPnCE/rUPKXaLvhDaz2szzz8xYcv+t10yhKuX5PYWA==";
-    };
-    dependencies = [
-      sources."node-addon-api-4.3.0"
-      sources."node-gyp-build-4.8.1"
-      sources."q-1.5.1"
-      sources."usb-1.9.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Programmer for TECK keyboards.";
-      homepage = "https://github.com/m-ou-se/teck-programmer";
-      license = "GPL-3.0+";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   tern = nodeEnv.buildNodePackage {
     name = "tern";
     packageName = "tern";

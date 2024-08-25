@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pymarshal";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stargateaudio";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
+      --replace-fail "'pytest-runner'" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ bson ];
+  dependencies = [ bson ];
 
   nativeCheckInputs = [
     pytestCheckHook
