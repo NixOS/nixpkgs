@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  uv,
+  replaceVars,
   git,
   cargo,
   stdenv,
@@ -24,11 +24,14 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-HW2vDVsFrdFRRaPNuGDg9DZpJd8OuYDIqA3KQRa3m9o=";
   };
 
+  patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3.pkgs.uv; }) ];
+
   build-system = with python3.pkgs; [
     hatchling
     hatch-vcs
-    uv
   ];
+
+  pythonRemoveDeps = [ "uv" ];
 
   dependencies = with python3.pkgs; [
     click
