@@ -7553,6 +7553,17 @@
     githubId = 15957973;
     name = "Jeffry Molanus";
   };
+  gileri = {
+    email = "s@linuxw.info";
+    github = "gileri";
+    githubId = 493438;
+    name = "Éric Gillet";
+    keys = [
+      {
+        fingerprint = "E478 85DC 8F33 FA86 D3FC  183D 80A8 14DB 8ED5 70BC";
+      }
+    ];
+  };
   gilice = {
     email = "gilice@proton.me";
     github = "gilice";
