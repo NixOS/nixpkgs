@@ -1,34 +1,45 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  bazel_6,
+
+  # bazel wheel
   buildBazelPackage,
-  buildPythonPackage,
-  cctools,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
   python,
   setuptools,
   wheel,
   absl-py,
-  tensorflow,
-  six,
-  numpy,
-  dm-tree,
-  keras,
-  decorator,
+
+  bazel_6,
+  cctools,
+
+  # python package
+  buildPythonPackage,
+
+  # dependencies
   cloudpickle,
+  decorator,
+  dm-tree,
   gast,
+  keras,
+  numpy,
+  six,
+  tensorflow,
+
+  # tests
   hypothesis,
-  scipy,
-  pandas,
-  mpmath,
   matplotlib,
   mock,
+  mpmath,
+  pandas,
   pytest,
+  scipy,
 }:
 
 let
-  version = "0.21.0";
+  version = "0.24.0";
   pname = "tensorflow-probability";
 
   # first build all binaries and generate setup.py using bazel
@@ -38,15 +49,15 @@ let
       owner = "tensorflow";
       repo = "probability";
       rev = "refs/tags/v${version}";
-      hash = "sha256-DsJd1E5n86xNS7Ci0DXxoUxQ9jH8OwTZq2UuLlQtMUU=";
+      hash = "sha256-V6aw4NtGOHlvcbgLWMH29x81eck1PyzV93ANelvpL4c=";
     };
     nativeBuildInputs = [
+      absl-py
       # needed to create the output wheel in installPhase
       python
       setuptools
-      wheel
-      absl-py
       tensorflow
+      wheel
     ];
 
     bazel = bazel_6;
@@ -83,27 +94,27 @@ buildPythonPackage {
 
   src = bazel-wheel;
 
-  propagatedBuildInputs = [
-    tensorflow
-    six
-    numpy
-    decorator
+  dependencies = [
     cloudpickle
-    gast
+    decorator
     dm-tree
+    gast
     keras
+    numpy
+    six
+    tensorflow
   ];
 
   # Listed here:
   # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
   nativeCheckInputs = [
     hypothesis
-    pytest
-    scipy
-    pandas
-    mpmath
     matplotlib
     mock
+    mpmath
+    pandas
+    pytest
+    scipy
   ];
 
   # Ideally, we run unit tests with pytest, but in checkPhase, only the Bazel-build wheel is available.
@@ -114,10 +125,11 @@ buildPythonPackage {
   # sanity check
   pythonImportsCheck = [ "tensorflow_probability" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
