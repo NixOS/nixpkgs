@@ -10,14 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-gstreamer";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-C4yee7hzkSOjIeaacLaTGPzZ1qYdYtHK5a3m9gz2pPI=";
+    hash = "sha256-23LyxN1Vgol9uA7rDdfZXcmfhG4l0RfMYGbofbhObBE=";
   };
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "'git', 'rev-parse', '--short', 'HEAD'" "'echo', '${version}'"
+  '';
 
   nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = with gst_all_1; [ gstreamer gst-plugins-base obs-studio ];
