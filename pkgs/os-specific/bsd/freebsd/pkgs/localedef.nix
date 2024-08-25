@@ -9,30 +9,28 @@
   makeMinimal,
   install,
 }:
-mkDerivation (
-  {
-    path = "usr.bin/localedef";
+mkDerivation ({
+  path = "usr.bin/localedef";
 
-    extraPaths = [
-      "lib/libc/locale"
-      "lib/libc/stdtime"
-    ] ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [ "." ];
+  extraPaths = [
+    "lib/libc/locale"
+    "lib/libc/stdtime"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [ "." ];
 
-    nativeBuildInputs = [
-      bsdSetupHook
-      byacc
-      freebsdSetupHook
-      makeMinimal
-      install
-    ];
+  nativeBuildInputs = [
+    bsdSetupHook
+    byacc
+    freebsdSetupHook
+    makeMinimal
+    install
+  ];
 
-    buildInputs = [ ];
+  buildInputs = [ ];
 
-    preBuild = lib.optionalString (!stdenv.hostPlatform.isFreeBSD) ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${compat}/include -D__unused= -D__pure= -Wno-strict-aliasing"
-      export NIX_LDFLAGS="$NIX_LDFLAGS -L${compat}/lib"
-    '';
+  preBuild = lib.optionalString (!stdenv.hostPlatform.isFreeBSD) ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${compat}/include -D__unused= -D__pure= -Wno-strict-aliasing"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L${compat}/lib"
+  '';
 
-    MK_TESTS = "no";
-  }
-)
+  MK_TESTS = "no";
+})
