@@ -6,10 +6,11 @@
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
 , gnome-settings-daemon
-, granite
-, gtk3
+, granite7
+, gtk4
 , glib
 , dbus
 , polkit
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-power";
-  version = "2.7.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8Hu2RIgA0gSc+tLNjDqGS+b/HpbsOdR4otpY4UqNzKs=";
+    sha256 = "sha256-TNwq3APXXnKlYuJ8K/5KRREbGWTC25r1i+vqPJzf0v8=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +40,9 @@ stdenv.mkDerivation rec {
     dbus
     gnome-settings-daemon
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     polkit
     switchboard
