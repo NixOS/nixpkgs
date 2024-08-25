@@ -5,7 +5,7 @@
 , pkg-config
 , openssl
 , nixosTests
-, CoreServices
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreServices
-  ];
+  ]);
 
   __darwinAllowLocalNetworking = true;
 
