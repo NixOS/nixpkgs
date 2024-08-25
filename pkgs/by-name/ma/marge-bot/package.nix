@@ -35,6 +35,9 @@ python3.pkgs.buildPythonApplication rec {
     # test broken when run under Nix:
     #   "unittest.mock.InvalidSpecError: Cannot spec a Mock object."
     "test_get_mr_ci_status"
+    # broken because of an incorrect assertion:
+    #   "AttributeError: 'has_calls' is not a valid assertion."
+    "test_reapprove"
   ];
   disabledTestPaths = [
     # test errors due to API mismatch in test setup:
