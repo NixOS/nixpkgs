@@ -429,10 +429,10 @@
         "src": {
             "owner": "libretro",
             "repo": "mame2003-libretro",
-            "rev": "ac11b67168c92caab5012d8d7365d36fe5c94b3e",
-            "hash": "sha256-SlEvXbqv4v51njU5QhpimJWnkvGEJlRLjsNg8s4fkBc="
+            "rev": "b2fbe7d4724d781572111f12176b5b38126bcf16",
+            "hash": "sha256-E+ln1isbslzMhT8THZO9MDd6dGN/+mRj1oKzfMz0t5Y="
         },
-        "version": "unstable-2024-08-18"
+        "version": "unstable-2024-08-22"
     },
     "mame2003-plus": {
         "fetcher": "fetchFromGitHub",
