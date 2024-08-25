@@ -6,13 +6,13 @@
   deprecated,
   dirtyjson,
   fetchFromGitHub,
-  fetchzip,
   fsspec,
   jsonpath-ng,
   llamaindex-py-client,
   nest-asyncio,
   networkx,
   nltk,
+  nltk-data,
   numpy,
   openai,
   pandas,
@@ -32,18 +32,6 @@
   tree-sitter,
   typing-inspect,
 }:
-
-let
-  stopwords = fetchzip {
-    url = "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip";
-    hash = "sha256-tX1CMxSvFjr0nnLxbbycaX/IBnzHFxljMZceX5zElPY=";
-  };
-
-  punkt = fetchzip {
-    url = "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip";
-    hash = "sha256-SKZu26K17qMUg7iCFZey0GTECUZ+sTTrF/pqeEgJCos=";
-  };
-in
 
 buildPythonPackage rec {
   pname = "llama-index-core";
@@ -67,12 +55,12 @@ buildPythonPackage rec {
   # Setting `NLTK_DATA` to a writable path can also solve this problem, but it needs to be done in
   # every package that depends on `llama-index-core` for `pythonImportsCheck` not to fail, so this
   # solution seems more elegant.
-  patchPhase = ''
+  postPatch = ''
     mkdir -p llama_index/core/_static/nltk_cache/corpora/stopwords/
-    cp -r ${stopwords}/* llama_index/core/_static/nltk_cache/corpora/stopwords/
+    cp -r ${nltk-data.stopwords}/corpora/stopwords/* llama_index/core/_static/nltk_cache/corpora/stopwords/
 
     mkdir -p llama_index/core/_static/nltk_cache/tokenizers/punkt/
-    cp -r ${punkt}/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
+    cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
   build-system = [ poetry-core ];
