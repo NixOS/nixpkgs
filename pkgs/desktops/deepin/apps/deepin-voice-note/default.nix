@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qtsvg
-, dde-qt-dbus-factory
-, qtmultimedia
-, qtwebengine
-, libvlc
-, gst_all_1
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  qtsvg,
+  dde-qt-dbus-factory,
+  qtmultimedia,
+  qtwebengine,
+  libvlc,
+  gst_all_1,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +30,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-k6LFMs2/OQQyeGI5WXBGWkAAY4GeP8LaA8hTXFwbaCM=";
   };
 
-  patches = [
-    ./use_v23_dbus_interface.diff
-  ];
+  patches = [ ./use_v23_dbus_interface.diff ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -47,30 +46,30 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtsvg
-    dtkwidget
-    qt5platform-plugins
-    dde-qt-dbus-factory
-    qtmultimedia
-    qtwebengine
-    libvlc
-    gtest
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      dtkwidget
+      qt5platform-plugins
+      dde-qt-dbus-factory
+      qtmultimedia
+      qtwebengine
+      libvlc
+      gtest
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ]);
 
   strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
+  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
