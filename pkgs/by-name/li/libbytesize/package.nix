@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, docbook_xml_dtd_43
-, docbook_xsl
-, gettext
-, gmp
-, gtk-doc
-, libxslt
-, mpfr
-, pcre2
-, pkg-config
-, python3
+{
+  lib,
+  autoreconfHook,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  fetchFromGitHub,
+  gettext,
+  gmp,
+  gtk-doc,
+  libxslt,
+  mpfr,
+  pcre2,
+  pkg-config,
+  python3,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IPBoYcnSQ1/ws3mzPUXxgbetZkXRWrGhtakXaVVFb6U=";
   };
 
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -49,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";
     description = "Tiny library providing a C 'class' for working with arbitrary big sizes in bytes";
-    mainProgram = "bscalc";
     license = lib.licenses.lgpl2Plus;
+    mainProgram = "bscalc";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
