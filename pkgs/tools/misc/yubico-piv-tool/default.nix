@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
-  version = "2.5.2";
+  version = "2.6.0";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Yubico";
     repo = "yubico-piv-tool";
     rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
-    hash = "sha256-SBVYr6OcWqT+WKOZgIeZ1TmqCbcGAjbq/HaWIwPduFw=";
+    hash = "sha256-53cgwXMzVKnouwHhbt6pODhjF2MH0sK5CPWpbZe71jE=";
   };
 
   postPatch = ''
