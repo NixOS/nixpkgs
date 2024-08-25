@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/ammen99/wf-recorder/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.linux;
     mainProgram = "wf-recorder";
   };
