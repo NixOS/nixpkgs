@@ -56,9 +56,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
     with subtest("Check if Pantheon components actually start"):
-        for i in ["gala", "io.elementary.wingpanel", "plank", "gsd-media-keys", "io.elementary.desktop.agent-polkit"]:
+        for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock", "gsd-media-keys", "io.elementary.desktop.agent-polkit"]:
             machine.wait_until_succeeds(f"pgrep -f {i}")
-        for i in ["gala", "io.elementary.wingpanel", "plank"]:
+        for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock"]:
             machine.wait_for_window(i)
         for i in ["bamfdaemon.service", "io.elementary.files.xdg-desktop-portal.service"]:
             machine.wait_for_unit(i, "${user.name}")
