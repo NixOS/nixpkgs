@@ -61,13 +61,18 @@ rustPlatform.buildRustPackage {
     bzip2
     openssl
     sqlite
-    foundationdb
     zstd
+  ] ++ lib.optionals stdenv.isLinux [
+    foundationdb
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  # skip defaults on darwin because foundationdb is not available
+  buildNoDefaultFeatures = stdenv.isDarwin;
+  buildFeatures = lib.optional (stdenv.isDarwin) [ "sqlite" "postgres" "mysql" "rocks" "elastic" "s3" "redis" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
