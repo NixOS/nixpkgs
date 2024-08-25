@@ -13,22 +13,23 @@
   libmongocrypt,
   postgresql,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.48.3";
+  version = "1.55.3";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-aCMbii5+iJ7m4P6Krr1/pcoH6fBsrFLtSjCx9DBYOeg=";
+    hash = "sha256-SgDw0je16Qf0ohzrVUjJM6FFovWxM2mvZjvfKkEESos=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-n1U5ftbB7BbiDIkZMVPG2ieoRBlJ+nPYFT3fNJRRTCI=";
+    hash = "sha256-KvSsWf1EHCQ46M4Z4wqyYb4mW9y9kNwB9e090YC1ZWs=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    echo "Removing non-deterministic files"
+
+    rm -r $(find -type d -name .turbo)
+    rm node_modules/.modules.yaml
+    rm packages/nodes-base/dist/types/nodes.json
+
+    echo "Removed non-deterministic files"
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -71,11 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # makes libmongocrypt bindings not look for static libraries in completely wrong places
-  BUILD_TYPE = "dynamic";
-
   passthru = {
     tests = nixosTests.n8n;
+    updateScript = nix-update-script { };
   };
 
   dontStrip = true;
