@@ -2417,18 +2417,6 @@ final: prev:
     meta.homepage = "https://github.com/wincent/command-t/";
   };
 
-  comment-nvim = buildVimPlugin {
-    pname = "comment.nvim";
-    version = "2024-06-09";
-    src = fetchFromGitHub {
-      owner = "numtostr";
-      repo = "comment.nvim";
-      rev = "e30b7f2008e52442154b66f7c519bfd2f1e32acb";
-      sha256 = "0dyz78j0kj3j99y5g8wncl7794g6z2qs05gfg9ddxaa4xswhyjc7";
-    };
-    meta.homepage = "https://github.com/numtostr/comment.nvim/";
-  };
-
   comment-box-nvim = buildVimPlugin {
     pname = "comment-box.nvim";
     version = "2024-02-03";
@@ -2439,6 +2427,18 @@ final: prev:
       sha256 = "182wfx8q30ingkkrr0xs4r9zf1rf0b8wp2l8pi8hds0cpzc8vfvx";
     };
     meta.homepage = "https://github.com/LudoPinelli/comment-box.nvim/";
+  };
+
+  comment-nvim = buildVimPlugin {
+    pname = "comment.nvim";
+    version = "2024-06-09";
+    src = fetchFromGitHub {
+      owner = "numtostr";
+      repo = "comment.nvim";
+      rev = "e30b7f2008e52442154b66f7c519bfd2f1e32acb";
+      sha256 = "0dyz78j0kj3j99y5g8wncl7794g6z2qs05gfg9ddxaa4xswhyjc7";
+    };
+    meta.homepage = "https://github.com/numtostr/comment.nvim/";
   };
 
   committia-vim = buildVimPlugin {
@@ -7348,18 +7348,6 @@ final: prev:
     meta.homepage = "https://github.com/miversen33/netman.nvim/";
   };
 
-  neuron-nvim = buildVimPlugin {
-    pname = "neuron.nvim";
-    version = "2022-02-27";
-    src = fetchFromGitHub {
-      owner = "oberblastmeister";
-      repo = "neuron.nvim";
-      rev = "c44032ece3cb71a9ce45043d246828cd1cef002c";
-      sha256 = "0r8qybg1pikp49v9v0zh79q7fxx8kh8rwafvyqghf5yb0ixcjiis";
-    };
-    meta.homepage = "https://github.com/oberblastmeister/neuron.nvim/";
-  };
-
   netrw-nvim = buildVimPlugin {
     pname = "netrw.nvim";
     version = "2024-07-23";
@@ -7370,6 +7358,18 @@ final: prev:
       sha256 = "1m8pnhy9si734k0i95fyn0yn4swwmavpj1s22qp2ss75djibwhxl";
     };
     meta.homepage = "https://github.com/prichrd/netrw.nvim/";
+  };
+
+  neuron-nvim = buildVimPlugin {
+    pname = "neuron.nvim";
+    version = "2022-02-27";
+    src = fetchFromGitHub {
+      owner = "oberblastmeister";
+      repo = "neuron.nvim";
+      rev = "c44032ece3cb71a9ce45043d246828cd1cef002c";
+      sha256 = "0r8qybg1pikp49v9v0zh79q7fxx8kh8rwafvyqghf5yb0ixcjiis";
+    };
+    meta.homepage = "https://github.com/oberblastmeister/neuron.nvim/";
   };
 
   neuron-vim = buildVimPlugin {
@@ -11232,6 +11232,18 @@ final: prev:
       sha256 = "0nmzpyh9sdbvxf0hzvga748i4wnd0l6jmlwp8bmx84zazp93c667";
     };
     meta.homepage = "https://github.com/luc-tielen/telescope_hoogle/";
+  };
+
+  templ-vim = buildVimPlugin {
+    pname = "templ.vim";
+    version = "2023-10-30";
+    src = fetchFromGitHub {
+      owner = "joerdav";
+      repo = "templ.vim";
+      rev = "5cc48b93a4538adca0003c4bc27af844bb16ba24";
+      sha256 = "12w1cplgz5f02c61v42acgsf11078xcwp46j2b3lzmq9hj57rmb1";
+    };
+    meta.homepage = "https://github.com/joerdav/templ.vim/";
   };
 
   template-string-nvim = buildVimPlugin {
@@ -17600,18 +17612,6 @@ final: prev:
       sha256 = "025rqfs0n2ryi7xwzpq5h2r7jhvxbrb2gjp6fqa072hapgqr0igb";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  templ-vim = buildVimPlugin {
-    pname = "templ.vim";
-    version = "2023-10-30";
-    src = fetchFromGitHub {
-      owner = "joerdav";
-      repo = "templ.vim";
-      rev = "5cc48b93a4538adca0003c4bc27af844bb16ba24";
-      sha256 = "12w1cplgz5f02c61v42acgsf11078xcwp46j2b3lzmq9hj57rmb1";
-    };
-    meta.homepage = "https://github.com/joerdav/templ.vim/";
   };
 
   catppuccin-nvim = buildVimPlugin {
