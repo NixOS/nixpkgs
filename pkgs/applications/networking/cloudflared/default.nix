@@ -3,6 +3,7 @@
 , buildGoModule
 , fetchFromGitHub
 , callPackage
+, gitUpdater
 }:
 
 buildGoModule rec {
@@ -70,7 +71,10 @@ buildGoModule rec {
 
   doCheck = !stdenv.isDarwin;
 
-  passthru.tests.simple = callPackage ./tests.nix { inherit version; };
+  passthru = {
+    tests.simple = callPackage ./tests.nix { inherit version; };
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
     description = "Cloudflare Tunnel daemon, Cloudflare Access toolkit, and DNS-over-HTTPS client";
