@@ -28,9 +28,9 @@ rec {
     sed -i '/MOZ_NORMANDY/ s/True/False/' browser/moz.configure
   '';
 
-  extraPrefsFiles = [ "${src.settings}/librewolf.cfg" ];
+  extraPrefsFiles = [ "${source}/settings/librewolf.cfg" ];
 
-  extraPoliciesFiles = [ "${src.settings}/distribution/policies.json" ];
+  extraPoliciesFiles = [ "${source}/settings/distribution/policies.json" ];
 
   extraPassthru = {
     librewolf = {
