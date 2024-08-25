@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace OpenSoundMeter.pro \
-      --replace 'APP_GIT_VERSION = ?' 'APP_GIT_VERSION = ${src.rev}'
+      --replace-fail 'APP_GIT_VERSION = ?' 'APP_GIT_VERSION = ${src.rev}'
   '';
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];

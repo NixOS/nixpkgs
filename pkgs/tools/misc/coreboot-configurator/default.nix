@@ -34,20 +34,20 @@ mkDerivation {
 
   postPatch = ''
     substituteInPlace src/application/*.cpp \
-      --replace '/usr/bin/pkexec' '${pkexecPath}' \
-      --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl' \
-      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+      --replace-fail '/usr/bin/pkexec' '${pkexecPath}' \
+      --replace-fail '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl' \
+      --replace-fail '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
 
     substituteInPlace src/resources/org.coreboot.nvramtool.policy \
-      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+      --replace-fail '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
 
     substituteInPlace src/resources/org.coreboot.reboot.policy \
-      --replace '/usr/sbin/reboot' '${lib.getBin systemd}/reboot'
+      --replace-fail '/usr/sbin/reboot' '${lib.getBin systemd}/reboot'
   '';
 
   postFixup = ''
     substituteInPlace $out/share/applications/coreboot-configurator.desktop \
-      --replace '/usr/bin/coreboot-configurator' 'coreboot-configurator'
+      --replace-fail '/usr/bin/coreboot-configurator' 'coreboot-configurator'
   '';
 
   meta = with lib; {

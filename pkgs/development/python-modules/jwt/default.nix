@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # pytest-flake8 is incompatible flake8 6.0.0 and currently unmaintained
-    substituteInPlace setup.cfg --replace "--flake8" ""
+    substituteInPlace setup.cfg --replace-fail "--flake8" ""
   '';
 
   propagatedBuildInputs = [ cryptography ];

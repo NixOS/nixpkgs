@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace bin/9c \
-      --replace 'which uniq' '${which}/bin/which uniq'
+      --replace-fail 'which uniq' '${which}/bin/which uniq'
 
     ed -sE INSTALL <<EOF
     # get /bin:/usr/bin out of PATH

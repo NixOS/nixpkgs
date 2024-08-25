@@ -15,8 +15,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       postPatch = ''
         substituteInPlace build.sh \
-          --replace "echo Install wget or curl" "cp ${zsh-portable-binary} zsh-5.8-linux-x86_64.tar.gz" \
-          --replace "command -v curl" "command -v this-should-not-trigger"
+          --replace-fail "echo Install wget or curl" "cp ${zsh-portable-binary} zsh-5.8-linux-x86_64.tar.gz" \
+          --replace-fail "command -v curl" "command -v this-should-not-trigger"
       '';
 
       installPhase = ''

@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
 
     substituteInPlace "$out/libexec/renode/renode-test" \
-      --replace '$PYTHON_RUNNER' '${python3Packages.python}/bin/python3'
+      --replace-fail '$PYTHON_RUNNER' '${python3Packages.python}/bin/python3'
 
     runHook postInstall
   '';

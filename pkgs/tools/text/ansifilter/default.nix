@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # avoid timestamp non-determinism with '-n'
-    substituteInPlace makefile --replace 'gzip -9f' 'gzip -9nf'
+    substituteInPlace makefile --replace-fail 'gzip -9f' 'gzip -9nf'
   '';
 
   makeFlags = [

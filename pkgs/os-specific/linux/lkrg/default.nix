@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   prePatch = ''
-    substituteInPlace Makefile --replace "KERNEL := " "KERNEL ?= "
+    substituteInPlace Makefile --replace-fail "KERNEL := " "KERNEL ?= "
   '';
 
   installPhase = ''

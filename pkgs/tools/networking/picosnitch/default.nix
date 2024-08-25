@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    substituteInPlace $out/${python3.sitePackages}/picosnitch.py --replace '/run/picosnitch.pid' '/run/picosnitch/picosnitch.pid'
+    substituteInPlace $out/${python3.sitePackages}/picosnitch.py --replace-fail '/run/picosnitch.pid' '/run/picosnitch/picosnitch.pid'
   '';
 
   pythonImportsCheck = [ "picosnitch" ];

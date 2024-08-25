@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs tests
     substituteInPlace tests/test-scribe.c \
-        --replace /bin/true ${coreutils}/bin/true \
-        --replace /bin/false ${coreutils}/bin/false
+        --replace-fail /bin/true ${coreutils}/bin/true \
+        --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   mesonFlags = [

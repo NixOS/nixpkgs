@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     for file in tkrev/tkrev.tcl tkdiff/tkdiff; do
         substituteInPlace "$file" \
-            --replace "exec wish" "exec ${tk}/bin/wish"
+            --replace-fail "exec wish" "exec ${tk}/bin/wish"
     done
   '';
 

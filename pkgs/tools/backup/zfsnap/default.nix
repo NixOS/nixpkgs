@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
     # Use zfs binaries from PATH, because often the zfs package from nixpkgs is
     # not the one that should be used
     substituteInPlace share/zfsnap/core.sh \
-      --replace "ZFS_CMD='/sbin/zfs'" "ZFS_CMD='zfs'" \
-      --replace "ZPOOL_CMD='/sbin/zpool'" "ZPOOL_CMD='zpool'"
+      --replace-fail "ZFS_CMD='/sbin/zfs'" "ZFS_CMD='zfs'" \
+      --replace-fail "ZPOOL_CMD='/sbin/zpool'" "ZPOOL_CMD='zpool'"
 
     substituteInPlace sbin/zfsnap.sh \
-      --replace "/bin/ls" "${coreutils}/bin/ls"
+      --replace-fail "/bin/ls" "${coreutils}/bin/ls"
   '';
 
   installPhase = ''

@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
 
     substituteInPlace meson/post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   passthru = {

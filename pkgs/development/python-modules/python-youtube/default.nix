@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=pyyoutube" "" \
-      --replace "--cov-report xml" ""
+      --replace-fail "--cov=pyyoutube" "" \
+      --replace-fail "--cov-report xml" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

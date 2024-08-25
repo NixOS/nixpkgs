@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "get-mac" "getmac"
+      --replace-fail "get-mac" "getmac"
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

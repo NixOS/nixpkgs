@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [ tkinter ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace Makefile --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   checkPhase = ''

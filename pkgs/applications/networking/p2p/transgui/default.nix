@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    substituteInPlace restranslator.pas --replace /usr/ $out/
+    substituteInPlace restranslator.pas --replace-fail /usr/ $out/
   '';
 
   preBuild = ''

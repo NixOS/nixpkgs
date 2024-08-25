@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     shopt -s globstar
     for i in **/*.cpp; do
-      substituteInPlace $i --replace /usr/share/nifskope $out/share/nifskope
+      substituteInPlace $i --replace-fail /usr/share/nifskope $out/share/nifskope
     done
   '';
 
@@ -49,8 +49,8 @@ stdenv.mkDerivation {
     cp ./install/linux-install/nifskope.desktop $out/share/applications
 
     substituteInPlace $out/share/applications/nifskope.desktop \
-      --replace 'Exec=nifskope' "Exec=$out/bin/NifSkope" \
-      --replace 'Icon=nifskope' "Icon=$out/share/pixmaps/nifskope.png"
+      --replace-fail 'Exec=nifskope' "Exec=$out/bin/NifSkope" \
+      --replace-fail 'Icon=nifskope' "Icon=$out/share/pixmaps/nifskope.png"
 
     find $out/share -type f -exec chmod -x {} \;
 

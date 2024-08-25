@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preInstall =
     ''
-      substituteInPlace src/Makefile --replace /usr /
+      substituteInPlace src/Makefile --replace-fail /usr /
     '';
 
   postInstall = ''

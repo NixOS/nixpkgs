@@ -45,7 +45,7 @@ buildGoModule rec {
 
     # skip test that requires networking
     substituteInPlace pkg/config/config_network_test.go \
-      --replace "TestLoad" "SkipLoad"
+      --replace-fail "TestLoad" "SkipLoad"
   '';
 
   postInstall = ''

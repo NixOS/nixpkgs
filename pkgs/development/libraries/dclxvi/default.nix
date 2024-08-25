@@ -15,10 +15,10 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace "gcc" "cc"
+      --replace-fail "gcc" "cc"
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace "-soname=libdclxvipairing.so" "-install_name,libdclxvipairing.so"
+      --replace-fail "-soname=libdclxvipairing.so" "-install_name,libdclxvipairing.so"
   '';
 
   installPhase = ''

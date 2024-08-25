@@ -68,10 +68,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/Controller/Src/Scanner/Engine.cpp \
-      --replace '@KILLALL@' ${killall}/bin/killall
+      --replace-fail '@KILLALL@' ${killall}/bin/killall
 
     substituteInPlace src/Controller/Src/Filter/GetOrientation.cpp \
-      --replace '@OCR_ENGINE_GETROTATE@' $out/libexec/epsonscan2-ocr/ocr-engine-getrotate
+      --replace-fail '@OCR_ENGINE_GETROTATE@' $out/libexec/epsonscan2-ocr/ocr-engine-getrotate
   '';
 
   nativeBuildInputs = [

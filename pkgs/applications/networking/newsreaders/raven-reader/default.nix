@@ -23,7 +23,7 @@ appimageTools.wrapType2 {
     cp -a ${appimageContents}/usr/share/icons $out/share/
 
     substituteInPlace $out/share/applications/raven-reader.desktop \
-      --replace 'Exec=AppRun' 'Exec=raven-reader'
+      --replace-fail 'Exec=AppRun' 'Exec=raven-reader'
   '';
 
   meta = with lib; {

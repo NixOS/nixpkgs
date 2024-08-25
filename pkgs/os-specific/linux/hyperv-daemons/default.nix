@@ -28,7 +28,7 @@ let
     postPatch = ''
       cd tools/hv
       substituteInPlace hv_kvp_daemon.c \
-        --replace /usr/libexec/hypervkvpd/ $out/${libexec}/
+        --replace-fail /usr/libexec/hypervkvpd/ $out/${libexec}/
     '';
 
     # We don't actually need the hv_get_{dhcp,dns}_info scripts on NixOS in
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
     EOF
 
     for f in $lib/lib/systemd/system/*.service ; do
-      substituteInPlace $f --replace @out@ ${daemons}/bin
+      substituteInPlace $f --replace-fail @out@ ${daemons}/bin
     done
 
     # we need to do both $out and $bin as $out is required

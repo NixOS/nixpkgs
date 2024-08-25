@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/plugin-accounts/operation/accountsworker.cpp \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
   nativeBuildInputs = [

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'wheel>=0.32.0,<0.33.0'" ""
+      --replace-fail "'wheel>=0.32.0,<0.33.0'" ""
   '';
 
   buildInputs = [ cython ];

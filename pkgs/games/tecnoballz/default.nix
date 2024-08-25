@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Newer compilers introduced warnings
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
   preConfigure = ''

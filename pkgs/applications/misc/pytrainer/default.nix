@@ -75,7 +75,7 @@ in python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pytrainer/platform.py \
-        --replace 'sys.prefix' "\"$out\""
+        --replace-fail 'sys.prefix' "\"$out\""
   '';
 
   checkPhase = ''

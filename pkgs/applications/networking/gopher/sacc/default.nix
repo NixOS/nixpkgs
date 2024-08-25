@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace config.mk \
-      --replace curses ncurses \
-      --replace "/usr/local" "$out"
+      --replace-fail curses ncurses \
+      --replace-fail "/usr/local" "$out"
     '';
 
   meta = with lib; {

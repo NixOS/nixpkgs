@@ -32,20 +32,20 @@ stdenv.mkDerivation rec {
       src/service/modules/{api/compatibleengine.cpp,subthemes/customtheme.cpp,background/backgrounds.cpp} \
       misc/dconfig/org.deepin.dde.appearance.json \
       fakewm/dbus/deepinwmfaker.cpp \
-      --replace "/usr/share" "/run/current-system/sw/share"
+      --replace-fail "/usr/share" "/run/current-system/sw/share"
 
     for file in $(grep -rl "/usr/bin/dde-appearance"); do
-      substituteInPlace $file --replace "/usr/bin/dde-appearance" "$out/bin/dde-appearance"
+      substituteInPlace $file --replace-fail "/usr/bin/dde-appearance" "$out/bin/dde-appearance"
     done
 
     substituteInPlace src/service/modules/api/themethumb.cpp \
-      --replace "/usr/lib/deepin-api" "/run/current-system/sw/lib/deepin-api"
+      --replace-fail "/usr/lib/deepin-api" "/run/current-system/sw/lib/deepin-api"
 
     substituteInPlace fakewm/dbus/deepinwmfaker.cpp \
-      --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace src/service/modules/api/locale.cpp \
-      --replace "/usr/share/locale/locale.alias" "${iconv}/share/locale/locale.alias"
+      --replace-fail "/usr/share/locale/locale.alias" "${iconv}/share/locale/locale.alias"
   '';
 
   nativeBuildInputs = [

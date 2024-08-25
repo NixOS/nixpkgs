@@ -52,13 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./src/scripts/Makefile \
-      --replace "etc" "$out/etc"
+      --replace-fail "etc" "$out/etc"
     substituteInPlace ./src/scripts/wihotspot \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
     substituteInPlace ./src/desktop/wifihotspot.desktop \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
     substituteInPlace ./src/scripts/policies/polkit.policy \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

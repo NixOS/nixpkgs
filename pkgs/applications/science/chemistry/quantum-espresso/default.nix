@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     chmod -R +rwx external/
 
     substituteInPlace external/devxlib.cmake \
-      --replace "qe_git_submodule_update(external/devxlib)" ""
+      --replace-fail "qe_git_submodule_update(external/devxlib)" ""
     substituteInPlace external/CMakeLists.txt \
-      --replace "qe_git_submodule_update(external/pw2qmcpack)" "" \
-      --replace "qe_git_submodule_update(external/d3q)" "" \
-      --replace "qe_git_submodule_update(external/qe-gipaw)" ""
+      --replace-fail "qe_git_submodule_update(external/pw2qmcpack)" "" \
+      --replace-fail "qe_git_submodule_update(external/d3q)" "" \
+      --replace-fail "qe_git_submodule_update(external/qe-gipaw)" ""
 
     ${builtins.toString (builtins.attrValues
       (builtins.mapAttrs
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     )}
 
     substituteInPlace cmake/quantum_espresso.pc.in \
-      --replace 'libdir="''${prefix}/@CMAKE_INSTALL_LIBDIR@"' 'libdir="@CMAKE_INSTALL_FULL_LIBDIR@"'
+      --replace-fail 'libdir="''${prefix}/@CMAKE_INSTALL_LIBDIR@"' 'libdir="@CMAKE_INSTALL_FULL_LIBDIR@"'
   '';
 
   passthru = { inherit mpi; };

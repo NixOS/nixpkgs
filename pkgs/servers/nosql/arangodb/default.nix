@@ -54,8 +54,8 @@ gcc10Stdenv.mkDerivation rec {
     sed -ie 's!/bin/echo!echo!' 3rdParty/V8/gypfiles/*.gypi
 
     # with nixpkgs, it has no sense to check for a version update
-    substituteInPlace js/client/client.js --replace "require('@arangodb').checkAvailableVersions();" ""
-    substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
+    substituteInPlace js/client/client.js --replace-fail "require('@arangodb').checkAvailableVersions();" ""
+    substituteInPlace js/server/server.js --replace-fail "require('@arangodb').checkAvailableVersions();" ""
   '';
 
   preConfigure = ''

@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
 
     # https://github.com/iovisor/bcc/issues/3996
     substituteInPlace src/cc/libbcc.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   preInstall = ''
@@ -97,7 +97,7 @@ python3.pkgs.buildPythonApplication rec {
         ln -s $f $bin
       fi
       substituteInPlace "$f" \
-        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
+        --replace-fail '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
 
     sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc

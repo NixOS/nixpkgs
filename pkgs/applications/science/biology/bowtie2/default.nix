@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: check with other distros and report upstream
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "-m64" ""
+      --replace-fail "-m64" ""
   '';
 
   nativeBuildInputs = [ cmake ];

@@ -36,9 +36,9 @@ buildPythonPackage rec {
   # and it is not easy to apply patches.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"setuptools_scm_git_archive>=1.1",' ""
+      --replace-fail '"setuptools_scm_git_archive>=1.1",' ""
     substituteInPlace setup.cfg \
-      --replace "setuptools_scm_git_archive>=1.0" ""
+      --replace-fail "setuptools_scm_git_archive>=1.0" ""
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

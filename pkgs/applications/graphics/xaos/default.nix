@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/include/config.h \
-      --replace "/usr/share/XaoS" "${datapath}"
+      --replace-fail "/usr/share/XaoS" "${datapath}"
   '';
 
   desktopItems = [ "xdg/xaos.desktop" ];

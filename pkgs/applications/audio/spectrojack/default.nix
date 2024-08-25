@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   configurePhase= ''
     sed -i 's/.*home.*/#&/' ./Makefile
     substituteInPlace ./Makefile \
-      --replace "/usr/share" "$out/usr/share"
+      --replace-fail "/usr/share" "$out/usr/share"
   '';
   installPhase= ''
     install -Dm755 spectrojack $out/bin/spectrojack

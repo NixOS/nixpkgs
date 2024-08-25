@@ -22,26 +22,26 @@ stdenv.mkDerivation rec {
 
     # `make support` installs above libraries
     substituteInPlace system.mk/* \
-      --replace ": support" ":"
+      --replace-fail ": support" ":"
 
     # Variable name is different in this makefile
     substituteInPlace applications/bed/sort-bed/src/Makefile.darwin \
-      --replace "DIST_DIR" "BINDIR"
+      --replace-fail "DIST_DIR" "BINDIR"
 
     # `mkdir -p $BINDIR` is missing
     substituteInPlace applications/bed/sort-bed/src/Makefile.darwin \
-      --replace 'mkdir -p ''${OBJ_DIR}' 'mkdir -p ''${OBJ_DIR} ''${BINDIR}'
+      --replace-fail 'mkdir -p ''${OBJ_DIR}' 'mkdir -p ''${OBJ_DIR} ''${BINDIR}'
 
-    substituteInPlace applications/bed/starch/src/Makefile --replace '$(LIBRARIES)' ""
+    substituteInPlace applications/bed/starch/src/Makefile --replace-fail '$(LIBRARIES)' ""
 
     # Function name is different in nixpkgs provided libraries
     for f in interfaces/src/data/starch/starchFileHelpers.c applications/bed/starch/src/starchcat.c ; do
-      substituteInPlace $f --replace deflateInit2cpp deflateInit2
+      substituteInPlace $f --replace-fail deflateInit2cpp deflateInit2
     done
 
     # Don't force static
     for f in */*/*/*/Makefile* ; do
-      substituteInPlace $f --replace '-static' ""
+      substituteInPlace $f --replace-fail '-static' ""
     done
   '';
 

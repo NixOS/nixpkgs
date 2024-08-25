@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/main.c --replace "attr/xattr.h" "sys/xattr.h"
-    substituteInPlace src/tools.c --replace "attr/xattr.h" "sys/xattr.h"
+    substituteInPlace src/main.c --replace-fail "attr/xattr.h" "sys/xattr.h"
+    substituteInPlace src/tools.c --replace-fail "attr/xattr.h" "sys/xattr.h"
   '';
 
   installPhase = ''

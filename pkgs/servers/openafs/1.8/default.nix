@@ -64,12 +64,12 @@ stdenv.mkDerivation {
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do
       echo "Patch /usr/include and /usr/src in $i"
       substituteInPlace $i \
-        --replace "/usr/include" "${glibc.dev}/include" \
-        --replace "/usr/src" "$TMP"
+        --replace-fail "/usr/include" "${glibc.dev}/include" \
+        --replace-fail "/usr/src" "$TMP"
     done
 
     for i in ./doc/xml/{AdminGuide,QuickStartUnix,UserGuide}/*.xml; do
-      substituteInPlace "''${i}" --replace "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
+      substituteInPlace "''${i}" --replace-fail "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
         "${docbook_xml_dtd_43}/xml/dtd/docbook/docbookx.dtd"
     done
 

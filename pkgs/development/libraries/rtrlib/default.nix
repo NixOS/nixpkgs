@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/rtrlib.pc \
-      --replace '=''${prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/'
   '';
 
   meta = with lib; {

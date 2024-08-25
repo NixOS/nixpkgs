@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     substituteInPlace src/daemon/hayabusa.service \
-      --replace "/usr/local" "$out"
+      --replace-fail "/usr/local" "$out"
   '';
 
   postInstall = ''

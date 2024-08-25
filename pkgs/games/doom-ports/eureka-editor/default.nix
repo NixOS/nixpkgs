@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace src/main.cc --replace /usr/local $out
-    substituteInPlace Makefile    --replace /usr/local $out
+    substituteInPlace src/main.cc --replace-fail /usr/local $out
+    substituteInPlace Makefile    --replace-fail /usr/local $out
   '';
 
   preInstall = ''

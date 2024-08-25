@@ -40,13 +40,13 @@ stdenv.mkDerivation {
     cp $src/blockcheck.sh $out/bin/blockcheck
 
     substituteInPlace $out/bin/blockcheck \
-      --replace "ZAPRET_BASE=\"\$EXEDIR\"" "ZAPRET_BASE=$out/usr/share/zapret"
+      --replace-fail "ZAPRET_BASE=\"\$EXEDIR\"" "ZAPRET_BASE=$out/usr/share/zapret"
 
     cp $src/init.d/sysv/functions $out/usr/share/zapret/init.d/sysv/functions
     cp $src/init.d/sysv/zapret $out/usr/share/zapret/init.d/sysv/init.d
 
     substituteInPlace $out/usr/share/zapret/init.d/sysv/functions \
-      --replace "ZAPRET_BASE=\$(readlink -f \"\$EXEDIR/../..\")" "ZAPRET_BASE=$out/usr/share/zapret"
+      --replace-fail "ZAPRET_BASE=\$(readlink -f \"\$EXEDIR/../..\")" "ZAPRET_BASE=$out/usr/share/zapret"
 
     touch $out/usr/share/zapret/config
 

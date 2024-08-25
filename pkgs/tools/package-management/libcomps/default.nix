@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libcomps/src/python/src/CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
+      --replace-fail "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
   '';
 
   nativeBuildInputs = [

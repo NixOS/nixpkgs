@@ -24,7 +24,7 @@ buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace nixops/args.py --replace "@version@" "${version}-pre-${lib.substring 0 7 src.rev or "dirty"}"
+    substituteInPlace nixops/args.py --replace-fail "@version@" "${version}-pre-${lib.substring 0 7 src.rev or "dirty"}"
   '';
 
   nativeBuildInputs = [

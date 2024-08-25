@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ atk cairo glib pango libxml2 gettext ];
 
   preBuild = ''
-    substituteInPlace gtksourceview/gtksourceview-utils.c --replace "@NIX_SHARE_PATH@" "$out/share"
+    substituteInPlace gtksourceview/gtksourceview-utils.c --replace-fail "@NIX_SHARE_PATH@" "$out/share"
   '';
 
   patches = [ ./3.x-nix_share_path.patch ];

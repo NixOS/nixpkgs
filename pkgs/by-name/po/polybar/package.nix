@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Replace hardcoded /etc when copying and reading the default config.
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "/etc" $out
+    substituteInPlace CMakeLists.txt --replace-fail "/etc" $out
     substituteAllInPlace src/utils/file.cpp
   '';
 

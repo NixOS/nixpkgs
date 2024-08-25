@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
   prePatch = ''
-    substituteInPlace unix/Makefile --replace 'CC = cc' ""
+    substituteInPlace unix/Makefile --replace-fail 'CC = cc' ""
   '';
 
   hardeningDisable = [ "format" ];

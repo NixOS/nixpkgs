@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/lein
     patchShebangs $out/bin/lein
     substituteInPlace $out/bin/lein \
-      --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
+      --replace-fail 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
     wrapProgram $out/bin/lein \
       --prefix PATH ":" "${lib.makeBinPath [ rlwrap coreutils ]}" \
       --set LEIN_GPG ${gnupg}/bin/gpg \

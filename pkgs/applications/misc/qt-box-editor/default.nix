@@ -28,7 +28,7 @@ mkDerivation {
     sed -i '/allheaders.h/a#include <leptonica/pix_internal.h>' src/TessTools.h
 
     substituteInPlace qt-box-editor.pro \
-      --replace '-llept' '-lleptonica'
+      --replace-fail '-llept' '-lleptonica'
   '';
 
   meta = with lib; {

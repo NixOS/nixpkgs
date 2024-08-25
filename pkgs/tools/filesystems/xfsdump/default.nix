@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "cp include/install-sh ." "cp -f include/install-sh ."
+      --replace-fail "cp include/install-sh ." "cp -f include/install-sh ."
   '';
 
   # Conifigure scripts don't check PATH, see xfstests derviation

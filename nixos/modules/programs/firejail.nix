@@ -31,7 +31,7 @@ let
 
         ${lib.optionalString (opts.desktop != null) ''
           substitute ${opts.desktop} $out/share/applications/$(basename ${opts.desktop}) \
-            --replace ${opts.executable} $out/bin/${command}
+            --replace-fail ${opts.executable} $out/bin/${command}
         ''}
       '') cfg.wrappedBinaries)}
     '';

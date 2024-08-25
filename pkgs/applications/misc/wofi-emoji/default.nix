@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace build.sh \
-      --replace 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
+      --replace-fail 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
     substituteInPlace wofi-emoji \
-      --replace 'wofi' '${wofi}/bin/wofi' \
-      --replace 'wtype' '${wtype}/bin/wtype' \
-      --replace 'wl-copy' '${wl-clipboard}/bin/wl-copy'
+      --replace-fail 'wofi' '${wofi}/bin/wofi' \
+      --replace-fail 'wtype' '${wtype}/bin/wtype' \
+      --replace-fail 'wl-copy' '${wl-clipboard}/bin/wl-copy'
   '';
 
   buildPhase = ''

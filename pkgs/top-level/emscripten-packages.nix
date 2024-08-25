@@ -177,9 +177,9 @@ rec {
 
       postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
         substituteInPlace configure \
-          --replace '/usr/bin/libtool' 'ar' \
-          --replace 'AR="libtool"' 'AR="ar"' \
-          --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+          --replace-fail '/usr/bin/libtool' 'ar' \
+          --replace-fail 'AR="libtool"' 'AR="ar"' \
+          --replace-fail 'ARFLAGS="-o"' 'ARFLAGS="-r"'
       '';
     });
 

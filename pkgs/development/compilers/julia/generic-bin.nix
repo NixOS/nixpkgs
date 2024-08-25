@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     # it provides its own so we can simply disable the test. Patching in the
     # dynamic path to ours require us to rebuild the Julia system image.
     substituteInPlace share/julia/stdlib/v${lib.versions.majorMinor version}/NetworkOptions/test/runtests.jl \
-      --replace '@test ca_roots_path() != bundled_ca_roots()' \
+      --replace-fail '@test ca_roots_path() != bundled_ca_roots()' \
         '@test_skip ca_roots_path() != bundled_ca_roots()'
   '';
 

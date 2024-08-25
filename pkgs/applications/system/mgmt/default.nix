@@ -24,11 +24,11 @@ buildGoModule rec {
   # see https://github.com/NixOS/nixpkgs/issues/208036
   preBuild = ''
     for file in `find -name Makefile -type f`; do
-      substituteInPlace $file --replace "/usr/bin/env " ""
+      substituteInPlace $file --replace-fail "/usr/bin/env " ""
     done
 
     substituteInPlace lang/types/Makefile \
-      --replace "unset GOCACHE && " ""
+      --replace-fail "unset GOCACHE && " ""
     patchShebangs misc/header.sh
     make lang funcgen
   '';

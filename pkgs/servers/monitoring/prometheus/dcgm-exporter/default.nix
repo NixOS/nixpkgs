@@ -22,7 +22,7 @@ buildGoModule rec {
   # Upgrade to go 1.17 during the vendoring FOD build because it fails otherwise.
   overrideModAttrs = _: {
     preBuild = ''
-      substituteInPlace go.mod --replace 'go 1.16' 'go 1.17'
+      substituteInPlace go.mod --replace-fail 'go 1.16' 'go 1.17'
       go mod tidy
     '';
     postInstall = ''

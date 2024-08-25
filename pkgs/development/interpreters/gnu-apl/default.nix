@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
    ]) ++ lib.optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
+    substituteInPlace src/LApack.cc --replace-fail "malloc.h" "malloc/malloc.h"
   '';
 
   postInstall = ''

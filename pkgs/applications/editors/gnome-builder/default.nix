@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build-aux/meson/post_install.py
     substituteInPlace build-aux/meson/post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   checkPhase = ''

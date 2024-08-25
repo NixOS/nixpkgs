@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace srp_daemon/srp_daemon.sh.in \
-      --replace /bin/rm rm
+      --replace-fail /bin/rm rm
   '';
 
   postInstall = ''
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
       echo "wrapping $pls"
-      substituteInPlace $pls --replace \
+      substituteInPlace $pls --replace-fail \
         "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
     done
   '';

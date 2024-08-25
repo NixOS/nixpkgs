@@ -17,22 +17,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace SConstruct \
-      --replace "'TERM' : os.environ['TERM']," "" \
-      --replace "Options" "Variables" \
-      --replace "-fomit-frame-pointer -ffast-math -mfpmath=sse" "-I${boost.dev}/include -I${ladspaH}/include" \
-      --replace "env.has_key('cxx')" "True" \
-      --replace "env['cxx']" "'${stdenv.cc.targetPrefix}c++'" \
-      --replace "-Wl,--strip-all" ""
+      --replace-fail "'TERM' : os.environ['TERM']," "" \
+      --replace-fail "Options" "Variables" \
+      --replace-fail "-fomit-frame-pointer -ffast-math -mfpmath=sse" "-I${boost.dev}/include -I${ladspaH}/include" \
+      --replace-fail "env.has_key('cxx')" "True" \
+      --replace-fail "env['cxx']" "'${stdenv.cc.targetPrefix}c++'" \
+      --replace-fail "-Wl,--strip-all" ""
 
     substituteInPlace filters.cpp \
-      --replace "LADSPA_HINT_SAMPLE_RATE, 0, 0.5" "LADSPA_HINT_SAMPLE_RATE, 0.0001, 0.5"
+      --replace-fail "LADSPA_HINT_SAMPLE_RATE, 0, 0.5" "LADSPA_HINT_SAMPLE_RATE, 0.0001, 0.5"
 
     substituteInPlace nova/source/dsp/filter.hpp \
-      --replace "= check" "= detail::filter_base<internal_type, checked>::check"
+      --replace-fail "= check" "= detail::filter_base<internal_type, checked>::check"
 
     substituteInPlace nova/source/primitives/float.hpp \
-      --replace "boost/detail/endian.hpp" "boost/predef/other/endian.h" \
-      --replace "BOOST_LITTLE_ENDIAN" "BOOST_ENDIAN_LITTLE_BYTE"
+      --replace-fail "boost/detail/endian.hpp" "boost/predef/other/endian.h" \
+      --replace-fail "BOOST_LITTLE_ENDIAN" "BOOST_ENDIAN_LITTLE_BYTE"
   '';
 
   nativeBuildInputs = [

@@ -26,7 +26,7 @@ buildNpmPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace package.json --replace "git config core.hooksPath .git-hooks" ""
+    substituteInPlace package.json --replace-fail "git config core.hooksPath .git-hooks" ""
   '';
 
   postInstall = ''

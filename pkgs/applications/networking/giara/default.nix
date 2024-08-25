@@ -60,10 +60,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
     # blueprint-compiler expects "profile" to be a string.
     substituteInPlace data/ui/headerbar.blp \
-      --replace "item { custom: profile; }" 'item { custom: "profile"; }'
+      --replace-fail "item { custom: profile; }" 'item { custom: "profile"; }'
   '';
 
   meta = with lib; {

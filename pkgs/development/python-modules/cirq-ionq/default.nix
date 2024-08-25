@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "requests~=2.18" "requests"
+      --replace-fail "requests~=2.18" "requests"
   '';
 
   propagatedBuildInputs = [

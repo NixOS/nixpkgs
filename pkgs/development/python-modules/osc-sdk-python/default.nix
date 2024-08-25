@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "ruamel.yaml==0.17.32" "ruamel.yaml"
+      --replace-fail "ruamel.yaml==0.17.32" "ruamel.yaml"
   '';
 
   # Only keep test not requiring access and secret keys

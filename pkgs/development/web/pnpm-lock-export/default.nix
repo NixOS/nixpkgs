@@ -15,7 +15,7 @@ buildNpmPackage rec {
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
     # Make the executable get installed to `bin/` instead of `bin/@cvent`
-    substituteInPlace package.json --replace "@cvent/pnpm-lock-export" "pnpm-lock-export"
+    substituteInPlace package.json --replace-fail "@cvent/pnpm-lock-export" "pnpm-lock-export"
   '';
 
   passthru = {

@@ -14,7 +14,7 @@ buildNpmPackage rec {
   postPatch = ''
     # Set a script name to avoid yargs using index.js as $0
     substituteInPlace common.mjs \
-      --replace '.version(false)' '.version(false).scriptName("readable")'
+      --replace-fail '.version(false)' '.version(false).scriptName("readable")'
   '';
 
   npmDepsHash = "sha256-X1pcgDm8C4G+hIsgx3sAVFQPadWsULvXrdLAIHnpjmE=";

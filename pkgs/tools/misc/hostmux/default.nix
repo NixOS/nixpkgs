@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace hostmux \
-      --replace "SSH_CMD=ssh" "SSH_CMD=${openssh}/bin/ssh" \
-      --replace "tmux -2" "${tmux}/bin/tmux -2" \
-      --replace "tmux s" "${tmux}/bin/tmux s"
+      --replace-fail "SSH_CMD=ssh" "SSH_CMD=${openssh}/bin/ssh" \
+      --replace-fail "tmux -2" "${tmux}/bin/tmux -2" \
+      --replace-fail "tmux s" "${tmux}/bin/tmux s"
   '';
 
   installPhase = ''

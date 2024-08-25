@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp -a ${appimageContents}/usr/share/icons $out/share
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
 
     runHook postInstall
   '';

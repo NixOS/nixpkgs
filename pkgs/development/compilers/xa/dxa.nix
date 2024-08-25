@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc"
+      --replace-fail "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc"
   '';
 
   installPhase = ''

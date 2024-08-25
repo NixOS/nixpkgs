@@ -33,7 +33,7 @@ buildPythonPackage rec {
     # remove vendored nlohmann_json
     rm MetaWear-SDK-Cpp/src/metawear/dfu/cpp/json.hpp
     substituteInPlace MetaWear-SDK-Cpp/src/metawear/dfu/cpp/file_operations.cpp \
-        --replace '#include "json.hpp"' '#include <nlohmann/json.hpp>'
+        --replace-fail '#include "json.hpp"' '#include <nlohmann/json.hpp>'
   '';
 
   propagatedBuildInputs = [

@@ -40,7 +40,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
+    substituteInPlace requirements.txt --replace-fail "pandas<1.4.0" "pandas"
   '';
 
   nativeBuildInputs = [ setuptools ];

@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/{dbusscreensaver.cpp,com.deepin.ScreenSaver.service,src.pro} \
       customscreensaver/deepin-custom-screensaver/deepin-custom-screensaver.pro \
-      --replace "/usr" "$out" \
-      --replace "/etc" "$out/etc"
+      --replace-fail "/usr" "$out" \
+      --replace-fail "/etc" "$out/etc"
 
     substituteInPlace tools/preview/main.cpp \
-      --replace "/usr/lib/xscreensaver" "${xscreensaver}/libexec/xscreensaver"
+      --replace-fail "/usr/lib/xscreensaver" "${xscreensaver}/libexec/xscreensaver"
   '';
 
   nativeBuildInputs = [

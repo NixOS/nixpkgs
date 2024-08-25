@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
 
   # Remove references to __DATE__ and __TIME__
   postPatch = ''
-    substituteInPlace wmerg-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
-    substituteInPlace ctang-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
-    substituteInPlace ctangle.cxx --replace ' ("__DATE__", "__TIME__")' ""
-    substituteInPlace cweav-patch.ch --replace ' ("__DATE__", "__TIME__")' ""
+    substituteInPlace wmerg-patch.ch --replace-fail ' ("__DATE__", "__TIME__")' ""
+    substituteInPlace ctang-patch.ch --replace-fail ' ("__DATE__", "__TIME__")' ""
+    substituteInPlace ctangle.cxx --replace-fail ' ("__DATE__", "__TIME__")' ""
+    substituteInPlace cweav-patch.ch --replace-fail ' ("__DATE__", "__TIME__")' ""
   '';
 
   nativeBuildInputs = [ tie ];

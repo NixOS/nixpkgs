@@ -14,12 +14,12 @@ stdenv.mkDerivation {
   prePatch = ''
     # Remove broken test
     substituteInPlace tests/draw/Makefile.am \
-      --replace "draw-wrong.sh" ""
+      --replace-fail "draw-wrong.sh" ""
     rm tests/draw/draw-wrong.sh
 
     # Fix bash path
     substituteInPlace scripts/nixexpr2xml.in \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
   preAutoreconf = ''

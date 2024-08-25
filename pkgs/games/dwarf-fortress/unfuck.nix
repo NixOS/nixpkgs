@@ -100,7 +100,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # https://github.com/svenstaro/dwarf_fortress_unfuck/pull/27
-    substituteInPlace CMakeLists.txt --replace \''${GLEW_LIBRARIES} GLEW::glew
+    substituteInPlace CMakeLists.txt --replace-fail \''${GLEW_LIBRARIES} GLEW::glew
   '';
 
   cmakeFlags = [

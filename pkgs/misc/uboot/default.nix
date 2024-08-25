@@ -69,7 +69,7 @@ let
     postPatch = ''
       ${lib.concatMapStrings (script: ''
         substituteInPlace ${script} \
-        --replace "#!/usr/bin/env python3" "#!${pythonScriptsToInstall.${script}}/bin/python3"
+        --replace-fail "#!/usr/bin/env python3" "#!${pythonScriptsToInstall.${script}}/bin/python3"
       '') (builtins.attrNames pythonScriptsToInstall)}
       patchShebangs tools
       patchShebangs scripts
@@ -574,7 +574,7 @@ in {
   ubootRock64v2 = buildUBoot {
     prePatch = ''
       substituteInPlace arch/arm/dts/rk3328-rock64-u-boot.dtsi \
-        --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
+        --replace-fail rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
     '';
     defconfig = "rock64-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];

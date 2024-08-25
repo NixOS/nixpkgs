@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
     for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
+      substituteInPlace $i --replace-fail "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
     done
   '';
 

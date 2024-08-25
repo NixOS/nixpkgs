@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs qtest/bin/qtest-driver
     patchShebangs run-qtest
     # qtest needs to know where the source code is
-    substituteInPlace CMakeLists.txt --replace "run-qtest" "run-qtest --top $src --code $src --bin $out"
+    substituteInPlace CMakeLists.txt --replace-fail "run-qtest" "run-qtest --top $src --code $src --bin $out"
   '';
 
   doCheck = true;

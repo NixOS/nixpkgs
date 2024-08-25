@@ -111,8 +111,8 @@ python311Packages.buildPythonApplication {
   postPatch = ''
     # https://github.com/NixOS/nixpkgs/issues/44230
     substituteInPlace createPPD.sh \
-      --replace ppdc "${cups}/bin/ppdc" \
-      --replace "gzip -c" "gzip -cn"
+      --replace-fail ppdc "${cups}/bin/ppdc" \
+      --replace-fail "gzip -c" "gzip -cn"
 
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
@@ -174,7 +174,7 @@ python311Packages.buildPythonApplication {
   postConfigure = ''
     # don't save timestamp, in order to improve reproducibility
     substituteInPlace Makefile \
-      --replace "GZIP_ENV = --best" "GZIP_ENV = --best -n"
+      --replace-fail "GZIP_ENV = --best" "GZIP_ENV = --best -n"
   '';
 
   enableParallelBuilding = true;
@@ -257,15 +257,15 @@ python311Packages.buildPythonApplication {
   '';
 
   postFixup = ''
-    substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
+    substituteInPlace $out/etc/hp/hplip.conf --replace-fail /usr $out
     # Patch udev rules:
     # with plugin, they upload firmware to printers,
     # without plugin, they complain about the missing plugin.
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
-      --replace {,${bash}}/bin/sh \
-      --replace /usr/bin/nohup "" \
-      --replace {,${util-linux}/bin/}logger \
-      --replace {/usr,$out}/bin
+      --replace-fail {,${bash}}/bin/sh \
+      --replace-fail /usr/bin/nohup "" \
+      --replace-fail {,${util-linux}/bin/}logger \
+      --replace-fail {/usr,$out}/bin
     remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
   '';
 

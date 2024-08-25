@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   postPatch = ''
-    substituteInPlace src/main.rs --replace "./config.cfg" "$out/etc/sonic/config.cfg"
+    substituteInPlace src/main.rs --replace-fail "./config.cfg" "$out/etc/sonic/config.cfg"
   '';
 
   postInstall = ''
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage rec {
 
     substituteInPlace \
       $out/lib/systemd/system/sonic.service \
-      --replace /usr/bin/sonic $out/bin/sonic \
-      --replace /etc/sonic.cfg $out/etc/sonic/config.cfg
+      --replace-fail /usr/bin/sonic $out/bin/sonic \
+      --replace-fail /etc/sonic.cfg $out/etc/sonic/config.cfg
   '';
 
   passthru = {

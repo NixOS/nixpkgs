@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

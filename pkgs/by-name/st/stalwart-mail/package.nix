@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage {
     mkdir -p $out/lib/systemd/system
 
     substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart-mail.service \
-      --replace "__PATH__" "$out"
+      --replace-fail "__PATH__" "$out"
   '';
 
   checkFlags = [

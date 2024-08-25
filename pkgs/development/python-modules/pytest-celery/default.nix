@@ -21,7 +21,7 @@ buildPythonPackage rec {
   postPatch = ''
     # avoid infinite recursion with celery
     substituteInPlace pyproject.toml \
-      --replace '"celery >= 4.4.0"' ""
+      --replace-fail '"celery >= 4.4.0"' ""
   '';
 
   nativeBuildInputs = [ flit-core ];

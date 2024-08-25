@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'CC =' 'CC = $(CXX) #' \
-      --replace 'INSTALL_DIR =' "INSTALL_DIR = $out/bin#"
+      --replace-fail 'CC =' 'CC = $(CXX) #' \
+      --replace-fail 'INSTALL_DIR =' "INSTALL_DIR = $out/bin#"
   '';
 
   nativeBuildInputs = [ makeWrapper ];

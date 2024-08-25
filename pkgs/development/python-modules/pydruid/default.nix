@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   # patch out the CLI because it doesn't work with newer versions of pygments
   postPatch = ''
-    substituteInPlace setup.py --replace '"console_scripts": ["pydruid = pydruid.console:main"],' ""
+    substituteInPlace setup.py --replace-fail '"console_scripts": ["pydruid = pydruid.console:main"],' ""
   '';
 
   nativeBuildInputs = [ setuptools ];

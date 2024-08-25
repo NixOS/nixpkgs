@@ -20,7 +20,7 @@ buildNpmPackage rec {
 
   postPatch = ''
     substituteInPlace bin/lib/paths.js \
-      --replace "../../../" "../../"
+      --replace-fail "../../../" "../../"
   '';
 
   dontNpmInstall = true;
@@ -30,7 +30,7 @@ buildNpmPackage rec {
     mkdir -p $out/{bin,lib/mozilla/native-messaging-hosts}
 
     substituteInPlace dist/app/fx_cast_bridge.json \
-      --replace "$(realpath dist/app/fx_cast_bridge.sh)" "$out/bin/fx_cast_bridge"
+      --replace-fail "$(realpath dist/app/fx_cast_bridge.sh)" "$out/bin/fx_cast_bridge"
     mv dist/app/fx_cast_bridge.json $out/lib/mozilla/native-messaging-hosts
 
     rm dist/app/fx_cast_bridge.sh

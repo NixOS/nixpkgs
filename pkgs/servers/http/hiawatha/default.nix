@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ mbedtls libxcrypt ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
 
   prePatch = ''
-    substituteInPlace CMakeLists.txt --replace SETUID ""
+    substituteInPlace CMakeLists.txt --replace-fail SETUID ""
   '';
 
   cmakeFlags = [

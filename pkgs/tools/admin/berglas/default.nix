@@ -19,8 +19,8 @@ let
       ''
         ${acc}
         substituteInPlace pkg/berglas/${goFileName}_test.go \
-          --replace "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
-          --replace "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
+          --replace-fail "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
+          --replace-fail "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
       ''
     ) "" (builtins.attrNames skipTests);
 in

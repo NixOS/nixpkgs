@@ -26,10 +26,10 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     cd common
     substituteInPlace configure \
-      --replace "/.." "" \
-      --replace "share/backintime" "${python'.sitePackages}/backintime"
+      --replace-fail "/.." "" \
+      --replace-fail "share/backintime" "${python'.sitePackages}/backintime"
     substituteInPlace "backintime" \
-      --replace "share" "${python'.sitePackages}"
+      --replace-fail "share" "${python'.sitePackages}"
   '';
 
   dontAddPrefix = true;

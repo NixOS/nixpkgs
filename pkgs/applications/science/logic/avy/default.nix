@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i -e '1i#include <stdint.h>' abc/src/bdd/dsd/dsd.h
-    substituteInPlace abc/src/bdd/dsd/dsd.h --replace \
+    substituteInPlace abc/src/bdd/dsd/dsd.h --replace-fail \
                '((Child = Dsd_NodeReadDec(Node,Index))>=0);' \
                '((intptr_t)(Child = Dsd_NodeReadDec(Node,Index))>=0);'
 

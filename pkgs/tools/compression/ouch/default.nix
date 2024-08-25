@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   preCheck = ''
     substituteInPlace tests/ui.rs \
-      --replace 'format!(r"/private{path}")' 'path.to_string()'
+      --replace-fail 'format!(r"/private{path}")' 'path.to_string()'
   '';
 
   postInstall = ''

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace forgit.plugin.zsh \
-      --replace "\$INSTALL_DIR/bin/git-forgit" "$out/bin/git-forgit"
+      --replace-fail "\$INSTALL_DIR/bin/git-forgit" "$out/bin/git-forgit"
   '';
 
   dontBuild = true;

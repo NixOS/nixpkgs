@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Link dynamically against libraries instead of statically
     substituteInPlace CMakeLists.txt \
-      --replace uuid.a uuid
+      --replace-fail uuid.a uuid
     substituteInPlace cmake/OpenSSL.cmake \
-      --replace "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
+      --replace-fail "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
   '';
 
   nativeBuildInputs = [

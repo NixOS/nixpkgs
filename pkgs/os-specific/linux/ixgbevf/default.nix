@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     cd src
     makeFlagsArray+=(KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build INSTALL_MOD_PATH=$out MANDIR=/share/man)
-    substituteInPlace common.mk --replace /sbin/depmod ${kmod}/bin/depmod
+    substituteInPlace common.mk --replace-fail /sbin/depmod ${kmod}/bin/depmod
     # prevent host system kernel introspection
-    substituteInPlace common.mk --replace /boot/System.map /not-exists
+    substituteInPlace common.mk --replace-fail /boot/System.map /not-exists
   '';
 
   enableParallelBuilding = true;

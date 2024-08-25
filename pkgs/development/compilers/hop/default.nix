@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace configure --replace "(os-tmp)" '(getenv "TMPDIR")'
+    substituteInPlace configure --replace-fail "(os-tmp)" '(getenv "TMPDIR")'
   '';
 
   buildInputs = [ bigloo ];

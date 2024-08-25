@@ -81,7 +81,7 @@ python3Packages.buildPythonApplication rec {
     ])}"
 
     substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
-      --replace '"sh"' '"${runtimeShell}"'
+      --replace-fail '"sh"' '"${runtimeShell}"'
   '';
 
   meta = {

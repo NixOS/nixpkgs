@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace inkcut/device/transports/printer/plugin.py \
-      --replace ", 'lpr', " ", '${cups}/bin/lpr', "
+      --replace-fail ", 'lpr', " ", '${cups}/bin/lpr', "
   '';
 
   nativeBuildInputs = [ wrapQtAppsHook ];

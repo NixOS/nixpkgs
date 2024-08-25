@@ -21,7 +21,7 @@ buildGoModule rec {
   # Currently hard-coded, will be fixed by developer
   postPatch = ''
     substituteInPlace main.go \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   postInstall = ''

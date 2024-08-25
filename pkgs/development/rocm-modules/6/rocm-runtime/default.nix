@@ -58,13 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs core/runtime/blit_shaders/create_blit_shader_header.sh
 
     substituteInPlace CMakeLists.txt \
-      --replace 'hsa/include/hsa' 'include/hsa'
+      --replace-fail 'hsa/include/hsa' 'include/hsa'
 
     # We compile clang before rocm-device-libs, so patch it in afterwards
     # Replace object version: https://github.com/ROCm/ROCR-Runtime/issues/166 (TODO: Remove on LLVM update?)
     substituteInPlace image/blit_src/CMakeLists.txt \
-      --replace '-cl-denorms-are-zero' '-cl-denorms-are-zero --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode' \
-      --replace '-mcode-object-version=4' '-mcode-object-version=5'
+      --replace-fail '-cl-denorms-are-zero' '-cl-denorms-are-zero --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode' \
+      --replace-fail '-mcode-object-version=4' '-mcode-object-version=5'
   '';
 
   passthru.updateScript = rocmUpdateScript {

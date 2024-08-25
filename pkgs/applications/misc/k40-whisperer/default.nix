@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace svg_reader.py \
-      --replace '"/usr/bin/inkscape"' '"${inkscape}/bin/inkscape"'
+      --replace-fail '"/usr/bin/inkscape"' '"${inkscape}/bin/inkscape"'
   '';
 
   buildPhase = "";

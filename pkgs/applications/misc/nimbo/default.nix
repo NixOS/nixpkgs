@@ -20,9 +20,9 @@ python3.pkgs.buildPythonApplication rec {
   # Rich + Colorama are added in `propagatedBuildInputs`
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awscli>=1.19<2.0" "" \
-      --replace "colorama==0.4.3" "" \
-      --replace "rich>=10.1.0" ""
+      --replace-fail "awscli>=1.19<2.0" "" \
+      --replace-fail "colorama==0.4.3" "" \
+      --replace-fail "rich>=10.1.0" ""
   '';
 
   nativeBuildInputs = [ installShellFiles ];

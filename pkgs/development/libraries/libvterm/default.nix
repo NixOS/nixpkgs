@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "gcc" "${stdenv.cc.targetPrefix}cc" \
-      --replace "ldconfig" "" \
-      --replace "/usr" "$out"
+      --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc" \
+      --replace-fail "ldconfig" "" \
+      --replace-fail "/usr" "$out"
 
     makeFlagsArray+=("PKG_CFG=`${stdenv.cc.targetPrefix}pkg-config --cflags glib-2.0`")
   '';

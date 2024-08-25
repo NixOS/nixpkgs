@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=yalexs_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=yalexs_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [ "yalexs_ble" ];

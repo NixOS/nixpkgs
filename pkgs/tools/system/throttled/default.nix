@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/throttled.py|' -i systemd/throttled.service
 
-    substituteInPlace throttled.py --replace "'setpci'" "'${pciutils}/bin/setpci'"
+    substituteInPlace throttled.py --replace-fail "'setpci'" "'${pciutils}/bin/setpci'"
   '';
 
   installPhase = ''

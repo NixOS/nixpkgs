@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf "$out/opt/${finalAttrs.pname}/${finalAttrs.pname}" "$out/bin/${finalAttrs.pname}"
 
     substituteInPlace "$out/share/applications/${finalAttrs.pname}.desktop" \
-      --replace "Exec=/opt/TickTick/ticktick" "Exec=$out/bin/${finalAttrs.pname}"
+      --replace-fail "Exec=/opt/TickTick/ticktick" "Exec=$out/bin/${finalAttrs.pname}"
 
     runHook postInstall
   '';

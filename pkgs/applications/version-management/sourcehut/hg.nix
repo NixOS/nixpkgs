@@ -44,7 +44,7 @@ let
 
     postPatch = ''
       substituteInPlace hgsrht-keys/main.go \
-        --replace /var/log/hgsrht-keys /var/log/sourcehut/hgsrht-keys
+        --replace-fail /var/log/hgsrht-keys /var/log/sourcehut/hgsrht-keys
     '';
   };
 in
@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "all: api hgsrht-keys" ""
+      --replace-fail "all: api hgsrht-keys" ""
 
     substituteInPlace hgsrht-shell \
-      --replace /var/log/hgsrht-shell /var/log/sourcehut/hgsrht-shell
+      --replace-fail /var/log/hgsrht-shell /var/log/sourcehut/hgsrht-shell
   '';
 
   nativeBuildInputs = [

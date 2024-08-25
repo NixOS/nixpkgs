@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace '-soname' '-install_name' \
-      --replace 'lib$(NAME).so' 'lib$(NAME).dylib'
+      --replace-fail '-soname' '-install_name' \
+      --replace-fail 'lib$(NAME).so' 'lib$(NAME).dylib'
   '';
 
   makeFlags = [

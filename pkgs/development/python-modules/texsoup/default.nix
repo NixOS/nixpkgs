@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=TexSoup" ""
+      --replace-fail "--cov=TexSoup" ""
   '';
 
   meta = with lib; {

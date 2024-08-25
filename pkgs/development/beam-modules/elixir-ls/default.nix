@@ -46,17 +46,17 @@ mixRelease {
     cp -Rv release $out/lib
     # Prepare the wrapper script
     substitute release/language_server.sh $out/bin/elixir-ls \
-      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+      --replace-fail 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-ls
 
     substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
-      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+      --replace-fail 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-debug-adapter
     # prepare the launcher
     substituteInPlace $out/lib/launch.sh \
-      --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
+      --replace-fail "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
                 "ERL_LIBS=$out/lib:\$ERL_LIBS" \
-      --replace "exec elixir" "exec ${elixir}/bin/elixir"
+      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir"
     runHook postInstall
   '';
 

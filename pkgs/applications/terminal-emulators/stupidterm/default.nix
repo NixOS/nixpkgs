@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     install -D -m 644 stupidterm.ini $out/share/stupidterm/stupidterm.ini
 
     substituteInPlace $out/share/applications/stupidterm.desktop \
-      --replace "Exec=st" "Exec=$out/bin/stupidterm"
+      --replace-fail "Exec=st" "Exec=$out/bin/stupidterm"
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.stupidterm;

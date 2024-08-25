@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--metadata PACKAGE_UNDER_TEST parse_type" "" \
-      --replace "--metadata PACKAGE_VERSION ${version}" "" \
-      --replace "--html=build/testing/report.html --self-contained-html" "" \
-      --replace "--junit-xml=build/testing/report.xml" ""
+      --replace-fail "--metadata PACKAGE_UNDER_TEST parse_type" "" \
+      --replace-fail "--metadata PACKAGE_VERSION ${version}" "" \
+      --replace-fail "--html=build/testing/report.html --self-contained-html" "" \
+      --replace-fail "--junit-xml=build/testing/report.xml" ""
   '';
 
   pythonImportsCheck = [ "parse_type" ];

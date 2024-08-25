@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Prevent calling out to `git' to generate a version number:
     substituteInPlace src/Makefile \
-      --replace '$(shell git describe --always --dirty)' '${firmwareVersion}'
+      --replace-fail '$(shell git describe --always --dirty)' '${firmwareVersion}'
 
     # Fix scripts that generate headers:
     for f in $(find scripts libopencm3/scripts -type f); do

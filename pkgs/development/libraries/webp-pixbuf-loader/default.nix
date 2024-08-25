@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # It looks for gdk-pixbuf-thumbnailer in this package's bin rather than the gdk-pixbuf bin. We need to patch that.
     substituteInPlace webp-pixbuf.thumbnailer.in \
-      --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp"
+      --replace-fail "@bindir@/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp"
   '';
 
   postInstall = ''

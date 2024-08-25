@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=bleak_esphome --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=bleak_esphome --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

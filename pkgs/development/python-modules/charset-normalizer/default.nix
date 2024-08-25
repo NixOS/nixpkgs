@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov=charset_normalizer --cov-report=term-missing" ""
+      --replace-fail " --cov=charset_normalizer --cov-report=term-missing" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

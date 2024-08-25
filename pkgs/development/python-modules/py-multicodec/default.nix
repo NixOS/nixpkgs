@@ -27,9 +27,9 @@ buildPythonPackage rec {
   # Failed: [pytest] section in setup.cfg files is no longer supported, change to [tool:pytest] instead.
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "[pytest]" "[tool:pytest]"
+      --replace-fail "[pytest]" "[tool:pytest]"
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
 
   propagatedBuildInputs = [

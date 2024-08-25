@@ -149,20 +149,20 @@ qtModule {
 
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
+        --replace-fail "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
       substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
-        --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
+        --replace-fail "/usr/bin/env -S deno" "/usr/bin/deno" || true
       patchShebangs .
     )
 
     substituteInPlace cmake/Functions.cmake \
-      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
+      --replace-fail "/bin/bash" "${buildPackages.bash}/bin/bash"
 
     # Patch library paths in sources
     substituteInPlace src/core/web_engine_library_info.cpp \
-      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
+      --replace-fail "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
+      --replace-fail "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
+      --replace-fail "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -173,11 +173,11 @@ qtModule {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure.cmake src/gn/CMakeLists.txt \
-      --replace "AppleClang" "Clang"
+      --replace-fail "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
-      --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+      --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
     substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace "\$sysroot/usr" "${xnu}"
+      --replace-fail "\$sysroot/usr" "${xnu}"
   '';
 
   cmakeFlags = [

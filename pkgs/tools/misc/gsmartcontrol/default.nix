@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace data/org.gsmartcontrol.policy --replace "/usr/sbin" $out/bin
+    substituteInPlace data/org.gsmartcontrol.policy --replace-fail "/usr/sbin" $out/bin
   '';
 
   nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook3 ];

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace psycopg2-binary psycopg2
+      --replace-fail psycopg2-binary psycopg2
   '';
 
   propagatedBuildInputs = [

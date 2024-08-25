@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     # so we need to set `ibus_released` to `1` in `configure.ac`. Otherwise, anyone running `ibus version` gets
     # a version with an inaccurate `-rcX` suffix.
     # https://github.com/ibus/ibus/issues/2584
-    substituteInPlace configure.ac --replace "m4_define([ibus_released], [0])" "m4_define([ibus_released], [1])"
+    substituteInPlace configure.ac --replace-fail "m4_define([ibus_released], [0])" "m4_define([ibus_released], [1])"
 
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
-    substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
-    substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
+    substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace-fail "ExecStart=sh" "ExecStart=${runtimeShell}"
+    substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace-fail "ExecStart=sh" "ExecStart=${runtimeShell}"
   '';
 
   preAutoreconf = "touch ChangeLog";

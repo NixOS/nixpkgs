@@ -66,7 +66,7 @@ let
       mkdir -p $out/include $out/pkgconfig
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-        --replace /out $out
+        --replace-fail /out $out
     '' + lib.optionalString stdenv.isDarwin ''
       install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
@@ -87,7 +87,7 @@ in buildGoModule {
   postPatch = ''
     # use go-bindata from environment
     substituteInPlace static/static.go \
-      --replace 'go run github.com/kevinburke/go-bindata/' ""
+      --replace-fail 'go run github.com/kevinburke/go-bindata/' ""
   '';
 
   # Check that libflux and the UI are at the right version, and embed

@@ -20,8 +20,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='${version}'"
-    substituteInPlace setup.py --replace "argparse" ""
+    substituteInPlace setup.py --replace-fail "version=versioneer.get_version()" "version='${version}'"
+    substituteInPlace setup.py --replace-fail "argparse" ""
   '';
 
   propagatedBuildInputs = [

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       zstd
     ];
   in ''
-    substituteInPlace rpm2targz --replace "=\"rpmoffset\"" "=\"$out/bin/rpmoffset\""
+    substituteInPlace rpm2targz --replace-fail "=\"rpmoffset\"" "=\"$out/bin/rpmoffset\""
     # rpm2targz relies on the executable name
     # to guess what compressor it should use
     # this is more reliable than wrapProgram

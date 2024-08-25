@@ -50,11 +50,11 @@ let
     chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
     patchShebangs ./common/list_capabilities.sh ./common/list_af_names.sh
     substituteInPlace ./common/Make.rules \
-      --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man" \
-      --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html" \
-      --replace "/usr/share/man" "share/man"
+      --replace-fail "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man" \
+      --replace-fail "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html" \
+      --replace-fail "/usr/share/man" "share/man"
     substituteInPlace ./utils/Makefile \
-      --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
+      --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
   '';
 
   patches = [
@@ -106,7 +106,7 @@ let
     dontDisableStatic = true;
 
     prePatch = prePatchCommon + ''
-      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
+      substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace-fail install_vendor install_site
     '';
     inherit patches;
 
@@ -169,7 +169,7 @@ let
       sed -i utils/aa-unconfined -e "/my_env\['PATH'\]/d"
 
       substituteInPlace utils/aa-remove-unknown \
-       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
+       --replace-fail "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
     '';
     inherit patches;
     postPatch = "cd ./utils";
@@ -231,12 +231,12 @@ let
     prePatch = prePatchCommon + ''
       ## techdoc.pdf still doesn't build ...
       substituteInPlace ./parser/Makefile \
-        --replace "/usr/bin/bison" "${bison}/bin/bison" \
-        --replace "/usr/bin/flex" "${flex}/bin/flex" \
-        --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h" \
-        --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
+        --replace-fail "/usr/bin/bison" "${bison}/bin/bison" \
+        --replace-fail "/usr/bin/flex" "${flex}/bin/flex" \
+        --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h" \
+        --replace-fail "manpages htmlmanpages pdf" "manpages htmlmanpages"
       substituteInPlace parser/rc.apparmor.functions \
-       --replace "/sbin/apparmor_parser" "$out/bin/apparmor_parser"
+       --replace-fail "/sbin/apparmor_parser" "$out/bin/apparmor_parser"
       sed -i parser/rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
     '';
     inherit patches;

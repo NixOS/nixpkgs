@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace 'SSL_LIB="ssl"' 'SSL_LIB="crypto"'
+      --replace-fail 'SSL_LIB="ssl"' 'SSL_LIB="crypto"'
   '';
 
   buildInputs = [ openssl libssh2 gpgme ];

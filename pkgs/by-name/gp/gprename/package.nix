@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     grep -Ev 'desktop-file-install|update-desktop-database' Makefile | sponge Makefile
 
     substituteInPlace Makefile \
-      --replace '/usr/share' '$(DESTDIR)/share'
+      --replace-fail '/usr/share' '$(DESTDIR)/share'
 
     substituteInPlace bin/gprename \
-      --replace '/usr/share' $out/share \
-      --replace '/usr/local/share' $out/share
+      --replace-fail '/usr/share' $out/share \
+      --replace-fail '/usr/local/share' $out/share
   '';
 
   makeFlags = [ "DESTDIR=$(out)" ];

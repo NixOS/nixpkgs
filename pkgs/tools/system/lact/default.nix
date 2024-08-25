@@ -45,19 +45,19 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace lact-daemon/src/server/system.rs \
-      --replace 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
+      --replace-fail 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
 
     substituteInPlace res/lactd.service \
-      --replace ExecStart={lact,$out/bin/lact}
+      --replace-fail ExecStart={lact,$out/bin/lact}
 
     substituteInPlace res/io.github.lact-linux.desktop \
-      --replace Exec={lact,$out/bin/lact}
+      --replace-fail Exec={lact,$out/bin/lact}
 
     pushd $cargoDepsCopy/pciid-parser
     oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
     substituteInPlace src/lib.rs --subst-var-by hwdata ${hwdata}
     substituteInPlace .cargo-checksum.json \
-      --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
+      --replace-fail $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
     popd
   '';
 

@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=cached_ipaddress --cov-report=term-missing:skip-covered" "" \
-      --replace "Cython>=3.0.5" "Cython"
+      --replace-fail " --cov=cached_ipaddress --cov-report=term-missing:skip-covered" "" \
+      --replace-fail "Cython>=3.0.5" "Cython"
   '';
 
   nativeBuildInputs = [

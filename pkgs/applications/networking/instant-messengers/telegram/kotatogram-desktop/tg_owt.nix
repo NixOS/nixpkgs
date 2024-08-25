@@ -44,10 +44,10 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
-      --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
-      --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
-      --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
-      --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
+      --replace-fail '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
+      --replace-fail '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
+      --replace-fail '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
+      --replace-fail '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
   '';
 
   outputs = [ "out" "dev" ];

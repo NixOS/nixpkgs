@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace cpp/src/Options.cpp \
-      --replace /etc/openzwave $out/etc/openzwave
+      --replace-fail /etc/openzwave $out/etc/openzwave
     substituteInPlace cpp/build/Makefile  \
-      --replace "-Werror" "-Werror -Wno-format"
+      --replace-fail "-Werror" "-Werror -Wno-format"
   '';
 
   meta = with lib; {

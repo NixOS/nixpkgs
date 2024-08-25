@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     mkdir -p $out/share/man
 
-    substituteInPlace src/Makefile --replace '/usr/local/src/mdk4' '$out'
+    substituteInPlace src/Makefile --replace-fail '/usr/local/src/mdk4' '$out'
   '';
 
   nativeBuildInputs = [ pkg-config ];

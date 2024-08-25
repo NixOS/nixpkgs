@@ -25,7 +25,7 @@ appimageTools.wrapAppImage rec {
     # Now, install assets such as the desktop file and icons
     install -m 444 -D ${src}/lbry.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/lbry.desktop \
-      --replace 'Exec=AppRun' 'Exec=lbry'
+      --replace-fail 'Exec=AppRun' 'Exec=lbry'
     cp -r ${src}/usr/share/icons $out/share
   '';
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/prog/gpm-root.y --replace __sigemptyset sigemptyset
+    substituteInPlace src/prog/gpm-root.y --replace-fail __sigemptyset sigemptyset
   '';
 
   nativeBuildInputs = [ automake autoconf libtool flex bison texinfo ];

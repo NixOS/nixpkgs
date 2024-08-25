@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   patchPhase = ''
-    substituteInPlace telethon/crypto/libssl.py --replace \
+    substituteInPlace telethon/crypto/libssl.py --replace-fail \
       "ctypes.util.find_library('ssl')" "'${lib.getLib openssl}/lib/libssl.so'"
   '';
 

@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace GNUmakefile \
-      --replace "AR = /usr/bin/libtool" "AR = ar" \
-      --replace "ARFLAGS = -static -o" "ARFLAGS = -cru"
+      --replace-fail "AR = /usr/bin/libtool" "AR = ar" \
+      --replace-fail "ARFLAGS = -static -o" "ARFLAGS = -cru"
   '';
 
   buildInputs = lib.optionals (stdenv.cc.isClang && withOpenMP) [ llvmPackages.openmp ];

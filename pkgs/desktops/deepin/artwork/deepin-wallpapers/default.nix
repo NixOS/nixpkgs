@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/lib/deepin-api/image-blur ${dde-api}/lib/deepin-api/image-blur
+      --replace-fail /usr/lib/deepin-api/image-blur ${dde-api}/lib/deepin-api/image-blur
   '';
 
   installPhase = ''

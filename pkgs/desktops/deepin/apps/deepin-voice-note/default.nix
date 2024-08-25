@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
     substituteInPlace src/common/audiowatcher.cpp \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
   '';
 
   nativeBuildInputs = [

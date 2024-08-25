@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   preConfigure = ''
     substituteInPlace config.mk \
-      --replace '-lsodium -lopus -lvpx ' ""
+      --replace-fail '-lsodium -lopus -lvpx ' ""
 
     ${lib.optionalString (conf!=null) "cp ${configFile} config.def.h"}
   '';

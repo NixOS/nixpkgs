@@ -221,7 +221,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     echo "Strip sgxsdk prefix"
     for path in "$out/share/bin/environment" "$out/bin/sgx-gdb"; do
-      substituteInPlace $path --replace "$TMPDIR/sgxsdk" "$out"
+      substituteInPlace $path --replace-fail "$TMPDIR/sgxsdk" "$out"
     done
 
     echo "Fixing pkg-config files"
@@ -229,19 +229,19 @@ stdenv.mkDerivation rec {
 
     echo "Fixing SGX_SDK default in samples"
     substituteInPlace $out/share/SampleCode/LocalAttestation/buildenv.mk \
-      --replace '/opt/intel/sgxsdk' "$out"
+      --replace-fail '/opt/intel/sgxsdk' "$out"
     for file in $out/share/SampleCode/*/Makefile; do
       substituteInPlace $file \
-        --replace '/opt/intel/sgxsdk' "$out"
+        --replace-fail '/opt/intel/sgxsdk' "$out"
     done
 
     echo "Fixing BINUTILS_DIR in buildenv.mk"
     substituteInPlace $out/share/bin/buildenv.mk \
-      --replace 'BINUTILS_DIR ?= /usr/local/bin' \
+      --replace-fail 'BINUTILS_DIR ?= /usr/local/bin' \
                 'BINUTILS_DIR ?= ${BINUTILS_DIR}'
 
     echo "Fixing GDB path in bin/sgx-gdb"
-    substituteInPlace $out/bin/sgx-gdb --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
+    substituteInPlace $out/bin/sgx-gdb --replace-fail '/usr/local/bin/gdb' '${gdb}/bin/gdb'
   '';
 
   doInstallCheck = true;

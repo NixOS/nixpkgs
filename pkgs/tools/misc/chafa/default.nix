@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   patches = [ ./xmlcatalog_patch.patch ];
 
   preConfigure = ''
-    substituteInPlace ./autogen.sh --replace pkg-config '$PKG_CONFIG'
+    substituteInPlace ./autogen.sh --replace-fail pkg-config '$PKG_CONFIG'
     NOCONFIGURE=1 ./autogen.sh
   '';
 

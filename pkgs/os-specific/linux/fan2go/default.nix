@@ -15,7 +15,7 @@ buildGoModule rec {
 
   postConfigure = ''
     substituteInPlace vendor/github.com/md14454/gosensors/gosensors.go \
-      --replace '"/etc/sensors3.conf"' '"${lm_sensors}/etc/sensors3.conf"'
+      --replace-fail '"/etc/sensors3.conf"' '"${lm_sensors}/etc/sensors3.conf"'
   '';
 
   CGO_CFLAGS = "-I ${lm_sensors}/include";

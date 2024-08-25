@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postPatch = ''
     # Doesn't need a compiler, only installs data
     substituteInPlace CMakeLists.txt \
-      --replace 'project (lomiri-sounds)' 'project (lomiri-sounds LANGUAGES NONE)'
+      --replace-fail 'project (lomiri-sounds)' 'project (lomiri-sounds LANGUAGES NONE)'
   '';
 
   strictDeps = true;

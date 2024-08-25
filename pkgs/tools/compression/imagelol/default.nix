@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     mv imagelol src
     substituteInPlace CMakeLists.txt \
-      --replace 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
+      --replace-fail 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
   '';
 
   nativeBuildInputs = [ cmake ];

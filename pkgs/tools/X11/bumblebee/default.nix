@@ -87,13 +87,13 @@ in stdenv.mkDerivation rec {
   # way they are currently loaded in NixOS, so use _have. See #10936
   postPatch = ''
     substituteInPlace scripts/bash_completion/bumblebee \
-      --replace "have optirun" "_have optirun"
+      --replace-fail "have optirun" "_have optirun"
   '';
 
   preConfigure = ''
     # Don't use a special group, just reuse wheel.
     substituteInPlace configure \
-      --replace 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
+      --replace-fail 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
 
     # Apply configuration options
     substituteInPlace conf/xorg.conf.nvidia \

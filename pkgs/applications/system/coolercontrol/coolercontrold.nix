@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     # copy the frontend static resources to a directory for embedding
     mkdir -p ui-build
     cp -R ${coolercontrol.coolercontrol-ui-data}/* ui-build/
-    substituteInPlace build.rs --replace '"./resources/app"' '"./ui-build"'
+    substituteInPlace build.rs --replace-fail '"./resources/app"' '"./ui-build"'
 
     # Hardcode a shell
     substituteInPlace src/repositories/utils.rs \
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     install -Dm444 "${src}/packaging/systemd/coolercontrold.service" -t "$out/lib/systemd/system"
     substituteInPlace "$out/lib/systemd/system/coolercontrold.service" \
-      --replace '/usr/bin' "$out/bin"
+      --replace-fail '/usr/bin' "$out/bin"
   '';
 
   passthru.tests.version = testers.testVersion {

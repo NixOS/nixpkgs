@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
 
     install -Dm644 ${icon} $out/share/icons/hicolor/128x128/apps/imagej.png
     substituteInPlace $out/share/applications/ImageJ.desktop \
-      --replace Exec=imagej Exec=$out/bin/imagej
+      --replace-fail Exec=imagej Exec=$out/bin/imagej
   '';
 
   meta = with lib; {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # slib:require unsupported feature color-database
   postPatch = ''
     substituteInPlace Makefile \
-      --replace " clrnamdb.scm" ""
+      --replace-fail " clrnamdb.scm" ""
   '';
 
   nativeBuildInputs = [ scheme texinfo unzip ];

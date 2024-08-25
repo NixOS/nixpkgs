@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace deer \
-      --replace " perl " " ${perl}/bin/perl "
+      --replace-fail " perl " " ${perl}/bin/perl "
   '';
 
   patches = [ ./realpath.patch ];

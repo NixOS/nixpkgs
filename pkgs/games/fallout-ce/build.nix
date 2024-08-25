@@ -54,9 +54,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace third_party/fpattern/CMakeLists.txt \
-      --replace "FetchContent_Populate" "#FetchContent_Populate" \
-      --replace "{fpattern_SOURCE_DIR}" "${fpattern}/include" \
-      --replace "$/nix/" "/nix/"
+      --replace-fail "FetchContent_Populate" "#FetchContent_Populate" \
+      --replace-fail "{fpattern_SOURCE_DIR}" "${fpattern}/include" \
+      --replace-fail "$/nix/" "/nix/"
   '';
 
   installPhase = ''

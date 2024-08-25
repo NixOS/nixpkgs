@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace QRemoteControl-Server.pro \
-      --replace /usr $out
+      --replace-fail /usr $out
   '';
 
   meta = with lib; {

@@ -54,8 +54,8 @@ buildDotnetModule rec {
 
     install -D NetworkMiner/NetworkMiner.desktop $out/share/applications/NetworkMiner.desktop
     substituteInPlace $out/share/applications/NetworkMiner.desktop \
-      --replace "Exec=mono NetworkMiner.exe %f" "Exec=NetworkMiner" \
-      --replace "Icon=./networkminericon-96x96.png" "Icon=NetworkMiner"
+      --replace-fail "Exec=mono NetworkMiner.exe %f" "Exec=NetworkMiner" \
+      --replace-fail "Icon=./networkminericon-96x96.png" "Icon=NetworkMiner"
     install -D NetworkMiner/networkminericon-96x96.png $out/share/pixmaps/NetworkMiner.png
 
     runHook postInstall

@@ -26,7 +26,7 @@ mkDerivation {
   # is the default.
   postPatch = ''
     substituteInPlace generators/txt/okularApplication_txt.desktop \
-      --replace InitialPreference=3 InitialPreference=1
+      --replace-fail InitialPreference=3 InitialPreference=1
   '';
 
   cmakeFlags = lib.optional (!withSpeech) "-DFORCE_NOT_REQUIRED_DEPENDENCIES=Qt5TextToSpeech";

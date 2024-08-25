@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace /etc \$\{INSTALL_PREFIX\}/etc \
-                                     --replace /usr \$\{INSTALL_PREFIX\}
+    substituteInPlace CMakeLists.txt --replace-fail /etc \$\{INSTALL_PREFIX\}/etc \
+                                     --replace-fail /usr \$\{INSTALL_PREFIX\}
   '';
 
   cmakeFlags = [

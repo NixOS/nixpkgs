@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # fix bogus include paths
     for f in $(find $out/lib/cmake -name '*.cmake'); do
-      substituteInPlace "$f" --replace "\''${_IMPORT_PREFIX}/$out/include" "\''${_IMPORT_PREFIX}/include"
+      substituteInPlace "$f" --replace-fail "\''${_IMPORT_PREFIX}/$out/include" "\''${_IMPORT_PREFIX}/include"
     done
   '';
 

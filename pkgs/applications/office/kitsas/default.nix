@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace kitsas/kitsas.pro \
-      --replace "LIBS += -L/usr/local/opt/poppler-qt5/lib -lpoppler-qt6" "LIBS += -lpoppler-qt5"
+      --replace-fail "LIBS += -L/usr/local/opt/poppler-qt5/lib -lpoppler-qt6" "LIBS += -lpoppler-qt5"
   '';
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];

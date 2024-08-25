@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace '-I/usr/local/include/PCSC/' '-I${lib.getDev pcsclite}/include/PCSC/' \
-      --replace '-L/usr/local/lib/pth' '-I${pth}/lib/'
+      --replace-fail '-I/usr/local/include/PCSC/' '-I${lib.getDev pcsclite}/include/PCSC/' \
+      --replace-fail '-L/usr/local/lib/pth' '-I${pth}/lib/'
     '';
 
   installPhase = ''

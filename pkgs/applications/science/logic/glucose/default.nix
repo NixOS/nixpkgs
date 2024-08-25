@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Main.cc \
-      --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
+      --replace-fail "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
   '';
 
   nativeBuildInputs = [ unzip ];

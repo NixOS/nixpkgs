@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # fix hardcoded install path
-    substituteInPlace CMakeLists.txt --replace /etc $out/etc
+    substituteInPlace CMakeLists.txt --replace-fail /etc $out/etc
 
     # fix command paths in unit files
     for unit in rcscripts/systemd/*; do
       substituteInPlace "$unit" \
-        --replace /bin/kill ${procps}/bin/kill \
-        --replace /usr/bin/pkill ${procps}/bin/pkill \
-        --replace /usr/bin/sleep ${coreutils}/bin/sleep
+        --replace-fail /bin/kill ${procps}/bin/kill \
+        --replace-fail /usr/bin/pkill ${procps}/bin/pkill \
+        --replace-fail /usr/bin/sleep ${coreutils}/bin/sleep
     done
   '';
 

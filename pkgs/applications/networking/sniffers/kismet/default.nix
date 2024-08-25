@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile.in \
-      --replace "-m 4550" ""
+      --replace-fail "-m 4550" ""
     substituteInPlace configure.ac \
-      --replace "pkg-config" "$PKG_CONFIG"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   postConfigure = ''

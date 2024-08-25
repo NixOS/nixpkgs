@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     patchShebangs build
 
     # Enforce reproducible build compiler flags
-    substituteInPlace CMakeLists.txt --replace '-mtune=native' ""
+    substituteInPlace CMakeLists.txt --replace-fail '-mtune=native' ""
   '';
 
   passthru = { inherit blas64; };

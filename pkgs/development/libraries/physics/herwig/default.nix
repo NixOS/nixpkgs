@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     # Fix failing "make install" being unable to find HwEvtGenInterface.so
     substituteInPlace src/defaults/decayers.in.in \
-      --replace "read EvtGenDecayer.in" ""
+      --replace-fail "read EvtGenDecayer.in" ""
   '';
 
   configureFlags = [

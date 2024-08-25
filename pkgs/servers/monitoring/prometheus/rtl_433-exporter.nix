@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-ggtGi1gnpTLGvZnfAW9vyYyU7ELbTRNhXyCMotx+KKU=";
   };
 
-  postPatch = "substituteInPlace rtl_433_prometheus.go --replace /bin/bash ${bash}/bin/bash";
+  postPatch = "substituteInPlace rtl_433_prometheus.go --replace-fail /bin/bash ${bash}/bin/bash";
 
   vendorHash = "sha256-BsNB0OTwBUu9kK+lSN7EF8ZQH3kFx8P9h4QgcfCvtg4=";
 

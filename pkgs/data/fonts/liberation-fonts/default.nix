@@ -60,7 +60,7 @@ in
     docsToInstall = [ "AUTHORS" "ChangeLog" "LICENSE" "README.md" ];
     nativeBuildInputs = commonNativeBuildInputs ++ [ fonttools ];
     postPatch = ''
-      substituteInPlace scripts/setisFixedPitch-fonttools.py --replace \
+      substituteInPlace scripts/setisFixedPitch-fonttools.py --replace-fail \
         'font = ttLib.TTFont(fontfile)' \
         'font = ttLib.TTFont(fontfile, recalcTimestamp=False)'
     '';

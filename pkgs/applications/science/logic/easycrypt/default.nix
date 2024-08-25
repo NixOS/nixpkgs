@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace dune-project --replace '(name easycrypt)' '(name easycrypt)(version ${version})'
+    substituteInPlace dune-project --replace-fail '(name easycrypt)' '(name easycrypt)(version ${version})'
   '';
 
   pythonPath = with python3.pkgs; [ pyyaml ];

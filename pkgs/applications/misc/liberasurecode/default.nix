@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace doc/doxygen.cfg.in \
-      --replace "GENERATE_MAN           = NO" "GENERATE_MAN           = YES"
+      --replace-fail "GENERATE_MAN           = NO" "GENERATE_MAN           = YES"
 
     substituteInPlace Makefile.am src/Makefile.am \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [ autoreconfHook doxygen installShellFiles ];

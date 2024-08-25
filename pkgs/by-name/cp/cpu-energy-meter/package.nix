@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "DESTDIR :=" "DESTDIR := $out" \
-      --replace "PREFIX := /usr/local" "PREFIX :="
+      --replace-fail "DESTDIR :=" "DESTDIR := $out" \
+      --replace-fail "PREFIX := /usr/local" "PREFIX :="
   '';
 
   buildInputs = [ libcap ];

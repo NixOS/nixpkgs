@@ -143,13 +143,13 @@ in
   git = old: (addToBuildInputsWithPkgConfig pkgs.libgit2 old) // {
     postPatch = ''
       substituteInPlace libgit2.scm \
-        --replace "asize" "reserved"
+        --replace-fail "asize" "reserved"
     '';
   };
   lazy-ffi = old: (addToBuildInputs pkgs.libffi old) // {
     postPatch = ''
       substituteInPlace lazy-ffi.scm \
-        --replace "ffi/ffi.h" "ffi.h"
+        --replace-fail "ffi/ffi.h" "ffi.h"
     '';
   };
   opengl = old:
@@ -160,13 +160,13 @@ in
     // {
       postPatch = ''
         substituteInPlace opengl.egg \
-          --replace 'framework ' 'framework" "'
+          --replace-fail 'framework ' 'framework" "'
       '';
     };
   posix-shm = old: {
     postPatch = lib.optionalString stdenv.isDarwin ''
       substituteInPlace build.scm \
-        --replace "-lrt" ""
+        --replace-fail "-lrt" ""
     '';
   };
 
@@ -182,8 +182,8 @@ in
       preBuild = ''
         substituteInPlace \
           dbus.egg dbus.setup \
-          --replace '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
-          --replace '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
+          --replace-fail '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
+          --replace-fail '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
       '';
     };
   math = old: {

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "__version__ = '0.0.3'" "__version__ = '${version}'"
+      --replace-fail "__version__ = '0.0.3'" "__version__ = '${version}'"
   '';
 
   # Tests are outdated

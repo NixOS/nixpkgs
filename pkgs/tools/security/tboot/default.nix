@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
-    substituteInPlace tboot/Makefile --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace tboot/Makefile --replace-fail /usr/bin/perl ${perl}/bin/perl
 
     for a in lcptools-v2 tb_polgen utils; do
-      substituteInPlace "$a/Makefile" --replace /usr/sbin /sbin
+      substituteInPlace "$a/Makefile" --replace-fail /usr/sbin /sbin
     done
-    substituteInPlace docs/Makefile --replace /usr/share /share
+    substituteInPlace docs/Makefile --replace-fail /usr/share /share
   '';
 
   installFlags = [ "DESTDIR=$(out)" ];

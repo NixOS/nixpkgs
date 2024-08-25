@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # Expects SDL2.framework in specific location, which we don't have
     # Passing this in cmakeFlags doesn't work because the path is hard-coded for Darwin
     substituteInPlace cmake/FindSDL2.cmake \
-      --replace 'set(SDL2_LIBRARIES' 'set(SDL2_LIBRARIES "${SDL2}/lib/libSDL2.dylib") #'
+      --replace-fail 'set(SDL2_LIBRARIES' 'set(SDL2_LIBRARIES "${SDL2}/lib/libSDL2.dylib") #'
     # Expects plutil, which we don't have
     sed -i '/plutil/d' CMakeLists.txt
   '';

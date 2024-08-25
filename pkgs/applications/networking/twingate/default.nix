@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     while read file; do
       substituteInPlace "$file" \
-        --replace "/usr/bin" "$out/bin" \
-        --replace "/usr/sbin" "$out/bin"
+        --replace-fail "/usr/bin" "$out/bin" \
+        --replace-fail "/usr/sbin" "$out/bin"
     done < <(find etc usr/lib usr/share -type f)
   '';
 

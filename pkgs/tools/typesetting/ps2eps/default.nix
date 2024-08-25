@@ -38,7 +38,7 @@ perlPackages.buildPerlPackage rec {
     make -C src/C bbox
     patchShebangs src/perl/ps2eps
     substituteInPlace src/perl/ps2eps \
-      --replace @bbox@ $out/bin/bbox
+      --replace-fail @bbox@ $out/bin/bbox
 
     runHook postBuild
   '';

@@ -73,32 +73,32 @@ in phpPackage.buildComposerProject rec {
 
     substituteInPlace \
       $out/misc/config_definitions.json \
-      --replace '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
-      --replace '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
-      --replace '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
-      --replace '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
-      --replace '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
-      --replace '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
-      --replace '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
-      --replace '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
-      --replace '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
-      --replace '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
-      --replace '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
-      --replace '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
-      --replace '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
-      --replace '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
-      --replace '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
-      --replace '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
-      --replace '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
-      --replace '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
-      --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
-      --replace '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
+      --replace-fail '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
+      --replace-fail '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
+      --replace-fail '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
+      --replace-fail '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
+      --replace-fail '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
+      --replace-fail '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
+      --replace-fail '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
+      --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
+      --replace-fail '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
+      --replace-fail '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
+      --replace-fail '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
+      --replace-fail '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
+      --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
+      --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
+      --replace-fail '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
+      --replace-fail '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
+      --replace-fail '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
+      --replace-fail '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
+      --replace-fail '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
+      --replace-fail '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
 
-    substituteInPlace $out/LibreNMS/wrapper.py --replace '/usr/bin/env php' '${phpPackage}/bin/php'
-    substituteInPlace $out/LibreNMS/__init__.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
-    substituteInPlace $out/snmp-scan.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/LibreNMS/wrapper.py --replace-fail '/usr/bin/env php' '${phpPackage}/bin/php'
+    substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/lnms --replace '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/lnms --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 

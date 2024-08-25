@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
   postPatch = ''
     substituteInPlace core/helpers.cpp \
-      --replace "@OUT@" $out
+      --replace-fail "@OUT@" $out
   '';
 
   strictDeps = true;

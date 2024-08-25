@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # Use wrapped python. Removing just the /usr/bin doesn't seem to work?
     substituteInPlace tests/httpbin.h.in \
-      --replace '/usr/bin/python3' '${lib.getExe pythonEnv}'
+      --replace-fail '/usr/bin/python3' '${lib.getExe pythonEnv}'
   '';
 
   strictDeps = true;

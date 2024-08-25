@@ -117,21 +117,21 @@ stdenv.mkDerivation rec {
     cp -r $out/usr/share $out/share
 
     substituteInPlace $out/lib/systemd/system/appgate-dumb-resolver.service \
-        --replace "/opt/" "$out/opt/"
+        --replace-fail "/opt/" "$out/opt/"
 
     substituteInPlace $out/lib/systemd/system/appgatedriver.service \
-        --replace "/opt/" "$out/opt/" \
-        --replace "InaccessiblePaths=/mnt /srv /boot /media" "InaccessiblePaths=-/mnt -/srv -/boot -/media"
+        --replace-fail "/opt/" "$out/opt/" \
+        --replace-fail "InaccessiblePaths=/mnt /srv /boot /media" "InaccessiblePaths=-/mnt -/srv -/boot -/media"
 
     substituteInPlace $out/lib/systemd/system/appgate-resolver.service \
-        --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq" \
-        --replace "/opt/" "$out/opt/"
+        --replace-fail "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq" \
+        --replace-fail "/opt/" "$out/opt/"
 
     substituteInPlace $out/opt/appgate/linux/nm.py \
-        --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq"
+        --replace-fail "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq"
 
     substituteInPlace $out/opt/appgate/linux/set_dns \
-        --replace "/etc/appgate.conf" "$out/etc/appgate.conf"
+        --replace-fail "/etc/appgate.conf" "$out/etc/appgate.conf"
 
     wrapProgram $out/opt/appgate/service/createdump \
         --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ stdenv.cc.cc ]}"

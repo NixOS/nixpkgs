@@ -11,7 +11,7 @@ stdenv.mkDerivation rec{
 
   prePatch = ''
     sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/share|$out/share|g" Makefile antiword.h
-    substituteInPlace Makefile --replace "gcc" '$(CC)'
+    substituteInPlace Makefile --replace-fail "gcc" '$(CC)'
   '';
 
   patches = [ ./10_fix_buffer_overflow_wordole_c_CVE-2014-8123.patch ];

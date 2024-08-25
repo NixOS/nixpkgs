@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "werror=true" "werror=false"
+      --replace-fail "werror=true" "werror=false"
   '';
 
   meta = with lib; {

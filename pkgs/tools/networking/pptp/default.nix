@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    substituteInPlace Makefile --replace 'install -o root' 'install'
+    substituteInPlace Makefile --replace-fail 'install -o root' 'install'
   '';
 
   makeFlags = [

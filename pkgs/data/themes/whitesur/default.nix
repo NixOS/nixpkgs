@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
     done
 
     # Do not provide `sudo`, as it is not needed in our use case of the install script
-    substituteInPlace shell/lib-core.sh --replace '$(which sudo)' false
+    substituteInPlace shell/lib-core.sh --replace-fail '$(which sudo)' false
 
     # Provides a dummy home directory
-    substituteInPlace shell/lib-core.sh --replace 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
+    substituteInPlace shell/lib-core.sh --replace-fail 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
   '';
 
   dontBuild = true;

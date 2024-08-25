@@ -14,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
   patches = [ ./prefix.patch ];
 
   preConfigure = ''
-    substituteInPlace src/orpie/install.ml.in --replace '@prefix@' $out
+    substituteInPlace src/orpie/install.ml.in --replace-fail '@prefix@' $out
   '';
 
   nativeBuildInputs = [ ocamlPackages.camlp5 ];

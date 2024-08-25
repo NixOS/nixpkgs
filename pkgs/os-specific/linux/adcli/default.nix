@@ -44,15 +44,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/Makefile.am \
-      --replace 'sbin_PROGRAMS' 'bin_PROGRAMS'
+      --replace-fail 'sbin_PROGRAMS' 'bin_PROGRAMS'
 
     substituteInPlace doc/Makefile.am \
-        --replace 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl' \
+        --replace-fail 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl' \
                   '${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl'
 
     function patch_docbook() {
       substituteInPlace $1 \
-        --replace "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
+        --replace-fail "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
                   "${docbook_xml_dtd_43}/xml/dtd/docbook/docbookx.dtd"
     }
     patch_docbook doc/adcli.xml

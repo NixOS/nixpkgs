@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out"/bin/HepMC3-config \
-      --replace 'greadlink' '${coreutils}/bin/readlink' \
-      --replace 'readlink' '${coreutils}/bin/readlink'
+      --replace-fail 'greadlink' '${coreutils}/bin/readlink' \
+      --replace-fail 'readlink' '${coreutils}/bin/readlink'
   '';
 
   pythonImportsCheck = [ "pyHepMC3" ];

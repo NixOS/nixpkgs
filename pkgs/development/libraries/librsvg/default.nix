@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString ((stdenv.buildPlatform != stdenv.hostPlatform) && (stdenv.hostPlatform.emulatorAvailable buildPackages)) ''
     # the replacement is the native conditional
     substituteInPlace gdk-pixbuf-loader/Makefile \
-      --replace 'RUN_QUERY_LOADER_TEST = false' 'RUN_QUERY_LOADER_TEST = test -z "$(DESTDIR)"' \
+      --replace-fail 'RUN_QUERY_LOADER_TEST = false' 'RUN_QUERY_LOADER_TEST = test -z "$(DESTDIR)"' \
   '';
 
   # Not generated when cross compiling.

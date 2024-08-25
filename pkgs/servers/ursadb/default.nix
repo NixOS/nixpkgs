@@ -14,12 +14,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "add_executable(ursadb_test src/Tests.cpp)" "" \
-      --replace "target_link_libraries(ursadb_test ursa)" "" \
-      --replace "target_enable_ipo(ursadb_test)" "" \
-      --replace "target_clangformat_setup(ursadb_test)" "" \
-      --replace 'target_include_directories(ursadb_test PUBLIC ${"$"}{CMAKE_SOURCE_DIR})' "" \
-      --replace "ursadb_test" ""
+      --replace-fail "add_executable(ursadb_test src/Tests.cpp)" "" \
+      --replace-fail "target_link_libraries(ursadb_test ursa)" "" \
+      --replace-fail "target_enable_ipo(ursadb_test)" "" \
+      --replace-fail "target_clangformat_setup(ursadb_test)" "" \
+      --replace-fail 'target_include_directories(ursadb_test PUBLIC ${"$"}{CMAKE_SOURCE_DIR})' "" \
+      --replace-fail "ursadb_test" ""
   '';
 
   nativeBuildInputs = [

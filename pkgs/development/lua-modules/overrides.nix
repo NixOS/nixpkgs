@@ -225,7 +225,7 @@ in
     # https://github.com/lgi-devs/lgi/pull/300
     postPatch = ''
       substituteInPlace lgi/Makefile tests/Makefile \
-        --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+        --replace-fail 'PKG_CONFIG =' 'PKG_CONFIG ?='
     '';
 
     # there is only a rockspec.in in the repo, the actual rockspec must be generated
@@ -270,7 +270,7 @@ in
           # works fine with 5.4 as well
           postConfigure = ''
             substituteInPlace ''${rockspecFilename} \
-              --replace 'lua ~> 5.3' 'lua >= 5.3, < 5.5'
+              --replace-fail 'lua ~> 5.3' 'lua >= 5.3, < 5.5'
           '';
         });
 
@@ -318,7 +318,7 @@ in
     # until Alloyed/lua-lsp#28
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace '"dkjson ~> 2.5",' '"dkjson >= 2.5",'
+        --replace-fail '"dkjson ~> 2.5",' '"dkjson >= 2.5",'
     '';
   });
 
@@ -473,7 +473,7 @@ in
   lua-resty-openidc =  prev.lua-resty-openidc.overrideAttrs (_: {
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace '"lua-resty-session >= 2.8, <= 3.10",' '"lua-resty-session >= 2.8",'
+        --replace-fail '"lua-resty-session >= 2.8, <= 3.10",' '"lua-resty-session >= 2.8",'
     '';
   });
 
@@ -665,7 +665,7 @@ in
 
     postPatch = ''
       substituteInPlace magick/wand/lib.lua \
-        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI${stdenv.hostPlatform.extensions.sharedLibrary}
+        --replace-fail @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
 
     # Requires ffi

@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     runHook prePatch
 
     substituteInPlace ./CMakeLists.txt \
-      --replace "find_package(TBB REQUIRED)" ""
+      --replace-fail "find_package(TBB REQUIRED)" ""
 
     # prevent inheriting permissions from /nix/store when copying
-    substituteInPlace Converter/src/main.cpp --replace \
+    substituteInPlace Converter/src/main.cpp --replace-fail \
       'fs::copy(templateDir, pagedir, fs::copy_options::overwrite_existing | fs::copy_options::recursive)' 'string cmd = "cp --no-preserve=mode -r " + templateDir + " " + pagedir; system(cmd.c_str());'
   '';
 

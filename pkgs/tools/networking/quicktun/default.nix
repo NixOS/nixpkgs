@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace build.sh \
-      --replace "cc=\"cc\"" "cc=\"$CC\""
+      --replace-fail "cc=\"cc\"" "cc=\"$CC\""
   '';
 
   buildPhase = ''

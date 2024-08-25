@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
 
     #comment out lpadmin commands to prohibit changes to CUPS config by just installing this driver.
     substituteInPlace $dir/cupswrapper/cupswrappermfc5890cn \
-      --replace "lpadmin" "#lpadmin" \
-      --replace "/usr/" "$out/usr/"
+      --replace-fail "lpadmin" "#lpadmin" \
+      --replace-fail "/usr/" "$out/usr/"
 
     #mfc5890cnlpr is a dependency of this package. Link all files of mfc5890cnlpr into the $out/usr folder, as other scripts depend on these files being present.
     #Ideally, we would use substituteInPlace for each file this package actually requires. But the scripts of Brother use variables to dynamically build the paths

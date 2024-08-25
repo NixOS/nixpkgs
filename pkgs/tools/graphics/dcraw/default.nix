@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   # CVEs.
   patchPhase = ''
     substituteInPlace install \
-      --replace 'prefix=/usr/local' 'prefix=$out' \
-      --replace gcc '$CC' \
-      --replace '-ljasper' '-DNO_JASPER=1'
+      --replace-fail 'prefix=/usr/local' 'prefix=$out' \
+      --replace-fail gcc '$CC' \
+      --replace-fail '-ljasper' '-DNO_JASPER=1'
   '';
 
   buildPhase = ''

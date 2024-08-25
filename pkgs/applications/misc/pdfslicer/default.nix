@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Don't build tests, vendored catch doesn't build with latest glibc.
     substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory (tests)" ""
+      --replace-fail "add_subdirectory (tests)" ""
   '';
 
   nativeBuildInputs = [

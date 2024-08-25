@@ -23,7 +23,7 @@ appimageTools.wrapType2 {
     install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

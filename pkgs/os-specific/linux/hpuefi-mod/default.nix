@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace "Makefile" \
-      --replace depmod \#
+      --replace-fail depmod \#
   '';
 
   meta = {

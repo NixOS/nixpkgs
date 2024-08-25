@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   preBuild = ''
-    substituteInPlace Makefile --replace /bin/rm rm --replace /usr/local/ $out/
+    substituteInPlace Makefile --replace-fail /bin/rm rm --replace-fail /usr/local/ $out/
   '';
 
   strictDeps = true;

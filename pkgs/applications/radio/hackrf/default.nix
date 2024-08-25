@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace host/cmake/modules/FindFFTW.cmake \
-      --replace "find_library (FFTW_LIBRARIES NAMES fftw3)" "find_library (FFTW_LIBRARIES NAMES fftw3f)"
+      --replace-fail "find_library (FFTW_LIBRARIES NAMES fftw3)" "find_library (FFTW_LIBRARIES NAMES fftw3f)"
   '';
 
   meta = with lib; {

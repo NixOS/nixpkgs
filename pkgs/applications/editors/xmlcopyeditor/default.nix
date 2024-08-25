@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   #        with an rvalue of type 'const xmlError *' (aka 'const _xmlError *')
   postPatch = ''
     substituteInPlace src/wraplibxml.cpp \
-      --replace "xmlErrorPtr err" "const xmlError *err"
+      --replace-fail "xmlErrorPtr err" "const xmlError *err"
   '';
 
   nativeBuildInputs = [

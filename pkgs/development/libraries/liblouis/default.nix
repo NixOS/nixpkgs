@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs tests
-    substituteInPlace python/louis/__init__.py.in --replace "###LIBLOUIS_SONAME###" "$out/lib/liblouis.so"
+    substituteInPlace python/louis/__init__.py.in --replace-fail "###LIBLOUIS_SONAME###" "$out/lib/liblouis.so"
   '';
 
   postInstall = ''

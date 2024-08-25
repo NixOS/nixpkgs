@@ -19,11 +19,11 @@ let
     # See https://github.com/ipfs/fs-repo-migrations/pull/163
     postPatch = lib.optionalString (lib.elem pname [ "fs-repo-10-to-11" "fs-repo-11-to-12" ]) ''
       substituteInPlace 'vendor/github.com/marten-seemann/qtls-go1-15/common.go' \
-        --replace \
+        --replace-fail \
           '"container/list"' \
           '"container/list"
           "context"' \
-        --replace \
+        --replace-fail \
           'config *Config' \
           'config *Config
           ctx context.Context'

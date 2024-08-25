@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
 
     for file in $(find -name render-\*.sh); do
       substituteInPlace "$file" \
-        --replace 'INKSCAPE="/usr/bin/inkscape"' \
+        --replace-fail 'INKSCAPE="/usr/bin/inkscape"' \
                   'INKSCAPE="${inkscape}/bin/inkscape"' \
-        --replace 'OPTIPNG="/usr/bin/optipng"' \
+        --replace-fail 'OPTIPNG="/usr/bin/optipng"' \
                   'OPTIPNG="${optipng}/bin/optipng"'
     done
   '';

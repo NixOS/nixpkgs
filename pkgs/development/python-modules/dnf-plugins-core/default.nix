@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}" \
-      --replace "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
-      --replace "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
+      --replace-fail "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}" \
+      --replace-fail "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
+      --replace-fail "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
     substituteInPlace doc/CMakeLists.txt \
-      --replace 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
+      --replace-fail 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
   '';
 
   nativeBuildInputs = [

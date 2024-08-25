@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # killall is dangerous on non-gnu platforms. Use pkill instead.
   postPatch = ''
-    substituteInPlace middle.c --replace "killall" "pkill -x"
+    substituteInPlace middle.c --replace-fail "killall" "pkill -x"
   '';
 
   installPhase = ''

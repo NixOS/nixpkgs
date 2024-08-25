@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
     # fix the path in the desktop file
     substituteInPlace \
       $out/share/applications/pencil.desktop \
-      --replace /opt/ $out/opt/
+      --replace-fail /opt/ $out/opt/
 
     # symlink the binary to bin/
     ln -s $out/opt/pencil/pencil $out/bin/pencil

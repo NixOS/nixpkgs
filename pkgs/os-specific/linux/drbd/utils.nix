@@ -74,20 +74,20 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     substituteInPlace user/v84/drbdadm_usage_cnt.c \
-      --replace '"/lib/drbd");' \
+      --replace-fail '"/lib/drbd");' \
                 '"${placeholder "out"}/lib/drbd");'
     substituteInPlace user/v9/drbdsetup_linux.c \
-      --replace 'ret = system("/sbin/modprobe drbd");' \
+      --replace-fail 'ret = system("/sbin/modprobe drbd");' \
                 'ret = system("${kmod}/bin/modprobe drbd");'
     substituteInPlace user/v84/drbdsetup.c \
-      --replace 'system("/sbin/modprobe drbd")' \
+      --replace-fail 'system("/sbin/modprobe drbd")' \
                 'system("${kmod}/bin/modprobe drbd")'
     substituteInPlace documentation/ra2refentry.xsl \
-      --replace "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" \
+      --replace-fail "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" \
                 "${docbook_xml_dtd_44}/xml/dtd/docbook/docbookx.dtd"
     function patch_docbook45() {
       substituteInPlace $1 \
-        --replace "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
+        --replace-fail "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
                   "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
     }
     patch_docbook45 documentation/v9/drbd.conf.xml.in
@@ -100,16 +100,16 @@ stdenv.mkDerivation rec {
     # Use of uninitialized value $args[1] in sprintf at /nix/store/wyx2nn2pjcn50lc95c6qgsgm606rn0x2-perl5.32.1-po4a-0.62/lib/perl5/site_perl/Locale/Po4a/Common.pm line 134.
     # Invalid po file drbdsetup.xml.po:
     substituteInPlace Makefile.in \
-      --replace 'DOC_DIRS    := documentation/v9 documentation/ja/v9' \
+      --replace-fail 'DOC_DIRS    := documentation/v9 documentation/ja/v9' \
                 'DOC_DIRS    := documentation/v9' \
-      --replace 'DOC_DIRS    += documentation/v84 documentation/ja/v84' \
+      --replace-fail 'DOC_DIRS    += documentation/v84 documentation/ja/v84' \
                 'DOC_DIRS    += documentation/v84' \
-      --replace '$(MAKE) -C documentation/ja/v9 doc' \
+      --replace-fail '$(MAKE) -C documentation/ja/v9 doc' \
                 "" \
-      --replace '$(MAKE) -C documentation/ja/v84 doc' \
+      --replace-fail '$(MAKE) -C documentation/ja/v84 doc' \
                 ""
     substituteInPlace user/v9/drbdtool_common.c \
-      --replace 'add_component_to_path("/lib/drbd");' \
+      --replace-fail 'add_component_to_path("/lib/drbd");' \
                 'add_component_to_path("${placeholder "out"}/lib/drbd");'
   '';
 

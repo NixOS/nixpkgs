@@ -11,7 +11,7 @@ clangStdenv.mkDerivation rec {
 
   patches = [ ./sat_solver.patch ];
   postPatch = ''
-    substituteInPlace zchaff_solver.cpp --replace "// #define VERIFY_ON" "#define VERIFY_ON"
+    substituteInPlace zchaff_solver.cpp --replace-fail "// #define VERIFY_ON" "#define VERIFY_ON"
   '';
 
   makeFlags = [ "CC=${clangStdenv.cc.targetPrefix}c++" ];

@@ -160,7 +160,7 @@ in stdenv.mkDerivation {
     # Patch MathInstaller's shebangs and udev rules dir
     patchShebangs MathInstaller
     substituteInPlace MathInstaller \
-      --replace /etc/udev/rules.d $out/lib/udev/rules.d
+      --replace-fail /etc/udev/rules.d $out/lib/udev/rules.d
 
     # Remove PATH restriction, root and avahi daemon checks, and hostname call
     sed -i '

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.sh \
-      --replace "/tmp/sdl-test" $(mktemp)
+      --replace-fail "/tmp/sdl-test" $(mktemp)
   '';
 
   configurePhase = ''

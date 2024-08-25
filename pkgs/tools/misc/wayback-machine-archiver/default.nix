@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace \"pytest-runner\", ""
+      --replace-fail \"pytest-runner\", ""
   '';
 
   pythonImportsCheck = [ "wayback_machine_archiver" ];

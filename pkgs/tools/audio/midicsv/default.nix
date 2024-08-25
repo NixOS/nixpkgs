@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/local $out \
-      --replace gcc "${stdenv.cc.targetPrefix}cc"
+      --replace-fail /usr/local $out \
+      --replace-fail gcc "${stdenv.cc.targetPrefix}cc"
   '';
 
   meta = with lib; {

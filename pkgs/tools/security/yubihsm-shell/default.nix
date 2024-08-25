@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Can't find libyubihsm at runtime because of dlopen() in C code
     substituteInPlace lib/yubihsm.c \
-      --replace "libyubihsm_usb.so" "$out/lib/libyubihsm_usb.so" \
-      --replace "libyubihsm_http.so" "$out/lib/libyubihsm_http.so"
+      --replace-fail "libyubihsm_usb.so" "$out/lib/libyubihsm_usb.so" \
+      --replace-fail "libyubihsm_http.so" "$out/lib/libyubihsm_http.so"
     # ld: unknown option: -z
     substituteInPlace CMakeLists.txt cmake/SecurityFlags.cmake \
-      --replace "AppleClang" "Clang"
+      --replace-fail "AppleClang" "Clang"
   '';
 
   nativeBuildInputs = [

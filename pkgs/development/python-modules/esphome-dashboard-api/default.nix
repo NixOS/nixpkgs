@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools~=65.6" "setuptools" \
-      --replace "wheel~=0.37.1" "wheel"
+      --replace-fail "setuptools~=65.6" "setuptools" \
+      --replace-fail "wheel~=0.37.1" "wheel"
   '';
 
   nativeBuildInputs = [

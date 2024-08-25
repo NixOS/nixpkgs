@@ -128,7 +128,7 @@ in {
 
     preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
       substituteInPlace makefile \
-        --replace "aarch64" "arm64"
+        --replace-fail "aarch64" "arm64"
     '';
 
     buildPhase = ''

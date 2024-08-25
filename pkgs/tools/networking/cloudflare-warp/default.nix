@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
     patchelf --replace-needed libpcap.so.0.8 ${libpcap}/lib/libpcap.so $out/bin/warp-dex
     mv lib/systemd/system $out/lib/systemd/
     substituteInPlace $out/lib/systemd/system/warp-svc.service \
-      --replace "ExecStart=" "ExecStart=$out"
+      --replace-fail "ExecStart=" "ExecStart=$out"
     substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
-      --replace "ExecStart=" "ExecStart=$out"
+      --replace-fail "ExecStart=" "ExecStart=$out"
 
     cat >>$out/lib/systemd/user/warp-taskbar.service <<EOF
 

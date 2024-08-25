@@ -14,9 +14,9 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     for f in bin/*; do
       substituteInPlace $f \
-        --replace "'ssh'" "'${openssh}/bin/ssh'" \
-        --replace "'scp'" "'${openssh}/bin/scp'" \
-        --replace "'rsync'" "'${rsync}/bin/rsync'"
+        --replace-fail "'ssh'" "'${openssh}/bin/ssh'" \
+        --replace-fail "'scp'" "'${openssh}/bin/scp'" \
+        --replace-fail "'rsync'" "'${rsync}/bin/rsync'"
     done
   '';
 

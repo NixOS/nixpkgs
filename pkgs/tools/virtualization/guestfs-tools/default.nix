@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     # when wrapping to stop it looking in
     # $out/etc/.virt-builder-wrapped, which won't exist.
     substituteInPlace common/mlstdutils/std_utils.ml \
-        --replace Sys.executable_name '(Array.get Sys.argv 0)'
+        --replace-fail Sys.executable_name '(Array.get Sys.argv 0)'
   '';
 
   preConfigure = ''

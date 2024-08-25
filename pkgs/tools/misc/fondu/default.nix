@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postConfigure = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace /System/Library/Frameworks/CoreServices.framework/CoreServices "-framework CoreServices"
+    substituteInPlace Makefile --replace-fail /System/Library/Frameworks/CoreServices.framework/CoreServices "-framework CoreServices"
   '';
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];

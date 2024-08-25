@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
   '' + lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(test)" ""
+      --replace-fail "add_subdirectory(test)" ""
   '';
 
   # Tests always fail, probably need GPU

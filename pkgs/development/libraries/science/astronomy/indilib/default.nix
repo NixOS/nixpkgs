@@ -64,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
-      substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \
-                           --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
+      substituteInPlace $f --replace-fail "/bin/sh" "${bash}/bin/sh" \
+                           --replace-fail "/sbin/modprobe" "${kmod}/sbin/modprobe"
     done
   '';
 

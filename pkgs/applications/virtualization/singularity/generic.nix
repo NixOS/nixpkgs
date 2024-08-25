@@ -255,7 +255,7 @@ in
     '') sourceFilesWithDefaultPaths}
 
     substituteInPlace internal/pkg/util/gpu/nvidia.go \
-      --replace \
+      --replace-fail \
         'return fmt.Errorf("/usr/bin not writable in the container")' \
         ""
   '';
@@ -286,7 +286,7 @@ in
 
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
-      --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+      --replace-fail "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
     # Respect PATH from the environment/the user.
     # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
@@ -295,11 +295,11 @@ in
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+        --replace-fail "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
     ''}
     ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
+        --replace-fail "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"

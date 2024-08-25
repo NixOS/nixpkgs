@@ -219,7 +219,7 @@ let
         epkg = super.epkg.overrideAttrs (old: {
           postPatch = ''
             substituteInPlace lisp/epkg.el \
-              --replace '(call-process "sqlite3"' '(call-process "${pkgs.sqlite}/bin/sqlite3"'
+              --replace-fail '(call-process "sqlite3"' '(call-process "${pkgs.sqlite}/bin/sqlite3"'
           '';
         });
 
@@ -234,7 +234,7 @@ let
         evil-escape = super.evil-escape.overrideAttrs (attrs: {
           postPatch = ''
             substituteInPlace evil-escape.el \
-              --replace ' ;;; evil' ';;; evil'
+              --replace-fail ' ;;; evil' ';;; evil'
           '';
           packageRequires = with self; [ evil ];
         });
@@ -484,7 +484,7 @@ let
         python-isort = super.python-isort.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace python-isort.el \
-              --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+              --replace-fail '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
           '';
         });
 
@@ -502,7 +502,7 @@ let
         pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace pikchr-mode.el \
-              --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+              --replace-fail '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
           '';
         });
 
@@ -548,13 +548,13 @@ let
 
           postPatch = ''
             substituteInPlace telega-customize.el \
-              --replace 'defcustom telega-server-command "telega-server"' \
+              --replace-fail 'defcustom telega-server-command "telega-server"' \
                         "defcustom telega-server-command \"$out/bin/telega-server\""
 
-            substituteInPlace telega-sticker.el --replace '"dwebp' '"${pkgs.libwebp}/bin/dwebp'
-            substituteInPlace telega-sticker.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
+            substituteInPlace telega-sticker.el --replace-fail '"dwebp' '"${pkgs.libwebp}/bin/dwebp'
+            substituteInPlace telega-sticker.el --replace-fail '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
 
-            substituteInPlace telega-vvnote.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
+            substituteInPlace telega-vvnote.el --replace-fail '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
           '';
 
           postBuild = ''
@@ -572,7 +572,7 @@ let
         tokei = super.tokei.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace tokei.el \
-              --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
+              --replace-fail 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
           '';
         });
 
@@ -585,7 +585,7 @@ let
         typst-mode = super.typst-mode.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace typst-mode.el \
-              --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+              --replace-fail 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
           '';
         });
 
@@ -677,7 +677,7 @@ let
         racer = super.racer.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace racer.el \
-              --replace /usr/local/src/rust/src ${pkgs.rustPlatform.rustcSrc}
+              --replace-fail /usr/local/src/rust/src ${pkgs.rustPlatform.rustcSrc}
           '';
         });
 
@@ -709,7 +709,7 @@ let
               let w3m = "${lib.getBin pkgs.w3m}/bin/w3m"; in
               ''
                 substituteInPlace w3m.el \
-                --replace 'defcustom w3m-command nil' \
+                --replace-fail 'defcustom w3m-command nil' \
                 'defcustom w3m-command "${w3m}"'
               '';
           });
@@ -718,14 +718,14 @@ let
         wordnut = super.wordnut.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace wordnut.el \
-              --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+              --replace-fail 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
           '';
         });
 
         mozc = super.mozc.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace src/unix/emacs/mozc.el \
-              --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+              --replace-fail '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
           '';
         });
 

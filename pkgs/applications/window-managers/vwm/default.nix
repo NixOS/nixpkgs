@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       -e /ldconfig/d Makefile modules/*/Makefile vwm.h
 
     # Fix ncurses-6.3 support:
-    substituteInPlace vwm_bkgd.c --replace \
+    substituteInPlace vwm_bkgd.c --replace-fail \
       'mvwprintw(window,height-1,width-(strlen(version_str)),version_str);' \
       'mvwprintw(window,height-1,width-(strlen(version_str)),"%s", version_str);'
   '';

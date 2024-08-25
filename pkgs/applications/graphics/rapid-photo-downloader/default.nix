@@ -20,7 +20,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sed -i '/python_requires/d' setup.py
     # Disable version check
     substituteInPlace raphodo/constants.py \
-      --replace "disable_version_check = False" "disable_version_check = True"
+      --replace-fail "disable_version_check = False" "disable_version_check = True"
   '';
 
   nativeBuildInputs = [

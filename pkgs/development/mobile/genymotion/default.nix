@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     sourceRoot=${pname}
 
     substitute phony-home/.local/share/applications/genymobile-genymotion.desktop \
-      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${pname}" "$out/libexec"
+      $out/share/applications/genymobile-genymotion.desktop --replace-fail "$TMP/${pname}" "$out/libexec"
   '';
 
   installPhase = ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "ECHO=echo" "LIBDIR=$(out)/lib" ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace /bin/echo echo
+    substituteInPlace Makefile --replace-fail /bin/echo echo
     patchShebangs platform2_preinstall.sh
   '';
 

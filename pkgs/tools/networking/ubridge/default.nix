@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "/usr/local/bin" "$out/bin" \
-      --replace "setcap" "#setcap"
+      --replace-fail "/usr/local/bin" "$out/bin" \
+      --replace-fail "setcap" "#setcap"
   '';
 
   buildInputs = [ libpcap ];

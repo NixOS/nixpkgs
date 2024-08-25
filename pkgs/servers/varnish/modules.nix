@@ -23,8 +23,8 @@ let
       buildInputs = [ varnish ];
 
       postPatch = ''
-        substituteInPlace bootstrap   --replace "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"
-        substituteInPlace Makefile.am --replace "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"
+        substituteInPlace bootstrap   --replace-fail "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"
+        substituteInPlace Makefile.am --replace-fail "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"
       '';
 
       postInstall = "find $out -type f -exec remove-references-to -t ${varnish.dev} '{}' +"; # varnish.dev captured only as __FILE__ in assert messages

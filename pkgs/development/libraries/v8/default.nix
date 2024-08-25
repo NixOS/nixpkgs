@@ -103,19 +103,19 @@ stdenv.mkDerivation rec {
   postPatch = ''
     ${lib.optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
-        --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+        --replace-fail 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     ''}
     ${lib.optionalString stdenv.isDarwin ''
       substituteInPlace build/config/compiler/compiler.gni \
-        --replace 'strip_absolute_paths_from_debug_symbols = true' \
+        --replace-fail 'strip_absolute_paths_from_debug_symbols = true' \
                   'strip_absolute_paths_from_debug_symbols = false'
       substituteInPlace build/config/compiler/BUILD.gn \
-        --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
+        --replace-fail 'current_toolchain == host_toolchain || !use_xcode_clang' \
                   'false'
     ''}
     ${lib.optionalString stdenv.isDarwin ''
       substituteInPlace build/config/compiler/BUILD.gn \
-        --replace "-Wl,-fatal_warnings" ""
+        --replace-fail "-Wl,-fatal_warnings" ""
     ''}
     touch build/config/gclient_args.gni
     sed '1i#include <utility>' -i src/heap/cppgc/prefinalizer-handler.h # gcc12

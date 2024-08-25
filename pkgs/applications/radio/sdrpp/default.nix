@@ -58,13 +58,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/share" "share" \
-      --replace "set(CMAKE_INSTALL_PREFIX" "#set(CMAKE_INSTALL_PREFIX"
+      --replace-fail "/usr/share" "share" \
+      --replace-fail "set(CMAKE_INSTALL_PREFIX" "#set(CMAKE_INSTALL_PREFIX"
     substituteInPlace decoder_modules/m17_decoder/src/m17dsp.h \
-      --replace "codec2.h" "codec2/codec2.h"
+      --replace-fail "codec2.h" "codec2/codec2.h"
     # Since the __TIME_ and __DATE__ is canonicalized in the build,
     # use our qualified version shown in the programs window title.
-    substituteInPlace core/src/version.h --replace "1.1.0" "$version"
+    substituteInPlace core/src/version.h --replace-fail "1.1.0" "$version"
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

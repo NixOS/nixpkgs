@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "parsimonious>=0.9.0,<0.10.0" "parsimonious"
+      --replace-fail "parsimonious>=0.9.0,<0.10.0" "parsimonious"
   '';
 
   propagatedBuildInputs = [

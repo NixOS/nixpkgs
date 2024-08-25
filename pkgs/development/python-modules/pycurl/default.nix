@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   preConfigure = ''
-    substituteInPlace setup.py --replace '--static-libs' '--libs'
+    substituteInPlace setup.py --replace-fail '--static-libs' '--libs'
     export PYCURL_SSL_LIBRARY=openssl
   '';
 

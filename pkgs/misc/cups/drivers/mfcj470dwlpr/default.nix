@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     dpkg-deb -x $src $out
 
     substituteInPlace $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
-    --replace /opt "$out/opt" \
+    --replace-fail /opt "$out/opt" \
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/mfcj470dw/lpd/psconvertij2
 

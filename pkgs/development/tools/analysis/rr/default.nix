@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
+    substituteInPlace src/Command.cc --replace-fail '_BSD_SOURCE' '_DEFAULT_SOURCE'
     patchShebangs src
   '';
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # See also https://github.com/NixOS/nixpkgs/pull/110846
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace "-flto" ""
+    substituteInPlace CMakeLists.txt --replace-fail "-flto" ""
   '';
 
   strictDeps = true;

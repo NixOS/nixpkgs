@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     # folder and symlinked.
     unzip -q $src -d $out/opt/pinegrow
     substituteInPlace $out/opt/pinegrow/Pinegrow.desktop \
-      --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/pinegrow"'
+      --replace-fail 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/pinegrow"'
     mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/pinegrow.desktop
     ln -s $out/opt/pinegrow/PinegrowLibrary $out/bin/pinegrow
 

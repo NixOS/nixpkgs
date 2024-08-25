@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
   '';
 
   meta = with lib; {

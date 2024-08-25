@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
   preBuild = ''
     makeFlagsArray=(PREFIX=$out)
 
-    substituteInPlace checkinstall --replace /usr/local/lib/checkinstall $out/lib/checkinstall
-    substituteInPlace checkinstallrc-dist --replace /usr/local $out
+    substituteInPlace checkinstall --replace-fail /usr/local/lib/checkinstall $out/lib/checkinstall
+    substituteInPlace checkinstallrc-dist --replace-fail /usr/local $out
 
     substituteInPlace installwatch/create-localdecls \
-      --replace /usr/include/unistd.h ${stdenv.cc.libc.dev}/include/unistd.h
+      --replace-fail /usr/include/unistd.h ${stdenv.cc.libc.dev}/include/unistd.h
   '';
 
   postInstall =

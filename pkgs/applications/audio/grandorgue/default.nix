@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace resources/CMakeLists.txt \
-      --replace \
+      --replace-fail \
         "iconutil -c icns \''${GENERATED_ICONS_DIR}" \
         "png2icns \''${GENERATED_ICONS_DIR}/../GrandOrgue.icns \''${GENERATED_ICONS_DIR}/*{16,32,128,256,512,1024}.png" \
   '';

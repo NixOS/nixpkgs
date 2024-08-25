@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace mk/smtpctl/Makefile.am --replace "chgrp" "true"
-    substituteInPlace mk/smtpctl/Makefile.am --replace "chmod 2555" "chmod 0555"
+    substituteInPlace mk/smtpctl/Makefile.am --replace-fail "chgrp" "true"
+    substituteInPlace mk/smtpctl/Makefile.am --replace-fail "chmod 2555" "chmod 0555"
   '';
 
   configureFlags = [

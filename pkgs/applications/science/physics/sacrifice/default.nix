@@ -18,10 +18,10 @@ stdenv.mkDerivation {
   ];
 
   preConfigure = ''
-    substituteInPlace configure --replace HAVE_LCG=yes HAVE_LCG=no
+    substituteInPlace configure --replace-fail HAVE_LCG=yes HAVE_LCG=no
   ''
   + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace LIB_SUFFIX=\"so\" LIB_SUFFIX=\"dylib\"
+    substituteInPlace configure --replace-fail LIB_SUFFIX=\"so\" LIB_SUFFIX=\"dylib\"
   '';
 
   configureFlags = [

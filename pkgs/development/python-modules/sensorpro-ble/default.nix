@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

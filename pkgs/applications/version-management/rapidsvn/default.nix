@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace "[3.0.*]" "[3.*]"
+      --replace-fail "[3.0.*]" "[3.*]"
   '';
 
   nativeBuildInputs = [

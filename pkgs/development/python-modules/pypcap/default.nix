@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Add the path to libpcap in the nix-store
-    substituteInPlace setup.py --replace "('/usr', sys.prefix)" "'${libpcap}'"
+    substituteInPlace setup.py --replace-fail "('/usr', sys.prefix)" "'${libpcap}'"
     # Remove coverage from test run
     sed -i "/--cov/d" setup.cfg
   '';

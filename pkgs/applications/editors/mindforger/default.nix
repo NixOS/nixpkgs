@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace lib/src/install/installer.cpp --replace /usr "$out"
-    substituteInPlace app/resources/gnome-shell/mindforger.desktop --replace /usr "$out"
+    substituteInPlace lib/src/install/installer.cpp --replace-fail /usr "$out"
+    substituteInPlace app/resources/gnome-shell/mindforger.desktop --replace-fail /usr "$out"
     for f in app/app.pro lib/lib.pro; do
-      substituteInPlace "$f" --replace "QMAKE_CXX = g++" ""
+      substituteInPlace "$f" --replace-fail "QMAKE_CXX = g++" ""
     done
   '';
 

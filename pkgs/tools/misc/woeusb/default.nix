@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     # Emulate version smudge filter (see .gitattributes, .gitconfig).
     for file in sbin/woeusb share/man/man1/woeusb.1; do
       substituteInPlace "$file" \
-        --replace '@@WOEUSB_VERSION@@' '${version}'
+        --replace-fail '@@WOEUSB_VERSION@@' '${version}'
     done
   '';
 

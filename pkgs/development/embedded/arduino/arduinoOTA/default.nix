@@ -18,7 +18,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace version/version.go \
-      --replace 'versionString        = ""' 'versionString        = "${version}"'
+      --replace-fail 'versionString        = ""' 'versionString        = "${version}"'
   '';
 
   passthru.updateScript = nix-update-script { };

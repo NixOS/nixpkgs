@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     # Hard-coded root paths, hard-coded root paths everywhere...
     for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
-        --replace '$(DESTDIR)/usr' "$out" \
-        --replace "DESTDIR" "out" \
-        --replace "/usr" "$out"
+        --replace-fail '$(DESTDIR)/usr' "$out" \
+        --replace-fail "DESTDIR" "out" \
+        --replace-fail "/usr" "$out"
     done
     substituteInPlace pam/Makefile.am \
-      --replace '/`basename $(libdir)`' "$out/lib"
+      --replace-fail '/`basename $(libdir)`' "$out/lib"
   '';
 
   configureFlags = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       $out/lib/systemd/system/* \
       $out/share/dbus-1/system-services/* \
     ; do
-      substituteInPlace $file --replace "/usr" "$out"
+      substituteInPlace $file --replace-fail "/usr" "$out"
     done
   '';
 

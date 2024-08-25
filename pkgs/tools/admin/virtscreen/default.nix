@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace virtscreen/__main__.py \
-      --replace "'GL'" "'${libGL}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}'" \
+      --replace-fail "'GL'" "'${libGL}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}'" \
   '';
 
   meta = with lib; {

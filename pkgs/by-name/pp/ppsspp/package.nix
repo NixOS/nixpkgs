@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace git-version.cmake --replace unknown ${finalAttrs.src.rev}
-    substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
+    substituteInPlace git-version.cmake --replace-fail unknown ${finalAttrs.src.rev}
+    substituteInPlace UI/NativeApp.cpp --replace-fail /usr/share $out/share
   '';
 
   nativeBuildInputs = [

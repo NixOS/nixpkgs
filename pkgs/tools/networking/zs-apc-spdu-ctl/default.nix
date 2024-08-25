@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/confent.cxx \
-      --replace /usr/sbin/fping "${fping}/bin/fping"
+      --replace-fail /usr/sbin/fping "${fping}/bin/fping"
   '';
 
   meta = with lib; {

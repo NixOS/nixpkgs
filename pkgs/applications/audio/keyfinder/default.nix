@@ -16,8 +16,8 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace is_KeyFinder.pro \
-       --replace "-stdlib=libc++" "" \
-       --replace "\$\$[QT_INSTALL_PREFIX]" "$out"
+       --replace-fail "-stdlib=libc++" "" \
+       --replace-fail "\$\$[QT_INSTALL_PREFIX]" "$out"
   '';
 
   dontWrapQtApps = true;

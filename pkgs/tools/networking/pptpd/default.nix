@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ppp ];
 
   postPatch = ''
-    substituteInPlace plugins/Makefile --replace "install -o root" "install"
+    substituteInPlace plugins/Makefile --replace-fail "install -o root" "install"
   '';
 
   meta = with lib; {

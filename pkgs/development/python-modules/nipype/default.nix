@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
-      --replace "/usr/bin/env bash" "${bash}/bin/bash"
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
 

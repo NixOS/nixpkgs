@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace "jsoncpp_object" "jsoncpp" \
-      --replace "jsoncpp_static" "jsoncpp"
+      --replace-fail "jsoncpp_object" "jsoncpp" \
+      --replace-fail "jsoncpp_static" "jsoncpp"
   '';
 
   cmakeFlags = [

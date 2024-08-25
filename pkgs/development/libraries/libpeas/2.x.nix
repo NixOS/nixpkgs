@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Checks lua51 and lua5.1 executable but we have non of them.
-    substituteInPlace meson.build --replace \
+    substituteInPlace meson.build --replace-fail \
       "find_program('lua51', required: false)" \
       "find_program('lua', required: false)"
   '';

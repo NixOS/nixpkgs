@@ -21,12 +21,12 @@ let
 
     postPatch = ''
       substituteInPlace src/makefile \
-        --replace "shell pkg-config" "shell $PKG_CONFIG"
+        --replace-fail "shell pkg-config" "shell $PKG_CONFIG"
       substituteInPlace makefile \
-        --replace 'gzip' 'gzip -n'
+        --replace-fail 'gzip' 'gzip -n'
     '' + lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
-          --replace 'CXX=g++' 'CXX=clang++'
+          --replace-fail 'CXX=g++' 'CXX=clang++'
     '';
 
     preConfigure = ''

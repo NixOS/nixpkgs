@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     rm -rf deps/luajit && mkdir deps/luajit
 
     substituteInPlace ./Makefile \
-      --replace '-lluajit' '-lluajit-5.1' \
-      --replace '_BSD_SOURCE' '_DEFAULT_SOURCE' \
-      --replace 'cd $(LDIR) && ./luajit' '${luajit}/bin/luajit' \
-      --replace 'config.h Makefile $(LDIR)/libluajit.a' 'config.h Makefile'
+      --replace-fail '-lluajit' '-lluajit-5.1' \
+      --replace-fail '_BSD_SOURCE' '_DEFAULT_SOURCE' \
+      --replace-fail 'cd $(LDIR) && ./luajit' '${luajit}/bin/luajit' \
+      --replace-fail 'config.h Makefile $(LDIR)/libluajit.a' 'config.h Makefile'
 
     substituteInPlace ./src/script.c \
-      --replace 'struct luaL_reg ' 'struct luaL_Reg '
+      --replace-fail 'struct luaL_reg ' 'struct luaL_Reg '
   '';
 
   dontConfigure = true;

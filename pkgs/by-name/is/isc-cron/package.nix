@@ -50,10 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   # and we will do this ourselves as needed
   postPatch = ''
     substituteInPlace Makefile \
-      --replace ' -o root' ' ' \
-      --replace 111 755 \
-      --replace 4755 0755 \
-      --replace ' -s cron' ' cron'
+      --replace-fail ' -o root' ' ' \
+      --replace-fail 111 755 \
+      --replace-fail 4755 0755 \
+      --replace-fail ' -s cron' ' cron'
   '';
 
   preInstall = ''

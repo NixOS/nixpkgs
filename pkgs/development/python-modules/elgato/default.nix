@@ -30,8 +30,8 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "--cov" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

@@ -33,10 +33,10 @@ buildPythonPackage rec {
     rm test-requirements.txt
 
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
-      --replace "/bin/bash" "${bash}/bin/bash" \
-      --replace "/bin/true" "${coreutils}/bin/true" \
-      --replace "/usr/bin/env" "${coreutils}/bin/env" \
-      --replace "/usr/bin/true" "${coreutils}/bin/true"
+      --replace-fail "/bin/bash" "${bash}/bin/bash" \
+      --replace-fail "/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/usr/bin/env" "${coreutils}/bin/env" \
+      --replace-fail "/usr/bin/true" "${coreutils}/bin/true"
   '';
 
   propagatedBuildInputs = [

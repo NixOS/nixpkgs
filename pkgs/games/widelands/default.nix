@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace xdg/org.widelands.Widelands.desktop \
-      --replace 'Exec=widelands' "Exec=$out/bin/widelands"
+      --replace-fail 'Exec=widelands' "Exec=$out/bin/widelands"
   '';
 
   cmakeFlags = [

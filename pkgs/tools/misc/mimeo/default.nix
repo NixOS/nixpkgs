@@ -16,9 +16,9 @@ in python3Packages.buildPythonApplication {
 
   preConfigure = ''
     substituteInPlace Mimeo.py \
-      --replace "EXE_UPDATE_DESKTOP_DATABASE = 'update-desktop-database'" \
+      --replace-fail "EXE_UPDATE_DESKTOP_DATABASE = 'update-desktop-database'" \
                 "EXE_UPDATE_DESKTOP_DATABASE = '${desktop-file-utils}/bin/update-desktop-database'" \
-      --replace "EXE_FILE = 'file'" \
+      --replace-fail "EXE_FILE = 'file'" \
                 "EXE_FILE = '${file}/bin/file'"
   '';
 

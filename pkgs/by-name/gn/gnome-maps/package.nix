@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Maps.service.in" \
-        --replace "Exec=@pkgdatadir@/@app-id@" \
+        --replace-fail "Exec=@pkgdatadir@/@app-id@" \
                   "Exec=$out/bin/gnome-maps"
   '';
 

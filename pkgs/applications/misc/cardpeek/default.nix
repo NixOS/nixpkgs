@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   postPatch = lib.optionalString stdenv.isDarwin ''
     # replace xcode check and hard-coded PCSC framework path
     substituteInPlace configure.ac \
-      --replace 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \
-      --replace 'PCSC_HEADERS=`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/*.sdk/System/Library/Frameworks/PCSC.framework/Versions/Current/Headers/ | sort | head -1`' 'PCSC_HEADERS=${PCSC}/Library/Frameworks/PCSC.framework/Headers'
+      --replace-fail 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \
+      --replace-fail 'PCSC_HEADERS=`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/*.sdk/System/Library/Frameworks/PCSC.framework/Versions/Current/Headers/ | sort | head -1`' 'PCSC_HEADERS=${PCSC}/Library/Frameworks/PCSC.framework/Headers'
   '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

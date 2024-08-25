@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
-        --replace /usr/bin/libtool ar \
-        --replace 'AR="libtool"' 'AR="ar"' \
-        --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+        --replace-fail /usr/bin/libtool ar \
+        --replace-fail 'AR="libtool"' 'AR="ar"' \
+        --replace-fail 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
   configureFlags = [

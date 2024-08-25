@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString enableShared ''
     substituteInPlace CMakeLists.txt \
-        --replace "mlx42 STATIC" "mlx42 SHARED"
+        --replace-fail "mlx42 STATIC" "mlx42 SHARED"
   '';
 
   nativeBuildInputs = [ cmake ];

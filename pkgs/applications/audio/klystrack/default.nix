@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     install -DT icon/256x256.png $out/share/icons/hicolor/256x256/apps/klystrack.png
     mkdir -p $out/share/applications
     substitute linux/klystrack.desktop $out/share/applications/klystrack.desktop \
-      --replace "klystrack %f" "$out/bin/klystrack %f"
+      --replace-fail "klystrack %f" "$out/bin/klystrack %f"
   '';
 
   meta = with lib; {

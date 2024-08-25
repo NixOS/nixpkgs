@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   # No flags to build selectively it seems...
   postPatch = lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(test)" ""
+      --replace-fail "add_subdirectory(test)" ""
   '' + lib.optionalString (!buildExamples) ''
     substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(example)" ""
+      --replace-fail "add_subdirectory(example)" ""
   '';
 
   postInstall = lib.optionalString buildTests ''

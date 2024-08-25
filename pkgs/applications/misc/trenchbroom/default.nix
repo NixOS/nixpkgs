@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       --subst-var-by APP_VERSION_NUMBER ${lib.versions.minor version} \
       --subst-var-by GIT_DESCRIBE v${version}
     substituteInPlace app/CMakeLists.txt \
-      --replace 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
+      --replace-fail 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
   '';
 
   nativeBuildInputs = [ cmake ninja curl git pandoc wrapQtAppsHook copyDesktopItems pkg-config unzip zip ];

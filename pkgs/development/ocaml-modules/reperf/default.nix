@@ -12,7 +12,7 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace src/dune --replace "printbox" "printbox-text"
+    substituteInPlace src/dune --replace-fail "printbox" "printbox-text"
   '';
 
   nativeBuildInputs = [ reason ];

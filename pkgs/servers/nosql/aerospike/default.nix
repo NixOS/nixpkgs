@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     patchShebangs build/gen_version
-    substituteInPlace build/gen_version --replace 'git describe' 'echo ${version}'
+    substituteInPlace build/gen_version --replace-fail 'git describe' 'echo ${version}'
   '';
 
   installPhase = ''

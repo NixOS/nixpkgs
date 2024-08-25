@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Docs/makefile.am \
-      --replace 'man1_MANS = robodoc.1 robohdrs.1' 'man1_MANS ='
+      --replace-fail 'man1_MANS = robodoc.1 robohdrs.1' 'man1_MANS ='
   '';
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # the delete component of 0001-use-system-getopt.patch
     rm compat/getopt.h
     # Fix building on Darwin with GCC.
-    substituteInPlace compat/regex.c --replace \
+    substituteInPlace compat/regex.c --replace-fail \
        __private_extern__  '__attribute__ ((visibility ("hidden")))'
   '';
 

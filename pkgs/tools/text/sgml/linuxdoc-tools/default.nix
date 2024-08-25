@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     pushd doc/example
     substituteInPlace Makefile \
-      --replace "COMMAND=linuxdoc" "COMMAND=$out/bin/linuxdoc" \
-      ${lib.optionalString (!withLatex) "--replace '.tex .dvi .ps .pdf' ''"}
+      --replace-fail "COMMAND=linuxdoc" "COMMAND=$out/bin/linuxdoc" \
+      ${lib.optionalString (!withLatex) "--replace-fail '.tex .dvi .ps .pdf' ''"}
     make
     popd
   '';

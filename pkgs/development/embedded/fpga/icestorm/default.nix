@@ -42,15 +42,15 @@ stdenv.mkDerivation rec {
   # platforms, it offers significant performance improvements.
   patchPhase = ''
     substituteInPlace ./icebox/icebox_vlog.py \
-      --replace /usr/local/share "$out/share"
+      --replace-fail /usr/local/share "$out/share"
 
     for x in icefuzz/Makefile icebox/Makefile icetime/Makefile; do
-      substituteInPlace "$x" --replace python3 "${passthru.pythonInterp}"
+      substituteInPlace "$x" --replace-fail python3 "${passthru.pythonInterp}"
     done
 
     for x in $(find . -type f -iname '*.py'); do
       substituteInPlace "$x" \
-        --replace '/usr/bin/env python3' '${passthru.pythonInterp}'
+        --replace-fail '/usr/bin/env python3' '${passthru.pythonInterp}'
     done
   '';
 

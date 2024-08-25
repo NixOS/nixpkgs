@@ -66,7 +66,7 @@ in stdenv.mkDerivation (finalAttrs: {
       src/abagames/tf/tumikiset.d
     do
       substituteInPlace $f \
-        --replace "/usr/" "$out/"
+        --replace-fail "/usr/" "$out/"
     done
   '';
 

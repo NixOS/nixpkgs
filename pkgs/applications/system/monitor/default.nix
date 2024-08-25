@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
 
     # Alternatively, using pkg-config here should just work.
-    substituteInPlace meson.build --replace \
+    substituteInPlace meson.build --replace-fail \
       "meson.get_compiler('c').find_library('libcurl', dirs: vapidir)" \
       "meson.get_compiler('c').find_library('libcurl', dirs: '${curl.out}/lib')"
   '';

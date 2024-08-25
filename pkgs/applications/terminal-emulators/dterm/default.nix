@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
+      --replace-fail 'gcc' '${stdenv.cc.targetPrefix}cc'
   '';
 
   preInstall = "mkdir -p $out/bin";

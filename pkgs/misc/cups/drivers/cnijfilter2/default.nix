@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     (
       cd lgmon3
       substituteInPlace src/Makefile.am \
-        --replace /usr/include/libusb-1.0 \
+        --replace-fail /usr/include/libusb-1.0 \
                   ${libusb1.dev}/include/libusb-1.0
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
                    --datadir=$out/share \
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     (
       cd cnijbe2
       substituteInPlace src/Makefile.am \
-        --replace "/usr/lib/cups/backend" \
+        --replace-fail "/usr/lib/cups/backend" \
                   "$out/lib/cups/backend"
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin
       make

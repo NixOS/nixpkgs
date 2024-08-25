@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace qmltermwidget.pro \
-      --replace '$$[QT_INSTALL_QML]' '$$PREFIX/${qtbase.qtQmlPrefix}/'
+      --replace-fail '$$[QT_INSTALL_QML]' '$$PREFIX/${qtbase.qtQmlPrefix}/'
   '';
 
   dontWrapQtApps = true;

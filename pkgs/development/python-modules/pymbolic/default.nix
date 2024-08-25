@@ -39,7 +39,7 @@ buildPythonPackage rec {
   postPatch = ''
     # pytest is a test requirement not a run-time one
       substituteInPlace setup.py \
-        --replace '"pytest>=2.3",' ""
+        --replace-fail '"pytest>=2.3",' ""
   '';
 
   pythonImportsCheck = [ "pymbolic" ];

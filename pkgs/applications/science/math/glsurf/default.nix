@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for f in callbacks*/Makefile src/Makefile; do
-      substituteInPlace "$f" --replace "+camlp4" \
+      substituteInPlace "$f" --replace-fail "+camlp4" \
         "${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4"
     done
 

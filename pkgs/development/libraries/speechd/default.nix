@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/pico.c --replace-fail "/usr/share/pico/lang" "${svox}/share/pico/lang"
   '';
 
   postInstall = if libsOnly then ''

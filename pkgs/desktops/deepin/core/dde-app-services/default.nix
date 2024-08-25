@@ -25,16 +25,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace dconfig-center/dde-dconfig-daemon/services/org.desktopspec.ConfigManager.service \
-      --replace "/usr/bin/dde-dconfig-daemon" "$out/bin/dde-dconfig-daemon"
+      --replace-fail "/usr/bin/dde-dconfig-daemon" "$out/bin/dde-dconfig-daemon"
     substituteInPlace dconfig-center/dde-dconfig/main.cpp \
-      --replace "/bin/dde-dconfig-editor" "dde-dconfig-editor"
+      --replace-fail "/bin/dde-dconfig-editor" "dde-dconfig-editor"
     substituteInPlace dconfig-center/CMakeLists.txt \
-      --replace 'add_subdirectory("example")' " " \
-      --replace 'add_subdirectory("tests")'   " "
+      --replace-fail 'add_subdirectory("example")' " " \
+      --replace-fail 'add_subdirectory("tests")'   " "
 
     substituteInPlace dconfig-center/dde-dconfig-daemon/services/dde-dconfig-daemon.service \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share" "/run/current-system/sw/share"
+      --replace-fail "/usr/bin" "$out/bin" \
+      --replace-fail "/usr/share" "/run/current-system/sw/share"
   '';
 
   nativeBuildInputs = [

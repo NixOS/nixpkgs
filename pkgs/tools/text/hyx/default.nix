@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace "-Wl,-z,relro,-z,now -fpic -pie" ""
+      --replace-fail "-Wl,-z,relro,-z,now -fpic -pie" ""
   '';
 
   buildInputs = lib.optional (stdenv.system == "x86_64-darwin") memstreamHook;

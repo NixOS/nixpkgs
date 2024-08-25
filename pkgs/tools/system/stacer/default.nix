@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace stacer/Managers/app_manager.cpp \
-      --replace 'qApp->applicationDirPath() + "/translations"' \
+      --replace-fail 'qApp->applicationDirPath() + "/translations"' \
                 'QStandardPaths::locate(QStandardPaths::AppDataLocation, "translations", QStandardPaths::LocateDirectory)'
   '';
 

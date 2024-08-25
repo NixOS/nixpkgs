@@ -27,7 +27,7 @@ mkDerivation rec {
   preFixup = ''
     ln --relative --symbolic $out/share/APMPlanner2/* $out/bin/
     substituteInPlace $out/share/applications/apmplanner2.desktop \
-      --replace /usr $out
+      --replace-fail /usr $out
   '';
 
   meta = {

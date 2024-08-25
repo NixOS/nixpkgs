@@ -35,7 +35,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/lazdavila/pescea/pull/1
     substituteInPlace setup.py \
-      --replace '"asyncio",' ""
+      --replace-fail '"asyncio",' ""
   '';
 
   disabledTests = [

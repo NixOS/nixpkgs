@@ -90,7 +90,7 @@ buildBazelPackage rec {
     preBuild = ''
       patchShebangs .
 
-      substituteInPlace cmd/ibazel/BUILD.bazel --replace '{STABLE_GIT_VERSION}' ${version}
+      substituteInPlace cmd/ibazel/BUILD.bazel --replace-fail '{STABLE_GIT_VERSION}' ${version}
       echo ${bazel_5.version} > .bazelversion
     '';
 

@@ -28,8 +28,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'requests-oauth = ">=0.4.1"' ''' \
-      --replace 'addopts = "--capture no --cov ./withings_api --cov-report html:build/coverage_report --cov-report term --cov-report xml:build/coverage.xml"' '''
+      --replace-fail 'requests-oauth = ">=0.4.1"' ''' \
+      --replace-fail 'addopts = "--capture no --cov ./withings_api --cov-report html:build/coverage_report --cov-report term --cov-report xml:build/coverage.xml"' '''
   '';
 
   nativeBuildInputs = [ poetry-core ];

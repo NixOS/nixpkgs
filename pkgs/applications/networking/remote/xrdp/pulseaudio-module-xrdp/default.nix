@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     install -m 755 instfiles/load_pa_modules.sh $out/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init
     substituteInPlace $out/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init \
-      --replace pactl ${pulseaudio}/bin/pactl
+      --replace-fail pactl ${pulseaudio}/bin/pactl
 
     runHook postInstall
   '';

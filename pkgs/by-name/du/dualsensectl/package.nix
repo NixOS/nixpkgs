@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "/usr/" "/"
+    substituteInPlace Makefile --replace-fail "/usr/" "/"
   '';
 
   nativeBuildInputs = [ pkg-config ];

@@ -86,10 +86,10 @@ stdenv.mkDerivation rec {
   # nix removes .git, so its approximated here
   postPatch = lib.optionalString (!stable || testing) ''
     substituteInPlace cmake/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}"
+      --replace-fail "unknown" "${builtins.substring 0 10 src.rev}"
 
     substituteInPlace cmake/CreateGitVersionHeader.cmake \
-      --replace "0000000000000000000000000000000000000000" "${src.rev}"
+      --replace-fail "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];

@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace libqalculate/Calculator-plot.cc \
-      --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
-      --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+      --replace-fail 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
+      --replace-fail '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
   '' + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/qalc.cc \
-      --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
+      --replace-fail 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
   '';
 
   preBuild = ''

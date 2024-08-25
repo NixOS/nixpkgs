@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for f in *.{c,man,pl,unix} ; do
-      substituteInPlace $f --replace /usr/tmp /tmp
+      substituteInPlace $f --replace-fail /usr/tmp /tmp
     done
 
     # this just shuts up some warnings

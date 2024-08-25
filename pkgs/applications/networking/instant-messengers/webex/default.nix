@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    substituteInPlace opt/Webex/bin/webex.desktop --replace /opt $out/opt
+    substituteInPlace opt/Webex/bin/webex.desktop --replace-fail /opt $out/opt
   '';
 
   dontPatchELF = true;

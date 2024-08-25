@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ vdr ffmpeg ];
 
   postPatch = ''
-    substituteInPlace command/Makefile --replace '/usr' ""
+    substituteInPlace command/Makefile --replace-fail '/usr' ""
 
     substituteInPlace plugin/markad.cpp \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/var/lib/markad" "$out/var/lib/markad"
+      --replace-fail "/usr/bin" "$out/bin" \
+      --replace-fail "/var/lib/markad" "$out/var/lib/markad"
 
     substituteInPlace command/markad-standalone.cpp \
-      --replace "/var/lib/markad" "$out/var/lib/markad"
+      --replace-fail "/var/lib/markad" "$out/var/lib/markad"
   '';
 
   buildFlags = [

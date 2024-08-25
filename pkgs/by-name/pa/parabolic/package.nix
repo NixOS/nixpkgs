@@ -53,7 +53,7 @@ buildDotnetModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace NickvisionTubeConverter.Shared/Linux/org.nickvision.tubeconverter.desktop.in --replace '@EXEC@' "NickvisionTubeConverter.GNOME"
+    substituteInPlace NickvisionTubeConverter.Shared/Linux/org.nickvision.tubeconverter.desktop.in --replace-fail '@EXEC@' "NickvisionTubeConverter.GNOME"
   '';
 
   postInstall = ''

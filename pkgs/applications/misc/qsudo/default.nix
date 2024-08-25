@@ -29,7 +29,7 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace qsudo.pro --replace /usr/bin $out/bin
+    substituteInPlace qsudo.pro --replace-fail /usr/bin $out/bin
   '';
 
   meta = with lib; {

@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     # 1. Fixes path for todesktop-runtime-config.json
     # 2. Fixes startup script
     substituteInPlace $TMP/work/dist/main.js \
-      --replace "process.resourcesPath,\"todesktop-runtime-config.json" "\"$out/opt/Morgen/resources/todesktop-runtime-config.json" \
-      --replace "Exec=\".concat(process.execPath," "Exec=\".concat(\"$out/bin/morgen\","
+      --replace-fail "process.resourcesPath,\"todesktop-runtime-config.json" "\"$out/opt/Morgen/resources/todesktop-runtime-config.json" \
+      --replace-fail "Exec=\".concat(process.execPath," "Exec=\".concat(\"$out/bin/morgen\","
     asar pack --unpack='{*.node,*.ftz,rect-overlay}' "$TMP/work" $out/opt/Morgen/resources/app.asar
 
     substituteInPlace $out/share/applications/morgen.desktop \
-      --replace '/opt/Morgen' $out/bin
+      --replace-fail '/opt/Morgen' $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/morgen \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} $out/opt/Morgen/resources/app.asar"

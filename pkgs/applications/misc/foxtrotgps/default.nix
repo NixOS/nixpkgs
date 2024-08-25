@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   # 1.2.2+331. The command can be removed if the build of a newer version
   # succeeds without it.
   postPatch = ''
-    substituteInPlace src/gps_functions.c --replace "STATUS_NO_FIX" "STATUS_UNK"
+    substituteInPlace src/gps_functions.c --replace-fail "STATUS_NO_FIX" "STATUS_UNK"
   '';
 
   preConfigure = ''

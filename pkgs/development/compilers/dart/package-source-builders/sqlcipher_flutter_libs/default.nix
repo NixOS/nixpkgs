@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       URL="https://storage.googleapis.com/simon-public-euw3/assets/sqlcipher/v$1.c"
       # --replace-fail messes with the file if it fails (is empty afterwards) so we do this instead
       if cat "$out/linux/CMakeLists.txt" | grep "$URL" >/dev/null 2>/dev/null; then
-        substituteInPlace "$out/linux/CMakeLists.txt" --replace "$URL" "file://$2"
+        substituteInPlace "$out/linux/CMakeLists.txt" --replace-fail "$URL" "file://$2"
       else
         return 2
       fi

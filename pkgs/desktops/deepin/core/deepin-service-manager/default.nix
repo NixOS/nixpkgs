@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for file in $(grep -rl "/usr/bin/deepin-service-manager"); do
-      substituteInPlace $file --replace "/usr/bin/deepin-service-manager" "$out/bin/deepin-service-manager"
+      substituteInPlace $file --replace-fail "/usr/bin/deepin-service-manager" "$out/bin/deepin-service-manager"
     done
   '';
 

@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   postInstall = ''
-    substituteInPlace $out/bin/cvsq --replace "/bin/sh" "${stdenv.shell}"
-    substituteInPlace $out/bin/lcvs --replace "/bin/sh" "${stdenv.shell}"
+    substituteInPlace $out/bin/cvsq --replace-fail "/bin/sh" "${stdenv.shell}"
+    substituteInPlace $out/bin/lcvs --replace-fail "/bin/sh" "${stdenv.shell}"
     wrapProgram $out/bin/cvsq --prefix PATH : ${lib.makeBinPath
       [ cvs nettools findutils rsync coreutils diffutils ]}
     wrapProgram $out/bin/cvsq-branch --prefix PATH : ${lib.makeBinPath

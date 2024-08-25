@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "pytest-flake8" "" \
-      --replace "pytest-isort" "" \
-      --replace "pytest-cov" "" \
-      --replace "--flake8" "" \
-      --replace "--isort" ""
+      --replace-fail "pytest-runner" "" \
+      --replace-fail "pytest-flake8" "" \
+      --replace-fail "pytest-isort" "" \
+      --replace-fail "pytest-cov" "" \
+      --replace-fail "--flake8" "" \
+      --replace-fail "--isort" ""
   '';
 
   pytestFlagsArray = [ "cairosvg/test_api.py" ];

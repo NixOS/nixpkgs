@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     rm bin/*.cmd
     substituteInPlace bin/dumpxsb \
-      --replace 'echo `dirname $0`' ""
+      --replace-fail 'echo `dirname $0`' ""
 
     substituteInPlace bin/_setlib \
-      --replace 'echo XMLBEANS_LIB=$XMLBEANS_LIB' ""
+      --replace-fail 'echo XMLBEANS_LIB=$XMLBEANS_LIB' ""
 
     for file in bin/*; do
       substituteInPlace $file \
-        --replace "java " "${jre_headless}/bin/java "
+        --replace-fail "java " "${jre_headless}/bin/java "
     done
   '';
 

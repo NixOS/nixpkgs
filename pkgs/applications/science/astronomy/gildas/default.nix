@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
   configurePhase=''
-    substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
-    substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
-    substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
+    substituteInPlace admin/wrapper.sh --replace-fail '%%OUT%%' $out
+    substituteInPlace admin/wrapper.sh --replace-fail '%%PYTHONHOME%%' ${python3Env}
+    substituteInPlace utilities/main/gag-makedepend.pl --replace-fail '/usr/bin/perl' ${perl}/bin/perl
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';

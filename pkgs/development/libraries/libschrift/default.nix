@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace config.mk \
-      --replace "PREFIX = /usr/local" "PREFIX = $out"
+      --replace-fail "PREFIX = /usr/local" "PREFIX = $out"
   '';
 
   makeFlags = [ "libschrift.a" ];

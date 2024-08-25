@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--benchmark-disable" ""
+      --replace-fail "--benchmark-disable" ""
   '';
 
   cargoRoot = "src/rust";

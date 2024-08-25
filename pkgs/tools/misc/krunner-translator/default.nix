@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/translateShellProcess.cpp --replace "start(\"trans\", arguments);" "start(\"${translate-shell}/bin/trans\", arguments);"
+    substituteInPlace src/translateShellProcess.cpp --replace-fail "start(\"trans\", arguments);" "start(\"${translate-shell}/bin/trans\", arguments);"
   '';
 
   meta = with lib; {

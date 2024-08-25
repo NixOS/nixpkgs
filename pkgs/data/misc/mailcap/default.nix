@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    substituteInPlace mailcap --replace "/usr/bin/" ""
+    substituteInPlace mailcap --replace-fail "/usr/bin/" ""
     sh generate-nginx-mimetypes.sh < mime.types > nginx-mime.types
 
     install -D -m0644 nginx-mime.types $out/etc/nginx/mime.types

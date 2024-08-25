@@ -48,7 +48,7 @@ stdenv.mkDerivation ({
     patchShebangs ${escriptPath} || true
 
     substituteInPlace Makefile \
-      --replace "/usr/local" $out
+      --replace-fail "/usr/local" $out
   '';
 
   postFixup = ''
@@ -63,7 +63,7 @@ stdenv.mkDerivation ({
     done
 
     substituteInPlace $out/bin/mix \
-      --replace "/usr/bin/env elixir" "${coreutils}/bin/env $out/bin/elixir"
+      --replace-fail "/usr/bin/env elixir" "${coreutils}/bin/env $out/bin/elixir"
   '';
 
   pos = builtins.unsafeGetAttrPos "sha256" args;

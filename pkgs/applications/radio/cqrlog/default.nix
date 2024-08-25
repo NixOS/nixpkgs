@@ -36,27 +36,27 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace @Lazarusdir@ "${lazarus}/share/lazarus" \
-      --replace /usr ""
+      --replace-fail @Lazarusdir@ "${lazarus}/share/lazarus" \
+      --replace-fail /usr ""
     substituteInPlace src/fTRXControl.pas \
-      --replace "/usr/bin/rigctld" "${hamlib}/bin/rigctld"
+      --replace-fail "/usr/bin/rigctld" "${hamlib}/bin/rigctld"
     substituteInPlace src/fCallAttachment.pas \
-      --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
     substituteInPlace src/fRotControl.pas \
-      --replace "/usr/bin/rotctld" "${hamlib}/bin/rotctld"
+      --replace-fail "/usr/bin/rotctld" "${hamlib}/bin/rotctld"
     substituteInPlace src/fPreferences.pas \
-      --replace "/usr/bin/rigctld" "${hamlib}/bin/rigctld" \
-      --replace "/usr/bin/rotctld" "${hamlib}/bin/rotctld" \
-      --replace "/usr/bin/xplanet" "${xplanet}/bin/xplanet"
+      --replace-fail "/usr/bin/rigctld" "${hamlib}/bin/rigctld" \
+      --replace-fail "/usr/bin/rotctld" "${hamlib}/bin/rotctld" \
+      --replace-fail "/usr/bin/xplanet" "${xplanet}/bin/xplanet"
     substituteInPlace src/fLoTWExport.pas \
-      --replace "/usr/bin/tqsl" "${tqsl}/bin/tqsl"
+      --replace-fail "/usr/bin/tqsl" "${tqsl}/bin/tqsl"
     substituteInPlace src/dUtils.pas \
-      --replace "/usr/bin/xplanet" "${xplanet}/bin/xplanet" \
-      --replace "/usr/bin/rigctld" "${hamlib}/bin/rigctld"
+      --replace-fail "/usr/bin/xplanet" "${xplanet}/bin/xplanet" \
+      --replace-fail "/usr/bin/rigctld" "${hamlib}/bin/rigctld"
     # Order is important
     substituteInPlace src/dData.pas \
-      --replace "/usr/bin/mysqld_safe" "${mariadb}/bin/mysqld_safe" \
-      --replace "/usr/bin/mysqld" "${mariadb}/bin/mysqld"
+      --replace-fail "/usr/bin/mysqld_safe" "${mariadb}/bin/mysqld_safe" \
+      --replace-fail "/usr/bin/mysqld" "${mariadb}/bin/mysqld"
 
     # To be fail when I need to patch a new hardcoded binary
     ! grep -C src -RC0 "/usr"

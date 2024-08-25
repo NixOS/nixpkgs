@@ -167,8 +167,8 @@ stdenv.mkDerivation rec {
     patchShebangs src/lib/elementary/config_embed
 
     # fix destination of systemd unit and dbus service
-    substituteInPlace systemd-services/meson.build --replace "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
-    substituteInPlace dbus-services/meson.build --replace "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
+    substituteInPlace systemd-services/meson.build --replace-fail "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
+    substituteInPlace dbus-services/meson.build --replace-fail "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
   '';
 
   # bin/edje_cc creates $HOME/.run, which would break build of reverse dependencies.
@@ -185,13 +185,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # fix use of $out variable
-    substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
+    substituteInPlace "$out/share/elua/core/util.lua" --replace-fail '$out' "$out"
     rm "$out/share/elua/core/util.lua.orig"
 
     # add all module include dirs to the Cflags field in efl.pc
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
     substituteInPlace "$out/lib/pkgconfig/efl.pc" \
-      --replace 'Cflags: -I''${includedir}/efl-1' \
+      --replace-fail 'Cflags: -I''${includedir}/efl-1' \
                 'Cflags: -I''${includedir}/eina-1/eina'"$modules"
 
     # build icon cache

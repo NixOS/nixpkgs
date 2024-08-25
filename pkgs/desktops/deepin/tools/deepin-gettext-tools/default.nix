@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/generate_mo.py --replace "sudo cp" "cp"
+    substituteInPlace src/generate_mo.py --replace-fail "sudo cp" "cp"
   '';
 
   nativeBuildInputs = [ python3Packages.wrapPython ];

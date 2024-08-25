@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace "$out/lib/cmake/cpr/cprTargets.cmake" \
-      --replace "_IMPORT_PREFIX \"$out\"" \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" \
                 "_IMPORT_PREFIX \"$dev\""
   '';
 

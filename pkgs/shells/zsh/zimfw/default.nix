@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   ## the `zimfw.zsh` where we currently are.
   postFixup = ''
     substituteInPlace $out/zimfw.zsh \
-      --replace "\''${ZIM_HOME}/zimfw.zsh" "$out/zimfw.zsh" \
-      --replace "\''${(q-)ZIM_HOME}/zimfw.zsh" "$out/zimfw.zsh"
+      --replace-fail "\''${ZIM_HOME}/zimfw.zsh" "$out/zimfw.zsh" \
+      --replace-fail "\''${(q-)ZIM_HOME}/zimfw.zsh" "$out/zimfw.zsh"
   '';
 
   meta = with lib; {

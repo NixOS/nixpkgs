@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
     patchShebangs tools/regression-test.pl
     patchShebangs tools/xavs-format
     '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace config.guess --replace 'uname -p' 'uname -m'
+    substituteInPlace config.guess --replace-fail 'uname -p' 'uname -m'
     substituteInPlace configure \
-      --replace '-O4' '-O3' \
-      --replace ' -s ' ' ' \
-      --replace 'LDFLAGS -s' 'LDFLAGS' \
-      --replace '-dynamiclib' ' ' \
-      --replace '-falign-loops=16' ' '
-    substituteInPlace Makefile --replace '-Wl,-soname,' ' '
+      --replace-fail '-O4' '-O3' \
+      --replace-fail ' -s ' ' ' \
+      --replace-fail 'LDFLAGS -s' 'LDFLAGS' \
+      --replace-fail '-dynamiclib' ' ' \
+      --replace-fail '-falign-loops=16' ' '
+    substituteInPlace Makefile --replace-fail '-Wl,-soname,' ' '
     '';
 
   configureFlags = [

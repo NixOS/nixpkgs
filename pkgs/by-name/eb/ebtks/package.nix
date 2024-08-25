@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?
   postPatch = ''
     substituteInPlace templates/EBTKS/SimpleArray.h \
-      --replace "#define FINITE(x) finite(x)" "#define FINITE(x) isfinite(x)"
+      --replace-fail "#define FINITE(x) finite(x)" "#define FINITE(x) isfinite(x)"
   ''
   # error: ISO C++17 does not allow 'register' storage class specifier
   + ''

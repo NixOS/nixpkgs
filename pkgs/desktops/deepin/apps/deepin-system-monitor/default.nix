@@ -43,17 +43,17 @@ stdenv.mkDerivation rec {
       deepin-system-monitor-main/process/priority_controller.cpp \
       deepin-system-monitor-main/service/service_manager.cpp \
       deepin-system-monitor-main/translations/policy/com.deepin.pkexec.deepin-system-monitor.policy \
-        --replace "/usr/bin/kill" "${lib.getBin util-linux}/bin/kill" \
-        --replace "/usr/bin/renice" "${lib.getBin util-linux}/bin/renice" \
-        --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl'
+        --replace-fail "/usr/bin/kill" "${lib.getBin util-linux}/bin/kill" \
+        --replace-fail "/usr/bin/renice" "${lib.getBin util-linux}/bin/renice" \
+        --replace-fail '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl'
 
     substituteInPlace deepin-system-monitor-main/{service/service_manager.cpp,process/{priority_controller.cpp,process_controller.cpp}} \
-      --replace "/usr/bin/pkexec" "${lib.getBin polkit}/bin/pkexec"
+      --replace-fail "/usr/bin/pkexec" "${lib.getBin polkit}/bin/pkexec"
 
     for file in $(grep -rl "/usr")
     do
       substituteInPlace $file \
-        --replace "/usr" "$out"
+        --replace-fail "/usr" "$out"
     done
   '';
 

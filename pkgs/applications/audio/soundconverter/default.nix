@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [ xvfb-run ];
 
   postPatch = ''
-    substituteInPlace  bin/soundconverter --replace \
+    substituteInPlace  bin/soundconverter --replace-fail \
       "DATA_PATH = os.path.join(SOURCE_PATH, 'data')" \
       "DATA_PATH = '$out/share/soundconverter'"
   '';
@@ -78,7 +78,7 @@ python3Packages.buildPythonApplication rec {
       sed -i '49 a\    @unittest.skip("Gio.file_parse_name issues")' tests/testcases/names.py
     ''
     + lib.optionalString (!faacSupport) ''
-      substituteInPlace tests/testcases/gui_integration.py --replace \
+      substituteInPlace tests/testcases/gui_integration.py --replace-fail \
         "for encoder in ['fdkaacenc', 'faac', 'avenc_aac']:" \
         "for encoder in ['fdkaacenc', 'avenc_aac']:"
     '';

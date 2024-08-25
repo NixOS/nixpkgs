@@ -14,7 +14,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   patches = [ ./fix-terraform-ls.patch ];
 
   postPatch = ''
-    substituteInPlace out/serverPath.js --replace TERRAFORM-LS-PATH ${terraform-ls}/bin/terraform-ls
+    substituteInPlace out/serverPath.js --replace-fail TERRAFORM-LS-PATH ${terraform-ls}/bin/terraform-ls
   '';
 
   meta = {

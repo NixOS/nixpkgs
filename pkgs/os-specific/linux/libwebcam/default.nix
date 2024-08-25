@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./uvcdynctrl/CMakeLists.txt \
-      --replace "/lib/udev" "$out/lib/udev"
+      --replace-fail "/lib/udev" "$out/lib/udev"
 
     substituteInPlace ./uvcdynctrl/udev/scripts/uvcdynctrl \
-      --replace 'debug=0' 'debug=''${NIX_UVCDYNCTRL_UDEV_DEBUG:-0}' \
-      --replace 'uvcdynctrlpath=uvcdynctrl' "uvcdynctrlpath=$out/bin/uvcdynctrl"
+      --replace-fail 'debug=0' 'debug=''${NIX_UVCDYNCTRL_UDEV_DEBUG:-0}' \
+      --replace-fail 'uvcdynctrlpath=uvcdynctrl' "uvcdynctrlpath=$out/bin/uvcdynctrl"
 
     substituteInPlace ./uvcdynctrl/udev/rules/80-uvcdynctrl.rules \
-      --replace "/lib/udev" "$out/lib/udev"
+      --replace-fail "/lib/udev" "$out/lib/udev"
   '';
 
 

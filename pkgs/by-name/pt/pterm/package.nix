@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-dtnetsubs-remove-null-check.patch ];
 
   preBuild = ''
-    substituteInPlace Makefile.common Makefile.wxpterm --replace "/bin/echo" "echo"
+    substituteInPlace Makefile.common Makefile.wxpterm --replace-fail "/bin/echo" "echo"
     echo "exit 0" > wxversion.py
   '';
 

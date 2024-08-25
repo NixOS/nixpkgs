@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/*.pc \
-      --replace '=''${exec_prefix}//' '=/'
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
   meta = with lib; {

@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace configure \
-      --replace "/usr/local/ssl/include" "${openssl.dev}/include" \
-      --replace "/usr/local/ssl/lib" "${lib.getLib openssl}/lib"
+      --replace-fail "/usr/local/ssl/include" "${openssl.dev}/include" \
+      --replace-fail "/usr/local/ssl/lib" "${lib.getLib openssl}/lib"
   '';
 
   configureFlags = [

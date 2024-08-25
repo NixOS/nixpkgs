@@ -21,7 +21,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Remove test QoL package from install_requires
     substituteInPlace setup.py \
-      --replace "'pytest-cache', " ""
+      --replace-fail "'pytest-cache', " ""
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   #   program directory (it's immutable!)
   postPatch = ''
     substituteInPlace src/tamatool.c \
-      --replace '#define RES_PATH'          "#define RES_PATH         \"$out/share/tamatool/res\"          //" \
-      --replace '#define ROM_PATH'          "#define ROM_PATH         \"$out/share/tamatool/rom.bin\"      //" \
-      --replace '#define ROM_NOT_FOUND_MSG' '#define ROM_NOT_FOUND_MSG "You need to use the --rom option!" //'
+      --replace-fail '#define RES_PATH'          "#define RES_PATH         \"$out/share/tamatool/res\"          //" \
+      --replace-fail '#define ROM_PATH'          "#define ROM_PATH         \"$out/share/tamatool/rom.bin\"      //" \
+      --replace-fail '#define ROM_NOT_FOUND_MSG' '#define ROM_NOT_FOUND_MSG "You need to use the --rom option!" //'
   '';
 
   nativeBuildInputs = [

@@ -74,7 +74,7 @@ in {
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     substituteInPlace lib/gcc/${upstreamTriplet}/${gccVersion}/install-tools/mkheaders.conf \
-      --replace "SYSTEM_HEADER_DIR=\"/usr/include\"" "SYSTEM_HEADER_DIR=\"/include\""
+      --replace-fail "SYSTEM_HEADER_DIR=\"/usr/include\"" "SYSTEM_HEADER_DIR=\"/include\""
   ''
   # The included fixincl binary that is called during header fixup has a
   # hardcoded execvp("/usr/bin/sed", ...) call, but /usr/bin/sed isn't

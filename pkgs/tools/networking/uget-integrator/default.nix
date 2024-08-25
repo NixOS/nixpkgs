@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     for f in conf/com.ugetdm.{chrome,firefox}.json; do
-      substituteInPlace $f --replace "/usr" "$out"
+      substituteInPlace $f --replace-fail "/usr" "$out"
     done
 
     install -D -t $out/bin                                   bin/uget-integrator

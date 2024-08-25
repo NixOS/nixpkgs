@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/bindings/python/CMakeLists.txt \
-      --replace "\''${Python_SITEARCH}" "${placeholder "out"}/${python3.sitePackages}"
+      --replace-fail "\''${Python_SITEARCH}" "${placeholder "out"}/${python3.sitePackages}"
   '';
 
   nativeBuildInputs = [
@@ -82,8 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/libvalhalla.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace '=''${exec_prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/' \
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
   passthru.tests = {

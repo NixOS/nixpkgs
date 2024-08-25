@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov" ""
+      --replace-fail " --cov" ""
   '';
 
   pythonImportsCheck = [ "pyramid_jinja2" ];

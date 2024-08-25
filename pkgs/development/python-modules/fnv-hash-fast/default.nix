@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=fnv_hash_fast --cov-report=term-missing:skip-covered" ""
+      --replace-fail "--cov=fnv_hash_fast --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [

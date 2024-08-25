@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     substituteInPlace "$out/share/applications/hase.desktop" \
-      --replace "Exec=hase" "Exec=$out/bin/hase"
+      --replace-fail "Exec=hase" "Exec=$out/bin/hase"
   '';
 
   meta = {

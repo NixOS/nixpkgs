@@ -8,7 +8,7 @@ buildPythonPackage {
     cd pkg
     # Their listdir function filters out `node_modules` folders.
     # Do we have to care about that with Nix...?
-    substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
+    substituteInPlace buildbot_pkg.py --replace-fail "os.listdir = listdir" ""
   '';
 
   # No tests

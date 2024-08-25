@@ -269,7 +269,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     fi
 
     for i in "''${!outputLib}/''${targetConfig}"/lib/*.{la,py}; do
-        substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+        substituteInPlace "$i" --replace-fail "$out" "''${!outputLib}"
     done
 
     if [ -n "$enableMultilib" ]; then
@@ -280,7 +280,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll" "''${!outputLib}"
 
         for i in "''${!outputLib}/''${targetConfig}"/lib64/*.{la,py}; do
-            substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+            substituteInPlace "$i" --replace-fail "$out" "''${!outputLib}"
         done
     fi
 

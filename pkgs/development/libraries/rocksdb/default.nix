@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     if [ -f "$out"/lib/pkgconfig/rocksdb.pc ]; then
       substituteInPlace "$out"/lib/pkgconfig/rocksdb.pc \
-        --replace '="''${prefix}//' '="/'
+        --replace-fail '="''${prefix}//' '="/'
     fi
   '';
 

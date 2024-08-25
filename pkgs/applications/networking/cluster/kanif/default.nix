@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-      substituteInPlace ./kanif --replace "/usr/bin/perl" "${perl}/bin/perl"
-      substituteInPlace ./kanif --replace '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
+      substituteInPlace ./kanif --replace-fail "/usr/bin/perl" "${perl}/bin/perl"
+      substituteInPlace ./kanif --replace-fail '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
   '';
 
   meta = {

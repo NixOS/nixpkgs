@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    substituteInPlace data/gen-header.pl --replace /usr/bin/env ""
+    substituteInPlace data/gen-header.pl --replace-fail /usr/bin/env ""
     patchShebangs .
   '';
 

@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix running wayland-scanner for the build platform when cross-compiling.
     # See comment here: https://github.com/libsdl-org/SDL/issues/4860#issuecomment-1119003545
     substituteInPlace configure \
-      --replace '$(WAYLAND_SCANNER)' 'wayland-scanner'
+      --replace-fail '$(WAYLAND_SCANNER)' 'wayland-scanner'
   '';
 
   strictDeps = true;

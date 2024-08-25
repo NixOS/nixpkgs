@@ -22,11 +22,11 @@ in stdenv.mkDerivation {
     done
 
     substituteInPlace "$out"/modprobe.conf \
-      --replace /sbin/lsmod /run/booted-system/sw/bin/lsmod \
-      --replace /sbin/rmmod /run/booted-system/sw/bin/rmmod \
-      --replace /sbin/modprobe /run/booted-system/sw/bin/modprobe \
-      --replace " grep " " /run/booted-system/sw/bin/grep " \
-      --replace " xargs " " /run/booted-system/sw/bin/xargs "
+      --replace-fail /sbin/lsmod /run/booted-system/sw/bin/lsmod \
+      --replace-fail /sbin/rmmod /run/booted-system/sw/bin/rmmod \
+      --replace-fail /sbin/modprobe /run/booted-system/sw/bin/modprobe \
+      --replace-fail " grep " " /run/booted-system/sw/bin/grep " \
+      --replace-fail " xargs " " /run/booted-system/sw/bin/xargs "
   '';
 
   meta = with lib; {

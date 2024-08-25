@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
 
-    substituteInPlace bin/sbt --replace 'declare java_cmd="java"' 'declare java_cmd="${jdk}/bin/java"'
+    substituteInPlace bin/sbt --replace-fail 'declare java_cmd="java"' 'declare java_cmd="${jdk}/bin/java"'
 
     install bin/sbt $out/bin
 

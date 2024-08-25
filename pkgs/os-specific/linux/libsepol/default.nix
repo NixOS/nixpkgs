@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
-    substituteInPlace src/Makefile --replace 'all: $(LIBA) $(LIBSO)' 'all: $(LIBA)'
+    substituteInPlace src/Makefile --replace-fail 'all: $(LIBA) $(LIBSO)' 'all: $(LIBA)'
     sed -i $'/^\t.*LIBSO/d' src/Makefile
   '';
 

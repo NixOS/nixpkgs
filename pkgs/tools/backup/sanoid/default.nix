@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp sanoid.defaults.conf "$out/etc/sanoid/sanoid.defaults.conf"
     # Hardcode path to default config
     substitute sanoid "$out/bin/sanoid" \
-      --replace "\$args{'configdir'}/sanoid.defaults.conf" "$out/etc/sanoid/sanoid.defaults.conf"
+      --replace-fail "\$args{'configdir'}/sanoid.defaults.conf" "$out/etc/sanoid/sanoid.defaults.conf"
     chmod +x "$out/bin/sanoid"
     # Prefer ZFS userspace tools from /run/booted-system/sw/bin to avoid
     # incompatibilities with the ZFS kernel module.

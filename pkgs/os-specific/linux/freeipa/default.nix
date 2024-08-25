@@ -113,13 +113,13 @@ stdenv.mkDerivation rec {
     patchShebangs makeapi makeaci install/ui/util
 
     substituteInPlace ipaplatform/setup.py \
-      --replace 'ipaplatform.debian' 'ipaplatform.nixos'
+      --replace-fail 'ipaplatform.debian' 'ipaplatform.nixos'
 
     substituteInPlace ipasetup.py.in \
-      --replace 'int(v)' 'int(v.replace("post", ""))'
+      --replace-fail 'int(v)' 'int(v.replace("post", ""))'
 
     substituteInPlace client/ipa-join.c \
-      --replace /usr/sbin/ipa-getkeytab $out/bin/ipa-getkeytab
+      --replace-fail /usr/sbin/ipa-getkeytab $out/bin/ipa-getkeytab
 
     cp -r ipaplatform/{fedora,nixos}
     substitute ${pathsPy} ipaplatform/nixos/paths.py \

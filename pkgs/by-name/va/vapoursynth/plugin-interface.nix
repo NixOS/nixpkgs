@@ -85,7 +85,7 @@ runCommand "${vapoursynth.name}-with-plugins"
         ${python3.sitePackages}/vapoursynth.la
     do
         substitute ${vapoursynth}/$textFile $out/$textFile \
-            --replace "${vapoursynth}" "$out"
+            --replace-fail "${vapoursynth}" "$out"
     done
 
     for binaryPlugin in ${pluginsEnv}/lib/vapoursynth/*; do

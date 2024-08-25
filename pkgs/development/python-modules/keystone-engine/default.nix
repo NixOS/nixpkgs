@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    substituteInPlace setup.py --replace \
+    substituteInPlace setup.py --replace-fail \
       "libkeystone" "${keystone}/lib/libkeystone"
   '';
 

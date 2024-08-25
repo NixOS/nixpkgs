@@ -80,7 +80,7 @@ perlPackages.buildPerlPackage rec {
   fixupPhase = ''
     for sh in bash zsh; do
       substituteInPlace ./share/rex-tab-completion.$sh \
-        --replace 'perl' "${pkgs.perl.withPackages (ps: [ ps.YAML ])}/bin/perl"
+        --replace-fail 'perl' "${pkgs.perl.withPackages (ps: [ ps.YAML ])}/bin/perl"
     done
     installShellCompletion --name _rex --zsh ./share/rex-tab-completion.zsh
     installShellCompletion --name rex --bash ./share/rex-tab-completion.bash

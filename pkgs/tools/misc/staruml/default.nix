@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/share/doc
 
     substituteInPlace $out/share/applications/staruml.desktop \
-      --replace "/opt/StarUML/staruml" "$out/bin/staruml"
+      --replace-fail "/opt/StarUML/staruml" "$out/bin/staruml"
 
     mkdir -p $out/lib
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/

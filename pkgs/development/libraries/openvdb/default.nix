@@ -27,8 +27,8 @@ stdenv.mkDerivation rec
 
   postFixup = ''
     substituteInPlace $dev/lib/cmake/OpenVDB/FindOpenVDB.cmake \
-      --replace \''${OPENVDB_LIBRARYDIR} $out/lib \
-      --replace \''${OPENVDB_INCLUDEDIR} $dev/include
+      --replace-fail \''${OPENVDB_LIBRARYDIR} $out/lib \
+      --replace-fail \''${OPENVDB_INCLUDEDIR} $dev/include
   '';
 
   meta = with lib; {

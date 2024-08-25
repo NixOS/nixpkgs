@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace install-sh \
-      --replace "stripprog=" "stripprog=\$STRIP # "
+      --replace-fail "stripprog=" "stripprog=\$STRIP # "
   '';
 
   env = lib.optionalAttrs stdenv.cc.isClang {

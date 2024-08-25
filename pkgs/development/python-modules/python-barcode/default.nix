@@ -28,9 +28,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=barcode" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--no-cov-on-fail" ""
+      --replace-fail "--cov=barcode" "" \
+      --replace-fail "--cov-report=term-missing:skip-covered" "" \
+      --replace-fail "--no-cov-on-fail" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.images;

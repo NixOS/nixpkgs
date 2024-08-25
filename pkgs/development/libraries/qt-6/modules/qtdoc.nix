@@ -10,7 +10,7 @@ qtModule {
   postPatch = ''
     for file in $(grep -rl '$QT_INSTALL_DOCS'); do
       substituteInPlace $file \
-          --replace '$QT_INSTALL_DOCS' "${qtbase}/share/doc"
+          --replace-fail '$QT_INSTALL_DOCS' "${qtbase}/share/doc"
     done
   '';
   nativeBuildInputs = [ (qttools.override { withClang = true; }) ];

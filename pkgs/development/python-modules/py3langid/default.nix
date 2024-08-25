@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   # nixify path to the courlan binary in the test suite
   postPatch = ''
-    substituteInPlace tests/test_langid.py --replace "'langid'" "'$out/bin/langid'"
+    substituteInPlace tests/test_langid.py --replace-fail "'langid'" "'$out/bin/langid'"
   '';
 
   pythonImportsCheck = [ "py3langid" ];

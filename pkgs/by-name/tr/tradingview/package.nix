@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/share/tradingview/meta
 
     install -Dm444 squashfs-root/meta/gui/tradingview.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/tradingview.desktop --replace \$\{SNAP}/meta/gui/icon.png tradingview
+    substituteInPlace $out/share/applications/tradingview.desktop --replace-fail \$\{SNAP}/meta/gui/icon.png tradingview
 
     mkdir $out/share/icons
     cp squashfs-root/meta/gui/icon.png $out/share/icons/tradingview.png

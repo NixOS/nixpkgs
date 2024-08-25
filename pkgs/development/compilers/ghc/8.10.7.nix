@@ -324,7 +324,7 @@ stdenv.mkDerivation (rec {
       # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
       for x in configure aclocal.m4; do
         substituteInPlace $x \
-          --replace '*-android*|*-gnueabi*)' \
+          --replace-fail '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   '';

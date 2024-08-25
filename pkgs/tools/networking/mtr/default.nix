@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # and this after autoreconfHook has generated Makefile.in
   preConfigure = ''
     substituteInPlace Makefile.in \
-      --replace ' install-exec-hook' ""
+      --replace-fail ' install-exec-hook' ""
   '';
 
   configureFlags = lib.optional (!withGtk) "--without-gtk";

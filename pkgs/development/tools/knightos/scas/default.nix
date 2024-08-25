@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DSCAS_LIBRARY=1" ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "TARGETS scas scdump scwrap" "TARGETS scas scdump scwrap generate_tables"
+      --replace-fail "TARGETS scas scdump scwrap" "TARGETS scas scdump scwrap generate_tables"
   '';
   strictDeps = true;
 

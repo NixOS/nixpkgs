@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString sslSupport ''
     moveToOutput "lib/libevent_openssl*" "$openssl"
     substituteInPlace "$dev/lib/pkgconfig/libevent_openssl.pc" \
-      --replace "$out" "$openssl"
+      --replace-fail "$out" "$openssl"
     sed "/^libdir=/s|$out|$openssl|" -i "$openssl"/lib/libevent_openssl.la
   '';
 

@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # The app crashes without a changed fontdir and upstream recommends dejavu as font
   postPatch = ''
-    substituteInPlace trigger-control.cpp --replace "/usr/share/fonts/" "${dejavu_fonts}/share/fonts/"
+    substituteInPlace trigger-control.cpp --replace-fail "/usr/share/fonts/" "${dejavu_fonts}/share/fonts/"
   '';
 
   installPhase = ''

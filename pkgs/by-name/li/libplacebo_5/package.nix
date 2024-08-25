@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace 'python_env.append' '#'
+      --replace-fail 'python_env.append' '#'
   '';
 
   meta = with lib; {

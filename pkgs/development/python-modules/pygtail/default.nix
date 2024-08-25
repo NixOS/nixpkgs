@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # remove at next bump, tag is one commit early for 0.8.0
   postPatch = ''
     substituteInPlace pygtail/core.py \
-      --replace 0.7.0 0.8.0
+      --replace-fail 0.7.0 0.8.0
   '';
 
   meta = with lib; {

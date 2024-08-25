@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/glib-mkenums \
-      --replace /usr/bin/perl "${perl}/bin/perl"
+      --replace-fail /usr/bin/perl "${perl}/bin/perl"
   '';
 
   installPhase = ''

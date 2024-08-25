@@ -37,26 +37,26 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace scripts/lightdm-deepin-greeter files/wayland/lightdm-deepin-greeter-wayland \
-      --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace src/session-widgets/auth_module.h \
-      --replace "/usr/lib/dde-control-center" "/run/current-system/sw/lib/dde-control-center"
+      --replace-fail "/usr/lib/dde-control-center" "/run/current-system/sw/lib/dde-control-center"
 
     substituteInPlace src/global_util/modules_loader.cpp \
-      --replace "/usr/lib/dde-session-shell/modules" "/run/current-system/sw/lib/dde-session-shell/modules"
+      --replace-fail "/usr/lib/dde-session-shell/modules" "/run/current-system/sw/lib/dde-session-shell/modules"
 
     substituteInPlace src/{session-widgets/{lockcontent.cpp,userinfo.cpp},widgets/fullscreenbackground.cpp} \
-      --replace "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds"
+      --replace-fail "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds"
 
     substituteInPlace src/global_util/xkbparser.h \
-      --replace "/usr/share/X11/xkb/rules/base.xml" "${xkeyboard_config}/share/X11/xkb/rules/base.xml"
+      --replace-fail "/usr/share/X11/xkb/rules/base.xml" "${xkeyboard_config}/share/X11/xkb/rules/base.xml"
 
     substituteInPlace files/{org.deepin.dde.ShutdownFront1.service,org.deepin.dde.LockFront1.service} \
-      --replace "/usr/bin/dbus-send" "${dbus}/bin/dbus-send" \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/bin/dbus-send" "${dbus}/bin/dbus-send" \
+      --replace-fail "/usr/share" "$out/share"
 
     substituteInPlace src/global_util/{public_func.cpp,constants.h} scripts/lightdm-deepin-greeter files/{dde-lock.desktop,lightdm-deepin-greeter.desktop,wayland/lightdm-deepin-greeter-wayland.desktop} \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
 
     patchShebangs files/deepin-greeter
   '';

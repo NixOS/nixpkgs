@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'asyncio = "^3.4.3"' ""
+      --replace-fail 'asyncio = "^3.4.3"' ""
   '';
 
   pythonImportsCheck = [

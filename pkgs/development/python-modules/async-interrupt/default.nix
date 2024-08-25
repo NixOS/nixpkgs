@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=async_interrupt --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=async_interrupt --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

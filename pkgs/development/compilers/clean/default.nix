@@ -24,10 +24,10 @@ stdenv.mkDerivation {
   patches = [ ./chroot-build-support-do-not-rebuild-equal-timestamps.patch ];
 
   preBuild = ''
-    substituteInPlace Makefile --replace 'INSTALL_DIR = $(CURRENTDIR)' 'INSTALL_DIR = '$out
+    substituteInPlace Makefile --replace-fail 'INSTALL_DIR = $(CURRENTDIR)' 'INSTALL_DIR = '$out
 
-    substituteInPlace src/tools/clm/clm.c --replace '/usr/bin/gcc' $(type -p gcc)
-    substituteInPlace src/tools/clm/clm.c --replace '/usr/bin/as' $(type -p as)
+    substituteInPlace src/tools/clm/clm.c --replace-fail '/usr/bin/gcc' $(type -p gcc)
+    substituteInPlace src/tools/clm/clm.c --replace-fail '/usr/bin/as' $(type -p as)
 
     cd src
   '';

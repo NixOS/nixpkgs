@@ -27,7 +27,7 @@ symlinkJoin {
     do
       rm -f "$out/$file"
       substitute "${thunar}/$file" "$out/$file" \
-        --replace "${thunar}" "$out"
+        --replace-fail "${thunar}" "$out"
     done
   '';
 

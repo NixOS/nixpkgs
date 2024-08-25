@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Remove hardcoded paths on Darwin
     substituteInPlace Makefile.defs \
-      --replace "/usr/bin/ar" "ar" \
-      --replace "/usr/bin/ranlib" "ranlib"
+      --replace-fail "/usr/bin/ar" "ar" \
+      --replace-fail "/usr/bin/ranlib" "ranlib"
     # Replace hardcoded path to libwhereami
     substituteInPlace client/Makefile \
-      --replace "/usr/include/whereami.h" "${whereami}/include/whereami.h"
+      --replace-fail "/usr/include/whereami.h" "${whereami}/include/whereami.h"
   '';
 
   nativeBuildInputs = [

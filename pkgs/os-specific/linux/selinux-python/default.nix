@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libselinux libsemanage setools python3.pkgs.ipy ];
 
   postPatch = ''
-    substituteInPlace sepolicy/Makefile --replace "echo --root" "echo --prefix"
-    substituteInPlace sepolgen/src/share/Makefile --replace "/var/lib/sepolgen" \
+    substituteInPlace sepolicy/Makefile --replace-fail "echo --root" "echo --prefix"
+    substituteInPlace sepolgen/src/share/Makefile --replace-fail "/var/lib/sepolgen" \
                                                             "\$PREFIX/var/lib/sepolgen"
   '';
 

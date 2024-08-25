@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # Workaround broken zlib version detecion in CMake < 3.37.
   postPatch = ''
     substituteInPlace ./src/cmake/Config.cmake.in \
-      --replace " @ZLIB_VERSION@" ""
+      --replace-fail " @ZLIB_VERSION@" ""
   '';
 
   outputs = [ "bin" "out" "dev" "doc" ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $dev/lib/cmake/OpenImageIO/OpenImageIOTargets-*.cmake \
-      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$out/lib/lib"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib/lib" "$out/lib/lib"
   '';
 
   meta = with lib; {

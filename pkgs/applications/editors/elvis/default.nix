@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace '-lcurses' '-lncurses'
+      --replace-fail '-lcurses' '-lncurses'
   '';
 
   preConfigure = ''

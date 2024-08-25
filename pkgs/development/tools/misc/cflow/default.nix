@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace "src/cflow.h"					\
-      --replace "/usr/bin/cpp"						\
+      --replace-fail "/usr/bin/cpp"						\
                 "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"
   '';
 

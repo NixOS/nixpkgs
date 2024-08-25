@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     rm -r prover_snapshots
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile --replace "-flto" ""
+    substituteInPlace Makefile --replace-fail "-flto" ""
   '';
 
   makeFlags = [

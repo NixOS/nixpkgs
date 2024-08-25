@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   prePatch = ''
     substituteInPlace src/util.rs \
-      --replace "/usr/share/i3status-rust" "$out/share"
+      --replace-fail "/usr/share/i3status-rust" "$out/share"
   '';
 
   postInstall = ''

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs ./vers_string
     sed -i s,vers_string,./vers_string, Makefile*
-    substituteInPlace vers_string --replace "cvslib.pl" "./cvslib.pl"
+    substituteInPlace vers_string --replace-fail "cvslib.pl" "./cvslib.pl"
   '';
 
   patches = [ ./crashes.patch ];
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   preInstall = ''
     installFlagsArray=(INST_UID=$(id -u) INST_GID=$(id -g) LIBC_VERS=2.5 NSS_VERS=2 NSS_LDAP_PATH_CONF=$out/etc/ldap.conf)
     substituteInPlace Makefile \
-      --replace '/usr$(libdir)' $TMPDIR \
-      --replace 'install-data-local:' 'install-data-local-disabled:'
+      --replace-fail '/usr$(libdir)' $TMPDIR \
+      --replace-fail 'install-data-local:' 'install-data-local-disabled:'
     mkdir -p $out/etc
   '';
 

@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace fs_quota/build.rs \
-       --replace '/usr/include/tirpc' '${libtirpc.dev}/include/tirpc'
+       --replace-fail '/usr/include/tirpc' '${libtirpc.dev}/include/tirpc'
   '';
 
   meta = with lib; {

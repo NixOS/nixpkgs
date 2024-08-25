@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     # Remove #[deny(warnings)] which is equivalent to -Werror in C.
     # Prevents build failures when upgrading rustc, which may give more warnings.
     substituteInPlace src/lib.rs \
-      --replace "#![deny(warnings)]" ""
+      --replace-fail "#![deny(warnings)]" ""
 
     # build script tries to get version information from git
     # this fixes the --version output

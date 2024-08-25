@@ -13,7 +13,7 @@ mkDerivation rec {
   buildInputs = [ qtbase qttools qtserialport libGLU ];
   nativeBuildInputs = [ qmake ];
   postPatch = ''
-    substituteInPlace oscar/oscar.pro --replace "/bin/bash" "${stdenv.shell}"
+    substituteInPlace oscar/oscar.pro --replace-fail "/bin/bash" "${stdenv.shell}"
   '';
 
   qmakeFlags = [ "OSCAR_QT.pro" ];

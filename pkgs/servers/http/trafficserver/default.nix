@@ -96,14 +96,14 @@ stdenv.mkDerivation rec {
       src/traffic_logstats/tests \
       tools/check-unused-dependencies
 
-    substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
+    substituteInPlace configure --replace-fail '/usr/bin/file' '${file}/bin/file'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace configure \
-      --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
+      --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
   '' + lib.optionalString stdenv.isDarwin ''
     # 'xcrun leaks' probably requires non-free XCode
     substituteInPlace iocore/net/test_certlookup.cc \
-      --replace 'xcrun leaks' 'true'
+      --replace-fail 'xcrun leaks' 'true'
   '';
 
   configureFlags = [
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    substituteInPlace rc/trafficserver.service --replace "syslog.target" ""
+    substituteInPlace rc/trafficserver.service --replace-fail "syslog.target" ""
     install -Dm644 rc/trafficserver.service $out/lib/systemd/system/trafficserver.service
 
     wrapProgram $out/bin/tspush \

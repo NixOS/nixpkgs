@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # texlive for docs seems extreme
     substituteInPlace autostuff \
-      --replace "$newdirs documentation" "$newdirs"
+      --replace-fail "$newdirs documentation" "$newdirs"
 
-    substituteInPlace sea/src/DEF_grammar_lex.l --replace "ifndef FLEX_BETA" \
+    substituteInPlace sea/src/DEF_grammar_lex.l --replace-fail "ifndef FLEX_BETA" \
       "if (YY_FLEX_MAJOR_VERSION <= 2) && (YY_FLEX_MINOR_VERSION < 6)"
 
     ./autostuff

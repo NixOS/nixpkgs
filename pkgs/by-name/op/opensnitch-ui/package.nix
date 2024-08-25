@@ -18,7 +18,7 @@ python311Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace ui/opensnitch/utils/__init__.py \
-      --replace /usr/lib/python3/dist-packages/data ${python311Packages.pyasn}/${python311Packages.python.sitePackages}/pyasn/data
+      --replace-fail /usr/lib/python3/dist-packages/data ${python311Packages.pyasn}/${python311Packages.python.sitePackages}/pyasn/data
   '';
 
   nativeBuildInputs = [

@@ -22,23 +22,23 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Fix setuid install
-    substituteInPlace Makefile --replace "-m 4755" "-m 755"
+    substituteInPlace Makefile --replace-fail "-m 4755" "-m 755"
     substituteInPlace sandboxX.sh \
-      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
-      --replace "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
-      --replace "/usr/bin/cut" "${coreutils}/bin/cut" \
-      --replace "/usr/bin/Xephyr" "${xorgserver}/bin/Xepyhr" \
-      --replace "secon" "${policycoreutils}/bin/secon"
+      --replace-fail "#!/bin/sh" "#!${bash}/bin/sh" \
+      --replace-fail "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
+      --replace-fail "/usr/bin/cut" "${coreutils}/bin/cut" \
+      --replace-fail "/usr/bin/Xephyr" "${xorgserver}/bin/Xepyhr" \
+      --replace-fail "secon" "${policycoreutils}/bin/secon"
     substituteInPlace sandbox \
-      --replace "/usr/sbin/seunshare" "$out/bin/seunshare" \
-      --replace "/usr/share/sandbox" "$out/share/sandbox" \
-      --replace "/usr/share/locale" "${policycoreutils}/share/locale" \
-      --replace "/usr/bin/openbox" "${openbox}/bin/openbox" \
-      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
-      --replace "dbus-" "${dbus}/bin/dbus-" \
-      --replace "/usr/bin/xmodmap" "${xmodmap}/bin/xmodmap" \
-      --replace "/usr/bin/shred" "${coreutils}/bin/shred" \
-      --replace "/usr/bin/test" "${coreutils}/bin/test" \
+      --replace-fail "/usr/sbin/seunshare" "$out/bin/seunshare" \
+      --replace-fail "/usr/share/sandbox" "$out/share/sandbox" \
+      --replace-fail "/usr/share/locale" "${policycoreutils}/share/locale" \
+      --replace-fail "/usr/bin/openbox" "${openbox}/bin/openbox" \
+      --replace-fail "#!/bin/sh" "#!${bash}/bin/sh" \
+      --replace-fail "dbus-" "${dbus}/bin/dbus-" \
+      --replace-fail "/usr/bin/xmodmap" "${xmodmap}/bin/xmodmap" \
+      --replace-fail "/usr/bin/shred" "${coreutils}/bin/shred" \
+      --replace-fail "/usr/bin/test" "${coreutils}/bin/test" \
   '';
 
   makeFlags = [

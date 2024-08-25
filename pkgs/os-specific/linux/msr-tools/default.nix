@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/bin
     substituteInPlace Makefile \
-      --replace /usr/sbin $out/bin
+      --replace-fail /usr/sbin $out/bin
   '';
 
   meta = with lib; {

@@ -22,9 +22,9 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i 's/flake8.*/flake8/' requirements.txt
     substituteInPlace hacking/checks/python23.py \
-      --replace 'H236: class Foo(object):\n    __metaclass__ = \' 'Okay: class Foo(object):\n    __metaclass__ = \'
+      --replace-fail 'H236: class Foo(object):\n    __metaclass__ = \' 'Okay: class Foo(object):\n    __metaclass__ = \'
     substituteInPlace hacking/checks/except_checks.py \
-      --replace 'H201: except:' 'Okay: except:'
+      --replace-fail 'H201: except:' 'Okay: except:'
   '';
 
   nativeBuildInputs = [ pbr ];

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     (runCommand "icon-validator.patch" { } ''
       # Flatpak uses a different path
       substitute "${flatpak.icon-validator-patch}" "$out" \
-        --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
+        --replace-fail "/icon-validator/validate-icon.c" "/src/validate-icon.c"
     '')
 
     # Allow installing installed tests to a separate output.

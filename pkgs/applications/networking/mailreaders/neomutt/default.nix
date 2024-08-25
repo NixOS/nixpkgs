@@ -32,21 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace auto.def --replace /usr/sbin/sendmail sendmail
+    substituteInPlace auto.def --replace-fail /usr/sbin/sendmail sendmail
     substituteInPlace contrib/smime_keys \
-      --replace /usr/bin/openssl ${openssl}/bin/openssl
+      --replace-fail /usr/bin/openssl ${openssl}/bin/openssl
 
     for f in doc/*.{xml,xsl}*  ; do
       substituteInPlace $f \
-        --replace http://docbook.sourceforge.net/release/xsl/current     ${docbook_xsl}/share/xml/docbook-xsl \
-        --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
+        --replace-fail http://docbook.sourceforge.net/release/xsl/current     ${docbook_xsl}/share/xml/docbook-xsl \
+        --replace-fail http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     done
 
 
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     # and use a far more comprehensive list than the one shipped with neomutt
     substituteInPlace send/sendlib.c \
-      --replace /etc/mime.types ${mailcap}/etc/mime.types
+      --replace-fail /etc/mime.types ${mailcap}/etc/mime.types
   '';
 
   configureFlags = [

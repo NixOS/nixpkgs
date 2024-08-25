@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
     substituteInPlace src/Makefile.am \
-      --replace "bin_PROGRAMS = wget2 wget2_noinstall" "bin_PROGRAMS = wget2"
+      --replace-fail "bin_PROGRAMS = wget2 wget2_noinstall" "bin_PROGRAMS = wget2"
   '';
 
   strictDeps = true;

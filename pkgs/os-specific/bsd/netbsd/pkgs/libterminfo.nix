@@ -30,9 +30,9 @@ mkDerivation {
   buildInputs = compatIfNeeded;
   SHLIBINSTALLDIR = "$(out)/lib";
   postPatch = ''
-    substituteInPlace $COMPONENT_PATH/term.c --replace /usr/share $out/share
+    substituteInPlace $COMPONENT_PATH/term.c --replace-fail /usr/share $out/share
     substituteInPlace $COMPONENT_PATH/setupterm.c \
-      --replace '#include <curses.h>' 'void use_env(bool);'
+      --replace-fail '#include <curses.h>' 'void use_env(bool);'
   '';
   postBuild = ''
     make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     # Remove outdated setup.cfg
     rm setup.cfg
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
 
   disabledTests = [

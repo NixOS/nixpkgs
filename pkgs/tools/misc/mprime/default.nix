@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     sed -i ${srcDir}/makefile \
       -e 's/^LFLAGS =.*//'
     substituteInPlace ${srcDir}/makefile \
-      --replace '-Wl,-Bstatic'  "" \
-      --replace '-Wl,-Bdynamic' ""
+      --replace-fail '-Wl,-Bstatic'  "" \
+      --replace-fail '-Wl,-Bdynamic' ""
   '';
 
   sourceRoot = ".";

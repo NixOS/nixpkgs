@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     substituteInPlace exe-thumbnailer.thumbnailer \
-      --replace Exec=exe-thumbnailer Exec=$out/bin/exe-thumbnailer
+      --replace-fail Exec=exe-thumbnailer Exec=$out/bin/exe-thumbnailer
 
     install -Dm644 exe-thumbnailer.thumbnailer -t $out/share/thumbnailers
   '';

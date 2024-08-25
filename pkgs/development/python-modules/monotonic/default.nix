@@ -18,7 +18,7 @@ buildPythonPackage rec {
   __propagatedImpureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
 
   patchPhase = lib.optionalString stdenv.isLinux ''
-    substituteInPlace monotonic.py --replace \
+    substituteInPlace monotonic.py --replace-fail \
       "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so'"
   '';
 

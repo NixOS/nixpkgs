@@ -24,7 +24,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/nexB/gemfileparser2/pull/8
     substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
+      --replace-fail ">=3.6.*" ">=3.6"
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "ruamel.yaml==0.17.4" "ruamel.yaml"
+      --replace-fail "ruamel.yaml==0.17.4" "ruamel.yaml"
   '';
 
   propagatedBuildInputs = [

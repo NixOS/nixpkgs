@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patchPhase = ''
-    substituteInPlace getver.sh --replace ver=unknown ver=${version}
-    substituteInPlace Makefile --replace pkg-config "$PKG_CONFIG"
+    substituteInPlace getver.sh --replace-fail ver=unknown ver=${version}
+    substituteInPlace Makefile --replace-fail pkg-config "$PKG_CONFIG"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

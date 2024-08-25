@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     mv config/Makefile.unix config/Makefile
-    substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
-    substituteInPlace config/Makefile --replace 'OCAMLLIB=$(shell $(OCAMLC) -where)' OCAMLLIB=$out/lib/ocaml/${ocaml.version}/site-lib/camlidl
-    substituteInPlace config/Makefile --replace CPP=cpp CPP=${stdenv.cc}/bin/cpp
-    substituteInPlace lib/Makefile --replace '$(OCAMLLIB)/Makefile.config' "${ocaml}/lib/ocaml/Makefile.config"
+    substituteInPlace config/Makefile --replace-fail BINDIR=/usr/local/bin BINDIR=$out
+    substituteInPlace config/Makefile --replace-fail 'OCAMLLIB=$(shell $(OCAMLC) -where)' OCAMLLIB=$out/lib/ocaml/${ocaml.version}/site-lib/camlidl
+    substituteInPlace config/Makefile --replace-fail CPP=cpp CPP=${stdenv.cc}/bin/cpp
+    substituteInPlace lib/Makefile --replace-fail '$(OCAMLLIB)/Makefile.config' "${ocaml}/lib/ocaml/Makefile.config"
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/caml
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/stublibs
   '';

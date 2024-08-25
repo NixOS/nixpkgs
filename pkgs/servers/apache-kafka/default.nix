@@ -40,10 +40,10 @@ let
 
       # allow us the specify logging directory using env
       substituteInPlace $out/bin/kafka-run-class.sh \
-        --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+        --replace-fail 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
 
       substituteInPlace $out/bin/kafka-server-stop.sh \
-        --replace 'ps' '${ps}/bin/ps'
+        --replace-fail 'ps' '${ps}/bin/ps'
 
       for p in $out/bin\/*.sh; do
         wrapProgram $p \

@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   # don't use the bundled turbostat binary
   postPatch = ''
-    substituteInPlace s0ix-selftest-tool.sh --replace '"$DIR"/turbostat' 'turbostat'
+    substituteInPlace s0ix-selftest-tool.sh --replace-fail '"$DIR"/turbostat' 'turbostat'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

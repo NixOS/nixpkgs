@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
-      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
-    substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
+      --replace-fail "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
+      --replace-fail "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
+    substituteInPlace tools/plot/fio2gnuplot --replace-fail /usr/share/fio $out/share/fio
   '';
 
   pythonPath = [ python3.pkgs.six ];

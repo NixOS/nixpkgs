@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   # do not build docs, it is slow and it fails on Hydra
   prePatch = ''
     rm -rf doc
-    substituteInPlace configure.ac --replace "doc/Makefile" ""
-    substituteInPlace Makefile.am --replace "lib doc ." "lib ."
+    substituteInPlace configure.ac --replace-fail "doc/Makefile" ""
+    substituteInPlace Makefile.am --replace-fail "lib doc ." "lib ."
   '';
 
   meta = {

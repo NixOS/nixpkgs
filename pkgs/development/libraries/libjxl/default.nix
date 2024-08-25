@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
-      --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
+      --replace-fail '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
   '';
 
   postInstall = lib.optionalString enablePlugins ''

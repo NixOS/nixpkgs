@@ -144,9 +144,9 @@ in stdenv.mkDerivation rec {
     cp $TMP/ya/{usr/share,opt} $out/ -R
     cp $out/share/applications/yandex-browser${app}.desktop $out/share/applications/${pname}.desktop || true
     rm -f $out/share/applications/yandex-browser.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop --replace /usr/ $out/
-    substituteInPlace $out/share/menu/yandex-browser${app}.menu --replace /opt/ $out/opt/
-    substituteInPlace $out/share/gnome-control-center/default-apps/yandex-browser${app}.xml --replace /opt/ $out/opt/
+    substituteInPlace $out/share/applications/${pname}.desktop --replace-fail /usr/ $out/
+    substituteInPlace $out/share/menu/yandex-browser${app}.menu --replace-fail /opt/ $out/opt/
+    substituteInPlace $out/share/gnome-control-center/default-apps/yandex-browser${app}.xml --replace-fail /opt/ $out/opt/
     ln -sf ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so $out/opt/yandex/browser${app}/libffmpeg.so
     ln -sf $out/opt/yandex/browser${app}/yandex-browser${app} $out/bin/${pname}
   '';

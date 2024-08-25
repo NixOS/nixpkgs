@@ -26,9 +26,9 @@ mkDerivation rec {
 
   preConfigure = ''
     # Give ownership of the Galaxy S USB device to the logged in user.
-    substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
+    substituteInPlace heimdall/60-heimdall.rules --replace-fail 'MODE="0666"' 'TAG+="uaccess"'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
+    substituteInPlace libpit/CMakeLists.txt --replace-fail "-std=gnu++11" ""
   '';
 
   installPhase = lib.optionalString (stdenv.isDarwin && enableGUI) ''

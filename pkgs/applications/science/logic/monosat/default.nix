@@ -31,7 +31,7 @@ let
   # https://github.com/sambayless/monosat/issues/33
   commonPostPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
     substituteInPlace src/monosat/Main.cc \
-      --replace 'defined(__linux__)' '0'
+      --replace-fail 'defined(__linux__)' '0'
   '';
 
   core = stdenv.mkDerivation {
@@ -85,7 +85,7 @@ let
     # shared lib? The current setup.py copies the .dylib/.so...
     ''
       substituteInPlace setup.py \
-        --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
+        --replace-fail 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
 
     nativeCheckInputs = [ pytestCheckHook ];

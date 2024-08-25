@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Suppress compiler warning. Remove it when upstream fix arrives
-    substituteInPlace Makefile --replace "-Werror" "-Werror -Wno-stringop-truncation"
+    substituteInPlace Makefile --replace-fail "-Werror" "-Werror -Wno-stringop-truncation"
   '';
 
   installFlags = [

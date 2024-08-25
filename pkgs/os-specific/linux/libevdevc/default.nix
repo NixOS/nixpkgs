@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace common.mk \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
     substituteInPlace include/module.mk \
-      --replace /usr/include /include
+      --replace-fail /usr/include /include
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];

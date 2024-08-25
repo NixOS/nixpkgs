@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace include/defaults.h --replace 'PKGLOCALSTATEDIR "' '"/var/lib/charybdis'
-    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/charybdis'
+    substituteInPlace include/defaults.h --replace-fail 'PKGLOCALSTATEDIR "' '"/var/lib/charybdis'
+    substituteInPlace include/defaults.h --replace-fail 'ETCPATH "' '"/etc/charybdis'
   '';
 
   autoreconfPhase = "sh autogen.sh";

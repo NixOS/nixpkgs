@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cd src
     kernel_version=${kernel.modDirVersion}
     substituteInPlace common.mk \
-      --replace "/lib/modules" "${kernel.dev}/lib/modules"
+      --replace-fail "/lib/modules" "${kernel.dev}/lib/modules"
     export makeFlags="BUILD_KERNEL=$kernel_version"
   '';
 

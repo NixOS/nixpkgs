@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace configure.ac \
-      --replace "-I/usr/include/tirpc" "-I${libtirpc.dev}/include/tirpc"
+      --replace-fail "-I/usr/include/tirpc" "-I${libtirpc.dev}/include/tirpc"
 
     patchShebangs autogen.sh config.rpath contrib programs
   '';

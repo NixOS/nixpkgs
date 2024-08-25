@@ -43,8 +43,8 @@ mkCoqDerivation {
   preConfigure = ''
     patchShebangs util
     substituteInPlace Makefile \
-      --replace 'COQVERSION= ' 'COQVERSION= 8.19.2 or-else 8.17.1 or-else 8.16.1 or-else 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
-      --replace 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
+      --replace-fail 'COQVERSION= ' 'COQVERSION= 8.19.2 or-else 8.17.1 or-else 8.16.1 or-else 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
+      --replace-fail 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
   '';
 
   makeFlags = [

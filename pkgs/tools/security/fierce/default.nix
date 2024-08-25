@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace 'dnspython==1.16.0' 'dnspython'
+      --replace-fail 'dnspython==1.16.0' 'dnspython'
   '';
 
   # tests require network access

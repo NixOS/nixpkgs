@@ -47,7 +47,7 @@ buildDotnetModule rec {
   executables = [ "NickvisionTagger.GNOME" ];
 
   postInstall = ''
-    substituteInPlace NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in --replace '@EXEC@' "NickvisionTagger.GNOME"
+    substituteInPlace NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in --replace-fail '@EXEC@' "NickvisionTagger.GNOME"
     install -Dm444 NickvisionTagger.Shared/Resources/org.nickvision.tagger.svg -t $out/share/icons/hicolor/scalable/apps/
     install -Dm444 NickvisionTagger.Shared/Resources/org.nickvision.tagger-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps/
     install -Dm444 NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in -T $out/share/applications/org.nickvision.tagger.desktop

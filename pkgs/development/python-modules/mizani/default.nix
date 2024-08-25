@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=mizani --cov-report=xml" ""
+      --replace-fail " --cov=mizani --cov-report=xml" ""
   '';
 
   pythonImportsCheck = [ "mizani" ];

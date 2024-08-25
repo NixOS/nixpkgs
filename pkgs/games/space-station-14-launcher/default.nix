@@ -28,7 +28,7 @@ buildFHSEnv rec {
     ln -s ${space-station-14-launcher}/share/icons $out/share
     cp ${space-station-14-launcher}/share/applications/space-station-14-launcher.desktop "$out/share/applications"
     substituteInPlace "$out/share/applications/space-station-14-launcher.desktop" \
-        --replace ${space-station-14-launcher.meta.mainProgram} ${meta.mainProgram}
+        --replace-fail ${space-station-14-launcher.meta.mainProgram} ${meta.mainProgram}
   '';
 
   passthru = space-station-14-launcher.passthru // {

@@ -20,17 +20,17 @@ python3Packages.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'fastapi = "^0.92.0"' 'fastapi = ">=0.92.0"' \
-      --replace 'python-dotenv = "^0.21.1"' 'python-dotenv = "*"' \
-      --replace 'python-multipart = "^0.0.6"' 'python-multipart = "^0.0.5"' \
-      --replace 'redis = "4.5.1"' 'redis = "^4.5.1"' \
-      --replace 'tiktoken = "^0.2.0"' 'tiktoken = "^0.3.0"' \
-      --replace 'packages = [{include = "server"}]' 'packages = [{include = "server"}, {include = "models"}, {include = "datastore"}, {include = "services"}]'
+      --replace-fail 'fastapi = "^0.92.0"' 'fastapi = ">=0.92.0"' \
+      --replace-fail 'python-dotenv = "^0.21.1"' 'python-dotenv = "*"' \
+      --replace-fail 'python-multipart = "^0.0.6"' 'python-multipart = "^0.0.5"' \
+      --replace-fail 'redis = "4.5.1"' 'redis = "^4.5.1"' \
+      --replace-fail 'tiktoken = "^0.2.0"' 'tiktoken = "^0.3.0"' \
+      --replace-fail 'packages = [{include = "server"}]' 'packages = [{include = "server"}, {include = "models"}, {include = "datastore"}, {include = "services"}]'
 
     substituteInPlace server/main.py \
-      --replace 'directory=".well-known"' 'directory="/var/lib/chatgpt-retrieval-plugin/.well-known"' \
-      --replace '0.0.0.0' '127.0.0.1' \
-      --replace '8000' '8080'
+      --replace-fail 'directory=".well-known"' 'directory="/var/lib/chatgpt-retrieval-plugin/.well-known"' \
+      --replace-fail '0.0.0.0' '127.0.0.1' \
+      --replace-fail '8000' '8080'
 
     ${dasel}/bin/dasel put -t string -f pyproject.toml -v '.well-known/*' '.tool.poetry.include.[]'
   '';

@@ -13,11 +13,11 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = lib.optionalString stdenv.isAarch64 ''
       substituteInPlace setup.py \
-      --replace "'-msse2'," ""
+      --replace-fail "'-msse2'," ""
   '';
 
   preBuild = ''
-    substituteInPlace src/CMakeLists.txt --replace \$'{PYTHONLIB}' "$out/${python3.sitePackages}";
+    substituteInPlace src/CMakeLists.txt --replace-fail \$'{PYTHONLIB}' "$out/${python3.sitePackages}";
     export NIX_CFLAGS_COMPILE="-L $out/${python3.sitePackages} $NIX_CFLAGS_COMPILE"
   '';
 

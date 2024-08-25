@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace chkrootkit \
-      --replace " ./" " $out/bin/"
+      --replace-fail " ./" " $out/bin/"
   '';
 
   installPhase = ''

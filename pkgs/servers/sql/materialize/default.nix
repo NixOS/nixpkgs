@@ -61,10 +61,10 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     ${lib.concatStringsSep "\n" (map fetchNpmPackage npmPackages)}
     substituteInPlace ./misc/dist/materialized.service \
-      --replace /usr/bin $out/bin \
-      --replace _Materialize root
+      --replace-fail /usr/bin $out/bin \
+      --replace-fail _Materialize root
     substituteInPlace ./src/catalog/build.rs \
-      --replace '&[ ' '&["."'
+      --replace-fail '&[ ' '&["."'
   '';
 
   # needed for internal protobuf c wrapper library

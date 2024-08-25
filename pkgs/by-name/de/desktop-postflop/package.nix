@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace tauri.conf.json \
-        --replace "../dist" "${npmDist}"
+        --replace-fail "../dist" "${npmDist}"
   '';
 
   # postflop-solver requires unstable rust features

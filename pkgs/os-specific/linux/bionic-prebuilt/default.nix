@@ -84,9 +84,9 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace libc/include/sys/cdefs.h --replace \
+    substituteInPlace libc/include/sys/cdefs.h --replace-fail \
       "__has_builtin(__builtin_umul_overflow)" "1"
-    substituteInPlace libc/include/bits/ioctl.h --replace \
+    substituteInPlace libc/include/bits/ioctl.h --replace-fail \
       "!defined(BIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD)" "0"
   '';
 
@@ -106,9 +106,9 @@ stdenvNoCC.mkDerivation rec {
     sed -i 's,union semun {,union Xsemun {,' $out/include/linux/sem.h
     sed -i 's,struct __kernel_sockaddr_storage,#define sockaddr_storage __kernel_sockaddr_storage\nstruct __kernel_sockaddr_storage,' $out/include/linux/socket.h
     sed -i 's,#ifndef __UAPI_DEF_.*$,#if 1,' $out/include/linux/libc-compat.h
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imr_" "struct in_addr		imr_"
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imsf_" "struct in_addr		imsf_"
-    substituteInPlace $out/include/linux/sysctl.h --replace "__unused" "_unused"
+    substituteInPlace $out/include/linux/in.h --replace-fail "__be32		imr_" "struct in_addr		imr_"
+    substituteInPlace $out/include/linux/in.h --replace-fail "__be32		imsf_" "struct in_addr		imsf_"
+    substituteInPlace $out/include/linux/sysctl.h --replace-fail "__unused" "_unused"
 
     # what could possibly live in <linux/compiler.h>
     touch $out/include/linux/compiler.h

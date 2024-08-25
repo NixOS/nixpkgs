@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp config.mk.in config.mk
 
     substituteInPlace config.mk \
-      --replace "INSTALLDIR = /usr/local" "INSTALLDIR = $out" \
-      --replace "WITH_LUA ?= no" "WITH_LUA ?= yes" \
-      --replace "WITH_ENCRYPT ?= no" "WITH_ENCRYPT ?= yes"
+      --replace-fail "INSTALLDIR = /usr/local" "INSTALLDIR = $out" \
+      --replace-fail "WITH_LUA ?= no" "WITH_LUA ?= yes" \
+      --replace-fail "WITH_ENCRYPT ?= no" "WITH_ENCRYPT ?= yes"
 
     runHook postConfigure
   '';

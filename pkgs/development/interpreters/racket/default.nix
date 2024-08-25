@@ -125,17 +125,17 @@ stdenv.mkDerivation rec {
       unset AR
       for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
         substituteInPlace "$f" \
-          --replace /usr/bin/uname ${coreutils}/bin/uname \
-          --replace /bin/cp ${coreutils}/bin/cp \
-          --replace /bin/ln ${coreutils}/bin/ln \
-          --replace /bin/rm ${coreutils}/bin/rm \
-          --replace /bin/true ${coreutils}/bin/true
+          --replace-fail /usr/bin/uname ${coreutils}/bin/uname \
+          --replace-fail /bin/cp ${coreutils}/bin/cp \
+          --replace-fail /bin/ln ${coreutils}/bin/ln \
+          --replace-fail /bin/rm ${coreutils}/bin/rm \
+          --replace-fail /bin/true ${coreutils}/bin/true
       done
 
       # The configure script forces using `libtool -o` as AR on Darwin. But, the
       # `-o` option is only available from Apple libtool. GNU ar works here.
       substituteInPlace src/ChezScheme/zlib/configure \
-          --replace 'ARFLAGS="-o"' 'AR=ar; ARFLAGS="rc"'
+          --replace-fail 'ARFLAGS="-o"' 'AR=ar; ARFLAGS="rc"'
 
       mkdir src/build
       cd src/build

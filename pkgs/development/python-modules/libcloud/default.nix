@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "setup_requires=pytest_runner," "setup_requires=[],"
+      --replace-fail "setup_requires=pytest_runner," "setup_requires=[],"
   '';
 
   # requires a certificates file

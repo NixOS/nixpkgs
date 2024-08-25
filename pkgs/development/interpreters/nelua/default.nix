@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace lualib/nelua/version.lua \
-      --replace "NELUA_GIT_HASH = nil" "NELUA_GIT_HASH = '${src.rev}'" \
-      --replace "NELUA_GIT_DATE = nil" "NELUA_GIT_DATE = '${lib.removePrefix "0-unstable-" version}'"
+      --replace-fail "NELUA_GIT_HASH = nil" "NELUA_GIT_HASH = '${src.rev}'" \
+      --replace-fail "NELUA_GIT_DATE = nil" "NELUA_GIT_DATE = '${lib.removePrefix "0-unstable-" version}'"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace vibrantLinux.pro \
-      --replace '$$(PREFIX)' '$$PREFIX'
+      --replace-fail '$$(PREFIX)' '$$PREFIX'
   '';
 
   meta = with lib; {

@@ -26,10 +26,10 @@ ocamlPackages.buildDunePackage {
   postPatch = ''
     for f in src/*.ml; do
       substituteInPlace "$f" \
-        --replace 'Unix.gettimeofday' 'Caml_unix.gettimeofday' \
-        --replace 'Core_kernel' 'Core' \
-        --replace 'sexp_option' 'option[@sexp.option]' \
-        --replace 'sexp_list' 'list[@sexp.list]'
+        --replace-fail 'Unix.gettimeofday' 'Caml_unix.gettimeofday' \
+        --replace-fail 'Core_kernel' 'Core' \
+        --replace-fail 'sexp_option' 'option[@sexp.option]' \
+        --replace-fail 'sexp_list' 'list[@sexp.list]'
     done
   '';
 

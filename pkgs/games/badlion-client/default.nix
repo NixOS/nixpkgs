@@ -20,7 +20,7 @@ in
       install -Dm444 ${appimageContents}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
       install -Dm444 ${appimageContents}/BadlionClient.png $out/share/pixmaps/BadlionClient.png
       substituteInPlace $out/share/applications/BadlionClient.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=badlion-client'
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=badlion-client'
     '';
 
     meta = with lib; {

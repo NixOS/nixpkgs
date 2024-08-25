@@ -71,19 +71,19 @@ stdenv.mkDerivation rec {
       $out/lib/systemd/system/microsoft-identity-device-broker.service \
       $out/share/dbus-1/system-services/com.microsoft.identity.devicebroker1.service \
       $out/share/dbus-1/services/com.microsoft.identity.broker1.service \
-      --replace \
+      --replace-fail \
         ExecStartPre=sh \
         ExecStartPre=${bash}/bin/sh \
-      --replace \
+      --replace-fail \
         ExecStartPre=!sh \
         ExecStartPre=!${bash}/bin/sh \
-      --replace \
+      --replace-fail \
         /opt/microsoft/identity-broker/bin/microsoft-identity-broker \
         $out/bin/microsoft-identity-broker \
-      --replace \
+      --replace-fail \
         /opt/microsoft/identity-broker/bin/microsoft-identity-device-broker \
         $out/bin/microsoft-identity-device-broker \
-      --replace \
+      --replace-fail \
         /usr/lib/jvm/java-11-openjdk-amd64 \
         ${openjdk11}/bin/java
   '';

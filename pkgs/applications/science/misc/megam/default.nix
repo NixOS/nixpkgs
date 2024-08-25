@@ -19,10 +19,10 @@ stdenv.mkDerivation {
   postPatch = ''
     # Deprecated in ocaml 3.10 https://github.com/ocaml/ocaml/commit/f6190f3d0c49c5220d443ee8d03ca5072d68aa87
     # Deprecated in ocaml 3.08 https://github.com/ocaml/ocaml/commit/0c7aecb88dc696f66f49f3bed54a037361a26b8d
-    substituteInPlace fastdot_c.c --replace copy_double caml_copy_double --replace Bigarray_val Caml_ba_array_val --replace caml_bigarray caml_ba_array
+    substituteInPlace fastdot_c.c --replace-fail copy_double caml_copy_double --replace-fail Bigarray_val Caml_ba_array_val --replace-fail caml_bigarray caml_ba_array
     # They were already deprecated in 3.12 https://v2.ocaml.org/releases/3.12/htmlman/libref/Array.html
-    substituteInPlace abffs.ml main.ml --replace create_matrix make_matrix
-    substituteInPlace intHashtbl.ml --replace Array.create Array.make
+    substituteInPlace abffs.ml main.ml --replace-fail create_matrix make_matrix
+    substituteInPlace intHashtbl.ml --replace-fail Array.create Array.make
   '';
   strictDeps = true;
 

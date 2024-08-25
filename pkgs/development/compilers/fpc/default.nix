@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     # Remove the -no_uuid strip flag which does not work on llvm-strip, only
     # Apple strip.
     substituteInPlace fpcsrc/compiler/Makefile \
-      --replace \
+      --replace-fail \
         "\$(CODESIGN) --remove-signature" \
         "${./remove-signature.sh}" \
-      --replace "ifneq (\$(CODESIGN),)" "ifeq (\$(OS_TARGET), darwin)" \
-      --replace "-no_uuid" ""
+      --replace-fail "ifneq (\$(CODESIGN),)" "ifeq (\$(OS_TARGET), darwin)" \
+      --replace-fail "-no_uuid" ""
   '';
 
   NIX_LDFLAGS = lib.optionalString

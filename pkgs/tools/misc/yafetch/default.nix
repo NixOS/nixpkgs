@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Use the provided NixOS logo automatically
   prePatch = ''
-    substituteInPlace ./config.h --replace \
+    substituteInPlace ./config.h --replace-fail \
       "#include \"ascii/gnu.h\"" "#include \"ascii/nixos.h\""
 
     sed '1i#include <array>' -i config.h # gcc12

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # Check upon updates if this can be removed.
   postPatch = ''
     substituteInPlace testsuite/CMakeLists.txt \
-        --replace "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
+        --replace-fail "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
   '';
 
   outputs = [ "out" "dev" ];

@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    substituteInPlace $out/lib/bsp-layout/layout.sh --replace 'bc ' '${bc}/bin/bc '
+    substituteInPlace $out/lib/bsp-layout/layout.sh --replace-fail 'bc ' '${bc}/bin/bc '
     for layout in tall rtall wide rwide
     do
-      substituteInPlace "$out/lib/bsp-layout/layouts/$layout.sh" --replace 'bc ' '${bc}/bin/bc '
+      substituteInPlace "$out/lib/bsp-layout/layouts/$layout.sh" --replace-fail 'bc ' '${bc}/bin/bc '
     done
   '';
 

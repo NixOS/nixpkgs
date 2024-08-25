@@ -222,8 +222,8 @@ in
     unpacked="resources/app/node_modules"
     asar extract "$packed" "$unpacked"
     substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
-      --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
     rm -rf "$packed"
 
     # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,

@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
 
     # fix /etc/xdg/herbstluftwm paths in documentation and scripts
     grep -rlZ /etc/xdg/herbstluftwm share/ doc/ scripts/ | while IFS="" read -r -d "" path; do
-      substituteInPlace "$path" --replace /etc/xdg/herbstluftwm $out/etc/xdg/herbstluftwm
+      substituteInPlace "$path" --replace-fail /etc/xdg/herbstluftwm $out/etc/xdg/herbstluftwm
     done
 
     # fix shebang in generated scripts
-    substituteInPlace tests/conftest.py --replace "/usr/bin/env bash" ${runtimeShell}
-    substituteInPlace tests/test_herbstluftwm.py --replace "/usr/bin/env bash" ${runtimeShell}
+    substituteInPlace tests/conftest.py --replace-fail "/usr/bin/env bash" ${runtimeShell}
+    substituteInPlace tests/test_herbstluftwm.py --replace-fail "/usr/bin/env bash" ${runtimeShell}
   '';
 
   doCheck = true;

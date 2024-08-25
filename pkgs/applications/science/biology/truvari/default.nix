@@ -27,7 +27,7 @@ in python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace truvari/utils.py \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
     patchShebangs repo_utils/test_files
   '';
 

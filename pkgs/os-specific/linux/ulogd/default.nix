@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" ];
 
   postPatch = ''
-    substituteInPlace ulogd.8 --replace "/usr/share/doc" "$doc/share/doc"
+    substituteInPlace ulogd.8 --replace-fail "/usr/share/doc" "$doc/share/doc"
   '';
 
   postBuild = ''

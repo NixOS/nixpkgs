@@ -24,7 +24,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-TTFolysg+La605EoS87gmhEjlzwNUVYmnXKr49De7fk=";
 
   postPatch = ''
-    substituteInPlace package.json --replace '"version": "0.0.0"' '"version": "${version}"'
+    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${version}"'
   '';
 
   nativeBuildInputs = [ pkg-config python3 ];

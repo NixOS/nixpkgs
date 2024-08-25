@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/platform/digmanager.cpp \
-      --replace '"dig"' '"${dnsutils}/bin/dig"'
+      --replace-fail '"dig"' '"${dnsutils}/bin/dig"'
     substituteInPlace src/platform/discover.cpp \
-        --replace '"nping"' '"${nmap}/bin/nping"'
+        --replace-fail '"nping"' '"${nmap}/bin/nping"'
     for f in \
       src/platform/monitor/monitor.cpp \
       src/platform/nsemanager.cpp ; do
 
       substituteInPlace $f \
-        --replace '"nmap"'  '"${nmap}/bin/nmap"'
+        --replace-fail '"nmap"'  '"${nmap}/bin/nmap"'
     done
   '';
 
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
 
     for f in $out/share/applications/* ; do
       substituteInPlace $f \
-        --replace Qt4                   Qt5 \
-        --replace Exec=nmapsi4          Exec=$out/bin/nmapsi4 \
-        --replace "Exec=kdesu nmapsi4" "Exec=kdesu $out/bin/nmapsi4"
+        --replace-fail Qt4                   Qt5 \
+        --replace-fail Exec=nmapsi4          Exec=$out/bin/nmapsi4 \
+        --replace-fail "Exec=kdesu nmapsi4" "Exec=kdesu $out/bin/nmapsi4"
     done
   '';
 

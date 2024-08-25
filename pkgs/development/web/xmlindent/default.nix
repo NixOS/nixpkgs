@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ flex ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace "PREFIX=/usr/local" "PREFIX=$out"
+    substituteInPlace Makefile --replace-fail "PREFIX=/usr/local" "PREFIX=$out"
   '';
 
   meta = {

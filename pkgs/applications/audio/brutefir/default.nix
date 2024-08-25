@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  postPatch = "substituteInPlace bfconf.c --replace /usr/local $out";
+  postPatch = "substituteInPlace bfconf.c --replace-fail /usr/local $out";
 
   installFlags = [ "INSTALL_PREFIX=$(out)" ];
 

@@ -23,8 +23,8 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/i18n.pri \
-      --replace 'EXTRA_TRANSLATIONS = \' "" \
-      --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
+      --replace-fail 'EXTRA_TRANSLATIONS = \' "" \
+      --replace-fail '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''

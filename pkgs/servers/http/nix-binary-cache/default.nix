@@ -10,36 +10,36 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     substitute "${./nix-binary-cache.cgi.in}" "$out"/bin/nix-binary-cache.cgi \
-      --replace @out@ "$out/bin" \
-      --replace @shell@ "${stdenv.shell}" \
-      --replace @coreutils@ "${coreutils}/bin" \
-      --replace @findutils@ "${findutils}/bin" \
-      --replace @nix@ "${nix.out}/bin" \
-      --replace @xz@ "${xz.bin}/bin" \
-      --replace @bzip2@ "${bzip2.bin}/bin" \
-      --replace @gnused@ "${gnused}/bin" \
-      --replace @gnugrep@ "${gnugrep}/bin" \
-      --replace @openssl@ "${openssl.bin}/bin" \
-      --replace @lighttpd@ "${lighttpd}/sbin" \
-      --replace @iproute@ "${iproute2}/sbin" \
-      --replace "xXxXx" "xXxXx"
+      --replace-fail @out@ "$out/bin" \
+      --replace-fail @shell@ "${stdenv.shell}" \
+      --replace-fail @coreutils@ "${coreutils}/bin" \
+      --replace-fail @findutils@ "${findutils}/bin" \
+      --replace-fail @nix@ "${nix.out}/bin" \
+      --replace-fail @xz@ "${xz.bin}/bin" \
+      --replace-fail @bzip2@ "${bzip2.bin}/bin" \
+      --replace-fail @gnused@ "${gnused}/bin" \
+      --replace-fail @gnugrep@ "${gnugrep}/bin" \
+      --replace-fail @openssl@ "${openssl.bin}/bin" \
+      --replace-fail @lighttpd@ "${lighttpd}/sbin" \
+      --replace-fail @iproute@ "${iproute2}/sbin" \
+      --replace-fail "xXxXx" "xXxXx"
 
     chmod a+x "$out/bin/nix-binary-cache.cgi"
 
     substitute "${./nix-binary-cache-start.in}" "$out"/bin/nix-binary-cache-start \
-      --replace @out@ "$out/bin" \
-      --replace @shell@ "${stdenv.shell}" \
-      --replace @coreutils@ "${coreutils}/bin" \
-      --replace @findutils@ "${findutils}/bin" \
-      --replace @nix@ "${nix.out}/bin" \
-      --replace @xz@ "${xz.bin}/bin" \
-      --replace @bzip2@ "${bzip2.bin}/bin" \
-      --replace @gnused@ "${gnused}/bin" \
-      --replace @gnugrep@ "${gnugrep}/bin" \
-      --replace @openssl@ "${openssl.bin}/bin" \
-      --replace @lighttpd@ "${lighttpd}/sbin" \
-      --replace @iproute@ "${iproute2}/sbin" \
-      --replace "xXxXx" "xXxXx"
+      --replace-fail @out@ "$out/bin" \
+      --replace-fail @shell@ "${stdenv.shell}" \
+      --replace-fail @coreutils@ "${coreutils}/bin" \
+      --replace-fail @findutils@ "${findutils}/bin" \
+      --replace-fail @nix@ "${nix.out}/bin" \
+      --replace-fail @xz@ "${xz.bin}/bin" \
+      --replace-fail @bzip2@ "${bzip2.bin}/bin" \
+      --replace-fail @gnused@ "${gnused}/bin" \
+      --replace-fail @gnugrep@ "${gnugrep}/bin" \
+      --replace-fail @openssl@ "${openssl.bin}/bin" \
+      --replace-fail @lighttpd@ "${lighttpd}/sbin" \
+      --replace-fail @iproute@ "${iproute2}/sbin" \
+      --replace-fail "xXxXx" "xXxXx"
 
     chmod a+x "$out/bin/nix-binary-cache-start"
   '';

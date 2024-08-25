@@ -72,7 +72,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=papis" ""
+      --replace-fail "--cov=papis" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov --cov-report xml --tb=short" ""
+      --replace-fail " --cov --cov-report xml --tb=short" ""
   '';
 
   nativeBuildInputs = [ cython ];

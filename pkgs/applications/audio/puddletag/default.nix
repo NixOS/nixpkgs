@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace share/pixmaps share/icons
+      --replace-fail share/pixmaps share/icons
   '';
 
   buildInputs = [

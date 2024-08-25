@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
     patchShebangs testing/binaries/data/vectorstats/*py
 
     substituteInPlace ./run_tests  \
-      --replace 'git submodule update --init $datadir >> $LOGFILE 2>&1' ""
+      --replace-fail 'git submodule update --init $datadir >> $LOGFILE 2>&1' ""
 
     substituteInPlace ./build  \
-      --replace '"less -RX "' '"${less}/bin/less -RX "'
+      --replace-fail '"less -RX "' '"${less}/bin/less -RX "'
   '';
 
   configurePhase = ''

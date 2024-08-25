@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Fix include path that will be incorrect due to the "dev" output
     substituteInPlace "$dev/lib/cmake/LibDataChannel/LibDataChannelTargets.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+      --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '';
 
   meta = with lib; {

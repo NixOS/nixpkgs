@@ -76,15 +76,15 @@ stdenv.mkDerivation rec {
   ''
     patchShebangs eval_git_sha.sh
     substituteInPlace configure.ac \
-        --replace "build_cpu" "host_cpu"
+        --replace-fail "build_cpu" "host_cpu"
     substituteInPlace common/compatibility.h \
-        --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
+        --replace-fail "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
     substituteInPlace configure.ac \
-        --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
+        --replace-fail 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
   ''
   (lib.optionals (!onlyFirmwareUpdater) ''
     substituteInPlace common/python_wrapper.sh \
-      --replace \
+      --replace-fail \
       'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
       'export PATH=$PATH:${lib.makeBinPath [ (placeholder "out") pciutils busybox]}; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
   '')

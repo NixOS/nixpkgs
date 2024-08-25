@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
+      --replace-fail " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

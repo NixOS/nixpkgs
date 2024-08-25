@@ -44,10 +44,10 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace scripts/postprocess-unix.sh \
-      --replace /bin/sh ${runtimeShell}
+      --replace-fail /bin/sh ${runtimeShell}
 
     substituteInPlace librecad/src/main/qc_applicationwindow.cpp \
-      --replace __DATE__ 0
+      --replace-fail __DATE__ 0
   '';
 
 

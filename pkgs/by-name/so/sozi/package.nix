@@ -20,7 +20,7 @@ in appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/sozi.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
     substituteInPlace $out/share/applications/sozi.desktop \
-      --replace 'Exec=AppRun' 'Exec=sozi'
+      --replace-fail 'Exec=AppRun' 'Exec=sozi'
   '';
 
   meta = {

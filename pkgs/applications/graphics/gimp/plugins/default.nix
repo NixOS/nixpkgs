@@ -194,7 +194,7 @@ in
     buildInputs = with pkgs; [ fftw ];
 
     postPatch = ''
-      substituteInPlace Makefile --replace '$(GCC)' '$(CC)'
+      substituteInPlace Makefile --replace-fail '$(GCC)' '$(CC)'
 
       # The tarball contains a prebuilt binary.
       make clean

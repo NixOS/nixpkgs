@@ -18,7 +18,7 @@ mkDerivation {
   # Resetting to 1, which is the default.
   postPatch = ''
     substituteInPlace kfmclient_html.desktop \
-      --replace InitialPreference=9 InitialPreference=1
+      --replace-fail InitialPreference=9 InitialPreference=1
   '';
 
   meta = {

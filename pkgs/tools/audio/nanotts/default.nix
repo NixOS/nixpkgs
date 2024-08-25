@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ popt alsa-lib ];
 
   patchPhase = ''
-    substituteInPlace "src/main.cpp" --replace "/usr/share/pico/lang" "$out/share/lang"
+    substituteInPlace "src/main.cpp" --replace-fail "/usr/share/pico/lang" "$out/share/lang"
     echo "" > update_build_version.sh
   '';
 

@@ -126,7 +126,7 @@ qtModule ({
 
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
+        --replace-fail "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
 
       # TODO: be more precise
       patchShebangs .
@@ -137,7 +137,7 @@ qtModule ({
   # from `src/core/config/mac_osx.pri`.
   + lib.optionalString stdenv.isDarwin ''
     substituteInPlace ./src/3rdparty/chromium/build/toolchain/mac/BUILD.gn \
-      --replace 'prefix = rebase_path("$clang_base_path/bin/", root_build_dir)' 'prefix = "$clang_base_path/bin/"'
+      --replace-fail 'prefix = rebase_path("$clang_base_path/bin/", root_build_dir)' 'prefix = "$clang_base_path/bin/"'
   ''
   # Patch library paths in Qt sources
   + ''
@@ -156,23 +156,23 @@ qtModule ({
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   '' + lib.optionalString stdenv.isDarwin (''
     substituteInPlace src/buildtools/config/mac_osx.pri \
-      --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+      --replace-fail 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
     # Following is required to prevent a build error:
     # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
     substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace '$sysroot/usr' "${xnu}"
+      --replace-fail '$sysroot/usr' "${xnu}"
 
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
-      --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
+      --replace-fail "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
     substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
-      --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
+      --replace-fail "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
 
     # ld: warning: directory not found for option '-L/nix/store/...-xcodebuild-0.1.2-pre/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/usr/lib'
     # ld: fatal warning(s) induced error (-fatal_warnings)
     substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
-      --replace "-Wl,-fatal_warnings" ""
+      --replace-fail "-Wl,-fatal_warnings" ""
 
     # Use system ffmpeg
     echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri

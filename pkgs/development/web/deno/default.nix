@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
     # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace "-fuse-ld=lld " ""
+    substituteInPlace .cargo/config.toml --replace-fail "-fuse-ld=lld " ""
   '';
 
   # uses zlib-ng but can't dynamically link yet

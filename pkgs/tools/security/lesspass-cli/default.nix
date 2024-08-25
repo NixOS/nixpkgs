@@ -20,7 +20,7 @@ buildPythonApplication rec {
   # *installed* code
   postPatch = ''
     for f in tests/test_functional.py tests/test_interaction.py ; do
-      substituteInPlace $f --replace "lesspass/core.py" "-m lesspass.core"
+      substituteInPlace $f --replace-fail "lesspass/core.py" "-m lesspass.core"
     done
   '';
 

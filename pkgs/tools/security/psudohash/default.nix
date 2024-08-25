@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     install -Dm444 common_padding_values.txt $out/share/psudohash/common_padding_values.txt
 
     substituteInPlace $out/bin/psudohash \
-      --replace "common_padding_values.txt" "$out/share/${pname}/common_padding_values.txt"
+      --replace-fail "common_padding_values.txt" "$out/share/${pname}/common_padding_values.txt"
 
     runHook postInstall
   '';

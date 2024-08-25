@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/cfg.c --replace /usr/local $out
+    substituteInPlace src/cfg.c --replace-fail /usr/local $out
   '';
 
   nativeBuildInputs = [ pkg-config ];

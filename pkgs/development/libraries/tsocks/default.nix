@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i -e "s,\\\/usr,"$(echo $out|sed -e "s,\\/,\\\\\\\/,g")",g" tsocks
-    substituteInPlace tsocks --replace /usr $out
+    substituteInPlace tsocks --replace-fail /usr $out
     export configureFlags="$configureFlags --libdir=$out/lib"
   '';
 

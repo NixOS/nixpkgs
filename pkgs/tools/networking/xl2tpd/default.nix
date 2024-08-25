@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ];
 
   postPatch = ''
-    substituteInPlace l2tp.h --replace /usr/sbin/pppd ${ppp}/sbin/pppd
+    substituteInPlace l2tp.h --replace-fail /usr/sbin/pppd ${ppp}/sbin/pppd
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

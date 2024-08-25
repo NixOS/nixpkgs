@@ -35,9 +35,9 @@ in stdenv.mkDerivation (finalAttrs: {
     cp -r filebot.sh lib/ jar/ $out/opt/
     # Filebot writes to $APP_DATA, which fails due to read-only filesystem. Using current user .local directory instead.
     substituteInPlace $out/opt/filebot.sh \
-      --replace 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \
-      --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license' \
-      --replace '-jar "$FILEBOT_HOME/jar/filebot.jar"' '-Dcom.googlecode.lanterna.terminal.UnixTerminal.sttyCommand=${coreutils}/bin/stty -jar "$FILEBOT_HOME/jar/filebot.jar"'
+      --replace-fail 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \
+      --replace-fail '$FILEBOT_HOME/data/.license' '$APP_DATA/.license' \
+      --replace-fail '-jar "$FILEBOT_HOME/jar/filebot.jar"' '-Dcom.googlecode.lanterna.terminal.UnixTerminal.sttyCommand=${coreutils}/bin/stty -jar "$FILEBOT_HOME/jar/filebot.jar"'
     wrapProgram $out/opt/filebot.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
     # Expose the binary in bin to make runnable.

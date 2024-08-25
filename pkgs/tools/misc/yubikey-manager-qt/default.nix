@@ -29,7 +29,7 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace ykman-gui/deployment.pri --replace '/usr/bin' "$out/bin"
+    substituteInPlace ykman-gui/deployment.pri --replace-fail '/usr/bin' "$out/bin"
   '';
 
   buildInputs = [
@@ -48,7 +48,7 @@ mkDerivation rec {
     # Desktop files
     install -D -m0644 resources/ykman-gui.desktop "$out/share/applications/ykman-gui.desktop"
     substituteInPlace "$out/share/applications/ykman-gui.desktop" \
-      --replace Exec=ykman-gui "Exec=$out/bin/ykman-gui"
+      --replace-fail Exec=ykman-gui "Exec=$out/bin/ykman-gui"
 
     # Icons
     install -Dt $out/share/ykman-gui/icons resources/icons/*.{icns,ico}

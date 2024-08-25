@@ -80,15 +80,15 @@ stdenv.mkDerivation rec {
     cp -a usr/lib/tmpfiles.d $out/lib
 
     substituteInPlace $out/share/applications/intune-portal.desktop \
-      --replace /opt/microsoft/intune/bin/intune-portal $out/bin/intune-portal
+      --replace-fail /opt/microsoft/intune/bin/intune-portal $out/bin/intune-portal
 
     substituteInPlace $out/lib/systemd/user/intune-agent.service \
-      --replace \
+      --replace-fail \
         ExecStart=/opt/microsoft/intune/bin/intune-agent \
         ExecStart=$out/bin/intune-agent
 
     substituteInPlace $out/lib/systemd/system/intune-daemon.service \
-      --replace \
+      --replace-fail \
         ExecStart=/opt/microsoft/intune/bin/intune-daemon \
         ExecStart=$out/bin/intune-daemon
 

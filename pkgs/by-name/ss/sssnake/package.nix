@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-zkErOV6Az0kJdwyXzMCnVW1997zpAB79TBvf/41Igic=";
   };
   postPatch = ''
-    substituteInPlace makefile --replace '-lncursesw' '-lncursesw -D_XOPEN_SOURCE=500'
+    substituteInPlace makefile --replace-fail '-lncursesw' '-lncursesw -D_XOPEN_SOURCE=500'
   '';
   buildInputs = [ncurses];
   makeFlags = [

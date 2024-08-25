@@ -12,8 +12,8 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace 'usbrelayd.service' \
-      --replace '/usr/bin/python3' "${python}/bin/python3" \
-      --replace '/usr/sbin/usbrelayd' "$out/bin/usbrelayd"
+      --replace-fail '/usr/bin/python3' "${python}/bin/python3" \
+      --replace-fail '/usr/sbin/usbrelayd' "$out/bin/usbrelayd"
   '';
 
   nativeBuildInputs = [ installShellFiles ];

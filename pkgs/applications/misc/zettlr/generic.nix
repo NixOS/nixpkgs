@@ -25,7 +25,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop
     install -m 444 -D ${appimageContents}/Zettlr.png $out/share/icons/hicolor/512x512/apps/Zettlr.png
     substituteInPlace $out/share/applications/Zettlr.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

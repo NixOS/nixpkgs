@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/polar-bookshelf/polar-desktop-app $out/bin/polar-desktop-app
 
     substituteInPlace $out/share/applications/polar-desktop-app.desktop \
-      --replace "/opt/Polar/polar-desktop-app" "$out/bin/polar-desktop-app"
+      --replace-fail "/opt/Polar/polar-desktop-app" "$out/bin/polar-desktop-app"
 
     runHook postInstall
   '';

@@ -15,7 +15,7 @@ build-idris-package  {
 
   postPatch = ''
     substituteInPlace src/MakefileGlfw \
-      --replace glfw3 "glfw3 gl"
+      --replace-fail glfw3 "glfw3 gl"
   '';
 
   src = fetchFromGitHub {

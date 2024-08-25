@@ -18,7 +18,7 @@ buildGoModule rec {
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
+    substituteInPlace main.go --replace-fail 'notify-send' ${libnotify}/bin/notify-send
   '';
 
   vendorHash = "sha256-+IRPs3wm3EvIgfQRpzcVpo2JBaFQlyY/RI1G7XfVS84=";
@@ -32,7 +32,7 @@ buildGoModule rec {
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p $out/lib/systemd/user
     substitute contrib/systemd/user/yubikey-agent.service $out/lib/systemd/user/yubikey-agent.service \
-      --replace 'ExecStart=yubikey-agent' "ExecStart=$out/bin/yubikey-agent"
+      --replace-fail 'ExecStart=yubikey-agent' "ExecStart=$out/bin/yubikey-agent"
   '';
 
   meta = with lib; {

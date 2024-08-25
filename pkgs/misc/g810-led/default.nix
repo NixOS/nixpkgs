@@ -18,8 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace udev/g810-led.rules \
-      --replace "/usr" $out \
-      --replace "/etc/g810-led/profile" "${profile}"
+      --replace-fail "/usr" $out \
+      --replace-fail "/etc/g810-led/profile" "${profile}"
   '';
 
   # GCC 13 cannot find `uint16_t` and other similar types by default anymore

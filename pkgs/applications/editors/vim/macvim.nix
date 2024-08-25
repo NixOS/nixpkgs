@@ -138,11 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
     substituteInPlace src/auto/config.mk \
-      --replace "PERL_CFLAGS${"\t"}=" "PERL_CFLAGS${"\t"}= -I${darwin.libutil}/include" \
-      --replace " -L${stdenv.cc.libc}/lib" "" \
-      --replace " -L${darwin.libobjc}/lib" "" \
-      --replace " -L${darwin.libunwind}/lib" "" \
-      --replace " -L${libiconv}/lib" ""
+      --replace-fail "PERL_CFLAGS${"\t"}=" "PERL_CFLAGS${"\t"}= -I${darwin.libutil}/include" \
+      --replace-fail " -L${stdenv.cc.libc}/lib" "" \
+      --replace-fail " -L${darwin.libobjc}/lib" "" \
+      --replace-fail " -L${darwin.libunwind}/lib" "" \
+      --replace-fail " -L${libiconv}/lib" ""
 
     # All the libraries we stripped have -osx- in their name as of this time.
     # Assert now that this pattern no longer appears in config.mk.

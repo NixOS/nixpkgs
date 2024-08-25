@@ -87,7 +87,7 @@ let
         dontBuild = false;
         postPatch = ''
           substituteInPlace ext/mini_racer_extension/extconf.rb \
-            --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
+            --replace-fail Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
         '';
       };
     };

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # broken anyway
   postPatch = ''
     substituteInPlace ipcalc-maxmind.c \
-      --replace /usr/share/GeoIP /var/lib/GeoIP
+      --replace-fail /usr/share/GeoIP /var/lib/GeoIP
   '';
 
   nativeBuildInputs = [ meson ninja pkg-config ronn ];

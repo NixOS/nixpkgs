@@ -22,9 +22,9 @@ runCommandLocal
     cp -r '${libidn2.dev}' "$dev"
     chmod +w "$dev"/nix-support/propagated-build-inputs
     substituteInPlace "$dev"/nix-support/propagated-build-inputs \
-      --replace '${libidn2.bin}' "$bin"
+      --replace-fail '${libidn2.bin}' "$bin"
     substituteInPlace "$dev"/lib/pkgconfig/libidn2.pc \
-      --replace '${libidn2.dev}' "$dev"
+      --replace-fail '${libidn2.dev}' "$dev"
 
     ln -s '${libidn2.out}' "$out" # it's hard to be without any $out
   ''

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace font-config-info.c --replace "dump_xsettings |" "${xsettingsd}/bin/dump_xsettings |"
+    substituteInPlace font-config-info.c --replace-fail "dump_xsettings |" "${xsettingsd}/bin/dump_xsettings |"
   '';
 
   installPhase = ''

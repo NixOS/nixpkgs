@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "(3, 8): 'py34'," "(3, 8): 'py34', (3, 9): 'py34', (3, 10): 'py34', (3, 11): 'py34', (3, 12): 'py34',"
+      --replace-fail "'pytest-runner'," "" \
+      --replace-fail "(3, 8): 'py34'," "(3, 8): 'py34', (3, 9): 'py34', (3, 10): 'py34', (3, 11): 'py34', (3, 12): 'py34',"
   '';
 
   propagatedBuildInputs = [ wheel ];

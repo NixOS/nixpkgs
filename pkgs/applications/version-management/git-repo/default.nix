@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   postPatch = ''
-    substituteInPlace repo --replace \
+    substituteInPlace repo --replace-fail \
       'urllib.request.urlopen(url)' \
       'urllib.request.urlopen(url, context=ssl.create_default_context())'
   '';

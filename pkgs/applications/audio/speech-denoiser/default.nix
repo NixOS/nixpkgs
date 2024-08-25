@@ -31,7 +31,7 @@ stdenv.mkDerivation  {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"
+      --replace-fail "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"
   '';
 
   meta = with lib; {

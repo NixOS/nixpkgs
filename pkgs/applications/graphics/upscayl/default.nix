@@ -27,7 +27,7 @@ in
       cp ${appimageContents}/${pname}.png $out/share/pixmaps/${pname}.png
 
       substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
 
     meta = with lib; {

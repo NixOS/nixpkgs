@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace test/CMakeLists.txt \
-      --replace 'FetchContent_Populate' '#FetchContent_Populate'
+      --replace-fail 'FetchContent_Populate' '#FetchContent_Populate'
   '';
   cmakeFlags = [
     "-Dgoogletest_SOURCE_DIR=${gtest.src}"

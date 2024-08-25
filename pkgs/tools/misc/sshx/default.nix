@@ -52,8 +52,8 @@ in
 
     postPatch = ''
       substituteInPlace crates/sshx-server/src/web.rs \
-        --replace 'ServeDir::new("build")' 'ServeDir::new("${passthru.web.outPath}")' \
-        --replace 'ServeFile::new("build/spa.html")' 'ServeFile::new("${passthru.web.outPath}/spa.html")'
+        --replace-fail 'ServeDir::new("build")' 'ServeDir::new("${passthru.web.outPath}")' \
+        --replace-fail 'ServeFile::new("build/spa.html")' 'ServeFile::new("${passthru.web.outPath}/spa.html")'
     '';
 
     passthru.web = buildNpmPackage {
@@ -65,7 +65,7 @@ in
 
       postPatch = ''
         substituteInPlace vite.config.ts \
-          --replace 'execSync("git rev-parse --short HEAD").toString().trim()' '"${src.rev}"'
+          --replace-fail 'execSync("git rev-parse --short HEAD").toString().trim()' '"${src.rev}"'
       '';
 
       npmDepsHash = "sha256-bKePCxo6+n0EG+4tbbMimPedJ0Hu1O8yZsgspmhobOs=";

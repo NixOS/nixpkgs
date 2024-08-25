@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ popt ] ;
 
   postPatch = ''
-    substituteInPlace Makefile --replace "#/usr/" "#"
-    substituteInPlace Makefile --replace "/usr/" "/"
+    substituteInPlace Makefile --replace-fail "#/usr/" "#"
+    substituteInPlace Makefile --replace-fail "/usr/" "/"
   '';
 
   dontConfigure = true;

@@ -52,9 +52,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
-      --replace '-lquazip5' '-lquazip1-qt5' \
-      --replace '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+      --replace-fail '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace-fail '-lquazip5' '-lquazip1-qt5' \
+      --replace-fail '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
   '';
 
   nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];

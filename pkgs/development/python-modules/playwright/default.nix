@@ -51,17 +51,17 @@ buildPythonPackage rec {
     git commit -m "workaround setuptools-scm"
 
     substituteInPlace setup.py \
-      --replace "setuptools-scm==8.0.4" "setuptools-scm" \
+      --replace-fail "setuptools-scm==8.0.4" "setuptools-scm" \
       --replace-fail "wheel==0.42.0" "wheel"
 
     substituteInPlace pyproject.toml \
-      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.42.0", "auditwheel==5.4.0"]' \
+      --replace-fail 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.42.0", "auditwheel==5.4.0"]' \
                 'requires = ["setuptools", "setuptools-scm", "wheel"]'
 
     # Skip trying to download and extract the driver.
     # This is done manually in postInstall instead.
     substituteInPlace setup.py \
-      --replace "self._download_and_extract_local_driver(base_wheel_bundles)" ""
+      --replace-fail "self._download_and_extract_local_driver(base_wheel_bundles)" ""
 
     # Set the correct driver path with the help of a patch in patches
     substituteInPlace playwright/_impl/_driver.py \

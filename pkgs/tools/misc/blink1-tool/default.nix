@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "@git submodule update --init" "true"
+      --replace-fail "@git submodule update --init" "true"
   '';
 
   nativeBuildInputs = [ pkg-config ];

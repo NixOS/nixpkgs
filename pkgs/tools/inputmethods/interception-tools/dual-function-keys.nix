@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevdev yaml-cpp ];
 
   prePatch = ''
-    substituteInPlace config.mk --replace \
+    substituteInPlace config.mk --replace-fail \
       '/usr/include/libevdev-1.0' \
       "$(pkg-config --cflags libevdev | cut -c 3-)"
   '';

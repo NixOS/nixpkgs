@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/fltrator.cxx\
-      --replace 'home += "fltrator/"' "home = \"$out/fltrator/\""
+      --replace-fail 'home += "fltrator/"' "home = \"$out/fltrator/\""
     substituteInPlace src/fltrator-landscape.cxx\
-      --replace 'home += "fltrator/"' "home = \"$out/fltrator/\""
+      --replace-fail 'home += "fltrator/"' "home = \"$out/fltrator/\""
     substituteInPlace rsc/fltrator.desktop \
-      --replace 'Exec=fltrator' "Exec=$out/bin/fltrator"
+      --replace-fail 'Exec=fltrator' "Exec=$out/bin/fltrator"
   '';
 
   dontAddPrefix = true;

@@ -25,7 +25,7 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace ' ''${QT_INSTALL_QML}' " $out/${qtbase.qtQmlPrefix}"
+      --replace-fail ' ''${QT_INSTALL_QML}' " $out/${qtbase.qtQmlPrefix}"
   '';
 
   meta = with lib; {

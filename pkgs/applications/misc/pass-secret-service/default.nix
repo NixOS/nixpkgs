@@ -25,14 +25,14 @@ python3.pkgs.buildPythonApplication rec {
   # /etc/ in check phase.
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
-      --replace '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)' \
-      --replace 'pytest-3' 'pytest'
+      --replace-fail "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf" \
+      --replace-fail '-p $(relpassstore)' '-p $(PASSWORD_STORE_DIR)' \
+      --replace-fail 'pytest-3' 'pytest'
 
     substituteInPlace systemd/org.freedesktop.secrets.service \
-      --replace "/bin/false" "${coreutils}/bin/false"
+      --replace-fail "/bin/false" "${coreutils}/bin/false"
     substituteInPlace systemd/dbus-org.freedesktop.secrets.service \
-      --replace "/usr/local" "$out"
+      --replace-fail "/usr/local" "$out"
   '';
 
   postInstall = ''

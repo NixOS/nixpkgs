@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ apacheHttpd python3 ncurses ];
 
   postPatch = ''
-    substituteInPlace configure --replace '/usr/bin/lipo' 'lipo'
+    substituteInPlace configure --replace-fail '/usr/bin/lipo' 'lipo'
   '';
 
   makeFlags = [

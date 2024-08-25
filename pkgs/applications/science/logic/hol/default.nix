@@ -42,12 +42,12 @@ stdenv.mkDerivation {
     cd ${holsubdir}
 
     substituteInPlace tools/Holmake/Holmake_types.sml \
-      --replace "\"/bin/" "\"" \
+      --replace-fail "\"/bin/" "\"" \
 
 
     for f in tools/buildutils.sml help/src-sml/DOT;
     do
-      substituteInPlace $f --replace "\"/usr/bin/dot\"" "\"${graphviz}/bin/dot\""
+      substituteInPlace $f --replace-fail "\"/usr/bin/dot\"" "\"${graphviz}/bin/dot\""
     done
 
     #sed -ie "/compute/,999 d" tools/build-sequence # for testing

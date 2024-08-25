@@ -26,14 +26,14 @@ in stdenv.mkDerivation {
   buildInputs = [ ncurses ];
   prePatch = ''
     substituteInPlace ./configure \
-      --replace "alias echo=/bin/echo" ""
+      --replace-fail "alias echo=/bin/echo" ""
 
     substituteInPlace ./src/config.c \
-      --replace "/usr/bin/gpg" "${gnupg}/bin/gpg" \
-      --replace "/usr/bin/vi" "vi"
+      --replace-fail "/usr/bin/gpg" "${gnupg}/bin/gpg" \
+      --replace-fail "/usr/bin/vi" "vi"
 
     substituteInPlace ./mdp.1 \
-      --replace "/usr/bin/gpg" "${gnupg}/bin/gpg"
+      --replace-fail "/usr/bin/gpg" "${gnupg}/bin/gpg"
   '';
   # we add symlinks to the binary and man page with the name 'gpg-mdp', in case
   # the completely unrelated program also named 'mdp' is already installed.

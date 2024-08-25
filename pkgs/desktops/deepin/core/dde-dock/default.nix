@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace plugins/pluginmanager/pluginmanager.cpp frame/controller/quicksettingcontroller.cpp  \
-      --replace "/usr/lib/dde-dock" "/run/current-system/sw/lib/dde-dock"
+      --replace-fail "/usr/lib/dde-dock" "/run/current-system/sw/lib/dde-dock"
 
     substituteInPlace configs/com.deepin.dde.dock.json frame/util/common.h \
-    --replace "/usr" "/run/current-system/sw"
+    --replace-fail "/usr" "/run/current-system/sw"
 
     for file in $(grep -rl "/usr/lib/deepin-daemon"); do
-      substituteInPlace $file --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      substituteInPlace $file --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
     done
   '';
 

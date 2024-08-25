@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Hardcode unzip path
     substituteInPlace ./src/updater/moduleUpdater.js \
-      --replace \'unzip\' \'${unzip}/bin/unzip\'
+      --replace-fail \'unzip\' \'${unzip}/bin/unzip\'
     # Remove auto-update feature
     echo "module.exports = async () => log('AsarUpdate', 'Removed');" > ./src/asarUpdate.js
   '';
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     bash scripts/injectPolyfills.sh
-    substituteInPlace src/index.js --replace 'nightly' '${finalAttrs.version}'
+    substituteInPlace src/index.js --replace-fail 'nightly' '${finalAttrs.version}'
     ${nodejs}/bin/node scripts/strip.js
     ${asar}/bin/asar pack src app.asar
 

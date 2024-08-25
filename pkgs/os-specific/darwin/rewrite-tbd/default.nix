@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   # Nix takes care of these paths. Avoiding the use of `pkg-config` prevents an infinite recursion.
   postPatch = ''
     substituteInPlace Makefile.boot \
-      --replace '$(shell pkg-config --cflags yaml-0.1)' "" \
-      --replace '$(shell pkg-config --libs yaml-0.1)' "-lyaml"
+      --replace-fail '$(shell pkg-config --cflags yaml-0.1)' "" \
+      --replace-fail '$(shell pkg-config --libs yaml-0.1)' "-lyaml"
   '';
 
   buildInputs = [ libyaml ];

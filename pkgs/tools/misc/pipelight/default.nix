@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     substituteInPlace $out/share/pipelight/install-dependency \
-      --replace cabextract ${cabextract}/bin/cabextract
+      --replace-fail cabextract ${cabextract}/bin/cabextract
   '';
 
   enableParallelBuilding = true;

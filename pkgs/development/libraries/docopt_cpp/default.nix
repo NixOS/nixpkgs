@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace docopt.pc.in \
-      --replace "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" \
+      --replace-fail "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" \
                 "@CMAKE_INSTALL_LIBDIR@"
   '';
 

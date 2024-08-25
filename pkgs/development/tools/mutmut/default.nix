@@ -16,7 +16,7 @@ let self = with python3.pkgs; buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace 'junit-xml==1.8' 'junit-xml==1.9'
+    substituteInPlace requirements.txt --replace-fail 'junit-xml==1.8' 'junit-xml==1.9'
   '';
 
   disabled = pythonOlder "3.7";

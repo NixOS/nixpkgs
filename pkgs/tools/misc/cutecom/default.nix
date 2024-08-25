@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/Applications" "$out/Applications"
+      --replace-fail "/Applications" "$out/Applications"
   '';
 
   buildInputs = [ qtserialport ];

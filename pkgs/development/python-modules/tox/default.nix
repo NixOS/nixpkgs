@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "packaging>=22" "packaging"
+      --replace-fail "packaging>=22" "packaging"
   '';
 
   nativeBuildInputs = [

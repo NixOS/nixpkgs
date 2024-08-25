@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # NOCONFIGURE fixes 'If you meant to cross compile, use `--host'.'
     NOCONFIGURE=1 ./autogen.sh --prefix="$out"
     substituteInPlace ./configure \
-      --replace "dummy pkg-config" 'dummy ''${ac_tool_prefix}pkg-config'
+      --replace-fail "dummy pkg-config" 'dummy ''${ac_tool_prefix}pkg-config'
   '';
 
   meta = with lib; {

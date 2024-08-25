@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace dist/CMakeLists.txt \
-      --replace "PK3_OUTPUT" "PK3_DESTINATION"
+      --replace-fail "PK3_OUTPUT" "PK3_DESTINATION"
   '';
 
   nativeBuildInputs = [

@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace cmake/Version.cmake \
-      --replace "unknown" "${version}" \
-      --replace "0.0" "${version}"
+      --replace-fail "unknown" "${version}" \
+      --replace-fail "0.0" "${version}"
   ''
   # There is broken and complicated logic when setting X265_LATEST_TAG for
   # mingwW64 builds. This bypasses the logic by setting it at the end of the

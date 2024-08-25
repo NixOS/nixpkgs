@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/compton.c --replace \
+    substituteInPlace src/compton.c --replace-fail \
       "assets_add_path(\"./assets/\");" \
       "assets_add_path(\"$out/share/neocomp/assets/\");"
-    substituteInPlace src/assets/assets.c --replace \
+    substituteInPlace src/assets/assets.c --replace-fail \
       "#define MAX_PATH_LENGTH 64" \
       "#define MAX_PATH_LENGTH 128"
   '';

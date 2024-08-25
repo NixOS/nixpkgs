@@ -35,9 +35,9 @@ stdenv.mkDerivation {
     dpkg-deb -x ${lprdeb} $out
 
     substituteInPlace $out/opt/brother/Printers/hl3140cw/lpd/filterhl3140cw \
-      --replace /opt "$out/opt"
+      --replace-fail /opt "$out/opt"
     substituteInPlace $out/opt/brother/Printers/hl3140cw/inf/setupPrintcapij \
-      --replace /opt "$out/opt"
+      --replace-fail /opt "$out/opt"
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/hl3140cw/lpd/psconvertij2
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     dpkg-deb -x ${cupsdeb} $out
 
     substituteInPlace $out/opt/brother/Printers/hl3140cw/cupswrapper/cupswrapperhl3140cw \
-      --replace /opt "$out/opt"
+      --replace-fail /opt "$out/opt"
 
     mkdir -p $out/lib/cups/filter
     ln -s $out/opt/brother/Printers/hl3140cw/cupswrapper/cupswrapperhl3140cw $out/lib/cups/filter/cupswrapperhl3140cw

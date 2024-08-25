@@ -31,7 +31,7 @@ buildDotnetModule rec {
 
   postPatch = ''
     substituteInPlace src/Azure.Functions.Cli/Common/CommandChecker.cs \
-      --replace "CheckExitCode(\"/bin/bash" "CheckExitCode(\"${stdenv.shell}"
+      --replace-fail "CheckExitCode(\"/bin/bash" "CheckExitCode(\"${stdenv.shell}"
   '';
 
   postInstall = ''

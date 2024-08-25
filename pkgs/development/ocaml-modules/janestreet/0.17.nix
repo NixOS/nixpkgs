@@ -640,7 +640,7 @@ with self;
       ppx_jane
     ];
     postPatch = ''
-      substituteInPlace src/fzf.ml --replace /usr/bin/fzf ${fzf}/bin/fzf
+      substituteInPlace src/fzf.ml --replace-fail /usr/bin/fzf ${fzf}/bin/fzf
     '';
   };
 
@@ -1570,8 +1570,8 @@ with self;
       regex_parser_intf
     ];
     prePatch = ''
-      substituteInPlace src/re2_c/dune --replace 'CXX=g++' 'CXX=c++'
-      substituteInPlace src/dune --replace '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2))' '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2) (-x c++))'
+      substituteInPlace src/re2_c/dune --replace-fail 'CXX=g++' 'CXX=c++'
+      substituteInPlace src/dune --replace-fail '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2))' '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2) (-x c++))'
     '';
   };
 

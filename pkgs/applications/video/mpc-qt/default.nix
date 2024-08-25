@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace lconvert.pri --replace "qtPrepareTool(LCONVERT, lconvert)" "qtPrepareTool(LCONVERT, lconvert, , , ${qttools}/bin)"
+    substituteInPlace lconvert.pri --replace-fail "qtPrepareTool(LCONVERT, lconvert)" "qtPrepareTool(LCONVERT, lconvert, , , ${qttools}/bin)"
   '';
 
   postConfigure = ''
-    substituteInPlace Makefile --replace ${qtbase}/bin/lrelease ${qttools.dev}/bin/lrelease
+    substituteInPlace Makefile --replace-fail ${qtbase}/bin/lrelease ${qttools.dev}/bin/lrelease
   '';
 
   qmakeFlags = [

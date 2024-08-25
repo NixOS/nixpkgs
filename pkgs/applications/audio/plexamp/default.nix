@@ -22,7 +22,7 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/plexamp.svg \
       $out/share/icons/hicolor/scalable/apps/plexamp.svg
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   passthru.updateScript = ./update-plexamp.sh;

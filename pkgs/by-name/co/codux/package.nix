@@ -21,7 +21,7 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
-    substituteInPlace $out/share/applications/${pname}.desktop  --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/${pname}.desktop  --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

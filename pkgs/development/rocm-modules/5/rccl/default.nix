@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Really strange behavior, `#!/usr/bin/env perl` should work...
     substituteInPlace CMakeLists.txt \
-      --replace "\''$ \''${hipify-perl_executable}" "${perl}/bin/perl ${hipify}/bin/hipify-perl"
+      --replace-fail "\''$ \''${hipify-perl_executable}" "${perl}/bin/perl ${hipify}/bin/hipify-perl"
   '';
 
   postInstall = lib.optionalString buildTests ''

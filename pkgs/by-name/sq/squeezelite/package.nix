@@ -81,7 +81,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace opus.c \
-      --replace "<opusfile.h>" "<opus/opusfile.h>"
+      --replace-fail "<opusfile.h>" "<opus/opusfile.h>"
   '';
 
   EXECUTABLE = binName;

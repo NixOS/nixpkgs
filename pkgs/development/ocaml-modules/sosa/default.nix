@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "4.07") ''
     for p in functors list_of of_mutable
     do
-      substituteInPlace src/lib/$p.ml --replace Pervasives. Stdlib.
+      substituteInPlace src/lib/$p.ml --replace-fail Pervasives. Stdlib.
     done
   '';
 

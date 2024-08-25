@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out/share/applications/hopper-${rev}.desktop" \
-      --replace "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
+      --replace-fail "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
   '';
 
   meta = with lib; {

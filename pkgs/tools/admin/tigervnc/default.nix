@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
     substituteInPlace vncviewer/vncviewer.cxx \
-       --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
+       --replace-fail '"/usr/bin/ssh' '"${openssh}/bin/ssh'
 
     cp unix/xserver21.1.1.patch unix/xserver211.patch
     source_top="$(pwd)"

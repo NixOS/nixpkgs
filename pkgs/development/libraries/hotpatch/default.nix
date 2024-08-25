@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace test/loader.c \
-      --replace \"/lib64/ld-linux-x86-64.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace \"/lib/ld-linux-x86-64.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace \"/lib/ld-linux.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace \"/lib32/ld-linux.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)"
+      --replace-fail \"/lib64/ld-linux-x86-64.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --replace-fail \"/lib/ld-linux-x86-64.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --replace-fail \"/lib/ld-linux.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --replace-fail \"/lib32/ld-linux.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)"
   '';
 
   checkPhase = ''

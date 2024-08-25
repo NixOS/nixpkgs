@@ -32,10 +32,10 @@ stdenv.mkDerivation {
         -i ui-snapshot.c
 
     substituteInPlace filters/html-converters/man2html \
-      --replace 'groff' '${groff}/bin/groff'
+      --replace-fail 'groff' '${groff}/bin/groff'
 
     substituteInPlace filters/html-converters/rst2html \
-      --replace 'rst2html.py' '${docutils}/bin/rst2html.py'
+      --replace-fail 'rst2html.py' '${docutils}/bin/rst2html.py'
   '';
 
   # Give cgit a git source tree and pass configuration parameters (as make

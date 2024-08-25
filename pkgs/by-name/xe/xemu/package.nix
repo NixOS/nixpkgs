@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs .
     substituteInPlace ./scripts/xemu-version.sh \
-      --replace 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
+      --replace-fail 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
   '';
 
   preConfigure =
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     cd build
-    substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
+    substituteInPlace ./build.ninja --replace-fail /usr/bin/env $(which env)
   '';
 
   installPhase =

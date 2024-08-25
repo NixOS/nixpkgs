@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/lib/uhub/" "$out/plugins" \
-      --replace "/etc/uhub" "$TMPDIR"
+      --replace-fail "/usr/lib/uhub/" "$out/plugins" \
+      --replace-fail "/etc/uhub" "$TMPDIR"
   '';
 
   cmakeFlags = [

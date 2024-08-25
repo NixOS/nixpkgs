@@ -31,7 +31,7 @@ python.pkgs.buildPythonApplication rec {
   # Replace this with an absolute path.
   postPatch = ''
     substituteInPlace config/99-azure-product-uuid.rules \
-      --replace "/bin/chmod" "${coreutils}/bin/chmod"
+      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
   '';
 
   propagatedBuildInputs = [ python.pkgs.distro ];

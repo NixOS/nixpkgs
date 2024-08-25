@@ -39,10 +39,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace postlicyd/policy_tokens.sh \
-                      --replace /bin/bash ${bash}/bin/bash;
+                      --replace-fail /bin/bash ${bash}/bin/bash;
 
     substituteInPlace postlicyd/*_tokens.sh \
-      --replace "unsigned int" "size_t"
+      --replace-fail "unsigned int" "size_t"
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare -Wno-error=format-truncation";

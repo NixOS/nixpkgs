@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pywatchman/__init__.py \
-      --replace "'watchman'" "'${watchman}/bin/watchman'"
+      --replace-fail "'watchman'" "'${watchman}/bin/watchman'"
   '';
 
   # No tests in archive

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "gcc" "$CC"
+      --replace-fail "gcc" "$CC"
   '';
 
   installPhase = ''

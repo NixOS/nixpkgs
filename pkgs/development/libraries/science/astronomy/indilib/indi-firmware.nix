@@ -54,19 +54,19 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in {libfishcamp,libsbig,libqhy}/CMakeLists.txt
     do
-      substituteInPlace $f --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace $f --replace-fail "/lib/firmware" "lib/firmware"
     done
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
-      substituteInPlace "$f" --replace "/sbin/fxload" "${libusb-with-fxload}/sbin/fxload" \
-                             --replace "/bin/sleep" "${coreutils}/bin/sleep" \
-                             --replace "/bin/cat" "${coreutils}/bin/cat" \
-                             --replace "/bin/echo" "${coreutils}/bin/echo" \
-                             --replace "/bin/sh" "${bash}/bin/sh" \
-                             --replace "/lib/firmware/" "$out/lib/firmware/"
+      substituteInPlace "$f" --replace-fail "/sbin/fxload" "${libusb-with-fxload}/sbin/fxload" \
+                             --replace-fail "/bin/sleep" "${coreutils}/bin/sleep" \
+                             --replace-fail "/bin/cat" "${coreutils}/bin/cat" \
+                             --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+                             --replace-fail "/bin/sh" "${bash}/bin/sh" \
+                             --replace-fail "/lib/firmware/" "$out/lib/firmware/"
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i "$f"
     done
   '';

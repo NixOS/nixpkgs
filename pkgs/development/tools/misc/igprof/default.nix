@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/igprof --replace libigprof.so $out/lib/libigprof.so
+    substituteInPlace src/igprof --replace-fail libigprof.so $out/lib/libigprof.so
     '';
 
   buildInputs = [libunwind gdb pcre];

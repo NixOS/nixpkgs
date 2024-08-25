@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/tz.cpp \
-      --replace '::getenv("TZDIR")' '"${tzdata}/share/zoneinfo"'
+      --replace-fail '::getenv("TZDIR")' '"${tzdata}/share/zoneinfo"'
   '';
 
   nativeBuildInputs = [

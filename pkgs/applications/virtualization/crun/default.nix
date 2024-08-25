@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     echo '#define GIT_VERSION "${src.rev}"' > git-version.h
 
     ${lib.concatMapStringsSep "\n" (e:
-      "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+      "substituteInPlace Makefile.am --replace-fail 'tests/${e}' ''"
     ) disabledTests}
   '';
 

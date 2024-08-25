@@ -181,13 +181,13 @@ let
           chmod +w -R .
 
           substituteInPlace Orange/classification/tests/test_xgb_cls.py \
-            --replace test_learners mk_test_learners
+            --replace-fail test_learners mk_test_learners
 
           substituteInPlace Orange/modelling/tests/test_xgb.py \
-            --replace test_learners mk_test_learners
+            --replace-fail test_learners mk_test_learners
 
           substituteInPlace Orange/**/tests/*.py \
-            --replace test_filename filename_test
+            --replace-fail test_filename filename_test
 
           # TODO: debug why orange is crashing on GC, may be a upstream issue
           chmod +x Orange/__init__.py

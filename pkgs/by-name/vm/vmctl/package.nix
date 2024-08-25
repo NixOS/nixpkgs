@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     substituteInPlace vmctl \
-      --replace 'BASEDIR="$(dirname "$(readlink -f "''${BASH_SOURCE[0]}")")"' 'BASEDIR="${placeholder "out"}"'
+      --replace-fail 'BASEDIR="$(dirname "$(readlink -f "''${BASH_SOURCE[0]}")")"' 'BASEDIR="${placeholder "out"}"'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

@@ -25,7 +25,7 @@ buildPythonPackage {
   postPatch = ''
     # the version mangling in mautrix_signal/get_version.py interacts badly with pythonRelaxDepsHook
     substituteInPlace setup.py \
-      --replace '>=3.6.*' '>=3.6'
+      --replace-fail '>=3.6.*' '>=3.6'
   '';
 
   pythonImportsCheck = [ "boilerpy3" ];

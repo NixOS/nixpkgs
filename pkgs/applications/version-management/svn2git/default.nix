@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp -r lib $out/
 
     mkdir -p $out/bin
-    substituteInPlace bin/svn2git --replace '/usr/bin/env ruby' ${ruby}/bin/ruby
+    substituteInPlace bin/svn2git --replace-fail '/usr/bin/env ruby' ${ruby}/bin/ruby
     cp bin/svn2git $out/bin/
     chmod +x $out/bin/svn2git
 

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/config.mk \
-      --replace pkg-config "$PKG_CONFIG"
+      --replace-fail pkg-config "$PKG_CONFIG"
   '';
 
   passthru.updateScript = gitUpdater {

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   # can't open generated html files
   postPatch = ''
-    substituteInPlace Makefile --replace open "test -f"
+    substituteInPlace Makefile --replace-fail open "test -f"
   '';
 
   nativeBuildInputs = lib.optional enableTcl tcl.tclPackageHook;

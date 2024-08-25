@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Disable a test that requires an internet connection.
     substituteInPlace tests/CMakeLists.txt \
-      --replace "add_subdirectory(cmake_fetch_content)" ""
+      --replace-fail "add_subdirectory(cmake_fetch_content)" ""
   '';
 
   doCheck = true;

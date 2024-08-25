@@ -65,23 +65,23 @@ mkDerivation rec {
   postPatch = ''
     # Avoid absolute path on sessdir
     substituteInPlace src-qt5/OS-detect.pri \
-      --replace L_SESSDIR=/usr/share/xsessions '#L_SESSDIR=/usr/share/xsessions'
+      --replace-fail L_SESSDIR=/usr/share/xsessions '#L_SESSDIR=/usr/share/xsessions'
 
     # Fix plugin dir
     substituteInPlace src-qt5/core/lumina-theme-engine/lthemeengine.pri \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+      --replace-fail "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
 
     # Fix location of fluxbox styles
     substituteInPlace src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp \
-      --replace 'LOS::AppPrefix()+"share/fluxbox' "\"${fluxbox}/share/fluxbox"
+      --replace-fail 'LOS::AppPrefix()+"share/fluxbox' "\"${fluxbox}/share/fluxbox"
 
     # Add full path of bsdtar to lumina-archiver
     substituteInPlace src-qt5/desktop-utils/lumina-archiver/TarBackend.cpp \
-      --replace '"bsdtar"' '"${lib.getBin libarchive}/bin/bsdtar"'
+      --replace-fail '"bsdtar"' '"${lib.getBin libarchive}/bin/bsdtar"'
 
     # Fix installation path of lumina-sudo
     substituteInPlace src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro \
-      --replace "/usr/bin" "$out/bin"
+      --replace-fail "/usr/bin" "$out/bin"
   '';
 
   postInstall = ''

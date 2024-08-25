@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # PCMsolver. Replace SIGSTKZ by the backward-compatible _SC_SIGSTKSZ.
   postPatch = ''
     substituteInPlace external/Catch/catch.hpp \
-      --replace SIGSTKSZ _SC_SIGSTKSZ
+      --replace-fail SIGSTKSZ _SC_SIGSTKSZ
   '';
 
   nativeBuildInputs = [

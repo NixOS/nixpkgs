@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for i in ./src/search.h ./src/pdfgrep.cc ./src/search.cc; do
-      substituteInPlace $i --replace '<cpp/' '<'
+      substituteInPlace $i --replace-fail '<cpp/' '<'
     done
   '';
 

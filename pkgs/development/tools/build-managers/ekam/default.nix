@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     # /var/tmp.  We change it to use /tmp because /var is not available
     # under nix-build.
     substituteInPlace deps/capnproto/c++/src/kj/filesystem-disk-test.c++ \
-      --replace "/var/tmp" "/tmp"
+      --replace-fail "/var/tmp" "/tmp"
   '';
 
   # NIX_ENFORCE_PURITY prevents ld from linking against anything outside

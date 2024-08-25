@@ -19,9 +19,9 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace "cmd/add_test.go" \
-      --replace "TestGoldenAddCmd" "SkipGoldenAddCmd"
+      --replace-fail "TestGoldenAddCmd" "SkipGoldenAddCmd"
     substituteInPlace "cmd/init_test.go" \
-      --replace "TestGoldenInitCmd" "SkipGoldenInitCmd"
+      --replace-fail "TestGoldenInitCmd" "SkipGoldenInitCmd"
   '';
 
   postFixup = ''

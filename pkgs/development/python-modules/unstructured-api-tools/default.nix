@@ -65,8 +65,8 @@ buildPythonPackage {
   doCheck = false;
   # preCheck = ''
   #   substituteInPlace Makefile \
-  #     --replace "PYTHONPATH=." "" \
-  #     --replace "mypy" "${mypy}/bin/mypy"
+  #     --replace-fail "PYTHONPATH=." "" \
+  #     --replace-fail "mypy" "${mypy}/bin/mypy"
   #   make generate-test-api
   # '';
 

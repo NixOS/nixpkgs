@@ -32,6 +32,6 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/{locales,resources} "$out/share/lib/miru"
       cp -r ${contents}/usr/* "$out"
       cp "${contents}/${pname}.desktop" "$out/share/applications/"
-      substituteInPlace $out/share/applications/${pname}.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
+      substituteInPlace $out/share/applications/${pname}.desktop --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
 }

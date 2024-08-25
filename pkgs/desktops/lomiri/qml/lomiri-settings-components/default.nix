@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/imports/check_imports.py
 
     substituteInPlace CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
   '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i CMakeLists.txt \
       -e '/add_subdirectory(tests)/d'

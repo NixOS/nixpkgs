@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace " + pytest_runner" ""
+      --replace-fail " + pytest_runner" ""
   '';
 
   buildInputs = [ setuptools ];

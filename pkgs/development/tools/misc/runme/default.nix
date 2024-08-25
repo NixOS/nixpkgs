@@ -49,7 +49,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \
-      --replace /bin/bash "${runtimeShell}"
+      --replace-fail /bin/bash "${runtimeShell}"
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

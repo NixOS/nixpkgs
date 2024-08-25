@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = lib.optionalString (buildMaximumColorFonts == "bitmap") ''
     substituteInPlace helpers/generate-fonts-runner.sh \
-      --replace 'maximum_color' 'maximum_color --bitmaps'
+      --replace-fail 'maximum_color' 'maximum_color --bitmaps'
   '';
 
   buildPhase = ''

@@ -22,10 +22,10 @@ buildPythonPackage rec {
   postPatch = ''
     # patch dlopen call
     substituteInPlace src/c/pyeclib_c/pyeclib_c.c \
-      --replace "liberasurecode.so" "${liberasurecode}/lib/liberasurecode.so"
+      --replace-fail "liberasurecode.so" "${liberasurecode}/lib/liberasurecode.so"
     # python's platform.platform() doesn't return "Darwin" (anymore?)
     substituteInPlace setup.py \
-      --replace '"Darwin"' '"macOS"'
+      --replace-fail '"Darwin"' '"macOS"'
   '';
 
   preBuild =

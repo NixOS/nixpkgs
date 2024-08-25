@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "xlrd<2" "xlrd<3"
+    substituteInPlace setup.py --replace-fail "xlrd<2" "xlrd<3"
   '';
 
   meta = {

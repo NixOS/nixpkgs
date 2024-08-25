@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     EOF
 
     substituteInPlace $out/bin/iscc \
-      --replace "\$out" "$out"
+      --replace-fail "\$out" "$out"
 
     chmod +x "$out/bin/iscc"
 

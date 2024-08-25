@@ -63,8 +63,8 @@ let
     # Make setuptools build the 'base' and 'checks' modules.
     postPatch = ''
       substituteInPlace setup.py \
-        --replace "from setuptools import setup" "from setuptools import find_packages, setup" \
-        --replace "packages=['datadog_checks']" "packages=find_packages()"
+        --replace-fail "from setuptools import setup" "from setuptools import find_packages, setup" \
+        --replace-fail "packages=['datadog_checks']" "packages=find_packages()"
     '';
 
     propagatedBuildInputs = with python.pkgs; [

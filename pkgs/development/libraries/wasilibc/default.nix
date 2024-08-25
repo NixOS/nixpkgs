@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   # clang-13: error: argument unused during compilation: '-rtlib=compiler-rt' [-Werror,-Wunused-command-line-argument]
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
   preBuild = ''

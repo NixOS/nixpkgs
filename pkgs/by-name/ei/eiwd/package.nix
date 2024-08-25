@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   # all it does is attempt to `mkdir` the `localstatedir`.
   preInstall = ''
     mkdir install-data-local
-    substituteInPlace Makefile --replace \
+    substituteInPlace Makefile --replace-fail \
       '$(MKDIR_P) -m 700 $(DESTDIR)$(daemon_storagedir)' \
       'true'
   '';

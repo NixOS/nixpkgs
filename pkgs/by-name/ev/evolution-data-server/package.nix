@@ -143,9 +143,9 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/SetupBuildFlags.cmake \
-      --replace "-Wl,--no-undefined" ""
+      --replace-fail "-Wl,--no-undefined" ""
     substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
-      --replace "G_OS_WIN32" "__APPLE__"
+      --replace-fail "G_OS_WIN32" "__APPLE__"
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''

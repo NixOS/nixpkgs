@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs test.sh
     substituteInPlace test.sh \
-      --replace /bin/rm rm \
-      --replace /sbin/ifconfig ifconfig
+      --replace-fail /bin/rm rm \
+      --replace-fail /sbin/ifconfig ifconfig
   '';
 
   buildInputs = [ openssl readline ];

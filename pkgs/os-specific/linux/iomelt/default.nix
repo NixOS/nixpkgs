@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     install -d $out/{bin,share/man/man1}
 
     substituteInPlace Makefile \
-      --replace /usr $out
+      --replace-fail /usr $out
   '';
 
   meta = with lib; {

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/Makefile \
-      --replace gcc cc
+      --replace-fail gcc cc
   '';
 
   installPhase = ''

@@ -94,10 +94,10 @@ buildPerlPackage rec {
   outputs = [ "out" "devdoc" "sa_config" ];
 
   postConfigure = ''
-    substituteInPlace Makefile --replace 'TEST_FILES = t/*.t' \
+    substituteInPlace Makefile --replace-fail 'TEST_FILES = t/*.t' \
         'TEST_FILES = $(shell find t -name *.t ${testConditions})'
     substituteInPlace lib/PublicInbox/TestCommon.pm \
-      --replace /bin/cp ${coreutils}/bin/cp
+      --replace-fail /bin/cp ${coreutils}/bin/cp
   '';
 
   nativeBuildInputs = [ makeWrapper ];

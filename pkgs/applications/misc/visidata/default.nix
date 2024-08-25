@@ -147,7 +147,7 @@ buildPythonApplication rec {
     git add .
     git commit -m "test reference"
 
-    substituteInPlace dev/test.sh --replace "bin/vd" "$out/bin/vd"
+    substituteInPlace dev/test.sh --replace-fail "bin/vd" "$out/bin/vd"
     bash dev/test.sh
     runHook postCheck
   '';

@@ -298,7 +298,7 @@ stdenv.mkDerivation rec {
       if grep '^update_package_db' ghc-${version}*/Makefile > /dev/null; then
         echo Hadrian bindist, applying workaround for xxx path substitution.
         # based on https://gitlab.haskell.org/ghc/ghc/-/commit/dd5fecb0e2990b192d92f4dfd7519ecb33164fad.patch
-        substituteInPlace ghc-${version}*/Makefile --replace 'xxx' '\0xxx\0'
+        substituteInPlace ghc-${version}*/Makefile --replace-fail 'xxx' '\0xxx\0'
       else
         echo Not a hadrian bindist, not applying xxx path workaround.
       fi
@@ -386,7 +386,7 @@ stdenv.mkDerivation rec {
     done
 
     for file in $(find "$out" -name setup-config); do
-      substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
+      substituteInPlace $file --replace-fail /usr/bin/ranlib "$(type -P ranlib)"
     done
   '' +
   lib.optionalString minimal ''

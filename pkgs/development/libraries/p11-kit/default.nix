@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Install sample config files to $out/etc even though they will be loaded from /etc.
     substituteInPlace p11-kit/meson.build \
-      --replace 'install_dir: prefix / p11_system_config' "install_dir: '$out/etc/pkcs11'"
+      --replace-fail 'install_dir: prefix / p11_system_config' "install_dir: '$out/etc/pkcs11'"
   '';
 
   preCheck = ''

@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     substituteInPlace snap/gui/fclones-gui.desktop \
-      --replace Exec=fclones-gui Exec=$out/bin/fclones-gui \
-      --replace 'Icon=''${SNAP}/meta/gui/fclones-gui.png' Icon=fclones-gui
+      --replace-fail Exec=fclones-gui Exec=$out/bin/fclones-gui \
+      --replace-fail 'Icon=''${SNAP}/meta/gui/fclones-gui.png' Icon=fclones-gui
 
     install -Dm444 snap/gui/fclones-gui.desktop -t $out/share/applications
     install -Dm444 snap/gui/fclones-gui.png -t $out/share/pixmaps

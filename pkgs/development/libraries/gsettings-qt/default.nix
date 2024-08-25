@@ -39,19 +39,19 @@ stdenv.mkDerivation rec {
     export QML2_IMPORT_PATH=${qtdeclarative.bin}/${qtbase.qtQmlPrefix}
 
     substituteInPlace GSettings/gsettings-qt.pro \
-      --replace '$$[QT_INSTALL_QML]' "$out/$qtQmlPrefix" \
-      --replace '$$[QT_INSTALL_BINS]/qmlplugindump' "qmlplugindump"
+      --replace-fail '$$[QT_INSTALL_QML]' "$out/$qtQmlPrefix" \
+      --replace-fail '$$[QT_INSTALL_BINS]/qmlplugindump' "qmlplugindump"
 
     substituteInPlace src/gsettings-qt.pro \
-      --replace '$$[QT_INSTALL_LIBS]' "$out/lib" \
-      --replace '$$[QT_INSTALL_HEADERS]' "$out/include"
+      --replace-fail '$$[QT_INSTALL_LIBS]' "$out/lib" \
+      --replace-fail '$$[QT_INSTALL_HEADERS]' "$out/include"
   '';
 
   preInstall = ''
     # do not install tests
     for f in tests/Makefile{,.cpptest}; do
       substituteInPlace $f \
-        --replace "install: install_target" "install: "
+        --replace-fail "install: install_target" "install: "
     done
   '';
 

@@ -28,8 +28,8 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
-    substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
+    substituteInPlace scripts/Makefile --replace-fail /usr/share/dpkg ${dpkg}/share/dpkg
+    substituteInPlace scripts/debrebuild.pl --replace-fail /usr/bin/perl ${perlPackages.perl}/bin/perl
     patchShebangs scripts
   '';
 

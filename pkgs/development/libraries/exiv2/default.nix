@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
     # disable tests that requires loopback networking
     substituteInPlace  ../tests/bash_tests/testcases.py \
-      --replace "def io_test(self):" "def io_disabled(self):"
+      --replace-fail "def io_test(self):" "def io_disabled(self):"
   '';
 
   preFixup = ''

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    substituteInPlace src/dune --replace " bytes " " "
+    substituteInPlace src/dune --replace-fail " bytes " " "
   '';
 
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace meson.build --replace "'werror=true'," "" # Build fails with -Werror, remove
+    substituteInPlace meson.build --replace-fail "'werror=true'," "" # Build fails with -Werror, remove
   '';
 
   postFixup = ''

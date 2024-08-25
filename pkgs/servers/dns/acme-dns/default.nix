@@ -19,7 +19,7 @@ buildGoModule rec {
 
   postInstall = ''
     install -D -m0444 -t $out/lib/systemd/system ./acme-dns.service
-    substituteInPlace $out/lib/systemd/system/acme-dns.service --replace "/usr/local/bin/acme-dns" "$out/bin/acme-dns"
+    substituteInPlace $out/lib/systemd/system/acme-dns.service --replace-fail "/usr/local/bin/acme-dns" "$out/bin/acme-dns"
   '';
 
   passthru.tests = { inherit (nixosTests) acme-dns; };

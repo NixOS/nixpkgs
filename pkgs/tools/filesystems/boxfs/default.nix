@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   src = srcs.boxfs2;
 
   prePatch = with srcs; ''
-    substituteInPlace Makefile --replace "git pull" "true"
+    substituteInPlace Makefile --replace-fail "git pull" "true"
     cp -a --no-preserve=mode ${libapp} libapp
     cp -a --no-preserve=mode ${libjson} libjson
   '';

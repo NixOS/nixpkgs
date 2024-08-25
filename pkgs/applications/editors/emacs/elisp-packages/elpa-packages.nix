@@ -141,7 +141,7 @@ self: let
           dontUnpack = false;
           postPatch = old.postPatch or "" + ''
             substituteInPlace ./plz.el \
-              --replace 'plz-curl-program "curl"' 'plz-curl-program "${pkgs.curl}/bin/curl"'
+              --replace-fail 'plz-curl-program "curl"' 'plz-curl-program "${pkgs.curl}/bin/curl"'
           '';
           preInstall = ''
             tar -cf "$pname-$version.tar" --transform "s,^,$pname-$version/," * .[!.]*

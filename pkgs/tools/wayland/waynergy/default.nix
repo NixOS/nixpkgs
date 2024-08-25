@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdrm wayland wayland-protocols wl-clipboard libxkbcommon libressl ];
 
   postPatch = ''
-    substituteInPlace waynergy.desktop --replace "Exec=/usr/bin/waynergy" "Exec=$out/bin/waynergy"
+    substituteInPlace waynergy.desktop --replace-fail "Exec=/usr/bin/waynergy" "Exec=$out/bin/waynergy"
   '';
 
   meta = with lib; {

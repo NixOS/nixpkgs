@@ -30,10 +30,10 @@ stdenv.mkDerivation {
     dpkg-deb -x ${lprdeb} $out
 
     substituteInPlace $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
-      --replace /opt "$out/opt" \
-      --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HLL2340D/\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"HLL2340D\"; #"
+      --replace-fail /opt "$out/opt" \
+      --replace-fail /usr/bin/perl ${perl}/bin/perl \
+      --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HLL2340D/\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"HLL2340D\"; #"
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       $out/opt/brother/Printers/HLL2340D/lpd/brprintconflsr3

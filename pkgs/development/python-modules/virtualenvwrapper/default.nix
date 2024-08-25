@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
-      substituteInPlace "$file" --replace "which" "${pkgs.which}/bin/which"
+      substituteInPlace "$file" --replace-fail "which" "${pkgs.which}/bin/which"
 
       # We can't set PYTHONPATH in a normal way (like exporting in a wrapper
       # script) because the user has to evaluate the script and we don't want
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       # "$VIRTUALENVWRAPPER_PYTHON" -c "import os,[...] and not in
       # if-statements or anything like that.
       # ...and yes, this "patch" is hacky :)
-      substituteInPlace "$file" --replace '"$VIRTUALENVWRAPPER_PYTHON" -' 'env PYTHONPATH="$VIRTUALENVWRAPPER_PYTHONPATH" "$VIRTUALENVWRAPPER_PYTHON" -'
+      substituteInPlace "$file" --replace-fail '"$VIRTUALENVWRAPPER_PYTHON" -' 'env PYTHONPATH="$VIRTUALENVWRAPPER_PYTHONPATH" "$VIRTUALENVWRAPPER_PYTHON" -'
     done
   '';
 

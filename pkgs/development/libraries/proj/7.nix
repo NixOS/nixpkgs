@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (version == "7.2.1") ''
     substituteInPlace CMakeLists.txt \
-      --replace "MAJOR 7 MINOR 2 PATCH 0" "MAJOR 7 MINOR 2 PATCH 1"
+      --replace-fail "MAJOR 7 MINOR 2 PATCH 0" "MAJOR 7 MINOR 2 PATCH 1"
   '';
 
   outputs = [ "out" "dev"];

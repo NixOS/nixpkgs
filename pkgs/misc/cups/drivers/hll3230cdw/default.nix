@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/opt/brother/Printers/hll3230cdw/lpd/filter_hll3230cdw \
-      --replace "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/hll3230cdw/\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"hll3230cdw\"; #"
+      --replace-fail "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/hll3230cdw/\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"hll3230cdw\"; #"
 
     substituteInPlace $out/opt/brother/Printers/hll3230cdw/cupswrapper/brother_lpdwrapper_hll3230cdw \
-      --replace "PRINTER =~" "PRINTER = \"hll3230cdw\"; #" \
-      --replace "my \$basedir = \`readlink \$0\`" "my \$basedir = \"$out/opt/brother/Printers/hll3230cdw/\""
+      --replace-fail "PRINTER =~" "PRINTER = \"hll3230cdw\"; #" \
+      --replace-fail "my \$basedir = \`readlink \$0\`" "my \$basedir = \"$out/opt/brother/Printers/hll3230cdw/\""
 
     wrapProgram $out/bin/brprintconf_hll3230cdw \
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       --set NIX_REDIRECTS /opt=$out/opt
 
     substituteInPlace $out/bin/brprintconf_hll3230cdw \
-      --replace \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${gnused}/bin/sed -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
+      --replace-fail \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${gnused}/bin/sed -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
   '';
 
   meta = with lib; {

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   # to `/usr/bin/env sh`, meaning that we now need to patch shebangs
   # in libtoolize.in:
   ''
-    substituteInPlace libtoolize.in       --replace '#! /usr/bin/env sh' '#!${runtimeShell}'
+    substituteInPlace libtoolize.in       --replace-fail '#! /usr/bin/env sh' '#!${runtimeShell}'
     # avoid help2man run after 'libtoolize.in' update
     touch doc/libtoolize.1
   '';

@@ -12,9 +12,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace shell/mcfly-fzf.bash --replace '$(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
-    substituteInPlace shell/mcfly-fzf.zsh --replace '$(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
-    substituteInPlace shell/mcfly-fzf.fish --replace '(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
+    substituteInPlace shell/mcfly-fzf.bash --replace-fail '$(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
+    substituteInPlace shell/mcfly-fzf.zsh --replace-fail '$(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
+    substituteInPlace shell/mcfly-fzf.fish --replace-fail '(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
   '';
 
   cargoHash = "sha256-xMXM56ulfKAY2HwRTXTG9h3garxDeu+zthMKSve5seQ=";

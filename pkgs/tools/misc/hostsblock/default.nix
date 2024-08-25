@@ -45,12 +45,12 @@ stdenv.mkDerivation {
     install -Dm644 conf/hosts.head $out/etc/
 
     for f in $out/bin/* $out/lib/* $out/etc/hostsblock.conf; do
-      substituteInPlace $f --replace "/dev/shm" "/tmp"
-      substituteInPlace $f --replace "/usr/lib/" "$out/lib/"
-      substituteInPlace $f --replace "/etc/hostsblock/" "$out/etc/"
+      substituteInPlace $f --replace-fail "/dev/shm" "/tmp"
+      substituteInPlace $f --replace-fail "/usr/lib/" "$out/lib/"
+      substituteInPlace $f --replace-fail "/etc/hostsblock/" "$out/etc/"
       sed --in-place --regexp-extended "s|([\` ])curl |\1${curl}/bin/curl |g" $f
-      substituteInPlace $f --replace grep ${gnugrep}/bin/grep
-      substituteInPlace $f --replace " sed " " ${gnused}/bin/sed "
+      substituteInPlace $f --replace-fail grep ${gnugrep}/bin/grep
+      substituteInPlace $f --replace-fail " sed " " ${gnused}/bin/sed "
       sed --in-place --regexp-extended "s|([^_])unzip |\1${unzip}/bin/unzip |" $f
       sed --in-place --regexp-extended "s|7za([^,])|${p7zip}/bin/7za\1|g" $f
     done

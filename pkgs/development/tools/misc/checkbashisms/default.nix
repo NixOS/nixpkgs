@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     substituteInPlace ./scripts/checkbashisms.pl \
-      --replace '###VERSION###' "$version"
+      --replace-fail '###VERSION###' "$version"
 
     runHook postBuild
   '';

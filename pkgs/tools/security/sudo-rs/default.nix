@@ -28,8 +28,8 @@ rustPlatform.buildRustPackage rec {
   # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
     substituteInPlace util/generate-docs.sh \
-      --replace "/usr/bin/env bash" ${lib.getExe bash} \
-      --replace util/pandoc.sh pandoc
+      --replace-fail "/usr/bin/env bash" ${lib.getExe bash} \
+      --replace-fail util/pandoc.sh pandoc
   '';
 
   postInstall = ''

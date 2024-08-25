@@ -87,7 +87,7 @@ mkDerivation rec {
     install -d "$out/share/polkit-1/actions"
     install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.policy" "$out/share/polkit-1/actions"
     substituteInPlace "$out/share/polkit-1/actions/com.teamviewer.TeamViewer.policy" \
-      --replace '/opt/teamviewer/tv_bin/script/execscript' \
+      --replace-fail '/opt/teamviewer/tv_bin/script/execscript' \
         "$out/share/teamviewer/tv_bin/script/execscript"
 
     for i in 16 20 24 32 48 256; do
@@ -100,9 +100,9 @@ mkDerivation rec {
     sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" $out/share/teamviewer/tv_bin/desktop/com.teamviewer.*.desktop
 
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_aux \
-      --replace '/lib64/ld-linux-x86-64.so.2' '${glibc.out}/lib/ld-linux-x86-64.so.2'
+      --replace-fail '/lib64/ld-linux-x86-64.so.2' '${glibc.out}/lib/ld-linux-x86-64.so.2'
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
-      --replace '/var/run/' '/run/'
+      --replace-fail '/var/run/' '/run/'
   '';
 
   makeWrapperArgs = [

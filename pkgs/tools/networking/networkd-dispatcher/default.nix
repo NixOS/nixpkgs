@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix paths in systemd unit file
     substituteInPlace networkd-dispatcher.service \
-      --replace "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher" \
-      --replace "/etc/conf.d" "$out/etc/conf.d"
+      --replace-fail "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher" \
+      --replace-fail "/etc/conf.d" "$out/etc/conf.d"
     # Remove conditions on existing rules path
     sed -i '/ConditionPathExistsGlob/g' networkd-dispatcher.service
   '';

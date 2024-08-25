@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ godot3-headless makeWrapper just inkscape imagemagick ];
 
   postPatch = ''
-    substituteInPlace export_presets.cfg --replace 'res://build/icons/usr/share/icons/hicolor' $out/share/icons/hicolor
-    substituteInPlace project.godot --replace 'res://build/icons/usr/share/icons/hicolor' $out/share/icons/hicolor
+    substituteInPlace export_presets.cfg --replace-fail 'res://build/icons/usr/share/icons/hicolor' $out/share/icons/hicolor
+    substituteInPlace project.godot --replace-fail 'res://build/icons/usr/share/icons/hicolor' $out/share/icons/hicolor
 
-    substituteInPlace justfile --replace '{{build_icons_dir}}/usr' $out
+    substituteInPlace justfile --replace-fail '{{build_icons_dir}}/usr' $out
   '';
 
   buildPhase = ''

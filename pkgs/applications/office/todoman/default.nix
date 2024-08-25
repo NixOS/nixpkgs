@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
-    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${lib.getExe jq} "
+    substituteInPlace contrib/completion/zsh/_todo --replace-fail "jq " "${lib.getExe jq} "
     installShellCompletion --zsh contrib/completion/zsh/_todo
   '';
 

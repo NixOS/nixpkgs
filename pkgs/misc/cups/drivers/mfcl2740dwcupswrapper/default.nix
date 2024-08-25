@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     dir=$out/opt/brother/Printers/MFCL2740DW
 
     substituteInPlace $dir/cupswrapper/brother_lpdwrapper_MFCL2740DW \
-      --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace "basedir =~" "basedir = \"$basedir\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"MFCL2740DW\"; #"
+      --replace-fail /usr/bin/perl ${perl}/bin/perl \
+      --replace-fail "basedir =~" "basedir = \"$basedir\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"MFCL2740DW\"; #"
 
     substituteInPlace $dir/cupswrapper/paperconfigml1 \
-      --replace /usr/bin/perl ${perl}/bin/perl
+      --replace-fail /usr/bin/perl ${perl}/bin/perl
 
     wrapProgram $dir/cupswrapper/brother_lpdwrapper_MFCL2740DW \
       --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}

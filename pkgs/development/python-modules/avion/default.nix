@@ -24,7 +24,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/mjg59/python-avion/pull/16
     substituteInPlace setup.py \
-      --replace "bluepy>==1.1.4" "bluepy>=1.1.4"
+      --replace-fail "bluepy>==1.1.4" "bluepy>=1.1.4"
   '';
 
   propagatedBuildInputs = [

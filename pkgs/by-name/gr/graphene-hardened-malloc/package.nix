@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 -t $out/lib out/libhardened_malloc.so out-light/libhardened_malloc-light.so
 
     mkdir -p $out/bin
-    substitute preload.sh $out/bin/preload-hardened-malloc --replace "\$dir" $out/lib
+    substitute preload.sh $out/bin/preload-hardened-malloc --replace-fail "\$dir" $out/lib
     chmod 0555 $out/bin/preload-hardened-malloc
 
     runHook postInstall
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
         pushd test
         make LDLIBS= LDFLAGS=-Wl,--unresolved-symbols=ignore-all CXXFLAGS=-lstdc++
         substituteInPlace test_smc.py \
-          --replace 'test_malloc_object_size' 'dont_test_malloc_object_size' \
-          --replace 'test_invalid_malloc_object_size' 'dont_test_invalid_malloc_object_size'
+          --replace-fail 'test_malloc_object_size' 'dont_test_malloc_object_size' \
+          --replace-fail 'test_invalid_malloc_object_size' 'dont_test_invalid_malloc_object_size'
         popd # test
       '';
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "= gcc" "?= gcc"
+      --replace-fail "= gcc" "?= gcc"
   '';
 
   enableParallelBuilding = true;

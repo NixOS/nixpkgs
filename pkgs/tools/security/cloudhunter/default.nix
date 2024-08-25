@@ -17,8 +17,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace cloudhunter.py \
-      --replace "'permutations.txt'" "'$out/share/permutations.txt'" \
-      --replace "'resolvers.txt'" "'$out/share/resolvers.txt'"
+      --replace-fail "'permutations.txt'" "'$out/share/permutations.txt'" \
+      --replace-fail "'resolvers.txt'" "'$out/share/resolvers.txt'"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

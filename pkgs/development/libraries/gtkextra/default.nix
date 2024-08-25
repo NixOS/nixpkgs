@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
   '';
 
   nativeBuildInputs = [ gobject-introspection pkg-config ];

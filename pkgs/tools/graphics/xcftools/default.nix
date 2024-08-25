@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Required if building with libpng-1.6, innocuous otherwise
     substituteInPlace xcf2png.c         \
-      --replace png_voidp_NULL NULL     \
-      --replace png_error_ptr_NULL NULL
+      --replace-fail png_voidp_NULL NULL     \
+      --replace-fail png_error_ptr_NULL NULL
 
     # xcfview needs mailcap and isn't that useful anyway
     sed -i -e '/BINARIES/s/xcfview//' Makefile.in

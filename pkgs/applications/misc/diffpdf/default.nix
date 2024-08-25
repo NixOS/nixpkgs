@@ -21,7 +21,7 @@ mkDerivation rec {
   buildInputs = [ qtbase poppler ];
 
   preConfigure = ''
-    substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT5@@ ${poppler.dev}
+    substituteInPlace diffpdf.pro --replace-fail @@NIX_POPPLER_QT5@@ ${poppler.dev}
     lrelease diffpdf.pro
   '';
 

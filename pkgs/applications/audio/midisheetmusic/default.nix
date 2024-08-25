@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   buildPhase = ''
     for i in Classes/MidiPlayer.cs Classes/MidiSheetMusic.cs
     do
-      substituteInPlace $i --replace "/usr/bin/timidity" "${timidity}/bin/timidity"
+      substituteInPlace $i --replace-fail "/usr/bin/timidity" "${timidity}/bin/timidity"
     done
 
     ./build.sh
@@ -30,8 +30,8 @@ in stdenv.mkDerivation {
   # run via nunit3 console, because mono nunit console wants access $HOME
   checkPhase = ''
     substituteInPlace UnitTestDLL.csproj \
-      --replace "</Compile>" '</Compile><Compile Include="Classes\UnitTest.cs"/>' \
-      --replace nunit.framework.dll "${dotnetPackages.NUnit}/lib/dotnet/NUnit/nunit.framework.dll"
+      --replace-fail "</Compile>" '</Compile><Compile Include="Classes\UnitTest.cs"/>' \
+      --replace-fail nunit.framework.dll "${dotnetPackages.NUnit}/lib/dotnet/NUnit/nunit.framework.dll"
     ./build_unit_test.sh
     nunit3-console bin/Debug/UnitTest.dll
   '';

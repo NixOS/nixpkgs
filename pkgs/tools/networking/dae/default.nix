@@ -44,7 +44,7 @@ buildGoModule rec {
   postInstall = ''
     install -Dm444 install/dae.service $out/lib/systemd/system/dae.service
     substituteInPlace $out/lib/systemd/system/dae.service \
-      --replace /usr/bin/dae $out/bin/dae
+      --replace-fail /usr/bin/dae $out/bin/dae
   '';
 
   passthru.tests = {

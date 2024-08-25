@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # Fix hardcoded path to GCC.
-    substituteInPlace ${makefile} --replace /usr/bin/gcc "${stdenv.cc}/bin/cc"
+    substituteInPlace ${makefile} --replace-fail /usr/bin/gcc "${stdenv.cc}/bin/cc"
 
     # Remove problematic default CFLAGS.
     substituteInPlace ${makefile} \
-      --replace -Werror "" \
-      --replace -O0 "" \
-      --replace -ggdb ""
+      --replace-fail -Werror "" \
+      --replace-fail -O0 "" \
+      --replace-fail -ggdb ""
   '';
 
   installPhase = ''

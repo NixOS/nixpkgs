@@ -119,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
 
     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
-     --replace "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
-     --replace "/bin/mount" "${util-linux}/bin/mount"
+     --replace-fail "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
+     --replace-fail "/bin/mount" "${util-linux}/bin/mount"
   '';
 
   configureFlags = [
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
           which
         ]
       }"
-    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace "/bin/sh" "${bash}/bin/sh"
+    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace-fail "/bin/sh" "${bash}/bin/sh"
   '';
 
   meta = with lib; {

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     # Dependency installation in setup.py doesn't work
     echo -n > requirements.txt
     substituteInPlace setup.cfg \
-      --replace "--cov=napalm_procurve --cov-report term-missing -vs --pylama" ""
+      --replace-fail "--cov=napalm_procurve --cov-report term-missing -vs --pylama" ""
   '';
 
   nativeBuildInputs = [ pip ];

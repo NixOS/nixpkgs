@@ -22,19 +22,19 @@ stdenv.mkDerivation rec {
 
     # remove tests that require network access
     substituteInPlace test/cpp-utils/CMakeLists.txt \
-      --replace "network/CurlHttpClientTest.cpp" "" \
-      --replace "network/FakeHttpClientTest.cpp" ""
+      --replace-fail "network/CurlHttpClientTest.cpp" "" \
+      --replace-fail "network/FakeHttpClientTest.cpp" ""
 
     # remove CLI test trying to access /dev/fuse
     substituteInPlace test/cryfs-cli/CMakeLists.txt \
-      --replace "CliTest_IntegrityCheck.cpp" "" \
-      --replace "CliTest_Setup.cpp" "" \
-      --replace "CliTest_WrongEnvironment.cpp" "" \
-      --replace "CryfsUnmountTest.cpp" ""
+      --replace-fail "CliTest_IntegrityCheck.cpp" "" \
+      --replace-fail "CliTest_Setup.cpp" "" \
+      --replace-fail "CliTest_WrongEnvironment.cpp" "" \
+      --replace-fail "CryfsUnmountTest.cpp" ""
 
     # downsize large file test as 4.5G is too big for Hydra
     substituteInPlace test/cpp-utils/data/DataTest.cpp \
-      --replace "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
+      --replace-fail "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
   '';
 
   nativeBuildInputs = [ cmake pkg-config python3 ];

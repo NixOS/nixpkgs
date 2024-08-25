@@ -28,8 +28,8 @@ buildPythonPackage {
 
   preBuild = ''
     cd host
-    substituteInPlace setup.py --replace "'backports.functools_lru_cache'" ""
-    substituteInPlace pygreat/comms.py --replace "from backports.functools_lru_cache import lru_cache as memoize_with_lru_cache" "from functools import lru_cache as memoize_with_lru_cache"
+    substituteInPlace setup.py --replace-fail "'backports.functools_lru_cache'" ""
+    substituteInPlace pygreat/comms.py --replace-fail "from backports.functools_lru_cache import lru_cache as memoize_with_lru_cache" "from functools import lru_cache as memoize_with_lru_cache"
     echo "$version" > ../VERSION
   '';
 

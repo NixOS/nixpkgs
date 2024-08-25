@@ -109,11 +109,11 @@ mkDerivation {
     ];
 
   postPatch = ''
-    substituteInPlace $COMPONENT_PATH/Makefile --replace '.include <src.opts.mk>' ""
+    substituteInPlace $COMPONENT_PATH/Makefile --replace-fail '.include <src.opts.mk>' ""
 
     substituteInPlace $BSDSRCDIR/include/paths.h \
-        --replace '/usr/lib/i18n' '${builtins.placeholder "out"}/lib/i18n' \
-        --replace '/usr/share/i18n' '${builtins.placeholder "out"}/share/i18n'
+        --replace-fail '/usr/lib/i18n' '${builtins.placeholder "out"}/lib/i18n' \
+        --replace-fail '/usr/share/i18n' '${builtins.placeholder "out"}/share/i18n'
   '';
 
   nativeBuildInputs = [

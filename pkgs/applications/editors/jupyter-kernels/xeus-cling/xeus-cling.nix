@@ -74,11 +74,11 @@ clangStdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/xmagics/executable.cpp \
-      --replace "getDataLayout" "getDataLayoutString"
+      --replace-fail "getDataLayout" "getDataLayoutString"
     substituteInPlace src/xmagics/execution.cpp \
-      --replace "simplisticCastAs" "castAs"
+      --replace-fail "simplisticCastAs" "castAs"
     substituteInPlace src/xmime_internal.hpp \
-      --replace "code.str()" "code.str().str()"
+      --replace-fail "code.str()" "code.str().str()"
   '';
 
   dontStrip = debug;

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # libtool.m4 only matches macOS 10.*
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     substituteInPlace configure \
-      --replace "10.*)" "*)"
+      --replace-fail "10.*)" "*)"
   '';
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]

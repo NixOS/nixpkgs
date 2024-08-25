@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-Mmcc7Tp71OH5BQgMYMRhokqNDOqCudaUaCNzjOGoQ68=";
 
   postPatch = ''
-    substituteInPlace proc/read_test.go --replace /bin/cat cat
+    substituteInPlace proc/read_test.go --replace-fail /bin/cat cat
   '';
 
   doCheck = true;

@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" ""
+      --replace-fail "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" ""
   '';
 
   pythonImportsCheck = [ "ge25519" ];

@@ -69,7 +69,7 @@ buildPythonPackage rec {
     yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
     fixup-yarn-lock yarn.lock
 
-    substituteInPlace package.json --replace jlpm yarn
+    substituteInPlace package.json --replace-fail jlpm yarn
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts
     patchShebangs node_modules
 

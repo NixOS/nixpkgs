@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "use_2to3=True," ""
+      --replace-fail "use_2to3=True," ""
   '';
 
   # No tests

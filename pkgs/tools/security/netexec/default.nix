@@ -18,7 +18,7 @@ let
         # Fix version to be compliant with Python packaging rules
         postPatch = ''
           substituteInPlace setup.py \
-            --replace 'version="{}.{}.{}.{}{}"' 'version="{}.{}.{}"'
+            --replace-fail 'version="{}.{}.{}.{}{}"' 'version="{}.{}.{}"'
         '';
       };
     };
@@ -43,8 +43,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"' \
-      --replace '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
+      --replace-fail '{ git = "https://github.com/Pennyw0rth/impacket.git", branch = "gkdi" }' '"*"' \
+      --replace-fail '{ git = "https://github.com/Pennyw0rth/oscrypto" }' '"*"'
   '';
 
   nativeBuildInputs = with python.pkgs; [

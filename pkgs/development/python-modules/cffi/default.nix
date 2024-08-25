@@ -67,9 +67,9 @@ else
     postPatch = lib.optionalString stdenv.isDarwin ''
       # Remove setup.py impurities
       substituteInPlace setup.py \
-        --replace "'-iwithsysroot/usr/include/ffi'" "" \
-        --replace "'/usr/include/ffi'," "" \
-        --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
+        --replace-fail "'-iwithsysroot/usr/include/ffi'" "" \
+        --replace-fail "'/usr/include/ffi'," "" \
+        --replace-fail '/usr/include/libffi' '${lib.getDev libffi}/include'
     '';
 
     nativeBuildInputs = [

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Using env fails in the sandbox
-    substituteInPlace Tools/pymolcas/export.py --replace \
+    substituteInPlace Tools/pymolcas/export.py --replace-fail \
       "/usr/bin/env','python3" "python3"
 
     # Pointing CMake to local QCMaquis and NEVPT2 archives

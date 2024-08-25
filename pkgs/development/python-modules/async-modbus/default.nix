@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"--cov=async_modbus",' "" \
-      --replace '"--cov-report=html", "--cov-report=term",' "" \
-      --replace '"--durations=2", "--verbose"' ""
+      --replace-fail '"--cov=async_modbus",' "" \
+      --replace-fail '"--cov-report=html", "--cov-report=term",' "" \
+      --replace-fail '"--durations=2", "--verbose"' ""
   '';
 
   nativeBuildInputs = [ setuptools ];

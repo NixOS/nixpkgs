@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
   postPatch = ''
     cd software
-    substituteInPlace init_scripts/infnoise.service --replace "/usr/local" "$out"
+    substituteInPlace init_scripts/infnoise.service --replace-fail "/usr/local" "$out"
   '';
 
   postInstall = ''

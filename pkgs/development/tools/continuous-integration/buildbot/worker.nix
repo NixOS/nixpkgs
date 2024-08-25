@@ -28,7 +28,7 @@ buildPythonPackage ({
   postPatch = ''
     cd worker
     substituteInPlace buildbot_worker/scripts/logwatcher.py \
-      --replace /usr/bin/tail "${coreutils}/bin/tail"
+      --replace-fail /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
   nativeBuildInputs = [

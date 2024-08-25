@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov=textile --cov-report=html --cov-append --cov-report=term-missing" ""
+      --replace-fail " --cov=textile --cov-report=html --cov-append --cov-report=term-missing" ""
   '';
 
   pythonImportsCheck = [ "textile" ];

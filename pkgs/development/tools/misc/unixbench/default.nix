@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-Wa,-q" ""
+      --replace-fail "-Wa,-q" ""
   '';
 
   nativeBuildInputs = [
@@ -80,16 +80,16 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace USAGE \
-      --replace 'Run"' 'ubench"' \
-      --replace './Run' 'ubench' \
-      --replace 'Run ' 'ubench '
+      --replace-fail 'Run"' 'ubench"' \
+      --replace-fail './Run' 'ubench' \
+      --replace-fail 'Run ' 'ubench '
     pandoc -f rst -t man USAGE -o ubench.1
     installManPage ubench.1
   '';
 
   preFixup = ''
     substituteInPlace $out/libexec/pgms/multi.sh \
-      --replace '/bin/sh "$' '${targetPackages.runtimeShell} "$'
+      --replace-fail '/bin/sh "$' '${targetPackages.runtimeShell} "$'
 
     substituteInPlace $out/bin/ubench \
       --subst-var out

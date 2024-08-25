@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   # isn't mutable on Nix
   postPatch = ''
     substituteInPlace discord.sh \
-      --replace 'thisdir="$(cd "$(dirname "$(readlink -f "''${BASH_SOURCE[0]}")")" && pwd)"' 'thisdir="$(pwd)"'
+      --replace-fail 'thisdir="$(cd "$(dirname "$(readlink -f "''${BASH_SOURCE[0]}")")" && pwd)"' 'thisdir="$(pwd)"'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

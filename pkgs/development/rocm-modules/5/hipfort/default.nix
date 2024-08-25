@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs bin
 
     substituteInPlace bin/hipfc bin/mymcpu \
-      --replace "/bin/cat" "cat"
+      --replace-fail "/bin/cat" "cat"
 
     substituteInPlace bin/CMakeLists.txt \
-      --replace "/bin/mkdir" "mkdir" \
-      --replace "/bin/cp" "cp" \
-      --replace "/bin/sed" "sed" \
-      --replace "/bin/chmod" "chmod" \
-      --replace "/bin/ln" "ln"
+      --replace-fail "/bin/mkdir" "mkdir" \
+      --replace-fail "/bin/cp" "cp" \
+      --replace-fail "/bin/sed" "sed" \
+      --replace-fail "/bin/chmod" "chmod" \
+      --replace-fail "/bin/ln" "ln"
   '';
 
   passthru.updateScript = rocmUpdateScript {

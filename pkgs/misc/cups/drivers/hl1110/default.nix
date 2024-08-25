@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     dpkg-deb -x ${lprdeb} $out
 
     substituteInPlace $out/opt/brother/Printers/HL1110/lpd/filter_HL1110 \
-    --replace /opt "$out/opt" \
+    --replace-fail /opt "$out/opt" \
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/HL1110/lpd/psconvert2
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
     dpkg-deb -x ${cupsdeb} $out
 
-    substituteInPlace $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 --replace /opt "$out/opt"
+    substituteInPlace $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 --replace-fail /opt "$out/opt"
 
     mkdir -p $out/lib/cups/filter
     ln -s $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 $out/lib/cups/filter/brother_lpdwrapper_HL1110

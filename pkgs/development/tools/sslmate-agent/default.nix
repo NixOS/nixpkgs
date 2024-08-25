@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     mv lib $out
 
     substituteInPlace $out/lib/systemd/system/sslmate-agent.service \
-      --replace "/usr/s" "$out/"
+      --replace-fail "/usr/s" "$out/"
 
     runHook postInstall
   '';

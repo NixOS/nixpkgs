@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace "/usr/bin/" "" \
-      --replace "/usr/include/security/pam_" "${pam}/include/security/pam_"
+      --replace-fail "/usr/bin/" "" \
+      --replace-fail "/usr/include/security/pam_" "${pam}/include/security/pam_"
 
     substituteInPlace gradm_defs.h \
-      --replace "/sbin/grlearn" "$out/bin/grlearn" \
-      --replace "/sbin/gradm" "$out/bin/gradm" \
-      --replace "/sbin/gradm_pam" "$out/bin/gradm_pam"
+      --replace-fail "/sbin/grlearn" "$out/bin/grlearn" \
+      --replace-fail "/sbin/gradm" "$out/bin/gradm" \
+      --replace-fail "/sbin/gradm_pam" "$out/bin/gradm_pam"
 
     echo 'inherit-learn /nix/store' >>learn_config
 

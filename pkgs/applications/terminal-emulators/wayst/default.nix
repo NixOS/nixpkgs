@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/settings.c \
-      --replace xdg-open ${xdg-utils}/bin/xdg-open
+      --replace-fail xdg-open ${xdg-utils}/bin/xdg-open
     substituteInPlace src/main.c \
-      --replace notify-send ${libnotify}/bin/notify-send
+      --replace-fail notify-send ${libnotify}/bin/notify-send
   '';
 
   preInstall = ''

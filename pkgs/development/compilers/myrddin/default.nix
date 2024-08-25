@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace mk/c.mk \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
   buildPhase = ''

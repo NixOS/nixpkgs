@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   # systemd 230 no longer has libsystemd-daemon as a separate entity from libsystemd
   postPatch = ''
-    substituteInPlace configure.ac --replace libsystemd-daemon libsystemd
+    substituteInPlace configure.ac --replace-fail libsystemd-daemon libsystemd
   '';
 
   meta = with lib; {

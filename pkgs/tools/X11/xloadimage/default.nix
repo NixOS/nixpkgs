@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
   # $SOURCE_DATE_EPOCH, but we want to make sure we don't even call these.
   preConfigure = ''
     substituteInPlace build-info \
-      --replace '[ -x /bin/date ]' 'false' \
-      --replace '[ -x /bin/id ]' 'false' \
-      --replace '[ -x /bin/uname ]' 'false' \
-      --replace '[ -x /usr/bin/id ]' 'false'
+      --replace-fail '[ -x /bin/date ]' 'false' \
+      --replace-fail '[ -x /bin/id ]' 'false' \
+      --replace-fail '[ -x /bin/uname ]' 'false' \
+      --replace-fail '[ -x /usr/bin/id ]' 'false'
 
     chmod +x build-info configure
   '';

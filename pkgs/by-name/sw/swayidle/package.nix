@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace main.c \
-      --replace '"sh"' '"${runtimeShell}"'
+      --replace-fail '"sh"' '"${runtimeShell}"'
   '';
 
   meta = with lib; {

@@ -73,10 +73,10 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
-      --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
+      --replace-fail 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
 
     substituteInPlace src/setup.cfg \
-      --replace "--cov=./ --cov-report=" ""
+      --replace-fail "--cov=./ --cov-report=" ""
   '';
 
   nativeBuildInputs = [

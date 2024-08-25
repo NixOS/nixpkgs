@@ -16,35 +16,35 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "/bin/" "" \
-      --replace "MAKEJOBS := " '# MAKEJOBS := '
+      --replace-fail "/bin/" "" \
+      --replace-fail "MAKEJOBS := " '# MAKEJOBS := '
 
     substituteInPlace makedefs/MakeInc.cmd \
-      --replace "/usr/bin/" "" \
-      --replace "/bin/" "" \
-      --replace "-Werror " ""
+      --replace-fail "/usr/bin/" "" \
+      --replace-fail "/bin/" "" \
+      --replace-fail "-Werror " ""
 
     substituteInPlace makedefs/MakeInc.def \
-      --replace "-c -S -m" "-c -m"
+      --replace-fail "-c -S -m" "-c -m"
 
     substituteInPlace makedefs/MakeInc.top \
-      --replace "MEMORY_SIZE := " 'MEMORY_SIZE := 1073741824 # '
+      --replace-fail "MEMORY_SIZE := " 'MEMORY_SIZE := 1073741824 # '
 
     substituteInPlace libkern/kxld/Makefile \
-      --replace "-Werror " ""
+      --replace-fail "-Werror " ""
 
     substituteInPlace SETUP/kextsymboltool/Makefile \
-      --replace "-lstdc++" "-lc++"
+      --replace-fail "-lstdc++" "-lc++"
 
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
-      --replace "/usr/include" "/include" \
-      --replace "/usr/local/include" "/include" \
-      --replace 'MIG=`' "# " \
-      --replace 'MIGCC=`' "# " \
-      --replace " -o 0" "" \
-      --replace '$SRC/$mig' '-I$DSTROOT/include $SRC/$mig' \
-      --replace '$SRC/servers/netname.defs' '-I$DSTROOT/include $SRC/servers/netname.defs' \
-      --replace '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR'
+      --replace-fail "/usr/include" "/include" \
+      --replace-fail "/usr/local/include" "/include" \
+      --replace-fail 'MIG=`' "# " \
+      --replace-fail 'MIGCC=`' "# " \
+      --replace-fail " -o 0" "" \
+      --replace-fail '$SRC/$mig' '-I$DSTROOT/include $SRC/$mig' \
+      --replace-fail '$SRC/servers/netname.defs' '-I$DSTROOT/include $SRC/servers/netname.defs' \
+      --replace-fail '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR'
 
     patchShebangs .
   '' + lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11") ''
@@ -52,7 +52,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     # create an empty file to the header instead
     # this line becomes: echo "" > $@; echo --header ...
     substituteInPlace iokit/DriverKit/Makefile \
-      --replace '--def $<' '> $@; echo'
+      --replace-fail '--def $<' '> $@; echo'
   '';
 
   PLATFORM = "MacOSX";

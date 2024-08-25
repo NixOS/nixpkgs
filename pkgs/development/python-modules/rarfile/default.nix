@@ -35,11 +35,11 @@ buildPythonPackage rec {
     + (
       if useUnrar then
         ''
-          --replace 'UNRAR_TOOL = "unrar"' "UNRAR_TOOL = \"${unrar}/bin/unrar\""
+          --replace-fail 'UNRAR_TOOL = "unrar"' "UNRAR_TOOL = \"${unrar}/bin/unrar\""
         ''
       else
         ''
-          --replace 'ALT_TOOL = "bsdtar"' "ALT_TOOL = \"${libarchive}/bin/bsdtar\""
+          --replace-fail 'ALT_TOOL = "bsdtar"' "ALT_TOOL = \"${libarchive}/bin/bsdtar\""
         ''
     )
     + "";

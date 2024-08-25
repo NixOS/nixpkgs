@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace mk/linux.mk \
-      --replace '-m644' '-Dm644' \
-      --replace '-m755' '-Dm755' \
-      --replace 'warpd.1.gz $(DESTDIR)' 'warpd.1.gz -t $(DESTDIR)' \
-      --replace 'bin/warpd $(DESTDIR)' 'bin/warpd -t $(DESTDIR)'
+      --replace-fail '-m644' '-Dm644' \
+      --replace-fail '-m755' '-Dm755' \
+      --replace-fail 'warpd.1.gz $(DESTDIR)' 'warpd.1.gz -t $(DESTDIR)' \
+      --replace-fail 'bin/warpd $(DESTDIR)' 'bin/warpd -t $(DESTDIR)'
   '';
 
   meta = with lib; {

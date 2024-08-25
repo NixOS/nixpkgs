@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/lib/cmake/bpp-core/bpp-core-targets.cmake  \
-      --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
+      --replace-fail 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
   # prevents cmake from exporting incorrect INTERFACE_INCLUDE_DIRECTORIES
   # of form /nix/store/.../nix/store/.../include,

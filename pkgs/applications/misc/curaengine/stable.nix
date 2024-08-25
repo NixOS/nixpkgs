@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "--static" ""
+    substituteInPlace Makefile --replace-fail "--static" ""
   '';
 
   installPhase = ''

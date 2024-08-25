@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
         coreutils
       ]}
     substituteInPlace $dir/lpd/filtermfc465cn \
-      --replace "BR_PRT_PATH=" "BR_PRT_PATH=\"$dir/\" #"
+      --replace-fail "BR_PRT_PATH=" "BR_PRT_PATH=\"$dir/\" #"
     wrapProgram $dir/lpd/filtermfc465cn \
       --prefix PATH : ${lib.makeBinPath [
         coreutils
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
         gnused
       ]}
     substituteInPlace $dir/lpd/psconvertij2 \
-      --replace '`which gs`' "${ghostscript}/bin/gs"
+      --replace-fail '`which gs`' "${ghostscript}/bin/gs"
     wrapProgram $dir/lpd/psconvertij2 \
       --prefix PATH : ${lib.makeBinPath [
         gnused

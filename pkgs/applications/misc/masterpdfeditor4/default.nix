@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     substituteInPlace masterpdfeditor4.desktop \
-      --replace 'Exec=/opt/master-pdf-editor-4' "Exec=$out/bin" \
-      --replace 'Path=/opt/master-pdf-editor-4' "Path=$out/bin" \
-      --replace 'Icon=/opt/master-pdf-editor-4' "Icon=$out/share/pixmaps"
+      --replace-fail 'Exec=/opt/master-pdf-editor-4' "Exec=$out/bin" \
+      --replace-fail 'Path=/opt/master-pdf-editor-4' "Path=$out/bin" \
+      --replace-fail 'Icon=/opt/master-pdf-editor-4' "Icon=$out/share/pixmaps"
 
     install -Dm644 -t $out/share/pixmaps      masterpdfeditor4.png
     install -Dm644 -t $out/share/applications masterpdfeditor4.desktop

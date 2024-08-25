@@ -17,9 +17,9 @@ buildGoModule rec {
 
   postPatch = ''
         substituteInPlace cmd/flags.go \
-          --replace "\"ffmpeg\"" "\"${lib.getBin ffmpeg}/bin/ffmpeg\"" \
-          --replace "\"mpv\"" "\"${lib.getBin mpv}/bin/mpv\"" \
-          --replace "\"yt-dlp\"" "\"${lib.getBin yt-dlp}/bin/yt-dlp\""
+          --replace-fail "\"ffmpeg\"" "\"${lib.getBin ffmpeg}/bin/ffmpeg\"" \
+          --replace-fail "\"mpv\"" "\"${lib.getBin mpv}/bin/mpv\"" \
+          --replace-fail "\"yt-dlp\"" "\"${lib.getBin yt-dlp}/bin/yt-dlp\""
   '';
 
   meta = with lib; {

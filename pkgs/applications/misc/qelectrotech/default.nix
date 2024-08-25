@@ -21,11 +21,11 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace qelectrotech.pro \
-      --replace 'GIT_COMMIT_SHA="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --verify HEAD)\\\""' \
+      --replace-fail 'GIT_COMMIT_SHA="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --verify HEAD)\\\""' \
                 'GIT_COMMIT_SHA="\\\"${version}\\\""' \
-      --replace "COMPIL_PREFIX              = '/usr/local/'" \
+      --replace-fail "COMPIL_PREFIX              = '/usr/local/'" \
                 "COMPIL_PREFIX              = '$out/'" \
-      --replace "INSTALL_PREFIX             = '/usr/local/'" \
+      --replace-fail "INSTALL_PREFIX             = '/usr/local/'" \
                 "INSTALL_PREFIX             = '$out/'"
   '';
 

@@ -50,13 +50,13 @@
 
     # patch configuration files so each path points to the new $lib or $dev paths
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
+      --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
     substituteInPlace \
       "$dev/lib/cmake/llvm/LLVMExports-release.cmake" \
       "$dev/lib/cmake/mlir/MLIRTargets-release.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
-      --replace "\''${_IMPORT_PREFIX}/lib/objects-Release" "$lib/lib/objects-Release" \
-      --replace "$out/bin/llvm-config" "$dev/bin/llvm-config" # patch path for llvm-config
+      --replace-fail "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
+      --replace-fail "\''${_IMPORT_PREFIX}/lib/objects-Release" "$lib/lib/objects-Release" \
+      --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config" # patch path for llvm-config
   '';
 
   # Replace all references to @rpath with absolute paths and remove the rpaths.

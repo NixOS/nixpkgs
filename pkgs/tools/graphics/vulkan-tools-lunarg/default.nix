@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs scripts/*
-    substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
+    substituteInPlace via/CMakeLists.txt --replace-fail "jsoncpp_static" "jsoncpp"
   '';
 
   # Include absolute paths to layer libraries in their associated

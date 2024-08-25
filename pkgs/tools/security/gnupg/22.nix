@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/systemd/user
     for f in doc/examples/systemd-user/*.{service,socket} ; do
       substitute $f $out/lib/systemd/user/$(basename $f) \
-        --replace /usr/bin $out/bin
+        --replace-fail /usr/bin $out/bin
     done
 
     # add gpg2 symlink to make sure git does not break when signing commits

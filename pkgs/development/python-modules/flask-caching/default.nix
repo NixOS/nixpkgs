@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "cachelib >= 0.9.0, < 0.10.0" "cachelib"
+      --replace-fail "cachelib >= 0.9.0, < 0.10.0" "cachelib"
   '';
 
   propagatedBuildInputs = [

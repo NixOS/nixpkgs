@@ -17,8 +17,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "cryptography==" "cryptography>="
+      --replace-fail "'pytest-runner'," "" \
+      --replace-fail "cryptography==" "cryptography>="
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

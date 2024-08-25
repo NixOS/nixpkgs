@@ -24,7 +24,7 @@ buildPythonPackage {
     sed '1i#include <memory>' -i bfloat16.cc # gcc12
     # replace deprecated function for python3.11
     substituteInPlace bfloat16.cc \
-      --replace "Py_TYPE(&NPyBfloat16_Descr) = &PyArrayDescr_Type" "Py_SET_TYPE(&NPyBfloat16_Descr, &PyArrayDescr_Type)"
+      --replace-fail "Py_TYPE(&NPyBfloat16_Descr) = &PyArrayDescr_Type" "Py_SET_TYPE(&NPyBfloat16_Descr, &PyArrayDescr_Type)"
   '';
 
   disabled = pythonOlder "3.9" || pythonAtLeast "3.12";

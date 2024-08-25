@@ -29,7 +29,7 @@ mkCoqDerivation rec {
   postPatch = ''
     for p in Make Makefile.coq.local
     do
-      substituteInPlace $p --replace "-libs nums" "-use-ocamlfind -package num" || true
+      substituteInPlace $p --replace-fail "-libs nums" "-use-ocamlfind -package num" || true
     done
   '';
 

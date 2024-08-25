@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString stdenv.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
-      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+      --replace-fail '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
   outputs = [ "out" "dev" "devdoc" ];

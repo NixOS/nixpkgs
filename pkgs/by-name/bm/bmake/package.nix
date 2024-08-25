@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i unit-tests/Makefile \
       -e '/deptgt-delete_on_error/d' \
       -e '/shell-ksh/d'
-    substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
+    substituteInPlace unit-tests/opt-chdir.exp --replace-fail "File name" "Filename"
   '';
 
   buildPhase = ''

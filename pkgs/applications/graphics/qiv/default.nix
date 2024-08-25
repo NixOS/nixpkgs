@@ -13,9 +13,9 @@ stdenv.mkDerivation (rec {
   buildInputs = [ gtk2 imlib2 file lcms2 libexif ];
 
   preBuild=''
-    substituteInPlace Makefile --replace /usr/local "$out"
-    substituteInPlace Makefile --replace /man/ /share/man/
-    substituteInPlace Makefile --replace /share/share/ /share/
+    substituteInPlace Makefile --replace-fail /usr/local "$out"
+    substituteInPlace Makefile --replace-fail /man/ /share/man/
+    substituteInPlace Makefile --replace-fail /share/share/ /share/
   '';
 
   meta = with lib; {

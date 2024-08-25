@@ -69,9 +69,9 @@ let
         cd build
         sed -i 's@LIBNCURSES_PATH ?= .*@LIBNCURSES_PATH ?= ${ncurses_static}/lib/libncurses.a@'  Make.llvm.static
         substituteInPlace Make.llvm.static \
-          --replace 'mkdir -p $@ && cd $@ && ar -x ../../$<' 'mkdir -p $@ && cd $@ && ar -x ../source/build/lib/libfaust.a && cd ../source/build/'
+          --replace-fail 'mkdir -p $@ && cd $@ && ar -x ../../$<' 'mkdir -p $@ && cd $@ && ar -x ../source/build/lib/libfaust.a && cd ../source/build/'
         substituteInPlace Make.llvm.static \
-          --replace 'rm -rf $(TMP)' ' '
+          --replace-fail 'rm -rf $(TMP)' ' '
       '';
 
       cmakeFlags = [ "-C../backends/all.cmake" "-C../targets/all.cmake" ];
@@ -87,7 +87,7 @@ let
         # not used as an executable, so patch 'uname' usage directly
         # rather than use makeWrapper.
         substituteInPlace "$out"/bin/faustoptflags \
-          --replace uname "${coreutils}/bin/uname"
+          --replace-fail uname "${coreutils}/bin/uname"
 
         # wrapper for scripts that don't need faust.wrap*
         for script in "$out"/bin/faust2*; do
@@ -146,7 +146,7 @@ let
         # 'faustoptflags' to absolute paths.
         for script in "$out"/bin/*; do
           substituteInPlace "$script" \
-            --replace " error " "echo"
+            --replace-fail " error " "echo"
         done
       '';
 

@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 res/icon.png $out/share/icons/hicolor/128x128/apps/activate-linux.png
     install -Dm444 res/activate-linux.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/activate-linux.desktop \
-      --replace 'Icon=icon' 'Icon=activate-linux'
+      --replace-fail 'Icon=icon' 'Icon=activate-linux'
 
     runHook postInstall
   '';

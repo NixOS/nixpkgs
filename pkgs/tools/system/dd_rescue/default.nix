@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace "\$(DESTDIR)/usr" "$out" \
-      --replace "-o root" "" \
-      --replace "-g root" ""
+      --replace-fail "\$(DESTDIR)/usr" "$out" \
+      --replace-fail "-o root" "" \
+      --replace-fail "-g root" ""
   '';
   makeFlags = [ "LIBDIR=$out" ];
 

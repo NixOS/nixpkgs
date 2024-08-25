@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # Broken substitution is used for `perl/config.pl', which leaves literal
     # `$prefix' in it.
     substituteInPlace "perl/config.pl"       \
-      --replace '${"\$" + "{prefix}"}' "$out"
+      --replace-fail '${"\$" + "{prefix}"}' "$out"
   '';
 
   doCheck = false; # fails a lot of tests

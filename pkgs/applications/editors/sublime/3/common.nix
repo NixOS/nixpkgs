@@ -49,7 +49,7 @@ let
       mkdir Default.sublime-package-fix
       ( cd Default.sublime-package-fix
         unzip -q ../Packages/Default.sublime-package
-        substituteInPlace "exec.py" --replace \
+        substituteInPlace "exec.py" --replace-fail \
           "[\"/bin/bash\"" \
           "[\"$out/sublime_bash\""
         zip -q ../Packages/Default.sublime-package **/*
@@ -119,7 +119,7 @@ in stdenv.mkDerivation (rec {
     makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
   '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
     mkdir -p "$out/share/applications"
-    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
     for directory in ''$${primaryBinary}/Icon/*; do
       size=$(basename $directory)
       mkdir -p "$out/share/icons/hicolor/$size/apps"

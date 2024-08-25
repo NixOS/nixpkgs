@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -e s@/usr@$out@ Makefile
-    substituteInPlace INSTALL.d/prerequisites_imapsync --replace "PAR::Packer" ""
+    substituteInPlace INSTALL.d/prerequisites_imapsync --replace-fail "PAR::Packer" ""
   '';
 
   postInstall = ''

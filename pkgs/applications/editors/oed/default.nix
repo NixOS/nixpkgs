@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace configure --replace "./conftest" "echo"
+    substituteInPlace configure --replace-fail "./conftest" "echo"
   '';
 
   installPhase = ''

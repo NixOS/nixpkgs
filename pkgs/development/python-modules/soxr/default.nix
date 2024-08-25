@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "SYS_LIBSOXR = False" "SYS_LIBSOXR = True"
+      --replace-fail "SYS_LIBSOXR = False" "SYS_LIBSOXR = True"
   '';
 
   nativeBuildInputs = [

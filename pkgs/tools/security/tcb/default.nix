@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Make.defs \
-      --replace "PREFIX = /usr" "PREFIX = $out" \
-      --replace "SBINDIR = /sbin" "SBINDIR = $bin/bin" \
-      --replace "INCLUDEDIR = \$(PREFIX)/include" "INCLUDEDIR = $dev/include"
+      --replace-fail "PREFIX = /usr" "PREFIX = $out" \
+      --replace-fail "SBINDIR = /sbin" "SBINDIR = $bin/bin" \
+      --replace-fail "INCLUDEDIR = \$(PREFIX)/include" "INCLUDEDIR = $dev/include"
 
     # Override default 'CC=gcc'
     makeFlagsArray+=("CC=$CC")

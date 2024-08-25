@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     cp -p public/tracy/*.{h,hpp} $out/include/Tracy/tracy
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace extra/desktop/tracy.desktop \
-      --replace Exec=/usr/bin/tracy Exec=tracy
+      --replace-fail Exec=/usr/bin/tracy Exec=tracy
 
     install -D -m 0644 extra/desktop/application-tracy.xml $out/share/mime/packages/application-tracy.xml
     install -D -m 0644 extra/desktop/tracy.desktop $out/share/applications/tracy.desktop

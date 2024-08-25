@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # however, that would write to a different nixstore path, pass our own sitePackages location
   prePatch = lib.optionalString usePython ''
     substituteInPlace src/CMakeLists.txt \
-      --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
+      --replace-fail 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
   '';
 
   installTargets = [ "doc" "install" ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       mkdir -p $dst
       cp -prv * $dst/
 
-      substituteInPlace $dst/catalog.xml --replace 'uri="' "uri=\"$dst/"
+      substituteInPlace $dst/catalog.xml --replace-fail 'uri="' "uri=\"$dst/"
 
       rm -rf $dst/docs $dst/ChangeLog
 

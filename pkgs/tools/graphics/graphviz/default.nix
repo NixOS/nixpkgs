@@ -85,9 +85,9 @@ stdenv.mkDerivation rec {
 
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/vimdot \
-      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
-      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
-      --replace /usr/bin/vimdot $out/bin/vimdot \
+      --replace-fail '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace-fail '"/usr/bin/vim"' '"$(command -v vim)"' \
+      --replace-fail /usr/bin/vimdot $out/bin/vimdot \
   '';
 
   passthru.tests = {

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-liconv";
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "CC=gcc" "CC?=gcc"
+    substituteInPlace src/Makefile --replace-fail "CC=gcc" "CC?=gcc"
     cd src
   '';
 

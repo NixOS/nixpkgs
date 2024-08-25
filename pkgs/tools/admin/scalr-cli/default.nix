@@ -22,7 +22,7 @@ buildGoModule rec {
 
   preConfigure = ''
     # Set the version.
-    substituteInPlace main.go --replace '"0.0.0"' '"${version}"'
+    substituteInPlace main.go --replace-fail '"0.0.0"' '"${version}"'
   '';
 
   postInstall = ''

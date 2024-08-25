@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'strip' '${stdenv.cc.targetPrefix}strip'
-    substituteInPlace Makefile --replace '`./gitversion`' '${finalAttrs.src.rev}'
+    substituteInPlace Makefile --replace-fail 'strip' '${stdenv.cc.targetPrefix}strip'
+    substituteInPlace Makefile --replace-fail '`./gitversion`' '${finalAttrs.src.rev}'
   '';
 
   nativeBuildInputs = [ groff ] ++ lib.optionals useIcon [ icon-lang ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   installTargets = [ "install-code" "install-tex" "install-elisp" ];
 
   postInstall = ''
-    substituteInPlace "$out/bin/cpif" --replace "PATH=/bin:/usr/bin" ""
+    substituteInPlace "$out/bin/cpif" --replace-fail "PATH=/bin:/usr/bin" ""
 
     for f in $out/bin/no{index,roff,roots,untangle,web} \
              $out/lib/noweb/to{ascii,html,roff,tex} \
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
         # NOTE: substituteInPlace breaks Icon binaries, so make sure the script
         #       uses (n)awk before calling.
         if grep -q nawk "$f"; then
-            substituteInPlace "$f" --replace "nawk" "${nawk}/bin/nawk"
+            substituteInPlace "$f" --replace-fail "nawk" "${nawk}/bin/nawk"
         fi
     done
 

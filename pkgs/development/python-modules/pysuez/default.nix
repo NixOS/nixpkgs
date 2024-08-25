@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace ", 'datetime'" ""
+      --replace-fail ", 'datetime'" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

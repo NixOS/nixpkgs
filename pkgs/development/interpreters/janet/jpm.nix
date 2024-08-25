@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   # jpm bin folder
   postPatch = ''
     substituteInPlace configs/${platformFile} \
-      --replace 'auto-shebang true' 'auto-shebang false' \
-      --replace /usr/local $out
+      --replace-fail 'auto-shebang true' 'auto-shebang false' \
+      --replace-fail /usr/local $out
   '';
 
   dontConfigure = true;

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace lib/0xtools/psnproc.py \
-      --replace /usr/include/asm/unistd_64.h ${glibc.dev}/include/asm/unistd_64.h
+      --replace-fail /usr/include/asm/unistd_64.h ${glibc.dev}/include/asm/unistd_64.h
   '';
 
   buildInputs = [ python3 ];

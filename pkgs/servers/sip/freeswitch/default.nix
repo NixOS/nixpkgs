@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
-      --replace AS=\''${AS} AS=yasm
+      --replace-fail AS=\''${AS} AS=yasm
 
     # Disable advertisement banners
     for f in src/include/cc.h libs/esl/src/include/cc.h; do

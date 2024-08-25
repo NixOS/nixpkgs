@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "find_package(ClangTidy" "#find_package(ClangTidy"
+      --replace-fail "find_package(ClangTidy" "#find_package(ClangTidy"
     substituteInPlace packaging/custom_install.cmake.in \
-      --replace "fixup_bundle_portable(" "#fixup_bundle_portable("
+      --replace-fail "fixup_bundle_portable(" "#fixup_bundle_portable("
   '';
 
   nativeBuildInputs = [

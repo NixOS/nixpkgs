@@ -14,17 +14,17 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs gdisk_test.sh
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile.mac --replace \
+    substituteInPlace Makefile.mac --replace-fail \
       "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
-    substituteInPlace Makefile.mac --replace \
+    substituteInPlace Makefile.mac --replace-fail \
       " -arch i386" ""
-    substituteInPlace Makefile.mac --replace \
+    substituteInPlace Makefile.mac --replace-fail \
       "-arch x86_64" ""
-    substituteInPlace Makefile.mac --replace \
+    substituteInPlace Makefile.mac --replace-fail \
       "-arch arm64" ""
-    substituteInPlace Makefile.mac --replace \
+    substituteInPlace Makefile.mac --replace-fail \
       " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
-    substituteInPlace Makefile.mac --replace \
+    substituteInPlace Makefile.mac --replace-fail \
       "/usr/local/Cellar/ncurses/6.2/lib/libncurses.dylib" "${ncurses.out}/lib/libncurses.dylib"
   '';
 

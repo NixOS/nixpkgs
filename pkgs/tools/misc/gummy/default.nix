@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
   # Setting this through cmake does not seem to work.
   postPatch = ''
     substituteInPlace gummyd/gummyd/api.cpp \
-      --replace "CMAKE_INSTALL_DAEMON_PATH" "\"${placeholder "out"}/libexec/gummyd\""
+      --replace-fail "CMAKE_INSTALL_DAEMON_PATH" "\"${placeholder "out"}/libexec/gummyd\""
   '';
 
   preFixup = ''
     substituteInPlace $out/lib/udev/rules.d/99-gummy.rules \
-      --replace "/bin/chmod" "${coreutils}/bin/chmod"
+      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
 
     ln -s $out/libexec/gummyd $out/bin/gummyd
   '';

@@ -24,10 +24,10 @@ let
 
     postPatch = ''
       substituteInPlace src/client/curl/qcurl.c \
-        --replace "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
+        --replace-fail "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
     '' + lib.optionalString (openalSupport && !stdenv.isDarwin) ''
       substituteInPlace Makefile \
-        --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
+        --replace-fail "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
     '';
 
     buildInputs = [ SDL2 libGL curl ]

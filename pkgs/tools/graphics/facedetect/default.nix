@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace facedetect \
-      --replace /usr/share/opencv "${python3Packages.opencv4}/share/opencv4"
+      --replace-fail /usr/share/opencv "${python3Packages.opencv4}/share/opencv4"
   '';
 
   installPhase = ''

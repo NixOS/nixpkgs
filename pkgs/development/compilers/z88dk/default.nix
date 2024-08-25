@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     # we don't want to build zsdcc since it required network (svn)
     # we test in checkPhase
     substituteInPlace Makefile \
-      --replace 'testsuite bin/z88dk-lib$(EXESUFFIX)' 'bin/z88dk-lib$(EXESUFFIX)'\
-      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='
+      --replace-fail 'testsuite bin/z88dk-lib$(EXESUFFIX)' 'bin/z88dk-lib$(EXESUFFIX)'\
+      --replace-fail 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='
   '';
 
   checkPhase = ''

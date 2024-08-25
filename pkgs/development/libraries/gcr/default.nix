@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-    substituteInPlace meson_post_install.py --replace ".so" "${stdenv.hostPlatform.extensions.sharedLibrary}"
+    substituteInPlace meson_post_install.py --replace-fail ".so" "${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
   postFixup = ''

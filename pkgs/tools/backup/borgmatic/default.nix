@@ -56,9 +56,9 @@ python3Packages.buildPythonApplication rec {
     # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
     substitute sample/systemd/borgmatic.service \
                $out/lib/systemd/system/borgmatic.service \
-               --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
-               --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-               --replace "sleep " "${coreutils}/bin/sleep "
+               --replace-fail /root/.local/bin/borgmatic $out/bin/borgmatic \
+               --replace-fail systemd-inhibit ${systemd}/bin/systemd-inhibit \
+               --replace-fail "sleep " "${coreutils}/bin/sleep "
   '';
 
   passthru.tests = {

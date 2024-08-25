@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace mysqltuner.pl \
-      --replace '/usr/share' "$out/share"
+      --replace-fail '/usr/share' "$out/share"
   '';
 
   buildInputs = [ perl ];

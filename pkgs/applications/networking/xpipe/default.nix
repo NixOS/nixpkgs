@@ -102,8 +102,8 @@ in stdenvNoCC.mkDerivation rec {
     mkdir -p "$out/etc/bash_completion.d"
     ln -s "$out/opt/$pkg/cli/xpipe_completion" "$out/etc/bash_completion.d/$pkg"
 
-    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Exec=" "Exec=$out"
-    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Icon=" "Icon=$out"
+    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace-fail "Exec=" "Exec=$out"
+    substituteInPlace "$out/share/applications/${displayname}.desktop" --replace-fail "Icon=" "Icon=$out"
 
     mv "$out/opt/$pkg/app/bin/xpiped" "$out/opt/$pkg/app/bin/xpiped_raw"
     mv "$out/opt/$pkg/app/lib/app/xpiped.cfg" "$out/opt/$pkg/app/lib/app/xpiped_raw.cfg"

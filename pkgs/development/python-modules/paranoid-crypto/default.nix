@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "protobuf==3.20.*" "protobuf"
+      --replace-fail "protobuf==3.20.*" "protobuf"
   '';
 
   disabledTestPaths = [

@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace 'swapspace.service' \
-      --replace '/usr/local/sbin/' "$out/bin/"
+      --replace-fail '/usr/local/sbin/' "$out/bin/"
     substituteInPlace 'src/support.c' \
-      --replace '/sbin/swapon' '${lib.getBin util-linux}/bin/swapon' \
-      --replace '/sbin/swapoff' '${lib.getBin util-linux}/bin/swapoff'
+      --replace-fail '/sbin/swapon' '${lib.getBin util-linux}/bin/swapon' \
+      --replace-fail '/sbin/swapoff' '${lib.getBin util-linux}/bin/swapoff'
     substituteInPlace 'src/swaps.c' \
-      --replace 'mkswap' '${lib.getBin util-linux}/bin/mkswap'
+      --replace-fail 'mkswap' '${lib.getBin util-linux}/bin/mkswap'
 
     # Don't create empty directory $out/var/lib/swapspace
     substituteInPlace 'Makefile.am' \
-      --replace 'install-data-local:' 'do-not-execute:'
+      --replace-fail 'install-data-local:' 'do-not-execute:'
   '';
 
   postInstall = ''

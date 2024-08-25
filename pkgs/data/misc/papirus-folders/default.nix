@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patchPhase = ''
-    substituteInPlace ./papirus-folders --replace "getent" "${getent}/bin/getent"
+    substituteInPlace ./papirus-folders --replace-fail "getent" "${getent}/bin/getent"
   '';
 
   meta = with lib; {

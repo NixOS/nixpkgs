@@ -31,8 +31,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "numpy==1.19.*" "numpy" \
-      --replace "scipy==1.5.*" "scipy"
+      --replace-fail "numpy==1.19.*" "numpy" \
+      --replace-fail "scipy==1.5.*" "scipy"
   '';
 
   nativeBuildInputs = [ setuptools ];

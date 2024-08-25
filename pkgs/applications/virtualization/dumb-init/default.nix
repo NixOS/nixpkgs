@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    substituteInPlace Makefile --replace "-static" ""
+    substituteInPlace Makefile --replace-fail "-static" ""
   '';
 
   buildInputs = lib.optional (stdenv.hostPlatform.isGnu && stdenv.hostPlatform.isStatic) glibc.static;

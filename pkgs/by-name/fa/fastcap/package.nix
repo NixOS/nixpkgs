@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./doc/Makefile \
-      --replace '/bin/rm' 'rm'
+      --replace-fail '/bin/rm' 'rm'
 
     for f in "doc/*.tex" ; do
       sed -i -E $f \

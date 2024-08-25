@@ -55,10 +55,10 @@ buildPythonPackage rec {
   postPatch = ''
     # We don't want to generate coverage
     substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "--cov=health_check" "" \
-      --replace "--cov-report=term" "" \
-      --replace "--cov-report=xml" ""
+      --replace-fail "pytest-runner" "" \
+      --replace-fail "--cov=health_check" "" \
+      --replace-fail "--cov-report=term" "" \
+      --replace-fail "--cov-report=xml" ""
   '';
 
   pythonImportsCheck = [ "health_check" ];

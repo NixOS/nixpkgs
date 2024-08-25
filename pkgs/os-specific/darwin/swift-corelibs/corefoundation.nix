@@ -56,15 +56,15 @@ stdenv.mkDerivation {
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
-      --replace '#if (TARGET_OS_MAC' '#if (0'
+      --replace-fail '#if (TARGET_OS_MAC' '#if (0'
 
     # Why do we define __GNU__? Is that normal?
     substituteInPlace Base.subproj/CFAsmMacros.h \
-      --replace '#if defined(__GNU__) ||' '#if 0 &&'
+      --replace-fail '#if defined(__GNU__) ||' '#if 0 &&'
 
     # The MIN macro doesn't seem to be defined sensibly for us. Not sure if our stdenv or their bug
     substituteInPlace Base.subproj/CoreFoundation_Prefix.h \
-      --replace '#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX' '#if 1'
+      --replace-fail '#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX' '#if 1'
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [

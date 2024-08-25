@@ -36,7 +36,7 @@ stdenv.mkDerivation (self: {
     targetDir = if stdenv.isDarwin then "Applications" else "bin";
   in ''
     substituteInPlace CloudLogOffline.pro \
-      --replace 'target.path = /opt/$''${TARGET}/bin' "target.path = $out/${targetDir}"
+      --replace-fail 'target.path = /opt/$''${TARGET}/bin' "target.path = $out/${targetDir}"
   '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     for i in GxBoobTube GxValveCaster; do
-      substituteInPlace $i.lv2/Makefile --replace "\$(shell which echo) -e" "echo -e"
+      substituteInPlace $i.lv2/Makefile --replace-fail "\$(shell which echo) -e" "echo -e"
     done
   '';
 

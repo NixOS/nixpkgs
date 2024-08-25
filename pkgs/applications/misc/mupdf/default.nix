@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
             ];
 
   postPatch = ''
-    substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
+    substituteInPlace Makerules --replace-fail "(shell pkg-config" "(shell $PKG_CONFIG"
 
     patchShebangs scripts/mupdfwrap.py
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
     # fix libclang unnamed struct format
     for wrapper in ./scripts/wrap/{cpp,state}.py; do
-      substituteInPlace "$wrapper" --replace 'struct (unnamed' '(unnamed struct'
+      substituteInPlace "$wrapper" --replace-fail 'struct (unnamed' '(unnamed struct'
     done
   '';
 

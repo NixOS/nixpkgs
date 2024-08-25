@@ -15,7 +15,7 @@ buildNpmPackage rec {
 
   # This is to stop tests from being ran, as some of them fail due to trying to query remote repositories
   postPatch = ''
-    substituteInPlace package.json --replace \
+    substituteInPlace package.json --replace-fail \
       '"_mocha"' '""'
   '';
 

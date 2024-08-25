@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace /usr $out
+    substituteInPlace Makefile --replace-fail /usr $out
     sed -i -e '/chmod u+s/d' Makefile
   '';
 

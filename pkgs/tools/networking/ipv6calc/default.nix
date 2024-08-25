@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs *.sh */*.sh
     for i in {,databases/}lib/Makefile.in; do
-      substituteInPlace $i --replace "/sbin/ldconfig" "ldconfig"
+      substituteInPlace $i --replace-fail "/sbin/ldconfig" "ldconfig"
     done
   '';
 

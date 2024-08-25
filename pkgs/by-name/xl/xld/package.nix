@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CLI/xld \
-    --replace "/Applications/XLD.app" "$out/Applications/XLD.app"
+    --replace-fail "/Applications/XLD.app" "$out/Applications/XLD.app"
   '';
 
   passthru.updateScript = lib.getExe (writeShellApplication {

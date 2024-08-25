@@ -22,7 +22,7 @@ buildGoModule rec {
   postPatch = ''
     V={newgidmap,newgidmap} \
       substituteInPlace ./internal/unshare/unshare.c \
-        --replace "/usr/bin/$V" "${wrapperDir}/$V"
+        --replace-fail "/usr/bin/$V" "${wrapperDir}/$V"
   '';
 
   nativeBuildInputs = [

@@ -27,7 +27,7 @@ appimageTools.wrapType2 rec {
        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
 
     substituteInPlace $out/share/applications/ledger-live-desktop.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

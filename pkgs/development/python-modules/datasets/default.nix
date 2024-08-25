@@ -36,7 +36,7 @@ buildPythonPackage rec {
   # remove pyarrow<14.0.1 vulnerability fix
   postPatch = ''
     substituteInPlace src/datasets/features/features.py \
-      --replace "import pyarrow_hotfix" "#import pyarrow_hotfix"
+      --replace-fail "import pyarrow_hotfix" "#import pyarrow_hotfix"
   '';
 
   propagatedBuildInputs = [

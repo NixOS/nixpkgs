@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   ** in $CWD which doesn't work. */
   postPatch = ''
     substituteInPlace ./src/syntax.ml \
-      --replace \"default\" \"$out/libexec/default\"
+      --replace-fail \"default\" \"$out/libexec/default\"
   '';
 
   strictDeps = true;

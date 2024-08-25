@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
   preBuild = ''
-    substituteInPlace Cargo.toml --replace "features = [\"bundled\"]" "features = []"
+    substituteInPlace Cargo.toml --replace-fail "features = [\"bundled\"]" "features = []"
     cargo update --offline -p rusqlite
   '';
 

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "typesystem==0.3.1" "typesystem"
+      --replace-fail "typesystem==0.3.1" "typesystem"
   '';
 
   # Tests require databases

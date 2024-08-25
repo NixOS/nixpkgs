@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/bin "$out/bin" \
-      --replace /usr/share "$out/share"
+      --replace-fail /usr/bin "$out/bin" \
+      --replace-fail /usr/share "$out/share"
   '';
 
   preInstall = ''

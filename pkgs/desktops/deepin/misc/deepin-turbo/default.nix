@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ dtkwidget ];
 
   postPatch = ''
-    substituteInPlace src/{booster-dtkwidget/CMakeLists.txt,booster-desktop/{CMakeLists.txt,desktop.conf},booster-generic/CMakeLists.txt} --replace "/usr" "$out"
+    substituteInPlace src/{booster-dtkwidget/CMakeLists.txt,booster-desktop/{CMakeLists.txt,desktop.conf},booster-generic/CMakeLists.txt} --replace-fail "/usr" "$out"
   '';
 
   meta = with lib; {

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   postPhase = ''
-    substituteInPlace src/CMakeLists.txt --replace svnheader svnversion
+    substituteInPlace src/CMakeLists.txt --replace-fail svnheader svnversion
   '';
 
   nativeBuildInputs = [ cmake makedepend perl pkg-config qttools wrapQtAppsHook ];

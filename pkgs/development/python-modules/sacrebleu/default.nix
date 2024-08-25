@@ -31,7 +31,7 @@ buildPythonPackage {
 
   # postPatch = ''
   #   substituteInPlace setup.py \
-  #     --replace "portalocker==" "portalocker>="
+  #     --replace-fail "portalocker==" "portalocker>="
   # '';
 
   propagatedBuildInputs = [

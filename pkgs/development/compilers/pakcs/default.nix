@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
                 testsuite/test.sh            \
                 scripts/cleancurry.sh        \
                 scripts/compile-all-libs.sh; do
-        substituteInPlace $file --replace "/bin/rm" "rm"
+        substituteInPlace $file --replace-fail "/bin/rm" "rm"
     done
   '' ;
 

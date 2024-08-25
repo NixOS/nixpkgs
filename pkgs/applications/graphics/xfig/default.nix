@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/main.c --replace '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
-    substituteInPlace xfig.desktop --replace "/usr/bin/" "$out/bin/"
+    substituteInPlace src/main.c --replace-fail '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
+    substituteInPlace xfig.desktop --replace-fail "/usr/bin/" "$out/bin/"
   '';
 
   postInstall = ''

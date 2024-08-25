@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/util.cc \
-      --replace "notify-send" "${libnotify}/bin/notify-send"
+      --replace-fail "notify-send" "${libnotify}/bin/notify-send"
   '';
 
   buildInputs = [

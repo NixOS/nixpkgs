@@ -15,8 +15,8 @@ mkDerivation {
     ''
     + lib.optionalString stdenv.isDarwin ''
       substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
-        --replace '-Wl,--fatal-warnings' "" \
-        --replace '-Wl,--warn-shared-textrel' ""
+        --replace-fail '-Wl,--fatal-warnings' "" \
+        --replace-fail '-Wl,--warn-shared-textrel' ""
     '';
   postInstall = ''
     make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install

@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "matplotlib~=3.0" "matplotlib"
+      --replace-fail "matplotlib~=3.0" "matplotlib"
   '';
 
   propagatedBuildInputs =

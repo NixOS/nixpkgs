@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     for F in tools/discoverer_acceptance_tests.c tools/discoverer.c; do
-      substituteInPlace "$F" --replace "/usr/bin/nm" "nm"
+      substituteInPlace "$F" --replace-fail "/usr/bin/nm" "nm"
     done
   '';
 

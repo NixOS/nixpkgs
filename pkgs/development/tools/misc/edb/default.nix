@@ -19,7 +19,7 @@ mkDerivation rec {
 
   postPatch = ''
     # Remove CMAKE_INSTALL_PREFIX from DEFAULT_PLUGIN_PATH otherwise the nix store path will appear twice.
-    substituteInPlace ./src/CMakeLists.txt --replace \
+    substituteInPlace ./src/CMakeLists.txt --replace-fail \
         '-DDEFAULT_PLUGIN_PATH=\"''${CMAKE_INSTALL_PREFIX}/''${CMAKE_INSTALL_LIBDIR}/edb\"' \
         '-DDEFAULT_PLUGIN_PATH=\"''${CMAKE_INSTALL_LIBDIR}/edb\"'
 
@@ -29,7 +29,7 @@ mkDerivation rec {
     mkdir -p src/qhexview/.git lib/gdtoa-desktop/.git
 
     # Change default optional terminal program path to one that is more likely to work on NixOS.
-    substituteInPlace ./src/Configuration.cpp --replace "/usr/bin/xterm" "xterm";
+    substituteInPlace ./src/Configuration.cpp --replace-fail "/usr/bin/xterm" "xterm";
   '';
 
   meta = with lib; {

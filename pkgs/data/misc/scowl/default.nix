@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace scowl/src/Makefile \
-        --replace g++ c++
+        --replace-fail g++ c++
   '';
 
   nativeBuildInputs = [ unzip zip perl aspell dos2unix ];

@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace subprojects/funchook-helper/subprojects/funchook/CMakeLists.txt \
-      --replace "GIT_REPOSITORY https://github.com/gdabah/distorm.git" "SOURCE_DIR ${distorm-src}"
+      --replace-fail "GIT_REPOSITORY https://github.com/gdabah/distorm.git" "SOURCE_DIR ${distorm-src}"
   '';
 
   dontUseCmakeConfigure = true;

@@ -75,19 +75,19 @@ stdenv.mkDerivation rec {
     PAPER_CFG=opt/brother/Printers/BrGenML1/cupswrapper/paperconfigml1
 
     substituteInPlace $WRAPPER \
-      --replace "basedir =~" "basedir = \"${brgenml1lpr}/opt/brother/Printers/BrGenML1\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"BrGenML1\"; #" \
-      --replace "\$DEBUG=0;" "\$DEBUG=${debugLvl};"
+      --replace-fail "basedir =~" "basedir = \"${brgenml1lpr}/opt/brother/Printers/BrGenML1\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"BrGenML1\"; #" \
+      --replace-fail "\$DEBUG=0;" "\$DEBUG=${debugLvl};"
 
     # Fixing issue #1 and #2.
     substituteInPlace $WRAPPER \
-      --replace "\`cp " "\`cp -p " \
-      --replace "\$TEMPRC\`" "\$TEMPRC; chmod a+rw \$TEMPRC\`" \
-      --replace "\`mv " "\`cp -p "
+      --replace-fail "\`cp " "\`cp -p " \
+      --replace-fail "\$TEMPRC\`" "\$TEMPRC; chmod a+rw \$TEMPRC\`" \
+      --replace-fail "\`mv " "\`cp -p "
 
     # This config script make this assumption that the *.ppd are found in a global location `/etc/cups/ppd`.
     substituteInPlace $PAPER_CFG \
-      --replace "/etc/cups/ppd" "$out/share/cups/model"
+      --replace-fail "/etc/cups/ppd" "$out/share/cups/model"
   '';
 
 

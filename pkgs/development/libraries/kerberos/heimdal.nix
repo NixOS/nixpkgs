@@ -121,11 +121,11 @@ stdenv.mkDerivation {
     runHook prePatch
 
     substituteInPlace tests/ldap/slapd-init.in \
-      --replace 'SCHEMA_PATHS="' 'SCHEMA_PATHS="${openldap}/etc/schema '
+      --replace-fail 'SCHEMA_PATHS="' 'SCHEMA_PATHS="${openldap}/etc/schema '
     substituteInPlace tests/ldap/check-ldap.in \
-      --replace 'PATH=' 'PATH=${openldap}/libexec:${openldap}/bin:'
+      --replace-fail 'PATH=' 'PATH=${openldap}/libexec:${openldap}/bin:'
     substituteInPlace tests/ldap/slapd.conf \
-      --replace 'database	bdb' 'database mdb'
+      --replace-fail 'database	bdb' 'database mdb'
 
     runHook postPatch
   '';

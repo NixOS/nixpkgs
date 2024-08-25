@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # upstream meson.build currently doesn't have an option to change the default polkit dir
     substituteInPlace data/meson.build \
-      --replace 'polkit_policy_directory' "'$out/share/polkit-1/actions'"
+      --replace-fail 'polkit_policy_directory' "'$out/share/polkit-1/actions'"
   '';
 
   buildInputs = [

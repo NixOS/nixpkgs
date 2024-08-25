@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace '/usr/local/include/osxfuse/fuse' '${fuse}/include/fuse'
+      --replace-fail '/usr/local/include/osxfuse/fuse' '${fuse}/include/fuse'
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   preConfigure = lib.optionalString (!stdenv.isDarwin) ''
     mkdir -p $out/sbin
     cp -a mount.unionfs $out/sbin/mount.unionfs-fuse
-    substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse}/sbin/mount.fuse
-    substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
+    substituteInPlace $out/sbin/mount.unionfs-fuse --replace-fail mount.fuse ${fuse}/sbin/mount.fuse
+    substituteInPlace $out/sbin/mount.unionfs-fuse --replace-fail unionfs $out/bin/unionfs
   '';
 
   meta = with lib; {

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace INSTALL.im \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
     sed -i "6i #include <cstdint>" logbuf/logbuf
     patchShebangs .
   '';

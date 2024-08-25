@@ -49,7 +49,7 @@ let
     postPatch = ''
       patchShebangs .
       # another shebang was hidden in a here document text
-      substituteInPlace ./configure --replace "#! /bin/sh" "#!${bash}/bin/sh"
+      substituteInPlace ./configure --replace-fail "#! /bin/sh" "#!${bash}/bin/sh"
     '';
 
     configurePlatforms = [];

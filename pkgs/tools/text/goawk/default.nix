@@ -17,13 +17,13 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace goawk_test.go \
-      --replace "TestCommandLine" "SkipCommandLine" \
-      --replace "TestDevStdout" "SkipDevStdout" \
-      --replace "TestFILENAME" "SkipFILENAME" \
-      --replace "TestWildcards" "SkipWildcards"
+      --replace-fail "TestCommandLine" "SkipCommandLine" \
+      --replace-fail "TestDevStdout" "SkipDevStdout" \
+      --replace-fail "TestFILENAME" "SkipFILENAME" \
+      --replace-fail "TestWildcards" "SkipWildcards"
 
     substituteInPlace interp/interp_test.go \
-      --replace "TestShellCommand" "SkipShellCommand"
+      --replace-fail "TestShellCommand" "SkipShellCommand"
   '';
 
   checkFlags = [

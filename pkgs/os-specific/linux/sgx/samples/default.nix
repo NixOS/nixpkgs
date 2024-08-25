@@ -106,7 +106,7 @@ in
   sealUnseal = (buildSample "SealUnseal").overrideAttrs (old: {
     prePatch = ''
       substituteInPlace App/App.cpp \
-        --replace '"sealed_data_blob.txt"' '"/tmp/sealed_data_blob.txt"'
+        --replace-fail '"sealed_data_blob.txt"' '"/tmp/sealed_data_blob.txt"'
     '';
   });
   switchless = buildSample "Switchless";

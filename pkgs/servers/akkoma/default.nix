@@ -182,7 +182,7 @@ beamPackages.mixRelease rec {
 
           beamDeps = with final; [ credo ex_doc dialyxir temple ];
           patchPhase = ''
-            substituteInPlace mix.exs --replace ":logger" ":logger, :public_key"
+            substituteInPlace mix.exs --replace-fail ":logger" ":logger, :public_key"
             ${mimeTypePatchPhase}
           '';
         };

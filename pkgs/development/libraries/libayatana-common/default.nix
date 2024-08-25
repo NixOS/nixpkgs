@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Queries via pkg_get_variable, can't override prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'set(SYSTEMD_USER_UNIT_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/user)'
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'set(SYSTEMD_USER_UNIT_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/user)'
   '';
 
   strictDeps = true;

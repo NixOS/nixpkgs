@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sed -i s,/usr,$out, Makefile
 
     # Fix #171609
-    substituteInPlace fsync.c --replace /bin/mount ${util-linux}/bin/mount
+    substituteInPlace fsync.c --replace-fail /bin/mount ${util-linux}/bin/mount
   '';
 
   preInstall = "mkdir -p $out/sbin";

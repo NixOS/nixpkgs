@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace $makefile \
-      --replace "gcc" "$CC"
+      --replace-fail "gcc" "$CC"
   '';
 
   makefile = "Makefile.unx";

@@ -103,7 +103,7 @@ in stdenv.mkDerivation rec {
     done
 
     substituteInPlace $out/share/applications/renoise.desktop \
-      --replace Exec=renoise Exec=$out/bin/renoise
+      --replace-fail Exec=renoise Exec=$out/bin/renoise
   '';
 
   passthru.updateScript = writeScript "update-renoise" ''

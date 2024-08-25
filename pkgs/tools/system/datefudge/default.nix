@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-     --replace "/usr" "/" \
-     --replace "-o root -g root" ""
+     --replace-fail "/usr" "/" \
+     --replace-fail "-o root -g root" ""
     substituteInPlace datefudge.sh \
-     --replace "@LIBDIR@" "$out/lib/"
+     --replace-fail "@LIBDIR@" "$out/lib/"
   '';
 
   installFlags = [ "DESTDIR=$(out)" ];

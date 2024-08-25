@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     # Due to https://github.com/NixOS/nixpkgs/issues/8567 we cannot rely on
     # having the .git directory present, so directly provide the version
-    substituteInPlace src/Makefile.am --replace '$$vers' 'stellar-core ${finalAttrs.version}';
+    substituteInPlace src/Makefile.am --replace-fail '$$vers' 'stellar-core ${finalAttrs.version}';
 
     # Everything needs to be staged in git because the build uses
     # `git ls-files` to search for source files to compile.

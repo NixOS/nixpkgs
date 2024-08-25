@@ -44,12 +44,12 @@ qt5.mkDerivation rec {
   ];
 
   postPatch = ''
-     substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
+     substituteInPlace src/onmainwindow.cpp --replace-fail "/usr/sbin/sshd" "${openssh}/bin/sshd"
      substituteInPlace Makefile \
-       --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
-       --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
-       --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
-       --replace "-o root -g root" ""
+       --replace-fail "SHELL=/bin/bash" "SHELL=$SHELL" \
+       --replace-fail "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
+       --replace-fail "qmake-qt4" "${qtbase.dev}/bin/qmake" \
+       --replace-fail "-o root -g root" ""
   '';
 
   makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];

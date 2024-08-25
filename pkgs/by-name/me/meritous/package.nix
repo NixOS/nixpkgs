@@ -13,11 +13,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace Makefile \
-      --replace "prefix=/usr/local" "prefix=$out" \
-      --replace sdl-config ${lib.getDev SDL}/bin/sdl-config
+      --replace-fail "prefix=/usr/local" "prefix=$out" \
+      --replace-fail sdl-config ${lib.getDev SDL}/bin/sdl-config
 
     substituteInPlace src/audio.c \
-      --replace "filename[64]" "filename[256]"
+      --replace-fail "filename[64]" "filename[256]"
   '';
 
   buildInputs = [ SDL SDL_image SDL_mixer zlib ];

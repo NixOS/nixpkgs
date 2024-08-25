@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
     # NOTE: As of gitfs 0.5.2, The pygit2 release that upstream uses is a major
     # version behind the one packaged in nixpkgs.
-    substituteInPlace gitfs/mounter.py --replace \
+    substituteInPlace gitfs/mounter.py --replace-fail \
       'from pygit2.remote import RemoteCallbacks' \
       'from pygit2 import RemoteCallbacks'
   '';

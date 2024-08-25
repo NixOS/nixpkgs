@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
   postPatch = let
       # This evaluates to a string containing:
       #
-      #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
-      #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'
+      #     substituteInPlace tests/shar-2 --replace-fail '${SHAR}' '${SHAR} -s submitter'
+      #     substituteInPlace tests/shar-2 --replace-fail '${SHAR}' '${SHAR} -s submitter'
       shar_sub = "\${SHAR}";
     in ''
-      substituteInPlace tests/shar-1 --replace '${shar_sub}' '${shar_sub} -s submitter'
-      substituteInPlace tests/shar-2 --replace '${shar_sub}' '${shar_sub} -s submitter'
+      substituteInPlace tests/shar-1 --replace-fail '${shar_sub}' '${shar_sub} -s submitter'
+      substituteInPlace tests/shar-2 --replace-fail '${shar_sub}' '${shar_sub} -s submitter'
 
-      substituteInPlace intl/Makefile.in --replace "AR = ar" ""
+      substituteInPlace intl/Makefile.in --replace-fail "AR = ar" ""
     '';
 
   # Workaround to fix the static build on macOS.

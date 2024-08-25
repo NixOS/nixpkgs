@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # We don't want to run the coverage.
-    substituteInPlace tox.ini --replace "--cov=git_pw --cov-report" ""
+    substituteInPlace tox.ini --replace-fail "--cov=git_pw --cov-report" ""
   '';
 
   nativeBuildInputs = with python3.pkgs; [

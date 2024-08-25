@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace -Werror -Wno-error \
-      --replace '$(DESTDIR)/usr/include' '$(DESTDIR)/include'
+      --replace-fail -Werror -Wno-error \
+      --replace-fail '$(DESTDIR)/usr/include' '$(DESTDIR)/include'
   '';
 
   nativeBuildInputs = [ pkg-config ];

@@ -24,7 +24,7 @@ let
       buildFlags = [ "localstatedir=/var/spool" ];
 
       postPatch = ''
-        substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
+        substituteInPlace bin/varnishtest/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
       '';
 
       postInstall = ''

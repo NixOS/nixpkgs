@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace linux/brogue-multiuser.sh \
-      --replace broguedir= "broguedir=$out/opt/brogue-ce #"
+      --replace-fail broguedir= "broguedir=$out/opt/brogue-ce #"
   '';
 
   nativeBuildInputs = [

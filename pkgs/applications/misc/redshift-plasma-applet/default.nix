@@ -26,13 +26,13 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace package/contents/ui/main.qml \
-      --replace "redshiftCommand: 'redshift'" \
+      --replace-fail "redshiftCommand: 'redshift'" \
                 "redshiftCommand: '${redshift}/bin/redshift'" \
-      --replace "redshiftOneTimeCommand: 'redshift -O " \
+      --replace-fail "redshiftOneTimeCommand: 'redshift -O " \
                 "redshiftOneTimeCommand: '${redshift}/bin/redshift -O "
 
     substituteInPlace package/contents/ui/config/ConfigAdvanced.qml \
-      --replace "'redshift -V'" \
+      --replace-fail "'redshift -V'" \
                 "'${redshift}/bin/redshift -V'"
   '';
 

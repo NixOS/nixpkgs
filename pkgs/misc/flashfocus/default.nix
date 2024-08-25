@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace bin/nc_flash_window \
-      --replace "nc" "${lib.getExe netcat-openbsd}"
+      --replace-fail "nc" "${lib.getExe netcat-openbsd}"
   '';
 
   nativeBuildInputs = with python3Packages; [

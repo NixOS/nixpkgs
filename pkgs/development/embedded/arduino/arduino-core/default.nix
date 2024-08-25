@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     # Deliberately break build.xml's download statement in order to cause
     # an error if anything needed is missing from download.nix.
     substituteInPlace build/build.xml \
-      --replace 'ignoreerrors="true"' 'ignoreerrors="false"'
+      --replace-fail 'ignoreerrors="true"' 'ignoreerrors="false"'
 
     cd ./arduino-core && ant
     cd ../build && ant
@@ -165,16 +165,16 @@ stdenv.mkDerivation rec {
     ${lib.optionalString withGui ''
       mkdir -p $out/bin
       substituteInPlace $out/share/arduino/arduino \
-        --replace "JAVA=java" "JAVA=$javaPath/java" \
-        --replace "LD_LIBRARY_PATH=" "LD_LIBRARY_PATH=$dynamicLibraryPath:"
+        --replace-fail "JAVA=java" "JAVA=$javaPath/java" \
+        --replace-fail "LD_LIBRARY_PATH=" "LD_LIBRARY_PATH=$dynamicLibraryPath:"
       ln -sr "$out/share/arduino/arduino" "$out/bin/arduino"
 
       cp -r build/shared/icons $out/share/arduino
       mkdir -p $out/share/applications
       cp build/linux/dist/desktop.template $out/share/applications/arduino.desktop
       substituteInPlace $out/share/applications/arduino.desktop \
-        --replace '<BINARY_LOCATION>' "$out/bin/arduino" \
-        --replace '<ICON_NAME>' "$out/share/arduino/icons/128x128/apps/arduino.png"
+        --replace-fail '<BINARY_LOCATION>' "$out/bin/arduino" \
+        --replace-fail '<ICON_NAME>' "$out/share/arduino/icons/128x128/apps/arduino.png"
     ''}
 
     ${lib.optionalString withTeensyduino ''

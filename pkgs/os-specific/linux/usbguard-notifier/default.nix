@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace configure.ac \
-      --replace 'AC_MSG_FAILURE([Cannot detect the systemd system unit dir])' \
+      --replace-fail 'AC_MSG_FAILURE([Cannot detect the systemd system unit dir])' \
         'systemd_unit_dir="$out/lib/systemd/user"'
   '';
 

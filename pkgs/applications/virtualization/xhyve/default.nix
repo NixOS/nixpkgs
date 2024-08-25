@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # Don't use git to determine version
   prePatch = ''
     substituteInPlace Makefile \
-      --replace 'shell git describe --abbrev=6 --dirty --always --tags' "$version"
+      --replace-fail 'shell git describe --abbrev=6 --dirty --always --tags' "$version"
   '';
 
 

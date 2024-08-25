@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     for f in coreconf/config.gypi build.sh; do
-      substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
+      substituteInPlace "$f" --replace-fail "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
     done
 
-    substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
+    substituteInPlace coreconf/config.gypi --replace-fail "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-    substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+    substituteInPlace coreconf/Darwin.mk --replace-fail '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+    substituteInPlace coreconf/config.gypi --replace-fail "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
   '';
 
   outputs = [ "out" "dev" "tools" ];

@@ -77,7 +77,7 @@ in python.pkgs.buildPythonApplication rec {
   postPatch = ''
     # We disable the Darwin specific things because it relies on pyobjc, which we don't have.
     substituteInPlace setup.py \
-      --replace "':sys_platform == \"darwin\"'" "'darwin'"
+      --replace-fail "':sys_platform == \"darwin\"'" "'darwin'"
   '';
 
   checkPhase = ''

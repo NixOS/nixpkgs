@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # https://github.com/dirkvdb/ffmpegthumbnailer/issues/215
   postPatch = ''
     substituteInPlace libffmpegthumbnailer.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   meta = with lib; {

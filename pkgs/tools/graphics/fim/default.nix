@@ -20,7 +20,7 @@ gcc9Stdenv.mkDerivation rec {
 
   postPatch = ''
    substituteInPlace doc/vim2html.pl \
-     --replace /usr/bin/perl ${perl}/bin/perl
+     --replace-fail /usr/bin/perl ${perl}/bin/perl
   '';
 
   nativeBuildInputs = [ autoconf automake pkg-config ];

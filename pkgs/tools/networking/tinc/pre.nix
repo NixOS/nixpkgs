@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   # needed so the build doesn't need to run git to find out the version.
   prePatch = ''
-    substituteInPlace configure.ac --replace UNKNOWN ${version}
+    substituteInPlace configure.ac --replace-fail UNKNOWN ${version}
     echo "${version}" > configure-version
     echo "https://tinc-vpn.org/git/browse?p=tinc;a=log;h=refs/tags/release-${version}" > ChangeLog
     sed -i '/AC_INIT/s/m4_esyscmd_s.*/${version})/' configure.ac

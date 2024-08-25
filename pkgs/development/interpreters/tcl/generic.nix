@@ -18,10 +18,10 @@ let
 
       postPatch = ''
         substituteInPlace library/clock.tcl \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
-          --replace "/usr/share/lib/zoneinfo" "" \
-          --replace "/usr/lib/zoneinfo" "" \
-          --replace "/usr/local/etc/zoneinfo" ""
+          --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+          --replace-fail "/usr/share/lib/zoneinfo" "" \
+          --replace-fail "/usr/lib/zoneinfo" "" \
+          --replace-fail "/usr/local/etc/zoneinfo" ""
       '';
 
       preConfigure = ''

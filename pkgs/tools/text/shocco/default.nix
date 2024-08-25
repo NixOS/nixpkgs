@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # Don't change $PATH
-    substituteInPlace configure --replace PATH= NIRVANA=
+    substituteInPlace configure --replace-fail PATH= NIRVANA=
   '';
 
   buildInputs = [ perlPackages.TextMarkdown python3.pkgs.pygments ];

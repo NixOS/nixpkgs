@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   #Fix, see #28255
   postPatch = ''
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       'set -o posix' \
       'set +o posix'
   '';

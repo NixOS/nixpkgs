@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./test-driver
 
     # Fix the test script generator
-    substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace Makefile.am --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
   outputs = [ "out" "doc" "man" "dev" ];

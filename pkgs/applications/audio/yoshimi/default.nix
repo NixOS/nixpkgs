@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   postPatch = ''
-    substituteInPlace Misc/Config.cpp --replace /usr $out
-    substituteInPlace Misc/Bank.cpp --replace /usr $out
+    substituteInPlace Misc/Config.cpp --replace-fail /usr $out
+    substituteInPlace Misc/Bank.cpp --replace-fail /usr $out
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

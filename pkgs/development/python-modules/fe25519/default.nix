@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--doctest-modules --ignore=docs --cov=fe25519 --cov-report term-missing" ""
+      --replace-fail "--doctest-modules --ignore=docs --cov=fe25519 --cov-report term-missing" ""
   '';
 
   pythonImportsCheck = [ "fe25519" ];

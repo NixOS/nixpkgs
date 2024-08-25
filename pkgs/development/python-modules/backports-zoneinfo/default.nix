@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   # Make sure test data update patch applies
   prePatch = ''
-    substituteInPlace tests/data/zoneinfo_data.json --replace \"2020a\" \"2021a\"
+    substituteInPlace tests/data/zoneinfo_data.json --replace-fail \"2020a\" \"2021a\"
   '';
 
   patches = [

@@ -21,47 +21,47 @@ mkDerivation {
   postPatch =
     ''
       substituteInPlace $BSDSRCDIR/share/mk/bsd.doc.mk \
-        --replace '-o ''${DOCOWN}' "" \
-        --replace '-g ''${DOCGRP}' ""
+        --replace-fail '-o ''${DOCOWN}' "" \
+        --replace-fail '-g ''${DOCGRP}' ""
       for mk in $BSDSRCDIR/share/mk/bsd.inc.mk $BSDSRCDIR/share/mk/bsd.kinc.mk; do
         substituteInPlace $mk \
-          --replace '-o ''${BINOWN}' "" \
-          --replace '-g ''${BINGRP}' ""
+          --replace-fail '-o ''${BINOWN}' "" \
+          --replace-fail '-g ''${BINGRP}' ""
       done
       substituteInPlace $BSDSRCDIR/share/mk/bsd.kmodule.mk \
-        --replace '-o ''${KMODULEOWN}' "" \
-        --replace '-g ''${KMODULEGRP}' ""
+        --replace-fail '-o ''${KMODULEOWN}' "" \
+        --replace-fail '-g ''${KMODULEGRP}' ""
       substituteInPlace $BSDSRCDIR/share/mk/bsd.lib.mk \
-        --replace '-o ''${LIBOWN}' "" \
-        --replace '-g ''${LIBGRP}' "" \
-        --replace '-o ''${DEBUGOWN}' "" \
-        --replace '-g ''${DEBUGGRP}' ""
+        --replace-fail '-o ''${LIBOWN}' "" \
+        --replace-fail '-g ''${LIBGRP}' "" \
+        --replace-fail '-o ''${DEBUGOWN}' "" \
+        --replace-fail '-g ''${DEBUGGRP}' ""
       substituteInPlace $BSDSRCDIR/share/mk/bsd.lua.mk \
-        --replace '-o ''${LIBOWN}' "" \
-        --replace '-g ''${LIBGRP}' ""
+        --replace-fail '-o ''${LIBOWN}' "" \
+        --replace-fail '-g ''${LIBGRP}' ""
       substituteInPlace $BSDSRCDIR/share/mk/bsd.man.mk \
-        --replace '-o ''${MANOWN}' "" \
-        --replace '-g ''${MANGRP}' ""
+        --replace-fail '-o ''${MANOWN}' "" \
+        --replace-fail '-g ''${MANGRP}' ""
       substituteInPlace $BSDSRCDIR/share/mk/bsd.nls.mk \
-        --replace '-o ''${NLSOWN}' "" \
-        --replace '-g ''${NLSGRP}' ""
+        --replace-fail '-o ''${NLSOWN}' "" \
+        --replace-fail '-g ''${NLSGRP}' ""
       substituteInPlace $BSDSRCDIR/share/mk/bsd.prog.mk \
-        --replace '-o ''${BINOWN}' "" \
-        --replace '-g ''${BINGRP}' "" \
-        --replace '-o ''${RUMPBINOWN}' "" \
-        --replace '-g ''${RUMPBINGRP}' "" \
-        --replace '-o ''${DEBUGOWN}' "" \
-        --replace '-g ''${DEBUGGRP}' ""
+        --replace-fail '-o ''${BINOWN}' "" \
+        --replace-fail '-g ''${BINGRP}' "" \
+        --replace-fail '-o ''${RUMPBINOWN}' "" \
+        --replace-fail '-g ''${RUMPBINGRP}' "" \
+        --replace-fail '-o ''${DEBUGOWN}' "" \
+        --replace-fail '-g ''${DEBUGGRP}' ""
 
        substituteInPlace $BSDSRCDIR/share/mk/bsd.lib.mk \
-         --replace '_INSTRANLIB=''${empty(PRESERVE):?-a "''${RANLIB} -t":}' '_INSTRANLIB='
+         --replace-fail '_INSTRANLIB=''${empty(PRESERVE):?-a "''${RANLIB} -t":}' '_INSTRANLIB='
        substituteInPlace $BSDSRCDIR/share/mk/bsd.kinc.mk \
-         --replace /bin/rm rm
+         --replace-fail /bin/rm rm
     ''
     + lib.optionalString stdenv.targetPlatform.isDarwin ''
       substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
-        --replace '-Wl,--fatal-warnings' "" \
-        --replace '-Wl,--warn-shared-textrel' ""
+        --replace-fail '-Wl,--fatal-warnings' "" \
+        --replace-fail '-Wl,--warn-shared-textrel' ""
     '';
 
   installPhase = ''

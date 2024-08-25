@@ -75,7 +75,7 @@ let
 
     postPatch = ''
       substituteInPlace scripts/msmtpq/msmtpq \
-        --replace @journal@ ${if withSystemd then "Y" else "N"}
+        --replace-fail @journal@ ${if withSystemd then "Y" else "N"}
     '';
 
     dontConfigure = true;

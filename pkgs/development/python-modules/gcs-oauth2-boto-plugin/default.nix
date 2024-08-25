@@ -31,8 +31,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "rsa==4.7.2" "rsa" \
-      --replace "version='2.7'" "version='${version}'"
+      --replace-fail "rsa==4.7.2" "rsa" \
+      --replace-fail "version='2.7'" "version='${version}'"
   '';
 
   propagatedBuildInputs = [

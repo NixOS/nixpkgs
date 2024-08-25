@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for a in test/Makefile.am test/format_test/format_checks.sh.in ; do
       substituteInPlace $a \
-        --replace /bin/bash ${runtimeShell}
+        --replace-fail /bin/bash ${runtimeShell}
     done
   '';
 

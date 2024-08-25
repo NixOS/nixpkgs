@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ blas gfortran.cc.lib lapack ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace /usr/local/bin $out/bin
+    substituteInPlace Makefile --replace-fail /usr/local/bin $out/bin
   '';
 
   preInstall = ''

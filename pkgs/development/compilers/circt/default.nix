@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     find ./test -name '*.mlir' -exec sed -i 's|/usr/bin/env|${coreutils}/bin/env|g' {} \;
     # circt uses git to check its version, but when cloned on nix it can't access git.
     # So this hard codes the version.
-    substituteInPlace cmake/modules/GenVersionFile.cmake --replace "unknown git version" "${src.rev}"
+    substituteInPlace cmake/modules/GenVersionFile.cmake --replace-fail "unknown git version" "${src.rev}"
   '';
 
   doCheck = true;

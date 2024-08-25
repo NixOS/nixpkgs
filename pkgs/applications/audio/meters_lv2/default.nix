@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    substituteInPlace Makefile --replace "-msse -msse2 -mfpmath=sse" ""
+    substituteInPlace Makefile --replace-fail "-msse -msse2 -mfpmath=sse" ""
   ''; # remove x86-specific flags
 
   meter_VERSION = version;

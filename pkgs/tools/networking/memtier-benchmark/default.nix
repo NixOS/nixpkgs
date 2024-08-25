@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./configure.ac \
-      --replace '1.2.8' '${version}'
+      --replace-fail '1.2.8' '${version}'
   '';
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

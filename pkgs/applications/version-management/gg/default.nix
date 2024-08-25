@@ -24,7 +24,7 @@ in buildGoModule {
   };
   postPatch = ''
     substituteInPlace cmd/gg/editor_unix.go \
-      --replace /bin/sh ${bash}/bin/sh
+      --replace-fail /bin/sh ${bash}/bin/sh
   '';
   subPackages = [ "cmd/gg" ];
   ldflags = [

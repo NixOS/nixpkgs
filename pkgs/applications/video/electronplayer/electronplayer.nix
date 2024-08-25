@@ -16,7 +16,7 @@ in appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=ElectronPlayer'
+      --replace-fail 'Exec=AppRun' 'Exec=ElectronPlayer'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   #   wrapper around pkg-config anyways
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "libtool " "${libtool}/bin/libtool --tag=CXX " \
-      --replace "freetype-config" "${stdenv.cc.targetPrefix}pkg-config freetype2"
+      --replace-fail "libtool " "${libtool}/bin/libtool --tag=CXX " \
+      --replace-fail "freetype-config" "${stdenv.cc.targetPrefix}pkg-config freetype2"
   '';
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" "BINDIR=/bin" "CXX=${stdenv.cc.targetPrefix}c++" ];

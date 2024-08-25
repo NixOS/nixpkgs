@@ -77,8 +77,8 @@ stdenv.mkDerivation {
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do
       echo "Patch /usr/include and /usr/src in $i"
       substituteInPlace $i \
-        --replace "/usr/include" "${glibc.dev}/include" \
-        --replace "/usr/src" "${kernelBuildDir}"
+        --replace-fail "/usr/include" "${glibc.dev}/include" \
+        --replace-fail "/usr/src" "${kernelBuildDir}"
     done
 
     ./regen.sh -q

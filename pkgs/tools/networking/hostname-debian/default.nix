@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'install -o root -g root' 'install'
+    substituteInPlace Makefile --replace-fail 'install -o root -g root' 'install'
   '';
   makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man" ];
 

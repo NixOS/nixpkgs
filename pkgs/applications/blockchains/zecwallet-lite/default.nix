@@ -14,7 +14,7 @@ appimageTools.wrapType2 rec {
     in ''
       install -m 444 -D ${contents}/zecwallet-lite.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/zecwallet-lite.desktop \
-        --replace 'Exec=AppRun' "Exec=$out/bin/zecwallet-lite"
+        --replace-fail 'Exec=AppRun' "Exec=$out/bin/zecwallet-lite"
       cp -r ${contents}/usr/share/icons $out/share
     '';
 

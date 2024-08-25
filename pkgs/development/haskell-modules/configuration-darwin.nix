@@ -111,13 +111,13 @@ self: super: ({
   x509-system = overrideCabal (drv:
     lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
       postPatch = ''
-        substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+        substituteInPlace System/X509/MacOS.hs --replace-fail security /usr/bin/security
       '' + (drv.postPatch or "");
     }) super.x509-system;
   crypton-x509-system = overrideCabal (drv:
     lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
       postPatch = ''
-        substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+        substituteInPlace System/X509/MacOS.hs --replace-fail security /usr/bin/security
       '' + (drv.postPatch or "");
     }) super.crypton-x509-system;
 
@@ -132,7 +132,7 @@ self: super: ({
     # when called from GHC, probably because clang is version 7, but we are
     # using LLVM8.
     preCompileBuildDriver = ''
-      substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
+      substituteInPlace Setup.hs --replace-fail "addToLdLibraryPath libDir" "pure ()"
     '' + (oldAttrs.preCompileBuildDriver or "");
   }) super.llvm-hs;
 
@@ -224,7 +224,7 @@ self: super: ({
   HTF = overrideCabal (drv: {
     # GNU find is not prefixed in stdenv
     postPatch = ''
-      substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
+      substituteInPlace scripts/local-htfpp --replace-fail "find=gfind" "find=find"
     '' + (drv.postPatch or "");
   }) super.HTF;
 
@@ -242,7 +242,7 @@ self: super: ({
   # however linking against it is also not necessary there
   GLHUI = overrideCabal (drv: {
     postPatch = ''
-      substituteInPlace GLHUI.cabal --replace " rt" ""
+      substituteInPlace GLHUI.cabal --replace-fail " rt" ""
     '' + (drv.postPatch or "");
   }) super.GLHUI;
 
@@ -250,7 +250,7 @@ self: super: ({
     # Prevent darwin-specific configuration code path being taken
     # which doesn't work with nixpkgs' SDL libraries
     postPatch = ''
-      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+      substituteInPlace configure --replace-fail xDarwin noDarwinSpecialCasing
     '' + (drv.postPatch or "");
     patches = [
       # Work around SDL_main.h redefining main to SDL_main
@@ -262,7 +262,7 @@ self: super: ({
   # doesn't work with nixpkgs' SDL libraries
   SDL-mixer = overrideCabal (drv: {
     postPatch = ''
-      substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
+      substituteInPlace configure --replace-fail xDarwin noDarwinSpecialCasing
     '' + (drv.postPatch or "");
   }) super.SDL-mixer;
 
@@ -354,7 +354,7 @@ self: super: ({
   # Remove a problematic assert, the length is sometimes 1 instead of 2 on darwin
   di-core = overrideCabal (drv: {
     preConfigure = ''
-      substituteInPlace test/Main.hs --replace \
+      substituteInPlace test/Main.hs --replace-fail \
         "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
     '';
   }) super.di-core;

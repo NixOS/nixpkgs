@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
+      --replace-fail 'protobuf>=4.21.6,<5.0dev' 'protobuf'
   '';
 
   outputs = [

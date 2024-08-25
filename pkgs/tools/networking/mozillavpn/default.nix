@@ -91,12 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/cmake/linux.cmake \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
+      --replace-fail '/usr/share/dbus-1' "$out/share/dbus-1" \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace '/etc' "$out/etc"
+      --replace-fail '/etc' "$out/etc"
 
     ln -s '${finalAttrs.netfilterGoModules}' linux/netfilter/vendor
   '';

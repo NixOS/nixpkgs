@@ -30,8 +30,8 @@ resholve.mkDerivation rec {
   # we can only set their initial values, and let them remain dynamic
   postPatch = ''
     substituteInPlace zxfer \
-      --replace 'LCAT=""'                'LCAT=${coreutils}/bin/cat' \
-      --replace 'LZFS=$( which zfs )'    'LZFS=${zfs}/bin/zfs'
+      --replace-fail 'LCAT=""'                'LCAT=${coreutils}/bin/cat' \
+      --replace-fail 'LZFS=$( which zfs )'    'LZFS=${zfs}/bin/zfs'
   '';
 
   installPhase = ''

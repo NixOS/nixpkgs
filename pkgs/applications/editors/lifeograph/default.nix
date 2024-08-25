@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/share/applications/net.sourceforge.Lifeograph.desktop \
-      --replace "Exec=" "Exec=$out/bin/"
+      --replace-fail "Exec=" "Exec=$out/bin/"
   '';
 
   meta = with lib; {

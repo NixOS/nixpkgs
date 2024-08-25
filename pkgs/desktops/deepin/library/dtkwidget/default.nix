@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/widgets/dapplication.cpp \
-      --replace "auto dataDirs = DStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);" \
+      --replace-fail "auto dataDirs = DStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);" \
                 "auto dataDirs = DStandardPaths::standardLocations(QStandardPaths::GenericDataLocation) << \"$out/share\";"
   '';
 

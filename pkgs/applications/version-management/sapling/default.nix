@@ -125,7 +125,7 @@ python3Packages.buildPythonApplication {
     # 'nodejs' package, so that 'sl web' always works. Without the
     # patch, 'sl web' will still work if 'nodejs' is in $PATH.
     substituteInPlace lib/config/loader/src/builtin_static/core.rs \
-      --replace '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
+      --replace-fail '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
   '';
 
   # Since the derivation builder doesn't have network access to remain pure,

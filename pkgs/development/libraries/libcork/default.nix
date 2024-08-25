@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
     # https://github.com/dcreager/libcork/issues/173
     substituteInPlace cmake/FindCTargets.cmake \
-      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR} \
-      --replace '\$'{datarootdir}/'$'{base_docdir} '$'{CMAKE_INSTALL_FULL_DOCDIR}
+      --replace-fail '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace-fail '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR} \
+      --replace-fail '\$'{datarootdir}/'$'{base_docdir} '$'{CMAKE_INSTALL_FULL_DOCDIR}
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     substituteInPlace usr/share/${pname}/${pname}.sh \
-      --replace "exec java" "exec ${jdk11}/bin/java"
+      --replace-fail "exec java" "exec ${jdk11}/bin/java"
 
     mkdir -p $out/{share,bin}
     mv usr/share/${pname} $out/share/

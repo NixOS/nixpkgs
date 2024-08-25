@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     for f in src/*.h; do
       substituteInPlace $f \
-        --replace "#include <luajit-2.0/" "#include <"
+        --replace-fail "#include <luajit-2.0/" "#include <"
     done
   '';
 

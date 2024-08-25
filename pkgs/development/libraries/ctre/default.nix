@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace packaging/pkgconfig.pc.in \
-      --replace "\''${prefix}/" ""
+      --replace-fail "\''${prefix}/" ""
   '';
 
   dontBuild = true;

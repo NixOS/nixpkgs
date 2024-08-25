@@ -22,7 +22,7 @@ let
 
   postPatch = ''
     substituteInPlace server/common/version.go \
-      --replace '"0.0.0"' '"${version}"'
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
   passthru.tests = {

@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace external/quickjs_*/Makefile \
-      --replace "gcc-ar" "${stdenv.cc.targetPrefix}ar" \
-      --replace "gcc" "${stdenv.cc.targetPrefix}cc"
+      --replace-fail "gcc-ar" "${stdenv.cc.targetPrefix}ar" \
+      --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   preConfigure = ''

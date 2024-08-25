@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     # we use trezord group, not plugdev
     # we don't need the udev-acl tag
     substituteInPlace 51-trezor.rules \
-      --replace 'GROUP="plugdev"' 'GROUP="trezord"' \
-      --replace ', TAG+="udev-acl"' ""
+      --replace-fail 'GROUP="plugdev"' 'GROUP="trezord"' \
+      --replace-fail ', TAG+="udev-acl"' ""
     cp 51-trezor.rules $out/lib/udev/rules.d/51-trezor.rules
   '';
 

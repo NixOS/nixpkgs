@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
 
   # Fix ".cht.sh-wrapped" in the help message
-  postPatch = "substituteInPlace share/cht.sh.txt --replace '\${0##*/}' cht.sh";
+  postPatch = "substituteInPlace share/cht.sh.txt --replace-fail '\${0##*/}' cht.sh";
 
   installPhase = ''
     install -m755 -D share/cht.sh.txt "$out/bin/cht.sh"

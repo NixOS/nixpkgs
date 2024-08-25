@@ -39,8 +39,8 @@ in stdenv.mkDerivation rec {
   patchPhase = ''
     # fix upstream typos
     substituteInPlace dvd-slideshow \
-      --replace "version='0.8.4-1'" "version='0.8.4-2'" \
-      --replace "mymyecho" "myecho"
+      --replace-fail "version='0.8.4-1'" "version='0.8.4-2'" \
+      --replace-fail "mymyecho" "myecho"
   '';
 
   installPhase = ''

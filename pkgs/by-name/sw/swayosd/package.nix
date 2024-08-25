@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace data/udev/99-swayosd.rules \
-      --replace /bin/chgrp ${coreutils}/bin/chgrp \
-      --replace /bin/chmod ${coreutils}/bin/chmod
+      --replace-fail /bin/chgrp ${coreutils}/bin/chgrp \
+      --replace-fail /bin/chmod ${coreutils}/bin/chmod
   '';
 
   meta = with lib; {

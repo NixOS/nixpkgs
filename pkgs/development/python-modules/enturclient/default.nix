@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'async_timeout = "^3.0.1"' 'async_timeout = ">=3.0.1"'
+      --replace-fail 'async_timeout = "^3.0.1"' 'async_timeout = ">=3.0.1"'
   '';
 
   # Project has no tests

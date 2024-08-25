@@ -39,10 +39,10 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     mkdir test-reports
     substituteInPlace requirements.txt \
-      --replace "libusb1==1.9.3" "libusb1" \
-      --replace "protobuf >=3.17.3, < 4.0.0" "protobuf"
+      --replace-fail "libusb1==1.9.3" "libusb1" \
+      --replace-fail "protobuf >=3.17.3, < 4.0.0" "protobuf"
     substituteInPlace nordicsemi/dfu/tests/test_signing.py \
-      --replace "self.assertEqual(expected_vk_pem, vk_pem)" ""
+      --replace-fail "self.assertEqual(expected_vk_pem, vk_pem)" ""
   '';
 
   meta = {

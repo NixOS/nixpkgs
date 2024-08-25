@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for i in $out/etc/udev/rules.d/*.rules $out/lib/udev/rules.d/*.rules ; do
       substituteInPlace "$i" \
-        --replace '/usr/sbin' "$out/bin" \
-        --replace '/bin/awk' '${gawk}/bin/awk'
+        --replace-fail '/usr/sbin' "$out/bin" \
+        --replace-fail '/bin/awk' '${gawk}/bin/awk'
     done
 
     substituteInPlace "$out/bin/ec2-metadata" \
-      --replace 'curl' '${curl}/bin/curl'
+      --replace-fail 'curl' '${curl}/bin/curl'
   '';
 
   doInstallCheck = true;

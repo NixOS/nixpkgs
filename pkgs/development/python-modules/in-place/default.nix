@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace tox.ini --replace "--cov=in_place --no-cov-on-fail" ""
+    substituteInPlace tox.ini --replace-fail "--cov=in_place --no-cov-on-fail" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

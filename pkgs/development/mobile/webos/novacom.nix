@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -Dm755 -t $out/bin ../scripts/novaterm
-    substituteInPlace $out/bin/novaterm --replace "exec novacom" "exec $out/bin/novacom"
+    substituteInPlace $out/bin/novaterm --replace-fail "exec novacom" "exec $out/bin/novacom"
   '';
 
   meta = with lib; {

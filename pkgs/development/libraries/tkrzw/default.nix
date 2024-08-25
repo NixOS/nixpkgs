@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace 'PATH=".:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"' ""
+      --replace-fail 'PATH=".:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"' ""
   '';
 
   enableParallelBuilding = true;

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/the_Foundation.pc \
-      --replace '="''${prefix}//' '="/'
+      --replace-fail '="''${prefix}//' '="/'
   '';
 
   meta = with lib; {

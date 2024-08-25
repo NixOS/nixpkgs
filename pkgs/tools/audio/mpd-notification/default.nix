@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    substituteInPlace systemd/mpd-notification.service --replace /usr $out
+    substituteInPlace systemd/mpd-notification.service --replace-fail /usr $out
   '';
 
   meta = with lib; {

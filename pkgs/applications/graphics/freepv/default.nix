@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     sed -i -e '1i \
       #include <cstring>' src/libfreepv/Image.cpp
     substituteInPlace src/libfreepv/Action.h \
-      --replace NULL nullptr
+      --replace-fail NULL nullptr
     substituteInPlace src/libfreepv/pngReader.cpp \
-      --replace png_set_gray_1_2_4_to_8 png_set_expand_gray_1_2_4_to_8
+      --replace-fail png_set_gray_1_2_4_to_8 png_set_expand_gray_1_2_4_to_8
   '';
 
   env.NIX_CFLAGS_COMPILE = "-fpermissive -Wno-narrowing";

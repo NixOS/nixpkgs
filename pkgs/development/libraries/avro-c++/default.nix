@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost ];
 
   preConfigure = ''
-    substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"
-    substituteInPlace test/buffertest.cc --replace "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
+    substituteInPlace test/SchemaTests.cc --replace-fail "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"
+    substituteInPlace test/buffertest.cc --replace-fail "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
   '';
 
   meta = {

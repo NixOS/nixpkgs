@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       substituteInPlace configure \
-        --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
-        --replace '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
+        --replace-fail '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
+        --replace-fail '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
     '';
 
   configureFlags =
@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
       configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
 
       substituteInPlace systemd/nfs-utils.service \
-        --replace "/bin/true" "${coreutils}/bin/true"
+        --replace-fail "/bin/true" "${coreutils}/bin/true"
 
       substituteInPlace tools/nfsrahead/Makefile.in systemd/Makefile.in \
-        --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
+        --replace-fail "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
       substituteInPlace utils/mount/Makefile.in \
-        --replace "chmod 4511" "chmod 0511"
+        --replace-fail "chmod 4511" "chmod 0511"
 
       sed '1i#include <stdint.h>' -i support/nsm/rpc.c
     '';

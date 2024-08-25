@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: send upstream
   postPatch = ''
     substituteInPlace docs/meson.build \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
   '';
 
   doCheck = false; # test-font: FAIL

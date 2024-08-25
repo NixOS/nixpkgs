@@ -24,7 +24,7 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/jbrowse-desktop.png \
        $out/share/icons/hicolor/512x512/apps/jbrowse-desktop.png
     substituteInPlace $out/share/applications/jbrowse-desktop.desktop \
-      --replace 'Exec=AppRun --no-sandbox' 'Exec=jbrowse-desktop'
+      --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=jbrowse-desktop'
   '';
 
   meta = with lib; {

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./Makefile \
-      --replace 'chmod 4555' '#chmod 4555'
+      --replace-fail 'chmod 4555' '#chmod 4555'
   '';
 
   makeFlags = [

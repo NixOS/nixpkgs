@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteAllInPlace src/donate.h
     substituteInPlace cmake/OpenSSL.cmake \
-      --replace "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
+      --replace-fail "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
   '';
 
   nativeBuildInputs = [

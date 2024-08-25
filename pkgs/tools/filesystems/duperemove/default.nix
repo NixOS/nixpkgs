@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace util.c --replace \
+    substituteInPlace util.c --replace-fail \
       "lscpu" "${lib.getBin util-linux}/bin/lscpu"
   '';
 

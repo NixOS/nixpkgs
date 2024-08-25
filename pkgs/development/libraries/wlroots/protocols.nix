@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace wlr-protocols.pc.in \
-      --replace '=''${pc_sysrootdir}' "=" \
-      --replace '=@prefix@' "=$out"
+      --replace-fail '=''${pc_sysrootdir}' "=" \
+      --replace-fail '=@prefix@' "=$out"
   '';
 
   doCheck = true;

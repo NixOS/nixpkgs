@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./vers_string
-    substituteInPlace vers_string --replace "cvslib.pl" "./cvslib.pl"
+    substituteInPlace vers_string --replace-fail "cvslib.pl" "./cvslib.pl"
   '';
 
   preInstall = "
-    substituteInPlace Makefile --replace '-o root -g root' ''
+    substituteInPlace Makefile --replace-fail '-o root -g root' ''
   ";
 
   nativeBuildInputs = [ perl ];

@@ -81,14 +81,14 @@ let
       # valid without having the correct $PATH set
       postInstall = if (pname == "gammastep") then ''
         substituteInPlace $out/share/applications/gammastep.desktop \
-          --replace 'Exec=gammastep' "Exec=$out/bin/gammastep"
+          --replace-fail 'Exec=gammastep' "Exec=$out/bin/gammastep"
         substituteInPlace $out/share/applications/gammastep-indicator.desktop \
-          --replace 'Exec=gammastep-indicator' "Exec=$out/bin/gammastep-indicator"
+          --replace-fail 'Exec=gammastep-indicator' "Exec=$out/bin/gammastep-indicator"
       '' else ''
         substituteInPlace $out/share/applications/redshift.desktop \
-          --replace 'Exec=redshift' "Exec=$out/bin/redshift"
+          --replace-fail 'Exec=redshift' "Exec=$out/bin/redshift"
         substituteInPlace $out/share/applications/redshift-gtk.desktop \
-          --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+          --replace-fail 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
       '';
 
       enableParallelBuilding = true;

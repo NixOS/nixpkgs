@@ -17,9 +17,9 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "IPython==7.16.1" "IPython" \
-      --replace "diskcache==5.1.0" "diskcache>=5.1.0" \
-      --replace "radish-bdd==0.13.1" "radish-bdd" \
+      --replace-fail "IPython==7.16.1" "IPython" \
+      --replace-fail "diskcache==5.1.0" "diskcache>=5.1.0" \
+      --replace-fail "radish-bdd==0.13.1" "radish-bdd" \
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -35,14 +35,14 @@ stdenvNoCC.mkDerivation {
   # notify-send has to be patched in a bash file
   postPatch = ''
     substituteInPlace emojipick \
-      --replace "use_rofi=0" "use_rofi=${boolToInt emojipick-use-rofi}" \
-      --replace "copy_to_clipboard=1" "copy_to_clipboard=${boolToInt emojipick-copy-to-clipboard}" \
-      --replace "show_notification=1" "show_notification=${boolToInt emojipick-show-notifications}" \
-      --replace "print_emoji=1" "print_emoji=${boolToInt emojipick-print-emoji}" \
-      --replace "font_family='\"Noto Color Emoji\"'" "font_family='\"${emojipick-font-family}\"'" \
-      --replace 'font_size="18"' 'font_size="${emojipick-font-size}"' \
-      ${lib.optionalString emojipick-use-rofi "--replace 'rofi ' '${rofi}/bin/rofi '"} \
-      --replace notify-send ${libnotify}/bin/notify-send
+      --replace-fail "use_rofi=0" "use_rofi=${boolToInt emojipick-use-rofi}" \
+      --replace-fail "copy_to_clipboard=1" "copy_to_clipboard=${boolToInt emojipick-copy-to-clipboard}" \
+      --replace-fail "show_notification=1" "show_notification=${boolToInt emojipick-show-notifications}" \
+      --replace-fail "print_emoji=1" "print_emoji=${boolToInt emojipick-print-emoji}" \
+      --replace-fail "font_family='\"Noto Color Emoji\"'" "font_family='\"${emojipick-font-family}\"'" \
+      --replace-fail 'font_size="18"' 'font_size="${emojipick-font-size}"' \
+      ${lib.optionalString emojipick-use-rofi "--replace-fail 'rofi ' '${rofi}/bin/rofi '"} \
+      --replace-fail notify-send ${libnotify}/bin/notify-send
   '';
 
   buildInputs = [

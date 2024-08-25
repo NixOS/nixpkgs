@@ -45,7 +45,7 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${runtimeShell}"
+    substituteInPlace "hack/update-generated-docs.sh" --replace-fail "make" "make SHELL=${runtimeShell}"
     patchShebangs ./hack ./cluster/addons/addon-manager
     make "SHELL=${runtimeShell}" "WHAT=$WHAT"
     ./hack/update-generated-docs.sh

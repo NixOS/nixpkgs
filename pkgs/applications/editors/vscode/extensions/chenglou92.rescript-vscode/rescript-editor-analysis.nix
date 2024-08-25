@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   postPatch = ''
     cd analysis
     substituteInPlace Makefile \
-      --replace "build: build-analysis-binary build-reanalyze build-tests" "build: build-analysis-binary" \
-      --replace "test: test-analysis-binary test-reanalyze" "test: test-analysis-binary"
+      --replace-fail "build: build-analysis-binary build-reanalyze build-tests" "build: build-analysis-binary" \
+      --replace-fail "test: test-analysis-binary test-reanalyze" "test: test-analysis-binary"
   '';
 
   installPhase = ''

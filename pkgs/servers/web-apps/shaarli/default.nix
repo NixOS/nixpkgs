@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace index.php \
-      --replace "new ConfigManager();" "new ConfigManager(getenv('SHAARLI_CONFIG'));"
+      --replace-fail "new ConfigManager();" "new ConfigManager(getenv('SHAARLI_CONFIG'));"
   '';
 
 #    Point $SHAARLI_CONFIG to your configuration file, see https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration.

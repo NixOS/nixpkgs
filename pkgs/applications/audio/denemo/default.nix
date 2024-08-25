@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/denemo.git/patch/?id=9de1c65e56a021925af532bb55336b0ce86d3084";
       postFetch = ''
         substituteInPlace $out \
-          --replace "2.6.8" "2.6.0" \
-          --replace "2.6.9" "2.6.0"
+          --replace-fail "2.6.8" "2.6.0" \
+          --replace-fail "2.6.9" "2.6.0"
       '';
       hash = "sha256-Jj33k/KgvZgKG43MuLgjb4A2KNkm/z9ytzGKcXMAOI4=";
     })

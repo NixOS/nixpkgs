@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton.vpn.backend.linux.networkmanager.protocol.openvpn --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton.vpn.backend.linux.networkmanager.protocol.openvpn --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.backend.linux.networkmanager.protocol" ];

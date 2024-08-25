@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   # don't use vendored htmltopdf
   postPatch = ''
     substituteInPlace deepin_reader.pro \
-      --replace "SUBDIRS += htmltopdf" " "
+      --replace-fail "SUBDIRS += htmltopdf" " "
     substituteInPlace reader/document/Model.cpp \
-      --replace "/usr/lib/deepin-reader/htmltopdf" "htmltopdf"
+      --replace-fail "/usr/lib/deepin-reader/htmltopdf" "htmltopdf"
   '';
 
   nativeBuildInputs = [

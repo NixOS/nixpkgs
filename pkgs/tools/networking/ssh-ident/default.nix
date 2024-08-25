@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     substituteInPlace ssh-ident \
-      --replace 'ssh-agent >' '${openssh}/bin/ssh-agent >'
+      --replace-fail 'ssh-agent >' '${openssh}/bin/ssh-agent >'
   '';
   buildInputs = [ python3 ];
 

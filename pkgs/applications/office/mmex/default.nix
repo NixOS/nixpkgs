@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     substituteInPlace src/platfdep_mac.mm \
-      --replace "appearance.name == NSAppearanceNameDarkAqua" "NO"
+      --replace-fail "appearance.name == NSAppearanceNameDarkAqua" "NO"
   '' + lib.optionalString (stdenv.isLinux && !stdenv.isx86_64) ''
     substituteInPlace 3rd/CMakeLists.txt \
-      --replace "-msse4.2 -maes" ""
+      --replace-fail "-msse4.2 -maes" ""
   '';
 
   nativeBuildInputs = [

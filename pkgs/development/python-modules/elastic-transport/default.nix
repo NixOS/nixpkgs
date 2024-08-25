@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov-report=term-missing --cov=elastic_transport" ""
+      --replace-fail " --cov-report=term-missing --cov=elastic_transport" ""
   '';
 
   build-system = [ setuptools ];

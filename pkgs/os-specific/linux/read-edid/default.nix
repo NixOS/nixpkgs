@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fno-common.patch ];
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace 'COPYING' 'LICENSE'
+    substituteInPlace CMakeLists.txt --replace-fail 'COPYING' 'LICENSE'
   '';
 
   nativeBuildInputs = [ cmake ];

@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace src/main.cpp \
-      --replace GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
   '';
 
   meta = with lib; {

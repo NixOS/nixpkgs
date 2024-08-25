@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
   '';
 
   configureFlags = [

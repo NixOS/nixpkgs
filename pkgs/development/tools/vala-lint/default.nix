@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # https://github.com/vala-lang/vala-lint/issues/181
     substituteInPlace test/meson.build \
-      --replace "test('auto-fix', auto_fix_test, env: test_envars)" ""
+      --replace-fail "test('auto-fix', auto_fix_test, env: test_envars)" ""
   '';
 
   doCheck = true;

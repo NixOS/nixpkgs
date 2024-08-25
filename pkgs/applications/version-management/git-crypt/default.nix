@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace commands.cpp \
-      --replace '(escape_shell_arg(our_exe_path()))' '= "git-crypt"'
+      --replace-fail '(escape_shell_arg(our_exe_path()))' '= "git-crypt"'
   '';
 
   makeFlags = [

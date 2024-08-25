@@ -28,18 +28,18 @@ buildGoModule rec {
   # Some tests require access to scaleway's API, failing when sandboxed
   preCheck = ''
     substituteInPlace internal/core/bootstrap_test.go \
-      --replace "TestInterruptError" "SkipInterruptError"
+      --replace-fail "TestInterruptError" "SkipInterruptError"
     substituteInPlace internal/e2e/errors_test.go \
-      --replace "TestStandardErrors" "SkipStandardErrors"
+      --replace-fail "TestStandardErrors" "SkipStandardErrors"
     substituteInPlace internal/e2e/human_test.go \
-      --replace "TestTestCommand" "SkipTestCommand" \
-      --replace "TestHumanCreate" "SkipHumanCreate" \
-      --replace "TestHumanList" "SkipHumanList" \
-      --replace "TestHumanUpdate" "SkipHumanUpdate" \
-      --replace "TestHumanGet" "SkipHumanGet" \
-      --replace "TestHumanDelete" "SkipHumanDelete"
+      --replace-fail "TestTestCommand" "SkipTestCommand" \
+      --replace-fail "TestHumanCreate" "SkipHumanCreate" \
+      --replace-fail "TestHumanList" "SkipHumanList" \
+      --replace-fail "TestHumanUpdate" "SkipHumanUpdate" \
+      --replace-fail "TestHumanGet" "SkipHumanGet" \
+      --replace-fail "TestHumanDelete" "SkipHumanDelete"
     substituteInPlace internal/e2e/sdk_errors_test.go \
-      --replace "TestSdkStandardErrors" "SkipSdkStandardErrors"
+      --replace-fail "TestSdkStandardErrors" "SkipSdkStandardErrors"
   '';
 
   doInstallCheck = true;

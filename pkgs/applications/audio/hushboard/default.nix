@@ -44,9 +44,9 @@ buildPythonApplication {
 
   postPatch = ''
     substituteInPlace hushboard/_pulsectl.py \
-      --replace "ctypes.util.find_library('libpulse') or 'libpulse.so.0'" "'${libpulseaudio}/lib/libpulse.so.0'"
+      --replace-fail "ctypes.util.find_library('libpulse') or 'libpulse.so.0'" "'${libpulseaudio}/lib/libpulse.so.0'"
     substituteInPlace snap/gui/hushboard.desktop \
-      --replace "\''${SNAP}/hushboard/icons/hushboard.svg" "hushboard"
+      --replace-fail "\''${SNAP}/hushboard/icons/hushboard.svg" "hushboard"
   '';
 
   postInstall = ''

@@ -21,7 +21,7 @@ mkDerivation rec {
   # Upstream seems dead and there are new deprecation warnings in KF5.100
   # Remember, kids: friends don't let friends build with -Werror
   postPatch = ''
-    substituteInPlace src/CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace src/CMakeLists.txt --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

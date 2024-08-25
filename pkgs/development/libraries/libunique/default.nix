@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # Don't make deprecated usages hard errors
   prePatch = ''
-    substituteInPlace configure --replace "-Werror" "";
+    substituteInPlace configure --replace-fail "-Werror" "";
   '';
 
   # glib-2.62 deprecations

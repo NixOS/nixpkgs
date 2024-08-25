@@ -182,16 +182,16 @@ let
   preConfigure = ''
       # Purity.
       for i in /usr /sw /opt /pkg; do
-        substituteInPlace ./setup.py --replace $i /no-such-path
+        substituteInPlace ./setup.py --replace-fail $i /no-such-path
       done
     '' + lib.optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
-        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
+        substituteInPlace $i --replace-fail /usr/include/ ${stdenv.cc.libc}/include/
       done
     '' + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+      substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
       substituteInPlace Lib/multiprocessing/__init__.py \
-        --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
+        --replace-fail 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
     '';
 
   configureFlags = lib.optionals enableOptimizations [
@@ -274,7 +274,7 @@ in with passthru; stdenv.mkDerivation ({
     setupHook = python-setup-hook sitePackages;
 
     postPatch = lib.optionalString (x11Support && (tix != null)) ''
-          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+          substituteInPlace "Lib/lib-tk/Tix.py" --replace-fail "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
     postInstall =

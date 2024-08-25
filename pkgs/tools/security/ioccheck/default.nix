@@ -79,7 +79,7 @@ in py.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Can be removed with the next release
     substituteInPlace pyproject.toml \
-      --replace '"hurry.filesize" = "^0.9"' ""
+      --replace-fail '"hurry.filesize" = "^0.9"' ""
   '';
 
   pythonImportsCheck = [

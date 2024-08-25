@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cd src
     patchShebangs configure
     substituteInPlace Makefile.pre \
-      --replace '+camlp4' "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
+      --replace-fail '+camlp4' "${camlp4}/lib/ocaml/${ocaml.version}/site-lib/camlp4"
   '';
 
   buildFlags = [ "opt" ];

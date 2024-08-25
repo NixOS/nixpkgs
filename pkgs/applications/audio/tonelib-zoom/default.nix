@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mv usr $out
-    substituteInPlace $out/share/applications/ToneLib-Zoom.desktop --replace /usr/ $out/
+    substituteInPlace $out/share/applications/ToneLib-Zoom.desktop --replace-fail /usr/ $out/
   '';
 
   meta = with lib; {

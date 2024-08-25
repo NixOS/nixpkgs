@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace beefi \
-      --replace objcopy ${binutils-unwrapped}/bin/objcopy \
-      --replace /usr/lib/systemd ${systemd}/lib/systemd
+      --replace-fail objcopy ${binutils-unwrapped}/bin/objcopy \
+      --replace-fail /usr/lib/systemd ${systemd}/lib/systemd
   '';
 
   installPhase = ''

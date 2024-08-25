@@ -158,11 +158,11 @@ in stdenv.mkDerivation (finalAttrs: {
       tool/mlconfig/po/Makefile.in.in
     #utmp and mlterm-fb
     substituteInPlace configure.in \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
+      --replace-fail "-m 2755 -g utmp" " " \
+      --replace-fail "-m 4755 -o root" " "
     substituteInPlace configure \
-      --replace "-m 2755 -g utmp" " " \
-      --replace "-m 4755 -o root" " "
+      --replace-fail "-m 2755 -g utmp" " " \
+      --replace-fail "-m 4755 -o root" " "
   '';
 
   env = lib.optionalAttrs stdenv.cc.isClang {

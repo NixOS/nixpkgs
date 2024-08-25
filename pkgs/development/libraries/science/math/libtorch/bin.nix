@@ -51,11 +51,11 @@ in stdenv.mkDerivation {
 
     # Fix up library paths for split outputs
     substituteInPlace $dev/share/cmake/Torch/TorchConfig.cmake \
-      --replace \''${TORCH_INSTALL_PREFIX}/lib "$out/lib" \
+      --replace-fail \''${TORCH_INSTALL_PREFIX}/lib "$out/lib" \
 
     substituteInPlace \
       $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
-      --replace \''${_IMPORT_PREFIX}/lib "$out/lib" \
+      --replace-fail \''${_IMPORT_PREFIX}/lib "$out/lib" \
   '';
 
   postFixup = let

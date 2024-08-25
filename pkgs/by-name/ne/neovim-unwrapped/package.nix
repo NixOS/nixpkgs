@@ -136,7 +136,7 @@ in {
 
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
-      substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+      substituteInPlace src/nvim/version.c --replace-fail NVIM_VERSION_CFLAGS "";
     '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       sed -i runtime/CMakeLists.txt \
         -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
@@ -166,7 +166,7 @@ in {
         "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
       )
     '' + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
+      substituteInPlace src/nvim/CMakeLists.txt --replace-fail "    util" ""
     '' + ''
       mkdir -p $out/lib/nvim/parser
     '' + lib.concatStrings (lib.mapAttrsToList

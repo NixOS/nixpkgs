@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # tests have a typo in one of the assertions
-    substituteInPlace tests/test_paranoid.py --replace "01-Jan-1970" "01 Jan 1970"
+    substituteInPlace tests/test_paranoid.py --replace-fail "01-Jan-1970" "01 Jan 1970"
   '';
 
   propagatedBuildInputs = [ flask ];

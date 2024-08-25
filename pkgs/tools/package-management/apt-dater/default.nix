@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace etc/Makefile.am \
-      --replace 02770 0770
+      --replace-fail 02770 0770
   '';
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace "/usr/bin/screen" "${screen}/bin/screen"
+      --replace-fail "/usr/bin/screen" "${screen}/bin/screen"
   '';
 
   doCheck = true;

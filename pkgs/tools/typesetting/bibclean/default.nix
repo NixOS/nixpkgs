@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile.in --replace man/man1 share/man/man1
+    substituteInPlace Makefile.in --replace-fail man/man1 share/man/man1
   '';
 
   preInstall = ''

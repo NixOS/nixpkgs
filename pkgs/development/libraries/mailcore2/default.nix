@@ -29,17 +29,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-       --replace " icule iculx" "" \
-       --replace "tidy/tidy.h" "tidy.h" \
-       --replace "/usr/include/tidy" "${html-tidy}/include" \
-       --replace "/usr/include/libxml2" "${libxml2.dev}/include/libxml2"
+       --replace-fail " icule iculx" "" \
+       --replace-fail "tidy/tidy.h" "tidy.h" \
+       --replace-fail "/usr/include/tidy" "${html-tidy}/include" \
+       --replace-fail "/usr/include/libxml2" "${libxml2.dev}/include/libxml2"
     substituteInPlace src/core/basetypes/MCHTMLCleaner.cpp \
-      --replace buffio.h tidybuffio.h
+      --replace-fail buffio.h tidybuffio.h
     substituteInPlace src/core/basetypes/MCString.cpp \
-      --replace "xmlErrorPtr" "const xmlError *"
+      --replace-fail "xmlErrorPtr" "const xmlError *"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace src/core/basetypes/MCICUTypes.h \
-      --replace "__CHAR16_TYPE__ UChar" "char16_t UChar"
+      --replace-fail "__CHAR16_TYPE__ UChar" "char16_t UChar"
   '';
 
   cmakeFlags = lib.optionals (!stdenv.isDarwin) [

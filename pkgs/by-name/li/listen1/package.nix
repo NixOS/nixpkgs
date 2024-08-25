@@ -15,7 +15,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/listen1.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/listen1.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/listen1.png \
       $out/share/icons/hicolor/512x512/apps/listen1.png
   '';

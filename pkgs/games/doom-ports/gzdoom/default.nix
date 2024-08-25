@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/updaterevision/UpdateRevision.cmake \
-      --replace "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
-      --replace "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
-      --replace "ret_var(Hash)" "ret_var(\"${src.rev}\")"
+      --replace-fail "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
+      --replace-fail "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
+      --replace-fail "ret_var(Hash)" "ret_var(\"${src.rev}\")"
   '';
 
   cmakeFlags = [

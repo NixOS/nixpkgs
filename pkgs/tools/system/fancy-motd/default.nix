@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace motd.sh \
-      --replace 'BASE_DIR="$(dirname "$(readlink -f "$0")")"' "BASE_DIR=\"$out/lib\""
+      --replace-fail 'BASE_DIR="$(dirname "$(readlink -f "$0")")"' "BASE_DIR=\"$out/lib\""
 
     substituteInPlace modules/20-uptime \
-      --replace "uptime -p" "${procps}/bin/uptime -p"
+      --replace-fail "uptime -p" "${procps}/bin/uptime -p"
 
     # does not work on nixos
     rm modules/41-updates

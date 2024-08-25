@@ -31,11 +31,11 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'include_dirs = ["libxnd", "ndtypes/python/ndtypes"] + INCLUDES' \
+      --replace-fail 'include_dirs = ["libxnd", "ndtypes/python/ndtypes"] + INCLUDES' \
                 'include_dirs = ["${libndtypes}/include", "${ndtypes}/include", "${libxnd}/include"]' \
-      --replace 'library_dirs = ["libxnd", "ndtypes/libndtypes"] + LIBS' \
+      --replace-fail 'library_dirs = ["libxnd", "ndtypes/libndtypes"] + LIBS' \
                 'library_dirs = ["${libndtypes}/lib", "${libxnd}/lib"]' \
-      --replace 'runtime_library_dirs = ["$ORIGIN"]' \
+      --replace-fail 'runtime_library_dirs = ["$ORIGIN"]' \
                 'runtime_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib"]' \
   '';
 

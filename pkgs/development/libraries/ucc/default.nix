@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     for comp in $(find src/components -name Makefile.am); do
       substituteInPlace $comp \
-        --replace "/bin/bash" "${stdenv.shell}"
+        --replace-fail "/bin/bash" "${stdenv.shell}"
     done
   '';
 

@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=qingping_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=qingping_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [ "qingping_ble" ];

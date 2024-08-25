@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace get-version.sh \
-      --replace "which echo" "echo"
+      --replace-fail "which echo" "echo"
   '';
 
   nativeBuildInputs = [ autoreconfHook ];

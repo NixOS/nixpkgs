@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     for f in $out/bin/*; do
-      substituteInPlace $f --replace "${buildPackages.perl}" "${perl}"
+      substituteInPlace $f --replace-fail "${buildPackages.perl}" "${perl}"
     done
   '';
 

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace tests/dummy_shell.sh \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
   checkFlags = [

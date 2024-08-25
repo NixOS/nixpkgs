@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix warning about implicit declaration of function 'strlcpy'
       substituteInPlace aucatctl.c \
-        --replace '#include <string.h>' '#include <bsd/string.h>'
+        --replace-fail '#include <string.h>' '#include <bsd/string.h>'
     '';
 
   meta = with lib; {

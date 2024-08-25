@@ -44,9 +44,9 @@ buildPythonPackage rec {
   postPatch = ''
     cp ../../README.md .
     substituteInPlace setup.py \
-      --replace "3.0.0" "${version}" \
-      --replace "grpcio==1.56.2" "grpcio" \
-      --replace "semver~=2.13" "semver"
+      --replace-fail "3.0.0" "${version}" \
+      --replace-fail "grpcio==1.56.2" "grpcio" \
+      --replace-fail "semver~=2.13" "semver"
   '';
 
   # Allow local networking in tests on Darwin

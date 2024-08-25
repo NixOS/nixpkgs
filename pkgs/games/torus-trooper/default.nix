@@ -73,7 +73,7 @@ in stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for f in src/abagames/tt/barrage.d src/abagames/util/sdl/sound.d src/abagames/util/sdl/texture.d; do
       substituteInPlace $f \
-        --replace "/usr/" "$out/"
+        --replace-fail "/usr/" "$out/"
     done
   '';
 

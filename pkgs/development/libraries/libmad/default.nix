@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
 
   # The -fforce-mem flag has been removed in GCC 4.3.
   postPatch = ''
-    substituteInPlace configure.ac --replace "-fforce-mem" ""
-    substituteInPlace configure.ac --replace "arch=\"-march=i486\"" ""
+    substituteInPlace configure.ac --replace-fail "-fforce-mem" ""
+    substituteInPlace configure.ac --replace-fail "arch=\"-march=i486\"" ""
   '';
 
   nativeBuildInputs = [ autoconf ];

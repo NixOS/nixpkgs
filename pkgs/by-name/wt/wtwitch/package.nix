@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   # hardcode SCRIPT_NAME because #150841
   postPatch = ''
-    substituteInPlace src/wtwitch --replace 'readonly SCRIPT_NAME="''${0##*/}"' 'readonly SCRIPT_NAME="wtwitch"'
+    substituteInPlace src/wtwitch --replace-fail 'readonly SCRIPT_NAME="''${0##*/}"' 'readonly SCRIPT_NAME="wtwitch"'
   '';
 
   buildPhase = ''

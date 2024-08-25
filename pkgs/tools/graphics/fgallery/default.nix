@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "/usr" $out
+      --replace-fail "/usr" $out
   '';
 
   installPhase = ''

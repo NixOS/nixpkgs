@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
   postPatch = ''
     substituteInPlace app/src/display.c \
-      --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
+      --replace-fail "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
   nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/share/applications/scrcpy-console.desktop \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
   meta = {

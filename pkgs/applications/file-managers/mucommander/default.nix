@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # there is no .git anyway
     substituteInPlace build.gradle \
-      --replace "git = grgit.open(dir: project.rootDir)" "" \
-      --replace "revision = git.head().id" "revision = '${finalAttrs.version}'"
+      --replace-fail "git = grgit.open(dir: project.rootDir)" "" \
+      --replace-fail "revision = git.head().id" "revision = '${finalAttrs.version}'"
   '';
 
   nativeBuildInputs = [ gradle makeWrapper ];

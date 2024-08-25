@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ varnish libmhash ];
 
   postPatch = ''
-    substituteInPlace autogen.sh  --replace "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"
-    substituteInPlace Makefile.am --replace "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"
+    substituteInPlace autogen.sh  --replace-fail "''${dataroot}/aclocal"                  "${varnish.dev}/share/aclocal"
+    substituteInPlace Makefile.am --replace-fail "''${LIBVARNISHAPI_DATAROOTDIR}/aclocal" "${varnish.dev}/share/aclocal"
   '';
 
   configureFlags = [ "VMOD_DIR=$(out)/lib/varnish/vmods" ];

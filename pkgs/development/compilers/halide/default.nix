@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # See https://github.com/halide/Halide/issues/7785
     substituteInPlace 'src/runtime/HalideRuntime.h' \
-      --replace '#if defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__aarch64__)
+      --replace-fail '#if defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__aarch64__)
     #define HALIDE_CPP_COMPILER_HAS_FLOAT16' \
                 '#if defined(__x86_64__) || defined(__i386__)
     #define HALIDE_CPP_COMPILER_HAS_FLOAT16'
@@ -40,14 +40,14 @@ stdenv.mkDerivation rec {
   # ::aligned_alloc is available. For us, it isn't.
   + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     substituteInPlace 'src/runtime/HalideBuffer.h' \
-      --replace '#ifdef __APPLE__
+      --replace-fail '#ifdef __APPLE__
     #include <AvailabilityVersions.h>
     #include <TargetConditionals.h>
     #endif' \
                 ' ' \
-      --replace 'TARGET_OS_OSX && (__MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_15)' \
+      --replace-fail 'TARGET_OS_OSX && (__MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_15)' \
                 '1' \
-      --replace 'TARGET_OS_IPHONE && (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_14_0)' \
+      --replace-fail 'TARGET_OS_IPHONE && (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_14_0)' \
                 '0'
   '';
 

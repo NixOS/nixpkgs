@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
+    substituteInPlace include/defaults.h --replace-fail 'ETCPATH "' '"/etc/solanum'
   '';
 
   configureFlags = [

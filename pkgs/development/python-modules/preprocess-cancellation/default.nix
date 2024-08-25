@@ -31,9 +31,9 @@ buildPythonPackage rec {
     mkdir tests
     mv GCode STLs test_* tests
     substituteInPlace tests/test_preprocessor.py \
-      --replace "./GCode" "./tests/GCode"
+      --replace-fail "./GCode" "./tests/GCode"
     substituteInPlace tests/test_preprocessor_with_shapely.py \
-      --replace "./GCode" "./tests/GCode"
+      --replace-fail "./GCode" "./tests/GCode"
   '';
 
   nativeBuildInputs = [

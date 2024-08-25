@@ -24,12 +24,12 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace usr/share/nemo-python/extensions/nemo-folder-color-switcher.py \
-      --replace "/usr/share/locale" "$out/share/locale" \
-      --replace "/usr/share/folder-color-switcher/colors.d" "/run/current-system/sw/share/folder-color-switcher/colors.d" \
-      --replace "/usr/share/folder-color-switcher/color.svg" "$out/share/folder-color-switcher/color.svg"
+      --replace-fail "/usr/share/locale" "$out/share/locale" \
+      --replace-fail "/usr/share/folder-color-switcher/colors.d" "/run/current-system/sw/share/folder-color-switcher/colors.d" \
+      --replace-fail "/usr/share/folder-color-switcher/color.svg" "$out/share/folder-color-switcher/color.svg"
 
     substituteInPlace usr/share/caja-python/extensions/caja-folder-color-switcher.py \
-      --replace "/usr/share/folder-color-switcher/colors.d" "/run/current-system/sw/share/folder-color-switcher/colors.d"
+      --replace-fail "/usr/share/folder-color-switcher/colors.d" "/run/current-system/sw/share/folder-color-switcher/colors.d"
   '';
 
   installPhase = ''

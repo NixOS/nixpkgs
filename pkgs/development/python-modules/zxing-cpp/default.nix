@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # https://pybind11.readthedocs.io/en/stable/installing.html#include-with-pypi
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "pybind11[global]" "pybind11"
+      --replace-fail "pybind11[global]" "pybind11"
   '';
 
   dontUseCmakeConfigure = true;

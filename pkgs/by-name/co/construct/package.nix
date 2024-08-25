@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-        --replace g++ c++
+        --replace-fail g++ c++
   '';
 
   makeTarget = "main";

@@ -77,7 +77,7 @@ buildPythonPackage rec {
     '';
 
   postPatch = ''
-    substituteInPlace setup.py --replace "cpu_use = 4" "cpu_use = $NIX_BUILD_CORES"
+    substituteInPlace setup.py --replace-fail "cpu_use = 4" "cpu_use = $NIX_BUILD_CORES"
   '';
 
   preCheck = ''

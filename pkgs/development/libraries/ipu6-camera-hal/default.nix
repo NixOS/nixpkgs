@@ -65,7 +65,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/platformdata/PlatformData.h \
-      --replace '/usr/share/' "${placeholder "out"}/share/"
+      --replace-fail '/usr/share/' "${placeholder "out"}/share/"
   '';
 
   postFixup = ''

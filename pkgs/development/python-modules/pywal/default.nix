@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
     for f in tests/test_export.py tests/test_util.py ; do
       substituteInPlace "$f" \
-        --replace '/tmp/' "$TMPDIR/"
+        --replace-fail '/tmp/' "$TMPDIR/"
     done
   '';
 

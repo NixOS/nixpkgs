@@ -172,8 +172,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
     cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/org.godotengine.Godot4.desktop"
     substituteInPlace "$out/share/applications/org.godotengine.Godot4.desktop" \
-      --replace "Exec=godot" "Exec=$out/bin/godot4" \
-      --replace "Godot Engine" "Godot Engine 4"
+      --replace-fail "Exec=godot" "Exec=$out/bin/godot4" \
+      --replace-fail "Godot Engine" "Godot Engine 4"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
 

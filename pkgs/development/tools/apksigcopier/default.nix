@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /bin/bash ${bash}/bin/bash
+      --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   postBuild = ''

@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     chmod u+w -R third_party
 
     substituteInPlace tools/update_build_version.py \
-      --replace "not os.path.exists(directory)" "True"
+      --replace-fail "not os.path.exists(directory)" "True"
   '';
 
   installPhase = ''

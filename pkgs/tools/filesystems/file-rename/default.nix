@@ -12,12 +12,12 @@ perlPackages.buildPerlPackage {
   # Fix an incorrect platform test that misidentifies Darwin as Windows
   postPatch = ''
     substituteInPlace Makefile.PL \
-      --replace '/win/i' '/MSWin32/'
+      --replace-fail '/win/i' '/MSWin32/'
   '';
 
   postFixup = ''
     substituteInPlace $out/bin/rename \
-      --replace "#!${perl}/bin/perl" "#!${perl}/bin/perl -I $out/${perl.libPrefix}"
+      --replace-fail "#!${perl}/bin/perl" "#!${perl}/bin/perl -I $out/${perl.libPrefix}"
   '';
 
   doCheck = !stdenv.isDarwin;

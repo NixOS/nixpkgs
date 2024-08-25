@@ -33,7 +33,7 @@ let
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
       substituteInPlace vite.config.ts \
-        --replace "open: true" "open: false";
+        --replace-fail "open: true" "open: false";
     '';
 
     env = {

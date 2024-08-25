@@ -16,10 +16,10 @@ mkDerivation rec {
   dontUseQmakeConfigure = true;
 
   patchPhase = ''
-    substituteInPlace host-linux/ee.ria.esteid.json --replace /usr $out
+    substituteInPlace host-linux/ee.ria.esteid.json --replace-fail /usr $out
     # TODO: macos
     substituteInPlace host-shared/PKCS11Path.cpp \
-      --replace opensc-pkcs11.so ${opensc}/lib/pkcs11/opensc-pkcs11.so
+      --replace-fail opensc-pkcs11.so ${opensc}/lib/pkcs11/opensc-pkcs11.so
   '';
 
   installPhase = ''

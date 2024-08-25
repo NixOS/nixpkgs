@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   fixupPhase = ''
     substituteInPlace $out/bin/makefile2graph \
-      --replace '/bin/sh' ${bash}/bin/bash \
-      --replace 'make2graph' "$out/bin/make2graph"
+      --replace-fail '/bin/sh' ${bash}/bin/bash \
+      --replace-fail 'make2graph' "$out/bin/make2graph"
     wrapProgram $out/bin/makefile2graph \
       --set PATH ${lib.makeBinPath [ gnumake ]}
   '';

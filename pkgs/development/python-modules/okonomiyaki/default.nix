@@ -38,11 +38,11 @@ buildPythonPackage rec {
   preCheck =
     ''
       substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
-        --replace 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
+        --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
     ''
     + lib.optionalString stdenv.isDarwin ''
       substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
-        --replace 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
+        --replace-fail 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
     '';
 
   checkInputs = [

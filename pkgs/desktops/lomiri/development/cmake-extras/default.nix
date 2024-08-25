@@ -19,11 +19,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postPatch = ''
     # We have nothing to build here, no need to depend on a C compiler
     substituteInPlace CMakeLists.txt \
-      --replace 'project(cmake-extras' 'project(cmake-extras LANGUAGES NONE'
+      --replace-fail 'project(cmake-extras' 'project(cmake-extras LANGUAGES NONE'
 
     # This is in a function that reverse dependencies use to determine where to install their files to
     substituteInPlace src/QmlPlugins/QmlPluginsConfig.cmake \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '';
 
   strictDeps = true;

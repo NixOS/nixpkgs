@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
 
     # TODO: submit upstream
     substituteInPlace meson.build \
-      --replace "'vala', req" "'vala', native: false, req"
+      --replace-fail "'vala', req" "'vala', native: false, req"
   '' + lib.optionalString withSystemd ''
     substituteInPlace data/NetworkManager.service.in \
       --replace-fail /usr/bin/busctl ${systemd}/bin/busctl

@@ -21,7 +21,7 @@ buildKodiAddon rec {
   prePatch = ''
     # ZIP does not support timestamps before 1980 - https://bugs.python.org/issue34097
     substituteInPlace build.py \
-      --replace "with zipfile.ZipFile(f'{target}/{archive_name}', 'w') as z:" "with zipfile.ZipFile(f'{target}/{archive_name}', 'w', strict_timestamps=False) as z:"
+      --replace-fail "with zipfile.ZipFile(f'{target}/{archive_name}', 'w') as z:" "with zipfile.ZipFile(f'{target}/{archive_name}', 'w', strict_timestamps=False) as z:"
   '';
 
   buildPhase = ''

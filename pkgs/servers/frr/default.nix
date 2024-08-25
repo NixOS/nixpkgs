@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/frr-reload \
-      --replace /usr/lib/frr/ $out/libexec/frr/
+      --replace-fail /usr/lib/frr/ $out/libexec/frr/
   '';
 
   doCheck = true;

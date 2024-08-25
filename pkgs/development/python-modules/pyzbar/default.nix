@@ -34,7 +34,7 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/7307
   postPatch = ''
     substituteInPlace pyzbar/zbar_library.py \
-      --replace \
+      --replace-fail \
         "find_library('zbar')" \
         '"${lib.getLib zbar}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';

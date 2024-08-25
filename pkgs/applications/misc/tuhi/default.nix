@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
   preConfigure = ''
     substituteInPlace meson_install.sh \
-      --replace "/usr/bin/env sh" "sh"
+      --replace-fail "/usr/bin/env sh" "sh"
   '';
   postFixup = ''
     wrapPythonProgramsIn $out/libexec "$out $pythonPath"

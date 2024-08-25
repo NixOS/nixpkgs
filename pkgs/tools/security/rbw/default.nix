@@ -59,17 +59,17 @@ rustPlatform.buildRustPackage rec {
   '' + lib.optionalString withFzf ''
     install -Dm755 -t $out/bin bin/rbw-fzf
     substituteInPlace $out/bin/rbw-fzf \
-      --replace fzf ${fzf}/bin/fzf \
-      --replace perl ${perl}/bin/perl
+      --replace-fail fzf ${fzf}/bin/fzf \
+      --replace-fail perl ${perl}/bin/perl
   '' + lib.optionalString withRofi ''
     install -Dm755 -t $out/bin bin/rbw-rofi
     substituteInPlace $out/bin/rbw-rofi \
-      --replace rofi ${rofi}/bin/rofi \
-      --replace xclip ${xclip}/bin/xclip
+      --replace-fail rofi ${rofi}/bin/rofi \
+      --replace-fail xclip ${xclip}/bin/xclip
   '' + lib.optionalString withPass ''
     install -Dm755 -t $out/bin bin/pass-import
     substituteInPlace $out/bin/pass-import \
-      --replace pass ${pass}/bin/pass
+      --replace-fail pass ${pass}/bin/pass
   '';
 
   meta = with lib; {

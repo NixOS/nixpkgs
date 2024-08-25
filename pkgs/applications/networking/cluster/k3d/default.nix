@@ -38,7 +38,7 @@ buildGoModule rec {
   preCheck = ''
     # skip test that uses networking
     substituteInPlace version/version_test.go \
-      --replace "TestGetK3sVersion" "SkipGetK3sVersion"
+      --replace-fail "TestGetK3sVersion" "SkipGetK3sVersion"
   '';
 
   postInstall = ''

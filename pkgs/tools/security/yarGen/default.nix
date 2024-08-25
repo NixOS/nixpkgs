@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace yarGen.py \
-      --replace "./3rdparty/strings.xml" "$out/share/yarGen/3rdparty/strings.xml"
+      --replace-fail "./3rdparty/strings.xml" "$out/share/yarGen/3rdparty/strings.xml"
   '';
 
   installPhase = ''

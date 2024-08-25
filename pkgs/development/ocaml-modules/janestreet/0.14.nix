@@ -134,7 +134,7 @@ with self;
     # in ctypes.foreign 0.18.0 threaded and unthreaded have been merged
     postPatch = ''
       substituteInPlace bindings/dune \
-        --replace "ctypes.foreign.threaded" "ctypes.foreign"
+        --replace-fail "ctypes.foreign.threaded" "ctypes.foreign"
     '';
   };
 
@@ -688,8 +688,8 @@ with self;
     meta.description = "OCaml bindings for RE2, Google's regular expression library";
     propagatedBuildInputs = [ core_kernel ];
     prePatch = ''
-      substituteInPlace src/re2_c/dune --replace 'CXX=g++' 'CXX=c++'
-      substituteInPlace src/dune --replace '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2))' '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2) (-x c++))'
+      substituteInPlace src/re2_c/dune --replace-fail 'CXX=g++' 'CXX=c++'
+      substituteInPlace src/dune --replace-fail '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2))' '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2) (-x c++))'
     '';
   };
 

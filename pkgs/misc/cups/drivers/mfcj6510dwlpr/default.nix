@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     dpkg-deb -x $src $out
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
-      --replace /opt "$out/opt"
+      --replace-fail /opt "$out/opt"
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/lpd/psconvertij2 \
-      --replace "GHOST_SCRIPT=`which gs`" "GHOST_SCRIPT=${ghostscript}/bin/gs"
+      --replace-fail "GHOST_SCRIPT=`which gs`" "GHOST_SCRIPT=${ghostscript}/bin/gs"
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/inf/setupPrintcapij \
-      --replace "/opt/brother/Printers" "$out/opt/brother/Printers" \
-      --replace "printcap.local" "printcap"
+      --replace-fail "/opt/brother/Printers" "$out/opt/brother/Printers" \
+      --replace-fail "printcap.local" "printcap"
 
     patchelf --set-interpreter ${pkgsi686Linux.stdenv.cc.libc.out}/lib/ld-linux.so.2 \
       --set-rpath $out/opt/brother/Printers/mfcj6510dw/inf:$out/opt/brother/Printers/mfcj6510dw/lpd \
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     echo -n "$brprintconf_mfcj6510dw_script" > $out/bin/brprintconf_mfcj6510dw
     chmod +x $out/bin/brprintconf_mfcj6510dw
-    substituteInPlace $out/bin/brprintconf_mfcj6510dw --replace @out@ $out
+    substituteInPlace $out/bin/brprintconf_mfcj6510dw --replace-fail @out@ $out
 
     mkdir -p $out/lib/cups/filter/
     ln -s $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw $out/lib/cups/filter/brother_lpdwrapper_mfcj6510dw

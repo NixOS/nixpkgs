@@ -36,9 +36,9 @@ buildPythonPackage rec {
   postPatch = ''
     # use wrapped executable in tests
     substituteInPlace jupyter_console/tests/test_console.py \
-      --replace "args = ['-m', 'jupyter_console', '--colors=NoColor']" "args = ['--colors=NoColor']" \
-      --replace "cmd = sys.executable" "cmd = '${placeholder "out"}/bin/jupyter-console'" \
-      --replace "check_output([sys.executable, '-m', 'jupyter_console'," "check_output(['${placeholder "out"}/bin/jupyter-console',"
+      --replace-fail "args = ['-m', 'jupyter_console', '--colors=NoColor']" "args = ['--colors=NoColor']" \
+      --replace-fail "cmd = sys.executable" "cmd = '${placeholder "out"}/bin/jupyter-console'" \
+      --replace-fail "check_output([sys.executable, '-m', 'jupyter_console'," "check_output(['${placeholder "out"}/bin/jupyter-console',"
   '';
 
   propagatedBuildInputs = [

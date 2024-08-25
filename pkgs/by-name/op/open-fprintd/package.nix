@@ -25,11 +25,11 @@ python3Packages.buildPythonPackage rec {
     install -D -m 644 debian/open-fprintd-suspend.service \
       $out/lib/systemd/system/open-fprintd-suspend.service
     substituteInPlace $out/lib/systemd/system/open-fprintd.service \
-      --replace /usr/lib/open-fprintd "$out/lib/open-fprintd"
+      --replace-fail /usr/lib/open-fprintd "$out/lib/open-fprintd"
     substituteInPlace $out/lib/systemd/system/open-fprintd-resume.service \
-      --replace /usr/lib/open-fprintd "$out/lib/open-fprintd"
+      --replace-fail /usr/lib/open-fprintd "$out/lib/open-fprintd"
     substituteInPlace $out/lib/systemd/system/open-fprintd-suspend.service \
-      --replace /usr/lib/open-fprintd "$out/lib/open-fprintd"
+      --replace-fail /usr/lib/open-fprintd "$out/lib/open-fprintd"
   '';
 
   dontWrapGApps = true;

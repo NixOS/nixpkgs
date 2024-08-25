@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = ''
-    substituteInPlace Makefile --replace "PYTHONPATH=$(shell pwd)" "PYTHONPATH=$PYTHONPATH:$(shell pwd)"
+    substituteInPlace Makefile --replace-fail "PYTHONPATH=$(shell pwd)" "PYTHONPATH=$PYTHONPATH:$(shell pwd)"
     export PYTEST="py.test"
     export XDG_CACHE_HOME=$(mktemp -d)
   '';

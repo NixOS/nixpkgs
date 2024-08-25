@@ -32,8 +32,8 @@ buildPythonPackage rec {
 
     # unbound numpy and disable coverage testing in pytest
     substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>=' \
-      --replace 'addopts = "' '#addopts = "'
+      --replace-fail 'numpy==' 'numpy>=' \
+      --replace-fail 'addopts = "' '#addopts = "'
 
     # provide a version to use when git fails to get the tag
     [[ -f skmisc/_version.py ]] || \

@@ -35,7 +35,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace man/man1/checkmake.1.md \
-      --replace REPLACE_DATE 1970-01-01T00:00:00Z
+      --replace-fail REPLACE_DATE 1970-01-01T00:00:00Z
   '';
 
   postBuild = ''

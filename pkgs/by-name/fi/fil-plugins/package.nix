@@ -17,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/lib/ladspa "$out/lib/ladspa" \
-      --replace g++             "$CXX"
+      --replace-fail /usr/lib/ladspa "$out/lib/ladspa" \
+      --replace-fail g++             "$CXX"
   '';
 
   preInstall = ''

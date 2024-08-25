@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = lib.optionalString (withGUI && lib.versionAtLeast qtbase.version "6.0") ''
     # Use Meson's Qt6 module
     substituteInPlace src/meson.build \
-      --replace qt5 qt6
+      --replace-fail qt5 qt6
 
     # For some reason Meson uses QMake instead of pkg-config detection method for Qt6 on Darwin, which gives wrong search paths for tools
     export PATH=${qtbase.dev}/libexec:$PATH

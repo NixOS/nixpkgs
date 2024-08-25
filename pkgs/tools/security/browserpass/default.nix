@@ -30,7 +30,7 @@ buildGoModule rec {
     # Because this Makefile will be installed to be used by the user, patch
     # variables to be valid by default
     substituteInPlace Makefile \
-      --replace "PREFIX ?= /usr" ""
+      --replace-fail "PREFIX ?= /usr" ""
     sed -i -e 's/SED =.*/SED = sed/' Makefile
     sed -i -e 's/INSTALL =.*/INSTALL = install/' Makefile
   '';

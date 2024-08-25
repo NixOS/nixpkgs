@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs quotehostinfo
-    substituteInPlace Makefile --replace strip '${stdenv.cc.targetPrefix}strip'
+    substituteInPlace Makefile --replace-fail strip '${stdenv.cc.targetPrefix}strip'
   '';
 
   meta = with lib; {

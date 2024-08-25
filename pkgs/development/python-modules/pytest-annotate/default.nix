@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest>=3.2.0,<7.0.0" "pytest>=3.2.0"
+      --replace-fail "pytest>=3.2.0,<7.0.0" "pytest>=3.2.0"
   '';
 
   # Module has no tests

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libuptimed/urec.h \
-      --replace /var/spool /var/lib
+      --replace-fail /var/spool /var/lib
   '';
 
   meta = with lib; {

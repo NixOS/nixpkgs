@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "protobuf>=4.22.0" "protobuf"
+      --replace-fail "protobuf>=4.22.0" "protobuf"
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

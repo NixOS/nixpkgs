@@ -54,11 +54,11 @@ python3Packages.buildPythonApplication rec {
   # build the rust library independantly
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "from setuptools_rust import Binding, RustExtension, Strip" "" \
-      --replace "RustExtension(\"portmodlib.portmod\", binding=Binding.PyO3, strip=Strip.Debug)" ""
+      --replace-fail "from setuptools_rust import Binding, RustExtension, Strip" "" \
+      --replace-fail "RustExtension(\"portmodlib.portmod\", binding=Binding.PyO3, strip=Strip.Debug)" ""
 
     substituteInPlace pyproject.toml \
-      --replace '"setuptools-rust"' ""
+      --replace-fail '"setuptools-rust"' ""
   '';
 
   nativeBuildInputs = with python3Packages; [

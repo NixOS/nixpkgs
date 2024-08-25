@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
 
       # Fix paths to decompressors. Trailing space to avoid replacing `xz` in `".xz"`.
       substituteInPlace src/libkbdfile/kbdfile.c \
-        --replace 'gzip '  '${gzip}/bin/gzip ' \
-        --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
-        --replace 'xz '    '${xz.bin}/bin/xz ' \
-        --replace 'zstd '  '${zstd.bin}/bin/zstd '
+        --replace-fail 'gzip '  '${gzip}/bin/gzip ' \
+        --replace-fail 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
+        --replace-fail 'xz '    '${xz.bin}/bin/xz ' \
+        --replace-fail 'zstd '  '${zstd.bin}/bin/zstd '
 
       sed -i '
         1i prefix:=$(vlock)
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for i in $out/bin/unicode_{start,stop}; do
       substituteInPlace "$i" \
-        --replace /usr/bin/tty ${coreutils}/bin/tty
+        --replace-fail /usr/bin/tty ${coreutils}/bin/tty
     done
   '';
 

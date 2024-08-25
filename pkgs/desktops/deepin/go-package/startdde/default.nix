@@ -32,15 +32,15 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace display/manager.go \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
 
     substituteInPlace misc/systemd_task/dde-display-task-refresh-brightness.service \
-       --replace "/usr/bin/dbus-send" "${dbus}/bin/dbus-send"
+       --replace-fail "/usr/bin/dbus-send" "${dbus}/bin/dbus-send"
 
     substituteInPlace display/manager.go \
-      --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
-    substituteInPlace misc/lightdm.conf --replace "/usr" "$out"
+    substituteInPlace misc/lightdm.conf --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [

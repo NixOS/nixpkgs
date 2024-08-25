@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/flopoco/flopoco/-/commit/de3aa60ad19333952c176c2a2e51f12653ca736b.patch";
       postFetch = ''
         substituteInPlace $out \
-          --replace 'FixSinCosCORDIC.hpp' 'CordicSinCos.hpp'
+          --replace-fail 'FixSinCosCORDIC.hpp' 'CordicSinCos.hpp'
       '';
       sha256 = "sha256-BlamA/MZuuqqvGYto+jPeQPop6gwva0y394Odw8pdwg=";
     })

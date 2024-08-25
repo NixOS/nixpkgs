@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "timeout = 300" ""
+      --replace-fail "timeout = 300" ""
   '';
 
   build-system = [

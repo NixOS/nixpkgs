@@ -18,7 +18,7 @@ buildNpmPackage rec {
 
   # correctly substitute the usage message
   postPatch = ''
-    substituteInPlace src/index.ts  --replace \
+    substituteInPlace src/index.ts  --replace-fail \
     '.usage("$0' '.usage("mw'
   '';
 

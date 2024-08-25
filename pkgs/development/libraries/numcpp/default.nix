@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace $out/share/NumCpp/cmake/NumCppConfig.cmake \
-      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
+      --replace-fail "\''${PACKAGE_PREFIX_DIR}/" ""
   '';
 
   NIX_CFLAGS_COMPILE="-Wno-error";

@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString withPythonModule ''
     substituteInPlace Makefile.in \
-      --replace "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}"
+      --replace-fail "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}"
   '';
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
   # get rid of runtime dependencies on $dev outputs
   + ''substituteInPlace "$lib/lib/libunbound.la" ''
   + lib.concatMapStrings
-    (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
+    (pkg: lib.optionalString (pkg ? dev) " --replace-fail '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace-fail '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) finalAttrs.buildInputs);
 
   passthru.tests = {

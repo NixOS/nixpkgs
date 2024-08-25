@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in {common,utility}/*.py; do
       substituteInPlace $f \
-        --replace '/usr/bin/env python3' ${python3.interpreter}
+        --replace-fail '/usr/bin/env python3' ${python3.interpreter}
     done
     for f in bootstrap/*.sh; do
       patchShebangs $f

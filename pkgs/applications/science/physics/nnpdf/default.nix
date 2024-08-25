@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for file in CMakeLists.txt buildmaster/CMakeLists.txt; do
       substituteInPlace $file \
-        --replace "-march=nocona -mtune=haswell" ""
+        --replace-fail "-march=nocona -mtune=haswell" ""
     done
   '';
 

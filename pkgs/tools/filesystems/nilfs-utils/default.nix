@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Fix up hardcoded paths.
-    substituteInPlace lib/cleaner_exec.c --replace /sbin/ $out/bin/
-    substituteInPlace sbin/mkfs/mkfs.c --replace /sbin/ ${lib.getBin e2fsprogs}/bin/
+    substituteInPlace lib/cleaner_exec.c --replace-fail /sbin/ $out/bin/
+    substituteInPlace sbin/mkfs/mkfs.c --replace-fail /sbin/ ${lib.getBin e2fsprogs}/bin/
   '';
 
   # According to upstream, libmount should be detected automatically but the

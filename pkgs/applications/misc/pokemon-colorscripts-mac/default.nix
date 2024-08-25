@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
     patchShebangs ./install.sh
 
     # Fix hardcoded prefixed coreutils
-    substituteInPlace pokemon-colorscripts.sh --replace greadlink readlink
-    substituteInPlace pokemon-colorscripts.sh --replace gshuf shuf
+    substituteInPlace pokemon-colorscripts.sh --replace-fail greadlink readlink
+    substituteInPlace pokemon-colorscripts.sh --replace-fail gshuf shuf
 
-    substituteInPlace install.sh --replace /usr/local $out
+    substituteInPlace install.sh --replace-fail /usr/local $out
   '';
 
   installPhase = ''

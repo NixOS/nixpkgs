@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "gcc" "$CC"
+      --replace-fail "gcc" "$CC"
   '';
 
   buildInputs = [

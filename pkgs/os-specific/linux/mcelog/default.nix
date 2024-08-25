@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for i in mcelog.conf paths.h; do
-      substituteInPlace $i --replace /etc $out/etc
+      substituteInPlace $i --replace-fail /etc $out/etc
     done
     touch mcelog.conf.5 # avoid regeneration requiring Python
 
-    substituteInPlace Makefile --replace '"unknown"' '"${version}"'
+    substituteInPlace Makefile --replace-fail '"unknown"' '"${version}"'
 
     for i in triggers/*; do
-      substituteInPlace $i --replace 'logger' '${util-linux}/bin/logger'
+      substituteInPlace $i --replace-fail 'logger' '${util-linux}/bin/logger'
     done
   '';
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/lib/systemd/system
     substitute mcelog.service $out/lib/systemd/system/mcelog.service \
-      --replace /usr/sbin $out/bin
+      --replace-fail /usr/sbin $out/bin
   '';
 
   meta = with lib; {

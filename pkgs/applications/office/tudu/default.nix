@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace configure \
-      --replace 'echo "main()' 'echo "int main()'
+      --replace-fail 'echo "main()' 'echo "int main()'
   '';
 
   meta = with lib; {

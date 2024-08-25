@@ -142,26 +142,26 @@ stdenv.mkDerivation ({
   # a flag and turn the flag off during the stdenv build.
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+      --replace-fail 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
-      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
+      --replace-fail 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
-      --replace "<stdlib.h>" "<stddef.h>"
+      --replace-fail "<stdlib.h>" "<stddef.h>"
   '') + ''
     substituteInPlace lib/builtins/int_util.c \
-      --replace "#include <stdlib.h>" ""
+      --replace-fail "#include <stdlib.h>" ""
   '' + (if stdenv.hostPlatform.isFreeBSD then
     # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
     ''
     substituteInPlace lib/builtins/clear_cache.c lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
-      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
+      --replace-fail "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
     '' else ''
     substituteInPlace lib/builtins/clear_cache.c \
-      --replace "#include <assert.h>" ""
+      --replace-fail "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
-      --replace "#include <assert.h>" ""
+      --replace-fail "#include <assert.h>" ""
   '')) + lib.optionalString (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14") ''
     # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
     # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.

@@ -47,7 +47,7 @@ mkDerivation rec {
 
   preFixup = ''
     substituteInPlace $out/bin/eiskaltdcpp-cli-jsonrpc \
-      --replace "/usr/local" "$out"
+      --replace-fail "/usr/local" "$out"
   '';
 
   meta = with lib; {

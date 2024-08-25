@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   # Avoid using absolute path to distinguish applications
   postPatch = ''
     substituteInPlace src/effects/screenshot/screenshotdbusinterface1.cpp \
-      --replace 'file.readAll().startsWith(DEFINE_DDE_DOCK_PATH"dde-dock")' 'file.readAll().contains("dde-dock")'
+      --replace-fail 'file.readAll().startsWith(DEFINE_DDE_DOCK_PATH"dde-dock")' 'file.readAll().contains("dde-dock")'
   '';
 
   nativeBuildInputs = [

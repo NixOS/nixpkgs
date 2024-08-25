@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation {
       rm -rf $out/bin/linux-x86-64
     fi
     substituteInPlace $out/bin/yourkit-java-profiler \
-        --replace 'JAVA_EXE="$YD/jre64/bin/java"' JAVA_EXE=${jre}/bin/java
+        --replace-fail 'JAVA_EXE="$YD/jre64/bin/java"' JAVA_EXE=${jre}/bin/java
     # Use our desktop item, which will be purged when this package
     # gets removed
     sed -i -e "/^YD=/isource $out/bin/forbid-desktop-item-creation\\

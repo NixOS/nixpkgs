@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun" \
+      --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun" \
   '';
 
   dontUseCmakeConfigure = true;

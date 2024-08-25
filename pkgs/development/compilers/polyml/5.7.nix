@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.7.1";
 
   prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.ac --replace stdc++ c++
+    substituteInPlace configure.ac --replace-fail stdc++ c++
   '';
 
   patches = [

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   # shell thing didn't work so i replaced it using nix
   prePatch = ''
-    substituteInPlace src/brickd/Makefile --replace 'PKG_CONFIG := $(shell which pkg-config 2> /dev/null)' "PKG_CONFIG := $pkgconfig/bin/pkg_config";
+    substituteInPlace src/brickd/Makefile --replace-fail 'PKG_CONFIG := $(shell which pkg-config 2> /dev/null)' "PKG_CONFIG := $pkgconfig/bin/pkg_config";
   '';
 
   buildPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     mkdir src/daemonlib
     cp -r ${daemonlib}/* src/daemonlib
     substituteInPlace src/daemonlib/utils.{c,h} \
-      --replace "_GNU_SOURCE" "__GLIBC__"
+      --replace-fail "_GNU_SOURCE" "__GLIBC__"
     cd src/brickd
     make
 

@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    substituteInPlace picosat.c --replace "sys/unistd.h" "unistd.h"
+    substituteInPlace picosat.c --replace-fail "sys/unistd.h" "unistd.h"
 
     substituteInPlace makefile.in \
-      --replace 'ar rc' '$(AR) rc' \
-      --replace 'ranlib' '$(RANLIB)'
+      --replace-fail 'ar rc' '$(AR) rc' \
+      --replace-fail 'ranlib' '$(RANLIB)'
   '';
 
   configurePhase = "./configure.sh --shared --trace";

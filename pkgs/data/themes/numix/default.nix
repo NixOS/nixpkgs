@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
+    substituteInPlace Makefile --replace-fail '$(DESTDIR)'/usr $out
     patchShebangs .
   '';
 

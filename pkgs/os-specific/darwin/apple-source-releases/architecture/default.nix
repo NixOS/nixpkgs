@@ -5,8 +5,8 @@ appleDerivation' stdenvNoCC {
 
   postPatch = ''
     substituteInPlace Makefile \
-        --replace '/bin/mkdir' 'mkdir' \
-        --replace '/usr/bin/install' 'install'
+        --replace-fail '/bin/mkdir' 'mkdir' \
+        --replace-fail '/usr/bin/install' 'install'
   '';
 
   installFlags = [ "EXPORT_DSTDIR=/include/architecture" ];

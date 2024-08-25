@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace CMakeLists.txt \
-      --replace "add_link_options(-Wl," "# add_link_options(-Wl,"
+      --replace-fail "add_link_options(-Wl," "# add_link_options(-Wl,"
   '';
 
   buildInputs = [ libgcrypt ];

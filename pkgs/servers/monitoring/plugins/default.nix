@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   # configureFlags due to the spaces in the argument
   postPatch = ''
     substituteInPlace po/Makefile.in.in \
-      --replace /bin/sh ${runtimeShell}
+      --replace-fail /bin/sh ${runtimeShell}
 
     sed -i configure.ac \
       -e 's|^DEFAULT_PATH=.*|DEFAULT_PATH=\"${binPath}\"|'

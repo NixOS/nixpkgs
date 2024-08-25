@@ -322,11 +322,11 @@ let
     postPatch = ''
       # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
       substituteInPlace BUILD.gn \
-        --replace '"//infra/orchestrator:orchestrator_all",' ""
+        --replace-fail '"//infra/orchestrator:orchestrator_all",' ""
       # Disable build flags that require LLVM 15:
       substituteInPlace build/config/compiler/BUILD.gn \
-        --replace '"-Xclang",' "" \
-        --replace '"-no-opaque-pointers",' ""
+        --replace-fail '"-Xclang",' "" \
+        --replace-fail '"-no-opaque-pointers",' ""
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -341,11 +341,11 @@ let
 
       if [[ -e native_client/SConstruct ]]; then
         # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
-        substituteInPlace native_client/SConstruct --replace "#! -*- python -*-" ""
+        substituteInPlace native_client/SConstruct --replace-fail "#! -*- python -*-" ""
       fi
       if [ -e third_party/harfbuzz-ng/src/src/update-unicode-tables.make ]; then
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-          --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
+          --replace-fail "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
       if [ -e third_party/webgpu-cts/src/tools/run_deno ]; then
         chmod -x third_party/webgpu-cts/src/tools/run_deno
@@ -356,18 +356,18 @@ let
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
-        --replace \
+        --replace-fail \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
 
       substituteInPlace services/audio/audio_sandbox_hook_linux.cc \
-        --replace \
+        --replace-fail \
           '/usr/share/alsa/' \
           '${alsa-lib}/share/alsa/' \
-        --replace \
+        --replace-fail \
           '/usr/lib/x86_64-linux-gnu/gconv/' \
           '${glibc}/lib/gconv/' \
-        --replace \
+        --replace-fail \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
@@ -402,7 +402,7 @@ let
 
     '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
-        --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+        --replace-fail 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '' + lib.optionalString ungoogled ''
       ${ungoogler}/utils/patches.py . ${ungoogler}/patches
       ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .

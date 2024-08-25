@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   # note: `#[deny(invalid_macro_export_arguments)]` implied by `#[deny(warnings)]`
   postPatch = ''
     substituteInPlace src/lib.rs \
-      --replace '#![deny(' '#![warn('
+      --replace-fail '#![deny(' '#![warn('
   '';
 
   # TODO export TREMOR_PATH($out/lib) variable

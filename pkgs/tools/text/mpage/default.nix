@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i "Makefile" -e "s|^ *PREFIX *=.*$|PREFIX = $out|g"
-    substituteInPlace Makefile --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
+    substituteInPlace Makefile --replace-fail 'gcc' '${stdenv.cc.targetPrefix}cc'
   '';
 
   meta = {

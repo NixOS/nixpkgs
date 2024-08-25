@@ -50,12 +50,12 @@ mkDerivation rec {
     pythonPath = python3Packages.makePythonPath (with python3Packages; [ sip setuptools ]);
   in ''
     substituteInPlace cmake/modules/FindSIP.cmake \
-      --replace 'PYTHONPATH=''${_sip_python_path}' 'PYTHONPATH=${pythonPath}'
+      --replace-fail 'PYTHONPATH=''${_sip_python_path}' 'PYTHONPATH=${pythonPath}'
     substituteInPlace cmake/modules/SIPMacros.cmake \
-      --replace 'PYTHONPATH=''${_krita_python_path}' 'PYTHONPATH=${pythonPath}'
+      --replace-fail 'PYTHONPATH=''${_krita_python_path}' 'PYTHONPATH=${pythonPath}'
 
     substituteInPlace plugins/impex/jp2/jp2_converter.cc \
-      --replace '<openjpeg.h>' '<${openjpeg.incDir}/openjpeg.h>'
+      --replace-fail '<openjpeg.h>' '<${openjpeg.incDir}/openjpeg.h>'
   '';
 
   cmakeBuildType = "RelWithDebInfo";

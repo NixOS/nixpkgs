@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "format" "pic" ];
 
   preBuild = ''
-    substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
+    substituteInPlace Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
     sed -i '/depmod/d' Makefile
   '';
 

@@ -36,8 +36,8 @@ buildPythonPackage rec {
     do
       # https://docs.python.org/3/whatsnew/3.12.html#id3
       substituteInPlace pyu2f/tests/$path \
-        --replace "assertEquals" "assertEqual" \
-        --replace "assertRaisesRegexp" "assertRaisesRegex"
+        --replace-fail "assertEquals" "assertEqual" \
+        --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
     done
   '';
 

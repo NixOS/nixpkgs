@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   # Fixes impure path to soundfont
   prePatch = ''
-    substituteInPlace src/m_misc.c --replace \
+    substituteInPlace src/m_misc.c --replace-fail \
       "/usr/share/sounds/sf3/default-GM.sf3" \
       "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
   '';

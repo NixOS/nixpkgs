@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Allow usage of ANGBAND_PATH
-    substituteInPlace config.h --replace "#define FIXED_PATHS" ""
+    substituteInPlace config.h --replace-fail "#define FIXED_PATHS" ""
   '';
 
   preConfigure = ''

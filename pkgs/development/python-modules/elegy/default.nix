@@ -50,9 +50,9 @@ buildPythonPackage rec {
   # Python constraint: https://github.com/poets-ai/elegy/issues/244
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'python = ">=3.7,<3.10"' 'python = ">=3.7"' \
-      --replace 'cloudpickle = "^1.5.0"' 'cloudpickle = "*"' \
-      --replace 'wandb = { version = "^0.12.10", optional = true }' ""
+      --replace-fail 'python = ">=3.7,<3.10"' 'python = ">=3.7"' \
+      --replace-fail 'cloudpickle = "^1.5.0"' 'cloudpickle = "*"' \
+      --replace-fail 'wandb = { version = "^0.12.10", optional = true }' ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

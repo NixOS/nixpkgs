@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs ./build
     patchShebangs scripts/
-    substituteInPlace INSTALL.im --replace /usr $out
-    substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
-    substituteInPlace scripts/yodl2whatever.in --replace getopt ${util-linux}/bin/getopt
+    substituteInPlace INSTALL.im --replace-fail /usr $out
+    substituteInPlace macros/rawmacros/startdoc.pl --replace-fail /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace scripts/yodl2whatever.in --replace-fail getopt ${util-linux}/bin/getopt
   '';
 
   # Set TERM because icmbuild calls tput.

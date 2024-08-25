@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/include/libusb-1.0 ${libusb1.dev}/include/libusb-1.0
+      --replace-fail /usr/include/libusb-1.0 ${libusb1.dev}/include/libusb-1.0
   '';
 
   makeFlags = [

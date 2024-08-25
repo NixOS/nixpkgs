@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace GPService/gpservice.h \
-      --replace /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
+      --replace-fail /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
     substituteInPlace GPService/CMakeLists.txt \
-      --replace /etc/gpservice $out/etc/gpservice;
+      --replace-fail /etc/gpservice $out/etc/gpservice;
   '';
 
   meta = with lib; {

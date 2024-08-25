@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     for f in f3write.h2w log-f3wr; do
      substituteInPlace $f \
-       --replace '$(dirname $0)' $out/bin
+       --replace-fail '$(dirname $0)' $out/bin
     done
   '';
 

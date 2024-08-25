@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # the right place in the Makefile itself.
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.in \
-      --replace --soname, -install_name,$out/lib/
+      --replace-fail --soname, -install_name,$out/lib/
   '';
 
   installPhase = ''

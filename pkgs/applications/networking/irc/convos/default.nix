@@ -45,7 +45,7 @@ perlPackages.buildPerlPackage rec {
     # the sandbox, we replace the this out from a substitution expression
     #
     substituteInPlace t/web-register-open-to-public.t \
-      --replace '!127.0.0.1!' '!localhost!'
+      --replace-fail '!127.0.0.1!' '!localhost!'
 
     # Another online test fails, so remove this.
     rm t/irc-reconnect.t

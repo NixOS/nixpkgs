@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     substituteInPlace clients/tests/CMakeLists.txt \
-      --replace "\''${PROJECT_BINARY_DIR}/matrices" "/build/source/matrices"
+      --replace-fail "\''${PROJECT_BINARY_DIR}/matrices" "/build/source/matrices"
   '';
 
   postInstall = lib.optionalString buildTests ''

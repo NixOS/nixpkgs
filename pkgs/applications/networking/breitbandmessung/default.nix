@@ -51,7 +51,7 @@ let
 
         # Fix the desktop link
         substituteInPlace $out/share/applications/breitbandmessung.desktop \
-          --replace /opt/Breitbandmessung $out/bin
+          --replace-fail /opt/Breitbandmessung $out/bin
       '';
     };
 

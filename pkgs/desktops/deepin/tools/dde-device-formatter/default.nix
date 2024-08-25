@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace translate_desktop2ts.sh translate_ts2desktop.sh \
-      --replace "/usr/bin/deepin-desktop-ts-convert" "deepin-desktop-ts-convert"
+      --replace-fail "/usr/bin/deepin-desktop-ts-convert" "deepin-desktop-ts-convert"
     substituteInPlace dde-device-formatter.pro dde-device-formatter.desktop \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
     patchShebangs *.sh
   '';
 

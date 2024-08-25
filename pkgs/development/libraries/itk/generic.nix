@@ -70,8 +70,8 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace CMake/ITKSetStandardCompilerFlags.cmake  \
-      --replace "-march=corei7" ""  \
-      --replace "-mtune=native" ""
+      --replace-fail "-march=corei7" ""  \
+      --replace-fail "-mtune=native" ""
     ln -sr ${itkGenericLabelInterpolatorSrc} Modules/External/ITKGenericLabelInterpolator
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
     ln -sr ${itkSimpleITKFiltersSrc} Modules/External/ITKSimpleITKFilters

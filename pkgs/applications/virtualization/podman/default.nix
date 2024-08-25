@@ -108,7 +108,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
+    substituteInPlace Makefile --replace-fail "/bin/bash" "${runtimeShell}"
     ${if stdenv.isDarwin then ''
       make podman-remote # podman-mac-helper uses FHS paths
     '' else ''

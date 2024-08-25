@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'httpx = ">=0.24,<0.25"' 'httpx = "*"'
+      --replace-fail 'httpx = ">=0.24,<0.25"' 'httpx = "*"'
   '';
 
   nativeBuildInputs = with python3.pkgs; [

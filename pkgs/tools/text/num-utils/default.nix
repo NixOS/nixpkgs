@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   patchPhase = ''
-    substituteInPlace Makefile --replace "-o 0 -g 0" "" --replace "\$(RPMDIR)" ""
+    substituteInPlace Makefile --replace-fail "-o 0 -g 0" "" --replace-fail "\$(RPMDIR)" ""
   '';
   makeFlags = [
     "TOPDIR=${placeholder "out"}"

@@ -11,18 +11,18 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kccommon.h \
-      --replace tr1/unordered_map unordered_map \
-      --replace tr1/unordered_set unordered_set \
-      --replace tr1::hash std::hash \
-      --replace tr1::unordered_map std::unordered_map \
-      --replace tr1::unordered_set std::unordered_set
+      --replace-fail tr1/unordered_map unordered_map \
+      --replace-fail tr1/unordered_set unordered_set \
+      --replace-fail tr1::hash std::hash \
+      --replace-fail tr1::unordered_map std::unordered_map \
+      --replace-fail tr1::unordered_set std::unordered_set
 
-    substituteInPlace lab/kcdict/Makefile --replace stdc++ c++
+    substituteInPlace lab/kcdict/Makefile --replace-fail stdc++ c++
     substituteInPlace configure \
-        --replace /usr/local/bin:/usr/local/sbin: "" \
-        --replace /usr/bin:/usr/sbin: "" \
-        --replace /bin:/sbin: "" \
-        --replace stdc++ c++
+        --replace-fail /usr/local/bin:/usr/local/sbin: "" \
+        --replace-fail /usr/bin:/usr/sbin: "" \
+        --replace-fail /bin:/sbin: "" \
+        --replace-fail stdc++ c++
   '';
 
   buildInputs = [ zlib ];

@@ -27,10 +27,10 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     # allow usage of ANGBAND_PATH
-    substituteInPlace config.h --replace "#define FIXED_PATHS" ""
+    substituteInPlace config.h --replace-fail "#define FIXED_PATHS" ""
 
     # change Makefile.std for ncurses according to its own comment
-    substituteInPlace Makefile.std --replace "-lcurses" "-lncurses"
+    substituteInPlace Makefile.std --replace-fail "-lcurses" "-lncurses"
   '';
 
   makefile = "Makefile.std";

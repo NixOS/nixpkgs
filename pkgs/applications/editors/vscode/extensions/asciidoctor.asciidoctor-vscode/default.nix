@@ -14,10 +14,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postPatch = ''
     substituteInPlace dist/src/text-parser.js \
-      --replace "get('asciidoctor_command', 'asciidoctor')" \
+      --replace-fail "get('asciidoctor_command', 'asciidoctor')" \
                 "get('asciidoctor_command', '${asciidoctor}/bin/asciidoctor')"
     substituteInPlace dist/src/commands/exportAsPDF.js \
-      --replace "get('asciidoctorpdf_command', 'asciidoctor-pdf')" \
+      --replace-fail "get('asciidoctorpdf_command', 'asciidoctor-pdf')" \
                 "get('asciidoctorpdf_command', '${asciidoctor}/bin/asciidoctor-pdf')"
   '';
 

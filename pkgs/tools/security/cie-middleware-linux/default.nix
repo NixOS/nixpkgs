@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   postPatch = ''
     # substitute the cieid command with this $out/bin/cieid
     substituteInPlace libs/pkcs11/src/CSP/AbilitaCIE.cpp \
-      --replace 'file = "cieid"' 'file = "'$out'/bin/cieid"'
+      --replace-fail 'file = "cieid"' 'file = "'$out'/bin/cieid"'
   '';
 
   # Note: we use pushd/popd to juggle between the

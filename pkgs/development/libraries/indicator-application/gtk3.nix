@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace data/Makefile.am \
-      --replace "/etc/xdg/autostart" "$out/etc/xdg/autostart"
+      --replace-fail "/etc/xdg/autostart" "$out/etc/xdg/autostart"
   '';
 
   configureFlags = [

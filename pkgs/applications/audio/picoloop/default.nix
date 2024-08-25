@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace SDL_GUI.cpp \
-    --replace "\"font.ttf\"" "\"$out/share/font.ttf\"" \
-    --replace "\"font.bmp\"" "\"$out/share/font.bmp\""
+    --replace-fail "\"font.ttf\"" "\"$out/share/font.ttf\"" \
+    --replace-fail "\"font.bmp\"" "\"$out/share/font.bmp\""
   '';
 
   installPhase = ''

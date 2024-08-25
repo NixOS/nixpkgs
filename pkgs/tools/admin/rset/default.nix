@@ -13,18 +13,18 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace rset.c \
-      --replace @ssh@       ${openssh}/bin/ssh \
-      --replace @miniquark@ $out/bin/miniquark \
-      --replace @rinstall@  $out/bin/rinstall \
-      --replace @rsub@      $out/bin/rsub
+      --replace-fail @ssh@       ${openssh}/bin/ssh \
+      --replace-fail @miniquark@ $out/bin/miniquark \
+      --replace-fail @rinstall@  $out/bin/rinstall \
+      --replace-fail @rsub@      $out/bin/rsub
 
     substituteInPlace execute.c \
-      --replace @ssh@     ${openssh}/bin/ssh \
-      --replace @ssh-add@ ${openssh}/bin/ssh-add \
-      --replace @tar@     ${gnutar}/bin/tar
+      --replace-fail @ssh@     ${openssh}/bin/ssh \
+      --replace-fail @ssh-add@ ${openssh}/bin/ssh-add \
+      --replace-fail @tar@     ${gnutar}/bin/tar
 
     substituteInPlace rutils.c \
-      --replace @install@ ${coreutils}/bin/install
+      --replace-fail @install@ ${coreutils}/bin/install
   '';
 
   # these are to be run on the remote host,

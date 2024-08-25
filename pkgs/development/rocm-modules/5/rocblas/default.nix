@@ -143,7 +143,7 @@ in stdenv.mkDerivation (finalAttrs: {
   postPatch = lib.optionalString (finalAttrs.pname != "rocblas") ''
     # Return early and install tensile files manually
     substituteInPlace library/src/CMakeLists.txt \
-      --replace "set_target_properties( TensileHost PROPERTIES OUTPUT_NAME" "return()''\nset_target_properties( TensileHost PROPERTIES OUTPUT_NAME"
+      --replace-fail "set_target_properties( TensileHost PROPERTIES OUTPUT_NAME" "return()''\nset_target_properties( TensileHost PROPERTIES OUTPUT_NAME"
   '' + lib.optionalString (buildTensile && finalAttrs.pname == "rocblas") ''
     # Link the prebuilt Tensile files
     mkdir -p build/Tensile/library
@@ -160,11 +160,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # Rewrap Tensile
     substituteInPlace tensile/bin/{.t*,.T*,*} \
-      --replace "${tensile}" "/build/source/tensile"
+      --replace-fail "${tensile}" "/build/source/tensile"
 
     substituteInPlace CMakeLists.txt \
-      --replace "include(virtualenv)" "" \
-      --replace "virtualenv_install(\''${Tensile_TEST_LOCAL_PATH})" ""
+      --replace-fail "include(virtualenv)" "" \
+      --replace-fail "virtualenv_install(\''${Tensile_TEST_LOCAL_PATH})" ""
   '';
 
   postInstall = lib.optionalString (finalAttrs.pname == "rocblas") ''

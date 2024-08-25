@@ -31,8 +31,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "filterwarnings = error" "" \
-      --replace "--cov=aiosignal" ""
+      --replace-fail "filterwarnings = error" "" \
+      --replace-fail "--cov=aiosignal" ""
   '';
 
   pythonImportsCheck = [ "aiosignal" ];

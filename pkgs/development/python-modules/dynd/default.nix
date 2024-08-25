@@ -37,8 +37,8 @@ buildPythonPackage rec {
   # setup.py invokes git on build but we're fetching a tarball, so
   # can't retrieve git version. We hardcode:
   preConfigure = ''
-    substituteInPlace setup.py --replace "ver = check_output(['git', 'describe', '--dirty'," "ver = '${version}'"
-    substituteInPlace setup.py --replace "'--always', '--match', 'v*']).decode('ascii').strip('\n')" ""
+    substituteInPlace setup.py --replace-fail "ver = check_output(['git', 'describe', '--dirty'," "ver = '${version}'"
+    substituteInPlace setup.py --replace-fail "'--always', '--match', 'v*']).decode('ascii').strip('\n')" ""
   '';
 
   dontUseCmakeConfigure = true;

@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace usr/lib/hypnotix/hypnotix.py \
-      --replace __DEB_VERSION__ ${version} \
-      --replace /usr/bin/yt-dlp ${yt-dlp}/bin/yt-dlp \
-      --replace /usr/share/circle-flags-svg ${circle-flags}/share/circle-flags-svg \
-      --replace /usr/share/hypnotix $out/share/hypnotix
+      --replace-fail __DEB_VERSION__ ${version} \
+      --replace-fail /usr/bin/yt-dlp ${yt-dlp}/bin/yt-dlp \
+      --replace-fail /usr/share/circle-flags-svg ${circle-flags}/share/circle-flags-svg \
+      --replace-fail /usr/share/hypnotix $out/share/hypnotix
 
     substituteInPlace usr/bin/hypnotix \
-      --replace /usr/lib/hypnotix/hypnotix.py $out/lib/hypnotix/hypnotix.py
+      --replace-fail /usr/lib/hypnotix/hypnotix.py $out/lib/hypnotix/hypnotix.py
   '';
 
   nativeBuildInputs = [

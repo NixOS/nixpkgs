@@ -116,8 +116,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-/Xp6ww9C3V6I67tTA4MrGpSGo3J0MXzFjzQU7RxY84U=";
     })
   ];
-  preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
-  postConfigure = lib.optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
+  preConfigure = "substituteInPlace ./configure --replace-fail /usr/bin/file ${file}/bin/file";
+  postConfigure = lib.optionalString stdenv.isLinux "substituteInPlace libtool --replace-fail ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
   configureFlags = [ "--enable-pch=no" ] ++ lib.optionals contribPlugins [
     ("--with-contrib-plugins" + lib.optionalString stdenv.isDarwin "=all,-FileManager,-NassiShneiderman")
     "--with-boost-libdir=${boost}/lib"

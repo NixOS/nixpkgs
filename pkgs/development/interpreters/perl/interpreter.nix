@@ -78,11 +78,11 @@ stdenv.mkDerivation (rec {
   # bootstrap tools when building bootstrap perl.
   postPatch = (if crossCompiling then ''
     substituteInPlace dist/PathTools/Cwd.pm \
-      --replace "/bin/pwd" '${coreutils}/bin/pwd'
-    substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
+      --replace-fail "/bin/pwd" '${coreutils}/bin/pwd'
+    substituteInPlace cnf/configure_tool.sh --replace-fail "cc -E -P" "cc -E"
   '' else ''
     substituteInPlace dist/PathTools/Cwd.pm \
-      --replace "/bin/pwd" "$(type -P pwd)"
+      --replace-fail "/bin/pwd" "$(type -P pwd)"
   '') +
   # Perl's build system uses the src variable, and its value may end up in
   # the output in some cases (when cross-compiling)
@@ -158,7 +158,7 @@ stdenv.mkDerivation (rec {
     USE_ZLIB_NG  = False
     EOF
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
+    substituteInPlace hints/darwin.sh --replace-fail "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
   '' + lib.optionalString (!enableThreading) ''
     # We need to do this because the bootstrap doesn't have a static libpthread
     sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
@@ -199,14 +199,14 @@ stdenv.mkDerivation (rec {
         -i "$out"/lib/perl5/*/*/Config.pm
       # TODO: removing those paths would be cleaner than overwriting with nonsense.
       substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
-        --replace "${libcInc}" /no-such-path \
-        --replace "${
+        --replace-fail "${libcInc}" /no-such-path \
+        --replace-fail "${
             if stdenv.hasCC then stdenv.cc else "/no-such-path"
           }" /no-such-path \
-        --replace "${
+        --replace-fail "${
             if stdenv.hasCC && stdenv.cc.cc != null then stdenv.cc.cc else "/no-such-path"
         }" /no-such-path \
-        --replace "$man" /no-such-path
+        --replace-fail "$man" /no-such-path
     '' + lib.optionalString crossCompiling
       ''
         mkdir -p $mini/lib/perl5/cross_perl/${version}

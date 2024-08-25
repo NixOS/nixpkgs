@@ -63,9 +63,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/mailman/config/postfix.cfg \
-      --replace /usr/sbin/postmap ${postfix}/bin/postmap
+      --replace-fail /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
-      --replace /usr/bin/lynx ${lynx}/bin/lynx
+      --replace-fail /usr/bin/lynx ${lynx}/bin/lynx
   '';
 
   # Mailman assumes that those scripts in $out/bin are Python scripts. Wrapping

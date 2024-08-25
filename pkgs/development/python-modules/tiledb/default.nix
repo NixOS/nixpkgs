@@ -51,18 +51,18 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Hardcode path to shared object
-    substituteInPlace tiledb/__init__.py --replace \
+    substituteInPlace tiledb/__init__.py --replace-fail \
       'os.path.join(lib_dir, lib_name)' 'os.path.join("${tiledb}/lib", lib_name)'
 
     # Disable failing test
-    substituteInPlace tiledb/tests/test_examples.py --replace \
+    substituteInPlace tiledb/tests/test_examples.py --replace-fail \
       "test_docs" "dont_test_docs"
     # these tests don't always fail
-    substituteInPlace tiledb/tests/test_libtiledb.py --replace \
+    substituteInPlace tiledb/tests/test_libtiledb.py --replace-fail \
       "test_varlen_write_int_subarray" "dont_test_varlen_write_int_subarray" \
-      --replace "test_memory_cleanup" "dont_test_memory_cleanup" \
-      --replace "test_ctx_thread_cleanup" "dont_test_ctx_thread_cleanup"
-    substituteInPlace tiledb/tests/test_metadata.py --replace \
+      --replace-fail "test_memory_cleanup" "dont_test_memory_cleanup" \
+      --replace-fail "test_ctx_thread_cleanup" "dont_test_ctx_thread_cleanup"
+    substituteInPlace tiledb/tests/test_metadata.py --replace-fail \
       "test_metadata_consecutive" "dont_test_metadata_consecutive"
   '';
 

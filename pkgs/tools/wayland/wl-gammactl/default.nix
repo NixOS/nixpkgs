@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patches = [ ./dont-need-wlroots.diff ];
 
   postPatch = ''
-    substituteInPlace meson.build --replace "git = find_program('git')" "git = 'false'"
+    substituteInPlace meson.build --replace-fail "git = find_program('git')" "git = 'false'"
   '';
 
   meta = with lib; {

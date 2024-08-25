@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Fix pkg-config name for cross-compilation
-    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+    substituteInPlace Makefile --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   makeFlags = [

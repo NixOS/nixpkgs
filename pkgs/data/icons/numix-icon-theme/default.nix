@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    substituteInPlace Numix/index.theme --replace Breeze breeze
+    substituteInPlace Numix/index.theme --replace-fail Breeze breeze
 
     mkdir -p $out/share/icons
     cp -a Numix{,-Light} $out/share/icons/

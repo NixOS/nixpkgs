@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
   # Unfortunately, upstream appears inactive and the patches from the fork don’t apply cleanly.
   # Modify `src/fastmix.cpp` to remove usage of the register storage class, which is
   # not allowed in C++17 and is an error in clang 16.
-  prePatch = "substituteInPlace src/fastmix.cpp --replace 'register ' ''";
+  prePatch = "substituteInPlace src/fastmix.cpp --replace-fail 'register ' ''";
 
   outputs = [ "out" "dev" ];
 
   preConfigure = ''
      substituteInPlace configure \
-        --replace ' -mmacosx-version-min=10.5' "" \
-        --replace /usr/bin/file ${file}/bin/file
+        --replace-fail ' -mmacosx-version-min=10.5' "" \
+        --replace-fail /usr/bin/file ${file}/bin/file
   '';
 
   meta = with lib; {

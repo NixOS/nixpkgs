@@ -44,9 +44,9 @@ in stdenv.mkDerivation {
     make install
 
     substituteInPlace $out/bin/solo5-virtio-mkimage \
-      --replace "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
-      --replace "/usr/share/syslinux" "${syslinux}/share/syslinux" \
-      --replace "cp " "cp --no-preserve=mode "
+      --replace-fail "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
+      --replace-fail "/usr/share/syslinux" "${syslinux}/share/syslinux" \
+      --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
       --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
     runHook preCheck
     patchShebangs tests
     substituteInPlace scripts/virtio-run/solo5-virtio-run.sh \
-      --replace " -no-acpi" ""
+      --replace-fail " -no-acpi" ""
     ./tests/bats-core/bats ./tests/tests.bats
     runHook postCheck
   '';

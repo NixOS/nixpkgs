@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'TMPDIR=colordiff-''${VERSION}' ""
+      --replace-fail 'TMPDIR=colordiff-''${VERSION}' ""
 
     substituteInPlace colordiff.pl \
-      --replace '= "diff";' '= "${diffutils}/bin/diff";'
+      --replace-fail '= "diff";' '= "${diffutils}/bin/diff";'
   '';
 
   installFlags = [

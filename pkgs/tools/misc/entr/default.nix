@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace entr.c --replace /bin/cat ${coreutils}/bin/cat
-    substituteInPlace entr.1 --replace /bin/cat cat
+    substituteInPlace entr.c --replace-fail /bin/cat ${coreutils}/bin/cat
+    substituteInPlace entr.1 --replace-fail /bin/cat cat
   '';
   dontAddPrefix = true;
   doCheck = true;

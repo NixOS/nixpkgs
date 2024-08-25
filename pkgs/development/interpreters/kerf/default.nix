@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./Makefile \
-      --replace 'CPUS ?=' 'CPUS = $(NIX_BUILD_CORES) #' \
-      --replace 'termcap' 'ncurses'
+      --replace-fail 'CPUS ?=' 'CPUS = $(NIX_BUILD_CORES) #' \
+      --replace-fail 'termcap' 'ncurses'
   '';
 
   # the kerf executable uses ncurses to create a fancy terminal for input and

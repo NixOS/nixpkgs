@@ -52,7 +52,7 @@ let
 
     postPatch = ''
       substituteInPlace configuration/config.ini \
-        --replace "\$LOCALAPPDATA\$" "@user.home"
+        --replace-fail "\$LOCALAPPDATA\$" "@user.home"
     '';
 
     installPhase = ''

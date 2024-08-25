@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace Makefile \
-      --replace "-o \$(OWNER) -g \$(GROUP)" "" \
-      --replace "4755" "755"
+      --replace-fail "-o \$(OWNER) -g \$(GROUP)" "" \
+      --replace-fail "4755" "755"
   '';
 
   installFlags = [ "INSTLIBDIR=$(out)/lib"

@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace CURSES_CURSES_LIBRARY CURSES_NCURSES_LIBRARY
+      --replace-fail CURSES_CURSES_LIBRARY CURSES_NCURSES_LIBRARY
     substituteInPlace cmake/GenerateBuiltins.cmake \
-      --replace 'bit 32 64' 'bit 64'
+      --replace-fail 'bit 32 64' 'bit 64'
   '';
 
   inherit testedTargets;

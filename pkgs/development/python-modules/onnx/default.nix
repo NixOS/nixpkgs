@@ -69,13 +69,13 @@ buildPythonPackage rec {
     patchShebangs tools/protoc-gen-mypy.sh.in
 
     substituteInPlace setup.py \
-      --replace 'setup_requires.append("pytest-runner")' ""
+      --replace-fail 'setup_requires.append("pytest-runner")' ""
 
     # prevent from fetching & building own gtest
     substituteInPlace CMakeLists.txt \
-      --replace 'include(googletest)' ""
+      --replace-fail 'include(googletest)' ""
     substituteInPlace cmake/unittest.cmake \
-      --replace 'googletest)' ')'
+      --replace-fail 'googletest)' ')'
   '';
 
   preConfigure = ''

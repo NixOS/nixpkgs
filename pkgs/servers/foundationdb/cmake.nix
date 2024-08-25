@@ -106,7 +106,7 @@ let
           # NB: use the original setup.py.in, so we can substitute VERSION correctly
           cp ../LICENSE ./bindings/python
           substitute ../bindings/python/setup.py.in ./bindings/python/setup.py \
-            --replace 'VERSION' "${version}"
+            --replace-fail 'VERSION' "${version}"
           rm -f ./bindings/python/setup.py.* ./bindings/python/CMakeLists.txt
           rm -f ./bindings/python/fdb/*.pth # remove useless files
           rm -f ./bindings/python/*.rst ./bindings/python/*.mk

@@ -103,17 +103,17 @@ stdenv.mkDerivation rec {
   SEARCH_LIB = lib.optionalString (!stdenv.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = ''
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       /usr /no-such-path
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
       'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       "-framework System" "-lSystem"
   '';
 

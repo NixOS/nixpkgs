@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     for i in Makefile po/Makefile; do
-      substituteInPlace $i --replace "prefix = /usr" "prefix = $out"
+      substituteInPlace $i --replace-fail "prefix = /usr" "prefix = $out"
     done
   '';
 

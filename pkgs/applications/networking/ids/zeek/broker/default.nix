@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
+    substituteInPlace bindings/python/CMakeLists.txt --replace-fail " -u -r" ""
   '';
 
   nativeBuildInputs = [ cmake python3 ];

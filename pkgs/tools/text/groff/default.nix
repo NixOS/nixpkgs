@@ -28,21 +28,21 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # BASH_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
     substituteInPlace contrib/gdiffmk/gdiffmk.sh \
-      --replace "@BASH_PROG@" "/bin/sh"
+      --replace-fail "@BASH_PROG@" "/bin/sh"
   '' + lib.optionalString enableHtml ''
     substituteInPlace src/preproc/html/pre-html.cpp \
-      --replace "psselect" "${psutils}/bin/psselect" \
-      --replace "pnmcut" "${lib.getBin netpbm}/bin/pnmcut" \
-      --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
-      --replace "pnmtopng" "${lib.getBin netpbm}/bin/pnmtopng"
+      --replace-fail "psselect" "${psutils}/bin/psselect" \
+      --replace-fail "pnmcut" "${lib.getBin netpbm}/bin/pnmcut" \
+      --replace-fail "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
+      --replace-fail "pnmtopng" "${lib.getBin netpbm}/bin/pnmtopng"
     substituteInPlace tmac/www.tmac.in \
-      --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
-      --replace "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
-      --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
+      --replace-fail "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
+      --replace-fail "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
+      --replace-fail "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
   '' + lib.optionalString (enableGhostscript || enableHtml) ''
     substituteInPlace contrib/pdfmark/pdfroff.sh \
-      --replace '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getBin ghostscript}/bin/gs" \
-      --replace '$GROFF_AWK_INTERPRETER' "${lib.getBin gawk}/bin/gawk"
+      --replace-fail '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getBin ghostscript}/bin/gs" \
+      --replace-fail '$GROFF_AWK_INTERPRETER' "${lib.getBin gawk}/bin/gawk"
   '';
 
   strictDeps = true;
@@ -102,12 +102,12 @@ stdenv.mkDerivation rec {
     moveToOutput bin/gpinyin $perl
     moveToOutput lib/groff/gpinyin $perl
     substituteInPlace $perl/bin/gpinyin \
-      --replace $out/lib/groff/gpinyin $perl/lib/groff/gpinyin
+      --replace-fail $out/lib/groff/gpinyin $perl/lib/groff/gpinyin
 
     moveToOutput bin/grog $perl
     moveToOutput lib/groff/grog $perl
     substituteInPlace $perl/bin/grog \
-      --replace $out/lib/groff/grog $perl/lib/groff/grog
+      --replace-fail $out/lib/groff/grog $perl/lib/groff/grog
 
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';

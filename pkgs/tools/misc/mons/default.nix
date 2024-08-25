@@ -36,8 +36,8 @@ resholve.mkDerivation rec {
   */
   postPatch = ''
     substituteInPlace mons.sh \
-      --replace "lib='%LIBDIR%/liblist.sh'" "" \
-      --replace '[ ! -r "$lib" ] && { "$lib: library not found."; exit 1; }' ""
+      --replace-fail "lib='%LIBDIR%/liblist.sh'" "" \
+      --replace-fail '[ ! -r "$lib" ] && { "$lib: library not found."; exit 1; }' ""
   '';
 
   solutions = {

@@ -100,8 +100,8 @@ buildPerlPackage rec {
   installPhase = ''
     ./Build install
     for f in $out/bin/*; do
-      substituteInPlace $f --replace "#! /usr/bin/env perl" "#!${perl}/bin/perl"
-      substituteInPlace $f --replace "exec perl" "exec ${perl}/bin/perl"
+      substituteInPlace $f --replace-fail "#! /usr/bin/env perl" "#!${perl}/bin/perl"
+      substituteInPlace $f --replace-fail "exec perl" "exec ${perl}/bin/perl"
     done
   '';
 

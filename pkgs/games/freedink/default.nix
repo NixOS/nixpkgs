@@ -13,7 +13,7 @@ let
       sha256 = "1mhns09l1s898x18ahbcy9gabrmgsr8dv7pm0a2ivid8mhxahn1j";
     };
 
-    prePatch = "substituteInPlace Makefile --replace /usr/local $out";
+    prePatch = "substituteInPlace Makefile --replace-fail /usr/local $out";
   };
 
 in stdenv.mkDerivation rec {

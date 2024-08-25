@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace contrib/gdk-pixbuf/avif.thumbnailer.in \
-      --replace '@CMAKE_INSTALL_FULL_BINDIR@/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-avif"
+      --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-avif"
   '';
 
   env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = gdkPixbufModuleDir;

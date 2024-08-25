@@ -89,7 +89,7 @@ in stdenv.mkDerivation (finalAttrs: {
     patchShebangs mlir
 
     substituteInPlace mlir/utils/performance/common/CMakeLists.txt \
-      --replace "/opt/rocm" "${clr}"
+      --replace-fail "/opt/rocm" "${clr}"
   '';
 
   dontBuild = true;

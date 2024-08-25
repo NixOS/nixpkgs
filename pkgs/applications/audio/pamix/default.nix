@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace "/etc" "$out/etc/xdg"
+    substituteInPlace CMakeLists.txt --replace-fail "/etc" "$out/etc/xdg"
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

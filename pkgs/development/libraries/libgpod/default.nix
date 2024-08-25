@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # support libplist 2.2
-    substituteInPlace configure.ac --replace 'libplist >= 1.0' 'libplist-2.0 >= 2.2'
+    substituteInPlace configure.ac --replace-fail 'libplist >= 1.0' 'libplist-2.0 >= 2.2'
   '';
 
   configureFlags = [

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'target_link_libraries(mcfm lhapdf_lib)' \
+      --replace-fail 'target_link_libraries(mcfm lhapdf_lib)' \
                 'target_link_libraries(mcfm ''${lhapdf_lib})'
   '';
 

@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace goldendict.pro \
-      --replace "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}" \
-      --replace "opencc.2" "opencc"
+      --replace-fail "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}" \
+      --replace-fail "opencc.2" "opencc"
   '';
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook3 ];

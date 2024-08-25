@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   # ld: unknown option: --start-group
   postPatch = ''
     substituteInPlace cmake/draco_targets.cmake \
-      --replace "^Clang" "^AppleClang"
+      --replace-fail "^Clang" "^AppleClang"
   '';
 
   buildInputs = [ gtest ]

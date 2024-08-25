@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace src/main.cc \
-      --replace "/etc/rtorrent/rtorrent.rc" "${placeholder "out"}/etc/rtorrent/rtorrent.rc"
+      --replace-fail "/etc/rtorrent/rtorrent.rc" "${placeholder "out"}/etc/rtorrent/rtorrent.rc"
   '';
 
   postFixup = ''

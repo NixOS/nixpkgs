@@ -32,12 +32,12 @@ buildPythonPackage rec {
 
     # Pip is unable to resolve attr logic, so it will emit version as 0.0.0
     substituteInPlace setup.cfg \
-      --replace "version = attr: localstack_ext.__version__" "version = ${version}"
+      --replace-fail "version = attr: localstack_ext.__version__" "version = ${version}"
     cat setup.cfg
 
     substituteInPlace setup.cfg \
-      --replace "dill==0.3.2" "dill~=0.3.0" \
-      --replace "requests>=2.20.0,<2.26" "requests~=2.20"
+      --replace-fail "dill==0.3.2" "dill~=0.3.0" \
+      --replace-fail "requests>=2.20.0,<2.26" "requests~=2.20"
   '';
 
   propagatedBuildInputs = [

@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace nix-web/nix-web.service \
-      --replace 'ExecStart=nix-web' "ExecStart=$out/bin/nix-web"
+      --replace-fail 'ExecStart=nix-web' "ExecStart=$out/bin/nix-web"
   '';
   postInstall = ''
     install -m 644 -D nix-web/nix-web.service $out/lib/systemd/system/nix-web.service

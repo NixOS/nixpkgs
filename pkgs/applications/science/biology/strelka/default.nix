@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/cmake/boost.cmake \
-      --replace "1.58.0" "${boost.version}" \
-      --replace "Boost_USE_STATIC_LIBS ON" "Boost_USE_STATIC_LIBS OFF"
+      --replace-fail "1.58.0" "${boost.version}" \
+      --replace-fail "Boost_USE_STATIC_LIBS ON" "Boost_USE_STATIC_LIBS OFF"
   '';
 
   nativeBuildInputs = [ cmake ];

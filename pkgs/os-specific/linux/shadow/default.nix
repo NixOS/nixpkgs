@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withTcb "--with-tcb";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-    substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
+    substituteInPlace lib/nscd.c --replace-fail /usr/sbin/nscd ${glibc.bin}/bin/nscd
   '';
 
   postInstall = ''

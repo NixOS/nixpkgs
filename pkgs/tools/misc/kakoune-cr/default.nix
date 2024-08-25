@@ -24,7 +24,7 @@ crystal.buildCrystalPackage rec {
   lockFile = ./shard.lock;
 
   preConfigure = ''
-    substituteInPlace src/kakoune/version.cr --replace \
+    substituteInPlace src/kakoune/version.cr --replace-fail \
       '`git describe --tags --always`' \
       '"${version}"'
   '';

@@ -31,8 +31,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "oauthlib~=3.1" "oauthlib" \
-      --replace "requests~=2.24" "requests"
+      --replace-fail "oauthlib~=3.1" "oauthlib" \
+      --replace-fail "requests~=2.24" "requests"
   '';
 
   pythonRelaxDeps = [ "requests-oauthlib" ];

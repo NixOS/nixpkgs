@@ -44,7 +44,7 @@ buildGoModule rec {
     # Install shell script
     install -Dm755 $src/scripts/assume $out/bin/assume
     substituteInPlace $out/bin/assume \
-      --replace /bin/bash ${bash}/bin/bash
+      --replace-fail /bin/bash ${bash}/bin/bash
 
     wrapProgram $out/bin/assume \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
@@ -53,7 +53,7 @@ buildGoModule rec {
     # Install fish script
     install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
     substituteInPlace $out/share/assume.fish \
-      --replace /bin/fish ${fish}/bin/fish
+      --replace-fail /bin/fish ${fish}/bin/fish
   '';
 
   meta = with lib; {

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mkdir -p $HOME/.cache
 
     for f in man/dupd man/dupd.1 src/main.c tests/test.56 tests/test.57 ; do
-      substituteInPlace $f --replace .dupd_sqlite .cache/dupd.sqlite3
+      substituteInPlace $f --replace-fail .dupd_sqlite .cache/dupd.sqlite3
     done
   '';
 

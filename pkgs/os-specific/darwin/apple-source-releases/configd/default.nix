@@ -42,10 +42,10 @@ appleDerivation' stdenv {
 
   patchPhase = lib.optionalString (!headersOnly) ''
     substituteInPlace SystemConfiguration.fproj/reachability/SCNetworkReachabilityServer_client.c \
-      --replace '#include <xpc/private.h>' ""
+      --replace-fail '#include <xpc/private.h>' ""
 
     substituteInPlace SystemConfiguration.fproj/SCNetworkReachability.c \
-      --replace ''$'#define\tHAVE_VPN_STATUS' ""
+      --replace-fail ''$'#define\tHAVE_VPN_STATUS' ""
   '';
 
   dontBuild = headersOnly;

@@ -27,7 +27,7 @@ python3Packages.buildPythonPackage rec {
     finaludev="$tmpl_udev"
     "$out/bin/rivalcfg" --print-udev > "$tmpudev"
     substitute "$tmpudev" "$out/lib/udev/rules.d/99-rivalcfg.rules" \
-      --replace MODE=\"0666\" "MODE=\"0664\", GROUP=\"input\""
+      --replace-fail MODE=\"0666\" "MODE=\"0664\", GROUP=\"input\""
     rm "$tmpudev"
   '';
 

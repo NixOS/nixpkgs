@@ -85,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace lib/exceptionhandler/dumpinfo.cpp \
-                      --replace '"which "' '"${which}/bin/which "'
+                      --replace-fail '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
-                      --replace "which %s" "${which}/bin/which %s"
+                      --replace-fail "which %s" "${which}/bin/which %s"
   '';
 
   cmakeFlags = [

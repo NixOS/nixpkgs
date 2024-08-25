@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/test_edam.py \
-      --replace /usr/bin/touch ${coreutils}/bin/touch
+      --replace-fail /usr/bin/touch ${coreutils}/bin/touch
     patchShebangs tests/mock_commands/vsim
   '';
 

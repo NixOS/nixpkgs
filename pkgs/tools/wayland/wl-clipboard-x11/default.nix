@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/wl-clipboard-x11 \
-      --replace '$(command -v wl-copy)' ${wl-clipboard}/bin/wl-copy \
-      --replace '$(command -v wl-paste)' ${wl-clipboard}/bin/wl-paste
+      --replace-fail '$(command -v wl-copy)' ${wl-clipboard}/bin/wl-copy \
+      --replace-fail '$(command -v wl-paste)' ${wl-clipboard}/bin/wl-paste
   '';
 
   meta = with lib; {

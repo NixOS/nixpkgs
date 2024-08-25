@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace $cargoDepsCopy/stream-download/src/lib.rs \
       --replace-warn '#![doc = include_str!("../README.md")]' ""
     substituteInPlace .cargo-checksum.json \
-      --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
+      --replace-fail $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
     popd
   '';
 

@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for file in usr/bin/byobu-export.in usr/lib/byobu/menu; do
       substituteInPlace $file \
-        --replace "gettext" "${gettext}/bin/gettext"
+        --replace-fail "gettext" "${gettext}/bin/gettext"
     done
   '';
 

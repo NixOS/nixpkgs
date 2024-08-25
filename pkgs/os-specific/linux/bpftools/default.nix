@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
     cd tools/bpf
     substituteInPlace ./bpftool/Makefile \
-      --replace '/usr/local' "$out" \
-      --replace '/usr'       "$out" \
-      --replace '/sbin'      '/bin'
+      --replace-fail '/usr/local' "$out" \
+      --replace-fail '/usr'       "$out" \
+      --replace-fail '/sbin'      '/bin'
   '';
 
   buildFlags = [ "bpftool" "bpf_asm" "bpf_dbg" ];

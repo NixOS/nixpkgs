@@ -24,8 +24,8 @@ stdenv.mkDerivation  rec {
 
   postPatch = ''
     substituteInPlace common.mak \
-      --replace /usr/local "$out" \
-      --replace /usr/share/fonts/truetype/ttf-bitstream-vera "${ttf_bitstream_vera}/share/fonts/truetype"
+      --replace-fail /usr/local "$out" \
+      --replace-fail /usr/share/fonts/truetype/ttf-bitstream-vera "${ttf_bitstream_vera}/share/fonts/truetype"
   '';
 
   nativeBuildInputs = [ pkg-config ];

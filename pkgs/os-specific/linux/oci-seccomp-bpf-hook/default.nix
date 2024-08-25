@@ -39,7 +39,7 @@ buildGoModule rec {
   '';
 
   postBuild = ''
-    substituteInPlace oci-seccomp-bpf-hook.json --replace HOOK_BIN_DIR "$out/bin"
+    substituteInPlace oci-seccomp-bpf-hook.json --replace-fail HOOK_BIN_DIR "$out/bin"
   '';
 
   installPhase = ''

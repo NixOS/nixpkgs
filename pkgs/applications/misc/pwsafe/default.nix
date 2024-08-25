@@ -82,17 +82,17 @@ stdenv.mkDerivation rec {
 
     # Fix hard coded paths.
     for f in $(grep -Rl /usr/share/ src install/desktop) ; do
-      substituteInPlace $f --replace /usr/share/ $out/share/
+      substituteInPlace $f --replace-fail /usr/share/ $out/share/
     done
 
     # Fix hard coded zip path.
-    substituteInPlace help/Makefile.linux --replace /usr/bin/zip ${zip}/bin/zip
+    substituteInPlace help/Makefile.linux --replace-fail /usr/bin/zip ${zip}/bin/zip
 
     for f in $(grep -Rl /usr/bin/ .) ; do
-      substituteInPlace $f --replace /usr/bin/ ""
+      substituteInPlace $f --replace-fail /usr/bin/ ""
     done
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/ui/cli/CMakeLists.txt --replace "uuid" ""
+    substituteInPlace src/ui/cli/CMakeLists.txt --replace-fail "uuid" ""
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];

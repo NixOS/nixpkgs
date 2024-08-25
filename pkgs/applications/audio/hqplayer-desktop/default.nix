@@ -85,11 +85,11 @@ mkDerivation rec {
   postInstall = ''
     for desktopFile in $out/share/applications/hqplayer4{desktop-nostyle,desktop-highdpi,-client,desktop}.desktop; do
       substituteInPlace "$desktopFile" \
-        --replace /usr/bin "$out"/bin
+        --replace-fail /usr/bin "$out"/bin
     done
     substituteInPlace "$doc/share/applications/hqplayer4desktop-manual.desktop" \
-        --replace /usr/share/doc/hqplayer4desktop "$doc/share/doc/${pname}" \
-        --replace evince "${evince}/bin/evince"
+        --replace-fail /usr/share/doc/hqplayer4desktop "$doc/share/doc/${pname}" \
+        --replace-fail evince "${evince}/bin/evince"
   '';
 
   postFixup = ''

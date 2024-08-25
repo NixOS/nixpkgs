@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace https_dns_proxy.service.in \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/" ""
+      --replace-fail "\''${CMAKE_INSTALL_PREFIX}/" ""
     substituteInPlace munin/https_dns_proxy.plugin \
-      --replace '--unit https_dns_proxy.service' '--unit https-dns-proxy.service'
+      --replace-fail '--unit https_dns_proxy.service' '--unit https-dns-proxy.service'
   '';
 
   nativeBuildInputs = [ cmake gtest ];

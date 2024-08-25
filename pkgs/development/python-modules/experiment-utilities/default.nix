@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # owned derivation
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "ipywidgets >= 7.5.1,<= 7.6.5" "ipywidgets >= 7.5.1"
+      --replace-fail "ipywidgets >= 7.5.1,<= 7.6.5" "ipywidgets >= 7.5.1"
   '';
 
   propagatedBuildInputs = [

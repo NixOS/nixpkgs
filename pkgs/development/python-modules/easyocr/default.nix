@@ -34,8 +34,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "opencv-python-headless" "" \
-      --replace "ninja" ""
+      --replace-fail "opencv-python-headless" "" \
+      --replace-fail "ninja" ""
   '';
 
   propagatedBuildInputs = [

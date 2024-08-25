@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace common/ResourcePaths.cpp \
-      --replace "/app/share/iaito/translations" "$out/share/iaito/translations"
+      --replace-fail "/app/share/iaito/translations" "$out/share/iaito/translations"
   '';
 
   nativeBuildInputs = [

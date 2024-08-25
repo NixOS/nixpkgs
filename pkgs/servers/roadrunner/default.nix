@@ -36,13 +36,13 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace internal/rpc/client_test.go \
-      --replace "127.0.0.1:55555" "127.0.0.1:55554"
+      --replace-fail "127.0.0.1:55555" "127.0.0.1:55554"
 
     substituteInPlace internal/rpc/test/config_rpc_ok.yaml \
-      --replace "127.0.0.1:55555" "127.0.0.1:55554"
+      --replace-fail "127.0.0.1:55555" "127.0.0.1:55554"
 
     substituteInPlace internal/rpc/test/config_rpc_conn_err.yaml \
-      --replace "127.0.0.1:0" "127.0.0.1:55554"
+      --replace-fail "127.0.0.1:0" "127.0.0.1:55554"
   '';
 
   vendorHash = "sha256-vwOvp8hckamdN0qKnvaL2pm30nCMelQ8+LjqcPZR/ZQ=";

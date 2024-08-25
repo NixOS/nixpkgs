@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/auth_keys.rs \
-      --replace '/bin/echo' '${coreutils}/bin/echo' \
-      --replace '/bin/false' '${coreutils}/bin/false'
+      --replace-fail '/bin/echo' '${coreutils}/bin/echo' \
+      --replace-fail '/bin/false' '${coreutils}/bin/false'
   '';
 
   nativeBuildInputs = [ pkg-config ];

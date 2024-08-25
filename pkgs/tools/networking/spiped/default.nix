@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libcperciva/cpusupport/Build/cpusupport.sh \
-      --replace "dirname" "${coreutils}/bin/dirname" \
-      --replace "2>/dev/null" "2>stderr.log"
+      --replace-fail "dirname" "${coreutils}/bin/dirname" \
+      --replace-fail "2>/dev/null" "2>stderr.log"
 
     substituteInPlace libcperciva/POSIX/posix-l.sh       \
-      --replace "rm" "${coreutils}/bin/rm"   \
-      --replace "2>/dev/null" "2>stderr.log"
+      --replace-fail "rm" "${coreutils}/bin/rm"   \
+      --replace-fail "2>/dev/null" "2>stderr.log"
    '';
 
   installPhase = ''

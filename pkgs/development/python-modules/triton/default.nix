@@ -81,16 +81,16 @@ buildPythonPackage rec {
     ''
       # Use our `cmakeFlags` instead and avoid downloading dependencies
       substituteInPlace python/setup.py \
-        --replace "= get_thirdparty_packages(triton_cache_path)" "= os.environ[\"cmakeFlags\"].split()"
+        --replace-fail "= get_thirdparty_packages(triton_cache_path)" "= os.environ[\"cmakeFlags\"].split()"
 
       # Already defined in llvm, when built with -DLLVM_INSTALL_UTILS
       substituteInPlace bin/CMakeLists.txt \
-        --replace "add_subdirectory(FileCheck)" ""
+        --replace-fail "add_subdirectory(FileCheck)" ""
 
       # Don't fetch googletest
       substituteInPlace unittest/CMakeLists.txt \
-        --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
-        --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
+        --replace-fail "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
+        --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
 
       cat << \EOF >> python/triton/common/build.py
       def libcuda_dirs():
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     + lib.optionalString cudaSupport ''
       # Use our linker flags
       substituteInPlace python/triton/common/build.py \
-        --replace '${subs.ldFlags.oldStr}' '${subs.ldFlags.newStr}'
+        --replace-fail '${subs.ldFlags.oldStr}' '${subs.ldFlags.newStr}'
     '';
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/VolumeHist/DHistogram.cc \
-      --replace "register " ""
+      --replace-fail "register " ""
   '';
 
   nativeBuildInputs = [ cmake makeWrapper ];

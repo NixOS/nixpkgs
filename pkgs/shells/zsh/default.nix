@@ -75,7 +75,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Src/Modules/pcre.mdd \
-      --replace 'pcre-config' 'true'
+      --replace-fail 'pcre-config' 'true'
   '';
 
   preConfigure = ''

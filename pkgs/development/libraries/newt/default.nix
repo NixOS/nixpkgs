@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
     sed -i -e s,/usr/bin/install,install, -e s,-I/usr/include/slang,, Makefile.in po/Makefile
 
     substituteInPlace configure \
-      --replace "/usr/include/python" "${pythonIncludePath}"
+      --replace-fail "/usr/include/python" "${pythonIncludePath}"
     substituteInPlace configure.ac \
-      --replace "/usr/include/python" "${pythonIncludePath}"
+      --replace-fail "/usr/include/python" "${pythonIncludePath}"
 
     substituteInPlace Makefile.in \
-      --replace "ar rv" "${stdenv.cc.targetPrefix}ar rv"
+      --replace-fail "ar rv" "${stdenv.cc.targetPrefix}ar rv"
   '';
 
   strictDeps = true;

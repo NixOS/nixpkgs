@@ -104,10 +104,10 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace autogen.sh \
-      --replace "which" "${buildPackages.busybox}/bin/which"
+      --replace-fail "which" "${buildPackages.busybox}/bin/which"
 
     substituteInPlace src/shared-data-manager.c \
-      --replace /bin/rm ${busybox}/bin/rm
+      --replace-fail /bin/rm ${busybox}/bin/rm
   '';
 
   postInstall = ''

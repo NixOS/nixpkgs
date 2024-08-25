@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i 's/^CFLAGS.*/CFLAGS=-O2 -fPIC/' Makefile
     substituteInPlace otpw-gen.c \
-      --replace "head -c 20 /dev/urandom 2>&1" "${coreutils}/bin/head -c 20 /dev/urandom 2>&1" \
-      --replace "ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." "${coreutils}/bin/ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." \
-      --replace "PATH=/usr/ucb:/bin:/usr/bin;ps lax" "PATH=/usr/ucb:/bin:/usr/bin;${unixtools.procps}/bin/ps lax" \
-      --replace "last | head -50" "${util-linux}/bin/last | ${coreutils}/bin/head -50" \
-      --replace "uptime;netstat -n;hostname;date;w" "${coreutils}/bin/uptime; ${unixtools.nettools}/bin/netstat -n; ${unixtools.nettools}/bin/hostname; ${coreutils}/bin/date; ${procps}/bin/w"
+      --replace-fail "head -c 20 /dev/urandom 2>&1" "${coreutils}/bin/head -c 20 /dev/urandom 2>&1" \
+      --replace-fail "ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." "${coreutils}/bin/ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." \
+      --replace-fail "PATH=/usr/ucb:/bin:/usr/bin;ps lax" "PATH=/usr/ucb:/bin:/usr/bin;${unixtools.procps}/bin/ps lax" \
+      --replace-fail "last | head -50" "${util-linux}/bin/last | ${coreutils}/bin/head -50" \
+      --replace-fail "uptime;netstat -n;hostname;date;w" "${coreutils}/bin/uptime; ${unixtools.nettools}/bin/netstat -n; ${unixtools.nettools}/bin/hostname; ${coreutils}/bin/date; ${procps}/bin/w"
   '';
 
   buildInputs = [

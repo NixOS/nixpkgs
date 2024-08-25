@@ -47,7 +47,7 @@ symlinkJoin {
     do
       rm "$out/$file"
       substitute "${nemo}/$file" "$out/$file" \
-        --replace "${nemo}" "$out"
+        --replace-fail "${nemo}" "$out"
     done
   '';
 

@@ -21,7 +21,7 @@ let
     # patch the ptrace reference for darwin
     installPhase = lib.optionalString stdenv.isDarwin ''
       substituteInPlace v.c \
-        --replace "#include <sys/ptrace.h>" "${ptraceSubstitution}"
+        --replace-fail "#include <sys/ptrace.h>" "${ptraceSubstitution}"
     '' + ''
       mkdir -p $out
       cp v.c $out/

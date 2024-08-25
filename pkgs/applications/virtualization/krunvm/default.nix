@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # do not pollute etc
     substituteInPlace src/utils.rs \
-      --replace "etc/containers" "share/krunvm/containers"
+      --replace-fail "etc/containers" "share/krunvm/containers"
   '';
 
   postInstall = ''

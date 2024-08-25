@@ -170,7 +170,7 @@ stdenv.mkDerivation {
     mv opt/ $out/
 
     substituteInPlace $out/share/applications/bytedance-feishu.desktop \
-      --replace /usr/bin/bytedance-feishu-stable $out/opt/bytedance/feishu/bytedance-feishu
+      --replace-fail /usr/bin/bytedance-feishu-stable $out/opt/bytedance/feishu/bytedance-feishu
 
     # Wrap feishu and vulcan
     # Feishu is the main executable, vulcan is the builtin browser

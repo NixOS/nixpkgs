@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # don't overwrite manually set version information
     substituteInPlace CMakeLists.txt \
-      --replace "include(ComputeVersion)" ""
+      --replace-fail "include(ComputeVersion)" ""
   '';
 
   nativeBuildInputs = [

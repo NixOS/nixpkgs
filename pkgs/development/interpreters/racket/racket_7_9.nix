@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     unset AR
     for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
-      substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
+      substituteInPlace "$f" --replace-fail /usr/bin/uname ${coreutils}/bin/uname
     done
     mkdir src/build
     cd src/build

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace $out/${python3.sitePackages}/driver/arguments.py \
-      --replace 'args.build = "release"' "args.build = \"$out/libexec/fast-downward\""
+      --replace-fail 'args.build = "release"' "args.build = \"$out/libexec/fast-downward\""
   '';
 
   meta = with lib; {

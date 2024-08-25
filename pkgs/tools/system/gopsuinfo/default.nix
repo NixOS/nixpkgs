@@ -25,7 +25,7 @@ buildGoModule rec {
   # Fix absolute path of icons in the code
   postPatch = ''
     substituteInPlace gopsuinfo.go \
-      --replace "/usr/share/gopsuinfo" "$out/usr/share/gopsuinfo"
+      --replace-fail "/usr/share/gopsuinfo" "$out/usr/share/gopsuinfo"
   '';
 
   # Install icons

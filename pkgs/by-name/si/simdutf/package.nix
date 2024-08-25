@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fix build on darwin
   postPatch = ''
-    substituteInPlace tools/CMakeLists.txt --replace "-Wl,--gc-sections" ""
+    substituteInPlace tools/CMakeLists.txt --replace-fail "-Wl,--gc-sections" ""
   '';
 
   nativeBuildInputs = [

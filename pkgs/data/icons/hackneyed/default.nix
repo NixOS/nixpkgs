@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
   # it's unnecessary for building though.
   prePatch = ''
     substituteInPlace GNUmakefile \
-        --replace 'inkscape-version: $(INKSCAPE)' 'inkscape-version:'
+        --replace-fail 'inkscape-version: $(INKSCAPE)' 'inkscape-version:'
   '';
 
   meta = with lib; {

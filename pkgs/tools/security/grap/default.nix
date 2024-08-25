@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/tools/grap-match/CMakeLists.txt --replace "/usr/local/bin" "$out/bin"
-    substituteInPlace src/tools/grap/CMakeLists.txt --replace "/usr/local/bin" "$out/bin"
+    substituteInPlace src/tools/grap-match/CMakeLists.txt --replace-fail "/usr/local/bin" "$out/bin"
+    substituteInPlace src/tools/grap/CMakeLists.txt --replace-fail "/usr/local/bin" "$out/bin"
   '';
 
   meta = with lib; {

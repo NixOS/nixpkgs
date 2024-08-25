@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace config.mk \
-      --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
-      --replace aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib
+      --replace-fail x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
+      --replace-fail aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib
   '';
 
   meta = with lib; {

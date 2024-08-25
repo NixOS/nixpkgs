@@ -27,15 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/CC=\/usr/d' makefile.macosx_llvm_64bits
     # Avoid writing timestamps into compressed manpages
     # to maintain determinism.
-    substituteInPlace install.sh --replace 'gzip' 'gzip -n'
+    substituteInPlace install.sh --replace-fail 'gzip' 'gzip -n'
     chmod +x install.sh
 
     # I think this is a typo and should be CXX? Either way let's kill it
     sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace makefile.machine \
-      --replace 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
-      --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
+      --replace-fail 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
+      --replace-fail 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
   '';
 
   preConfigure = ''

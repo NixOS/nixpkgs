@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     find -type f -name "*.py" | xargs sed -i "s@/usr/bin/env python3@$python3/bin/python3@g"
-    substituteInPlace setup.py --replace \
+    substituteInPlace setup.py --replace-fail \
         "fileout.write(('#!/usr/bin/env %s\n' % env).encode('utf-8'))" \
         "fileout.write(('#!%s/bin/%s\n' % (os.environ['python3'], env)).encode('utf-8'))"
     python3 setup.py --prefix=$out --freedom=partial install \

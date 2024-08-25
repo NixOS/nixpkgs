@@ -139,8 +139,8 @@ stdenv.mkDerivation {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/viber.desktop \
-      --replace /opt/viber/Viber $out/opt/viber/Viber \
-      --replace /usr/share/ $out/share/
+      --replace-fail /opt/viber/Viber $out/opt/viber/Viber \
+      --replace-fail /usr/share/ $out/share/
   '';
 
   dontStrip = true;

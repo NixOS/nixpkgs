@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr" "${placeholder "out"}"
+      --replace-fail "/usr" "${placeholder "out"}"
     sed -i 's/fixup_bundle.*")/")/g' CMakeLists.txt
   '';
 

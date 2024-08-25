@@ -35,8 +35,8 @@ flutter.buildFlutterApplication rec {
     mv $out/app/data/com.expidusos.file_manager.metainfo.xml $out/share/metainfo
 
     substituteInPlace "$out/share/applications/com.expidusos.file_manager.desktop" \
-      --replace "Exec=file_manager" "Exec=$out/bin/expidus-file-manager" \
-      --replace "Icon=com.expidusos.file_manager" "Icon=$out/share/icons/com.expidusos.file_manager.png"
+      --replace-fail "Exec=file_manager" "Exec=$out/bin/expidus-file-manager" \
+      --replace-fail "Icon=com.expidusos.file_manager" "Icon=$out/share/icons/com.expidusos.file_manager.png"
   '';
 
   meta = with lib; {

@@ -71,11 +71,11 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/resp.pro \
-      --replace 'which ccache' "false" \
-      --replace 'target.files = $$DESTDIR/resp' "${placeholder "src"}/bin/linux/release/resp" \
-      --replace '/opt/resp_app' "${placeholder "out"}" \
-      --replace 'target.path = $$LINUX_INSTALL_PATH' 'target.path = $$LINUX_INSTALL_PATH/bin' \
-      --replace '/usr/' "$out/"
+      --replace-fail 'which ccache' "false" \
+      --replace-fail 'target.files = $$DESTDIR/resp' "${placeholder "src"}/bin/linux/release/resp" \
+      --replace-fail '/opt/resp_app' "${placeholder "out"}" \
+      --replace-fail 'target.path = $$LINUX_INSTALL_PATH' 'target.path = $$LINUX_INSTALL_PATH/bin' \
+      --replace-fail '/usr/' "$out/"
     rm -r 3rdparty/snappy
   '';
 

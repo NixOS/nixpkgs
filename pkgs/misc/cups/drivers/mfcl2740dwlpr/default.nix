@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     dir=$out/opt/brother/Printers/MFCL2740DW
 
     substituteInPlace $dir/lpd/filter_MFCL2740DW \
-      --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"MFCL2740DW\"; #"
+      --replace-fail /usr/bin/perl ${perl}/bin/perl \
+      --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"MFCL2740DW\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2740DW \
       --prefix PATH : ${lib.makeBinPath [

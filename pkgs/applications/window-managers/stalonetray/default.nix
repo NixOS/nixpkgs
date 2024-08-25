@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       ac_str_sub = "DOCBOOK_ROOT=${db_root}; ${ac_str}";
     in
       ''
-        substituteInPlace configure.ac --replace '${ac_str}' '${ac_str_sub}'
+        substituteInPlace configure.ac --replace-fail '${ac_str}' '${ac_str_sub}'
       '';
 
   nativeBuildInputs = [

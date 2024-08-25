@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./configure \
-      --replace libopenal.so.1 ${openal}/lib/libopenal.so.1 \
-      --replace libGL.so.1 ${libGL}/lib/libGL.so.1
+      --replace-fail libopenal.so.1 ${openal}/lib/libopenal.so.1 \
+      --replace-fail libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
 
   meta = with lib; {

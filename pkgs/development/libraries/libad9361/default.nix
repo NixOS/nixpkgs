@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # Fix iio include path on darwin to match linux
     for i in test/*.c; do
       substituteInPlace $i \
-        --replace 'iio/iio.h' 'iio.h'
+        --replace-fail 'iio/iio.h' 'iio.h'
     done
   '';
 

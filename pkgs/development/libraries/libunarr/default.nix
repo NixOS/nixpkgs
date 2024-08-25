@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace "-flto" "" \
-      --replace "AppleClang" "Clang"
+      --replace-fail "-flto" "" \
+      --replace-fail "AppleClang" "Clang"
   '';
 
   nativeBuildInputs = [

@@ -63,9 +63,9 @@ mkCombyPackage {
   # cli tests expect a path to the built binary
   preBuild = ''
     substituteInPlace test/common/dune \
-      --replace "test_cli_list" "" \
-      --replace "test_cli_helper" "" \
-      --replace "test_cli" ""
+      --replace-fail "test_cli_list" "" \
+      --replace-fail "test_cli_helper" "" \
+      --replace-fail "test_cli" ""
     rm test/common/{test_cli_list,test_cli_helper,test_cli}.ml
   '';
 

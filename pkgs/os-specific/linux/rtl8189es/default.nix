@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
 
   prePatch = ''
-    substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
-    substituteInPlace ./Makefile --replace /sbin/depmod \#
-    substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+    substituteInPlace ./Makefile --replace-fail /lib/modules/ "${kernel.dev}/lib/modules/"
+    substituteInPlace ./Makefile --replace-fail /sbin/depmod \#
+    substituteInPlace ./Makefile --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
   makeFlags = kernel.makeFlags ++ [

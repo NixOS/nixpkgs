@@ -136,7 +136,7 @@ buildPythonPackage rec {
 
       # not packaged
       substituteInPlace src/twisted/test/test_failure.py \
-        --replace "from cython_test_exception_raiser import raiser  # type: ignore[import]" "raiser = None"
+        --replace-fail "from cython_test_exception_raiser import raiser  # type: ignore[import]" "raiser = None"
     ''
     + lib.optionalString stdenv.isLinux ''
       echo 'PTYProcessTestsBuilder_EPollReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
@@ -146,7 +146,7 @@ buildPythonPackage rec {
 
       # Patch t.p._inotify to point to libc. Without this,
       # twisted.python.runtime.platform.supportsINotify() == False
-      substituteInPlace src/twisted/python/_inotify.py --replace \
+      substituteInPlace src/twisted/python/_inotify.py --replace-fail \
         "ctypes.util.find_library(\"c\")" "'${stdenv.cc.libc}/lib/libc.so.6'"
     ''
     + lib.optionalString stdenv.isDarwin ''

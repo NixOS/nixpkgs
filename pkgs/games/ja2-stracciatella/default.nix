@@ -38,13 +38,13 @@ stdenv.mkDerivation {
   preConfigure = ''
     # Use rust library built with nix
     substituteInPlace CMakeLists.txt \
-      --replace lib/libstracciatella_c_api.a ${libstracciatella}/lib/libstracciatella_c_api.a \
-      --replace include/stracciatella ${libstracciatella}/include/stracciatella \
-      --replace bin/ja2-resource-pack ${libstracciatella}/bin/ja2-resource-pack
+      --replace-fail lib/libstracciatella_c_api.a ${libstracciatella}/lib/libstracciatella_c_api.a \
+      --replace-fail include/stracciatella ${libstracciatella}/include/stracciatella \
+      --replace-fail bin/ja2-resource-pack ${libstracciatella}/bin/ja2-resource-pack
 
     # Patch dependencies that are usually loaded by url
     substituteInPlace dependencies/lib-string_theory/builder/CMakeLists.txt.in \
-      --replace ${stringTheoryUrl} file://${stringTheory}
+      --replace-fail ${stringTheoryUrl} file://${stringTheory}
 
     cmakeFlagsArray+=("-DLOCAL_RAPIDJSON_LIB=OFF" "-DLOCAL_GTEST_LIB=OFF" "-DEXTRA_DATA_DIR=$out/share/ja2")
   '';

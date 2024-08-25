@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # connection plugins.
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
-      --replace "[python," "["
+      --replace-fail "[python," "["
 
     patchShebangs --build packaging/cli-doc/build.py
   '';

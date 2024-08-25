@@ -18,7 +18,7 @@ buildGoModule rec {
   preCheck = ''
     # wormhole_test.go:692: failed to establish connection
     substituteInPlace wormhole/wormhole_test.go \
-      --replace "TestWormholeDirectoryTransportSendRecvDirect" \
+      --replace-fail "TestWormholeDirectoryTransportSendRecvDirect" \
                 "SkipWormholeDirectoryTransportSendRecvDirect"
   '';
 

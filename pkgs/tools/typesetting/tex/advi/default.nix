@@ -43,10 +43,10 @@ ocamlPackages.buildDunePackage rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace "\$(DUNE) install \$(DUNEROOT) --display=short" \
+      --replace-fail "\$(DUNE) install \$(DUNEROOT) --display=short" \
       "\$(DUNE) install \$(DUNEROOT) --prefix $out --docdir $out/share/doc --mandir $out/share/man"
     substituteInPlace ./src/discover.sh \
-      --replace 'gs_path=$(which gs)' 'gs_path=${ghostscriptX}/bin/gs'
+      --replace-fail 'gs_path=$(which gs)' 'gs_path=${ghostscriptX}/bin/gs'
   '';
 
   duneVersion = "3";

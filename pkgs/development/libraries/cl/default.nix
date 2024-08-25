@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # https://github.com/tonyrog/cl/issues/39
   postPatch = ''
     substituteInPlace c_src/Makefile \
-      --replace "-m64" ""
+      --replace-fail "-m64" ""
   '';
 
   buildInputs = [ erlang rebar opencl-headers ocl-icd ];

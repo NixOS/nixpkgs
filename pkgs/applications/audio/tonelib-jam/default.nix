@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mv usr $out
-    substituteInPlace $out/share/applications/ToneLib-Jam.desktop --replace /usr/ $out/
+    substituteInPlace $out/share/applications/ToneLib-Jam.desktop --replace-fail /usr/ $out/
   '';
 
   meta = with lib; {

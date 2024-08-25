@@ -18,7 +18,7 @@ appimageTools.wrapType2 {
       install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/${pname}.png \
          $out/share/icons/hicolor/512x512/apps/${pname}.png
       substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
 
   extraPkgs = pkgs: [ pkgs.nss_latest ];

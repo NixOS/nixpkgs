@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pydsdl ~= 1.16" "pydsdl"
+      --replace-fail "pydsdl ~= 1.16" "pydsdl"
   '';
 
   propagatedBuildInputs = [

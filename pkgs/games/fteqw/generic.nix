@@ -31,9 +31,9 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   postPatch = ''
     substituteInPlace ./engine/Makefile \
-      --replace "I/usr/include/opus" "I${libopus.dev}/include/opus"
+      --replace-fail "I/usr/include/opus" "I${libopus.dev}/include/opus"
     substituteInPlace ./engine/gl/gl_vidlinuxglx.c \
-      --replace 'Sys_LoadLibrary("libXrandr"' 'Sys_LoadLibrary("${xorg.libXrandr}/lib/libXrandr.so"'
+      --replace-fail 'Sys_LoadLibrary("libXrandr"' 'Sys_LoadLibrary("${xorg.libXrandr}/lib/libXrandr.so"'
   '';
 
   installPhase = ''

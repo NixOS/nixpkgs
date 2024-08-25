@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace index.php \
-      --replace "define('ENVIRONMENT', 'development');" "define('ENVIRONMENT', 'production');"
+      --replace-fail "define('ENVIRONMENT', 'development');" "define('ENVIRONMENT', 'production');"
   '';
 
   installPhase = ''

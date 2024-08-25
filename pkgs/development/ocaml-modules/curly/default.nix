@@ -27,7 +27,7 @@ buildDunePackage rec {
 
   postPatch = ''
     substituteInPlace src/curly.ml \
-      --replace "exe=\"curl\"" "exe=\"${curl}/bin/curl\""
+      --replace-fail "exe=\"curl\"" "exe=\"${curl}/bin/curl\""
     '';
 
   meta = with lib; {

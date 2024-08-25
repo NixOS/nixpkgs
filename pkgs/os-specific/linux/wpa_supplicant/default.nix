@@ -95,13 +95,13 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     for manpage in wpa_supplicant/doc/docbook/wpa_supplicant.conf* ; do
-      substituteInPlace "$manpage" --replace /usr/share/doc $out/share/doc
+      substituteInPlace "$manpage" --replace-fail /usr/share/doc $out/share/doc
     done
     cd wpa_supplicant
     cp -v defconfig .config
     echo "$extraConfig" >> .config
     cat -n .config
-    substituteInPlace Makefile --replace /usr/local $out
+    substituteInPlace Makefile --replace-fail /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
       -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
       ${lib.optionalString withPcsclite "-I${lib.getDev pcsclite}/include/PCSC/"}"

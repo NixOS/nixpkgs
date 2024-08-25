@@ -22,7 +22,7 @@ rec {
     };
 
   postPatch = ''
-    substituteInPlace "runtime/glow-path.ss" --replace \
+    substituteInPlace "runtime/glow-path.ss" --replace-fail \
       '(def glow-install-path (source-path "dapps"))' \
       '(def glow-install-path "$out")'
   '';

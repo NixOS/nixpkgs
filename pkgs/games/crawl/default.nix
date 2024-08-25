@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
   # Patch hard-coded paths and remove force library builds
   postPatch = ''
     substituteInPlace crawl-ref/source/util/find_font \
-      --replace '/usr/share/fonts /usr/local/share/fonts /usr/*/lib/X11/fonts' '${fontsPath}/share/fonts'
+      --replace-fail '/usr/share/fonts /usr/local/share/fonts /usr/*/lib/X11/fonts' '${fontsPath}/share/fonts'
     substituteInPlace crawl-ref/source/windowmanager-sdl.cc \
-      --replace 'SDL_image.h' 'SDL2/SDL_image.h'
+      --replace-fail 'SDL_image.h' 'SDL2/SDL_image.h'
   '';
 
   nativeBuildInputs = [ pkg-config which perl pngcrush advancecomp ];

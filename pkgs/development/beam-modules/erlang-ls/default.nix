@@ -13,7 +13,7 @@ let
       });
       redbug = super.redbug.overrideAttrs (_: {
         patchPhase = ''
-          substituteInPlace rebar.config --replace ", warnings_as_errors" ""
+          substituteInPlace rebar.config --replace-fail ", warnings_as_errors" ""
           '';
       });
     });

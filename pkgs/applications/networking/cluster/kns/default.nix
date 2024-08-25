@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    substituteInPlace bin/kns bin/ktx --replace fzf ${fzf}/bin/fzf --replace kubectl ${kubectl}/bin/kubectl
+    substituteInPlace bin/kns bin/ktx --replace-fail fzf ${fzf}/bin/fzf --replace-fail kubectl ${kubectl}/bin/kubectl
     install -D -m755 -t $out/bin bin/kns bin/ktx
 
     runHook postInstall

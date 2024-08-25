@@ -120,20 +120,20 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
     substituteInPlace CMakeLists.txt \
-      --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
+      --replace-fail "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
 
     # JIT library was removed from composable_kernel...
     # https://github.com/ROCm/composable_kernel/issues/782
     substituteInPlace src/targets/gpu/CMakeLists.txt \
-      --replace " COMPONENTS jit_library" "" \
-      --replace " composable_kernel::jit_library" "" \
-      --replace "if(WIN32)" "if(TRUE)"
+      --replace-fail " COMPONENTS jit_library" "" \
+      --replace-fail " composable_kernel::jit_library" "" \
+      --replace-fail "if(WIN32)" "if(TRUE)"
   '' + lib.optionalString (!buildDocs) ''
     substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(doc)" ""
+      --replace-fail "add_subdirectory(doc)" ""
   '' + lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(test)" ""
+      --replace-fail "add_subdirectory(test)" ""
   '';
 
   # Unfortunately, it seems like we have to call make on this manually

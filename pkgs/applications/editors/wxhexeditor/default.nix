@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs .";
 
   prePatch = ''
-    substituteInPlace Makefile --replace "/usr" "$out"
-    substituteInPlace Makefile --replace "mhash; ./configure" "mhash; ./configure --prefix=$out"
+    substituteInPlace Makefile --replace-fail "/usr" "$out"
+    substituteInPlace Makefile --replace-fail "mhash; ./configure" "mhash; ./configure --prefix=$out"
   '' + lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile --replace "-lgomp" "-lomp"
+    substituteInPlace Makefile --replace-fail "-lgomp" "-lomp"
   '';
 
   patches = [

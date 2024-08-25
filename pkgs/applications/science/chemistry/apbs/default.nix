@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # ImportFETK.cmake downloads source and builds fetk
     substituteInPlace CMakeLists.txt \
-      --replace "include(ImportFETK)" "" \
-      --replace 'import_fetk(''${FETK_VERSION})' ""
+      --replace-fail "include(ImportFETK)" "" \
+      --replace-fail 'import_fetk(''${FETK_VERSION})' ""
 
     # U was removed in python 3.11 because it had no effect
     substituteInPlace tools/manip/inputgen.py \
-      --replace '"rU"' '"r"'
+      --replace-fail '"rU"' '"r"'
   '';
 
   nativeBuildInputs = [

@@ -120,7 +120,7 @@ rustPlatform.buildRustPackage {
   # transforms-geoip is patched out of Cargo.toml for now - unless explicitly asked for.
   postPatch = ''
     substituteInPlace ./src/dns.rs \
-      --replace "#[tokio::test]" ""
+      --replace-fail "#[tokio::test]" ""
   '';
 
   passthru = {

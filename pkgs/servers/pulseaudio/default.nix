@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
 
     # Ensure that service files use the wrapped binaries.
     find "$out" -name "*.service" | while read f; do
-        substituteInPlace "$f" --replace "$out/.bin-unwrapped/" "$out/bin/"
+        substituteInPlace "$f" --replace-fail "$out/.bin-unwrapped/" "$out/bin/"
     done
   '';
 

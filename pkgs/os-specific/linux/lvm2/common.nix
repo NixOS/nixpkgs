@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
     sed -i /DEFAULT_SYS_DIR/d Makefile.in
     sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
 
-    substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
-    substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+    substituteInPlace make.tmpl.in --replace-fail "@systemdsystemunitdir@" "$out/lib/systemd/system"
+    substituteInPlace libdm/make.tmpl.in --replace-fail "@systemdsystemunitdir@" "$out/lib/systemd/system"
 
     substituteInPlace scripts/blk_availability_systemd_red_hat.service.in \
-      --replace '/usr/bin/true' '${coreutils}/bin/true'
+      --replace-fail '/usr/bin/true' '${coreutils}/bin/true'
   '';
 
   postConfigure = ''

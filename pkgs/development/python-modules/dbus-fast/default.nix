@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=dbus_fast --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [

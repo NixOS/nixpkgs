@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov vulture --cov-report=html --cov-report=term --cov-report=xml --cov-append" ""
+      --replace-fail " --cov vulture --cov-report=html --cov-report=term --cov-report=xml --cov-append" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

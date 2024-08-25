@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool ];
 
   postPatch = ''
-    substituteInPlace makefile.shared --replace glibtool libtool
-    substituteInPlace makefile_include.mk --replace "shell arch" "shell uname -m"
+    substituteInPlace makefile.shared --replace-fail glibtool libtool
+    substituteInPlace makefile_include.mk --replace-fail "shell arch" "shell uname -m"
   '';
 
   preBuild = ''

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     };
   in ''
     substituteInPlace src/CMakeLists.txt \
-      --replace "include(PandocMan)" "include(${PandocMan})"
+      --replace-fail "include(PandocMan)" "include(${PandocMan})"
   '';
 
   nativeBuildInputs = [ cmake pandoc pkg-config ];

@@ -43,8 +43,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
-    substituteInPlace 'requirements.txt' --replace 'pytest' ""
+    substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace-fail '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
+    substituteInPlace 'requirements.txt' --replace-fail 'pytest' ""
   '';
 
   buildInputs =

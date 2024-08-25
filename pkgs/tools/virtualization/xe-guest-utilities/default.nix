@@ -20,7 +20,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace mk/xen-vcpu-hotplug.rules \
-      --replace "/bin/sh" "${runtimeShell}"
+      --replace-fail "/bin/sh" "${runtimeShell}"
   '';
 
   buildPhase = ''

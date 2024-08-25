@@ -57,8 +57,8 @@ buildPythonPackage rec {
 
     pushd tests
     substituteInPlace run.sh \
-      --replace "PYTHONPATH=.." "PYTHONPATH=$PYTHONPATH" \
-      --replace "pywebviewtest test_js_api.py::test_concurrent ''${PYTEST_OPTIONS}" "# skip flaky test_js_api.py::test_concurrent"
+      --replace-fail "PYTHONPATH=.." "PYTHONPATH=$PYTHONPATH" \
+      --replace-fail "pywebviewtest test_js_api.py::test_concurrent ''${PYTEST_OPTIONS}" "# skip flaky test_js_api.py::test_concurrent"
 
     patchShebangs run.sh
     wrapQtApp run.sh

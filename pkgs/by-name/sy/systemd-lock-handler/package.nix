@@ -34,7 +34,7 @@ buildGoModule rec {
     runHook preInstall
 
     substituteInPlace systemd-lock-handler.service \
-      --replace /usr/lib/ $out/lib/
+      --replace-fail /usr/lib/ $out/lib/
 
     make install DESTDIR= PREFIX=$out
 

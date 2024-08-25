@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     mkdir -p $out/share/heroku $out/bin
     cp -pr * $out/share/heroku
     substituteInPlace $out/share/heroku/bin/run \
-      --replace "/usr/bin/env node" "${nodejs}/bin/node"
+      --replace-fail "/usr/bin/env node" "${nodejs}/bin/node"
     makeWrapper $out/share/heroku/bin/run $out/bin/heroku \
       --set HEROKU_DISABLE_AUTOUPDATE 1
   '';

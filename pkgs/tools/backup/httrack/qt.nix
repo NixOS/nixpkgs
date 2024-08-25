@@ -16,16 +16,16 @@ mkDerivation rec {
 
   prePatch = ''
     substituteInPlace cmake/HTTRAQTFindHttrack.cmake \
-      --replace /usr/include/httrack/ ${httrack}/include/httrack/
+      --replace-fail /usr/include/httrack/ ${httrack}/include/httrack/
 
     substituteInPlace distribution/posix/CMakeLists.txt \
-      --replace /usr/share $out/share
+      --replace-fail /usr/share $out/share
 
     substituteInPlace desktop/httraqt.desktop \
-      --replace Exec=httraqt Exec=$out/bin/httraqt
+      --replace-fail Exec=httraqt Exec=$out/bin/httraqt
 
     substituteInPlace sources/main/httraqt.cpp \
-      --replace /usr/share/httraqt/ $out/share/httraqt
+      --replace-fail /usr/share/httraqt/ $out/share/httraqt
   '';
 
   meta = with lib; {

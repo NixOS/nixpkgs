@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
     cp "include/"* "$out/share/stalin-${version}/include"
 
     substituteInPlace "$out/bin/stalin" \
-      --replace "$PWD/include/stalin" "$out/share/stalin-${version}/include/stalin"
+      --replace-fail "$PWD/include/stalin" "$out/share/stalin-${version}/include/stalin"
     substituteInPlace "$out/bin/stalin" \
-      --replace "$PWD/include" "$out/share/stalin-${version}/include"
+      --replace-fail "$PWD/include" "$out/share/stalin-${version}/include"
   '';
 
   meta = {

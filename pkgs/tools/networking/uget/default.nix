@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # TODO: remove the replace once upstream fix is released:
     #   https://sourceforge.net/p/urlget/uget2/ci/14890943c52e0a5cd2a87d8a1c51cbffebee7cf9/
-    substituteInPlace ui-gtk/UgtkBanner.h --replace "} banner;" "};"
+    substituteInPlace ui-gtk/UgtkBanner.h --replace-fail "} banner;" "};"
   '';
 
   nativeBuildInputs = [

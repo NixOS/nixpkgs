@@ -19,9 +19,9 @@ buildPythonApplication rec {
   # of the package, that has been affected by the pyscaffold package dependency removal.
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "['pyscaffold>=3.0a0,<3.1a0'] + " "" \
-      --replace "use_pyscaffold=True"  ""
-    substituteInPlace src/bkyml/skeleton.py --replace \
+      --replace-fail "['pyscaffold>=3.0a0,<3.1a0'] + " "" \
+      --replace-fail "use_pyscaffold=True"  ""
+    substituteInPlace src/bkyml/skeleton.py --replace-fail \
         "from bkyml import __version__" \
         "__version__ = \"${version}\""
   '';

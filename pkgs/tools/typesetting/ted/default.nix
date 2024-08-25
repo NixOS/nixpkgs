@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
     make tedPackage/makefile
     pushd tedPackage
-    substituteInPlace makefile --replace /usr ""
+    substituteInPlace makefile --replace-fail /usr ""
     make PKGDESTDIR=$out datadir
     popd
 

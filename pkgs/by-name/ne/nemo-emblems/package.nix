@@ -21,10 +21,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "/usr/share" "share"
+      --replace-fail "/usr/share" "share"
 
     substituteInPlace nemo-extension/nemo-emblems.py \
-      --replace "/usr/share/locale" "${cinnamon-translations}/share/locale"
+      --replace-fail "/usr/share/locale" "${cinnamon-translations}/share/locale"
   '';
 
   meta = with lib; {

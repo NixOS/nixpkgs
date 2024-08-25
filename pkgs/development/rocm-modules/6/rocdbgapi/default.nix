@@ -85,10 +85,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace $out/lib/cmake/amd-dbgapi/amd-dbgapi-config.cmake \
-      --replace "/build/source/build/" ""
+      --replace-fail "/build/source/build/" ""
 
     substituteInPlace $out/lib/cmake/amd-dbgapi/amd-dbgapi-targets.cmake \
-      --replace "/build/source/build" "$out"
+      --replace-fail "/build/source/build" "$out"
   '' + lib.optionalString buildDocs ''
     mv $out/share/html/amd-dbgapi $doc/share/doc/amd-dbgapi/html
     rmdir $out/share/html

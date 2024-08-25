@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     rm $out/opt/TheDesk/thedesk
 
     substituteInPlace $out/share/applications/thedesk.desktop \
-      --replace '/opt/TheDesk' $out/bin
+      --replace-fail '/opt/TheDesk' $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/thedesk \
       --add-flags $out/opt/TheDesk/resources/app.asar

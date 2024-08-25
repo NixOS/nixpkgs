@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace libqmenumodel/src/qmenumodel.pc.in \
-      --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
-      --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
+      --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
 
     substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/{client,script}/*.py
   '';

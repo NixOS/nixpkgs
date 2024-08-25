@@ -242,13 +242,13 @@ in python3.pkgs.buildPythonApplication rec {
   '') + ''
     # Fix tests
     for f in $(grep -R --files-with-matches "2002-11-25") ; do
-      substituteInPlace $f --replace "2002-11-25" "1980-01-02"
-      substituteInPlace $f --replace "00:37:42" "00:00:00"
+      substituteInPlace $f --replace-fail "2002-11-25" "1980-01-02"
+      substituteInPlace $f --replace-fail "00:37:42" "00:00:00"
     done
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     # We want to use asciidoc from the build platform to build the documentation.
     substituteInPlace Makefile.in \
-      --replace "python3 -m asciidoc.a2x" "${buildPackages.asciidoc}/bin/a2x"
+      --replace-fail "python3 -m asciidoc.a2x" "${buildPackages.asciidoc}/bin/a2x"
   '';
 
   build-system = with python3.pythonOnBuildForHost.pkgs; [ setuptools ];

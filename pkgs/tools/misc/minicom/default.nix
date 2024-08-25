@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Have `configure' assume that the lock directory exists.
     substituteInPlace configure \
-      --replace 'test -d $UUCPLOCK' true
+      --replace-fail 'test -d $UUCPLOCK' true
   '';
 
   postInstall = ''

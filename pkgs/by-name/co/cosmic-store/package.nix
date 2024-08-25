@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];

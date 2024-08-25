@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
+      --replace-fail "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
   '';
 
   nativeBuildInputs = [

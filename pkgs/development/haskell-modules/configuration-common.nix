@@ -384,7 +384,7 @@ self: super: {
   containers-unicode-symbols = overrideCabal {
     postPatch = ''
       substituteInPlace containers-unicode-symbols.cabal \
-        --replace 'containers >= 0.5 && < 0.6.5' 'containers'
+        --replace-fail 'containers >= 0.5 && < 0.6.5' 'containers'
     '';
   } super.containers-unicode-symbols;
 
@@ -523,7 +523,7 @@ self: super: {
 
   inline-c-cpp = overrideCabal (drv: {
     postPatch = (drv.postPatch or "") + ''
-      substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
+      substituteInPlace inline-c-cpp.cabal --replace-fail "-optc-std=c++11" ""
     '';
   }) super.inline-c-cpp;
 
@@ -1050,7 +1050,7 @@ self: super: {
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal (drv: {
     postPatch = (drv.postPatch or "") + ''
-      substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
+      substituteInPlace source/Network/Stun/MappedAddress.hs --replace-fail "import Network.Endian" ""
     '';
   }) super.stunclient;
 
@@ -1368,7 +1368,7 @@ self: super: {
     patches = (drv.patches or []) ++ [ ./patches/portmidi-alsa-plugins.patch ];
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
-        --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
+        --replace-fail @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
     '';
   }) super.PortMidi;
 
@@ -1474,7 +1474,7 @@ self: super: {
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
     postPatch = (drv.postPatch or "") + ''
-      substituteInPlace hledger-flow.cabal --replace "-static" ""
+      substituteInPlace hledger-flow.cabal --replace-fail "-static" ""
     '';
   }) super.hledger-flow;
 

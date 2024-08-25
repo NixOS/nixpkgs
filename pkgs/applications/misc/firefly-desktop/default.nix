@@ -18,8 +18,8 @@ in appimageTools.wrapType2 {
     mkdir -p $out/share/applications $out/share/pixmaps
     cp ${appimageContents}/desktop.desktop $out/share/applications/firefly-desktop.desktop
     substituteInPlace $out/share/applications/firefly-desktop.desktop \
-      --replace 'Exec=AppRun' 'Exec=firefly-desktop' \
-      --replace 'Icon=desktop' 'Icon=firefly-desktop'
+      --replace-fail 'Exec=AppRun' 'Exec=firefly-desktop' \
+      --replace-fail 'Icon=desktop' 'Icon=firefly-desktop'
     cp ${appimageContents}/desktop.png $out/share/pixmaps/firefly-desktop.png
   '';
 

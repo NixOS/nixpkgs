@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''
     substituteInPlace pyproject.toml \
-      --replace '"error",' '"error", "ignore::UserWarning",'
+      --replace-fail '"error",' '"error", "ignore::UserWarning",'
   '';
 
   nativeBuildInputs = [

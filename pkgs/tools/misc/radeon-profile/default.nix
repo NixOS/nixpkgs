@@ -19,7 +19,7 @@ mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace radeon-profile.pro \
-      --replace "/usr/" "$out/"
+      --replace-fail "/usr/" "$out/"
   '';
 
   meta = with lib; {

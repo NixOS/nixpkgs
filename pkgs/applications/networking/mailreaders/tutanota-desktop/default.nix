@@ -21,7 +21,7 @@ appimageTools.wrapType2 rec {
       install -Dm 444 ${appimageContents}/tutanota-desktop.png -t $out/share/pixmaps
 
       substituteInPlace $out/share/applications/tutanota-desktop.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
 
   meta = with lib; {

@@ -110,11 +110,11 @@ stdenv.mkDerivation rec {
     cp -r usr/* $out
     for i in wps wpp et wpspdf; do
       substituteInPlace $out/bin/$i \
-        --replace /opt/kingsoft/wps-office $prefix
+        --replace-fail /opt/kingsoft/wps-office $prefix
     done
     for i in $out/share/applications/*;do
       substituteInPlace $i \
-        --replace /usr/bin $out/bin
+        --replace-fail /usr/bin $out/bin
     done
     runHook postInstall
   '';

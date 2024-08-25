@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   # As of 2.8.49 (maybe earlier) this is needed to silence warnings
   prePatch = ''
     substituteInPlace configure.ac \
-      --replace 'AM_INIT_AUTOMAKE([foreign])' 'AM_INIT_AUTOMAKE([foreign subdir-objects])'
+      --replace-fail 'AM_INIT_AUTOMAKE([foreign])' 'AM_INIT_AUTOMAKE([foreign subdir-objects])'
   '';
 
   meta = with lib; {

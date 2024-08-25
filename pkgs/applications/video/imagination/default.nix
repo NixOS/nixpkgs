@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     substituteInPlace src/main-window.c \
-      --replace 'gtk_icon_theme_load_icon(icon_theme,"image", 20, 0, NULL)' \
+      --replace-fail 'gtk_icon_theme_load_icon(icon_theme,"image", 20, 0, NULL)' \
       'gtk_icon_theme_load_icon(icon_theme,"insert-image", 20, 0, NULL)' \
-      --replace 'gtk_icon_theme_load_icon(icon_theme,"sound", 20, 0, NULL)' \
+      --replace-fail 'gtk_icon_theme_load_icon(icon_theme,"sound", 20, 0, NULL)' \
       'gtk_icon_theme_load_icon(icon_theme,"audio-x-generic", 20, 0, NULL)'
   '';
 

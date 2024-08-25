@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace power-usage-report \
-      --replace "'which'" "'${which}/bin/which'"
+      --replace-fail "'which'" "'${which}/bin/which'"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

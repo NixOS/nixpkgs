@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   # breaking the build
   patchPhase = ''
     substituteInPlace src/insertionops.cc \
-      --replace "Directory ACL:" "High 32 bits of size:" \
-      --replace "inode.i_dir_acl" "inode.i_size_high"
+      --replace-fail "Directory ACL:" "High 32 bits of size:" \
+      --replace-fail "inode.i_dir_acl" "inode.i_size_high"
   '';
 
   meta = with lib; {

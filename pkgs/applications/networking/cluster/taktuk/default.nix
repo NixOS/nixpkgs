@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-      substituteInPlace ./taktuk --replace "/usr/bin/perl" "${perl}/bin/perl"
+      substituteInPlace ./taktuk --replace-fail "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
   meta = {

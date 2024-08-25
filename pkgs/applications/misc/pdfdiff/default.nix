@@ -23,8 +23,8 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pdfdiff.py \
-      --replace 'pdftotextProgram = "pdftotext"' 'pdftotextProgram = "${xpdf}/bin/pdftotext"' \
-      --replace 'progName = "pdfdiff.py"' 'progName = "pdfdiff"'
+      --replace-fail 'pdftotextProgram = "pdftotext"' 'pdftotextProgram = "${xpdf}/bin/pdftotext"' \
+      --replace-fail 'progName = "pdfdiff.py"' 'progName = "pdfdiff"'
     '';
 
   installPhase = ''

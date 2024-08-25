@@ -50,8 +50,8 @@ let
     dontBuild = true;
 
     postPatch = ''
-      substituteInPlace opt/${program}${year}/${program}${year} --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk.out}"
-      substituteInPlace opt/${program}${year}/updater --replace "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk.out}"
+      substituteInPlace opt/${program}${year}/${program}${year} --replace-fail "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk.out}"
+      substituteInPlace opt/${program}${year}/updater --replace-fail "# INSTALL4J_JAVA_HOME_OVERRIDE=" "INSTALL4J_JAVA_HOME_OVERRIDE=${jdk.out}"
     '';
 
     installPhase = ''

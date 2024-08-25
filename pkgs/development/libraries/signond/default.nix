@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     substituteInPlace src/signond/signond.pro \
-      --replace "/etc" "@out@/etc"
+      --replace-fail "/etc" "@out@/etc"
   '';
 
   meta = with lib; {

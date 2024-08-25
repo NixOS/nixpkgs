@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   installFlags = [ "PREFIX=\${out}" ];
 
   patchPhase = ''
-   substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"
+   substituteInPlace rarcrack.c --replace-fail "file -i" "${file}/bin/file -i"
   '';
 
   preInstall = ''

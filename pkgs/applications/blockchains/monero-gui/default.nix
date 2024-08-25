@@ -54,18 +54,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # set monero-gui version
     substituteInPlace src/version.js.in \
-       --replace '@VERSION_TAG_GUI@' '${version}'
+       --replace-fail '@VERSION_TAG_GUI@' '${version}'
 
     # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \
-      --replace 'QApplication::applicationDirPath() + "' '"${monero-cli}/bin'
+      --replace-fail 'QApplication::applicationDirPath() + "' '"${monero-cli}/bin'
 
     # 1: only build external deps, *not* the full monero
     # 2: use nixpkgs libraries
     substituteInPlace CMakeLists.txt \
-      --replace 'add_subdirectory(monero)' \
+      --replace-fail 'add_subdirectory(monero)' \
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)' \
-      --replace 'add_subdirectory(external)' ""
+      --replace-fail 'add_subdirectory(external)' ""
   '';
 
   cmakeFlags = [ "-DARCH=default" ];

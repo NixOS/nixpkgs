@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/bsoncxx/cmake/libbsoncxx.pc.in \
       src/mongocxx/cmake/libmongocxx.pc.in \
-      --replace "\''${prefix}/" ""
+      --replace-fail "\''${prefix}/" ""
   '';
 
   nativeBuildInputs = [

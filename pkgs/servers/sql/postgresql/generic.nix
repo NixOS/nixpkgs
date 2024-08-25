@@ -133,9 +133,9 @@ let
       substituteInPlace "src/common/config_info.c" --subst-var out
     '' + lib.optionalString jitSupport ''
         # Force lookup of jit stuff in $out instead of $lib
-        substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
+        substituteInPlace src/backend/jit/jit.c --replace-fail pkglib_path \"$out/lib\"
+        substituteInPlace src/backend/jit/llvm/llvmjit.c --replace-fail pkglib_path \"$out/lib\"
+        substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace-fail pkglib_path \"$out/lib\"
     '';
 
     postInstall =
@@ -146,7 +146,7 @@ let
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace-fail ${stdenv'.cc}/bin/ld ld
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
@@ -165,18 +165,18 @@ let
         moveToOutput "lib/llvmjit*" "$out"
 
         # In the case of JIT support, prevent a retained dependency on clang-wrapper
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/clang clang
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace-fail ${stdenv'.cc}/bin/clang clang
         nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
 
         # Stop out depending on the default output of llvm
         substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.out}/bin "" \
-          --replace '$(LLVM_BINPATH)/' ""
+          --replace-fail ${llvmPackages.llvm.out}/bin "" \
+          --replace-fail '$(LLVM_BINPATH)/' ""
 
         # Stop out depending on the -dev output of llvm
         substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
-          --replace -I${llvmPackages.llvm.dev}/include ""
+          --replace-fail ${llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
+          --replace-fail -I${llvmPackages.llvm.dev}/include ""
 
         ${lib.optionalString (!stdenv'.isDarwin) ''
           # Stop lib depending on the -dev output of llvm

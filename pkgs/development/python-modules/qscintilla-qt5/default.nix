@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ''
     + lib.optionalString stdenv.isDarwin ''
       substituteInPlace project.py \
-        --replace \
+        --replace-fail \
         "if self.project.qsci_external_lib:
                   if self.qsci_features_dir is not None:" \
         "if self.project.qsci_external_lib:

@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do
       substituteInPlace $file \
-         --replace "/bin/rm" "${coreutils}/bin/rm" \
-         --replace "/bin/cat" "${coreutils}/bin/cat"
+         --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+         --replace-fail "/bin/cat" "${coreutils}/bin/cat"
     done
 
     for file in $out/share/zeek/policy/misc/trim-trace-file.zeek $out/share/zeek/base/frameworks/logging/postprocessors/scp.zeek $out/share/zeek/base/frameworks/logging/postprocessors/sftp.zeek; do
-      substituteInPlace $file --replace "/bin/rm" "${coreutils}/bin/rm"
+      substituteInPlace $file --replace-fail "/bin/rm" "${coreutils}/bin/rm"
     done
   '';
 

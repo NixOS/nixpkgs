@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     substituteInPlace Makefile.in \
-      --replace "/bin/rm" "rm"
+      --replace-fail "/bin/rm" "rm"
   '';
 
   nativeBuildInputs = [

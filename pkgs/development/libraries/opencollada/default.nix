@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     substituteInPlace DAEValidator/CMakeLists.txt --replace-fail ' -Werror"' '"'
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
-      --replace math.h cmath
+      --replace-fail math.h cmath
   '';
 
   meta = {

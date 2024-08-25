@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   buildInputs = [ which procps kbd ];
 
   postPatch = ''
-    substituteInPlace src/Makefile.am --replace 'root' '$(id -u)'
-    substituteInPlace configure.ac --replace '/dev/input' '/tmp'
+    substituteInPlace src/Makefile.am --replace-fail 'root' '$(id -u)'
+    substituteInPlace configure.ac --replace-fail '/dev/input' '/tmp'
     sed -i '/chmod u+s/d' src/Makefile.am
  '';
 

@@ -77,8 +77,8 @@ in stdenv.mkDerivation rec {
     ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
 
   preConfigure = ''
-    substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
-    substituteInPlace ./configure --replace /usr /no-such-path
+    substituteInPlace ./configure --replace-fail "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
+    substituteInPlace ./configure --replace-fail /usr /no-such-path
   '';
 
   enableParallelBuilding = false;

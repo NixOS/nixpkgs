@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D notify_send.py $out/share/notify_send.py
     substituteInPlace $out/share/notify_send.py \
-      --replace "'notify-send'" "'${libnotify}/bin/notify-send'"
+      --replace-fail "'notify-send'" "'${libnotify}/bin/notify-send'"
   '';
 
   meta = with lib; {

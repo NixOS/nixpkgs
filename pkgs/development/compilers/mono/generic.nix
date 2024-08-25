@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
-    substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
+    substituteInPlace mcs/class/corlib/System/Environment.cs --replace-fail /usr/share "$out/share"
   '' + lib.optionalString withLLVM ''
-    substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
+    substituteInPlace mono/mini/aot-compiler.c --replace-fail "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
 
   # Fix mono DLLMap so it can find libX11 to run winforms apps

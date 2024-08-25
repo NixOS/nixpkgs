@@ -15,7 +15,7 @@ let
 
   patchDesktopFile = ''
     substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
-      --replace "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
+      --replace-fail "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
   '';
 
   installMacOSAppLauncher = ''

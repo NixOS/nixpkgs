@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace build.rs \
       --subst-var-by librclone ${librclone}
     substituteInPlace .cargo-checksum.json \
-      --replace $oldHash $(sha256sum build.rs | cut -d " " -f 1)
+      --replace-fail $oldHash $(sha256sum build.rs | cut -d " " -f 1)
     popd
 
     substituteInPlace justfile \
-      --replace "{{ env_var('DESTDIR') }}/usr" "${placeholder "out"}"
+      --replace-fail "{{ env_var('DESTDIR') }}/usr" "${placeholder "out"}"
     # buildRustPackage takes care of installing the binary
     sed -i "#/bin/celeste#d" justfile
   '';

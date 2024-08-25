@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "platformdirs>=2,<4" "platformdirs"
+    substituteInPlace setup.cfg --replace-fail "platformdirs>=2,<4" "platformdirs"
   '';
 
   propagatedBuildInputs = [

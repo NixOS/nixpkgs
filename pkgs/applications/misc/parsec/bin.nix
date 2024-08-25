@@ -92,8 +92,8 @@ stdenvNoCC.mkDerivation {
       --run "$prepareParsec"
 
     substituteInPlace $out/share/applications/parsecd.desktop \
-      --replace "/usr/bin/parsecd" "parsecd" \
-      --replace "/usr/share/icons" "${placeholder "out"}/share/icons"
+      --replace-fail "/usr/bin/parsecd" "parsecd" \
+      --replace-fail "/usr/share/icons" "${placeholder "out"}/share/icons"
 
     runHook postInstall
   '';

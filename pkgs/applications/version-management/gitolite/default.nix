@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   postPatch = ''
-    substituteInPlace ./install --replace " 2>/dev/null" ""
+    substituteInPlace ./install --replace-fail " 2>/dev/null" ""
     substituteInPlace src/lib/Gitolite/Hooks/PostUpdate.pm \
-      --replace /usr/bin/perl "${perl}/bin/perl"
+      --replace-fail /usr/bin/perl "${perl}/bin/perl"
     substituteInPlace src/lib/Gitolite/Hooks/Update.pm \
-      --replace /usr/bin/perl "${perl}/bin/perl"
+      --replace-fail /usr/bin/perl "${perl}/bin/perl"
     substituteInPlace src/lib/Gitolite/Setup.pm \
-      --replace hostname "${nettools}/bin/hostname"
+      --replace-fail hostname "${nettools}/bin/hostname"
     substituteInPlace src/commands/sskm \
-      --replace /bin/rm "${coreutils}/bin/rm"
+      --replace-fail /bin/rm "${coreutils}/bin/rm"
   '';
 
   postFixup = ''

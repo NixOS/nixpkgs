@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Issue introduced by attr-2.4.48
-    substituteInPlace src/apps/user/ofs_setdirhint.c --replace attr/xattr.h sys/xattr.h
+    substituteInPlace src/apps/user/ofs_setdirhint.c --replace-fail attr/xattr.h sys/xattr.h
 
     # Do not try to install empty sysconfdir
-    substituteInPlace Makefile.in --replace 'install -d $(sysconfdir)' ""
+    substituteInPlace Makefile.in --replace-fail 'install -d $(sysconfdir)' ""
 
     # perl interpreter needs to be fixed or build fails
     patchShebangs ./src/apps/admin/pvfs2-genconfig
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for f in pvfs2-getmattr pvfs2-setmattr; do
-      substituteInPlace $out/bin/$f --replace '#!/bin/csh' '#!${tcsh}/bin/tcsh'
+      substituteInPlace $out/bin/$f --replace-fail '#!/bin/csh' '#!${tcsh}/bin/tcsh'
     done
 
     sed -i 's:openssl:${openssl}/bin/openssl:' $out/bin/pvfs2-gen-keys.sh

@@ -51,7 +51,7 @@ mkCoqDerivation {
   # dpd_compute.ml uses deprecated Pervasives.compare
   # Versions prior to 0.6.5 do not have the WARN_ERR build flag
   preConfigure = lib.optionalString hasWarning ''
-    substituteInPlace Makefile.in --replace "-warn-error +a " ""
+    substituteInPlace Makefile.in --replace-fail "-warn-error +a " ""
   '';
 
   buildFlags = lib.optional hasWarning "WARN_ERR=";

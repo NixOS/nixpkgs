@@ -76,13 +76,13 @@ stdenv.mkDerivation rec {
     # it should be a build-time dep for build
     # TODO: send upstream
     substituteInPlace doc/meson.build \
-      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
 
     # gir works for us even when cross-compiling
     # TODO: send upstream because downstream users can use the option to disable gir if they don't have it working
     substituteInPlace libgweather/meson.build \
-      --replace "g_ir_scanner.found() and not meson.is_cross_build()" "g_ir_scanner.found()"
+      --replace-fail "g_ir_scanner.found() and not meson.is_cross_build()" "g_ir_scanner.found()"
   '';
 
   postFixup = ''

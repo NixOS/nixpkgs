@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace 'platform.dist()[0]' '"nix"'
+      --replace-fail 'platform.dist()[0]' '"nix"'
     patchShebangs .
   '';
 

@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '' +
     lib.optionalString withRlwrap ''
       substituteInPlace $out/bin/bb \
-        --replace '"${unwrapped-bin}"' '"${rlwrap}/bin/rlwrap" "${unwrapped-bin}"'
+        --replace-fail '"${unwrapped-bin}"' '"${rlwrap}/bin/rlwrap" "${unwrapped-bin}"'
     '';
 
   installCheckPhase = ''

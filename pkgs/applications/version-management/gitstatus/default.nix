@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     # the fallback path is wrong in the case of home-manager
     # because the FHS directories don't start at /
     substituteInPlace install \
-      --replace "_gitstatus_install_main ." "_gitstatus_install_main $out"
+      --replace-fail "_gitstatus_install_main ." "_gitstatus_install_main $out"
   '';
 
   # Don't install the "install" and "build.info" files, which the end user

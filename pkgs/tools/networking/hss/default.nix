@@ -17,7 +17,7 @@ buildRubyGem rec {
 
   postInstall = ''
    substituteInPlace $GEM_HOME/gems/${gemName}-${version}/bin/hss \
-     --replace \
+     --replace-fail \
        "'ssh'" \
        "'${openssh}/bin/ssh'"
   '';

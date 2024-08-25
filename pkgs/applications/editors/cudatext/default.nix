@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '') deps) + ''
     # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
     substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
-      --replace GTK2_IME_CODE _GTK2_IME_CODE
+      --replace-fail GTK2_IME_CODE _GTK2_IME_CODE
 
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \

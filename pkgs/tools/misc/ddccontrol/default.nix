@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace configure.ac              \
-      --replace                                 \
+      --replace-fail                                 \
       "\$""{datadir}/ddccontrol-db"             \
       "${ddccontrol-db}/share/ddccontrol-db"
 
     substituteInPlace src/ddcpci/Makefile.am    \
-       --replace "chmod 4711" "chmod 0711"
+       --replace-fail "chmod 4711" "chmod 0711"
   '';
 
   preConfigure = ''

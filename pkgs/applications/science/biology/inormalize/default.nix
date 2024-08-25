@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace inormalize.cc \
-      --replace "clamp" "::clamp"
+      --replace-fail "clamp" "::clamp"
   '';
 
   nativeBuildInputs = [ cmake makeWrapper ];

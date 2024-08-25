@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt\
-      --replace "opencv-python" "opencv"
+      --replace-fail "opencv-python" "opencv"
   '';
 
   nativeBuildInputs = [

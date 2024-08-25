@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
     # double-conversion is a dependency of 2geom
     substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
-      --replace 'find_package(DoubleConversion REQUIRED)' ""
+      --replace-fail 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
   nativeBuildInputs = [

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace gnomekeyringextention.cpp \
-      --replace "/usr/share/dpa-ext-gnomekeyring" "$out/share/dpa-ext-gnomekeyring"
+      --replace-fail "/usr/share/dpa-ext-gnomekeyring" "$out/share/dpa-ext-gnomekeyring"
   '';
 
   nativeBuildInputs = [

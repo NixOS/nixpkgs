@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pelican/tests/test_pelican.py \
-      --replace "'git'" "'${git}/bin/git'"
+      --replace-fail "'git'" "'${git}/bin/git'"
   '';
 
   nativeBuildInputs = [

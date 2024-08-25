@@ -21,7 +21,7 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace common/sc_popen.cpp --replace '/bin/sh' '${runtimeShell}'
+    substituteInPlace common/sc_popen.cpp --replace-fail '/bin/sh' '${runtimeShell}'
   '';
 
   strictDeps = true;

@@ -476,7 +476,7 @@ self: super: builtins.intersectAttrs super {
     postPatch = (drv.postPatch or "") + ''
       for f in src/IDE/Leksah.hs src/IDE/Utils/ServerConnection.hs
       do
-        substituteInPlace "$f" --replace "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
+        substituteInPlace "$f" --replace-fail "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
       done
     '';
   }) super.leksah);
@@ -1044,7 +1044,7 @@ self: super: builtins.intersectAttrs super {
   nix-diff = overrideCabal (drv: {
     postPatch = ''
       substituteInPlace src/Nix/Diff/Types.hs \
-        --replace "{-# OPTIONS_GHC -Wno-orphans #-}" "{-# OPTIONS_GHC -Wno-orphans -fconstraint-solver-iterations=0 #-}"
+        --replace-fail "{-# OPTIONS_GHC -Wno-orphans #-}" "{-# OPTIONS_GHC -Wno-orphans -fconstraint-solver-iterations=0 #-}"
       '';
   }) (doJailbreak (dontCheck super.nix-diff));
 

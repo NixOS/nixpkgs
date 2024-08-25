@@ -67,7 +67,7 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace plasma-dialer/org.kde.phone.dialer.desktop \
-      --replace "/usr/bin/" "$out/bin/"
+      --replace-fail "/usr/bin/" "$out/bin/"
   '';
 
   # Plasma gear 22.09 shipped before KWin 5.26 was made available.

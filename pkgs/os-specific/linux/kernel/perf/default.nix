@@ -89,12 +89,12 @@ stdenv.mkDerivation {
     cd tools/perf
 
     for x in util/build-id.c util/dso.c; do
-      substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
+      substituteInPlace $x --replace-fail /usr/lib/debug /run/current-system/sw/lib/debug
     done
 
   '' + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
     substituteInPlace scripts/python/flamegraph.py \
-      --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
+      --replace-fail "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
       "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
 
   '' + lib.optionalString (lib.versionAtLeast kernel.version "6.0") ''

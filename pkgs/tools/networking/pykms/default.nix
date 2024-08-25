@@ -52,7 +52,7 @@ pypkgs.buildPythonApplication rec {
     siteDir=$out/${python3.sitePackages}
 
     substituteInPlace pykms_DB2Dict.py \
-      --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
+      --replace-fail "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
   '';
 
   format = "other";

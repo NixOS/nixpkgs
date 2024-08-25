@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
-      --replace '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \
-      --replace ' ''${CSMITH_HOME}/runtime' " $out/include/${pname}-${version}" \
-      --replace '$CSMITH_HOME/src/csmith' $out/bin/csmith
+      --replace-fail '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \
+      --replace-fail ' ''${CSMITH_HOME}/runtime' " $out/include/${pname}-${version}" \
+      --replace-fail '$CSMITH_HOME/src/csmith' $out/bin/csmith
 
     substituteInPlace $out/bin/launchn.pl \
-      --replace '../compiler_test.pl' $out/bin/compiler_test.pl \
-      --replace '../$CONFIG_FILE' '$CONFIG_FILE'
+      --replace-fail '../compiler_test.pl' $out/bin/compiler_test.pl \
+      --replace-fail '../$CONFIG_FILE' '$CONFIG_FILE'
 
     wrapProgram $out/bin/launchn.pl \
       --prefix PERL5LIB : "$PERL5LIB"

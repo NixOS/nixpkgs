@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   # see https://github.com/NixOS/nixpkgs/issues/144170
   postFixup = ''
     substituteInPlace $dev/lib/cmake/${pname}/${pname}-targets-release.cmake  \
-      --replace '$'{_IMPORT_PREFIX}/lib/ $out/lib/
+      --replace-fail '$'{_IMPORT_PREFIX}/lib/ $out/lib/
   '';
 
   passthru = {

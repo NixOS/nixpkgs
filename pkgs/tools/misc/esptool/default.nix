@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs ci
 
     substituteInPlace test/test_espsecure_hsm.py \
-      --replace "/usr/lib/softhsm" "${lib.getLib softhsm}/lib/softhsm"
+      --replace-fail "/usr/lib/softhsm" "${lib.getLib softhsm}/lib/softhsm"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

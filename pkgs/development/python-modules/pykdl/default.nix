@@ -29,7 +29,7 @@ toPythonModule (
     # Fix hardcoded installation path
     postPatch = ''
       substituteInPlace CMakeLists.txt \
-        --replace dist-packages site-packages
+        --replace-fail dist-packages site-packages
     '';
 
     nativeBuildInputs = [

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace test/Makefile \
-      --replace '/usr/share/dict/words' '${scowl}/share/dict/words.txt'
+      --replace-fail '/usr/share/dict/words' '${scowl}/share/dict/words.txt'
   '';
 
   installPhase = ''

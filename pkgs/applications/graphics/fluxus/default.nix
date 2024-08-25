@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   patches = [ ./fix-build.patch ];
   postPatch = ''
     substituteInPlace src/Unicode.cpp \
-      --replace "(byte)" "(unsigned char)"
+      --replace-fail "(byte)" "(unsigned char)"
   '';
   sconsFlags = [
     "RacketPrefix=${racket}"

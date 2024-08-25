@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   buildInputs = [ libnetfilter_queue libnfnetlink ];
 
   postPatch = ''
-    substituteInPlace preloader.c --replace /usr/local/ $out/
-    substituteInPlace Makefile    --replace /usr/local/ $out/
+    substituteInPlace preloader.c --replace-fail /usr/local/ $out/
+    substituteInPlace Makefile    --replace-fail /usr/local/ $out/
   '';
 
   preInstall = ''

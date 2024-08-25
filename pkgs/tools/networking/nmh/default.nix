@@ -25,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace config/config.c --replace /bin/cat ${coreutils}/bin/cat
+    substituteInPlace config/config.c --replace-fail /bin/cat ${coreutils}/bin/cat
     substituteInPlace \
       sbr/arglist.c \
       uip/mhbuildsbr.c \
       uip/whatnowsbr.c \
       uip/slocal.c \
-      --replace '"/bin/sh"' '"${runtimeShell}"'
+      --replace-fail '"/bin/sh"' '"${runtimeShell}"'
     # the "cleanup" pseudo-test makes diagnosing test failures a pain
     ln -s -f ${stdenv}/bin/true test/cleanup
   '';

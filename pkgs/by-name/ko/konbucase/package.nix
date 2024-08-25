@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mv $out/bin/com.github.ryonakano.konbucase $out/bin/konbucase
     substituteInPlace $out/share/applications/com.github.ryonakano.konbucase.desktop \
-      --replace 'Exec=com.github.ryonakano.konbucase' 'Exec=${placeholder "out"}/bin/konbucase'
+      --replace-fail 'Exec=com.github.ryonakano.konbucase' 'Exec=${placeholder "out"}/bin/konbucase'
   '';
 
   meta = with lib; {

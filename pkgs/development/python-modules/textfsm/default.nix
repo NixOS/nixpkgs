@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # upstream forgot to update the release version
   postPatch = ''
     substituteInPlace textfsm/__init__.py \
-      --replace "1.1.2" "1.1.3"
+      --replace-fail "1.1.2" "1.1.3"
   '';
 
   propagatedBuildInputs = [

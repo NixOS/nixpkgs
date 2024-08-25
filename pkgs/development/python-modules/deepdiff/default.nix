@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/test_command.py \
-      --replace '/tmp/' "$TMPDIR/"
+      --replace-fail '/tmp/' "$TMPDIR/"
   '';
 
   propagatedBuildInputs = [

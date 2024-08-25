@@ -163,9 +163,9 @@ stdenv.mkDerivation (finalAttrs: {
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
-      --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
+      --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
-      --replace "'VERSION'" "'QEMU_VERSION'"
+      --replace-fail "'VERSION'" "'QEMU_VERSION'"
   '';
 
   configureFlags = [
@@ -238,23 +238,23 @@ stdenv.mkDerivation (finalAttrs: {
     # time limits are a little meagre for a build machine that's
     # potentially under load.
     substituteInPlace ../tests/unit/meson.build \
-      --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
+      --replace-fail 'timeout: slow_tests' 'timeout: 50 * slow_tests'
     substituteInPlace ../tests/qtest/meson.build \
-      --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
+      --replace-fail 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
     substituteInPlace ../tests/fp/meson.build \
-      --replace 'timeout: 90)' 'timeout: 300)'
+      --replace-fail 'timeout: 90)' 'timeout: 300)'
 
     # point tests towards correct binaries
     substituteInPlace ../tests/unit/test-qga.c \
-      --replace '/bin/bash' "$(type -P bash)" \
-      --replace '/bin/echo' "$(type -P echo)"
+      --replace-fail '/bin/bash' "$(type -P bash)" \
+      --replace-fail '/bin/echo' "$(type -P echo)"
     substituteInPlace ../tests/unit/test-io-channel-command.c \
-      --replace '/bin/socat' "$(type -P socat)"
+      --replace-fail '/bin/socat' "$(type -P socat)"
 
     # combined with a long package name, some temp socket paths
     # can end up exceeding max socket name len
     substituteInPlace ../tests/qtest/bios-tables-test.c \
-      --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
+      --replace-fail 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
 
     # get-fsinfo attempts to access block devices, disallowed by sandbox
     sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
@@ -267,7 +267,7 @@ stdenv.mkDerivation (finalAttrs: {
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
     substituteInPlace ../tests/unit/meson.build \
-      --replace "'test-io-channel-command'" "#'test-io-channel-command'"
+      --replace-fail "'test-io-channel-command'" "#'test-io-channel-command'"
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.

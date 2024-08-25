@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'addopts = "--cov pytrends/"' ""
+      --replace-fail 'addopts = "--cov pytrends/"' ""
   '';
 
   nativeBuildInputs = [

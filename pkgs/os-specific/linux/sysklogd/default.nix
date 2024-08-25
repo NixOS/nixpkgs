@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # Disable stripping during installation, stripping will be done anyway.
     # Fixes cross-compilation.
     substituteInPlace Makefile \
-      --replace "-m 500 -s" "-m 500"
+      --replace-fail "-m 500 -s" "-m 500"
   '';
 
   preConfigure =

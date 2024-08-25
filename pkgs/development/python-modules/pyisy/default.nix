@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version_format="{tag}"' 'version="${version}"'
+      --replace-fail 'version_format="{tag}"' 'version="${version}"'
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

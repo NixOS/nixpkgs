@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
 
     substituteInPlace $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstar/dune-package \
-      --replace ${fstar-dune} $out
+      --replace-fail ${fstar-dune} $out
 
     installShellCompletion --bash .completion/bash/fstar.exe.bash
     installShellCompletion --fish .completion/fish/fstar.exe.fish

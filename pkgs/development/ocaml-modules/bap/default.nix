@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace oasis/elf-loader --replace bitstring.ppx ppx_bitstring
+    substituteInPlace oasis/elf-loader --replace-fail bitstring.ppx ppx_bitstring
   '';
 
   configureFlags = [ "--enable-everything ${disableIda} ${disableGhidra}" "--with-llvm-config=${llvm.dev}/bin/llvm-config" ];

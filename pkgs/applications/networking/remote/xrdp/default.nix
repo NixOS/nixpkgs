@@ -43,11 +43,11 @@ let
     postPatch = ''
       # patch from Debian, allows to run xrdp daemon under unprivileged user
       substituteInPlace module/rdpClientCon.c \
-        --replace 'g_sck_listen(dev->listen_sck);' 'g_sck_listen(dev->listen_sck); g_chmod_hex(dev->uds_data, 0x0660);'
+        --replace-fail 'g_sck_listen(dev->listen_sck);' 'g_sck_listen(dev->listen_sck); g_chmod_hex(dev->uds_data, 0x0660);'
 
       substituteInPlace configure.ac \
-        --replace 'moduledir=`pkg-config xorg-server --variable=moduledir`' "moduledir=$out/lib/xorg/modules" \
-        --replace 'sysconfdir="/etc"' "sysconfdir=$out/etc"
+        --replace-fail 'moduledir=`pkg-config xorg-server --variable=moduledir`' "moduledir=$out/lib/xorg/modules" \
+        --replace-fail 'sysconfdir="/etc"' "sysconfdir=$out/etc"
     '';
 
     preConfigure = "./bootstrap";
@@ -94,9 +94,9 @@ let
     ];
 
     postPatch = ''
-      substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+      substituteInPlace sesman/xauth.c --replace-fail "xauth -q" "${xorg.xauth}/bin/xauth -q"
 
-      substituteInPlace configure.ac --replace /usr/include/ ""
+      substituteInPlace configure.ac --replace-fail /usr/include/ ""
     '';
 
     preConfigure = ''
@@ -127,7 +127,7 @@ let
 
       cp $src/keygen/openssl.conf $out/share/xrdp/openssl.conf
 
-      substituteInPlace $out/etc/xrdp/sesman.ini --replace /etc/xrdp/pulse $out/etc/xrdp/pulse
+      substituteInPlace $out/etc/xrdp/sesman.ini --replace-fail /etc/xrdp/pulse $out/etc/xrdp/pulse
 
       # remove all session types except Xorg (they are not supported by this setup)
       perl -i -ne 'print unless /\[(X11rdp|Xvnc|console|vnc-any|sesman-any|rdp-any|neutrinordp-any)\]/ .. /^$/' $out/etc/xrdp/xrdp.ini

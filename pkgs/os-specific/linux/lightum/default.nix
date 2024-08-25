@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace "libsystemd-login" "libsystemd"
+      --replace-fail "libsystemd-login" "libsystemd"
   '';
 
   installPhase = ''

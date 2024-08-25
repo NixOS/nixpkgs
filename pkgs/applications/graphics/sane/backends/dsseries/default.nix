@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace etc/udev/rules.d/50-Brother_DSScanner.rules \
-      --replace 'GROUP="users"' 'GROUP="scanner", ENV{libsane_matched}="yes"'
+      --replace-fail 'GROUP="users"' 'GROUP="scanner", ENV{libsane_matched}="yes"'
 
     mkdir -p etc/sane.d/dll.d
     echo "dsseries" > etc/sane.d/dll.d/dsseries.conf

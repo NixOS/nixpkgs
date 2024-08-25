@@ -34,17 +34,17 @@ python3.pkgs.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace /lib/systemd $out/lib/systemd
+      --replace-fail /lib/systemd $out/lib/systemd
 
     substituteInPlace cloudinit/net/networkd.py \
-      --replace '["/usr/sbin", "/bin"]' '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
+      --replace-fail '["/usr/sbin", "/bin"]' '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
 
     substituteInPlace tests/unittests/test_net_activators.py \
-      --replace '["/usr/sbin", "/bin"]' \
+      --replace-fail '["/usr/sbin", "/bin"]' \
         '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
 
     substituteInPlace tests/unittests/cmd/test_clean.py \
-      --replace "/bin/bash" "/bin/sh"
+      --replace-fail "/bin/bash" "/bin/sh"
   '';
 
   postInstall = ''

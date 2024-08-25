@@ -16,7 +16,7 @@ let
     dontConfigure = true;
     buildPhase = "true";
     installPhase = ''
-      substituteInPlace contrib/collection.cgi --replace '"/etc/collection.conf"' '$ENV{COLLECTION_CONF}'
+      substituteInPlace contrib/collection.cgi --replace-fail '"/etc/collection.conf"' '$ENV{COLLECTION_CONF}'
       cp contrib/collection.cgi $out
     '';
   });

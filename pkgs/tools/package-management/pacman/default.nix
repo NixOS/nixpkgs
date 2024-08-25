@@ -89,16 +89,16 @@ stdenv.mkDerivation (final: {
   ]; in ''
     echo 'export PATH=${lib.makeBinPath compressionTools}:$PATH' >> scripts/libmakepkg/util/compress.sh.in
     substituteInPlace meson.build \
-      --replace "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
-      --replace "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
-      --replace "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'" \
-      --replace "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
+      --replace-fail "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
+      --replace-fail "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
+      --replace-fail "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'" \
+      --replace-fail "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
     substituteInPlace doc/meson.build \
-      --replace "/bin/true" "${coreutils}/bin/true"
+      --replace-fail "/bin/true" "${coreutils}/bin/true"
     substituteInPlace scripts/repo-add.sh.in \
-      --replace bsdtar "${libarchive}/bin/bsdtar"
+      --replace-fail bsdtar "${libarchive}/bin/bsdtar"
     substituteInPlace scripts/pacman-key.sh.in \
-      --replace "local KEYRING_IMPORT_DIR='@keyringdir@'" "" \
+      --replace-fail "local KEYRING_IMPORT_DIR='@keyringdir@'" "" \
       --subst-var-by keyringdir '\$KEYRING_IMPORT_DIR'
   '';
 

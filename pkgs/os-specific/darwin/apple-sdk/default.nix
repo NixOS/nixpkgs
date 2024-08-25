@@ -303,7 +303,7 @@ in rec {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
-          --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
+          --replace-fail "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
     });
 

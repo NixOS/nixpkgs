@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   # tests are determined to use /var/tmp on unix
   postPatch = ''
     cat <(find . -name tmpDir.h) <(echo src/test/OpenEXRCoreTest/main.cpp) | while read -r f ; do
-      substituteInPlace $f --replace '/var/tmp' "$TMPDIR"
+      substituteInPlace $f --replace-fail '/var/tmp' "$TMPDIR"
     done
   '';
 

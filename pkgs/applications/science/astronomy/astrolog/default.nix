@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     sed -i "s:~/astrolog:$out/astrolog:g" astrolog.h
-    substituteInPlace Makefile --replace cc "$CC" --replace strip "$STRIP"
+    substituteInPlace Makefile --replace-fail cc "$CC" --replace-fail strip "$STRIP"
   '';
 
   buildInputs = [ xorg.libX11 ];

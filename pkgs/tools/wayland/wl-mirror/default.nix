@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     echo 'v${version}' > version.txt
     substituteInPlace CMakeLists.txt \
-      --replace 'WL_PROTOCOL_DIR "/usr' 'WL_PROTOCOL_DIR "${wayland-protocols}' \
-      --replace 'WLR_PROTOCOL_DIR "/usr' 'WLR_PROTOCOL_DIR "${wlr-protocols}'
+      --replace-fail 'WL_PROTOCOL_DIR "/usr' 'WL_PROTOCOL_DIR "${wayland-protocols}' \
+      --replace-fail 'WLR_PROTOCOL_DIR "/usr' 'WLR_PROTOCOL_DIR "${wlr-protocols}'
   '';
 
   cmakeFlags = [

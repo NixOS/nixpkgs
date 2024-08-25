@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
   # Original installs udev rules and service config into global paths
   postPatch = ''
     substituteInPlace etc/meson.build \
-      --replace "install_dir: unitdir" "install_dir: '$out/etc/systemd/system'" \
-      --replace "install_dir: rulesdir" "install_dir: '$out/etc/udev/rules.d'"
+      --replace-fail "install_dir: unitdir" "install_dir: '$out/etc/systemd/system'" \
+      --replace-fail "install_dir: rulesdir" "install_dir: '$out/etc/udev/rules.d'"
     substituteInPlace etc/systemd/iptsd-find-service \
-      --replace "iptsd-find-hidraw" "$out/bin/iptsd-find-hidraw" \
-      --replace "systemd-escape" "${lib.getExe' systemd "systemd-escape"}"
+      --replace-fail "iptsd-find-hidraw" "$out/bin/iptsd-find-hidraw" \
+      --replace-fail "systemd-escape" "${lib.getExe' systemd "systemd-escape"}"
     substituteInPlace etc/udev/50-iptsd.rules.in \
-      --replace "/bin/systemd-escape" "${lib.getExe' systemd "systemd-escape"}"
+      --replace-fail "/bin/systemd-escape" "${lib.getExe' systemd "systemd-escape"}"
   '';
 
   mesonFlags = [

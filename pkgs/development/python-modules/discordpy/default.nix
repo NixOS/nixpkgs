@@ -36,11 +36,11 @@ buildPythonPackage rec {
   patchPhase =
     ''
       substituteInPlace "discord/opus.py" \
-        --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        --replace-fail "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
     ''
     + lib.optionalString withVoice ''
       substituteInPlace "discord/player.py" \
-        --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
+        --replace-fail "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
     '';
 
   # Only have integration tests with discord

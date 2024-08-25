@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile.in --replace '-Wl,--soname=' '-Wl,-install_name,$(out)/lib/'
+    substituteInPlace Makefile.in --replace-fail '-Wl,--soname=' '-Wl,-install_name,$(out)/lib/'
   '';
 
   makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];

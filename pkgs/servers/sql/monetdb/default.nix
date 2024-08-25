@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ openssl readline bzip2 ];
 
   postPatch = ''
-    substituteInPlace cmake/monetdb-packages.cmake --replace \
+    substituteInPlace cmake/monetdb-packages.cmake --replace-fail \
       'get_os_release_info(LINUX_DISTRO LINUX_DISTRO_VERSION)' \
       'set(LINUX_DISTRO "nixos")'
   '';

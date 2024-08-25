@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage rec {
   # so we need to patch it to call git by absolute path instead.
   postPatch = ''
     substituteInPlace src/git.rs \
-        --replace 'std::process::Command::new("git")' \
+        --replace-fail 'std::process::Command::new("git")' \
         'std::process::Command::new("${git}/bin/git")'
     substituteInPlace tests/lib.rs \
-        --replace 'std::process::Command::new("git")' \
+        --replace-fail 'std::process::Command::new("git")' \
         'std::process::Command::new("${git}/bin/git")'
   '';
 

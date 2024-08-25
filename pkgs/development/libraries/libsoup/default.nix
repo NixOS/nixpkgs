@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     # the commit is in 3.0.6
     # https://gitlab.gnome.org/GNOME/libsoup/-/commit/5280e936d0a76f94dbc5d8489cfbdc0a06343f65
     substituteInPlace meson.build \
-      --replace "required: vapi_opt)" "required: vapi_opt, native: false)"
+      --replace-fail "required: vapi_opt)" "required: vapi_opt, native: false)"
 
     patchShebangs libsoup/
   '';

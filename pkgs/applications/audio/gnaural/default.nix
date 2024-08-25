@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substitute \
       $out/share/gnome/apps/Multimedia/gnaural.desktop \
       $out/share/applications/gnaural.desktop \
-      --replace \
+      --replace-fail \
         "/usr/share/gnaural/pixmaps/gnaural-icon.png" \
         "$out/share/gnaural/pixmaps/gnaural-icon.png" \
 

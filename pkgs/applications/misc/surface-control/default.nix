@@ -28,8 +28,8 @@ rustPlatform.buildRustPackage rec {
     install -Dm 0444 -t $out/etc/udev/rules.d \
       etc/udev/40-surface-control.rules
     substituteInPlace $out/etc/udev/rules.d/40-surface-control.rules \
-      --replace "/usr/bin/chmod" "${coreutils}/bin/chmod" \
-      --replace "/usr/bin/chown" "${coreutils}/bin/chown"
+      --replace-fail "/usr/bin/chmod" "${coreutils}/bin/chmod" \
+      --replace-fail "/usr/bin/chown" "${coreutils}/bin/chown"
   '';
 
   meta = with lib; {

@@ -118,7 +118,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'm4_esyscmd([./get-git-version])' '${version}'
+      --replace-fail 'm4_esyscmd([./get-git-version])' '${version}'
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';

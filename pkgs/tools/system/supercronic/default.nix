@@ -25,8 +25,8 @@ buildGoModule rec {
 
   postConfigure = ''
     # There are tests that set the shell to various paths
-    substituteInPlace cron/cron_test.go --replace /bin/sh ${bash}/bin/sh
-    substituteInPlace cron/cron_test.go --replace /bin/false ${coreutils}/bin/false
+    substituteInPlace cron/cron_test.go --replace-fail /bin/sh ${bash}/bin/sh
+    substituteInPlace cron/cron_test.go --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   meta = with lib; {

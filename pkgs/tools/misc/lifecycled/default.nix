@@ -18,7 +18,7 @@ buildGoModule rec {
   postInstall = ''
     mkdir -p $out/lib/systemd/system
     substitute init/systemd/lifecycled.unit $out/lib/systemd/system/lifecycled.service \
-      --replace /usr/bin/lifecycled $out/bin/lifecycled
+      --replace-fail /usr/bin/lifecycled $out/bin/lifecycled
   '';
 
   meta = with lib; {

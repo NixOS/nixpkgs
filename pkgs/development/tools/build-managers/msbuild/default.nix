@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # not patchShebangs, there is /bin/bash in the body of the script as well
-    substituteInPlace ./eng/cibuild_bootstrapped_msbuild.sh --replace /bin/bash ${stdenv.shell}
+    substituteInPlace ./eng/cibuild_bootstrapped_msbuild.sh --replace-fail /bin/bash ${stdenv.shell}
 
     patchShebangs eng/*.sh mono/build/*.sh
 

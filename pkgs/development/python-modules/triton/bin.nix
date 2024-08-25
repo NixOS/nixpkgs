@@ -74,7 +74,7 @@ buildPythonPackage rec {
       in
       ''
         substituteInPlace $out/${python.sitePackages}/triton/common/build.py \
-          --replace '${oldStr}' '${newStr}'
+          --replace-fail '${oldStr}' '${newStr}'
       ''
     );
 

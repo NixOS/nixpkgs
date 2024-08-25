@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # We have dex support enabled in yara-python
     substituteInPlace setup.py \
-      --replace "yara-python-dex>=1.0.1" "yara-python"
+      --replace-fail "yara-python-dex>=1.0.1" "yara-python"
   '';
 
   pythonImportsCheck = [

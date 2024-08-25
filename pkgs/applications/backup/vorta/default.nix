@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
-    --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
+    --replace-fail com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
 
   postInstall = ''

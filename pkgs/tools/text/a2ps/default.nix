@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace afm/make_fonts_map.sh --replace "/bin/rm" "rm"
-    substituteInPlace tests/defs.in --replace "/bin/rm" "rm"
+    substituteInPlace afm/make_fonts_map.sh --replace-fail "/bin/rm" "rm"
+    substituteInPlace tests/defs.in --replace-fail "/bin/rm" "rm"
   '';
 
   nativeBuildInputs = [ autoconf bison file perl pkg-config ];

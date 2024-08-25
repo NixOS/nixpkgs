@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     substituteInPlace spotifycli/spotifycli.py \
-      --replace dbus-send ${dbus}/bin/dbus-send
+      --replace-fail dbus-send ${dbus}/bin/dbus-send
   '';
 
   disabled = !python3Packages.isPy3k;

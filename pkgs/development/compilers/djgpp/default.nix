@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     runHook prePatch
     for f in "build-djgpp.sh" "script/${version}" "setenv/copyfile.sh"; do
-      substituteInPlace "$f" --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
+      substituteInPlace "$f" --replace-fail '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
     done
   ''
   # i686 patches from https://github.com/andrewwutw/build-djgpp/issues/45#issuecomment-1484010755

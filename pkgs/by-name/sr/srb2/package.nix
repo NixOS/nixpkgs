@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./src/sdl/ogl_sdl.c \
-      --replace libGLU.so.1 ${libGLU}/lib/libGLU.so.1
+      --replace-fail libGLU.so.1 ${libGLU}/lib/libGLU.so.1
   '';
 
   desktopItems = [

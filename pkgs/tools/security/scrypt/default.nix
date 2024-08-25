@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     for f in Makefile.in autotools/Makefile.am libcperciva/cpusupport/Build/cpusupport.sh configure ; do
-      substituteInPlace $f --replace "command -p " ""
+      substituteInPlace $f --replace-fail "command -p " ""
     done
 
     patchShebangs tests/test_scrypt.sh

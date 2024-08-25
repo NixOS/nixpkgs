@@ -39,8 +39,8 @@ buildPythonPackage rec {
   # Prevent the test suite from attempting to download fonts
   postPatch = ''
     substituteInPlace test/styles.ipynb \
-      --replace '"def testfont(exprs, fonturl):\n",' '"def testfont(exprs, fonturl):\n", "    return\n",' \
-      --replace "mathfont='FiraMath-Regular.otf', " ""
+      --replace-fail '"def testfont(exprs, fonturl):\n",' '"def testfont(exprs, fonturl):\n", "    return\n",' \
+      --replace-fail "mathfont='FiraMath-Regular.otf', " ""
   '';
 
   pythonImportsCheck = [ "ziamath" ];

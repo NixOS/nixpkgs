@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace systeroid-core/src/parsers.rs \
-      --replace '"/usr/share/doc/kernel-doc-*/Documentation/*",' '"${linux-doc}/share/doc/linux-doc/*",'
+      --replace-fail '"/usr/share/doc/kernel-doc-*/Documentation/*",' '"${linux-doc}/share/doc/linux-doc/*",'
   '';
 
   cargoHash = "sha256-TTxvkRRVPCycEtAmm5BIOVc9bUmdqQBPSORBxHzm9ms=";

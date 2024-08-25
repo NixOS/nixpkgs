@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'rm abstime.h' ""
+    substituteInPlace Makefile --replace-fail 'rm abstime.h' ""
   '';
 
   # Workaround build failure on -fno-common toolchains:

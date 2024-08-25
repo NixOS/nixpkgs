@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs tests
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace Makefile.in --replace "tests" " "
+    substituteInPlace Makefile.in --replace-fail "tests" " "
 
-    substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
+    substituteInPlace doc/Makefile.am --replace-fail 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace "salt/utils/rsax931.py" \
       --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}"
     substituteInPlace requirements/base.txt \
-      --replace contextvars ""
+      --replace-fail contextvars ""
 
     # Don't require optional dependencies on Darwin, let's use
     # `extraInputs` like on any other platform
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
 
     # Remove windows-only requirement
     substituteInPlace "requirements/zeromq.txt" \
-      --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
+      --replace-fail 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

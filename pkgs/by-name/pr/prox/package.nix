@@ -19,7 +19,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace cmd/prox/version.go \
-      --replace '0.0.0-unknown' '${version}'
+      --replace-fail '0.0.0-unknown' '${version}'
   '';
 
   meta = with lib; {

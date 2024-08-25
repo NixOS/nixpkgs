@@ -35,7 +35,7 @@ buildPythonPackage rec {
     ln -s */requires.txt requirements.txt
 
     substituteInPlace requirements.txt  \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
   # required for import check to work (argostranslate)

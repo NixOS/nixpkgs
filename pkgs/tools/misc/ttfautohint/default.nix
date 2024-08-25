@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   postAutoreconf = ''
-    substituteInPlace configure --replace "macx-g++" "macx-clang"
+    substituteInPlace configure --replace-fail "macx-g++" "macx-clang"
   '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

@@ -44,7 +44,7 @@ in mkDerivation rec {
   postPatch = ''
     cp -Rv "${reaperFork.src}"/* external/REAPER
     cp -Rv "${libqaudioextra.src}"/* external/libqaudioextra
-    substituteInPlace dfasma.pro --replace "CONFIG += file_sdif" "";
+    substituteInPlace dfasma.pro --replace-fail "CONFIG += file_sdif" "";
   '';
 
   meta = with lib; {

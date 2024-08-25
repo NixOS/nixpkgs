@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # Make more reproducible by removing build user and date.
   postPatch = ''
-    substituteInPlace build/build-usual-image --replace '"(made by $USER on $date)"' '""'
+    substituteInPlace build/build-usual-image --replace-fail '"(made by $USER on $date)"' '""'
   '';
 
   # Silence warnings related to use of implicitly declared library functions and implicit ints.

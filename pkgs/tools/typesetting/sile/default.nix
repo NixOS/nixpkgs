@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace libtexpdf/dpxutil.c \
-      --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
+      --replace-fail "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
   # remove forbidden references to $TMPDIR

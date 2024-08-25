@@ -72,7 +72,7 @@ in
       preAutoreconf = ''
         for i in $(find . -type f -name "*.m4"); do
           substituteInPlace $i \
-            --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
+            --replace-fail 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
         done
       '';
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./
     sed -i 's/dvdisaster48.png/dvdisaster/' contrib/dvdisaster.desktop
     substituteInPlace scripts/bash-based-configure \
-      --replace 'if (make -v | grep "GNU Make") > /dev/null 2>&1 ;' \
+      --replace-fail 'if (make -v | grep "GNU Make") > /dev/null 2>&1 ;' \
                 'if make -v | grep "GNU Make" > /dev/null 2>&1 ;'
   '';
 
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$TMP"/{log,regtest}
     substituteInPlace common.bash \
-      --replace /dev/shm "$TMP/log" \
-      --replace /var/tmp "$TMP"
+      --replace-fail /dev/shm "$TMP/log" \
+      --replace-fail /var/tmp "$TMP"
 
     for test in *.bash; do
       case "$test" in

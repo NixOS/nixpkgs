@@ -12,7 +12,7 @@ py.toPythonApplication
     ];
 
     postPatch = (old.postPatch or "") + ''
-      substituteInPlace mlflow/utils/process.py --replace \
+      substituteInPlace mlflow/utils/process.py --replace-fail \
         "child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True," \
         "cmd[0]='$out/bin/gunicornMlflow'; child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True,"
     '';

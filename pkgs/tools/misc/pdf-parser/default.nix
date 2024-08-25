@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
 
   preFixup = ''
     substituteInPlace $out/bin/pdf-parser.py \
-      --replace '/usr/bin/python' '${python3Packages.python}/bin/python'
+      --replace-fail '/usr/bin/python' '${python3Packages.python}/bin/python'
   '';
 
   meta = with lib; {

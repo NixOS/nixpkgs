@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   buildInputs = [ glib readline ];
 
   preConfigure = ''
-    substituteInPlace "ncl/Makefile.am" --replace "noinst_PROGRAMS" "bin_PROGRAMS"
-    substituteInPlace "demo/Makefile.am" --replace "noinst_PROGRAMS" "bin_PROGRAMS"
+    substituteInPlace "ncl/Makefile.am" --replace-fail "noinst_PROGRAMS" "bin_PROGRAMS"
+    substituteInPlace "demo/Makefile.am" --replace-fail "noinst_PROGRAMS" "bin_PROGRAMS"
     sh autogen.sh
   '';
 

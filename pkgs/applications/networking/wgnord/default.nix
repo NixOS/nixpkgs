@@ -24,8 +24,8 @@ resholve.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace wgnord \
-      --replace '$conf_dir/countries.txt' "$out/share/countries.txt" \
-      --replace '$conf_dir/countries_iso31662.txt' "$out/share/countries_iso31662.txt"
+      --replace-fail '$conf_dir/countries.txt' "$out/share/countries.txt" \
+      --replace-fail '$conf_dir/countries_iso31662.txt' "$out/share/countries_iso31662.txt"
   '';
 
   dontBuild = true;

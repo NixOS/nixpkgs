@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "humanize>=0.5.1,<0.6" "humanize>=0.5.1"
+      --replace-fail "humanize>=0.5.1,<0.6" "humanize>=0.5.1"
   '';
 
   buildInputs = [

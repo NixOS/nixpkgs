@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bzip2 ];
 
-  preBuild = "substituteInPlace Makefile --replace g++ c++";
+  preBuild = "substituteInPlace Makefile --replace-fail g++ c++";
 
   installFlags = [ "PREFIX=$(out)" ];
 

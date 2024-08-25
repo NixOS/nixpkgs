@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   # Ensure compatibility with OCaml ≥ 5.0
   preConfigure = lib.optional (lib.versionAtLeast ocaml.version "4.08") ''
-    substituteInPlace src/dune --replace '(libraries bytes bigarray)' ""
+    substituteInPlace src/dune --replace-fail '(libraries bytes bigarray)' ""
   '';
 
   src = fetchFromGitHub {

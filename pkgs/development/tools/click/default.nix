@@ -31,7 +31,7 @@ buildPythonApplication {
   postPatch = ''
     # These should be proper Requires, using the header needs their headers
     substituteInPlace lib/click/click-*.pc.in \
-      --replace 'Requires.private' 'Requires'
+      --replace-fail 'Requires.private' 'Requires'
   '';
 
   configureFlags = [

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     substituteInPlace usr/share/jitsi-videobridge/jvb.sh \
-      --replace "exec java" "exec ${jre_headless}/bin/java"
+      --replace-fail "exec java" "exec ${jre_headless}/bin/java"
 
     mkdir -p $out/{bin,share/jitsi-videobridge,etc/jitsi/videobridge}
     mv etc/jitsi/videobridge/logging.properties $out/etc/jitsi/videobridge/

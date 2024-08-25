@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets
-    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "${stdenv.shell}"
+    substituteInPlace ./autogen.sh --replace-fail "/usr/bin/env sh" "${stdenv.shell}"
     ./autogen.sh --prefix $out
   '';
 
   # Make sure the executables use the right mono binary,
   # and set up some symlinks for backwards compatibility.
   postInstall = ''
-    substituteInPlace $out/bin/fsharpc --replace " mono " " ${mono}/bin/mono "
-    substituteInPlace $out/bin/fsharpi --replace " mono " " ${mono}/bin/mono "
-    substituteInPlace $out/bin/fsharpiAnyCpu --replace " mono " " ${mono}/bin/mono "
+    substituteInPlace $out/bin/fsharpc --replace-fail " mono " " ${mono}/bin/mono "
+    substituteInPlace $out/bin/fsharpi --replace-fail " mono " " ${mono}/bin/mono "
+    substituteInPlace $out/bin/fsharpiAnyCpu --replace-fail " mono " " ${mono}/bin/mono "
     ln -s $out/bin/fsharpc $out/bin/fsc
     ln -s $out/bin/fsharpi $out/bin/fsi
     for dll in "$out/lib/mono/4.5"/FSharp*.dll

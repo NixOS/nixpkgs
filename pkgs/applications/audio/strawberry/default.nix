@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
   postPatch = ''
     substituteInPlace src/context/contextalbum.cpp \
-      --replace pictures/strawberry.png pictures/strawberry-grey.png
+      --replace-fail pictures/strawberry.png pictures/strawberry-grey.png
   '';
 
   buildInputs = [

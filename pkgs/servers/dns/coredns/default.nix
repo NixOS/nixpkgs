@@ -52,23 +52,23 @@ in buildGoModule rec {
 
   postPatch = ''
     substituteInPlace test/file_cname_proxy_test.go \
-      --replace "TestZoneExternalCNAMELookupWithProxy" \
+      --replace-fail "TestZoneExternalCNAMELookupWithProxy" \
                 "SkipZoneExternalCNAMELookupWithProxy"
 
     substituteInPlace test/readme_test.go \
-      --replace "TestReadme" "SkipReadme"
+      --replace-fail "TestReadme" "SkipReadme"
 
     # this test fails if any external plugins were imported.
     # it's a lint rather than a test of functionality, so it's safe to disable.
     substituteInPlace test/presubmit_test.go \
-      --replace "TestImportOrdering" "SkipImportOrdering"
+      --replace-fail "TestImportOrdering" "SkipImportOrdering"
   '' + lib.optionalString stdenv.isDarwin ''
     # loopback interface is lo0 on macos
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
 
     # test is apparently outdated but only exhibits this on darwin
     substituteInPlace test/corefile_test.go \
-      --replace "TestCorefile1" "SkipCorefile1"
+      --replace-fail "TestCorefile1" "SkipCorefile1"
   '';
 
   postInstall = ''

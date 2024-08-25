@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mv usr $out
-    substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace /usr/ $out/
+    substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace-fail /usr/ $out/
  '';
 
   meta = with lib; {

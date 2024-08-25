@@ -30,9 +30,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--cov=versioningit" "" \
-      --replace "--cov-config=tox.ini" "" \
-      --replace "--no-cov-on-fail" ""
+      --replace-fail "--cov=versioningit" "" \
+      --replace-fail "--cov-config=tox.ini" "" \
+      --replace-fail "--no-cov-on-fail" ""
   '';
 
   nativeBuildInputs = [ hatchling ];

@@ -33,7 +33,7 @@ buildPerlPackage rec {
 
   postPatch = ''
     substituteInPlace lib/File/StripNondeterminism.pm \
-      --replace "exec('file'" "exec('${lib.getExe file}'"
+      --replace-fail "exec('file'" "exec('${lib.getExe file}'"
   '';
 
 

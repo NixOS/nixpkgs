@@ -41,8 +41,8 @@ let
     postPatch = prev.postPatch + lib.optionalString stdenv.isAarch64 ''
       # https://github.com/igraph/igraph/issues/1694
       substituteInPlace tests/CMakeLists.txt \
-        --replace "igraph_scg_grouping3" "" \
-        --replace "igraph_scg_semiprojectors2" ""
+        --replace-fail "igraph_scg_grouping3" "" \
+        --replace-fail "igraph_scg_semiprojectors2" ""
     '';
     NIX_CFLAGS_COMPILE = (prev.NIX_CFLAGS_COMPILE or []) ++ lib.optionals stdenv.cc.isClang [
       "-Wno-strict-prototypes"

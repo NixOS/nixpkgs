@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace configure.ac --replace "-Werror" "-Wno-error"
+    substituteInPlace configure.ac --replace-fail "-Werror" "-Wno-error"
   '';
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

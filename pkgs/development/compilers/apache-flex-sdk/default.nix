@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     shopt -s extglob
     for i in bin/!(aasdoc|acompc|amxmlc); do
-      substituteInPlace $i --replace "java " "${jre}/bin/java "
+      substituteInPlace $i --replace-fail "java " "${jre}/bin/java "
     done
   '';
 

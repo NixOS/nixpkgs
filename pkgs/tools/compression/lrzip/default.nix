@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     # which fails on darwin, so remove it
     # https://github.com/ckolivas/lrzip/issues/193
     # https://github.com/Homebrew/homebrew-core/pull/85360
-    substituteInPlace lzma/Makefile.am --replace "SUBDIRS = C ASM/x86" "SUBDIRS = C"
-    substituteInPlace configure.ac --replace "-f elf64" "-f macho64"
+    substituteInPlace lzma/Makefile.am --replace-fail "SUBDIRS = C ASM/x86" "SUBDIRS = C"
+    substituteInPlace configure.ac --replace-fail "-f elf64" "-f macho64"
   '';
 
   nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals isx86 [ nasm ];

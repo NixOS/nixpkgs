@@ -18,7 +18,7 @@ buildPythonPackage rec {
   patchPhase = ''
     # Allow greenlet-1.0.0.
     # See https://github.com/mopemope/meinheld/pull/123
-    substituteInPlace setup.py --replace "greenlet>=0.4.5,<0.5" "greenlet>=0.4.5"
+    substituteInPlace setup.py --replace-fail "greenlet>=0.4.5,<0.5" "greenlet>=0.4.5"
   '';
 
   propagatedBuildInputs = [ greenlet ];

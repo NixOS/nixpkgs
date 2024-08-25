@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   postPatch = ''
     substituteInPlace fzf-zsh.plugin.zsh \
-      --replace \
+      --replace-fail \
         'fzf_path="$( cd "$fzf_zsh_path/../fzf/" && pwd )"' \
         "fzf_path=${fzf}" \
-      --replace \
+      --replace-fail \
         '$fzf_path/shell' \
         '${fzf}/share/fzf'
   '';

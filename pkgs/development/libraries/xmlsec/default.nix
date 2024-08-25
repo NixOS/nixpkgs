@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ nss.tools ];
   preCheck = ''
     substituteInPlace tests/testrun.sh \
-      --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
-      --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+      --replace-fail 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
+      --replace-fail 'TMPFOLDER=/tmp' '$(mktemp -d)'
   '';
 
   # enable deprecated soap headers required by lasso

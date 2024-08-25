@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libdframeworkdbus/libdframeworkdbus.pro \
-     --replace "/usr" ""
+     --replace-fail "/usr" ""
 
     substituteInPlace libdframeworkdbus/DFrameworkdbusConfig.in \
-      --replace "/usr/include" "$out/include"
+      --replace-fail "/usr/include" "$out/include"
   '';
 
   meta = with lib; {

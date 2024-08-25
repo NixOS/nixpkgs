@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (!static) ''
     substituteInPlace build/cmake/CMakeLists.txt \
-      --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
+      --replace-fail 'message(SEND_ERROR "You need to build static library to build tests")' ""
     substituteInPlace build/cmake/tests/CMakeLists.txt \
-      --replace 'libzstd_static' 'libzstd_shared'
+      --replace-fail 'libzstd_static' 'libzstd_shared'
     sed -i \
       "1aexport ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
       tests/playTests.sh
@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $bin/bin
     substituteInPlace ../programs/zstdgrep \
-      --replace ":-grep" ":-${gnugrep}/bin/grep" \
-      --replace ":-zstdcat" ":-$bin/bin/zstdcat"
+      --replace-fail ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace-fail ":-zstdcat" ":-$bin/bin/zstdcat"
 
     substituteInPlace ../programs/zstdless \
-      --replace "zstdcat" "$bin/bin/zstdcat"
+      --replace-fail "zstdcat" "$bin/bin/zstdcat"
   '' + lib.optionalString buildContrib (
     ''
       cp contrib/pzstd/pzstd $bin/bin/pzstd

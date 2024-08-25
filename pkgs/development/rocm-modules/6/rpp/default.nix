@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = lib.optionalString (!useOpenCL && !useCPU) ''
     # Bad path
     substituteInPlace CMakeLists.txt \
-      --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
+      --replace-fail "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
   '';
 
   postBuild = lib.optionalString buildDocs ''

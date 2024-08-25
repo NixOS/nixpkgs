@@ -20,7 +20,7 @@ buildPythonPackage rec {
   postPatch = ''
     # remove custom install
     substituteInPlace setup.py \
-      --replace "'install': PostInstallHook," ""
+      --replace-fail "'install': PostInstallHook," ""
   '';
 
   propagatedBuildInputs = [ pyyaml ];

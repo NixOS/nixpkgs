@@ -66,8 +66,8 @@ in {
     ln -s $out/share/logseq/resources/app/icons/logseq.png $out/share/pixmaps/logseq.png
 
     substituteInPlace $out/share/applications/logseq.desktop \
-      --replace Exec=Logseq Exec=logseq \
-      --replace Icon=Logseq Icon=logseq
+      --replace-fail Exec=Logseq Exec=logseq \
+      --replace-fail Icon=Logseq Icon=logseq
   '') + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications/Logseq.app,bin}
     cp -R . $out/Applications/Logseq.app

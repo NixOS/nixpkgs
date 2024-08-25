@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace OpenDialog/gtk.c \
-      --replace '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
+      --replace-fail '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
   '';
 
   meta = with lib; {

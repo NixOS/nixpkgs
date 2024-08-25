@@ -47,14 +47,14 @@ in
     preConfigure = ''
       for f in $(find -type f);do
         substituteInPlace $f \
-          --replace /etc/xdg $out/etc/xdg
+          --replace-fail /etc/xdg $out/etc/xdg
       done
 
       substituteInPlace Makefile \
-        --replace '$(DESTDIR)$(SHADERDIR)' '$(SHADERDIR)'
+        --replace-fail '$(DESTDIR)$(SHADERDIR)' '$(SHADERDIR)'
 
       substituteInPlace Makefile \
-        --replace 'unknown' 'v${version}'
+        --replace-fail 'unknown' 'v${version}'
     '';
 
     makeFlags = optional (!enableGlfw) "DISABLE_GLFW=1";

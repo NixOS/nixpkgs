@@ -17,8 +17,8 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     patchShebangs --host ${pname}
     substituteInPlace ./justfile \
-      --replace " /bin" " $out/bin" \
-      --replace " /usr" " $out"
+      --replace-fail " /bin" " $out/bin" \
+      --replace-fail " /usr" " $out"
   '';
   installPhase = ''
     runHook preInstall

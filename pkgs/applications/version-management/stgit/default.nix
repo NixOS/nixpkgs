@@ -43,14 +43,14 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     for f in Documentation/*.xsl; do
       substituteInPlace $f \
-        --replace http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl \
+        --replace-fail http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl \
                   ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
-        --replace http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl \
+        --replace-fail http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl \
                   ${docbook_xsl}/xml/xsl/docbook/html/docbook.xsl
     done
 
     substituteInPlace Documentation/texi.xsl \
-      --replace http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd \
+      --replace-fail http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd \
                 ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
   '';
 

@@ -35,7 +35,7 @@ mkDerivation {
 
   postPatch = ''
     substituteInPlace bin/plasma-bigscreen-wayland.in \
-      --replace @KDE_INSTALL_FULL_LIBEXECDIR@ "${plasma-workspace}/libexec"
+      --replace-fail @KDE_INSTALL_FULL_LIBEXECDIR@ "${plasma-workspace}/libexec"
   '';
 
   preFixup = ''

@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
 
     # Replace absolute path in desktop file to correctly point to nix store
     substituteInPlace $out/share/applications/unityhub.desktop \
-      --replace /opt/unityhub/unityhub $out/opt/unityhub/unityhub
+      --replace-fail /opt/unityhub/unityhub $out/opt/unityhub/unityhub
 
     runHook postInstall
   '';

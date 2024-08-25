@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openldap pam python3 ];
 
   preConfigure = ''
-    substituteInPlace Makefile.in --replace "install-data-local: " "# install-data-local: "
+    substituteInPlace Makefile.in --replace-fail "install-data-local: " "# install-data-local: "
   '';
 
   configureFlags = [

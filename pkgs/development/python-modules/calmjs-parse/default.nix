@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "env['PYTHONPATH'] = 'src'" "env['PYTHONPATH'] += ':src'"
+      --replace-fail "env['PYTHONPATH'] = 'src'" "env['PYTHONPATH'] += ':src'"
   '';
 
   nativeBuildInputs = [ setuptools ];

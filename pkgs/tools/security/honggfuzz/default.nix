@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace hfuzz_cc/hfuzz-cc.c \
-      --replace '"clang' '"${clang}/bin/clang'
+      --replace-fail '"clang' '"${clang}/bin/clang'
   '';
 
   enableParallelBuilding = true;

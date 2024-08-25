@@ -38,7 +38,7 @@ let
 
     postPatch = ''
       substituteInPlace gitsrht-dispatch/main.go \
-        --replace /var/log/gitsrht-dispatch /var/log/sourcehut/gitsrht-dispatch
+        --replace-fail /var/log/gitsrht-dispatch /var/log/sourcehut/gitsrht-dispatch
     '';
   } // gqlgen);
 
@@ -50,7 +50,7 @@ let
 
     postPatch = ''
       substituteInPlace gitsrht-keys/main.go \
-        --replace /var/log/gitsrht-keys /var/log/sourcehut/gitsrht-keys
+        --replace-fail /var/log/gitsrht-keys /var/log/sourcehut/gitsrht-keys
     '';
   } // gqlgen);
 
@@ -62,7 +62,7 @@ let
 
     postPatch = ''
       substituteInPlace gitsrht-shell/main.go \
-        --replace /var/log/gitsrht-shell /var/log/sourcehut/gitsrht-shell
+        --replace-fail /var/log/gitsrht-shell /var/log/sourcehut/gitsrht-shell
     '';
   } // gqlgen);
 
@@ -74,7 +74,7 @@ let
 
     postPatch = ''
       substituteInPlace gitsrht-update-hook/main.go \
-        --replace /var/log/gitsrht-update-hook /var/log/sourcehut/gitsrht-update-hook
+        --replace-fail /var/log/gitsrht-update-hook /var/log/sourcehut/gitsrht-update-hook
     '';
   } // gqlgen);
 in
@@ -87,7 +87,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
+      --replace-fail "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
   '';
 
   nativeBuildInputs = [

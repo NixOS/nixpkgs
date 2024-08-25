@@ -44,7 +44,7 @@ buildPythonPackage rec {
   postPatch = ''
     # avoid infinite recursion by not formatting the release files
     substituteInPlace libcst/codegen/generate.py \
-      --replace '"ufmt"' '"true"'
+      --replace-fail '"ufmt"' '"true"'
   '';
 
   nativeBuildInputs = [

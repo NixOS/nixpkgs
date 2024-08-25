@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile \
-      --replace "-m 4755 -o root -g root" ""
+      --replace-fail "-m 4755 -o root -g root" ""
   '';
 
   makeFlags = [ "PREFIX=$(out)" "SESSION=systemd" ];

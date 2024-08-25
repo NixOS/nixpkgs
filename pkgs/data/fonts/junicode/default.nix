@@ -15,10 +15,10 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace TeX/junicode.sty \
-      --replace '@@@opentype_path@@@' "$out/share/fonts/opentype/" \
-      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
+      --replace-fail '@@@opentype_path@@@' "$out/share/fonts/opentype/" \
+      --replace-fail '@@@truetype_path@@@' "$out/share/fonts/truetype/"
     substituteInPlace TeX/junicodevf.sty \
-      --replace '@@@truetype_path@@@' "$out/share/fonts/truetype/"
+      --replace-fail '@@@truetype_path@@@' "$out/share/fonts/truetype/"
   '';
 
   installPhase = ''

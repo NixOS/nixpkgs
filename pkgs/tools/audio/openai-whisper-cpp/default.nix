@@ -67,7 +67,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
   in lib.optionalString cudaSupport ''
     substituteInPlace Makefile \
-      --replace '${cudaOldStr}' '${cudaNewStr}'
+      --replace-fail '${cudaOldStr}' '${cudaNewStr}'
   '';
 
   env = lib.optionalAttrs stdenv.isDarwin {

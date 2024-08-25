@@ -18,7 +18,7 @@ mkDerivation {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [

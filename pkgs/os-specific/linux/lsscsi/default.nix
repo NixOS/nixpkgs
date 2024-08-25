@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    substituteInPlace Makefile.in --replace /usr "$out"
+    substituteInPlace Makefile.in --replace-fail /usr "$out"
   '';
 
   meta = with lib; {

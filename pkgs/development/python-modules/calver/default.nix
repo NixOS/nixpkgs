@@ -24,7 +24,7 @@ let
 
     postPatch = ''
       substituteInPlace setup.py \
-        --replace "version=calver_version(True)" 'version="${version}"'
+        --replace-fail "version=calver_version(True)" 'version="${version}"'
     '';
 
     doCheck = false; # avoid infinite recursion with hatchling

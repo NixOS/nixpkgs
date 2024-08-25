@@ -68,11 +68,11 @@ multiStdenv.mkDerivation {
 
   postPatch = ''
     # Binaries not used directly should land in libexec/.
-    substituteInPlace src/common/storage.cpp --replace '"/bin"' '"/libexec"'
+    substituteInPlace src/common/storage.cpp --replace-fail '"/bin"' '"/libexec"'
 
     # For airwave-host-32.exe.so, point wineg++ to 32-bit versions of
     # these libraries, as $NIX_LDFLAGS contains only 64-bit ones.
-    substituteInPlace src/host/CMakeLists.txt --replace '-m32' \
+    substituteInPlace src/host/CMakeLists.txt --replace-fail '-m32' \
       '-m32 -L${wine-xembed}/lib -L${wine-xembed}/lib/wine -L${multiStdenv.cc.libc.out}/lib/32'
   '';
 

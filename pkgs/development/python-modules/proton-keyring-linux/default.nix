@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton.keyring_linux.core --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton.keyring_linux.core --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.keyring_linux.core" ];

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
+      --replace-fail " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

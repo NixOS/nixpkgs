@@ -41,8 +41,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=watchdog" "" \
-      --replace "--cov-report=term-missing" ""
+      --replace-fail "--cov=watchdog" "" \
+      --replace-fail "--cov-report=term-missing" ""
   '';
 
   pytestFlagsArray =

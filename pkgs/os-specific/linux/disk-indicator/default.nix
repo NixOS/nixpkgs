@@ -15,9 +15,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # avoid -Werror
-    substituteInPlace Makefile --replace "-Werror" ""
+    substituteInPlace Makefile --replace-fail "-Werror" ""
     # avoid host-specific options
-    substituteInPlace Makefile --replace "-march=native" ""
+    substituteInPlace Makefile --replace-fail "-march=native" ""
   '';
 
   postConfigure = ''

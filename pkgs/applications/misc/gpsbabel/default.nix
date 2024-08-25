@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     patchShebangs testo
   '' + lib.optionalString withDoc ''
     substituteInPlace gbversion.h.qmake.in \
-      --replace /usr/share/doc $doc/share/doc
+      --replace-fail /usr/share/doc $doc/share/doc
 
     substituteInPlace testo.d/serialization.test \
-      --replace /usr/share/doc $doc/share/doc
+      --replace-fail /usr/share/doc $doc/share/doc
 
     substituteInPlace xmldoc/gpsbabel_man.xml \
-      --replace /usr/share/doc $doc/share/doc
+      --replace-fail /usr/share/doc $doc/share/doc
   '';
 
   outputs = [ "out" ] ++ lib.optional withDoc "doc";

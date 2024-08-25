@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
-    substituteInPlace setup.py --replace \
+    substituteInPlace setup.py --replace-fail \
       "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
       "observed_version = [36, 2, 0]"
   '';

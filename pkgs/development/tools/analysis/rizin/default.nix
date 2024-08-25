@@ -85,7 +85,7 @@ let rizin = stdenv.mkDerivation rec {
     export LIBRARY_PATH
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace binrz/rizin/macos_sign.sh \
-      --replace 'codesign' '# codesign'
+      --replace-fail 'codesign' '# codesign'
   '';
 
   buildInputs = [
@@ -112,7 +112,7 @@ let rizin = stdenv.mkDerivation rec {
     # which does not have any extra modules.
     # https://github.com/mesonbuild/meson/pull/9904
     substituteInPlace meson.build \
-      --replace "import('python').find_installation()" "find_program('python3')"
+      --replace-fail "import('python').find_installation()" "find_program('python3')"
   '';
 
   passthru = rec {

@@ -82,7 +82,7 @@ stdenv.mkDerivation (rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace src/procattr.c \
-      --replace "#include <unistd.h>" ""
+      --replace-fail "#include <unistd.h>" ""
   '';
 
   preInstall = lib.optionalString enablePython ''

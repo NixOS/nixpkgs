@@ -17,13 +17,13 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "apprise~=1.8.0" "apprise" \
-      --replace "cryptography~=3.4" "cryptography" \
-      --replace "dnspython==2.6.1" "dnspython" \
-      --replace "pytest ~=7.2" "" \
-      --replace "pytest-flask ~=1.2" "" \
-      --replace "selenium~=4.14.0" "selenium" \
-      --replace "werkzeug~=3.0" "werkzeug"
+      --replace-fail "apprise~=1.8.0" "apprise" \
+      --replace-fail "cryptography~=3.4" "cryptography" \
+      --replace-fail "dnspython==2.6.1" "dnspython" \
+      --replace-fail "pytest ~=7.2" "" \
+      --replace-fail "pytest-flask ~=1.2" "" \
+      --replace-fail "selenium~=4.14.0" "selenium" \
+      --replace-fail "werkzeug~=3.0" "werkzeug"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

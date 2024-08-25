@@ -426,7 +426,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
                 cp -r ${selfDarwin.darwin-stubs}/usr/lib $out/lib
                 chmod -R +w $out/lib
-                substituteInPlace $out/lib/libSystem.B.tbd --replace /usr/lib/system $out/lib/system
+                substituteInPlace $out/lib/libSystem.B.tbd --replace-fail /usr/lib/system $out/lib/system
 
                 ln -s libSystem.B.tbd $out/lib/libSystem.tbd
 

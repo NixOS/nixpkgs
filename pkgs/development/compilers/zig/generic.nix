@@ -52,10 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
   # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch = if lib.versionAtLeast args.version "0.12" then ''
     substituteInPlace lib/std/zig/system.zig \
-      --replace "/usr/bin/env" "${coreutils}/bin/env"
+      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '' else ''
     substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
-      --replace "/usr/bin/env" "${coreutils}/bin/env"
+      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   doInstallCheck = true;

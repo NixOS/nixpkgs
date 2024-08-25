@@ -57,7 +57,7 @@ let
 
     preConfigure = ''
       chmod +x configure
-      substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
+      substituteInPlace configure --replace-fail /bin/bash "${bash}/bin/bash"
     '';
 
     configureFlags = [

@@ -91,17 +91,17 @@ stdenv.mkDerivation rec {
     echo "#!/bin/sh" > test/node_modules
 
     substituteInPlace src/tls/cockpit-certificate-helper.in \
-      --replace 'COCKPIT_CONFIG="@sysconfdir@/cockpit"' 'COCKPIT_CONFIG=/etc/cockpit'
+      --replace-fail 'COCKPIT_CONFIG="@sysconfdir@/cockpit"' 'COCKPIT_CONFIG=/etc/cockpit'
 
     substituteInPlace src/tls/cockpit-certificate-ensure.c \
-      --replace '#define COCKPIT_SELFSIGNED_PATH      PACKAGE_SYSCONF_DIR COCKPIT_SELFSIGNED_FILENAME' '#define COCKPIT_SELFSIGNED_PATH      "/etc" COCKPIT_SELFSIGNED_FILENAME'
+      --replace-fail '#define COCKPIT_SELFSIGNED_PATH      PACKAGE_SYSCONF_DIR COCKPIT_SELFSIGNED_FILENAME' '#define COCKPIT_SELFSIGNED_PATH      "/etc" COCKPIT_SELFSIGNED_FILENAME'
 
     substituteInPlace src/common/cockpitconf.c \
-      --replace 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
+      --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
 
     # instruct users with problems to create a nixpkgs issue instead of nagging upstream directly
     substituteInPlace configure.ac \
-      --replace 'devel@lists.cockpit-project.org' 'https://github.com/NixOS/nixpkgs/issues/new?assignees=&labels=0.kind%3A+bug&template=bug_report.md&title=cockpit%25'
+      --replace-fail 'devel@lists.cockpit-project.org' 'https://github.com/NixOS/nixpkgs/issues/new?assignees=&labels=0.kind%3A+bug&template=bug_report.md&title=cockpit%25'
 
     patchShebangs \
       build.js \
@@ -126,15 +126,15 @@ stdenv.mkDerivation rec {
     for f in pkg/**/*.js pkg/**/*.jsx test/**/* src/**/*; do
       # some files substituteInPlace report as missing and it's safe to ignore them
       substituteInPlace "$(realpath "$f")" \
-        --replace '"/usr/bin/' '"' \
-        --replace '"/bin/' '"' || true
+        --replace-fail '"/usr/bin/' '"' \
+        --replace-fail '"/bin/' '"' || true
     done
 
     substituteInPlace src/common/Makefile-common.am \
-      --replace 'TEST_PROGRAM += test-pipe' "" # skip test-pipe because it hangs the build
+      --replace-fail 'TEST_PROGRAM += test-pipe' "" # skip test-pipe because it hangs the build
 
     substituteInPlace test/pytest/*.py \
-      --replace "'bash" "'${bashInteractive}/bin/bash"
+      --replace-fail "'bash" "'${bashInteractive}/bin/bash"
 
     echo "m4_define(VERSION_NUMBER, [${version}])" > version.m4
   '';
@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
     PATH=${pythonWithGobject}/bin patchShebangs src/client/cockpit-client
 
     substituteInPlace src/ws/cockpit-desktop \
-      --replace ' /bin/bash' ' ${runtimeShell}'
+      --replace-fail ' /bin/bash' ' ${runtimeShell}'
   '';
 
   fixupPhase = ''
@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ gnused ]}
 
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
-      --replace /usr $out
+      --replace-fail /usr $out
 
     runHook postFixup
   '';

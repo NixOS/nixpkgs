@@ -5,7 +5,7 @@ buildDunePackage {
   inherit (csv) src version meta;
 
   preConfigure = ''
-    substituteInPlace lwt/dune --replace '(libraries   bytes' '(libraries '
+    substituteInPlace lwt/dune --replace-fail '(libraries   bytes' '(libraries '
   '';
 
   duneVersion = "3";

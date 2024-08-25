@@ -145,15 +145,15 @@ in mkDerivation rec {
     patchShebangs src/
 
     substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
+      --replace-fail 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-duplicate-includes.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
+      --replace-fail 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-ungrouped-includes.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
+      --replace-fail 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/list-licenses/list-licenses.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
+      --replace-fail 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
-      --replace 'git rev-parse --show-toplevel' '$src'
+      --replace-fail 'git rev-parse --show-toplevel' '$src'
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|gfind|find|' cmake/tools.cmake
     sed -i 's|ggrep|grep|' cmake/tools.cmake
@@ -171,7 +171,7 @@ in mkDerivation rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Make sure Darwin invokes lld.ld64 not lld.
     substituteInPlace cmake/tools.cmake \
-      --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
+      --replace-fail '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
   '';
 
   cmakeFlags = [
@@ -198,9 +198,9 @@ in mkDerivation rec {
     sed -i -e '\!<log>/var/log/clickhouse-server/clickhouse-server\.log</log>!d' \
       $out/etc/clickhouse-server/config.xml
     substituteInPlace $out/etc/clickhouse-server/config.xml \
-      --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
+      --replace-fail "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
     substituteInPlace $out/etc/clickhouse-server/config.xml \
-      --replace "<level>trace</level>" "<level>warning</level>"
+      --replace-fail "<level>trace</level>" "<level>warning</level>"
   '';
 
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.

@@ -97,8 +97,8 @@ stdenv.mkDerivation {
     substitute \
       app/pcloud.desktop \
       share/applications/pcloud.desktop \
-      --replace 'Name=pcloud' 'Name=pCloud' \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Name=pcloud' 'Name=pCloud' \
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
 
     # Build the main executable
     cat > bin/pcloud <<EOF

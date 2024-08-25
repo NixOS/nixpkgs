@@ -123,8 +123,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs tools exts/dbcsr/tools/build_utils exts/dbcsr/.cp2k
     substituteInPlace exts/build_dbcsr/Makefile \
-      --replace '/usr/bin/env python3' '${python3}/bin/python' \
-      --replace 'SHELL = /bin/sh' 'SHELL = bash'
+      --replace-fail '/usr/bin/env python3' '${python3}/bin/python' \
+      --replace-fail 'SHELL = /bin/sh' 'SHELL = bash'
   '';
 
   configurePhase = ''

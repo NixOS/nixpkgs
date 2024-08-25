@@ -61,14 +61,14 @@ in stdenv.mkDerivation rec {
     # $PATH, so it should also work on non-NixOS systems.
     export NIX_CFLAGS_COMPILE="-DFUSERMOUNT_DIR=\"/run/wrappers/bin\""
 
-    substituteInPlace lib/mount_util.c --replace "/bin/" "${util-linux}/bin/"
+    substituteInPlace lib/mount_util.c --replace-fail "/bin/" "${util-linux}/bin/"
     '' + (if isFuse3 then ''
       # The configure phase will delete these files (temporary workaround for
       # ./fuse3-install_man.patch)
       install -D -m444 doc/fusermount3.1 $out/share/man/man1/fusermount3.1
       install -D -m444 doc/mount.fuse3.8 $out/share/man/man8/mount.fuse3.8
     '' else ''
-      substituteInPlace util/mount.fuse.c --replace '"su"' '"${shadow.su}/bin/su"'
+      substituteInPlace util/mount.fuse.c --replace-fail '"su"' '"${shadow.su}/bin/su"'
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
       ./makeconf.sh
     '');

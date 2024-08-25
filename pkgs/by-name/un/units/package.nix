@@ -29,7 +29,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   prePatch = lib.optionalString enableCurrenciesUpdater ''
     substituteInPlace units_cur \
-      --replace "#!/usr/bin/env python" ${pythonEnv}/bin/python
+      --replace-fail "#!/usr/bin/env python" ${pythonEnv}/bin/python
   '';
 
   postInstall = lib.optionalString enableCurrenciesUpdater ''

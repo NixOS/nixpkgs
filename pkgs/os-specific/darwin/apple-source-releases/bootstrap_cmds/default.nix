@@ -35,9 +35,9 @@ appleDerivation {
     cp migcom.1 $out/share/man/man1
 
     substituteInPlace $out/bin/mig \
-      --replace 'arch=`/usr/bin/arch`' 'arch=${stdenv.targetPlatform.darwinArch}' \
-      --replace '/usr/bin/' "" \
-      --replace '/bin/rmdir' "rmdir" \
-      --replace 'C=''${MIGCC}' "C=${targetTargetPrefix}cc"
+      --replace-fail 'arch=`/usr/bin/arch`' 'arch=${stdenv.targetPlatform.darwinArch}' \
+      --replace-fail '/usr/bin/' "" \
+      --replace-fail '/bin/rmdir' "rmdir" \
+      --replace-fail 'C=''${MIGCC}' "C=${targetTargetPrefix}cc"
   '';
 }

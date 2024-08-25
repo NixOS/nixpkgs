@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace configure.ac --replace 2.0.4 ${finalAttrs.version}
+    substituteInPlace configure.ac --replace-fail 2.0.4 ${finalAttrs.version}
   '';
 
   meta = {

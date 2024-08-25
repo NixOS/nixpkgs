@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for a in checks/*.sh ; do
       substituteInPlace $a \
-        --replace /bin/echo echo
+        --replace-fail /bin/echo echo
     done
   '';
 

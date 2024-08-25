@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace default.properties \
-      --replace "javac.target.version=1.4" "javac.target.version=8"
+      --replace-fail "javac.target.version=1.4" "javac.target.version=8"
   '';
 
   buildPhase = ''

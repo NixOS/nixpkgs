@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # https://github.com/saw-your-packet/EC2StepShell/pull/1
     substituteInPlace pyproject.toml \
-      --replace "realpython" "ec2stepshell"
+      --replace-fail "realpython" "ec2stepshell"
   '';
 
   nativeBuildInputs = with python3.pkgs; [

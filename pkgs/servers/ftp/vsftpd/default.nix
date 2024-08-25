@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h
 
     substituteInPlace Makefile \
-      --replace -dirafter "" \
-      --replace /usr $out \
-      --replace /etc $out/etc \
-      --replace "-Werror" ""
+      --replace-fail -dirafter "" \
+      --replace-fail /usr $out \
+      --replace-fail /etc $out/etc \
+      --replace-fail "-Werror" ""
 
 
     mkdir -p $out/sbin $out/man/man{5,8}

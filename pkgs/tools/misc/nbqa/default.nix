@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # Force using the Ruff executable rather than the Python package
-    substituteInPlace nbqa/__main__.py --replace 'if shell:' 'if shell or main_command == "ruff":'
+    substituteInPlace nbqa/__main__.py --replace-fail 'if shell:' 'if shell or main_command == "ruff":'
   '';
 
   preCheck = ''

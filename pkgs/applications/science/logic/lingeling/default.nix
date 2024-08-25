@@ -21,10 +21,10 @@ stdenv.mkDerivation {
     # doesn't handle real build products very well (it works on a build-time
     # dir, not installed copy)... This is so we can build 'blimc'
     substituteInPlace ./makefile \
-      --replace 'targets: liblgl.a' 'targets: liblgl.a blimc'      \
-      --replace '$(AIGER)/aiger.o'  '${aiger.lib}/lib/aiger.o'     \
-      --replace '$(AIGER)/aiger.h'  '${aiger.dev}/include/aiger.h' \
-      --replace '-I$(AIGER)'        '-I${aiger.dev}/include'
+      --replace-fail 'targets: liblgl.a' 'targets: liblgl.a blimc'      \
+      --replace-fail '$(AIGER)/aiger.o'  '${aiger.lib}/lib/aiger.o'     \
+      --replace-fail '$(AIGER)/aiger.h'  '${aiger.dev}/include/aiger.h' \
+      --replace-fail '-I$(AIGER)'        '-I${aiger.dev}/include'
   '';
 
   installPhase = ''

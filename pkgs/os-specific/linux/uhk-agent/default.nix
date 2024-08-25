@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation {
     cp -r --no-preserve=mode "${appimageContents}/${pname}.desktop" "$out/share/applications/${pname}.desktop"
 
     substituteInPlace "$out/share/applications/${pname}.desktop" \
-      --replace "Exec=AppRun" "Exec=${pname}"
+      --replace-fail "Exec=AppRun" "Exec=${pname}"
 
     asar extract "$out/opt/${pname}/app.asar" "$out/opt/${pname}/app.asar.unpacked"
     rm           "$out/opt/${pname}/app.asar"

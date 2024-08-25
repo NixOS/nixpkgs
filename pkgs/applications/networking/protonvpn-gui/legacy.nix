@@ -62,7 +62,7 @@ buildPythonApplication rec {
     install -Dm644 protonvpn.desktop -t $out/share/applications/
     chmod 644 $out/${python3.sitePackages}/protonvpn_gui/assets/icons/plus-server.png
     substituteInPlace $out/share/applications/protonvpn.desktop \
-      --replace 'protonvpn-logo' protonvpn
+      --replace-fail 'protonvpn-logo' protonvpn
   '';
 
   # Project has a dummy test

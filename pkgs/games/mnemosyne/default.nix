@@ -31,7 +31,7 @@ python.pkgs.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace '("", ["/usr/local/bin/mplayer"])' ""
+      --replace-fail '("", ["/usr/local/bin/mplayer"])' ""
   '';
 
   # No tests/ directory in tarball

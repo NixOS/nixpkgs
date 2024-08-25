@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString docsSupport ''
-    substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
+    substituteInPlace cmake/Conky.cmake --replace-fail "# set(RELEASE true)" "set(RELEASE true)"
 
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
   '' + lib.optionalString waylandSupport ''
     substituteInPlace src/CMakeLists.txt \
-      --replace 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
+      --replace-fail 'COMMAND ''${Wayland_SCANNER}' 'COMMAND wayland-scanner'
   '';
 
   env = {

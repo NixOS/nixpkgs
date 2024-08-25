@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'requests = "^2.27.1"' 'requests = "*"'
+      --replace-fail 'requests = "^2.27.1"' 'requests = "*"'
   '';
 
   # Tests require credentials and requests-testing

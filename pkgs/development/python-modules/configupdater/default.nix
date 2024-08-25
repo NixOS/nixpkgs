@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace '--cov configupdater --cov-report term-missing' ""
+      --replace-fail '--cov configupdater --cov-report term-missing' ""
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

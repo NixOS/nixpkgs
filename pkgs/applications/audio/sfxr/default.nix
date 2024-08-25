@@ -27,15 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace "usr/" ""
-    substituteInPlace sdlkit.h --replace \
+    substituteInPlace Makefile --replace-fail "usr/" ""
+    substituteInPlace sdlkit.h --replace-fail \
       "/usr/share/sfxr/sfxr.bmp" \
       "$out/share/sfxr/sfxr.bmp"
     substituteInPlace main.cpp \
-      --replace \
+      --replace-fail \
       "/usr/share/sfxr/font.tga" \
       "$out/share/sfxr/font.tga" \
-      --replace \
+      --replace-fail \
       "/usr/share/sfxr/ld48.tga" \
       "$out/share/sfxr/ld48.tga"
   '';

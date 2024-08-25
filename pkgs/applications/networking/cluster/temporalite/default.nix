@@ -20,10 +20,10 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace cmd/temporalite/ui_test.go \
-      --replace "TestNewUIConfigWithMissingConfigFile" "SkipNewUIConfigWithMissingConfigFile"
+      --replace-fail "TestNewUIConfigWithMissingConfigFile" "SkipNewUIConfigWithMissingConfigFile"
 
     substituteInPlace cmd/temporalite/mtls_test.go \
-      --replace "TestMTLSConfig" "SkipMTLSConfig"
+      --replace-fail "TestMTLSConfig" "SkipMTLSConfig"
   '';
 
   meta = with lib; {

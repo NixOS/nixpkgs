@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   prePatch = ''
-    substituteInPlace window_vector.cc --replace \
+    substituteInPlace window_vector.cc --replace-fail \
       "insert( 0U, 1," \
       "insert( 0U, 1U,"
   '';

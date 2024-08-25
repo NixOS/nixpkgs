@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/share/applications/tetrd.desktop --replace /opt $out/opt
+    substituteInPlace $out/share/applications/tetrd.desktop --replace-fail /opt $out/opt
   '';
 
   meta = with lib; {

@@ -24,7 +24,7 @@ in appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/browserx.png \
       $out/share/icons/hicolor/512x512/apps/browserx.png
     substituteInPlace $out/share/applications/browserx.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

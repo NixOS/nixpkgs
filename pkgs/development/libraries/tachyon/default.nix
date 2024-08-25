@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Ensure looks for nix-provided Carbon, not system frameworks
     substituteInPlace unix/Make-arch \
-      --replace '-F/System/Library/Frameworks' ""
+      --replace-fail '-F/System/Library/Frameworks' ""
   '';
 
   installPhase = ''

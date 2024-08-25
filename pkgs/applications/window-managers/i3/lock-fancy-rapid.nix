@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace i3lock-fancy-rapid.c \
-      --replace '"i3lock"' '"${i3lock}/bin/i3lock"'
+      --replace-fail '"i3lock"' '"${i3lock}/bin/i3lock"'
   '';
 
   installPhase = ''

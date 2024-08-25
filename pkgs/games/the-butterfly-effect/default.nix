@@ -15,7 +15,7 @@ mkDerivation rec {
     sed '1i#include <vector>' -i src/model/World.h
 
     # fix translations not building: https://gitlab.kitware.com/cmake/cmake/-/issues/21931
-    substituteInPlace i18n/CMakeLists.txt --replace qt5_create_translation qt_add_translation
+    substituteInPlace i18n/CMakeLists.txt --replace-fail qt5_create_translation qt_add_translation
   '';
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];

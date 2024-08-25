@@ -144,12 +144,12 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString isLinux ''
     for binary in mount umount mkfs; do
       substituteInPlace meson.build \
-        --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
+        --replace-fail "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
     done
 
   '' + ''
     substituteInPlace meson.build \
-      --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
+      --replace-fail "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
   '' + lib.optionalString isLinux ''
     sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
       src/storage/storage_backend_disk.c \
@@ -242,18 +242,18 @@ stdenv.mkDerivation rec {
       # the path to qemu-kvm will be stored in VM's .xml and .save files
       # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
       substituteInPlace src/lxc/lxc_conf.c \
-        --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
+        --replace-fail 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
 
       substituteInPlace build-aux/meson.build \
-        --replace "gsed" "sed" \
-        --replace "gmake" "make" \
-        --replace "ggrep" "grep"
+        --replace-fail "gsed" "sed" \
+        --replace-fail "gmake" "make" \
+        --replace-fail "ggrep" "grep"
 
       substituteInPlace src/util/virpolkit.h \
-        --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
+        --replace-fail '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
       substituteInPlace src/util/virpci.c \
-         --replace '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
+         --replace-fail '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
 
       patchShebangs .
     ''
@@ -342,21 +342,21 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/virt-xml-validate \
-      --replace xmllint ${libxml2}/bin/xmllint
+      --replace-fail xmllint ${libxml2}/bin/xmllint
 
     substituteInPlace $out/libexec/libvirt-guests.sh \
-      --replace 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
-      --replace 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
-      --replace 'PARALLEL_SHUTDOWN=0'   'PARALLEL_SHUTDOWN=''${PARALLEL_SHUTDOWN:-0}' \
-      --replace "$out/bin"              '${gettext}/bin' \
-      --replace 'lock/subsys'           'lock' \
-      --replace 'gettext.sh'            'gettext.sh
+      --replace-fail 'ON_BOOT="start"'       'ON_BOOT=''${ON_BOOT:-start}' \
+      --replace-fail 'ON_SHUTDOWN="suspend"' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
+      --replace-fail 'PARALLEL_SHUTDOWN=0'   'PARALLEL_SHUTDOWN=''${PARALLEL_SHUTDOWN:-0}' \
+      --replace-fail "$out/bin"              '${gettext}/bin' \
+      --replace-fail 'lock/subsys'           'lock' \
+      --replace-fail 'gettext.sh'            'gettext.sh
     # Added in nixpkgs:
     gettext() { "${gettext}/bin/gettext" "$@"; }
     '
   '' + lib.optionalString isLinux ''
     for f in $out/lib/systemd/system/*.service ; do
-      substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
+      substituteInPlace $f --replace-fail /bin/kill ${coreutils}/bin/kill
     done
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \

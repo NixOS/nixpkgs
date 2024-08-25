@@ -16,10 +16,10 @@ python3Packages.buildPythonPackage rec {
 
   patchPhase = ''
       substituteInPlace ./setup.py \
-        --replace "/usr/share" "usr/share"
+        --replace-fail "/usr/share" "usr/share"
 
       substituteInPlace ./libqnotero/_themes/light.py \
-         --replace "/usr/share" "$out/usr/share"
+         --replace-fail "/usr/share" "$out/usr/share"
   '';
 
   preFixup = ''
@@ -31,7 +31,7 @@ python3Packages.buildPythonPackage rec {
     mv $out/usr/share/applications $out/share/applications
 
     substituteInPlace $out/share/applications/qnotero.desktop \
-      --replace "Icon=/usr/share/qnotero/resources/light/qnotero.png" "Icon=qnotero"
+      --replace-fail "Icon=/usr/share/qnotero/resources/light/qnotero.png" "Icon=qnotero"
 
     mkdir -p $out/share/icons/hicolor/64x64/apps
     ln -s $out/usr/share/qnotero/resources/light/qnotero.png \

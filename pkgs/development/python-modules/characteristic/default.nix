@@ -16,7 +16,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest ];
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "[pytest]" "[tool:pytest]"
+    substituteInPlace setup.cfg --replace-fail "[pytest]" "[tool:pytest]"
   '';
 
   meta = {

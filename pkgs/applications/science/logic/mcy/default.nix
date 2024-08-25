@@ -22,13 +22,13 @@ stdenv.mkDerivation {
     patchShebangs .
 
     substituteInPlace mcy.py \
-      --replace yosys '${yosys}/bin/yosys' \
-      --replace 'os.execvp("mcy-dash"' "os.execvp(\"$out/bin/mcy-dash\""
+      --replace-fail yosys '${yosys}/bin/yosys' \
+      --replace-fail 'os.execvp("mcy-dash"' "os.execvp(\"$out/bin/mcy-dash\""
     substituteInPlace mcy-dash.py \
-      --replace 'app.run(debug=True)' 'app.run(host="0.0.0.0",debug=True)' \
-      --replace 'subprocess.Popen(["mcy"' "subprocess.Popen([\"$out/bin/mcy\""
+      --replace-fail 'app.run(debug=True)' 'app.run(host="0.0.0.0",debug=True)' \
+      --replace-fail 'subprocess.Popen(["mcy"' "subprocess.Popen([\"$out/bin/mcy\""
     substituteInPlace scripts/create_mutated.sh \
-      --replace yosys '${yosys}/bin/yosys'
+      --replace-fail yosys '${yosys}/bin/yosys'
   '';
 
   # the build needs a bit of work...

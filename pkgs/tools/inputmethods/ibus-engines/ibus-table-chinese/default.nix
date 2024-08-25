@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
   # Must replace PRJ_DOC_DIR with actual share/ folder for ibus-table-chinese
   # Otherwise it tries to write to /ibus-table-chinese if not defined (!)
   postConfigure = ''
-    substituteInPlace cmake_install.cmake --replace '/build/source/REPLACE' $out/share/ibus-table-chinese
+    substituteInPlace cmake_install.cmake --replace-fail '/build/source/REPLACE' $out/share/ibus-table-chinese
   '';
   # Fails otherwise with "no such file or directory: <table>.txt"
   dontUseCmakeBuildDir = true;

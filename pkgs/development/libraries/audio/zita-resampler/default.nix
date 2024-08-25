@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     cd source
     substituteInPlace Makefile \
-      --replace 'ldconfig' ""
+      --replace-fail 'ldconfig' ""
   '' + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
     substituteInPlace Makefile \
-      --replace '-DENABLE_SSE2' ""
+      --replace-fail '-DENABLE_SSE2' ""
   '';
 
   fixupPhase = ''

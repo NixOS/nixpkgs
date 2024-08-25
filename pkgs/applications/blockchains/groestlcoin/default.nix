@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish contrib/completions/fish/groestlcoin-qt.fish
 
     install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
-    substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
+    substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace-fail "Icon=groestlcoin128" "Icon=groestlcoin"
     install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
   '';
 

@@ -43,7 +43,7 @@ let
       # Avoid blanket -Werror to evade build failures on less
       # tested compilers.
       substituteInPlace cmake/compiler_settings.cmake \
-        --replace '"-Werror"' ' '
+        --replace-fail '"-Werror"' ' '
 
       # Missing includes for GCC11
       sed '5i#include <thread>' -i \

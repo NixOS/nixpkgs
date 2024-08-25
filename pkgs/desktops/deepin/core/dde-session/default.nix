@@ -27,21 +27,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace misc/CMakeLists.txt \
-      --replace "/etc" "$out/etc"
+      --replace-fail "/etc" "$out/etc"
 
     # Avoid using absolute path to distinguish applications
     substituteInPlace src/dde-session/impl/sessionmanager.cpp \
-      --replace 'file.readAll().startsWith("/usr/bin/dde-lock")' 'file.readAll().contains("dde-lock")' \
+      --replace-fail 'file.readAll().startsWith("/usr/bin/dde-lock")' 'file.readAll().contains("dde-lock")' \
 
     substituteInPlace systemd/dde-session-initialized.target.wants/dde-polkit-agent.service \
-      --replace "/usr/lib/polkit-1-dde" "${dde-polkit-agent}/lib/polkit-1-dde"
+      --replace-fail "/usr/lib/polkit-1-dde" "${dde-polkit-agent}/lib/polkit-1-dde"
 
     for file in $(grep -rl "/usr/lib/deepin-daemon"); do
-      substituteInPlace $file --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      substituteInPlace $file --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
     done
 
     for file in $(grep -rl "/usr/bin"); do
-      substituteInPlace $file --replace "/usr/bin/" "/run/current-system/sw/bin/"
+      substituteInPlace $file --replace-fail "/usr/bin/" "/run/current-system/sw/bin/"
     done
   '';
 

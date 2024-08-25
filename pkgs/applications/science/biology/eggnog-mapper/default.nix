@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # Not a great solution...
     substituteInPlace setup.cfg \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
   nativeBuildInputs = [

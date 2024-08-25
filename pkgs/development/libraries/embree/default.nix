@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     sed -i "s|SET(EMBREE_ROOT_DIR .*)|set(EMBREE_ROOT_DIR $out)|" \
       common/cmake/embree-config.cmake
     sed -i "s|$""{EMBREE_ROOT_DIR}/||" common/cmake/embree-config.cmake
-    substituteInPlace common/math/emath.h --replace 'defined(__MACOSX__) && !defined(__INTEL_COMPILER)' 0
-    substituteInPlace common/math/emath.h --replace 'defined(__WIN32__) || defined(__FreeBSD__)' 'defined(__WIN32__) || defined(__FreeBSD__) || defined(__MACOSX__)'
+    substituteInPlace common/math/emath.h --replace-fail 'defined(__MACOSX__) && !defined(__INTEL_COMPILER)' 0
+    substituteInPlace common/math/emath.h --replace-fail 'defined(__WIN32__) || defined(__FreeBSD__)' 'defined(__WIN32__) || defined(__FreeBSD__) || defined(__MACOSX__)'
   '';
 
   cmakeFlags = [

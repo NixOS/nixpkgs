@@ -15,8 +15,8 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'TAG_VERSION := $(shell git describe --tags)' "" \
-      --replace "/usr/local" "$out"
+      --replace-fail 'TAG_VERSION := $(shell git describe --tags)' "" \
+      --replace-fail "/usr/local" "$out"
   '';
 
   vendorHash = "sha256-FuVWV3Rimhd+Pm9wrKGLWQWtbP1hWvoWa22pQT+m2go=";

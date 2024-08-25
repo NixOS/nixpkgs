@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
 
     # Setup max debug log by default.
     substituteInPlace $LPDDIR/filter_BrGenML1 \
-      --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/BrGenML1\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"BrGenML1\"; #"
+      --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/BrGenML1\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"BrGenML1\"; #"
 
     ${myPatchElf "$INFDIR/braddprinter"}
     ${myPatchElf "$LPDDIR/brprintconflsr3"}

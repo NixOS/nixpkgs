@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   preCheck = ''
     substituteInPlace "tests/conftest.py" \
-      --replace "import tensorflow as tf" ""
+      --replace-fail "import tensorflow as tf" ""
     substituteInPlace "tests/conftest.py" \
-      --replace "tf.random.set_seed(seed)" ""
+      --replace-fail "tf.random.set_seed(seed)" ""
   '';
 
   disabledTestPaths = [

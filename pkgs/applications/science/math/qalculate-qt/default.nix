@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace qalculate-qt.pro\
-      --replace "LRELEASE" "${qttools.dev}/bin/lrelease"
+      --replace-fail "LRELEASE" "${qttools.dev}/bin/lrelease"
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''

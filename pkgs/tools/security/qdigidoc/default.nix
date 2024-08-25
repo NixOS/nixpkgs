@@ -43,7 +43,7 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
-      --replace $\{TSL_URL} file://${tsl}
+      --replace-fail $\{TSL_URL} file://${tsl}
   '';
 
   buildInputs = [

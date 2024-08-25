@@ -133,45 +133,45 @@ python3.pkgs.buildPythonApplication rec {
     rm -r Onboard/pypredict/attic
 
     substituteInPlace  ./scripts/sokSettings.py \
-      --replace "#!/usr/bin/python3" "" \
-      --replace "PYTHON_EXECUTABLE," "\"$out/bin/onboard-settings\"" \
-      --replace '"-cfrom Onboard.settings import Settings\ns = Settings(False)"' ""
+      --replace-fail "#!/usr/bin/python3" "" \
+      --replace-fail "PYTHON_EXECUTABLE," "\"$out/bin/onboard-settings\"" \
+      --replace-fail '"-cfrom Onboard.settings import Settings\ns = Settings(False)"' ""
 
     chmod -x ./scripts/sokSettings.py
 
     patchShebangs .
 
     substituteInPlace setup.py \
-      --replace "/etc" "$out/etc"
+      --replace-fail "/etc" "$out/etc"
 
     substituteInPlace  ./Onboard/LanguageSupport.py \
-      --replace "/usr/share/xml/iso-codes" "${isocodes}/share/xml/iso-codes"
+      --replace-fail "/usr/share/xml/iso-codes" "${isocodes}/share/xml/iso-codes"
 
     substituteInPlace  ./Onboard/Indicator.py \
-      --replace   "/usr/bin/yelp" "${yelp}/bin/yelp"
+      --replace-fail   "/usr/bin/yelp" "${yelp}/bin/yelp"
 
     substituteInPlace  ./gnome/Onboard_Indicator@onboard.org/extension.js \
-      --replace "/usr/bin/yelp" "${yelp}/bin/yelp"
+      --replace-fail "/usr/bin/yelp" "${yelp}/bin/yelp"
 
     substituteInPlace  ./Onboard/SpellChecker.py \
-      --replace "/usr/lib" "$out/lib"
+      --replace-fail "/usr/lib" "$out/lib"
 
     substituteInPlace  ./data/org.onboard.Onboard.service  \
-      --replace "/usr/bin" "$out/bin"
+      --replace-fail "/usr/bin" "$out/bin"
 
     substituteInPlace  ./Onboard/utils.py \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
     substituteInPlace  ./onboard-defaults.conf.example \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
     substituteInPlace  ./Onboard/Config.py \
-      --replace "/usr/share/onboard" "$out/share/onboard"
+      --replace-fail "/usr/share/onboard" "$out/share/onboard"
 
     substituteInPlace  ./Onboard/WordSuggestions.py \
-      --replace "/usr/bin" "$out/bin"
+      --replace-fail "/usr/bin" "$out/bin"
 
     # killall is dangerous on non-gnu platforms. Use pkill instead.
     substituteInPlace  ./setup.py \
-      --replace '"killall",' '"${procps}/bin/pkill", "-x",'
+      --replace-fail '"killall",' '"${procps}/bin/pkill", "-x",'
   '';
 
   # setuptools to get distutils with python 3.12

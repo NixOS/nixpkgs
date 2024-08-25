@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage rec {
 
   preBuild = ''
     substituteInPlace src/grow.rs \
-      --replace '"growpart"' '"${cloud-utils}/bin/growpart"'
+      --replace-fail '"growpart"' '"${cloud-utils}/bin/growpart"'
     substituteInPlace src/lsblk.rs \
-      --replace '"lsblk"' '"${util-linux}/bin/lsblk"'
+      --replace-fail '"lsblk"' '"${util-linux}/bin/lsblk"'
   '';
 
   nativeBuildInputs = [

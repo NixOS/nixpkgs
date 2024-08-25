@@ -21,9 +21,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
     substituteInPlace setup.cfg \
-      --replace "--cov-report term --cov=categories" ""
+      --replace-fail "--cov-report term --cov=categories" ""
   '';
 
   # Is private because the author states it's unmaintained

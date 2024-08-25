@@ -46,7 +46,7 @@ let
 
     buildPhase = ''
       substituteInPlace usr/share/applications/vk.desktop \
-        --replace /usr/share/pixmaps/vk.png vk
+        --replace-fail /usr/share/pixmaps/vk.png vk
     '';
 
     installPhase = ''

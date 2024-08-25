@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "all: api worker" ""
+      --replace-fail "all: api worker" ""
   '';
 
   nativeBuildInputs = [

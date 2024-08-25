@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/MQTTVersion.c \
-      --replace "namebuf[60]" "namebuf[120]" \
-      --replace "lib%s" "$out/lib/lib%s"
+      --replace-fail "namebuf[60]" "namebuf[120]" \
+      --replace-fail "lib%s" "$out/lib/lib%s"
   '';
 
   nativeBuildInputs = [ cmake ];

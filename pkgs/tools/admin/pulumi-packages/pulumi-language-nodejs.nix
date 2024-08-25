@@ -14,7 +14,7 @@ buildGoModule rec {
   postPatch = ''
     # Gives github.com/pulumi/pulumi/pkg/v3: is replaced in go.mod, but not marked as replaced in vendor/modules.txt etc
     substituteInPlace language_test.go \
-      --replace "TestLanguage" \
+      --replace-fail "TestLanguage" \
                 "SkipTestLanguage"
   '';
 

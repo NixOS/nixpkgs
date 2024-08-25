@@ -48,9 +48,9 @@ buildPythonPackage rec {
   # patch out pytest-cov dep/invocation
   postPatch = ''
     substituteInPlace setup.cfg  \
-      --replace "--cov=skorch" ""  \
-      --replace "--cov-report=term-missing" ""  \
-      --replace "--cov-config .coveragerc" ""
+      --replace-fail "--cov=skorch" ""  \
+      --replace-fail "--cov-report=term-missing" ""  \
+      --replace-fail "--cov-config .coveragerc" ""
   '';
 
   disabledTests =

@@ -46,21 +46,21 @@ stdenv.mkDerivation rec {
     # Fix paths in the source.
     find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
 
-    substituteInPlace $(pwd)/Makefile --replace '/bin/cp' $(type -p cp)
-    substituteInPlace bin/mlton-script --replace gcc cc
-    substituteInPlace bin/regression --replace gcc cc
-    substituteInPlace lib/mlnlffi-lib/Makefile --replace gcc cc
-    substituteInPlace mlnlffigen/gen-cppcmd --replace gcc cc
-    substituteInPlace runtime/Makefile --replace gcc cc
-    substituteInPlace ../${usr_prefix}/bin/mlton --replace gcc cc
+    substituteInPlace $(pwd)/Makefile --replace-fail '/bin/cp' $(type -p cp)
+    substituteInPlace bin/mlton-script --replace-fail gcc cc
+    substituteInPlace bin/regression --replace-fail gcc cc
+    substituteInPlace lib/mlnlffi-lib/Makefile --replace-fail gcc cc
+    substituteInPlace mlnlffigen/gen-cppcmd --replace-fail gcc cc
+    substituteInPlace runtime/Makefile --replace-fail gcc cc
+    substituteInPlace ../${usr_prefix}/bin/mlton --replace-fail gcc cc
 
     # Fix paths in the binary distribution.
     BIN_DIST_DIR="$(pwd)/../${usr_prefix}"
     for f in "bin/mlton" "lib/mlton/platform" "lib/mlton/static-library" ; do
-      substituteInPlace "$BIN_DIST_DIR/$f" --replace '/${usr_prefix}/bin/env bash' $(type -p bash)
+      substituteInPlace "$BIN_DIST_DIR/$f" --replace-fail '/${usr_prefix}/bin/env bash' $(type -p bash)
     done
 
-    substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
+    substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace-fail '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
   '' + lib.optionalString stdenv.cc.isClang ''
     sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
   '' + lib.optionalString stdenv.isDarwin ''
@@ -98,16 +98,16 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Fix path to mlton libraries.
-    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $out/lib/mlton
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace-fail '/${usr_prefix}/lib/mlton' $out/lib/mlton
 
     # Path to libgmp.
-    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-link-opt '-lm -lgmp'" "-link-opt '-lm -lgmp -L${gmp.out}/lib'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace-fail "-link-opt '-lm -lgmp'" "-link-opt '-lm -lgmp -L${gmp.out}/lib'"
 
     # Path to gmp.h.
-    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-cc-opt '-O1 -fno-common'" "-cc-opt '-O1 -fno-common -I${gmp.dev}/include'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace-fail "-cc-opt '-O1 -fno-common'" "-cc-opt '-O1 -fno-common -I${gmp.dev}/include'"
 
     # Path to the same cc used in the build; needed at runtime.
-    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "gcc='gcc'" "gcc='"$(type -p cc)"'"
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace-fail "gcc='gcc'" "gcc='"$(type -p cc)"'"
 
     # Copy files to final positions.
     cp -r $(pwd)/install/${usr_prefix}/bin $out

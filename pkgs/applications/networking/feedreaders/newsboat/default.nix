@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Allow other ncurses versions on Darwin
     substituteInPlace config.sh \
-      --replace "ncurses5.4" "ncurses"
+      --replace-fail "ncurses5.4" "ncurses"
   '';
 
   nativeBuildInputs = [

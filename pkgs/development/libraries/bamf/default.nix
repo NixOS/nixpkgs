@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   # https://bugs.launchpad.net/bamf/+bug/1780557
   postPatch = ''
     substituteInPlace data/Makefile.am \
-      --replace '/usr/lib/systemd/user' '@prefix@/lib/systemd/user'
+      --replace-fail '/usr/lib/systemd/user' '@prefix@/lib/systemd/user'
   '';
 
   configureFlags = [

@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace 'webkit2gtk-4.0' 'webkit2gtk-4.1'
+      --replace-fail 'webkit2gtk-4.0' 'webkit2gtk-4.1'
   '';
 
   passthru = {

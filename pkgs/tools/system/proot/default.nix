@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/GNUmakefile \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
     # our cross machinery defines $CC and co just right
     sed -i /CROSS_COMPILE/d src/GNUmakefile
   '';

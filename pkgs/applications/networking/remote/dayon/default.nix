@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/share/applications/*.desktop \
-        --replace "/usr/bin/dayon/dayon.png" "dayon"
+        --replace-fail "/usr/bin/dayon/dayon.png" "dayon"
   '';
 
   meta = with lib; {

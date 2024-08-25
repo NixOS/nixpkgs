@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.ac --replace stdc++ c++
+    substituteInPlace configure.ac --replace-fail stdc++ c++
   '';
 
   buildInputs = [ libffi gmp ];

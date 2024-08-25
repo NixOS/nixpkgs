@@ -185,7 +185,7 @@ let
 
       postPatch = ''
         substituteInPlace scripts/galera_new_cluster.sh \
-          --replace ":-mariadb" ":-mysql"
+          --replace-fail ":-mariadb" ":-mysql"
       '';
 
       cmakeFlags = common.cmakeFlags ++ [

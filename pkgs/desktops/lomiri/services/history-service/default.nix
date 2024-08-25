@@ -25,7 +25,7 @@
 }:
 
 let
-  replaceDbusService = pkg: name: "--replace \"\\\${DBUS_SERVICES_DIR}/${name}\" \"${pkg}/share/dbus-1/services/${name}\"";
+  replaceDbusService = pkg: name: "--replace-fail \"\\\${DBUS_SERVICES_DIR}/${name}\" \"${pkg}/share/dbus-1/services/${name}\"";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "history-service";
@@ -98,15 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
     # libphonenumber -> protobuf -> abseil-cpp demands C++14
     # But uses std::string_view which is C++17?
     substituteInPlace CMakeLists.txt \
-      --replace '-std=c++11' '-std=c++17'
+      --replace-fail '-std=c++11' '-std=c++17'
 
     # Uses pkg_get_variable, cannot substitute prefix with that
     substituteInPlace daemon/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
 
     # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
     substituteInPlace CMakeLists.txt \
-      --replace "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
   '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     # Tests launch these DBus services, fix paths related to them
     substituteInPlace tests/common/dbus-services/CMakeLists.txt \
@@ -115,8 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
       ${replaceDbusService dconf "ca.desrt.dconf.service"}
 
     substituteInPlace cmake/modules/GenerateTest.cmake \
-      --replace '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
-      --replace '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
+      --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
+      --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
   '';
 
   strictDeps = true;

@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
   # uses C++17 APIs like std::transform_reduce
   postPatch = ''
     substituteInPlace molsketch/CMakeLists.txt \
-      --replace "CXX_STANDARD 14" "CXX_STANDARD 17"
+      --replace-fail "CXX_STANDARD 14" "CXX_STANDARD 17"
     substituteInPlace libmolsketch/CMakeLists.txt \
-      --replace "CXX_STANDARD 14" "CXX_STANDARD 17"
+      --replace-fail "CXX_STANDARD 14" "CXX_STANDARD 17"
     substituteInPlace obabeliface/CMakeLists.txt \
-      --replace "CXX_STANDARD 14" "CXX_STANDARD 17"
+      --replace-fail "CXX_STANDARD 14" "CXX_STANDARD 17"
   '';
 
   preConfigure = ''

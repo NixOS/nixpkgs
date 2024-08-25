@@ -80,8 +80,8 @@ rustPlatform.buildRustPackage {
   # Also modify tauri.conf.json so that it expects the resources at the new location
   postPatch = ''
     substituteInPlace ./tauri.conf.json \
-      --replace '"distDir": "../dist",' '"distDir": "dist",' \
-      --replace '"beforeBuildCommand": "yarn run build",' '"beforeBuildCommand": "",'
+      --replace-fail '"distDir": "../dist",' '"distDir": "dist",' \
+      --replace-fail '"beforeBuildCommand": "yarn run build",' '"beforeBuildCommand": "",'
   '';
 
   nativeBuildInputs = [

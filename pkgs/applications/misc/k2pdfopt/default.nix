@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace willuslib/bmpdjvu.c \
-      --replace "<djvu.h>" "<libdjvu/ddjvuapi.h>"
+      --replace-fail "<djvu.h>" "<libdjvu/ddjvuapi.h>"
   '';
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
@@ -147,9 +147,9 @@ in stdenv.mkDerivation rec {
         postPatch = ''
           echo libtesseract_la_SOURCES += src/api/tesscapi.cpp >> Makefile.am
           substituteInPlace src/api/tesseract.h \
-            --replace "#include <leptonica.h>" "//#include <leptonica.h>"
+            --replace-fail "#include <leptonica.h>" "//#include <leptonica.h>"
           substituteInPlace include/tesseract/tesseract.h \
-            --replace "#include <leptonica.h>" "//#include <leptonica.h>"
+            --replace-fail "#include <leptonica.h>" "//#include <leptonica.h>"
         '';
       });
     };

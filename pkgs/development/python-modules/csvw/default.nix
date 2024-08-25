@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace setup.cfg \
-      --replace "--cov" ""
+      --replace-fail "--cov" ""
   '';
 
   disabledTests =

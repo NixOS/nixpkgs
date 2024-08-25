@@ -28,12 +28,12 @@ in stdenv.mkDerivation rec {
 
     # this test requires the net
     for a in ncdap_test/Makefile.am ncdap_test/Makefile.in; do
-      substituteInPlace $a --replace testurl.sh " "
+      substituteInPlace $a --replace-fail testurl.sh " "
     done
 
     # Prevent building the tests from prepending `#!/bin/bash` and wiping out the patched shenbangs.
     substituteInPlace nczarr_test/Makefile.in \
-      --replace '#!/bin/bash' '${stdenv.shell}'
+      --replace-fail '#!/bin/bash' '${stdenv.shell}'
   '';
 
   nativeBuildInputs = [ m4 removeReferencesTo ];

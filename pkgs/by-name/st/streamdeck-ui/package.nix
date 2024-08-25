@@ -88,7 +88,7 @@ python3Packages.buildPythonApplication rec {
     ''
       mkdir -p $out/lib/systemd/user
       substitute scripts/streamdeck.service $out/lib/systemd/user/streamdeck.service \
-        --replace '<path to streamdeck>' $out/bin/streamdeck
+        --replace-fail '<path to streamdeck>' $out/bin/streamdeck
 
       mkdir -p "$out/etc/udev/rules.d"
       cp ${writeText "70-streamdeck.rules" udevRules} $out/etc/udev/rules.d/70-streamdeck.rules

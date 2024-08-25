@@ -23,7 +23,7 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

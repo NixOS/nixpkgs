@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/test_icecream.py \
-      --replace assertRegexpMatches assertRegex
+      --replace-fail assertRegexpMatches assertRegex
   '';
 
   nativeBuildInputs = [ setuptools ];

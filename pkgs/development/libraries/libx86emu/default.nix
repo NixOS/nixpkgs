@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     # VERSION is usually generated using Git
     echo "${version}" > VERSION
-    substituteInPlace Makefile --replace "/usr" "/"
+    substituteInPlace Makefile --replace-fail "/usr" "/"
   '';
 
   buildFlags = [ "shared" ];

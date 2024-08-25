@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace \
       $out/bin/headset-charge-indicator.py \
-      --replace "default='headsetcontrol'" "default='${headsetcontrol}/bin/headsetcontrol'"
+      --replace-fail "default='headsetcontrol'" "default='${headsetcontrol}/bin/headsetcontrol'"
 
     cat << EOF > ${pname}.desktop
     [Desktop Entry]

@@ -95,14 +95,14 @@ in stdenvNoCC.mkDerivation ({
     for f in $(find . -name 'mkl*.pc') ; do
       bn=$(basename $f)
       substituteInPlace $f \
-        --replace $\{MKLROOT} "$out" \
-        --replace "lib/intel64" "lib"
+        --replace-fail $\{MKLROOT} "$out" \
+        --replace-fail "lib/intel64" "lib"
 
       sed -r -i "s|^prefix=.*|prefix=$out|g" $f
     done
 
     for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
-      substituteInPlace $f --replace "../compiler/lib" "lib"
+      substituteInPlace $f --replace-fail "../compiler/lib" "lib"
     done
 
     # License

@@ -32,18 +32,18 @@ stdenv.mkDerivation rec {
 
   # Fix the build on macOS with macFUSE installed
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       "/usr/local/lib/pkgconfig" "/nonexistent"
   '';
 
   preBuild = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace config.h --replace \
+    substituteInPlace config.h --replace-fail \
       "#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1" \
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"
   '';
 
   postInstall = ''
-    substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
+    substituteInPlace $out/sbin/mfscgiserv --replace-fail "datapath=\"$out" "datapath=\""
   '';
 
   doCheck = true;

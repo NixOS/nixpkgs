@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace Makefile \
-      --replace '"$(DESTDIR)/etc/ras/dimm_labels.d"' '"$(prefix)/etc/ras/dimm_labels.d"'
+      --replace-fail '"$(DESTDIR)/etc/ras/dimm_labels.d"' '"$(prefix)/etc/ras/dimm_labels.d"'
   '';
 
   outputs = [ "out" "dev" "man" "inject" ];
@@ -80,11 +80,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Fix dmidecode and modprobe paths
     substituteInPlace $out/bin/ras-mc-ctl \
-      --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
+      --replace-fail 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
   ''
   + lib.optionalString (!stdenv.isAarch64) ''
     substituteInPlace $out/bin/ras-mc-ctl \
-      --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
+      --replace-fail 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
   '';
 
   passthru.tests = nixosTests.rasdaemon;

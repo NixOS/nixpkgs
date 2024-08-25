@@ -74,6 +74,6 @@ if stdenv.isDarwin then stdenv.mkDerivation {
 
     # Replace wrong exec statement in XDG Desktop file
     substituteInPlace $out/share/applications/nosql-workbench.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=nosql-workbench'
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=nosql-workbench'
   '';
 }

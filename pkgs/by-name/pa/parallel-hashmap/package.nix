@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     # don't download googletest, but build it from source
     # https://github.com/greg7mdp/parallel-hashmap/blob/be6a2c79857c9ea76760ca6ce782e1609713428e/CMakeLists.txt#L98
     substituteInPlace CMakeLists.txt \
-      --replace "include(cmake/DownloadGTest.cmake)" "add_subdirectory(${gtest.src} ./googletest-build EXCLUDE_FROM_ALL)"
+      --replace-fail "include(cmake/DownloadGTest.cmake)" "add_subdirectory(${gtest.src} ./googletest-build EXCLUDE_FROM_ALL)"
   '';
 
   nativeBuildInputs = [

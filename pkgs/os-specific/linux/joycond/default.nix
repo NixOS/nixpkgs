@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     cp $src/systemd/joycond.service $out/etc/systemd/system
     cp $src/systemd/joycond.conf $out/lib/modules-load.d
 
-    substituteInPlace $out/etc/systemd/system/joycond.service --replace \
+    substituteInPlace $out/etc/systemd/system/joycond.service --replace-fail \
       "ExecStart=/usr/bin/joycond" "ExecStart=$out/bin/joycond"
 
-    substituteInPlace $out/etc/udev/rules.d/89-joycond.rules --replace \
+    substituteInPlace $out/etc/udev/rules.d/89-joycond.rules --replace-fail \
       "/bin/setfacl"  "${acl}/bin/setfacl"
   '';
 

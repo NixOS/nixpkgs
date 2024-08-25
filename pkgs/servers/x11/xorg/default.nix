@@ -119,7 +119,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -141,7 +141,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -163,7 +163,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -185,7 +185,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -207,7 +207,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -249,7 +249,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -271,7 +271,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -293,7 +293,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -315,7 +315,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -337,7 +337,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -359,7 +359,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -381,7 +381,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -403,7 +403,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -425,7 +425,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -447,7 +447,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -469,7 +469,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -491,7 +491,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -513,7 +513,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -535,7 +535,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -557,7 +557,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -579,7 +579,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -601,7 +601,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -623,7 +623,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -645,7 +645,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -667,7 +667,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -689,7 +689,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -711,7 +711,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -733,7 +733,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -755,7 +755,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -777,7 +777,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -799,7 +799,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -821,7 +821,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -843,7 +843,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -905,7 +905,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -927,7 +927,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
-    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    postPatch = ''substituteInPlace configure --replace-fail 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];

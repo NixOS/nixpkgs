@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace gcc cc
+    substituteInPlace Makefile --replace-fail gcc cc
   '';
 
   installPhase = ''

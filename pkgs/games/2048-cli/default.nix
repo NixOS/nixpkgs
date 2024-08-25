@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-lcurses" "-lncurses"
+      --replace-fail "-lcurses" "-lncurses"
   '';
 
   nativeBuildInputs = [

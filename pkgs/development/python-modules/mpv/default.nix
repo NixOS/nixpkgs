@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace mpv.py \
-      --replace "sofile = ctypes.util.find_library('mpv')" \
+      --replace-fail "sofile = ctypes.util.find_library('mpv')" \
                 'sofile = "${mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 

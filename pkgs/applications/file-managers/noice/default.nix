@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Add support for ncurses-6.3. Can be dropped with 0.9 release.
     # Fixed upstream at: https://git.2f30.org/noice/commit/53c35e6b340b7c135038e00057a198f03cb7d7cf.html
-    substituteInPlace noice.c --replace 'printw(str);' 'printw("%s", str);'
+    substituteInPlace noice.c --replace-fail 'printw(str);' 'printw("%s", str);'
   '';
 
   configFile = lib.optionalString (conf!=null) (builtins.toFile "config.def.h" conf);

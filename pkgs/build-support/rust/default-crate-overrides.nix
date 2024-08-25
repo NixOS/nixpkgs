@@ -120,7 +120,7 @@ in
     #
     # patchPhase = ''
     #   substituteInPlace ./foundationdb-sys/build.rs \
-    #     --replace /usr/local/include ${foundationdb.dev}/include
+    #     --replace-fail /usr/local/include ${foundationdb.dev}/include
     # '';
   };
 

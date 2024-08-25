@@ -17,19 +17,19 @@ stdenv.mkDerivation rec {
     FILES="$(grep -r '/bin/sh' src/utils -l; find src -name \*.c)"
     for file in $FILES; do
       substituteInPlace "$file" \
-        --replace /bin/mount ${util-linux}/bin/mount \
-        --replace /bin/umount ${util-linux}/bin/umount \
-        --replace /sbin/mount.ecryptfs_private ${wrapperDir}/mount.ecryptfs_private \
-        --replace /sbin/umount.ecryptfs_private ${wrapperDir}/umount.ecryptfs_private \
-        --replace /sbin/mount.ecryptfs $out/sbin/mount.ecryptfs \
-        --replace /sbin/umount.ecryptfs $out/sbin/umount.ecryptfs \
-        --replace /usr/bin/ecryptfs-rewrite-file $out/bin/ecryptfs-rewrite-file \
-        --replace /usr/bin/ecryptfs-mount-private $out/bin/ecryptfs-mount-private \
-        --replace /usr/bin/ecryptfs-setup-private $out/bin/ecryptfs-setup-private \
-        --replace /sbin/cryptsetup ${cryptsetup}/sbin/cryptsetup \
-        --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup \
-        --replace /sbin/unix_chkpwd ${wrapperDir}/unix_chkpwd \
-        --replace /bin/bash ${bash}/bin/bash
+        --replace-fail /bin/mount ${util-linux}/bin/mount \
+        --replace-fail /bin/umount ${util-linux}/bin/umount \
+        --replace-fail /sbin/mount.ecryptfs_private ${wrapperDir}/mount.ecryptfs_private \
+        --replace-fail /sbin/umount.ecryptfs_private ${wrapperDir}/umount.ecryptfs_private \
+        --replace-fail /sbin/mount.ecryptfs $out/sbin/mount.ecryptfs \
+        --replace-fail /sbin/umount.ecryptfs $out/sbin/umount.ecryptfs \
+        --replace-fail /usr/bin/ecryptfs-rewrite-file $out/bin/ecryptfs-rewrite-file \
+        --replace-fail /usr/bin/ecryptfs-mount-private $out/bin/ecryptfs-mount-private \
+        --replace-fail /usr/bin/ecryptfs-setup-private $out/bin/ecryptfs-setup-private \
+        --replace-fail /sbin/cryptsetup ${cryptsetup}/sbin/cryptsetup \
+        --replace-fail /sbin/dmsetup ${lvm2}/sbin/dmsetup \
+        --replace-fail /sbin/unix_chkpwd ${wrapperDir}/unix_chkpwd \
+        --replace-fail /bin/bash ${bash}/bin/bash
     done
   '';
 

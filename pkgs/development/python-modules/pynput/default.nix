@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'sphinx >=1.3.1'" ""
+      --replace-fail "'sphinx >=1.3.1'" ""
   '';
 
   nativeBuildInputs = [

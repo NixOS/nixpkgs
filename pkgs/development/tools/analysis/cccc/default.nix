@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   patches = [ ./cccc.patch ];
 
   preConfigure = ''
-    substituteInPlace install/install.mak --replace /usr/local/bin $out/bin
-    substituteInPlace install/install.mak --replace MKDIR=mkdir "MKDIR=mkdir -p"
+    substituteInPlace install/install.mak --replace-fail /usr/local/bin $out/bin
+    substituteInPlace install/install.mak --replace-fail MKDIR=mkdir "MKDIR=mkdir -p"
   '';
   buildFlags = [ "CCC=c++" "LD=c++" ];
 

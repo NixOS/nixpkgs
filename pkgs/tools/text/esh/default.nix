@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     substituteInPlace esh \
-        --replace '"/bin/sh"' '"${runtimeShell}"' \
-        --replace '"awk"' '"${gawk}/bin/awk"' \
-        --replace 'sed' '${gnused}/bin/sed'
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
+        --replace-fail '"awk"' '"${gawk}/bin/awk"' \
+        --replace-fail 'sed' '${gnused}/bin/sed'
     substituteInPlace tests/test-dump.exp \
-        --replace '#!/bin/sh' '#!${runtimeShell}'
+        --replace-fail '#!/bin/sh' '#!${runtimeShell}'
   '';
 
   doCheck = true;

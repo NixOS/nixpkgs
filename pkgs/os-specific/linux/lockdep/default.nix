@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # kernel version
   postPatch = ''
     substituteInPlace tools/lib/lockdep/Makefile \
-      --replace 'CONFIG_INCLUDES =' $'CONFIG_INCLUDES = -I../../../usr/include\n#'
+      --replace-fail 'CONFIG_INCLUDES =' $'CONFIG_INCLUDES = -I../../../usr/include\n#'
   '';
 
   nativeBuildInputs = [ flex bison ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # there are more /bin/bash references than just shebangs
     for f in lockdep run_tests.sh tests/*.sh; do
       substituteInPlace $f \
-        --replace '/bin/bash' '${bash}/bin/bash'
+        --replace-fail '/bin/bash' '${bash}/bin/bash'
     done
 
     ./run_tests.sh
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     cp -R include/liblockdep $out/include
     make install DESTDIR=$out prefix=""
 
-    substituteInPlace $out/bin/lockdep --replace "./liblockdep.so" "$out/lib/liblockdep.so.$fullver"
+    substituteInPlace $out/bin/lockdep --replace-fail "./liblockdep.so" "$out/lib/liblockdep.so.$fullver"
   '';
 
   meta = {

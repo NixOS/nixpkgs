@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     cd lv2
-    substituteInPlace GNUmakefile --replace "/usr/lib/lv2" "$out/lib/lv2"
+    substituteInPlace GNUmakefile --replace-fail "/usr/lib/lv2" "$out/lib/lv2"
     make  SIMD=0
   '';
 

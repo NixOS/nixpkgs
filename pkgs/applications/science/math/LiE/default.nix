@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace make_lie \
-      --replace \`/bin/pwd\` $out
+      --replace-fail \`/bin/pwd\` $out
   '';
 
   installPhase = ''

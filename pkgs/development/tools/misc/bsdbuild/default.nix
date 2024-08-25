@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   prePatch = ''
     #ignore unfamiliar flags
     substituteInPlace configure \
-      --replace '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
+      --replace-fail '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
     #same for packages using bsdbuild
     substituteInPlace mkconfigure.pl \
-      --replace '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
+      --replace-fail '--sbindir=*' '--sbindir=* | --includedir=* | --oldincludedir=*'
     #insert header for missing NULL macro
     for f in db4.pm sdl_ttf.pm mysql.pm uim.pm strlcpy.pm getpwuid.pm \
       getaddrinfo.pm strtoll.pm free_null.pm getpwnam_r.pm \

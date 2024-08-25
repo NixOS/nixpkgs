@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # binutils 2.37 fix
     # https://github.com/ArcticaProject/nx-libs/issues/1003
-    substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
+    substituteInPlace nx-X11/config/cf/Imake.tmpl --replace-fail "clq" "cq"
   '';
 
   PREFIX=""; # Don't install to $out/usr/local

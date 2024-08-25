@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     libXft
   ];
 
-  preConfigure = "substituteInPlace configure --replace '-lxft' '-lXft'";
+  preConfigure = "substituteInPlace configure --replace-fail '-lxft' '-lXft'";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

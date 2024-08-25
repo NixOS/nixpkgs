@@ -109,11 +109,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # We're not on Windows so these are never installed to hipcc...
     substituteInPlace hipamd/CMakeLists.txt \
-      --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
-      --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
+      --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
+      --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
-      --replace "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
+      --replace-fail "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
 
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \

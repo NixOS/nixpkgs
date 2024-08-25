@@ -50,7 +50,7 @@ mkDerivation rec {
   ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
+      --replace-fail 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
   '';
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

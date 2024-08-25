@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   # tries to download data during configuration
   postPatch = ''
-    substituteInPlace Packages/DrawEM/CMakeLists.txt --replace "include(Atlases.cmake)" ""
+    substituteInPlace Packages/DrawEM/CMakeLists.txt --replace-fail "include(Atlases.cmake)" ""
   '';
 
   # tests don't seem to be maintained and gtest fails to link with BUILD_TESTING=ON;

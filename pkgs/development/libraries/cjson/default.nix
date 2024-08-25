@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # cJSON actually uses C99 standard, not C89
   # https://github.com/DaveGamble/cJSON/issues/275
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace -std=c89 -std=c99
+    substituteInPlace CMakeLists.txt --replace-fail -std=c89 -std=c99
   '';
 
   meta = with lib; {

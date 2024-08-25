@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace '/usr/local' $out
+    substituteInPlace Makefile --replace-fail '/usr/local' $out
   '';
 
   passthru.updateScript = unstableGitUpdater { };

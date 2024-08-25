@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '$(DESTDIR)/usr' '$(DESTDIR)/'
+      --replace-fail '$(DESTDIR)/usr' '$(DESTDIR)/'
     substituteInPlace gridtracker.sh \
-      --replace "exec nw" "exec ${nwjs}/bin/nw" \
-      --replace "/usr/share/gridtracker" "$out/share/gridtracker"
+      --replace-fail "exec nw" "exec ${nwjs}/bin/nw" \
+      --replace-fail "/usr/share/gridtracker" "$out/share/gridtracker"
     substituteInPlace gridtracker.desktop \
-      --replace "/usr/share/gridtracker/gridview.png" "$out/share/gridtracker/gridview.png"
+      --replace-fail "/usr/share/gridtracker/gridview.png" "$out/share/gridtracker/gridview.png"
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "NO_DIST_INSTALL=1" ];

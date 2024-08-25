@@ -91,7 +91,7 @@ effectiveStdenv.mkDerivation rec {
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
 
   preConfigure = lib.optionals rLibrary ''
-    substituteInPlace cmake/RPackageInstall.cmake.in --replace "CMD INSTALL" "CMD INSTALL -l $out/library"
+    substituteInPlace cmake/RPackageInstall.cmake.in --replace-fail "CMD INSTALL" "CMD INSTALL -l $out/library"
     export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
   '';
 

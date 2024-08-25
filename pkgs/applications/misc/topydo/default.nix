@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   # Skip test that has been reported multiple times upstream without result:
   # bram85/topydo#271, bram85/topydo#274.
   preCheck = ''
-    substituteInPlace test/test_revert_command.py --replace 'test_revert_ls' 'dont_test_revert_ls'
+    substituteInPlace test/test_revert_command.py --replace-fail 'test_revert_ls' 'dont_test_revert_ls'
   '';
 
   LC_ALL = "en_US.UTF-8";

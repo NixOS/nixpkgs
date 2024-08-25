@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
     ln -s ${abseil-cpp.src} third_party/abseil-cpp
     ln -s ${demumble} third_party/demumble
     substituteInPlace CMakeLists.txt \
-      --replace "find_package(Python COMPONENTS Interpreter)" "" \
-      --replace "if(Python_FOUND AND LIT_EXECUTABLE" "if(LIT_EXECUTABLE" \
-      --replace "COMMAND \''\${Python_EXECUTABLE} \''\${LIT_EXECUTABLE}" "COMMAND \''\${LIT_EXECUTABLE}"
+      --replace-fail "find_package(Python COMPONENTS Interpreter)" "" \
+      --replace-fail "if(Python_FOUND AND LIT_EXECUTABLE" "if(LIT_EXECUTABLE" \
+      --replace-fail "COMMAND \''\${Python_EXECUTABLE} \''\${LIT_EXECUTABLE}" "COMMAND \''\${LIT_EXECUTABLE}"
     # wasm test fail. Possibly due to LLVM version < 17. See https://github.com/google/bloaty/pull/354
     rm -rf tests/wasm
   '';

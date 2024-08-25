@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     # Once that bug is fixed, this can be removed.
     # This is needed in, for example, `zeroad`.
     substituteInPlace js/public/StructuredClone.h \
-         --replace "class SharedArrayRawBufferRefs {" \
+         --replace-fail "class SharedArrayRawBufferRefs {" \
                    "class JS_PUBLIC_API SharedArrayRawBufferRefs {"
   '';
 

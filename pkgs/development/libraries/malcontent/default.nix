@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libmalcontent/tests/app-filter.c \
-      --replace "/usr/bin/true" "${coreutils}/bin/true" \
-      --replace "/bin/true" "${coreutils}/bin/true" \
-      --replace "/usr/bin/false" "${coreutils}/bin/false" \
-      --replace "/bin/false" "${coreutils}/bin/false"
+      --replace-fail "/usr/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/usr/bin/false" "${coreutils}/bin/false" \
+      --replace-fail "/bin/false" "${coreutils}/bin/false"
   '';
 
   postInstall = ''

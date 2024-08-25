@@ -55,14 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace data/CMakeLists.txt \
-      --replace "\''${SYSTEMD_USER_UNIT_DIR}" "\''${CMAKE_INSTALL_LIBDIR}/systemd/user"
+      --replace-fail "\''${SYSTEMD_USER_UNIT_DIR}" "\''${CMAKE_INSTALL_LIBDIR}/systemd/user"
 
     substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
-      --replace "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
+      --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
 
     # Update URI handler database whenever new url-handler is installed system-wide
     substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
-      --replace '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
+      --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
   '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/test-sql.sh
   '';
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     substituteInPlace $out/bin/lomiri-url-dispatcher-dump \
-      --replace '/bin/sh' '${runtimeShell}'
+      --replace-fail '/bin/sh' '${runtimeShell}'
 
     wrapProgram $out/bin/lomiri-url-dispatcher-dump \
       --prefix PATH : ${lib.makeBinPath [ sqlite ]}
@@ -136,8 +136,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg $out/share/icons/hicolor/scalable/apps/
 
     substituteInPlace $out/share/applications/lomiri-url-dispatcher-gui.desktop \
-      --replace "Exec=$guiExec" "Exec=$(basename $guiScript)" \
-      --replace "Icon=$out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg" "Icon=lomiri-url-dispatcher-gui"
+      --replace-fail "Exec=$guiExec" "Exec=$(basename $guiScript)" \
+      --replace-fail "Icon=$out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg" "Icon=lomiri-url-dispatcher-gui"
 
     # Calls qmlscene from PATH, needs Qt plugins & QML components
     qtWrapperArgs+=(

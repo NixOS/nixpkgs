@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # fix the plugins directory
   postPatch = ''
     substituteInPlace dool \
-      --replace \
+      --replace-fail \
         "os.path.abspath(os.path.dirname(sys.argv[0])) + '/plugins/'" \
         "'$out/share/dool/'"
   '';

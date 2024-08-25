@@ -143,7 +143,7 @@ stdenv.mkDerivation {
   postPatch = ''
     # temporary patch for forgotten version updates
     substituteInPlace CMakeLists.txt \
-      --replace "1.9.2" ${version}
+      --replace-fail "1.9.2" ${version}
   '';
 
   postConfigure =

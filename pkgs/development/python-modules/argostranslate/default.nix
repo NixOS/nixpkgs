@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ln -s */requires.txt requirements.txt
 
     substituteInPlace requirements.txt  \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
   doCheck = false; # needs network access

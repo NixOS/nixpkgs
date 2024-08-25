@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--enable-runas-user=nobody" ];
 
   prePatch = ''
-    substituteInPlace Makefile.in --replace 02770 0770
+    substituteInPlace Makefile.in --replace-fail 02770 0770
   '';
 
   # configure uses id to check environment; we don't want this check

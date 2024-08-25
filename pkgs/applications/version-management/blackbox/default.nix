@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs bin tools
     substituteInPlace Makefile \
-      --replace "PREFIX?=/usr/local" "PREFIX=$out"
+      --replace-fail "PREFIX?=/usr/local" "PREFIX=$out"
 
     substituteInPlace tools/confidence_test.sh \
-      --replace 'PATH="''${blackbox_home}:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/local/bin:/usr/pkg/bin:/usr/pkg/gnu/bin:/usr/local/MacGPG2/bin:/opt/homebrew/bin:''${blackbox_home}"' \
+      --replace-fail 'PATH="''${blackbox_home}:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/local/bin:/usr/pkg/bin:/usr/pkg/gnu/bin:/usr/local/MacGPG2/bin:/opt/homebrew/bin:''${blackbox_home}"' \
         "PATH=/build/source/bin/:$PATH"
   '';
 

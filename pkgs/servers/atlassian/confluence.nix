@@ -26,7 +26,7 @@ lib.warnIf (crowdProperties != null) "Using `crowdProperties` is deprecated!"
     rm -r temp; ln -sf /run/confluence/temp/ .
   '' + lib.optionalString enableSSO ''
     substituteInPlace confluence/WEB-INF/classes/seraph-config.xml \
-      --replace com.atlassian.confluence.user.ConfluenceAuthenticator\
+      --replace-fail com.atlassian.confluence.user.ConfluenceAuthenticator\
                 com.atlassian.confluence.user.ConfluenceCrowdSSOAuthenticator
   '' + lib.optionalString (crowdProperties != null) ''
     cat <<EOF > confluence/WEB-INF/classes/crowd.properties

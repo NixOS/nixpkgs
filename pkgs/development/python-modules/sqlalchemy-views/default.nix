@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace tox.ini --replace '--cov=sqlalchemy_views --cov-report=term' ""
+    substituteInPlace tox.ini --replace-fail '--cov=sqlalchemy_views --cov-report=term' ""
   '';
 
   nativeBuildInputs = [ setuptools ];

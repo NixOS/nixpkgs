@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--flake8" ""
+      --replace-fail "--flake8" ""
   '';
 
   outputs = [ "out" "doc" "man" ];

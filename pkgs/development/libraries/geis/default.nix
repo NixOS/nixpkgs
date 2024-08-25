@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
-    substituteInPlace python/geis/geis_v2.py --replace \
+    substituteInPlace python/geis/geis_v2.py --replace-fail \
       "ctypes.util.find_library(\"geis\")" "'$out/lib/libgeis.so'"
   '';
 

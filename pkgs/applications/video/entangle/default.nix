@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.entangle_photo.Manager.desktop" \
-      --replace "Exec=entangle" "Exec=$out/bin/entangle"
+      --replace-fail "Exec=entangle" "Exec=$out/bin/entangle"
   '';
 
   meta = with lib; {

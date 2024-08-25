@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Don't disable optimisations
-    substituteInPlace CMakeLists.txt --replace " -O0 " ""
+    substituteInPlace CMakeLists.txt --replace-fail " -O0 " ""
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

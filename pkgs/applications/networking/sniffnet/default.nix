@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     done
     install -Dm444 resources/packaging/linux/sniffnet.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/sniffnet.desktop \
-      --replace 'Exec=/usr/bin/sniffnet' 'Exec=sniffnet'
+      --replace-fail 'Exec=/usr/bin/sniffnet' 'Exec=sniffnet'
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''

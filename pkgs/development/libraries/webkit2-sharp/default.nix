@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Workaround build failure with WebKitGTK 2.40.0
     # https://github.com/hbons/webkit2-sharp/issues/6
-    substituteInPlace sources/webkit2-sharp-api.raw --replace \
+    substituteInPlace sources/webkit2-sharp-api.raw --replace-fail \
       '<field cname="parentInstance" access="public" writeable="false" readable="true" name="ParentInstance" type="GtkContainer*"/>' \
       '<field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="GtkContainer*"/>'
   '';

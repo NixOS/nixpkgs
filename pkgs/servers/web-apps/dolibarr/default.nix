@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     find . -type f -name "*.php" -print0 | xargs -0 sed -i 's|/etc/dolibarr|${stateDir}|g'
 
     substituteInPlace htdocs/filefunc.inc.php \
-      --replace '//$conffile = ' '$conffile = ' \
-      --replace '//$conffiletoshow = ' '$conffiletoshow = '
+      --replace-fail '//$conffile = ' '$conffile = ' \
+      --replace-fail '//$conffiletoshow = ' '$conffiletoshow = '
 
     substituteInPlace htdocs/install/inc.php \
-      --replace '//$conffile = ' '$conffile = ' \
-      --replace '//$conffiletoshow = ' '$conffiletoshow = '
+      --replace-fail '//$conffile = ' '$conffile = ' \
+      --replace-fail '//$conffiletoshow = ' '$conffiletoshow = '
   '';
 
   installPhase = ''

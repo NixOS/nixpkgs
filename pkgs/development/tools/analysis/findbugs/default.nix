@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    substituteInPlace bin/findbugs --replace /bin/pwd pwd
+    substituteInPlace bin/findbugs --replace-fail /bin/pwd pwd
   '';
 
   installPhase = ''

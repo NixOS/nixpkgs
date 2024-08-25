@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace usr/sbin/flexibee-server \
-      --replace "/usr/share/flexibee" $out \
-      --replace "/var/run" "/run"
+      --replace-fail "/usr/share/flexibee" $out \
+      --replace-fail "/var/run" "/run"
   '';
 
 

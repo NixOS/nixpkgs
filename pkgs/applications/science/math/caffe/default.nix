@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   });
 
   postPatch = ''
-    substituteInPlace src/caffe/util/io.cpp --replace \
+    substituteInPlace src/caffe/util/io.cpp --replace-fail \
       'SetTotalBytesLimit(kProtoReadBytesLimit, 536870912)' \
       'SetTotalBytesLimit(kProtoReadBytesLimit)'
   '' + lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''

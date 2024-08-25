@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   luaversion = "5.1";
 
   postPatch = ''
-    substituteInPlace Makefile --replace ldconfig :
+    substituteInPlace Makefile --replace-fail ldconfig :
     if test -n "''${dontStrip-}"; then
       # CCDEBUG must be non-empty or everything will be stripped, -g being
       # passed by nixpkgs CC wrapper is insufficient on its own

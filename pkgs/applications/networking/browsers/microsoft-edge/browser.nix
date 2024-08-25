@@ -154,25 +154,25 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace $out/share/applications/${longName}.desktop \
-      --replace /usr/bin/${baseName}-${channel} $out/bin/${longName}
+      --replace-fail /usr/bin/${baseName}-${channel} $out/bin/${longName}
 
     substituteInPlace $out/share/gnome-control-center/default-apps/${longName}.xml \
-      --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
+      --replace-fail /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
 
     substituteInPlace $out/share/menu/${longName}.menu \
-      --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
+      --replace-fail /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
 
     substituteInPlace $out/opt/microsoft/${shortName}/xdg-mime \
-      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
-      --replace "xdg_system_dirs=/usr/local/share/:/usr/share/" "xdg_system_dirs=/run/current-system/sw/share/" \
-      --replace /usr/bin/file ${file}/bin/file
+      --replace-fail "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
+      --replace-fail "xdg_system_dirs=/usr/local/share/:/usr/share/" "xdg_system_dirs=/run/current-system/sw/share/" \
+      --replace-fail /usr/bin/file ${file}/bin/file
 
     substituteInPlace $out/opt/microsoft/${shortName}/default-app-block \
-      --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
+      --replace-fail /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
 
     substituteInPlace $out/opt/microsoft/${shortName}/xdg-settings \
-      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
-      --replace "\''${XDG_CONFIG_DIRS:-/etc/xdg}" "\''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
+      --replace-fail "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
+      --replace-fail "\''${XDG_CONFIG_DIRS:-/etc/xdg}" "\''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
   '';
 
   postFixup = ''

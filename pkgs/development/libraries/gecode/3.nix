@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace gecode/flatzinc/lexer.yy.cpp \
-      --replace "register " ""
+      --replace-fail "register " ""
   '';
 
   nativeBuildInputs = [ perl ];

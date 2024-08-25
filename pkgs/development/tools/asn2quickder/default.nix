@@ -24,7 +24,7 @@ buildPythonApplication rec {
     patchShebangs ./python/scripts/*
 
     # Unpin pyparsing 3.0.0. Issue resolved in latest version.
-    substituteInPlace setup.py --replace 'pyparsing==3.0.0' 'pyparsing'
+    substituteInPlace setup.py --replace-fail 'pyparsing==3.0.0' 'pyparsing'
   '';
 
   dontUseCmakeConfigure = true;

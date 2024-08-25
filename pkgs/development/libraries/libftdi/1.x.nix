@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     # This gets misassigned to the C++ version's path for some reason
     for fileToFix in $out/{bin/libftdi1-config,lib/pkgconfig/libftdi1.pc}; do
       substituteInPlace $fileToFix \
-        --replace "$out/include/libftdipp1" "$out/include/libftdi1"
+        --replace-fail "$out/include/libftdipp1" "$out/include/libftdi1"
     done
   '';
 

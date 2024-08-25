@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'pytest-runner' ""
+      --replace-fail 'pytest-runner' ""
     substituteInPlace setup.cfg \
-      --replace "collect_ignore = ['setup.py']" ""
+      --replace-fail "collect_ignore = ['setup.py']" ""
   '';
 
   propagatedBuildInputs = [

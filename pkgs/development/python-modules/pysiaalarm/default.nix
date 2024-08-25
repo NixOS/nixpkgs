@@ -26,9 +26,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "==" ">="
+      --replace-fail "==" ">="
     substituteInPlace pytest.ini \
-      --replace "--cov pysiaalarm --cov-report term-missing" ""
+      --replace-fail "--cov pysiaalarm --cov-report term-missing" ""
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

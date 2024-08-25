@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace /usr $out \
-      --replace "CC = gcc" "#CC = gcc"
+      --replace-fail /usr $out \
+      --replace-fail "CC = gcc" "#CC = gcc"
   '';
 
   # Allow users set their own list of patches

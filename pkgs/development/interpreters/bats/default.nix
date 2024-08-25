@@ -212,7 +212,7 @@ resholve.mkDerivation rec {
         '') + ''
 
         # test generates file with absolute shebang dynamically
-        substituteInPlace test/install.bats --replace \
+        substituteInPlace test/install.bats --replace-fail \
           "/usr/bin/env bash" "${bash}/bin/bash"
 
         ${bats}/bin/bats test

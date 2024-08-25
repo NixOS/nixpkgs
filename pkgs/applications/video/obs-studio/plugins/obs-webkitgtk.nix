@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./obs-webkitgtk.c \
-      --replace 'g_file_read_link("/proc/self/exe", NULL)' "g_strdup(\"$out/lib/obs-plugins\")"
+      --replace-fail 'g_file_read_link("/proc/self/exe", NULL)' "g_strdup(\"$out/lib/obs-plugins\")"
   '';
 
   meta = with lib; {

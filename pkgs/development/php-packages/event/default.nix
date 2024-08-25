@@ -20,7 +20,7 @@ buildPecl {
   ];
 
   postPhpize = ''
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       'as_fn_error $? "Couldn'\'''t find $phpincludedir/sockets/php_sockets.h. Please check if sockets extension installed" "$LINENO" 5' \
       ':'
   '';

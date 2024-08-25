@@ -68,6 +68,6 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace elpi_REPL.ml --replace "tput cols" "${ncurses}/bin/tput cols"
+    substituteInPlace elpi_REPL.ml --replace-fail "tput cols" "${ncurses}/bin/tput cols"
   '';
 }

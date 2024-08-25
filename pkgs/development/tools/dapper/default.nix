@@ -16,7 +16,7 @@ buildGoModule rec {
   vendorHash = null;
 
   patchPhase = ''
-    substituteInPlace main.go --replace 0.0.0 ${version}
+    substituteInPlace main.go --replace-fail 0.0.0 ${version}
   '';
 
   meta = with lib; {

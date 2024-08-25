@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pushd $out/bin
     for f in gapi2-*
     do
-      substituteInPlace $f --replace mono ${mono}/bin/mono
+      substituteInPlace $f --replace-fail mono ${mono}/bin/mono
     done
     popd
   '';

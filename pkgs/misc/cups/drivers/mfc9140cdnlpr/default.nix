@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       ]}
 
     substituteInPlace $dir/lpd/filtermfc9140cdn \
-      --replace "BR_CFG_PATH=" "BR_CFG_PATH=\"$dir/\" #" \
-      --replace "BR_LPD_PATH=" "BR_LPD_PATH=\"$dir/\" #"
+      --replace-fail "BR_CFG_PATH=" "BR_CFG_PATH=\"$dir/\" #" \
+      --replace-fail "BR_LPD_PATH=" "BR_LPD_PATH=\"$dir/\" #"
 
     wrapProgram $dir/lpd/filtermfc9140cdn \
       --prefix PATH : ${lib.makeBinPath [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       ]}
 
     substituteInPlace $dir/lpd/psconvertij2 \
-      --replace '`which gs`' "${ghostscript}/bin/gs"
+      --replace-fail '`which gs`' "${ghostscript}/bin/gs"
 
     wrapProgram $dir/lpd/psconvertij2 \
       --prefix PATH : ${lib.makeBinPath [

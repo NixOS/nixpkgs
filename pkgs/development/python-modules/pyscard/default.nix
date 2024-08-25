@@ -45,7 +45,7 @@ buildPythonPackage rec {
       ''
     else
       ''
-        substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
+        substituteInPlace setup.py --replace-fail "pkg-config" "$PKG_CONFIG"
         substituteInPlace smartcard/scard/winscarddll.c \
           --replace-fail "libpcsclite.so.1" \
                     "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"

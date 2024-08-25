@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/NixOS/nixpkgs/pull/252982#discussion_r1314346216
   postPatch = ''
     substituteInPlace config.mk examples/Makefile \
-      --replace '($(SYS),WINDOWS)' '($(SYS),Windows)'
+      --replace-fail '($(SYS),WINDOWS)' '($(SYS),Windows)'
   '';
 
   makeFlags = [

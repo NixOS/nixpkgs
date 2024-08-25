@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+      --replace-fail "--isort --flake8 --cov --no-cov-on-fail" ""
   '';
 
   preCheck = ''

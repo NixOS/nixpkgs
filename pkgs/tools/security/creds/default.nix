@@ -17,10 +17,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "tinydb==4.3" "tinydb" \
-      --replace "pathlib" ""
+      --replace-fail "tinydb==4.3" "tinydb" \
+      --replace-fail "pathlib" ""
     substituteInPlace creds \
-      --replace "pathlib.Path(__file__).parent" "pathlib.Path.home()"
+      --replace-fail "pathlib.Path(__file__).parent" "pathlib.Path.home()"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

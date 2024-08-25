@@ -33,7 +33,7 @@ in
     mkdir $out/share/applications
     cp ${extracted}/caprine.desktop $out/share/applications/
     substituteInPlace $out/share/applications/caprine.desktop \
-        --replace AppRun caprine
+        --replace-fail AppRun caprine
   '';
 
   meta = metaCommon // {

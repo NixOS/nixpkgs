@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "1.1.0";
 
   postPatch = ''
-    substituteInPlace process.go --replace \"/bin/sh\" \"${runtimeShell}\"
+    substituteInPlace process.go --replace-fail \"/bin/sh\" \"${runtimeShell}\"
   '';
 
   src = fetchFromGitHub {

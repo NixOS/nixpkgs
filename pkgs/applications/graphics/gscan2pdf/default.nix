@@ -60,7 +60,7 @@ perlPackages.buildPerlPackage rec {
   in ''
     # Required for the program to properly load its SVG assets
     substituteInPlace bin/gscan2pdf \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
 
     # Substitute the non-free Helvetica font in the tests
     sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t

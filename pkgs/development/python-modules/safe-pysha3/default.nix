@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # AttributeError: 'Keccak_224Tests' object has no attribute 'failIf'.
   postPatch = ''
     substituteInPlace tests.py \
-      --replace "failIf" "assertFalse"
+      --replace-fail "failIf" "assertFalse"
   '';
 
   pythonImportsCheck = [ "sha3" ];

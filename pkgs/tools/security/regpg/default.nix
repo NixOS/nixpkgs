@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./util/insert-here.pl ./util/markdown.pl
     substituteInPlace ./Makefile \
-      --replace 'util/insert-here.pl' 'perl util/insert-here.pl'
+      --replace-fail 'util/insert-here.pl' 'perl util/insert-here.pl'
     substituteInPlace ./Makefile \
-      --replace 'util/markdown.pl' 'perl util/markdown.pl'
+      --replace-fail 'util/markdown.pl' 'perl util/markdown.pl'
     substituteInPlace util/insert-here.pl \
-      --replace 'qx(git describe)' '"regpg-${version}"'
+      --replace-fail 'qx(git describe)' '"regpg-${version}"'
   '';
 
   dontConfigure = true;

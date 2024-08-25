@@ -20,11 +20,11 @@ let
 
       postPatch = ''
         substituteInPlace CMakeLists.txt \
-          --replace '/etc/udev/rules.d' "$out/etc/udev/rules.d" \
-          --replace "VERSION_INFO_PATCH_VERSION git" "VERSION_INFO_PATCH_VERSION ${lib.versions.patch version}"
+          --replace-fail '/etc/udev/rules.d' "$out/etc/udev/rules.d" \
+          --replace-fail "VERSION_INFO_PATCH_VERSION git" "VERSION_INFO_PATCH_VERSION ${lib.versions.patch version}"
 
         substituteInPlace rtl-sdr.rules \
-          --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
+          --replace-fail 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
       '';
 
       meta = with lib; {

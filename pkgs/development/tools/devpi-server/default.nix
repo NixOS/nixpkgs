@@ -45,7 +45,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--flake8" ""
+      --replace-fail "--flake8" ""
   '';
 
   nativeBuildInputs = [

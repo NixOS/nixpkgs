@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     asar p asar-unpacked $out/share/${pname}/resources/app.asar
 
     substituteInPlace $out/share/applications/station-electron.desktop \
-      --replace "/opt/Terra Station/station-electron" ${pname}
+      --replace-fail "/opt/Terra Station/station-electron" ${pname}
 
     runHook postInstall
   '';

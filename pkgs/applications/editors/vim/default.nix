@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   # binaries for the host platform.
   preConfigure = ''
     export HOST_PATH
-    substituteInPlace src/which.sh --replace '$PATH' '$HOST_PATH'
+    substituteInPlace src/which.sh --replace-fail '$PATH' '$HOST_PATH'
   '';
 
   postInstall = ''

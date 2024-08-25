@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
    # -Wall -Wextra -Werror fails on clang and newer gcc
     substituteInPlace CMakeLists.txt \
-      --replace "-Wno-braced-scalar-init" "" \
-      --replace "-Werror" ""
+      --replace-fail "-Wno-braced-scalar-init" "" \
+      --replace-fail "-Werror" ""
   '';
 
   buildInputs = [ json_c libpcap ncurses libtirpc ];

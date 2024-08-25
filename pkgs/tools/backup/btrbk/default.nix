@@ -32,18 +32,18 @@ stdenv.mkDerivation rec {
   preInstall = ''
     for f in $(find . -name Makefile); do
       substituteInPlace "$f" \
-        --replace "/usr" "$out" \
-        --replace "/etc" "$out/etc"
+        --replace-fail "/usr" "$out" \
+        --replace-fail "/etc" "$out/etc"
     done
 
     # Tainted Mode disables PERL5LIB
     substituteInPlace btrbk \
-      --replace "perl -T" "perl" \
-      --replace "\$0" "\$ENV{'program_name'}"
+      --replace-fail "perl -T" "perl" \
+      --replace-fail "\$0" "\$ENV{'program_name'}"
 
     # Fix SSH filter script
     sed -i '/^export PATH/d' ssh_filter_btrbk.sh
-    substituteInPlace ssh_filter_btrbk.sh --replace logger ${util-linux}/bin/logger
+    substituteInPlace ssh_filter_btrbk.sh --replace-fail logger ${util-linux}/bin/logger
   '';
 
   preFixup = ''

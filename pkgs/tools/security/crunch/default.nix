@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace '-g root -o root' "" \
-      --replace '-g wheel -o root' "" \
-      --replace 'sudo ' ""
+      --replace-fail '-g root -o root' "" \
+      --replace-fail '-g wheel -o root' "" \
+      --replace-fail 'sudo ' ""
   '';
 
   makeFlags = [

@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage {
     mkdir -p frontend-build
     cp -R ${frontend-build}/src frontend-build
 
-    substituteInPlace tauri.conf.json --replace '"distDir": "../out/src",' '"distDir": "frontend-build/src",'
+    substituteInPlace tauri.conf.json --replace-fail '"distDir": "../out/src",' '"distDir": "frontend-build/src",'
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

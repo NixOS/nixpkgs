@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pyjwt~=2.1.0" "pyjwt>=2.1.0"
+      --replace-fail "pyjwt~=2.1.0" "pyjwt>=2.1.0"
   '';
 
   pythonImportsCheck = [ "smarttub" ];

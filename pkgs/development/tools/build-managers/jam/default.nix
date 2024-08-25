@@ -104,7 +104,7 @@ in
     };
   in base.overrideAttrs (oldAttrs: {
     postPatch = (oldAttrs.postPatch or "") + ''
-      substituteInPlace Jamfile --replace strip ${stdenv.cc.targetPrefix}strip
+      substituteInPlace Jamfile --replace-fail strip ${stdenv.cc.targetPrefix}strip
     '';
 
     # Doesn't understand how to cross compile once bootstrapped, so we'll just

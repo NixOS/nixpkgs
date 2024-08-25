@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   # Don't use "install -s"
   postPatch = ''
-    substituteInPlace Makefile.in --replace " 0555 -s " " 0555 "
+    substituteInPlace Makefile.in --replace-fail " 0555 -s " " 0555 "
   '';
 
   src = fetchurl {

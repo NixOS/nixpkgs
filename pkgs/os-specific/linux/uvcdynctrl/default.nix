@@ -22,8 +22,8 @@ stdenv.mkDerivation {
     )
     for f in "''${fixup_list[@]}"; do
       substituteInPlace "$f" \
-        --replace "/etc/udev" "$out/etc/udev" \
-        --replace "/lib/udev" "$out/lib/udev"
+        --replace-fail "/etc/udev" "$out/etc/udev" \
+        --replace-fail "/lib/udev" "$out/lib/udev"
     done
   '';
 

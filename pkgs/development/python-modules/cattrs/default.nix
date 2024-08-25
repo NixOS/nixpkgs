@@ -64,10 +64,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
+      --replace-fail "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
     substituteInPlace tests/test_preconf.py \
-      --replace "from orjson import dumps as orjson_dumps" "" \
-      --replace "from orjson import loads as orjson_loads" ""
+      --replace-fail "from orjson import dumps as orjson_dumps" "" \
+      --replace-fail "from orjson import loads as orjson_loads" ""
   '';
 
   preCheck = ''

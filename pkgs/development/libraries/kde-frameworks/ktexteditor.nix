@@ -18,6 +18,6 @@ mkDerivation ({
 } // lib.optionalAttrs stdenv.isDarwin {
   postPatch = ''
     substituteInPlace src/part/CMakeLists.txt \
-      --replace "kpart.desktop" "${kparts}/share/kservicetypes5/kpart.desktop"
+      --replace-fail "kpart.desktop" "${kparts}/share/kservicetypes5/kpart.desktop"
   '';
 })

@@ -131,12 +131,12 @@ in stdenv.mkDerivation rec {
     git config --global url."file://${google-test}".insteadOf "${google-test.url}"
     git config --global url."file://${date}".insteadOf "${date.url}"
 
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "https://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "URL ${sqlite3.url}" "URL ${sqlite3}"
+    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace-fail "http://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace-fail "https://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace-fail "http://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace-fail "URL ${sqlite3.url}" "URL ${sqlite3}"
 
-    substituteInPlace Builds/CMake/deps/Rocksdb.cmake --replace "RocksDB 6.27" "RocksDB"
+    substituteInPlace Builds/CMake/deps/Rocksdb.cmake --replace-fail "RocksDB 6.27" "RocksDB"
   '';
 
   doCheck = true;

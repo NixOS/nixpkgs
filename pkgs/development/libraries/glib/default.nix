@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
   '' + lib.optionalString stdenv.hostPlatform.isWindows ''
     substituteInPlace gio/win32/meson.build \
-      --replace "libintl, " ""
+      --replace-fail "libintl, " ""
   '';
 
   postConfigure = ''
@@ -227,7 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
     moveToOutput "share/glib-2.0/gdb" "$out"
-    substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
+    substituteInPlace "$dev/bin/gdbus-codegen" --replace-fail "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.

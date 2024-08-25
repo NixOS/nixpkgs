@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     rm bin/qtextasdata.py
 
     # not considered good practice pinning in install_requires
-    substituteInPlace setup.py --replace 'six==' 'six>='
+    substituteInPlace setup.py --replace-fail 'six==' 'six>='
   '';
 
   meta = with lib; {

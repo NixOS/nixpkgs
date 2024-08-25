@@ -34,7 +34,7 @@ useStdenv.mkDerivation {
 
     # don't use hardcoded /bin/sh
     for f in repl.k repl-bg.k m.c;do
-      substituteInPlace "$f" --replace "/bin/sh" "${runtimeShell}"
+      substituteInPlace "$f" --replace-fail "/bin/sh" "${runtimeShell}"
     done
   '';
 
@@ -56,7 +56,7 @@ useStdenv.mkDerivation {
     install -Dm755 libk.so "$lib/lib/libk.so"
     install -Dm644 k.h "$dev/include/k.h"
     install -Dm644 LICENSE -t "$out/share/ngn-k"
-    substituteInPlace "$out/bin/k-repl" --replace "#!k" "#!$out/bin/k"
+    substituteInPlace "$out/bin/k-repl" --replace-fail "#!k" "#!$out/bin/k"
     runHook postInstall
   '';
 

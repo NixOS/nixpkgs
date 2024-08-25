@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace src/Makefile.in \
-      --replace "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
+      --replace-fail "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
   '' + (lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile.in \
-      --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
+      --replace-fail "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
   '');
 
   enableParallelBuilding = false; # broken

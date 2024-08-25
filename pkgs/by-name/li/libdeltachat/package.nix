@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
   # absolute path to headers by expanding `__FILE__`.
   postInstall = ''
     substituteInPlace $out/include/deltachat.h \
-      --replace __FILE__ '"${placeholder "out"}/include/deltachat.h"'
+      --replace-fail __FILE__ '"${placeholder "out"}/include/deltachat.h"'
   '';
 
   passthru = {

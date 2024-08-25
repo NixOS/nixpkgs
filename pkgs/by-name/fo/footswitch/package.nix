@@ -16,9 +16,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/local $out \
-      --replace /usr/bin/install install \
-      --replace /etc/udev $out/lib/udev
+      --replace-fail /usr/local $out \
+      --replace-fail /usr/bin/install install \
+      --replace-fail /etc/udev $out/lib/udev
   '';
 
   preInstall = ''

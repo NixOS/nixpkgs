@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   preConfigure= ''
     export UDEVDIR=$out/etc/udev
-    substituteInPlace ./Makefile --replace "udevrulesdir}" "prefix}/etc/udev";
+    substituteInPlace ./Makefile --replace-fail "udevrulesdir}" "prefix}/etc/udev";
   '';
 
   enableParallelBuilding = true;

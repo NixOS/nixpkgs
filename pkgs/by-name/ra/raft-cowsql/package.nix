@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace configure --replace /usr/bin/ " "
+    substituteInPlace configure --replace-fail /usr/bin/ " "
   '';
 
   doCheck = true;

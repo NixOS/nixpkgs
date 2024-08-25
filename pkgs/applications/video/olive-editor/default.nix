@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   # https://github.com/olive-editor/olive/issues/2200
   postPatch = ''
     substituteInPlace ./app/node/project/serializer/serializer230220.cpp \
-      --replace 'QStringRef' 'QStringView'
+      --replace-fail 'QStringRef' 'QStringView'
   '';
 
   nativeBuildInputs = [

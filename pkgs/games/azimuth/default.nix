@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace data/azimuth.desktop \
-      --replace Exec=azimuth "Exec=$out/bin/azimuth" \
-      --replace "Version=%AZ_VERSION_NUMBER" "Version=${version}"
+      --replace-fail Exec=azimuth "Exec=$out/bin/azimuth" \
+      --replace-fail "Version=%AZ_VERSION_NUMBER" "Version=${version}"
   '';
 
   makeFlags = [

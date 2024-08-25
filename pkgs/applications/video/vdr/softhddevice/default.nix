@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace softhddev.c \
-      --replace "LOCALBASE \"/bin/X\"" "\"${xorgserver}/bin/X\""
+      --replace-fail "LOCALBASE \"/bin/X\"" "\"${xorgserver}/bin/X\""
   '';
 
   meta = with lib; {

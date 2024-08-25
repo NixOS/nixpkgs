@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString isLinux ''
     substituteInPlace doc/docbook_man.debian.xsl \
-      --replace /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook\.xsl ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl
+      --replace-fail /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook\.xsl ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl
   '';
 
   cmakeFlags = [

@@ -75,11 +75,11 @@ in stdenv.mkDerivation rec {
     # absolute paths to convert & tesseract
     sed -i '/\[AC_DEFINE(\[HAVE_IMAGE_MAGICK\], \[1\])/a \ MAGICK_CONVERT="${imagemagick}/bin/convert"' configure.ac
     substituteInPlace filters/magick.cpp \
-      --replace 'convert ' '${imagemagick}/bin/convert '
+      --replace-fail 'convert ' '${imagemagick}/bin/convert '
     substituteInPlace filters/reorient.cpp \
-      --replace '"tesseract' '"${tesseract4}/bin/tesseract'
+      --replace-fail '"tesseract' '"${tesseract4}/bin/tesseract'
     substituteInPlace filters/get-text-orientation \
-      --replace '=tesseract' '=${tesseract4}/bin/tesseract'
+      --replace-fail '=tesseract' '=${tesseract4}/bin/tesseract'
   '';
 
   configureFlags = [

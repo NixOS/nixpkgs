@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/gui/src/SslCertificate.cpp \
-      --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
+      --replace-fail 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
-      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
     substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
-      --replace "/usr/bin" "$out/bin"
+      --replace-fail "/usr/bin" "$out/bin"
   '' + lib.optionalString (stdenv.isDarwin && withGUI) ''
     mkdir -p $out/Applications
     cp -r bundle/Synergy.app $out/Applications

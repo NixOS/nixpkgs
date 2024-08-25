@@ -68,7 +68,7 @@ buildRebar3 {
     for f in $out/bin/*; do
       wrapProgram $f \
         --prefix PATH ":" "${makeBinPath [ erlang coreutils bash ]}:$out/bin"
-      substituteInPlace $f --replace "/usr/bin/env" "${coreutils}/bin/env"
+      substituteInPlace $f --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
     done
   '';
 

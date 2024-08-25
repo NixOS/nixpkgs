@@ -243,7 +243,7 @@ stdenv.mkDerivation (
           # 1. remove references to erlang from plain text files
           for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
             echo "removing references to erlang in $file"
-            substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
+            substituteInPlace "$file" --replace-fail "${erlang}/lib/erlang" "$out"
           done
 
           # 2. remove references to erlang from .beam files

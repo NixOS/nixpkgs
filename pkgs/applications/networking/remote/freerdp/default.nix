@@ -94,18 +94,18 @@ stdenv.mkDerivation rec {
     # failing test(s)
     ${lib.concatMapStringsSep "\n" (e: ''
       substituteInPlace ${e.dir}/CMakeLists.txt \
-        --replace ${e.file} ""
+        --replace-fail ${e.file} ""
       rm ${e.dir}/${e.file}
     '') disabledTests}
 
     substituteInPlace "libfreerdp/freerdp.pc.in" \
-      --replace "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+      --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
   '' + lib.optionalString (pcsclite != null) ''
     substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
-      --replace "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
+      --replace-fail "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
   '' + lib.optionalString nocaps ''
     substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
-      --replace "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
+      --replace-fail "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
   '';
 
   buildInputs = [

@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/constant.h \
-        --replace '"pdftk"' '"${pdftk}/bin/pdftk"' \
-        --replace "/usr/share" "$out/share"
+        --replace-fail '"pdftk"' '"${pdftk}/bin/pdftk"' \
+        --replace-fail "/usr/share" "$out/share"
   '';
 
   meta = with lib; {

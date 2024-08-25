@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     # Install p4vc separately (it's a tiny shell script).
     mv p4vc $out/bin
     substituteInPlace $out/bin/p4vc \
-      --replace /Applications $out/Applications
+      --replace-fail /Applications $out/Applications
   '';
 }

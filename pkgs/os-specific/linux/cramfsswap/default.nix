@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Needed for cross-compilation
   postPatch = ''
-    substituteInPlace Makefile --replace 'strip ' '$(STRIP) '
+    substituteInPlace Makefile --replace-fail 'strip ' '$(STRIP) '
   '';
 
   buildInputs = [zlib];

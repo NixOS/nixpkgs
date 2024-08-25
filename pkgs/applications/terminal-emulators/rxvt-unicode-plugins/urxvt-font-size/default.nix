@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     substituteInPlace font-size \
-      --replace "xrdb -merge" "${xrdb}/bin/xrdb -merge" \
-      --replace "xlsfonts" "${xlsfonts}/bin/xlsfonts"
+      --replace-fail "xrdb -merge" "${xrdb}/bin/xrdb -merge" \
+      --replace-fail "xlsfonts" "${xlsfonts}/bin/xlsfonts"
 
     mkdir -p $out/lib/urxvt/perl
     cp font-size $out/lib/urxvt/perl

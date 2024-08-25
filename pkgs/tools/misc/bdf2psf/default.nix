@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    substituteInPlace usr/bin/bdf2psf --replace /usr/bin/perl "${perl}/bin/perl"
+    substituteInPlace usr/bin/bdf2psf --replace-fail /usr/bin/perl "${perl}/bin/perl"
     rm usr/share/doc/bdf2psf/changelog.gz
     mv usr "$out"
     runHook postInstall

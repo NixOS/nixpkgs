@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '= "^' '= ">='
+      --replace-fail '= "^' '= ">='
   '';
 
   build-system = with python3.pkgs; [ poetry-core ];

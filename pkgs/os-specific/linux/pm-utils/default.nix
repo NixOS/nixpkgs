@@ -25,16 +25,16 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       # Install the manpages (xmlto isn't really needed).
-      substituteInPlace man/Makefile.in --replace '@HAVE_XMLTO_TRUE@' ""
+      substituteInPlace man/Makefile.in --replace-fail '@HAVE_XMLTO_TRUE@' ""
 
       # Set the PATH properly.
-      substituteInPlace pm/pm-functions.in --replace '/sbin:/usr/sbin:/bin:/usr/bin' '$PATH:${binPath}:${sbinPath}'
+      substituteInPlace pm/pm-functions.in --replace-fail '/sbin:/usr/sbin:/bin:/usr/bin' '$PATH:${binPath}:${sbinPath}'
 
-      substituteInPlace src/pm-action.in --replace 'tr ' '${coreutils}/bin/tr '
+      substituteInPlace src/pm-action.in --replace-fail 'tr ' '${coreutils}/bin/tr '
 
-      substituteInPlace pm/sleep.d/00logging --replace /bin/uname "$(type -P uname)"
+      substituteInPlace pm/sleep.d/00logging --replace-fail /bin/uname "$(type -P uname)"
 
-      substituteInPlace pm/sleep.d/90clock --replace /sbin/hwclock hwclock
+      substituteInPlace pm/sleep.d/90clock --replace-fail /sbin/hwclock hwclock
     '';
 
   postInstall =

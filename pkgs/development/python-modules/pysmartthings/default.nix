@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
+      --replace-fail "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
   '';
 
   propagatedBuildInputs = [ aiohttp ];

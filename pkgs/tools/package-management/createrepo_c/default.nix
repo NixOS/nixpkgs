@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace '@BASHCOMP_DIR@' "$out/share/bash-completion/completions"
+      --replace-fail '@BASHCOMP_DIR@' "$out/share/bash-completion/completions"
     substituteInPlace src/python/CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python3.sitePackages}"
+      --replace-fail "@PYTHON_INSTALL_DIR@" "$out/${python3.sitePackages}"
   '';
 
   nativeBuildInputs = [ cmake pkg-config rpm ];

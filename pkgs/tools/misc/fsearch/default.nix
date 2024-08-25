@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     substituteInPlace $out/share/applications/io.github.cboxdoerfer.FSearch.desktop \
-      --replace "Exec=fsearch" "Exec=$out/bin/fsearch"
+      --replace-fail "Exec=fsearch" "Exec=$out/bin/fsearch"
   '';
 
   meta = with lib; {

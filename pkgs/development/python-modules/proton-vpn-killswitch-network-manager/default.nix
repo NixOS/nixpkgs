@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton.vpn.killswitch.backend.linux.networkmanager --cov-report=html --cov-report=term" ""
+      --replace-fail "--cov=proton.vpn.killswitch.backend.linux.networkmanager --cov-report=html --cov-report=term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.killswitch.backend.linux.networkmanager" ];

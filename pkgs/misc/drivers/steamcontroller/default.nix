@@ -15,7 +15,7 @@ buildPythonApplication {
   };
 
   postPatch = ''
-    substituteInPlace src/uinput.py --replace \
+    substituteInPlace src/uinput.py --replace-fail \
       "/usr/include" "${linuxHeaders}/include"
   '';
 

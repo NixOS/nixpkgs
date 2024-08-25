@@ -41,8 +41,8 @@ let
       postPatch = ''
         for filename in patches/clang/*.patch; do
           substituteInPlace "$filename" \
-            --replace "a/clang/" "a/" \
-            --replace "b/clang/" "b/"
+            --replace-fail "a/clang/" "a/" \
+            --replace-fail "b/clang/" "b/"
         done
       '';
 
@@ -72,12 +72,12 @@ let
     postPatch = ''
       # fix not be able to find clang from PATH
       substituteInPlace cl_headers/CMakeLists.txt \
-        --replace " NO_DEFAULT_PATH" ""
+        --replace-fail " NO_DEFAULT_PATH" ""
     '' + lib.optionalString stdenv.isDarwin ''
       # Uses linker flags that are not supported on Darwin.
       sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
       substituteInPlace CMakeLists.txt \
-        --replace '-Wl,--no-undefined' ""
+        --replace-fail '-Wl,--no-undefined' ""
     '';
   };
 in

@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/mbase/SConscript \
-      --replace "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
+      --replace-fail "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
   '';
 
   nativeBuildInputs = [ wrapGAppsHook3 scons pkg-config gettext ];

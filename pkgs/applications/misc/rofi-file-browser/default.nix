@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace ./CMakeLists.txt \
-      --replace ' ''${ROFI_PLUGINS_DIR}' " $out/lib/rofi" \
-      --replace "/usr/share/" "$out/share/"
+      --replace-fail ' ''${ROFI_PLUGINS_DIR}' " $out/lib/rofi" \
+      --replace-fail "/usr/share/" "$out/share/"
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

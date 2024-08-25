@@ -13,11 +13,11 @@ buildGoModule rec {
   postPatch = ''
     # rebuild with patched paths
     rm ipp-usb.8
-    substituteInPlace Makefile --replace "install: all" "install: man"
-    substituteInPlace systemd-udev/ipp-usb.service --replace "/sbin" "$out/bin"
+    substituteInPlace Makefile --replace-fail "install: all" "install: man"
+    substituteInPlace systemd-udev/ipp-usb.service --replace-fail "/sbin" "$out/bin"
     for i in Makefile paths.go ipp-usb.8.md; do
-      substituteInPlace $i --replace "/usr" "$out"
-      substituteInPlace $i --replace "/var/ipp-usb" "/var/lib/ipp-usb"
+      substituteInPlace $i --replace-fail "/usr" "$out"
+      substituteInPlace $i --replace-fail "/var/ipp-usb" "/var/lib/ipp-usb"
     done
   '';
 

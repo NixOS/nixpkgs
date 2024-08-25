@@ -30,16 +30,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace bus/Makefile.am \
-      --replace 'install-data-hook:' 'disabled:' \
-      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
+      --replace-fail 'install-data-hook:' 'disabled:' \
+      --replace-fail '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
     substituteInPlace tools/Makefile.am \
-      --replace 'install-data-local:' 'disabled:' \
-      --replace 'installcheck-local:' 'disabled:'
+      --replace-fail 'install-data-local:' 'disabled:' \
+      --replace-fail 'installcheck-local:' 'disabled:'
   '' + /* cleanup of runtime references */ ''
     substituteInPlace ./dbus/dbus-sysdeps-unix.c \
-      --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
+      --replace-fail 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
     substituteInPlace ./tools/dbus-launch.c \
-      --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
+      --replace-fail 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
   '';
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];

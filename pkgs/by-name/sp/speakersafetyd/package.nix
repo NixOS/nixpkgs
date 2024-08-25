@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ alsa-lib ];
 
   postPatch = ''
-    substituteInPlace speakersafetyd.service --replace "/usr" "$out"
-    substituteInPlace Makefile --replace "target/release" "target/${rust.lib.toRustTargetSpec stdenv.hostPlatform}/$cargoBuildType"
+    substituteInPlace speakersafetyd.service --replace-fail "/usr" "$out"
+    substituteInPlace Makefile --replace-fail "target/release" "target/${rust.lib.toRustTargetSpec stdenv.hostPlatform}/$cargoBuildType"
     # creating files in /var does not make sense in a nix package
-    substituteInPlace Makefile --replace 'install -dDm0755 $(DESTDIR)/$(VARDIR)/lib/speakersafetyd/blackbox' ""
+    substituteInPlace Makefile --replace-fail 'install -dDm0755 $(DESTDIR)/$(VARDIR)/lib/speakersafetyd/blackbox' ""
   '';
 
   installFlags = [

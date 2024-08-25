@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   # it search in ../lib/.piglit-wrapped, we just replace the script name with "piglit" again.
   prePatch = ''
     substituteInPlace piglit \
-      --replace 'script_basename_noext = os.path.splitext(os.path.basename(__file__))[0]' 'script_basename_noext = "piglit"'
+      --replace-fail 'script_basename_noext = os.path.splitext(os.path.basename(__file__))[0]' 'script_basename_noext = "piglit"'
   '';
 
   postInstall = ''

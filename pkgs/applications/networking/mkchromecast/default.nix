@@ -52,8 +52,8 @@ python3Packages.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'platform.system() == "Darwin"' 'False' \
-      --replace 'platform.system() == "Linux"' 'True'
+      --replace-fail 'platform.system() == "Darwin"' 'False' \
+      --replace-fail 'platform.system() == "Linux"' 'True'
   '';
 
   nativeBuildInputs = [ wrapQtAppsHook ];
@@ -71,11 +71,11 @@ python3Packages.buildPythonApplication {
 
   postInstall = ''
     substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
-      --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
+      --replace-fail '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
   '' + lib.optionalString stdenv.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
     substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
-      --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
+      --replace-fail './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 
   meta = with lib; {

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preBuild = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace programs/mkwinpeimg.in \
-      --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
+      --replace-fail '/usr/lib/syslinux' "${syslinux}/share/syslinux"
   '';
 
   postInstall = let

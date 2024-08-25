@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace \
+    substituteInPlace Makefile --replace-fail \
       '$(INSTALL) -m 755 -s' \
       '$(INSTALL) -m 755 -s --strip-program=${stdenv.cc.targetPrefix}strip'
   '';

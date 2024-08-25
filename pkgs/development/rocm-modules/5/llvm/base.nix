@@ -141,7 +141,7 @@ in stdenv.mkDerivation (finalAttrs: {
     rm unittests/Support/Path.cpp
 
     substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "Path.cpp" ""
+      --replace-fail "Path.cpp" ""
   '' + extraPostPatch;
 
   doCheck = buildTests;

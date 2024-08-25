@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace etc/systemd/iscsi-init.service.template \
-      --replace /usr/bin/sh ${runtimeShell}
+      --replace-fail /usr/bin/sh ${runtimeShell}
     sed -i '/install_dir: db_root/d' meson.build
   '';
 

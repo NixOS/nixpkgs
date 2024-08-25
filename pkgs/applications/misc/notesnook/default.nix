@@ -52,7 +52,7 @@ let
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/notesnook.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
   };
 

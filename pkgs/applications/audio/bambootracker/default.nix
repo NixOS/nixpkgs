@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Work around lrelease finding in qmake being broken by using pre-Qt5.12 code path
     # https://github.com/NixOS/nixpkgs/issues/214765
     substituteInPlace BambooTracker/lang/lang.pri \
-      --replace 'equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 12)' 'if(true)'
+      --replace-fail 'equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 12)' 'if(true)'
   '';
 
   nativeBuildInputs = [

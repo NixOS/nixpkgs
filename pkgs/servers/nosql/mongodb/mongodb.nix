@@ -99,21 +99,21 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     # fix environment variable reading
     substituteInPlace SConstruct \
-        --replace "env = Environment(" "env = Environment(ENV = os.environ,"
+        --replace-fail "env = Environment(" "env = Environment(ENV = os.environ,"
    '' + ''
     # Fix debug gcc 11 and clang 12 builds on Fedora
     # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
-    substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
+    substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace-fail '#include <string>' '#include <optional>
     #include <string>'
-    substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
+    substituteInPlace src/mongo/db/exec/plan_stats.h --replace-fail '#include <string>' '#include <optional>
     #include <string>'
   '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder version "6.0") ''
-    substituteInPlace src/third_party/mozjs-${mozjsVersion}/extract/js/src/jsmath.cpp --replace '${mozjsReplace}' 0
+    substituteInPlace src/third_party/mozjs-${mozjsVersion}/extract/js/src/jsmath.cpp --replace-fail '${mozjsReplace}' 0
   '' + lib.optionalString stdenv.isi686 ''
 
     # don't fail by default on i686
     substituteInPlace src/mongo/db/storage/storage_options.h \
-      --replace 'engine("wiredTiger")' 'engine("mmapv1")'
+      --replace-fail 'engine("wiredTiger")' 'engine("mmapv1")'
   '' + lib.optionalString (!avxSupport) ''
     substituteInPlace SConstruct \
       --replace-fail "default=['+sandybridge']," 'default=[],'

@@ -239,7 +239,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # lzma-sys bundles an old version of xz that doesn't build
     # on modern FreeBSD, use the system one instead
     substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
-        --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
+        --replace-fail 'cargo.env("LZMA_API_STATIC", "1");' ' '
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't

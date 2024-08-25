@@ -12,5 +12,5 @@ in runCommandLocal "unpack-${ck.name}" {
     cp -r --no-preserve=mode ${ck}/* $out
     zstd -dv --rm $out/lib/libdevice_operations.a.zst -o $out/lib/libdevice_operations.a
     substituteInPlace $out/lib/cmake/composable_kernel/*.cmake \
-      --replace "${ck}" "$out"
+      --replace-fail "${ck}" "$out"
   ''

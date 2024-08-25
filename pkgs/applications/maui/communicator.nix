@@ -28,7 +28,7 @@ mkDerivation {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/share/maui-accounts/manifests" "$out/usr/share/maui-accounts/manifests"
+      --replace-fail "/usr/share/maui-accounts/manifests" "$out/usr/share/maui-accounts/manifests"
   '';
 
   buildInputs = [

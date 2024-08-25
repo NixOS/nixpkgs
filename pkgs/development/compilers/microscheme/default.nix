@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace makefile --replace gcc ${stdenv.cc.targetPrefix}cc
+    substituteInPlace makefile --replace-fail gcc ${stdenv.cc.targetPrefix}cc
   '';
 
   nativeBuildInputs = [ makeWrapper unixtools.xxd ];

@@ -84,9 +84,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
     substituteInPlace ./libhtp/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
 
     mkdir -p bpf_stubs_workaround/gnu
     touch bpf_stubs_workaround/gnu/stubs-32.h
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/suricatasc" \
       --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out")
     substituteInPlace "$out/etc/suricata/suricata.yaml" \
-      --replace "/etc/suricata" "$out/etc/suricata"
+      --replace-fail "/etc/suricata" "$out/etc/suricata"
   '';
 
   meta = with lib; {

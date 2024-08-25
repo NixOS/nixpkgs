@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace examples/tinywl/OutputDelegate.qml \
-      --replace "/usr/share/wallpapers/deepin/desktop.jpg" \
+      --replace-fail "/usr/share/wallpapers/deepin/desktop.jpg" \
                 "${nixos-artwork.wallpapers.simple-blue}/share/backgrounds/nixos/nix-wallpaper-simple-blue.png"
   '';
 

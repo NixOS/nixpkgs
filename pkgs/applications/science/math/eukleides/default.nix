@@ -22,14 +22,14 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   preConfigure = ''
     substituteInPlace Makefile \
-      --replace mktexlsr true
+      --replace-fail mktexlsr true
 
     substituteInPlace doc/Makefile \
-      --replace ginstall-info install-info
+      --replace-fail ginstall-info install-info
 
     substituteInPlace Config \
-      --replace '/usr/local' "$out" \
-      --replace '$(SHARE_DIR)/texmf' "$tex"
+      --replace-fail '/usr/local' "$out" \
+      --replace-fail '$(SHARE_DIR)/texmf' "$tex"
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream

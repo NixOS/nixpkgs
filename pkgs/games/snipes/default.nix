@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     substitute config-sample.h config.h \
-      --replace SnipesConsole.ttf $out/share/snipes/SnipesConsole.ttf
+      --replace-fail SnipesConsole.ttf $out/share/snipes/SnipesConsole.ttf
   '';
 
   enableParallelBuilding = true;

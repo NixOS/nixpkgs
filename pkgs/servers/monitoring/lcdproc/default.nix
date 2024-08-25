@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # we don't need to see the GPL every time we launch lcdd in the foreground
   postPatch = ''
     substituteInPlace server/main.c \
-      --replace 'output_GPL_notice();' '// output_GPL_notice();'
+      --replace-fail 'output_GPL_notice();' '// output_GPL_notice();'
   '';
 
   configureFlags = [
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for f in $out/bin/*.pl ; do
       substituteInPlace $f \
-        --replace /usr/bin/perl ${lib.getBin perl}/bin/perl
+        --replace-fail /usr/bin/perl ${lib.getBin perl}/bin/perl
     done
 
     # NixOS will not use this file anyway but at least we can now execute LCDd
     substituteInPlace $out/etc/LCDd.conf \
-      --replace server/drivers/ $out/lib/lcdproc/
+      --replace-fail server/drivers/ $out/lib/lcdproc/
   '';
 
   meta = with lib; {

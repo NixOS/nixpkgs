@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    substituteInPlace hostapd/Makefile --replace /usr/local $out
+    substituteInPlace hostapd/Makefile --replace-fail /usr/local $out
   '';
 
   configurePhase = ''

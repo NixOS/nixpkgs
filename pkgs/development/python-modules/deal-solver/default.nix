@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "\"--cov=deal_solver\"," "" \
-      --replace "\"--cov-report=html\"," "" \
-      --replace "\"--cov-report=xml\"," "" \
-      --replace "\"--cov-report=term-missing:skip-covered\"," "" \
-      --replace "\"--cov-fail-under=100\"," ""
+      --replace-fail "\"--cov=deal_solver\"," "" \
+      --replace-fail "\"--cov-report=html\"," "" \
+      --replace-fail "\"--cov-report=xml\"," "" \
+      --replace-fail "\"--cov-report=term-missing:skip-covered\"," "" \
+      --replace-fail "\"--cov-fail-under=100\"," ""
   '';
 
   propagatedBuildInputs = [

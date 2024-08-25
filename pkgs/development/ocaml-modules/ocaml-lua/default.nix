@@ -18,8 +18,8 @@ buildDunePackage {
   postPatch = ''
     rm -r src/lua_c
     substituteInPlace src/dune \
-      --replace "-Ilua_c/lua515/src" "" \
-      --replace "(libraries unix threads lua_c)" \
+      --replace-fail "-Ilua_c/lua515/src" "" \
+      --replace-fail "(libraries unix threads lua_c)" \
                 "(libraries unix threads) (c_library_flags -llua)"
   '';
 

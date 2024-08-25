@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      substituteInPlace Makefile --replace "/usr/" "/"
+      substituteInPlace Makefile --replace-fail "/usr/" "/"
     '';
 
   preInstall =

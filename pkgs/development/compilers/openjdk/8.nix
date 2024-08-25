@@ -61,9 +61,9 @@ let
 
     preConfigure = ''
       chmod +x configure
-      substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
-      substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "${stdenv.shell}"
-      substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
+      substituteInPlace configure --replace-fail /bin/bash "${bash}/bin/bash"
+      substituteInPlace hotspot/make/linux/adlc_updater --replace-fail /bin/sh "${stdenv.shell}"
+      substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace-fail /usr/include/sys/sdt.h "/no-such-path"
     '';
 
     configureFlags = [

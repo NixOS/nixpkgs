@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs --build tests/
     patchShebangs --host snakemake/executors/jobscript.sh
     substituteInPlace snakemake/shell.py \
-      --replace "/bin/sh" "${runtimeShell}"
+      --replace-fail "/bin/sh" "${runtimeShell}"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

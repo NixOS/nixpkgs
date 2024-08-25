@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "\\\''${prefix}/" ""
+    substituteInPlace CMakeLists.txt --replace-fail "\\\''${prefix}/" ""
   '';
 
   buildInputs = [ libxml2 cppunit boost apr aprutil db expat ];

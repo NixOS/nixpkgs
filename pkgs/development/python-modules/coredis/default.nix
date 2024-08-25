@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "-K" ""
+      --replace-fail "-K" ""
   '';
 
   propagatedBuildInputs = [

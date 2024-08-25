@@ -10,11 +10,11 @@ rec {
     fixStamp = git-version: stampYmd: stampHms: ''
       echo "Fixing timestamp recipe in Makefile"
       substituteInPlace configure \
-        --replace "$(grep '^PACKAGE_VERSION=.*$' configure)" 'PACKAGE_VERSION="v${git-version}"' \
-        --replace "$(grep '^PACKAGE_STRING=.*$' configure)" 'PACKAGE_STRING="Gambit v${git-version}"' ;
+        --replace-fail "$(grep '^PACKAGE_VERSION=.*$' configure)" 'PACKAGE_VERSION="v${git-version}"' \
+        --replace-fail "$(grep '^PACKAGE_STRING=.*$' configure)" 'PACKAGE_STRING="Gambit v${git-version}"' ;
       substituteInPlace include/makefile.in \
-        --replace "\$\$(\$(GIT) describe --tag --always | sed 's/-bootstrap\$\$//')" "v${git-version}" \
-        --replace "echo > stamp.h;" "(echo '#define ___STAMP_VERSION \"v${git-version}\"'; echo '#define ___STAMP_YMD ${toString stampYmd}'; echo '#define ___STAMP_HMS ${toString stampHms}';) > stamp.h;";
+        --replace-fail "\$\$(\$(GIT) describe --tag --always | sed 's/-bootstrap\$\$//')" "v${git-version}" \
+        --replace-fail "echo > stamp.h;" "(echo '#define ___STAMP_VERSION \"v${git-version}\"'; echo '#define ___STAMP_YMD ${toString stampYmd}'; echo '#define ___STAMP_HMS ${toString stampHms}';) > stamp.h;";
       grep -i ' version=\|echo..#define ___STAMP_VERSION' include/makefile.in # XXX DEBUG -- REMOVE ME
     '';
     modules = true;

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
   propagatedBuildInputs = [

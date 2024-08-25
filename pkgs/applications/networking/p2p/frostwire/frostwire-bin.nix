@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME "${jre}"
 
     substituteInPlace $out/share/java/frostwire \
-      --replace "export JAVA_PROGRAM_DIR=/usr/lib/frostwire/jre/bin" \
+      --replace-fail "export JAVA_PROGRAM_DIR=/usr/lib/frostwire/jre/bin" \
         "export JAVA_PROGRAM_DIR=${jre}/bin/"
 
     substituteInPlace $out/share/java/frostwire.desktop \
-      --replace "Exec=/usr/bin/frostwire %U" "Exec=${placeholder "out"}/bin/frostwire %U"
+      --replace-fail "Exec=/usr/bin/frostwire %U" "Exec=${placeholder "out"}/bin/frostwire %U"
 
     runHook postInstall
   '';

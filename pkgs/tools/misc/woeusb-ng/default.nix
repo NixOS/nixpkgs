@@ -22,8 +22,8 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py WoeUSB/*.py miscellaneous/* \
-      --replace "/usr/local/" "$out/" \
-      --replace "/usr/" "$out/"
+      --replace-fail "/usr/local/" "$out/" \
+      --replace-fail "/usr/" "$out/"
   '';
 
   nativeBuildInputs = [

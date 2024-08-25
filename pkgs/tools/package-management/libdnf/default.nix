@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # https://github.com/rpm-software-management/libdnf/issues/1518
     substituteInPlace libdnf/libdnf.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
     substituteInPlace cmake/modules/FindPythonInstDir.cmake \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
+      --replace-fail "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
   '';
 
   cmakeFlags = [

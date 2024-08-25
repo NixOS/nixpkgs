@@ -23,7 +23,7 @@ buildNpmPackage rec {
   # TODO can be removed with next update
   postPatch = ''
     substituteInPlace package-lock.json \
-      --replace 50c7a1508cd9358757c30794e14ba777e6faa8aa b4cb32eb1734a2f73ba2d92743647b1a91c0e2a8
+      --replace-fail 50c7a1508cd9358757c30794e14ba777e6faa8aa b4cb32eb1734a2f73ba2d92743647b1a91c0e2a8
   '';
 
   makeCacheWritable = true;

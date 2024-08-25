@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 libexif ];
   postPatch = ''
     substituteInPlace config.mk \
-      --replace /usr/local $out
+      --replace-fail /usr/local $out
     substituteInPlace Makefile \
-      --replace "all: src man" "all: src man info"
+      --replace-fail "all: src man" "all: src man info"
   '';
   preInstall = ''
     mkdir -p $out/share/{app-install/desktop,applications,info,pixmaps}

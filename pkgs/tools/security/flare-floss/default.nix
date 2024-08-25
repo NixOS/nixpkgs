@@ -19,10 +19,10 @@ python3.pkgs.buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "==" ">="
+      --replace-fail "==" ">="
 
     substituteInPlace floss/main.py \
-      --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
+      --replace-fail 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
   '';
 
   build-system = with python3.pkgs; [

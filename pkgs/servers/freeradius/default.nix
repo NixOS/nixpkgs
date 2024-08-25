@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/main/checkrad.in \
-      --replace "/usr/bin/finger" "${bsd-finger}/bin/finger"
+      --replace-fail "/usr/bin/finger" "${bsd-finger}/bin/finger"
   '';
 
   # By default, freeradius will generate Diffie-Hellman parameters and

@@ -14,10 +14,10 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setoolkit \
-      --replace "src/core/config.baseline" "$out/share/social-engineer-toolkit/src/core/config.baseline"
+      --replace-fail "src/core/config.baseline" "$out/share/social-engineer-toolkit/src/core/config.baseline"
     substituteInPlace src/core/setcore.py \
-      --replace '"src/core/set.version"' "\"$out/share/social-engineer-toolkit/src/core/set.version\"" \
-      --replace "/opt/metasploit-framework" "${metasploit}/bin"
+      --replace-fail '"src/core/set.version"' "\"$out/share/social-engineer-toolkit/src/core/set.version\"" \
+      --replace-fail "/opt/metasploit-framework" "${metasploit}/bin"
   '';
 
   nativeBuildInputs = [

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Tries to load libpython3.so via g_module_open ().
     substituteInPlace meson.build \
-      --replace "get_option('prefix'), get_option('libdir')" "'${python3}/lib'"
+      --replace-fail "get_option('prefix'), get_option('libdir')" "'${python3}/lib'"
   '';
 
   PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";

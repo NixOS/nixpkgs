@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
 
   patchPhase = ''
     substituteInPlace manuskript/ui/welcome.py \
-      --replace sample-projects $out/share/${pname}/sample-projects
+      --replace-fail sample-projects $out/share/${pname}/sample-projects
   '';
 
   buildPhase = "";

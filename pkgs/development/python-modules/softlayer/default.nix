@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-        --replace "rich ==" "rich >="
+        --replace-fail "rich ==" "rich >="
   '';
 
   propagatedBuildInputs = [

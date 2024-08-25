@@ -22,10 +22,10 @@ python3.pkgs.buildPythonApplication rec {
   # - Fix version number cannot find error
   postPatch = ''
     substituteInPlace OutputCheck/Driver.py \
-      --replace "argparse.FileType('rU')" "argparse.FileType('r')"
+      --replace-fail "argparse.FileType('rU')" "argparse.FileType('r')"
 
     substituteInPlace tests/invalid-regex-syntax.smt2 \
-      --replace "unbalanced parenthesis" "missing ), unterminated subpattern"
+      --replace-fail "unbalanced parenthesis" "missing ), unterminated subpattern"
 
     echo ${version} > RELEASE-VERSION
   '';

@@ -35,7 +35,7 @@ in appimageTools.wrapAppImage {
     install -Dm444 ${appimageContents}/flexoptix-app.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/pixmaps
     substituteInPlace $out/share/applications/flexoptix-app.desktop \
-      --replace 'Exec=AppRun' "Exec=$out/bin/${pname} --"
+      --replace-fail 'Exec=AppRun' "Exec=$out/bin/${pname} --"
 
     # Add udev rules
     mkdir -p $out/lib/udev/rules.d

@@ -29,7 +29,7 @@ buildGoModule rec {
 
   preCheck = ''
     substituteInPlace scripts/test.py \
-      --replace 'dsq latest' 'dsq ${version}'
+      --replace-fail 'dsq latest' 'dsq ${version}'
   '';
 
   checkPhase = ''

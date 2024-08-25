@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/pkgconfig/toxcore.pc \
-      --replace '=''${prefix}/' '=' \
+      --replace-fail '=''${prefix}/' '=' \
 
   '';
   # We might be getting the wrong pkg-config file anyway:

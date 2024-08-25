@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for file in packages/main/src/tray-animate-icon.ts extensions/podman/src/util.ts packages/main/src/plugin/certificates.ts; do
       substituteInPlace "$file" \
-        --replace 'process.resourcesPath'          "'$out/share/lib/podman-desktop/resources'" \
-        --replace '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
+        --replace-fail 'process.resourcesPath'          "'$out/share/lib/podman-desktop/resources'" \
+        --replace-fail '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
     done
   '';
 

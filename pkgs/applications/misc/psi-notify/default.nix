@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D psi-notify $out/bin/psi-notify
-    substituteInPlace psi-notify.service --replace psi-notify $out/bin/psi-notify
+    substituteInPlace psi-notify.service --replace-fail psi-notify $out/bin/psi-notify
     install -D psi-notify.service $out/lib/systemd/user/psi-notify.service
 
     runHook postInstall

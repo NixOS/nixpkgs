@@ -53,7 +53,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     substituteInPlace $out/share/xgreeters/pantheon-greeter.desktop \
-      --replace "pantheon-greeter" "$out/bin/pantheon-greeter"
+      --replace-fail "pantheon-greeter" "$out/bin/pantheon-greeter"
   '';
 
   meta = with lib; {

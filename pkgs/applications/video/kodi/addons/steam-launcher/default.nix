@@ -15,9 +15,9 @@ buildKodiAddon {
 
   postInstall = ''
     substituteInPlace $out/share/kodi/addons/script.steam.launcher/resources/main.py \
-      --replace "\"which\"" "\"${which}/bin/which\"" \
-      --replace "\"xdotool\"" "\"${xdotool}/bin/xdotool\"" \
-      --replace "\"wmctrl\"" "\"${wmctrl}/bin/wmctrl\""
+      --replace-fail "\"which\"" "\"${which}/bin/which\"" \
+      --replace-fail "\"xdotool\"" "\"${xdotool}/bin/xdotool\"" \
+      --replace-fail "\"wmctrl\"" "\"${wmctrl}/bin/wmctrl\""
     ${dos2unix}/bin/dos2unix $out/share/kodi/addons/script.steam.launcher/resources/scripts/steam-launcher.sh
   '';
 

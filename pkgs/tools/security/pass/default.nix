@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Fix program name in --help
     substituteInPlace $out/bin/pass \
-      --replace 'PROGRAM="''${0##*/}"' "PROGRAM=pass"
+      --replace-fail 'PROGRAM="''${0##*/}"' "PROGRAM=pass"
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
 
     substituteInPlace src/password-store.sh \
-      --replace "@out@" "$out"
+      --replace-fail "@out@" "$out"
 
     # the turning
     sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \

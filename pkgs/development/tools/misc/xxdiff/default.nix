@@ -25,7 +25,7 @@ mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   postPatch = ''
-    substituteInPlace xxdiff.pro --replace ../bin ./bin
+    substituteInPlace xxdiff.pro --replace-fail ../bin ./bin
   '';
 
   preConfigure = ''

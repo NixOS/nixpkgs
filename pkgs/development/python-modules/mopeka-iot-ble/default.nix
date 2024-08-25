@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

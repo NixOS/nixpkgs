@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/share/applications/tidal-hifi.desktop \
-      --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
+      --replace-fail "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
   '';
 
   meta = {

@@ -24,14 +24,14 @@ buildPythonApplication rec {
   #   https://github.com/Kentzo/git-archive-all/issues/90
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace pycodestyle==2.5.0 "" \
-      --replace pytest==5.2.2 pytest \
-      --replace pytest-cov==2.8.1 "" \
-      --replace pytest-mock==1.11.2 pytest-mock \
-      --replace "--cov=git_archive_all --cov-report=term --cov-branch" "" \
-      --replace "filterwarnings = error" ""
+      --replace-fail pycodestyle==2.5.0 "" \
+      --replace-fail pytest==5.2.2 pytest \
+      --replace-fail pytest-cov==2.8.1 "" \
+      --replace-fail pytest-mock==1.11.2 pytest-mock \
+      --replace-fail "--cov=git_archive_all --cov-report=term --cov-branch" "" \
+      --replace-fail "filterwarnings = error" ""
     substituteInPlace test_git_archive_all.py \
-      --replace "import pycodestyle" ""
+      --replace-fail "import pycodestyle" ""
   '';
 
   nativeCheckInputs = [

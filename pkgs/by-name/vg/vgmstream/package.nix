@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace cmake/dependencies/audacious.cmake \
-      --replace "pkg_get_variable(AUDACIOUS_PLUGIN_DIR audacious plugin_dir)" "set(AUDACIOUS_PLUGIN_DIR \"$out/lib/audacious\")"
+      --replace-fail "pkg_get_variable(AUDACIOUS_PLUGIN_DIR audacious plugin_dir)" "set(AUDACIOUS_PLUGIN_DIR \"$out/lib/audacious\")"
   '';
 
   cmakeFlags = [

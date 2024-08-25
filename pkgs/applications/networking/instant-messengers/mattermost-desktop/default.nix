@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     rm $out/share/${pname}/create_desktop_file.sh
     mv Mattermost.desktop $out/share/applications/Mattermost.desktop
     substituteInPlace $out/share/applications/Mattermost.desktop \
-      --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
+      --replace-fail /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
     makeWrapper '${lib.getExe electron}' $out/bin/${pname} \
       --set-default ELECTRON_IS_DEV 0 \

@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   # Fix cross-compilation
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'ar q' '${stdenv.cc.targetPrefix}ar q' \
-      --replace 'strip' '${stdenv.cc.targetPrefix}strip'
-    ${lib.optionalString isCrossCompiling "substituteInPlace Makefile --replace ./s9 '${buildPackages.s9fes}/bin/s9'"}
+      --replace-fail 'ar q' '${stdenv.cc.targetPrefix}ar q' \
+      --replace-fail 'strip' '${stdenv.cc.targetPrefix}strip'
+    ${lib.optionalString isCrossCompiling "substituteInPlace Makefile --replace-fail ./s9 '${buildPackages.s9fes}/bin/s9'"}
   '';
 
   buildInputs = [ ncurses ];

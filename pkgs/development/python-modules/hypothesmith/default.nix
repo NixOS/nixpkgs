@@ -27,13 +27,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "lark-parser" "lark"
+      --replace-fail "lark-parser" "lark"
 
     substituteInPlace tox.ini \
-      --replace "--cov=hypothesmith" "" \
-      --replace "--cov-branch" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--cov-fail-under=100" ""
+      --replace-fail "--cov=hypothesmith" "" \
+      --replace-fail "--cov-branch" "" \
+      --replace-fail "--cov-report=term-missing:skip-covered" "" \
+      --replace-fail "--cov-fail-under=100" ""
   '';
 
   propagatedBuildInputs = [

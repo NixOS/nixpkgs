@@ -103,10 +103,10 @@ in stdenv.mkDerivation {
 
   preConfigure = ''
     substituteInPlace src/config.c \
-      --replace /usr/bin/tar ${gnutar}/bin/tar
+      --replace-fail /usr/bin/tar ${gnutar}/bin/tar
 
     substituteInPlace src/input/mpegts/scanfile.c \
-      --replace /usr/share/dvb ${dtv-scan-tables}/share/dvbv5
+      --replace-fail /usr/share/dvb ${dtv-scan-tables}/share/dvbv5
 
     # the version detection script `support/version` reads this file if it
     # exists, so let's just use that

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-march=native" ""
+      --replace-fail "-march=native" ""
   '';
 
   sourceRoot = "${finalAttrs.src.name}/cpp";

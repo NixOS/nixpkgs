@@ -56,8 +56,8 @@ compcert = mkCoqDerivation {
 
   postPatch = ''
     substituteInPlace ./configure \
-      --replace \$\{toolprefix\}ar 'ar' \
-      --replace '{toolprefix}gcc' '{toolprefix}cc'
+      --replace-fail \$\{toolprefix\}ar 'ar' \
+      --replace-fail '{toolprefix}gcc' '{toolprefix}cc'
   '';
 
   configurePhase = ''

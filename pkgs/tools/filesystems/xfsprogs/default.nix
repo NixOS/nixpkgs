@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     for file in scrub/{xfs_scrub_all.cron.in,xfs_scrub@.service.in,xfs_scrub_all.service.in}; do
       substituteInPlace "$file" \
-        --replace '@sbindir@' '/run/current-system/sw/bin'
+        --replace-fail '@sbindir@' '/run/current-system/sw/bin'
     done
     patchShebangs ./install-sh
   '';

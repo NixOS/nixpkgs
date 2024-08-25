@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -R bin config lib modules plugins $out
 
     substituteInPlace $out/bin/opensearch \
-      --replace 'bin/opensearch-keystore' "$out/bin/opensearch-keystore"
+      --replace-fail 'bin/opensearch-keystore' "$out/bin/opensearch-keystore"
 
     wrapProgram $out/bin/opensearch \
       --prefix PATH : "${lib.makeBinPath [ gnugrep coreutils ]}" \

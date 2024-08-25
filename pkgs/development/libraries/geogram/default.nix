@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace cmake/platforms/*/config.cmake \
-      --replace "-m64" ""
+      --replace-fail "-m64" ""
   '';
 
   postBuild = ''

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace data/spice-vdagent.desktop --replace /usr $out
+    substituteInPlace data/spice-vdagent.desktop --replace-fail /usr $out
   '';
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsa-lib spice-protocol glib libdrm

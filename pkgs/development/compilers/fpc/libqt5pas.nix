@@ -8,7 +8,7 @@ mkDerivation {
 
   postPatch = ''
     substituteInPlace Qt5Pas.pro \
-      --replace 'target.path = $$[QT_INSTALL_LIBS]' "target.path = $out/lib"
+      --replace-fail 'target.path = $$[QT_INSTALL_LIBS]' "target.path = $out/lib"
   '';
 
   nativeBuildInputs = [ qmake ];

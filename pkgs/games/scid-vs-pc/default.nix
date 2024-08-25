@@ -11,8 +11,8 @@ tcl.mkTclDerivation rec {
 
   postPatch = ''
     substituteInPlace configure Makefile.conf \
-      --replace "~/.fonts" "$out/share/fonts/truetype/Scid" \
-      --replace "which fc-cache" "false"
+      --replace-fail "~/.fonts" "$out/share/fonts/truetype/Scid" \
+      --replace-fail "which fc-cache" "false"
   '';
 
   nativeBuildInputs = [ makeWrapper which ];

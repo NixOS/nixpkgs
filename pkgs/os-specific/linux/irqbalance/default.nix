@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       mkdir -p $out/lib/systemd/system
       grep -vi "EnvironmentFile" misc/irqbalance.service >$out/lib/systemd/system/irqbalance.service
       substituteInPlace $out/lib/systemd/system/irqbalance.service \
-        --replace /usr/sbin/irqbalance $out/bin/irqbalance \
-        --replace ' $IRQBALANCE_ARGS' ""
+        --replace-fail /usr/sbin/irqbalance $out/bin/irqbalance \
+        --replace-fail ' $IRQBALANCE_ARGS' ""
     '';
 
   meta = with lib; {

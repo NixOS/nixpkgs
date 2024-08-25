@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # do not set sticky bit in nix store.
-    substituteInPlace Makefile --replace 2750 0750
+    substituteInPlace Makefile --replace-fail 2750 0750
   '';
 
   preConfigure = ''
-    substituteInPlace src/logtail --replace "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
-    substituteInPlace src/logtail2 --replace "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
+    substituteInPlace src/logtail --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
+    substituteInPlace src/logtail2 --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
 
     sed -i -e 's|! -f /usr/bin/lockfile|! -f ${lockfileProgs}/bin/lockfile|' \
            -e 's|^\([ \t]*\)lockfile-|\1${lockfileProgs}/bin/lockfile-|' \

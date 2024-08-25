@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'use_2to3': True," ""
+      --replace-fail "'use_2to3': True," ""
 
     substituteInPlace setup3lib.py \
-      --replace "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
+      --replace-fail "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
   '';
 
   # 2to3 is removed from Python 3.13, so always use Python 3.12 2to3 for now.

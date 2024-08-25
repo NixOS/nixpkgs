@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   # from nixpkgs during tests.
   preCheck = ''
     substituteInPlace src/core/process.rs \
-      --replace /usr/bin/which '${which}/bin/which'
+      --replace-fail /usr/bin/which '${which}/bin/which'
     substituteInPlace src/sampler/mod.rs \
-      --replace /usr/bin/which '${which}/bin/which'
+      --replace-fail /usr/bin/which '${which}/bin/which'
   '';
 
   checkFlags = [

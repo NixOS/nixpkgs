@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace camlp4/META.in \
-    --replace +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
+    --replace-fail +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
   '';
 
   makeFlags = [ "all" ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace contacts.m \
-      --replace "int peopleSort" "long peopleSort"
+      --replace-fail "int peopleSort" "long peopleSort"
   '';
 
   nativeBuildInputs = [ xcbuildHook ];

@@ -41,7 +41,7 @@ buildPythonPackage rec {
   postPatch = ''
     # pythonRelaxDeps doesn't work
     substituteInPlace setup.py \
-      --replace "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0"
+      --replace-fail "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0"
   '';
 
   nativeBuildInputs = [

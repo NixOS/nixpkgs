@@ -37,27 +37,27 @@ stdenv.mkDerivation rec {
     interpreter=${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2
     patchelf --set-interpreter "$interpreter" "$dir/cupswrapper/brcupsconfpt1"
     substituteInPlace $dir/cupswrapper/cupswrappermfc465cn \
-      --replace "mkdir -p /usr" ": # mkdir -p /usr" \
-      --replace '/''${printer_model}' "/mfc465cn" \
-      --replace 'br''${printer_model}' "brmfc465cn" \
-      --replace 'brlpdwrapper''${printer_model}' "brlpdwrappermfc465cn" \
-      --replace 'filter''${printer_model}' "filtermfc465cn" \
-      --replace ' ''${printer_name}' " MFC465CN" \
-      --replace ' ''${device_name}' " MFC-465CN" \
-      --replace '(''${device_name}' "(MFC-465CN" \
-      --replace ':''${device_name}' ":MFC-465CN" \
-      --replace '/''${device_name}' "/MFC-465CN" \
-      --replace 'BR''${pcfilename}' "BR465" \
-      --replace '/''${device_model}' "/Printer" \
-      --replace '/usr/lib64/cups/filter/brlpdwrappermfc465cn' "$out/lib/cups/filter/brlpdwrappermfc465cn" \
-      --replace '/usr/local/Brother/Printer/mfc465cn/lpd/filtermfc465cn' "$lpr/lpd/filtermfc465cn" \
-      --replace '/usr/share/ppd/brmfc465cn.ppd' "$dir/cupswrapper/brmfc465.ppd" \
-      --replace '/usr/share/cups/model/brmfc465cn.ppd' "$dir/cupswrapper/brmfc465.ppd" \
-      --replace '/usr/lib/cups/filter/brlpdwrappermfc465cn' "$out/usr/lib/cups/filter/brlpdwrappermfc465cn" \
-      --replace 'nup="psnup' "nup=\"${psutils}/bin/psnup" \
-      --replace '/usr/bin/psnup' "${psutils}/bin/psnup" \
-      --replace '/usr/local/Brother/Printer/mfc465cn/cupswrapper/brcupsconfpt1' "$dir/cupswrapper/brcupsconfpt1" \
-      --replace '/usr/local/Brother/Printer/mfc465cn/inf' "$lpr/inf"
+      --replace-fail "mkdir -p /usr" ": # mkdir -p /usr" \
+      --replace-fail '/''${printer_model}' "/mfc465cn" \
+      --replace-fail 'br''${printer_model}' "brmfc465cn" \
+      --replace-fail 'brlpdwrapper''${printer_model}' "brlpdwrappermfc465cn" \
+      --replace-fail 'filter''${printer_model}' "filtermfc465cn" \
+      --replace-fail ' ''${printer_name}' " MFC465CN" \
+      --replace-fail ' ''${device_name}' " MFC-465CN" \
+      --replace-fail '(''${device_name}' "(MFC-465CN" \
+      --replace-fail ':''${device_name}' ":MFC-465CN" \
+      --replace-fail '/''${device_name}' "/MFC-465CN" \
+      --replace-fail 'BR''${pcfilename}' "BR465" \
+      --replace-fail '/''${device_model}' "/Printer" \
+      --replace-fail '/usr/lib64/cups/filter/brlpdwrappermfc465cn' "$out/lib/cups/filter/brlpdwrappermfc465cn" \
+      --replace-fail '/usr/local/Brother/Printer/mfc465cn/lpd/filtermfc465cn' "$lpr/lpd/filtermfc465cn" \
+      --replace-fail '/usr/share/ppd/brmfc465cn.ppd' "$dir/cupswrapper/brmfc465.ppd" \
+      --replace-fail '/usr/share/cups/model/brmfc465cn.ppd' "$dir/cupswrapper/brmfc465.ppd" \
+      --replace-fail '/usr/lib/cups/filter/brlpdwrappermfc465cn' "$out/usr/lib/cups/filter/brlpdwrappermfc465cn" \
+      --replace-fail 'nup="psnup' "nup=\"${psutils}/bin/psnup" \
+      --replace-fail '/usr/bin/psnup' "${psutils}/bin/psnup" \
+      --replace-fail '/usr/local/Brother/Printer/mfc465cn/cupswrapper/brcupsconfpt1' "$dir/cupswrapper/brcupsconfpt1" \
+      --replace-fail '/usr/local/Brother/Printer/mfc465cn/inf' "$lpr/inf"
     # Create the PPD file from the cupswrapper file
     sed -n '/ENDOFPPDFILE1/,/ENDOFPPDFILE1/p' "$dir/cupswrapper/cupswrappermfc465cn" | head -n -1 | tail -n +2 > $dir/cupswrapper/brmfc465.ppd
     sed -n '/ENDOFPPDFILE_END/,/ENDOFPPDFILE_END/p' "$dir/cupswrapper/cupswrappermfc465cn" | head -n -1 | tail -n +2 >> $dir/cupswrapper/brmfc465.ppd

@@ -43,7 +43,7 @@ in {
       rev = "v${version}";
     };
 
-    postPatch = "substituteInPlace Makefile --replace /bin/true true";
+    postPatch = "substituteInPlace Makefile --replace-fail /bin/true true";
 
     makeFlags = [ "DESTDIR=$(out)" ];
 

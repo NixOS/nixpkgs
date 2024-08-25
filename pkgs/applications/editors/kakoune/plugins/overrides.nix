@@ -29,7 +29,7 @@ self: super: {
       fi
 
       substituteInPlace $out/share/kak/autoload/plugins/fzf-kak/rc/fzf.kak \
-        --replace \'fzf\' \'"$fzfImpl"\'
+        --replace-fail \'fzf\' \'"$fzfImpl"\'
     '';
   });
 
@@ -78,10 +78,10 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
     installPhase = ''
       mkdir -p $out/bin $out/share/kak/autoload/plugins/
       substitute rc/plumb.kak $out/share/kak/autoload/plugins/plumb.kak \
-        --replace '9 plumb' '${plan9port}/bin/9 plumb'
+        --replace-fail '9 plumb' '${plan9port}/bin/9 plumb'
       substitute edit-client $out/bin/edit-client \
-        --replace '9 9p' '${plan9port}/bin/9 9p' \
-        --replace 'kak -p' '${kakoune-unwrapped}/bin/kak -p'
+        --replace-fail '9 9p' '${plan9port}/bin/9 9p' \
+        --replace-fail 'kak -p' '${kakoune-unwrapped}/bin/kak -p'
       chmod +x $out/bin/edit-client
     '';
 
@@ -99,9 +99,9 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
       mkdir -p $out/bin
       mv $out/share/kak/autoload/plugins/kakoune-rainbow/bin/kak-rainbow.scm $out/bin
       substituteInPlace $out/bin/kak-rainbow.scm \
-        --replace '/usr/bin/env -S guile' '${guile}/bin/guile'
+        --replace-fail '/usr/bin/env -S guile' '${guile}/bin/guile'
       substituteInPlace $out/share/kak/autoload/plugins/kakoune-rainbow/rainbow.kak \
-        --replace '%sh{dirname "$kak_source"}' "'$out'"
+        --replace-fail '%sh{dirname "$kak_source"}' "'$out'"
     '';
   });
 
@@ -128,7 +128,7 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
   powerline-kak = super.powerline-kak.overrideAttrs(oldAttrs: rec {
     preFixup = ''
       substituteInPlace $out/share/kak/autoload/plugins/powerline-kak/rc/modules/git.kak \
-        --replace ' git ' ' ${git}/bin/git '
+        --replace-fail ' git ' ' ${git}/bin/git '
     '';
   });
 

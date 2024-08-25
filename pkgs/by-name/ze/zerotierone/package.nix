@@ -58,11 +58,11 @@ in stdenv.mkDerivation {
 
     patchShebangs ./doc/build.sh
     substituteInPlace ./doc/build.sh \
-      --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
+      --replace-fail '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
     substituteInPlace ./make-linux.mk \
-      --replace '-march=armv6zk' "" \
-      --replace '-mcpu=arm1176jzf-s' ""
+      --replace-fail '-march=armv6zk' "" \
+      --replace-fail '-mcpu=arm1176jzf-s' ""
   '';
 
   nativeBuildInputs = [

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # only relevant to python < 3.4
   postPatch = ''
     substituteInPlace setup.py \
-        --replace ', "pathlib2"' ' '
+        --replace-fail ', "pathlib2"' ' '
   '';
 
   propagatedBuildInputs = [

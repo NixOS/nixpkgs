@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [ cmake ];

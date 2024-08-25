@@ -5,6 +5,6 @@ mkDerivation {
   extraPaths = [ "sys" ];
 
   postPatch = ''
-    substituteInPlace $BSDSRCDIR/bin/cp/Makefile --replace 'tests' ""
+    substituteInPlace $BSDSRCDIR/bin/cp/Makefile --replace-fail 'tests' ""
   '';
 }

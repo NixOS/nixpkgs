@@ -8,7 +8,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
 
   prePatch = ''
     substituteInPlace tzlink.c \
-      --replace '#include <xpc/xpc.h>' ""
+      --replace-fail '#include <xpc/xpc.h>' ""
   '';
 
   xcbuildFlags = [ "-target" "util" ];

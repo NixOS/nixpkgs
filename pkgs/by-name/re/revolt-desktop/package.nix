@@ -52,7 +52,7 @@
           cp -a ${final.appimageContents}/usr/share/icons $out/share/icons
 
           substituteInPlace $out/share/applications/revolt-desktop.desktop \
-            --replace 'Exec=AppRun' 'Exec=revolt-desktop'
+            --replace-fail 'Exec=AppRun' 'Exec=revolt-desktop'
 
           runHook postInstall
         '';

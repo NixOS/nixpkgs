@@ -13,8 +13,8 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "4.03") ''
     substituteInPlace extract_consts.ml \
-      --replace String.lowercase String.lowercase_ascii \
-      --replace String.capitalize String.capitalize_ascii
+      --replace-fail String.lowercase String.lowercase_ascii \
+      --replace-fail String.capitalize String.capitalize_ascii
   '';
 
   nativeBuildInputs = [ pkg-config ocaml ];

@@ -19,12 +19,12 @@ tcl.mkTclDerivation {
 
   postPatch = ''
     for file in $(find library/demos/. -type f ! -name "*.*"); do
-      substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
+      substituteInPlace $file --replace-fail "exec wish" "exec $out/bin/wish"
     done
   ''
   + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
     substituteInPlace unix/configure* \
-      --replace " -framework UniformTypeIdentifiers" ""
+      --replace-fail " -framework UniformTypeIdentifiers" ""
   '';
 
   postInstall = ''

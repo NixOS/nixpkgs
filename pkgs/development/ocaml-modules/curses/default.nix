@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   postPatch = ''
-    substituteInPlace curses.ml --replace "pp gcc" "pp $CC"
+    substituteInPlace curses.ml --replace-fail "pp gcc" "pp $CC"
   '';
 
   buildPhase = "make all opt";

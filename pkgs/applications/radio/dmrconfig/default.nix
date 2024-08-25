@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile \
-      --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
+      --replace-fail /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
   makeFlags = [ "VERSION=${version}" "GITCOUNT=0" ];

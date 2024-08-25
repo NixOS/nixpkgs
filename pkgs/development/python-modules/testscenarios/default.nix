@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "buffer = 1" "" \
-      --replace "catch = 1" ""
+      --replace-fail "buffer = 1" "" \
+      --replace-fail "catch = 1" ""
   '';
 
   nativeBuildInputs = [

@@ -19,8 +19,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ndugyiAYPDyue2Ajxx22BNvYc9iBTxZqP5OxaqmC7U0=";
 
   postPatch = ''
-    substituteInPlace data/supergfxd.service --replace /usr/bin/supergfxd $out/bin/supergfxd
-    substituteInPlace data/99-nvidia-ac.rules --replace /usr/bin/systemctl ${systemd}/bin/systemctl
+    substituteInPlace data/supergfxd.service --replace-fail /usr/bin/supergfxd $out/bin/supergfxd
+    substituteInPlace data/99-nvidia-ac.rules --replace-fail /usr/bin/systemctl ${systemd}/bin/systemctl
   '';
 
   nativeBuildInputs = [ pkg-config ];

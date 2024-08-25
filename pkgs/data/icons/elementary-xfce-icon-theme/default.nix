@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   postPatch = ''
-    substituteInPlace svgtopng/Makefile --replace "-O0" "-O"
+    substituteInPlace svgtopng/Makefile --replace-fail "-O0" "-O"
   '';
 
   postInstall = ''

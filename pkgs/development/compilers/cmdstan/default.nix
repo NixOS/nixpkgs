@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace stan/lib/stan_math/make/libraries \
-      --replace "/usr/bin/env bash" "bash"
+      --replace-fail "/usr/bin/env bash" "bash"
   '';
 
   nativeBuildInputs = [

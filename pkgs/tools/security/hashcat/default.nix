@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
      # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
-      --replace "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
-      --replace "/usr/bin/ar" "ar" \
-      --replace "/usr/bin/sed" "sed" \
-      --replace '-i ""' '-i'
+      --replace-fail "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
+      --replace-fail "/usr/bin/ar" "ar" \
+      --replace-fail "/usr/bin/sed" "sed" \
+      --replace-fail '-i ""' '-i'
   '';
 
   nativeBuildInputs = [

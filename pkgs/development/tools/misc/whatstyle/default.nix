@@ -12,8 +12,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # Fix references to previous version, to avoid confusion:
   postPatch = ''
-    substituteInPlace setup.py --replace 0.1.6 ${version}
-    substituteInPlace ${pname}.py --replace 0.1.6 ${version}
+    substituteInPlace setup.py --replace-fail 0.1.6 ${version}
+    substituteInPlace ${pname}.py --replace-fail 0.1.6 ${version}
   '';
 
   nativeCheckInputs = [ clang-unwrapped /* clang-format */ ];

@@ -70,13 +70,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "urwid==1.3.0" "urwid" \
-      --replace "future==0.14.3" "future" \
-      --replace "tweepy==3.3.0" "tweepy"
+      --replace-fail "urwid==1.3.0" "urwid" \
+      --replace-fail "future==0.14.3" "future" \
+      --replace-fail "tweepy==3.3.0" "tweepy"
     substituteInPlace tests/test_config.py \
-      --replace "config.generate_config_file.assert_called_once()" "assert config.generate_config_file.call_count == 1"
+      --replace-fail "config.generate_config_file.assert_called_once()" "assert config.generate_config_file.call_count == 1"
     substituteInPlace tests/test_meta.py \
-      --replace "self.observer.update.assert_called_once()" "assert self.observer.update.call_count == 1"
+      --replace-fail "self.observer.update.assert_called_once()" "assert self.observer.update.call_count == 1"
   '';
 
   checkPhase = ''

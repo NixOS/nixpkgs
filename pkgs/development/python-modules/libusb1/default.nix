@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace usb1/_libusb1.py --replace \
+    substituteInPlace usb1/_libusb1.py --replace-fail \
       "ctypes.util.find_library(base_name)" \
       "'${libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';

@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   '' + optionalString enableX11 ''
     cd x11
     substituteInPlace Makefile.am \
-      --replace 'GIT_VERSION :=' 'GIT_VERSION ?='
+      --replace-fail 'GIT_VERSION :=' 'GIT_VERSION ?='
     ./autogen.sh ${x11ConfigureFlags}
     ./configure ${x11ConfigureFlags}
     cd ..
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
     cd sdl2
     for mkfile in ${sdlMakefiles}; do
       substituteInPlace $mkfile \
-        --replace 'GIT_VERSION :=' 'GIT_VERSION ?='
+        --replace-fail 'GIT_VERSION :=' 'GIT_VERSION ?='
       echo make -f $mkfile $buildFlags ${sdlBuildFlags} clean
       make -f $mkfile $buildFlags ${sdlBuildFlags} clean
       make -f $mkfile $buildFlags ${sdlBuildFlags}

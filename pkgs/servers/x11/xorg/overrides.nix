@@ -171,7 +171,7 @@ self: super:
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
     preConfigure = ''
-      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
+      substituteInPlace src/Makefile.in --replace-fail -F/System -F${ApplicationServices}
     '';
   });
 
@@ -893,7 +893,7 @@ self: super:
         preConfigure = ''
           mkdir -p $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
-          substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${ApplicationServices}
+          substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace-fail -F/System -F${ApplicationServices}
         '';
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled
@@ -945,12 +945,12 @@ self: super:
       export XPROTO_CFLAGS=" "
       export XPROTO_LIBS=" "
       substituteInPlace lndir.c \
-        --replace '<X11/Xos.h>' '<string.h>' \
-        --replace '<X11/Xfuncproto.h>' '<unistd.h>' \
-        --replace '_X_ATTRIBUTE_PRINTF(1,2)' '__attribute__((__format__(__printf__,1,2)))' \
-        --replace '_X_ATTRIBUTE_PRINTF(2,3)' '__attribute__((__format__(__printf__,2,3)))' \
-        --replace '_X_NORETURN' '__attribute__((noreturn))' \
-        --replace 'n_dirs--;' ""
+        --replace-fail '<X11/Xos.h>' '<string.h>' \
+        --replace-fail '<X11/Xfuncproto.h>' '<unistd.h>' \
+        --replace-fail '_X_ATTRIBUTE_PRINTF(1,2)' '__attribute__((__format__(__printf__,1,2)))' \
+        --replace-fail '_X_ATTRIBUTE_PRINTF(2,3)' '__attribute__((__format__(__printf__,2,3)))' \
+        --replace-fail '_X_NORETURN' '__attribute__((noreturn))' \
+        --replace-fail 'n_dirs--;' ""
     '';
     meta = attrs.meta // { mainProgram = "lndir"; };
   });
@@ -997,14 +997,14 @@ self: super:
     ];
     postPatch = ''
       # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
-      substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
+      substituteInPlace Makefile.in --replace-fail "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
     '';
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.xauth ]
                          ++ lib.optionals isDarwin [ xorg.libX11 xorg.xorgproto ];
     postFixup = ''
       substituteInPlace $out/bin/startx \
-        --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc \
-        --replace $out/etc/X11/xinit/xinitrc /etc/X11/xinit/xinitrc
+        --replace-fail $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc \
+        --replace-fail $out/etc/X11/xinit/xinitrc /etc/X11/xinit/xinitrc
     '';
     meta = attrs.meta // { mainProgram = "xinit"; };
   });
@@ -1084,7 +1084,7 @@ self: super:
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
     postInstall = lib.optionalString stdenv.isDarwin ''
-      substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
+      substituteInPlace $out/lib/X11/config/darwin.cf --replace-fail "/usr/bin/" ""
     '';
   });
 

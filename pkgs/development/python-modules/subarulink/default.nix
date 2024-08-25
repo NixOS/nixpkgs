@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=subarulink" ""
+      --replace-fail "--cov=subarulink" ""
   '';
 
   __darwinAllowLocalNetworking = true;

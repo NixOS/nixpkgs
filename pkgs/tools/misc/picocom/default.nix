@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '.picocom_history' '.cache/picocom_history'
+      --replace-fail '.picocom_history' '.cache/picocom_history'
 
     substituteInPlace picocom.c \
-      --replace '"rz -vv -E"' '"${lrzsz}/bin/rz -vv -E"' \
-      --replace '"sz -vv"' '"${lrzsz}/bin/sz -vv"'
+      --replace-fail '"rz -vv -E"' '"${lrzsz}/bin/rz -vv -E"' \
+      --replace-fail '"sz -vv"' '"${lrzsz}/bin/sz -vv"'
   '';
 
   enableParallelBuilding = true;

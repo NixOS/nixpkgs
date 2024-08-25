@@ -159,10 +159,10 @@ stdenv.mkDerivation rec {
   patchPhase = lib.optionalString enableMacOSGuests ''
     cp -R "${unlockerSrc}" unlocker/
 
-    substituteInPlace unlocker/unlocker.py --replace \
+    substituteInPlace unlocker/unlocker.py --replace-fail \
       "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
 
-    substituteInPlace unlocker/unlocker.py --replace \
+    substituteInPlace unlocker/unlocker.py --replace-fail \
       "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
   '';
 

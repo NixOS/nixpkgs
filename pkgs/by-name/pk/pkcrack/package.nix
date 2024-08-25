@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     # malloc.h is not needed because stdlib.h is already included.
     # On macOS, malloc.h does not even exist, resulting in an error.
     substituteInPlace exfunc.c extract.c main.c readhead.c zipdecrypt.c \
-      --replace '#include <malloc.h>' ""
+      --replace-fail '#include <malloc.h>' ""
   '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

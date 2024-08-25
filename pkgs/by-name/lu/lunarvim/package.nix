@@ -81,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     " bin/lvim
 
     substituteInPlace bin/lvim \
-      --replace NVIM_APPNAME_VAR lvim \
-      --replace RUNTIME_DIR_VAR \$HOME/.local/share/lvim \
-      --replace CONFIG_DIR_VAR \$HOME/.config/lvim \
-      --replace CACHE_DIR_VAR \$HOME/.cache/lvim \
-      --replace BASE_DIR_VAR $out/share/lvim \
-      --replace nvim ${neovim}/bin/nvim
+      --replace-fail NVIM_APPNAME_VAR lvim \
+      --replace-fail RUNTIME_DIR_VAR \$HOME/.local/share/lvim \
+      --replace-fail CONFIG_DIR_VAR \$HOME/.config/lvim \
+      --replace-fail CACHE_DIR_VAR \$HOME/.cache/lvim \
+      --replace-fail BASE_DIR_VAR $out/share/lvim \
+      --replace-fail nvim ${neovim}/bin/nvim
 
     # Allow language servers to be overridden by appending instead of prepending
     # the mason.nvim path.

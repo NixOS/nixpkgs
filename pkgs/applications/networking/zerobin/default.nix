@@ -39,10 +39,10 @@ python3Packages.buildPythonApplication rec {
 
     # relax version constraints of some dependencies
     substituteInPlace setup.cfg \
-      --replace "clize==4.1.1" "clize" \
-      --replace "bleach==3.1.5" "bleach>=3.1.5,<6" \
-      --replace "bottle==0.12.18" "bottle>=0.12.18,<1" \
-      --replace "Paste==3.4.3" "Paste>=3.4.3,<4"
+      --replace-fail "clize==4.1.1" "clize" \
+      --replace-fail "bleach==3.1.5" "bleach>=3.1.5,<6" \
+      --replace-fail "bottle==0.12.18" "bottle>=0.12.18,<1" \
+      --replace-fail "Paste==3.4.3" "Paste>=3.4.3,<4"
   '';
 
   buildPhase = ''

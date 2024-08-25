@@ -23,28 +23,28 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace lib/ClusterShell/Worker/Ssh.py \
-      --replace '"ssh"' '"${openssh}/bin/ssh"' \
-      --replace '"scp"' '"${openssh}/bin/scp"'
+      --replace-fail '"ssh"' '"${openssh}/bin/ssh"' \
+      --replace-fail '"scp"' '"${openssh}/bin/scp"'
 
     substituteInPlace lib/ClusterShell/Worker/fastsubprocess.py \
-      --replace '"/bin/sh"' '"${bash}/bin/sh"'
+      --replace-fail '"/bin/sh"' '"${bash}/bin/sh"'
 
     for f in tests/*; do
       substituteInPlace $f \
-        --replace '/bin/hostname'   '${hostname}/bin/hostname' \
-        --replace '/bin/sleep'      'sleep' \
-        --replace '/bin/echo'       'echo' \
-        --replace '/bin/uname'      'uname' \
-        --replace '/bin/false'      'false' \
-        --replace '/bin/true'       'true' \
-        --replace '/usr/bin/printf' 'printf'
+        --replace-fail '/bin/hostname'   '${hostname}/bin/hostname' \
+        --replace-fail '/bin/sleep'      'sleep' \
+        --replace-fail '/bin/echo'       'echo' \
+        --replace-fail '/bin/uname'      'uname' \
+        --replace-fail '/bin/false'      'false' \
+        --replace-fail '/bin/true'       'true' \
+        --replace-fail '/usr/bin/printf' 'printf'
     done
 
     # Fix warnings
     substituteInPlace lib/ClusterShell/Task.py \
-      --replace "notifyAll" "notify_all"
+      --replace-fail "notifyAll" "notify_all"
     substituteInPlace tests/TaskPortTest.py lib/ClusterShell/Task.py \
-      --replace "currentThread" "current_thread"
+      --replace-fail "currentThread" "current_thread"
   '';
 
   propagatedBuildInputs = [ pyyaml ];

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out/share/xgreeters/lightdm-mini-greeter.desktop" \
-      --replace "Exec=lightdm-mini-greeter" "Exec=$out/bin/lightdm-mini-greeter"
+      --replace-fail "Exec=lightdm-mini-greeter" "Exec=$out/bin/lightdm-mini-greeter"
   '';
 
   passthru.xgreeters = linkFarm "lightdm-mini-greeter-xgreeters" [{

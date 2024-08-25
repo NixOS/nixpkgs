@@ -73,7 +73,7 @@ import ./make-test-python.nix  ({ pkgs, lib, ... }: rec {
       # No STONITH device
       node1.succeed("crm_attribute -t crm_config -n stonith-enabled -v false")
       # Configure the cat resource
-      node1.succeed("cibadmin --replace --scope resources --xml-file ${resources}")
+      node1.succeed("cibadmin --replace-fail --scope resources --xml-file ${resources}")
 
       # wait until the service is started
       while True:

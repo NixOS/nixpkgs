@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'graphviz = ">=0.13.2,<0.20.0"' 'graphviz = "*"'
+      --replace-fail 'graphviz = ">=0.13.2,<0.20.0"' 'graphviz = "*"'
   '';
 
   preConfigure = ''

@@ -23,7 +23,7 @@ buildGoModule rec {
 
   prePatch = ''
     for file in main.go tools.go; do
-      substituteInPlace $file --replace '/usr/share/nwg-menu' $out/share
+      substituteInPlace $file --replace-fail '/usr/share/nwg-menu' $out/share
     done
   '';
 

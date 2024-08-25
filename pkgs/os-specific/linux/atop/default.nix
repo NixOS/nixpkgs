@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       findutils=${findutils} systemd=${systemd} substituteAllInPlace "$f"
     done
 
-    substituteInPlace Makefile --replace 'chown' 'true'
-    substituteInPlace Makefile --replace 'chmod 04711' 'chmod 0711'
+    substituteInPlace Makefile --replace-fail 'chown' 'true'
+    substituteInPlace Makefile --replace-fail 'chmod 04711' 'chmod 0711'
   '';
 
   preInstall = ''

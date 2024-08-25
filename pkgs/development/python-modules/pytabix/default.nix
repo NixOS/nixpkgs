@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
   preCheck = ''
     substituteInPlace test/test.py \
-      --replace 'test_remote_file' 'dont_test_remote_file'
+      --replace-fail 'test_remote_file' 'dont_test_remote_file'
   '';
   pythonImportsCheck = [ "tabix" ];
 

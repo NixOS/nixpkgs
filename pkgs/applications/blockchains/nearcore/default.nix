@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace neard/build.rs \
-      --replace 'get_git_version()?' '"nix:${version}"'
+      --replace-fail 'get_git_version()?' '"nix:${version}"'
   '';
 
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";

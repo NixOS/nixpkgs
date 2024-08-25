@@ -37,10 +37,10 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     substituteInPlace contracts/vesting/build.rs \
-      --replace 'vergen(config).expect("failed to extract build metadata")' '()'
+      --replace-fail 'vergen(config).expect("failed to extract build metadata")' '()'
 
     substituteInPlace common/bin-common/build.rs \
-      --replace 'vergen(config).expect("failed to extract build metadata")' '()'
+      --replace-fail 'vergen(config).expect("failed to extract build metadata")' '()'
   '';
 
   nativeBuildInputs = [ pkg-config ];

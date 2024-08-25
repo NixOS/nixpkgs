@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     PATH=$TMPDIR:$PATH
 
     for i in $(find . -name Makefile.in); do
-      substituteInPlace $i --replace "install-data-local:" "disabled:" ;
+      substituteInPlace $i --replace-fail "install-data-local:" "disabled:" ;
     done
   '';
 
@@ -56,20 +56,20 @@ stdenv.mkDerivation rec {
 
     # Dpkg commands sometimes calls out to shell commands
     substituteInPlace lib/dpkg/dpkg.h \
-       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
-       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
-       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
-       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
-       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
-       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
-       --replace '"dpkg"' \"$out/bin/dpkg\" \
-       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
-       --replace '"rm"' \"${coreutils}/bin/rm\" \
-       --replace '"cat"' \"${coreutils}/bin/cat\" \
-       --replace '"diff"' \"${diffutils}/bin/diff\"
+       --replace-fail '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+       --replace-fail '"dpkg-split"' \"$out/bin/dpkg-split\" \
+       --replace-fail '"dpkg-query"' \"$out/bin/dpkg-query\" \
+       --replace-fail '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+       --replace-fail '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+       --replace-fail '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+       --replace-fail '"dpkg"' \"$out/bin/dpkg\" \
+       --replace-fail '"debsig-verify"' \"$out/bin/debsig-verify\" \
+       --replace-fail '"rm"' \"${coreutils}/bin/rm\" \
+       --replace-fail '"cat"' \"${coreutils}/bin/cat\" \
+       --replace-fail '"diff"' \"${diffutils}/bin/diff\"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace src/main/help.c \
-       --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
+       --replace-fail '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
 
   buildInputs = [ perl zlib bzip2 xz zstd libmd ]
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     ''
       for i in $out/bin/*; do
         if head -n 1 $i | grep -q perl; then
-          substituteInPlace $i --replace \
+          substituteInPlace $i --replace-fail \
             "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
         fi
       done

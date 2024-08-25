@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     # c99 makes isnan valid for float and double
     substituteInPlace include/EST_math.h \
-      --replace '__isnanf(X)' 'isnan(X)'
+      --replace-fail '__isnanf(X)' 'isnan(X)'
   '';
 
   installPhase = ''

@@ -47,9 +47,9 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/wifi-qr.desktop \
-      --replace "Icon=wifi-qr.svg" "Icon=wifi-qr"
+      --replace-fail "Icon=wifi-qr.svg" "Icon=wifi-qr"
     substituteInPlace src/wifi-qr \
-      --replace "/usr/share/doc/wifi-qr/copyright" "$out/share/doc/wifi-qr/copyright"
+      --replace-fail "/usr/share/doc/wifi-qr/copyright" "$out/share/doc/wifi-qr/copyright"
   '';
 
   installPhase = ''

@@ -34,7 +34,7 @@ symlinkJoin {
       # so we need to fix the path to reference $out instead.
       rm "$out/${fishCompletion}"
       substitute "${zathura_core.out}/${fishCompletion}" "$out/${fishCompletion}" \
-        --replace "${zathura_core.out}" "$out"
+        --replace-fail "${zathura_core.out}" "$out"
     '';
 
   meta = with lib; {

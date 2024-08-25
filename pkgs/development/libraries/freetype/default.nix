@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     # makeWrapper doesn't cross-compile to windows #120726
     + ''
     substituteInPlace $dev/bin/freetype-config \
-      --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
+      --replace-fail ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
   '' + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
 
     wrapProgram "$dev/bin/freetype-config" \

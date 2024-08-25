@@ -41,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = ''
-    substituteInPlace bpf/Makefile --replace '/bin/bash' '${lib.getExe bash}'
-    substituteInPlace pkg/defaults/defaults.go --replace '/var/lib/tetragon/' $out/lib/tetragon/bpf/
+    substituteInPlace bpf/Makefile --replace-fail '/bin/bash' '${lib.getExe bash}'
+    substituteInPlace pkg/defaults/defaults.go --replace-fail '/var/lib/tetragon/' $out/lib/tetragon/bpf/
   '';
 
   installPhase = ''

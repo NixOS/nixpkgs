@@ -114,9 +114,9 @@ stdenv.mkDerivation rec {
     # When cross-compiling (for aarch64-multiplatform), the compiler errors out on these flags.
     # Since they're 'just' warnings, it's fine to just remove them.
     substituteInPlace configure \
-      --replace "check_add_cflags -Wparentheses-equality" "" \
-      --replace "check_add_cflags -Wunreachable-code-loop-increment" "" \
-      --replace "check_cflags -Wshorten-64-to-32 && add_cflags_only -Wshorten-64-to-32" ""
+      --replace-fail "check_add_cflags -Wparentheses-equality" "" \
+      --replace-fail "check_add_cflags -Wunreachable-code-loop-increment" "" \
+      --replace-fail "check_cflags -Wshorten-64-to-32 && add_cflags_only -Wshorten-64-to-32" ""
   '';
 
   outputs = [ "bin" "dev" "out" ];

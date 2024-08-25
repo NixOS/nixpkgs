@@ -26,11 +26,11 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/mdp-toolkit/mdp-toolkit/issues/92
     substituteInPlace mdp/utils/routines.py \
-      --replace numx.typeDict numx.sctypeDict
+      --replace-fail numx.typeDict numx.sctypeDict
     substituteInPlace mdp/test/test_NormalizingRecursiveExpansionNode.py \
-      --replace py.test"" "pytest"
+      --replace-fail py.test"" "pytest"
     substituteInPlace mdp/test/test_RecursiveExpansionNode.py \
-      --replace py.test"" "pytest"
+      --replace-fail py.test"" "pytest"
   '';
 
   propagatedBuildInputs = [

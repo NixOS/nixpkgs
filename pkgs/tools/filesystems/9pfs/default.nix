@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+    substituteInPlace Makefile --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   makeFlags = [ "BIN=$(out)/bin" "MAN=$(out)/share/man/man1" ];

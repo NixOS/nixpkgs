@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "''${!outputDev}/lib/pkgconfig/spatialaudio.pc" \
-      --replace '-L${lib.getDev libmysofa}' '-L${lib.getLib libmysofa}'
+      --replace-fail '-L${lib.getDev libmysofa}' '-L${lib.getLib libmysofa}'
   '';
 
   meta = with lib; {

@@ -78,7 +78,7 @@ mkDerivation {
     find include -type d -exec mkdir -p "$dev/{}" ';'
     find include '(' -type f -o -type l ')' -exec cp -pr "{}" "$dev/{}" ';'
     popd
-    substituteInPlace "$dev/include/sys/time.h" --replace "defined (_LIBC)" "true"
+    substituteInPlace "$dev/include/sys/time.h" --replace-fail "defined (_LIBC)" "true"
 
     pushd ${csu}
     find lib -type d -exec mkdir -p "$out/{}" ';'

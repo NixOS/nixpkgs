@@ -37,7 +37,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   postPatch = ''
-    substituteInPlace Makefile --replace "all: api" ""
+    substituteInPlace Makefile --replace-fail "all: api" ""
   '';
 
   nativeBuildInputs = [

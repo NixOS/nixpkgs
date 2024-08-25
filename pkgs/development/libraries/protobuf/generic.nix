@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
   patches = lib.optionals (lib.versionOlder version "22") [

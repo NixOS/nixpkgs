@@ -57,24 +57,24 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
     patches = [ ./permissions.patch ];
     postPatch = ''
       substituteInPlace daemon/service/platform/platform_linux.go \
-        --replace 'openVpnBinaryPath = "/usr/sbin/openvpn"' \
+        --replace-fail 'openVpnBinaryPath = "/usr/sbin/openvpn"' \
         'openVpnBinaryPath = "${openvpn}/bin/openvpn"' \
-        --replace 'routeCommand = "/sbin/ip route"' \
+        --replace-fail 'routeCommand = "/sbin/ip route"' \
         'routeCommand = "${iproute2}/bin/ip route"'
 
       substituteInPlace daemon/netinfo/netinfo_linux.go \
-        --replace 'retErr := shell.ExecAndProcessOutput(log, outParse, "", "/sbin/ip", "route")' \
+        --replace-fail 'retErr := shell.ExecAndProcessOutput(log, outParse, "", "/sbin/ip", "route")' \
         'retErr := shell.ExecAndProcessOutput(log, outParse, "", "${iproute2}/bin/ip", "route")'
 
       substituteInPlace daemon/service/platform/platform_linux_release.go \
-        --replace 'installDir := "/opt/ivpn"' "installDir := \"$out\"" \
-        --replace 'obfsproxyStartScript = path.Join(installDir, "obfsproxy/obfs4proxy")' \
+        --replace-fail 'installDir := "/opt/ivpn"' "installDir := \"$out\"" \
+        --replace-fail 'obfsproxyStartScript = path.Join(installDir, "obfsproxy/obfs4proxy")' \
         'obfsproxyStartScript = "${lib.getExe obfs4}"' \
-        --replace 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
+        --replace-fail 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
         'wgBinaryPath = "${wireguard-tools}/bin/wg-quick"' \
-        --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
+        --replace-fail 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
         'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
-        --replace 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
+        --replace-fail 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
         'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"'
     '';
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace rc/rep.kak --replace '$(rep' '$('"$out/bin/rep"
+    substituteInPlace rc/rep.kak --replace-fail '$(rep' '$('"$out/bin/rep"
   '';
   makeFlags = [ "prefix=$(out)" ];
 

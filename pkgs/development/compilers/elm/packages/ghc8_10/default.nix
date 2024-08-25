@@ -16,7 +16,7 @@ self: pkgs.haskell.packages.ghc810.override {
             };
 
             prePatch = ''
-              substituteInPlace package.yaml --replace "- -Werror" ""
+              substituteInPlace package.yaml --replace-fail "- -Werror" ""
               hpack
             '';
             jailbreak = true;

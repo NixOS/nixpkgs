@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # write rebuild args to file after bootstrap
-    substituteInPlace configure.py --replace "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
+    substituteInPlace configure.py --replace-fail "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
   '';
 
   buildPhase = ''

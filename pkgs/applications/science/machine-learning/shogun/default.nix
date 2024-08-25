@@ -196,7 +196,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # CMake incorrectly calculates library path from dev prefix
     substituteInPlace $dev/lib/cmake/shogun/ShogunTargets-release.cmake \
-      --replace "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
   '';
 
   meta = with lib; {

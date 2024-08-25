@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "pre-commit" ""
+      --replace-fail "pre-commit" ""
   '';
 
   nativeBuildInputs = [

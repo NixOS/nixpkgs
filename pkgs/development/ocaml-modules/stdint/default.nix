@@ -19,9 +19,9 @@ buildDunePackage rec {
   #    https://github.com/andrenth/ocaml-stdint/pull/61
   postPatch = ''
     substituteInPlace tests/stdint_test.ml \
-      --replace 'test "An integer should perform left-shifts correctly"' \
+      --replace-fail 'test "An integer should perform left-shifts correctly"' \
                 'skip "An integer should perform left-shifts correctly"' \
-      --replace 'test "Logical shifts must not sign-extend"' \
+      --replace-fail 'test "Logical shifts must not sign-extend"' \
                 'skip "Logical shifts must not sign-extend"'
   '';
 

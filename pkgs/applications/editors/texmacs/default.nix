@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   postPatch = common.postPatch + ''
     substituteInPlace configure \
-      --replace "-mfpmath=sse -msse2" ""
+      --replace-fail "-mfpmath=sse -msse2" ""
   '';
 
   nativeBuildInputs = [

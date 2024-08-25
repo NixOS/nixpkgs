@@ -27,7 +27,7 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
     ln -s ../googletest gmock/gtest
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
   nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc buildProtobuf ];

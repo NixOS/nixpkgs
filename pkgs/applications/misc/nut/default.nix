@@ -73,17 +73,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
-      --replace /bin/sed "${gnused}/bin/sed" \
-      --replace /bin/sleep "${coreutils}/bin/sleep" \
-      --replace /bin/systemctl "${systemd}/bin/systemctl"
+      --replace-fail /bin/sed "${gnused}/bin/sed" \
+      --replace-fail /bin/sleep "${coreutils}/bin/sleep" \
+      --replace-fail /bin/systemctl "${systemd}/bin/systemctl"
 
     for file in system/{nut-monitor.service,nut-driver-enumerator.service,nut-server.service,nut-driver@.service} system-shutdown/nutshutdown; do
       substituteInPlace $out/lib/systemd/$file \
-        --replace "$out/etc/nut.conf" "/etc/nut/nut.conf"
+        --replace-fail "$out/etc/nut.conf" "/etc/nut/nut.conf"
     done
 
     substituteInPlace $out/lib/systemd/system/nut-driver-enumerator.path \
-      --replace "$out/etc/ups.conf" "/etc/nut/ups.conf"
+      --replace-fail "$out/etc/ups.conf" "/etc/nut/ups.conf"
 
     # Suspicious/overly broad rule, remove it until we know better
     rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules

@@ -277,16 +277,16 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/basic/path-util.h --replace-fail "@defaultPathNormal@" "${placeholder "out"}/bin/"
   '' + lib.optionalString withLibBPF ''
     substituteInPlace meson.build \
-      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
   '' + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
-      --replace \
+      --replace-fail \
       "'readelf'" \
       "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
-      --replace \
+      --replace-fail \
       "/usr/lib/systemd/boot/efi" \
       "$out/lib/systemd/boot/efi"
   ''
@@ -644,7 +644,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # { replacement, search, where, ignore } -> List[str]
       mkSubstitute = { replacement, search, where, ignore ? [ ] }:
-        map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
+        map (path: "substituteInPlace ${path} --replace-fail '${search}' \"${replacement}\"") where;
       mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
         let
           ignore' = lib.concatStringsSep "|" (ignore ++ [ "^test" "NEWS" ]);
@@ -668,19 +668,19 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
 
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
-        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+        --replace-fail /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
       substituteInPlace src/import/pull-tar.c \
-        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
+        --replace-fail 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
     '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
   # warning messages
   postConfigure = ''
     substituteInPlace config.h \
-      --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
-      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace-fail "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
+      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
+      --replace-fail "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([
@@ -720,7 +720,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix reference to /bin/false in the D-Bus services.
     for i in $out/share/dbus-1/system-services/*.service; do
-      substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+      substituteInPlace $i --replace-fail /bin/false ${coreutils}/bin/false
     done
 
     # For compatibility with dependents that use sbin instead of bin.

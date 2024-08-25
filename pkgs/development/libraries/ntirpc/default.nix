@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace ntirpc/netconfig.h --replace "/etc/netconfig" "$out/etc/netconfig"
+    substituteInPlace ntirpc/netconfig.h --replace-fail "/etc/netconfig" "$out/etc/netconfig"
     sed '1i#include <assert.h>' -i src/work_pool.c
   '';
 

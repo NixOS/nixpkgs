@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/bin
     cp "${vimPlugins.vimacs}"/bin/vim $out/bin/vimacs
     substituteInPlace "$out"/bin/vimacs \
-      --replace '-vim}' '-@bin@/bin/vim}' \
-      --replace '-gvim}' '-@bin@/bin/vim -g}' \
-      --replace '--cmd "let g:VM_Enabled = 1"' \
+      --replace-fail '-vim}' '-@bin@/bin/vim}' \
+      --replace-fail '-gvim}' '-@bin@/bin/vim -g}' \
+      --replace-fail '--cmd "let g:VM_Enabled = 1"' \
                 '--cmd "let g:VM_Enabled = 1" --cmd "set rtp^=@rtp@" ${vimacsExtraArgs}' \
-      --replace @rtp@ ${vimPlugins.vimacs} \
-      --replace @bin@ ${vimPackage}
+      --replace-fail @rtp@ ${vimPlugins.vimacs} \
+      --replace-fail @bin@ ${vimPackage}
     for prog in vm gvm gvimacs vmdiff vimacsdiff
     do
       ln -s "$out"/bin/vimacs $out/bin/$prog

@@ -16,7 +16,7 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace cohttp/src/dune --replace 'bytes base64' 'base64'
+    substituteInPlace cohttp/src/dune --replace-fail 'bytes base64' 'base64'
   '';
 
   buildInputs = [ jsonm ppx_sexp_conv ];

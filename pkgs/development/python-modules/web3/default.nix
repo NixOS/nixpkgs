@@ -60,7 +60,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace setup.py --replace "types-protobuf==3.19.13" "types-protobuf"
+    substituteInPlace setup.py --replace-fail "types-protobuf==3.19.13" "types-protobuf"
   '';
 
   pythonImportsCheck = [ "web3" ];

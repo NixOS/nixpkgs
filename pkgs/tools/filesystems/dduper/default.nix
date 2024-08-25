@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
-    substituteInPlace ./dduper --replace "/usr/sbin/btrfs.static" "${btrfsProgsPatched}/bin/btrfs"
+    substituteInPlace ./dduper --replace-fail "/usr/sbin/btrfs.static" "${btrfsProgsPatched}/bin/btrfs"
   '';
 
   installPhase = ''

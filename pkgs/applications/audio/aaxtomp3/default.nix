@@ -29,10 +29,10 @@ resholve.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace AAXtoMP3 \
-      --replace 'AAXtoMP3' 'aaxtomp3'
+      --replace-fail 'AAXtoMP3' 'aaxtomp3'
     substituteInPlace interactiveAAXtoMP3 \
-      --replace 'AAXtoMP3' 'aaxtomp3' \
-      --replace 'call="./aaxtomp3"' 'call="$AAXTOMP3"'
+      --replace-fail 'AAXtoMP3' 'aaxtomp3' \
+      --replace-fail 'call="./aaxtomp3"' 'call="$AAXTOMP3"'
   '';
 
   installPhase = ''

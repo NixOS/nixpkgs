@@ -111,7 +111,7 @@ let
           doCheck = false;
           postPatch = ''
             substituteInPlace octoprint_pi_support/__init__.py \
-              --replace /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
+              --replace-fail /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
           '';
         };
       })

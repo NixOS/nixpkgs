@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/hipBin_amd.h \
-      --replace "/usr/bin/lsb_release" "${lsb-release}/bin/lsb_release"
+      --replace-fail "/usr/bin/lsb_release" "${lsb-release}/bin/lsb_release"
   '';
 
   postInstall = ''

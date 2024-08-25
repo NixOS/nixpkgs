@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = ''
-    substituteInPlace tsk/img/ewf.cpp --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
+    substituteInPlace tsk/img/ewf.cpp --replace-fail libewf_handle_read_random libewf_handle_read_buffer_at_offset
   '';
 
   enableParallelBuilding = true;

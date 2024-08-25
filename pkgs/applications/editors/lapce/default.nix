@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace lapce-app/Cargo.toml --replace ", \"updater\"" ""
+    substituteInPlace lapce-app/Cargo.toml --replace-fail ", \"updater\"" ""
   '';
 
   nativeBuildInputs = [

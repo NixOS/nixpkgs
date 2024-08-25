@@ -58,9 +58,9 @@ stdenv.mkDerivation rec {
     done
 
     # Ensure the default compilers are the ones mvapich was built with
-    substituteInPlace $out/bin/mpicc --replace 'CC="gcc"' 'CC=${stdenv.cc}/bin/cc'
-    substituteInPlace $out/bin/mpicxx --replace 'CXX="g++"' 'CXX=${stdenv.cc}/bin/c++'
-    substituteInPlace $out/bin/mpifort --replace 'FC="gfortran"' 'FC=${gfortran}/bin/gfortran'
+    substituteInPlace $out/bin/mpicc --replace-fail 'CC="gcc"' 'CC=${stdenv.cc}/bin/cc'
+    substituteInPlace $out/bin/mpicxx --replace-fail 'CXX="g++"' 'CXX=${stdenv.cc}/bin/c++'
+    substituteInPlace $out/bin/mpifort --replace-fail 'FC="gfortran"' 'FC=${gfortran}/bin/gfortran'
   '';
 
   enableParallelBuilding = true;

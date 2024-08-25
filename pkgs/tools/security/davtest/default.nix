@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace davtest.pl \
-      --replace "backdoors/" "$out/share/davtest/backdoors/" \
-      --replace "tests/" "$out/share/davtest/tests/"
+      --replace-fail "backdoors/" "$out/share/davtest/backdoors/" \
+      --replace-fail "tests/" "$out/share/davtest/tests/"
   '';
 
   buildInputs = [

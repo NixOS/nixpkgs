@@ -15,7 +15,7 @@ mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/klayout.pri --replace "-Wno-reserved-user-defined-literal" ""
+    substituteInPlace src/klayout.pri --replace-fail "-Wno-reserved-user-defined-literal" ""
     patchShebangs .
   '';
 

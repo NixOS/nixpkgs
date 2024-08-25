@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   postPatch = ''
-    substituteInPlace configure --replace "curses" "ncurses"
+    substituteInPlace configure --replace-fail "curses" "ncurses"
   '';
 
   meta = with lib; {

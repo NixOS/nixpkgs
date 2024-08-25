@@ -97,8 +97,8 @@ in {
             ls ${pkgs.vdo}/bin/ | while read BIN; do
               copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
             done
-            substituteInPlace $out/bin/vdorecover --replace "${pkgs.bash}/bin/bash" "/bin/sh"
-            substituteInPlace $out/bin/adaptLVMVDO.sh --replace "${pkgs.bash}/bin/bash" "/bin/sh"
+            substituteInPlace $out/bin/vdorecover --replace-fail "${pkgs.bash}/bin/bash" "/bin/sh"
+            substituteInPlace $out/bin/adaptLVMVDO.sh --replace-fail "${pkgs.bash}/bin/bash" "/bin/sh"
           '';
 
           extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)''

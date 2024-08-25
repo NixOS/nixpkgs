@@ -396,9 +396,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '' + lib.optionalString withFrei0r ''
     substituteInPlace libavfilter/vf_frei0r.c \
-      --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
+      --replace-fail /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
     substituteInPlace doc/filters.texi \
-      --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
+      --replace-fail /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
   patches = []

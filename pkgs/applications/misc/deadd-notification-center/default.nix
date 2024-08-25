@@ -45,7 +45,7 @@ in mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/NotificationCenter.hs \
-      --replace '/etc/xdg/deadd/deadd.css' "$out/etc/deadd.css"
+      --replace-fail '/etc/xdg/deadd/deadd.css' "$out/etc/deadd.css"
   '';
 
   # Add systemd user unit and install default style.

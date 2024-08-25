@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteAllInPlace src/res/watch.yaml \
-      --replace '"pactl"' '"${lib.getExe' pulseaudio "pactl"}"'
+      --replace-fail '"pactl"' '"${lib.getExe' pulseaudio "pactl"}"'
 
     # TODO: src/res/keyboard.yaml references 'whisper_stt'
   '';

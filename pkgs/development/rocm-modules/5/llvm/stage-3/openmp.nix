@@ -43,7 +43,7 @@ callPackage ../base.nix rec {
   extraPostPatch = ''
     # We can't build this target at the moment
     substituteInPlace libomptarget/DeviceRTL/CMakeLists.txt \
-      --replace "gfx1010" ""
+      --replace-fail "gfx1010" ""
 
     # No idea what's going on here...
     cat ${./1000-openmp-failing-tests.list} | xargs -d \\n rm

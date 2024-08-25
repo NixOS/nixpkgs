@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/src.pro \
-      --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
-      --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+      --replace-fail '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
+      --replace-fail '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
 
     # Don't install test binary
     sed -i tests/tst_plugin.pro \

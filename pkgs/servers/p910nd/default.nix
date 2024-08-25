@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile --replace gcc clang
+    substituteInPlace Makefile --replace-fail gcc clang
   '';
 
   nativeBuildInputs = [ installShellFiles ];

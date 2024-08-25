@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile \
-      --replace "2>/dev/null" "" \
-      --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
+      --replace-fail "2>/dev/null" "" \
+      --replace-fail "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./Makefile --replace-fail "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace dwmbar \
-      --replace 'DEFAULT_CONFIG_DIR="/usr/share/dwmbar"' "DEFAULT_CONFIG_DIR=\"$out/share/dwmbar\""
+      --replace-fail 'DEFAULT_CONFIG_DIR="/usr/share/dwmbar"' "DEFAULT_CONFIG_DIR=\"$out/share/dwmbar\""
   '';
 
   installPhase = ''

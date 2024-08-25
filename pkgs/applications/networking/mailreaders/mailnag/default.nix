@@ -82,10 +82,10 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     substituteInPlace $out/${python3Packages.python.sitePackages}/Mailnag/common/dist_cfg.py \
-      --replace "/usr/" $out/
+      --replace-fail "/usr/" $out/
     for desktop_file in $out/share/applications/*.desktop; do
       substituteInPlace "$desktop_file" \
-      --replace "/usr/bin" $out/bin
+      --replace-fail "/usr/bin" $out/bin
     done
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

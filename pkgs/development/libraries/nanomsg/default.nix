@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # https://github.com/nanomsg/nanomsg/issues/1082
   postPatch = ''
     substituteInPlace src/pkgconfig.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   meta = with lib; {

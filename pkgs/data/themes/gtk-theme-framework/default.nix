@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace main.sh \
-      --replace "#!/usr/bin/env bash" "#!/bin/sh"
+      --replace-fail "#!/usr/bin/env bash" "#!/bin/sh"
 
     substituteInPlace scripts/install.sh \
-      --replace "#!/usr/bin/env bash" "#!/bin/sh"
+      --replace-fail "#!/usr/bin/env bash" "#!/bin/sh"
   '';
 
   installPhase = ''

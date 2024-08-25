@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'sys.platform == "darwin"' "False"
+    substituteInPlace setup.py --replace-fail 'sys.platform == "darwin"' "False"
   '';
 
   nativeCheckInputs = [

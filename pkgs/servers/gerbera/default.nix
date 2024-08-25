@@ -87,8 +87,8 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString enableMysql ''
     substituteInPlace cmake/FindMySQL.cmake \
-      --replace /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \
-      --replace /usr/lib/mysql     ${lib.getLib libmysqlclient}/lib/mariadb
+      --replace-fail /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \
+      --replace-fail /usr/lib/mysql     ${lib.getLib libmysqlclient}/lib/mariadb
   '';
 
   cmakeFlags = [

@@ -18,9 +18,9 @@ perlPackages.buildPerlPackage rec {
     patchShebangs bin
 
     substituteInPlace "lib/FusionInventory/Agent/Tools/Linux.pm" \
-      --replace /sbin/ip ${iproute2}/sbin/ip
+      --replace-fail /sbin/ip ${iproute2}/sbin/ip
     substituteInPlace "lib/FusionInventory/Agent/Task/Inventory/Linux/Networks.pm" \
-      --replace /sbin/ip ${iproute2}/sbin/ip
+      --replace-fail /sbin/ip ${iproute2}/sbin/ip
   '';
 
   buildTools = [];

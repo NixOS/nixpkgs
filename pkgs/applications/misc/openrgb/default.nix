@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh
     substituteInPlace scripts/build-udev-rules.sh \
-      --replace /bin/chmod "${coreutils}/bin/chmod"
+      --replace-fail /bin/chmod "${coreutils}/bin/chmod"
   '';
 
   doInstallCheck = true;

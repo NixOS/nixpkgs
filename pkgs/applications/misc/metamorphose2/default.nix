@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   postPatch = ''
     rm -rf ./src/mutagen
     substituteInPlace messages/Makefile \
-      --replace "\$(shell which msgfmt)" "${gettext}/bin/msgfmt"
+      --replace-fail "\$(shell which msgfmt)" "${gettext}/bin/msgfmt"
   '';
 
   postInstall = ''

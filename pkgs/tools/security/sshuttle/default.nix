@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
+      --replace-fail '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
   '';
 
   nativeBuildInputs = [

@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
 
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
-    substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
+    substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace-fail "Icon=bitcoin128" "Icon=bitcoin"
     install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
   '';
 

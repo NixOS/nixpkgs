@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace src/oddjobd.c \
-      --replace "globals.selinux_enabled" "FALSE"
+      --replace-fail "globals.selinux_enabled" "FALSE"
   '';
 
   # Requires a dbus-daemon environment

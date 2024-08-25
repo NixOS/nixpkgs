@@ -73,8 +73,8 @@ in stdenv.mkDerivation {
     cp -v libtinyxml${SHLIB_EXT} $out/lib/
     cp -v *.h $out/include/
 
-    substituteInPlace tinyxml.pc --replace "@out@" "$out"
-    substituteInPlace tinyxml.pc --replace "@version@" "${version}"
+    substituteInPlace tinyxml.pc --replace-fail "@out@" "$out"
+    substituteInPlace tinyxml.pc --replace-fail "@version@" "${version}"
     cp -v tinyxml.pc $out/lib/pkgconfig/
 
     cp -v docs/* $out/share/doc/tinyxml/

@@ -22,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "tests";
 
   postPatch = ''
-    substituteInPlace tests/017/realpath.tl --replace /usr/bin /bin
-    substituteInPlace tests/017/realpath.expected --replace /usr/bin /bin
+    substituteInPlace tests/017/realpath.tl --replace-fail /usr/bin /bin
+    substituteInPlace tests/017/realpath.expected --replace-fail /usr/bin /bin
 
-    substituteInPlace tests/018/process.tl --replace /usr/bin/env ${lib.getBin coreutils}/bin/env
+    substituteInPlace tests/018/process.tl --replace-fail /usr/bin/env ${lib.getBin coreutils}/bin/env
   '';
 
   preCheck = let

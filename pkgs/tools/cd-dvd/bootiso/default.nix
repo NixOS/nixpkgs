@@ -41,8 +41,8 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace bootiso \
-      --replace "\$(basename \"\$0\")" "bootiso" \
-      --replace "/usr/share/syslinux" "${syslinux}/share/syslinux"
+      --replace-fail "\$(basename \"\$0\")" "bootiso" \
+      --replace-fail "/usr/share/syslinux" "${syslinux}/share/syslinux"
   '';
 
   postInstall = ''

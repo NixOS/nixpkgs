@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "all" "man" ];
 
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
+    substituteInPlace CMakeLists.txt --replace-fail /etc/biboumi $out/etc/biboumi
     cp ${louiz_catch}/single_include/catch.hpp tests/
   '';
 

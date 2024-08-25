@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # New toolchainsd like gcc-13 trigger warnings and fail the build.
-    substituteInPlace configure.ac --replace "-Werror" ""
+    substituteInPlace configure.ac --replace-fail "-Werror" ""
   '';
 
   preAutoreconf = ''

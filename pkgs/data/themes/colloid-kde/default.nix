@@ -24,16 +24,16 @@ stdenvNoCC.mkDerivation rec {
     patchShebangs install.sh
 
     substituteInPlace install.sh \
-      --replace '$HOME/.local' $out \
-      --replace '$HOME/.config' $out/share
+      --replace-fail '$HOME/.local' $out \
+      --replace-fail '$HOME/.config' $out/share
 
     substituteInPlace sddm/install.sh \
-      --replace /usr $sddm \
-      --replace '$(cd $(dirname $0) && pwd)' . \
-      --replace '"$UID" -eq "$ROOT_UID"' true
+      --replace-fail /usr $sddm \
+      --replace-fail '$(cd $(dirname $0) && pwd)' . \
+      --replace-fail '"$UID" -eq "$ROOT_UID"' true
 
     substituteInPlace sddm/Colloid/Main.qml \
-      --replace /usr $sddm
+      --replace-fail /usr $sddm
   '';
 
   installPhase = ''

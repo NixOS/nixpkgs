@@ -81,7 +81,7 @@ in stdenv.mkDerivation (rec {
     # Provide desktop item and icon.
     cp -r usr/share $out
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace /opt/${name}/${pname} ${pname}
+      --replace-fail /opt/${name}/${pname} ${pname}
   '';
 
   dontWrapGApps = true;

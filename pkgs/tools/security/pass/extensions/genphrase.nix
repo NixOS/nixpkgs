@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/lib/password-store/extensions/genphrase.bash \
-      --replace '$EXTENSIONS' "$out/lib/password-store/extensions/"
+      --replace-fail '$EXTENSIONS' "$out/lib/password-store/extensions/"
   '';
 
   meta = with lib; {

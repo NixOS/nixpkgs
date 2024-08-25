@@ -27,18 +27,18 @@ stdenv.mkDerivation rec {
 
     for dateSource in bld/wipfc/configure; do
       substituteInPlace $dateSource \
-        --replace '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
+        --replace-fail '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
     done
 
     substituteInPlace bld/watcom/h/banner.h \
-      --replace '__DATE__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%b %d %Y')\"" \
-      --replace '__TIME__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%T')\""
+      --replace-fail '__DATE__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%b %d %Y')\"" \
+      --replace-fail '__TIME__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%T')\""
 
     substituteInPlace build/makeinit \
-      --replace '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
+      --replace-fail '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace build/mif/local.mif \
-      --replace '-static' ""
+      --replace-fail '-static' ""
   '';
 
   nativeBuildInputs = [

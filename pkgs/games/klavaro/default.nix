@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl gtk3 gtkdatabox ];
 
   postPatch = ''
-    substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
+    substituteInPlace src/tutor.c --replace-fail '"espeak ' '"${espeak}/bin/espeak '
   '';
 
   postInstall = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # Fixes /usr/bin/file: No such file or directory
   preConfigure = ''
     substituteInPlace configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
   '';
 
   # remove forbidden references to $TMPDIR

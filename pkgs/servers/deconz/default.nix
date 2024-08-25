@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     for f in "$out/lib/systemd/system/"*.service \
              "$out/share/applications/"*.desktop; do
         substituteInPlace "$f" \
-            --replace "/usr/" "$out/"
+            --replace-fail "/usr/" "$out/"
     done
 
     for p in "$out/bin/deCONZ" "$out/bin/GCFFlasher_internal.bin"; do

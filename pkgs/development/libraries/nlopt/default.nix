@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace \
+    substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace-fail \
       'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/' 'INTERFACE_INCLUDE_DIRECTORIES "'
   '';
 

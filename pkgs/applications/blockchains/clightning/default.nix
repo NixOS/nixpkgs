@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
       tools/fromschema.py \
       devtools/sql-rewrite.py
   '' else ''
-    substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
-    substituteInPlace external/libwally-core/configure.ac --replace gsed sed
+    substituteInPlace external/libwally-core/tools/autogen.sh --replace-fail gsed sed && \
+    substituteInPlace external/libwally-core/configure.ac --replace-fail gsed sed
   '';
 
   configureFlags = [ "--disable-valgrind" ];

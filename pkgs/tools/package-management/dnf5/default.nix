@@ -103,12 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace dnf5daemon-server/dbus/CMakeLists.txt \
-      --replace '/etc' "$out/etc" \
-      --replace '/usr' "$out"
+      --replace-fail '/etc' "$out/etc" \
+      --replace-fail '/usr' "$out"
     substituteInPlace dnf5daemon-server/polkit/CMakeLists.txt \
-      --replace '/usr' "$out"
+      --replace-fail '/usr' "$out"
     substituteInPlace dnf5/CMakeLists.txt \
-      --replace '/etc/bash_completion.d' "$out/etc/bash_completion.d"
+      --replace-fail '/etc/bash_completion.d' "$out/etc/bash_completion.d"
   '';
 
   dontFixCmake = true;

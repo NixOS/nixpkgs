@@ -34,16 +34,16 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "OPUSARCHIVE=libopus.a" "OPUSARCHIVE=" \
-      --replace "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
+      --replace-fail "OPUSARCHIVE=libopus.a" "OPUSARCHIVE=" \
+      --replace-fail "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
     substituteInPlace snis_launcher \
-      --replace "PREFIX=." "PREFIX=$out"
+      --replace-fail "PREFIX=." "PREFIX=$out"
     substituteInPlace snis_text_to_speech.sh \
-      --replace "pico2wave" "${sox}/bin/pico2wave" \
-      --replace "espeak" "${espeak-classic}/bin/espeak" \
-      --replace "play" "${sox}/bin/play" \
-      --replace "aplay" "${alsa-utils}/bin/aplay" \
-      --replace "/bin/rm" "${coreutils}/bin/rm"
+      --replace-fail "pico2wave" "${sox}/bin/pico2wave" \
+      --replace-fail "espeak" "${espeak-classic}/bin/espeak" \
+      --replace-fail "play" "${sox}/bin/play" \
+      --replace-fail "aplay" "${alsa-utils}/bin/aplay" \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
   '';
 
   nativeBuildInputs = [ pkg-config openscad makeWrapper ];

@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/linux/unittest_inspector.py
 
     substituteInPlace src/linux/integration-test.py \
-      --replace "/usr/share/dbus-1" "$out/share/dbus-1"
+      --replace-fail "/usr/share/dbus-1" "$out/share/dbus-1"
   '';
 
   preCheck = ''

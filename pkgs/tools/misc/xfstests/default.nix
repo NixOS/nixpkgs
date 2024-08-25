@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace "cp include/install-sh ." "cp -f include/install-sh ."
+      --replace-fail "cp include/install-sh ." "cp -f include/install-sh ."
 
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"

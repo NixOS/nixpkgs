@@ -19,12 +19,12 @@ buildPythonApplication rec {
   postPatch = ''
     for f in grc grcat; do
       substituteInPlace $f \
-        --replace /usr/local/ $out/
+        --replace-fail /usr/local/ $out/
     done
 
     # Support for absolute store paths.
     substituteInPlace grc.conf \
-      --replace "^([/\w\.]+\/)" "^([/\w\.\-]+\/)"
+      --replace-fail "^([/\w\.]+\/)" "^([/\w\.\-]+\/)"
   '';
 
   nativeBuildInputs = [ installShellFiles ];

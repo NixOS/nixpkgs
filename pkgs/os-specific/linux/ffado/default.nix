@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace ./support/tools/ffado-diag.in \
-      --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
+      --replace-fail /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
   '';
 
   nativeBuildInputs =

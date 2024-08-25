@@ -7,8 +7,8 @@ appleDerivation {
   # automatically be prefixed.
   patchPhase = ''
     substituteInPlace basic_cmds.xcodeproj/project.pbxproj \
-      --replace "dstPath = /usr/share/man/man1;" "dstPath = $out/share/man/man1;" \
-      --replace "dstPath = /usr/share/man/man5;" "dstPath = $out/share/man/man5;"
+      --replace-fail "dstPath = /usr/share/man/man1;" "dstPath = $out/share/man/man1;" \
+      --replace-fail "dstPath = /usr/share/man/man5;" "dstPath = $out/share/man/man5;"
   '';
 
   # temporary install phase until xcodebuild has "install" support

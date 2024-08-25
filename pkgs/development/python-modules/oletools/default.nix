@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pyparsing>=2.1.0,<3" "pyparsing>=2.1.0"
+      --replace-fail "pyparsing>=2.1.0,<3" "pyparsing>=2.1.0"
   '';
 
   disabledTests = [

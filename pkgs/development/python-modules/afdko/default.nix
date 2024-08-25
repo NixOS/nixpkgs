@@ -67,7 +67,7 @@ buildPythonPackage rec {
 
   # Happy new year
   postPatch = ''
-    substituteInPlace tests/tx_data/expected_output/alt-missing-glif.pfb --replace 2023 2024
+    substituteInPlace tests/tx_data/expected_output/alt-missing-glif.pfb --replace-fail 2023 2024
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [

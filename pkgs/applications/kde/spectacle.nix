@@ -20,7 +20,7 @@ mkDerivation {
   ];
   postPatch = ''
     substituteInPlace desktop/org.kde.spectacle.desktop.cmake \
-      --replace "Exec=@QtBinariesDir@/qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
+      --replace-fail "Exec=@QtBinariesDir@/qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
   '';
 
   dontWrapGApps = true;

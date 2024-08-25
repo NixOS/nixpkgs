@@ -63,10 +63,10 @@ stdenv.mkDerivation rec {
   prePatch = ''
     # remove sources of nondeterminism
     substituteInPlace lib/cmdline.c \
-      --replace "__DATE__" "\"Jan  1 1970\"" \
-      --replace "__TIME__" "\"00:00:00\""
+      --replace-fail "__DATE__" "\"Jan  1 1970\"" \
+      --replace-fail "__TIME__" "\"00:00:00\""
     substituteInPlace docs/SConscript \
-      --replace "gzip -c " "gzip -cn "
+      --replace-fail "gzip -c " "gzip -cn "
   '';
 
   # Otherwise tries to access /usr.

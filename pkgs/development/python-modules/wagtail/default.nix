@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "django-filter>=23.3,<24" "django-filter>=23.3,<24.3"
+      --replace-fail "django-filter>=23.3,<24" "django-filter>=23.3,<24.3"
   '';
 
   propagatedBuildInputs = [

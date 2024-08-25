@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements-runtime.txt \
-      --replace "pytest" ""
+      --replace-fail "pytest" ""
   '';
 
   nativeBuildInputs = [

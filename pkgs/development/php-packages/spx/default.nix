@@ -23,7 +23,7 @@ buildPecl {
 
   preConfigure = ''
     substituteInPlace Makefile.frag \
-      --replace '$(INSTALL_ROOT)$(prefix)/share/misc/php-spx/assets/web-ui' '${placeholder "out"}/share/misc/php-spx/assets/web-ui'
+      --replace-fail '$(INSTALL_ROOT)$(prefix)/share/misc/php-spx/assets/web-ui' '${placeholder "out"}/share/misc/php-spx/assets/web-ui'
   '';
 
   meta = {

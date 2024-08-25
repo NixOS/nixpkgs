@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # Drop test that fails on musl (?)
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace tests/Makefile.am \
-      --replace "set-rpath-library.sh" ""
+      --replace-fail "set-rpath-library.sh" ""
   '';
 
   setupHook = [ ./setup-hook.sh ];

@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
   patches = [ ./es-home-6.x.patch ];
 
   postPatch = ''
-    substituteInPlace bin/elasticsearch-env --replace \
+    substituteInPlace bin/elasticsearch-env --replace-fail \
       "ES_CLASSPATH=\"\$ES_HOME/lib/*\"" \
       "ES_CLASSPATH=\"$out/lib/*\""
 
-    substituteInPlace bin/elasticsearch-cli --replace \
+    substituteInPlace bin/elasticsearch-cli --replace-fail \
       "ES_CLASSPATH=\"\$ES_CLASSPATH:\$ES_HOME/\$additional_classpath_directory/*\"" \
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/*
 
     substituteInPlace $out/bin/elasticsearch \
-      --replace 'bin/elasticsearch-keystore' "$out/bin/elasticsearch-keystore"
+      --replace-fail 'bin/elasticsearch-keystore' "$out/bin/elasticsearch-keystore"
 
     wrapProgram $out/bin/elasticsearch \
       --prefix PATH : "${lib.makeBinPath [ util-linux coreutils gnugrep ]}" \

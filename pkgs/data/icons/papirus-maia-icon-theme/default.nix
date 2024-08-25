@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace /usr "$out"
+    substituteInPlace CMakeLists.txt --replace-fail /usr "$out"
   '';
 
   postInstall = ''

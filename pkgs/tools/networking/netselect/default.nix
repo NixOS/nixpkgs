@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace netselect-apt \
-      --replace "/usr/bin/" ""
+      --replace-fail "/usr/bin/" ""
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

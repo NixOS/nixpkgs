@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
     # BUILDTIME is embedded in the result
     # if switching to cmake then a similar substitution has to be done
     substituteInPlace src/core/Makefile.am \
-      --replace '`date -u "+%Y-%m-%d %H:%M"`' "`date -u \"+%Y-%m-%d %H:%M\" --date="@''${SOURCE_DATE_EPOCH}"`"
+      --replace-fail '`date -u "+%Y-%m-%d %H:%M"`' "`date -u \"+%Y-%m-%d %H:%M\" --date="@''${SOURCE_DATE_EPOCH}"`"
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Specifically patch out two drivers that have build errors with musl libc,
     # while leaving the rest of the default selection enabled
     substituteInPlace configure.in \
-      --replace checkfor_lirc={yes,no} \
-      --replace checkfor_matrox={yes,no}
+      --replace-fail checkfor_lirc={yes,no} \
+      --replace-fail checkfor_matrox={yes,no}
   '';
 
   nativeBuildInputs = [ autoreconfHook perl pkg-config flux ];

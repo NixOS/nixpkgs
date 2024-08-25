@@ -19,13 +19,13 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "ruamel.yaml >= 0.16, < 0.19" "ruamel.yaml" \
-      --replace "prov == 1.5.1" "prov" \
-      --replace '"schema-salad >= 8.4.20230426093816, < 9",' "" \
-      --replace "PYTEST_RUNNER + " ""
+      --replace-fail "ruamel.yaml >= 0.16, < 0.19" "ruamel.yaml" \
+      --replace-fail "prov == 1.5.1" "prov" \
+      --replace-fail '"schema-salad >= 8.4.20230426093816, < 9",' "" \
+      --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml" \
-      --replace "mypy==1.10.0" "mypy==1.10.*"
+      --replace-fail "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml" \
+      --replace-fail "mypy==1.10.0" "mypy==1.10.*"
   '';
 
   nativeBuildInputs = [

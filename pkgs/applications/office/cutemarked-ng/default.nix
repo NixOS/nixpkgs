@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace app/app.pro \
-      --replace '$$[QT_INSTALL_BINS]/lrelease' "lrelease"
+      --replace-fail '$$[QT_INSTALL_BINS]/lrelease' "lrelease"
   '';
 
   nativeBuildInputs = [

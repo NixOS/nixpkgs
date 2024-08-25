@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput bin/kdwsdl2cpp* "$dev"
     substituteInPlace "$out/lib/cmake/${cmakeName}/KDSoapTargets-release.cmake" \
-      --replace $out/bin $dev/bin
+      --replace-fail $out/bin $dev/bin
   '';
 
   meta = with lib; {

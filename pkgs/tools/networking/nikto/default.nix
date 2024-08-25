@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     # EXECDIR needs to be changed to the path where we copy the programs stuff
     # Forcing SSLeay is needed for SSL support (the auto mode doesn't seem to work otherwise)
     substituteInPlace program/nikto.conf.default \
-      --replace "# EXECDIR=/opt/nikto" "EXECDIR=$out/share" \
-      --replace "LW_SSL_ENGINE=auto" "LW_SSL_ENGINE=SSLeay"
+      --replace-fail "# EXECDIR=/opt/nikto" "EXECDIR=$out/share" \
+      --replace-fail "LW_SSL_ENGINE=auto" "LW_SSL_ENGINE=SSLeay"
   '';
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   # See https://github.com/srush/MiniChain/issues/24.
   postPatch = ''
-    substituteInPlace ./minichain/__init__.py --replace "from .gradio import GradioConf, show" ""
+    substituteInPlace ./minichain/__init__.py --replace-fail "from .gradio import GradioConf, show" ""
   '';
 
 

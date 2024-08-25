@@ -12,7 +12,7 @@ buildDunePackage rec {
   };
 
   preBuild = ''
-    substituteInPlace src/dune --replace "bytes)" ")"
+    substituteInPlace src/dune --replace-fail "bytes)" ")"
   '';
 
   meta = {

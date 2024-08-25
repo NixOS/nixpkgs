@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pyparsing>=2.4*" "pyparsing>=2.4"
+      --replace-fail "pyparsing>=2.4*" "pyparsing>=2.4"
 
     # fix distutils use for Python 3.12
     substituteInPlace src/wfuzz/plugin_api/base.py \

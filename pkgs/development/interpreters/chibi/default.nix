@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
     for f in chibi-doc chibi-ffi snow-chibi; do
       substituteInPlace "$out/bin/$f" \
-        --replace "/usr/bin/env chibi-scheme" "$out/bin/chibi-scheme"
+        --replace-fail "/usr/bin/env chibi-scheme" "$out/bin/chibi-scheme"
     done
   '';
 

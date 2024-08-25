@@ -39,19 +39,19 @@ stdenv.mkDerivation rec {
   # Lots of nice hard-coded paths...
   postPatch = ''
     substituteInPlace unetbootin.cpp \
-      --replace /bin/df             ${coreutils}/bin/df \
-      --replace /sbin/blkid         ${util-linux}/sbin/blkid \
-      --replace /sbin/fdisk         ${util-linux}/sbin/fdisk \
-      --replace /sbin/sfdisk        ${util-linux}/sbin/sfdisk \
-      --replace /usr/bin/syslinux   ${syslinux}/bin/syslinux \
-      --replace /usr/bin/extlinux   ${syslinux}/sbin/extlinux \
-      --replace /usr/share/syslinux ${syslinux}/share/syslinux
+      --replace-fail /bin/df             ${coreutils}/bin/df \
+      --replace-fail /sbin/blkid         ${util-linux}/sbin/blkid \
+      --replace-fail /sbin/fdisk         ${util-linux}/sbin/fdisk \
+      --replace-fail /sbin/sfdisk        ${util-linux}/sbin/sfdisk \
+      --replace-fail /usr/bin/syslinux   ${syslinux}/bin/syslinux \
+      --replace-fail /usr/bin/extlinux   ${syslinux}/sbin/extlinux \
+      --replace-fail /usr/share/syslinux ${syslinux}/share/syslinux
 
     substituteInPlace main.cpp \
-      --replace /usr/share/unetbootin $out/share/unetbootin
+      --replace-fail /usr/share/unetbootin $out/share/unetbootin
 
     substituteInPlace unetbootin.desktop \
-      --replace /usr/bin $out/bin
+      --replace-fail /usr/bin $out/bin
   '';
 
   preConfigure = ''

@@ -28,10 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Fixup bad cmake paths
   postInstall = ''
     substituteInPlace $out/lib/cmake/dnnl/dnnl-config.cmake \
-      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
+      --replace-fail "\''${PACKAGE_PREFIX_DIR}/" ""
 
     substituteInPlace $out/lib/cmake/dnnl/dnnl-targets.cmake \
-      --replace "\''${_IMPORT_PREFIX}/" ""
+      --replace-fail "\''${_IMPORT_PREFIX}/" ""
   '';
 
   meta = {

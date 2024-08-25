@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Fix broken install command
-    substituteInPlace Makefile --replace "-pm755" "-pDm755"
+    substituteInPlace Makefile --replace-fail "-pm755" "-pDm755"
   '';
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

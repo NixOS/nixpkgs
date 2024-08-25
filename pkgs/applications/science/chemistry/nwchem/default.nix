@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     echo -e '#!/bin/sh\n cd ga-${versionGA};autoreconf -ivf' > src/tools/get-tools-github
 
     # /usr/bin/env bash fails in sandbox/Makefile setting
-    substituteInPlace src/config/makefile.h --replace '/usr/bin/env bash' "${stdenv.shell}"
+    substituteInPlace src/config/makefile.h --replace-fail '/usr/bin/env bash' "${stdenv.shell}"
 
     patchShebangs ./
   '';

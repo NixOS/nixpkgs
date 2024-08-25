@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   # Fix broken paths in a .pc
   postPatch = ''
     substituteInPlace source/externals/ptl/cmake/Modules/PTLPackageConfigHelpers.cmake \
-      --replace '${"$"}{prefix}/${"$"}{PTL_INSTALL_' '${"$"}{PTL_INSTALL_'
+      --replace-fail '${"$"}{prefix}/${"$"}{PTL_INSTALL_' '${"$"}{PTL_INSTALL_'
   '';
 
   cmakeFlags = [

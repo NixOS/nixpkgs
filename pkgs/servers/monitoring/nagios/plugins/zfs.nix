@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs check_zfs.py
     substituteInPlace check_zfs.py \
-      --replace "'/usr/bin/sudo'" "'${sudo}/bin/sudo'" \
-      --replace "'/sbin/zpool'" "'${zfs}/bin/zpool'" \
-      --replace "'/sbin/zfs'" "'${zfs}/bin/zfs'"
+      --replace-fail "'/usr/bin/sudo'" "'${sudo}/bin/sudo'" \
+      --replace-fail "'/sbin/zpool'" "'${zfs}/bin/zpool'" \
+      --replace-fail "'/sbin/zfs'" "'${zfs}/bin/zfs'"
   '';
 
   installPhase = ''

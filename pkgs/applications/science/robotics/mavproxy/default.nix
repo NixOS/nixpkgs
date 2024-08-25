@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "opencv-python" ""
+      --replace-fail "opencv-python" ""
   '';
 
   propagatedBuildInputs = [

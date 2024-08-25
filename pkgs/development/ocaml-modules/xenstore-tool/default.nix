@@ -6,7 +6,7 @@ buildDunePackage {
   inherit (xenstore_transport) src version;
 
   postPatch = ''
-    substituteInPlace cli/dune --replace 'libraries ' 'libraries camlp-streams '
+    substituteInPlace cli/dune --replace-fail 'libraries ' 'libraries camlp-streams '
   '';
 
   buildInputs = [ camlp-streams xenstore_transport xenstore lwt ];

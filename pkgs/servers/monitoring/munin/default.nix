@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     echo "${version}" > RELEASE
     substituteInPlace "Makefile" \
-      --replace "/bin/pwd" "pwd" \
-      --replace "HTMLOld.3pm" "HTMLOld.3"
+      --replace-fail "/bin/pwd" "pwd" \
+      --replace-fail "HTMLOld.3pm" "HTMLOld.3"
 
     # munin checks at build time if user/group exists, unpure
     sed -i '/CHECKUSER/d' Makefile

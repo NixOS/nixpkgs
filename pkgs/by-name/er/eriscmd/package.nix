@@ -19,7 +19,7 @@ buildNimPackage (final: prev: {
 
     mkdir -p "$bin/share/applications"
     substitute "eris-open.desktop" "$bin/share/applications/eris-open.desktop"\
-      --replace "Exec=eriscmd " "Exec=$bin/bin/eriscmd "
+      --replace-fail "Exec=eriscmd " "Exec=$bin/bin/eriscmd "
 
     install -D "eris-link.xml" -t "$bin/share/mime/packages"
     install -D "eris48.png" "$bin/share/icons/hicolor/48x48/apps/eris.png"

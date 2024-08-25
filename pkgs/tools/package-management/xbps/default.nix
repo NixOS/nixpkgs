@@ -25,16 +25,16 @@ stdenv.mkDerivation rec {
     # _BSD_SOURCE causes cpp warning
     # https://github.com/void-linux/xbps/issues/576
     substituteInPlace bin/xbps-fbulk/main.c lib/util.c lib/external/dewey.c lib/external/fexec.c \
-      --replace 'define _BSD_SOURCE' 'define _DEFAULT_SOURCE' \
-      --replace '# define _BSD_SOURCE' '#define _DEFAULT_SOURCE'
+      --replace-fail 'define _BSD_SOURCE' 'define _DEFAULT_SOURCE' \
+      --replace-fail '# define _BSD_SOURCE' '#define _DEFAULT_SOURCE'
 
     # fix unprefixed ranlib (needed on cross)
     substituteInPlace lib/Makefile \
-      --replace 'SILENT}ranlib ' 'SILENT}$(RANLIB) '
+      --replace-fail 'SILENT}ranlib ' 'SILENT}$(RANLIB) '
 
     # Don't try to install keys to /var/db/xbps, put in $out/share for now
     substituteInPlace data/Makefile \
-      --replace '$(DESTDIR)/$(DBDIR)' '$(DESTDIR)/$(SHAREDIR)'
+      --replace-fail '$(DESTDIR)/$(DBDIR)' '$(DESTDIR)/$(SHAREDIR)'
   '';
 
   enableParallelBuilding = true;

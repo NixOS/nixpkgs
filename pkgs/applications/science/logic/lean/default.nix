@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     substituteInPlace $out/bin/leanpkg \
-      --replace "greadlink" "${coreutils}/bin/readlink"
+      --replace-fail "greadlink" "${coreutils}/bin/readlink"
   '';
 
   meta = with lib; {

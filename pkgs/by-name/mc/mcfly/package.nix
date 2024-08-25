@@ -12,9 +12,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace mcfly.bash --replace '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
-    substituteInPlace mcfly.zsh  --replace '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
-    substituteInPlace mcfly.fish --replace '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
+    substituteInPlace mcfly.bash --replace-fail '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
+    substituteInPlace mcfly.zsh  --replace-fail '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
+    substituteInPlace mcfly.fish --replace-fail '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
   '';
 
   cargoHash = "sha256-c+LOmUUt8t1x5Pp8yGHSeLcJNs/lJzq29KMX/i7Cscs=";

@@ -12,9 +12,9 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     for i in zs-wait4host zs-wait4host-inf; do
       substituteInPlace "$i" \
-        --replace '$(zs-guess-fping)' '${fping}/bin/fping' \
-        --replace ' sleep ' ' ${coreutils}/bin/sleep ' \
-        --replace '[ "$FPING" ] || exit 1' ""
+        --replace-fail '$(zs-guess-fping)' '${fping}/bin/fping' \
+        --replace-fail ' sleep ' ' ${coreutils}/bin/sleep ' \
+        --replace-fail '[ "$FPING" ] || exit 1' ""
     done
   '';
 

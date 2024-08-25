@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=ruuvitag_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=ruuvitag_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [ "ruuvitag_ble" ];

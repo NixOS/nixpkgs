@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./vite.config.ts \
-      --replace 'outDir: "../internal/server/public_html"' 'outDir: "dist"'
+      --replace-fail 'outDir: "../internal/server/public_html"' 'outDir: "dist"'
   '';
 
   postBuild = ''

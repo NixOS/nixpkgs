@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lrte_net_bond";
 
   postPatch = ''
-    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${util-linux}/bin/lscpu
+    substituteInPlace lib/common/lscpu.h --replace-fail /usr/bin/lscpu ${util-linux}/bin/lscpu
   '';
 
   postInstall = ''

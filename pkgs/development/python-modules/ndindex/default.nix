@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--flakes" ""
+      --replace-fail "--flakes" ""
   '';
 
   passthru.optional-dependencies.arrays = [ numpy ];

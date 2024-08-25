@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # the gstreamer toolsdir points to the wrong derivation output
   postPatch = ''
     substituteInPlace configure.ac \
-                      --replace '$gst10_toolsdir/gst-inspect-1.0' '${gst_all_1.gstreamer}/bin/gst-inspect-1.0' \
+                      --replace-fail '$gst10_toolsdir/gst-inspect-1.0' '${gst_all_1.gstreamer}/bin/gst-inspect-1.0' \
   '';
 
   preBuild = ''

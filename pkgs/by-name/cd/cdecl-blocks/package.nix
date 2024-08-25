@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   prePatch = ''
     substituteInPlace cdecl.c \
-      --replace 'getline' 'cdecl_getline'
+      --replace-fail 'getline' 'cdecl_getline'
   '';
 
   strictDeps = true;

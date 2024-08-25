@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/keybase-gui
 
     substituteInPlace $out/share/applications/keybase.desktop \
-      --replace run_keybase $out/bin/keybase-gui
+      --replace-fail run_keybase $out/bin/keybase-gui
   '';
 
   meta = with lib; {

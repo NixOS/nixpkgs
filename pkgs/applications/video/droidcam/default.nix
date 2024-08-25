@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/droidcam.c \
-      --replace "/opt/droidcam-icon.png" "$out/share/icons/hicolor/96x96/apps/droidcam.png"
+      --replace-fail "/opt/droidcam-icon.png" "$out/share/icons/hicolor/96x96/apps/droidcam.png"
     substituteInPlace droidcam.desktop \
-      --replace "/opt/droidcam-icon.png" "droidcam" \
-      --replace "/usr/local/bin/droidcam" "droidcam"
+      --replace-fail "/opt/droidcam-icon.png" "droidcam" \
+      --replace-fail "/usr/local/bin/droidcam" "droidcam"
   '';
 
   preBuild = ''

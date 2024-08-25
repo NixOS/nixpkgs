@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   # For details see https://github.com/envio-cli/envio/pull/31
   postPatch = ''
     substituteInPlace build.rs\
-      --replace 'fn get_version() -> String {' 'fn get_version() -> String { return "${version}".to_string();'
+      --replace-fail 'fn get_version() -> String {' 'fn get_version() -> String { return "${version}".to_string();'
   '';
 
   meta = with lib; {

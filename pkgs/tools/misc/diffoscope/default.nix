@@ -121,7 +121,7 @@ python.pkgs.buildPythonApplication rec {
     sed -i setup.py -e "/'rpm-python',/d"
 
     # When generating manpage, use the installed version
-    substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
+    substituteInPlace doc/Makefile --replace-fail "../bin" "$out/bin"
   '';
 
   nativeBuildInputs = [

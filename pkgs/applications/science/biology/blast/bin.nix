@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   preFixup = ''
     substituteInPlace $out/bin/get_species_taxids.sh \
-      --replace /bin/rm ${coreutils}/bin/rm
+      --replace-fail /bin/rm ${coreutils}/bin/rm
   '';
 
   meta = with lib; {

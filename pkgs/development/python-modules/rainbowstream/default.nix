@@ -53,7 +53,7 @@ buildPythonPackage rec {
   postPatch = ''
     clib=$out/${python.sitePackages}/rainbowstream/image.so
     substituteInPlace rainbowstream/c_image.py \
-      --replace @CLIB@ $clib
+      --replace-fail @CLIB@ $clib
     sed -i 's/requests.*"/requests"/' setup.py
   '';
 

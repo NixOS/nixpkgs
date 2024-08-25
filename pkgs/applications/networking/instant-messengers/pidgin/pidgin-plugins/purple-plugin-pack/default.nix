@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "PURPLE.get_pkgconfig_variable('plugindir')" "'$out/lib/purple-2'" \
-      --replace "PURPLE.get_pkgconfig_variable('datadir')" "'$out/share'" \
-      --replace "PIDGIN.get_pkgconfig_variable('plugindir')" "'$out/lib/pidgin'" \
-      --replace "PIDGIN.get_pkgconfig_variable('datadir')" "'$out/share'"
+      --replace-fail "PURPLE.get_pkgconfig_variable('plugindir')" "'$out/lib/purple-2'" \
+      --replace-fail "PURPLE.get_pkgconfig_variable('datadir')" "'$out/share'" \
+      --replace-fail "PIDGIN.get_pkgconfig_variable('plugindir')" "'$out/lib/pidgin'" \
+      --replace-fail "PIDGIN.get_pkgconfig_variable('datadir')" "'$out/share'"
   '';
 
   nativeBuildInputs = [

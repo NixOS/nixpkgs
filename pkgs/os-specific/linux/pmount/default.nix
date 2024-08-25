@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     # etc/Mafile.am is hardcoded and it does not respect the --prefix option.
-    substituteInPlace ./etc/Makefile --replace DESTDIR prefix
+    substituteInPlace ./etc/Makefile --replace-fail DESTDIR prefix
     # Do not change ownership & Do not add the set user ID bit
-    substituteInPlace ./src/Makefile --replace '-o root -g root -m 4755 ' '-m 755 '
+    substituteInPlace ./src/Makefile --replace-fail '-o root -g root -m 4755 ' '-m 755 '
   '';
 
   doCheck = false; # fails 1 out of 1 tests with "Error: could not open fstab-type file: No such file or directory"

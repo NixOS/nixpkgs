@@ -32,8 +32,8 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     mv -v *.ppd ppd/
     substituteInPlace src/pstoqpdl.cpp \
-      --replace "RASTERDIR \"/\" RASTERTOQPDL" "\"$out/lib/cups/filter/rastertoqpdl\"" \
-      --replace "RASTERDIR" "\"${cups-filters}/lib/cups/filter\"" \
+      --replace-fail "RASTERDIR \"/\" RASTERTOQPDL" "\"$out/lib/cups/filter/rastertoqpdl\"" \
+      --replace-fail "RASTERDIR" "\"${cups-filters}/lib/cups/filter\"" \
   '';
 
   makeFlags = [

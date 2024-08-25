@@ -129,11 +129,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # We're not on Windows so these are never installed to hipcc...
     substituteInPlace hipamd/CMakeLists.txt \
-      --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
-      --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
+      --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
+      --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
-      --replace "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
+      --replace-fail "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
 
     # https://lists.debian.org/debian-ai/2024/02/msg00178.html
     substituteInPlace rocclr/utils/flags.hpp \

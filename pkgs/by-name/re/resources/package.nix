@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/utils/memory.rs \
-      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
+      --replace-fail '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
     substituteInPlace src/utils/cpu.rs \
-      --replace '"lscpu"' '"${util-linux}/bin/lscpu"'
+      --replace-fail '"lscpu"' '"${util-linux}/bin/lscpu"'
     substituteInPlace src/utils/memory.rs \
-      --replace '"pkexec"' '"/run/wrappers/bin/pkexec"'
+      --replace-fail '"pkexec"' '"/run/wrappers/bin/pkexec"'
   '';
 
   mesonFlags = [

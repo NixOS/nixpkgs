@@ -29,7 +29,7 @@ buildGoModule rec {
   postInstall = ''
     mkdir -p $out/lib/systemd/system
     substitute dist/systemd/zrepl.service $out/lib/systemd/system/zrepl.service \
-      --replace /usr/local/bin/zrepl $out/bin/zrepl
+      --replace-fail /usr/local/bin/zrepl $out/bin/zrepl
 
     wrapProgram $out/bin/zrepl \
       --prefix PATH : ${lib.makeBinPath [ openssh ]}

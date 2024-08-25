@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/src.pro \
-      --replace '$$[QT_INSTALL_LIBS]' "$out/lib" \
-      --replace '$$[QT_INSTALL_HEADERS]' "$out/include" \
-      --replace '$$[QMAKE_MKSPECS]' "$out/mkspecs"
+      --replace-fail '$$[QT_INSTALL_LIBS]' "$out/lib" \
+      --replace-fail '$$[QT_INSTALL_HEADERS]' "$out/include" \
+      --replace-fail '$$[QMAKE_MKSPECS]' "$out/mkspecs"
   '';
 
   nativeBuildInputs = [

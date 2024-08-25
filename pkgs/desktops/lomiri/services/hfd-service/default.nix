@@ -27,17 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace qt/feedback-plugin/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/plugins" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/plugins" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}"
 
     # Queries pkg-config via pkg_get_variable, can't override prefix
     substituteInPlace init/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_SYSTEM_DIR systemd systemdsystemunitdir)' 'set(SYSTEMD_SYSTEM_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/system)'
+      --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_DIR systemd systemdsystemunitdir)' 'set(SYSTEMD_SYSTEM_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/system)'
     substituteInPlace CMakeLists.txt \
-      --replace 'pkg_get_variable(AS_INTERFACES_DIR accountsservice interfacesdir)' 'set(AS_INTERFACES_DIR "''${CMAKE_INSTALL_FULL_DATADIR}/accountsservice/interfaces")' \
-      --replace '../../dbus-1/interfaces' "\''${CMAKE_INSTALL_PREFIX}/\''${DBUS_INTERFACES_DIR}" \
-      --replace 'DESTINATION ''${DBUS_INTERFACES_DIR}' 'DESTINATION ''${CMAKE_INSTALL_PREFIX}/''${DBUS_INTERFACES_DIR}'
+      --replace-fail 'pkg_get_variable(AS_INTERFACES_DIR accountsservice interfacesdir)' 'set(AS_INTERFACES_DIR "''${CMAKE_INSTALL_FULL_DATADIR}/accountsservice/interfaces")' \
+      --replace-fail '../../dbus-1/interfaces' "\''${CMAKE_INSTALL_PREFIX}/\''${DBUS_INTERFACES_DIR}" \
+      --replace-fail 'DESTINATION ''${DBUS_INTERFACES_DIR}' 'DESTINATION ''${CMAKE_INSTALL_PREFIX}/''${DBUS_INTERFACES_DIR}'
     substituteInPlace src/CMakeLists.txt \
-      --replace "\''${DBUS_INTERFACES_DIR}/org.freedesktop.Accounts.xml" '${accountsservice}/share/dbus-1/interfaces/org.freedesktop.Accounts.xml'
+      --replace-fail "\''${DBUS_INTERFACES_DIR}/org.freedesktop.Accounts.xml" '${accountsservice}/share/dbus-1/interfaces/org.freedesktop.Accounts.xml'
   '';
 
   strictDeps = true;

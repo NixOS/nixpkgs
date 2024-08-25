@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
+    substituteInPlace setup.cfg --replace-fail "auto_use = True" "auto_use = False"
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -32,9 +32,9 @@ buildPythonPackage rec {
       # This code should never be hit, but in case it does, we don't want to have
       # it "accidentally" work by pulling something from /opt.
       substituteInPlace enchant/_enchant.py                  \
-        --replace 'os.environ.get("PYENCHANT_LIBRARY_PATH")' \
+        --replace-fail 'os.environ.get("PYENCHANT_LIBRARY_PATH")' \
                   "'${enchant2}/lib/libenchant-2${libext}'"  \
-        --replace '/opt/local/lib/' ""
+        --replace-fail '/opt/local/lib/' ""
     '';
 
   # dictionaries needed for tests

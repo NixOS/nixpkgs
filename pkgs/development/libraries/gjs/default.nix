@@ -94,7 +94,7 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace installed-tests/js/meson.build \
-      --replace "'Encoding'," "#'Encoding',"
+      --replace-fail "'Encoding'," "#'Encoding',"
   '';
 
   preCheck = ''

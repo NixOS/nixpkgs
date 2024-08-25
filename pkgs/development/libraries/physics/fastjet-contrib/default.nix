@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for f in Makefile.in */Makefile; do
-      substituteInPlace "$f" --replace "CXX=g++" ""
+      substituteInPlace "$f" --replace-fail "CXX=g++" ""
     done
     patchShebangs ./utils/check.sh ./utils/install-sh
   '';

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace configure --replace Linux Debian
+    substituteInPlace configure --replace-fail Linux Debian
   '';
 
   strictDeps = true;

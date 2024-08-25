@@ -60,10 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace style.css \
-      --replace "/usr/share/wlogout" "$out/share/wlogout"
+      --replace-fail "/usr/share/wlogout" "$out/share/wlogout"
 
     substituteInPlace main.c \
-      --replace "/etc/wlogout" "$out/etc/wlogout"
+      --replace-fail "/etc/wlogout" "$out/etc/wlogout"
   '';
 
   passthru = {

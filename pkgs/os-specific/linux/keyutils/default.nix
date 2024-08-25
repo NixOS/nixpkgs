@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # https://github.com/archlinux/svntogit-packages/blob/packages/keyutils/trunk/reproducible.patch
     substituteInPlace Makefile \
-      --replace \
+      --replace-fail \
         'VCPPFLAGS	:= -DPKGBUILD="\"$(shell date -u +%F)\""' \
         'VCPPFLAGS	:= -DPKGBUILD="\"$(date -ud "@$SOURCE_DATE_EPOCH" +%F)\""'
   '';

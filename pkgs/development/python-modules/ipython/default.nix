@@ -87,7 +87,7 @@ buildPythonPackage rec {
 
     # doctests try to fetch an image from the internet
     substituteInPlace pyproject.toml \
-      --replace '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
+      --replace-fail '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
   '';
 
   nativeCheckInputs = [

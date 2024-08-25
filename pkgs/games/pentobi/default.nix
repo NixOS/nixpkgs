@@ -17,9 +17,9 @@ mkDerivation rec {
   buildInputs = [ appstream qtbase qtsvg qtquickcontrols2 qtwebview itstool librsvg ];
 
   patchPhase = ''
-    substituteInPlace pentobi_thumbnailer/CMakeLists.txt --replace "/manpages" "/share/xml/docbook-xsl/manpages/"
-    substituteInPlace pentobi/unix/CMakeLists.txt --replace "/manpages" "/share/xml/docbook-xsl/manpages/"
-    substituteInPlace pentobi/docbook/CMakeLists.txt --replace "/html" "/share/xml/docbook-xsl/html"
+    substituteInPlace pentobi_thumbnailer/CMakeLists.txt --replace-fail "/manpages" "/share/xml/docbook-xsl/manpages/"
+    substituteInPlace pentobi/unix/CMakeLists.txt --replace-fail "/manpages" "/share/xml/docbook-xsl/manpages/"
+    substituteInPlace pentobi/docbook/CMakeLists.txt --replace-fail "/html" "/share/xml/docbook-xsl/html"
   '';
 
   cmakeFlags = [

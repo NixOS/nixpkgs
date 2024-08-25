@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook to
     # take effect.
-    substituteInPlace configure.ac --replace \
+    substituteInPlace configure.ac --replace-fail \
       'export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH' ""
   '';
 

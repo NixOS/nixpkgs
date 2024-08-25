@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/pell --replace "/usr/bin/env scsh" "${scsh}/bin/scsh"
-    substituteInPlace $out/bin/pell --replace "(play " "(${sox}/bin/play "
-    substituteInPlace $out/bin/pell --replace "(notify-send " "(${libnotify}/bin/notify-send "
-    substituteInPlace $out/bin/pell --replace "/usr/share/pell/online.mp3" "$out/share/online.mp3"
-    substituteInPlace $out/bin/pell --replace "/usr/share/pell/offline.mp3" "$out/share/offline.mp3"
+    substituteInPlace $out/bin/pell --replace-fail "/usr/bin/env scsh" "${scsh}/bin/scsh"
+    substituteInPlace $out/bin/pell --replace-fail "(play " "(${sox}/bin/play "
+    substituteInPlace $out/bin/pell --replace-fail "(notify-send " "(${libnotify}/bin/notify-send "
+    substituteInPlace $out/bin/pell --replace-fail "/usr/share/pell/online.mp3" "$out/share/online.mp3"
+    substituteInPlace $out/bin/pell --replace-fail "/usr/share/pell/offline.mp3" "$out/share/offline.mp3"
   '';
 
   meta = with lib; {

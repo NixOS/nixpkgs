@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     cp ./*.jar $out/share/java
 
     for file in $out/bin/*; do
-      substituteInPlace $file --replace "\$BF_DIR" $out/libexec
+      substituteInPlace $file --replace-fail "\$BF_DIR" $out/libexec
     done
-    substituteInPlace $out/libexec/bf.sh --replace "\$BF_JAR_DIR" $out/share/java
+    substituteInPlace $out/libexec/bf.sh --replace-fail "\$BF_JAR_DIR" $out/share/java
   '';
 
   postFixup = ''

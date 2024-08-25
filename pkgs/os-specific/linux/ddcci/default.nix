@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace ./ddcci/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
+      --replace-fail '"$(src)"' '$(PWD)' \
+      --replace-fail depmod \#
     substituteInPlace ./ddcci-backlight/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
+      --replace-fail '"$(src)"' '$(PWD)' \
+      --replace-fail depmod \#
   '';
 
   makeFlags = kernel.makeFlags ++ [

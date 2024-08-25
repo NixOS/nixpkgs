@@ -25,18 +25,18 @@ stdenv.mkDerivation {
     # from the actual config options.
     for pl in *.pl; do
       substituteInPlace "$pl" \
-        --replace 'require "$ENV{HOME}/.tagtimerc";' \
+        --replace-fail 'require "$ENV{HOME}/.tagtimerc";' \
                   'require "${placeholder "out"}/libexec/settings.pl";'
     done;
 
     install tagtimed.pl $out/bin/tagtimed
 
     substituteInPlace util.pl \
-      --replace '/usr/bin/touch' \
+      --replace-fail '/usr/bin/touch' \
                 '${coreutils}/bin/touch' \
-      --replace '/bin/rm -f $lockf' \
+      --replace-fail '/bin/rm -f $lockf' \
                 '${coreutils}/bin/rm -f $lockf' \
-      --replace '$lockf = "''${path}tagtime.lock";' \
+      --replace-fail '$lockf = "''${path}tagtime.lock";' \
                 'mkdir "$ENV{HOME}/.cache/tagtime";
     $lockf = "$ENV{HOME}/.cache/tagtime/tagtime.lock";'
 
@@ -46,16 +46,16 @@ stdenv.mkDerivation {
 
     # set the default template arguments to sane defaults.
     substitute settings.pl.template $out/libexec/settings.pl \
-      --replace '"__USER__"' \
+      --replace-fail '"__USER__"' \
                 'getlogin()' \
-      --replace '"__PATH__"' \
+      --replace-fail '"__PATH__"' \
                 '"${placeholder "out"}/libexec/"' \
-      --replace '$logf = "$path$usr.log";' \
+      --replace-fail '$logf = "$path$usr.log";' \
                 'mkdir "$ENV{HOME}/.local/share/tagtime";
     $logf = "$ENV{HOME}/.local/share/tagtime/pings.log";' \
-      --replace '"__ED__ +"' \
+      --replace-fail '"__ED__ +"' \
                 '$ENV{"EDITOR"}' \
-      --replace '"__XT__"' \
+      --replace-fail '"__XT__"' \
                 '"${xterm}/bin/xterm"'
 
     runHook postInstall

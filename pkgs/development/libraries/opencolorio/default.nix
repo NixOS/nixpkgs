@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
     # these tests don't like being run headless on darwin. no builtin
     # way of skipping tests so this is what we're reduced to.
     substituteInPlace tests/cpu/Config_tests.cpp \
-      --replace 'OCIO_ADD_TEST(Config, virtual_display)' 'static void _skip_virtual_display()' \
-      --replace 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
+      --replace-fail 'OCIO_ADD_TEST(Config, virtual_display)' 'static void _skip_virtual_display()' \
+      --replace-fail 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
   '';
 
   nativeBuildInputs = [ cmake ];

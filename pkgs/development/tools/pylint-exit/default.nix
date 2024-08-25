@@ -14,7 +14,7 @@ with python3Packages; buildPythonApplication rec {
   # Converting the shebang manually as it is not picked up by patchShebangs
   postPatch = ''
     substituteInPlace pylint_exit.py \
-      --replace "#!/usr/local/bin/python" "#!${python.interpreter}"
+      --replace-fail "#!/usr/local/bin/python" "#!${python.interpreter}"
   '';
 
   # See https://github.com/jongracecox/pylint-exit/pull/7

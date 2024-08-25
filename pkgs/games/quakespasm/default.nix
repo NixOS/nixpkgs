@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p "$out/bin"
-    substituteInPlace Makefile --replace "/usr/local/games" "$out/bin"
-    substituteInPlace Makefile.darwin --replace "/usr/local/games" "$out/bin"
+    substituteInPlace Makefile --replace-fail "/usr/local/games" "$out/bin"
+    substituteInPlace Makefile.darwin --replace-fail "/usr/local/games" "$out/bin"
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/quake $out/Applications/Quake.app/Contents/MacOS/quake
 
     substituteInPlace $out/Applications/Quake.app/Contents/Info.plist \
-      --replace '>''${EXECUTABLE_NAME}' '>quake'
+      --replace-fail '>''${EXECUTABLE_NAME}' '>quake'
     substituteInPlace $out/Applications/Quake.app/Contents/Info.plist \
-      --replace '>''${PRODUCT_NAME}' '>QuakeSpasm'
+      --replace-fail '>''${PRODUCT_NAME}' '>QuakeSpasm'
   '';
 
   enableParallelBuilding = true;

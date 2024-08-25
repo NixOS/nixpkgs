@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace sudachi/src/config.rs \
-      --replace '"resources"' '"${placeholder "out"}/share/resources"'
+      --replace-fail '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
   cargoHash = "sha256-Ufo3dB2KGDDNiebp7hLhQrUMLsefO8wRpJQDz57Yb8Y=";

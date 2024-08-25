@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preBuild = lib.optionalString stdenv.cc.isClang
     ''
       substituteInPlace Makefile \
-        --replace -fpredictive-commoning ""
+        --replace-fail -fpredictive-commoning ""
     '';
 
   preInstall = ''

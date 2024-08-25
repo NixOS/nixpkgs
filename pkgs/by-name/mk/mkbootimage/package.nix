@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ elfutils pcre ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace "git rev-parse --short HEAD" "echo ${finalAttrs.src.rev}"
+    substituteInPlace Makefile --replace-fail "git rev-parse --short HEAD" "echo ${finalAttrs.src.rev}"
   '';
 
   installPhase = ''

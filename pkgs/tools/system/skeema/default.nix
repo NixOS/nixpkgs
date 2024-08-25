@@ -20,14 +20,14 @@ buildGoModule rec {
   preCheck = ''
     # Fix tests expecting /usr/bin/printf and /bin/echo
     substituteInPlace skeema_cmd_test.go \
-      --replace /usr/bin/printf "${coreutils}/bin/printf"
+      --replace-fail /usr/bin/printf "${coreutils}/bin/printf"
 
     substituteInPlace internal/fs/dir_test.go \
-      --replace /bin/echo "${coreutils}/bin/echo" \
-      --replace /usr/bin/printf "${coreutils}/bin/printf"
+      --replace-fail /bin/echo "${coreutils}/bin/echo" \
+      --replace-fail /usr/bin/printf "${coreutils}/bin/printf"
 
     substituteInPlace internal/applier/ddlstatement_test.go \
-      --replace /bin/echo "${coreutils}/bin/echo"
+      --replace-fail /bin/echo "${coreutils}/bin/echo"
   '';
 
   checkFlags =

@@ -24,9 +24,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "cryptography==3.3.2" "cryptography" \
-      --replace "ecdsa==0.15" "ecdsa" \
-      --replace "pyopenssl==20.0.0" "pyopenssl"
+      --replace-fail "cryptography==3.3.2" "cryptography" \
+      --replace-fail "ecdsa==0.15" "ecdsa" \
+      --replace-fail "pyopenssl==20.0.0" "pyopenssl"
   '';
 
   propagatedBuildInputs = [

@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   postConfigure = ''
     for f in src/c/vendor/configure/{ltmain.sh,configure}; do
-      substituteInPlace "$f" --replace /usr/bin/file file
+      substituteInPlace "$f" --replace-fail /usr/bin/file file
     done
   '';
 

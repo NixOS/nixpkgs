@@ -18,10 +18,10 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace checkup.bash \
-      --replace curl ${curl}/bin/curl \
-      --replace find ${findutils}/bin/find \
-      --replace grep ${gnugrep}/bin/grep \
-      --replace sed ${gnused}/bin/sed
+      --replace-fail curl ${curl}/bin/curl \
+      --replace-fail find ${findutils}/bin/find \
+      --replace-fail grep ${gnugrep}/bin/grep \
+      --replace-fail sed ${gnused}/bin/sed
   '';
 
   installPhase = ''

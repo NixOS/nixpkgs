@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   # Fix location of Lua 5.4 header and library
   postPatch = ''
-    substituteInPlace Makefile --replace "-llua5.4" "-llua";
-    substituteInPlace mle.h    --replace "<lua5.4/" "<";
+    substituteInPlace Makefile --replace-fail "-llua5.4" "-llua";
+    substituteInPlace mle.h    --replace-fail "<lua5.4/" "<";
     patchShebangs tests/*
   '';
 

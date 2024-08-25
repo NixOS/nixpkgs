@@ -68,7 +68,7 @@ let self = buildPythonPackage rec {
     # sphinx.ext.intersphinx requires network connection or packaged object.inv files for python and pypug
     # sphinxcontrib.towncrier is not currently packaged
     for ext in sphinx.ext.intersphinx sphinx_copybutton sphinx_inline_tabs sphinxcontrib.towncrier myst_parser; do
-      substituteInPlace html/conf.py --replace '"'$ext'",' ""
+      substituteInPlace html/conf.py --replace-fail '"'$ext'",' ""
     done
 
     PYTHONPATH=$src/src:$PYTHONPATH sphinx-build -v \

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       patchShebangs configure
-      substituteInPlace configure --replace ",/dev/null" ""
+      substituteInPlace configure --replace-fail ",/dev/null" ""
     '';
 
   enableParallelBuilding = false; # fails to build if true

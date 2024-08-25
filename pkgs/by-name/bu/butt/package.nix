@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # remove advertising
     substituteInPlace src/FLTK/flgui.cpp \
-      --replace 'idata_radio_co_badge, 124, 61, 4,' 'nullptr, 0, 0, 0,'
+      --replace-fail 'idata_radio_co_badge, 124, 61, 4,' 'nullptr, 0, 0, 0,'
   '';
 
   nativeBuildInputs = [ pkg-config ];

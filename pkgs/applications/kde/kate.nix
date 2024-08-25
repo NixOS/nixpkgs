@@ -21,9 +21,9 @@ mkDerivation {
   # 1, which is the default.
   postPatch = ''
     substituteInPlace apps/kate/data/org.kde.kate.desktop \
-      --replace InitialPreference=9 InitialPreference=1
+      --replace-fail InitialPreference=9 InitialPreference=1
     substituteInPlace apps/kwrite/data/org.kde.kwrite.desktop \
-      --replace InitialPreference=8 InitialPreference=1
+      --replace-fail InitialPreference=8 InitialPreference=1
   '';
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

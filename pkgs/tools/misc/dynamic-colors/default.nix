@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace bin/dynamic-colors \
-      --replace /usr/share/dynamic-colors $out/share/dynamic-colors
+      --replace-fail /usr/share/dynamic-colors $out/share/dynamic-colors
   '';
 
   meta = with lib; {

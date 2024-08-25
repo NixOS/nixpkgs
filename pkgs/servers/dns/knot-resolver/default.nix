@@ -45,7 +45,7 @@ unwrapped = stdenv.mkDerivation rec {
     # Even though they should already be loaded and they're in RPATH, too.
     for f in daemon/lua/{kres,zonefile}.lua; do
       substituteInPlace "$f" \
-        --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+        --replace-fail "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
     done
   ''
     # some tests have issues with network sandboxing, apparently

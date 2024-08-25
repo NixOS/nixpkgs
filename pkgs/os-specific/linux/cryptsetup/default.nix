@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # O_DIRECT is filesystem dependent and fails in a sandbox (on tmpfs)
     # and on several filesystem types (btrfs, zfs) without sandboxing.
     # Remove it, see discussion in #46151
-    substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
+    substituteInPlace tests/unit-utils-io.c --replace-fail "| O_DIRECT" ""
   '';
 
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";

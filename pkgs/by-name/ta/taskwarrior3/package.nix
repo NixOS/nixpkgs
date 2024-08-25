@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
-      --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
+      --replace-fail "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
   nativeBuildInputs =

@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace dracut.sh \
-      --replace 'dracutbasedir="$dracutsysrootdir"/usr/lib/dracut' 'dracutbasedir="$dracutsysrootdir"'"$out/lib/dracut"
+      --replace-fail 'dracutbasedir="$dracutsysrootdir"/usr/lib/dracut' 'dracutbasedir="$dracutsysrootdir"'"$out/lib/dracut"
     substituteInPlace lsinitrd.sh \
-      --replace 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
+      --replace-fail 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
 
     echo 'DRACUT_VERSION=${version}' >dracut-version.sh
   '';

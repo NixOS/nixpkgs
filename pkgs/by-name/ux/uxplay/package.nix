@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace lib/CMakeLists.txt \
-      --replace ".a" "${stdenv.hostPlatform.extensions.sharedLibrary}"
+      --replace-fail ".a" "${stdenv.hostPlatform.extensions.sharedLibrary}"
     sed -i '/PKG_CONFIG_EXECUTABLE/d' renderers/CMakeLists.txt
   '';
 

@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     PREFIX=\"\" DESTDIR=$out make install
     substituteInPlace $out/bin/profile-sync-daemon \
-      --replace "/usr/" "$out/" \
-      --replace "sudo " "/run/wrappers/bin/sudo "
+      --replace-fail "/usr/" "$out/" \
+      --replace-fail "sudo " "/run/wrappers/bin/sudo "
     # $HOME detection fails (and is unnecessary)
     sed -i '/^HOME/d' $out/bin/profile-sync-daemon
     substituteInPlace $out/bin/psd-overlay-helper \
-      --replace "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
-      --replace "sudo " "/run/wrappers/bin/sudo "
+      --replace-fail "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
+      --replace-fail "sudo " "/run/wrappers/bin/sudo "
   '';
 
   meta = with lib; {

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     mkdir -p $serviceDir
     cp kwakd.service $serviceDir/
     substituteInPlace $serviceDir/kwakd.service \
-      --replace "kwakd -p 80" "$out/bin/kwakd -p 80"
+      --replace-fail "kwakd -p 80" "$out/bin/kwakd -p 80"
   '';
 
   meta = with lib; {

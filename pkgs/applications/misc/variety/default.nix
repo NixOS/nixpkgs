@@ -71,11 +71,11 @@ python3.pkgs.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace variety_lib/varietyconfig.py \
-      --replace "__variety_data_directory__ = \"../data\"" \
+      --replace-fail "__variety_data_directory__ = \"../data\"" \
                 "__variety_data_directory__ = \"$out/share/variety\""
     substituteInPlace variety/VarietyWindow.py \
-      --replace '[script,' '["${runtimeShell}", script,' \
-      --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
+      --replace-fail '[script,' '["${runtimeShell}", script,' \
+      --replace-fail 'check_output(script)' 'check_output(["${runtimeShell}", script])'
   '';
 
   meta = with lib; {

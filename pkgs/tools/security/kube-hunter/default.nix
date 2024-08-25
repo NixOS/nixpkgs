@@ -38,9 +38,9 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "dataclasses" "" \
-      --replace "kubernetes==12.0.1" "kubernetes" \
-      --replace "--cov=kube_hunter" ""
+      --replace-fail "dataclasses" "" \
+      --replace-fail "kubernetes==12.0.1" "kubernetes" \
+      --replace-fail "--cov=kube_hunter" ""
   '';
 
   pythonImportsCheck = [

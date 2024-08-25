@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # we change this to a more sensible path
     # see https://github.com/WAUthethird/Marble-Marcher-Community-Edition/issues/23
     substituteInPlace CMakeLists.txt \
-      --replace '/home/MMCE' '/share/MMCE'
+      --replace-fail '/home/MMCE' '/share/MMCE'
   '';
 
   postInstall = ''

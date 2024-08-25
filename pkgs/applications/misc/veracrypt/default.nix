@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
     install -Dm 444 License.txt -t "$out/share/doc/${pname}/"
     install -d $out/share/applications
     substitute Setup/Linux/${pname}.desktop $out/share/applications/${pname}.desktop \
-      --replace "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
-      --replace "Icon=veracrypt" "Icon=veracrypt.xpm"
+      --replace-fail "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
+      --replace-fail "Icon=veracrypt" "Icon=veracrypt.xpm"
   '';
 
   meta = with lib; {

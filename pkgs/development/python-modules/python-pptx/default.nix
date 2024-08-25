@@ -18,9 +18,9 @@ buildPythonPackage rec {
 
   # postPatch = ''
   #   substituteInPlace setup.py \
-  #     --replace "grpcio-tools>=1.47.0, <=1.48.0" "grpcio-tools>=1.47.0, <=1.52.0" \
-  #     --replace "grpcio>=1.47.0,<=1.48.0" "grpcio>=1.47.0,<=1.53.0" \
-  #     --replace "ujson>=2.0.0,<=5.4.0" "ujson>=2.0.0,<=5.7.0"
+  #     --replace-fail "grpcio-tools>=1.47.0, <=1.48.0" "grpcio-tools>=1.47.0, <=1.52.0" \
+  #     --replace-fail "grpcio>=1.47.0,<=1.48.0" "grpcio>=1.47.0,<=1.53.0" \
+  #     --replace-fail "ujson>=2.0.0,<=5.4.0" "ujson>=2.0.0,<=5.7.0"
   #   '';
 
   propagatedBuildInputs = [

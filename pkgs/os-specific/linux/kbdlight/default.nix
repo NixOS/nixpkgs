@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile \
-      --replace /usr/local $out \
-      --replace 4755 0755
+      --replace-fail /usr/local $out \
+      --replace-fail 4755 0755
   '';
 
   meta = with lib; {

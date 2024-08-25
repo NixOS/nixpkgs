@@ -25,9 +25,9 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Remove install helpers which we don't need
     substituteInPlace setup.py \
-      --replace "parse_requirements('requirements.txt')," "[]," \
-      --replace "resolve('wheel')" "" \
-      --replace "'install': LocalInstallCommand," ""
+      --replace-fail "parse_requirements('requirements.txt')," "[]," \
+      --replace-fail "resolve('wheel')" "" \
+      --replace-fail "'install': LocalInstallCommand," ""
   '';
 
   # Project has no tests

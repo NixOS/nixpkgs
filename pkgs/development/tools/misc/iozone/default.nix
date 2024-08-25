@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sed -i "1i#! $shell" $out/libexec/Generate_Graphs
     substituteInPlace $out/libexec/Generate_Graphs \
-      --replace ./gengnuplot.sh $out/libexec/gengnuplot.sh \
-      --replace 'gnuplot ' "${gnuplot}/bin/gnuplot " \
-      --replace gnu3d.dem $out/libexec/gnu3d.dem
+      --replace-fail ./gengnuplot.sh $out/libexec/gengnuplot.sh \
+      --replace-fail 'gnuplot ' "${gnuplot}/bin/gnuplot " \
+      --replace-fail gnu3d.dem $out/libexec/gnu3d.dem
   '';
 
   meta = {

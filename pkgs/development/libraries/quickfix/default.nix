@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   # More hacking out of the unittests
   preBuild = ''
-    substituteInPlace Makefile --replace 'UnitTest++' ' '
+    substituteInPlace Makefile --replace-fail 'UnitTest++' ' '
   '';
 
   meta = with lib; {

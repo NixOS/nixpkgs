@@ -43,7 +43,7 @@ buildPythonApplication rec {
   # remove need for git history
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "version = get_version()" "version='${version}',"
+      --replace-fail "version = get_version()" "version='${version}',"
   '';
 
   postConfigure = ''

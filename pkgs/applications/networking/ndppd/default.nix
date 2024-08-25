@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace /bin/gzip gzip
+    substituteInPlace Makefile --replace-fail /bin/gzip gzip
   '';
 
   postInstall = ''

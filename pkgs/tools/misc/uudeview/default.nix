@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace tcl/xdeview --replace "exec uuwish" "exec $out/bin/uuwish"
+    substituteInPlace tcl/xdeview --replace-fail "exec uuwish" "exec $out/bin/uuwish"
   '';
 
   meta = {

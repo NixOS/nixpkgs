@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [ libffi libxml2 ncurses ];
 
   postPatch = ''
-    substituteInPlace tests/golden_tests.rs --replace \
+    substituteInPlace tests/golden_tests.rs --replace-fail \
       'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/release"
   '';
   preBuild =

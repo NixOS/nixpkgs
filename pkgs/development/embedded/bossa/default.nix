@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-arch x86_64" ""
+      --replace-fail "-arch x86_64" ""
   '';
 
   nativeBuildInputs = [ bin2c ];

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs install.sh
-    substituteInPlace install.sh --replace /usr/local "$out"
+    substituteInPlace install.sh --replace-fail /usr/local "$out"
   '';
 
   strictDeps = true;

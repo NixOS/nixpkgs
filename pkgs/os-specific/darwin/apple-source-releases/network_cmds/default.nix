@@ -15,11 +15,11 @@ appleDerivation {
   # "unbound" doesn’t build against supported versions of OpenSSL or LibreSSL
   patchPhase = ''
     substituteInPlace network_cmds.xcodeproj/project.pbxproj \
-      --replace "7294F0EA0EE8BAC80052EC88 /* PBXTargetDependency */," "" \
-      --replace "7216D34D0EE89FEC00AE70E4 /* PBXTargetDependency */," "" \
-      --replace "72CD1D9C0EE8C47C005F825D /* PBXTargetDependency */," "" \
-      --replace "7216D2C20EE89ADF00AE70E4 /* PBXTargetDependency */," "" \
-      --replace "71D958C51A9455A000C9B286 /* PBXTargetDependency */," ""
+      --replace-fail "7294F0EA0EE8BAC80052EC88 /* PBXTargetDependency */," "" \
+      --replace-fail "7216D34D0EE89FEC00AE70E4 /* PBXTargetDependency */," "" \
+      --replace-fail "72CD1D9C0EE8C47C005F825D /* PBXTargetDependency */," "" \
+      --replace-fail "7216D2C20EE89ADF00AE70E4 /* PBXTargetDependency */," "" \
+      --replace-fail "71D958C51A9455A000C9B286 /* PBXTargetDependency */," ""
   '';
 
   # temporary install phase until xcodebuild has "install" support

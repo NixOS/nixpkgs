@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   # Skip linting
   postPatch = ''
-    substituteInPlace test_thefuzz.py --replace "import pycodestyle" ""
+    substituteInPlace test_thefuzz.py --replace-fail "import pycodestyle" ""
   '';
 
   pythonImportsCheck = [ "thefuzz" ];

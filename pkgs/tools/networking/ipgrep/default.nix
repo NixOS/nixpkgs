@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   patchPhase = ''
     mkdir -p ${pname}
     substituteInPlace setup.py \
-      --replace "'scripts': []" "'scripts': { '${pname}.py' }"
+      --replace-fail "'scripts': []" "'scripts': { '${pname}.py' }"
   '';
 
   propagatedBuildInputs = with python3Packages; [

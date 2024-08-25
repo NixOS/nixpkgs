@@ -33,23 +33,23 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \
-      --replace '"libfive/bind/guile"' \
+      --replace-fail '"libfive/bind/guile"' \
                 '"libfive/bind/guile:${placeholder "out"}/${guile.siteCcacheDir}"' \
-      --replace '(app_resource_dir + ":" + finder_build_dir).toLocal8Bit()' \
+      --replace-fail '(app_resource_dir + ":" + finder_build_dir).toLocal8Bit()' \
                 '"libfive/bind/guile:${placeholder "out"}/${guile.siteCcacheDir}"'
 
     substituteInPlace libfive/bind/guile/CMakeLists.txt \
-      --replace "LIBFIVE_FRAMEWORK_DIR=$<TARGET_FILE_DIR:libfive>" \
+      --replace-fail "LIBFIVE_FRAMEWORK_DIR=$<TARGET_FILE_DIR:libfive>" \
                 "LIBFIVE_FRAMEWORK_DIR=$out/lib" \
-      --replace "LIBFIVE_STDLIB_DIR=$<TARGET_FILE_DIR:libfive-stdlib>" \
+      --replace-fail "LIBFIVE_STDLIB_DIR=$<TARGET_FILE_DIR:libfive-stdlib>" \
                 "LIBFIVE_STDLIB_DIR=$out/lib"
 
     substituteInPlace libfive/bind/python/CMakeLists.txt \
-      --replace ' ''${PYTHON_SITE_PACKAGES_DIR}' \
+      --replace-fail ' ''${PYTHON_SITE_PACKAGES_DIR}' \
                 " $out/${python.sitePackages}" \
 
     substituteInPlace libfive/bind/python/libfive/ffi.py \
-      --replace "os.path.join('libfive', folder)" \
+      --replace-fail "os.path.join('libfive', folder)" \
                 "os.path.join('$out/${python.sitePackages}/libfive', folder)" \
 
     export XDG_CACHE_HOME=$(mktemp -d)/.cache

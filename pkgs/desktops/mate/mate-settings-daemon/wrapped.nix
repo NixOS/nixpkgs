@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     makeWrapper ${mate.mate-settings-daemon}/libexec/mate-settings-daemon $out/libexec/mate-settings-daemon \
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/etc/xdg/autostart/mate-settings-daemon.desktop \
-      --replace "${mate.mate-settings-daemon}/libexec/mate-settings-daemon" "$out/libexec/mate-settings-daemon"
+      --replace-fail "${mate.mate-settings-daemon}/libexec/mate-settings-daemon" "$out/libexec/mate-settings-daemon"
   '';
 
   meta = mate.mate-settings-daemon.meta // { priority = -10; };

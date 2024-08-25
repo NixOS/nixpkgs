@@ -67,7 +67,7 @@ buildPythonPackage {
   postPatch = ''
     # https://github.com/facebookresearch/detectron2/issues/5010
     substituteInPlace detectron2/data/transforms/transform.py \
-      --replace "interp=Image.LINEAR" "interp=Image.BILINEAR"
+      --replace-fail "interp=Image.LINEAR" "interp=Image.BILINEAR"
   '';
 
   nativeBuildInputs = [

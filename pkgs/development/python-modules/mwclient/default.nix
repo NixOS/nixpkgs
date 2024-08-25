@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov mwclient test" ""
+      --replace-fail " --cov mwclient test" ""
   '';
 
   pythonImportsCheck = [ "mwclient" ];

@@ -29,25 +29,25 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile.am \
-      --replace "contrib/init.d contrib/systemd" ""
+      --replace-fail "contrib/init.d contrib/systemd" ""
     substituteInPlace src/cmds/Makefile.am \
-      --replace "/etc/" "$out/etc/"
+      --replace-fail "/etc/" "$out/etc/"
     substituteInPlace src/mom_rcp/pathnames.h \
-      --replace /bin/cp ${coreutils}/bin/cp
+      --replace-fail /bin/cp ${coreutils}/bin/cp
     substituteInPlace src/resmom/requests.c \
-      --replace /bin/cp ${coreutils}/bin/cp
+      --replace-fail /bin/cp ${coreutils}/bin/cp
   '';
 
   preConfigure = ''
     substituteInPlace ./configure \
-      --replace '/usr/bin/file' '${file}/bin/file'
+      --replace-fail '/usr/bin/file' '${file}/bin/file'
 
     # fix broken libxml2 detection
     sed -i '/xmlLib\=/c\xmlLib=xml2' ./configure
 
     for s in fifo cray_t3e dec_cluster msic_cluster sgi_origin umn_cluster; do
       substituteInPlace src/scheduler.cc/samples/$s/Makefile.in \
-        --replace "schedprivdir = " "schedprivdir = $out/"
+        --replace-fail "schedprivdir = " "schedprivdir = $out/"
     done
 
     for f in $(find ./ -name Makefile.in); do

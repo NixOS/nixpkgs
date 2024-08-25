@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace check_wmi_plus.pl \
-      --replace /usr/bin/wmic                      ${wmic-bin}/bin/wmic \
-      --replace /etc/check_wmi_plus                $out/etc/check_wmi_plus \
-      --replace /opt/nagios/bin/plugins            $out/etc/check_wmi_plus \
-      --replace /usr/lib/nagios/plugins            ${monitoring-plugins}/libexec \
-      --replace '$base_dir/check_wmi_plus_help.pl' "$out/bin/check_wmi_plus_help.pl"
+      --replace-fail /usr/bin/wmic                      ${wmic-bin}/bin/wmic \
+      --replace-fail /etc/check_wmi_plus                $out/etc/check_wmi_plus \
+      --replace-fail /opt/nagios/bin/plugins            $out/etc/check_wmi_plus \
+      --replace-fail /usr/lib/nagios/plugins            ${monitoring-plugins}/libexec \
+      --replace-fail '$base_dir/check_wmi_plus_help.pl' "$out/bin/check_wmi_plus_help.pl"
 
     for f in *.pl ; do
-      substituteInPlace $f --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
+      substituteInPlace $f --replace-fail /usr/bin/perl ${perlPackages.perl}/bin/perl
     done
   '';
 

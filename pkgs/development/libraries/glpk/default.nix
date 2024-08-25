@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     # Do not hardcode the include path for libmysqlclient.
     ''
       substituteInPlace configure \
-        --replace '-I/usr/include/mysql' '$(mysql_config --include)'
+        --replace-fail '-I/usr/include/mysql' '$(mysql_config --include)'
     '';
 
   doCheck = true;

@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ schedtool util-linux ]}
 
     substituteInPlace $out/lib/systemd/system/ananicy.service \
-      --replace "/sbin/sysctl" "${sysctl}/bin/sysctl" \
-      --replace "/usr/bin/ananicy" "$out/bin/ananicy"
+      --replace-fail "/sbin/sysctl" "${sysctl}/bin/sysctl" \
+      --replace-fail "/usr/bin/ananicy" "$out/bin/ananicy"
   '';
 
   meta = with lib; {

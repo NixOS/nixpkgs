@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     cp -v defconfig .config
     cat $extraConfigPath >> .config
     cat -n .config
-    substituteInPlace Makefile --replace /usr/local $out
+    substituteInPlace Makefile --replace-fail /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"
   '';
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace openexrid/makefile \
-        --replace g++ c++
+        --replace-fail g++ c++
   '';
 
   env.NIX_CFLAGS_COMPILE = ''-I${ilmbase.dev}/include/OpenEXR

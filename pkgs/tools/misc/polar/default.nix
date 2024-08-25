@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     for script in polar_*
     do
-      substituteInPlace $script --replace "#{File.dirname(__FILE__)}/lib" "$out/lib/polar"
+      substituteInPlace $script --replace-fail "#{File.dirname(__FILE__)}/lib" "$out/lib/polar"
     done
   '';
   buildInputs = [ gems ruby ];

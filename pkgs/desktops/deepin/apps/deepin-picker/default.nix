@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace com.deepin.Picker.service \
-      --replace "/usr/bin/deepin-picker" "$out/bin/deepin-picker"
+      --replace-fail "/usr/bin/deepin-picker" "$out/bin/deepin-picker"
   '';
 
   qmakeFlags = [

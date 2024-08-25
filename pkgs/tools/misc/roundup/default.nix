@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # Don't change $PATH
-    substituteInPlace configure --replace PATH= NIRVANA=
+    substituteInPlace configure --replace-fail PATH= NIRVANA=
     # There are only man pages in sections 1 and 5 \
-    substituteInPlace Makefile --replace "{1..9}" "1 5"
+    substituteInPlace Makefile --replace-fail "{1..9}" "1 5"
   '';
 
   nativeBuildInputs = [ ronn shocco ];

@@ -41,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
-      --replace '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
-      --replace 'AR="libtool"' 'AR="${stdenv.cc.targetPrefix}ar"' \
-      --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+      --replace-fail '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
+      --replace-fail 'AR="libtool"' 'AR="${stdenv.cc.targetPrefix}ar"' \
+      --replace-fail 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
   strictDeps = true;

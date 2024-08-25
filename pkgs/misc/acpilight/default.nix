@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   ]);
 
   postConfigure = ''
-    substituteInPlace 90-backlight.rules --replace /bin ${coreutils}/bin
-    substituteInPlace Makefile --replace udevadm true
+    substituteInPlace 90-backlight.rules --replace-fail /bin ${coreutils}/bin
+    substituteInPlace Makefile --replace-fail udevadm true
   '';
 
   buildInputs = [ pyenv ];

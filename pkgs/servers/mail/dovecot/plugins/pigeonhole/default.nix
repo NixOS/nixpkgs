@@ -13,10 +13,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ dovecot openssl ];
 
   preConfigure = ''
-    substituteInPlace src/managesieve/managesieve-settings.c --replace \
+    substituteInPlace src/managesieve/managesieve-settings.c --replace-fail \
       ".executable = \"managesieve\"" \
       ".executable = \"$out/libexec/dovecot/managesieve\""
-    substituteInPlace src/managesieve-login/managesieve-login-settings.c --replace \
+    substituteInPlace src/managesieve-login/managesieve-login-settings.c --replace-fail \
       ".executable = \"managesieve-login\"" \
       ".executable = \"$out/libexec/dovecot/managesieve-login\""
   '';

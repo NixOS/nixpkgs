@@ -31,7 +31,7 @@ buildPythonPackage rec {
     rm -r taggit
     # Replace directory of locale
     substituteInPlace ./tests/test_utils.py \
-      --replace 'os.path.dirname(__file__), ".."' "\"$out/lib/python${lib.versions.majorMinor python.version}/site-packages/\""
+      --replace-fail 'os.path.dirname(__file__), ".."' "\"$out/lib/python${lib.versions.majorMinor python.version}/site-packages/\""
     ${python.interpreter} -m django test --settings=tests.settings
   '';
 

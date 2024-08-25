@@ -41,7 +41,7 @@ let
       mkdir -p $out/include $out/pkgconfig
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-        --replace /out $out
+        --replace-fail /out $out
     '' + lib.optionalString stdenv.isDarwin ''
       install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';

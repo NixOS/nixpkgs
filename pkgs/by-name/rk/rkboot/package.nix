@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = rkbin.src;
 
   postPatch = ''
-    substituteInPlace RKBOOT/*.ini --replace 'PATH=' 'PATH=rkboot/'
+    substituteInPlace RKBOOT/*.ini --replace-fail 'PATH=' 'PATH=rkboot/'
   '';
 
   buildPhase = ''

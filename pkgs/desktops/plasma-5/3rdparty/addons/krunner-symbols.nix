@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # symbols.cpp hardcodes the location of configuration files
     substituteInPlace symbols.cpp \
-      --replace "/usr/share/config/krunner-symbol" "$out/share/config/krunner-symbol"
+      --replace-fail "/usr/share/config/krunner-symbol" "$out/share/config/krunner-symbol"
 
     # change cmake flag names to output using the correct qt-plugin prefix and kservice location
     substituteInPlace CMakeLists.txt \
-      --replace "LOCATION_PLUGIN" "KDE_INSTALL_PLUGINDIR" \
-      --replace "LOCATION_DESKTOP" "KDE_INSTALL_KSERVICES5DIR"
+      --replace-fail "LOCATION_PLUGIN" "KDE_INSTALL_PLUGINDIR" \
+      --replace-fail "LOCATION_DESKTOP" "KDE_INSTALL_KSERVICES5DIR"
   '';
 
   cmakeFlags = [ "-DLOCATION_CONFIG=share/config" ];

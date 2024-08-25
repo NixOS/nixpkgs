@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=gato" ""
+      --replace-fail "--cov=gato" ""
   '';
 
   nativeBuildInputs = with python3.pkgs; [

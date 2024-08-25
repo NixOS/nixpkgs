@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ c-blosc hdf5 ];
 
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace 'set(BLOSC_INSTALL_DIR "''${CMAKE_CURRENT_BINARY_DIR}/blosc")' 'set(BLOSC_INSTALL_DIR "${c-blosc}")'
+    substituteInPlace CMakeLists.txt --replace-fail 'set(BLOSC_INSTALL_DIR "''${CMAKE_CURRENT_BINARY_DIR}/blosc")' 'set(BLOSC_INSTALL_DIR "${c-blosc}")'
   '';
 
   cmakeFlags = [

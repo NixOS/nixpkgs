@@ -204,7 +204,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" ""
+      --replace-fail "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" ""
   '';
 
   buildInputs = [ cairo ];

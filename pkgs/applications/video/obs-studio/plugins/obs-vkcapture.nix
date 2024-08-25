@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/glinject.c \
-      --replace "libGLX.so.0" "${lib.getLib libGL}/lib/libGLX.so.0" \
-      --replace "libX11.so.6" "${lib.getLib libX11}/lib/libX11.so.6" \
-      --replace "libX11-xcb.so.1" "${lib.getLib libX11}/lib/libX11-xcb.so.1" \
-      --replace "libxcb-dri3.so.0" "${lib.getLib libxcb}/lib/libxcb-dri3.so.0" \
-      --replace "libEGL.so.1" "${lib.getLib libGL}/lib/libEGL.so.1" \
-      --replace "libvulkan.so.1" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+      --replace-fail "libGLX.so.0" "${lib.getLib libGL}/lib/libGLX.so.0" \
+      --replace-fail "libX11.so.6" "${lib.getLib libX11}/lib/libX11.so.6" \
+      --replace-fail "libX11-xcb.so.1" "${lib.getLib libX11}/lib/libX11-xcb.so.1" \
+      --replace-fail "libxcb-dri3.so.0" "${lib.getLib libxcb}/lib/libxcb-dri3.so.0" \
+      --replace-fail "libEGL.so.1" "${lib.getLib libGL}/lib/libEGL.so.1" \
+      --replace-fail "libvulkan.so.1" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
   '';
 
   # Support 32bit Vulkan applications by linking in the 32bit Vulkan layer and

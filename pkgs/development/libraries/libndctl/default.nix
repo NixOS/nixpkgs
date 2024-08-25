@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     patchShebangs test
 
-    substituteInPlace git-version --replace /bin/bash ${stdenv.shell}
-    substituteInPlace git-version-gen --replace /bin/sh ${stdenv.shell}
+    substituteInPlace git-version --replace-fail /bin/bash ${stdenv.shell}
+    substituteInPlace git-version-gen --replace-fail /bin/sh ${stdenv.shell}
 
     echo "m4_define([GIT_VERSION], [${version}])" > version.m4;
   '';

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # which is not safe on darwin.
   # see http://article.gmane.org/gmane.os.macosx.fink.devel/21882
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/system.c --replace '_(' 'N_('
+    substituteInPlace src/system.c --replace-fail '_(' 'N_('
   '';
 
   outputs = [ "out" "info" ];

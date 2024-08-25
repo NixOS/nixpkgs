@@ -48,11 +48,11 @@ callPackage ../base.nix rec {
   extraPostPatch = ''
     # `No such file or directory: 'ldd'`
     substituteInPlace ../compiler-rt/test/lit.common.cfg.py \
-      --replace "'ldd'," "'${glibc.bin}/bin/ldd',"
+      --replace-fail "'ldd'," "'${glibc.bin}/bin/ldd',"
 
     # We can run these
     substituteInPlace ../compiler-rt/test/CMakeLists.txt \
-      --replace "endfunction()" "endfunction()''\nadd_subdirectory(builtins)''\nadd_subdirectory(shadowcallstack)"
+      --replace-fail "endfunction()" "endfunction()''\nadd_subdirectory(builtins)''\nadd_subdirectory(shadowcallstack)"
 
     # Could not launch llvm-config in /build/source/runtimes/build/bin
     mkdir -p build/bin

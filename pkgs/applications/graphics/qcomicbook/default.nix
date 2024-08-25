@@ -21,7 +21,7 @@ mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/share/applications/*.desktop \
-      --replace "Exec=qcomicbook" "Exec=$out/bin/qcomicbook"
+      --replace-fail "Exec=qcomicbook" "Exec=$out/bin/qcomicbook"
   '';
 
   meta = with lib; {

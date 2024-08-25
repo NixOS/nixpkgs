@@ -18,9 +18,9 @@ stdenv.mkDerivation {
   # Avoid guessing where files end up. Just use current directory.
   postPatch = ''
     substituteInPlace projects/premake4.lua \
-      --replace 'location ( os.get() .. "/" .. _ACTION )' 'location ( ".." )'
+      --replace-fail 'location ( os.get() .. "/" .. _ACTION )' 'location ( ".." )'
     substituteInPlace projects/bootil.lua \
-      --replace 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
+      --replace-fail 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
   '';
 
   nativeBuildInputs = [ premake4 ];

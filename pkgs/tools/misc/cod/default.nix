@@ -25,7 +25,7 @@ buildGoModule rec {
     popd
     export COD_TEST_BINARY="''${NIX_BUILD_TOP}/go/bin/cod"
 
-    substituteInPlace test/learn_test.go --replace TestLearnArgparseSubCommand SkipLearnArgparseSubCommand
+    substituteInPlace test/learn_test.go --replace-fail TestLearnArgparseSubCommand SkipLearnArgparseSubCommand
   '';
 
   meta = with lib; {

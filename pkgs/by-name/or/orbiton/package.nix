@@ -17,11 +17,11 @@ buildGoModule rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace "-Wl,--as-needed" ""
+      --replace-fail "-Wl,--as-needed" ""
 
     # Requires impure pbcopy and pbpaste
     substituteInPlace v2/pbcopy_test.go \
-      --replace TestPBcopy SkipTestPBcopy
+      --replace-fail TestPBcopy SkipTestPBcopy
   '';
 
   nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];

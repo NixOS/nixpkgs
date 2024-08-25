@@ -43,8 +43,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'click = "^7.0"' 'click = "*"' \
-      --replace 'attrs = "^21.1.0"' 'attrs = "*"'
+      --replace-fail 'click = "^7.0"' 'click = "*"' \
+      --replace-fail 'attrs = "^21.1.0"' 'attrs = "*"'
   '';
 
   disabledTests = [

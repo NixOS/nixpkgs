@@ -32,9 +32,9 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 res/icons/tk.categulario.pizarra.svg $out/share/icons/hicolor/scalable/apps/pizarra.svg
     install -Dm444 res/pizarra.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/pizarra.desktop \
-      --replace "TryExec=/usr/bin/" "TryExec=" \
-      --replace "Exec=/usr/bin/" "Exec=" \
-      --replace "Icon=/usr/share/icons/hicolor/scalable/apps/pizarra.svg" "Icon=pizarra"
+      --replace-fail "TryExec=/usr/bin/" "TryExec=" \
+      --replace-fail "Exec=/usr/bin/" "Exec=" \
+      --replace-fail "Icon=/usr/share/icons/hicolor/scalable/apps/pizarra.svg" "Icon=pizarra"
   '';
 
   meta = with lib; {

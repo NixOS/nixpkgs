@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "bs4 >= 0.0.0.1" "beautifulsoup4 >= 4.11.1"
+      --replace-fail "bs4 >= 0.0.0.1" "beautifulsoup4 >= 4.11.1"
   '';
 
   propagatedBuildInputs = [

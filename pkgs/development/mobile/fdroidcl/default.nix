@@ -21,7 +21,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace adb/{server,device}.go \
-      --replace 'exec.Command("adb"' 'exec.Command("${android-tools}/bin/adb"'
+      --replace-fail 'exec.Command("adb"' 'exec.Command("${android-tools}/bin/adb"'
   '';
 
   # TestScript/search attempts to connect to fdroid

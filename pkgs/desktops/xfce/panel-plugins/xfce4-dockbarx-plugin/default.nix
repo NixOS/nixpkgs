@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
     # We execute the wrapped xfce4-panel-plug directly.
     # Since argv is used for g_free() we also need to shift the indexes.
     substituteInPlace src/xfce_panel_plugin.c \
-      --replace '"python3",' "" \
-      --replace "g_free(argv[3]);" "g_free(argv[2]);" \
-      --replace "g_free(argv[5]);" "g_free(argv[4]);"
+      --replace-fail '"python3",' "" \
+      --replace-fail "g_free(argv[3]);" "g_free(argv[2]);" \
+      --replace-fail "g_free(argv[5]);" "g_free(argv[4]);"
 
     patchShebangs src/xfce4-dockbarx-plug.py
   '';

@@ -82,7 +82,7 @@ python3.pkgs.buildPythonApplication rec {
 
     # Fixes testCLI0051virt_install_initrd_inject on Darwin: "cpio: root:root: invalid group"
     substituteInPlace virtinst/install/installerinject.py \
-      --replace "'--owner=root:root'" "'--owner=0:0'"
+      --replace-fail "'--owner=root:root'" "'--owner=0:0'"
   '';
 
   nativeCheckInputs = with python3.pkgs; [

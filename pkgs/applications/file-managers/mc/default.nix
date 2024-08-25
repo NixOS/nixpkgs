@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
-      --replace /bin/rm ${coreutils}/bin/rm
+      --replace-fail /bin/rm ${coreutils}/bin/rm
   '';
 
   postFixup = lib.optionalString ((!stdenv.isDarwin) && x11Support) ''

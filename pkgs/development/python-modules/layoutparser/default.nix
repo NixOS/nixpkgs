@@ -56,7 +56,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "opencv-python" "opencv"
+      --replace-fail "opencv-python" "opencv"
   '';
 
   propagatedBuildInputs = [

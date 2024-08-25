@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace airspy-tools/CMakeLists.txt --replace "/etc/udev/rules.d" "$out/etc/udev/rules.d"
+    substituteInPlace airspy-tools/CMakeLists.txt --replace-fail "/etc/udev/rules.d" "$out/etc/udev/rules.d"
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];

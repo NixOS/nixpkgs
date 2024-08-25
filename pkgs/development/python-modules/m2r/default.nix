@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \
-      --replace "optional" "positional"
+      --replace-fail "optional" "positional"
   '';
 
   propagatedBuildInputs = [

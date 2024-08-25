@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace src/Makefile.in \
-      --replace games bin
+      --replace-fail games bin
   '';
 
   meta = {

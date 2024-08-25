@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # we cannot write the config file to /etc and as we don't need the file, so drop it
   postPatch = ''
     substituteInPlace Makefile.am \
-      --replace '$(DESTDIR)$(confdir)' /tmp
+      --replace-fail '$(DESTDIR)$(confdir)' /tmp
   '';
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

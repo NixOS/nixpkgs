@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 ../mount.prl_fs.8 $out/share/man/man8
 
       substituteInPlace ../99prltoolsd-hibernate \
-        --replace "/bin/bash" "${bash}/bin/bash"
+        --replace-fail "/bin/bash" "${bash}/bin/bash"
 
       mkdir -p $out/etc/pm/sleep.d
       install -Dm644 ../99prltoolsd-hibernate $out/etc/pm/sleep.d

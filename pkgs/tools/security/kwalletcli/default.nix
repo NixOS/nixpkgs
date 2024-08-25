@@ -14,17 +14,17 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace GNUmakefile \
-      --replace -I/usr/include/KF5/KCoreAddons -I${kcoreaddons.dev}/include/KF5/KCoreAddons \
-      --replace -I/usr/include/KF5/KI18n       -I${ki18n.dev}/include/KF5/KI18n \
-      --replace -I/usr/include/KF5/KWallet     -I${kwallet.dev}/include/KF5/KWallet \
-      --replace /usr/bin                       $out/bin \
-      --replace /usr/share/man                 $out/share/man
+      --replace-fail -I/usr/include/KF5/KCoreAddons -I${kcoreaddons.dev}/include/KF5/KCoreAddons \
+      --replace-fail -I/usr/include/KF5/KI18n       -I${ki18n.dev}/include/KF5/KI18n \
+      --replace-fail -I/usr/include/KF5/KWallet     -I${kwallet.dev}/include/KF5/KWallet \
+      --replace-fail /usr/bin                       $out/bin \
+      --replace-fail /usr/share/man                 $out/share/man
 
     substituteInPlace pinentry-kwallet \
-      --replace '/usr/bin/env mksh' ${mksh}/bin/mksh
+      --replace-fail '/usr/bin/env mksh' ${mksh}/bin/mksh
 
     substituteInPlace kwalletcli_getpin \
-      --replace '/usr/bin/env mksh' ${mksh}/bin/mksh
+      --replace-fail '/usr/bin/env mksh' ${mksh}/bin/mksh
   '';
 
   makeFlags = [ "KDE_VER=5" ];

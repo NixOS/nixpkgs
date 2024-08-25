@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     cp ${if stdenv.cc.isClang then "CLUnix.mak" else "GccUnix.mak"} Makefile
     substituteInPlace Makefile \
-      --replace "/usr/local/bin" "${placeholder "out"}/bin"
+      --replace-fail "/usr/local/bin" "${placeholder "out"}/bin"
   '';
 
   postInstall = ''

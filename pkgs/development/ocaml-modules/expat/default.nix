@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    substituteInPlace Makefile --replace "gcc" "\$(CC)"
+    substituteInPlace Makefile --replace-fail "gcc" "\$(CC)"
   '';
 
   nativeBuildInputs = [ ocaml findlib ];

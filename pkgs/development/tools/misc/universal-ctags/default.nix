@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Tmain/utils.sh \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
     # fails on sandbox
     rm -fr Tmain/ptag-proc-cwd.d/
     patchShebangs misc/*

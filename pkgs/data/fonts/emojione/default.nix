@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
       sha256 = "7tDWIkpcdir1V6skgXSM3r0FwHy0F6PyJ07OPRsSStA=";
       postFetch = ''
         substituteInPlace $out \
-          --replace "inkscape --without-gui" "inkscape --export-png" \
-          --replace TWEMOJI EMOJIONE \
-          --replace "the assets" "the emojione assets" \
-          --replace twemoji emojione
+          --replace-fail "inkscape --without-gui" "inkscape --export-png" \
+          --replace-fail TWEMOJI EMOJIONE \
+          --replace-fail "the assets" "the emojione assets" \
+          --replace-fail twemoji emojione
       '';
     })
   ];

@@ -39,7 +39,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace \
+    substituteInPlace setup.py --replace-fail \
       "websockets>=10,<11;python_version>'3.6'" \
       "websockets>=10,<12;python_version>'3.6'"
   '';

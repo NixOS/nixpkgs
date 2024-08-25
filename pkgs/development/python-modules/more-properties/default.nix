@@ -25,11 +25,11 @@ buildPythonPackage rec {
   postPatch = ''
     mv pypi_upload/setup.py .
     substituteInPlace setup.py \
-      --replace "project_root = Path(__file__).parents[1]" "project_root = Path(__file__).parents[0]"
+      --replace-fail "project_root = Path(__file__).parents[1]" "project_root = Path(__file__).parents[0]"
 
     # dataclasses is included in Python 3.7
     substituteInPlace requirements.txt \
-      --replace dataclasses ""
+      --replace-fail dataclasses ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

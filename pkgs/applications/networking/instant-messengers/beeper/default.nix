@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation rec {
     cp -a ${appimageContents}/usr/share/icons $out/share/
     install -Dm 644 ${appimageContents}/${pname}.desktop -t $out/share/applications/
 
-    substituteInPlace $out/share/applications/${pname}.desktop --replace "AppRun" "${pname}"
+    substituteInPlace $out/share/applications/${pname}.desktop --replace-fail "AppRun" "${pname}"
 
     wrapProgram $out/bin/${pname} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}} --no-update"

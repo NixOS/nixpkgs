@@ -127,7 +127,7 @@ stdenv.mkDerivation {
 
     # update default paths in factor-listener.el for fuel mode
     substituteInPlace misc/fuel/fuel-listener.el \
-      --replace '(defcustom fuel-factor-root-dir nil' "(defcustom fuel-factor-root-dir \"$out/lib/factor\""
+      --replace-fail '(defcustom fuel-factor-root-dir nil' "(defcustom fuel-factor-root-dir \"$out/lib/factor\""
   '';
 
   buildPhase = ''

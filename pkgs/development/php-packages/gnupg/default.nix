@@ -28,19 +28,19 @@ buildPecl {
 
   postPhpize = ''
     substituteInPlace configure \
-      --replace '/usr/bin/file' '${file}/bin/file' \
-      --replace 'SEARCH_PATH="/usr/local /usr /opt"' 'SEARCH_PATH="${gpgme.dev}"'
+      --replace-fail '/usr/bin/file' '${file}/bin/file' \
+      --replace-fail 'SEARCH_PATH="/usr/local /usr /opt"' 'SEARCH_PATH="${gpgme.dev}"'
   '';
 
   postConfigure = ''
     substituteInPlace Makefile \
-      --replace 'run-tests.php' 'run-tests.php -q --offline'
+      --replace-fail 'run-tests.php' 'run-tests.php -q --offline'
     substituteInPlace tests/gnupg_res_init_file_name.phpt \
-      --replace '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
+      --replace-fail '/usr/bin/gpg' '${gnupg}/bin/gpg' \
+      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
     substituteInPlace tests/gnupg_oo_init_file_name.phpt \
-      --replace '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
+      --replace-fail '/usr/bin/gpg' '${gnupg}/bin/gpg' \
+      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
   '';
 
   doCheck = true;

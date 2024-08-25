@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
 
   # hardcode PROGCMD because #150841
   postPatch = ''
-    substituteInPlace steamtinkerlaunch --replace 'PROGCMD="''${0##*/}"' 'PROGCMD="steamtinkerlaunch"'
+    substituteInPlace steamtinkerlaunch --replace-fail 'PROGCMD="''${0##*/}"' 'PROGCMD="steamtinkerlaunch"'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

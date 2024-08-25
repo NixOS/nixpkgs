@@ -30,8 +30,8 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "more-itertools<6.0.0" "more-itertools" \
-      --replace "pytest==3.8" "pytest"
+      --replace-fail "more-itertools<6.0.0" "more-itertools" \
+      --replace-fail "pytest==3.8" "pytest"
   '';
 
   # although AVX can be enabled, we never test with it. Some Hydra machines

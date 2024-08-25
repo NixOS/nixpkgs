@@ -37,10 +37,10 @@ buildPythonPackage rec {
   postPatch = ''
     # see https://github.com/etal/cnvkit/issues/589
     substituteInPlace setup.py \
-      --replace 'joblib < 1.0' 'joblib'
+      --replace-fail 'joblib < 1.0' 'joblib'
     # see https://github.com/etal/cnvkit/issues/680
     substituteInPlace test/test_io.py \
-      --replace 'test_read_vcf' 'dont_test_read_vcf'
+      --replace-fail 'test_read_vcf' 'dont_test_read_vcf'
   '';
 
   propagatedBuildInputs = [

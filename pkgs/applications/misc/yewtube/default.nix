@@ -14,8 +14,8 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # Don't try to detect the version at runtime with pip
     substituteInPlace mps_youtube/__init__.py \
-      --replace "from pip._vendor import pkg_resources" "" \
-      --replace "__version__ =" "__version__ = '${version}' #"
+      --replace-fail "from pip._vendor import pkg_resources" "" \
+      --replace-fail "__version__ =" "__version__ = '${version}' #"
   '';
 
   propagatedBuildInputs = with python3Packages; [

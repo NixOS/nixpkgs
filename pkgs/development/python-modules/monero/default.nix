@@ -27,8 +27,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace 'pynacl~=1.4' 'pynacl>=1.4' \
-      --replace 'ipaddress' ""
+      --replace-fail 'pynacl~=1.4' 'pynacl>=1.4' \
+      --replace-fail 'ipaddress' ""
   '';
 
   pythonImportsCheck = [ "monero" ];

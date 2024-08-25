@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
-  preBuild = "substituteInPlace Makefile --replace '$(DESTDIR)/usr/local' $out";
+  preBuild = "substituteInPlace Makefile --replace-fail '$(DESTDIR)/usr/local' $out";
   makeFlags = [ "CC:=$(CC)" "LINK:=$(CC)" ];
 
   meta = with lib; {

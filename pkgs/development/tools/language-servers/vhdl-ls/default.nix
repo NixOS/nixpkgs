@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace vhdl_lang/src/config.rs \
-      --replace /usr/lib $out/lib
+      --replace-fail /usr/lib $out/lib
   '';
 
   postInstall = ''

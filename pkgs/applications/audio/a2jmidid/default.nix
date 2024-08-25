@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
-    substituteInPlace $out/bin/a2j --replace "a2j_control" "$out/bin/a2j_control"
+    substituteInPlace $out/bin/a2j --replace-fail "a2j_control" "$out/bin/a2j_control"
   '';
 
   passthru.updateScript = gitUpdater { };

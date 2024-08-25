@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "boto3>=1.34.75" "boto3>=1.34.58" \
+      --replace-fail "boto3>=1.34.75" "boto3>=1.34.58" \
   '';
 
   nativeCheckInputs = with python3.pkgs; [

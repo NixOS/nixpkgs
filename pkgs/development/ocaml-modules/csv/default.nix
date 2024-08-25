@@ -10,7 +10,7 @@ buildDunePackage rec {
   };
 
   preConfigure = ''
-    substituteInPlace src/dune --replace '(libraries bytes)' ""
+    substituteInPlace src/dune --replace-fail '(libraries bytes)' ""
   '';
 
   duneVersion = "3";

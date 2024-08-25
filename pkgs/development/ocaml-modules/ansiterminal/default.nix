@@ -10,7 +10,7 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace src/dune --replace 'libraries unix bytes' 'libraries unix'
+    substituteInPlace src/dune --replace-fail 'libraries unix bytes' 'libraries unix'
   '';
 
   doCheck = true;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace testresources/tests/test_resourced_test_case.py \
-      --replace "failIf" "assertFalse"
+      --replace-fail "failIf" "assertFalse"
   '';
 
   nativeBuildInputs = [ setuptools ];

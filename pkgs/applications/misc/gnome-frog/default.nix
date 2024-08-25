@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     chmod +x ./build-aux/meson/postinstall.py
     patchShebangs ./build-aux/meson/postinstall.py
     substituteInPlace ./build-aux/meson/postinstall.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
     substituteInPlace ./frog/language_manager.py --subst-var out
   '';
 

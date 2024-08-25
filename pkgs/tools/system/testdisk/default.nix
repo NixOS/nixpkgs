@@ -28,7 +28,7 @@ assert enableQt -> qwt != null;
 
   postPatch = ''
     substituteInPlace linux/qphotorec.desktop \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   enableParallelBuilding = true;

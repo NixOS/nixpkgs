@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    substituteInPlace meson.build --replace \
+    substituteInPlace meson.build --replace-fail \
       "udev_rules_dir = udev.get_pkgconfig_variable('udevdir') + '/rules.d'" \
       "udev_rules_dir = '$out/lib/udev'"
   '';

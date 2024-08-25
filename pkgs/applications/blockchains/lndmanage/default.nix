@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preBuild = ''
-    substituteInPlace setup.py --replace '==' '>='
+    substituteInPlace setup.py --replace-fail '==' '>='
   '';
 
   preCheck = ''

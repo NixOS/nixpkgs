@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   postPatch = ''
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
-      --replace '/sharedlink' '/lib'
+      --replace-fail '/sharedlink' '/lib'
   '';
 
   configurePhase = ''

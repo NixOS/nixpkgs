@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov --no-cov-on-fail" ""
+      --replace-fail "--cov --no-cov-on-fail" ""
   '';
 
   preBuild = ''

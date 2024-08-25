@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \
-      --replace "-Wl,-Bsymbolic " ""
+      --replace-fail "-Wl,-Bsymbolic " ""
     substituteInPlace src/EGL/Makefile.am \
-      --replace "-Wl,-Bsymbolic " ""
+      --replace-fail "-Wl,-Bsymbolic " ""
     substituteInPlace src/GLdispatch/Makefile.am \
-      --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
+      --replace-fail "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([

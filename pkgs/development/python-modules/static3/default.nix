@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace ", 'pytest-cov'" ""
+      --replace-fail ", 'pytest-cov'" ""
   '';
 
   passthru.optional-dependencies = {

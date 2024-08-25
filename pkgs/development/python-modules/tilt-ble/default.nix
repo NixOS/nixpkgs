@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=tilt_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=tilt_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [ "tilt_ble" ];

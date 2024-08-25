@@ -33,7 +33,7 @@ localPython.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # https://github.com/aws/aws-elastic-beanstalk-cli/pull/469
-    substituteInPlace setup.py --replace "scripts=['bin/eb']," ""
+    substituteInPlace setup.py --replace-fail "scripts=['bin/eb']," ""
   '';
 
   nativeBuildInputs = with localPython.pkgs; [

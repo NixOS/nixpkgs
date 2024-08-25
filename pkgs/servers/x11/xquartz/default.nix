@@ -117,12 +117,12 @@ in stdenv.mkDerivation {
     cp ${fontsConf} $fontsConfPath
 
     substituteInPlace $out/bin/startx \
-      --replace "bindir=${xorg.xinit}/bin" "bindir=$out/bin" \
-      --replace 'defaultserver=${xorg.xorgserver}/bin/X' "defaultserver=$out/bin/Xquartz" \
-      --replace "${xorg.xinit}" "$out" \
-      --replace "${xorg.xorgserver}" "$out" \
-      --replace "eval xinit" "eval $out/bin/xinit" \
-      --replace "sysclientrc=/etc/X11/xinit/xinitrc" "sysclientrc=$out/etc/X11/xinit/xinitrc"
+      --replace-fail "bindir=${xorg.xinit}/bin" "bindir=$out/bin" \
+      --replace-fail 'defaultserver=${xorg.xorgserver}/bin/X' "defaultserver=$out/bin/Xquartz" \
+      --replace-fail "${xorg.xinit}" "$out" \
+      --replace-fail "${xorg.xorgserver}" "$out" \
+      --replace-fail "eval xinit" "eval $out/bin/xinit" \
+      --replace-fail "sysclientrc=/etc/X11/xinit/xinitrc" "sysclientrc=$out/etc/X11/xinit/xinitrc"
 
     wrapProgram $out/bin/Xquartz \
       --set XQUARTZ_APP $out/Applications/XQuartz.app
@@ -139,9 +139,9 @@ in stdenv.mkDerivation {
     EOF
 
     substituteInPlace $out/etc/X11/xinit/xinitrc \
-      --replace ${xorg.xinit} $out \
-      --replace xmodmap ${xorg.xmodmap}/bin/xmodmap \
-      --replace xrdb ${xorg.xrdb}/bin/xrdb
+      --replace-fail ${xorg.xinit} $out \
+      --replace-fail xmodmap ${xorg.xmodmap}/bin/xmodmap \
+      --replace-fail xrdb ${xorg.xrdb}/bin/xrdb
 
     mkdir -p $out/etc/X11/xinit/xinitrc.d
 
@@ -158,7 +158,7 @@ in stdenv.mkDerivation {
     chmod +x $out/etc/X11/xinit/xinitrc.d/99-quartz-wm.sh
 
     substituteInPlace $out/etc/X11/xinit/privileged_startx.d/20-font_cache \
-      --replace ${xorg.xinit} $out
+      --replace-fail ${xorg.xinit} $out
 
     cp ${./font_cache} $out/bin/font_cache
     substituteInPlace $out/bin/font_cache \

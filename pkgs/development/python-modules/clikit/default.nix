@@ -35,7 +35,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace \
+    substituteInPlace pyproject.toml --replace-fail \
       'crashtest = { version = "^0.3.0", python = "^3.6" }' \
       'crashtest = { version = "*", python = "^3.6" }'
   '';

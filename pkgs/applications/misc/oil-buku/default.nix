@@ -12,13 +12,13 @@ stdenvNoCC.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/oil --replace \
+    substituteInPlace src/oil --replace-fail \
       "LIBDIR=/usr/local/lib/oil" "LIBDIR=${placeholder "out"}/lib"
 
-    substituteInPlace src/json-to-line.jq --replace \
+    substituteInPlace src/json-to-line.jq --replace-fail \
       "/usr/bin/env -S jq" "${jq}/bin/jq"
 
-    substituteInPlace src/format-columns.awk --replace \
+    substituteInPlace src/format-columns.awk --replace-fail \
       "/usr/bin/env -S awk" "${gawk}/bin/awk"
   '';
 

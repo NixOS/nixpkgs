@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '-ltermcap' '-lncurses' \
-      --replace '-L /usr/lib/termcap' ' '
+      --replace-fail '-ltermcap' '-lncurses' \
+      --replace-fail '-L /usr/lib/termcap' ' '
   '';
 
   installPhase = ''

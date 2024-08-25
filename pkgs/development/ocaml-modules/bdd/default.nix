@@ -20,7 +20,7 @@ buildDunePackage {
   # Fix build with OCaml 4.02
   postPatch = ''
     substituteInPlace lib/bdd.ml \
-      --replace "Buffer.truncate Format.stdbuf 0;" "Buffer.clear Format.stdbuf;"
+      --replace-fail "Buffer.truncate Format.stdbuf 0;" "Buffer.clear Format.stdbuf;"
   '';
 
   propagatedBuildInputs = [

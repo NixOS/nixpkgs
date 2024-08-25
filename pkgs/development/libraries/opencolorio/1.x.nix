@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ lcms2 tinyxml ] ++ lib.optional stdenv.isDarwin boost;
 
   postPatch = ''
-    substituteInPlace src/core/CMakeLists.txt --replace "-Werror" ""
-    substituteInPlace src/pyglue/CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace src/core/CMakeLists.txt --replace-fail "-Werror" ""
+    substituteInPlace src/pyglue/CMakeLists.txt --replace-fail "-Werror" ""
   '';
 
   cmakeFlags = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     mv $out/OpenColorIOConfig.cmake $dev/cmake/
 
     substituteInPlace "$dev/cmake/OpenColorIO-release.cmake" \
-      --replace "$out/bin" "$bin/bin"
+      --replace-fail "$out/bin" "$bin/bin"
   '';
 
   meta = with lib; {

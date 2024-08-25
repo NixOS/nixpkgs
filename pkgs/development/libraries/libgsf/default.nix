@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix cross-compilation
     substituteInPlace configure.ac \
-      --replace "AC_PATH_PROG(PKG_CONFIG, pkg-config, no)" \
+      --replace-fail "AC_PATH_PROG(PKG_CONFIG, pkg-config, no)" \
                 "PKG_PROG_PKG_CONFIG"
   '';
 

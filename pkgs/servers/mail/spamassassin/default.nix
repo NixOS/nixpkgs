@@ -45,7 +45,7 @@ perlPackages.buildPerlPackage rec {
   ];
   preCheck = ''
     substituteInPlace t/spamc_x_e.t \
-      --replace "/bin/echo" "${coreutils}/bin/echo"
+      --replace-fail "/bin/echo" "${coreutils}/bin/echo"
     export C_INCLUDE_PATH='${lib.makeSearchPathOutput "include" "include" [ libxcrypt ]}'
     export HARNESS_OPTIONS="j''${NIX_BUILD_CORES}"
 

@@ -29,7 +29,7 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace dnsviz/config.py.in --replace '@out@' $out
+    substituteInPlace dnsviz/config.py.in --replace-fail '@out@' $out
   '';
 
   # Tests require network connection and /etc/resolv.conf

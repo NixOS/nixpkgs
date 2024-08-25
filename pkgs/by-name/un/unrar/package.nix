@@ -17,9 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace unrar/makefile \
-      --replace "CXX=" "#CXX=" \
-      --replace "STRIP=" "#STRIP=" \
-      --replace "AR=" "#AR="
+      --replace-fail "CXX=" "#CXX=" \
+      --replace-fail "STRIP=" "#STRIP=" \
+      --replace-fail "AR=" "#AR="
   '';
 
   outputs = [ "out" "dev" ];

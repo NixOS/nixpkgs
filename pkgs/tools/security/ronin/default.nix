@@ -9,7 +9,7 @@ bundlerEnv {
       dontBuild = false;
       postPatch = ''
         substituteInPlace lib/ronin/code/asm/program.rb \
-          --replace "YASM::Command.run(" "YASM::Command.run(
+          --replace-fail "YASM::Command.run(" "YASM::Command.run(
           command_path: '${yasm}/bin/yasm',"
       '';
     };

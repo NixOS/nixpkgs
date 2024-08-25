@@ -44,7 +44,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "cryptography == 36.0.2" "cryptography"
+      --replace-fail "cryptography == 36.0.2" "cryptography"
   '';
 
   meta = with lib; {

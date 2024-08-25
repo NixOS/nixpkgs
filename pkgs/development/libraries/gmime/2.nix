@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tests/testsuite.c \
-      --replace /bin/rm rm \
-      --replace /bin/mkdir mkdir
+      --replace-fail /bin/rm rm \
+      --replace-fail /bin/mkdir mkdir
 
     substituteInPlace tests/test-pkcs7.c \
-      --replace /bin/mkdir mkdir
+      --replace-fail /bin/mkdir mkdir
   '';
 
   preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

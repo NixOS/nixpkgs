@@ -261,15 +261,15 @@ let
 
       for i in $out/*.rules; do
           substituteInPlace $i \
-            --replace ata_id ${extraUtils}/bin/ata_id \
-            --replace scsi_id ${extraUtils}/bin/scsi_id \
-            --replace cdrom_id ${extraUtils}/bin/cdrom_id \
-            --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
-            --replace ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
-            --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
-            --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
-            --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
-            --replace ${udev} ${extraUtils}
+            --replace-fail ata_id ${extraUtils}/bin/ata_id \
+            --replace-fail scsi_id ${extraUtils}/bin/scsi_id \
+            --replace-fail cdrom_id ${extraUtils}/bin/cdrom_id \
+            --replace-fail ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
+            --replace-fail ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
+            --replace-fail ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
+            --replace-fail ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
+            --replace-fail ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
+            --replace-fail ${udev} ${extraUtils}
       done
 
       # Work around a bug in QEMU, which doesn't implement the "READ
@@ -283,7 +283,7 @@ let
       # udev <= 154.  See also
       #   https://www.spinics.net/lists/hotplug/msg03935.html
       substituteInPlace $out/60-persistent-storage.rules \
-        --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
+        --replace-fail ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
     ''; # */
 
 
@@ -372,7 +372,7 @@ let
               target=$out
               printf "$src" > $out
               substituteInPlace $out \
-                --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
+                --replace-fail ${config.services.multipath.package}/lib ${extraUtils}/lib
             '';
           symlink = "/etc/multipath.conf";
         }

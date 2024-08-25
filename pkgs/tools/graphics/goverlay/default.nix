@@ -56,10 +56,10 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'prefix = /usr/local' "prefix = $out"
+      --replace-fail 'prefix = /usr/local' "prefix = $out"
 
     substituteInPlace overlayunit.pas \
-      --replace '/usr/share/icons/hicolor/128x128/apps/goverlay.png' "$out/share/icons/hicolor/128x128/apps/goverlay.png"
+      --replace-fail '/usr/share/icons/hicolor/128x128/apps/goverlay.png' "$out/share/icons/hicolor/128x128/apps/goverlay.png"
   '';
 
   nativeBuildInputs = [

@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
   patches = [ ./dont_register_file_types.patch ];
 
   postPatch = ''
-     substituteInPlace ./makefile --replace '-L/usr/X11R6/lib'  "" \
-                                  --replace '-I/usr/X11R6/include' "" \
-                                  --replace '/usr/local/' $out/ \
-                                  --replace 'sudo' "" \
-                                  --replace '-C surf depend' '-C surf' \
-                                  --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
+     substituteInPlace ./makefile --replace-fail '-L/usr/X11R6/lib'  "" \
+                                  --replace-fail '-I/usr/X11R6/include' "" \
+                                  --replace-fail '/usr/local/' $out/ \
+                                  --replace-fail 'sudo' "" \
+                                  --replace-fail '-C surf depend' '-C surf' \
+                                  --replace-fail 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
 
-     substituteInPlace ambfor/makefile --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
+     substituteInPlace ambfor/makefile --replace-fail 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
 
      sed -in '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
   '';

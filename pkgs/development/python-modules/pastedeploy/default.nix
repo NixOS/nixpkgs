@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov" ""
+      --replace-fail " --cov" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

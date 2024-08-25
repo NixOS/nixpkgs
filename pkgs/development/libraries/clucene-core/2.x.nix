@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
 
   # see https://github.com/macports/macports-ports/commit/236d43f2450c6be52dc42fd3a2bbabbaa5136201
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/shared/CMakeLists.txt --replace 'fstati64;_fstati64;fstat64;fstat;_fstat' 'fstat;_fstat'
-    substituteInPlace src/shared/CMakeLists.txt --replace 'stati64;_stati64;stat64;stat;_stat' 'stat;_stat'
+    substituteInPlace src/shared/CMakeLists.txt --replace-fail 'fstati64;_fstati64;fstat64;fstat;_fstat' 'fstat;_fstat'
+    substituteInPlace src/shared/CMakeLists.txt --replace-fail 'stati64;_stati64;stat64;stat;_stat' 'stat;_stat'
   '';
 
   # fails with "Unable to find executable:

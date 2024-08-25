@@ -16,9 +16,9 @@ stdenv.mkDerivation {
     MV=$(type -tp mv)
     CP=$(type -tp cp)
     for f in Makefile */Makefile; do
-      substituteInPlace $f --replace "/bin/rm" "$RM" \
-        --replace "/bin/mv" "$MV" \
-        --replace "/bin/cp" "$CP";
+      substituteInPlace $f --replace-fail "/bin/rm" "$RM" \
+        --replace-fail "/bin/mv" "$MV" \
+        --replace-fail "/bin/cp" "$CP";
     done
   '';
 

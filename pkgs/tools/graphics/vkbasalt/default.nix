@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   # layer under the same name.
   postFixup = ''
     substituteInPlace "$out/share/vulkan/implicit_layer.d/vkBasalt.json" \
-      --replace "VK_LAYER_VKBASALT_post_processing" "VK_LAYER_VKBASALT_post_processing_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+      --replace-fail "VK_LAYER_VKBASALT_post_processing" "VK_LAYER_VKBASALT_post_processing_${toString stdenv.hostPlatform.parsed.cpu.bits}"
   '';
 
   meta = with lib; {

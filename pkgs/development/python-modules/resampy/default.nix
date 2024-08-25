@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov-report term-missing --cov resampy --cov-report=xml" ""
+      --replace-fail " --cov-report term-missing --cov resampy --cov-report=xml" ""
   '';
 
   pythonImportsCheck = [ "resampy" ];

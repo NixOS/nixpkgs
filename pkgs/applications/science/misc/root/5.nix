@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       graf2d/asimage/src/libAfterImage/Makefile.in
     )
     for toFix in "''${fixupList[@]}"; do
-      substituteInPlace "$toFix" --replace "clq" "cq"
+      substituteInPlace "$toFix" --replace-fail "clq" "cq"
     done
 
     patchShebangs build/unix/
@@ -100,16 +100,16 @@ stdenv.mkDerivation rec {
 
     # __malloc_hook is deprecated
     substituteInPlace misc/memstat/src/TMemStatHook.cxx \
-      --replace "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
+      --replace-fail "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
                 "defined(R__GNU) && (defined(__APPLE__))"
   ''
   # Fix CINTSYSDIR for "build" version of rootcint
   # This is probably a bug that breaks out-of-source builds
   + ''
     substituteInPlace cint/cint/src/loadfile.cxx\
-      --replace 'env = "cint";' 'env = "'`pwd`'/cint";'
+      --replace-fail 'env = "cint";' 'env = "'`pwd`'/cint";'
   '' + lib.optionalString noSplash ''
-    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
+    substituteInPlace rootx/src/rootx.cxx --replace-fail "gNoLogo = false" "gNoLogo = true"
   '';
 
   cmakeFlags = [

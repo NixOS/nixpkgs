@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
 
       cd ../${srcdirs.driver}
       for ppd in ppds/*; do
-          substituteInPlace "$ppd" --replace '/opt/${pname}' "$out"
+          substituteInPlace "$ppd" --replace-fail '/opt/${pname}' "$out"
           gzip -c "$ppd" > "${ppddir}/''${ppd#*/}"
       done
       cp COPYING.EPSON README "${docdir}"

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for file in $(grep -rl "/bin/bash"); do
-      substituteInPlace $file --replace "/bin/bash" "${runtimeShell}"
+      substituteInPlace $file --replace-fail "/bin/bash" "${runtimeShell}"
     done
   '';
 

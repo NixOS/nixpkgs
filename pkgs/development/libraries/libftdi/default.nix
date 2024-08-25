@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff
   patchPhase = ''
     substituteInPlace ./src/ftdi.c \
-      --replace "ifdef USB_CLASS_PTP" "if 0"
+      --replace-fail "ifdef USB_CLASS_PTP" "if 0"
   '';
 
   # remove forbidden references to $TMPDIR

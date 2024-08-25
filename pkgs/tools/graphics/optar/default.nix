@@ -15,10 +15,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/local $out
+      --replace-fail /usr/local $out
 
     substituteInPlace pgm2ps \
-      --replace 'convert ' "${lib.getBin imagemagick}/bin/convert "
+      --replace-fail 'convert ' "${lib.getBin imagemagick}/bin/convert "
   '';
 
   preInstall = ''

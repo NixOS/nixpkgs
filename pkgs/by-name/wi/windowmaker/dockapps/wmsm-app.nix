@@ -25,8 +25,8 @@ stdenv.mkDerivation  (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "PREFIX	= /usr/X11R6/bin" "" \
-      --replace "/usr/bin/install" "install"
+      --replace-fail "PREFIX	= /usr/X11R6/bin" "" \
+      --replace-fail "/usr/bin/install" "install"
   '';
 
   makeFlags = [

@@ -85,12 +85,12 @@ mkDerivation {
   postPatch = ''
     for f in Modules/kwinsupportinfo/{kcm_kwinsupportinfo.json.in,main.cpp}; do
       substituteInPlace $f \
-        --replace "@qdbus@" "${qdbus}"
+        --replace-fail "@qdbus@" "${qdbus}"
     done
 
     for f in Modules/xserver/{kcm_xserver.json,main.cpp}; do
       substituteInPlace $f \
-        --replace "@xdpyinfo@" "${getExe xdpyinfo}"
+        --replace-fail "@xdpyinfo@" "${getExe xdpyinfo}"
     done
   '';
 

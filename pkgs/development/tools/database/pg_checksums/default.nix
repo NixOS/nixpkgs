@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace doc/stylesheet-man.xsl \
-      --replace "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+      --replace-fail "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
   '';
 
   installPhase = ''

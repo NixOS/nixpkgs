@@ -64,7 +64,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals withVisualization visualizationPackages;
 
   postPatch = ''
-    substituteInPlace setup.py --replace "websocket-client>=1.0.1" "websocket-client"
+    substituteInPlace setup.py --replace-fail "websocket-client>=1.0.1" "websocket-client"
   '';
 
   # Most tests require credentials to run on IBMQ

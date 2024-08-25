@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     substituteInPlace Makefile \
-      --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
+      --replace-fail '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
   '' + lib.optionalString (!stdenv.isLinux) ''
     sed 's/#EXTRA/EXTRA/' -i Makefile
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

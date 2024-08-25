@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/main.cc \
-        --replace "dmenu -i" "${lib.getExe dmenu} -i"
+        --replace-fail "dmenu -i" "${lib.getExe dmenu} -i"
   '';
 
   nativeBuildInputs = [ cmake ];

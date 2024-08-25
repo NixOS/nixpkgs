@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
   postPatch =
     if stdenv.isDarwin then ''
       substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
-        --replace "libstdc++.6.dylib" "libc++.1.dylib"
+        --replace-fail "libstdc++.6.dylib" "libc++.1.dylib"
     '' else ''
       for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
         substituteInPlace $f \
-          --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
-          --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
-          --replace "-DGNU_RUNTIME=1" "" \
-          --replace "-fgnu-runtime" "-fobjc-runtime=gnustep-2.0"
+          --replace-fail "= gcc" "=${stdenv.cc.targetPrefix}cc" \
+          --replace-fail "= g++" "=${stdenv.cc.targetPrefix}c++" \
+          --replace-fail "-DGNU_RUNTIME=1" "" \
+          --replace-fail "-fgnu-runtime" "-fobjc-runtime=gnustep-2.0"
       done
 
       # we need to build inside this directory as well, so we have to make it writeable

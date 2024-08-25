@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     # update: curl -L api.github.com/repos/processone/ejabberd-po/branches/main | jq .commit.sha -r
     postPatch = ''
       substituteInPlace rebar.config \
-        --replace \
+        --replace-fail \
           '{git, "https://github.com/processone/ejabberd-po", {branch, "main"}}' \
           '{git, "https://github.com/processone/ejabberd-po", {tag, "26d6463386588d39f07027dabff3cb8dd938bf6b"}}'
     '';

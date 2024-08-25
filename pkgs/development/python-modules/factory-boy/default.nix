@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/test_version.py \
-      --replace '"3.2.1.dev0")' '"${version}")'
+      --replace-fail '"3.2.1.dev0")' '"${version}")'
   '';
 
   propagatedBuildInputs = [ faker ];

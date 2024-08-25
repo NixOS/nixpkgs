@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     substituteInPlace wemux \
-        --replace tmux ${tmux}/bin/tmux \
-        --replace "/usr/local/etc" "/etc"
+        --replace-fail tmux ${tmux}/bin/tmux \
+        --replace-fail "/usr/local/etc" "/etc"
 
-    substituteInPlace man/wemux.1 --replace "/usr/local/etc" "/etc"
+    substituteInPlace man/wemux.1 --replace-fail "/usr/local/etc" "/etc"
 
     install -Dm755 wemux -t $out/bin
     installManPage man/wemux.1

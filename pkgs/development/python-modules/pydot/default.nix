@@ -39,11 +39,11 @@ buildPythonPackage rec {
   postPatch = ''
     # test_graphviz_regression_tests also fails upstream: https://github.com/pydot/pydot/pull/198
     substituteInPlace test/pydot_unittest.py \
-      --replace "test_graphviz_regression_tests" "no_test_graphviz_regression_tests" \
+      --replace-fail "test_graphviz_regression_tests" "no_test_graphviz_regression_tests" \
     # Patch path for pytestCheckHook
     substituteInPlace test/pydot_unittest.py \
-      --replace "shapefile_dir = os.path.join(test_dir, 'from-past-to-future')" "shapefile_dir = 'test/from-past-to-future'" \
-      --replace "path = os.path.join(test_dir, TESTS_DIR_1)" "path = os.path.join('test/', TESTS_DIR_1)"
+      --replace-fail "shapefile_dir = os.path.join(test_dir, 'from-past-to-future')" "shapefile_dir = 'test/from-past-to-future'" \
+      --replace-fail "path = os.path.join(test_dir, TESTS_DIR_1)" "path = os.path.join('test/', TESTS_DIR_1)"
   '';
 
   pytestFlagsArray = [ "test/pydot_unittest.py" ];

@@ -31,8 +31,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "!=3.10.*," "" --replace "!=3.11.*" ""
-    substituteInPlace setup.cfg --replace "pytest-runner" ""
+    substituteInPlace setup.cfg --replace-fail "!=3.10.*," "" --replace-fail "!=3.11.*" ""
+    substituteInPlace setup.cfg --replace-fail "pytest-runner" ""
   '';
 
   pythonRelaxDeps = [ "nibabel" ];

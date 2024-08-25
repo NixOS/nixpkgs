@@ -17,13 +17,13 @@ in
     installPhase = ''
       # FIXME: Storing config files under `$out/etc' is not very useful.
 
-      substituteInPlace "hibernate.sh" --replace \
+      substituteInPlace "hibernate.sh" --replace-fail \
         'SWSUSP_D="/etc/hibernate"' "SWSUSP_D=\"$out/etc/hibernate\""
 
       # Remove all references to `/bin' and `/sbin'.
       for i in scriptlets.d/*
       do
-        substituteInPlace "$i" --replace "/bin/" "" --replace "/sbin/" ""
+        substituteInPlace "$i" --replace-fail "/bin/" "" --replace-fail "/sbin/" ""
       done
 
       PREFIX="$out" CONFIG_PREFIX="$out" ./install.sh

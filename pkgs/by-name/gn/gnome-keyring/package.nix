@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
     for file in ''${files[*]}; do
       substituteInPlace $file \
-        --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+        --replace-fail "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
     done
   '';
 

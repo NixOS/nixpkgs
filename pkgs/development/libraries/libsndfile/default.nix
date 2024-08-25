@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests/test_wrapper.sh tests/pedantic-header-test.sh
 
     substituteInPlace tests/test_wrapper.sh \
-      --replace '/usr/bin/env' "$(type -P env)"
+      --replace-fail '/usr/bin/env' "$(type -P env)"
   '';
 
   passthru.tests = {

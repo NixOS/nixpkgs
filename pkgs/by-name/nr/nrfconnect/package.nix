@@ -27,7 +27,7 @@ in appimageTools.wrapType2 {
     install -Dm444 ${appimageContents}/usr/share/icons/hicolor/512x512/apps/nrfconnect.png \
       -t $out/share/icons/hicolor/512x512/apps
     substituteInPlace $out/share/applications/nrfconnect.desktop \
-      --replace 'Exec=AppRun' 'Exec=nrfconnect'
+      --replace-fail 'Exec=AppRun' 'Exec=nrfconnect'
   '';
 
   meta = with lib; {

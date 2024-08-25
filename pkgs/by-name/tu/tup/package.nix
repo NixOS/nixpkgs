@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./fusermount-setuid.patch ];
 
   configurePhase = ''
-    substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
+    substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${version}'
 
     cat << EOF > tup.config
     CONFIG_CC=${stdenv.cc.targetPrefix}cc

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/lib/systemd/system/wg-quick@.service \
-      --replace /usr/bin $out/bin
+      --replace-fail /usr/bin $out/bin
   '' + lib.optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
       # Which firewall and resolvconf implementations to use should be determined by the

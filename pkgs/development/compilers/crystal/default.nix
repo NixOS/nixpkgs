@@ -119,40 +119,40 @@ let
         # Add dependency of crystal to docs to avoid issue on flag changes between releases
         # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
         substituteInPlace Makefile \
-          --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
+          --replace-fail 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
 
         mkdir -p $TMP/crystal
 
         substituteInPlace spec/std/file_spec.cr \
-          --replace '/bin/ls' '${coreutils}/bin/ls' \
-          --replace '/usr/share' "$TMP/crystal" \
-          --replace '/usr' "$TMP" \
-          --replace '/tmp' "$TMP"
+          --replace-fail '/bin/ls' '${coreutils}/bin/ls' \
+          --replace-fail '/usr/share' "$TMP/crystal" \
+          --replace-fail '/usr' "$TMP" \
+          --replace-fail '/tmp' "$TMP"
 
         substituteInPlace spec/std/process_spec.cr \
-          --replace '/bin/cat' '${coreutils}/bin/cat' \
-          --replace '/bin/ls' '${coreutils}/bin/ls' \
-          --replace '/usr/bin/env' '${coreutils}/bin/env' \
-          --replace '"env"' '"${coreutils}/bin/env"' \
-          --replace '/usr' "$TMP" \
-          --replace '/tmp' "$TMP"
+          --replace-fail '/bin/cat' '${coreutils}/bin/cat' \
+          --replace-fail '/bin/ls' '${coreutils}/bin/ls' \
+          --replace-fail '/usr/bin/env' '${coreutils}/bin/env' \
+          --replace-fail '"env"' '"${coreutils}/bin/env"' \
+          --replace-fail '/usr' "$TMP" \
+          --replace-fail '/tmp' "$TMP"
 
         substituteInPlace spec/std/system_spec.cr \
-          --replace '`hostname`' '`${hostname}/bin/hostname`'
+          --replace-fail '`hostname`' '`${hostname}/bin/hostname`'
 
         # See https://github.com/crystal-lang/crystal/issues/8629
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
-          --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+          --replace-fail 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
       '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
-          --replace 'it "parses file paths"' 'pending "parses file paths"'
+          --replace-fail 'it "parses file paths"' 'pending "parses file paths"'
       '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
         # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
         # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
         substituteInPlace src/llvm/lib_llvm.cr \
-          --replace '@[Link("stdc++")]' '@[Link("c++")]'
+          --replace-fail '@[Link("stdc++")]' '@[Link("c++")]'
       '';
 
       # Defaults are 4

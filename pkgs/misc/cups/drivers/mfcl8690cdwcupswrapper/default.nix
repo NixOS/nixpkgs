@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     dir=$out/opt/brother/Printers/mfcl8690cdw
 
     substituteInPlace $dir/cupswrapper/brother_lpdwrapper_mfcl8690cdw \
-      --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace "basedir =~" "basedir = \"$basedir/\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
+      --replace-fail /usr/bin/perl ${perl}/bin/perl \
+      --replace-fail "basedir =~" "basedir = \"$basedir/\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
 
     wrapProgram $dir/cupswrapper/brother_lpdwrapper_mfcl8690cdw \
       --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}

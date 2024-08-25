@@ -31,27 +31,27 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace bin/rivet-build.in \
-      --replace 'num_jobs=$(getconf _NPROCESSORS_ONLN)' 'num_jobs=''${NIX_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}' \
-      --replace 'which' '"${which}/bin/which"' \
-      --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
-      --replace 'mycxxflags="' "mycxxflags=\"$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
+      --replace-fail 'num_jobs=$(getconf _NPROCESSORS_ONLN)' 'num_jobs=''${NIX_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}' \
+      --replace-fail 'which' '"${which}/bin/which"' \
+      --replace-fail 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
+      --replace-fail 'mycxxflags="' "mycxxflags=\"$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';
 
   preInstall = ''
     substituteInPlace bin/make-plots \
-      --replace '"which"' '"${which}/bin/which"' \
-      --replace '"latex"' '"'$latex'/bin/latex"' \
-      --replace '"dvips"' '"'$latex'/bin/dvips"' \
-      --replace '"ps2pdf"' '"${ghostscript}/bin/ps2pdf"' \
-      --replace '"ps2eps"' '"${ghostscript}/bin/ps2eps"' \
-      --replace '"kpsewhich"' '"'$latex'/bin/kpsewhich"' \
-      --replace '"convert"' '"${imagemagick.out}/bin/convert"'
+      --replace-fail '"which"' '"${which}/bin/which"' \
+      --replace-fail '"latex"' '"'$latex'/bin/latex"' \
+      --replace-fail '"dvips"' '"'$latex'/bin/dvips"' \
+      --replace-fail '"ps2pdf"' '"${ghostscript}/bin/ps2pdf"' \
+      --replace-fail '"ps2eps"' '"${ghostscript}/bin/ps2eps"' \
+      --replace-fail '"kpsewhich"' '"'$latex'/bin/kpsewhich"' \
+      --replace-fail '"convert"' '"${imagemagick.out}/bin/convert"'
     substituteInPlace bin/rivet \
-      --replace '"less"' '"${less}/bin/less"'
+      --replace-fail '"less"' '"${less}/bin/less"'
     substituteInPlace bin/rivet-mkhtml \
-      --replace '"make-plots"' \"$out/bin/make-plots\" \
-      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \
-      --replace 'ch_cmd = [sys.executable, os.path.join(os.path.dirname(__file__),' 'ch_cmd = [('
+      --replace-fail '"make-plots"' \"$out/bin/make-plots\" \
+      --replace-fail '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \
+      --replace-fail 'ch_cmd = [sys.executable, os.path.join(os.path.dirname(__file__),' 'ch_cmd = [('
   '';
 
   configureFlags = [

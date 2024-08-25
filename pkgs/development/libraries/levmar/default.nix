@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    substituteInPlace levmar.h --replace "define HAVE_LAPACK" "undef HAVE_LAPACK"
+    substituteInPlace levmar.h --replace-fail "define HAVE_LAPACK" "undef HAVE_LAPACK"
     sed -i 's/LAPACKLIBS=.*/LAPACKLIBS=/' Makefile
-    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
+    substituteInPlace Makefile --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   installPhase = ''

@@ -29,7 +29,7 @@ mkDerivation rec {
   # Remove -Werror since it uses deprecated methods
   postPatch = ''
     substituteInPlace ./CMakeLists.txt \
-      --replace "add_definitions (-Wall -Werror)" "add_definitions (-Wall)"
+      --replace-fail "add_definitions (-Wall -Werror)" "add_definitions (-Wall)"
   '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

@@ -124,22 +124,22 @@ stdenv.mkDerivation rec {
       fi
     done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
-      --replace 'set(lcgpackages ' '#set(lcgpackages '
+      --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
     # We have to bypass the connection check, because it would disable clad.
     # This should probably be fixed upstream with a flag to disable the
     # connectivity check!
     substituteInPlace CMakeLists.txt \
-      --replace 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
+      --replace-fail 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
     # Make sure that clad is not downloaded when building
     substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
+      --replace-fail 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
     # Make sure that clad is finding the right llvm version
     substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
+      --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
 
     substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-      --replace 'add_clang_symlink(''${link} clang)' ""
+      --replace-fail 'add_clang_symlink(''${link} clang)' ""
 
     # Don't require textutil on macOS
     : > cmake/modules/RootCPack.cmake
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/macosx/CMakeLists.txt \
-      --replace "-F/System/Library/PrivateFrameworks " ""
+      --replace-fail "-F/System/Library/PrivateFrameworks " ""
   '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';

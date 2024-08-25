@@ -24,7 +24,7 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/usr/* "$out"
       cp "${contents}/kMeet.desktop" "$out/share/applications/"
       mv "$out/bin/kmeet" "$out/bin/${meta.mainProgram}" || true
-      substituteInPlace $out/share/applications/kMeet.desktop --replace 'Exec=AppRun' 'Exec=${meta.mainProgram}'
+      substituteInPlace $out/share/applications/kMeet.desktop --replace-fail 'Exec=AppRun' 'Exec=${meta.mainProgram}'
     '';
 
   meta = with lib; {

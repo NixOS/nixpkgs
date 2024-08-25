@@ -73,10 +73,10 @@ in stdenv.mkDerivation rec {
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
     substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsConfig.cmake \
-      --replace "$out/" ""
+      --replace-fail "$out/" ""
 
     substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsTargets.cmake \
-      --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
+      --replace-fail "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 
   meta = with lib; {

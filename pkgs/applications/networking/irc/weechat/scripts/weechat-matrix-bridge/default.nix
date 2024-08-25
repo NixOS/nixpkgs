@@ -18,12 +18,12 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace matrix.lua \
-      --replace "/usr/bin/curl" "${curl}/bin/curl" \
-      --replace "__NIX_LIB_PATH__" "$out/lib/?.so" \
-      --replace "__NIX_OLM_PATH__" "$out/share/?.lua"
+      --replace-fail "/usr/bin/curl" "${curl}/bin/curl" \
+      --replace-fail "__NIX_LIB_PATH__" "$out/lib/?.so" \
+      --replace-fail "__NIX_OLM_PATH__" "$out/share/?.lua"
 
     substituteInPlace olm.lua \
-      --replace "__NIX_LIB_PATH__" "$out/lib/?.so"
+      --replace-fail "__NIX_LIB_PATH__" "$out/lib/?.so"
   '';
 
   passthru.scripts = [ "matrix.lua" ];

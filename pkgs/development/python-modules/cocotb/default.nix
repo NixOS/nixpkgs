@@ -39,11 +39,11 @@ buildPythonPackage rec {
         cocotb/share/makefiles/Makefile.* \
         cocotb/share/makefiles/simulators/Makefile.*
       do
-        substituteInPlace $f --replace 'shell which' 'shell command -v'
+        substituteInPlace $f --replace-fail 'shell which' 'shell command -v'
       done
 
       # remove circular dependency cocotb-bus from setup.py
-      substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
+      substituteInPlace setup.py --replace-fail "'cocotb-bus<1.0'" ""
     '';
 
   patches = [

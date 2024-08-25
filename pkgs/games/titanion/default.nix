@@ -60,7 +60,7 @@ in stdenv.mkDerivation (finalAttrs: {
     rm -r lib
     for f in src/abagames/ttn/screen.d src/abagames/util/sdl/sound.d src/abagames/util/sdl/texture.d; do
       substituteInPlace $f \
-        --replace "/usr/" "$out/"
+        --replace-fail "/usr/" "$out/"
     done
   '';
 

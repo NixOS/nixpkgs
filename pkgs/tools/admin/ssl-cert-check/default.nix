@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    substituteInPlace $pname --replace PATH= NOT_PATH=
+    substituteInPlace $pname --replace-fail PATH= NOT_PATH=
   '';
 
   installPhase = ''

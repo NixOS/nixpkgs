@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   inherit version;
 
   prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.ac --replace stdc++ c++
+    substituteInPlace configure.ac --replace-fail stdc++ c++
   '';
 
   patches = [

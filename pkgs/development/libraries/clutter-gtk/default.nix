@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # ld: malformed 32-bit x.y.z version number: =1
     substituteInPlace meson.build \
-      --replace "host_system == 'darwin'" "false"
+      --replace-fail "host_system == 'darwin'" "false"
   '';
 
   postBuild = "rm -rf $out/share/gtk-doc";

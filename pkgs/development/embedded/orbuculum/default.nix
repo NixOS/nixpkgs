@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    substituteInPlace meson.build --replace \
+    substituteInPlace meson.build --replace-fail \
       "/etc/udev/rules.d" "$out/etc/udev/rules.d"
   '';
 

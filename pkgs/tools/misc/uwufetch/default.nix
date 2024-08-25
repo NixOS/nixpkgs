@@ -13,18 +13,18 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace uwufetch.c \
-      --replace "/usr/lib/uwufetch" "$out/lib/uwufetch" \
-      --replace "/usr/local/lib/uwufetch" "$out/lib/uwufetch" \
-      --replace "/etc/uwufetch/config" "$out/etc/uwufetch/config"
+      --replace-fail "/usr/lib/uwufetch" "$out/lib/uwufetch" \
+      --replace-fail "/usr/local/lib/uwufetch" "$out/lib/uwufetch" \
+      --replace-fail "/etc/uwufetch/config" "$out/etc/uwufetch/config"
     # fix command_path for package manager (nix-store)
     substituteInPlace fetch.c \
-      --replace "/usr/bin" "/run/current-system/sw/bin"
+      --replace-fail "/usr/bin" "/run/current-system/sw/bin"
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
-      --replace "local/bin" "bin" \
-      --replace "local/lib" "lib" \
-      --replace "local/include" "include" \
-      --replace "local/share" "share"
+      --replace-fail "local/bin" "bin" \
+      --replace-fail "local/lib" "lib" \
+      --replace-fail "local/include" "include" \
+      --replace-fail "local/share" "share"
   '';
 
   nativeBuildInputs = [ makeWrapper ];

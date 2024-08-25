@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       --set CLASSPATH "$cp" \
       --set JAVA_HOME "${jre}"
     # Make sure above `CLASSPATH` gets picked up
-    substituteInPlace $out/share/squirrel-sql/squirrel-sql.sh --replace "-cp \"\$CP\"" "-cp \"\$CLASSPATH:\$CP\""
+    substituteInPlace $out/share/squirrel-sql/squirrel-sql.sh --replace-fail "-cp \"\$CP\"" "-cp \"\$CLASSPATH:\$CP\""
 
     mkdir -p $out/share/icons/hicolor/32x32/apps
     ln -s $out/share/squirrel-sql/icons/acorn.png \

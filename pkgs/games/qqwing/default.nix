@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for file in "src-first-comment.pl" "src_neaten.pl"; do
       substituteInPlace "build/$file" \
-        --replace "#!/usr/bin/perl" "#!${perl}/bin/perl"
+        --replace-fail "#!/usr/bin/perl" "#!${perl}/bin/perl"
     done
 
     substituteInPlace "build/cpp_install.sh" \
-      --replace "sudo " ""
+      --replace-fail "sudo " ""
   '';
 
   nativeBuildInputs = [ autoconf automake ];

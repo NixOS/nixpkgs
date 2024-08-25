@@ -52,10 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Tries to query QMake for QT_INSTALL_QML variable, would return broken paths into /build/qtbase-<commit> even if qmake was available
     substituteInPlace src/modules/UserMetrics/CMakeLists.txt \
-      --replace 'query_qmake(QT_INSTALL_QML QT_IMPORTS_DIR)' 'set(QT_IMPORTS_DIR "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}")'
+      --replace-fail 'query_qmake(QT_INSTALL_QML QT_IMPORTS_DIR)' 'set(QT_IMPORTS_DIR "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}")'
 
     substituteInPlace doc/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
+      --replace-fail "\''${CMAKE_INSTALL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
   '';
 
   strictDeps = true;

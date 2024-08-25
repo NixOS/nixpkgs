@@ -46,15 +46,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/firewall/config/__init__.py.in \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
 
     for file in config/firewall-{applet,config}.desktop.in; do
       substituteInPlace $file \
-        --replace "/usr/bin/" "$out/bin/"
+        --replace-fail "/usr/bin/" "$out/bin/"
     done
   '' + lib.optionalString withGui ''
     substituteInPlace src/firewall-applet.in \
-      --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-conenction-editor"
+      --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-conenction-editor"
   '';
 
   nativeBuildInputs = [

@@ -34,11 +34,11 @@ resholve.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace "PREFIX = /usr/local" "PREFIX ?= /usr/local"
+      --replace-fail "PREFIX = /usr/local" "PREFIX ?= /usr/local"
     substituteInPlace ./pacstrap.in \
-      --replace "cp -a" "cp -LR --no-preserve=mode" \
-      --replace "unshare pacman" "unshare ${pacman}/bin/pacman" \
-      --replace 'gnupg "$newroot/etc/pacman.d/"' 'gnupg "$newroot/etc/pacman.d/" && chmod 700 "$newroot/etc/pacman.d/gnupg"'
+      --replace-fail "cp -a" "cp -LR --no-preserve=mode" \
+      --replace-fail "unshare pacman" "unshare ${pacman}/bin/pacman" \
+      --replace-fail 'gnupg "$newroot/etc/pacman.d/"' 'gnupg "$newroot/etc/pacman.d/" && chmod 700 "$newroot/etc/pacman.d/gnupg"'
     echo "export PATH=${lib.strings.makeSearchPath "" chrootPath}:\$PATH" >> ./common
   '';
 

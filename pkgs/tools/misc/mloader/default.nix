@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "protobuf~=3.6" "protobuf"
+      --replace-fail "protobuf~=3.6" "protobuf"
   '';
 
   propagatedBuildInputs = with python3Packages; [

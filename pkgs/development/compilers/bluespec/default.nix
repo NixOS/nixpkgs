@@ -63,8 +63,8 @@ in stdenv.mkDerivation rec {
       src/comp/wrapper.sh
 
     substituteInPlace src/comp/Makefile \
-      --replace 'BINDDIR' 'BINDIR' \
-      --replace 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) install-utils'
+      --replace-fail 'BINDDIR' 'BINDIR' \
+      --replace-fail 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) install-utils'
 
     # allow running bsc to bootstrap
     export LD_LIBRARY_PATH=$PWD/inst/lib/SAT

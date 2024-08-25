@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace "/lib/modules" "${kernel.dev}/lib/modules"
+      --replace-fail "/lib/modules" "${kernel.dev}/lib/modules"
   '';
 
   makeFlags = kernel.makeFlags;

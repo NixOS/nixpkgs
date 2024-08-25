@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'CMAKE_INSTALL_PREFIX "/usr"' "CMAKE_INSTALL_PREFIX $out"
+      --replace-fail 'CMAKE_INSTALL_PREFIX "/usr"' "CMAKE_INSTALL_PREFIX $out"
     substituteInPlace data/CMakeLists.txt \
-      --replace 'DESTINATION usr/share' "DESTINATION share"
+      --replace-fail 'DESTINATION usr/share' "DESTINATION share"
   '';
 
   postConfigure = ''
     substituteInPlace cmake_install.cmake \
-      --replace "/var/empty" "/usr"
+      --replace-fail "/var/empty" "/usr"
   '';
 
   meta = with lib; {

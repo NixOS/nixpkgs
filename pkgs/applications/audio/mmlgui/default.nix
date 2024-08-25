@@ -30,19 +30,19 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/147503#issuecomment-1055943897
     # Removing a pkgconf-specific option makes it work with pkg-config
     substituteInPlace libvgm.mak \
-      --replace '--with-path=/usr/local/lib/pkgconfig' ""
+      --replace-fail '--with-path=/usr/local/lib/pkgconfig' ""
 
     # Use correct pkg-config
     substituteInPlace {imgui,libvgm}.mak \
-      --replace 'pkg-config' "\''$(PKG_CONFIG)"
+      --replace-fail 'pkg-config' "\''$(PKG_CONFIG)"
 
     # Don't force building tests
     substituteInPlace Makefile \
-      --replace 'all: $(MMLGUI_BIN) test' 'all: $(MMLGUI_BIN)'
+      --replace-fail 'all: $(MMLGUI_BIN) test' 'all: $(MMLGUI_BIN)'
 
     # Breaking change in libvgm
     substituteInPlace src/emu_player.cpp \
-      --replace 'Resmpl_SetVals(&resmpl, 0xff' 'Resmpl_SetVals(&resmpl, RSMODE_LINEAR'
+      --replace-fail 'Resmpl_SetVals(&resmpl, 0xff' 'Resmpl_SetVals(&resmpl, RSMODE_LINEAR'
   '';
 
   strictDeps = true;

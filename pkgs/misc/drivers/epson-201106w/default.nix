@@ -28,8 +28,8 @@ in
       tar -zxf epson-inkjet-printer-201106w-${version}.tar.gz
       tar -zxf epson-inkjet-printer-filter-${filterVersion}.tar.gz
       for ppd in epson-inkjet-printer-201106w-${version}/ppds/*; do
-        substituteInPlace $ppd --replace "/opt/epson-inkjet-printer-201106w" "$out"
-        substituteInPlace $ppd --replace "/cups/lib" "/lib/cups"
+        substituteInPlace $ppd --replace-fail "/opt/epson-inkjet-printer-201106w" "$out"
+        substituteInPlace $ppd --replace-fail "/cups/lib" "/lib/cups"
       done
       cd epson-inkjet-printer-filter-${filterVersion}
     '';

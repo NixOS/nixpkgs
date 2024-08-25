@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "-flto" ""
+    substituteInPlace Makefile --replace-fail "-flto" ""
   '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

@@ -44,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x fake-true
     grep -rlF '/bin/true' test-suite/ | while read -r filename ; do
       substituteInPlace "$filename" \
-        --replace "$(type -P true)" "$(realpath fake-true)" \
-        --replace "/bin/true" "$(realpath fake-true)"
+        --replace-fail "$(type -P true)" "$(realpath fake-true)" \
+        --replace-fail "/bin/true" "$(realpath fake-true)"
     done
   '';
 

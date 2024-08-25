@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   FOUND.
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'SDL2 REQUIRED' 'SDL2'
+      --replace-fail 'SDL2 REQUIRED' 'SDL2'
   '';
 
   strictDeps = true;

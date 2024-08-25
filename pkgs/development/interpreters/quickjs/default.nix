@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "CONFIG_LTO=y" ""
+    substituteInPlace Makefile --replace-fail "CONFIG_LTO=y" ""
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

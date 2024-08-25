@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace rust/Cargo.lock \
-      --replace "3.0.0-beta-1" "3.0.0"
+      --replace-fail "3.0.0-beta-1" "3.0.0"
   '';
 
   cargoRoot = "rust";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     hash = "sha256-6fw0KgnPIMfdseWcunsGjvjVB+lJNoG3pLDqkORPJ0I=";
     postPatch = ''
       substituteInPlace Cargo.lock \
-        --replace "3.0.0-beta-1" "3.0.0"
+        --replace-fail "3.0.0-beta-1" "3.0.0"
     '';
   };
 

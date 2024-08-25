@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     mv usr/* "$out/"
 
     substituteInPlace $out/share/applications/hyper.desktop \
-      --replace "/opt/Hyper/hyper" "hyper"
+      --replace-fail "/opt/Hyper/hyper" "hyper"
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.hyper;

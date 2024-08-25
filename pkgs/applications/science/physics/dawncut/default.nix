@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile.architecture \
-      --replace 'CXX      := g++' ""
+      --replace-fail 'CXX      := g++' ""
   '';
 
   dontConfigure = true;

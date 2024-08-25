@@ -195,7 +195,7 @@ let
         for file in scripts/gen-randstruct-seed.sh scripts/gcc-plugins/gen-random-seed.sh; do
           if [ -f "$file" ]; then
             substituteInPlace "$file" \
-              --replace NIXOS_RANDSTRUCT_SEED \
+              --replace-fail NIXOS_RANDSTRUCT_SEED \
               $(echo ${randstructSeed}${src} ${placeholder "configfile"} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
             break
           fi

@@ -20,7 +20,7 @@ buildGoModule rec {
     rm registry/storage/driver/inmemory/driver_test.go
 
     substituteInPlace health/checks/checks_test.go \
-      --replace \
+      --replace-fail \
         'func TestHTTPChecker(t *testing.T) {' \
         'func TestHTTPChecker(t *testing.T) { t.Skip("Test requires network connection")'
   '';

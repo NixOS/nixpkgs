@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs configure
     substituteInPlace configure \
-      --replace 'python_install_option=""' 'python_install_option="--prefix=$out"'
+      --replace-fail 'python_install_option=""' 'python_install_option="--prefix=$out"'
   '';
 
   enableParallelBuilding = true;

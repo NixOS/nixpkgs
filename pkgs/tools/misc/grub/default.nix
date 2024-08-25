@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
 
       ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
-      substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+      substituteInPlace ./configure --replace-fail '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
 
   postConfigure = ''
@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
     # just adding bash to buildInputs wasn't enough to fix the shebang
     substituteInPlace $out/lib/grub/*/modinfo.sh \
-      --replace ${buildPackages.bash} "/usr/bin/bash"
+      --replace-fail ${buildPackages.bash} "/usr/bin/bash"
   '';
 
   passthru.tests = {

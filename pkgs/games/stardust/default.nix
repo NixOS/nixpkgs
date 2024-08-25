@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace config.h \
-      --replace '#define PACKAGE ""' '#define PACKAGE "stardust"'
+      --replace-fail '#define PACKAGE ""' '#define PACKAGE "stardust"'
   '';
 
   meta = with lib; {

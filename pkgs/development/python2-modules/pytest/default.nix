@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pluggy>=0.12,<1.0" "pluggy>=0.12,<2.0"
+      --replace-fail "pluggy>=0.12,<1.0" "pluggy>=0.12,<2.0"
   '';
 
   nativeCheckInputs = [ hypothesis mock ];

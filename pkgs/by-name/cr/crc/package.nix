@@ -30,7 +30,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace pkg/crc/oc/oc_linux_test.go \
-      --replace "/bin/echo" "${coreutils}/bin/echo"
+      --replace-fail "/bin/echo" "${coreutils}/bin/echo"
   '';
 
   subPackages = [

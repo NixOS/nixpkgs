@@ -64,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
-      --replace "hid2hci " "$out/lib/udev/hid2hci "
+      --replace-fail /sbin/udevadm ${systemdMinimal}/bin/udevadm \
+      --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
   '' +
   # Disable some tests:
   # - test-mesh-crypto depends on the following kernel settings:

@@ -22,9 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Daemon/ydotoold.c \
-      --replace "/usr/bin/xinput" "${xorg.xinput}/bin/xinput"
+      --replace-fail "/usr/bin/xinput" "${xorg.xinput}/bin/xinput"
     substituteInPlace Daemon/ydotool.service.in \
-      --replace "/usr/bin/kill" "${util-linux}/bin/kill"
+      --replace-fail "/usr/bin/kill" "${util-linux}/bin/kill"
   '';
 
   strictDeps = true;

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=sensor_state_data --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=sensor_state_data --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [ "sensor_state_data" ];

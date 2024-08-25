@@ -17,7 +17,7 @@ buildGoModule (rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "all: server" ""
+      --replace-fail "all: server" ""
 
     # fix build failure due to unused import
     substituteInPlace server.go \

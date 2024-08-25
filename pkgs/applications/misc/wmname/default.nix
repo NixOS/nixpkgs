@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "@strip" "#@strip"
+    substituteInPlace Makefile --replace-fail "@strip" "#@strip"
   '';
 
   buildInputs = [ libX11 ];

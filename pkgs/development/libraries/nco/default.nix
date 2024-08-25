@@ -41,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/nco/nco_fl_utl.c \
-      --replace "/bin/cp" "${coreutils}/bin/cp"
+      --replace-fail "/bin/cp" "${coreutils}/bin/cp"
 
     substituteInPlace src/nco/nco_fl_utl.c \
-      --replace "/bin/mv" "${coreutils}/bin/mv"
+      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
   '';
 
   makeFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];

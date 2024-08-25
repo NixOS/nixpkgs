@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/CoreDumpWriter.c \
-      --replace '"gcore ' '"${gdb}/bin/gcore ' \
-      --replace '"rm ' '"${coreutils}/bin/rm ' \
-      --replace '/bin/bash' '${bash}/bin/bash'
+      --replace-fail '"gcore ' '"${gdb}/bin/gcore ' \
+      --replace-fail '"rm ' '"${coreutils}/bin/rm ' \
+      --replace-fail '/bin/bash' '${bash}/bin/bash'
   '';
 
   makeFlags = [

@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+      --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
   propagatedBuildInputs = [ sly ];

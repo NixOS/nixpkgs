@@ -20,12 +20,12 @@ mkDerivation rec {
     # Fix location of poppler-qt5.h
     for f in threads/indexrunner.cpp html/noteformatter.cpp utilities/noteindexer.cpp gui/plugins/popplerviewer.h gui/plugins/pluginfactory.h gui/plugins/popplerviewer.cpp ; do
       substituteInPlace $f \
-        --replace '#include <poppler-qt5.h>' '#include <poppler/qt5/poppler-qt5.h>'
+        --replace-fail '#include <poppler-qt5.h>' '#include <poppler/qt5/poppler-qt5.h>'
     done
 
-    substituteInPlace help/about.html --replace '__VERSION__' '${version}'
+    substituteInPlace help/about.html --replace-fail '__VERSION__' '${version}'
 
-    substituteInPlace nixnote.cpp --replace 'tidyProcess.start("tidy' 'tidyProcess.start("${html-tidy}/bin/tidy'
+    substituteInPlace nixnote.cpp --replace-fail 'tidyProcess.start("tidy' 'tidyProcess.start("${html-tidy}/bin/tidy'
   '';
 
   postInstall = ''

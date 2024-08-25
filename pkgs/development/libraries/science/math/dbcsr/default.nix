@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
     # Force build of shared library, otherwise just static.
     substituteInPlace src/CMakeLists.txt \
-      --replace 'add_library(dbcsr ''${DBCSR_SRCS})' 'add_library(dbcsr SHARED ''${DBCSR_SRCS})' \
-      --replace 'add_library(dbcsr_c ''${DBCSR_C_SRCS})' 'add_library(dbcsr_c SHARED ''${DBCSR_C_SRCS})'
+      --replace-fail 'add_library(dbcsr ''${DBCSR_SRCS})' 'add_library(dbcsr SHARED ''${DBCSR_SRCS})' \
+      --replace-fail 'add_library(dbcsr_c ''${DBCSR_C_SRCS})' 'add_library(dbcsr_c SHARED ''${DBCSR_C_SRCS})'
 
     # Avoid calling the fypp wrapper script with python again. The nix wrapper took care of that.
     substituteInPlace cmake/fypp-sources.cmake \
-      --replace 'COMMAND ''${Python_EXECUTABLE} ''${FYPP_EXECUTABLE}' 'COMMAND ''${FYPP_EXECUTABLE}'
+      --replace-fail 'COMMAND ''${Python_EXECUTABLE} ''${FYPP_EXECUTABLE}' 'COMMAND ''${FYPP_EXECUTABLE}'
   '';
 
   nativeBuildInputs = [

@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
     cp ${catch2}/include/catch2/catch.hpp external/catch/catch.hpp
 
     substituteInPlace ./data/udev/80-theimagingsource-cameras.rules.in \
-      --replace "/bin/sh" "${runtimeShell}/bin/sh" \
-      --replace "typically /usr/bin/" "" \
-      --replace "typically /usr/share/theimagingsource/tiscamera/uvc-extension/" ""
+      --replace-fail "/bin/sh" "${runtimeShell}/bin/sh" \
+      --replace-fail "typically /usr/bin/" "" \
+      --replace-fail "typically /usr/share/theimagingsource/tiscamera/uvc-extension/" ""
   '';
 
   nativeBuildInputs = [

@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" "" \
-      --replace "--disable-socket" ""
+      --replace-fail "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" "" \
+      --replace-fail "--disable-socket" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   # libdf is an alternative name for libhdf (hdf4)
   preConfigure = lib.optionalString (hdf4 != null) ''
     substituteInPlace configure \
-    --replace "-ldf" "-lhdf" \
+    --replace-fail "-ldf" "-lhdf" \
   '';
 
   preBuild = lib.optionalString hdf5.mpiSupport "export CC=${lib.getBin hdf5.mpi}/mpicc";

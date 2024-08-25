@@ -56,7 +56,7 @@ mkDerivation rec {
   postPatch = ''
     echo "project(linphoneqt VERSION ${version})" >linphone-app/linphoneqt_version.cmake
     substituteInPlace linphone-app/src/app/AppController.cpp \
-      --replace "APPLICATION_SEMVER" "\"${version}\""
+      --replace-fail "APPLICATION_SEMVER" "\"${version}\""
     substituteInPlace CMakeLists.txt \
       --subst-var out
   '';

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/applications
     cp usr/share/applications/ipscan.desktop $out/share/applications/ipscan.desktop
-    substituteInPlace $out/share/applications/ipscan.desktop --replace "/usr/bin" "$out/bin"
+    substituteInPlace $out/share/applications/ipscan.desktop --replace-fail "/usr/bin" "$out/bin"
 
     mkdir -p $out/share/pixmaps
     cp usr/share/pixmaps/ipscan.png $out/share/pixmaps/ipscan.png

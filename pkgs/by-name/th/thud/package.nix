@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -Dm644 assets/thud.thumbnailer $out/share/thumbnailers/thud.thumbnailer
-    substituteInPlace $out/share/thumbnailers/thud.thumbnailer --replace "thud" "$out/bin/thud"
+    substituteInPlace $out/share/thumbnailers/thud.thumbnailer --replace-fail "thud" "$out/bin/thud"
 
     installManPage target/man/thud.1
 

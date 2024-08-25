@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace buildSrc/linux.gradle \
-      --replace ', "-Werror=implicit-function-declaration"' ""
+      --replace-fail ', "-Werror=implicit-function-declaration"' ""
 
     # Add missing includes for gcc-13 for webkit build:
     sed -e '1i #include <cstdio>' \

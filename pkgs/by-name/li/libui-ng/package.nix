@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    substituteInPlace meson.build --replace "'-arch', 'arm64'" ""
+    substituteInPlace meson.build --replace-fail "'-arch', 'arm64'" ""
   '';
 
   nativeBuildInputs = [

@@ -119,7 +119,7 @@ else stdenv.mkDerivation {
     cp -r opt $out/opt
     cp -r usr/share $out/share
     substituteInPlace $out/share/applications/yesplaymusic.desktop \
-      --replace "/opt/YesPlayMusic/yesplaymusic" "$out/bin/yesplaymusic"
+      --replace-fail "/opt/YesPlayMusic/yesplaymusic" "$out/bin/yesplaymusic"
     makeWrapper $out/opt/YesPlayMusic/yesplaymusic $out/bin/yesplaymusic \
       --argv0 "yesplaymusic" \
       --add-flags "$out/opt/YesPlayMusic/resources/app.asar"

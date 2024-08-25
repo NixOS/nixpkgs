@@ -28,7 +28,7 @@ buildPythonPackage rec {
   postPatch = ''
     # tarball doesn't appear to have been shipped totally ready-to-build
     substituteInPlace ci/ext.py \
-      --replace \
+      --replace-fail \
         'shell_cmd(["git"' \
         '"0000000000000000000000000000000000000000" or shell_cmd(["git"'
     # TODO revert back to use ${version} when bumping to the next stable release

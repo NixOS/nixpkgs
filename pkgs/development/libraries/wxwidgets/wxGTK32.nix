@@ -121,9 +121,9 @@ stdenv.mkDerivation rec {
     cp -r ${nanosvg}/* 3rdparty/nanosvg/
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure \
-      --replace 'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' 'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
+      --replace-fail 'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' 'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
     substituteInPlace configure \
-      --replace "-framework System" "-lSystem"
+      --replace-fail "-framework System" "-lSystem"
   '';
 
   postInstall = "

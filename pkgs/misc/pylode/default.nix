@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "rdflib==6.0.0" "rdflib"
+      --replace-fail "rdflib==6.0.0" "rdflib"
   '';
 
   # Path issues with the tests

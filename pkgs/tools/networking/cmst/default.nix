@@ -17,7 +17,7 @@ mkDerivation rec {
 
   postPatch = ''
     for f in $(find . -name \*.cpp -o -name \*.pri -o -name \*.pro); do
-      substituteInPlace $f --replace /etc $out/etc --replace /usr $out
+      substituteInPlace $f --replace-fail /etc $out/etc --replace-fail /usr $out
     done
   '';
 

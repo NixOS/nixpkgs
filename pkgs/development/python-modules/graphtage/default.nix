@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "json5==0.9.5" "json5>=0.9.5"
+      --replace-fail "json5==0.9.5" "json5>=0.9.5"
   '';
 
   propagatedBuildInputs = [

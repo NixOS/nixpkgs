@@ -272,7 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
     # For more info on device emulation, see:
     #   https://github.com/fwupd/fwupd/blob/eeeac4e9ba8a6513428b456a551bffd95d533e50/docs/device-emulation.md
     substituteInPlace data/installed-tests/meson.build \
-      --replace "join_paths(datadir, 'fwupd', 'device-tests')" "'/dev/null'"
+      --replace-fail "join_paths(datadir, 'fwupd', 'device-tests')" "'/dev/null'"
   '';
 
   preBuild = ''

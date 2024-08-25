@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace configure.ac --replace 'MANTICORE_ROOT=`pwd`' 'MANTICORE_ROOT=$out/repo_checkout'
+    substituteInPlace configure.ac --replace-fail 'MANTICORE_ROOT=`pwd`' 'MANTICORE_ROOT=$out/repo_checkout'
   '';
 
   preInstall = "mkdir -p $out/bin";

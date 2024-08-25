@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Disable update check
     substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
-      --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
+      --replace-fail 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
         'VERSION_CHECK_ENABLED, Boolean.FALSE'
 
     # Find OpenOffice/LibreOffice binary
     substituteInPlace src/main/java/org/jabref/logic/openoffice/OpenOfficePreferences.java \
-      --replace '/usr' '/run/current-system/sw'
+      --replace-fail '/usr' '/run/current-system/sw'
   '';
 
   nativeBuildInputs = [

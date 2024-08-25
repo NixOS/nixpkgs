@@ -15,7 +15,7 @@ buildDunePackage rec {
   patches = [ ./hack_parallel.patch ];
 
   postPatch = ''
-    substituteInPlace src/third-party/hack_core/hack_caml.ml --replace 'include Pervasives' ""
+    substituteInPlace src/third-party/hack_core/hack_caml.ml --replace-fail 'include Pervasives' ""
     substituteInPlace \
       src/interface/hack_parallel_intf.mli \
       src/procs/worker.ml \
@@ -27,8 +27,8 @@ buildDunePackage rec {
       src/utils/hack_path.ml \
       src/utils/measure.ml \
       src/utils/timeout.ml \
-      --replace Pervasives. Stdlib.
-    substituteInPlace src/utils/sys_utils.ml --replace String.create Bytes.create
+      --replace-fail Pervasives. Stdlib.
+    substituteInPlace src/utils/sys_utils.ml --replace-fail String.create Bytes.create
   '';
 
   nativeBuildInputs = [ pkg-config ];

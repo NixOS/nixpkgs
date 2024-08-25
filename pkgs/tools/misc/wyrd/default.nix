@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
+    substituteInPlace curses/curses.ml --replace-fail 'pp gcc' "pp $CC"
   '';
 
   strictDeps = true;

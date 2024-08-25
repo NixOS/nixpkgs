@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for perltool in *.pl; do
       substituteInPlace Makefile \
-        --replace "./$perltool" "${perlenv}/bin/perl ./$perltool"
+        --replace-fail "./$perltool" "${perlenv}/bin/perl ./$perltool"
     done
   '';
 

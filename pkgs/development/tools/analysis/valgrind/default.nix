@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   preConfigure = lib.optionalString stdenv.isFreeBSD ''
-    substituteInPlace configure --replace '`uname -r`' \
+    substituteInPlace configure --replace-fail '`uname -r`' \
         ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
   '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
     in ''
       echo "Don't derive our xnu version using uname -r."
-      substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
+      substituteInPlace configure --replace-fail "uname -r" "echo ${OSRELEASE}"
 
       # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
       echo "getting rid of the \`-arch' GCC option..."
@@ -77,11 +77,11 @@ stdenv.mkDerivation rec {
           -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
 
       substituteInPlace coregrind/m_debuginfo/readmacho.c \
-         --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
+         --replace-fail /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
       echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
       substituteInPlace coregrind/link_tool_exe_darwin.in \
-        --replace /usr/bin/ld ${cctools}/bin/ld
+        --replace-fail /usr/bin/ld ${cctools}/bin/ld
     '');
 
   configureFlags =
@@ -93,9 +93,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for i in $out/libexec/valgrind/*.supp; do
       substituteInPlace $i \
-        --replace 'obj:/lib' 'obj:*/lib' \
-        --replace 'obj:/usr/X11R6/lib' 'obj:*/lib' \
-        --replace 'obj:/usr/lib' 'obj:*/lib'
+        --replace-fail 'obj:/lib' 'obj:*/lib' \
+        --replace-fail 'obj:/usr/X11R6/lib' 'obj:*/lib' \
+        --replace-fail 'obj:/usr/lib' 'obj:*/lib'
     done
   '';
 

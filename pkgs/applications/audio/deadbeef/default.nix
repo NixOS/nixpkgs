@@ -125,7 +125,7 @@ in clangStdenv.mkDerivation {
     # Fix the build on c++17 compiler:
     #   https://github.com/DeaDBeeF-Player/deadbeef/issues/3012
     # TODO: remove after 1.9.5 release.
-    substituteInPlace plugins/adplug/Makefile.am --replace 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
+    substituteInPlace plugins/adplug/Makefile.am --replace-fail 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
   '';
 
   meta = with lib; {

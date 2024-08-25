@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     install -Dm644 contrib/MacOSX-launchd/uk.org.thekelleys.dnsmasq.plist \
       $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist
     substituteInPlace $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist \
-      --replace "/usr/local/sbin" "$out/bin"
+      --replace-fail "/usr/local/sbin" "$out/bin"
   '' + lib.optionalString stdenv.isLinux ''
     install -Dm755 contrib/lease-tools/dhcp_lease_time $out/bin/dhcp_lease_time
     install -Dm755 contrib/lease-tools/dhcp_release $out/bin/dhcp_release

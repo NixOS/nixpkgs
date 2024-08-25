@@ -75,9 +75,9 @@ mkDerivation {
 
   postPatch = ''
     substituteInPlace qflipper_common.pri \
-        --replace 'GIT_VERSION = unknown' 'GIT_VERSION = "${version}"' \
-        --replace 'GIT_TIMESTAMP = 0' 'GIT_TIMESTAMP = ${timestamp}' \
-        --replace 'GIT_COMMIT = unknown' 'GIT_COMMIT = "${commit}"'
+        --replace-fail 'GIT_VERSION = unknown' 'GIT_VERSION = "${version}"' \
+        --replace-fail 'GIT_TIMESTAMP = 0' 'GIT_TIMESTAMP = ${timestamp}' \
+        --replace-fail 'GIT_COMMIT = unknown' 'GIT_COMMIT = "${commit}"'
     cat qflipper_common.pri
   '';
 

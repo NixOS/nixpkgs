@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     # Fix formatting string error:
     # https://github.com/biocore/sortmerna/issues/255
     substituteInPlace src/sortmerna/indexdb.cpp \
-      --replace 'is_verbose, ss' 'is_verbose, "%s", ss'
+      --replace-fail 'is_verbose, ss' 'is_verbose, "%s", ss'
 
     # Fix missing pthread dependency for the main binary.
     substituteInPlace src/sortmerna/CMakeLists.txt \
-      --replace "target_link_libraries(sortmerna" \
+      --replace-fail "target_link_libraries(sortmerna" \
         "target_link_libraries(sortmerna Threads::Threads"
 
     # Fix gcc-13 build by adding missing <cstdint> includes:

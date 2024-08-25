@@ -45,7 +45,7 @@ let
 
   defaultPatch = ''
     substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
-      --replace '"neko"' '"${neko}/bin/neko"'
+      --replace-fail '"neko"' '"${neko}/bin/neko"'
   '';
 
   generic =

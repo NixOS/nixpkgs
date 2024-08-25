@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # Fixes "Error: No time zones found." on the clock
   postPatch = ''
-    substituteInPlace src/emClock/emTimeZonesModel.cpp --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/emClock/emTimeZonesModel.cpp --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   nativeBuildInputs = [ pkg-config makeWrapper copyDesktopItems ];

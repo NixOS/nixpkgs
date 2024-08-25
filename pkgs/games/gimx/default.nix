@@ -47,11 +47,11 @@ in stdenv.mkDerivation rec {
 
   postPatch = lib.optionals gimxPdpGamepad ''
     substituteInPlace ./shared/gimxcontroller/include/x360.h \
-      --replace "0x045e" "0x0e6f" --replace "0x028e" "0x0213"
+      --replace-fail "0x045e" "0x0e6f" --replace-fail "0x028e" "0x0213"
     substituteInPlace ./loader/firmware/EMU360.hex \
-      --replace "1B210001" "1B211001" \
-      --replace "09210001" "09211001" \
-      --replace "5E048E021001" "6F0E13020001"
+      --replace-fail "1B210001" "1B211001" \
+      --replace-fail "09210001" "09211001" \
+      --replace-fail "5E048E021001" "6F0E13020001"
   '';
 
   makeFlags = [ "build-core" ];
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    substituteInPlace ./core/Makefile --replace "chmod ug+s" "echo"
+    substituteInPlace ./core/Makefile --replace-fail "chmod ug+s" "echo"
 
     export DESTDIR="$out"
     make install-shared install-core

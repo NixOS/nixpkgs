@@ -79,7 +79,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace cmake/install_directives.cmake --replace "/control" "control"
+    substituteInPlace cmake/install_directives.cmake --replace-fail "/control" "control"
   '';
 
   configurePhase = ''

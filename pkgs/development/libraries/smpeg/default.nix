@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace video/gdith.cpp \
-      --replace 'register int' 'int' \
-      --replace 'register Uint16' 'Uint16'
+      --replace-fail 'register int' 'int' \
+      --replace-fail 'register Uint16' 'Uint16'
   '';
 
   enableParallelBuilding = true;

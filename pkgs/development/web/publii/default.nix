@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
     mv usr/share $out
     substituteInPlace $out/share/applications/Publii.desktop \
-      --replace 'Exec=/opt/Publii/Publii' 'Exec=Publii'
+      --replace-fail 'Exec=/opt/Publii/Publii' 'Exec=Publii'
 
     mv opt $out
 

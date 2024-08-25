@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out/bin/souffle-compile.py" \
-        --replace "-IPLACEHOLDER_FOR_INCLUDES_THAT_ARE_SET_BY_NIXPKGS" \
+        --replace-fail "-IPLACEHOLDER_FOR_INCLUDES_THAT_ARE_SET_BY_NIXPKGS" \
                   "-I${ncurses.dev}/include -I${zlib.dev}/include -I${sqlite.dev}/include -I${libffi.dev}/include -I$out/include"
   '';
 

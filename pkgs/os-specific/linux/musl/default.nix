@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
   # Don't force them on, but don't force off either
   postPatch = ''
     substituteInPlace configure \
-      --replace -fno-unwind-tables "" \
-      --replace -fno-asynchronous-unwind-tables ""
+      --replace-fail -fno-unwind-tables "" \
+      --replace-fail -fno-asynchronous-unwind-tables ""
   '';
 
   patches = [
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     done
     moveToOutput lib/musl-gcc.specs $dev
     substituteInPlace $dev/bin/musl-gcc \
-      --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
+      --replace-fail $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
 
     # provide 'iconv' utility, using just-built headers, libc/ldso
     $CC ${iconv_c} -o $bin/bin/iconv \

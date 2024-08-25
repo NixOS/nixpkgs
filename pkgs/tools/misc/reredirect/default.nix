@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace ${placeholder "out"}/bin/relink \
-      --replace "reredirect" "${placeholder "out"}/bin/reredirect"
+      --replace-fail "reredirect" "${placeholder "out"}/bin/reredirect"
   '';
 
   meta = with lib; {

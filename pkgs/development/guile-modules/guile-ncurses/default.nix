@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for f in $out/${guile.siteDir}/ncurses/**.scm; do \
       substituteInPlace $f \
-        --replace "libguile-ncurses" "$out/lib/guile/${guile.effectiveVersion}/libguile-ncurses"; \
+        --replace-fail "libguile-ncurses" "$out/lib/guile/${guile.effectiveVersion}/libguile-ncurses"; \
     done
   '';
 

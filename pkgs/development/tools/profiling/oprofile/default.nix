@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace opjitconv/opjitconv.c \
-      --replace "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
-      --replace "/bin/cp" "${buildPackages.coreutils}/bin/cp"
+      --replace-fail "/bin/rm" "${buildPackages.coreutils}/bin/rm" \
+      --replace-fail "/bin/cp" "${buildPackages.coreutils}/bin/cp"
   '';
 
   nativeBuildInputs = [ pkg-config ];

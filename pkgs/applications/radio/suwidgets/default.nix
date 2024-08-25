@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace SuWidgets.pri \
-      --replace "PKGCONFIG += sigutils fftw3" "PKGCONFIG += sigutils fftw3f"
+      --replace-fail "PKGCONFIG += sigutils fftw3" "PKGCONFIG += sigutils fftw3f"
   '';
 
   nativeBuildInputs = [

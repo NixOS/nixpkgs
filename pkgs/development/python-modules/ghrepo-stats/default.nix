@@ -25,7 +25,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/mrbean-bremen/ghrepo-stats/pull/1
     substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
+      --replace-fail "bs4" "beautifulsoup4"
   '';
 
   propagatedBuildInputs = [

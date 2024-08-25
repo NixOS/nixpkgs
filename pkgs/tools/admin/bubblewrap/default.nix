@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tests/libtest.sh \
-      --replace "/var/tmp" "$TMPDIR"
+      --replace-fail "/var/tmp" "$TMPDIR"
   '';
 
   nativeBuildInputs = [

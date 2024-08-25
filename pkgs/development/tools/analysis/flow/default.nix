@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/services/inference/check_cache.ml --replace 'Core_kernel' 'Core'
+    substituteInPlace src/services/inference/check_cache.ml --replace-fail 'Core_kernel' 'Core'
   '';
 
   makeFlags = [ "FLOW_RELEASE=1" ];

@@ -22,11 +22,11 @@ buildPythonApplication rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace vpn_slice/mac.py \
-      --replace "'/sbin/route'" "'${unixtools.route}/bin/route'"
+      --replace-fail "'/sbin/route'" "'${unixtools.route}/bin/route'"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace vpn_slice/linux.py \
-      --replace "'/sbin/ip'" "'${iproute2}/bin/ip'" \
-      --replace "'/sbin/iptables'" "'${iptables}/bin/iptables'"
+      --replace-fail "'/sbin/ip'" "'${iproute2}/bin/ip'" \
+      --replace-fail "'/sbin/iptables'" "'${iptables}/bin/iptables'"
   '';
 
   propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ];

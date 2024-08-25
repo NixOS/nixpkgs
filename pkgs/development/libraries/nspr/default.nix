@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cd nspr
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace '@executable_path/' "$out/lib/"
-    substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
+    substituteInPlace configure --replace-fail '@executable_path/' "$out/lib/"
+    substituteInPlace configure.in --replace-fail '@executable_path/' "$out/lib/"
   '';
 
   HOST_CC = "cc";

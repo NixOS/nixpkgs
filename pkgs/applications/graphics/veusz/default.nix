@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   # really have a corresponding path, so patching the location of PyQt5 inplace
   postPatch = ''
     substituteInPlace pyqt_setuptools.py \
-      --replace "get_path('platlib')" "'${python3Packages.pyqt5}/${python3Packages.python.sitePackages}'"
+      --replace-fail "get_path('platlib')" "'${python3Packages.pyqt5}/${python3Packages.python.sitePackages}'"
     patchShebangs tests/runselftest.py
   '';
 

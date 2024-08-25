@@ -59,14 +59,14 @@ buildPythonPackage {
 
   postPatch =
     ''
-      substituteInPlace Makefile --replace "/usr/bin/g++" "g++" --replace "lib64" "lib"
+      substituteInPlace Makefile --replace-fail "/usr/bin/g++" "g++" --replace-fail "lib64" "lib"
       substituteInPlace bitsandbytes/cuda_setup/main.py  \
-        --replace "binary_path = package_dir / self.binary_name"  \
+        --replace-fail "binary_path = package_dir / self.binary_name"  \
                   "binary_path = Path('$out/${python.sitePackages}/${pname}')/self.binary_name"
     ''
     + lib.optionalString torch.cudaSupport ''
       substituteInPlace bitsandbytes/cuda_setup/main.py  \
-        --replace "/usr/local/cuda/lib64" "${cuda-native-redist}/lib"
+        --replace-fail "/usr/local/cuda/lib64" "${cuda-native-redist}/lib"
     '';
 
   CUDA_HOME = "${cuda-native-redist}";

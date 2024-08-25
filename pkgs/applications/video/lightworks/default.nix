@@ -73,7 +73,7 @@ let
     installPhase = ''
       mkdir -p $out/bin
       substitute usr/bin/lightworks $out/bin/lightworks \
-        --replace "/usr/lib/lightworks" "$out/lib/lightworks"
+        --replace-fail "/usr/lib/lightworks" "$out/lib/lightworks"
       chmod +x $out/bin/lightworks
 
       cp -r usr/lib $out

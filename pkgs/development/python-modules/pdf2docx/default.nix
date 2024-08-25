@@ -54,8 +54,8 @@ buildPythonPackage {
     convert $out/${python.sitePackages}/pdf2docx/gui/icon.ico \
       $out/${python.sitePackages}/pdf2docx/gui/icon.xbm
     substituteInPlace $out/${python.sitePackages}/pdf2docx/gui/App.py \
-      --replace 'icon.ico' 'icon.xbm' \
-      --replace 'iconbitmap(icon_path)' "iconbitmap(f'@{icon_path}')"
+      --replace-fail 'icon.ico' 'icon.xbm' \
+      --replace-fail 'iconbitmap(icon_path)' "iconbitmap(f'@{icon_path}')"
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

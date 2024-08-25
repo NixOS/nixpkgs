@@ -11,7 +11,7 @@ callPackage ./generic.nix (args // rec {
   # Don't build tests due to badness with ec_ilog
   prePatch = ''
     substituteInPlace Makefile.in \
-      --replace 'SUBDIRS = libcelt tests' \
+      --replace-fail 'SUBDIRS = libcelt tests' \
                 'SUBDIRS = libcelt'
   '';
 })

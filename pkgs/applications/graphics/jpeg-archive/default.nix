@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   prePatch = ''
     # allow override LIBJPEG
-    substituteInPlace Makefile --replace 'LIBJPEG =' 'LIBJPEG ?='
+    substituteInPlace Makefile --replace-fail 'LIBJPEG =' 'LIBJPEG ?='
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream

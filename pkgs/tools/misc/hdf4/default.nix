@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   preConfigure = lib.optionalString uselibtirpc ''
     # Make tirpc discovery work with CMAKE_PREFIX_PATH
     substituteInPlace config/cmake/FindXDR.cmake \
-      --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
+      --replace-fail 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
                 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
   '' + lib.optionalString szipSupport ''
     export SZIP_INSTALL=${szip}

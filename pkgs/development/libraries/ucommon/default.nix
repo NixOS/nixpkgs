@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # disable flaky networking test
   postPatch = ''
     substituteInPlace test/stream.cpp \
-      --replace 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
+      --replace-fail 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
   '';
 
   # ucommon.pc has link time depdendencies on -lusecure -lucommon -lgnutls

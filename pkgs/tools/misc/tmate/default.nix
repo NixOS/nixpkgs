@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'msgpack >= 1.1.0' 'msgpack-c >= 1.1.0'
+      --replace-fail 'msgpack >= 1.1.0' 'msgpack-c >= 1.1.0'
   '';
 
   nativeBuildInputs = [

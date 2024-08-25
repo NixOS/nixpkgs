@@ -15,12 +15,12 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake ];
 
   postPatch = ''
-    substituteInPlace dbus.pro --replace ' tests' ""
+    substituteInPlace dbus.pro --replace-fail ' tests' ""
     substituteInPlace src/nemo-dbus/nemo-dbus.pro \
-      --replace /usr $out \
-      --replace '$$[QT_INSTALL_LIBS]' $out'/lib'
+      --replace-fail /usr $out \
+      --replace-fail '$$[QT_INSTALL_LIBS]' $out'/lib'
     substituteInPlace src/plugin/plugin.pro \
-      --replace '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
+      --replace-fail '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
   '';
 
   meta = with lib; {

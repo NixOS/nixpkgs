@@ -184,12 +184,12 @@ in stdenv.mkDerivation (finalAttrs: {
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
 
     substituteInPlace CMakeLists.txt \
-      --replace "unpack_db(\"\''${CMAKE_SOURCE_DIR}/src/kernels/\''${FILE_NAME}.kdb.bz2\")" "" \
-      --replace "MIOPEN_HIP_COMPILER MATCHES \".*clang\\\\+\\\\+$\"" "true" \
-      --replace "set(MIOPEN_TIDY_ERRORS ALL)" "" # error: missing required key 'key'
+      --replace-fail "unpack_db(\"\''${CMAKE_SOURCE_DIR}/src/kernels/\''${FILE_NAME}.kdb.bz2\")" "" \
+      --replace-fail "MIOPEN_HIP_COMPILER MATCHES \".*clang\\\\+\\\\+$\"" "true" \
+      --replace-fail "set(MIOPEN_TIDY_ERRORS ALL)" "" # error: missing required key 'key'
 
     substituteInPlace test/gtest/CMakeLists.txt \
-      --replace "include(googletest)" ""
+      --replace-fail "include(googletest)" ""
 
     substituteInPlace test/gtest/CMakeLists.txt \
       --replace-fail " gtest_main " " ${gtest}/lib/libgtest.so ${gtest}/lib/libgtest_main.so "

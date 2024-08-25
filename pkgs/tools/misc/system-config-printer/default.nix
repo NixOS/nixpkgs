@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # for automake
     touch README ChangeLog
     # for tests
-    substituteInPlace Makefile.am --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace Makefile.am --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   patches = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       patchPythonScript $out/etc/udev/udev-add-printer
 
       substituteInPlace $out/etc/udev/rules.d/70-printers.rules \
-        --replace "udev-configure-printer" "$out/etc/udev/udev-configure-printer"
+        --replace-fail "udev-configure-printer" "$out/etc/udev/udev-configure-printer"
     '';
 
   meta = {

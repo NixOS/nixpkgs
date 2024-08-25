@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace libcaribou/Makefile.am --replace "--shared-library=libcaribou.so.0" "--shared-library=$out/lib/libcaribou.so.0"
+    substituteInPlace libcaribou/Makefile.am --replace-fail "--shared-library=libcaribou.so.0" "--shared-library=$out/lib/libcaribou.so.0"
   '';
 
   passthru = {

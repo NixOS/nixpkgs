@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace 3rdparty/mkldnn/tests/CMakeLists.txt \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
 
     # Build against the system version of OpenMP.
     # https://github.com/apache/incubator-mxnet/pull/12160

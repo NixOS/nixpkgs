@@ -18,7 +18,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${contents}/@parsifydesktop.desktop -t $out/share/applications
 
     substituteInPlace $out/share/applications/@parsifydesktop.desktop \
-      --replace "Exec=AppRun" "Exec=${pname}"
+      --replace-fail "Exec=AppRun" "Exec=${pname}"
 
     cp -r ${contents}/usr/share/* $out/share
   '';

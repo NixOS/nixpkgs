@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix install references
     substituteInPlace po/Makefile \
-       --replace /usr/bin/install install --replace /usr/share /share
-    substituteInPlace newrole/Makefile --replace /usr/share /share
+       --replace-fail /usr/bin/install install --replace-fail /usr/share /share
+    substituteInPlace newrole/Makefile --replace-fail /usr/share /share
   '';
 
   nativeBuildInputs = [ gettext ];

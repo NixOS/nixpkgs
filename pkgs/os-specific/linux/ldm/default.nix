@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ldm.c \
-      --replace "/mnt/" "${mountPath}"
+      --replace-fail "/mnt/" "${mountPath}"
     sed '16i#include <sys/stat.h>' -i ldm.c
   '';
 

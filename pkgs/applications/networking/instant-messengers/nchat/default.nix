@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace lib/tgchat/ext/td/CMakeLists.txt \
-      --replace "get_git_head_revision" "#get_git_head_revision"
+      --replace-fail "get_git_head_revision" "#get_git_head_revision"
   '';
 
   nativeBuildInputs = [ cmake gperf ];

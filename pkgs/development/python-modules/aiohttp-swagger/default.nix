@@ -39,8 +39,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "markupsafe~=1.1.1" "markupsafe>=1.1.1" \
-      --replace "jinja2~=2.11.2" "jinja2>=2.11.2"
+      --replace-fail "markupsafe~=1.1.1" "markupsafe>=1.1.1" \
+      --replace-fail "jinja2~=2.11.2" "jinja2>=2.11.2"
   '';
 
   preCheck = ''

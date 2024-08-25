@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/lib/pkgconfig/*.pc \
-      --replace '=''${prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/'
   '';
 
   meta = with lib; {

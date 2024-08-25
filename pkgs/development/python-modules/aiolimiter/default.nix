@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --cov=aiolimiter --cov-config=tox.ini --cov-report term-missing" ""
+      --replace-fail " --cov=aiolimiter --cov-config=tox.ini --cov-report term-missing" ""
   '';
 
   pythonImportsCheck = [ "aiolimiter" ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
     substituteInPlace manlifter \
-      --replace '/usr/bin/env python2' '/usr/bin/env python3'
+      --replace-fail '/usr/bin/env python2' '/usr/bin/env python3'
     2to3 -w manlifter
     cp manlifter $out/bin
     wrapProgram "$out/bin/manlifter" \

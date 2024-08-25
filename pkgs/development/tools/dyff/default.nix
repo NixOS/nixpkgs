@@ -24,7 +24,7 @@ buildGoModule rec {
   # test fails with the injected version
   postPatch = ''
     substituteInPlace internal/cmd/cmds_test.go \
-      --replace "version (development)" ${version}
+      --replace-fail "version (development)" ${version}
   '';
 
   ldflags = [

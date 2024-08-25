@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+      --replace-fail "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
   '';
 
   passthru = {

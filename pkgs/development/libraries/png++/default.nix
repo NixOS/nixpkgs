@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   preCheck = ''
     patchShebangs test/test.sh
-    substituteInPlace test/test.sh --replace "exit 1" "exit 0"
+    substituteInPlace test/test.sh --replace-fail "exit 1" "exit 0"
   '';
 
   postCheck = "cat test/test.log";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libpng ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace error.hpp --replace "#if (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE" "#if (__clang__ || _POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE"
+    substituteInPlace error.hpp --replace-fail "#if (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE" "#if (__clang__ || _POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !_GNU_SOURCE"
   '' + ''
     sed "s|\(PNGPP := .\)|PREFIX := ''${out}\n\\1|" -i Makefile
   '';

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace vulkanCapsViewer.pro \
-      --replace '/usr/' "/"
+      --replace-fail '/usr/' "/"
   '';
 
   qmakeFlags = [

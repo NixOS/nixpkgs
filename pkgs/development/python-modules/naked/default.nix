@@ -26,7 +26,7 @@ buildPythonPackage rec {
   postPatch = ''
     # fix hardcoded absolute paths
     substituteInPlace **/*.* \
-      --replace /Users/ces/Desktop/code/naked /build/source
+      --replace-fail /Users/ces/Desktop/code/naked /build/source
   '';
 
   nativeBuildInputs = [

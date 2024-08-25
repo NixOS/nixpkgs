@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
     # SystemError: PY_SSIZE_T_CLEAN macro must be defined for '#' formats
     # AttributeError: module 'collections' has no attribute 'Hashable'
     substituteInPlace test/py/RunClientServer.py \
-      --replace "'FastbinaryTest.py'," "" \
-      --replace "'TestEof.py'," "" \
-      --replace "'TestFrozen.py'," ""
+      --replace-fail "'FastbinaryTest.py'," "" \
+      --replace-fail "'TestEof.py'," "" \
+      --replace-fail "'TestFrozen.py'," ""
 
     # these functions are removed in Python3.12
     substituteInPlace test/py/SerializationTest.py \

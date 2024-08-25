@@ -99,9 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/*-config" "$dev"
     moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
-      substituteInPlace "$file" --replace "${pkg-config}/bin/pkg-config -config" \
+      substituteInPlace "$file" --replace-fail "${pkg-config}/bin/pkg-config -config" \
         ${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config
-      substituteInPlace "$file" --replace ${pkg-config}/bin/pkg-config \
+      substituteInPlace "$file" --replace-fail ${pkg-config}/bin/pkg-config \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
     done
   '' + lib.optionalString ghostscriptSupport ''

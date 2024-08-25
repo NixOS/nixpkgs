@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbsd ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace "shell pkg-config" "shell $PKG_CONFIG"
+    substituteInPlace Makefile --replace-fail "shell pkg-config" "shell $PKG_CONFIG"
   '';
 
   installFlags = [ "PREFIX=$(out)" ];

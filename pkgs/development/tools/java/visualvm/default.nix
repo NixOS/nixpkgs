@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     find . -type f -name "*.dll" -o -name "*.exe"  -delete;
 
     substituteInPlace etc/visualvm.conf \
-      --replace "#visualvm_jdkhome=" "visualvm_jdkhome=" \
-      --replace "/path/to/jdk" "${jdk.home}" \
+      --replace-fail "#visualvm_jdkhome=" "visualvm_jdkhome=" \
+      --replace-fail "/path/to/jdk" "${jdk.home}" \
 
     cp -r . $out
   '';

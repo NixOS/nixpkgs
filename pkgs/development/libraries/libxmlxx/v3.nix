@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $dev/lib/pkgconfig/libxml++-3.0.pc \
-      --replace 'docdir=''${datarootdir}' "docdir=$doc/share"
+      --replace-fail 'docdir=''${datarootdir}' "docdir=$doc/share"
   '';
 
   passthru = {

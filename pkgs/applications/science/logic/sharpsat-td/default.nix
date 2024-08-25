@@ -39,9 +39,9 @@ in stdenv.mkDerivation rec {
 
     # ensure resultant build calls its own binaries
     substituteInPlace src/decomposition.cpp \
-      --replace '"../../../flow-cutter-pace17/flow_cutter_pace17"' '"'"$out"'/bin/flow_cutter_pace17"'
+      --replace-fail '"../../../flow-cutter-pace17/flow_cutter_pace17"' '"'"$out"'/bin/flow_cutter_pace17"'
     substituteInPlace src/preprocessor/treewidth.cpp \
-      --replace '"./flow_cutter_pace17"' '"'"$out"'/bin/flow_cutter_pace17"'
+      --replace-fail '"./flow_cutter_pace17"' '"'"$out"'/bin/flow_cutter_pace17"'
 
     # replace bundled version of mpreal/mpfrc++
     rm -r src/mpfr

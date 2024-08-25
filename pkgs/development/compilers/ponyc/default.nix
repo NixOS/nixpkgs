@@ -70,11 +70,11 @@ stdenv.mkDerivation (rec {
 
   postPatch = ''
     substituteInPlace packages/process/_test.pony \
-        --replace '"/bin/' '"${coreutils}/bin/' \
-        --replace '=/bin' "${coreutils}/bin"
+        --replace-fail '"/bin/' '"${coreutils}/bin/' \
+        --replace-fail '=/bin' "${coreutils}/bin"
     substituteInPlace src/libponyc/pkg/package.c \
-        --replace "/usr/local/lib" "" \
-        --replace "/opt/local/lib" ""
+        --replace-fail "/usr/local/lib" "" \
+        --replace-fail "/opt/local/lib" ""
   '';
 
   preBuild = ''

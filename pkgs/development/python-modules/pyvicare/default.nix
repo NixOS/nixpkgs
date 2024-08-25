@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version_config=True," 'version="${version}",' \
-      --replace "'setuptools-git-versioning<1.8.0'" ""
+      --replace-fail "version_config=True," 'version="${version}",' \
+      --replace-fail "'setuptools-git-versioning<1.8.0'" ""
   '';
 
   propagatedBuildInputs = [

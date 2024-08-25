@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
-    substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace Requires.private Requires
+    substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace-fail Requires.private Requires
   '';
 
   meta = with lib; {

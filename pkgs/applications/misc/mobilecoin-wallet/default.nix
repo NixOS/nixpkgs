@@ -23,7 +23,7 @@ in appimageTools.wrapType2 {
     install -Dm 644 ${appimageContents}/${pname}.desktop -t $out/share/applications/
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace "AppRun" "${pname}"
+      --replace-fail "AppRun" "${pname}"
   '';
 
   meta = with lib; {

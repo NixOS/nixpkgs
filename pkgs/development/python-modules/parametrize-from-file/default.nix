@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sed -i '/coveralls/d' ./pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace "more_itertools~=8.10" "more_itertools"
+      --replace-fail "more_itertools~=8.10" "more_itertools"
   '';
 
   nativeBuildInputs = [ flit-core ];

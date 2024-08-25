@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace libasyncns/asyncns.c \
-      --replace '<arpa/nameser.h>' '<arpa/nameser_compat.h>'
+      --replace-fail '<arpa/nameser.h>' '<arpa/nameser_compat.h>'
   '';
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

@@ -35,8 +35,8 @@ flutter.buildFlutterApplication rec {
     mv $out/app/data/com.expidusos.calculator.metainfo.xml $out/share/metainfo
 
     substituteInPlace "$out/share/applications/com.expidusos.calculator.desktop" \
-      --replace "Exec=calculator" "Exec=$out/bin/expidus-calculator" \
-      --replace "Icon=com.expidusos.calculator" "Icon=$out/share/icons/com.expidusos.calculator.png"
+      --replace-fail "Exec=calculator" "Exec=$out/bin/expidus-calculator" \
+      --replace-fail "Icon=com.expidusos.calculator" "Icon=$out/share/icons/com.expidusos.calculator.png"
   '';
 
   meta = with lib; {

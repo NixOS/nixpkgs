@@ -31,12 +31,12 @@ mkDerivation rec {
   # Replaces paths from the Qt store path to this library's store path.
   postPatch = ''
     substituteInPlace src/src.pro \
-      --replace /usr $out \
-      --replace '$$[QT_INSTALL_PREFIX]' "$out" \
-      --replace 'target.path = $$[QT_INSTALL_LIBS]' "target.path = $out/lib"
+      --replace-fail /usr $out \
+      --replace-fail '$$[QT_INSTALL_PREFIX]' "$out" \
+      --replace-fail 'target.path = $$[QT_INSTALL_LIBS]' "target.path = $out/lib"
 
     substituteInPlace plugin/plugin.pro \
-      --replace '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
+      --replace-fail '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
   '';
 
   nativeBuildInputs = [

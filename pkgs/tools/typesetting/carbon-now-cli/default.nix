@@ -18,9 +18,9 @@ buildNpmPackage rec {
 
   postPatch = ''
     substituteInPlace package.json \
-      --replace "bundle/cli.js" "dist/cli.js" \
-      --replace "trash " "rm -rf " \
-      --replace "npx playwright install --with-deps" "true"
+      --replace-fail "bundle/cli.js" "dist/cli.js" \
+      --replace-fail "trash " "rm -rf " \
+      --replace-fail "npx playwright install --with-deps" "true"
   '';
 
   env = {

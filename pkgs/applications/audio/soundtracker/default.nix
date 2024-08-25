@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Darwin binutils don't support D option for ar
     # ALSA macros are missing on Darwin, causing error
     substituteInPlace configure.ac \
-      --replace ARFLAGS=crD ARFLAGS=cru \
-      --replace AM_PATH_ALSA '#AM_PATH_ALSA'
+      --replace-fail ARFLAGS=crD ARFLAGS=cru \
+      --replace-fail AM_PATH_ALSA '#AM_PATH_ALSA'
     # Avoid X11-specific workaround code on more than just Windows
     substituteInPlace app/keys.c \
-      --replace '!defined(_WIN32)' '!defined(_WIN32) && !defined(__APPLE__)'
+      --replace-fail '!defined(_WIN32)' '!defined(_WIN32) && !defined(__APPLE__)'
     # "The application with bundle ID (null) is running setugid(), which is not allowed."
     sed -i -e '/seteuid/d' -e '/setegid/d' app/main.c
   '';

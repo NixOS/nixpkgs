@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/ip.py \
-      --replace /sbin/ifconfig ${darwin.network_cmds}/bin/ifconfig \
-      --replace /sbin/route ${darwin.network_cmds}/bin/route \
-      --replace /usr/sbin/netstat ${darwin.network_cmds}/bin/netstat \
-      --replace /usr/sbin/ndp ${darwin.network_cmds}/bin/ndp \
-      --replace /usr/sbin/arp ${darwin.network_cmds}/bin/arp \
-      --replace /usr/sbin/networksetup ${darwin.network_cmds}/bin/networksetup
+      --replace-fail /sbin/ifconfig ${darwin.network_cmds}/bin/ifconfig \
+      --replace-fail /sbin/route ${darwin.network_cmds}/bin/route \
+      --replace-fail /usr/sbin/netstat ${darwin.network_cmds}/bin/netstat \
+      --replace-fail /usr/sbin/ndp ${darwin.network_cmds}/bin/ndp \
+      --replace-fail /usr/sbin/arp ${darwin.network_cmds}/bin/arp \
+      --replace-fail /usr/sbin/networksetup ${darwin.network_cmds}/bin/networksetup
   '';
   installPhase = ''
     mkdir -p $out/bin

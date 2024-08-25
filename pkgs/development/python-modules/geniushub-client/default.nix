@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'VERSION = os.environ["GITHUB_REF_NAME"]' "" \
-      --replace "version=VERSION," 'version="${version}",'
+      --replace-fail 'VERSION = os.environ["GITHUB_REF_NAME"]' "" \
+      --replace-fail "version=VERSION," 'version="${version}",'
   '';
 
   propagatedBuildInputs = [ aiohttp ];

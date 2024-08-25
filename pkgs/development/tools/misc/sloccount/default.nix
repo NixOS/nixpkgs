@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       if grep -q /usr/bin/perl "$file"
       then
           echo "patching \`$file'..."
-          substituteInPlace "$file" --replace \
+          substituteInPlace "$file" --replace-fail \
             "/usr/bin/perl" "${perl}/bin/perl"
       fi
     done

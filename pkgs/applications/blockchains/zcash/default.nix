@@ -16,8 +16,8 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   prePatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace .cargo/config.offline \
-      --replace "[target.aarch64-unknown-linux-gnu]" "" \
-      --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
+      --replace-fail "[target.aarch64-unknown-linux-gnu]" "" \
+      --replace-fail "linker = \"aarch64-linux-gnu-gcc\"" ""
   '';
 
   cargoHash = "sha256-Mz8mr/RDcOfwJvXhY19rZmWHP8mUeEf9GYD+3JAPNOw=";

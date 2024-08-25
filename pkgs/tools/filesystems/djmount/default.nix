@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Taken from https://github.com/pupnp/pupnp/pull/334/files
     substituteInPlace libupnp/threadutil/inc/ithread.h \
-      --replace \
+      --replace-fail \
         "#define ithread_mutexattr_setkind_np pthread_mutexattr_setkind_np" \
         '#define ithread_mutexattr_setkind_np pthread_mutexattr_settype'
   '';

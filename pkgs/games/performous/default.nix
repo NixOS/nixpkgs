@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     cp -R ${cedSrc}/* ced-src
 
     substituteInPlace data/CMakeLists.txt \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [

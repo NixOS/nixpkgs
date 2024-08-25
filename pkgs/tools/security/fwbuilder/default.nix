@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # Avoid blanket -Werror as it triggers on any minor compiler
     # warnings like deprecated functions or invalid indentat8ion.
     # Leave fixing these problems to upstream.
-    substituteInPlace CMakeLists.txt --replace ';-Werror;' ';'
+    substituteInPlace CMakeLists.txt --replace-fail ';-Werror;' ';'
   '';
 
   nativeBuildInputs = [

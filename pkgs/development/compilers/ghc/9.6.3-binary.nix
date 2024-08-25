@@ -345,7 +345,7 @@ stdenv.mkDerivation rec {
     done
 
     for file in $(find "$out" -name setup-config); do
-      substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
+      substituteInPlace $file --replace-fail /usr/bin/ranlib "$(type -P ranlib)"
     done
   ''
   # Recache package db which needs to happen for Hadrian bindists

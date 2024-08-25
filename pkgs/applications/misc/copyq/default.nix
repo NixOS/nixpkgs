@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace shared/com.github.hluk.copyq.desktop.in \
-      --replace copyq "$out/bin/copyq"
+      --replace-fail copyq "$out/bin/copyq"
   '';
 
   cmakeFlags = [ "-DWITH_QT6=ON" ];

@@ -22,7 +22,7 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ${pname}.pro \
-      --replace /usr ""
+      --replace-fail /usr ""
   '';
 
   buildInputs = [ qtbase xz boost ];

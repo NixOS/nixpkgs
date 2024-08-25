@@ -75,7 +75,7 @@ in stdenv.mkDerivation rec {
   # Fix use of old OpenAL header path
   postPatch = ''
     substituteInPlace src/sound/backends/gates/openal_api.h \
-      --replace "#include <OpenAL/" "#include <AL/"
+      --replace-fail "#include <OpenAL/" "#include <AL/"
   '';
 
   buildPhase = let

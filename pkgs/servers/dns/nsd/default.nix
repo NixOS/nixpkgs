@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
+    substituteInPlace nsd-control-setup.sh.in --replace-fail openssl ${openssl}/bin/openssl
   '';
 
   buildInputs = [ libevent openssl ];

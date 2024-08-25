@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "djangorestframework-jwt" "drf-jwt"
+      --replace-fail "djangorestframework-jwt" "drf-jwt"
   '';
 
   propagatedBuildInputs = [

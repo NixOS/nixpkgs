@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix pkg-config and ranlib names for cross-compilation
     substituteInPlace Makefile \
-      --replace "pkg-config" "$PKG_CONFIG" \
-      --replace "ranlib" "$RANLIB"
+      --replace-fail "pkg-config" "$PKG_CONFIG" \
+      --replace-fail "ranlib" "$RANLIB"
   '';
 
   makeFlags = [

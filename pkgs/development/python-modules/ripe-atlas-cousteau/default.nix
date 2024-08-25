@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "websocket-client~=1.3.1" "websocket-client"
+      --replace-fail "websocket-client~=1.3.1" "websocket-client"
   '';
 
   propagatedBuildInputs = [

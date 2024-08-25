@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Make builds more reproducible
-    substituteInPlace apply-feature.py --replace \
+    substituteInPlace apply-feature.py --replace-fail \
       'ricty = ttLib.TTFont(options.in_font)' \
       'ricty = ttLib.TTFont(options.in_font, recalcTimestamp=False)'
-    substituteInPlace build.py --replace \
+    substituteInPlace build.py --replace-fail \
       'datetime.date.today()' \
       'datetime.date.fromtimestamp(float(os.environ["SOURCE_DATE_EPOCH"]))'
   '';

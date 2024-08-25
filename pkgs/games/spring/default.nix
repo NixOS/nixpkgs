@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     substituteInPlace ./rts/build/cmake/FindAsciiDoc.cmake \
-      --replace "PATHS /usr /usr/share /usr/local /usr/local/share" "PATHS ${docbook_xsl}"\
-      --replace "xsl/docbook/manpages" "share/xml/docbook-xsl/manpages"
+      --replace-fail "PATHS /usr /usr/share /usr/local /usr/local/share" "PATHS ${docbook_xsl}"\
+      --replace-fail "xsl/docbook/manpages" "share/xml/docbook-xsl/manpages"
 
     # The cmake included module correcly finds nix's glew, however
     # it has to be the bundled FindGLEW for headless or dedicated builds

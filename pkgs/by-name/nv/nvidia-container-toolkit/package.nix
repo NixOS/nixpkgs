@@ -46,17 +46,17 @@ buildGoModule rec {
     # default ldconfig locations to the one in nixpkgs.
 
     substituteInPlace internal/config/config.go \
-      --replace '/usr/bin/nvidia-container-runtime-hook' "$out/bin/nvidia-container-runtime-hook" \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$out/bin/nvidia-container-runtime-hook" \
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace internal/config/config_test.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace tools/container/toolkit/toolkit.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace cmd/nvidia-ctk/hook/update-ldcache/update-ldcache.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
   '';
 
   # Based on upstream's Makefile:

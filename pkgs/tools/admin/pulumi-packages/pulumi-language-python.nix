@@ -13,7 +13,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace main_test.go \
-      --replace "TestDeterminePulumiPackages" \
+      --replace-fail "TestDeterminePulumiPackages" \
                 "SkipTestDeterminePulumiPackages"
   '';
 

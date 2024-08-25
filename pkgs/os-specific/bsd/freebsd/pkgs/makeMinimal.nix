@@ -44,10 +44,10 @@ mkDerivation {
     cp -r "$BSDSRCDIR/share/mk" "$out/share/mk"
     find "$out/share/mk" -type f -print0 |
       while IFS= read -r -d "" f; do
-        substituteInPlace "$f" --replace 'usr/' ""
+        substituteInPlace "$f" --replace-fail 'usr/' ""
       done
     substituteInPlace "$out/share/mk/bsd.symver.mk" \
-      --replace '/share/mk' "$out/share/mk"
+      --replace-fail '/share/mk' "$out/share/mk"
 
     runHook postInstall
   '';
@@ -60,7 +60,7 @@ mkDerivation {
     mv "$out"/share/mk/bsd.{lib,prog}.mk "$replaced_mk"
     for m in bsd.{lib,prog}.mk; do
       cp "$boot_mk/$m" "$out/share/mk"
-      substituteInPlace "$out/share/mk/$m" --replace '../../../share/mk' '../mk.orig'
+      substituteInPlace "$out/share/mk/$m" --replace-fail '../../../share/mk' '../mk.orig'
     done
   '';
 

@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/NixOS/nixpkgs/issues/146131
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure \
-      --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
-      --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
-      --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+      --replace-fail "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
+      --replace-fail "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
+      --replace-fail "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
     substituteInPlace tests/Examples/Makefile.in \
-      --replace "test-Examples: test-Examples-Base" "test-Examples:" # do not test the examples
+      --replace-fail "test-Examples: test-Examples-Base" "test-Examples:" # do not test the examples
   '';
 
   dontDisableStatic = static;

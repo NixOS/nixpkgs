@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/modules/everything/evry_plug_calc.c \
-      --replace "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
+      --replace-fail "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
   '';
 
   mesonFlags = [

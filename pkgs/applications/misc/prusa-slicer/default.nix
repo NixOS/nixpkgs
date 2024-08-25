@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     # dlopen(3) for context.
     if [ -f "src/libslic3r/Format/STEP.cpp" ]; then
       substituteInPlace src/libslic3r/Format/STEP.cpp \
-        --replace 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
+        --replace-fail 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
     fi
     # https://github.com/prusa3d/PrusaSlicer/issues/9581
     if [ -f "cmake/modules/FindEXPAT.cmake" ]; then
@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix resources folder location on macOS
     substituteInPlace src/PrusaSlicer.cpp \
-      --replace "#ifdef __APPLE__" "#if 0"
+      --replace-fail "#ifdef __APPLE__" "#if 0"
   '';
 
   cmakeFlags = [

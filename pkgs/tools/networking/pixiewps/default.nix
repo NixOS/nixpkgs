@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    substituteInPlace Makefile --replace "/usr/local" "$out"
+    substituteInPlace Makefile --replace-fail "/usr/local" "$out"
   '';
 
   meta = {

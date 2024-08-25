@@ -20,7 +20,7 @@ mkXfceDerivation {
   sha256 = "sha256-7vcjARm0O+/hVNFzOpxcgAnqD+wRNg5/eqXLcq4t/iU=";
 
   postPatch = ''
-    substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
+    substituteInPlace configure.ac.in --replace-fail gio-2.0 gio-unix-2.0
   '';
 
   buildInputs = [

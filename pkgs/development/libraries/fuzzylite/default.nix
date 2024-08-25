@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "-Werror" "-Wno-error"
+      --replace-fail "-Werror" "-Wno-error"
   '';
 
   nativeBuildInputs = [

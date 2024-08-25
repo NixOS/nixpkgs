@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.in \
-        --replace '-Wl,--as-needed' "" \
-        --replace '-Wl,-soname -Wl,libvsqlitepp.so.3' \
+        --replace-fail '-Wl,--as-needed' "" \
+        --replace-fail '-Wl,-soname -Wl,libvsqlitepp.so.3' \
                   "-Wl,-install_name,$out/lib/libvsqlitepp.3.dylib"
   '';
 

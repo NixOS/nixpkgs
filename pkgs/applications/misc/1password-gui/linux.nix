@@ -111,13 +111,13 @@ stdenv.mkDerivation {
       # Desktop file
       install -Dt $out/share/applications resources/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
+        --replace-fail 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
     ''
     + (lib.optionalString (polkitPolicyOwners != [ ]) ''
       # Polkit file
         mkdir -p $out/share/polkit-1/actions
-        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace "\''${POLICY_OWNERS}" "${policyOwners}"
+        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace-fail "\''${POLICY_OWNERS}" "${policyOwners}"
     '')
     + ''
 

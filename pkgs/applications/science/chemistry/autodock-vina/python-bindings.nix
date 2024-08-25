@@ -18,20 +18,20 @@ buildPythonPackage {
     # wildcards are not allowed
     # https://github.com/ccsb-scripps/AutoDock-Vina/issues/176
     substituteInPlace setup.py \
-      --replace "python_requires='>=3.5.*'" "python_requires='>=3.5'"
+      --replace-fail "python_requires='>=3.5.*'" "python_requires='>=3.5'"
 
     # setupPyBuildFlags are not applied with `format = "pyproject"`
     substituteInPlace setup.py \
-      --replace "= locate_boost()" "= '${lib.getDev boost}/include', '${boost}/lib'"
+      --replace-fail "= locate_boost()" "= '${lib.getDev boost}/include', '${boost}/lib'"
 
     # this line attempts to delete the source code
     substituteInPlace setup.py \
-      --replace "shutil.rmtree('src')" "..."
+      --replace-fail "shutil.rmtree('src')" "..."
 
     # np.int is deprecated
     # https://github.com/ccsb-scripps/AutoDock-Vina/pull/167 and so on
     substituteInPlace vina/vina.py \
-      --replace "np.int" "int"
+      --replace-fail "np.int" "int"
   '';
 
   nativeBuildInputs = [

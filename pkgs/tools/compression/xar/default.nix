@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'OpenSSL_add_all_ciphers' 'OPENSSL_init_crypto' \
-      --replace 'openssl/evp.h' 'openssl/crypto.h'
+      --replace-fail 'OpenSSL_add_all_ciphers' 'OPENSSL_init_crypto' \
+      --replace-fail 'openssl/evp.h' 'openssl/crypto.h'
   '';
 
   configureFlags = lib.optional (fts != null) "LDFLAGS=-lfts";

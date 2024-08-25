@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   # of executable on dynamic systems, but fails with link error when attempting
   # to cross-build "xstow-static" to the system where "xstow" proper is static.
   postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
-    substituteInPlace src/Makefile.am --replace xstow-static ""
-    substituteInPlace src/Makefile.am --replace xstow-stow ""
+    substituteInPlace src/Makefile.am --replace-fail xstow-static ""
+    substituteInPlace src/Makefile.am --replace-fail xstow-stow ""
   '';
 
   buildInputs = [

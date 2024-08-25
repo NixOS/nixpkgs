@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
 
       # Fix global references and replace auto discovery mechanism with hardcoded values
       substituteInPlace $out/opt/brother/Printers/MFCL2750DW/lpd/lpdfilter \
-        --replace /opt "$out/opt" \
-        --replace "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/MFCL2750DW\"; #" \
-        --replace "PRINTER =~" "PRINTER = \"MFCL2750DW\"; #"
+        --replace-fail /opt "$out/opt" \
+        --replace-fail "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/MFCL2750DW\"; #" \
+        --replace-fail "PRINTER =~" "PRINTER = \"MFCL2750DW\"; #"
 
       # Make sure all executables have the necessary runtime dependencies available
       find "$out" -executable -and -type f | while read file; do

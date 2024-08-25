@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace install.py \
-      --replace 'platform.version()' '"Nix"'
+      --replace-fail 'platform.version()' '"Nix"'
 
     patchShebangs .
   '';

@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication {
     runHook preCheck
     patchShebangs test
 
-    substituteInPlace test --replace "#raise TestFailedException()" "sys.exit(1)"
+    substituteInPlace test --replace-fail "#raise TestFailedException()" "sys.exit(1)"
     ./test
     runHook postCheck
   '';

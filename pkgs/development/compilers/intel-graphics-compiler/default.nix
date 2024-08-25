@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
-      --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
-      --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
+      --replace-fail '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
+      --replace-fail '/@CMAKE_INSTALL_LIBDIR@' "/lib"
   '';
 
   # Handholding the braindead build script

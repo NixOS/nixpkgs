@@ -21,8 +21,8 @@ in stdenv.mkDerivation rec {
     tar -xaf $debian
     patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
 
-    substituteInPlace Makefile --replace STRINGS STRINGDEFS
-    substituteInPlace debian/patches/13_shlib_weaksym --replace STRINGS STRINGDEFS
+    substituteInPlace Makefile --replace-fail STRINGS STRINGDEFS
+    substituteInPlace debian/patches/13_shlib_weaksym --replace-fail STRINGS STRINGDEFS
   '';
 
   # Fix __BEGIN_DECLS usage (even if it wasn't non-standard, this doesn't include sys/cdefs.h)
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace Makefile \
-      --replace '-DNETGROUP' '-DUSE_GETDOMAIN'
+      --replace-fail '-DNETGROUP' '-DUSE_GETDOMAIN'
   '';
 
   buildInputs = [ libnsl ];

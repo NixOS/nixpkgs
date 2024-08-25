@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/gpu_util/gpu_blas_api.hpp \
-      --replace '#include <rocblas.h>' '#include <rocblas/rocblas.h>'
+      --replace-fail '#include <rocblas.h>' '#include <rocblas/rocblas.h>'
   '';
 
   nativeBuildInputs = [

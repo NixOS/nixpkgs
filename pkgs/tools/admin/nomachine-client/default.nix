@@ -62,7 +62,7 @@ in
       cp share/applnk/client/xdg-mime/*.xml $out/share/mime/packages/
 
       for i in $out/share/applications/*.desktop; do
-        substituteInPlace "$i" --replace /usr/NX/bin $out/bin
+        substituteInPlace "$i" --replace-fail /usr/NX/bin $out/bin
       done
     '';
 

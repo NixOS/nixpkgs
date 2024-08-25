@@ -113,13 +113,13 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     substituteInPlace windmill-worker/src/bash_executor.rs \
-      --replace '"/bin/bash"' '"${bash}/bin/bash"'
+      --replace-fail '"/bin/bash"' '"${bash}/bin/bash"'
 
     substituteInPlace windmill-api/src/lib.rs \
-      --replace 'unknown-version' 'v${version}'
+      --replace-fail 'unknown-version' 'v${version}'
 
     substituteInPlace src/main.rs \
-      --replace 'unknown-version' 'v${version}'
+      --replace-fail 'unknown-version' 'v${version}'
 
     pushd ..
 

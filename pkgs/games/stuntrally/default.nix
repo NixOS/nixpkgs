@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace config/*-default.cfg \
-      --replace "screenshot_png = off" "screenshot_png = on"
+      --replace-fail "screenshot_png = off" "screenshot_png = on"
     substituteInPlace source/*/BaseApp_Create.cpp \
-      --replace "Codec_FreeImage" "Codec_STBI"
+      --replace-fail "Codec_FreeImage" "Codec_STBI"
   '';
 
   preConfigure = ''

@@ -27,7 +27,7 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace ./vendor/dune --replace "mrmime.prettym" "prettym"
+    substituteInPlace ./vendor/dune --replace-fail "mrmime.prettym" "prettym"
   '';
 
   propagatedBuildInputs = [

@@ -24,7 +24,7 @@ let
 
     postPatch = ''
       substituteInPlace Makefile \
-        --replace "$(INSTALL) $(BUILDDIR)/$(BINARY) $(PREFIX)/bin" \
+        --replace-fail "$(INSTALL) $(BUILDDIR)/$(BINARY) $(PREFIX)/bin" \
         "$(INSTALL) $(BUILDDIR)/$(BINARY) $(PREFIX)/bin/svg-flatten" \
     '';
 
@@ -69,12 +69,12 @@ in python3Packages.buildPythonApplication rec {
   preConfigure = ''
     # setup.py tries to execute a call to git in a subprocess, this avoids it.
     substituteInPlace setup.py \
-      --replace "version = get_version()," \
+      --replace-fail "version = get_version()," \
                 "version = '${version}'," \
 
     # setup.py tries to execute a call to git in a subprocess, this avoids it.
     substituteInPlace setup.py \
-      --replace "long_description=format_readme_for_pypi()," \
+      --replace-fail "long_description=format_readme_for_pypi()," \
                 "long_description='\n'.join(Path('README.rst').read_text().splitlines()),"
   '';
 

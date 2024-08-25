@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     cd build/generic
   '' + lib.optionalString stdenv.isDarwin ''
     # Undocumented darwin hack
-    substituteInPlace configure --replace "-no-cpp-precomp" ""
+    substituteInPlace configure --replace-fail "-no-cpp-precomp" ""
   '';
 
   configureFlags = [ ]

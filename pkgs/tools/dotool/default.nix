@@ -25,7 +25,7 @@ buildGoModule rec {
   patches = [ ./fix-paths.patch ];
 
   postPatch = ''
-    substituteInPlace ./dotoold --replace "@dotool@" "$out/bin/dotool"
+    substituteInPlace ./dotoold --replace-fail "@dotool@" "$out/bin/dotool"
   '';
 
   buildInputs = [ libxkbcommon ];

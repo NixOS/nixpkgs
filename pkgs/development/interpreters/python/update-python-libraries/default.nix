@@ -10,5 +10,5 @@ runCommand "update-python-libraries" {
 } ''
   cp ${./update-python-libraries.py} $out
   patchShebangs $out
-  substituteInPlace $out --replace 'GIT = "git"' 'GIT = "${git}/bin/git"'
+  substituteInPlace $out --replace-fail 'GIT = "git"' 'GIT = "${git}/bin/git"'
 ''

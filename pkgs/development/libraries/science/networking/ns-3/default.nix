@@ -92,13 +92,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
      substituteInPlace src/tap-bridge/CMakeLists.txt \
-       --replace '-DTAP_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/tap-bridge/' "-DTAP_CREATOR=\"$out/libexec/ns3/"
+       --replace-fail '-DTAP_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/tap-bridge/' "-DTAP_CREATOR=\"$out/libexec/ns3/"
 
     substituteInPlace src/fd-net-device/CMakeLists.txt \
-      --replace '-DRAW_SOCK_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DRAW_SOCK_CREATOR=\"$out/libexec/ns3/"
+      --replace-fail '-DRAW_SOCK_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DRAW_SOCK_CREATOR=\"$out/libexec/ns3/"
 
     substituteInPlace src/fd-net-device/CMakeLists.txt \
-      --replace '-DTAP_DEV_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DTAP_DEV_CREATOR=\"$out/libexec/ns3/"
+      --replace-fail '-DTAP_DEV_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DTAP_DEV_CREATOR=\"$out/libexec/ns3/"
   '';
 
   doCheck = false;

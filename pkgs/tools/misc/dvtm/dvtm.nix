@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   prePatch = ''
     substituteInPlace Makefile \
-      --replace /usr/share/terminfo $out/share/terminfo
+      --replace-fail /usr/share/terminfo $out/share/terminfo
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

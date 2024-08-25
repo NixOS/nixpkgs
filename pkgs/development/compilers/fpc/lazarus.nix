@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share "$out/lazarus"
     tar xf ${fpc.src} --strip-components=1 -C $out/share -m
     substituteInPlace ide/packages/ideconfig/include/unix/lazbaseconf.inc \
-      --replace '/usr/fpcsrc' "$out/share/fpcsrc"
+      --replace-fail '/usr/fpcsrc' "$out/share/fpcsrc"
   '';
 
   postInstall = let

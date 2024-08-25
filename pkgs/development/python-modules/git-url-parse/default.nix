@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov giturlparse --cov-report term-missing" ""
+      --replace-fail " --cov giturlparse --cov-report term-missing" ""
   '';
 
   # Manually set version because prb wants to get it from the git

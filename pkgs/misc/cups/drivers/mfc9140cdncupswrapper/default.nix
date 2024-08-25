@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$interpreter" "$dir/cupswrapper/brcupsconfpt1"
 
     substituteInPlace $dir/cupswrapper/cupswrappermfc9140cdn \
-      --replace "mkdir -p /usr" ": # mkdir -p /usr" \
-      --replace '/opt/brother/''${device_model}/''${printer_model}/lpd/filter''${printer_model}' "$lpr/lpd/filtermfc9140cdn" \
-      --replace '/usr/share/ppd/Brother/brother_''${printer_model}_printer_en.ppd' "$dir/cupswrapper/brother_mfc9140cdn_printer_en.ppd" \
-      --replace '/usr/share/cups/model/Brother/brother_''${printer_model}_printer_en.ppd' "$dir/cupswrapper/brother_mfc9140cdn_printer_en.ppd" \
-      --replace '/opt/brother/Printers/''${printer_model}/' "$lpr/" \
-      --replace 'nup="psnup' "nup=\"${psutils}/bin/psnup" \
-      --replace '/usr/bin/psnup' "${psutils}/bin/psnup"
+      --replace-fail "mkdir -p /usr" ": # mkdir -p /usr" \
+      --replace-fail '/opt/brother/''${device_model}/''${printer_model}/lpd/filter''${printer_model}' "$lpr/lpd/filtermfc9140cdn" \
+      --replace-fail '/usr/share/ppd/Brother/brother_''${printer_model}_printer_en.ppd' "$dir/cupswrapper/brother_mfc9140cdn_printer_en.ppd" \
+      --replace-fail '/usr/share/cups/model/Brother/brother_''${printer_model}_printer_en.ppd' "$dir/cupswrapper/brother_mfc9140cdn_printer_en.ppd" \
+      --replace-fail '/opt/brother/Printers/''${printer_model}/' "$lpr/" \
+      --replace-fail 'nup="psnup' "nup=\"${psutils}/bin/psnup" \
+      --replace-fail '/usr/bin/psnup' "${psutils}/bin/psnup"
 
     mkdir -p $out/lib/cups/filter
     mkdir -p $out/share/cups/model

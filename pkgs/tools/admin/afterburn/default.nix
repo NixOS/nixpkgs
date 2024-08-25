@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   postPatch = ''
-    substituteInPlace ./systemd/afterburn-checkin.service --replace /usr/bin $out/bin
-    substituteInPlace ./systemd/afterburn-firstboot-checkin.service --replace /usr/bin $out/bin
-    substituteInPlace ./systemd/afterburn-sshkeys@.service.in --replace /usr/bin $out/bin
-    substituteInPlace ./systemd/afterburn.service --replace /usr/bin $out/bin
+    substituteInPlace ./systemd/afterburn-checkin.service --replace-fail /usr/bin $out/bin
+    substituteInPlace ./systemd/afterburn-firstboot-checkin.service --replace-fail /usr/bin $out/bin
+    substituteInPlace ./systemd/afterburn-sshkeys@.service.in --replace-fail /usr/bin $out/bin
+    substituteInPlace ./systemd/afterburn.service --replace-fail /usr/bin $out/bin
   '';
 
   postInstall = ''

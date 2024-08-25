@@ -143,8 +143,8 @@ stdenv.mkDerivation (self: {
       cp icon.svg "$out"/share/icons/hicolor/scalable/apps/godot.svg
       cp icon.png "$out"/share/icons/godot.png
       substituteInPlace "$out"/share/applications/$installedGodotShortcutFileName \
-        --replace "Exec=godot" "Exec=\"$outbin/$installedGodotBinName\"" \
-        --replace "Name=Godot Engine" "Name=$installedGodotShortcutDisplayName"
+        --replace-fail "Exec=godot" "Exec=\"$outbin/$installedGodotBinName\"" \
+        --replace-fail "Name=Godot Engine" "Name=$installedGodotShortcutDisplayName"
     fi
 
     runHook postInstall

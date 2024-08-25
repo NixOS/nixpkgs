@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ icmake yodl ];
 
   postPatch = ''
-    substituteInPlace INSTALL.im --replace /usr $out
+    substituteInPlace INSTALL.im --replace-fail /usr $out
     patchShebangs .
   '';
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w third-party/imgui
   '' + lib.optionalString (lib.versionAtLeast imgui.version "1.90.1") ''
     substituteInPlace src/imtui-impl-{emscripten,ncurses}.cpp \
-      --replace "ImGuiKey_KeyPadEnter" "ImGuiKey_KeypadEnter"
+      --replace-fail "ImGuiKey_KeyPadEnter" "ImGuiKey_KeypadEnter"
   '';
 
   cmakeFlags = [

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   postPatch = ''
-    substituteInPlace viper --replace "/etc/viper4linux" "$out/etc/viper4linux"
+    substituteInPlace viper --replace-fail "/etc/viper4linux" "$out/etc/viper4linux"
   '';
 
   installPhase = ''

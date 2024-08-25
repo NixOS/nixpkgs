@@ -54,7 +54,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "DESTINATION /etc" "DESTINATION $out/etc"
+      --replace-fail "DESTINATION /etc" "DESTINATION $out/etc"
   '';
 
   nativeBuildInputs = [ cmake ninja pkg-config idl-serial ];

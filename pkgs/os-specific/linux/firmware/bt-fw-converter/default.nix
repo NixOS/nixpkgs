@@ -21,7 +21,7 @@ stdenv.mkDerivation  rec {
 
   installPhase = ''
     install -D -m755 bt-fw-converter.pl $out/bin/bt-fw-converter
-    substituteInPlace $out/bin/bt-fw-converter --replace /usr/bin/hex2hcd ${bluez}/bin/hex2hcd
+    substituteInPlace $out/bin/bt-fw-converter --replace-fail /usr/bin/hex2hcd ${bluez}/bin/hex2hcd
     wrapProgram $out/bin/bt-fw-converter --set PERL5LIB $PERL5LIB
   '';
 

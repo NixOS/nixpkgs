@@ -98,8 +98,8 @@ gccStdenv.mkDerivation rec {
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
       ${lib.optionalString (gccStdenv.isDarwin && !gambit-params.stable)
-         ''--replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''} \
-        --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
+         ''--replace-fail "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''} \
+        --replace-fail "/usr/local/opt/openssl" "${lib.getLib openssl}"
 
     ./config.status
   '';

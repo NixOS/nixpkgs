@@ -91,9 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # meson.build: bump version to 1.7.0
     substituteInPlace libfdt/meson.build \
-      --replace "version: '1.6.0'," "version: '${finalAttrs.version}',"
+      --replace-fail "version: '1.6.0'," "version: '${finalAttrs.version}',"
     substituteInPlace meson.build \
-      --replace "version: '1.6.0'," "version: '${finalAttrs.version}',"
+      --replace-fail "version: '1.6.0'," "version: '${finalAttrs.version}',"
   '';
 
   # Required for installation of Python library and is innocuous otherwise.

@@ -201,7 +201,7 @@ stdenv.mkDerivation rec {
 
     # Remove runtime Erlang references
     for file in $(grep -FrIl '${erlang}/lib/erlang' $out/app/server/beam/tau); do
-      substituteInPlace "$file" --replace '${erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
+      substituteInPlace "$file" --replace-fail '${erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
     done
   '';
 

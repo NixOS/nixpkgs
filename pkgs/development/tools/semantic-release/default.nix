@@ -27,7 +27,7 @@ buildNpmPackage rec {
 
   # Fixes `semantic-release --version` output
   postPatch = ''
-    substituteInPlace package.json --replace \
+    substituteInPlace package.json --replace-fail \
       '"version": "0.0.0-development"' \
       '"version": "${version}"'
   '';

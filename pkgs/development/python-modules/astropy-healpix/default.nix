@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "numpy>=2.0.0rc1" "numpy"
+    substituteInPlace pyproject.toml --replace-fail "numpy>=2.0.0rc1" "numpy"
   '';
 
   nativeBuildInputs = [

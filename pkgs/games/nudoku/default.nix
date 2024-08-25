@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   # Allow gettext 0.20
   postPatch = ''
-    substituteInPlace configure.ac --replace 0.19 0.20
+    substituteInPlace configure.ac --replace-fail 0.19 0.20
   '';
 
   nativeBuildInputs = [ autoreconfHook pkg-config gettext ];

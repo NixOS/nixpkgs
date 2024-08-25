@@ -42,7 +42,7 @@ let
     # but it’s not available on my systems (or hydra apparently)
     postConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace config.h \
-        --replace "#define HAVE___EXP10 1" "#undef HAVE___EXP10"
+        --replace-fail "#define HAVE___EXP10 1" "#undef HAVE___EXP10"
     '';
 
     passthru.tests = {

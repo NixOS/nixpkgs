@@ -51,8 +51,8 @@ stdenv.mkDerivation {
   # So we just comment them out, and let dillong use the defaults.
   postPatch = ''
     substituteInPlace dillorc \
-      --replace "start_page=" "#start_page=" \
-      --replace "home=" "#home="
+      --replace-fail "start_page=" "#start_page=" \
+      --replace-fail "home=" "#home="
   '';
 
   meta = {

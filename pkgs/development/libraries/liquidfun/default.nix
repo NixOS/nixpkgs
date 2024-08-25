@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i Box2D/Common/b2Settings.h -e 's@b2_maxPolygonVertices .*@b2_maxPolygonVertices 15@'
-    substituteInPlace Box2D/CMakeLists.txt --replace "Common/b2GrowableStack.h" "Common/b2GrowableStack.h Common/b2GrowableBuffer.h"
+    substituteInPlace Box2D/CMakeLists.txt --replace-fail "Common/b2GrowableStack.h" "Common/b2GrowableStack.h Common/b2GrowableBuffer.h"
   '';
 
   configurePhase = ''

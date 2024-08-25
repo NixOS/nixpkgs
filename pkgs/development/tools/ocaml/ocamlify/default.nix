@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
 
   configurePhase = ''
-    substituteInPlace src/ocamlify.ml --replace 'OCamlifyConfig.version' '"0.0.2"'
+    substituteInPlace src/ocamlify.ml --replace-fail 'OCamlifyConfig.version' '"0.0.2"'
   '';
 
   buildPhase = "ocamlbuild src/ocamlify.native";

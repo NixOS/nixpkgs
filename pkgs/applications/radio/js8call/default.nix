@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace CMakeLists.txt \
-        --replace "/usr/share/applications" "$out/share/applications" \
-        --replace "/usr/share/pixmaps" "$out/share/pixmaps" \
-        --replace "/usr/bin/" "$out/bin"
+        --replace-fail "/usr/share/applications" "$out/share/applications" \
+        --replace-fail "/usr/share/pixmaps" "$out/share/pixmaps" \
+        --replace-fail "/usr/bin/" "$out/bin"
   '';
 
   patches = [ ./cmake.patch ];

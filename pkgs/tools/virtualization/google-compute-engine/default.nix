@@ -26,16 +26,16 @@ buildPythonPackage rec {
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
-        --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl" \
-        --replace /bin/bash "${bashInteractive}/bin/bash" \
-        --replace /sbin/hwclock "${util-linux}/bin/hwclock"
+        --replace-fail /bin/systemctl "/run/current-system/systemd/bin/systemctl" \
+        --replace-fail /bin/bash "${bashInteractive}/bin/bash" \
+        --replace-fail /sbin/hwclock "${util-linux}/bin/hwclock"
       # SELinux tool ???  /sbin/restorecon
     done
 
     substituteInPlace google_config/udev/64-gce-disk-removal.rules \
-      --replace /bin/sh "${bash}/bin/sh" \
-      --replace /bin/umount "${util-linux}/bin/umount" \
-      --replace /usr/bin/logger "${util-linux}/bin/logger"
+      --replace-fail /bin/sh "${bash}/bin/sh" \
+      --replace-fail /bin/umount "${util-linux}/bin/umount" \
+      --replace-fail /usr/bin/logger "${util-linux}/bin/logger"
   '';
 
   postInstall = ''

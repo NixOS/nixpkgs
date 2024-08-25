@@ -21,18 +21,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     echo 'InstallBinSubdirs(packlib scripts)' >> 2006/src/Imakefile
     substituteInPlace 2006/src/config/site.def \
-      --replace "# define MakeCmd gmake" "# define MakeCmd make"
+      --replace-fail "# define MakeCmd gmake" "# define MakeCmd make"
     substituteInPlace 2006/src/config/lnxLib.rules \
-      --replace "# lib" "// lib"
+      --replace-fail "# lib" "// lib"
 
     substituteInPlace 2006/src/config/linux.cf \
-      --replace "# ifdef Hasgfortran" "# if 1" \
-      --replace "# define CcCmd			gcc4" "# define CcCmd			gcc"
+      --replace-fail "# ifdef Hasgfortran" "# if 1" \
+      --replace-fail "# define CcCmd			gcc4" "# define CcCmd			gcc"
     substituteInPlace 2006/src/scripts/cernlib \
-      --replace "-lnsl" ""
+      --replace-fail "-lnsl" ""
 
     # binutils 2.37 fix
-    substituteInPlace 2006/src/config/Imake.tmpl --replace "clq" "cq"
+    substituteInPlace 2006/src/config/Imake.tmpl --replace-fail "clq" "cq"
   '';
 
   preConfigure = ''

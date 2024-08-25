@@ -36,7 +36,7 @@ in
     };
 
     preConfigure = ''
-      substituteInPlace src/frontend/main.ml --replace \
+      substituteInPlace src/frontend/main.ml --replace-fail \
       '/usr/local/share/satysfi"; "/usr/share/satysfi' \
       $out/share/satysfi
     '';

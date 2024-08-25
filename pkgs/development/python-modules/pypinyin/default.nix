@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini --replace \
+    substituteInPlace pytest.ini --replace-fail \
       "--cov-report term-missing" ""
   '';
 

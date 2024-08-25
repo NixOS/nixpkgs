@@ -417,9 +417,9 @@ let
       preBuild = lib.optionalString effectiveStdenv.isDarwin ''
         export NIX_LDFLAGS+=" -F${IOKit}/Library/Frameworks"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/osx_cc_wrapper.sh.tpl \
-          --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
+          --replace-fail "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
-          --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
+          --replace-fail "/usr/bin/libtool" "${cctools}/bin/libtool"
       '';
     };
 

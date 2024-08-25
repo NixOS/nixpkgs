@@ -22,11 +22,11 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "GCC = g++" "GCC = c++"
+      --replace-fail "GCC = g++" "GCC = c++"
     substituteInPlace src/main.cc \
-      --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
+      --replace-fail "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
     substituteInPlace src/MaxSatSolver.cc \
-      --replace "occ[i][sign(softLiterals[j])] > 0" "occ[i][sign(softLiterals[j])] != 0"
+      --replace-fail "occ[i][sign(softLiterals[j])] > 0" "occ[i][sign(softLiterals[j])] != 0"
   '';
 
   preBuild = ''

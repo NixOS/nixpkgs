@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
-      --replace "-fext-numeric-literals" ""
+      --replace-fail "-fext-numeric-literals" ""
 
     # disable test that fails due to strict floating-point number comparison
     echo "#!/usr/bin/env perl" > check/fnlo-tk-stattest.pl.in

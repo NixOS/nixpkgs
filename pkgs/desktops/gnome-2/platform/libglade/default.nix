@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # uses pkg-config in some places and uses the correct $PKG_CONFIG in some
     # it's an ancient library so it has very old configure scripts and m4
     substituteInPlace ./configure \
-      --replace "pkg-config" "$PKG_CONFIG"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   NIX_LDFLAGS = "-lgmodule-2.0";

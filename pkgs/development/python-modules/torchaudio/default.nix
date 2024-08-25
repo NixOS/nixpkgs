@@ -87,13 +87,13 @@ buildPythonPackage rec {
   postPatch =
     ''
       substituteInPlace setup.py \
-        --replace 'print(" --- Initializing submodules")' "return" \
-        --replace "_fetch_archives(_parse_sources())" "pass"
+        --replace-fail 'print(" --- Initializing submodules")' "return" \
+        --replace-fail "_fetch_archives(_parse_sources())" "pass"
     ''
     + lib.optionalString rocmSupport ''
       # There is no .info/version-dev, only .info/version
       substituteInPlace cmake/LoadHIP.cmake \
-        --replace "/.info/version-dev" "/.info/version"
+        --replace-fail "/.info/version-dev" "/.info/version"
     '';
 
   env = {

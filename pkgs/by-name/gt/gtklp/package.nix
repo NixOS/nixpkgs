@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace include/defaults.h \
-      --replace "netscape" "firefox" \
-      --replace "http://localhost:631/sum.html#STANDARD_OPTIONS" \
+      --replace-fail "netscape" "firefox" \
+      --replace-fail "http://localhost:631/sum.html#STANDARD_OPTIONS" \
                 "http://localhost:631/help/"
   '';
 

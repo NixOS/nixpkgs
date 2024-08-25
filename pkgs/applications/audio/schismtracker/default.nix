@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # Our Darwin SDL2 doesn't have a SDL2main to link against
   preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac \
-      --replace '-lSDL2main' '-lSDL2'
+      --replace-fail '-lSDL2main' '-lSDL2'
   '';
 
   meta = with lib; {

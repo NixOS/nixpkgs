@@ -19,8 +19,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace ",<6.0" ""
-    substituteInPlace setup.cfg --replace ",<6.0" ""
+    substituteInPlace pyproject.toml --replace-fail ",<6.0" ""
+    substituteInPlace setup.cfg --replace-fail ",<6.0" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

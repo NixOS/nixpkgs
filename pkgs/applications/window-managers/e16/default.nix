@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace scripts/e_gen_menu --replace "/usr/local:" "/run/current-system/sw:/usr/local:"
-    substituteInPlace scripts/e_gen_menu --replace "'/opt'" "'/opt', '/run/current-system/sw'"
-    substituteInPlace scripts/e_gen_menu --replace "'/.local'" "'/.nix-profile', '/.local'"
+    substituteInPlace scripts/e_gen_menu --replace-fail "/usr/local:" "/run/current-system/sw:/usr/local:"
+    substituteInPlace scripts/e_gen_menu --replace-fail "'/opt'" "'/opt', '/run/current-system/sw'"
+    substituteInPlace scripts/e_gen_menu --replace-fail "'/.local'" "'/.nix-profile', '/.local'"
   '';
 
   passthru.updateScript = gitUpdater {

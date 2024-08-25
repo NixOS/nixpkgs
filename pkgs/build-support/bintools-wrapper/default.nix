@@ -371,7 +371,7 @@ stdenvNoCC.mkDerivation {
 
     + ''
       for flags in "$out/nix-support"/*flags*; do
-        substituteInPlace "$flags" --replace $'\n' ' '
+        substituteInPlace "$flags" --replace-fail $'\n' ' '
       done
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh

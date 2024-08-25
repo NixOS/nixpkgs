@@ -43,17 +43,17 @@ stdenv.mkDerivation rec {
   postFixup = ''
     pushd $out
     substituteInPlace scripts/build \
-        --replace '~/.bash-my-aws' $out
+        --replace-fail '~/.bash-my-aws' $out
     substituteInPlace scripts/build-completions \
-        --replace "{HOME}" $out \
-        --replace '~/.bash-my-aws' $out
+        --replace-fail "{HOME}" $out \
+        --replace-fail '~/.bash-my-aws' $out
     ./scripts/build
     ./scripts/build-completions
     substituteInPlace bash_completion.sh \
-        --replace "{HOME}" $out \
-        --replace .bash-my-aws ""
+        --replace-fail "{HOME}" $out \
+        --replace-fail .bash-my-aws ""
     substituteInPlace bin/bma \
-        --replace '~/.bash-my-aws' $out
+        --replace-fail '~/.bash-my-aws' $out
     wrapProgram $out/bin/bma --prefix PATH : ${lib.makeBinPath [awscli jq unixtools.column bashInteractive ]}
     installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
     chmod +x $out/lib/*

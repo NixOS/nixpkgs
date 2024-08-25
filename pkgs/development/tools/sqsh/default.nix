@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     export SYBASE=${freetds}
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace "libct.so" "libct.dylib"
+    substituteInPlace configure --replace-fail "libct.so" "libct.dylib"
   '';
 
   enableParallelBuilding = true;

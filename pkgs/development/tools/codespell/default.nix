@@ -18,8 +18,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=codespell_lib" "" \
-      --replace "--cov-report=" ""
+      --replace-fail "--cov=codespell_lib" "" \
+      --replace-fail "--cov-report=" ""
   '';
 
   nativeBuildInputs = with python3.pkgs; [

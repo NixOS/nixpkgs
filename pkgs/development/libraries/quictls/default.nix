@@ -41,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   # config is a configure script which is not installed.
   + ''
-    substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
+    substituteInPlace config --replace-fail '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace crypto/async/arch/async_posix.h \
-      --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
+      --replace-fail '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                 '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
   '';
 

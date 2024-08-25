@@ -97,13 +97,13 @@ stdenvNoCC.mkDerivation rec {
     do
       patchShebangs $f
       substituteInPlace $f \
-        --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
-        --replace /usr/bin/optipng ${optipng}/bin/optipng
+        --replace-fail /usr/bin/inkscape ${inkscape}/bin/inkscape \
+        --replace-fail /usr/bin/optipng ${optipng}/bin/optipng
     done
 
     ${lib.optionalString wallpapers ''
       for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
-        substituteInPlace $f --replace /usr $out
+        substituteInPlace $f --replace-fail /usr $out
       done
     ''}
   '';

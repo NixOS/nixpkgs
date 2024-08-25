@@ -32,7 +32,7 @@ let
     # fix default path to timidity.cfg so MIDI files could be played
     postPatch = ''
       substituteInPlace timidity/options.h \
-        --replace "/usr/share/timidity" "${timidity}/share/timidity"
+        --replace-fail "/usr/share/timidity" "${timidity}/share/timidity"
     '';
 
     passthru.tests.lzwolf = lzwolf;

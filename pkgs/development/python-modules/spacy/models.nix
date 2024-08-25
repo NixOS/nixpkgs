@@ -51,7 +51,7 @@ let
 
       postPatch = lib.optionalString requires-protobuf ''
         substituteInPlace meta.json \
-          --replace "protobuf<3.21.0" "protobuf"
+          --replace-fail "protobuf<3.21.0" "protobuf"
       '';
 
       nativeBuildInputs = [ setuptools ] ++ lib.optionals requires-protobuf [ protobuf ];

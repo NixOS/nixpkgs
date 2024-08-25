@@ -17,10 +17,10 @@ stdenv.mkDerivation {
     ''
       for i in execsnoop iolatency iosnoop kernel/funcslower killsnoop opensnoop; do
         substituteInPlace $i \
-          --replace /usr/bin/gawk "$(type -p gawk)" \
-          --replace /usr/bin/mawk /no-such-path \
-          --replace /usr/bin/getconf "$(type -p getconf)" \
-          --replace awk=awk "awk=$(type -p gawk)"
+          --replace-fail /usr/bin/gawk "$(type -p gawk)" \
+          --replace-fail /usr/bin/mawk /no-such-path \
+          --replace-fail /usr/bin/getconf "$(type -p getconf)" \
+          --replace-fail awk=awk "awk=$(type -p gawk)"
       done
 
       rm -rf examples deprecated

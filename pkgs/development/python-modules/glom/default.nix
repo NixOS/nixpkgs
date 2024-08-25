@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "face==20.1.1" "face"
+      --replace-fail "face==20.1.1" "face"
   '';
 
   propagatedBuildInputs = [

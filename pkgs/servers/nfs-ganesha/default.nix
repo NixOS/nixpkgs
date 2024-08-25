@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
+    substituteInPlace src/tools/mount.9P --replace-fail "/bin/mount" "/usr/bin/env mount"
   '';
 
   postFixup = ''

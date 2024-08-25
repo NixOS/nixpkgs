@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -m644 vendor/greatest.h $out/include/
 
     substituteInPlace $out/lib/pkgconfig/libtheft.pc \
-      --replace "/usr/local" "$out"
+      --replace-fail "/usr/local" "$out"
   '';
 
   meta = with lib; {

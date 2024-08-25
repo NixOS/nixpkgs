@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace fbgrab \
-      --replace 'pnmtopng' '${netpbm}/bin/pnmtopng' \
-      --replace 'fbcat' "$out/bin/fbcat"
+      --replace-fail 'pnmtopng' '${netpbm}/bin/pnmtopng' \
+      --replace-fail 'fbcat' "$out/bin/fbcat"
   '';
 
   installFlags = [

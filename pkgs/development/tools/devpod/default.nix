@@ -121,10 +121,10 @@ rec {
         ln -s ${devpod}/bin/devpod bin/devpod-cli-${rustTargetPlatformSpec}
         cp -r ${frontend-build} frontend-build
 
-        substituteInPlace tauri.conf.json --replace '"distDir": "../dist",' '"distDir": "frontend-build",'
+        substituteInPlace tauri.conf.json --replace-fail '"distDir": "../dist",' '"distDir": "frontend-build",'
       '' + lib.optionalString stdenv.isLinux ''
         substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-          --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+          --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
         # Since `cargo build` is used instead of `tauri build`, configs are merged manually.
         jq --slurp '.[0] * .[1]' tauri.conf.json tauri-linux.conf.json >tauri.conf.json.merged

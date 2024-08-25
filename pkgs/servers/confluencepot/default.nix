@@ -19,7 +19,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace confluencePot.go \
-      --replace "confluence.html" "$out/share/confluence.html"
+      --replace-fail "confluence.html" "$out/share/confluence.html"
   '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''

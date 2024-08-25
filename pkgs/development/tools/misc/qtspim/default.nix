@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     cd QtSpim
 
-    substituteInPlace QtSpim.pro --replace /usr/lib/qtspim/lib $out/lib
+    substituteInPlace QtSpim.pro --replace-fail /usr/lib/qtspim/lib $out/lib
     substituteInPlace menu.cpp \
-      --replace /usr/lib/qtspim/bin/assistant ${qttools.dev}/bin/assistant \
-      --replace /usr/lib/qtspim/help/qtspim.qhc $out/share/help/qtspim.qhc
+      --replace-fail /usr/lib/qtspim/bin/assistant ${qttools.dev}/bin/assistant \
+      --replace-fail /usr/lib/qtspim/help/qtspim.qhc $out/share/help/qtspim.qhc
     substituteInPlace ../Setup/qtspim_debian_deployment/qtspim.desktop \
-      --replace /usr/bin/qtspim qtspim \
-      --replace /usr/lib/qtspim/qtspim.png qtspim
+      --replace-fail /usr/bin/qtspim qtspim \
+      --replace-fail /usr/lib/qtspim/qtspim.png qtspim
   '';
 
   nativeBuildInputs = [ wrapQtAppsHook qttools qmake bison flex ];

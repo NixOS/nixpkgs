@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/main.cpp \
-      --replace "res/" "$out/opt/antsimulator/"
+      --replace-fail "res/" "$out/opt/antsimulator/"
 
     substituteInPlace include/simulation/config.hpp \
-      --replace "res/" "$out/opt/antsimulator/"
+      --replace-fail "res/" "$out/opt/antsimulator/"
 
     substituteInPlace include/render/colony_renderer.hpp \
-      --replace "res/" "$out/opt/antsimulator/"
+      --replace-fail "res/" "$out/opt/antsimulator/"
   '';
 
   installPhase = ''

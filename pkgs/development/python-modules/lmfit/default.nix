@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "--cov=lmfit --cov-report html" ""
+    substituteInPlace pyproject.toml --replace-fail "--cov=lmfit --cov-report html" ""
   '';
 
   nativeBuildInputs = [

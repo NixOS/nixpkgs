@@ -52,25 +52,25 @@ stdenv.mkDerivation rec {
       --replace-fail "env.Replace(RANLIB = \"gcc-ranlib\")" "pass"
     '' + lib.optionalString stdenv.isDarwin ''
     # prevent clang from dying on errors that gcc is fine with
-    substituteInPlace ./src/SConscript --replace "-Werror" "-Wno-inconsistent-missing-override"
+    substituteInPlace ./src/SConscript --replace-fail "-Werror" "-Wno-inconsistent-missing-override"
 
     # disable LTO on macos
-    substituteInPlace ./src/SConscript --replace ", '-flto'" ""
+    substituteInPlace ./src/SConscript --replace-fail ", '-flto'" ""
 
     # static builds on mac fail as no static libcrt is provided by apple
     # see https://stackoverflow.com/questions/3801011/ld-library-not-found-for-lcrt0-o-on-osx-10-6-with-gcc-clang-static-flag
     substituteInPlace ./src/SConscript \
-      --replace "'-static-libgcc', " "" \
-      --replace "'-static-libstdc++', " "" \
-      --replace "'-Wl,--whole-archive', '-static', " "" \
-      --replace ", '-Wl,--no-whole-archive'" ""
+      --replace-fail "'-static-libgcc', " "" \
+      --replace-fail "'-static-libstdc++', " "" \
+      --replace-fail "'-Wl,--whole-archive', '-static', " "" \
+      --replace-fail ", '-Wl,--no-whole-archive'" ""
 
     #remove hardcoding of gcc
     sed -i '40i env.Replace(CC = "${stdenv.cc.targetPrefix}cc")' ./SConstruct
     sed -i '40i env.Replace(CXX = "${stdenv.cc.targetPrefix}c++")' ./SConstruct
 
     #gpm doesn't exist on darwin
-    substituteInPlace ./src/SConscript --replace ", 'gpm'" ""
+    substituteInPlace ./src/SConscript --replace-fail ", 'gpm'" ""
    '';
 
   sconsFlags =

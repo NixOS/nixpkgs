@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace " -o root -g root" "" \
-      --replace "/usr" "$out" \
-      --replace "/etc/udev" "$out/lib/udev"
+      --replace-fail " -o root -g root" "" \
+      --replace-fail "/usr" "$out" \
+      --replace-fail "/etc/udev" "$out/lib/udev"
     substituteInPlace *.rules \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   enableParallelBuilding = true;

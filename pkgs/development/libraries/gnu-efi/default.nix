@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Make.defaults \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
   passthru = {

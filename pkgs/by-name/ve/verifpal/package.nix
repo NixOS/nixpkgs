@@ -22,7 +22,7 @@ buildGoModule rec {
 
   # goversioninfo is for Windows only and can be skipped during go generate
   preBuild = ''
-    substituteInPlace cmd/verifpal/main.go --replace "go:generate goversioninfo" "(disabled goversioninfo)"
+    substituteInPlace cmd/verifpal/main.go --replace-fail "go:generate goversioninfo" "(disabled goversioninfo)"
     go generate verifpal.com/cmd/verifpal
   '';
 

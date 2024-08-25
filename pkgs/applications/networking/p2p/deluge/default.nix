@@ -84,7 +84,7 @@ let
 
       postFixup = ''
         for f in $out/lib/systemd/system/*; do
-          substituteInPlace $f --replace /usr/bin $out/bin
+          substituteInPlace $f --replace-fail /usr/bin $out/bin
         done
       '';
 

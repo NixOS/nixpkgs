@@ -46,11 +46,11 @@ buildDotnetModule rec {
 
   # net7.0 replacement needed until upstream bumps to dotnet 7
   postPatch = ''
-    substituteInPlace OpenUtau/OpenUtau.csproj OpenUtau.Test/OpenUtau.Test.csproj --replace \
+    substituteInPlace OpenUtau/OpenUtau.csproj OpenUtau.Test/OpenUtau.Test.csproj --replace-fail \
       '<TargetFramework>net6.0</TargetFramework>' \
       '<TargetFramework>net7.0</TargetFramework>'
 
-    substituteInPlace OpenUtau/Program.cs --replace \
+    substituteInPlace OpenUtau/Program.cs --replace-fail \
       '/usr/bin/fc-match' \
       '${lib.getExe' fontconfig "fc-match"}'
   '';

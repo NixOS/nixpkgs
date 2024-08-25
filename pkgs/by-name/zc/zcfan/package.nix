@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "/usr/local" $out
+      --replace-fail "/usr/local" $out
   '';
 
   doInstallCheck = true;

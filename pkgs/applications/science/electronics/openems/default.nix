@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/openEMS/matlab/setup.m \
-      --replace /usr/lib ${hdf5}/lib \
-      --replace /usr/include ${hdf5}/include
+      --replace-fail /usr/lib ${hdf5}/lib \
+      --replace-fail /usr/include ${hdf5}/include
 
     ${octave}/bin/mkoctfile -L${hdf5}/lib -I${hdf5}/include \
       -lhdf5 $out/share/openEMS/matlab/h5readatt_octave.cc \

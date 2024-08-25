@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     substituteInPlace bin/${version}/passff.json \
-      --replace PLACEHOLDER $out/share/passff-host/passff.py
+      --replace-fail PLACEHOLDER $out/share/passff-host/passff.py
 
     install -Dt $out/share/passff-host \
       bin/${version}/passff.{py,json}

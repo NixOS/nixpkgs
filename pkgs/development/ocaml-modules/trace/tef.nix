@@ -8,7 +8,7 @@ buildDunePackage {
   # (not available in nixpkgs)
   # Said package for OCaml ≥ 4.12 is empty
   postPatch = ''
-    substituteInPlace src/tef/dune --replace 'atomic ' ""
+    substituteInPlace src/tef/dune --replace-fail 'atomic ' ""
   '';
 
   minimalOCamlVersion = "4.12";

@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/libdsdcc.pc \
-      --replace '=''${exec_prefix}//' '=/'
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
   meta = {

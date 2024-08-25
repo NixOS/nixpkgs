@@ -47,8 +47,8 @@ let
     preConfigure = ''
       rm configure
       substituteInPlace CMakeLists.txt \
-        --replace 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
-        --replace 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
+        --replace-fail 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
+        --replace-fail 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
     '';
 
     inherit patches;
@@ -58,7 +58,7 @@ let
     postPatch = ''
       patchShebangs tests/
       ${lib.optionalString (lib.versionAtLeast version "2.9.2") ''
-        substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
+        substituteInPlace ./tls/tls_config.c --replace-fail '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
       ''}
     '';
 

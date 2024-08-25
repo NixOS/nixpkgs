@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     # jHiccup.jar
     for x in ./jHiccup ./jHiccupLogProcessor; do
       substituteInPlace $x \
-        --replace 'JHICCUP_Version=2.0.5' 'JHICCUP_Version=${version}' \
-        --replace '$INSTALLED_PATH' $out/share/java
+        --replace-fail 'JHICCUP_Version=2.0.5' 'JHICCUP_Version=${version}' \
+        --replace-fail '$INSTALLED_PATH' $out/share/java
     done
 
     mv jHiccup jHiccupLogProcessor $out/bin/

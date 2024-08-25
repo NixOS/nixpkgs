@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace udev/90-cc-debugger.rules \
-      --replace 'MODE="0666"' 'MODE="0660", GROUP="plugdev", TAG+="uaccess"'
+      --replace-fail 'MODE="0666"' 'MODE="0660", GROUP="plugdev", TAG+="uaccess"'
   '';
 
   postInstall = ''

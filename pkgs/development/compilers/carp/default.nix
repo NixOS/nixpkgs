@@ -24,7 +24,7 @@ haskellPackages.mkDerivation rec {
   # -Werror breaks build with GHC >= 9.0
   # https://github.com/carp-lang/Carp/issues/1386
   postPatch = ''
-    substituteInPlace CarpHask.cabal --replace "-Werror" ""
+    substituteInPlace CarpHask.cabal --replace-fail "-Werror" ""
   '';
 
   buildTools = [ makeWrapper ];

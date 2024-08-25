@@ -61,10 +61,10 @@ mkDerivation {
 
   postPatch = ''
     substituteInPlace bin/startplasmamobile.in \
-      --replace @KDE_INSTALL_FULL_LIBEXECDIR@ "${plasma-workspace}/libexec"
+      --replace-fail @KDE_INSTALL_FULL_LIBEXECDIR@ "${plasma-workspace}/libexec"
 
     substituteInPlace bin/plasma-mobile.desktop.cmake \
-      --replace @CMAKE_INSTALL_FULL_LIBEXECDIR@ "${plasma-workspace}/libexec"
+      --replace-fail @CMAKE_INSTALL_FULL_LIBEXECDIR@ "${plasma-workspace}/libexec"
   '';
 
   # Ensures dependencies like libqofono (at the very least) are present for the shell.

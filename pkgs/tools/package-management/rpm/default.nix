@@ -60,14 +60,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux "--with-cap";
 
   postPatch = ''
-    substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
+    substituteInPlace Makefile.am --replace-fail '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
   '';
 
   preFixup = ''
     # Don't keep a reference to RPM headers or manpages
     for f in $out/lib/rpm/platform/*/macros; do
-      substituteInPlace $f --replace "$dev" "/rpm-dev-path-was-here"
-      substituteInPlace $f --replace "$man" "/rpm-man-path-was-here"
+      substituteInPlace $f --replace-fail "$dev" "/rpm-dev-path-was-here"
+      substituteInPlace $f --replace-fail "$man" "/rpm-man-path-was-here"
     done
 
     # Avoid macros like '%__ld' pointing to absolute paths

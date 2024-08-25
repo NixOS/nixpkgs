@@ -93,7 +93,7 @@ let
 
     prePatch = ''
       substituteInPlace components/process/processinvoker.cpp \
-        --replace "\"./\"" "\"$out/bin/\""
+        --replace-fail "\"./\"" "\"$out/bin/\""
     '';
 
     patches = [

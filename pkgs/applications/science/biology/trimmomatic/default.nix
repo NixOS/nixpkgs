@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Remove jdk version requirement
   postPatch = ''
     substituteInPlace ./build.xml \
-      --replace 'source="1.5" target="1.5"' ""
+      --replace-fail 'source="1.5" target="1.5"' ""
   '';
 
   nativeBuildInputs = [

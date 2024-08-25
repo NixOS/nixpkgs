@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace Makefile --replace 'SHELL=/bin/bash' 'SHELL=${builtins.getEnv "SHELL"}'
+    substituteInPlace Makefile --replace-fail 'SHELL=/bin/bash' 'SHELL=${builtins.getEnv "SHELL"}'
   '';
 
   # builder.pl had complained about the same file (drbd.ko.xz) provided by two different packages

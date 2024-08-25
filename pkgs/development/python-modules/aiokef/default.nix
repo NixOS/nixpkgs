@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--cov --cov-append --cov-fail-under=30 --cov-report=" "" \
-      --replace "--mypy" ""
+      --replace-fail "--cov --cov-append --cov-fail-under=30 --cov-report=" "" \
+      --replace-fail "--mypy" ""
   '';
 
   propagatedBuildInputs = [

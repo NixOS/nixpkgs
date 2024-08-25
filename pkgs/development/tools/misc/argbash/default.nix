@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs .
     substituteInPlace resources/Makefile \
-      --replace '/bin/bash' "${runtimeShell}"
+      --replace-fail '/bin/bash' "${runtimeShell}"
   '';
 
   nativeBuildInputs = [

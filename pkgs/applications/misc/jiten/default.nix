@@ -46,9 +46,9 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     rmdir nonfree-data
     ln -s ${nonFreeData} nonfree-data
-    substituteInPlace Makefile --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace Makefile --replace-fail /bin/bash ${bash}/bin/bash
     substituteInPlace jiten/res/jmdict/Makefile \
-      --replace /bin/bash ${bash}/bin/bash
+      --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   checkPhase = ''

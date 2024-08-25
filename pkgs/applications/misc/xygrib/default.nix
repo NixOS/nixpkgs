@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       install -Dm444 $src/debian/xygrib.png -t $out/share/icons/hicolor/32x32/apps
       install -Dm444 $src/debian/xygrib.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/xygrib.desktop \
-        --replace 'Exec=XyGrib' 'Exec=xygrib'
+        --replace-fail 'Exec=XyGrib' 'Exec=xygrib'
     '';
 
   meta = with lib; {

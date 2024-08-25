@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace pkg/META --replace "bytes" ""
+    substituteInPlace pkg/META --replace-fail "bytes" ""
   '';
 
   strictDeps = true;

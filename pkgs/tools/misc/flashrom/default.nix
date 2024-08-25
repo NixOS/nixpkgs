@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace util/flashrom_udev.rules \
-      --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
+      --replace-fail 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
   '';
 
   makeFlags = [ "PREFIX=$(out)" "libinstall" ]

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${clang}/bin/clang"
+      --replace-fail "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${clang}/bin/clang"
   '';
 
   passthru.updateScript = rocmUpdateScript {

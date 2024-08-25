@@ -46,17 +46,17 @@ let
           vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
           for vmVersionFile in $vmVersionFiles; do
             substituteInPlace "$vmVersionFile" \
-              --replace "\$Date\$" "\$Date: Thu Jan 1 00:00:00 1970 +0000 \$" \
-              --replace "\$URL\$" "\$URL: ${src.url} \$" \
-              --replace "\$Rev\$" "\$Rev: ${src.rev} \$" \
-              --replace "\$CommitHash\$" "\$CommitHash: 000000000000 \$"
+              --replace-fail "\$Date\$" "\$Date: Thu Jan 1 00:00:00 1970 +0000 \$" \
+              --replace-fail "\$URL\$" "\$URL: ${src.url} \$" \
+              --replace-fail "\$Rev\$" "\$Rev: ${src.rev} \$" \
+              --replace-fail "\$CommitHash\$" "\$CommitHash: 000000000000 \$"
           done
           patchShebangs --build ./building/${platformDir} scripts
           substituteInPlace ./platforms/unix/config/mkmf \
-            --replace "/bin/rm" "rm"
+            --replace-fail "/bin/rm" "rm"
           substituteInPlace ./platforms/unix/config/configure \
-            --replace "/usr/bin/file" "file" \
-            --replace "/usr/bin/pkg-config" "pkg-config" \
+            --replace-fail "/usr/bin/file" "file" \
+            --replace-fail "/usr/bin/pkg-config" "pkg-config" \
         '';
 
       preConfigure = ''

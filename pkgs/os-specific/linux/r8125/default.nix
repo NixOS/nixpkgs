@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "BASEDIR :=" "BASEDIR ?="
-    substituteInPlace src/Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
+    substituteInPlace src/Makefile --replace-fail "BASEDIR :=" "BASEDIR ?="
+    substituteInPlace src/Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
   '';
 
   makeFlags = [

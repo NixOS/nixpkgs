@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "cvm";
   postPatch = ''
     substituteInPlace common.mk \
-      --replace "-lcurses" "-lncurses"
+      --replace-fail "-lcurses" "-lncurses"
   '';
   installPhase = ''
     runHook preInstall;

@@ -86,7 +86,7 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # actually different we need to convince the configure script that it
 # is in fact building a cross compiler although it doesn't believe it.
 + lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform) ''
-  substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
+  substituteInPlace configure --replace-fail is_cross_compiler=no is_cross_compiler=yes
 ''
 
 # Normally (for host != target case) --without-headers automatically

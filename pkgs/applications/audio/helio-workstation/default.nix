@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd Projects/LinuxMakefile
-    substituteInPlace Makefile --replace alsa "alsa jack"
+    substituteInPlace Makefile --replace-fail alsa "alsa jack"
   '';
   buildFlags = [ "CONFIG=Release64" ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp -r ../Deployment/Linux/Debian/x64/usr/share/* $out/share
     substituteInPlace $out/share/applications/Helio.desktop \
-      --replace "/usr/bin/helio" "$out/bin/helio"
+      --replace-fail "/usr/bin/helio" "$out/bin/helio"
   '';
 
   meta = with lib; {

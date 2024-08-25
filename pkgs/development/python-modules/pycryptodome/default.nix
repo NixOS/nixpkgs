@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace lib/Crypto/Math/_IntegerGMP.py \
-      --replace 'load_lib("gmp"' 'load_lib("${gmp}/lib/libgmp.so.10"'
+      --replace-fail 'load_lib("gmp"' 'load_lib("${gmp}/lib/libgmp.so.10"'
   '';
 
   nativeCheckInputs = [ test-vectors ];

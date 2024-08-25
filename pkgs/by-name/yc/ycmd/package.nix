@@ -91,7 +91,7 @@ stdenv.mkDerivation {
   # python won't be thrown off by argv[0]
   postFixup = ''
     substituteInPlace $out/lib/ycmd/ycmd/__main__.py \
-      --replace __file__ "'$out/lib/ycmd/ycmd/__main__.py'"
+      --replace-fail __file__ "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
   meta = with lib; {

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace src/../asn1/utils/asn1tostruct.py  \
-      --replace '#!/usr/bin/env python3' '#!${python3}/bin/python3'
+      --replace-fail '#!/usr/bin/env python3' '#!${python3}/bin/python3'
   '';
 
   postPatch = ''

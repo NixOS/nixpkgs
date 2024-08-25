@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/common/SurgeStorage.cpp \
-      --replace "/usr/share/Surge" "$out/share/surge"
+      --replace-fail "/usr/share/Surge" "$out/share/surge"
     substituteInPlace src/linux/UserInteractionsLinux.cpp \
-      --replace '"zenity' '"${zenity}/bin/zenity'
+      --replace-fail '"zenity' '"${zenity}/bin/zenity'
     patchShebangs scripts/linux/
     cp -r $extraContent/Skins/ resources/data/skins
   '';

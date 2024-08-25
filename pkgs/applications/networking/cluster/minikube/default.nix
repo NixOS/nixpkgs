@@ -32,15 +32,15 @@ buildGoModule rec {
       lib.optionalString (withQemu && stdenv.isDarwin) ''
         substituteInPlace \
           pkg/minikube/registry/drvs/qemu2/qemu2.go \
-          --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
-          --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
+          --replace-fail "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
+          --replace-fail "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
       ''
     ) + (
       lib.optionalString (withQemu && stdenv.isLinux) ''
         substituteInPlace \
           pkg/minikube/registry/drvs/qemu2/qemu2.go \
-          --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
-          --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
+          --replace-fail "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
+          --replace-fail "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
       ''
     );
 

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   # The python script searches in subfolders, but we want to search in the same bin directory
   prePatch = ''
     substituteInPlace tools/gfxrecon/gfxrecon.py \
-      --replace "scriptdir, '..', cmd" 'scriptdir'
+      --replace-fail "scriptdir, '..', cmd" 'scriptdir'
   '';
 
   # Fix the paths to load the layer.
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   # does not try to start the wrapper bash scripts with python.
   postInstall = ''
     substituteInPlace $out/share/vulkan/explicit_layer.d/VkLayer_gfxreconstruct.json \
-      --replace 'libVkLayer_gfxreconstruct.so' "$out/lib/libVkLayer_gfxreconstruct.so"
+      --replace-fail 'libVkLayer_gfxreconstruct.so' "$out/lib/libVkLayer_gfxreconstruct.so"
     for f in $out/bin/*.py; do
       mv -- "$f" "''${f%%.py}"
     done

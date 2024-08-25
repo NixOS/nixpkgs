@@ -58,17 +58,17 @@ stdenv.mkDerivation rec {
   postPatch = ''
     export PROJECT_SOURCE_DIR=./
     substituteInPlace CMakeLists.txt \
-      --replace "find_package(GTest CONFIG)" "find_package(GTest REQUIRED)" \
-      --replace "OpenCL_INCLUDE_DIRS}" "OpenCL_INCLUDE_DIRS}" \
-      --replace "elseif(APPLE)" "elseif(APPLESKIP)"
+      --replace-fail "find_package(GTest CONFIG)" "find_package(GTest REQUIRED)" \
+      --replace-fail "OpenCL_INCLUDE_DIRS}" "OpenCL_INCLUDE_DIRS}" \
+      --replace-fail "elseif(APPLE)" "elseif(APPLESKIP)"
     substituteInPlace \
       external_libs/compute/include/boost/compute/cl.hpp \
       external_libs/compute/include/boost/compute/cl_ext.hpp \
-      --replace "include <OpenCL/" "include <CL/"
+      --replace-fail "include <OpenCL/" "include <CL/"
     substituteInPlace build_r.R \
-      --replace "shQuote(normalizePath" "shQuote(type = 'cmd', string = normalizePath" \
-      --replace "file.path(getwd(), \"lightgbm_r\")" "'$out/tmp'" \
-      --replace \
+      --replace-fail "shQuote(normalizePath" "shQuote(type = 'cmd', string = normalizePath" \
+      --replace-fail "file.path(getwd(), \"lightgbm_r\")" "'$out/tmp'" \
+      --replace-fail \
         "install_args <- c(\"CMD\", \"INSTALL\", \"--no-multiarch\", \"--with-keep.source\", tarball)" \
         "install_args <- c(\"CMD\", \"INSTALL\", \"--no-multiarch\", \"--with-keep.source\", \"-l $out/library\", tarball)"
 

@@ -32,9 +32,9 @@ buildGoModule rec {
     install -Dm444 install/juicity-server.service $out/lib/systemd/system/juicity-server.service
     install -Dm444 install/juicity-client.service $out/lib/systemd/system/juicity-client.service
     substituteInPlace $out/lib/systemd/system/juicity-server.service \
-      --replace /usr/bin/juicity-server $out/bin/juicity-server
+      --replace-fail /usr/bin/juicity-server $out/bin/juicity-server
     substituteInPlace $out/lib/systemd/system/juicity-client.service \
-      --replace /usr/bin/juicity-client $out/bin/juicity-client
+      --replace-fail /usr/bin/juicity-client $out/bin/juicity-client
   '';
 
   meta = with lib; {

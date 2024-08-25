@@ -26,10 +26,10 @@ let
       rm -rf GLPlugin
       ln -s ${glplugin} GLPlugin
       substituteInPlace plugins-scripts/Makefile.am \
-        --replace /bin/cat  ${lib.getBin coreutils}/bin/cat \
-        --replace /bin/echo ${lib.getBin coreutils}/bin/echo \
-        --replace /bin/grep ${lib.getBin gnugrep}/bin/grep \
-        --replace /bin/sed  ${lib.getBin gnused}/bin/sed
+        --replace-fail /bin/cat  ${lib.getBin coreutils}/bin/cat \
+        --replace-fail /bin/echo ${lib.getBin coreutils}/bin/echo \
+        --replace-fail /bin/grep ${lib.getBin gnugrep}/bin/grep \
+        --replace-fail /bin/sed  ${lib.getBin gnused}/bin/sed
     '';
 
     postInstall = ''

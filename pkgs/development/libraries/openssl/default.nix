@@ -36,22 +36,22 @@ let
       patchShebangs test/*
       for a in test/t* ; do
         substituteInPlace "$a" \
-          --replace /bin/rm rm
+          --replace-fail /bin/rm rm
       done
     ''
     # config is a configure script which is not installed.
     + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
-      substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
+      substituteInPlace config --replace-fail '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
     '' + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
-        --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
+        --replace-fail '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
     ''
     # Move ENGINESDIR into OPENSSLDIR for static builds, in order to move
     # it to the separate etc output.
     + lib.optionalString static ''
       substituteInPlace Configurations/unix-Makefile.tmpl \
-        --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
+        --replace-fail 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                   'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
     '';
 

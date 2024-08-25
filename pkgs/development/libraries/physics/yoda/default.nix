@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     substituteInPlace pyext/yoda/plotting/script_generator.py \
-      --replace '/usr/bin/env python' '${python.interpreter}'
+      --replace-fail '/usr/bin/env python' '${python.interpreter}'
   '';
 
   postInstall = ''

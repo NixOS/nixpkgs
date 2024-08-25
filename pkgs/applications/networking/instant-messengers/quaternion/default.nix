@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin || :
     '' else ''
       substituteInPlace $out/share/applications/com.github.quaternion.desktop \
-        --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+        --replace-fail 'Exec=quaternion' "Exec=$out/bin/quaternion"
     '';
 
   meta = with lib; {

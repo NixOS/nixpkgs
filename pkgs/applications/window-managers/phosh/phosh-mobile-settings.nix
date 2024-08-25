@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # There are no schemas to compile.
     substituteInPlace meson.build \
-      --replace 'glib_compile_schemas: true' 'glib_compile_schemas: false'
+      --replace-fail 'glib_compile_schemas: true' 'glib_compile_schemas: false'
   '';
 
   postInstall = ''

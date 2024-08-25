@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   # Remove enum34 requirement if Python >= 3.4
   postPatch = lib.optionalString (pythonAtLeast "3.4") ''
-    substituteInPlace requirements.txt --replace "enum34" ""
+    substituteInPlace requirements.txt --replace-fail "enum34" ""
   '';
 
   build-system = [ setuptools ];

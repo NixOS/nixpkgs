@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     dpkg-deb -x ${lprdeb} $out
 
     substituteInPlace $out/opt/brother/Printers/HL1210W/lpd/filter_HL1210W \
-      --replace /opt "$out/opt"
+      --replace-fail /opt "$out/opt"
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/HL1210W/lpd/psconvert2
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     # install cups
     dpkg-deb -x ${cupsdeb} $out
 
-    substituteInPlace $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W --replace /opt "$out/opt"
+    substituteInPlace $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W --replace-fail /opt "$out/opt"
 
     mkdir -p $out/lib/cups/filter $out/share/cups/model
     ln -s $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W $out/lib/cups/filter/brother_lpdwrapper_HL1210W

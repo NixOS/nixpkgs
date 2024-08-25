@@ -26,7 +26,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \
-      --replace "\"/etc/ct\"," "\"$out/etc/ct\","
+      --replace-fail "\"/etc/ct\"," "\"$out/etc/ct\","
   '';
 
   ldflags = [

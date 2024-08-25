@@ -121,7 +121,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace lutris/util/magic.py \
-      --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
+      --replace-fail '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
   nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # patch dlopen path for gtk3
   postPatch = ''
     substituteInPlace src/hook_gtk3.h \
-      --replace "libgtk-3.so" "${lib.getLib gtk3}/lib/libgtk-3.so"
+      --replace-fail "libgtk-3.so" "${lib.getLib gtk3}/lib/libgtk-3.so"
   '';
 
   nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook3 ];

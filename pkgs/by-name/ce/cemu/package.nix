@@ -129,7 +129,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/applications
     substitute ../dist/linux/info.cemu.Cemu.desktop $out/share/applications/info.cemu.Cemu.desktop \
-      --replace "Exec=Cemu" "Exec=$out/bin/Cemu"
+      --replace-fail "Exec=Cemu" "Exec=$out/bin/Cemu"
 
     install -Dm644 ../dist/linux/info.cemu.Cemu.metainfo.xml -t $out/share/metainfo
     install -Dm644 ../src/resource/logo_icon.png $out/share/icons/hicolor/128x128/apps/info.cemu.Cemu.png

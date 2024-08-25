@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   postPatch = ''
-    substituteInPlace src/meson.build --replace "/app/bin/blueprint-compiler" "blueprint-compiler"
+    substituteInPlace src/meson.build --replace-fail "/app/bin/blueprint-compiler" "blueprint-compiler"
     substituteInPlace src/bin.js troll/gjspack/bin/gjspack \
-      --replace "#!/usr/bin/env -S gjs -m" "#!${gjs}/bin/gjs -m"
+      --replace-fail "#!/usr/bin/env -S gjs -m" "#!${gjs}/bin/gjs -m"
   '';
 
   # https://github.com/NixOS/nixpkgs/issues/31168#issuecomment-341793501

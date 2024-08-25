@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   # don't use vendored opencv
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace "opencv_mobile" "opencv4"
+      --replace-fail "opencv_mobile" "opencv4"
     substituteInPlace src/paddleocr-ncnn/paddleocr.cpp \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [

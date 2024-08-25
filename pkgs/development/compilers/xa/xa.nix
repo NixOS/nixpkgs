@@ -22,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
-      --replace "LD = gcc" "LD = ${stdenv.cc.targetPrefix}cc" \
-      --replace "CFLAGS = -O2" "CFLAGS ?=" \
-      --replace "LDFLAGS = -lc" "LDFLAGS ?= -lc"
+      --replace-fail "CC = gcc" "CC = ${stdenv.cc.targetPrefix}cc" \
+      --replace-fail "LD = gcc" "LD = ${stdenv.cc.targetPrefix}cc" \
+      --replace-fail "CFLAGS = -O2" "CFLAGS ?=" \
+      --replace-fail "LDFLAGS = -lc" "LDFLAGS ?= -lc"
   '';
 
   makeFlags = [

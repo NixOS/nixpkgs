@@ -15,7 +15,7 @@ perlPackages.buildPerlPackage rec {
 
   postPatch = ''
     substituteInPlace wwwroot/cgi-bin/awstats.pl \
-      --replace /usr/share/awstats/ "$out/wwwroot/cgi-bin/"
+      --replace-fail /usr/share/awstats/ "$out/wwwroot/cgi-bin/"
   '';
 
   outputs = [ "bin" "out" "doc" ]; # bin just links the user-run executable

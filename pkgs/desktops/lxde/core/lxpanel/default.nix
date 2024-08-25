@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/Makefile.in \
-      --replace "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
+      --replace-fail "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
     substituteInPlace plugins/Makefile.in \
-      --replace "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
+      --replace-fail "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
   '';
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";

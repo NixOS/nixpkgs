@@ -13,8 +13,8 @@ buildDunePackage rec {
 
   preBuild = ''
     substituteInPlace src/dune \
-      --replace "(libraries bytes)" "" \
-      --replace "libraries qcheck ounit2 bytes" "libraries qcheck ounit2"
+      --replace-fail "(libraries bytes)" "" \
+      --replace-fail "libraries qcheck ounit2 bytes" "libraries qcheck ounit2"
   '';
 
   propagatedBuildInputs = [ qcheck ];

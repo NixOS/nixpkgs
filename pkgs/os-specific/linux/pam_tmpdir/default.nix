@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace pam_tmpdir.c \
-      --replace /sbin/pam-tmpdir-helper $out/sbin/pam-tmpdir-helper
+      --replace-fail /sbin/pam-tmpdir-helper $out/sbin/pam-tmpdir-helper
 
     # chmod/chown fails on files in /nix/store
     sed -i -E -e '/^\s*(chmod|chown)/d' Makefile.{am,in}

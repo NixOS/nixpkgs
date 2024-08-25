@@ -21,7 +21,7 @@ python3Packages.buildPythonPackage rec {
   postInstall = ''
     mkdir -p $out/etc/systemd/system
     substitute systemd/hddfancontrol.service $out/etc/systemd/system/hddfancontrol.service \
-        --replace /usr/bin/hddfancontrol $out/bin/hddfancontrol
+        --replace-fail /usr/bin/hddfancontrol $out/bin/hddfancontrol
     sed -i -e '/EnvironmentFile=.*/d' $out/etc/systemd/system/hddfancontrol.service
   '';
 

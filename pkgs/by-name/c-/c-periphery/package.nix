@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/libperiphery.pc.in \
-      --replace '=''${prefix}/' '=' \
-      --replace '=''${exec_prefix}/' '='
+      --replace-fail '=''${prefix}/' '=' \
+      --replace-fail '=''${exec_prefix}/' '='
   '';
 
   nativeBuildInputs = [ cmake ];

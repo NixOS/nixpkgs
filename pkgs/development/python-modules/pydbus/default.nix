@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pydbus/_inspect3.py \
-      --replace "getargspec" "getfullargspec"
+      --replace-fail "getargspec" "getfullargspec"
   '';
 
   nativeBuildInputs = [ setuptools ];

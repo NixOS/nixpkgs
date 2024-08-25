@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication rec {
       --run "mkdir -p /tmp/Responder"
 
     substituteInPlace $out/share/Responder/Responder.conf \
-      --replace "Responder-Session.log" "/tmp/Responder/Responder-Session.log" \
-      --replace "Poisoners-Session.log" "/tmp/Responder/Poisoners-Session.log" \
-      --replace "Analyzer-Session.log" "/tmp/Responder/Analyzer-Session" \
-      --replace "Config-Responder.log" "/tmp/Responder/Config-Responder.log" \
-      --replace "Responder.db" "/tmp/Responder/Responder.db"
+      --replace-fail "Responder-Session.log" "/tmp/Responder/Responder-Session.log" \
+      --replace-fail "Poisoners-Session.log" "/tmp/Responder/Poisoners-Session.log" \
+      --replace-fail "Analyzer-Session.log" "/tmp/Responder/Analyzer-Session" \
+      --replace-fail "Config-Responder.log" "/tmp/Responder/Config-Responder.log" \
+      --replace-fail "Responder.db" "/tmp/Responder/Responder.db"
 
     runHook postInstall
   '';

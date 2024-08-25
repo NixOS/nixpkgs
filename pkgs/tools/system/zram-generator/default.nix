@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
     substituteInPlace Makefile \
-      --replace 'target/$(BUILDTYPE)' 'target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$(BUILDTYPE)'
+      --replace-fail 'target/$(BUILDTYPE)' 'target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$(BUILDTYPE)'
     substituteInPlace src/generator.rs \
-      --replace 'Command::new("systemd-detect-virt")' 'Command::new("${systemd}/bin/systemd-detect-virt")' \
-      --replace 'Command::new("modprobe")' 'Command::new("${kmod}/bin/modprobe")'
+      --replace-fail 'Command::new("systemd-detect-virt")' 'Command::new("${systemd}/bin/systemd-detect-virt")' \
+      --replace-fail 'Command::new("modprobe")' 'Command::new("${kmod}/bin/modprobe")'
   '';
 
   nativeBuildInputs = [

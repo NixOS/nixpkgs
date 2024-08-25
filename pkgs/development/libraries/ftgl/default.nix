@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   # and breaks build on recent macOS versions
   postPatch = ''
     substituteInPlace m4/gl.m4 \
-      --replace ' -dylib_file $GL_DYLIB: $GL_DYLIB' ""
+      --replace-fail ' -dylib_file $GL_DYLIB: $GL_DYLIB' ""
   '';
 
   nativeBuildInputs = [

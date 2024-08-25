@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # Python > 3.7 compatibility
   postPatch = ''
     substituteInPlace zetup/zetup_config.py \
-      --replace "'3.7']" "'3.7', '3.8', '3.9', '3.10']"
+      --replace-fail "'3.7']" "'3.7', '3.8', '3.9', '3.10']"
   '';
 
   checkPhase = ''

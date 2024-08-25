@@ -403,10 +403,10 @@ in rec {
     # increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
     preConfigure =''
       substituteInPlace src/common/module.c \
-        --replace "char command[128];" "char command[256];" \
-        --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \
-        --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
-        --replace "/bin/grep" "${gnugrep}/bin/grep"
+        --replace-fail "char command[128];" "char command[256];" \
+        --replace-fail "/sbin/modinfo"  "${kmod}/bin/modinfo" \
+        --replace-fail "/sbin/modprobe" "${kmod}/bin/modprobe" \
+        --replace-fail "/bin/grep" "${gnugrep}/bin/grep"
 
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
@@ -505,7 +505,7 @@ in rec {
       cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
-      substituteInPlace $out/bin/ceph          --replace ${ceph} $out
-      substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
+      substituteInPlace $out/bin/ceph          --replace-fail ${ceph} $out
+      substituteInPlace $out/bin/.ceph-wrapped --replace-fail ${ceph} $out
    '';
 }

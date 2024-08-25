@@ -51,9 +51,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'ijson = "^2.5.1"' 'ijson = "*"' \
-      --replace 'pytz = "^2019.3"' 'pytz = "*"' \
-      --replace 'oauthlib = "^3.1.0"' 'oauthlib = "*"'
+      --replace-fail 'ijson = "^2.5.1"' 'ijson = "*"' \
+      --replace-fail 'pytz = "^2019.3"' 'pytz = "*"' \
+      --replace-fail 'oauthlib = "^3.1.0"' 'oauthlib = "*"'
   '';
 
   pythonImportsCheck = [ "pysnow" ];

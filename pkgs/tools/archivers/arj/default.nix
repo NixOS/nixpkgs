@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace environ.c \
-        --replace "  #include <sys/statfs.h>" "  #include <sys/mount.h>"
+        --replace-fail "  #include <sys/statfs.h>" "  #include <sys/mount.h>"
   '';
 
   preAutoreconf = ''

@@ -36,7 +36,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "networkx>=2.2,<2.6" "networkx"
+    substituteInPlace requirements.txt --replace-fail "networkx>=2.2,<2.6" "networkx"
   '';
 
   nativeBuildInputs = [ setuptools ];

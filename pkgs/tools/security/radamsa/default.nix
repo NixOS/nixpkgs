@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./tests/bd.sh  \
-      --replace "/bin/echo" echo
+      --replace-fail "/bin/echo" echo
 
     ln -s ${owl} ol.c.gz
 

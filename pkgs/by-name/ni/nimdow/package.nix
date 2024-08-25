@@ -24,7 +24,7 @@ buildNimPackage (finalAttrs: {
   '';
 
   postPatch = ''
-    substituteInPlace src/nimdowpkg/config/configloader.nim --replace "/usr/share/nimdow" "$out/share/nimdow"
+    substituteInPlace src/nimdowpkg/config/configloader.nim --replace-fail "/usr/share/nimdow" "$out/share/nimdow"
   '';
 
   passthru.tests = {

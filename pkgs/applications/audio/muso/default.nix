@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   preConfigure = ''
     substituteInPlace lib/utils.rs \
-      --replace "/usr/share/muso" "$out/share/muso"
+      --replace-fail "/usr/share/muso" "$out/share/muso"
   '';
 
   postInstall = ''

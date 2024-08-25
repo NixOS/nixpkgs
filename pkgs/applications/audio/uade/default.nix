@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs configure
     substituteInPlace configure \
-      --replace 'PYTHON_SETUP_ARGS=""' 'PYTHON_SETUP_ARGS="--prefix=$out"'
+      --replace-fail 'PYTHON_SETUP_ARGS=""' 'PYTHON_SETUP_ARGS="--prefix=$out"'
     substituteInPlace src/frontends/mod2ogg/mod2ogg2.sh.in \
-      --replace '-e stat' '-n stat' \
-      --replace '/usr/local' "$out"
+      --replace-fail '-e stat' '-n stat' \
+      --replace-fail '/usr/local' "$out"
     substituteInPlace python/uade/generate_oscilloscope_view.py \
-      --replace "default='uade123'" "default='$out/bin/uade123'"
+      --replace-fail "default='uade123'" "default='$out/bin/uade123'"
     # https://gitlab.com/uade-music-player/uade/-/issues/37
     substituteInPlace write_audio/Makefile.in \
-      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+      --replace-fail 'g++' '${stdenv.cc.targetPrefix}c++'
   '';
 
   nativeBuildInputs = [

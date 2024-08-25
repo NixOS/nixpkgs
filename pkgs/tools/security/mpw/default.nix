@@ -20,8 +20,8 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     rm build
     substituteInPlace mpw-cli-tests \
-      --replace '/usr/bin/env bash' ${stdenv.shell} \
-      --replace ./mpw ./build/mpw
+      --replace-fail '/usr/bin/env bash' ${stdenv.shell} \
+      --replace-fail ./mpw ./build/mpw
   '';
 
   cmakeFlags = [

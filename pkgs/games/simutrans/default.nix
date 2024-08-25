@@ -135,7 +135,7 @@ let
       echo "${config}" > config.default
 
       # Use ~/.simutrans instead of ~/simutrans
-      substituteInPlace simsys.cc --replace '%s/simutrans' '%s/.simutrans'
+      substituteInPlace simsys.cc --replace-fail '%s/simutrans' '%s/.simutrans'
 
       # use -O2 optimization (defaults are -O or -O3)
       sed -i -e '/CFLAGS += -O/d' Makefile

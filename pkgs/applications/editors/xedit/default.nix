@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # ./lisp/mathimp.c:493:10: error: implicitly declaring library function 'finite' with type 'int (double)'
   postPatch = lib.optionalString stdenv.isDarwin ''
     for i in $(find . -type f -name "*.c"); do
-      substituteInPlace $i --replace "finite" "isfinite"
+      substituteInPlace $i --replace-fail "finite" "isfinite"
     done
   '';
 

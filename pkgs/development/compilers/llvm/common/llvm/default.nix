@@ -127,8 +127,8 @@ stdenv.mkDerivation (rec {
 
   postPatch = optionalString stdenv.isDarwin (''
     substituteInPlace cmake/modules/AddLLVM.cmake \
-      --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
-      --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""
+      --replace-fail 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
+      --replace-fail 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""
   '' +
     # As of LLVM 15, marked as XFAIL on arm64 macOS but lit doesn't seem to pick
     # this up: https://github.com/llvm/llvm-project/blob/c344d97a125b18f8fed0a64aace73c49a870e079/llvm/test/MC/ELF/cfi-version.ll#L7
@@ -140,10 +140,10 @@ stdenv.mkDerivation (rec {
     # and thus fails under the sandbox:
     (if lib.versionAtLeast release_version "16" then ''
     substituteInPlace unittests/TargetParser/Host.cpp \
-      --replace '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
+      --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
   '' else ''
     substituteInPlace unittests/Support/Host.cpp \
-      --replace '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
+      --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
   '') +
     # This test tries to call the intrinsics `@llvm.roundeven.f32` and
     # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
@@ -157,25 +157,25 @@ stdenv.mkDerivation (rec {
     # pass there?
     optionalString (lib.versionAtLeast release_version "16") ''
     substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-      --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-      --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+      --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
+      --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
   '' +
     # fails when run in sandbox
     optionalString (!stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "18") ''
     substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-      --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+      --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
   ''))) +
     # dup of above patch with different conditions
     optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "15") (optionalString (lib.versionOlder release_version "16") ''
     substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-      --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-      --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+      --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
+      --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
 
   '' +
     # fails when run in sandbox
     ((optionalString (lib.versionAtLeast release_version "18") ''
     substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-      --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+      --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
   '') +
     # This test fails on darwin x86_64 because `sw_vers` reports a different
     # macOS version than what LLVM finds by reading
@@ -207,10 +207,10 @@ stdenv.mkDerivation (rec {
     # TODO(@rrbutani): fix/follow-up
     (if lib.versionAtLeast release_version "16" then ''
     substituteInPlace unittests/TargetParser/Host.cpp \
-      --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+      --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
   '' else ''
     substituteInPlace unittests/Support/Host.cpp \
-      --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+      --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
   '') +
     # This test fails with a `dysmutil` crash; have not yet dug into what's
     # going on here (TODO(@rrbutani)).
@@ -220,10 +220,10 @@ stdenv.mkDerivation (rec {
     # FileSystem permissions tests fail with various special bits
   ''
     substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "Path.cpp" ""
+      --replace-fail "Path.cpp" ""
     rm unittests/Support/Path.cpp
     substituteInPlace unittests/IR/CMakeLists.txt \
-      --replace "PassBuilderCallbacksTest.cpp" ""
+      --replace-fail "PassBuilderCallbacksTest.cpp" ""
     rm unittests/IR/PassBuilderCallbacksTest.cpp
   '' + lib.optionalString (lib.versionAtLeast release_version "13") ''
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
@@ -246,7 +246,7 @@ stdenv.mkDerivation (rec {
     optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${./TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "add_subdirectory(DynamicLibrary)" ""
+      --replace-fail "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
     rm test/CodeGen/AArch64/wineh4.mir
   '' + optionalString stdenv.hostPlatform.isAarch32 ''
@@ -296,8 +296,8 @@ stdenv.mkDerivation (rec {
       ; do
       echo "PATCH: $f"
       substituteInPlace $f \
-        --replace 'Starting llvm::' 'Starting {{.*}}' \
-        --replace 'Finished llvm::' 'Finished {{.*}}'
+        --replace-fail 'Starting llvm::' 'Starting {{.*}}' \
+        --replace-fail 'Finished llvm::' 'Finished {{.*}}'
     done
   '' +
     # gcc-13 fix
@@ -406,14 +406,14 @@ stdenv.mkDerivation (rec {
     mv $out/share/opt-viewer $python/share/opt-viewer
     moveToOutput "bin/llvm-config*" "$dev"
     substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
-      --replace "$out/bin/llvm-config" "$dev/bin/llvm-config"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
+      --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
   '' + (if lib.versionOlder release_version "15" then ''
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
+      --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
   '' else ''
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
+      --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   '')
   + optionalString (stdenv.isDarwin && enableSharedLibraries && lib.versionOlder release_version "18") ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib

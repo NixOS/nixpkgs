@@ -185,7 +185,7 @@
 
           # Generate the sample source
 
-          substitute ${./sample_source.csh.in} sample_source.csh --replace @sed@ ${gnused}/bin/sed
+          substitute ${./sample_source.csh.in} sample_source.csh --replace-fail @sed@ ${gnused}/bin/sed
           chmod u+rw sample_source.csh
 
 
@@ -383,7 +383,7 @@
 
           # Generate the sample source "$PWD/delta:$PWD/foxtrot" "$PWD/delta:$PWD/foxtrot"
 
-          substitute ${./sample_source.sh.in} sample_source.sh --replace @sed@ ${gnused}/bin/sed
+          substitute ${./sample_source.sh.in} sample_source.sh --replace-fail @sed@ ${gnused}/bin/sed
           chmod u+rw sample_source.sh
 
 

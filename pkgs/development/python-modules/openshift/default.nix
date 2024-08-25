@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "kubernetes ~= 12.0" "kubernetes"
+      --replace-fail "kubernetes ~= 12.0" "kubernetes"
 
     sed -i '/--cov/d' setup.cfg
   '';

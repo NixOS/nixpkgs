@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString (rubies != null) ''
-    substituteInPlace share/chruby/chruby.sh --replace "@rubiesEnv@" ${rubiesEnv}
+    substituteInPlace share/chruby/chruby.sh --replace-fail "@rubiesEnv@" ${rubiesEnv}
   '';
 
   installPhase = ''

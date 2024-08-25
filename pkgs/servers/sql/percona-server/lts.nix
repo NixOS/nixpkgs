@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
+    substituteInPlace cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool libtool
     # The rocksdb setup script is called with `env -i` and cannot find anything in PATH.
     patchShebangs storage/rocksdb/get_rocksdb_files.sh
-    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace mktemp ${coreutils}/bin/mktemp
-    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "rm $MKFILE" "${coreutils}/bin/rm $MKFILE"
-    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
+    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace-fail mktemp ${coreutils}/bin/mktemp
+    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace-fail "rm $MKFILE" "${coreutils}/bin/rm $MKFILE"
+    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace-fail "make --" "${gnumake}/bin/make --"
   '';
 
   buildInputs = [

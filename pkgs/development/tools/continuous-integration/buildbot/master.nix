@@ -137,7 +137,7 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace master/buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    substituteInPlace master/buildbot/scripts/logwatcher.py --replace-fail '/usr/bin/tail' "$(type -P tail)"
   '';
   preBuild = ''
     cd master

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
+    substituteInPlace $out/share/ibus/component/anthy.xml --replace-fail \$\{exec_prefix\} $out
   '';
 
   meta = with lib; {

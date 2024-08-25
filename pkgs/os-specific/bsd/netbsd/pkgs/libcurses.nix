@@ -23,9 +23,9 @@ mkDerivation {
   makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${libterminfo}/lib" ];
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace $COMPONENT_PATH/printw.c \
-      --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
-      --replace "__strong_alias(vwprintw, vw_printw)" 'extern int vwprintw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_printw")));'
+      --replace-fail "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
+      --replace-fail "__strong_alias(vwprintw, vw_printw)" 'extern int vwprintw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_printw")));'
     substituteInPlace $COMPONENT_PATH/scanw.c \
-      --replace "__strong_alias(vwscanw, vw_scanw)" 'extern int vwscanw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_scanw")));'
+      --replace-fail "__strong_alias(vwscanw, vw_scanw)" 'extern int vwscanw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_scanw")));'
   '';
 }

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   postPatch = ''
     # PEP440 support was removed in newer setuptools, https://github.com/nexB/extractcode/pull/46
     substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
+      --replace-fail ">=3.6.*" ">=3.6"
   '';
 
   dontConfigure = true;

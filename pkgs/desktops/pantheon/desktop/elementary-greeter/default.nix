@@ -101,11 +101,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Use NixOS default wallpaper
     substituteInPlace $out/etc/lightdm/io.elementary.greeter.conf \
-      --replace "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
+      --replace-fail "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
       "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
 
     substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
-      --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
+      --replace-fail "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
   passthru = {

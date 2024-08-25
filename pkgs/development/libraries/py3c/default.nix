@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     # clang and gcc-11 complain about 'register' keywords used by
     # python-2.7. Let's avoid blanket -Werror.
     substituteInPlace test/setup.py \
-      --replace "'-Werror', " ""
+      --replace-fail "'-Werror', " ""
   '';
 
   makeFlags = [

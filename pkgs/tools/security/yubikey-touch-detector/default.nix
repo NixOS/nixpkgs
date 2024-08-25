@@ -26,7 +26,7 @@ buildGoModule rec {
     install -Dm444 -t $out/lib/systemd/user *.{service,socket}
 
     substituteInPlace $out/lib/systemd/user/*.service \
-      --replace /usr/bin/yubikey-touch-detector "$out/bin/yubikey-touch-detector"
+      --replace-fail /usr/bin/yubikey-touch-detector "$out/bin/yubikey-touch-detector"
   '';
 
   meta = with lib; {

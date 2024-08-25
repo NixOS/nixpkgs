@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do
-      substituteInPlace "$file" --replace '-m 4550' '-m 550'
+      substituteInPlace "$file" --replace-fail '-m 4550' '-m 550'
     done
 
     patchShebangs --host \
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace "$out/bin/pon" --replace "/usr/sbin" "$out/bin"
+    substituteInPlace "$out/bin/pon" --replace-fail "/usr/sbin" "$out/bin"
   '';
 
   passthru.tests = {

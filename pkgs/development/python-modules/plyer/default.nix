@@ -25,10 +25,10 @@ buildPythonPackage rec {
     # remove all the wifi stuff. Depends on a python wifi module that has not been updated since 2016
     find -iname "wifi*" -exec rm {} \;
     substituteInPlace plyer/__init__.py \
-      --replace "wifi = Proxy('wifi', facades.Wifi)" "" \
-      --replace "'wifi', " ""
+      --replace-fail "wifi = Proxy('wifi', facades.Wifi)" "" \
+      --replace-fail "'wifi', " ""
     substituteInPlace plyer/facades/__init__.py \
-      --replace "from plyer.facades.wifi import Wifi" ""
+      --replace-fail "from plyer.facades.wifi import Wifi" ""
   '';
 
   propagatedBuildInputs = [ keyring ];

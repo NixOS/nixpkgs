@@ -41,8 +41,8 @@ mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/applications/HP-myroom.desktop \
-      --replace /usr/bin/hpmyroom hpmyroom \
-      --replace Icon=/usr/share/hpmyroom/Resources/MyRoom.png Icon=$out/share/hpmyroom/Resources/MyRoom.png
+      --replace-fail /usr/bin/hpmyroom hpmyroom \
+      --replace-fail Icon=/usr/share/hpmyroom/Resources/MyRoom.png Icon=$out/share/hpmyroom/Resources/MyRoom.png
 
     ln -s ${libpng}/lib/libpng.so $out/lib/hpmyroom/libpng15.so.15
   '';

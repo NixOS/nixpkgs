@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/TestIntervalSet.py \
-      --replace "assertEquals" "assertEqual"
+      --replace-fail "assertEquals" "assertEqual"
   '';
 
   # We use an asterisk because this expression is used also for old antlr

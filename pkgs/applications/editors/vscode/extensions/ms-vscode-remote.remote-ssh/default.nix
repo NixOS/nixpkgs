@@ -90,7 +90,7 @@ buildVscodeMarketplaceExtension {
 
   postPatch = ''
     substituteInPlace "out/extension.js" \
-      --replace '# Start the server\n' '${patch}'
+      --replace-fail '# Start the server\n' '${patch}'
   '';
 
   passthru.tests = {

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace 'numpy==' 'numpy>='
+      --replace-fail 'numpy==' 'numpy>='
   '';
 
   propagatedBuildInputs = [ numpy ];

@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace INSTALL.im --replace /usr $out
+    substituteInPlace INSTALL.im --replace-fail /usr $out
     patchShebangs .
     for file in $(find documentation -type f); do
-      substituteInPlace "$file" --replace /usr/share/common-licenses/GPL ${gpl}
-      substituteInPlace "$file" --replace /usr $out
+      substituteInPlace "$file" --replace-fail /usr/share/common-licenses/GPL ${gpl}
+      substituteInPlace "$file" --replace-fail /usr $out
     done
   '';
 

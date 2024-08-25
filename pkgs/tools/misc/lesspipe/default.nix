@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build configure
-    substituteInPlace configure --replace '/etc/bash_completion.d' '/share/bash-completion/completions'
+    substituteInPlace configure --replace-fail '/etc/bash_completion.d' '/share/bash-completion/completions'
   '';
 
   configureFlags = [ "--shell=${bash}/bin/bash" "--prefix=/" ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # resholve doesn't see strings in an array definition
-    substituteInPlace $out/bin/lesspipe.sh --replace 'nodash strings' "nodash ${binutils-unwrapped}/bin/strings"
+    substituteInPlace $out/bin/lesspipe.sh --replace-fail 'nodash strings' "nodash ${binutils-unwrapped}/bin/strings"
 
     ${resholve.phraseSolution "lesspipe.sh" {
       scripts = [ "bin/lesspipe.sh" ];

@@ -26,9 +26,9 @@ buildPythonApplication rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
-    substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
-    substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
-    substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
+    substituteInPlace scc/paths.py --replace-fail sys.prefix "'$out'"
+    substituteInPlace scc/uinput.py --replace-fail /usr/include ${linuxHeaders}/include
+    substituteInPlace scc/device_monitor.py --replace-fail "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 udev bluez ];

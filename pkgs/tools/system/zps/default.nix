@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/applications
     substitute ../.application/zps.desktop $out/share/applications/zps.desktop \
-      --replace Exec=zps Exec=$out/zps \
+      --replace-fail Exec=zps Exec=$out/zps \
   '';
 
   meta = with lib; {

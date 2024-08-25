@@ -146,10 +146,10 @@ in stdenv.mkDerivation {
     printf '%s\n' "$vmAbbrevHash"
     for vmVersionFile in $vmVersionFiles; do
       substituteInPlace "$vmVersionFile" \
-        --replace "\$Date\$" "\$Date: ''${vmVersionDate} \$" \
-        --replace "\$URL\$" "\$URL: ''${vmSrcUrl} \$" \
-        --replace "\$Rev\$" "\$Rev: ''${vmVersionRelease} \$" \
-        --replace "\$CommitHash\$" "\$CommitHash: ''${vmAbbrevHash} \$"
+        --replace-fail "\$Date\$" "\$Date: ''${vmVersionDate} \$" \
+        --replace-fail "\$URL\$" "\$URL: ''${vmSrcUrl} \$" \
+        --replace-fail "\$Rev\$" "\$Rev: ''${vmVersionRelease} \$" \
+        --replace-fail "\$CommitHash\$" "\$CommitHash: ''${vmAbbrevHash} \$"
     done
     patchShebangs --build ./"build.$vmBuild"/squeak.cog.spur ./scripts
     for squeaksh in ./platforms/unix/config/{,bin.}squeak.sh.in; do
@@ -158,7 +158,7 @@ in stdenv.mkDerivation {
         --subst-var-by 'gnugrep' ${lib.escapeShellArg (lib.getBin gnugrep)}
     done
     substituteInPlace ./platforms/unix/config/mkmf \
-      --replace '/bin/rm ' '${coreutils}/bin/rm '
+      --replace-fail '/bin/rm ' '${coreutils}/bin/rm '
   '';
 
   # Workaround build failure on -fno-common toolchains:
@@ -194,13 +194,13 @@ in stdenv.mkDerivation {
     fi
 
     substituteInPlace ./platforms/unix/config/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
     cd ./"build.$vmBuild"/squeak.cog.spur/build
     substituteInPlace ./mvm \
-      --replace 'read a' 'a=y' \
-      --replace $'if [ $# -ge 1 ]; then\n\tINSTALLDIR="$1"; shift\nfi\n' "" \
-      --replace 'config/configure' 'config/configure "$@"' \
-      --replace 'make install' '# make install'
+      --replace-fail 'read a' 'a=y' \
+      --replace-fail $'if [ $# -ge 1 ]; then\n\tINSTALLDIR="$1"; shift\nfi\n' "" \
+      --replace-fail 'config/configure' 'config/configure "$@"' \
+      --replace-fail 'make install' '# make install'
   '';
 
   configureFlags = [

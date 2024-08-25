@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in html manpage ; do
       substituteInPlace man/$f.xsl \
-        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
+        --replace-fail http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
     done
   '';
 

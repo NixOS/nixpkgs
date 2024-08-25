@@ -32,7 +32,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
-      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+      --replace-fail "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
   excludedPackages = [

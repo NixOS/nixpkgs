@@ -19,7 +19,7 @@ rec {
   # Use man from $PATH; escape sequences are still problematic.
   postPatch = ''
     substituteInPlace runtime/ftplugin/man.vim \
-      --replace "/usr/bin/man " "man "
+      --replace-fail "/usr/bin/man " "man "
   '';
 
   # man page moving is done in postFixup instead of postInstall otherwise fixupPhase moves it right back where it was

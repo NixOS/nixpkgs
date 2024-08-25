@@ -43,11 +43,11 @@ in stdenv'.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace qscintilla.pro \
-      --replace '$$[QT_INSTALL_LIBS]'         $out/lib \
-      --replace '$$[QT_INSTALL_HEADERS]'      $out/include \
-      --replace '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
-      --replace '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
-      --replace '$$[QT_INSTALL_DATA]'         $out/share
+      --replace-fail '$$[QT_INSTALL_LIBS]'         $out/lib \
+      --replace-fail '$$[QT_INSTALL_HEADERS]'      $out/include \
+      --replace-fail '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
+      --replace-fail '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
+      --replace-fail '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
   meta = with lib; {

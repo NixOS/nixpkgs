@@ -88,7 +88,7 @@ buildPythonPackage rec {
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace kivy/lib/mtdev.py \
-      --replace "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
+      --replace-fail "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
   '';
 
   /*

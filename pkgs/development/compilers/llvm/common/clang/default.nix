@@ -102,12 +102,12 @@ let
       moveToOutput "lib/libclang-cpp.*" "$lib"
     '' + (if lib.versionOlder release_version "15" then ''
       substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
+          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
+          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
     '' else ''
       substituteInPlace $dev/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
+          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
+          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
     '') + ''
 
     '' + (if lib.versionOlder release_version "15" then ''
@@ -214,7 +214,7 @@ let
         unpackFile ${clang-tools-extra_src}
         mv clang-tools-extra-* $sourceRoot/tools/extra
         substituteInPlace $sourceRoot/tools/extra/clangd/quality/CompletionModel.cmake \
-          --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
+          --replace-fail ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
       '';
     })
   // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {

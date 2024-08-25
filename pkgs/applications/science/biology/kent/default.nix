@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./src/checkUmask.sh \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
-      --replace "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
+      --replace-fail "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
   '';
 
   buildPhase = ''

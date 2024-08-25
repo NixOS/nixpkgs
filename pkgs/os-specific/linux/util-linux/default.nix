@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     patchShebangs tests/run.sh
 
     substituteInPlace sys-utils/eject.c \
-      --replace "/bin/umount" "$bin/bin/umount"
+      --replace-fail "/bin/umount" "$bin/bin/umount"
   '' + lib.optionalString shadowSupport ''
     substituteInPlace include/pathnames.h \
-      --replace "/bin/login" "${shadow}/bin/login"
+      --replace-fail "/bin/login" "${shadow}/bin/login"
   '';
 
   # !!! It would be better to obtain the path to the mount helpers

@@ -26,15 +26,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace \
+    substituteInPlace Makefile --replace-fail \
       'target/release/$(BIN)' \
       'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/$(BIN)'
 
     # Needs chmod and chgrp
-    substituteInPlace 90-wluma-backlight.rules --replace \
+    substituteInPlace 90-wluma-backlight.rules --replace-fail \
       'RUN+="/bin/' 'RUN+="${coreutils}/bin/'
 
-    substituteInPlace wluma.service --replace \
+    substituteInPlace wluma.service --replace-fail \
       'ExecStart=/usr/bin/wluma' 'ExecStart=${placeholder "out"}/bin/wluma'
   '';
 

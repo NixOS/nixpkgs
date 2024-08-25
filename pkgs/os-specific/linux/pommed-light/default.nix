@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace pommed.conf.mactel --replace /usr $out
-    substituteInPlace pommed.conf.pmac --replace /usr $out
-    substituteInPlace pommed/beep.h --replace /usr $out
-    substituteInPlace pommed/cd_eject.c --replace /usr/bin/eject ${eject}/bin/eject
+    substituteInPlace pommed.conf.mactel --replace-fail /usr $out
+    substituteInPlace pommed.conf.pmac --replace-fail /usr $out
+    substituteInPlace pommed/beep.h --replace-fail /usr $out
+    substituteInPlace pommed/cd_eject.c --replace-fail /usr/bin/eject ${eject}/bin/eject
   '';
 
   nativeBuildInputs = [ pkg-config ];

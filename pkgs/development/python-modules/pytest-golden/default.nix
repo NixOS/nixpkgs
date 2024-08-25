@@ -29,8 +29,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry>=0.12" poetry-core \
-      --replace poetry.masonry.api poetry.core.masonry.api
+      --replace-fail "poetry>=0.12" poetry-core \
+      --replace-fail poetry.masonry.api poetry.core.masonry.api
   '';
 
   pythonRelaxDeps = [ "testfixtures" ];

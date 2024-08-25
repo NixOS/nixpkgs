@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   # We can't substitute the patch itself because substituteAll is itself a derivation,
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
-    substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
+    substituteInPlace src/reshade_effect_manager.cpp --replace-fail "@out@" "$out"
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
     # Replace gamescopereeaper with absolute path

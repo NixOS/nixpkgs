@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/hobbits-core/settingsdata.cpp \
-      --replace "pythonHome = \"/usr\"" "pythonHome = \"${python3}\""
+      --replace-fail "pythonHome = \"/usr\"" "pythonHome = \"${python3}\""
     substituteInPlace cmake/gitversion.cmake \
-      --replace "[Mystery Build]" "${version}"
+      --replace-fail "[Mystery Build]" "${version}"
   '';
 
   buildInputs = [ pffft libpcap libusb1 python3 ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libev libX11 libXext libXi libXfixes ];
 
   prePatch = ''
-    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+    substituteInPlace Makefile --replace-fail 'PKG_CONFIG =' 'PKG_CONFIG ?='
   '';
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

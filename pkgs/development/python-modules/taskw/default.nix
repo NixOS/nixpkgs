@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
   postPatch = ''
     substituteInPlace taskw/warrior.py \
-      --replace '@@taskwarrior@@' '${taskwarrior2}'
+      --replace-fail '@@taskwarrior@@' '${taskwarrior2}'
   '';
 
   build-system = [ setuptools ];

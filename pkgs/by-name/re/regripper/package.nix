@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace rip.pl rr.pl \
-      --replace \"plugins/\" \"$out/share/regripper/plugins/\" \
-      --replace \"plugins\" \"$out/share/regripper/plugins\"
+      --replace-fail \"plugins/\" \"$out/share/regripper/plugins/\" \
+      --replace-fail \"plugins\" \"$out/share/regripper/plugins\"
   '';
 
   installPhase = ''

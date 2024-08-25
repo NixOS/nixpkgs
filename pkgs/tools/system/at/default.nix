@@ -24,17 +24,17 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Remove chown commands and setuid bit
     substituteInPlace Makefile.in \
-      --replace ' -o root ' ' ' \
-      --replace ' -g root ' ' ' \
-      --replace ' -o $(DAEMON_USERNAME) ' ' ' \
-      --replace ' -o $(DAEMON_GROUPNAME) ' ' ' \
-      --replace ' -g $(DAEMON_GROUPNAME) ' ' ' \
-      --replace '$(DESTDIR)$(etcdir)' "$out/etc" \
-      --replace '$(DESTDIR)$(ATJOB_DIR)' "$out/var/spool/atjobs" \
-      --replace '$(DESTDIR)$(ATSPOOL_DIR)' "$out/var/spool/atspool" \
-      --replace '$(DESTDIR)$(LFILE)' "$out/var/spool/atjobs/.SEQ" \
-      --replace 'chown' '# skip chown' \
-      --replace '6755' '0755'
+      --replace-fail ' -o root ' ' ' \
+      --replace-fail ' -g root ' ' ' \
+      --replace-fail ' -o $(DAEMON_USERNAME) ' ' ' \
+      --replace-fail ' -o $(DAEMON_GROUPNAME) ' ' ' \
+      --replace-fail ' -g $(DAEMON_GROUPNAME) ' ' ' \
+      --replace-fail '$(DESTDIR)$(etcdir)' "$out/etc" \
+      --replace-fail '$(DESTDIR)$(ATJOB_DIR)' "$out/var/spool/atjobs" \
+      --replace-fail '$(DESTDIR)$(ATSPOOL_DIR)' "$out/var/spool/atspool" \
+      --replace-fail '$(DESTDIR)$(LFILE)' "$out/var/spool/atjobs/.SEQ" \
+      --replace-fail 'chown' '# skip chown' \
+      --replace-fail '6755' '0755'
   '';
 
   nativeBuildInputs = [ bison flex perl /* for `prove` (tests) */ ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       export SENDMAIL=${sendmailPath}
       # Purity: force atd.pid to be placed in /var/run regardless of
       # whether it exists now.
-      substituteInPlace ./configure --replace "test -d /var/run" "true"
+      substituteInPlace ./configure --replace-fail "test -d /var/run" "true"
     '';
 
   configureFlags = [

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/tools/Makefile.am \
-      --replace 'chmod u+s' 'chmod +x'
+      --replace-fail 'chmod u+s' 'chmod +x'
   '';
 
   meta = {

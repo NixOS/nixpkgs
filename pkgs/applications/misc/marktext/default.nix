@@ -25,7 +25,7 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/marktext.desktop $out/share/applications/marktext.desktop
     substituteInPlace $out/share/applications/marktext.desktop \
-      --replace "Exec=AppRun" "Exec=${pname} --"
+      --replace-fail "Exec=AppRun" "Exec=${pname} --"
 
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';

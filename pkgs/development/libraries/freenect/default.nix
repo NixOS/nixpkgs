@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   # see https://aur.archlinux.org/cgit/aur.git/commit/PKGBUILD?h=libfreenect&id=0d17db49ba64bcb9e3a4eed61cf55c9a5ceb97f1
   patchPhase = lib.concatMapStrings (x: ''
-    substituteInPlace ${x} --replace "{GLUT_LIBRARY}" "{GLUT_LIBRARIES}"
+    substituteInPlace ${x} --replace-fail "{GLUT_LIBRARY}" "{GLUT_LIBRARIES}"
   '') [ "examples/CMakeLists.txt" "wrappers/cpp/CMakeLists.txt" ];
 
   meta = {

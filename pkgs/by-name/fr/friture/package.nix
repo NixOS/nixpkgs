@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/applications/friture.desktop --replace usr/bin/friture friture
+    substituteInPlace $out/share/applications/friture.desktop --replace-fail usr/bin/friture friture
 
     for size in 16 32 128 256 512
     do

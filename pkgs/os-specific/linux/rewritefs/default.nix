@@ -16,10 +16,10 @@ stdenv.mkDerivation {
 
   prePatch = ''
     # do not set sticky bit in nix store
-    substituteInPlace Makefile --replace 6755 0755
+    substituteInPlace Makefile --replace-fail 6755 0755
   '';
 
-  preConfigure = "substituteInPlace Makefile --replace /usr/local $out";
+  preConfigure = "substituteInPlace Makefile --replace-fail /usr/local $out";
 
   meta = with lib; {
     description = ''A FUSE filesystem intended to be used

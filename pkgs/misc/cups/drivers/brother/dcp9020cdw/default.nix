@@ -34,7 +34,7 @@ rec {
 
     installPhase = ''
       substituteInPlace $out/opt/brother/Printers/${model}/lpd/filter${model} \
-      --replace /opt "$out/opt"
+      --replace-fail /opt "$out/opt"
 
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       $out/opt/brother/Printers/${model}/lpd/br${model}filter

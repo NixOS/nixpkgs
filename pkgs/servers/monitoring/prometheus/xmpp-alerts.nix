@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "bs4" "beautifulsoup4"
+      --replace-fail "bs4" "beautifulsoup4"
   '';
 
   propagatedBuildInputs = [

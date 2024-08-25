@@ -45,12 +45,12 @@ mkDerivation rec {
     for i in qt5/CMakeLists.txt qt5/config/CMakeLists.txt
     do
       substituteInPlace $i \
-        --replace "{_Qt5_PLUGIN_INSTALL_DIR}" "{KDE_INSTALL_QTPLUGINDIR}"
+        --replace-fail "{_Qt5_PLUGIN_INSTALL_DIR}" "{KDE_INSTALL_QTPLUGINDIR}"
     done
     substituteInPlace CMakeLists.txt \
-      --replace \$\{GTK2_PREFIX\} $out
+      --replace-fail \$\{GTK2_PREFIX\} $out
     substituteInPlace gtk2/style/CMakeLists.txt \
-      --replace \$\{GTK2_LIBDIR\} $out/lib
+      --replace-fail \$\{GTK2_LIBDIR\} $out/lib
     patchShebangs tools/gen-version.sh
   '';
 

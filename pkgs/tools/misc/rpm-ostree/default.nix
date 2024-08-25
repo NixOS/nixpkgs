@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
     # Let's not hardcode the rpm-gpg path...
     substituteInPlace libdnf/libdnf/dnf-keyring.cpp \
-      --replace '"/etc/pki/rpm-gpg"' 'getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") ? getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") : "/etc/pki/rpm-gpg"'
+      --replace-fail '"/etc/pki/rpm-gpg"' 'getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") ? getenv("LIBDNF_RPM_GPG_PATH_OVERRIDE") : "/etc/pki/rpm-gpg"'
   '';
 
   preConfigure = ''

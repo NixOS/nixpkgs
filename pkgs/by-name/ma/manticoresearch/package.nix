@@ -104,9 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/systemd/system
     cp ${finalAttrs.src}/dist/deb/manticore.service.in $out/lib/systemd/system/manticore.service
     substituteInPlace $out/lib/systemd/system/manticore.service \
-      --replace "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
-      --replace "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
-      --replace "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
+      --replace-fail "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
+      --replace-fail "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
+      --replace-fail "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
   '';
 
   passthru.tests.version = testers.testVersion {

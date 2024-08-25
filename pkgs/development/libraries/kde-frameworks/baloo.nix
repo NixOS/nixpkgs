@@ -29,7 +29,7 @@ mkDerivation {
   # (`${lib.getBin pkgs.plasma-workspace}` would cause infinite recursion)
   postUnpack = ''
     substituteInPlace "$sourceRoot"/src/file/kde-baloo.service.in \
-      --replace @KDE_INSTALL_FULL_BINDIR@ /run/current-system/sw/bin
+      --replace-fail @KDE_INSTALL_FULL_BINDIR@ /run/current-system/sw/bin
   '';
   meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
 }

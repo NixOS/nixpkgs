@@ -92,10 +92,10 @@ let
 
       for f in $out/lib/*.la $out/lib/python*/site-packages/*/*.la; do
         substituteInPlace $f \
-          --replace "${expat.dev}/lib" "${expat.out}/lib" \
-          --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
-          --replace "${sqlite.dev}/lib" "${sqlite.out}/lib" \
-          --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
+          --replace-fail "${expat.dev}/lib" "${expat.out}/lib" \
+          --replace-fail "${zlib.dev}/lib" "${zlib.out}/lib" \
+          --replace-fail "${sqlite.dev}/lib" "${sqlite.out}/lib" \
+          --replace-fail "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
       done
     '';
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace gpu_burn-drv.cpp \
-      --replace "#define COMPARE_KERNEL \"compare.ptx\"" \
+      --replace-fail "#define COMPARE_KERNEL \"compare.ptx\"" \
                 "#define COMPARE_KERNEL \"$out/share/compare.ptx\""
   '';
 

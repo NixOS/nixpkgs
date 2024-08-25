@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "malduck==4.1.0" "malduck"
+      --replace-fail "malduck==4.1.0" "malduck"
   '';
 
   # Project has no tests

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for file in src/libsync/vfs/*/CMakeLists.txt; do
       substituteInPlace $file \
-        --replace "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
+        --replace-fail "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
     done
   '';
 

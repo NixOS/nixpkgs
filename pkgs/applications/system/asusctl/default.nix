@@ -45,19 +45,19 @@ rustPlatform.buildRustPackage rec {
       rog-control-center/src/tray.rs
     "
     for file in $files; do
-      substituteInPlace $file --replace /usr/share $out/share
+      substituteInPlace $file --replace-fail /usr/share $out/share
     done
 
-    substituteInPlace data/asusd.rules --replace systemctl ${systemd}/bin/systemctl
+    substituteInPlace data/asusd.rules --replace-fail systemctl ${systemd}/bin/systemctl
     substituteInPlace data/asusd.service \
-      --replace /usr/bin/asusd $out/bin/asusd \
-      --replace /bin/sleep ${coreutils}/bin/sleep
+      --replace-fail /usr/bin/asusd $out/bin/asusd \
+      --replace-fail /bin/sleep ${coreutils}/bin/sleep
     substituteInPlace data/asusd-user.service \
-      --replace /usr/bin/asusd-user $out/bin/asusd-user \
-      --replace /usr/bin/sleep ${coreutils}/bin/sleep
+      --replace-fail /usr/bin/asusd-user $out/bin/asusd-user \
+      --replace-fail /usr/bin/sleep ${coreutils}/bin/sleep
 
     substituteInPlace Makefile \
-      --replace /usr/bin/grep ${lib.getExe gnugrep}
+      --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
   '';
 
   nativeBuildInputs = [ pkg-config ];

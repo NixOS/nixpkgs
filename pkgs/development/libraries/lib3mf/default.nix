@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # This lets us build the tests properly on aarch64-darwin.
     substituteInPlace CMakeLists.txt \
-      --replace 'SET(CMAKE_OSX_ARCHITECTURES "x86_64")' ""
+      --replace-fail 'SET(CMAKE_OSX_ARCHITECTURES "x86_64")' ""
 
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
     sed -i 's,libdir=''${\(exec_\)\?prefix}/,libdir=,' lib3mf.pc.in

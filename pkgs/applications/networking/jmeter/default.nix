@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     cp -R * $out/
 
-    substituteInPlace $out/bin/create-rmi-keystore.sh --replace \
+    substituteInPlace $out/bin/create-rmi-keystore.sh --replace-fail \
       "keytool -genkey" \
       "${jre}/lib/openjdk/jre/bin/keytool -genkey"
 

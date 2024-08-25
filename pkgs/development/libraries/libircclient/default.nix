@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/Makefile.in \
-      --replace "@prefix@/include" "@prefix@/include/libircclient" \
-      --replace "@libdir@"         "@prefix@/lib" \
-      --replace "cp "              "install "
+      --replace-fail "@prefix@/include" "@prefix@/include/libircclient" \
+      --replace-fail "@libdir@"         "@prefix@/lib" \
+      --replace-fail "cp "              "install "
   '';
 
   meta = with lib; {

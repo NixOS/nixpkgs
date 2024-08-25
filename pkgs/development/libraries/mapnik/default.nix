@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
+      --replace-fail '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
     rm -r scons
     # Remove bundled 'sparsehash' directory in favor of 'sparsehash' package
     rm -r deps/mapnik/sparsehash

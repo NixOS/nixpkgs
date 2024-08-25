@@ -47,17 +47,17 @@ let
     postFixup = ''
       substituteInPlace \
         $out/share/applications/com.beyondidentity.endpoint.BeyondIdentity.desktop \
-        --replace /usr/bin/ $out/bin/
+        --replace-fail /usr/bin/ $out/bin/
       substituteInPlace \
         $out/share/applications/com.beyondidentity.endpoint.webserver.BeyondIdentity.desktop \
-        --replace /opt/ $out/opt/
+        --replace-fail /opt/ $out/opt/
       substituteInPlace \
         $out/opt/beyond-identity/bin/byndid-web \
-        --replace /opt/ $out/opt/
+        --replace-fail /opt/ $out/opt/
       substituteInPlace \
         $out/bin/beyond-identity \
-        --replace /opt/ $out/opt/ \
-        --replace /usr/bin/gtk-launch ${gtk3}/bin/gtk-launch
+        --replace-fail /opt/ $out/opt/ \
+        --replace-fail /usr/bin/gtk-launch ${gtk3}/bin/gtk-launch
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

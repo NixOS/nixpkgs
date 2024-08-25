@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"--flake8",' "" \
-      --replace '"--tb=short",' "" \
-      --replace '"--cov=result",' "" \
-      --replace '"--cov=tests",' "" \
-      --replace '"--cov-report=term",' "" \
-      --replace '"--cov-report=xml",' ""
+      --replace-fail '"--flake8",' "" \
+      --replace-fail '"--tb=short",' "" \
+      --replace-fail '"--cov=result",' "" \
+      --replace-fail '"--cov=tests",' "" \
+      --replace-fail '"--cov-report=term",' "" \
+      --replace-fail '"--cov-report=xml",' ""
   '';
 
   nativeCheckInputs = [

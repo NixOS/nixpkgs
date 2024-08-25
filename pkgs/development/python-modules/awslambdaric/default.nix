@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements/base.txt \
-      --replace 'simplejson==3' 'simplejson~=3'
+      --replace-fail 'simplejson==3' 'simplejson~=3'
   '';
 
   propagatedBuildInputs = [ simplejson ];

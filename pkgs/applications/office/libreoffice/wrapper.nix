@@ -107,7 +107,7 @@ in runCommand "${unwrapped.name}-wrapped" {
   done
   for f in $out/share/applications/*.desktop; do
     substituteInPlace "$f" \
-      --replace "Exec=libreoffice${major}.${minor}" "Exec=soffice"
+      --replace-fail "Exec=libreoffice${major}.${minor}" "Exec=soffice"
   done
 
   mkdir -p $out/bin

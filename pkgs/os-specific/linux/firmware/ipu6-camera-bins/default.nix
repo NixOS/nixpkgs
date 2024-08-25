@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     for pcfile in $out/lib/*/pkgconfig/*.pc; do
       substituteInPlace $pcfile \
-        --replace 'prefix=/usr' "prefix=$out"
+        --replace-fail 'prefix=/usr' "prefix=$out"
     done
   '';
 

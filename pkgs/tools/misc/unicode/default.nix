@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   postFixup = ''
     substituteInPlace "$out/bin/.unicode-wrapped" \
-      --replace "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
+      --replace-fail "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
   '';
 
   postInstall = ''

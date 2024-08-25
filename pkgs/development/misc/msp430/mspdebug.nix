@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # TODO: remove once a new 0.26+ release is made
-    substituteInPlace drivers/tilib_api.c --replace .so ${stdenv.hostPlatform.extensions.sharedLibrary}
+    substituteInPlace drivers/tilib_api.c --replace-fail .so ${stdenv.hostPlatform.extensions.sharedLibrary}
 
     # Makefile only uses pkg-config if it detects homebrew
-    substituteInPlace Makefile --replace brew true
+    substituteInPlace Makefile --replace-fail brew true
   '';
 
   # TODO: wrap with MSPDEBUG_TILIB_PATH env var instead of these rpath fixups in 0.26+

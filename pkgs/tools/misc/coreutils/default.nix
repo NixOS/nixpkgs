@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
-      --replace 'mode3=2755' 'mode3=1755'
+      --replace-fail 'mode3=2755' 'mode3=1755'
 
     # Fails on systems with a rootfs. Looks like a bug in the test, see
     # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html

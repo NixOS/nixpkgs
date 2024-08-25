@@ -41,14 +41,14 @@ stdenv.mkDerivation rec {
     # having to pass `AWS_CORE_HEADER_FILE` explicitly to cmake configure
     # when using find_package(AWSSDK CONFIG)
     substituteInPlace cmake/AWSSDKConfig.cmake \
-      --replace 'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core' \
+      --replace-fail 'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core' \
         'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core"
             "${placeholder "dev"}/include/aws/core'
 
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     substituteInPlace cmake/compiler_settings.cmake \
-      --replace '"-Werror"' ' '
+      --replace-fail '"-Werror"' ' '
 
     # Flaky on Hydra
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp

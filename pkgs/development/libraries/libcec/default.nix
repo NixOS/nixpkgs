@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   # Fix dlopen path
   postPatch = ''
-    substituteInPlace include/cecloader.h --replace "libcec.so" "$out/lib/libcec.so"
+    substituteInPlace include/cecloader.h --replace-fail "libcec.so" "$out/lib/libcec.so"
   '';
 
   nativeBuildInputs = [ pkg-config cmake ];

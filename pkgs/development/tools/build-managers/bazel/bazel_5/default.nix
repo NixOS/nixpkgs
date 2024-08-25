@@ -364,7 +364,7 @@ stdenv.mkDerivation rec {
         scripts/bootstrap/compile.sh \
         tools/osx/BUILD
 
-      substituteInPlace scripts/bootstrap/compile.sh --replace ' -mmacosx-version-min=10.9' ""
+      substituteInPlace scripts/bootstrap/compile.sh --replace-fail ' -mmacosx-version-min=10.9' ""
 
       # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
       sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc
@@ -383,9 +383,9 @@ stdenv.mkDerivation rec {
 
     genericPatches = ''
       # Substitute j2objc and objc wrapper's python shebang to plain python path.
-      substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
-      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
-      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
+      substituteInPlace tools/j2objc/j2objc_header_map.py --replace-fail "$!/usr/bin/python2.7" "#!${python3.interpreter}"
+      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace-fail "$!/usr/bin/python2.7" "#!${python3.interpreter}"
+      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace-fail "$!/usr/bin/python2.7" "#!${python3.interpreter}"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|g' \
@@ -393,43 +393,43 @@ stdenv.mkDerivation rec {
 
       # replace initial value of pythonShebang variable in BazelPythonSemantics.java
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/BazelPythonSemantics.java \
-        --replace '"#!/usr/bin/env " + pythonExecutableName' "\"#!${python3}/bin/python\""
+        --replace-fail '"#!/usr/bin/env " + pythonExecutableName' "\"#!${python3}/bin/python\""
 
       substituteInPlace src/main/java/com/google/devtools/build/lib/starlarkbuildapi/python/PyRuntimeInfoApi.java \
-        --replace '"#!/usr/bin/env python3"' "\"#!${python3}/bin/python\""
+        --replace-fail '"#!/usr/bin/env python3"' "\"#!${python3}/bin/python\""
 
       # substituteInPlace is rather slow, so prefilter the files with grep
       grep -rlZ /bin/ src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
-          --replace /bin/bash ${bash}/bin/bash \
-          --replace "/usr/bin/env bash" ${bash}/bin/bash \
-          --replace "/usr/bin/env python" ${python3}/bin/python \
-          --replace /usr/bin/env ${coreutils}/bin/env \
-          --replace /bin/true ${coreutils}/bin/true
+          --replace-fail /bin/bash ${bash}/bin/bash \
+          --replace-fail "/usr/bin/env bash" ${bash}/bin/bash \
+          --replace-fail "/usr/bin/env python" ${python3}/bin/python \
+          --replace-fail /usr/bin/env ${coreutils}/bin/env \
+          --replace-fail /bin/true ${coreutils}/bin/true
       done
 
       grep -rlZ /bin/ tools/python | while IFS="" read -r -d "" path; do
         substituteInPlace "$path" \
-          --replace "/usr/bin/env python2" ${python3.interpreter} \
-          --replace "/usr/bin/env python3" ${python3}/bin/python \
-          --replace /usr/bin/env ${coreutils}/bin/env
+          --replace-fail "/usr/bin/env python2" ${python3.interpreter} \
+          --replace-fail "/usr/bin/env python3" ${python3}/bin/python \
+          --replace-fail /usr/bin/env ${coreutils}/bin/env
       done
 
       # bazel test runner include references to /bin/bash
       substituteInPlace tools/build_rules/test_rules.bzl \
-        --replace /bin/bash ${bash}/bin/bash
+        --replace-fail /bin/bash ${bash}/bin/bash
 
       for i in $(find tools/cpp/ -type f)
       do
         substituteInPlace $i \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace-fail /bin/bash ${bash}/bin/bash
       done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace-fail /bin/bash ${bash}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF

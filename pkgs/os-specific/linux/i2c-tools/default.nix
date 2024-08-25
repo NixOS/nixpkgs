@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace eeprom/decode-edid \
-      --replace "/usr/sbin/parse-edid" "${read-edid}/bin/parse-edid"
+      --replace-fail "/usr/sbin/parse-edid" "${read-edid}/bin/parse-edid"
 
     substituteInPlace stub/i2c-stub-from-dump \
-      --replace "/sbin/" ""
+      --replace-fail "/sbin/" ""
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

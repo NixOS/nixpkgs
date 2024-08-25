@@ -21,8 +21,8 @@ buildFHSEnv {
       mkdir -p $out/share/applications
       cp ${arduino-core-unwrapped.src}/build/linux/dist/desktop.template $out/share/applications/arduino.desktop
       substituteInPlace $out/share/applications/arduino.desktop \
-        --replace '<BINARY_LOCATION>' "$out/bin/arduino" \
-        --replace '<ICON_NAME>' "$out/share/arduino/icons/128x128/apps/arduino.png"
+        --replace-fail '<BINARY_LOCATION>' "$out/bin/arduino" \
+        --replace-fail '<ICON_NAME>' "$out/share/arduino/icons/128x128/apps/arduino.png"
       # icon file
       mkdir -p $out/share/arduino
       cp -r ${arduino-core-unwrapped.src}/build/shared/icons $out/share/arduino

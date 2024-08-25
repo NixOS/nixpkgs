@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace src/filesys.cpp --replace-fail "/bin/rm" "${coreutils}/bin/rm"
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
   '';

@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     cp ${fuse}/bin/fusermount3 bin/fusermount
     export PATH=bin:$PATH
     # Can't access /dev/fuse within the sandbox: "FUSE kernel module does not seem to be loaded"
-    substituteInPlace test/util.py --replace "/dev/fuse" "/dev/null"
+    substituteInPlace test/util.py --replace-fail "/dev/fuse" "/dev/null"
     # TODO: "fusermount executable not setuid, and we are not root"
     # We should probably use a VM test instead
     ${python3Packages.python.interpreter} -m pytest test/

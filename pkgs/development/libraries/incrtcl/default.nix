@@ -12,7 +12,7 @@ tcl.mkTclDerivation rec {
   enableParallelBuilding = true;
 
   patchPhase = ''
-    substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
+    substituteInPlace configure --replace-fail "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
   '';
 
   postInstall = ''

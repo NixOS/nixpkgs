@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.ml --replace '#use "topfind"' \
+    substituteInPlace setup.ml --replace-fail '#use "topfind"' \
       '#directory "${findlib}/lib/ocaml/${ocaml.version}/site-lib/";; #use "topfind"'
   '';
 

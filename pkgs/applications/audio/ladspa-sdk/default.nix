@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i 's@/usr/@$(out)/@g'  Makefile
     substituteInPlace Makefile \
-      --replace /tmp/test.wav $NIX_BUILD_TOP/${sourceRoot}/test.wav
+      --replace-fail /tmp/test.wav $NIX_BUILD_TOP/${sourceRoot}/test.wav
   '';
 
   makeFlags = [

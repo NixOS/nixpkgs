@@ -86,7 +86,7 @@ let
       # Fix `np.float` deprecation in Numpy 1.20
       grep -lr 'np.float(' test/ | while read -r fn; do
         substituteInPlace "$fn" \
-          --replace "np.float(" "np.float64("
+          --replace-fail "np.float(" "np.float64("
       done
     '';
     checkPhase = ''
@@ -259,10 +259,10 @@ let
     dontUseCmakeConfigure = true;
     preConfigure = ''
       export CMAKE_PREFIX_PATH=${pybind11}/share/cmake/pybind11:$CMAKE_PREFIX_PATH
-      substituteInPlace setup.py --replace "pybind11==2.2.4" "pybind11"
+      substituteInPlace setup.py --replace-fail "pybind11==2.2.4" "pybind11"
       substituteInPlace dolfin/jit/jit.py \
-        --replace 'pkgconfig.exists("dolfin")' 'pkgconfig.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
-        --replace 'pkgconfig.parse("dolfin")' 'pkgconfig.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
+        --replace-fail 'pkgconfig.exists("dolfin")' 'pkgconfig.exists("${dolfin}/lib/pkgconfig/dolfin.pc")' \
+        --replace-fail 'pkgconfig.parse("dolfin")' 'pkgconfig.parse("${dolfin}/lib/pkgconfig/dolfin.pc")'
     '';
     buildInputs = [
       dolfin

@@ -22,10 +22,10 @@ import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version 
     # need to provide GO* env variables & patch for reproducibility
     postPatch = ''
       substituteInPlace src/go/Makefile.am \
-        --replace '`go env GOOS`' "$GOOS" \
-        --replace '`go env GOARCH`' "$GOARCH" \
-        --replace '`date +%H:%M:%S`' "00:00:00" \
-        --replace '`date +"%b %_d %Y"`' "Jan 1 1970"
+        --replace-fail '`go env GOOS`' "$GOOS" \
+        --replace-fail '`go env GOARCH`' "$GOARCH" \
+        --replace-fail '`date +%H:%M:%S`' "00:00:00" \
+        --replace-fail '`date +"%b %_d %Y"`' "Jan 1 1970"
     '';
 
     # manually configure the c dependencies

@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
     # patch paths in scripts
     function cdbmake-subst {
       substituteInPlace $bin/bin/$1 \
-        --replace /usr/local/bin/cdbmake $bin/bin/cdbmake
+        --replace-fail /usr/local/bin/cdbmake $bin/bin/cdbmake
     }
     cdbmake-subst cdbmake-12
     cdbmake-subst cdbmake-sv

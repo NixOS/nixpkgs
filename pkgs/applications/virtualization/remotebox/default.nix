@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -pv $out/bin
 
-    substituteInPlace remotebox --replace "\$Bin/" "\$Bin/../"
+    substituteInPlace remotebox --replace-fail "\$Bin/" "\$Bin/../"
     install -v -t $out/bin remotebox
     wrapProgram $out/bin/remotebox --prefix PERL5LIB : $PERL5LIB
 

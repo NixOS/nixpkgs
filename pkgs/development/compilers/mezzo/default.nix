@@ -32,11 +32,11 @@ stdenv.mkDerivation {
   # Sets warning 3 as non-fatal
   prePatch = lib.optionalString (check-ocaml-version "4.02") ''
     substituteInPlace myocamlbuild.pre.ml \
-    --replace '@1..3' '@1..2+3'
+    --replace-fail '@1..3' '@1..2+3'
   ''
   # Compatibility with PPrint ≥ 20220103
   + ''
-    substituteInPlace typing/Fact.ml --replace PPrintOCaml PPrint.OCaml
+    substituteInPlace typing/Fact.ml --replace-fail PPrintOCaml PPrint.OCaml
   '';
 
   createFindlibDestdir = true;

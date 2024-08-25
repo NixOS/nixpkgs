@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
   fixupPhase = ''
     substituteInPlace $out/bin/vglrun \
-      --replace "LD_PRELOAD=libvglfaker" "LD_PRELOAD=$out/lib/libvglfaker" \
-      --replace "LD_PRELOAD=libdlfaker" "LD_PRELOAD=$out/lib/libdlfaker" \
-      --replace "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
+      --replace-fail "LD_PRELOAD=libvglfaker" "LD_PRELOAD=$out/lib/libvglfaker" \
+      --replace-fail "LD_PRELOAD=libdlfaker" "LD_PRELOAD=$out/lib/libdlfaker" \
+      --replace-fail "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
   '';
 
   meta = with lib; {

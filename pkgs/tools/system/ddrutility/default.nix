@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace makefile --replace /usr/local ""
+    substituteInPlace makefile --replace-fail /usr/local ""
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream

@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
   checkPhase = ''
     mkdir $PWD/tmp
     for i in testing/file.h xdelta3-test.h; do
-      substituteInPlace $i --replace /tmp $PWD/tmp
+      substituteInPlace $i --replace-fail /tmp $PWD/tmp
     done
     ./xdelta3regtest
   '';

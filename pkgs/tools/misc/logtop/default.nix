@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   postConfigure = ''
-    substituteInPlace Makefile --replace /usr ""
+    substituteInPlace Makefile --replace-fail /usr ""
   '';
 
   meta = with lib; {

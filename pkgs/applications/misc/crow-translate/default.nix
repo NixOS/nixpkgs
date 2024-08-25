@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace data/io.crow_translate.CrowTranslate.desktop \
-      --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
+      --replace-fail "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
   '';
 
   nativeBuildInputs = [

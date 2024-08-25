@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
       cinny;
   in ''
     substituteInPlace tauri.conf.json \
-      --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
+      --replace-fail '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
     substituteInPlace tauri.conf.json \
-      --replace '"cd cinny && npm run build"' '""'
+      --replace-fail '"cd cinny && npm run build"' '""'
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''

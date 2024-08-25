@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiosyncthing --cov-report=html" ""
+      --replace-fail " --cov=aiosyncthing --cov-report=html" ""
   '';
 
   pythonImportsCheck = [ "aiosyncthing" ];

@@ -41,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build.sh install/linux/install.sh
     substituteInPlace build.sh \
-      --replace '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
+      --replace-fail '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
     substituteInPlace install/linux/install.sh \
-      --replace '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
+      --replace-fail '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
   '';
 
   buildPhase = ''

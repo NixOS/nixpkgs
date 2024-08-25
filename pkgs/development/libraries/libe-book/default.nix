@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   # restore compatibility with icu68+
   postPatch = ''
-    substituteInPlace src/lib/EBOOKCharsetConverter.cpp --replace \
+    substituteInPlace src/lib/EBOOKCharsetConverter.cpp --replace-fail \
       "TRUE, TRUE, &status)" \
       "true, true, &status)"
   '';

@@ -92,7 +92,7 @@ buildDotnetModule rec {
   postPatch = ''
     # Ignore changes to src/Runner.Sdk/BuildConstants.cs
     substituteInPlace src/dir.proj \
-      --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
+      --replace-fail 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
                 'true'
   '';
 
@@ -229,21 +229,21 @@ buildDotnetModule rec {
     ln -sr "$out/lib/github-runner/env.sh" "$out/bin/"
 
     substituteInPlace $out/lib/github-runner/config.sh \
-      --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
+      --replace-fail './bin/Runner.Listener' "$out/bin/Runner.Listener"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/lib/github-runner/config.sh \
-      --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
-      --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
-      --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
+      --replace-fail 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
+      --replace-fail 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
+      --replace-fail '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
   '' + ''
     # Remove uneeded copy for run-helper template
-    substituteInPlace $out/lib/github-runner/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
-    substituteInPlace $out/lib/github-runner/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
+    substituteInPlace $out/lib/github-runner/run.sh --replace-fail 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+    substituteInPlace $out/lib/github-runner/run-helper.sh --replace-fail '"$DIR"/bin/' '"$DIR"/'
 
     # Make paths absolute
     substituteInPlace $out/lib/github-runner/runsvc.sh \
-      --replace './externals' "$out/lib/externals" \
-      --replace './bin/RunnerService.js' "$out/lib/github-runner/RunnerService.js"
+      --replace-fail './externals' "$out/lib/externals" \
+      --replace-fail './bin/RunnerService.js' "$out/lib/github-runner/RunnerService.js"
 
     # The upstream package includes Node and expects it at the path
     # externals/node$version. As opposed to the official releases, we don't
@@ -262,7 +262,7 @@ buildDotnetModule rec {
 
     # We don't wrap with libicu
     substituteInPlace $out/lib/github-runner/config.sh \
-      --replace '$LDCONFIG_COMMAND -NXv ''${libpath//:/ }' 'echo libicu'
+      --replace-fail '$LDCONFIG_COMMAND -NXv ''${libpath//:/ }' 'echo libicu'
   '' + ''
     # XXX: Using the corresponding Nix argument does not work as expected:
     #      https://github.com/NixOS/nixpkgs/issues/218449

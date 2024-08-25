@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ nettools ];
 
   postPatch = ''
-    substituteInPlace src/tun.cpp --replace "/sbin/" "${nettools}/bin/"
+    substituteInPlace src/tun.cpp --replace-fail "/sbin/" "${nettools}/bin/"
   '';
 
   enableParallelBuilding = true;

@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov-config=.coveragerc --cov sockio" "" \
-      --replace "--cov-report html --cov-report term" "" \
-      --replace "--durations=2 --verbose" ""
+      --replace-fail "--cov-config=.coveragerc --cov sockio" "" \
+      --replace-fail "--cov-report html --cov-report term" "" \
+      --replace-fail "--durations=2 --verbose" ""
   '';
 
   __darwinAllowLocalNetworking = true;

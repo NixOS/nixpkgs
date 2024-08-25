@@ -35,7 +35,7 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "setuptools>=59,<70"' ""
+      --replace-fail ', "setuptools>=59,<70"' ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

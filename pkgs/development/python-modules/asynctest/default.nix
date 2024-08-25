@@ -23,7 +23,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Skip failing test, probably caused by file system access
     substituteInPlace test/test_selector.py \
-      --replace "test_events_watched_outside_test_are_ignored" "xtest_events_watched_outside_test_are_ignored"
+      --replace-fail "test_events_watched_outside_test_are_ignored" "xtest_events_watched_outside_test_are_ignored"
   '';
 
   # https://github.com/Martiusweb/asynctest/issues/132

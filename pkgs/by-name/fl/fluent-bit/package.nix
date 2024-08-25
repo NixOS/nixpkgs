@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace /lib/systemd $out/lib/systemd
+      --replace-fail /lib/systemd $out/lib/systemd
   '';
 
   meta = {

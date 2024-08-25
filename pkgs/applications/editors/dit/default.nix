@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # fix paths
   prePatch = ''
     patchShebangs tools/GenHeaders
-    substituteInPlace Prototypes.h --replace 'tail' "$(type -P tail)"
+    substituteInPlace Prototypes.h --replace-fail 'tail' "$(type -P tail)"
   '';
 
   meta = with lib; {

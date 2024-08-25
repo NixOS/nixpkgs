@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "-lnl" "$(pkg-config --libs libnl-genl-3.0)"
+    substituteInPlace Makefile --replace-fail "-lnl" "$(pkg-config --libs libnl-genl-3.0)"
   '';
 
   nativeBuildInputs = [ pkg-config ];

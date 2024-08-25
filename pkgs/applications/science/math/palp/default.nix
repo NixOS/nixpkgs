@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace GNUmakefile --replace gcc cc
+    substituteInPlace GNUmakefile --replace-fail gcc cc
   '';
 
   preBuild = ''

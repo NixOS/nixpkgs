@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   patchPhase = ''
-    substituteInPlace dialog.py --replace ":/bin:/usr/bin" ":$out/bin"
+    substituteInPlace dialog.py --replace-fail ":/bin:/usr/bin" ":$out/bin"
   '';
 
   meta = with lib; {

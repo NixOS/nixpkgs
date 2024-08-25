@@ -76,8 +76,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace '--cov' ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail '--cov' ""
   '';
 
   build-system = [

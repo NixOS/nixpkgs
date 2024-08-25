@@ -34,7 +34,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Remove upstream's selfmade approach to collect the dependencies
     # https://github.com/userzimmermann/robotframework-tools/issues/1
-    substituteInPlace setup.py --replace \
+    substituteInPlace setup.py --replace-fail \
       "setup_requires=SETUP_REQUIRES + (zfg.SETUP_REQUIRES or [])," ""
   '';
 

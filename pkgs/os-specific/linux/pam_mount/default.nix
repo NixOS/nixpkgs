@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/mtcrypt.c \
-      --replace @@NIX_UTILLINUX@@ ${util-linux}/bin
+      --replace-fail @@NIX_UTILLINUX@@ ${util-linux}/bin
   '';
 
   nativeBuildInputs = [

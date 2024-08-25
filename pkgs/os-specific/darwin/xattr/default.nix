@@ -42,8 +42,8 @@ buildPythonPackage rec {
   '';
 
   postPatch = ''
-    substituteInPlace ../Makefile.inc --replace gnutar tar
-    substituteInPlace Makefile --replace "/usr" ""
+    substituteInPlace ../Makefile.inc --replace-fail gnutar tar
+    substituteInPlace Makefile --replace-fail "/usr" ""
   '';
 
   preInstall = ''

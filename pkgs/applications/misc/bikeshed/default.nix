@@ -33,7 +33,7 @@ buildPythonApplication rec {
   # https://github.com/tabatkins/bikeshed/issues/2178
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
   propagatedBuildInputs = [

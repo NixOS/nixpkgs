@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace private/autogen \
-      --replace /usr/share/gettext ${gettext}/share/gettext \
-      --replace /usr/share/libtool ${libtool}/share/libtool
+      --replace-fail /usr/share/gettext ${gettext}/share/gettext \
+      --replace-fail /usr/share/libtool ${libtool}/share/libtool
 
     substituteInPlace configure.ac \
-      --replace '$djvulibre_bin_path' ${djvulibre.bin}/bin
+      --replace-fail '$djvulibre_bin_path' ${djvulibre.bin}/bin
   '';
 
   preAutoreconf = ''

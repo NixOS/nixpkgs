@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace makefile --replace "./version.pl" "perl version.pl"
-    substituteInPlace src/makefile --replace "-lcurses" "-lncurses"
+    substituteInPlace makefile --replace-fail "./version.pl" "perl version.pl"
+    substituteInPlace src/makefile --replace-fail "-lcurses" "-lncurses"
   '';
 
   nativeBuildInputs = [ texliveMedium texinfo6 perl ghostscript ];

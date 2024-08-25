@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     # Patch cagebreak to read its default configuration from $out/share/cagebreak
     sed -i "s|/etc/xdg/cagebreak|$out/share/cagebreak|" meson.build cagebreak.c
     substituteInPlace meson.build \
-      --replace "/usr/share/licenses" "$out/share/licenses"
+      --replace-fail "/usr/share/licenses" "$out/share/licenses"
   '';
 
   postFixup = lib.optionalString withXwayland ''

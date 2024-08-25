@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     # Upstream doesn't set the version string itself
-    substituteInPlace src/main.rs --replace '0.0.1' ${version}
+    substituteInPlace src/main.rs --replace-fail '0.0.1' ${version}
   '';
 
   nativeBuildInputs = [ python3 ];

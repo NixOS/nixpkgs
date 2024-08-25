@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "-std=c++11" "-std=c++17"
+      --replace-fail "-std=c++11" "-std=c++17"
   ''
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',
   # so let's make sure it knows where to find it:
   + lib.optionalString stdenv.isLinux ''
-    substituteInPlace creduce/creduce_utils.pm --replace \
+    substituteInPlace creduce/creduce_utils.pm --replace-fail \
       lscpu ${util-linux}/bin/lscpu
   '';
 

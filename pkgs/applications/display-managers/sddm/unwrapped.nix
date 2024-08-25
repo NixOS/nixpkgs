@@ -25,7 +25,7 @@ in stdenv.mkDerivation(finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/greeter/waylandkeyboardbackend.cpp \
-      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [ cmake pkg-config qttools ];
@@ -73,7 +73,7 @@ in stdenv.mkDerivation(finalAttrs: {
     rm "$out/share/sddm/scripts/Xsetup" "$out/share/sddm/scripts/Xstop"
     for f in $out/share/sddm/themes/**/theme.conf ; do
       substituteInPlace $f \
-        --replace 'background=' "background=$(dirname $f)/"
+        --replace-fail 'background=' "background=$(dirname $f)/"
     done
   '';
 

@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/mp3fs.cc \
-      --replace "#include <fuse_darwin.h>" "" \
-      --replace "osxfuse_version()" "fuse_version()"
+      --replace-fail "#include <fuse_darwin.h>" "" \
+      --replace-fail "osxfuse_version()" "fuse_version()"
   '';
 
   buildInputs = [ flac fuse lame libid3tag libvorbis ];

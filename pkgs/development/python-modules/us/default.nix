@@ -23,7 +23,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream spins jellyfish
     substituteInPlace setup.py \
-      --replace "jellyfish==" "jellyfish>="
+      --replace-fail "jellyfish==" "jellyfish>="
   '';
 
   propagatedBuildInputs = [ jellyfish ];

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=pdfplumber --cov-report xml:coverage.xml --cov-report term" ""
+      --replace-fail "--cov=pdfplumber --cov-report xml:coverage.xml --cov-report term" ""
   '';
 
   propagatedBuildInputs = [

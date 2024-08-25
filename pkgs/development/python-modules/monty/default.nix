@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/test_os.py \
-      --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
+      --replace-fail 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
 
   nativeBuildInputs = [

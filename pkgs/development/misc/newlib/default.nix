@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   # when newlib was extracted from GCC, this "is cross compiling"
   # logic was not fixed.  So we must disable it.
   ''
-    substituteInPlace configure --replace 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
-    substituteInPlace configure --replace 'cross_only="target-libgloss target-newlib' 'cross_only="'
+    substituteInPlace configure --replace-fail 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
+    substituteInPlace configure --replace-fail 'cross_only="target-libgloss target-newlib' 'cross_only="'
   '';
 
 

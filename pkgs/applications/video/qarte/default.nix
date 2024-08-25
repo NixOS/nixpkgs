@@ -20,7 +20,7 @@ in mkDerivation {
     mkdir -p $out/bin
     mv qarte $out/bin/
     substituteInPlace $out/bin/qarte \
-      --replace '/usr/share' "$out/share"
+      --replace-fail '/usr/share' "$out/share"
 
     mkdir -p $out/share/man/man1/
     mv qarte.1 $out/share/man/man1/

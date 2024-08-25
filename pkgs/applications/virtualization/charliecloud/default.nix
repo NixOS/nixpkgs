@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs test/
-    substituteInPlace configure.ac --replace "/usr/bin/env" "${coreutils}/bin/env"
+    substituteInPlace configure.ac --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   makeFlags = [

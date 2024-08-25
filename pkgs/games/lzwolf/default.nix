@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # SDL2_net-2.2.0 changed CMake component name slightly.
     substituteInPlace src/CMakeLists.txt \
-      --replace 'SDL2::SDL2_net' 'SDL2_net::SDL2_net'
+      --replace-fail 'SDL2::SDL2_net' 'SDL2_net::SDL2_net'
   '';
 
   nativeBuildInputs = [ p7zip pkg-config cmake ];

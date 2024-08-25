@@ -52,48 +52,48 @@ stdenv.mkDerivation rec {
   installFlags = [ "install-systemd" "install-udev" "install-polkit" ];
 
   preConfigure = ''
-    substituteInPlace configure --replace /sbin/ldconfig ldconfig
+    substituteInPlace configure --replace-fail /sbin/ldconfig ldconfig
 
     # Some script needs a working tclsh shebang
     patchShebangs .
 
     # Skip impure operations
     substituteInPlace Programs/Makefile.in    \
-      --replace install-writable-directory "" \
-      --replace install-apisoc-directory ""   \
-      --replace install-api-key ""
+      --replace-fail install-writable-directory "" \
+      --replace-fail install-apisoc-directory ""   \
+      --replace-fail install-api-key ""
   '';
 
   postInstall = ''
     # Rewrite absolute paths
     substituteInPlace $out/bin/brltty-mkuser \
-      --replace '/sbin/nologin' '${shadow}/bin/nologin'
+      --replace-fail '/sbin/nologin' '${shadow}/bin/nologin'
     (
       cd $out/lib
       substituteInPlace systemd/system/brltty@.service \
-        --replace '/sbin/modprobe' '${kmod}/bin/modprobe'
+        --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
       # Ensure the systemd-wrapper script uses the correct path to the brltty binary
       sed "/^Environment=\"BRLTTY_EXECUTABLE_ARGUMENTS.*/a Environment=\"BRLTTY_EXECUTABLE_PATH=$out/bin/brltty\"" -i systemd/system/brltty@.service
       substituteInPlace systemd/system/brltty-device@.service \
-        --replace '/usr/bin/true' '${coreutils}/bin/true'
+        --replace-fail '/usr/bin/true' '${coreutils}/bin/true'
       substituteInPlace udev/rules.d/90-brltty-uinput.rules \
-        --replace '/usr/bin/setfacl' '${acl}/bin/setfacl'
+        --replace-fail '/usr/bin/setfacl' '${acl}/bin/setfacl'
       substituteInPlace udev/rules.d/90-brltty-hid.rules \
-        --replace '/usr/bin/setfacl' '${acl}/bin/setfacl'
+        --replace-fail '/usr/bin/setfacl' '${acl}/bin/setfacl'
        substituteInPlace tmpfiles.d/brltty.conf \
-        --replace "$out/etc" '/etc'
+        --replace-fail "$out/etc" '/etc'
 
       # Remove unused commands from udev rules
       sed '/initctl/d' -i udev/rules.d/90-brltty-usb-generic.rules
       sed '/initctl/d' -i udev/rules.d/90-brltty-usb-customized.rules
       # Remove pulse-access group from systemd unit and sysusers
       substituteInPlace systemd/system/brltty@.service \
-        --replace 'SupplementaryGroups=pulse-access' '# SupplementaryGroups=pulse-access'
+        --replace-fail 'SupplementaryGroups=pulse-access' '# SupplementaryGroups=pulse-access'
       substituteInPlace sysusers.d/brltty.conf \
-        --replace 'm brltty pulse-access' '# m brltty pulse-access'
+        --replace-fail 'm brltty pulse-access' '# m brltty pulse-access'
      )
      substituteInPlace $out/libexec/brltty/systemd-wrapper \
-       --replace 'logger' "${util-linux}/bin/logger" \
-       --replace 'udevadm' "${systemd}/bin/udevadm"
+       --replace-fail 'logger' "${util-linux}/bin/logger" \
+       --replace-fail 'udevadm' "${systemd}/bin/udevadm"
   '';
 }

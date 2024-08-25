@@ -15,7 +15,7 @@ buildGoModule rec {
 
   postPatch = ''
     for f in command.go command_test.go; do
-      substituteInPlace $f --replace '"sh"' '"${runtimeShell}"'
+      substituteInPlace $f --replace-fail '"sh"' '"${runtimeShell}"'
     done
   '';
 

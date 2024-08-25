@@ -72,7 +72,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov-report=xml --cov jira" ""
+      --replace-fail "--cov-report=xml --cov jira" ""
   '';
 
   pythonImportsCheck = [ "jira" ];

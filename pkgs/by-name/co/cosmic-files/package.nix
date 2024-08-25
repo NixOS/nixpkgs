@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];

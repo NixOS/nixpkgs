@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/local/lib/libosxfuse.dylib" "fuse"
+      --replace-fail "/usr/local/lib/libosxfuse.dylib" "fuse"
   '';
 
   nativeBuildInputs = [ cmake ];

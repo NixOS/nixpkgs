@@ -15,9 +15,9 @@ python3Packages.buildPythonApplication rec {
 
   patchPhase = ''
     substituteInPlace setup.py \
-      --replace "assert" "assert 1==1 #"
+      --replace-fail "assert" "assert 1==1 #"
     substituteInPlace src/tt \
-      --replace "locale.setlocale" "#locale.setlocale"
+      --replace-fail "locale.setlocale" "#locale.setlocale"
     '';
 
   meta = with lib; {

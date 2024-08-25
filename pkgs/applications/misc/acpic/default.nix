@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pbr>=5.8.1,<6" "pbr"
+      --replace-fail "pbr>=5.8.1,<6" "pbr"
   '';
 
   nativeBuildInputs = with python3Packages; [

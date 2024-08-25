@@ -29,9 +29,9 @@ buildPythonPackage rec {
   postPatch = ''
     # Is in setup_requires but not used in setup.py
     substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
+      --replace-fail "'pytest-runner'" ""
     substituteInPlace setup.cfg \
-      --replace " --cov --cov-config .coveragerc --flake8" ""
+      --replace-fail " --cov --cov-config .coveragerc --flake8" ""
   '';
 
   propagatedBuildInputs = [

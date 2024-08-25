@@ -15,7 +15,7 @@
 
   enableParallelBuilding = true;
 
-  postPatch = "substituteInPlace Makefile --replace libsystemd-daemon libsystemd";
+  postPatch = "substituteInPlace Makefile --replace-fail libsystemd-daemon libsystemd";
 
   buildInputs = [ fontconfig libjpeg libcap freetype perl ]
   ++ lib.optional enableSystemd systemd

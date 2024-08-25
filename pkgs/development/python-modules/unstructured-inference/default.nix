@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements/base.in \
-      --replace "opencv-python" "opencv"
+      --replace-fail "opencv-python" "opencv"
   '';
 
   propagatedBuildInputs =

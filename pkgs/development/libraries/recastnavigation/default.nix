@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
 
     # https://github.com/recastnavigation/recastnavigation/issues/524
     substituteInPlace CMakeLists.txt \
-      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+      --replace-fail '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace-fail '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Expects SDL2.framework in specific location, which we don't have
     # Change where SDL2 headers are searched for to match what we do have
     substituteInPlace RecastDemo/CMakeLists.txt \
-      --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
+      --replace-fail 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
   '';
 
   doCheck = true;

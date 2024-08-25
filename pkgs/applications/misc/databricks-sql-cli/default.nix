@@ -26,8 +26,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'python = ">=3.7.1,<4.0"' 'python = ">=3.8,<4.0"' \
-      --replace 'pandas = "1.3.4"' 'pandas = "~1.5"'
+      --replace-fail 'python = ">=3.7.1,<4.0"' 'python = ">=3.8,<4.0"' \
+      --replace-fail 'pandas = "1.3.4"' 'pandas = "~1.5"'
   '';
 
   nativeBuildInputs = with python3.pkgs; [

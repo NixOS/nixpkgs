@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0flyi596hm6fv7xyw2iykx3s65p748s62bf15624xcnwpfrh8ncy";
   };
 
-  prePatch = "substituteInPlace configure --replace /usr/bin/file ${file}/bin/file";
+  prePatch = "substituteInPlace configure --replace-fail /usr/bin/file ${file}/bin/file";
 
   doCheck = true;
 

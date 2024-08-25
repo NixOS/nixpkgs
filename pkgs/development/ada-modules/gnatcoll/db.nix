@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   # as we usually do in nixpkgs where possible
   postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     for f in gnatcoll_db2ada/Makefile gnatinspect/Makefile; do
-      substituteInPlace "$f" --replace "=static" "=relocatable"
+      substituteInPlace "$f" --replace-fail "=static" "=relocatable"
     done
   '';
 

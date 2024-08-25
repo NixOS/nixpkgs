@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${runtimeLibs}" )
     # Correct desktop file `Exec`
     substituteInPlace $out/share/applications/polar-bookshelf.desktop \
-      --replace "/opt/Polar Bookshelf/polar-bookshelf" "$out/bin/polar-bookshelf"
+      --replace-fail "/opt/Polar Bookshelf/polar-bookshelf" "$out/bin/polar-bookshelf"
   '';
 
   meta = {

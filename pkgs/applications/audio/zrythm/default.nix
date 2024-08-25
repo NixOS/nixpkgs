@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace "'/usr/lib', '/usr/local/lib', '/opt/homebrew/lib'" "'${fftw}/lib'"
+      --replace-fail "'/usr/lib', '/usr/local/lib', '/opt/homebrew/lib'" "'${fftw}/lib'"
 
     chmod +x scripts/meson-post-install.sh
     patchShebangs ext/sh-manpage-completions/run.sh scripts/generic_guile_wrap.sh \

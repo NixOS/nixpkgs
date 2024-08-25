@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   installPhase = ''
     install -D $src $out/etc/udev/rules.d/70-teensy.rules
     substituteInPlace $out/etc/udev/rules.d/70-teensy.rules \
-      --replace "/bin/stty" "${coreutils}/bin/stty"
+      --replace-fail "/bin/stty" "${coreutils}/bin/stty"
   '';
 
   meta = with lib; {

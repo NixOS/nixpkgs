@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # it is fine if lint tools are missing
     substituteInPlace conftest.py \
-      --replace "sys.exit(1)" ""
+      --replace-fail "sys.exit(1)" ""
   '';
 
   nativeBuildInputs = with python3.pkgs; [

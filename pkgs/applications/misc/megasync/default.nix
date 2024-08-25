@@ -74,7 +74,7 @@ mkDerivation rec {
 
   postPatch = ''
     for file in $(find src/ -type f \( -iname configure -o -iname \*.sh \) ); do
-      substituteInPlace "$file" --replace "/bin/bash" "${stdenv.shell}"
+      substituteInPlace "$file" --replace-fail "/bin/bash" "${stdenv.shell}"
     done
   '';
 

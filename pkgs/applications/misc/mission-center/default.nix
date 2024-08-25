@@ -100,22 +100,22 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/sys_info_v2/gatherer.rs \
-      --replace '"missioncenter-gatherer"' '"${placeholder "out"}/bin/missioncenter-gatherer"'
+      --replace-fail '"missioncenter-gatherer"' '"${placeholder "out"}/bin/missioncenter-gatherer"'
 
     substituteInPlace src/sys_info_v2/mem_info.rs \
-      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
+      --replace-fail '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
 
     substituteInPlace $cargoDepsCopy/gl_loader-*/src/glad.c \
-      --replace "libGL.so.1" "${libGL}/lib/libGL.so.1"
+      --replace-fail "libGL.so.1" "${libGL}/lib/libGL.so.1"
 
     substituteInPlace $cargoDepsCopy/ash-*/src/entry.rs \
-      --replace '"libvulkan.so.1"' '"${vulkan-loader}/lib/libvulkan.so.1"'
+      --replace-fail '"libvulkan.so.1"' '"${vulkan-loader}/lib/libvulkan.so.1"'
 
     SRC_GATHERER=$NIX_BUILD_TOP/source/src/sys_info_v2/gatherer
     SRC_GATHERER_NVTOP=$SRC_GATHERER/3rdparty/nvtop
 
     substituteInPlace $SRC_GATHERER_NVTOP/nvtop.json \
-      --replace "nvtop-45a1796375cd617d16167869bb88e5e69c809468" "nvtop-src"
+      --replace-fail "nvtop-45a1796375cd617d16167869bb88e5e69c809468" "nvtop-src"
 
     GATHERER_BUILD_DEST=$NIX_BUILD_TOP/source/build/src/sys_info_v2/gatherer/src/debug/build/native
     mkdir -p $GATHERER_BUILD_DEST

@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace testssl.sh                                               \
-      --replace TESTSSL_INSTALL_DIR:-\"\"   TESTSSL_INSTALL_DIR:-\"$out\"      \
-      --replace PROG_NAME=\"\$\(basename\ \"\$0\"\)\" PROG_NAME=\"testssl.sh\"
+      --replace-fail TESTSSL_INSTALL_DIR:-\"\"   TESTSSL_INSTALL_DIR:-\"$out\"      \
+      --replace-fail PROG_NAME=\"\$\(basename\ \"\$0\"\)\" PROG_NAME=\"testssl.sh\"
   '';
 
   installPhase = ''

@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace debian/anarchism.desktop \
-      --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
     substituteInPlace debian/anarchism.desktop \
-      --replace "file:///usr" "file://$out"
+      --replace-fail "file:///usr" "file://$out"
   '';
 
   installPhase = ''

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ncurses libxml2 ];
 
   postPatch = ''
-    substituteInPlace meson.build --replace \
+    substituteInPlace meson.build --replace-fail \
       "ncurses_sys_prefix = '/usr'" \
       "ncurses_sys_prefix = '${lib.getDev ncurses}'"
   '';

@@ -27,8 +27,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov" "" \
-      --replace '"0.0.0"' '"${version}"'
+      --replace-fail "--cov" "" \
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
   nativeBuildInputs = [ poetry-core ];

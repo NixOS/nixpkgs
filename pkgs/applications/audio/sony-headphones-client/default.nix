@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Constants.h \
-      --replace "UNKNOWN = -1" "// UNKNOWN removed since it doesn't fit in char"
+      --replace-fail "UNKNOWN = -1" "// UNKNOWN removed since it doesn't fit in char"
   '';
 
   installPhase = ''

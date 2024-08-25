@@ -13,9 +13,9 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'VERSION :=' 'VERSION ?='
+      --replace-fail 'VERSION :=' 'VERSION ?='
     substituteInPlace src/holo-build.sh \
-      --replace '/usr/lib/holo/holo-build' '${placeholder "out"}/lib/holo/holo-build'
+      --replace-fail '/usr/lib/holo/holo-build' '${placeholder "out"}/lib/holo/holo-build'
   '';
 
   vendorHash = null;

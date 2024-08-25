@@ -27,26 +27,26 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace libusal/scsi-mac-iokit.c \
-      --replace "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
+      --replace-fail "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
     substituteInPlace genisoimage/sha256.c \
-      --replace "<endian.h>" "<machine/endian.h>"
+      --replace-fail "<endian.h>" "<machine/endian.h>"
     substituteInPlace genisoimage/sha512.c \
-      --replace "<endian.h>" "<machine/endian.h>"
+      --replace-fail "<endian.h>" "<machine/endian.h>"
     substituteInPlace genisoimage/sha256.h \
-      --replace "__THROW" ""
+      --replace-fail "__THROW" ""
     substituteInPlace genisoimage/sha512.h \
-      --replace "__THROW" ""
+      --replace-fail "__THROW" ""
   '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace include/xconfig.h.in \
-        --replace "#define HAVE_RCMD 1" "#undef HAVE_RCMD"
+        --replace-fail "#define HAVE_RCMD 1" "#undef HAVE_RCMD"
   '';
 
   postConfigure = lib.optionalString stdenv.isDarwin ''
     for f in */CMakeFiles/*.dir/link.txt ; do
       substituteInPlace "$f" \
-        --replace "-lrt" "-framework IOKit"
+        --replace-fail "-lrt" "-framework IOKit"
     done
   '';
 

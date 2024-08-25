@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals tlsSupport [ openssl ];
 
   preBuild = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/Makefile --replace "-flto" ""
+    substituteInPlace src/Makefile --replace-fail "-flto" ""
   '';
 
   # More cross-compiling fixes.
@@ -66,10 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     # disable test "Connect multiple replicas at the same time": even
     # upstream find this test too timing-sensitive
     substituteInPlace tests/integration/replication.tcl \
-      --replace 'foreach mdl {no yes}' 'foreach mdl {}'
+      --replace-fail 'foreach mdl {no yes}' 'foreach mdl {}'
 
     substituteInPlace tests/support/server.tcl \
-      --replace 'exec /usr/bin/env' 'exec env'
+      --replace-fail 'exec /usr/bin/env' 'exec env'
 
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl

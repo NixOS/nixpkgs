@@ -51,16 +51,16 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     for script in *.bash *.sh; do
       substituteInPlace "$script" \
-        --replace /usr/share/undistract-me "$out/share/undistract-me" \
-        --replace basename ${coreutils}/bin/basename \
-        --replace 'cut ' '${coreutils}/bin/cut ' \
-        --replace date ${coreutils}/bin/date \
-        --replace dirname ${coreutils}/bin/dirname \
-        --replace sed ${gnused}/bin/sed \
-        --replace notify-send ${libnotify}/bin/notify-send \
-        --replace paplay ${pulseaudio}/bin/paplay \
-        --replace /usr/share/sounds/freedesktop ${sound-theme-freedesktop}/share/sounds/freedesktop \
-        --replace xprop ${xprop}/bin/xprop
+        --replace-fail /usr/share/undistract-me "$out/share/undistract-me" \
+        --replace-fail basename ${coreutils}/bin/basename \
+        --replace-fail 'cut ' '${coreutils}/bin/cut ' \
+        --replace-fail date ${coreutils}/bin/date \
+        --replace-fail dirname ${coreutils}/bin/dirname \
+        --replace-fail sed ${gnused}/bin/sed \
+        --replace-fail notify-send ${libnotify}/bin/notify-send \
+        --replace-fail paplay ${pulseaudio}/bin/paplay \
+        --replace-fail /usr/share/sounds/freedesktop ${sound-theme-freedesktop}/share/sounds/freedesktop \
+        --replace-fail xprop ${xprop}/bin/xprop
     done
   '';
 

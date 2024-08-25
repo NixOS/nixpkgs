@@ -15,14 +15,14 @@ appleDerivation {
 
   postPatch = ''
     substituteInPlace dtrace.xcodeproj/project.pbxproj \
-      --replace "/usr/sbin" ""
+      --replace-fail "/usr/sbin" ""
     substituteInPlace libdtrace/dt_open.c \
-      --replace /usr/bin/clang ${stdenv.cc.cc}/bin/clang \
-      --replace /usr/bin/ld ${stdenv.cc.bintools.bintools}/bin/ld \
-      --replace /usr/lib/dtrace/dt_cpp.h $out/include/dt_cpp.h \
-      --replace /usr/lib/dtrace $out/lib/dtrace
+      --replace-fail /usr/bin/clang ${stdenv.cc.cc}/bin/clang \
+      --replace-fail /usr/bin/ld ${stdenv.cc.bintools.bintools}/bin/ld \
+      --replace-fail /usr/lib/dtrace/dt_cpp.h $out/include/dt_cpp.h \
+      --replace-fail /usr/lib/dtrace $out/lib/dtrace
     substituteInPlace libproc/libproc.c \
-      --replace "#include <sandbox/rootless.h>" ""
+      --replace-fail "#include <sandbox/rootless.h>" ""
   '';
 
   # hack to handle xcbuild's broken lex handling
@@ -33,8 +33,8 @@ appleDerivation {
     popd
 
     substituteInPlace dtrace.xcodeproj/project.pbxproj \
-      --replace '6EBC9800099BFBBF0001019C /* dt_grammar.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = dt_grammar.y; path = libdtrace/dt_grammar.y; sourceTree = "<group>"; };' '6EBC9800099BFBBF0001019C /* y.tab.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = y.tab.c; path = libdtrace/y.tab.c; sourceTree = "<group>"; };' \
-      --replace '6EBC9808099BFBBF0001019C /* dt_lex.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; name = dt_lex.l; path = libdtrace/dt_lex.l; sourceTree = "<group>"; };' '6EBC9808099BFBBF0001019C /* lex.yy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lex.yy.c; path = libdtrace/lex.yy.c; sourceTree = "<group>"; };'
+      --replace-fail '6EBC9800099BFBBF0001019C /* dt_grammar.y */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.yacc; name = dt_grammar.y; path = libdtrace/dt_grammar.y; sourceTree = "<group>"; };' '6EBC9800099BFBBF0001019C /* y.tab.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = y.tab.c; path = libdtrace/y.tab.c; sourceTree = "<group>"; };' \
+      --replace-fail '6EBC9808099BFBBF0001019C /* dt_lex.l */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.lex; name = dt_lex.l; path = libdtrace/dt_lex.l; sourceTree = "<group>"; };' '6EBC9808099BFBBF0001019C /* lex.yy.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lex.yy.c; path = libdtrace/lex.yy.c; sourceTree = "<group>"; };'
   '';
 
   # xcbuild doesn't support install

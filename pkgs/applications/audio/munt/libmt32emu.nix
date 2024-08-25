@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$dev"/lib/pkgconfig/mt32emu.pc \
-      --replace '=''${exec_prefix}//' '=/' \
-      --replace "$dev/$dev/" "$dev/"
+      --replace-fail '=''${exec_prefix}//' '=/' \
+      --replace-fail "$dev/$dev/" "$dev/"
   '';
 
   meta = with lib; {

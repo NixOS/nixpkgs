@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   preAutoreconf = ''
-    substituteInPlace ./update-version-m4.sh --replace 'VERSION="$(git describe --always --tags)"' "VERSION=v${version}"
+    substituteInPlace ./update-version-m4.sh --replace-fail 'VERSION="$(git describe --always --tags)"' "VERSION=v${version}"
     ./update-version-m4.sh
   '';
 

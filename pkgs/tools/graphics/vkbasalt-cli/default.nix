@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace vkbasalt/lib.py \
-      --replace /usr ${vkbasalt}
+      --replace-fail /usr ${vkbasalt}
   '';
 
   pythonImportsCheck = [ "vkbasalt.lib" ];

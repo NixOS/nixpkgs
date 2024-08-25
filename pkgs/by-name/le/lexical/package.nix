@@ -34,7 +34,7 @@ beamPackages.mixRelease rec {
   '';
 
   postInstall = ''
-    substituteInPlace "$out/bin/start_lexical.sh" --replace 'elixir_command=' 'elixir_command="${elixir}/bin/"'
+    substituteInPlace "$out/bin/start_lexical.sh" --replace-fail 'elixir_command=' 'elixir_command="${elixir}/bin/"'
     mv "$out/bin" "$out/libexec"
     makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" --set RELEASE_COOKIE lexical
   '';

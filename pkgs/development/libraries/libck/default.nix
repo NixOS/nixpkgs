@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace \
       configure \
-        --replace \
+        --replace-fail \
           'COMPILER=`./.1 2> /dev/null`' \
           "COMPILER=gcc"
   '';

@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace qosmic.pro \
-      --replace "/share" "/Applications/qosmic.app/Contents/Resources" \
-      --replace "/qosmic/scripts" "/scripts" \
-      --replace "install_icons install_desktop" ""
+      --replace-fail "/share" "/Applications/qosmic.app/Contents/Resources" \
+      --replace-fail "/qosmic/scripts" "/scripts" \
+      --replace-fail "install_icons install_desktop" ""
   '';
 
   nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];

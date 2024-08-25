@@ -24,22 +24,22 @@ in appleDerivation {
 
   patchPhase = ''
     substituteInPlace BSDmakefile \
-      --replace chgrp true \
-      --replace /Developer/Makefiles/bin/compress-man-pages.pl true \
-      --replace "ps.tproj" "" --replace "gencat.tproj" "" --replace "md.tproj" "" \
-      --replace "tabs.tproj" "" --replace "cap_mkdb.tproj" "" \
-      --replace "!= tconf --test TARGET_OS_EMBEDDED" "= NO"
+      --replace-fail chgrp true \
+      --replace-fail /Developer/Makefiles/bin/compress-man-pages.pl true \
+      --replace-fail "ps.tproj" "" --replace-fail "gencat.tproj" "" --replace-fail "md.tproj" "" \
+      --replace-fail "tabs.tproj" "" --replace-fail "cap_mkdb.tproj" "" \
+      --replace-fail "!= tconf --test TARGET_OS_EMBEDDED" "= NO"
 
-    substituteInPlace Makefile --replace perl true
+    substituteInPlace Makefile --replace-fail perl true
 
     substituteInPlace colldef.tproj/scan.l \
-      --replace 'static orderpass = 0;' 'static int orderpass = 0;'
+      --replace-fail 'static orderpass = 0;' 'static int orderpass = 0;'
 
     for subproject in colldef mklocale monetdef msgdef numericdef timedef; do
       substituteInPlace usr-share-locale.tproj/$subproject/BSDmakefile \
-        --replace /usr/share/locale "" \
-        --replace '-o ''${BINOWN} -g ''${BINGRP}' "" \
-        --replace "rsync -a" "cp -r"
+        --replace-fail /usr/share/locale "" \
+        --replace-fail '-o ''${BINOWN} -g ''${BINGRP}' "" \
+        --replace-fail "rsync -a" "cp -r"
     done
   '';
 
@@ -47,7 +47,7 @@ in appleDerivation {
     cp -r --no-preserve=all ${recentAdvCmds}/colldef .
 
     substituteInPlace colldef/scan.l \
-      --replace 'static orderpass = 0;' 'static int orderpass = 0;'
+      --replace-fail 'static orderpass = 0;' 'static int orderpass = 0;'
 
     pushd colldef
     mv locale/collate.h .

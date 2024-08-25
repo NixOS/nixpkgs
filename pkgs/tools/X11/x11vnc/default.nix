@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/unixpw.c \
-        --replace '"/bin/su"' '"/run/wrappers/bin/su"' \
-        --replace '"/bin/true"' '"${coreutils}/bin/true"'
+        --replace-fail '"/bin/su"' '"/run/wrappers/bin/su"' \
+        --replace-fail '"/bin/true"' '"${coreutils}/bin/true"'
 
     sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:${xorg.xauth}\/bin:$PATH\\n"' -e 's|/bin/su|/run/wrappers/bin/su|g' src/ssltools.h
 

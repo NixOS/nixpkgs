@@ -32,7 +32,7 @@ let cg3 = stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/cg3.pc \
-      --replace '=''${prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/'
   '';
 
   passthru.tests.minimal = runCommand "${pname}-test" {

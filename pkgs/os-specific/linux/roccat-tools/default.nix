@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     }' libroccat/roccat_helper.c
 
     substituteInPlace udev/90-roccat-kone.rules \
-      --replace "/bin/sh" "${runtimeShell}" \
-      --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
-      --replace "/bin/echo" "${coreutils}/bin/echo"
+      --replace-fail "/bin/sh" "${runtimeShell}" \
+      --replace-fail "/sbin/modprobe" "${kmod}/bin/modprobe" \
+      --replace-fail "/bin/echo" "${coreutils}/bin/echo"
   '';
 
   nativeBuildInputs = [ cmake pkg-config gettext ];

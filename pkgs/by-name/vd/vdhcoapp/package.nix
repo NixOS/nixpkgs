@@ -41,7 +41,7 @@ buildNpmPackage rec {
   postPatch = ''
     # Cannot use patch, setting placeholder here
     substituteInPlace src/native-autoinstall.js \
-      --replace process.execPath "\"${placeholder "out"}/bin/vdhcoapp\""
+      --replace-fail process.execPath "\"${placeholder "out"}/bin/vdhcoapp\""
   '';
 
   preBuild = ''

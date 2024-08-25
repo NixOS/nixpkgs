@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   preBuild = ''
-    substituteInPlace Makefile --replace "KERNELDIR :=" "KERNELDIR ?="
+    substituteInPlace Makefile --replace-fail "KERNELDIR :=" "KERNELDIR ?="
   '';
 
   makeFlags = [

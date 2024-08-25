@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # https://github.com/megadose/holehe/pull/178
     substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
+      --replace-fail "bs4" "beautifulsoup4"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

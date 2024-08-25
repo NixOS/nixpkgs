@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail " ""
+      --replace-fail "--no-cov-on-fail " ""
   '';
 
   dependencies =

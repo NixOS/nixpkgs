@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # change sudoers dir from /var/google-sudoers.d to /run/google-sudoers.d (managed through systemd-tmpfiles)
-    substituteInPlace src/pam/pam_oslogin_admin.cc --replace /var/google-sudoers.d /run/google-sudoers.d
+    substituteInPlace src/pam/pam_oslogin_admin.cc --replace-fail /var/google-sudoers.d /run/google-sudoers.d
     # fix "User foo not allowed because shell /bin/bash does not exist"
-    substituteInPlace src/include/compat.h --replace /bin/bash /run/current-system/sw/bin/bash
+    substituteInPlace src/include/compat.h --replace-fail /bin/bash /run/current-system/sw/bin/bash
   '';
 
   buildInputs = [ curl.dev pam json_c ];

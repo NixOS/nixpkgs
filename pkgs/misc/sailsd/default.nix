@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace gcc cc
+      --replace-fail gcc cc
   '';
 
   meta = with lib; {

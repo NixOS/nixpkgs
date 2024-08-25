@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs mylvmbackup
     substituteInPlace Makefile \
-      --replace "prefix = /usr/local" "prefix = ${builtins.placeholder "out"}" \
-      --replace "sysconfdir = /etc" "sysconfdir = ${builtins.placeholder "out"}/etc" \
-      --replace "/usr/bin/install" "install"
+      --replace-fail "prefix = /usr/local" "prefix = ${builtins.placeholder "out"}" \
+      --replace-fail "sysconfdir = /etc" "sysconfdir = ${builtins.placeholder "out"}/etc" \
+      --replace-fail "/usr/bin/install" "install"
   '';
 
   postInstall = ''

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
+    substituteInPlace Makefile --replace-fail '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
   '';
 
   nativeBuildInputs = [

@@ -56,7 +56,7 @@ mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/applications/io.github.input_leap.InputLeap.desktop \
-      --replace "Exec=input-leap" "Exec=$out/bin/input-leap"
+      --replace-fail "Exec=input-leap" "Exec=$out/bin/input-leap"
   '';
 
   meta = {

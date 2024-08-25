@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile \
-    --replace "CC=gcc" ""
+    --replace-fail "CC=gcc" ""
   '';
 
   installPhase = ''

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./assets-path.diff ];
 
   postPatch = ''
-    substituteInPlace src/poptracker.cpp --replace "@assets@" "$out/share/poptracker/"
+    substituteInPlace src/poptracker.cpp --replace-fail "@assets@" "$out/share/poptracker/"
   '';
 
   enableParallelBuilding = true;

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace brutespray.py \
-      --replace "/usr/share/brutespray" "$out/share/brutespray"
+      --replace-fail "/usr/share/brutespray" "$out/share/brutespray"
   '';
 
   dontBuild = true;

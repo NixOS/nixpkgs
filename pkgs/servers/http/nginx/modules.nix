@@ -143,7 +143,7 @@ let self = {
       runCommand "brotli" { } ''
         cp -a ${src'} $out
         substituteInPlace $out/filter/config \
-          --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev brotli}
+          --replace-fail '$ngx_addon_dir/deps/brotli/c' ${lib.getDev brotli}
       '';
 
     inputs = [ brotli ];
@@ -987,7 +987,7 @@ let self = {
       hash = "sha256-xcdbaogJV/vSzFfP55uK2+zw3zF5j9AHaJI0QItTSss=";
       postFetch = ''
         substituteInPlace $out/vod/media_set.h \
-          --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
+          --replace-fail "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
       '';
     };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "argparse" ""
+      --replace-fail "argparse" ""
   '';
 
   propagatedBuildInputs = [

@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
   # force using the echo binary
   postPatch = ''
-    substituteInPlace tests/test-git.t --replace "echo" "${coreutils}/bin/echo"
+    substituteInPlace tests/test-git.t --replace-fail "echo" "${coreutils}/bin/echo"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

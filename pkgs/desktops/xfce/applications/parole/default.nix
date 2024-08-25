@@ -23,7 +23,7 @@ mkXfceDerivation {
 
   postPatch = ''
     substituteInPlace src/plugins/mpris2/Makefile.am \
-      --replace GST_BASE_CFLAGS GST_VIDEO_CFLAGS
+      --replace-fail GST_BASE_CFLAGS GST_VIDEO_CFLAGS
   '';
 
   buildInputs = with gst_all_1; [

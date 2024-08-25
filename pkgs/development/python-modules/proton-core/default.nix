@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton" ];

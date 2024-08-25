@@ -22,7 +22,7 @@ buildPythonPackage rec {
     # Should be fixed in versions > 0.3.1
     # https://github.com/ashb/sphinx-argparse/pull/3
     substituteInPlace sphinxarg/parser.py \
-      --replace "if action_group.title == 'optional arguments':" "if action_group.title == 'optional arguments' or action_group.title == 'options':"
+      --replace-fail "if action_group.title == 'optional arguments':" "if action_group.title == 'optional arguments' or action_group.title == 'options':"
   '';
 
   propagatedBuildInputs = [ sphinx ];

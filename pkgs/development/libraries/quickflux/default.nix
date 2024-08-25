@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     # Has extra $out in includes list, breaks usage of module (complains about non-existent path in module includes)
     substituteInPlace $out/lib/cmake/QuickFlux/QuickFluxTargets.cmake \
-      --replace "\''${_IMPORT_PREFIX}/include" '${placeholder "dev"}/include'
+      --replace-fail "\''${_IMPORT_PREFIX}/include" '${placeholder "dev"}/include'
   '';
 
   meta = with lib; {

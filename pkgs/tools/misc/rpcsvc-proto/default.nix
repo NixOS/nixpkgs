@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # replace fallback cpp with the target prefixed cpp
     substituteInPlace rpcgen/rpc_main.c \
-      --replace 'CPP = "cpp"' \
+      --replace-fail 'CPP = "cpp"' \
                 'CPP = "${targetPackages.stdenv.cc.targetPrefix}cpp"'
   '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)  ''
     substituteInPlace rpcsvc/Makefile.am \
-      --replace '$(top_builddir)/rpcgen/rpcgen' '${buildPackages.rpcsvc-proto}/bin/rpcgen'
+      --replace-fail '$(top_builddir)/rpcgen/rpcgen' '${buildPackages.rpcsvc-proto}/bin/rpcgen'
   '';
 
   meta = with lib; {

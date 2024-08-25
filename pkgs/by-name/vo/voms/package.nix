@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   postAutoreconf = ''
     # FHS patching
     substituteInPlace configure \
-      --replace "/usr/bin/soapcpp2" "${gsoap}/bin/soapcpp2"
+      --replace-fail "/usr/bin/soapcpp2" "${gsoap}/bin/soapcpp2"
 
     # Tell gcc about the location of zlib
     # See https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=voms

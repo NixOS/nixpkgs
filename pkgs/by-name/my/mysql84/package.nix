@@ -21,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
+    substituteInPlace cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
   buildInputs = [

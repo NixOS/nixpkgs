@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace cubiomes-viewer.pro \
-      --replace '$$[QT_INSTALL_BINS]/lupdate' lupdate \
-      --replace '$$[QT_INSTALL_BINS]/lrelease' lrelease
+      --replace-fail '$$[QT_INSTALL_BINS]/lupdate' lupdate \
+      --replace-fail '$$[QT_INSTALL_BINS]/lrelease' lrelease
   '';
 
   buildInputs = [

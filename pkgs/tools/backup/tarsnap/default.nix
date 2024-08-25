@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile.in \
-      --replace "command -p mv" "mv"
+      --replace-fail "command -p mv" "mv"
     substituteInPlace configure \
-      --replace "command -p getconf PATH" "echo $PATH"
+      --replace-fail "command -p getconf PATH" "echo $PATH"
   '';
 
   postInstall = ''

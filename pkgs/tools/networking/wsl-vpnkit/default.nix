@@ -35,8 +35,8 @@ resholve.mkDerivation {
 
   postPatch = ''
     substituteInPlace wsl-vpnkit \
-      --replace "/app/wsl-vm" "${gvproxy}/bin/gvforwarder" \
-      --replace "/app/wsl-gvproxy.exe" "${gvproxyWin}/bin/gvproxy-windows.exe"
+      --replace-fail "/app/wsl-vm" "${gvproxy}/bin/gvforwarder" \
+      --replace-fail "/app/wsl-gvproxy.exe" "${gvproxyWin}/bin/gvproxy-windows.exe"
   '';
 
   installPhase = ''

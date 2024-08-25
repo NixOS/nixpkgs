@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace misc/unix/grafx2.desktop \
-      --replace "Exec=grafx2" "Exec=grafx2-sdl"
+      --replace-fail "Exec=grafx2" "Exec=grafx2-sdl"
   '';
 
   nativeBuildInputs = [

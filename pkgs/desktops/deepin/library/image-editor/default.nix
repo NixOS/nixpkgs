@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace libimageviewer/CMakeLists.txt --replace '/usr' '$out'
-    substituteInPlace libimagevisualresult/CMakeLists.txt --replace '/usr' '$out'
+    substituteInPlace libimageviewer/CMakeLists.txt --replace-fail '/usr' '$out'
+    substituteInPlace libimagevisualresult/CMakeLists.txt --replace-fail '/usr' '$out'
   '';
 
   nativeBuildInputs = [

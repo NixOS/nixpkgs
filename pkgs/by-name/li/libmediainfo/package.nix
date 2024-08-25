@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (stdenv.cc.targetPrefix != "") ''
     substituteInPlace configure.ac \
-      --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
+      --replace-fail "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
   '';
 
   configureFlags = [ "--enable-shared" ];

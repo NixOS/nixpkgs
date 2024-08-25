@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/openboardview/CMakeLists.txt \
-      --replace "SDL2::SDL2main" ""
-    substituteInPlace CMakeLists.txt --replace "fixup_bundle" "#fixup_bundle"
+      --replace-fail "SDL2::SDL2main" ""
+    substituteInPlace CMakeLists.txt --replace-fail "fixup_bundle" "#fixup_bundle"
   '';
 
   cmakeFlags = [

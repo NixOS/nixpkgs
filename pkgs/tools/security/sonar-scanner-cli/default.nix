@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   fixupPhase = ''
     substituteInPlace $out/bin/sonar-scanner \
-      --replace "\$sonar_scanner_home/jre" "${lib.getBin jre}"
+      --replace-fail "\$sonar_scanner_home/jre" "${lib.getBin jre}"
   '';
 
   meta = with lib; {

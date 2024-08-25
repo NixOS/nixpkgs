@@ -45,13 +45,13 @@ let
     nativeBuildInputs = [ python3Packages.wrapPython ];
     postPatch = ''
       substituteInPlace bitmask-root \
-        --replace 'swhich("ip")' '"${iproute2}/bin/ip"' \
-        --replace 'swhich("iptables")' '"${iptables}/bin/iptables"' \
-        --replace 'swhich("ip6tables")' '"${iptables}/bin/ip6tables"' \
-        --replace 'swhich("sysctl")' '"${procps}/bin/sysctl"' \
-        --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
+        --replace-fail 'swhich("ip")' '"${iproute2}/bin/ip"' \
+        --replace-fail 'swhich("iptables")' '"${iptables}/bin/iptables"' \
+        --replace-fail 'swhich("ip6tables")' '"${iptables}/bin/ip6tables"' \
+        --replace-fail 'swhich("sysctl")' '"${procps}/bin/sysctl"' \
+        --replace-fail /usr/sbin/openvpn ${openvpn}/bin/openvpn
       substituteInPlace se.leap.bitmask.policy \
-        --replace /usr/sbin/bitmask-root $out/bin/bitmask-root
+        --replace-fail /usr/sbin/bitmask-root $out/bin/bitmask-root
     '';
     installPhase = ''
       runHook preInstall
@@ -72,26 +72,26 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace pkg/pickle/helpers.go \
-      --replace /usr/share $out/share
+      --replace-fail /usr/share $out/share
 
     # Using $PROVIDER is not working,
     # thus replacing directly into the vendor.conf
     substituteInPlace providers/vendor.conf \
-      --replace "provider = riseup" "provider = ${provider}"
+      --replace-fail "provider = riseup" "provider = ${provider}"
 
     substituteInPlace branding/templates/debian/app.desktop-template \
-      --replace "Icon=icon" "Icon=${pname}"
+      --replace-fail "Icon=icon" "Icon=${pname}"
 
     patchShebangs gui/build.sh
     wrapPythonProgramsIn branding/scripts
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace pkg/helper/linux.go \
-      --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
+      --replace-fail /usr/sbin/openvpn ${openvpn}/bin/openvpn
     substituteInPlace pkg/vpn/launcher_linux.go \
-      --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn \
-      --replace /usr/sbin/bitmask-root ${bitmask-root}/bin/bitmask-root \
-      --replace /usr/bin/lxpolkit /run/wrappers/bin/polkit-agent-helper-1 \
-      --replace '"polkit-gnome-authentication-agent-1",' '"polkit-gnome-authentication-agent-1","polkitd",'
+      --replace-fail /usr/sbin/openvpn ${openvpn}/bin/openvpn \
+      --replace-fail /usr/sbin/bitmask-root ${bitmask-root}/bin/bitmask-root \
+      --replace-fail /usr/bin/lxpolkit /run/wrappers/bin/polkit-agent-helper-1 \
+      --replace-fail '"polkit-gnome-authentication-agent-1",' '"polkit-gnome-authentication-agent-1","polkitd",'
   '';
 
   nativeBuildInputs = [

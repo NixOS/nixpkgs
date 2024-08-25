@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     mv html/d $out/share/doc/
 
     # fix paths in dmd.conf (one level less)
-    substituteInPlace $out/bin/dmd.conf --replace "/../../" "/../"
+    substituteInPlace $out/bin/dmd.conf --replace-fail "/../../" "/../"
 
     runHook postInstall
   '';

@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     # Fill the version stub in the man page. We can't fill the date
     # stub reproducibly.
     substitute man/page man/broot.1 \
-      --replace "#version" "${version}"
+      --replace-fail "#version" "${version}"
   '';
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''

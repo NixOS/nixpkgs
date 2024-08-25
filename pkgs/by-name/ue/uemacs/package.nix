@@ -19,11 +19,11 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace "lcurses" "lncurses"
-    substituteInPlace Makefile --replace "/usr/bin" "$out/bin"
-    substituteInPlace Makefile --replace "/usr/lib" "$out/share/uemacs"
+    substituteInPlace Makefile --replace-fail "lcurses" "lncurses"
+    substituteInPlace Makefile --replace-fail "/usr/bin" "$out/bin"
+    substituteInPlace Makefile --replace-fail "/usr/lib" "$out/share/uemacs"
 
-    substituteInPlace epath.h --replace "/usr/global/lib/" "$out/share/uemacs/"
+    substituteInPlace epath.h --replace-fail "/usr/global/lib/" "$out/share/uemacs/"
   '';
 
   installPhase = ''

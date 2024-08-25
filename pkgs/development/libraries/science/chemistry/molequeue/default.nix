@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
     substituteInPlace $out/lib/cmake/${pname}/MoleQueueConfig.cmake \
-      --replace "$out/" ""
+      --replace-fail "$out/" ""
   '';
 
   meta = with lib; {

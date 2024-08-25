@@ -77,8 +77,8 @@ let
       ];
       postPatch = ''
         substituteInPlace zod_launcher_src/zod_launcherFrm.cpp \
-          --replace 'message = wxT("./zod");' 'message = wxT("zod");' \
-          --replace "check.replace(i,1,1,'_');" "check.replace(i,1,1,(wxUniChar)'_');"
+          --replace-fail 'message = wxT("./zod");' 'message = wxT("zod");' \
+          --replace-fail "check.replace(i,1,1,'_');" "check.replace(i,1,1,(wxUniChar)'_');"
       '';
       preBuild = "cd zod_launcher_src";
       installPhase = ''

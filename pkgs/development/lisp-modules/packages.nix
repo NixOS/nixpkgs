@@ -78,7 +78,7 @@ let
   cl-gobject-introspection = super.cl-gobject-introspection.overrideLispAttrs (o: {
     postPatch = ''
       substituteInPlace src/init.lisp \
-        --replace sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
+        --replace-fail sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
     '';
   });
 

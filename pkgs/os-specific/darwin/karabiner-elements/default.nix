@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for f in *.pkg/Library/Launch{Agents,Daemons}/*.plist; do
       substituteInPlace $f \
-        --replace "/Library/" "$out/Library/"
+        --replace-fail "/Library/" "$out/Library/"
     done
   '';
 

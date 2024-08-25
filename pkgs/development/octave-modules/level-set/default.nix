@@ -23,8 +23,8 @@ buildOctavePackage rec {
   # exists, (a simple regex also matches that), but logic_error() doesn't
   # require a format specifier. So, this regex was born to handle that...
   postPatch = ''
-    substituteInPlace build.sh --replace "level-set-0.3.1" "${pname}-${version}" \
-                               --replace "\`pwd\`" '/build'
+    substituteInPlace build.sh --replace-fail "level-set-0.3.1" "${pname}-${version}" \
+                               --replace-fail "\`pwd\`" '/build'
     sed -i -E 's#[^[:graph:]]error \(# error \(\"%s\", #g' src/*.cpp
   '';
 

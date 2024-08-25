@@ -47,10 +47,10 @@ in
   postPatch = ''
     # fix FHS paths
     substituteInPlace inputremapper/configs/data.py \
-      --replace "/usr/share"  "$out/usr/share"
+      --replace-fail "/usr/share"  "$out/usr/share"
   '' + lib.optionalString withDebugLogLevel ''
     # if debugging
-    substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
+    substituteInPlace inputremapper/logger.py --replace-fail "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
   '';
 
   doCheck = withDoCheck;

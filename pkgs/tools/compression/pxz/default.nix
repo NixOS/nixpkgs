@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '`date +%Y%m%d`' '19700101'
+      --replace-fail '`date +%Y%m%d`' '19700101'
 
     substituteInPlace pxz.c \
-      --replace 'XZ_BINARY "xz"' 'XZ_BINARY "${lib.getBin xz}/bin/xz"'
+      --replace-fail 'XZ_BINARY "xz"' 'XZ_BINARY "${lib.getBin xz}/bin/xz"'
   '';
 
   buildInputs = [ xz ];

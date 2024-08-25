@@ -64,8 +64,8 @@ flutter322.buildFlutterApplication rec {
 
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
-      --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
-      --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
+      --replace-fail "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
+      --replace-fail "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
   '';
 
   # Needed for QR scanning to work

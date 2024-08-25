@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
+    substituteInPlace Makefile --replace-fail '$(DESTDIR)'/usr $out
   '';
 
   dontBuild = true;

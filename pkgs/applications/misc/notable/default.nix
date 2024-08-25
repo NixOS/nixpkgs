@@ -29,7 +29,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/notable.png \
       $out/share/icons/hicolor/1024x1024/apps/notable.png
     substituteInPlace $out/share/applications/notable.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/${pname}" \
       --add-flags "--disable-seccomp-filter-sandbox"

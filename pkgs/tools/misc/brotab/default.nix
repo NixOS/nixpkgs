@@ -30,9 +30,9 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements/base.txt \
-      --replace "Flask==2.0.2" "Flask>=2.0.2" \
-      --replace "psutil==5.8.0" "psutil>=5.8.0" \
-      --replace "requests==2.24.0" "requests>=2.24.0"
+      --replace-fail "Flask==2.0.2" "Flask>=2.0.2" \
+      --replace-fail "psutil==5.8.0" "psutil>=5.8.0" \
+      --replace-fail "requests==2.24.0" "requests>=2.24.0"
   '';
 
   __darwinAllowLocalNetworking = true;

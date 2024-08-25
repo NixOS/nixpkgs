@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     substituteInPlace configure.in \
-      --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
+      --replace-fail '_BSD_SOURCE' '_DEFAULT_SOURCE'
     cat configure.in | ${bsdbuild}/bin/mkconfigure > configure
   '';
 

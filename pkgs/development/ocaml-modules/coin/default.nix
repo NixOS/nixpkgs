@@ -17,7 +17,7 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace src/dune --replace 'ocaml} ' \
+    substituteInPlace src/dune --replace-fail 'ocaml} ' \
       'ocaml} -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib '
   '';
 

@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace usr/lib/bulky/bulky.py \
-                     --replace "/usr/share/locale" "$out/share/locale" \
-                     --replace /usr/share/bulky "$out/share/bulky" \
-                     --replace /usr/share/common-licenses "${common-licenses}/share/common-licenses" \
-                     --replace __DEB_VERSION__  "${version}"
+                     --replace-fail "/usr/share/locale" "$out/share/locale" \
+                     --replace-fail /usr/share/bulky "$out/share/bulky" \
+                     --replace-fail /usr/share/common-licenses "${common-licenses}/share/common-licenses" \
+                     --replace-fail __DEB_VERSION__  "${version}"
   '';
 
   installPhase = ''

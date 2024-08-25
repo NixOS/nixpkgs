@@ -29,7 +29,7 @@ in appimageTools.wrapAppImage {
     install -Dm444 ${appimageContents}/todoist.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/todoist.png -t $out/share/pixmaps
     substituteInPlace $out/share/applications/todoist.desktop \
-      --replace 'Exec=AppRun' "Exec=$out/bin/${pname} --"
+      --replace-fail 'Exec=AppRun' "Exec=$out/bin/${pname} --"
   '';
 
   meta = with lib; {

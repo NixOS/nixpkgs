@@ -66,8 +66,8 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools==69.0.2" "setuptools" \
-      --replace "wheel==0.42.0" "wheel"
+      --replace-fail "setuptools==69.0.2" "setuptools" \
+      --replace-fail "wheel==0.42.0" "wheel"
   '';
 
   meta = with lib; {

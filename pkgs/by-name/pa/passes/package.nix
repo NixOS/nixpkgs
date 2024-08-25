@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/model/meson.build \
-      --replace /app/lib ${zint}/lib
+      --replace-fail /app/lib ${zint}/lib
     substituteInPlace src/view/window.blp \
-      --replace reveal_flap reveal-flap
+      --replace-fail reveal_flap reveal-flap
     substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
+      --replace-fail gtk-update-icon-cache gtk4-update-icon-cache
     patchShebangs build-aux/meson/postinstall.py
   '';
 

@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     patchShebangs build.sh recolor-cursor.sh
     substituteInPlace Makefile \
-      --replace "~/.icons" "$out/share/icons"
+      --replace-fail "~/.icons" "$out/share/icons"
     ./recolor-cursor.sh \
   '' + lib.optionalString (accentColor != null) ''
     --accent-color "${accentColor}" \

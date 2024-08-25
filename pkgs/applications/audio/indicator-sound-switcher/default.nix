@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace lib/indicator_sound_switcher/lib_pulseaudio.py \
-      --replace "CDLL('libpulse.so.0')" "CDLL('${libpulseaudio}/lib/libpulse.so')"
+      --replace-fail "CDLL('libpulse.so.0')" "CDLL('${libpulseaudio}/lib/libpulse.so')"
   '';
 
   nativeBuildInputs = [

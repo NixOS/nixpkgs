@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/rush-po \
-      --replace "exec perl" "exec ${lib.getExe perl}"
+      --replace-fail "exec perl" "exec ${lib.getExe perl}"
   '';
 
   doCheck = true;

@@ -27,9 +27,9 @@ in haskellLib.overrideCabal (self: {
   patches = (self.patches or []) ++ [ ./custom-config.patch ];
   postPatch = (self.postPatch or "") + ''
     substituteInPlace src/Main.hs \
-      --replace '@config@' '${configStr}'
+      --replace-fail '@config@' '${configStr}'
     substituteInPlace src/Modules.hs \
-      --replace '@modules@' '${modulesStr}'
+      --replace-fail '@modules@' '${modulesStr}'
   '';
 
   buildTools = (self.buildTools or []) ++ [ makeWrapper ];

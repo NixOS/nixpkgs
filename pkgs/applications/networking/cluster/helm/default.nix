@@ -47,13 +47,13 @@ buildGoModule rec {
 
     # skipping version tests because they require dot git directory
     substituteInPlace cmd/helm/version_test.go \
-      --replace "TestVersion" "SkipVersion"
+      --replace-fail "TestVersion" "SkipVersion"
     # skipping plugin tests
     substituteInPlace cmd/helm/plugin_test.go \
-      --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
-      --replace "TestLoadPlugins" "SkipLoadPlugins"
+      --replace-fail "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
+      --replace-fail "TestLoadPlugins" "SkipLoadPlugins"
     substituteInPlace cmd/helm/helm_test.go \
-      --replace "TestPluginExitCode" "SkipPluginExitCode"
+      --replace-fail "TestPluginExitCode" "SkipPluginExitCode"
   '';
 
   nativeBuildInputs = [ installShellFiles ];

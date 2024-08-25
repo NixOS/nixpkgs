@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/etc/profile.d
     substitute ${asdfPrepareFile} $out/etc/profile.d/asdf-prepare.sh \
-      --replace "@asdfDir@" "$out/share/asdf-vm"
+      --replace-fail "@asdfDir@" "$out/share/asdf-vm"
 
     mkdir -p $out/bin
     makeWrapper $out/share/asdf-vm/bin/asdf $out/bin/asdf \

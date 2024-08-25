@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "preshed>=3.0.2,<3.1.0" "preshed"
+      --replace-fail "preshed>=3.0.2,<3.1.0" "preshed"
   '';
 
   nativeBuildInputs = [ setuptools ];

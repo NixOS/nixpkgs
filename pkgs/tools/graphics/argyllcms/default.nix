@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Jambase \
-      --replace "-m64" ""
+      --replace-fail "-m64" ""
   '';
 
   preConfigure = let
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     '';
   in ''
     cp ${jamTop} Jamtop
-    substituteInPlace Makefile --replace "-j 3" "-j $NIX_BUILD_CORES"
+    substituteInPlace Makefile --replace-fail "-j 3" "-j $NIX_BUILD_CORES"
     # Remove tiff, jpg and png to be sure the nixpkgs-provided ones are used
     rm -rf tiff jpg png
 

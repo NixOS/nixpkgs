@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace runtests.sh \
-      --replace "mkdir -p \$builddir" "mkdir -p \$builddir && pwd"
+      --replace-fail "mkdir -p \$builddir" "mkdir -p \$builddir && pwd"
   '';
 
   # TODO: remove in next version

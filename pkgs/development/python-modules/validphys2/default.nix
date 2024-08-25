@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/validphys/version.py \
-      --replace '= __give_git()' '= "'$version'"'
+      --replace-fail '= __give_git()' '= "'$version'"'
   '';
 
   propagatedBuildInputs = [

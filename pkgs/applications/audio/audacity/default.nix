@@ -74,10 +74,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     mkdir src/private
     substituteInPlace scripts/build/macOS/fix_bundle.py \
-      --replace "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
+      --replace-fail "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
-      --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+      --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
   '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';

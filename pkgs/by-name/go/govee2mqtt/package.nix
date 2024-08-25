@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/service/http.rs \
-      --replace '"assets"' '"${placeholder "out"}/share/govee2mqtt/assets"'
+      --replace-fail '"assets"' '"${placeholder "out"}/share/govee2mqtt/assets"'
   '';
 
   cargoHash = "sha256-wApf+H5T7HPkCGQwv8ePoDnStUn04oVvv3eIJ8aKVUw=";

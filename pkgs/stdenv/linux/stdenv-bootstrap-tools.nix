@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
           local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
           cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${libc.out}' | sort -u)
           for f in $lScripts; do
-            substituteInPlace "$f" --replace '${libc.out}/lib/' ""
+            substituteInPlace "$f" --replace-fail '${libc.out}/lib/' ""
           done
 
           # Hopefully we won't need these.

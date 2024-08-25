@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substitute sample.Configuration Configuration \
-      --replace /usr/bin ${lib.makeBinPath [ ocaml' ]} \
-      --replace elkhound ${elkhound}/bin/elkhound
+      --replace-fail /usr/bin ${lib.makeBinPath [ ocaml' ]} \
+      --replace-fail elkhound ${elkhound}/bin/elkhound
 
     mkdir -p obj/{.depend,x86_LINUX}
 

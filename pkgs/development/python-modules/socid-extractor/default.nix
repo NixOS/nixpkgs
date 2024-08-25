@@ -31,7 +31,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/soxoj/socid-extractor/pull/150
     substituteInPlace requirements.txt \
-      --replace "beautifulsoup4~=4.11.1" "beautifulsoup4>=4.10.0"
+      --replace-fail "beautifulsoup4~=4.11.1" "beautifulsoup4>=4.10.0"
   '';
 
   # Test require network access

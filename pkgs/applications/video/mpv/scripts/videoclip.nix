@@ -22,11 +22,11 @@ buildLua {
   patchPhase =
     ''
       substituteInPlace platform.lua \
-      --replace \'curl\' \'${lib.getExe curl}\' \
+      --replace-fail \'curl\' \'${lib.getExe curl}\' \
     ''
     + lib.optionalString stdenv.isLinux ''
-      --replace xclip ${lib.getExe xclip} \
-      --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
+      --replace-fail xclip ${lib.getExe xclip} \
+      --replace-fail wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
     '';
 
   scriptPath = ".";

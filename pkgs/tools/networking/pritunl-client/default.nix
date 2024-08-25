@@ -61,7 +61,7 @@
       mkdir -p $out/lib/systemd/system/
       cp $src/resources_linux/pritunl-client.service $out/lib/systemd/system/
       substituteInPlace $out/lib/systemd/system/pritunl-client.service \
-        --replace "/usr" "$out"
+        --replace-fail "/usr" "$out"
     '';
 
     postFixup = let
@@ -123,7 +123,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/share/applications/
     cp resources_linux/pritunl-client-electron.desktop $out/share/applications/
     substituteInPlace $out/share/applications/pritunl-client-electron.desktop \
-      --replace "/usr/lib/pritunl_client_electron/Pritunl" "$out/bin/pritunl-client-electron"
+      --replace-fail "/usr/lib/pritunl_client_electron/Pritunl" "$out/bin/pritunl-client-electron"
   '' + ''
     # install shell completions for pritunl-client
     installShellCompletion --cmd pritunl-client \

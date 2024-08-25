@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs setup.sh gen-template.sh gen-text-file.sh
-    substituteInPlace setup.sh --replace gcc "$CC"
-    substituteInPlace Makefile --replace gcc "$CC"
+    substituteInPlace setup.sh --replace-fail gcc "$CC"
+    substituteInPlace Makefile --replace-fail gcc "$CC"
   '';
 
   INSTALL_PATH = "$out";

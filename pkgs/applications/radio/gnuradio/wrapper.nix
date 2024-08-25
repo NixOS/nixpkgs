@@ -192,7 +192,7 @@ let
           mv -f "$i".tmp "$i"
           if head -1 "$i" | grep -q ${unwrapped.python}; then
             substituteInPlace "$i" \
-              --replace ${unwrapped.python} ${pythonEnv}
+              --replace-fail ${unwrapped.python} ${pythonEnv}
           fi
           wrapProgram "$i" ${makeWrapperArgs}
         done

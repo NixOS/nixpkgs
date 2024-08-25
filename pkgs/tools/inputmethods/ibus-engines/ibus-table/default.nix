@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
         -e "/export IBUS_DATAROOTDIR=/ s/^.$//" \
         -e "/export IBUS_LOCALEDIR=/ s/^.$//" \
         -i "setup/ibus-setup-table.in"
-    substituteInPlace engine/tabcreatedb.py --replace '/usr/share/ibus-table' $out/share/ibus-table
+    substituteInPlace engine/tabcreatedb.py --replace-fail '/usr/share/ibus-table' $out/share/ibus-table
     substituteInPlace engine/ibus_table_location.py \
-      --replace '/usr/libexec' $out/libexec \
-      --replace '/usr/share/ibus-table/' $out/share/ibus-table/
+      --replace-fail '/usr/libexec' $out/libexec \
+      --replace-fail '/usr/share/ibus-table/' $out/share/ibus-table/
   '';
 
   buildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     substituteInPlace $sourceRoot/engine/Makefile.am \
-      --replace "docbook2man" "docbook2man --sgml"
+      --replace-fail "docbook2man" "docbook2man --sgml"
   '';
 
   meta = with lib; {

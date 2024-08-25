@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     echo "CFLAGS=$CFLAGS" >>config.mk
     echo "LIBS=$LIBS" >>config.mk
     echo "LDFLAGS=$LIBS" >>config.mk
-    substituteInPlace config.mk --replace /usr/local "$out"
-    substituteInPlace gadgets/config.mk --replace /usr/local "$out"
+    substituteInPlace config.mk --replace-fail /usr/local "$out"
+    substituteInPlace gadgets/config.mk --replace-fail /usr/local "$out"
   '';
 
   buildPhase = ''

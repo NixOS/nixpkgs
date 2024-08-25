@@ -29,10 +29,10 @@ perlPackages.buildPerlPackage rec {
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
   patchPhase = ''
     substituteInPlace pg_format \
-      --replace "#!/usr/bin/env perl" "#!/usr/bin/perl"
+      --replace-fail "#!/usr/bin/env perl" "#!/usr/bin/perl"
     substituteInPlace Makefile.PL \
-      --replace "'DESTDIR'      => \$DESTDIR," "'DESTDIR'      => '$out/'," \
-      --replace "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
+      --replace-fail "'DESTDIR'      => \$DESTDIR," "'DESTDIR'      => '$out/'," \
+      --replace-fail "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
   '';
 
   nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;

@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch = ''
     substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
-      --replace "/usr/bin/env" "${lib.getExe' coreutils "env"}"
+      --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
   '';
 
   postBuild = ''

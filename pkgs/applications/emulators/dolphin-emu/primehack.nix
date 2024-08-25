@@ -122,10 +122,10 @@ stdenv.mkDerivation rec {
 
   # - Allow Dolphin to use nix-provided libraries instead of building them
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
+    substituteInPlace CMakeLists.txt --replace-fail 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace CMakeLists.txt --replace 'if(NOT APPLE)' 'if(true)'
-    substituteInPlace CMakeLists.txt --replace 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
+    substituteInPlace CMakeLists.txt --replace-fail 'if(NOT APPLE)' 'if(true)'
+    substituteInPlace CMakeLists.txt --replace-fail 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
   '';
 
   postInstall = ''
@@ -133,8 +133,8 @@ stdenv.mkDerivation rec {
     mv $out/bin/dolphin-emu-nogui $out/bin/dolphin-emu-primehack-nogui
     mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
     mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
-    substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'dolphin-emu' 'dolphin-emu-primehack'
-    substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'Dolphin Emulator' 'PrimeHack'
+    substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace-fail 'dolphin-emu' 'dolphin-emu-primehack'
+    substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace-fail 'Dolphin Emulator' 'PrimeHack'
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/lib/cmake/${pname}/${pname}-targets.cmake  \
-      --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
+      --replace-fail 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
 
   doCheck = !stdenv.isDarwin;

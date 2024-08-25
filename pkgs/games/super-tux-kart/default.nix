@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
     # Allow building with system-installed wiiuse on Darwin
     substituteInPlace CMakeLists.txt \
-      --replace 'NOT (APPLE OR HAIKU)) AND USE_SYSTEM_WIIUSE' 'NOT (HAIKU)) AND USE_SYSTEM_WIIUSE'
+      --replace-fail 'NOT (APPLE OR HAIKU)) AND USE_SYSTEM_WIIUSE' 'NOT (HAIKU)) AND USE_SYSTEM_WIIUSE'
   '';
 
   nativeBuildInputs = [

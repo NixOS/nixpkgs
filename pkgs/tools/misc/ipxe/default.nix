@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    substituteInPlace src/util/genfsimg --replace "	syslinux " "	true "
+    substituteInPlace src/util/genfsimg --replace-fail "	syslinux " "	true "
   ''; # calling syslinux on a FAT image isn't going to work
 
   # not possible due to assembler code
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
     for opt in ${lib.escapeShellArgs enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
-    substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
+    substituteInPlace src/Makefile.housekeeping --replace-fail '/bin/echo' echo
   '' + lib.optionalString stdenv.hostPlatform.isx86 ''
-    substituteInPlace src/util/genfsimg --replace /usr/lib/syslinux ${syslinux}/share/syslinux
+    substituteInPlace src/util/genfsimg --replace-fail /usr/lib/syslinux ${syslinux}/share/syslinux
   '' + ''
     runHook postConfigure
   '';

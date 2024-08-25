@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace widgets/fullscreenbackground.cpp \
-      --replace "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds" \
-      --replace "/usr/share/wallpapers" "/run/current-system/sw/share/wallpapers"
+      --replace-fail "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds" \
+      --replace-fail "/usr/share/wallpapers" "/run/current-system/sw/share/wallpapers"
 
     substituteInPlace dde-warning-dialog/src/org.deepin.dde.WarningDialog1.service dde-welcome/src/org.deepin.dde.Welcome1.service \
-      --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+      --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace dmemory-warning-dialog/src/org.deepin.dde.MemoryWarningDialog1.service \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [

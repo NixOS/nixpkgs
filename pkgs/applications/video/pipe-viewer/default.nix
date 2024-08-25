@@ -59,7 +59,7 @@ buildPerlModule rec {
   # Modification of a read-only value attempted at /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-perl5.34.0-Getopt-Long-2.52/lib/perl5/site_perl/5.34.0/Getopt/Long.pm line 585.
   #buildFlags = lib.optional withGtk3 "--gtk3";
   postPatch = lib.optionalString withGtk3 ''
-    substituteInPlace Build.PL --replace 'my $gtk ' 'my $gtk = 1;#'
+    substituteInPlace Build.PL --replace-fail 'my $gtk ' 'my $gtk = 1;#'
   '';
 
   nativeCheckInputs = [

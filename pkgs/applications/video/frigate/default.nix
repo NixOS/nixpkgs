@@ -86,30 +86,30 @@ python.pkgs.buildPythonApplication rec {
     echo 'VERSION = "${version}"' > frigate/version.py
 
     substituteInPlace frigate/app.py \
-      --replace "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
+      --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
     substituteInPlace frigate/const.py \
-      --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate" \
-      --replace "/config" "/var/lib/frigate" \
-      --replace "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
+      --replace-fail "/media/frigate" "/var/lib/frigate" \
+      --replace-fail "/tmp/cache" "/var/cache/frigate" \
+      --replace-fail "/config" "/var/lib/frigate" \
+      --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
     substituteInPlace frigate/http.py \
-      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
+      --replace-fail "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
 
     substituteInPlace frigate/output.py \
-      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
+      --replace-fail "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
 
     substituteInPlace frigate/detectors/detector_config.py \
-      --replace "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
+      --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
     substituteInPlace frigate/config.py \
-      --replace "/cpu_model.tflite" "${tflite_cpu_model}" \
-      --replace "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
+      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
+      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
     substituteInPlace frigate/test/test_config.py \
-      --replace "(MODEL_CACHE_DIR" "('/build/model_cache'" \
-      --replace "/config/model_cache" "/build/model_cache"
+      --replace-fail "(MODEL_CACHE_DIR" "('/build/model_cache'" \
+      --replace-fail "/config/model_cache" "/build/model_cache"
   '';
 
   dontBuild = true;

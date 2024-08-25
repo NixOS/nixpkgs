@@ -37,7 +37,7 @@ let
       cp -r $src/src $src/runtime/lua/*.lua $src/manifest.xml $out
 
       # Pretend this is an official build so we don't get the ugly "dev mode" warning
-      substituteInPlace $out/manifest.xml --replace '<Version' '<Version platform="nixos"'
+      substituteInPlace $out/manifest.xml --replace-fail '<Version' '<Version platform="nixos"'
       touch $out/installed.cfg
 
       # Completely stub out the update check

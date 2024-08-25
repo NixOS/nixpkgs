@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       substituteInPlace tests/testsuite.c \
-        --replace /bin/rm rm
+        --replace-fail /bin/rm rm
     ''
     + lib.optionalString stdenv.isDarwin ''
       # This specific test fails on darwin for some unknown reason

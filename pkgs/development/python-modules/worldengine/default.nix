@@ -50,16 +50,16 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace pypng>=0.0.18 purepng \
-      --replace 'numpy>=1.9.2, <= 1.10.0.post2' 'numpy' \
-      --replace 'argparse==1.2.1' "" \
-      --replace 'protobuf==3.0.0a3' 'protobuf' \
-      --replace 'noise==1.2.2' 'noise' \
-      --replace 'PyPlatec==1.4.0' 'PyPlatec' \
+      --replace-fail pypng>=0.0.18 purepng \
+      --replace-fail 'numpy>=1.9.2, <= 1.10.0.post2' 'numpy' \
+      --replace-fail 'argparse==1.2.1' "" \
+      --replace-fail 'protobuf==3.0.0a3' 'protobuf' \
+      --replace-fail 'noise==1.2.2' 'noise' \
+      --replace-fail 'PyPlatec==1.4.0' 'PyPlatec' \
 
     substituteInPlace \
       worldengine/{draw.py,hdf5_serialization.py} \
-      --replace numpy.float float
+      --replace-fail numpy.float float
   '';
 
   doCheck = !isPy27; # google namespace clash

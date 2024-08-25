@@ -165,7 +165,7 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/ethon/curls/settings.rb \
-        --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
+        --replace-fail "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
   };
 
@@ -218,7 +218,7 @@ in
     buildInputs = [ openssl ];
     postPatch = ''
       substituteInPlace ext/em.cpp \
-        --replace 'if (bind (' 'if (::bind ('
+        --replace-fail 'if (bind (' 'if (::bind ('
     '';
   };
 
@@ -304,7 +304,7 @@ in
     postPatch = let
       getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
     in ''
-      substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+      substituteInPlace lib/prometheus/client/page_size.rb --replace-fail "getconf" "${lib.getBin getconf}/bin/getconf"
     '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     cargoRoot = "ext/fast_mmaped_file_rs";
@@ -412,7 +412,7 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace bin/gollum \
-        --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
+        --replace-fail "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
     '';
   };
 
@@ -442,14 +442,14 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace Makefile \
-        --replace '-Wno-invalid-source-encoding' ""
+        --replace-fail '-Wno-invalid-source-encoding' ""
     '' + lib.optionalString (lib.versionOlder attrs.version "1.53.0" && stdenv.isDarwin) ''
       # For < v1.48.0
       substituteInPlace src/ruby/ext/grpc/extconf.rb \
-        --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
+        --replace-fail "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
       # For >= v1.48.0
       substituteInPlace src/ruby/ext/grpc/extconf.rb \
-        --replace 'apple_toolchain = ' 'apple_toolchain = false && '
+        --replace-fail 'apple_toolchain = ' 'apple_toolchain = false && '
     '';
   };
 
@@ -508,7 +508,7 @@ in
     '';
     postPatch = ''
       substituteInPlace ext/libv8/extconf.rb \
-        --replace "location = Libv8::Location::Vendor.new" \
+        --replace-fail "location = Libv8::Location::Vendor.new" \
                   "location = Libv8::Location::System.new"
     '';
     meta.broken = true; # At 2023-01-20, errors as:
@@ -635,7 +635,7 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/opus-ruby.rb \
-        --replace "ffi_lib 'opus'" \
+        --replace-fail "ffi_lib 'opus'" \
                   "ffi_lib '${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
     '';
   };
@@ -718,7 +718,7 @@ in
       dontBuild = false;
       postPatch = ''
         substituteInPlace lib/rbnacl/sodium.rb \
-          --replace 'ffi_lib ["sodium"' \
+          --replace-fail 'ffi_lib ["sodium"' \
                     'ffi_lib ["${libsodium}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}"'
       '';
     };
@@ -772,10 +772,10 @@ in
     ];
     dontBuild = false;
     postPatch = ''
-      substituteInPlace extconf.rb --replace 'rubyio.h' 'ruby/io.h'
+      substituteInPlace extconf.rb --replace-fail 'rubyio.h' 'ruby/io.h'
       substituteInPlace terminfo.c \
-        --replace 'rubyio.h' 'ruby/io.h' \
-        --replace 'rb_cData' 'rb_cObject'
+        --replace-fail 'rubyio.h' 'ruby/io.h' \
+        --replace-fail 'rb_cData' 'rb_cObject'
     '';
   };
 
@@ -784,9 +784,9 @@ in
       cd "$(cat $out/nix-support/gem-meta/install-path)"
 
       substituteInPlace lib/vips.rb \
-        --replace 'library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
-        --replace 'library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
-        --replace 'library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"'
+        --replace-fail 'library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace-fail 'library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace-fail 'library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
   };
 
@@ -802,7 +802,7 @@ in
     SASS_LIBSASS_PATH = toString libsass;
     postPatch = ''
       substituteInPlace lib/sassc/native.rb \
-        --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
+        --replace-fail 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
   };
 
@@ -811,8 +811,8 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace ext/sass/Rakefile \
-        --replace \'dart-sass/sass\' \'${dart-sass}/bin/sass\' \
-        --replace ' => %w[dart-sass]' ""
+        --replace-fail \'dart-sass/sass\' \'${dart-sass}/bin/sass\' \
+        --replace-fail ' => %w[dart-sass]' ""
     '';
   };
 
@@ -854,7 +854,7 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/rbreadline.rb \
-        --replace 'infocmp' '${ncurses}/bin/infocmp'
+        --replace-fail 'infocmp' '${ncurses}/bin/infocmp'
     '';
   };
 
@@ -889,7 +889,7 @@ in
       in
         ''
           substituteInPlace ${path} \
-            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+            --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
         '';
   };
 

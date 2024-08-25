@@ -98,23 +98,23 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools/{parse-settings.py,run-xvfb.sh} tests/{headers,whitespace,server}/*.py
 
     substituteInPlace tests/thumbnailer-admin/thumbnailer-admin_test.cpp \
-      --replace '/usr/bin/test' 'test'
+      --replace-fail '/usr/bin/test' 'test'
 
     substituteInPlace plugins/*/Thumbnailer*/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
     # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
     # > If the <LANG> compiler passes to the linker an architecture-specific system library search directory such as
     # > <prefix>/lib/<arch> this variable contains the <arch> name if/as detected by CMake.
     substituteInPlace tests/qml/CMakeLists.txt \
-      --replace 'CMAKE_LIBRARY_ARCHITECTURE' 'CMAKE_SYSTEM_PROCESSOR' \
-      --replace 'powerpc-linux-gnu' 'ppc' \
-      --replace 's390x-linux-gnu' 's390x'
+      --replace-fail 'CMAKE_LIBRARY_ARCHITECTURE' 'CMAKE_SYSTEM_PROCESSOR' \
+      --replace-fail 'powerpc-linux-gnu' 'ppc' \
+      --replace-fail 's390x-linux-gnu' 's390x'
 
     # Tests run in parallel to other builds, don't suck up cores
     substituteInPlace tests/headers/compile_headers.py \
-      --replace 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
+      --replace-fail 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
   '';
 
   strictDeps = true;

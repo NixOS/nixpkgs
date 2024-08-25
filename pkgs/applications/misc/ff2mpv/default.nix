@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     substituteInPlace ff2mpv.json \
-      --replace '/home/william/scripts/ff2mpv' "$out/bin/ff2mpv.py"
+      --replace-fail '/home/william/scripts/ff2mpv' "$out/bin/ff2mpv.py"
   '';
 
   installPhase = ''

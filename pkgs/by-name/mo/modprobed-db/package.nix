@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace ./common/modprobed-db.in \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
   '';
 
   postInstall = ''

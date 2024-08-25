@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "clhep_ensure_out_of_source_build()" ""
+      --replace-fail "clhep_ensure_out_of_source_build()" ""
   '';
 
   nativeBuildInputs = [

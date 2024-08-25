@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"poetry-plugin-tweak-dependencies-version", ' ""
+      --replace-fail '"poetry-plugin-tweak-dependencies-version", ' ""
   '';
 
   nativeBuildInputs = [

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace manual.xml \
-      --replace "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
+      --replace-fail "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" \
                 "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
   '';
 

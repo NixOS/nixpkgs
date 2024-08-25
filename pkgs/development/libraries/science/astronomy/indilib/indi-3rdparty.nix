@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in $(find . -name "CMakeLists.txt"); do
       substituteInPlace $f \
-        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
-        --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
-        --replace "/lib/firmware" "lib/firmware"
+        --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace-fail "/etc/udev/rules.d" "lib/udev/rules.d" \
+        --replace-fail "/lib/firmware" "lib/firmware"
     done
 
     substituteInPlace libpktriggercord/CMakeLists.txt \
-      --replace "set (PK_DATADIR /usr/share/pktriggercord)" "set (PK_DATADIR $out/share/pkgtriggercord)"
+      --replace-fail "set (PK_DATADIR /usr/share/pktriggercord)" "set (PK_DATADIR $out/share/pkgtriggercord)"
 
     sed '1i#include <ctime>' -i indi-duino/libfirmata/src/firmata.cpp # gcc12
   '';
@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
-      substituteInPlace $f --replace "/sbin/fxload" "${libusb-with-fxload}/sbin/fxload" \
-                           --replace "/lib/firmware/" "$out/lib/firmware/" \
-                           --replace "/bin/sleep" "${coreutils}/bin/sleep" \
-                           --replace "/bin/cat" "${coreutils}/bin/cat" \
-                           --replace "/bin/echo" "${coreutils}/bin/echo" \
-                           --replace "/bin/sh" "${bash}/bin/sh"
+      substituteInPlace $f --replace-fail "/sbin/fxload" "${libusb-with-fxload}/sbin/fxload" \
+                           --replace-fail "/lib/firmware/" "$out/lib/firmware/" \
+                           --replace-fail "/bin/sleep" "${coreutils}/bin/sleep" \
+                           --replace-fail "/bin/cat" "${coreutils}/bin/cat" \
+                           --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+                           --replace-fail "/bin/sh" "${bash}/bin/sh"
     done
   '';
 

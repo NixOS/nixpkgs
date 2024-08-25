@@ -34,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '-I/usr/local/include' "" \
-      --replace '-L/usr/local/lib' "" \
-      --replace 'GIT_VERSION :=' 'GIT_VERSION ?='
+      --replace-fail '-I/usr/local/include' "" \
+      --replace-fail '-L/usr/local/lib' "" \
+      --replace-fail 'GIT_VERSION :=' 'GIT_VERSION ?='
   '';
 
   nativeBuildInputs = [ xxd ];

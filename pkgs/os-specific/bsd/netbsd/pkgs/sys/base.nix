@@ -20,7 +20,7 @@
   # Make the build ignore linker warnings
   prePatch = ''
     substituteInPlace sys/conf/Makefile.kern.inc \
-      --replace "-Wa,--fatal-warnings" ""
+      --replace-fail "-Wa,--fatal-warnings" ""
   '';
 
   patches = [
@@ -35,7 +35,7 @@
   postPatch =
     ''
       substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
-        --replace "-nocombreloc" "-z nocombreloc"
+        --replace-fail "-nocombreloc" "-z nocombreloc"
     ''
     +
       # multiple header dirs, see above

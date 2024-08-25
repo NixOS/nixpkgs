@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system/networkaudiod.service \
-      --replace /usr/sbin/networkaudiod $out/bin/networkaudiod
+      --replace-fail /usr/sbin/networkaudiod $out/bin/networkaudiod
   '';
 
   meta = with lib; {

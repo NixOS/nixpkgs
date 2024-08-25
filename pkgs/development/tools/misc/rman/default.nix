@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace ginstall install \
-      --replace gcc '${stdenv.cc.targetPrefix}cc'
+      --replace-fail ginstall install \
+      --replace-fail gcc '${stdenv.cc.targetPrefix}cc'
   '';
 
   makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man" ];

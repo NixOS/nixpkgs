@@ -50,13 +50,13 @@ buildPythonPackage rec {
   # tests fail.
   prePatch = ''
     substituteInPlace tests/conftest.py \
-      --replace nplusone/tests/conftest source/tests/conftest
+      --replace-fail nplusone/tests/conftest source/tests/conftest
   '';
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "python_paths" "pythonpath" \
-      --replace "--cov nplusone --cov-report term-missing" ""
+      --replace-fail "python_paths" "pythonpath" \
+      --replace-fail "--cov nplusone --cov-report term-missing" ""
   '';
 
   disabledTests = [

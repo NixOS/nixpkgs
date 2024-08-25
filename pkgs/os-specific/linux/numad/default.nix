@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "install -m" "install -Dm"
+    substituteInPlace Makefile --replace-fail "install -m" "install -Dm"
   '';
 
   makeFlags = [ "prefix=$(out)" ];

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "python-socketio>=4,<5" "python-socketio>=4"
+      --replace-fail "python-socketio>=4,<5" "python-socketio>=4"
   '';
 
   nativeBuildInputs = [ setuptools ];

@@ -57,19 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Makefile tries to create the directory /var/lib/swtpm-localca, which fails
     substituteInPlace samples/Makefile.am \
-        --replace 'install-data-local:' 'do-not-execute:'
+        --replace-fail 'install-data-local:' 'do-not-execute:'
 
     # Use the correct path to the certtool binary
     # instead of relying on it being in the environment
     substituteInPlace src/swtpm_localca/swtpm_localca.c \
-      --replace \
+      --replace-fail \
         '# define CERTTOOL_NAME "gnutls-certtool"' \
         '# define CERTTOOL_NAME "${gnutls}/bin/certtool"' \
-      --replace \
+      --replace-fail \
         '# define CERTTOOL_NAME "certtool"' \
         '# define CERTTOOL_NAME "${gnutls}/bin/certtool"'
 
-    substituteInPlace tests/common --replace \
+    substituteInPlace tests/common --replace-fail \
         'CERTTOOL=gnutls-certtool;;' \
         'CERTTOOL=certtool;;'
 
@@ -77,13 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
     # stat: invalid option -- '%'
     # This is caused by the stat program not being the BSD version,
     # as is expected by the test
-    substituteInPlace tests/common --replace \
+    substituteInPlace tests/common --replace-fail \
         'if [[ "$(uname -s)" =~ (Linux|CYGWIN_NT-) ]]; then' \
         'if [[ "$(uname -s)" =~ (Linux|Darwin|CYGWIN_NT-) ]]; then'
 
     # Otherwise certtool seems to pick up the system language on macOS,
     # which might cause a test to fail
-    substituteInPlace tests/test_swtpm_setup_create_cert --replace \
+    substituteInPlace tests/test_swtpm_setup_create_cert --replace-fail \
         '$CERTTOOL' \
         'LC_ALL=C.UTF-8 $CERTTOOL'
   '';

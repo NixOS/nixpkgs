@@ -75,15 +75,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for x in package/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
-      substituteInPlace $x --replace /usr $out
+      substituteInPlace $x --replace-fail /usr $out
     done
-    substituteInPlace package/CMakeLists.txt --replace /etc/xdg/autostart $out/etc/xdg/autostart
+    substituteInPlace package/CMakeLists.txt --replace-fail /etc/xdg/autostart $out/etc/xdg/autostart
 
     # We don't find the radiotray-ng-notification icon otherwise
     substituteInPlace data/radiotray-ng.desktop \
-      --replace radiotray-ng-notification radiotray-ng-on
+      --replace-fail radiotray-ng-notification radiotray-ng-on
     substituteInPlace data/rtng-bookmark-editor.desktop \
-      --replace radiotray-ng-notification radiotray-ng-on
+      --replace-fail radiotray-ng-notification radiotray-ng-on
   '';
 
   cmakeFlags = [

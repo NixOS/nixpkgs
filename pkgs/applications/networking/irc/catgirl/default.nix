@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # is the "out" output of libressl in our case (where the libraries are
   # installed), so we need to fix this up.
   postConfigure = ''
-    substituteInPlace config.mk --replace \
+    substituteInPlace config.mk --replace-fail \
       "$($PKG_CONFIG --variable exec_prefix openssl)" \
       "${lib.getBin libressl}"
   '';

@@ -47,20 +47,20 @@ in stdenv.mkDerivation rec {
 
   postPatch = if stdenv.isDarwin then ''
     substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "M4 = gm4"   "M4 = m4" \
-      --replace "dtrace"     "/usr/sbin/dtrace" \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+      --replace-fail "M4 = gm4"   "M4 = m4" \
+      --replace-fail "dtrace"     "/usr/sbin/dtrace" \
+      --replace-fail "/bin/rm"    "${coreutils}/bin/rm" \
+      --replace-fail "/bin/echo"  "${coreutils}/bin/echo"
 
     substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
   '' else ''
     substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+      --replace-fail "/bin/rm"    "${coreutils}/bin/rm" \
+      --replace-fail "/bin/echo"  "${coreutils}/bin/echo"
 
     substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
   '';
 
   buildPhase = ''

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'CC=cc' 'CC=${stdenv.cc.targetPrefix}cc'
+    substituteInPlace Makefile --replace-fail 'CC=cc' 'CC=${stdenv.cc.targetPrefix}cc'
   '';
 
   nativeBuildInputs = [

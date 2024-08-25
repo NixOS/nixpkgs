@@ -29,7 +29,7 @@ buildGoModule rec {
     runHook prePatch
 
     shopt -s globstar
-    substituteInPlace **/*.go --replace '"/bin/' '"/usr/bin/env '
+    substituteInPlace **/*.go --replace-fail '"/bin/' '"/usr/bin/env '
     shopt -u globstar
 
     runHook postPatch

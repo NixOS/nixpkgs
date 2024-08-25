@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/signon.c \
-      --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace meson.build \
-      --replace "-Werror=format-truncation=0" "" \
-      --replace "-Wno-stringop-overflow" ""
+      --replace-fail "-Werror=format-truncation=0" "" \
+      --replace-fail "-Wno-stringop-overflow" ""
   '';
 
   nativeBuildInputs = [

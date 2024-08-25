@@ -64,7 +64,7 @@ beamPackages.mixRelease {
   };
 
   postPatch = ''
-    substituteInPlace lib/plausible_release.ex --replace 'defp prepare do' 'def prepare do'
+    substituteInPlace lib/plausible_release.ex --replace-fail 'defp prepare do' 'def prepare do'
   '';
 
   preBuild = ''

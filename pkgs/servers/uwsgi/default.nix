@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     for f in uwsgiconfig.py plugins/*/uwsgiplugin.py; do
       substituteInPlace "$f" \
-        --replace pkg-config "$PKG_CONFIG"
+        --replace-fail pkg-config "$PKG_CONFIG"
     done
     sed -e "s/ + php_version//" -i plugins/php/uwsgiplugin.py
   '';

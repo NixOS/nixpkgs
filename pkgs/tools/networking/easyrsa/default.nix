@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     install -D -m755 easyrsa3/easyrsa $out/bin/easyrsa
 
     substituteInPlace $out/bin/easyrsa \
-      --replace /usr/ $out/ \
-      --replace '~VER~' '${version}' \
-      --replace '~GITHEAD~' 'v${version}' \
-      --replace '~DATE~' '1970-01-01'
+      --replace-fail /usr/ $out/ \
+      --replace-fail '~VER~' '${version}' \
+      --replace-fail '~GITHEAD~' 'v${version}' \
+      --replace-fail '~DATE~' '1970-01-01'
 
     # Wrap it with the correct OpenSSL binary.
     wrapProgram $out/bin/easyrsa \

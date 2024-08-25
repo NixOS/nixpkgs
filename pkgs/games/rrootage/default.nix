@@ -50,9 +50,9 @@ in stdenv.mkDerivation {
       "1wr76az4rlv1gaj9xdknzqcjazw6h8myqw6y3753q259hxbq4cah")
   ];
   postPatch = ''
-    substituteInPlace "src/screen.c" --replace "/usr/share/games/rrootage" "$out/share/games/rrootage"
-    substituteInPlace "src/soundmanager.c" --replace "/usr/share/games/rrootage" "$out/share/games/rrootage"
-    substituteInPlace "src/barragemanager.cc" --replace "/usr/share/games/rrootage" "$out/share/games/rrootage"
+    substituteInPlace "src/screen.c" --replace-fail "/usr/share/games/rrootage" "$out/share/games/rrootage"
+    substituteInPlace "src/soundmanager.c" --replace-fail "/usr/share/games/rrootage" "$out/share/games/rrootage"
+    substituteInPlace "src/barragemanager.cc" --replace-fail "/usr/share/games/rrootage" "$out/share/games/rrootage"
   '';
 
   buildInputs = [ SDL SDL_mixer bulletml ];

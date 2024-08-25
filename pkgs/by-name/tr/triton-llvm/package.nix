@@ -148,7 +148,7 @@ in stdenv.mkDerivation (finalAttrs: {
     rm unittests/Support/Path.cpp
 
     substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "Path.cpp" ""
+      --replace-fail "Path.cpp" ""
   '' + lib.optionalString stdenv.isAarch64 ''
     # Not sure why this fails
     rm test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s

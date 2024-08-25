@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # because of the conflict between qt5 hooks and qt6 hooks
   postPatch = ''
     substituteInPlace {gio-qt,qgio-tools}/CMakeLists.txt \
-      --replace "include(qt6.cmake)" " "
+      --replace-fail "include(qt6.cmake)" " "
   '';
 
   nativeBuildInputs =

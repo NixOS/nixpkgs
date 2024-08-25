@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace configure.ac --replace "AM_GNU_GETTEXT_VERSION([0.19.8])" "AM_GNU_GETTEXT_VERSION([${gettext.version}])"
+    substituteInPlace configure.ac --replace-fail "AM_GNU_GETTEXT_VERSION([0.19.8])" "AM_GNU_GETTEXT_VERSION([${gettext.version}])"
   '';
 
   nativeBuildInputs = [ wrapGAppsHook3 gettext autoreconfHook pkg-config ];

@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
     mv opt $out
 
     substituteInPlace $out/share/applications/alfaview.desktop \
-      --replace "/opt/alfaview" "$out/bin" \
-      --replace "/usr/share/pixmaps/alfaview_production.png" alfaview_production
+      --replace-fail "/opt/alfaview" "$out/bin" \
+      --replace-fail "/usr/share/pixmaps/alfaview_production.png" alfaview_production
 
     makeWrapper $out/opt/alfaview/alfaview $out/bin/alfaview \
       --prefix LD_LIBRARY_PATH : ${libPath}

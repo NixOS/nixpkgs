@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace " -o root -g root" ""
+      --replace-fail " -o root -g root" ""
   '';
 
   makeFlags = [

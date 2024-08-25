@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mv usr $out
-    substituteInPlace $out/share/applications/ToneLib-Metal.desktop --replace /usr/ $out/
+    substituteInPlace $out/share/applications/ToneLib-Metal.desktop --replace-fail /usr/ $out/
  '';
 
   meta = with lib; {

@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for i in doc/*/Makefile* micropython*/xcas/Makefile*; do
-      substituteInPlace "$i" --replace "/bin/cp" "cp";
+      substituteInPlace "$i" --replace-fail "/bin/cp" "cp";
     done;
     rm src/mkjs
-    substituteInPlace src/Makefile.am --replace "g++ mkjs.cc" \
+    substituteInPlace src/Makefile.am --replace-fail "g++ mkjs.cc" \
       "${buildPackages.stdenv.cc.targetPrefix}c++ mkjs.cc"
 
     # to open help
-    substituteInPlace src/global.cc --replace 'browser="mozilla"' 'browser="xdg-open"'
+    substituteInPlace src/global.cc --replace-fail 'browser="mozilla"' 'browser="xdg-open"'
   '';
 
   nativeBuildInputs = [

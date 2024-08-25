@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/install.c \
-      --replace \"update-desktop-database\" \"$out/bin/update-desktop-database\"
+      --replace-fail \"update-desktop-database\" \"$out/bin/update-desktop-database\"
   '';
 
   setupHook = ./setup-hook.sh;

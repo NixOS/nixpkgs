@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace qt${majorVersion}/platforminputcontext/CMakeLists.txt \
-      --replace \$"{CMAKE_INSTALL_QT${majorVersion}PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+      --replace-fail \$"{CMAKE_INSTALL_QT${majorVersion}PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
   '';
 
   cmakeFlags = [

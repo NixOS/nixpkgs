@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/libexpat/libexpat/issues/501
   postFixup = ''
     substituteInPlace $dev/lib/cmake/expat-${finalAttrs.version}/expat-noconfig.cmake \
-      --replace "$"'{_IMPORT_PREFIX}' $out
+      --replace-fail "$"'{_IMPORT_PREFIX}' $out
   '';
 
   passthru.tests = {

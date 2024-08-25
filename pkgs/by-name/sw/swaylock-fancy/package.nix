@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace ${mainProgram} \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
   '';
 
   strictDeps = true;

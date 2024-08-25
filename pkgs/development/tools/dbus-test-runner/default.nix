@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Tests `cat` together build shell scripts
     # true is a PATHable call, bash a shebang
     substituteInPlace tests/Makefile.am \
-      --replace '/bin/true' 'true' \
-      --replace '/bin/bash' '${lib.getExe bash}'
+      --replace-fail '/bin/true' 'true' \
+      --replace-fail '/bin/bash' '${lib.getExe bash}'
   '';
 
   strictDeps = true;

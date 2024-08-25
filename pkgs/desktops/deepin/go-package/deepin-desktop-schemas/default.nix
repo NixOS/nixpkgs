@@ -24,7 +24,7 @@ buildGoModule rec {
     for file in $(grep -rl "/usr/share")
     do
       substituteInPlace $file \
-        --replace "/usr/share" "/run/current-system/sw/share"
+        --replace-fail "/usr/share" "/run/current-system/sw/share"
     done
   '';
 

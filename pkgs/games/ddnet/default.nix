@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
-      --replace /usr/ $out/
+      --replace-fail /usr/ $out/
   '';
 
   cmakeFlags = [

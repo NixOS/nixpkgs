@@ -81,7 +81,7 @@ buildGoModule {
     install -Dm 444 ${src}/install/universal/v2raya.desktop -t $out/share/applications
     install -Dm 444 ${src}/install/universal/v2raya.png -t $out/share/icons/hicolor/512x512/apps
     substituteInPlace $out/share/applications/v2raya.desktop \
-      --replace 'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' 'Icon=v2raya'
+      --replace-fail 'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' 'Icon=v2raya'
 
     wrapProgram $out/bin/v2rayA \
       --prefix PATH ":" "${lib.makeBinPath [ v2ray ]}" \

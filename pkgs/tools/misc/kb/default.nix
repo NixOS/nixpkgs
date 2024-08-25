@@ -19,13 +19,13 @@ python3.pkgs.buildPythonApplication rec {
     # `attr` module is not available. And `attrs` defines another `attr` package
     # that shadows it.
     substituteInPlace setup.py \
-      --replace \
+      --replace-fail \
         "install_requires=[\"colored\",\"toml\",\"attr\",\"attrs\",\"gitpython\"]," \
         "install_requires=[\"colored\",\"toml\",\"attrs\",\"gitpython\"],"
 
     # pytest coverage reporting isn't necessary
     substituteInPlace setup.cfg \
-      --replace \
+      --replace-fail \
       "addopts = --cov=kb --cov-report term-missing" ""
   '';
 

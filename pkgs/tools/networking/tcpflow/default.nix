@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace bootstrap.sh \
-      --replace ".git" "" \
-      --replace "/bin/rm" "rm"
+      --replace-fail ".git" "" \
+      --replace-fail "/bin/rm" "rm"
     # Temporary fix for a build error:
     # https://src.fedoraproject.org/rpms/tcpflow/blob/979e250032b90de2d6b9e5b94b5203d98cccedad/f/tcpflow-1.6.1-format.patch
     substituteInPlace src/datalink.cpp \
-      --replace 'DEBUG(6)(s.c_str());' 'DEBUG(6) ("%s", s.c_str());'
+      --replace-fail 'DEBUG(6)(s.c_str());' 'DEBUG(6) ("%s", s.c_str());'
   '';
 
   preConfigure = "bash ./bootstrap.sh";

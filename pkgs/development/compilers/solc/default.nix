@@ -63,11 +63,11 @@ let
 
     postPatch = ''
       substituteInPlace cmake/jsoncpp.cmake \
-        --replace "${jsoncppUrl}" ${jsoncpp}
+        --replace-fail "${jsoncppUrl}" ${jsoncpp}
       substituteInPlace cmake/range-v3.cmake \
-        --replace "${range3Url}" ${range3}
+        --replace-fail "${range3Url}" ${range3}
       substituteInPlace cmake/fmtlib.cmake \
-        --replace "${fmtlibUrl}" ${fmtlib}
+        --replace-fail "${fmtlibUrl}" ${fmtlib}
     '';
 
     cmakeFlags = [

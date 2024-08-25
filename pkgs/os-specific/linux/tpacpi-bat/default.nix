@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tpacpi-bat \
-      --replace modprobe ${kmod}/bin/modprobe \
-      --replace cat ${coreutils}/bin/cat
+      --replace-fail modprobe ${kmod}/bin/modprobe \
+      --replace-fail cat ${coreutils}/bin/cat
   '';
 
   meta = {

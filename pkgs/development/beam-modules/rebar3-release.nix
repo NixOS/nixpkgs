@@ -89,7 +89,7 @@ let
         for dir in $out/rel/*/erts-*; do
           echo "ERTS found in $dir - removing references to erlang to reduce closure size"
           for f in $dir/bin/{erl,start}; do
-            substituteInPlace "$f" --replace "${erlang}/lib/erlang" "''${dir/\/erts-*/}"
+            substituteInPlace "$f" --replace-fail "${erlang}/lib/erlang" "''${dir/\/erts-*/}"
           done
         done
       '';

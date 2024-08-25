@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'cmake!=3.17,!=3.17.0'," "" \
-      --replace "'pybind11', min_version='2.6'" "'pybind11'" \
-      --replace "pybind11>=2.6" "pybind11" \
-      --replace "scikit-build>=0.11.0" "scikit-build" \
-      --replace "min_version='0.11.0'" ""
+      --replace-fail "'cmake!=3.17,!=3.17.0'," "" \
+      --replace-fail "'pybind11', min_version='2.6'" "'pybind11'" \
+      --replace-fail "pybind11>=2.6" "pybind11" \
+      --replace-fail "scikit-build>=0.11.0" "scikit-build" \
+      --replace-fail "min_version='0.11.0'" ""
   '';
 
   nativeBuildInputs = [

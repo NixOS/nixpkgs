@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
   postPatch = ''
-    substituteInPlace configure.ac --replace '	docs/Makefile' ""
+    substituteInPlace configure.ac --replace-fail '	docs/Makefile' ""
     patchShebangs contrib reports
   '';
 

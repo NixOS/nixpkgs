@@ -58,7 +58,7 @@ mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace CMakeLists.txt \
-      --replace "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml" \
+      --replace-fail "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml" \
                 "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia"
     grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
   '';

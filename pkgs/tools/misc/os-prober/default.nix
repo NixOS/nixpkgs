@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for file in $(find $out  -type f ! -name newns) ; do
       substituteInPlace $file \
-        --replace /usr/share/os-prober/ $out/share/ \
-        --replace /usr/lib/os-probes/ $out/lib/os-probes/ \
-        --replace /usr/lib/linux-boot-probes/ $out/lib/linux-boot-probes/ \
-        --replace /usr/lib/os-prober/ $out/lib/
+        --replace-fail /usr/share/os-prober/ $out/share/ \
+        --replace-fail /usr/lib/os-probes/ $out/lib/os-probes/ \
+        --replace-fail /usr/lib/linux-boot-probes/ $out/lib/linux-boot-probes/ \
+        --replace-fail /usr/lib/os-prober/ $out/lib/
     done;
     for file in $out/bin/*; do
       wrapProgram $file \

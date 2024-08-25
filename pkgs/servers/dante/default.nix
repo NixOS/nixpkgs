@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace include/redefgen.sh --replace 'PATH=/bin:/usr/bin:/sbin:/usr/sbin' ""
+    substituteInPlace include/redefgen.sh --replace-fail 'PATH=/bin:/usr/bin:/sbin:/usr/sbin' ""
   '';
 
   meta = with lib; {

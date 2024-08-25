@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libowfat libcap zlib openssl libxcrypt ];
 
   configurePhase = ''
-    substituteInPlace Makefile --replace "/usr/local" "$out"
-    substituteInPlace GNUmakefile --replace "/opt/diet" "$out"
+    substituteInPlace Makefile --replace-fail "/usr/local" "$out"
+    substituteInPlace GNUmakefile --replace-fail "/opt/diet" "$out"
   '';
 
   buildPhase = ''

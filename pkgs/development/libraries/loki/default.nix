@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    substituteInPlace Makefile.common --replace /usr $out
+    substituteInPlace Makefile.common --replace-fail /usr $out
     make build-shared
   '';
 

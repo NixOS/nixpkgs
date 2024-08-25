@@ -20,7 +20,7 @@ in appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/devdocs.desktop $out/share/applications/devdocs.desktop
     install -m 444 -D ${appimageContents}/devdocs.png $out/share/icons/hicolor/0x0/apps/devdocs.png
     substituteInPlace $out/share/applications/devdocs.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

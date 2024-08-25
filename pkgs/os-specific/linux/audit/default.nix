@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
-      --replace "/usr/include/linux/audit.h" \
+      --replace-fail "/usr/include/linux/audit.h" \
                 "${linuxHeaders}/include/linux/audit.h"
   '';
 

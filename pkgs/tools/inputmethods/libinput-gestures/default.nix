@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      substituteInPlace libinput-gestures-setup --replace /usr/ /
+      substituteInPlace libinput-gestures-setup --replace-fail /usr/ /
 
       substituteInPlace libinput-gestures \
-        --replace      /etc     "$out/etc" \
+        --replace-fail      /etc     "$out/etc" \
         --subst-var-by libinput "${libinput}/bin/libinput" \
         --subst-var-by wmctrl   "${wmctrl}/bin/wmctrl"
     '';
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   postFixup =
     ''
       rm "$out/bin/libinput-gestures-setup"
-      substituteInPlace "$out/share/systemd/user/libinput-gestures.service" --replace "/usr" "$out"
-      substituteInPlace "$out/share/applications/libinput-gestures.desktop" --replace "/usr" "$out"
+      substituteInPlace "$out/share/systemd/user/libinput-gestures.service" --replace-fail "/usr" "$out"
+      substituteInPlace "$out/share/applications/libinput-gestures.desktop" --replace-fail "/usr" "$out"
       chmod +x "$out/share/applications/libinput-gestures.desktop"
       wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${lib.makeBinPath ([coreutils] ++ extraUtilsPath)}"
     '';

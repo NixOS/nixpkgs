@@ -22,14 +22,14 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace ydiff.py \
-      --replace "['git'" "['${gitMinimal}/bin/git'" \
-      --replace "['hg'" "['${mercurial}/bin/hg'" \
-      --replace "['svn'" "['${subversion}/bin/svn'" \
-      --replace "['filterdiff'" "['${patchutils}/bin/filterdiff'" \
-      --replace "['less'" "['${less}/bin/less'" # doesn't support PAGER from env
+      --replace-fail "['git'" "['${gitMinimal}/bin/git'" \
+      --replace-fail "['hg'" "['${mercurial}/bin/hg'" \
+      --replace-fail "['svn'" "['${subversion}/bin/svn'" \
+      --replace-fail "['filterdiff'" "['${patchutils}/bin/filterdiff'" \
+      --replace-fail "['less'" "['${less}/bin/less'" # doesn't support PAGER from env
     substituteInPlace tests/test_ydiff.py \
-      --replace /bin/rm rm \
-      --replace /bin/sh sh
+      --replace-fail /bin/rm rm \
+      --replace-fail /bin/sh sh
     patchShebangs setup.py
     patchShebangs tests/*.sh
   '';

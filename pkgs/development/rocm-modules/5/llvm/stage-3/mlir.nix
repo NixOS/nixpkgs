@@ -40,7 +40,7 @@ callPackage ../base.nix rec {
   extraPostPatch = ''
     # `add_library cannot create target "llvm_gtest" because an imported target with the same name already exists`
     substituteInPlace CMakeLists.txt \
-      --replace "EXISTS \''${UNITTEST_DIR}/googletest/include/gtest/gtest.h" "FALSE"
+      --replace-fail "EXISTS \''${UNITTEST_DIR}/googletest/include/gtest/gtest.h" "FALSE"
 
     # Mainly `No such file or directory`
     cat ${./1001-mlir-failing-tests.list} | xargs -d \\n rm

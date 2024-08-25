@@ -79,7 +79,7 @@ let
         # with pytest-httpbin 1.x
         preCheck = ''
           substituteInPlace pyproject.toml \
-            --replace '[tool.pytest.ini_options]' '[tool.notpytest.ini_options]'
+            --replace-fail '[tool.pytest.ini_options]' '[tool.notpytest.ini_options]'
         '';
       });
       pytest-httpbin = pySuper.pytest-httpbin.overridePythonAttrs (o: rec {

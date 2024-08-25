@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
-    substituteInPlace configure --replace " -static" ""
+    substituteInPlace configure --replace-fail " -static" ""
   '';
 
   preInstall = ''
-    substituteInPlace Makefile --replace ./run-ldconfig true
+    substituteInPlace Makefile --replace-fail ./run-ldconfig true
   '';
 
   # this required for wipefreespace

@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system/hqplayerd.service \
-      --replace /usr/bin/hqplayerd $out/bin/hqplayerd \
-      --replace "NetworkManager-wait-online.service" ""
+      --replace-fail /usr/bin/hqplayerd $out/bin/hqplayerd \
+      --replace-fail "NetworkManager-wait-online.service" ""
   '';
 
   # NB: addDriverRunpath needs to run _after_ autoPatchelfHook, which runs in

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "-o aslr" ""
+      --replace-fail "-o aslr" ""
   '';
 
   meta = with lib; {

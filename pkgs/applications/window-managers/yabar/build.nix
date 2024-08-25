@@ -44,8 +44,8 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace "\$(shell git describe)" "${version}" \
-      --replace "a2x" "a2x --no-xmllint"
+      --replace-fail "\$(shell git describe)" "${version}" \
+      --replace-fail "a2x" "a2x --no-xmllint"
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];

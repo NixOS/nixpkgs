@@ -150,15 +150,15 @@ mkDerivation rec {
   # filtering utils. Short circuit this by replacing the filtering command with
   # the absolute path to the filtering command.
   postInstall = ''
-    substituteInPlace $out/lib/*/site-packages/recoll/rclconfig.py --replace /usr/share/recoll $out/share/recoll
-    substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
+    substituteInPlace $out/lib/*/site-packages/recoll/rclconfig.py --replace-fail /usr/share/recoll $out/share/recoll
+    substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace-fail /usr/share/recoll $out/share/recoll
     for f in $out/share/recoll/filters/* ; do
       if [[ ! "$f" =~ \.zip$ ]]; then
   '' + lib.concatStrings (lib.mapAttrsToList (k: v: (''
-        substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
+        substituteInPlace $f --replace-fail '"${k}"'  '"${lib.getBin v}/bin/${k}"'
   '')) filters) + ''
-        substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
-        substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
+        substituteInPlace $f --replace-fail '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
+        substituteInPlace $f --replace-fail /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi
     done
     wrapProgram $out/share/recoll/filters/rclaudio.py \
@@ -168,7 +168,7 @@ mkDerivation rec {
     wrapProgram $out/share/recoll/filters/rclimg \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
+    substituteInPlace  $f --replace-fail '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
   '' + lib.optionalString (stdenv.isDarwin && withGui) ''
     mkdir $out/Applications
     mv $out/bin/recoll.app $out/Applications

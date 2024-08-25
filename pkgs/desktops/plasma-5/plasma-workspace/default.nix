@@ -159,7 +159,7 @@ mkDerivation {
   # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'ecm_query_qt(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
+      --replace-fail 'ecm_query_qt(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
   '';
 
   # work around wrapQtAppsHook double-wrapping kcminit_startup,

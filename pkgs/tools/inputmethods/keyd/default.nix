@@ -26,7 +26,7 @@ let
 
     postPatch = ''
       substituteInPlace scripts/${pname} \
-        --replace /bin/sh ${runtimeShell}
+        --replace-fail /bin/sh ${runtimeShell}
     '';
 
     propagatedBuildInputs = with pypkgs; [ xlib ];
@@ -47,10 +47,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr ""
+      --replace-fail /usr ""
 
     substituteInPlace keyd.service \
-      --replace /usr/bin $out/bin
+      --replace-fail /usr/bin $out/bin
   '';
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];

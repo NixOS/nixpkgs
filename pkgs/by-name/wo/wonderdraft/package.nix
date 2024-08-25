@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp -R usr/share opt $out/
     substituteInPlace \
       $out/share/applications/Wonderdraft.desktop \
-      --replace /opt/ $out/opt/
+      --replace-fail /opt/ $out/opt/
     ln -s $out/opt/Wonderdraft/Wonderdraft.x86_64 $out/bin/Wonderdraft.x86_64
     runHook postInstall
   '';

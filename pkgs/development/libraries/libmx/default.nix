@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   # remove the following superfluous checks
   preConfigure = ''
     substituteInPlace "autogen.sh" \
-      --replace '`which intltoolize`' '"x"' \
-      --replace '`which gtkdocize`' '"x"' \
-      --replace '`which autoreconf`' '"x"'
+      --replace-fail '`which intltoolize`' '"x"' \
+      --replace-fail '`which gtkdocize`' '"x"' \
+      --replace-fail '`which autoreconf`' '"x"'
   '';
 
   configureFlags = [ "--enable-introspection"

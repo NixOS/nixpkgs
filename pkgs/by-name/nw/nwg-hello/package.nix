@@ -35,15 +35,15 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # hard coded paths
     substituteInPlace nwg_hello/main.py \
-      --replace '/etc/nwg-hello' "$out/etc/nwg-hello" \
-      --replace "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
-      --replace "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
+      --replace-fail '/etc/nwg-hello' "$out/etc/nwg-hello" \
+      --replace-fail "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
+      --replace-fail "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
 
     substituteInPlace nwg-hello-default.json \
-      --replace "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
-      --replace "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
+      --replace-fail "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
+      --replace-fail "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
 
-    substituteInPlace nwg_hello/ui.py --replace '/usr/share/nwg-hello' "$out/share/nwg-hello"
+    substituteInPlace nwg_hello/ui.py --replace-fail '/usr/share/nwg-hello' "$out/share/nwg-hello"
   '';
 
   postInstall = ''

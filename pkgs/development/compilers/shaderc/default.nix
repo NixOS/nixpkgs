@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
   # Fix the paths in .pc, even though it's unclear if all these .pc are really useful.
   postFixup = ''
     substituteInPlace "$dev"/lib/pkgconfig/*.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace "$dev/$dev/" "$dev/"
+      --replace-fail '=''${prefix}//' '=/' \
+      --replace-fail "$dev/$dev/" "$dev/"
   '';
 
   meta = with lib; {

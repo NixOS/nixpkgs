@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     substituteInPlace avocode.desktop.in \
-      --replace /path/to/avocode-dir/Avocode $out/bin/avocode \
-      --replace /path/to/avocode-dir/avocode.png avocode
+      --replace-fail /path/to/avocode-dir/Avocode $out/bin/avocode \
+      --replace-fail /path/to/avocode-dir/avocode.png avocode
 
     mkdir -p share/applications share/pixmaps
     mv avocode.desktop.in share/applications/avocode.desktop

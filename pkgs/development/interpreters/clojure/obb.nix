@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     runHook preConfigure
 
     mkdir -p .m2
-    substituteInPlace deps.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
-    substituteInPlace bb.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
+    substituteInPlace deps.edn --replace-fail ':paths' ':mvn/local-repo "./.m2" :paths'
+    substituteInPlace bb.edn --replace-fail ':paths' ':mvn/local-repo "./.m2" :paths'
     echo deps.edn
 
     runHook postConfigure

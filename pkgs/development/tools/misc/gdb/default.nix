@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace gdb/darwin-nat.c \
-      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+      --replace-fail '#include "bfd/mach-o.h"' '#include "mach-o.h"'
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
-    substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
-    substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
-    substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
+    substituteInPlace sim/erc32/erc32.c  --replace-fail sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/interf.c  --replace-fail sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/sis.c  --replace-fail sys/fcntl.h fcntl.h
+    substituteInPlace sim/ppc/emul_unix.c --replace-fail sys/termios.h termios.h
   '';
 
   patches = [

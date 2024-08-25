@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     cd xdelta3
 
-    substituteInPlace Makefile.am --replace \
+    substituteInPlace Makefile.am --replace-fail \
       "common_CFLAGS =" \
       "common_CFLAGS = -DXD3_USE_LARGESIZET=1"
   '';
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   checkPhase = ''
     mkdir $PWD/tmp
     for i in testing/file.h xdelta3-test.h; do
-      substituteInPlace $i --replace /tmp $PWD/tmp
+      substituteInPlace $i --replace-fail /tmp $PWD/tmp
     done
     ./xdelta3regtest
   '';

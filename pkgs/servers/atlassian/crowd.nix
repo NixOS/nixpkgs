@@ -21,14 +21,14 @@ lib.warnIf (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is d
 
     ln -s /run/atlassian-crowd/database database
 
-    substituteInPlace apache-tomcat/bin/startup.sh --replace start run
+    substituteInPlace apache-tomcat/bin/startup.sh --replace-fail start run
 
     echo "crowd.home=${home}" > crowd-webapp/WEB-INF/classes/crowd-init.properties
     substituteInPlace build.properties \
-      --replace "openidserver.url=http://localhost:8095/openidserver" \
+      --replace-fail "openidserver.url=http://localhost:8095/openidserver" \
                 "openidserver.url=http://localhost:${toString port}/openidserver"
     substituteInPlace crowd-openidserver-webapp/WEB-INF/classes/crowd.properties \
-      --replace "http://localhost:8095/" \
+      --replace-fail "http://localhost:8095/" \
                 "http://localhost:${toString port}/"
     sed -r -i crowd-openidserver-webapp/WEB-INF/classes/crowd.properties \
       -e 's,application.password\s+password,application.password ${openidPassword},'

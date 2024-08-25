@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       wrapQtApp $out/Applications/Communi.app/Contents/MacOS/Communi
     '' else ''
       substituteInPlace "$out/share/applications/communi.desktop" \
-        --replace "/usr/bin" "$out/bin"
+        --replace-fail "/usr/bin" "$out/bin"
     '';
 
   preFixup = ''

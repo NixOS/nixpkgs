@@ -19,7 +19,7 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace src/dune --replace batteries batteries.unthreaded
+    substituteInPlace src/dune --replace-fail batteries batteries.unthreaded
   '';
 
   propagatedBuildInputs = [

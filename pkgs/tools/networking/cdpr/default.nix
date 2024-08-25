@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'gcc' '"$$CC"'
+    substituteInPlace Makefile --replace-fail 'gcc' '"$$CC"'
   '';
 
   buildInputs = [ libpcap ];

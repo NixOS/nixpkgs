@@ -10,7 +10,7 @@ mkDerivation {
   propagatedBuildInputs = [ qtbase ];
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace /lib/udev/rules.d "$bin/lib/udev/rules.d"
+      --replace-fail /lib/udev/rules.d "$bin/lib/udev/rules.d"
   '';
   meta.platforms = lib.platforms.linux;
 }

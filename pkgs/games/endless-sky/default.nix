@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # endless sky naively joins the paths with string concatenation
     # so it's essential that there be a trailing slash on the resources path
     substituteInPlace source/Files.cpp \
-      --replace '%NIXPKGS_RESOURCES_PATH%' "$out/share/games/endless-sky/"
+      --replace-fail '%NIXPKGS_RESOURCES_PATH%' "$out/share/games/endless-sky/"
   '';
 
   preBuild = ''

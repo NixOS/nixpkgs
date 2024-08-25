@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # The GPGME backend is recommended
     for f in "gtk3/Cargo.toml" "cli/Cargo.toml"; do
-      substituteInPlace "$f" --replace \
+      substituteInPlace "$f" --replace-fail \
         'default = ["backend-gnupg-bin"' 'default = ["backend-gpgme"'
     done
   '';

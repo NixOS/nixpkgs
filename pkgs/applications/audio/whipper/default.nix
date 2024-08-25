@@ -84,7 +84,7 @@ in python3.pkgs.buildPythonApplication rec {
     # disable tests that require internet access
     # https://github.com/JoeLametta/whipper/issues/291
     substituteInPlace whipper/test/test_common_accurip.py \
-      --replace "test_AccurateRipResponse" "dont_test_AccurateRipResponse"
+      --replace-fail "test_AccurateRipResponse" "dont_test_AccurateRipResponse"
     export HOME=$TMPDIR
   '';
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ libmrss ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace -liconv_hook ""
+    substituteInPlace Makefile --replace-fail -liconv_hook ""
   '';
 
   makeFlags = [ "prefix=$(out)" ];

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Fix path that will be incorrect on move to "dev" output.
     substituteInPlace "$out/lib/cmake/libwebsockets/LibwebsocketsTargets-release.cmake" \
-      --replace "\''${_IMPORT_PREFIX}" "$out"
+      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
 
     # The package builds a few test programs that are not usually necessary.
     # Move those to the dev output.

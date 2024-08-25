@@ -29,9 +29,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'setuptools = "^62.6.0"' 'setuptools = "*"' \
-      --replace 'google-api-python-client = "^1.7.12"' 'google-api-python-client = "*"' \
-      --replace 'pyxdg = "^0.28"' 'pyxdg = "*"'
+      --replace-fail 'setuptools = "^62.6.0"' 'setuptools = "*"' \
+      --replace-fail 'google-api-python-client = "^1.7.12"' 'google-api-python-client = "*"' \
+      --replace-fail 'pyxdg = "^0.28"' 'pyxdg = "*"'
   '';
 
   nativeBuildInputs = [

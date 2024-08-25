@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     patchShebangs install.sh
 
     substituteInPlace install.sh \
-      --replace '$HOME/.local' $out \
-      --replace '$HOME/.config' $out/share
+      --replace-fail '$HOME/.local' $out \
+      --replace-fail '$HOME/.config' $out/share
 
     substituteInPlace sddm/*/Main.qml \
-      --replace /usr $out
+      --replace-fail /usr $out
   '';
 
   installPhase = ''

@@ -17,9 +17,9 @@ buildPythonPackage rec {
   postPatch = ''
     # python 3.12 compatibility
     substituteInPlace tests/*.py \
-      --replace "assertEquals" "assertEqual" \
-      --replace "assertNotEquals" "assertNotEqual" \
-      --replace "assert_equals" "assert_equal"
+      --replace-fail "assertEquals" "assertEqual" \
+      --replace-fail "assertNotEquals" "assertNotEqual" \
+      --replace-fail "assert_equals" "assert_equal"
   '';
 
   meta = with lib; {

@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs script
     substituteInPlace src/tss2-tcti/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib/
+      --replace-fail '@PREFIX@' $out/lib/
     substituteInPlace ./test/unit/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib/
+      --replace-fail '@PREFIX@' $out/lib/
     substituteInPlace ./bootstrap \
-      --replace 'git describe --tags --always --dirty' 'echo "${version}"'
+      --replace-fail 'git describe --tags --always --dirty' 'echo "${version}"'
   '';
 
   configureFlags = lib.optionals doInstallCheck [

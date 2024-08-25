@@ -22,7 +22,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/via-nativia.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/via-nativia.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
 
     mkdir -p $out/etc/udev/rules.d

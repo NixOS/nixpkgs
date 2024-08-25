@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace jaq --replace "json2tsv" "$out/bin/json2tsv"
+    substituteInPlace jaq --replace-fail "json2tsv" "$out/bin/json2tsv"
   '';
 
   makeFlags = [ "RANLIB:=$(RANLIB)" ];

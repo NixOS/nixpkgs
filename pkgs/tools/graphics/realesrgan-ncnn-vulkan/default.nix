@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ vulkan-headers vulkan-loader glslang libwebp ncnn ];
 
   postPatch = ''
-    substituteInPlace main.cpp --replace REPLACE_MODELS $out/share/models
+    substituteInPlace main.cpp --replace-fail REPLACE_MODELS $out/share/models
   '';
 
   installPhase = ''

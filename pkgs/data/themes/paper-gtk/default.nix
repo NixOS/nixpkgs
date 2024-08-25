@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ gtk_engines ];
 
   postPatch = ''
-    substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
+    substituteInPlace Makefile.am --replace-fail '$(DESTDIR)'/usr $out
   '';
 
   preferLocalBuild = true;

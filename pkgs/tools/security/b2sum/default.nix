@@ -14,8 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Use the generic C implementation rather than the SSE optimised version on non-x86 platforms
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
     substituteInPlace makefile \
-      --replace "#FILES=b2sum.c ../ref/" "FILES=b2sum.c ../ref/" \
-      --replace "FILES=b2sum.c ../sse/" "#FILES=b2sum.c ../sse/"
+      --replace-fail "#FILES=b2sum.c ../ref/" "FILES=b2sum.c ../ref/" \
+      --replace-fail "FILES=b2sum.c ../sse/" "#FILES=b2sum.c ../sse/"
   '';
 
   sourceRoot = "${finalAttrs.src.name}/b2sum";

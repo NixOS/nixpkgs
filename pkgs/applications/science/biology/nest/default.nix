@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     # fix PyNEST installation path
     # it expects CMAKE_INSTALL_LIBDIR to be relative
     substituteInPlace cmake/ProcessOptions.cmake \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/python" "lib/python"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/python" "lib/python"
   '';
 
   nativeBuildInputs = [

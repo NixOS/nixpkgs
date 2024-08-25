@@ -17,11 +17,11 @@ let
     inherit version src;
     makeFlags = [ "-f" "Makefile.perl" ];
     patchPhase = ''
-      substituteInPlace X2Go/Config.pm --replace '/etc/x2go' '/var/lib/x2go/conf'
+      substituteInPlace X2Go/Config.pm --replace-fail '/etc/x2go' '/var/lib/x2go/conf'
       substituteInPlace X2Go/Server/DB.pm \
-        --replace '$x2go_lib_path/libx2go-server-db-sqlite3-wrapper' \
+        --replace-fail '$x2go_lib_path/libx2go-server-db-sqlite3-wrapper' \
                   '/run/wrappers/bin/x2gosqliteWrapper'
-      substituteInPlace X2Go/Server/DB/SQLite3.pm --replace "user='x2gouser'" "user='x2go'"
+      substituteInPlace X2Go/Server/DB/SQLite3.pm --replace-fail "user='x2gouser'" "user='x2go'"
     '';
   };
 
@@ -47,19 +47,19 @@ stdenv.mkDerivation rec {
     patchShebangs .
     sed -i '/Makefile.PL\|Makefile.perl/d' Makefile
     for i in */Makefile; do
-      substituteInPlace "$i" --replace "-o root -g root " ""
+      substituteInPlace "$i" --replace-fail "-o root -g root " ""
     done
-    substituteInPlace libx2go-server-db-perl/Makefile --replace "chmod 2755" "chmod 755"
+    substituteInPlace libx2go-server-db-perl/Makefile --replace-fail "chmod 2755" "chmod 755"
     for i in x2goserver/sbin/x2godbadmin x2goserver/bin/x2go*
     do
-      substituteInPlace $i --replace '/etc/x2go' '/var/lib/x2go/conf'
+      substituteInPlace $i --replace-fail '/etc/x2go' '/var/lib/x2go/conf'
     done
     substituteInPlace x2goserver/sbin/x2gocleansessions \
-      --replace '/var/run/x2goserver.pid' '/var/run/x2go/x2goserver.pid'
-    substituteInPlace x2goserver/sbin/x2godbadmin --replace 'user="x2gouser"' 'user="x2go"'
+      --replace-fail '/var/run/x2goserver.pid' '/var/run/x2go/x2goserver.pid'
+    substituteInPlace x2goserver/sbin/x2godbadmin --replace-fail 'user="x2gouser"' 'user="x2go"'
     substituteInPlace x2goserver-xsession/etc/Xsession \
-      --replace "SSH_AGENT /bin/bash -c" "SSH_AGENT ${bash}/bin/bash -c" \
-      --replace "[ -f /etc/redhat-release ]" "[ -d /etc/nix ] || [ -f /etc/redhat-release ]"
+      --replace-fail "SSH_AGENT /bin/bash -c" "SSH_AGENT ${bash}/bin/bash -c" \
+      --replace-fail "[ -f /etc/redhat-release ]" "[ -d /etc/nix ] || [ -f /etc/redhat-release ]"
   '';
 
   makeFlags = [ "PREFIX=/" "NXLIBDIR=${nx-libs}/lib/nx" ];

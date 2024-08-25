@@ -25,7 +25,7 @@ in
       echo CDROMREADERSYNTAX=cdparanoia >>abcde.conf
 
       substituteInPlace "abcde" \
-        --replace "/etc/abcde.conf" "$out/etc/abcde.conf"
+        --replace-fail "/etc/abcde.conf" "$out/etc/abcde.conf"
     '';
 
     nativeBuildInputs = [ makeWrapper ];

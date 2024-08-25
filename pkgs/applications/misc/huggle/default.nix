@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     rm -r src/3rd
     echo ${version} > src/huggle_core/version.txt
     substituteInPlace src/huggle_core/definitions_prod.hpp --subst-var out
-    substituteInPlace src/CMakeLists.txt --replace '@libirc_includes@' '${libirc.out}'
+    substituteInPlace src/CMakeLists.txt --replace-fail '@libirc_includes@' '${libirc.out}'
   '';
 
   cmakeBuildType = "None";

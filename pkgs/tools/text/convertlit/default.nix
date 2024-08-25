@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     make
     cd ../clit18
     substituteInPlace Makefile \
-      --replace ../libtommath-0.30/libtommath.a -ltommath
+      --replace-fail ../libtommath-0.30/libtommath.a -ltommath
     make
   '';
 

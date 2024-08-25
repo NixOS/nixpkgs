@@ -51,7 +51,7 @@ let
     '';
 
     postInstall = ''
-      substituteInPlace $out/bin/synology-drive --replace /opt $out/opt
+      substituteInPlace $out/bin/synology-drive --replace-fail /opt $out/opt
     '';
   };
 

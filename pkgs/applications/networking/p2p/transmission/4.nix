@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       cmake/FindFmt.cmake \
       cmake/FindUtfCpp.cmake
     # Upstream uses different config file name.
-    substituteInPlace CMakeLists.txt --replace 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+    substituteInPlace CMakeLists.txt --replace-fail 'find_package(UtfCpp)' 'find_package(utf8cpp)'
   '';
 
   nativeBuildInputs = [

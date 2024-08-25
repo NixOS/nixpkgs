@@ -52,7 +52,7 @@ let
       patchShebangs skimage/_build_utils/{version,cythoner}.py
 
       substituteInPlace pyproject.toml \
-        --replace "numpy==" "numpy>="
+        --replace-fail "numpy==" "numpy>="
     '';
 
     nativeBuildInputs = [

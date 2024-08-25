@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs . ;
     grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
-      substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
+      substituteInPlace "$f" --replace-fail '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
     done ;
     cat > MANIFEST <<EOF
     gerbil_stamp_version=v${git-version}
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     for f in src/bootstrap/gerbil/compiler/driver__0.scm \
              src/build/build-libgerbil.ss \
              src/gerbil/compiler/driver.ss ; do
-      substituteInPlace "$f" --replace '"gcc"' '"${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"' ;
+      substituteInPlace "$f" --replace-fail '"gcc"' '"${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"' ;
     done
   '';
 
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     ( cd src && sh build.sh )
 
     f=build/lib/libgerbil.so.ldd ; [ -f $f ] && :
-    substituteInPlace "$f" --replace '(' \
+    substituteInPlace "$f" --replace-fail '(' \
       '(${lib.strings.concatStrings (map (x: "\"${x}\" " ) extraLdOptions)}'
 
     runHook postBuild

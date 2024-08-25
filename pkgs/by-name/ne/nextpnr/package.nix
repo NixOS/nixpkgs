@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   patchPhase = with builtins; ''
     # use PyPy for icestorm if enabled
     substituteInPlace ./ice40/CMakeLists.txt \
-      --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
+      --replace-fail ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 
   preBuild = ''

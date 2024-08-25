@@ -11,7 +11,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     # Fix installation path of xdg schemas.
-    substituteInPlace Makefile --replace '$(DESTDIR)/' '$(DESTDIR)$(PREFIX)/'
+    substituteInPlace Makefile --replace-fail '$(DESTDIR)/' '$(DESTDIR)$(PREFIX)/'
     # Do not wrap an importable module with a shell script.
     chmod -x src/daemon/desktops_memory.py
   '';

@@ -107,10 +107,10 @@ in stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
 
     substituteInPlace tests-v2/featuretests/profiler/CMakeLists.txt \
-      --replace "--build-id=sha1" "--build-id=sha1 --rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
+      --replace-fail "--build-id=sha1" "--build-id=sha1 --rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
 
     substituteInPlace test/CMakeLists.txt \
-      --replace "\''${ROCM_ROOT_DIR}/amdgcn/bitcode" "${rocm-device-libs}/amdgcn/bitcode"
+      --replace-fail "\''${ROCM_ROOT_DIR}/amdgcn/bitcode" "${rocm-device-libs}/amdgcn/bitcode"
   '';
 
   postInstall = ''

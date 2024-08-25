@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+    substituteInPlace Makefile --replace-fail 'g++' '${stdenv.cc.targetPrefix}c++'
   '';
 
   installPhase = ''

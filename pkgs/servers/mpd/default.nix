@@ -150,8 +150,8 @@ let
 
       postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
-          --replace kAudioObjectPropertyElement{Main,Master} \
-          --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+          --replace-fail kAudioObjectPropertyElement{Main,Master} \
+          --replace-fail kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
       '';
 
       # Otherwise, the meson log says:

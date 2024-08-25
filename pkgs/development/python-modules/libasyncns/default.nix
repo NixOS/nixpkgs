@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace resquery.c \
-      --replace '<arpa/nameser.h>' '<arpa/nameser_compat.h>'
+      --replace-fail '<arpa/nameser.h>' '<arpa/nameser_compat.h>'
   '';
 
   buildInputs = [ libasyncns ];

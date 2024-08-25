@@ -21,7 +21,7 @@ mkDerivation rec {
         menu/luckybackup-su.desktop menu/luckybackup.desktop \
         menu/net.luckybackup.su.policy src/functions.cpp \
         src/global.cpp src/scheduleDialog.cpp; do
-      substituteInPlace $File --replace "/usr" "$out"
+      substituteInPlace $File --replace-fail "/usr" "$out"
     done
   '';
 

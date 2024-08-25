@@ -54,8 +54,8 @@ python3.pkgs.buildPythonApplication rec {
   # Fix CDLL python calls for non absolute paths of xorg libraries
   postPatch = ''
     substituteInPlace Screenkey/xlib.py \
-      --replace libX11.so.6 ${lib.getLib xorg.libX11}/lib/libX11.so.6 \
-      --replace libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
+      --replace-fail libX11.so.6 ${lib.getLib xorg.libX11}/lib/libX11.so.6 \
+      --replace-fail libXtst.so.6 ${lib.getLib xorg.libXtst}/lib/libXtst.so.6
   '';
 
   meta = with lib; {

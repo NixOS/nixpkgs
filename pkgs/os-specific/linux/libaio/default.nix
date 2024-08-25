@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
     # Makefile is too optimistic, gcc is too smart
     substituteInPlace harness/Makefile \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
   makeFlags = [

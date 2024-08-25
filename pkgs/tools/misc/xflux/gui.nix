@@ -30,7 +30,7 @@ buildPythonApplication rec {
 
   postPatch = ''
      substituteInPlace src/fluxgui/xfluxcontroller.py \
-       --replace "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${xflux}/bin/xflux\""
+       --replace-fail "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${xflux}/bin/xflux\""
   '';
 
   postFixup = ''

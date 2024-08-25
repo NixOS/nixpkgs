@@ -53,9 +53,9 @@ mkChromiumDerivation (base: rec {
       $out/share/applications/chromium-browser.desktop
 
     substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace "@@MENUNAME@@" "Chromium" \
-      --replace "@@PACKAGE@@" "chromium" \
-      --replace "Exec=/usr/bin/@@USR_BIN_SYMLINK_NAME@@" "Exec=chromium"
+      --replace-fail "@@MENUNAME@@" "Chromium" \
+      --replace-fail "@@PACKAGE@@" "chromium" \
+      --replace-fail "Exec=/usr/bin/@@USR_BIN_SYMLINK_NAME@@" "Exec=chromium"
 
     # Append more mime types to the end
     sed -i '/^MimeType=/ s,$,x-scheme-handler/webcal;x-scheme-handler/mailto;x-scheme-handler/about;x-scheme-handler/unknown,' \

@@ -35,7 +35,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake wrapGAppsHook3 ];
 
   postFixup = ''
-    substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"
+    substituteInPlace "$out/share/applications/barrier.desktop" --replace-fail "Exec=barrier" "Exec=$out/bin/barrier"
   '';
 
   qtWrapperArgs = [

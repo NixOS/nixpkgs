@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace \
       examples/CMakeLists.txt \
       examples/log/check_logfiles.sh \
-      --replace /bin/bash ${stdenv.shell}
+      --replace-fail /bin/bash ${stdenv.shell}
   '';
 
   doCheck = true;

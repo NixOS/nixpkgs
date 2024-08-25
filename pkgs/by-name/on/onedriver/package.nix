@@ -48,12 +48,12 @@ buildGoModule {
     installManPage ./pkg/resources/onedriver.1
 
     substituteInPlace $out/share/applications/onedriver.desktop \
-      --replace "/usr/bin/onedriver-launcher" "$out/bin/onedriver-launcher" \
-      --replace "/usr/share/icons" "$out/share/icons"
+      --replace-fail "/usr/bin/onedriver-launcher" "$out/bin/onedriver-launcher" \
+      --replace-fail "/usr/share/icons" "$out/share/icons"
 
     substituteInPlace $out/lib/systemd/user/onedriver@.service \
-      --replace "/usr/bin/onedriver" "$out/bin/onedriver" \
-      --replace "/usr/bin/fusermount" "${wrapperDir}/fusermount"
+      --replace-fail "/usr/bin/onedriver" "$out/bin/onedriver" \
+      --replace-fail "/usr/bin/fusermount" "${wrapperDir}/fusermount"
   '';
 
   meta = with lib; {

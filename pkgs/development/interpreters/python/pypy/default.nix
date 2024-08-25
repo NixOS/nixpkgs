@@ -95,10 +95,10 @@ in with passthru; stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace lib_pypy/pypy_tools/build_cffi_imports.py \
-      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
+      --replace-fail "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
     substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" \
-      --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+      --replace-fail "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   buildPhase = ''

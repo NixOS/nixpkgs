@@ -20,22 +20,22 @@ stdenv.mkDerivation {
   postPatch = ''
     # not configurable at runtime unfortunately:
     substituteInPlace app/Config/Paths.php \
-      --replace "__DIR__ . '/../../writable'" "'${dataDir}/writable'"
+      --replace-fail "__DIR__ . '/../../writable'" "'${dataDir}/writable'"
 
     substituteInPlace modules/Admin/Controllers/DashboardController.php \
-      --replace "disk_total_space('./')" "disk_total_space('${dataDir}')"
+      --replace-fail "disk_total_space('./')" "disk_total_space('${dataDir}')"
 
     # configuration file must be writable, place it to ${dataDir}
     substituteInPlace modules/Install/Controllers/InstallController.php \
-      --replace "ROOTPATH" "'${dataDir}/'"
+      --replace-fail "ROOTPATH" "'${dataDir}/'"
     substituteInPlace public/index.php spark \
-      --replace "DotEnv(ROOTPATH)" "DotEnv('${dataDir}')"
+      --replace-fail "DotEnv(ROOTPATH)" "DotEnv('${dataDir}')"
 
     # ffmpeg is required for Video Clips feature
     substituteInPlace modules/MediaClipper/VideoClipper.php \
-      --replace "ffmpeg" "${ffmpeg-headless}/bin/ffmpeg"
+      --replace-fail "ffmpeg" "${ffmpeg-headless}/bin/ffmpeg"
     substituteInPlace modules/Admin/Controllers/VideoClipsController.php \
-      --replace "which ffmpeg" "echo ${ffmpeg-headless}/bin/ffmpeg"
+      --replace-fail "which ffmpeg" "echo ${ffmpeg-headless}/bin/ffmpeg"
   '';
 
   installPhase = ''

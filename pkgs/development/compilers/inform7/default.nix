@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
     popd
 
     substituteInPlace "$out/bin/i7" \
-      --replace "/usr/bin/perl" "${perl}/bin/perl"
+      --replace-fail "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
   meta = with lib; {

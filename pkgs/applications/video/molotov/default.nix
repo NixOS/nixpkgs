@@ -16,7 +16,7 @@ appimageTools.wrapType2 {
       ${appimageContents}/@molotovdesktop-wrapper.desktop \
       $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
   meta = with lib; {

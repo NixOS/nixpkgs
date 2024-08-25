@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       ]}
 
     substituteInPlace $dir/lpd/filtermfc5890cn \
-      --replace "/usr/" "$out/usr/"
+      --replace-fail "/usr/" "$out/usr/"
 
     wrapProgram $dir/lpd/filtermfc5890cn \
       --prefix PATH : ${lib.makeBinPath [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       ]}
 
     substituteInPlace $dir/lpd/psconvertij2 \
-      --replace '`which gs`' "${ghostscript}/bin/gs"
+      --replace-fail '`which gs`' "${ghostscript}/bin/gs"
 
     wrapProgram $dir/lpd/psconvertij2 \
       --prefix PATH : ${lib.makeBinPath [

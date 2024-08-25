@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
+      substituteInPlace foomaticrip.c --replace-fail /bin/bash ${stdenv.shell}
     '';
 
   # Workaround build failure on -fno-common toolchains like upstream

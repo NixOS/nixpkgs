@@ -32,9 +32,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
-      --replace 'Events = "^0.4"' 'Events = ">=0.4"' \
-      --replace " --cov=pysnooz --cov-report=term-missing:skip-covered" ""
+      --replace-fail 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
+      --replace-fail 'Events = "^0.4"' 'Events = ">=0.4"' \
+      --replace-fail " --cov=pysnooz --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [ poetry-core ];

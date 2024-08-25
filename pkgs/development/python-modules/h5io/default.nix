@@ -25,9 +25,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml  \
-      --replace "--cov-report=" ""  \
-      --replace "--cov-branch" ""  \
-      --replace "--cov=h5io" ""
+      --replace-fail "--cov-report=" ""  \
+      --replace-fail "--cov-branch" ""  \
+      --replace-fail "--cov=h5io" ""
   '';
 
   nativeBuildInputs = [ setuptools ];

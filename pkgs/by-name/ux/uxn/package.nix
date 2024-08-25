@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build.sh
     substituteInPlace build.sh \
-      --replace "-L/usr/local/lib " ""
+      --replace-fail "-L/usr/local/lib " ""
   '';
 
   buildPhase = ''

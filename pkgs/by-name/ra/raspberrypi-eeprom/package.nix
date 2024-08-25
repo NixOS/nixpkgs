@@ -28,8 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Don't try to verify md5 signatures from /var/lib/dpkg and
     # fix path to the configuration.
     substituteInPlace rpi-eeprom-update \
-      --replace 'IGNORE_DPKG_CHECKSUMS=''${LOCAL_MODE}' 'IGNORE_DPKG_CHECKSUMS=1' \
-      --replace '/etc/default' '/etc'
+      --replace-fail 'IGNORE_DPKG_CHECKSUMS=''${LOCAL_MODE}' 'IGNORE_DPKG_CHECKSUMS=1' \
+      --replace-fail '/etc/default' '/etc'
   '';
 
   installPhase = ''

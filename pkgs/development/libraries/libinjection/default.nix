@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs src
     substituteInPlace src/Makefile \
-      --replace /usr/local $out
+      --replace-fail /usr/local $out
   '';
 
   configurePhase = "cd src";

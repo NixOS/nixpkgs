@@ -18,10 +18,10 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr $out
+      --replace-fail /usr $out
 
     substituteInPlace common/${pname}.in \
-      --replace '$0' ${pname}
+      --replace-fail '$0' ${pname}
   '';
 
   nativeBuildInputs = [ makeWrapper ];

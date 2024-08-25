@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
   postPatch = ''
     # Apply second part of ncurses-6.3.patch:
-    substituteInPlace display-main.c --replace 'wprintw(dump_win, str);' 'wprintw(dump_win, "%s", str);'
+    substituteInPlace display-main.c --replace-fail 'wprintw(dump_win, str);' 'wprintw(dump_win, "%s", str);'
   '';
 
   nativeBuildInputs = [ pkg-config ];

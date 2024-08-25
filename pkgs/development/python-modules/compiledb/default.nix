@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # fix the tests
   patchPhase = ''
     substituteInPlace tests/data/multiple_commands_oneline.txt \
-                      --replace /bin/echo ${coreutils}/bin/echo
+                      --replace-fail /bin/echo ${coreutils}/bin/echo
   '';
 
   nativeCheckInputs = [

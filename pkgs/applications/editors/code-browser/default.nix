@@ -18,18 +18,18 @@ mkDerivation rec {
     sha256 = "sha256-beCp4lx4MI1+hVgWp2h3piE/zu51zfwQdB5g7ImgmwY=";
   };
   postPatch = ''
-    substituteInPlace Makefile --replace "LFLAGS=-no-pie" "LFLAGS=-no-pie -L."
+    substituteInPlace Makefile --replace-fail "LFLAGS=-no-pie" "LFLAGS=-no-pie -L."
     patchShebangs .
   ''
   + lib.optionalString withQt ''
-    substituteInPlace libs/copper-ui/Makefile --replace "moc -o" "${qtbase.dev}/bin/moc -o"
-    substituteInPlace libs/copper-ui/Makefile --replace "all: qt gtk gtk2" "all: qt"
+    substituteInPlace libs/copper-ui/Makefile --replace-fail "moc -o" "${qtbase.dev}/bin/moc -o"
+    substituteInPlace libs/copper-ui/Makefile --replace-fail "all: qt gtk gtk2" "all: qt"
   ''
   + lib.optionalString withGtk2 ''
-    substituteInPlace libs/copper-ui/Makefile --replace "all: qt gtk gtk2" "all: gtk2"
+    substituteInPlace libs/copper-ui/Makefile --replace-fail "all: qt gtk gtk2" "all: gtk2"
   ''
   + lib.optionalString withGtk3 ''
-    substituteInPlace libs/copper-ui/Makefile --replace "all: qt gtk gtk2" "all: gtk"
+    substituteInPlace libs/copper-ui/Makefile --replace-fail "all: qt gtk gtk2" "all: gtk"
   ''
   ;
   nativeBuildInputs = [ copper

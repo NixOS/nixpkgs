@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   # Fix wrong path; @docdir@ already gets replaced with the correct store path
   postPatch = ''
     substituteInPlace Makefile.in \
-      --replace 'DOCDIR = $(DATAROOTDIR)@docdir@' 'DOCDIR = @docdir@'
+      --replace-fail 'DOCDIR = $(DATAROOTDIR)@docdir@' 'DOCDIR = @docdir@'
   '';
 
   outputs = [ "out" "man" ];

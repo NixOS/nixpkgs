@@ -44,12 +44,12 @@ buildGoModule rec {
     mkdir -p $out/lib/systemd/system
 
     substitute dist/systemd/maddy.service $out/lib/systemd/system/maddy.service \
-      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
 
     substitute dist/systemd/maddy@.service $out/lib/systemd/system/maddy@.service \
-      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=strict-prototypes";

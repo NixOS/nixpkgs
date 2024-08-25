@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace config.sh \
-      --replace "pkg-config" "${stdenv.cc.targetPrefix}pkg-config"
+      --replace-fail "pkg-config" "${stdenv.cc.targetPrefix}pkg-config"
   '';
 
   MIMEDB = "${mailcap}/etc/mime.types";

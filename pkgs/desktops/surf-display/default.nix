@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/xsessions/surf-display.desktop \
-      --replace surf-display $out/bin/surf-display
+      --replace-fail surf-display $out/bin/surf-display
 
-    substituteInPlace $out/bin/surf-display --replace /usr/share $out/share
+    substituteInPlace $out/bin/surf-display --replace-fail /usr/share $out/share
 
     patchShebangs $out/bin/surf-display
     wrapProgram $out/bin/surf-display \

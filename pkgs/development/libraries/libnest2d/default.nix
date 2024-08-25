@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace {,examples/}CMakeLists.txt \
-      --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
+      --replace-fail "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
   '';
 
   propagatedBuildInputs = [ clipper nlopt boost ];

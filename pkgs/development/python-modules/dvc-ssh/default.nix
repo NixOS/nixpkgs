@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   # bcrypt is enabled for sshfs in nixpkgs
   postPatch = ''
-    substituteInPlace setup.cfg --replace "sshfs[bcrypt]" "sshfs"
+    substituteInPlace setup.cfg --replace-fail "sshfs[bcrypt]" "sshfs"
   '';
 
   # Network access is needed for tests

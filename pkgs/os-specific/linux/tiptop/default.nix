@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace ./configure --replace -lcurses -lncurses
+    substituteInPlace ./configure --replace-fail -lcurses -lncurses
   '';
 
   nativeBuildInputs = [ flex bison ];

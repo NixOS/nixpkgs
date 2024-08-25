@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace log4j-scan.py \
-      --replace "headers.txt" "../share/headers.txt"
+      --replace-fail "headers.txt" "../share/headers.txt"
   '';
 
   installPhase = ''

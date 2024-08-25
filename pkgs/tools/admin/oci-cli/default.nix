@@ -69,12 +69,12 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "cryptography>=3.2.1,<=37.0.2" "cryptography" \
-      --replace "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL" \
-      --replace "PyYAML>=5.4,<6" "PyYAML" \
-      --replace "prompt-toolkit==3.0.29" "prompt-toolkit" \
-      --replace "terminaltables==3.1.0" "terminaltables" \
-      --replace "oci==2.78.0" "oci"
+      --replace-fail "cryptography>=3.2.1,<=37.0.2" "cryptography" \
+      --replace-fail "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL" \
+      --replace-fail "PyYAML>=5.4,<6" "PyYAML" \
+      --replace-fail "prompt-toolkit==3.0.29" "prompt-toolkit" \
+      --replace-fail "terminaltables==3.1.0" "terminaltables" \
+      --replace-fail "oci==2.78.0" "oci"
   '';
 
   postInstall = ''

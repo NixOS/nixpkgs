@@ -65,8 +65,8 @@ buildPythonPackage rec {
   # don't care about
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "dask[complete]" "dask" \
-      --replace "xarray >=0.9.6" "xarray"
+      --replace-fail "dask[complete]" "dask" \
+      --replace-fail "xarray >=0.9.6" "xarray"
   '';
 
   preCheck = ''

@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-L/usr/X11R6/lib" "" \
-      --replace "-I/usr/X11R6/include" ""
+      --replace-fail "-L/usr/X11R6/lib" "" \
+      --replace-fail "-I/usr/X11R6/include" ""
   '';
 
   makeFlags = [ "PREFIX=$(out)" "SES=$(out)/share/xsessions" ];

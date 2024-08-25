@@ -23,8 +23,8 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/StefanIacobLivisi/aiolivisi/pull/3
     substituteInPlace setup.py \
-      --replace 'REQUIREMENTS = list(val.strip() for val in open("requirements.txt"))' "" \
-      --replace "REQUIREMENTS," "[],"
+      --replace-fail 'REQUIREMENTS = list(val.strip() for val in open("requirements.txt"))' "" \
+      --replace-fail "REQUIREMENTS," "[],"
   '';
 
   propagatedBuildInputs = [

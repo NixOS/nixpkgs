@@ -15,6 +15,6 @@ stdenv.mkDerivation {
     substitute \
       $out/share/cdemu/net.sf.cdemu.CDEmuDaemon.service \
       $out/share/dbus-1/services/net.sf.cdemu.CDEmuDaemon.service \
-      --replace /bin/true ${coreutils}/bin/true
+      --replace-fail /bin/true ${coreutils}/bin/true
   '';
 }

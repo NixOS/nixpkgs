@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '/lib/modules/$(VM_UNAME)/misc' "$out/lib/modules/${kernel.modDirVersion}/misc" \
-      --replace /sbin/modinfo "${kmod}/bin/modinfo" \
-      --replace 'test -z "$(DESTDIR)"' "0"
+      --replace-fail '/lib/modules/$(VM_UNAME)/misc' "$out/lib/modules/${kernel.modDirVersion}/misc" \
+      --replace-fail /sbin/modinfo "${kmod}/bin/modinfo" \
+      --replace-fail 'test -z "$(DESTDIR)"' "0"
 
     for module in "vmmon-only" "vmnet-only"; do
       substituteInPlace "./$module/Makefile" \
-        --replace '/lib/modules/' "${kernel.dev}/lib/modules/" \
-        --replace /bin/grep "${gnugrep}/bin/grep"
+        --replace-fail '/lib/modules/' "${kernel.dev}/lib/modules/" \
+        --replace-fail /bin/grep "${gnugrep}/bin/grep"
     done
   '';
 

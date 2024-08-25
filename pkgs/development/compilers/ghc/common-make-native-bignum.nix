@@ -334,14 +334,14 @@ stdenv.mkDerivation (rec {
       # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
       for x in configure aclocal.m4; do
         substituteInPlace $x \
-          --replace '*-android*|*-gnueabi*)' \
+          --replace-fail '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   ''
   # HACK: allow bootstrapping with GHC 8.10 which works fine, as we don't have
   # binary 9.0 packaged. Bootstrapping with 9.2 is broken without hadrian.
   + lib.optionalString (lib.versions.majorMinor version == "9.4") ''
-    substituteInPlace configure --replace \
+    substituteInPlace configure --replace-fail \
       'MinBootGhcVersion="9.0"' \
       'MinBootGhcVersion="8.10"'
   '';

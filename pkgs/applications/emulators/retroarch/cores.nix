@@ -835,7 +835,7 @@ in
     cmakeFlags = [ "-DLIBRETRO=ON" ];
     # remove ccache
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "ccache" ""
+      substituteInPlace CMakeLists.txt --replace-fail "ccache" ""
     '';
     postBuild = "cd pcsx2";
     # causes redefinition of _FORTIFY_SOURCE

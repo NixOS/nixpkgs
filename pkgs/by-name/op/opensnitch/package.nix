@@ -28,7 +28,7 @@ buildGoModule rec {
 
   postPatch = ''
     # Allow configuring Version at build time
-    substituteInPlace daemon/core/version.go --replace "const " "var "
+    substituteInPlace daemon/core/version.go --replace-fail "const " "var "
   '';
 
   modRoot = "daemon";
@@ -57,12 +57,12 @@ buildGoModule rec {
     mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
     cp system-fw.json $out/etc/opensnitchd/
     substitute default-config.json $out/etc/opensnitchd/default-config.json \
-      --replace "/var/log/opensnitchd.log" "/dev/stdout"
+      --replace-fail "/var/log/opensnitchd.log" "/dev/stdout"
     # Do not mkdir rules path
     sed -i '8d' opensnitchd.service
     # Fixup hardcoded paths
     substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
-      --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
+      --replace-fail "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
   '';
 
   ldflags = [

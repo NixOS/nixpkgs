@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # fftw builds with -mtune=native by default
   postPatch = ''
-    substituteInPlace configure --replace "-mtune=native" "-mtune=generic"
+    substituteInPlace configure --replace-fail "-mtune=native" "-mtune=generic"
   '';
 
   enableParallelBuilding = true;

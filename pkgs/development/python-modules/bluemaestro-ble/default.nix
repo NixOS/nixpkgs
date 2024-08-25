@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=bluemaestro_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=bluemaestro_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [ "bluemaestro_ble" ];

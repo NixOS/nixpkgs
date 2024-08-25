@@ -83,9 +83,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov-report= --cov=ot" "" \
-      --replace " --durations=20" "" \
-      --replace " --junit-xml=junit-results.xml" ""
+      --replace-fail " --cov-report= --cov=ot" "" \
+      --replace-fail " --durations=20" "" \
+      --replace-fail " --junit-xml=junit-results.xml" ""
 
     substituteInPlace pyproject.toml \
       --replace-fail "numpy>=2.0.0" "numpy"

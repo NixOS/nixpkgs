@@ -30,10 +30,10 @@ buildGoModule {
 
   # Prevent a non-deterministic temporary directory from polluting the resulting object files
   postPatch = ''
-    substituteInPlace cmd/gomobile/env.go --replace \
+    substituteInPlace cmd/gomobile/env.go --replace-fail \
       'tmpdir, err = ioutil.TempDir("", "gomobile-work-")' \
       'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "gomobile-work")'
-    substituteInPlace cmd/gomobile/init.go --replace \
+    substituteInPlace cmd/gomobile/init.go --replace-fail \
       'tmpdir, err = ioutil.TempDir(gomobilepath, "work-")' \
       'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "work")'
   '';

@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
       # Fix ExecStart path and replace deprecated directory creation method,
       # use dynamic user.
       substituteInPlace "$out/lib/systemd/system/blackfire-agent.service" \
-        --replace '/usr/' "$out/" \
-        --replace 'ExecStartPre=/bin/mkdir -p /var/run/blackfire' 'RuntimeDirectory=blackfire' \
-        --replace 'ExecStartPre=/bin/chown blackfire: /var/run/blackfire' "" \
-        --replace 'User=blackfire' 'DynamicUser=yes' \
-        --replace 'PermissionsStartOnly=true' ""
+        --replace-fail '/usr/' "$out/" \
+        --replace-fail 'ExecStartPre=/bin/mkdir -p /var/run/blackfire' 'RuntimeDirectory=blackfire' \
+        --replace-fail 'ExecStartPre=/bin/chown blackfire: /var/run/blackfire' "" \
+        --replace-fail 'User=blackfire' 'DynamicUser=yes' \
+        --replace-fail 'PermissionsStartOnly=true' ""
 
       # Modernize socket path.
       substituteInPlace "$out/etc/blackfire/agent" \
-        --replace '/var/run' '/run'
+        --replace-fail '/var/run' '/run'
     else
       mkdir $out
 

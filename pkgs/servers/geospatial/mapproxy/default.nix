@@ -12,7 +12,7 @@ buildPythonApplication rec {
   hash = "sha256-2FEgfdo8i/R5lU0G514zJcaIRe8y60Vm0jHOBEaoEwI=";
   };
   prePatch = ''
-    substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
+    substituteInPlace mapproxy/util/ext/serving.py --replace-fail "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
   propagatedBuildInputs = [
     boto3 # needed for caches service

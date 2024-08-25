@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "enum-compat" ""
+      --replace-fail "enum-compat" ""
   '';
 
   pytestFlagsArray = [ "tests/test_asn1.py" ];

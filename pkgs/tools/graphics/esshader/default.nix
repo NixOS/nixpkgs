@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace config.mk \
-      --replace "-lGLESv2" "-lGL -lGLESv2"
+      --replace-fail "-lGLESv2" "-lGL -lGLESv2"
   '';
 
   nativeBuildInputs = [

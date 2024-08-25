@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
+    substituteInPlace Makefile --replace-fail "-fno-guess-branch-probability" ""
 
     for f in $(find -name "*.h" -or -name "*.cpp"); do
         substituteInPlace "$f" --replace-quiet "log2" "_log2"

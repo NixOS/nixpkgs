@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   prePatch = ''
-    substituteInPlace Makefile.in --replace 4755 0755
+    substituteInPlace Makefile.in --replace-fail 4755 0755
   '';
 
   preConfigure = ''

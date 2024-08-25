@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
 
     substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
-      --replace 'zenitypath = "zenity"' 'zenitypath = "${zenity}/bin/zenity"'
+      --replace-fail 'zenitypath = "zenity"' 'zenitypath = "${zenity}/bin/zenity"'
     substituteInPlace plugins/editor/src/editor/NativeHelpers.cpp \
-      --replace '/usr/bin/zenity' '${zenity}/bin/zenity'
+      --replace-fail '/usr/bin/zenity' '${zenity}/bin/zenity'
   '';
 
   cmakeFlags = [ "-DSFIZZ_TESTS=ON" ];

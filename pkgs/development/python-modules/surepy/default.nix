@@ -33,9 +33,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
-      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"' \
-      --replace 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
+      --replace-fail 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
+      --replace-fail 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"' \
+      --replace-fail 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
   '';
 
   nativeBuildInputs = [ poetry-core ];

@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
     export PERL5LIB="./xs/blib/arch/:./xs/blib/lib:$PERL5LIB"
 
     substituteInPlace Build.PL \
-      --replace "0.9918" "0.9923" \
-      --replace "eval" ""
+      --replace-fail "0.9918" "0.9923" \
+      --replace-fail "eval" ""
 
     pushd xs
       perl Build.PL

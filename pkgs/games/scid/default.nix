@@ -21,7 +21,7 @@ tcl.mkTclDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace "set var(INSTALL) {install_mac}" ""
+      --replace-fail "set var(INSTALL) {install_mac}" ""
   '';
 
   nativeBuildInputs = [

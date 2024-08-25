@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
+    substituteInPlace xargs/xargs.c --replace-fail 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
   '';
 
   patches = [ ./no-install-statedir.patch ];

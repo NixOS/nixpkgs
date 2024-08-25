@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpulseaudio libnotify ];
   nativeBuildInputs = [ pkg-config ];
 
-  postPatch = ''substituteInPlace Makefile --replace "\$(DESTDIR)/usr" "$out"'';
+  postPatch = ''substituteInPlace Makefile --replace-fail "\$(DESTDIR)/usr" "$out"'';
 
   meta = with lib; {
     description = "CLI PulseAudio Volume Control";

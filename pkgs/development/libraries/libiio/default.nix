@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libiio.rules.cmakein \
-      --replace /bin/sh ${runtimeShell}
+      --replace-fail /bin/sh ${runtimeShell}
   '' + lib.optionalString pythonSupport ''
     # Hardcode path to the shared library into the bindings.
     sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${./hardcode-library-path.patch} | patch -p1

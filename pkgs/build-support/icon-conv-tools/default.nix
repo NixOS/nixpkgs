@@ -10,8 +10,8 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace extractWinRscIconsToStdFreeDesktopDir.sh \
-      --replace "icotool" "${icoutils}/bin/icotool" \
-      --replace "wrestool" "${icoutils}/bin/wrestool"
+      --replace-fail "icotool" "${icoutils}/bin/icotool" \
+      --replace-fail "wrestool" "${icoutils}/bin/wrestool"
   '';
 
   buildPhase = ''

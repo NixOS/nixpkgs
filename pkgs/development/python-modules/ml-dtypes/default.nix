@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "numpy~=1.21.2" "numpy" \
-      --replace "numpy~=1.23.3" "numpy" \
-      --replace "numpy~=1.26.0" "numpy" \
-      --replace "numpy==2.0.0rc1" "numpy" \
-      --replace "setuptools~=68.1.0" "setuptools"
+      --replace-fail "numpy~=1.21.2" "numpy" \
+      --replace-fail "numpy~=1.23.3" "numpy" \
+      --replace-fail "numpy~=1.26.0" "numpy" \
+      --replace-fail "numpy==2.0.0rc1" "numpy" \
+      --replace-fail "setuptools~=68.1.0" "setuptools"
   '';
 
   nativeBuildInputs = [ setuptools ];

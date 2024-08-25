@@ -24,7 +24,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace internal/libpcap/compile.go \
-      --replace "-static" ""
+      --replace-fail "-static" ""
   '';
 
   # this breaks go generate as bpf does not support -fzero-call-used-regs=used-gpr

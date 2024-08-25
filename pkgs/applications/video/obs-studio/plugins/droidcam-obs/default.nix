@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./linux/linux.mk \
-      --replace "-limobiledevice" "-limobiledevice-1.0" \
-      --replace "-I/usr/include/obs" "-I${obs-studio}/include/obs" \
-      --replace "-I/usr/include/ffmpeg" "-I${ffmpeg}/include"
+      --replace-fail "-limobiledevice" "-limobiledevice-1.0" \
+      --replace-fail "-I/usr/include/obs" "-I${obs-studio}/include/obs" \
+      --replace-fail "-I/usr/include/ffmpeg" "-I${ffmpeg}/include"
   '';
 
   preBuild = ''

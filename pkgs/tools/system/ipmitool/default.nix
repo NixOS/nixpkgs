@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'AC_MSG_WARN([** Neither wget nor curl could be found.])' 'AM_CONDITIONAL([DOWNLOAD], [true])'
+      --replace-fail 'AC_MSG_WARN([** Neither wget nor curl could be found.])' 'AM_CONDITIONAL([DOWNLOAD], [true])'
     cp ${iana-enterprise-numbers} enterprise-numbers
   '';
 

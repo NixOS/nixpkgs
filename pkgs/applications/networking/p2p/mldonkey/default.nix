@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace '+camlp4' \
+    substituteInPlace Makefile --replace-fail '+camlp4' \
       '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
   '';
 

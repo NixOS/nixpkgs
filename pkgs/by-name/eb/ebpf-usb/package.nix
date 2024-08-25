@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace ebpf-usb.py \
-      --replace '#!/usr/bin/env -S python3 -u' '#!/usr/bin/env python3'
+      --replace-fail '#!/usr/bin/env -S python3 -u' '#!/usr/bin/env python3'
   '';
 
   installPhase = ''

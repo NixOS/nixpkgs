@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tests/Makefile.am \
-      --replace 'TESTS            += empty_string' "" \
-      --replace 'TESTS            += print_filter' ""
+      --replace-fail 'TESTS            += empty_string' "" \
+      --replace-fail 'TESTS            += print_filter' ""
   '';
 
   nativeBuildInputs = [ autoreconfHook flex ];

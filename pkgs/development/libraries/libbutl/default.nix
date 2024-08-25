@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace libbutl/uuid-linux.cxx \
-      --replace '"libuuid.so' '"${lib.getLib libuuid}/lib/libuuid.so'
+      --replace-fail '"libuuid.so' '"${lib.getLib libuuid}/lib/libuuid.so'
   '';
 
   build2ConfigureFlags = [

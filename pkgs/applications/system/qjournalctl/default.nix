@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace qjournalctl.pro --replace /usr/ $out/
+    substituteInPlace qjournalctl.pro --replace-fail /usr/ $out/
   '';
 
   nativeBuildInputs = [

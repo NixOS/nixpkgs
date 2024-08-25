@@ -85,8 +85,8 @@ let
 
       patchShebangs $out/usr/bin/runescape-launcher
       substituteInPlace $out/usr/bin/runescape-launcher \
-        --replace "unset XMODIFIERS" "$envVarsWithXmodifiers" \
-        --replace "/usr/share/games/runescape-launcher/runescape" "$out/share/games/runescape-launcher/runescape"
+        --replace-fail "unset XMODIFIERS" "$envVarsWithXmodifiers" \
+        --replace-fail "/usr/share/games/runescape-launcher/runescape" "$out/share/games/runescape-launcher/runescape"
 
       cp -r $out/usr/bin $out/
       cp -r $out/usr/share $out/
@@ -142,7 +142,7 @@ in
       cp ${runescape}/share/applications/runescape-launcher.desktop "$out/share/applications"
       cp -r ${runescape}/share/icons "$out/share/icons"
       substituteInPlace "$out/share/applications/runescape-launcher.desktop" \
-        --replace "/usr/bin/runescape-launcher" "RuneScape"
+        --replace-fail "/usr/bin/runescape-launcher" "RuneScape"
     '';
 
     meta = with lib; {

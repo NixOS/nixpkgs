@@ -34,10 +34,10 @@ python3Packages.buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace \
+    substituteInPlace setup.py --replace-fail \
       '"https://github.com/thann/install_freedesktop/tarball/master#egg=install_freedesktop-0.2.0"' \
       '"file://${install-freedesktop}#egg=install_freedesktop-0.2.0"' \
-      --replace 'version = get_version()' 'version = "0.1.0.post9"'
+      --replace-fail 'version = get_version()' 'version = "0.1.0.post9"'
   '';
 
   nativeBuildInputs = with python3Packages; [

@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace "$dev/lib/pkgconfig/jack.pc" \
-      --replace "$out/include" "$dev/include"
+      --replace-fail "$out/include" "$dev/include"
   '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     # test-object: ../lib/test-object.c:129: main: Assertion `setlocale(LC_NUMERIC, "de_DE.UTF-8") != 0' failed.
     # PR that added it https://github.com/varlink/libvarlink/pull/27
     substituteInPlace lib/test-object.c \
-      --replace 'assert(setlocale(LC_NUMERIC, "de_DE.UTF-8") != 0);' ""
+      --replace-fail 'assert(setlocale(LC_NUMERIC, "de_DE.UTF-8") != 0);' ""
 
     patchShebangs lib/test-symbols.sh varlink-wrapper.py
   '';

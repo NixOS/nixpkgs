@@ -40,7 +40,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set version in the repo
     substituteInPlace pyproject.toml \
-      --replace 'version = "0"' 'version = "${version}"'
+      --replace-fail 'version = "0"' 'version = "${version}"'
   '';
 
   pythonImportsCheck = [ "pytraccar" ];

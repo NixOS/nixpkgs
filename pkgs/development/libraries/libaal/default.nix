@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   preInstall = ''
-    substituteInPlace Makefile --replace ./run-ldconfig true
+    substituteInPlace Makefile --replace-fail ./run-ldconfig true
   '';
 
   enableParallelBuilding = true;

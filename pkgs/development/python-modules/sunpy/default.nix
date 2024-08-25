@@ -99,7 +99,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --dist no" ""
+      --replace-fail " --dist no" ""
   '';
 
   # darwin has write permission issues

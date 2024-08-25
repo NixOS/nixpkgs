@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # U was removed in python 3.11 because it had no effect
     substituteInPlace waflib/*.py \
-      --replace "m='rU" "m='r" \
-      --replace "'rU'" "'r'"
+      --replace-fail "m='rU" "m='r" \
+      --replace-fail "'rU'" "'r'"
   '';
 
   meta = with lib; {

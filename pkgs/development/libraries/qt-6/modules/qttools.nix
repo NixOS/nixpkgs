@@ -28,7 +28,7 @@ qtModule {
       src/qdoc/catch/CMakeLists.txt \
       src/qdoc/catch_generators/CMakeLists.txt \
       src/qdoc/catch_conversions/CMakeLists.txt \
-      --replace ''\'''${CMAKE_INSTALL_INCLUDEDIR}' "$out/include"
+      --replace-fail ''\'''${CMAKE_INSTALL_INCLUDEDIR}' "$out/include"
   '';
   postInstall = ''
     mkdir -p "$dev"

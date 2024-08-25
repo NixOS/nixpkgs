@@ -29,9 +29,9 @@ buildPythonPackage {
   postPatch = ''
     # Required to support numpy >=1.24 where np.bool is removed in favor of just bool
     substituteInPlace python/mxnet/numpy/utils.py \
-      --replace "bool = onp.bool" "bool = bool"
+      --replace-fail "bool = onp.bool" "bool = bool"
     substituteInPlace python/setup.py \
-      --replace "graphviz<0.9.0," "graphviz"
+      --replace-fail "graphviz<0.9.0," "graphviz"
   '';
 
   preConfigure = ''

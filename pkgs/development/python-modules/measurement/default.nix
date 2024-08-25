@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=measurement" ""
+      --replace-fail "--cov=measurement" ""
   '';
 
   propagatedBuildInputs = [ sympy ];

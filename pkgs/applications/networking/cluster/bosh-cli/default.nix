@@ -19,7 +19,7 @@ buildGoModule rec {
   vendorHash = null;
 
   postPatch = ''
-    substituteInPlace cmd/version.go --replace '[DEV BUILD]' '${version}'
+    substituteInPlace cmd/version.go --replace-fail '[DEV BUILD]' '${version}'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

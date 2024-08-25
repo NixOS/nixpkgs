@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "events>=0.3,<0.4" "events>=0.3"
+      --replace-fail "events>=0.3,<0.4" "events>=0.3"
   '';
 
   pythonImportsCheck = [ "eve" ];

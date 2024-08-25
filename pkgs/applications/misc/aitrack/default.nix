@@ -34,7 +34,7 @@
 
   postPatch = ''
     substituteInPlace Client/src/Main.cpp \
-      --replace "/usr/share/" "$out/share/"
+      --replace-fail "/usr/share/" "$out/share/"
   '';
 
   postInstall = ''

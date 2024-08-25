@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   prePatch = ''
-    substituteInPlace CMakeLists.txt --replace "CMAKE_ROOT}/Modules" "CMAKE_INSTALL_PREFIX}/lib/cmake"
+    substituteInPlace CMakeLists.txt --replace-fail "CMAKE_ROOT}/Modules" "CMAKE_INSTALL_PREFIX}/lib/cmake"
     substituteInPlace webOS/webOS.cmake \
-      --replace ' ''${CMAKE_ROOT}/Modules' " $out/lib/cmake" \
-      --replace 'INSTALL_ROOT}/usr' 'INSTALL_ROOT}'
+      --replace-fail ' ''${CMAKE_ROOT}/Modules' " $out/lib/cmake" \
+      --replace-fail 'INSTALL_ROOT}/usr' 'INSTALL_ROOT}'
 
     sed -i '/CMAKE_INSTALL_PREFIX/d' webOS/webOS.cmake
   '';

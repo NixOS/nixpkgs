@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace tests/sherlock_interactives.py \
-      --replace @sherlockBin@ "$out/bin/sherlock"
+      --replace-fail @sherlockBin@ "$out/bin/sherlock"
   '';
 
   nativeBuildInputs = [ makeWrapper ];

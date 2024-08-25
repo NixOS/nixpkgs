@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "SHELL := /bin/bash" "SHELL := bash" \
-      --replace "test flaketest" "test"
+      --replace-fail "SHELL := /bin/bash" "SHELL := bash" \
+      --replace-fail "test flaketest" "test"
     substituteInPlace setup.py \
-      --replace "'tox'," ""
+      --replace-fail "'tox'," ""
   '';
 
   propagatedBuildInputs = [

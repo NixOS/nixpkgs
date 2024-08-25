@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '-lcurses' '-lncurses'
+      --replace-fail '-lcurses' '-lncurses'
 
     substituteInPlace Makefile \
-      --replace 'LDFLAGS = -s -N' '#LDFLAGS = -s -N'
+      --replace-fail 'LDFLAGS = -s -N' '#LDFLAGS = -s -N'
   '';
 
   buildInputs = [ ncurses glibc ];

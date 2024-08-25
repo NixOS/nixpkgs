@@ -42,9 +42,9 @@ buildPythonPackage rec {
   # them up as tests
   postPatch = ''
     substituteInPlace project/tests/test_silky_profiler.py \
-      --replace "def test_time_taken" "def _test_time_taken"
+      --replace-fail "def test_time_taken" "def _test_time_taken"
     substituteInPlace setup.py \
-      --replace 'use_scm_version=True' 'version="${version}"'
+      --replace-fail 'use_scm_version=True' 'version="${version}"'
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

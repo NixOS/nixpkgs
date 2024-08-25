@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e'2s/.*/exit 77/' scripts/ocsp-stapling.test
     # ensure test detects musl-based systems too
     substituteInPlace scripts/ocsp-stapling2.test \
-      --replace '"linux-gnu"' '"linux-"'
+      --replace-fail '"linux-gnu"' '"linux-"'
   '';
 
   configureFlags = [

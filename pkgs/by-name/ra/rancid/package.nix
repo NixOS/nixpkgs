@@ -63,29 +63,29 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
 
     substituteInPlace configure.ac \
-      --replace 'm4_esyscmd(configure.vers package_name),' ${finalAttrs.pname}, \
-      --replace 'm4_esyscmd(configure.vers package_version),' ${finalAttrs.version},
+      --replace-fail 'm4_esyscmd(configure.vers package_name),' ${finalAttrs.pname}, \
+      --replace-fail 'm4_esyscmd(configure.vers package_version),' ${finalAttrs.version},
 
     substituteInPlace etc/rancid.conf.sample.in \
-      --replace @ENV_PATH@ ${makeBinPath [ "/run/wrappers" (placeholder "out") coreutils git gnugrep gnused openssh perl runtimeShell telnet' ]}
+      --replace-fail @ENV_PATH@ ${makeBinPath [ "/run/wrappers" (placeholder "out") coreutils git gnugrep gnused openssh perl runtimeShell telnet' ]}
 
     for f in bin/*.in; do \
       if grep -q /usr/bin/tail $f ; then
-        substituteInPlace $f --replace /usr/bin/tail ${coreutils}/bin/tail
+        substituteInPlace $f --replace-fail /usr/bin/tail ${coreutils}/bin/tail
       fi
     done
 
     substituteInPlace bin/par.c \
-      --replace '"sh"' '"${runtimeShell}"'
+      --replace-fail '"sh"' '"${runtimeShell}"'
 
     substituteInPlace bin/rancid-run.in \
-      --replace '>$LOGDIR/$GROUP.`date +%Y%m%d.%H%M%S` 2>&1' ' ' \
-      --replace 'perl ' '${getExe perl} ' \
-      --replace 'sh ' '${runtimeShell} ' \
-      --replace '"control_rancid ' '"${placeholder "out"}/bin/control_rancid ' \
+      --replace-fail '>$LOGDIR/$GROUP.`date +%Y%m%d.%H%M%S` 2>&1' ' ' \
+      --replace-fail 'perl ' '${getExe perl} ' \
+      --replace-fail 'sh ' '${runtimeShell} ' \
+      --replace-fail '"control_rancid ' '"${placeholder "out"}/bin/control_rancid ' \
 
     substituteInPlace bin/control_rancid.in \
-      --replace "'rancid-fe " "'${placeholder "out"}/bin/rancid-fe "
+      --replace-fail "'rancid-fe " "'${placeholder "out"}/bin/rancid-fe "
   '';
 
   enableParallelBuilding = true;

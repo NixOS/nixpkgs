@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/efi_runtime";
 
   postPatch = ''
-    substituteInPlace Makefile --replace \
+    substituteInPlace Makefile --replace-fail \
       '/lib/modules/$(KVER)/build' \
       '${kernel.dev}/lib/modules/${kernel.modDirVersion}/build'
   '';

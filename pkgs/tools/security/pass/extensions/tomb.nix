@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/lib/password-store/extensions/tomb.bash \
-      --replace 'TOMB="''${PASSWORD_STORE_TOMB:-tomb}"' 'TOMB="''${PASSWORD_STORE_TOMB:-${tomb}/bin/tomb}"'
+      --replace-fail 'TOMB="''${PASSWORD_STORE_TOMB:-tomb}"' 'TOMB="''${PASSWORD_STORE_TOMB:-${tomb}/bin/tomb}"'
   '';
 
   meta = with lib; {

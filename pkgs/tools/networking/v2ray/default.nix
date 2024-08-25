@@ -42,9 +42,9 @@ buildGoModule rec {
     wrapProgram $out/bin/v2ray \
       --suffix XDG_DATA_DIRS : $assetsDrv/share
     substituteInPlace $out/lib/systemd/system/*.service \
-      --replace User=nobody DynamicUser=yes \
-      --replace /usr/local/bin/ $out/bin/ \
-      --replace /usr/local/etc/ /etc/
+      --replace-fail User=nobody DynamicUser=yes \
+      --replace-fail /usr/local/bin/ $out/bin/ \
+      --replace-fail /usr/local/etc/ /etc/
   '';
 
   passthru = {

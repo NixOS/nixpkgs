@@ -27,7 +27,7 @@ buildGoModule rec {
   # update documentation to fix broken test
   postPatch = ''
     substituteInPlace docs/CLI.md \
-      --replace 0.3.0 0.3.1
+      --replace-fail 0.3.0 0.3.1
   '';
 
   passthru.tests = {

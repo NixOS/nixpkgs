@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   # `gcc: error: CCC: No such file or directory` during the build.
   + ''
     substituteInPlace configure* \
-      --replace 'LIBSEMA="CCC"' 'LIBSEMA=""'
+      --replace-fail 'LIBSEMA="CCC"' 'LIBSEMA=""'
   '';
 
   strictDeps = true;

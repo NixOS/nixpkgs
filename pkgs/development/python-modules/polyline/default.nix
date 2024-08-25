@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=polyline --cov-report term-missing" ""
+      --replace-fail " --cov=polyline --cov-report term-missing" ""
   '';
 
   nativeBuildInputs = [

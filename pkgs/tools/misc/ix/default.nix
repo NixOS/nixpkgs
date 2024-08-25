@@ -16,7 +16,7 @@ resholve.mkDerivation {
 
     install -Dm555 $src $out/bin/ix
     substituteInPlace $out/bin/ix \
-      --replace '$echo ' ""
+      --replace-fail '$echo ' ""
 
     runHook postInstall
   '';

@@ -70,8 +70,8 @@ buildGoModule rec {
     cp -a ${compiler-rt.src}/compiler-rt/lib/builtins/* lib/compiler-rt-builtins/
 
     substituteInPlace GNUmakefile \
-      --replace "build/release/tinygo/bin" "$out/bin" \
-      --replace "build/release/" "$out/share/"
+      --replace-fail "build/release/tinygo/bin" "$out/bin" \
+      --replace-fail "build/release/" "$out/share/"
   '';
 
   preBuild = ''

@@ -35,7 +35,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs shell_scripts
-    substituteInPlace shell_scripts/{awsume,awsume.fish} --replace "awsumepy" "$out/bin/awsumepy"
+    substituteInPlace shell_scripts/{awsume,awsume.fish} --replace-fail "awsumepy" "$out/bin/awsumepy"
   '';
 
   postInstall = ''

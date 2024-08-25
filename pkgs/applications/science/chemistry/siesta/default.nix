@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Src/siesta_init.F --replace '/bin/rm' 'rm'
+    substituteInPlace Src/siesta_init.F --replace-fail '/bin/rm' 'rm'
   '';
 
   passthru = {

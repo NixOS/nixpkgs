@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "hypothesis==" "hypothesis>="
+      --replace-fail "hypothesis==" "hypothesis>="
   '';
 
   preBuild = ''

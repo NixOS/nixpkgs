@@ -23,12 +23,12 @@ mkDerivation rec {
 
   postPatch = ''
   substituteInPlace youtube_dl.cpp \
-    --replace 'QString YoutubeDl::path = QString();' \
+    --replace-fail 'QString YoutubeDl::path = QString();' \
               'QString YoutubeDl::path = QString("${yt-dlp}/bin/yt-dlp");'
   '' + lib.optionalString (ffmpeg != null) ''
   substituteInPlace converter_ffmpeg.cpp \
-    --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
-    --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
+    --replace-fail '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
+    --replace-fail '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
   '';
 
   qmakeFlags = [ "clipgrab.pro" ];

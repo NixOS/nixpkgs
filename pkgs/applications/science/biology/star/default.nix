@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/source";
 
   postPatch = ''
-    substituteInPlace Makefile --replace "/bin/rm" "rm"
+    substituteInPlace Makefile --replace-fail "/bin/rm" "rm"
   '';
 
   buildInputs = [ zlib ];

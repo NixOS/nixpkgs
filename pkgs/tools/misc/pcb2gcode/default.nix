@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile.am \
-    --replace '`git describe --dirty --always --tags`' '${version}'
+    --replace-fail '`git describe --dirty --always --tags`' '${version}'
   '';
 
   meta = with lib; {

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   # AC_CHECK_DECLS doesn't work with clang
   postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace configure.ac --replace \
+    substituteInPlace configure.ac --replace-fail \
       'AC_CHECK_DECLS(fdatasync)' ""
   '';
 

@@ -24,7 +24,7 @@ buildGoModule rec {
 
   postConfigure = ''
     substituteInPlace vendor/github.com/alexellis/go-execute/v2/exec.go \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
   CGO_ENABLED = 0;

@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "glean-sdk>=50.0.1,==50.*" "glean-sdk"
+      --replace-fail "glean-sdk>=50.0.1,==50.*" "glean-sdk"
   '';
 
   nativeBuildInputs = with python3.pkgs; [

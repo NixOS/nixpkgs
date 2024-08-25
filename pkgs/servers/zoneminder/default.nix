@@ -81,49 +81,49 @@ in stdenv.mkDerivation rec {
 
     for d in scripts/ZoneMinder onvif/{modules,proxy} ; do
       substituteInPlace $d/CMakeLists.txt \
-        --replace 'DESTDIR="''${CMAKE_CURRENT_BINARY_DIR}/output"' "PREFIX=$out INSTALLDIRS=site"
+        --replace-fail 'DESTDIR="''${CMAKE_CURRENT_BINARY_DIR}/output"' "PREFIX=$out INSTALLDIRS=site"
       sed -i '/^install/d' $d/CMakeLists.txt
     done
 
     substituteInPlace misc/CMakeLists.txt \
-      --replace '"''${PC_POLKIT_PREFIX}/''${CMAKE_INSTALL_DATAROOTDIR}' "\"$out/share"
+      --replace-fail '"''${PC_POLKIT_PREFIX}/''${CMAKE_INSTALL_DATAROOTDIR}' "\"$out/share"
 
     for f in misc/*.policy.in \
              scripts/*.pl* \
              scripts/ZoneMinder/lib/ZoneMinder/Memory.pm.in ; do
       substituteInPlace $f \
-        --replace '/usr/bin/perl' '${perlBin}' \
-        --replace '/bin:/usr/bin' "$out/bin:${lib.makeBinPath [ coreutils procps psmisc ]}"
+        --replace-fail '/usr/bin/perl' '${perlBin}' \
+        --replace-fail '/bin:/usr/bin' "$out/bin:${lib.makeBinPath [ coreutils procps psmisc ]}"
     done
 
     substituteInPlace scripts/zmdbbackup.in \
-      --replace /usr/bin/mysqldump ${mariadb.client}/bin/mysqldump
+      --replace-fail /usr/bin/mysqldump ${mariadb.client}/bin/mysqldump
 
     substituteInPlace scripts/zmupdate.pl.in \
-      --replace "'mysql'" "'${mariadb.client}/bin/mysql'" \
-      --replace "'mysqldump'" "'${mariadb.client}/bin/mysqldump'"
+      --replace-fail "'mysql'" "'${mariadb.client}/bin/mysql'" \
+      --replace-fail "'mysqldump'" "'${mariadb.client}/bin/mysqldump'"
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
              src/zm_config_data.h.in \
              web/api/app/Config/bootstrap.php.in \
              web/includes/config.php.in ; do
-      substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder
+      substituteInPlace $f --replace-fail @ZM_CONFIG_SUBDIR@ /etc/zoneminder
     done
 
     for f in includes/Event.php views/image.php ; do
       substituteInPlace web/$f \
-        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
+        --replace-fail "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
     done
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Event.pm \
              scripts/ZoneMinder/lib/ZoneMinder/Storage.pm ; do
       substituteInPlace $f \
-        --replace '/bin/rm' "${coreutils}/bin/rm"
+        --replace-fail '/bin/rm' "${coreutils}/bin/rm"
     done
 
     substituteInPlace web/includes/functions.php \
-      --replace "'date " "'${coreutils}/bin/date " \
+      --replace-fail "'date " "'${coreutils}/bin/date " \
       --subst-var-by srcHash "`basename $out`"
   '';
 

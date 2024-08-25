@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Causes fatal ldconfig cache generation attempt on non-NixOS Linux
     for mkfile in autoconf/Makefile.common.lib.in libAfter{Base,Image}/Makefile.in; do
       substituteInPlace $mkfile \
-        --replace 'test -w /etc' 'false'
+        --replace-fail 'test -w /etc' 'false'
     done
   '';
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       "libAfterImage/Makefile.in"
     )
     for toFix in "''${fixupList[@]}"; do
-      substituteInPlace "$toFix" --replace "clq" "cq"
+      substituteInPlace "$toFix" --replace-fail "clq" "cq"
     done
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';

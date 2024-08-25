@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/graphics.rs \
-      --replace /usr $out
+      --replace-fail /usr $out
   '';
 
   postInstall = ''

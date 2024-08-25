@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace makefile --replace "-Wl,-soname," "-Wl,-install_name,$out/lib/"
+    substituteInPlace makefile --replace-fail "-Wl,-soname," "-Wl,-install_name,$out/lib/"
   '';
 
   buildPhase = ''

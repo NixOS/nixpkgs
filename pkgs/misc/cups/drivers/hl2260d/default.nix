@@ -36,8 +36,8 @@ stdenv.mkDerivation {
     LPDDIR=$out/opt/brother/Printers/HL2260D/lpd
 
     substituteInPlace $LPDDIR/filter_HL2260D \
-      --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HL2260D\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"HL2260D\"; #"
+      --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HL2260D\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"HL2260D\"; #"
 
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       $INFDIR/braddprinter
@@ -51,16 +51,16 @@ stdenv.mkDerivation {
     PAPER_CFG=$out/opt/brother/Printers/HL2260D/cupswrapper/paperconfigml1
 
     substituteInPlace $WRAPPER \
-      --replace "basedir =~" "basedir = \"$out/opt/brother/Printers/HL2260D\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"HL2260D\"; #" \
-      --replace "\$DEBUG=0;" "\$DEBUG=${debugLvl};"
+      --replace-fail "basedir =~" "basedir = \"$out/opt/brother/Printers/HL2260D\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"HL2260D\"; #" \
+      --replace-fail "\$DEBUG=0;" "\$DEBUG=${debugLvl};"
     substituteInPlace $WRAPPER \
-      --replace "\`cp " "\`cp -p " \
-      --replace "\$TEMPRC\`" "\$TEMPRC; chmod a+rw \$TEMPRC\`" \
-      --replace "\`mv " "\`cp -p "
+      --replace-fail "\`cp " "\`cp -p " \
+      --replace-fail "\$TEMPRC\`" "\$TEMPRC; chmod a+rw \$TEMPRC\`" \
+      --replace-fail "\`mv " "\`cp -p "
     # This config script make this assumption that the *.ppd are found in a global location `/etc/cups/ppd`.
     substituteInPlace $PAPER_CFG \
-      --replace "/etc/cups/ppd" "$out/share/cups/model"
+      --replace-fail "/etc/cups/ppd" "$out/share/cups/model"
   '';
 
   installPhase = ''

@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   # Make compatible with cstruct 6.1.0
   postPatch = ''
-    substituteInPlace src/ramdisk.ml --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace src/ramdisk.ml --replace-fail 'Cstruct.len' 'Cstruct.length'
   '';
 
   minimalOCamlVersion = "4.06";

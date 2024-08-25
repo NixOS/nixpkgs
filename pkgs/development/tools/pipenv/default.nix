@@ -50,7 +50,7 @@ in buildPythonApplication rec {
     # It would use sys.executable, which in our case points to a python that
     # does not have the required dependencies.
     substituteInPlace pipenv/utils/virtualenv.py \
-      --replace "sys.executable" "'${pythonEnv.interpreter}'"
+      --replace-fail "sys.executable" "'${pythonEnv.interpreter}'"
   '';
 
   propagatedBuildInputs = runtimeDeps python3.pkgs;

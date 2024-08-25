@@ -27,8 +27,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry==1.3.2" "poetry-core" \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+      --replace-fail "poetry==1.3.2" "poetry-core" \
+      --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
   nativeBuildInputs = [ poetry-core ];

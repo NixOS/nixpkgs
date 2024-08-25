@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     # it should be a build-time dep for build
     # TODO: send upstream
     substituteInPlace docs/meson.build \
-      --replace "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
 
     # Remove 'ani' loader until proper fix for CVE-2022-48622
     substituteInPlace meson.build --replace-fail "'ani'," ""

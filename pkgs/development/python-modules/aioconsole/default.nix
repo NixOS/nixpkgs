@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov aioconsole --count 2" ""
+      --replace-fail "--cov aioconsole --count 2" ""
   '';
 
   __darwinAllowLocalNetworking = true;

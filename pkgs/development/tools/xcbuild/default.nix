@@ -52,7 +52,7 @@ in stdenv.mkDerivation {
     # Apple Open Sourced LZFSE, but not libcompression, and it isn't
     # part of an impure framework we can add
     substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
-      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
+      --replace-fail "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
 
   # TODO: instruct cmake not to put it in /usr, rather than cleaning up

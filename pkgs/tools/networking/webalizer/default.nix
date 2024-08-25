@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       substituteInPlace ./configure \
-        --replace "--static" ""
+        --replace-fail "--static" ""
     '';
 
   buildInputs = [ zlib libpng gd geoip db ];

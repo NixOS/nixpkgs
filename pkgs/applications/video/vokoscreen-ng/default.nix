@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/vokoscreenNG.pro \
-      --replace lrelease-qt5 lrelease
+      --replace-fail lrelease-qt5 lrelease
   '';
 
   postInstall = ''

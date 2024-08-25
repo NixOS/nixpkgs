@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
     patchShebangs configure
 
     substituteInPlace configure \
-      --replace 'DISTRO=$(format "$(lsb_release -si 2>/dev/null)")' 'DISTRO=nixos'
+      --replace-fail 'DISTRO=$(format "$(lsb_release -si 2>/dev/null)")' 'DISTRO=nixos'
   '';
 
   installPhase = ''

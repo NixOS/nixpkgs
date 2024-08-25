@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace set-cfs-zen-tweaks.sh \
-      --replace '$(gawk' '$(${gawk}/bin/gawk'
+      --replace-fail '$(gawk' '$(${gawk}/bin/gawk'
   '';
 
   preFixup = ''

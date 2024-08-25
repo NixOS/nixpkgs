@@ -72,8 +72,8 @@ let
   ideFlags = lib.optionalString (buildIde && !coqAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = lib.optionalString (csdp != null) ''
-    substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
-    substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
+    substituteInPlace plugins/micromega/sos.ml --replace-fail "; csdp" "; ${csdp}/bin/csdp"
+    substituteInPlace plugins/micromega/coq_micromega.ml --replace-fail "System.is_in_system_path \"csdp\"" "true"
   '';
   ocamlPackages = if customOCamlPackages != null then customOCamlPackages
     else lib.switch coq-version [
@@ -162,8 +162,8 @@ self = stdenv.mkDerivation {
   postPatch = ''
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
-    substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    ${lib.optionalString (!coqAtLeast "8.7") "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\""}
+    substituteInPlace tools/beautify-archive --replace-fail "/bin/rm" "$RM"
+    ${lib.optionalString (!coqAtLeast "8.7") "substituteInPlace configure.ml --replace-fail \"md5 -q\" \"md5sum\""}
     ${csdpPatch}
   '';
 

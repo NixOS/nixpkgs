@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
     mv usr/* "$out/"
 
     substituteInPlace $out/share/applications/roam-research.desktop \
-      --replace "/opt/Roam Research/roam-research" "roam-research"
+      --replace-fail "/opt/Roam Research/roam-research" "roam-research"
   '';
 
   # autoPatchelfHook/patchelf are not used because they cause the binary to coredump.

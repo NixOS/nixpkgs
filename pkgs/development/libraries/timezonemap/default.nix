@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     for f in {configure,m4/libtool.m4}; do
       substituteInPlace $f\
-        --replace /usr/bin/file ${file}/bin/file
+        --replace-fail /usr/bin/file ${file}/bin/file
     done
   '';
 

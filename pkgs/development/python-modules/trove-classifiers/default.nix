@@ -24,7 +24,7 @@ let
 
     postPatch = ''
       substituteInPlace setup.py \
-        --replace '"calver"' ""
+        --replace-fail '"calver"' ""
     '';
 
     build-system = [

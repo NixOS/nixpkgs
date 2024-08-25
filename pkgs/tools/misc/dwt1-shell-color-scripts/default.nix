@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation {
 
   postFixup = ''
     substituteInPlace $out/bin/colorscript \
-      --replace "/opt/shell-color-scripts/colorscripts" \
+      --replace-fail "/opt/shell-color-scripts/colorscripts" \
                 "$out/share/shell-color-scripts/colorscripts"
   '';
 

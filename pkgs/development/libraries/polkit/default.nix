@@ -149,10 +149,10 @@ stdenv.mkDerivation rec {
     # NixOS.  Hard-coding the path is kinda ugly.  Maybe we can just
     # call through $PATH, but that might have security implications.
     substituteInPlace src/polkitagent/polkitagentsession.c \
-      --replace   'PACKAGE_PREFIX "/lib/polkit-1/'   '"${setuid}/'
+      --replace-fail   'PACKAGE_PREFIX "/lib/polkit-1/'   '"${setuid}/'
     substituteInPlace test/data/etc/polkit-1/rules.d/10-testing.rules \
-      --replace   /bin/true ${coreutils}/bin/true \
-      --replace   /bin/false ${coreutils}/bin/false
+      --replace-fail   /bin/true ${coreutils}/bin/true \
+      --replace-fail   /bin/false ${coreutils}/bin/false
   '';
 
   postConfigure = lib.optionalString doCheck ''

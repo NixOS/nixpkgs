@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
+      --replace-fail "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
 
     # Outdated vendored assimp, many warnings with newer compilers, too old for CMake option to control this
     # Note that this -Werror caused issues on darwin, so make sure to re-check builds there before removing this
     substituteInPlace externals/assimp/code/CMakeLists.txt \
-      --replace 'TARGET_COMPILE_OPTIONS(assimp PRIVATE -Werror)' ""
+      --replace-fail 'TARGET_COMPILE_OPTIONS(assimp PRIVATE -Werror)' ""
   '';
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];

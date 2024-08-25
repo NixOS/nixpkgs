@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "--disable-general-dynamic-tls";
 
   prePatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile.am --replace stdc++ c++
+    substituteInPlace Makefile.am --replace-fail stdc++ c++
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin

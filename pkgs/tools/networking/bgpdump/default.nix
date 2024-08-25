@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile.in --replace 'ar r libbgpdump.a' '$(AR) r libbgpdump.a'
+    substituteInPlace Makefile.in --replace-fail 'ar r libbgpdump.a' '$(AR) r libbgpdump.a'
   '';
 
   nativeBuildInputs = [ autoreconfHook ];

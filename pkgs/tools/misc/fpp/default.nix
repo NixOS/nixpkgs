@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postPatch = ''
-    substituteInPlace fpp --replace 'PYTHONCMD="python3"' 'PYTHONCMD="${python3.interpreter}"'
+    substituteInPlace fpp --replace-fail 'PYTHONCMD="python3"' 'PYTHONCMD="${python3.interpreter}"'
   '';
 
   installPhase = ''

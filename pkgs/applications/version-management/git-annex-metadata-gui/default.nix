@@ -12,7 +12,7 @@ buildPythonApplication rec {
   };
 
   prePatch = ''
-    substituteInPlace setup.py --replace "'PyQt5', " ""
+    substituteInPlace setup.py --replace-fail "'PyQt5', " ""
   '';
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];

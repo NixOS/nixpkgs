@@ -30,7 +30,7 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-        --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
+        --replace-fail "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
   '';
 
   meta = with lib; {

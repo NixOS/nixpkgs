@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/Settings.cpp src/GuiMidiSetupDialog.cpp \
-      --replace "/usr/share/soundfonts" "${soundfont-fluid}/share/soundfonts" \
-      --replace "FluidR3_GM.sf2" "FluidR3_GM2-2.sf2"
+      --replace-fail "/usr/share/soundfonts" "${soundfont-fluid}/share/soundfonts" \
+      --replace-fail "FluidR3_GM.sf2" "FluidR3_GM2-2.sf2"
   '';
 
   nativeBuildInputs = [

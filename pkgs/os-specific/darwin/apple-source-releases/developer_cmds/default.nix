@@ -13,7 +13,7 @@ appleDerivation {
   postPatch = ''
     makeWrapper ${llvmPackages.clang}/bin/clang $out/bin/clang-cpp --add-flags "--driver-mode=cpp"
     substituteInPlace rpcgen/rpc_main.c \
-      --replace "/usr/bin/cpp" "$out/bin/clang-cpp"
+      --replace-fail "/usr/bin/cpp" "$out/bin/clang-cpp"
   '';
 
   # Workaround build failure on -fno-common toolchains:

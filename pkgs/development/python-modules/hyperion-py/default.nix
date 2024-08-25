@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --timeout=9 --cov=hyperion" ""
+      --replace-fail " --timeout=9 --cov=hyperion" ""
   '';
 
   pythonImportsCheck = [ "hyperion" ];

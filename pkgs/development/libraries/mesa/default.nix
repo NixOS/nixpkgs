@@ -151,11 +151,11 @@ in stdenv.mkDerivation {
     patchShebangs .
 
     # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
-    substituteInPlace src/util/xmlconfig.c --replace \
+    substituteInPlace src/util/xmlconfig.c --replace-fail \
       'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
-    substituteInPlace src/util/meson.build --replace \
+    substituteInPlace src/util/meson.build --replace-fail \
       "get_option('datadir')" "'${placeholder "out"}/share'"
-    substituteInPlace src/amd/vulkan/meson.build --replace \
+    substituteInPlace src/amd/vulkan/meson.build --replace-fail \
       "get_option('datadir')" "'${placeholder "out"}/share'"
 
     ${copyRustDeps}
@@ -320,7 +320,7 @@ in stdenv.mkDerivation {
     # Move Vulkan layers to $drivers and update manifests
     moveToOutput "lib/libVkLayer*" $drivers
     for js in $drivers/share/vulkan/{im,ex}plicit_layer.d/*.json; do
-      substituteInPlace "$js" --replace '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
+      substituteInPlace "$js" --replace-fail '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
     done
 
     # Construct our own .icd files that contain absolute paths.
@@ -340,7 +340,7 @@ in stdenv.mkDerivation {
   postFixup = ''
     # set the default search path for DRI drivers; used e.g. by X server
     for pc in lib/pkgconfig/{dri,d3d}.pc; do
-      [ -f "$dev/$pc" ] && substituteInPlace "$dev/$pc" --replace "$drivers" "${libglvnd.driverLink}"
+      [ -f "$dev/$pc" ] && substituteInPlace "$dev/$pc" --replace-fail "$drivers" "${libglvnd.driverLink}"
     done
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
@@ -352,7 +352,7 @@ in stdenv.mkDerivation {
     mkdir -p $driversdev/lib/pkgconfig
     for pc in lib/pkgconfig/{xatracker,d3d}.pc; do
       if [ -f "$dev/$pc" ]; then
-        substituteInPlace "$dev/$pc" --replace $out $drivers
+        substituteInPlace "$dev/$pc" --replace-fail $out $drivers
         mv $dev/$pc $driversdev/$pc
       fi
     done

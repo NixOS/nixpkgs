@@ -53,7 +53,7 @@ let
       postPatch = ''
         # Workaround for metadata, that maturin 0.14 does not accept in Cargo.toml anymore
         substituteInPlace ${buildAndTestSubdir}/Cargo.toml \
-          --replace "package.metadata.maturin" "broken"
+          --replace-fail "package.metadata.maturin" "broken"
       '';
 
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ extraBuildInputs;

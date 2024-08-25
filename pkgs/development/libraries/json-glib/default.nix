@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
   # TODO: send upstream
   postPatch = ''
     substituteInPlace doc/meson.build \
-      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
   '';
 
   doCheck = true;

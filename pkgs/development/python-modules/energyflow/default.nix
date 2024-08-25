@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "setup_requires=" "" \
-      --replace "pytest-runner" ""
+      --replace-fail "setup_requires=" "" \
+      --replace-fail "pytest-runner" ""
   '';
 
   propagatedBuildInputs = [

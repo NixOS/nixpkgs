@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
       substituteInPlace "dum.ml" \
-      --replace "Lazy.lazy_is_val" "Lazy.is_val" \
-      --replace "Obj.final_tag" "Obj.custom_tag"
+      --replace-fail "Lazy.lazy_is_val" "Lazy.is_val" \
+      --replace-fail "Obj.final_tag" "Obj.custom_tag"
   '';
 
   nativeBuildInputs = [ ocaml findlib ];

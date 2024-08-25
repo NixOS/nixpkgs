@@ -69,10 +69,10 @@ stdenv.mkDerivation {
     export CMAKE_LIBRARY_PATH=${lib.getLib openssl}/lib
 
     substituteInPlace cpp/cmake/FindValgrind.cmake \
-      --replace "/usr/local" "${valgrind}"
+      --replace-fail "/usr/local" "${valgrind}"
 
     substituteInPlace cpp/CMakeLists.txt \
-      --replace '"/lib64" "/usr/lib64"' '"${attr.out}/lib" "${fuse}/lib"'
+      --replace-fail '"/lib64" "/usr/lib64"' '"${attr.out}/lib" "${fuse}/lib"'
 
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${fuse}/include"
     export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${fuse}/lib"
@@ -80,20 +80,20 @@ stdenv.mkDerivation {
     export DESTDIR=$out
 
     substituteInPlace Makefile \
-      --replace "/usr/share/" "/share/" \
-      --replace 'BIN_DIR=$(DESTDIR)/usr/bin' "BIN_DIR=$out/bin"
+      --replace-fail "/usr/share/" "/share/" \
+      --replace-fail 'BIN_DIR=$(DESTDIR)/usr/bin' "BIN_DIR=$out/bin"
 
     substituteInPlace etc/init.d/generate_initd_scripts.sh \
-      --replace "/bin/bash" "${stdenv.shell}"
+      --replace-fail "/bin/bash" "${stdenv.shell}"
 
     substituteInPlace cpp/thirdparty/gtest-1.7.0/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
 
     substituteInPlace cpp/thirdparty/protobuf-2.5.0/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
 
     substituteInPlace cpp/thirdparty/protobuf-2.5.0/gtest/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace-fail "/usr/bin/file" "${file}/bin/file"
 
     # do not put cmake into buildInputs
     export PATH="$PATH:${cmake}/bin"

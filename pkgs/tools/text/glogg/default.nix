@@ -13,7 +13,7 @@ mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace glogg.pro \
-      --replace "boost_program_options-mt" "boost_program_options"
+      --replace-fail "boost_program_options-mt" "boost_program_options"
   '';
 
   nativeBuildInputs = [ qmake ];

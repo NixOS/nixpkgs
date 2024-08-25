@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/nemo-fileroller.c \
-      --replace "file-roller" "${lib.getExe file-roller}" \
-      --replace "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
+      --replace-fail "file-roller" "${lib.getExe file-roller}" \
+      --replace-fail "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
   '';
 
   PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";

@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix plugin dir
     substituteInPlace pbfplugin.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+      --replace-fail "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix darwin build
     substituteInPlace pbfplugin.pro \
-      --replace '$$PROTOBUF/include' '${protobuf}/include' \
-      --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
+      --replace-fail '$$PROTOBUF/include' '${protobuf}/include' \
+      --replace-fail '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
   '';
 
   meta = with lib; {

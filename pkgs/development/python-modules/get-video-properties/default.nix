@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace videoprops/__init__.py \
-      --replace "which('ffprobe')" "'${ffmpeg-headless}/bin/ffprobe'"
+      --replace-fail "which('ffprobe')" "'${ffmpeg-headless}/bin/ffprobe'"
 
     # unused and vulnerable to various CVEs
     rm -r videoprops/binary_dependencies

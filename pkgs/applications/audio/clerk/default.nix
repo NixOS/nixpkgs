@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace clerk_rating_client.service \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [ makeWrapper ];

@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # set compiled-in DATA_DIR so resources can be found
     substituteInPlace src/engine/shared/storage.cpp \
-      --replace '#define DATA_DIR "data"' \
+      --replace-fail '#define DATA_DIR "data"' \
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
 
     # Quote nonsense is a workaround for https://github.com/NixOS/nix/issues/661
     substituteInPlace 'other/bundle/client/Info.plist.in' \
-      --replace ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
-      --replace ${"'"}''${PROJECT_VERSION}' '${version}'
+      --replace-fail ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
+      --replace-fail ${"'"}''${PROJECT_VERSION}' '${version}'
 
     # Make sure some bundled dependencies are actually unbundled.
     # This will fail compilation if one of these dependencies could not

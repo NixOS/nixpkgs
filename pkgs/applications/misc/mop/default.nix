@@ -15,9 +15,9 @@ buildGoModule rec {
 
   preConfigure = ''
     for i in *.go **/*.go; do
-        substituteInPlace $i --replace michaeldv/termbox-go nsf/termbox-go
+        substituteInPlace $i --replace-fail michaeldv/termbox-go nsf/termbox-go
     done
-    substituteInPlace Makefile --replace mop/cmd mop/mop
+    substituteInPlace Makefile --replace-fail mop/cmd mop/mop
     mv cmd mop
   '';
 

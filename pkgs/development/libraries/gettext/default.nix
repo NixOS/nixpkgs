@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
    substituteAllInPlace gettext-runtime/src/gettext.sh.in
-   substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+   substituteInPlace gettext-tools/projects/KDE/trigger --replace-fail "/bin/pwd" pwd
+   substituteInPlace gettext-tools/projects/GNOME/trigger --replace-fail "/bin/pwd" pwd
+   substituteInPlace gettext-tools/src/project-id --replace-fail "/bin/pwd" pwd
   '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in

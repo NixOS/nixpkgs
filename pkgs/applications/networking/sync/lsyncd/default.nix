@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace default-rsync.lua \
-      --replace "/usr/bin/rsync" "${rsync}/bin/rsync"
+      --replace-fail "/usr/bin/rsync" "${rsync}/bin/rsync"
   '';
 
   # Special flags needed on Darwin:

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     for x in libfsm.pc libre.pc; do
       substituteInPlace "$dev/lib/pkgconfig/$x" \
-        --replace 'libdir=''${prefix}/lib' "libdir=$lib/lib"
+        --replace-fail 'libdir=''${prefix}/lib' "libdir=$lib/lib"
     done
   '';
 

@@ -42,7 +42,7 @@ mkDerivation rec {
 
   prePatch = ''
     substituteInPlace package.yaml \
-        --replace -Werror ""
+        --replace-fail -Werror ""
   '';
 
   isLibrary = false;

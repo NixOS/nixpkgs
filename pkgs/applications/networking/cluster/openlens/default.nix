@@ -24,8 +24,8 @@ appimageTools.wrapType2 {
        $out/share/icons/hicolor/512x512/apps/${pname}.png
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Icon=open-lens' 'Icon=${pname}' \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Icon=open-lens' 'Icon=${pname}' \
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

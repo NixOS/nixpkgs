@@ -34,11 +34,11 @@ python3.pkgs.buildPythonApplication rec {
   preConfigure = ''
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
-        --replace /usr/sbin/sendmail sendmail
+        --replace-fail /usr/sbin/sendmail sendmail
     done
 
     substituteInPlace config/filter.d/dovecot.conf \
-      --replace dovecot.service dovecot2.service
+      --replace-fail dovecot.service dovecot2.service
   '';
 
   doCheck = false;
@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   preInstall = ''
-    substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
+    substituteInPlace setup.py --replace-fail /usr/share/doc/ share/doc/
 
     # see https://github.com/NixOS/nixpkgs/issues/4968
     ${python3.pythonOnBuildForHost.interpreter} setup.py install_data --install-dir=$out --root=$out

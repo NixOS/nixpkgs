@@ -37,7 +37,7 @@ appimageTools.wrapType2 {
     mkdir $out/share/applications
     cp ${extracted}/losslesscut.desktop $out/share/applications
     substituteInPlace $out/share/applications/losslesscut.desktop \
-      --replace AppRun losslesscut
+      --replace-fail AppRun losslesscut
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/losslesscut" \
       --add-flags "--disable-seccomp-filter-sandbox"

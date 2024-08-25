@@ -29,7 +29,7 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace plugin.go --replace "const PluginDir" "var PluginDir"
+    substituteInPlace plugin.go --replace-fail "const PluginDir" "var PluginDir"
   '';
 
   postInstall = ''

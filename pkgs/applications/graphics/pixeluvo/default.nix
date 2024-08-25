@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $out/opt/pixeluvo/pixeluvo.png -t $out/share/pixmaps/
 
     substituteInPlace $out/share/applications/pixeluvo.desktop \
-      --replace '/opt/pixeluvo/pixeluvo.png' pixeluvo
+      --replace-fail '/opt/pixeluvo/pixeluvo.png' pixeluvo
 
     makeWrapper $out/opt/pixeluvo/bin/Pixeluvo64 $out/bin/pixeluvo \
       --prefix LD_LIBRARY_PATH : ${libPath}

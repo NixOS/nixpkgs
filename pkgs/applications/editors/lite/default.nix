@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     # use system Lua 5.2
     rm -rf src/lib/lua52
     substituteInPlace src/api/api.h \
-      --replace '"lib/lua52/lua.h"' '<lua.h>' \
-      --replace '"lib/lua52/lauxlib.h"' '<lauxlib.h>' \
-      --replace '"lib/lua52/lualib.h"' '<lualib.h>'
+      --replace-fail '"lib/lua52/lua.h"' '<lua.h>' \
+      --replace-fail '"lib/lua52/lauxlib.h"' '<lauxlib.h>' \
+      --replace-fail '"lib/lua52/lualib.h"' '<lualib.h>'
   '';
 
   buildPhase = ''

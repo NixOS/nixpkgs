@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $(find test -name '*.py')
 
     substituteInPlace data/*.pc.in \
-      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"
 
     # Variable is queried via pkg-config by reverse dependencies
     # TODO This is likely not supposed to be the regular Qt QML import prefix
     # but otherwise i.e. lomiri-notifications cannot be found in lomiri
     substituteInPlace CMakeLists.txt \
-      --replace 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
+      --replace-fail 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
   '';
 
   strictDeps = true;

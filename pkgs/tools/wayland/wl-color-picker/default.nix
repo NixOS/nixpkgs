@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace 'which' 'ls' \
-      --replace 'grim' "${grim}/bin/grim" \
-      --replace 'slurp' "${slurp}/bin/slurp" \
-      --replace 'convert' "${imagemagick}/bin/convert" \
-      --replace 'zenity' "${zenity}/bin/zenity" \
-      --replace 'wl-copy' "${wl-clipboard}/bin/wl-copy"
+      --replace-fail 'which' 'ls' \
+      --replace-fail 'grim' "${grim}/bin/grim" \
+      --replace-fail 'slurp' "${slurp}/bin/slurp" \
+      --replace-fail 'convert' "${imagemagick}/bin/convert" \
+      --replace-fail 'zenity' "${zenity}/bin/zenity" \
+      --replace-fail 'wl-copy' "${wl-clipboard}/bin/wl-copy"
   '';
 
   installFlags = [

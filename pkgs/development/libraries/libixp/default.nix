@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace mk/ixp.mk \
-      --replace "©" "C "
+      --replace-fail "©" "C "
   '';
 
   postConfigure = ''

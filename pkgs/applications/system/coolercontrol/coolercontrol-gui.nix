@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     mkdir -p ui-build
     cp -R ${coolercontrol.coolercontrol-ui-data}/* ui-build/
-    substituteInPlace tauri.conf.json --replace '"frontendDist": "../dist"' '"frontendDist": "ui-build"'
+    substituteInPlace tauri.conf.json --replace-fail '"frontendDist": "../dist"' '"frontendDist": "ui-build"'
   '';
 
   postInstall = ''

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--isort --flake8" ""
+      --replace-fail "--isort --flake8" ""
   '';
 
   nativeBuildInputs = [ flit-core ];

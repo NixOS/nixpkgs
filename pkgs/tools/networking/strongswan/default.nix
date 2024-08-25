@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # glibc-2.26 reorganized internal includes
     sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
 
-    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
+    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace-fail "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
     '';
 
   configureFlags =

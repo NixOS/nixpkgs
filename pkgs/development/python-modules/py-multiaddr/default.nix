@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'pytest-runner'," ""
+    substituteInPlace setup.py --replace-fail "'pytest-runner'," ""
   '';
 
   propagatedBuildInputs = [

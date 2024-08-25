@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   # Actually link and add libgfortran to the rpath
   postPatch = ''
     substituteInPlace scs.mk \
-      --replace "#-lgfortran" "-lgfortran" \
-      --replace "gcc" "cc"
+      --replace-fail "#-lgfortran" "-lgfortran" \
+      --replace-fail "gcc" "cc"
   '';
 
   nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;

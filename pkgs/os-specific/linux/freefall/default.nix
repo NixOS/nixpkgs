@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
     # Default time-out is a little low, probably because the AC/lid status
     # functions were never implemented. Because no-one still uses HDDs, right?
-    substituteInPlace freefall.c --replace "alarm(2)" "alarm(5)"
+    substituteInPlace freefall.c --replace-fail "alarm(2)" "alarm(5)"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];

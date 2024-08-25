@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p2" ];
 
   prePatch = ''
-    substituteInPlace Makefile --replace 2711 0711
+    substituteInPlace Makefile --replace-fail 2711 0711
   '';
 
   makeFlags = [

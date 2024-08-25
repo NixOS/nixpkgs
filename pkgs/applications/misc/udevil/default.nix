@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace src/Makefile.in --replace "-o root -g root" ""
+    substituteInPlace src/Makefile.in --replace-fail "-o root -g root" ""
     # do not set setuid bit in nix store
-    substituteInPlace src/Makefile.in --replace 4755 0755
+    substituteInPlace src/Makefile.in --replace-fail 4755 0755
   '';
 
   configureFlags = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system/devmon@.service \
-      --replace /usr/bin/devmon "$out/bin/devmon"
+      --replace-fail /usr/bin/devmon "$out/bin/devmon"
   '';
 
   patches = [

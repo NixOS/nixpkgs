@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "CC := gcc" "CC ?= $CC"
+      --replace-fail "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [ "out" "dev" ];

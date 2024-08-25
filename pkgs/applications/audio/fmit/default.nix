@@ -25,7 +25,7 @@ mkDerivation rec {
     ++ lib.optionals portaudioSupport [ portaudio ];
 
   postPatch = ''
-    substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
+    substituteInPlace fmit.pro --replace-fail '$$FMITVERSIONGITPRO' '${version}'
   '';
 
   preConfigure = ''

@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/bin/fltk-config \
-      --replace "/$out/" "/"
+      --replace-fail "/$out/" "/"
   '';
 
   meta = with lib; {

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "LDFLAGS+=-static" "LDFLAGS+="
+      --replace-fail "LDFLAGS+=-static" "LDFLAGS+="
   '';
 
   makeFlags = [

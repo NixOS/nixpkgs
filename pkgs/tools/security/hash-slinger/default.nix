@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "$(DESTDIR)/usr" "$out"
+      --replace-fail "$(DESTDIR)/usr" "$out"
     substituteInPlace ipseckey \
-      --replace "/usr/sbin/ipsec" "${libreswan}/sbin/ipsec"
+      --replace-fail "/usr/sbin/ipsec" "${libreswan}/sbin/ipsec"
     substituteInPlace tlsa \
-      --replace "/var/lib/unbound/root" "${python3.pkgs.pyunbound}/etc/pyunbound/root"
+      --replace-fail "/var/lib/unbound/root" "${python3.pkgs.pyunbound}/etc/pyunbound/root"
     patchShebangs *
   '';
 

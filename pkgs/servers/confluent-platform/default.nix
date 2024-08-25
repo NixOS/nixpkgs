@@ -37,10 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # allow us the specify logging directory using env
     substituteInPlace $out/bin/kafka-run-class \
-      --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+      --replace-fail 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
 
     substituteInPlace $out/bin/ksql-run-class \
-      --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
+      --replace-fail 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
 
     for p in $out/bin\/*; do
       wrapProgram $p \

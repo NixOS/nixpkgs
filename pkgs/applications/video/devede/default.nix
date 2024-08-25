@@ -29,10 +29,10 @@ in buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'/usr'," ""
+    substituteInPlace setup.py --replace-fail "'/usr'," ""
     substituteInPlace src/devedeng/configuration_data.py \
-      --replace "/usr/share" "$out/share" \
-      --replace "/usr/local/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share" \
+      --replace-fail "/usr/local/share" "$out/share"
   '';
 
   meta = with lib; {

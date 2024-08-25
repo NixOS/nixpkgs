@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace stack-lang.c --replace /usr/share/X11/xkb ${xkeyboard_config}/share/X11/xkb
-    substituteInPlace theme.c --replace /usr/share /run/current-system/sw/share
+    substituteInPlace stack-lang.c --replace-fail /usr/share/X11/xkb ${xkeyboard_config}/share/X11/xkb
+    substituteInPlace theme.c --replace-fail /usr/share /run/current-system/sw/share
   '';
 
   passthru.updateScript = unstableGitUpdater { };

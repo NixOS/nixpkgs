@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     cp interface/* $out/include/
 
     substituteInPlace eglexternalplatform.pc \
-      --replace "/usr/include/EGL" "$out/include"
+      --replace-fail "/usr/include/EGL" "$out/include"
     install -Dm644 {.,$out/share/pkgconfig}/eglexternalplatform.pc
 
     runHook postInstall

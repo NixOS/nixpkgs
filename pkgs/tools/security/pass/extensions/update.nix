@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "BASHCOMPDIR ?= /etc/bash_completion.d" "BASHCOMPDIR ?= $out/share/bash-completion/completions"
+      --replace-fail "BASHCOMPDIR ?= /etc/bash_completion.d" "BASHCOMPDIR ?= $out/share/bash-completion/completions"
   '';
 
   dontBuild = true;

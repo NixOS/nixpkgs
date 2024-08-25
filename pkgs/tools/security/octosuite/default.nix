@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # pyreadline3 is Windows-only
     substituteInPlace setup.py \
-      --replace ', "pyreadline3"' ""
+      --replace-fail ', "pyreadline3"' ""
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

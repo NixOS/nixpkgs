@@ -20,7 +20,7 @@ buildDunePackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace dune --replace mdx ocaml-mdx
+    substituteInPlace dune --replace-fail mdx ocaml-mdx
   '';
 
   doCheck = true;

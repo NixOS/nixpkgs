@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     echo "set(HG_VERSION ${version})" > ReleaseInfo.cmake
     substituteInPlace tools/osx/Info.plist.in rtgui/config.h.in \
-      --replace "/Applications" "${placeholder "out"}/Applications"
+      --replace-fail "/Applications" "${placeholder "out"}/Applications"
   '';
 
   nativeBuildInputs = [

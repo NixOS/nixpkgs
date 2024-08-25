@@ -27,18 +27,18 @@ in stdenv.mkDerivation rec {
   patches = [ ./gpgwrap_makefile.patch ];
 
   postPatch = ''
-    substituteInPlace gpg-mailkeys/gpg-mailkeys --replace \
+    substituteInPlace gpg-mailkeys/gpg-mailkeys --replace-fail \
       "/usr/sbin/sendmail" "${sendmailPath}"
   '';
 
   # One can use the following command to find all relevant Makefiles:
   # grep -R '$(DESTDIR)/usr' | cut -d: -f1 | sort -u | grep -v 'debian/rules'
   preBuild = ''
-    substituteInPlace gpgsigs/Makefile --replace '$(DESTDIR)/usr' "$out"
-    substituteInPlace keyanalyze/Makefile --replace '$(DESTDIR)/usr' "$out"
-    substituteInPlace keylookup/Makefile --replace '$(DESTDIR)/usr' "$out"
-    substituteInPlace sig2dot/Makefile --replace '$(DESTDIR)/usr' "$out"
-    substituteInPlace springgraph/Makefile --replace '$(DESTDIR)/usr' "$out"
+    substituteInPlace gpgsigs/Makefile --replace-fail '$(DESTDIR)/usr' "$out"
+    substituteInPlace keyanalyze/Makefile --replace-fail '$(DESTDIR)/usr' "$out"
+    substituteInPlace keylookup/Makefile --replace-fail '$(DESTDIR)/usr' "$out"
+    substituteInPlace sig2dot/Makefile --replace-fail '$(DESTDIR)/usr' "$out"
+    substituteInPlace springgraph/Makefile --replace-fail '$(DESTDIR)/usr' "$out"
   '';
 
   # Perl is required for it's pod2man.

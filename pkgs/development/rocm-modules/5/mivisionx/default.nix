@@ -109,18 +109,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Properly find miopengemm and miopen
     substituteInPlace amd_openvx_extensions/CMakeLists.txt \
-      --replace "miopengemm PATHS \''${ROCM_PATH} QUIET" "miopengemm PATHS ${miopengemm} QUIET" \
-      --replace "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
-      --replace "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
+      --replace-fail "miopengemm PATHS \''${ROCM_PATH} QUIET" "miopengemm PATHS ${miopengemm} QUIET" \
+      --replace-fail "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
+      --replace-fail "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
 
     # Properly find turbojpeg
     substituteInPlace amd_openvx/cmake/FindTurboJpeg.cmake \
-      --replace "\''${TURBO_JPEG_PATH}/include" "${libjpeg_turbo.dev}/include" \
-      --replace "\''${TURBO_JPEG_PATH}/lib" "${libjpeg_turbo.out}/lib"
+      --replace-fail "\''${TURBO_JPEG_PATH}/include" "${libjpeg_turbo.dev}/include" \
+      --replace-fail "\''${TURBO_JPEG_PATH}/lib" "${libjpeg_turbo.out}/lib"
 
     # Fix bad paths
     substituteInPlace rocAL/rocAL/rocAL_hip/CMakeLists.txt amd_openvx_extensions/amd_nn/nn_hip/CMakeLists.txt amd_openvx/openvx/hipvx/CMakeLists.txt \
-      --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clang}/bin/clang++"
+      --replace-fail "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clang}/bin/clang++"
   '';
 
   postBuild = lib.optionalString buildDocs ''

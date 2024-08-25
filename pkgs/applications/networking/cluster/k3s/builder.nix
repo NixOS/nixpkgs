@@ -338,15 +338,15 @@ buildGoModule rec {
     # Nix prefers dynamically linked binaries over static binary.
 
     substituteInPlace scripts/package-cli \
-      --replace '"$LDFLAGS $STATIC" -o' \
+      --replace-fail '"$LDFLAGS $STATIC" -o' \
                 '"$LDFLAGS" -o' \
-      --replace "STATIC=\"-extldflags \'-static\'\"" \
+      --replace-fail "STATIC=\"-extldflags \'-static\'\"" \
                 ""
 
     # Upstream codegen fails with trimpath set. Removes "trimpath" for 'go generate':
 
     substituteInPlace scripts/package-cli \
-      --replace '"''${GO}" generate' \
+      --replace-fail '"''${GO}" generate' \
                 'GOFLAGS="" \
                  GOOS="${pkgsBuildBuild.go.GOOS}" \
                  GOARCH="${pkgsBuildBuild.go.GOARCH}" \

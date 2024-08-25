@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       chmod +x "$program"
 
       substituteInPlace "$serviceFile" \
-        --replace "Exec=$execLine" "Exec=$program"
+        --replace-fail "Exec=$execLine" "Exec=$program"
     }
 
     # Extract the exec line into a separate program so that it can be wrapped.

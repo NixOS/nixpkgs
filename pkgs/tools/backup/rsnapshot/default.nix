@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" ];
 
   patchPhase = ''
-    substituteInPlace "Makefile.in" --replace \
+    substituteInPlace "Makefile.in" --replace-fail \
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
   '';
 

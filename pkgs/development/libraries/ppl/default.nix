@@ -19,9 +19,9 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/PIP_Tree.cc \
-      --replace "std::auto_ptr" "std::unique_ptr"
+      --replace-fail "std::auto_ptr" "std::unique_ptr"
     substituteInPlace src/Powerset_inlines.hh src/Pointset_Powerset_inlines.hh \
-      --replace "std::mem_fun_ref" "std::mem_fn"
+      --replace-fail "std::mem_fun_ref" "std::mem_fn"
   '';
 
   nativeBuildInputs = [ perl gnum4 ];

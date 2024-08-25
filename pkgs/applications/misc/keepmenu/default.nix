@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace tests/keepmenu-config.ini tests/tests.py \
-      --replace "/usr/bin/dmenu" "dmenu"
+      --replace-fail "/usr/bin/dmenu" "dmenu"
   '';
 
   checkPhase = ''

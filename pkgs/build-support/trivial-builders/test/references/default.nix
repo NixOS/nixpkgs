@@ -61,10 +61,10 @@ let
       runHook preInstall
       mkdir -p "$out/bin"
       substitute "$src" "$out/bin/${finalAttrs.meta.mainProgram}" \
-        --replace "@SAMPLES@" ${lib.escapeShellArg (samplesToString samples)} \
-        --replace "@CLOSURES@" ${lib.escapeShellArg (samplesToString closures)} \
-        --replace "@DIRECT_REFS@" ${lib.escapeShellArg (samplesToString directReferences)} \
-        --replace "@COLLECTIVE_CLOSURE@" ${lib.escapeShellArg collectiveClosure}
+        --replace-fail "@SAMPLES@" ${lib.escapeShellArg (samplesToString samples)} \
+        --replace-fail "@CLOSURES@" ${lib.escapeShellArg (samplesToString closures)} \
+        --replace-fail "@DIRECT_REFS@" ${lib.escapeShellArg (samplesToString directReferences)} \
+        --replace-fail "@COLLECTIVE_CLOSURE@" ${lib.escapeShellArg collectiveClosure}
       runHook postInstall
       chmod +x "$out/bin/${finalAttrs.meta.mainProgram}"
     '';

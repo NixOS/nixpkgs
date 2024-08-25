@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
     # Always replacing the link flag with a generic link flag seems to help though, so let's do that for now.
     lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Makefile \
-        --replace "-ldb-6.9" "-ldb"
+        --replace-fail "-ldb-6.9" "-ldb"
       substituteInPlace apu-1-config \
-        --replace "-ldb-6.9" "-ldb"
+        --replace-fail "-ldb-6.9" "-ldb"
   '';
 
   propagatedBuildInputs = [ apr expat libiconv libxcrypt ]
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for f in $out/lib/*.la $out/lib/apr-util-1/*.la $dev/bin/apu-1-config; do
       substituteInPlace $f \
-        --replace "${expat.dev}/lib" "${expat.out}/lib" \
-        --replace "${db.dev}/lib" "${db.out}/lib" \
-        --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
+        --replace-fail "${expat.dev}/lib" "${expat.out}/lib" \
+        --replace-fail "${db.dev}/lib" "${db.out}/lib" \
+        --replace-fail "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
     done
 
     # Give apr1 access to sed for runtime invocations.

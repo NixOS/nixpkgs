@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov-append --cov-report term --cov tinydb" ""
+      --replace-fail "--cov-append --cov-report term --cov tinydb" ""
   '';
 
   nativeCheckInputs = [

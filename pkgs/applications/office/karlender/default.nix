@@ -34,15 +34,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/domain/time.rs --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    substituteInPlace build.rs --replace "// gra::build" "gra::build"
+    substituteInPlace src/domain/time.rs --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace build.rs --replace-fail "// gra::build" "gra::build"
   '';
 
   postInstall = ''
     substituteInPlace target/gra-gen/data/codes.loers.Karlender.desktop \
-      --replace "Exec=codes.loers.Karlender" "Exec=karlender"
+      --replace-fail "Exec=codes.loers.Karlender" "Exec=karlender"
     substituteInPlace target/gra-gen/data/codes.loers.Karlender.appdata.xml \
-      --replace "<binary>codes.loers.Karlender</binary>" "<binary>karlender</binary>"
+      --replace-fail "<binary>codes.loers.Karlender</binary>" "<binary>karlender</binary>"
     install -Dm444 target/gra-gen/codes.loers.Karlender.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas/
     glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas/
     install -Dm444 target/gra-gen/data/codes.loers.Karlender.svg -t $out/share/icons/hicolor/scalable/apps/

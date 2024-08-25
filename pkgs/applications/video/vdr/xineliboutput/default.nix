@@ -34,7 +34,7 @@ let
     postPatch = ''
       # pkg-config is called with opengl, which do not contain needed glx symbols
       substituteInPlace configure \
-        --replace "X11  opengl" "X11  gl"
+        --replace-fail "X11  opengl" "X11  gl"
     '';
 
     # configure don't accept argument --prefix

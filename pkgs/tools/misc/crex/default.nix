@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "/usr/local/bin" "bin"
+    substituteInPlace CMakeLists.txt --replace-fail "/usr/local/bin" "bin"
   '';
 
   nativeBuildInputs = [ cmake ];

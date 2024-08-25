@@ -31,9 +31,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "setuptools_scm ~= 3.3" "setuptools_scm"
+      --replace-fail "setuptools_scm ~= 3.3" "setuptools_scm"
     substituteInPlace pytest.ini \
-      --replace "--cov=jproperties --cov-report=term --cov-report=html --cov-branch" ""
+      --replace-fail "--cov=jproperties --cov-report=term --cov-report=html --cov-branch" ""
   '';
 
   disabledTestPaths = [

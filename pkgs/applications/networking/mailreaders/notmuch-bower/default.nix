@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ mercury pandoc ];
   postPatch = ''
-    substituteInPlace src/compose.m --replace 'shell_quoted("base64' 'shell_quoted("${coreutils}/bin/base64'
-    substituteInPlace src/detect_mime_type.m --replace 'shell_quoted("file' 'shell_quoted("${file}/bin/file'
+    substituteInPlace src/compose.m --replace-fail 'shell_quoted("base64' 'shell_quoted("${coreutils}/bin/base64'
+    substituteInPlace src/detect_mime_type.m --replace-fail 'shell_quoted("file' 'shell_quoted("${file}/bin/file'
   '';
 
   buildInputs = [ ncurses gpgme ];

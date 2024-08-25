@@ -25,7 +25,7 @@ let
     # issues, unsure why it is not done in vite:
     # https://github.com/thomiceli/opengist/blob/05eccfa8e728335514a40476cd8116cfd1ca61dd/Makefile#L16-L19
     postBuild = ''
-      EMBED=1 npx postcss 'public/assets/embed-*.css' -c public/postcss.config.js --replace
+      EMBED=1 npx postcss 'public/assets/embed-*.css' -c public/postcss.config.js --replace-fail
     '';
 
     installPhase = ''

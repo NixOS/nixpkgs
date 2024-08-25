@@ -187,12 +187,12 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/share/git-core/contrib
       cp -a contrib/hooks/ $out/share/git-core/contrib/
       substituteInPlace $out/share/git-core/contrib/hooks/pre-auto-gc-battery \
-        --replace ' grep' ' ${gnugrep}/bin/grep' \
+        --replace-fail ' grep' ' ${gnugrep}/bin/grep' \
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
-          --replace ' grep' ' ${gnugrep}/bin/grep' \
-          --replace ' egrep' ' ${gnugrep}/bin/egrep'
+          --replace-fail ' grep' ' ${gnugrep}/bin/grep' \
+          --replace-fail ' egrep' ' ${gnugrep}/bin/egrep'
 
       # Fix references to the perl, sed, awk and various coreutil binaries used by
       # shell scripts that git calls (e.g. filter-branch)
@@ -323,7 +323,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Shared permissions are forbidden in sandbox builds:
     substituteInPlace t/test-lib.sh \
-      --replace "test_set_prereq POSIXPERM" ""
+      --replace-fail "test_set_prereq POSIXPERM" ""
     # TODO: Investigate while these still fail (without POSIXPERM):
     disable_test t0001-init 'shared overrides system'
     disable_test t0001-init 'init honors global core.sharedRepository'

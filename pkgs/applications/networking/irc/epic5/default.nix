@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace bsdinstall \
-      --replace /bin/cp ${coreutils}/bin/cp \
-      --replace /bin/rm ${coreutils}/bin/rm \
-      --replace /bin/chmod ${coreutils}/bin/chmod \
+      --replace-fail /bin/cp ${coreutils}/bin/cp \
+      --replace-fail /bin/rm ${coreutils}/bin/rm \
+      --replace-fail /bin/chmod ${coreutils}/bin/chmod \
   '';
 
   meta = with lib; {

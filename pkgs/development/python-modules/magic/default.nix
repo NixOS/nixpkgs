@@ -11,7 +11,7 @@ buildPythonPackage {
   src = pkgs.file.src;
 
   patchPhase = ''
-    substituteInPlace python/magic.py --replace "find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    substituteInPlace python/magic.py --replace-fail "find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
   buildInputs = [ pkgs.file ];

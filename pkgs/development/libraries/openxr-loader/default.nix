@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/305
   postPatch = ''
     substituteInPlace src/loader/openxr.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   postInstall = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     mv "$out/share/openxr" "$layers/share"
     # Use absolute paths in manifests so no LD_LIBRARY_PATH shenanigans are necessary
     for file in "$layers/share/openxr/1/api_layers/explicit.d/"*; do
-        substituteInPlace "$file" --replace '"library_path": "lib' "\"library_path\": \"$layers/lib/lib"
+        substituteInPlace "$file" --replace-fail '"library_path": "lib' "\"library_path\": \"$layers/lib/lib"
     done
     mkdir -p "$layers/lib"
     mv "$out/lib/libXrApiLayer"* "$layers/lib"

@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     # runtime, and the search paths are hard-coded... We tweak them to point to
     # the installation directory in the Nix store.
     substituteInPlace src/api/unified/symbol_manager.cpp \
-      --replace '"/opt/arrayfire-3/lib/",' \
+      --replace-fail '"/opt/arrayfire-3/lib/",' \
                 "\"$out/lib/\", \"/opt/arrayfire-3/lib/\","
   '';
 

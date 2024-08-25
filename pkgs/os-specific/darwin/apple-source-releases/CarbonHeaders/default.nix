@@ -9,7 +9,7 @@ appleDerivation' stdenvNoCC {
     cp ConditionalMacros.h $out/include
 
     substituteInPlace $out/include/MacTypes.h \
-      --replace "CarbonCore/" ""
+      --replace-fail "CarbonCore/" ""
   '';
 
   meta = with lib; {

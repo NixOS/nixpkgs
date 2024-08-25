@@ -63,8 +63,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "Django>=1.8,<3.1" "Django" \
-      --replace "django-tagging==0.4.3" "django-tagging"
+      --replace-fail "Django>=1.8,<3.1" "Django" \
+      --replace-fail "django-tagging==0.4.3" "django-tagging"
   '';
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
@@ -73,7 +73,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \
-      --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
+      --replace-fail "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
   checkInputs = [ mock ];
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     rm -r graphite
     # redis not practical in test environment
     substituteInPlace tests/test_tags.py \
-      --replace test_redis_tagdb _dont_test_redis_tagdb
+      --replace-fail test_redis_tagdb _dont_test_redis_tagdb
 
     DJANGO_SETTINGS_MODULE=tests.settings ${python.interpreter} manage.py test
     popd

@@ -18,9 +18,9 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace test/lib.py \
-      --replace 'TXT2TAGS = os.path.join(TEST_DIR, "..", "txt2tags.py")' \
+      --replace-fail 'TXT2TAGS = os.path.join(TEST_DIR, "..", "txt2tags.py")' \
                 'TXT2TAGS = "${placeholder "out"}/bin/txt2tags"' \
-      --replace "[PYTHON] + TXT2TAGS" "TXT2TAGS"
+      --replace-fail "[PYTHON] + TXT2TAGS" "TXT2TAGS"
   '';
 
   checkPhase = ''

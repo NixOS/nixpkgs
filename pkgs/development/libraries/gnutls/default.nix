@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
   '' + ''
     # It seems only useful for static linking but basically noone does that.
     substituteInPlace "$out/lib/libgnutls.la" \
-      --replace "-lunistring" ""
+      --replace-fail "-lunistring" ""
   '';
 
 

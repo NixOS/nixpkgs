@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "charset_normalizer~=2.0.0" "charset_normalizer"
+      --replace-fail "charset_normalizer~=2.0.0" "charset_normalizer"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

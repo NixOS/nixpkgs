@@ -81,7 +81,7 @@ buildEnv {
         "share/systemd/user/org.freedesktop.IBus.session.GNOME.service"
     do
         unlink "$out/$service"
-        substitute "$ibusPackage/$service" "$out/$service" --replace "$ibusPackage/bin" "$out/bin"
+        substitute "$ibusPackage/$service" "$out/$service" --replace-fail "$ibusPackage/bin" "$out/bin"
     done
 
     # Re-create relative symbolic links.

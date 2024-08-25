@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for file in */main.js; do
-      substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+      substituteInPlace $file --replace-fail "gjs" "${gjs}/bin/gjs"
     done
   '';
 

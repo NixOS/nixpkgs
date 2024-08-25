@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     for f in Makefile.am doc/Makefile.am doc/htmldocs/Makefile.am src/mupmate/Preferences.C; do
-      substituteInPlace $f --replace doc/packages doc
+      substituteInPlace $f --replace-fail doc/packages doc
     done
-    substituteInPlace src/mupprnt/mupprnt --replace 'mup ' $out/bin/mup' '
-    substituteInPlace src/mupdisp/genfile.c --replace '"mup"' '"'$out/bin/mup'"'
+    substituteInPlace src/mupprnt/mupprnt --replace-fail 'mup ' $out/bin/mup' '
+    substituteInPlace src/mupdisp/genfile.c --replace-fail '"mup"' '"'$out/bin/mup'"'
     substituteInPlace src/mupmate/Preferences.C \
-      --replace '"mup"' '"'$out/bin/mup'"' \
-      --replace '"gv"' '"xdg-open"' \
-      --replace /usr/share/doc $out/share/doc
+      --replace-fail '"mup"' '"'$out/bin/mup'"' \
+      --replace-fail '"gv"' '"xdg-open"' \
+      --replace-fail /usr/share/doc $out/share/doc
   '';
 
   enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.

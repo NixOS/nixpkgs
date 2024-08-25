@@ -38,7 +38,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev"
   releaseRev = v: "v${v}";
 
   preConfigure = lib.optionalString recent
-    "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
+    "substituteInPlace Makefile --replace-fail quickChickTool.byte quickChickTool.native";
 
   useDuneifVersion = v: lib.versions.isGe "2.1" v || v == "dev";
   opam-name = "coq-quickchick";

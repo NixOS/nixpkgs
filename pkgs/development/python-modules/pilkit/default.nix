@@ -34,9 +34,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --cov --cov-report term-missing:skip-covered" ""
+      --replace-fail " --cov --cov-report term-missing:skip-covered" ""
     substituteInPlace pilkit/processors/resize.py \
-      --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
+      --replace-fail "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
   '';
 
   pythonImportsCheck = [ "pilkit" ];

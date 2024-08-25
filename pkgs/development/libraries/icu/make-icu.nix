@@ -21,7 +21,7 @@ let
 
     # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
     postPatch = if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl") && lib.versionOlder version "62.1"
-      then "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
+      then "substituteInPlace i18n/digitlst.cpp --replace-fail '<xlocale.h>' '<locale.h>'"
       else null; # won't find locale_t on darwin
 
     inherit patchFlags patches;
@@ -86,7 +86,7 @@ let
       rm $out/share/icu/${version}/install-sh $out/share/icu/${version}/mkinstalldirs # Avoid having a runtime dependency on bash
 
       substituteInPlace "$dev/bin/icu-config" \
-        ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
+        ${lib.concatMapStringsSep " " (r: "--replace-fail '${r.from}' '${r.to}'") replacements}
     '');
 
     postFixup = ''moveToOutput lib/icu "$dev" '';

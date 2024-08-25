@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   prePatch = ''
     mkdir -p $out/bin
     substituteInPlace Makefile \
-      --replace /usr/bin/install $(type -P install) \
-      --replace gcc cc
+      --replace-fail /usr/bin/install $(type -P install) \
+      --replace-fail gcc cc
   '';
 
   meta = {

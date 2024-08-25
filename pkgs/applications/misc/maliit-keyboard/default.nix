@@ -32,7 +32,7 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace data/schemas/org.maliit.keyboard.maliit.gschema.xml \
-      --replace /usr/share "$out/share"
+      --replace-fail /usr/share "$out/share"
   '';
 
   buildInputs = [

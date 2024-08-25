@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     # Glob for 'shared' or 'static' subdir
     for f in $out/lib/s2n/cmake/*/s2n-targets.cmake; do
       substituteInPlace "$f" \
-        --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
   '';
 

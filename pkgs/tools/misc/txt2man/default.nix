@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in bookman src2man txt2man; do
       substituteInPlace $f \
-        --replace "gawk" "${gawk}/bin/gawk" \
-        --replace "(date" "(${coreutils}/bin/date" \
-        --replace "=cat" "=${coreutils}/bin/cat" \
-        --replace "cat <<" "${coreutils}/bin/cat <<" \
-        --replace "expand" "${coreutils}/bin/expand" \
-        --replace "(uname" "(${coreutils}/bin/uname"
+        --replace-fail "gawk" "${gawk}/bin/gawk" \
+        --replace-fail "(date" "(${coreutils}/bin/date" \
+        --replace-fail "=cat" "=${coreutils}/bin/cat" \
+        --replace-fail "cat <<" "${coreutils}/bin/cat <<" \
+        --replace-fail "expand" "${coreutils}/bin/expand" \
+        --replace-fail "(uname" "(${coreutils}/bin/uname"
     done
   '';
 

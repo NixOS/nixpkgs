@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace $out/share/applications/xine.desktop \
-      --replace "MimeType=;" "MimeType="
+      --replace-fail "MimeType=;" "MimeType="
   '';
 
   meta = {

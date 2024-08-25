@@ -222,7 +222,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     postPatch = ''
       substituteInPlace xbmc/platform/posix/PosixTimezone.cpp \
-        --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
+        --replace-fail 'usr/share/zoneinfo' 'etc/zoneinfo'
     '';
 
     postInstall = ''
@@ -242,7 +242,7 @@ in stdenv.mkDerivation (finalAttrs: {
         --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
-        --replace kodi-standalone $out/bin/kodi-standalone
+        --replace-fail kodi-standalone $out/bin/kodi-standalone
     '';
 
     doInstallCheck = true;

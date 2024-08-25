@@ -18,15 +18,15 @@ mkDerivation rec {
 
   preBuild = ''
     substituteInPlace app/app.pro \
-      --replace /usr/local/bin $out/bin \
-      --replace /usr/share $out/share
+      --replace-fail /usr/local/bin $out/bin \
+      --replace-fail /usr/share $out/share
 
     substituteInPlace app/src/views/mainWindow/MainWindow.cpp \
-      --replace ":/resource/pic/logo.svg" "$out/share/icons/hicolor/48x48/apps/mytetra.png"
+      --replace-fail ":/resource/pic/logo.svg" "$out/share/icons/hicolor/48x48/apps/mytetra.png"
 
     # https://github.com/xintrea/mytetra_dev/issues/164
     substituteInPlace thirdParty/mimetex/mimetex.c \
-      --replace "const char *strcasestr" "char *strcasestr"
+      --replace-fail "const char *strcasestr" "char *strcasestr"
   '';
 
   postFixup = ''

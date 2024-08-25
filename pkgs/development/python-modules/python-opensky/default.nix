@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
     substituteInPlace src/python_opensky/opensky.py \
-      --replace ".joinpath(uri)" "/ uri"
+      --replace-fail ".joinpath(uri)" "/ uri"
   '';
 
   nativeBuildInputs = [ poetry-core ];

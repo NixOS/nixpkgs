@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     # compile directly into a native binary, even if it's just a
     # temporary build product.
     substituteInPlace myocamlbuild.ml \
-      --replace ".byte" ".native"
+      --replace-fail ".byte" ".native"
   '';
 
   inherit (topkg) buildPhase installPhase;

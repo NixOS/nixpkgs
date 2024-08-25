@@ -46,9 +46,9 @@ in stdenv.mkDerivation rec {
     patchShebangs scripts/{make_local_manifest,meson_post_install}.py
 
     substituteInPlace gwe/repository/nvidia_repository.py \
-      --replace "from py3nvml import py3nvml" "import pynvml" \
-      --replace "py3nvml.py3nvml" "pynvml" \
-      --replace "py3nvml" "pynvml"
+      --replace-fail "from py3nvml import py3nvml" "import pynvml" \
+      --replace-fail "py3nvml.py3nvml" "pynvml" \
+      --replace-fail "py3nvml" "pynvml"
   '';
 
   nativeBuildInputs = [

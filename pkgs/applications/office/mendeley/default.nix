@@ -29,7 +29,7 @@ in appimageTools.wrapType2 {
     install -m 444 -D ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${executableName}.png
 
     substituteInPlace $out/share/applications/${executableName}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${executableName}'
+      --replace-fail 'Exec=AppRun' 'Exec=${executableName}'
   '';
 
   meta = with lib; {

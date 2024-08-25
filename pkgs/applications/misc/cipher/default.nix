@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace data/com.github.arshubham.cipher.desktop.in \
-      --replace "gio" "${glib.bin}/bin/gio"
+      --replace-fail "gio" "${glib.bin}/bin/gio"
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';

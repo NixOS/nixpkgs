@@ -27,11 +27,11 @@ buildPythonPackage rec {
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
+      --replace-fail 'version="main",' 'version="${version}",'
 
     # yarl 1.9.4 requires ports to be ints
     substituteInPlace pytautulli/models/host_configuration.py \
-      --replace "str(self.port)" "int(self.port)"
+      --replace-fail "str(self.port)" "int(self.port)"
   '';
 
   propagatedBuildInputs = [ aiohttp ];

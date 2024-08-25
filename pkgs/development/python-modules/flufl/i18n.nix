@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=flufl --cov-report=term --cov-report=xml" ""
+      --replace-fail "--cov=flufl --cov-report=term --cov-report=xml" ""
   '';
 
   nativeBuildInputs = [ pdm-pep517 ];

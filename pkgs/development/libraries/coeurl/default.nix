@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     })
   ];
   postPatch = ''
-    substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
+    substituteInPlace subprojects/curl.wrap --replace-fail '[provides]' '[provide]'
   '';
 
   nativeBuildInputs = [ ninja pkg-config meson ];

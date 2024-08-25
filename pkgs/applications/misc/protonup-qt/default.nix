@@ -16,8 +16,8 @@ appimageTools.wrapType2 {
     cp ${appimageContents}/net.davidotek.pupgui2.desktop $out/share/applications/${pname}.desktop
     cp ${appimageContents}/net.davidotek.pupgui2.png $out/share/pixmaps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=net.davidotek.pupgui2' 'Exec=${pname}' \
-      --replace 'Icon=net.davidotek.pupgui2' 'Icon=${pname}'
+      --replace-fail 'Exec=net.davidotek.pupgui2' 'Exec=${pname}' \
+      --replace-fail 'Icon=net.davidotek.pupgui2' 'Icon=${pname}'
   '';
 
   extraPkgs = pkgs: with pkgs; [ zstd ];

@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
-    substituteInPlace Makefile --replace 'gzip'     'gzip -n'
+    substituteInPlace Makefile --replace-fail 'fc-cache' '#fc-cache'
+    substituteInPlace Makefile --replace-fail 'gzip'     'gzip -n'
   '';
 
   installTargets = [ "install" "install-otb" "fontdir" ];

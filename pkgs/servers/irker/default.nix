@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '-o 0 -g 0' ""
+      --replace-fail '-o 0 -g 0' ""
   '';
 
   installFlags = [

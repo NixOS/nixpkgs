@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
   '' + lib.optionalString stdenv.isDarwin ''
     # Locate standard headers like <unistd.h>
     substituteInPlace base/runtime/config/gen-posix-names.sh \
-      --replace "\$SDK_PATH/usr" "${Libsystem}"
+      --replace-fail "\$SDK_PATH/usr" "${Libsystem}"
   '';
 
   unpackPhase = ''

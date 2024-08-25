@@ -9,12 +9,12 @@ buildPythonApplication {
   inherit (minijail) version src;
 
   postPatch = ''
-    substituteInPlace Makefile --replace /bin/echo echo
+    substituteInPlace Makefile --replace-fail /bin/echo echo
   '';
 
   postConfigure = ''
     substituteInPlace tools/compile_seccomp_policy.py \
-        --replace "'constants.json'" "'$out/share/constants.json'"
+        --replace-fail "'constants.json'" "'$out/share/constants.json'"
   '';
 
   preBuild = ''

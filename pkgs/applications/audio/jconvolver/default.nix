@@ -78,10 +78,10 @@ stdenv.mkDerivation rec {
     cd $out/share/jconvolver
     for conf in */*.conf */*/*.conf; do
       if grep -q /audio/ $conf; then
-        substituteInPlace $conf --replace /audio/ $out/share/jconvolver/
+        substituteInPlace $conf --replace-fail /audio/ $out/share/jconvolver/
       fi
     done
-    substituteInPlace config-files/xtalk-cancel/EYCv2-44.conf --replace /cd "#/cd"
+    substituteInPlace config-files/xtalk-cancel/EYCv2-44.conf --replace-fail /cd "#/cd"
     ln -s ${weird} config-files/weird.wav
 
     tar xf ${reverbs}

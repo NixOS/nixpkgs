@@ -57,14 +57,14 @@ buildPythonPackage rec {
 
   # When doing `make distclean`, ignore docs
   postPatch = ''
-    substituteInPlace Makefile --replace "src doc" "src"
+    substituteInPlace Makefile --replace-fail "src doc" "src"
     # Force test suite to error when unittest runner fails
     substituteInPlace tables/tests/test_suite.py \
-      --replace "return 0" "assert result.wasSuccessful(); return 0" \
-      --replace "return 1" "assert result.wasSuccessful(); return 1"
+      --replace-fail "return 0" "assert result.wasSuccessful(); return 0" \
+      --replace-fail "return 1" "assert result.wasSuccessful(); return 1"
     substituteInPlace requirements.txt \
-      --replace "cython>=0.29.21" "" \
-      --replace "blosc2~=2.0.0" "blosc2"
+      --replace-fail "cython>=0.29.21" "" \
+      --replace-fail "blosc2~=2.0.0" "blosc2"
   '';
 
   # Regenerate C code with Cython

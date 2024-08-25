@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
     # Fix pending upstream inclusion for ncurses-6.3 support:
     #   https://github.com/TragicWarrior/libviper/pull/16
     # Not applied as it due to unrelated code changes in context.
-    substituteInPlace viper_msgbox.c --replace \
+    substituteInPlace viper_msgbox.c --replace-fail \
       'mvwprintw(window,height-3,tmp,prompt);' \
       'mvwprintw(window,height-3,tmp,"%s",prompt);'
-    substituteInPlace w_decorate.c --replace \
+    substituteInPlace w_decorate.c --replace-fail \
       'mvwprintw(window,0,x,title);' \
       'mvwprintw(window,0,x,"%s",title);'
   '';

@@ -63,11 +63,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=3.3, <6" "apispec[yaml]" \
-      --replace "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
-      --replace "Flask-Babel>=1, <3" "Flask-Babel" \
-      --replace "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
-      --replace "prison>=0.2.1, <1.0.0" "prison"
+      --replace-fail "apispec[yaml]>=3.3, <6" "apispec[yaml]" \
+      --replace-fail "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
+      --replace-fail "Flask-Babel>=1, <3" "Flask-Babel" \
+      --replace-fail "marshmallow-sqlalchemy>=0.22.0, <0.27.0" "marshmallow-sqlalchemy" \
+      --replace-fail "prison>=0.2.1, <1.0.0" "prison"
   '';
 
   # Majority of tests require network access or mongo

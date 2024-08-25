@@ -19,7 +19,7 @@ buildPythonPackage rec {
   postPatch = ''
     # break dependency loop
     substituteInPlace setup.py \
-      --replace "'ntfy', " ""
+      --replace-fail "'ntfy', " ""
   '';
 
   propagatedBuildInputs = [

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs ./
-    substituteInPlace INSTALL.im --replace "usr/" ""
+    substituteInPlace INSTALL.im --replace-fail "usr/" ""
   '';
 
   buildPhase = ''

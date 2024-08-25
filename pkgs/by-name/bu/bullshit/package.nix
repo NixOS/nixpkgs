@@ -26,8 +26,8 @@ stdenvNoCC.mkDerivation {
     runHook preFixup
     patchShebangs $out/bin/bullshit
     substituteInPlace $out/bin/bullshit \
-        --replace /usr/lib/bullshit $out/share/wordlists/bullshit.txt \
-        --replace awk '${gawk}/bin/awk'
+        --replace-fail /usr/lib/bullshit $out/share/wordlists/bullshit.txt \
+        --replace-fail awk '${gawk}/bin/awk'
     runHook postFixup
   '';
 

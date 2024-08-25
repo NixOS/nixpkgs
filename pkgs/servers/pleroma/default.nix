@@ -91,7 +91,7 @@ beamPackages.mixRelease rec {
       # Some additional build inputs and build fixes
       http_signatures = prev.http_signatures.override {
         patchPhase = ''
-          substituteInPlace mix.exs --replace ":logger" ":logger, :public_key"
+          substituteInPlace mix.exs --replace-fail ":logger" ":logger, :public_key"
         '';
       };
       fast_html = prev.fast_html.override {

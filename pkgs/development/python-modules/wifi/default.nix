@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace wifi/scan.py \
-      --replace "/sbin/iwlist" "${wirelesstools}/bin/iwlist"
+      --replace-fail "/sbin/iwlist" "${wirelesstools}/bin/iwlist"
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

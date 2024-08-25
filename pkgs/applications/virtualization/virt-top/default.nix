@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   ] ++ [ libxml2 ];
 
   prePatch = ''
-    substituteInPlace ocaml-dep.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
-    substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-dep.sh.in --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-link.sh.in --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
   meta = with lib; {

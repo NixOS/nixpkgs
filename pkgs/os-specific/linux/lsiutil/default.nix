@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace lsiutil.c \
-      --replace /sbin/modprobe "${kmod}/bin/modprobe" \
-      --replace /bin/mknod "${coreutils}/bin/mknod"
+      --replace-fail /sbin/modprobe "${kmod}/bin/modprobe" \
+      --replace-fail /bin/mknod "${coreutils}/bin/mknod"
   '';
 
   buildPhase = ''

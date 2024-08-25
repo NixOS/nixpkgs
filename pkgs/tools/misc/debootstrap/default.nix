@@ -58,10 +58,10 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     substituteInPlace debootstrap \
-      --replace 'CHROOT_CMD="chroot '  'CHROOT_CMD="${coreutils}/bin/chroot ' \
-      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${util-linux}/bin/unshare ' \
-      --replace /usr/bin/dpkg ${dpkg}/bin/dpkg \
-      --replace '#!/bin/sh' '#!/bin/bash' \
+      --replace-fail 'CHROOT_CMD="chroot '  'CHROOT_CMD="${coreutils}/bin/chroot ' \
+      --replace-fail 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${util-linux}/bin/unshare ' \
+      --replace-fail /usr/bin/dpkg ${dpkg}/bin/dpkg \
+      --replace-fail '#!/bin/sh' '#!/bin/bash' \
       --subst-var-by VERSION ${version}
 
     d=$out/share/debootstrap
