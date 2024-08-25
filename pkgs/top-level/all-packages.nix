@@ -24311,10 +24311,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   };
 
-  yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-  };
-
   yubihsm-connector = callPackage ../tools/security/yubihsm-connector { };
 
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
