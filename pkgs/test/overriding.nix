@@ -2,14 +2,7 @@
 
 let
   tests =
-    let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: { dontWrapPythonPrograms = true; });
-    in
     {
-      overridePythonAttrs = {
-        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
-        expected = true;
-      };
       repeatedOverrides-pname = {
         expr = repeatedOverrides.pname == "a-better-hello-with-blackjack";
         expected = true;
@@ -27,6 +20,41 @@ let
         expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
         expected = true;
       };
+
+      # Python
+
+      overridePythonAttrs = {
+        expr = checkOverridePythonAttrs pipOverridden1;
+        expected = true;
+      };
+      overridePythonAttrs-nested = {
+        expr = revertOverridePythonAttrs pipOverridden1 == pip;
+        expected = true;
+      };
+      override-pythonPackage = {
+        expr = checkOverrideSetuptools pipOverridden2;
+        expected = true;
+      };
+      override-overridePythonAttrs-test-override = {
+        expr = checkOverrideSetuptools pipOverridden3;
+        expected = true;
+      };
+      override-overridePythonAttrs-test-overridePythonAttrs = {
+        expr = checkOverridePythonAttrs pipOverridden3;
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
+        expr = checkAttrsFooBar (applyOverridePythonAttrs (overrideAttrsFooBar pip));
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
+        expr = checkOverridePythonAttrs (applyOverridePythonAttrs (overrideAttrsFooBar pip));
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-commutation = {
+        expr = (applyOverridePythonAttrs (overrideAttrsFooBar pip)) ==  (overrideAttrsFooBar (applyOverridePythonAttrs pip));
+        expected = true;
+      };
     };
 
   addEntangled = origOverrideAttrs: f:
@@ -38,6 +66,11 @@ let
         };
       })
     );
+
+  # We are testing the overriding result of these packages without building them.
+  pkgsAllowingBroken = pkgs.extend (finalAttrs: previousAttrs: {
+    config = previousAttrs.config // { allowBroken = true; };
+  });
 
   entangle = pkg1: pkg2: pkg1.overrideAttrs (self: super: {
     passthru = super.passthru // {
@@ -51,6 +84,28 @@ let
   overrides1 = example.overrideAttrs (_: super: { pname = "a-better-${super.pname}"; });
 
   repeatedOverrides = overrides1.overrideAttrs (_: super: { pname = "${super.pname}-with-blackjack"; });
+
+
+  # Python
+
+  inherit (pkgsAllowingBroken.python3Packages) setuptools pip;
+  applyOverridePythonAttrs = p: p.overridePythonAttrs (_: { dontWrapPythonPrograms = true; });
+  revertOverridePythonAttrs = p: p.overridePythonAttrs (_: { dontWrapPythonPrograms = false; });
+  checkOverridePythonAttrs = p: !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+  pipOverridden1 = applyOverridePythonAttrs pip;
+  setuptoolsOverridden1 = applyOverridePythonAttrs setuptools;
+  applyOverrideSetuptools = p: p.override { setuptools = setuptoolsOverridden1; };
+  checkOverrideSetuptools = p: builtins.any (p': lib.hasInfix "setuptools" p'.name && checkOverridePythonAttrs p') p.nativeBuildInputs;
+  pipOverridden2 = applyOverrideSetuptools pip;
+  # Test ".override .overridePythonAttrs" only, since ".overridePythonAttrs .override" is known to be break.
+  pipOverridden3 = applyOverridePythonAttrs pipOverridden2;
+
+  overrideAttrsFooBar = drv: drv.overrideAttrs (finalAttrs: previousAttrs: {
+    FOO = "a";
+    BAR = finalAttrs.FOO;
+  });
+
+  checkAttrsFooBar = drv: drv.FOO == "a" && drv.BAR == "a";
 in
 
 stdenvNoCC.mkDerivation {
