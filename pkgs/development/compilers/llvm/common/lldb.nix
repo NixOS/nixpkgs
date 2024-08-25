@@ -30,11 +30,14 @@
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } ''
+      runCommand "lldb-src-${version}" { } (''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/lldb "$out"
-      '' else src;
+      '' + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+        mkdir -p "$out/llvm"
+        cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+      '') else src;
   vscodeExt = {
     name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
     version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
