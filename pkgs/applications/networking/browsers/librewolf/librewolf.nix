@@ -16,8 +16,10 @@ rec {
 
   extraPostPatch = ''
     while read patch_name; do
-      echo "applying LibreWolf patch: $patch_name"
-      patch -p1 < ${source}/$patch_name
+      if ! sed -n '/nvidia-wayland-backported-fixes-.*-Bug-1898476/p'; then
+        echo "applying LibreWolf patch: $patch_name"
+        patch -p1 < ${source}/$patch_name
+      fi
     done <${source}/assets/patches.txt
 
     cp -r ${source}/themes/browser .
@@ -31,8 +33,9 @@ rec {
   extraPoliciesFiles = [ "${src.settings}/distribution/policies.json" ];
 
   extraPassthru = {
-    librewolf = { inherit src extraPatches; };
+    librewolf = {
+      inherit src extraPatches;
+    };
     inherit extraPrefsFiles extraPoliciesFiles;
   };
 }
-
