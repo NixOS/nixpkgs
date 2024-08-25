@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     mainProgram = "onedrive";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ srgom peterhoeg bertof ];
+    maintainers = with maintainers; [ peterhoeg bertof ];
     platforms = platforms.linux;
   };
 }
