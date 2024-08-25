@@ -1,57 +1,79 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, ldc
-, installShellFiles
-, pkg-config
-, curl
-, sqlite
-, libnotify
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+{
+  lib,
+  autoreconfHook,
+  curl,
+  fetchFromGitHub,
+  installShellFiles,
+  ldc,
+  libnotify,
+  pkg-config,
+  sqlite,
+  stdenv,
+  systemd,
+  testers,
+  # Boolean flags
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
   version = "2.4.25";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
-    repo = pname;
-    rev = "v${version}";
+    repo = "onedrive";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M6EOJiykmAKWIuAXdm9ebTSX1eVoO+1axgzxlAmuI8U=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    installShellFiles
+    ldc
+    pkg-config
+  ];
 
   buildInputs = [
     curl
-    sqlite
     libnotify
-  ] ++ lib.optional withSystemd systemd;
+    sqlite
+  ] ++ lib.optionals withSystemd [ systemd ];
 
   configureFlags = [
-    "--enable-notifications"
-  ] ++ lib.optionals withSystemd [
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    (lib.enableFeature true "notifications")
+    (lib.withFeatureAs withSystemd "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.withFeatureAs withSystemd "systemduserunitdir" "${placeholder "out"}/lib/systemd/user")
   ];
 
   # we could also pass --enable-completions to configure but we would then have to
   # figure out the paths manually and pass those along.
   postInstall = ''
-    installShellCompletion --bash --name ${pname}  contrib/completions/complete.bash
-    installShellCompletion --zsh  --name _${pname} contrib/completions/complete.zsh
-    installShellCompletion --fish --name ${pname}  contrib/completions/complete.fish
+    installShellCompletion --bash --name onedrive contrib/completions/complete.bash
+    installShellCompletion --fish --name onedrive contrib/completions/complete.fish
+    installShellCompletion --zsh --name _onedrive contrib/completions/complete.zsh
   '';
 
-  meta = with lib; {
-    description = "Complete tool to interact with OneDrive on Linux";
-    mainProgram = "onedrive";
-    homepage = "https://github.com/abraunegg/onedrive";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ peterhoeg bertof ];
-    platforms = platforms.linux;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
-}
+
+  meta = {
+    homepage = "https://github.com/abraunegg/onedrive";
+    description = "Complete tool to interact with OneDrive on Linux";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "onedrive";
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      bertof
+    ];
+    platforms = lib.platforms.linux;
+  };
+})
