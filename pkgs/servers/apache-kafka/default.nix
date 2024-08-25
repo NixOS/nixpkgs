@@ -2,6 +2,12 @@
 
 let
   versionMap = {
+    "3_8" = {
+      kafkaVersion = "3.8.0";
+      scalaVersion = "2.13";
+      sha256 = "sha256-4Cl8xv2wnvnZkFdRsl0rYpwXUo+GKbYFYe7/h84pCZw=";
+      jre = jdk17_headless;
+    };
     "3_7" = {
       kafkaVersion = "3.7.1";
       scalaVersion = "2.13";
