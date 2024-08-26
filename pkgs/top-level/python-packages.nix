@@ -10501,6 +10501,8 @@ self: super: with self; {
 
   pystac = callPackage ../development/python-modules/pystac { };
 
+  pystac-client = callPackage ../development/python-modules/pystac-client { };
+
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
   pysuez = callPackage ../development/python-modules/pysuez { };
