@@ -404,6 +404,12 @@ lib.mapAttrs mkLicense ({
     fullName  = "CeCILL-C Free Software License Agreement";
   };
 
+  cockroachdb-community-license = {
+    fullName = "CockroachDB Community License Agreement";
+    url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
+    free = false;
+  };
+
   cpal10 = {
     spdxId = "CPAL-1.0";
     fullName = "Common Public Attribution License 1.0";
