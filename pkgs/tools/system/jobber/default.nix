@@ -35,7 +35,7 @@ buildGoModule rec {
     changelog = "https://github.com/dshearer/jobber/releases/tag/v${version}";
     description = "Alternative to cron, with sophisticated status-reporting and error-handling";
     license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
     mainProgram = "jobber";
   };
 }

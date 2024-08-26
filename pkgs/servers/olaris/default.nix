@@ -56,6 +56,6 @@ buildGoModule rec {
     homepage = "https://gitlab.com/olaris/olaris-server";
     changelog = "https://gitlab.com/olaris/olaris-server/-/releases/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

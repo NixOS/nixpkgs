@@ -28,6 +28,6 @@ buildGoModule rec {
     description = "Self-hosted file/code/media sharing website";
     homepage = "https://put.icu";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

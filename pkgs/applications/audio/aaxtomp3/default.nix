@@ -73,6 +73,6 @@ resholve.mkDerivation rec {
     description = "Convert Audible's .aax filetype to MP3, FLAC, M4A, or OPUS";
     homepage = "https://krumpetpirate.github.io/AAXtoMP3";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

@@ -40,7 +40,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
     homepage = "https://www.ivpn.net/apps";
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ataraxiasjel ];
+    maintainers = with maintainers; [ ataraxiasjel ];
     mainProgram = "ivpn";
   };
 })) {

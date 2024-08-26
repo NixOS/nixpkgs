@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Make it quick and easy to get up and running with Docker";
     homepage = "https://dockstarter.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
     mainProgram = "ds";
   };
 }

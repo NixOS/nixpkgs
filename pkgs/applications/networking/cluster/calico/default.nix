@@ -22,7 +22,7 @@ builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: 
     changelog = "https://github.com/projectcalico/calico/releases/tag/v${version}";
     description = "Cloud native networking and network security";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
     platforms = platforms.linux;
     inherit mainProgram;
   };

@@ -46,7 +46,7 @@ buildGoModule rec {
     changelog = "https://github.com/h2non/${pname}/releases/tag/v${version}";
     description = "Fast, simple, scalable, Docker-ready HTTP microservice for high-level image processing";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda urandom ];
+    maintainers = with maintainers; [ dotlambda ];
     mainProgram = "imaginary";
   };
 }

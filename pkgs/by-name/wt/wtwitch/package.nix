@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Terminal user interface for Twitch";
     homepage = "https://github.com/krathalan/wtwitch";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "wtwitch";
   };

@@ -52,6 +52,6 @@ buildGoModule rec {
     homepage = "https://kubearmor.io";
     changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom kashw2 ];
+    maintainers = with maintainers; [ kashw2 ];
   };
 }

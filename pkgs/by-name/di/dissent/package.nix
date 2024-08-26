@@ -54,6 +54,6 @@ buildGoModule rec {
     homepage = "https://github.com/diamondburned/dissent";
     license = with licenses; [ gpl3Plus cc0 ];
     mainProgram = "dissent";
-    maintainers = with maintainers; [ hmenke urandom aleksana ];
+    maintainers = with maintainers; [ hmenke aleksana ];
   };
 }

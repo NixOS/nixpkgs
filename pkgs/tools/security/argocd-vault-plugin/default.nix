@@ -41,6 +41,6 @@ buildGoModule rec {
     description = "Argo CD plugin to retrieve secrets from Secret Management tools and inject them into Kubernetes secrets";
     mainProgram = "argocd-vault-plugin";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

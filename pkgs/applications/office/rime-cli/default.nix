@@ -18,7 +18,7 @@ buildGoModule rec {
     changelog = "https://github.com/puddinging/rime-cli/releases/tag/v${version}";
     description = "Command line tool to add customized vocabulary for Rime IME";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
     mainProgram = "rime-cli";
   };
 }

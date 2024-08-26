@@ -32,6 +32,6 @@ buildGoModule rec {
     mainProgram = "nex";
     homepage = "https://github.com/blynn/nex";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

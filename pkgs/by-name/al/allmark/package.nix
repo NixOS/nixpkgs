@@ -32,7 +32,6 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
-      urandom
     ];
     mainProgram = "allmark";
   };

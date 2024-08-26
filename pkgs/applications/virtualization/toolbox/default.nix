@@ -46,7 +46,7 @@ buildGoModule rec {
     changelog = "https://github.com/containers/toolbox/releases/tag/${version}";
     description = "Tool for containerized command line environments on Linux";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = [ ];
     mainProgram = "toolbox";
   };
 }
