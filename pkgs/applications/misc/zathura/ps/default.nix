@@ -11,12 +11,12 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-ps";
   version = "0.2.7";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    url = "https://pwmt.org/projects/zathura-ps/download/zathura-ps-${finalAttrs.version}.tar.xz";
     hash = "sha256-WJf5IEz1+Xi5QTvnzn/r3oQxV69I41GTjt8H2/kwjkY=";
   };
 
@@ -26,23 +26,24 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
   ];
+
   buildInputs = [
     libspectre
     zathura_core
     girara
   ];
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+  env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pwmt.org/projects/zathura-ps/";
     description = "Zathura PS plugin";
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the
       libspectre library.
     '';
-    license = licenses.zlib;
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
