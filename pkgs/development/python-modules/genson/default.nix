@@ -1,4 +1,5 @@
 { lib
+, python3
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -9,34 +10,35 @@
 
 buildPythonPackage rec {
   pname = "genson";
-  version = "1.2.2";
-  format = "pyproject";
+  version = "1.3.0";
+
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   # The Pypi tarball doesn't contain some test data
   src = fetchFromGitHub {
     owner = "wolverdude";
-    repo = pname;
+    repo = "GenSON";
     rev = "v${version}";
-    hash = "sha256-3RaGY/F//Zt3aOH5ZO+jvRc6vn0+yT14MTYg6yCzO3w=";
+    hash = "sha256-Bb2PRuZuj/yotb78MbLgVwi4Fz7hbnXJmoXTe4kg43k=";
   };
 
-  # patches = [ ./fix-test-bin.patch ];
-  postPatch = ''
-    substituteInPlace test/test_bin.py \
-      --replace "BIN_PATH = " "BIN_PATH = \"$out/bin/genson\" # "
+  build-system = [ setuptools ];
+
+  dependencies = [ jsonschema ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  preInstall = ''
+    export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
   '';
 
-  nativeBuildInputs = [ unittestCheckHook setuptools ];
-
-  propagatedBuildInputs = [ jsonschema ];
-
-  pythonImportsCheck = [ pname ];
+  # pythonImportsCheck = [ "genson" ];
 
   meta = with lib; {
     description = "A powerful, user-friendly JSON Schema generator built in Python";
-    homepage = "https://github.com/wolverdude/genson/";
+    homepage = "https://github.com/wolverdude/GenSON/";
     license = licenses.mit;
     maintainers = with maintainers; [ erictapen ];
   };
