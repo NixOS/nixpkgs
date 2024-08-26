@@ -11,22 +11,8 @@
   }
 
 , ffmpegVariant ? "small" # Decides which dependencies are enabled by default
-
-  # Build with headless deps; excludes dependencies that are only necessary for
-  # GUI applications. To be used for purposes that don't generally need such
-  # components and i.e. only depend on libav
 , withHeadlessDeps ? ffmpegVariant == "headless" || withSmallDeps
-
-  # Dependencies a user might customarily expect from a regular ffmpeg build.
-  # /All/ packages that depend on ffmpeg and some of its feaures should depend
-  # on the small variant. Small means the minimal set of features that satisfies
-  # all dependants in Nixpkgs
 , withSmallDeps ? ffmpegVariant == "small" || withFullDeps
-
-  # Everything enabled; only guarded behind platform exclusivity or brokeness.
-  # If you need to depend on ffmpeg-full because ffmpeg is missing some feature
-  # your package needs, you should enable that feature in regular ffmpeg
-  # instead.
 , withFullDeps ? ffmpegVariant == "full"
 
 , fetchgit

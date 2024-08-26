@@ -40,6 +40,25 @@ let
       variant = lib.mkOption {
         type = lib.types.enum [ "headless" "small" "full" ];
         default = "headless";
+        description = ''
+          Which variant this feature should be enabled in.
+
+          Headless: Build with dependency set that is necessary for headless
+          operation; excludes dependencies that are only necessary for GUI
+          applications. Intended for purposes that don't generally need such
+          components and i.e. only depend on libav and for bootstrapping.
+
+          Small: Dependencies a user might customarily expect from a regular
+          ffmpeg build. /All/ packages that depend on ffmpeg and some of its
+          feaures should depend on the small variant. Small means the minimal
+          set of features that satisfies all dependants in Nixpkgs
+
+          Full: All dependencies enabled; only guarded behind platform
+          exclusivity, brokeness or extreme closure sizes that make more sense
+          in a specific ffmpeg variant. If you need to depend on ffmpeg-full
+          because ffmpeg is missing some feature your package needs, you should
+          enable that feature in regular ffmpeg instead.
+        '';
       };
 
       gate = lib.mkOption {
