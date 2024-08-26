@@ -41,7 +41,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "'^(\d*\.\d*\.\d*)$'"
+      ];
+    };
   };
 
   meta = {
