@@ -19016,8 +19016,6 @@ with pkgs;
 
   systemfd = callPackage ../development/tools/systemfd { };
 
-  swig1 = callPackage ../development/tools/misc/swig { };
-  swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
   swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
   swig4 = callPackage ../development/tools/misc/swig/4.nix { };
   swig = swig3;
