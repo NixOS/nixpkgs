@@ -60,23 +60,23 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rustc.config = "armv7-linux-androideabi";
-    sdkVer = "28";
-    ndkVer = "24";
+    androidSdkVersion = "28";
+    androidNdkVersion = "24";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rustc.config = "aarch64-linux-android";
-    sdkVer = "28";
-    ndkVer = "24";
+    androidSdkVersion = "28";
+    androidNdkVersion = "24";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "30";
-    ndkVer = "24";
+    androidSdkVersion = "30";
+    androidNdkVersion = "24";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
