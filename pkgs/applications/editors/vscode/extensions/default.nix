@@ -771,7 +771,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bradgashler.htmltagwrap";
           homepage = "https://github.com/bgashler1/vscode-htmltagwrap";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
@@ -2600,7 +2600,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-nix-syntax";
           homepage = "https://github.com/jeff-hykin/better-nix-syntax";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
@@ -4301,7 +4301,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
           homepage = "https://github.com/signageos/vscode-sops";
           license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
