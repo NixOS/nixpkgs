@@ -32,16 +32,15 @@ in {
         # This test also validates that we can use an "external" database
         database.createLocally = false;
         config = {
-          dbtype = "pgsql";
-          dbname = "nextcloud";
-          dbuser = adminuser;
-          dbpassFile = passFile;
           adminuser = adminuser;
           adminpassFile = passFile;
         };
         secretFile = "/etc/nextcloud-secrets.json";
 
         settings = {
+          dbtype = "pgsql";
+          dbname = "nextcloud";
+          dbuser = adminuser;
           allow_local_remote_servers = true;
           redis = {
             dbindex = 0;
@@ -65,14 +64,16 @@ in {
 
       services.postgresql = {
         enable = true;
-        package = pkgs.postgresql_14;
+        package = pkgs.postgresql_16;
       };
       systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
         password=$(cat ${passFile})
         ${config.services.postgresql.package}/bin/psql <<EOF
-          CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
-          CREATE DATABASE nextcloud;
+          CREATE USER ${adminuser} WITH PASSWORD '$password' CREATEDB;
+          CREATE DATABASE nextcloud TEMPLATE template0 ENCODING 'UTF8';
+          ALTER DATABASE nextcloud OWNER TO ${adminuser};
           GRANT ALL PRIVILEGES ON DATABASE nextcloud TO ${adminuser};
+          GRANT ALL PRIVILEGES ON SCHEMA public TO ${adminuser};
         EOF
       '';
 
@@ -83,7 +84,8 @@ in {
         {
           "redis": {
             "password": "secret"
-          }
+          },
+          "dbpass": "${pass}"
         }
       '';
     };

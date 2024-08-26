@@ -101,8 +101,8 @@ let
 
   inherit (config.system) stateVersion;
 
-  mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
-  pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
+  mysqlLocal = cfg.database.createLocally && cfg.settings.dbtype == "mysql";
+  pgsqlLocal = cfg.database.createLocally && cfg.settings.dbtype == "pgsql";
 
   nextcloudGreaterOrEqualThan = versionAtLeast cfg.package.version;
   nextcloudOlderThan = versionOlder cfg.package.version;
@@ -113,7 +113,7 @@ let
 
   overrideConfig = let
     c = cfg.config;
-    requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
+    requiresReadSecretFunction = c.objectstore.s3.enable;
     objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
       'objectstore' => [
         'class' => '\\OC\\Files\\ObjectStore\\S3',
@@ -173,17 +173,6 @@ let
       ],
       ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
       ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-      ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
-      ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
-      ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
-      ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-      ${optionalString (c.dbpassFile != null) ''
-          'dbpassword' => nix_read_secret(
-            "${c.dbpassFile}"
-          ),
-        ''
-      }
-      'dbtype' => '${c.dbtype}',
       ${objectstoreConfig}
     ];
 
@@ -228,6 +217,18 @@ in {
       [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "settings" "trusted_domains" ])
     (mkRenamedOptionModule
       [ "services" "nextcloud" "config" "trustedProxies" ] [ "services" "nextcloud" "settings" "trusted_proxies" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "dbtype" ] [ "services" "nextcloud" "settings" "dbtype" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "dbname" ] [ "services" "nextcloud" "settings" "dbname" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "dbuser" ] [ "services" "nextcloud" "settings" "dbuser" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "dbhost" ] [ "services" "nextcloud" "settings" "dbhost" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "dbtableprefix" ] [ "services" "nextcloud" "settings" "dbtableprefix" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "dbpassFile" ] [ "services" "nextcloud" "secretFile" ])
     (mkRenamedOptionModule ["services" "nextcloud" "extraOptions" ] [ "services" "nextcloud" "settings" ])
   ];
 
@@ -667,6 +668,50 @@ in {
         freeformType = jsonFormat.type;
         options = {
 
+          dbtype = mkOption {
+            type = types.enum [ "sqlite" "pgsql" "mysql" ];
+            default = "sqlite";
+            description = "Database type.";
+          };
+          dbname = mkOption {
+            type = types.nullOr types.str;
+            default = "nextcloud";
+            description = "Database name.";
+          };
+          dbuser = mkOption {
+            type = types.nullOr types.str;
+            default = if cfg.settings.dbtype == "sqlite" then null else "nextcloud";
+            defaultText = literalExpression ''
+              if cfg.settings.dbtype == "sqlite" then null else "nextcloud";
+            '';
+            description = "Database user.";
+          };
+          dbhost = mkOption {
+            type = types.nullOr types.str;
+            default =
+              if pgsqlLocal then "/run/postgresql"
+              else if mysqlLocal then "localhost:/run/mysqld/mysqld.sock"
+              else if cfg.settings.dbtype == "sqlite" then null
+              else "localhost";
+            defaultText = literalExpression ''
+              if pgsqlLocal then "/run/postgresql"
+              else if mysqlLocal then "localhost:/run/mysqld/mysqld.sock"
+              else if cfg.settings.dbtype == "sqlite" then null
+              else "localhost";
+            '';
+            example = "localhost:5000";
+            description = ''
+              Database host (+port) or socket path. Defaults to the correct unix socket
+              instead if [](#opt-services.nextcloud.database.createLocally) is true and
+              [](#opt-services.nextcloud.settings.dbtype) is either `pgsql` or
+              `mysql`.
+            '';
+          };
+          dbtableprefix = mkOption {
+            type = types.str;
+            default = "oc_";
+            description = "Table prefix in Nextcloud database.";
+          };
           loglevel = mkOption {
             type = types.ints.between 0 4;
             default = 2;
@@ -853,6 +898,17 @@ in {
         ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
         ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
 
+      assertions = [
+        {
+          assertion = cfg.settings.dbtype == "sqlite" -> (cfg.settings.dbuser == null && cfg.settings.dbhost == null);
+          message = ''When using sqlite as dbtype, dbuser, dbpass and dbhost should not be set'';
+        }
+        {
+          assertion = builtins.hasAttr "dbpass" cfg.settings != true;
+          message = ''It's discouraged to specify the database password inside the settings option. The secret will be copied into the Nix store and world-readable. Please use secretFile option to specify dbpass setting.'';
+        }
+      ];
+
       services.nextcloud.package = with pkgs;
         mkDefault (
           if pkgs ? nextcloud
@@ -881,25 +937,6 @@ in {
         })
       ];
     }
-
-    { assertions = [
-      { assertion = cfg.database.createLocally -> cfg.config.dbpassFile == null;
-        message = ''
-          Using `services.nextcloud.database.createLocally` with database
-          password authentication is no longer supported.
-
-          If you use an external database (or want to use password auth for any
-          other reason), set `services.nextcloud.database.createLocally` to
-          `false`. The database won't be managed for you (use `services.mysql`
-          if you want to set it up).
-
-          If you want this module to manage your nextcloud database for you,
-          unset `services.nextcloud.config.dbpassFile` and
-          `services.nextcloud.config.dbhost` to use socket authentication
-          instead of password.
-        '';
-      }
-    ]; }
 
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
@@ -932,8 +969,8 @@ in {
             mkExport = { arg, value }: "export ${arg}=${value}";
             dbpass = {
               arg = "DBPASS";
-              value = if c.dbpassFile != null
-                then ''"$(<"${toString c.dbpassFile}")"''
+              value = if cfg.secretFile != null
+                then ''"$(${lib.getExe pkgs.jq} -r '.dbpass // ""' "${toString cfg.secretFile}")"''
                 else ''""'';
             };
             adminpass = {
@@ -942,13 +979,13 @@ in {
             };
             installFlags = concatStringsSep " \\\n    "
               (mapAttrsToList (k: v: "${k} ${toString v}") {
-              "--database" = ''"${c.dbtype}"'';
+              "--database" = ''"${cfg.settings.dbtype}"'';
               # The following attributes are optional depending on the type of
               # database.  Those that evaluate to null on the left hand side
               # will be omitted.
-              ${if c.dbname != null then "--database-name" else null} = ''"${c.dbname}"'';
-              ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
-              ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
+              ${if cfg.settings.dbname != null then "--database-name" else null} = ''"${cfg.settings.dbname}"'';
+              ${if cfg.settings.dbhost != null then "--database-host" else null} = ''"${cfg.settings.dbhost}"'';
+              ${if cfg.settings.dbuser != null then "--database-user" else null} = ''"${cfg.settings.dbuser}"'';
               "--database-pass" = "\"\$${dbpass.arg}\"";
               "--admin-user" = ''"${c.adminuser}"'';
               "--admin-pass" = "\"\$${adminpass.arg}\"";
@@ -975,16 +1012,6 @@ in {
           path = [ occ ];
           restartTriggers = [ overrideConfig ];
           script = ''
-            ${optionalString (c.dbpassFile != null) ''
-              if [ ! -r "${c.dbpassFile}" ]; then
-                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-                exit 1
-              fi
-              if [ -z "$(<${c.dbpassFile})" ]; then
-                echo "dbpassFile ${c.dbpassFile} is empty!"
-                exit 1
-              fi
-            ''}
             if [ ! -r "${c.adminpassFile}" ]; then
               echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
               exit 1
@@ -1088,18 +1115,18 @@ in {
       services.mysql = lib.mkIf mysqlLocal {
         enable = true;
         package = lib.mkDefault pkgs.mariadb;
-        ensureDatabases = [ cfg.config.dbname ];
+        ensureDatabases = [ cfg.settings.dbname ];
         ensureUsers = [{
-          name = cfg.config.dbuser;
-          ensurePermissions = { "${cfg.config.dbname}.*" = "ALL PRIVILEGES"; };
+          name = cfg.settings.dbuser;
+          ensurePermissions = { "${cfg.settings.dbname}.*" = "ALL PRIVILEGES"; };
         }];
       };
 
       services.postgresql = mkIf pgsqlLocal {
         enable = true;
-        ensureDatabases = [ cfg.config.dbname ];
+        ensureDatabases = [ cfg.settings.dbname ];
         ensureUsers = [{
-          name = cfg.config.dbuser;
+          name = cfg.settings.dbuser;
           ensureDBOwnership = true;
         }];
       };
