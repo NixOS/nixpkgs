@@ -7304,10 +7304,10 @@ with self; {
 
   DBI = buildPerlPackage {
     pname = "DBI";
-    version = "1.643";
+    version = "1.644";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TIMB/DBI-1.643.tar.gz";
-      hash = "sha256-iiuZPbVgosNzwXTul2pRAn3XgOx2auF2IMIDk9LoNvo=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.644.tar.gz";
+      hash = "sha256-Ipe5neCeZwhmQLWQaZ4OmC+0adpjqT/ijcFHgtt6U8g=";
     };
     postInstall = lib.optionalString (perl ? crossVersion) ''
       mkdir -p $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI
