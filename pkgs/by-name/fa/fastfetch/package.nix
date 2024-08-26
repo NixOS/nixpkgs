@@ -10,7 +10,7 @@
   ddcutil,
   glib,
   hwdata,
-  imagemagick_light,
+  imagemagick,
   libXrandr,
   libdrm,
   libglvnd,
@@ -71,7 +71,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs =
     [
       chafa
-      imagemagick_light
+      imagemagick
       pcre
       pcre2
       sqlite
