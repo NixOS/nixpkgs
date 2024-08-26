@@ -12350,8 +12350,6 @@ with pkgs;
 
   inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop signal-desktop-beta;
 
-  slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
-
   sigma-cli = callPackage ../tools/security/sigma-cli { };
 
   signify = callPackage ../tools/security/signify { };

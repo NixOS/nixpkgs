@@ -1,27 +1,21 @@
 {
-  lib,
-  nix-update-script,
-  buildPythonPackage,
-  crytic-compile,
-  fetchFromGitHub,
-  makeWrapper,
-  packaging,
-  prettytable,
-  pythonOlder,
-  setuptools-scm,
-  solc,
-  web3,
-  withSolc ? false,
-  testers,
   slither-analyzer,
+  lib,
+  makeWrapper,
+  fetchFromGitHub,
+  python3Packages,
+  nix-update-script,
+  solc,
+  withSolc ? false,
+  testers
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "slither-analyzer";
   version = "0.10.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";
@@ -32,14 +26,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-    setuptools-scm
+    python3Packages.setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     crytic-compile
+    web3
     packaging
     prettytable
-    web3
   ];
 
   postFixup = lib.optionalString withSolc ''
