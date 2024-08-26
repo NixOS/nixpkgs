@@ -30,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "refs/tags/v${finalAttrs.version}";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-41672.patch";
+      url = "https://github.com/duckdb/duckdb/commit/c9b7c98aa0e1cd7363fe8bb8543a95f38e980d8a.patch";
+      hash = "sha256-Zb962mWIgy2t/0csbwZ8BcLgpdIA9/JpJ0+EWr1Kg1g=";
+    })
+  ];
+
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [ cmake ninja python3 ];
