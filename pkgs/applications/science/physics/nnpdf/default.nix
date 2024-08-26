@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, apfel
-, gsl
-, lhapdf
-, libarchive
-, yaml-cpp
-, python3
-, sqlite
-, swig4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  apfel,
+  gsl,
+  lhapdf,
+  libarchive,
+  yaml-cpp,
+  python3,
+  sqlite,
+  swig4,
 }:
 
 stdenv.mkDerivation rec {
