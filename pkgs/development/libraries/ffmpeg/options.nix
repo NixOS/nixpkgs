@@ -40,12 +40,8 @@ let
       variant = lib.mkOption {
         type = lib.types.enum [ "headless" "small" "full" ];
         default = "headless";
-        # description = policy here
       };
 
-      # TODO how to handle this better?
-      # Could you make use of priorities here?
-      # Use config = ?
       gate = lib.mkOption {
         default = true;
         description = ''
@@ -564,10 +560,5 @@ in
   options = {
     features = lib.mapAttrs mkFfmpegOption (featureOptions (config.features // { gpl = true; gplv3 = true; unfree = false; })); # TODO
     foo = lib.mkOption { default = isInVariant "full"; };
-
   };
-
-  # config = {
-  #   features.tensorflow.gate = true;
-  # };
 }
