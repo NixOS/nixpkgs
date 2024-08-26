@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, boost
-, lua
-, zlib
-, bzip2
-, xylib
-, readline
-, gnuplot
-, swig4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  boost,
+  lua,
+  zlib,
+  bzip2,
+  xylib,
+  readline,
+  gnuplot,
+  swig4,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,9 +38,7 @@ stdenv.mkDerivation rec {
     swig4
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-std=c++11"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++11" ];
 
   meta = {
     description = "Curve fitting and peak fitting software";
