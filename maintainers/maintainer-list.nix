@@ -22167,6 +22167,12 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
+  xelden = {
+    email = "anpiz@protonmail.com";
+    github = "Xelden";
+    githubId = 117323435;
+    name = "Andrés Pico";
+  };
   xfnw = {
     email = "xfnw+nixos@riseup.net";
     github = "xfnw";
