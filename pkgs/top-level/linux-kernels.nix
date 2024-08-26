@@ -389,8 +389,6 @@ in {
 
     ena = callPackage ../os-specific/linux/ena {};
 
-    kvdo = callPackage ../os-specific/linux/kvdo {};
-
     lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
 
     linux-gpib = callPackage ../applications/science/electronics/linux-gpib/kernel.nix { };
@@ -613,6 +611,7 @@ in {
     vm-tools = self.mm-tools;
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
+    kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);

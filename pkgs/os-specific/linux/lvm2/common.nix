@@ -101,10 +101,7 @@ stdenv.mkDerivation rec {
       multipath_tools = optionalTool enableMultipath multipath-tools;
       vdo = optionalTool enableVDO vdo;
     }))
-    # Musl fix from Alpine
     ./fix-stdio-usage.patch
-    # https://gitlab.com/lvmteam/lvm2/-/merge_requests/8
-    ./fix-static.patch
   ];
 
   doCheck = false; # requires root
