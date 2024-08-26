@@ -258,7 +258,7 @@ mapAliases ({
   claws-mail-gtk3 = claws-mail; # Added 2021-07-10
   clucene_core_1 = throw "'clucene_core_1' has been renamed to/replaced by 'clucene_core'"; # Added 2023-12-09
   cntk = throw "'cntk' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-10-09
-  cockroachdb = throw "'cockroachdb' has been removed as it was outdated and unmaintained. Use 'cockroachdb-bin' instead"; # 2024-03-15
+  cockroachdb-bin = cockroachdb; # 2024-03-15
   codimd = hedgedoc; # Added 2020-11-29
   inherit (libsForQt5.mauiPackages) communicator; # added 2022-05-17
   compton = throw "'compton' has been renamed to/replaced by 'picom'"; # Converted to throw 2023-09-10
