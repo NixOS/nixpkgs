@@ -14,7 +14,7 @@
 , libmaxminddb
 , gperftools
 , python3
-, swig
+, swig4
 , gettext
 , coreutils
 , ncurses
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     file
     flex
     python
-    swig
+    swig4
   ];
 
   buildInputs = [
