@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2024-08-01";
+  version = "0-unstable-2024-08-19";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "e127acbf9a71ebc0c26bc8e28346822e0a6e16ba";
-    hash = "sha256-GJIz4M5HDB948Ex/8cPvbkrNzl/eKUE7/c21JBu4lb8=";
+    rev = "acf3c351f8de47c6857f31948ab253f9c7ce2a6f";
+    hash = "sha256-jcY81r8PdMQ9dCGhT0YLZzxPj3kQJXyWCmvQLXbR1EI=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage {
   };
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
 
-  ATTIC_DISTRIBUTOR = "attic";
+  ATTIC_DISTRIBUTOR = "nixpkgs";
   NIX_INCLUDE_PATH = "${lib.getDev nix}/include";
 
   # Attic interacts with Nix directly and its tests require trusted-user access

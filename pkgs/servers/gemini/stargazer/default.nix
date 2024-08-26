@@ -6,25 +6,25 @@
 , scdoc
 , Security
 , nixosTests
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stargazer";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
     rev = version;
-    hash = "sha256-pYize+MGChi1GxCNaQsNlHELtsPUvfFZMPl0Q+pOTp0=";
+    hash = "sha256-Qzg9sCdD29FghHMY6obeVHMD0SRvzi9J6MhEUvcQgbE=";
   };
 
-  cargoHash = "sha256-KmVNRVyKD5q4/vWtnHM4nfiGg+uZvRl+l+Zk5hjWg9E=";
+  cargoHash = "sha256-SQzYEFdSUC1znukot3G3WoOsQGlYP7ICXpoy/w9eO8A=";
 
-  doCheck = false; # Uses external testing framework that requires network
-
-  passthru.tests = {
-    basic-functionality = nixosTests.stargazer;
+  passthru = {
+    tests.basic-functionality = nixosTests.stargazer;
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [ installShellFiles scdoc ];

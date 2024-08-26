@@ -9,6 +9,7 @@
   boolector,
   z3,
   aiger,
+  btor2tools,
   python3Packages,
   nix-update-script,
 }:
@@ -36,49 +37,53 @@ stdenv.mkDerivation rec {
     yices
     z3
     aiger
+    btor2tools
   ];
 
-  patchPhase = ''
-    patchShebangs .
+  postPatch = ''
+    patchShebangs docs/source/conf.py \
+      docs/source/conf.diff \
+      tests/autotune/*.sh \
+      tests/keepgoing/*.sh \
+      tests/junit/*.sh
 
     # Fix up Yosys imports
     substituteInPlace sbysrc/sby.py \
-      --replace "##yosys-sys-path##" \
+      --replace-fail "##yosys-sys-path##" \
                 "sys.path += [p + \"/share/yosys/python3/\" for p in [\"$out\", \"${yosys}\"]]"
 
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
-      --replace '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
-      --replace ', "btormc"'             ', "${boolector}/bin/btormc"' \
-      --replace ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
+      --replace-fail '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
+      --replace-fail ', "btormc"'             ', "${boolector}/bin/btormc"' \
+      --replace-fail ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
 
     substituteInPlace sbysrc/sby_core.py \
-      --replace '##yosys-program-prefix##' '"${yosys}/bin/"'
+      --replace-fail '##yosys-program-prefix##' '"${yosys}/bin/"'
 
     substituteInPlace sbysrc/sby.py \
-      --replace '/usr/bin/env python3' '${pythonEnv}/bin/python'
+      --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
+    substituteInPlace sbysrc/sby_autotune.py \
+      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
+    substituteInPlace tests/make/required_tools.py \
+      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share/yosys/python3
 
     cp sbysrc/sby_*.py $out/share/yosys/python3/
     cp sbysrc/sby.py $out/bin/sby
 
     chmod +x $out/bin/sby
+    runHook postInstall
   '';
 
   doCheck = true;
-  nativeCheckInputs = [
-    pythonEnv
-    yosys
-    boolector
-    yices
-    z3
-    aiger
-  ];
+
   checkPhase = ''
     runHook preCheck
     make test
@@ -93,7 +98,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "SymbiYosys (sby) -- Front-end for Yosys-based formal verification flows";
+    description = "SymbiYosys, a front-end for Yosys-based formal verification flows";
     homepage = "https://symbiyosys.readthedocs.io/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [

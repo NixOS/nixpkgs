@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.kanidm;
   settingsFormat = pkgs.formats.toml { };
@@ -7,18 +13,29 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
-  certPaths = builtins.map builtins.dirOf [ cfg.serverSettings.tls_chain cfg.serverSettings.tls_key ];
+  certPaths = builtins.map builtins.dirOf [
+    cfg.serverSettings.tls_chain
+    cfg.serverSettings.tls_key
+  ];
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
-  hasPrefixInList = list: newPath: lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
-  mergePaths = lib.foldl' (merged: newPath: let
+  hasPrefixInList =
+    list: newPath:
+    lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
+  mergePaths = lib.foldl' (
+    merged: newPath:
+    let
       # If the new path is a prefix to some existing path, we need to filter it out
-      filteredPaths = lib.filter (p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+      filteredPaths = lib.filter (
+        p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)
+      ) merged;
       # If a prefix of the new path is already in the list, do not add it
       filteredNew = lib.optional (!hasPrefixInList filteredPaths newPath) newPath;
-    in filteredPaths ++ filteredNew) [];
+    in
+    filteredPaths ++ filteredNew
+  ) [ ];
 
   defaultServiceConfig = {
     BindReadOnlyPaths = [
@@ -28,7 +45,7 @@ let
       "-/etc/hosts"
       "-/etc/localtime"
     ];
-    CapabilityBoundingSet = [];
+    CapabilityBoundingSet = [ ];
     # ProtectClock= adds DeviceAllow=char-rtc r
     DeviceAllow = "";
     # Implies ProtectSystem=strict, which re-mounts all paths
@@ -57,12 +74,16 @@ let
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
     SystemCallArchitectures = "native";
-    SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
+    SystemCallFilter = [
+      "@system-service"
+      "~@privileged @resources @setuid @keyring"
+    ];
     # Does not work well with the temporary root
     #UMask = "0066";
   };
 
-  mkPresentOption = what:
+  mkPresentOption =
+    what:
     lib.mkOption {
       description = "Whether to ensure that this ${what} is present or absent.";
       type = lib.types.bool;
@@ -71,9 +92,9 @@ let
 
   filterPresent = lib.filterAttrs (_: v: v.present);
 
-  provisionStateJson = pkgs.writeText "provision-state.json" (builtins.toJSON {
-    inherit (cfg.provision) groups persons systems;
-  });
+  provisionStateJson = pkgs.writeText "provision-state.json" (
+    builtins.toJSON { inherit (cfg.provision) groups persons systems; }
+  );
 
   # Only recover the admin account if a password should explicitly be provisioned
   # for the account. Otherwise it is not needed for provisioning.
@@ -89,28 +110,30 @@ let
   # Recover the idm_admin account. If a password should explicitly be provisioned
   # for the account we set it, otherwise we generate a new one because it is required
   # for provisioning.
-  recoverIdmAdmin = if cfg.provision.idmAdminPasswordFile != null
-    then ''
-      KANIDM_IDM_ADMIN_PASSWORD=$(< ${cfg.provision.idmAdminPasswordFile})
-      # We always reset the idm_admin account password if a desired password was specified.
-      if ! KANIDM_RECOVER_ACCOUNT_PASSWORD=$KANIDM_IDM_ADMIN_PASSWORD ${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} idm_admin --from-environment >/dev/null; then
-        echo "Failed to recover idm_admin account" >&2
-        exit 1
-      fi
-    ''
-    else ''
-      # Recover idm_admin account
-      if ! recover_out=$(${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} idm_admin -o json); then
-        echo "$recover_out" >&2
-        echo "kanidm provision: Failed to recover admin account" >&2
-        exit 1
-      fi
-      if ! KANIDM_IDM_ADMIN_PASSWORD=$(grep '{"password' <<< "$recover_out" | ${lib.getExe pkgs.jq} -r .password); then
-        echo "$recover_out" >&2
-        echo "kanidm provision: Failed to parse password for idm_admin account" >&2
-        exit 1
-      fi
-    '';
+  recoverIdmAdmin =
+    if cfg.provision.idmAdminPasswordFile != null then
+      ''
+        KANIDM_IDM_ADMIN_PASSWORD=$(< ${cfg.provision.idmAdminPasswordFile})
+        # We always reset the idm_admin account password if a desired password was specified.
+        if ! KANIDM_RECOVER_ACCOUNT_PASSWORD=$KANIDM_IDM_ADMIN_PASSWORD ${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} idm_admin --from-environment >/dev/null; then
+          echo "Failed to recover idm_admin account" >&2
+          exit 1
+        fi
+      ''
+    else
+      ''
+        # Recover idm_admin account
+        if ! recover_out=$(${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} idm_admin -o json); then
+          echo "$recover_out" >&2
+          echo "kanidm provision: Failed to recover admin account" >&2
+          exit 1
+        fi
+        if ! KANIDM_IDM_ADMIN_PASSWORD=$(grep '{"password' <<< "$recover_out" | ${lib.getExe pkgs.jq} -r .password); then
+          echo "$recover_out" >&2
+          echo "kanidm provision: Failed to parse password for idm_admin account" >&2
+          exit 1
+        fi
+      '';
 
   postStartScript = pkgs.writeShellScript "post-start" ''
     set -euo pipefail
@@ -142,14 +165,15 @@ let
 
   serverPort =
     # ipv6:
-    if lib.hasInfix "]:" cfg.serverSettings.bindaddress
-    then lib.last (lib.splitString "]:" cfg.serverSettings.bindaddress)
+    if lib.hasInfix "]:" cfg.serverSettings.bindaddress then
+      lib.last (lib.splitString "]:" cfg.serverSettings.bindaddress)
     else
-      # ipv4:
-      if lib.hasInfix "." cfg.serverSettings.bindaddress
-      then lib.last (lib.splitString ":" cfg.serverSettings.bindaddress)
-      # default is 8443
-      else "8443";
+    # ipv4:
+    if lib.hasInfix "." cfg.serverSettings.bindaddress then
+      lib.last (lib.splitString ":" cfg.serverSettings.bindaddress)
+    # default is 8443
+    else
+      "8443";
 in
 {
   options.services.kanidm = {
@@ -157,7 +181,7 @@ in
     enableServer = lib.mkEnableOption "the Kanidm server";
     enablePam = lib.mkEnableOption "the Kanidm PAM and NSS integration";
 
-    package = lib.mkPackageOption pkgs "kanidm" {};
+    package = lib.mkPackageOption pkgs "kanidm" { };
 
     serverSettings = lib.mkOption {
       type = lib.types.submodule {
@@ -213,12 +237,20 @@ in
           log_level = lib.mkOption {
             description = "Log level of the server.";
             default = "info";
-            type = lib.types.enum [ "info" "debug" "trace" ];
+            type = lib.types.enum [
+              "info"
+              "debug"
+              "trace"
+            ];
           };
           role = lib.mkOption {
             description = "The role of this server. This affects the replication relationship and thereby available features.";
             default = "WriteReplica";
-            type = lib.types.enum [ "WriteReplica" "WriteReplicaNoUI" "ReadOnlyReplica" ];
+            type = lib.types.enum [
+              "WriteReplica"
+              "WriteReplicaNoUI"
+              "ReadOnlyReplica"
+            ];
           };
           online_backup = {
             path = lib.mkOption {
@@ -347,218 +379,248 @@ in
 
       groups = lib.mkOption {
         description = "Provisioning of kanidm groups";
-        default = {};
-        type = lib.types.attrsOf (lib.types.submodule (groupSubmod: {
-          options = {
-            present = mkPresentOption "group";
+        default = { };
+        type = lib.types.attrsOf (
+          lib.types.submodule (groupSubmod: {
+            options = {
+              present = mkPresentOption "group";
 
-            members = lib.mkOption {
-              description = "List of kanidm entities (persons, groups, ...) which are part of this group.";
-              type = lib.types.listOf lib.types.str;
-              apply = lib.unique;
-              default = [];
+              members = lib.mkOption {
+                description = "List of kanidm entities (persons, groups, ...) which are part of this group.";
+                type = lib.types.listOf lib.types.str;
+                apply = lib.unique;
+                default = [ ];
+              };
             };
-          };
-          config.members = lib.concatLists (lib.flip lib.mapAttrsToList cfg.provision.persons (person: personCfg:
-            lib.optional (personCfg.present && builtins.elem groupSubmod.config._module.args.name personCfg.groups) person
-          ));
-        }));
+            config.members = lib.concatLists (
+              lib.flip lib.mapAttrsToList cfg.provision.persons (
+                person: personCfg:
+                lib.optional (
+                  personCfg.present && builtins.elem groupSubmod.config._module.args.name personCfg.groups
+                ) person
+              )
+            );
+          })
+        );
       };
 
       persons = lib.mkOption {
         description = "Provisioning of kanidm persons";
-        default = {};
-        type = lib.types.attrsOf (lib.types.submodule {
-          options = {
-            present = mkPresentOption "person";
+        default = { };
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              present = mkPresentOption "person";
 
-            displayName = lib.mkOption {
-              description = "Display name";
-              type = lib.types.str;
-              example = "My User";
-            };
+              displayName = lib.mkOption {
+                description = "Display name";
+                type = lib.types.str;
+                example = "My User";
+              };
 
-            legalName = lib.mkOption {
-              description = "Full legal name";
-              type = lib.types.nullOr lib.types.str;
-              example = "Jane Doe";
-              default = null;
-            };
+              legalName = lib.mkOption {
+                description = "Full legal name";
+                type = lib.types.nullOr lib.types.str;
+                example = "Jane Doe";
+                default = null;
+              };
 
-            mailAddresses = lib.mkOption {
-              description = "Mail addresses. First given address is considered the primary address.";
-              type = lib.types.listOf lib.types.str;
-              example = ["jane.doe@example.com"];
-              default = [];
-            };
+              mailAddresses = lib.mkOption {
+                description = "Mail addresses. First given address is considered the primary address.";
+                type = lib.types.listOf lib.types.str;
+                example = [ "jane.doe@example.com" ];
+                default = [ ];
+              };
 
-            groups = lib.mkOption {
-              description = "List of groups this person should belong to.";
-              type = lib.types.listOf lib.types.str;
-              apply = lib.unique;
-              default = [];
+              groups = lib.mkOption {
+                description = "List of groups this person should belong to.";
+                type = lib.types.listOf lib.types.str;
+                apply = lib.unique;
+                default = [ ];
+              };
             };
-          };
-        });
+          }
+        );
       };
 
       systems.oauth2 = lib.mkOption {
         description = "Provisioning of oauth2 resource servers";
-        default = {};
-        type = lib.types.attrsOf (lib.types.submodule {
-          options = {
-            present = mkPresentOption "oauth2 resource server";
+        default = { };
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              present = mkPresentOption "oauth2 resource server";
 
-            public = lib.mkOption {
-              description = "Whether this is a public client (enforces PKCE, doesn't use a basic secret)";
-              type = lib.types.bool;
-              default = false;
+              public = lib.mkOption {
+                description = "Whether this is a public client (enforces PKCE, doesn't use a basic secret)";
+                type = lib.types.bool;
+                default = false;
+              };
+
+              displayName = lib.mkOption {
+                description = "Display name";
+                type = lib.types.str;
+                example = "Some Service";
+              };
+
+              originUrl = lib.mkOption {
+                description = "The origin URL of the service. OAuth2 redirects will only be allowed to sites under this origin. Must end with a slash.";
+                type =
+                  let
+                    originStrType = lib.types.strMatching ".*://.*/$";
+                  in
+                  lib.types.either originStrType (lib.types.nonEmptyListOf originStrType);
+                example = "https://someservice.example.com/";
+              };
+
+              originLanding = lib.mkOption {
+                description = "When redirecting from the Kanidm Apps Listing page, some linked applications may need to land on a specific page to trigger oauth2/oidc interactions.";
+                type = lib.types.str;
+                example = "https://someservice.example.com/home";
+              };
+
+              basicSecretFile = lib.mkOption {
+                description = ''
+                  The basic secret to use for this service. If null, the random secret generated
+                  by kanidm will not be touched. Do NOT use a path from the nix store here!
+                '';
+                type = lib.types.nullOr lib.types.path;
+                example = "/run/secrets/some-oauth2-basic-secret";
+                default = null;
+              };
+
+              enableLocalhostRedirects = lib.mkOption {
+                description = "Allow localhost redirects. Only for public clients.";
+                type = lib.types.bool;
+                default = false;
+              };
+
+              enableLegacyCrypto = lib.mkOption {
+                description = "Enable legacy crypto on this client. Allows JWT signing algorthms like RS256.";
+                type = lib.types.bool;
+                default = false;
+              };
+
+              allowInsecureClientDisablePkce = lib.mkOption {
+                description = ''
+                  Disable PKCE on this oauth2 resource server to work around insecure clients
+                  that may not support it. You should request the client to enable PKCE!
+                  Only for non-public clients.
+                '';
+                type = lib.types.bool;
+                default = false;
+              };
+
+              preferShortUsername = lib.mkOption {
+                description = "Use 'name' instead of 'spn' in the preferred_username claim";
+                type = lib.types.bool;
+                default = false;
+              };
+
+              scopeMaps = lib.mkOption {
+                description = ''
+                  Maps kanidm groups to returned oauth scopes.
+                  See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
+                '';
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                default = { };
+              };
+
+              supplementaryScopeMaps = lib.mkOption {
+                description = ''
+                  Maps kanidm groups to additionally returned oauth scopes.
+                  See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
+                '';
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                default = { };
+              };
+
+              removeOrphanedClaimMaps = lib.mkOption {
+                description = "Whether claim maps not specified here but present in kanidm should be removed from kanidm.";
+                type = lib.types.bool;
+                default = true;
+              };
+
+              claimMaps = lib.mkOption {
+                description = ''
+                  Adds additional claims (and values) based on which kanidm groups an authenticating party belongs to.
+                  See [Claim Maps](https://kanidm.github.io/kanidm/master/integrations/oauth2.html#custom-claim-maps) for more information.
+                '';
+                default = { };
+                type = lib.types.attrsOf (
+                  lib.types.submodule {
+                    options = {
+                      joinType = lib.mkOption {
+                        description = ''
+                          Determines how multiple values are joined to create the claim value.
+                          See [Claim Maps](https://kanidm.github.io/kanidm/master/integrations/oauth2.html#custom-claim-maps) for more information.
+                        '';
+                        type = lib.types.enum [
+                          "array"
+                          "csv"
+                          "ssv"
+                        ];
+                        default = "array";
+                      };
+
+                      valuesByGroup = lib.mkOption {
+                        description = "Maps kanidm groups to values for the claim.";
+                        default = { };
+                        type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                      };
+                    };
+                  }
+                );
+              };
             };
-
-            displayName = lib.mkOption {
-              description = "Display name";
-              type = lib.types.str;
-              example = "Some Service";
-            };
-
-            originUrl = lib.mkOption {
-              description = "The origin URL of the service. OAuth2 redirects will only be allowed to sites under this origin. Must end with a slash.";
-              type = lib.types.strMatching ".*://.*/$";
-              example = "https://someservice.example.com/";
-            };
-
-            originLanding = lib.mkOption {
-              description = "When redirecting from the Kanidm Apps Listing page, some linked applications may need to land on a specific page to trigger oauth2/oidc interactions.";
-              type = lib.types.str;
-              example = "https://someservice.example.com/home";
-            };
-
-            basicSecretFile = lib.mkOption {
-              description = ''
-                The basic secret to use for this service. If null, the random secret generated
-                by kanidm will not be touched. Do NOT use a path from the nix store here!
-              '';
-              type = lib.types.nullOr lib.types.path;
-              example = "/run/secrets/some-oauth2-basic-secret";
-              default = null;
-            };
-
-            enableLocalhostRedirects = lib.mkOption {
-              description = "Allow localhost redirects. Only for public clients.";
-              type = lib.types.bool;
-              default = false;
-            };
-
-            enableLegacyCrypto = lib.mkOption {
-              description = "Enable legacy crypto on this client. Allows JWT signing algorthms like RS256.";
-              type = lib.types.bool;
-              default = false;
-            };
-
-            allowInsecureClientDisablePkce = lib.mkOption {
-              description = ''
-                Disable PKCE on this oauth2 resource server to work around insecure clients
-                that may not support it. You should request the client to enable PKCE!
-                Only for non-public clients.
-              '';
-              type = lib.types.bool;
-              default = false;
-            };
-
-            preferShortUsername = lib.mkOption {
-              description = "Use 'name' instead of 'spn' in the preferred_username claim";
-              type = lib.types.bool;
-              default = false;
-            };
-
-            scopeMaps = lib.mkOption {
-              description = ''
-                Maps kanidm groups to returned oauth scopes.
-                See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
-              '';
-              type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-              default = {};
-            };
-
-            supplementaryScopeMaps = lib.mkOption {
-              description = ''
-                Maps kanidm groups to additionally returned oauth scopes.
-                See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
-              '';
-              type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-              default = {};
-            };
-
-            removeOrphanedClaimMaps = lib.mkOption {
-              description = "Whether claim maps not specified here but present in kanidm should be removed from kanidm.";
-              type = lib.types.bool;
-              default = true;
-            };
-
-            claimMaps = lib.mkOption {
-              description = ''
-                Adds additional claims (and values) based on which kanidm groups an authenticating party belongs to.
-                See [Claim Maps](https://kanidm.github.io/kanidm/master/integrations/oauth2.html#custom-claim-maps) for more information.
-              '';
-              default = {};
-              type = lib.types.attrsOf (lib.types.submodule {
-                options = {
-                  joinType = lib.mkOption {
-                    description = ''
-                      Determines how multiple values are joined to create the claim value.
-                      See [Claim Maps](https://kanidm.github.io/kanidm/master/integrations/oauth2.html#custom-claim-maps) for more information.
-                    '';
-                    type = lib.types.enum ["array" "csv" "ssv"];
-                    default = "array";
-                  };
-
-                  valuesByGroup = lib.mkOption {
-                    description = "Maps kanidm groups to values for the claim.";
-                    default = {};
-                    type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-                  };
-                };
-              });
-            };
-          };
-        });
+          }
+        );
       };
     };
   };
 
   config = lib.mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
-    assertions = let
-      entityList = type: attrs: lib.flip lib.mapAttrsToList (filterPresent attrs) (name: _: { inherit type name; });
-      entities =
-        entityList "group" cfg.provision.groups
-        ++ entityList "person" cfg.provision.persons
-        ++ entityList "oauth2" cfg.provision.systems.oauth2;
+    assertions =
+      let
+        entityList =
+          type: attrs: lib.flip lib.mapAttrsToList (filterPresent attrs) (name: _: { inherit type name; });
+        entities =
+          entityList "group" cfg.provision.groups
+          ++ entityList "person" cfg.provision.persons
+          ++ entityList "oauth2" cfg.provision.systems.oauth2;
 
-      # Accumulate entities by name. Track corresponding entity types for later duplicate check.
-      entitiesByName = lib.foldl' (acc: { type, name }:
-        acc // {
-          ${name} = (acc.${name} or []) ++ [type];
-        }
-      ) {} entities;
+        # Accumulate entities by name. Track corresponding entity types for later duplicate check.
+        entitiesByName = lib.foldl' (
+          acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
+        ) { } entities;
 
-      assertGroupsKnown = opt: groups: let
-        knownGroups = lib.attrNames (filterPresent cfg.provision.groups);
-        unknownGroups = lib.subtractLists knownGroups groups;
-      in {
-        assertion = (cfg.enableServer && cfg.provision.enable) -> unknownGroups == [];
-        message = "${opt} refers to unknown groups: ${toString unknownGroups}";
-      };
+        assertGroupsKnown =
+          opt: groups:
+          let
+            knownGroups = lib.attrNames (filterPresent cfg.provision.groups);
+            unknownGroups = lib.subtractLists knownGroups groups;
+          in
+          {
+            assertion = (cfg.enableServer && cfg.provision.enable) -> unknownGroups == [ ];
+            message = "${opt} refers to unknown groups: ${toString unknownGroups}";
+          };
 
-      assertEntitiesKnown = opt: entities: let
-        unknownEntities = lib.subtractLists (lib.attrNames entitiesByName) entities;
-      in {
-        assertion = (cfg.enableServer && cfg.provision.enable) -> unknownEntities == [];
-        message = "${opt} refers to unknown entities: ${toString unknownEntities}";
-      };
-    in
+        assertEntitiesKnown =
+          opt: entities:
+          let
+            unknownEntities = lib.subtractLists (lib.attrNames entitiesByName) entities;
+          in
+          {
+            assertion = (cfg.enableServer && cfg.provision.enable) -> unknownEntities == [ ];
+            message = "${opt} refers to unknown entities: ${toString unknownEntities}";
+          };
+      in
       [
         {
-          assertion = !cfg.enableServer || ((cfg.serverSettings.tls_chain or null) == null) || (!lib.isStorePath cfg.serverSettings.tls_chain);
+          assertion =
+            !cfg.enableServer
+            || ((cfg.serverSettings.tls_chain or null) == null)
+            || (!lib.isStorePath cfg.serverSettings.tls_chain);
           message = ''
             <option>services.kanidm.serverSettings.tls_chain</option> points to
             a file in the Nix store. You should use a quoted absolute path to
@@ -566,7 +628,10 @@ in
           '';
         }
         {
-          assertion = !cfg.enableServer || ((cfg.serverSettings.tls_key or null) == null) || (!lib.isStorePath cfg.serverSettings.tls_key);
+          assertion =
+            !cfg.enableServer
+            || ((cfg.serverSettings.tls_key or null) == null)
+            || (!lib.isStorePath cfg.serverSettings.tls_key);
           message = ''
             <option>services.kanidm.serverSettings.tls_key</option> points to
             a file in the Nix store. You should use a quoted absolute path to
@@ -588,8 +653,12 @@ in
           '';
         }
         {
-          assertion = !cfg.enableServer || (cfg.serverSettings.domain == null
-            -> cfg.serverSettings.role == "WriteReplica" || cfg.serverSettings.role == "WriteReplicaNoUI");
+          assertion =
+            !cfg.enableServer
+            || (
+              cfg.serverSettings.domain == null
+              -> cfg.serverSettings.role == "WriteReplica" || cfg.serverSettings.role == "WriteReplicaNoUI"
+            );
           message = ''
             <option>services.kanidm.serverSettings.domain</option> can only be set if this instance
             is not a ReadOnlyReplica. Otherwise the db would inherit it from
@@ -602,63 +671,96 @@ in
         }
         # If any secret is provisioned, the kanidm package must have some required patches applied to it
         {
-          assertion = (cfg.provision.enable &&
-            (cfg.provision.adminPasswordFile != null
-              || cfg.provision.idmAdminPasswordFile != null
-              || lib.any (x: x.basicSecretFile != null) (lib.attrValues (filterPresent cfg.provision.systems.oauth2))
-            )) -> cfg.package.enableSecretProvisioning;
+          assertion =
+            (
+              cfg.provision.enable
+              && (
+                cfg.provision.adminPasswordFile != null
+                || cfg.provision.idmAdminPasswordFile != null
+                || lib.any (x: x.basicSecretFile != null) (
+                  lib.attrValues (filterPresent cfg.provision.systems.oauth2)
+                )
+              )
+            )
+            -> cfg.package.enableSecretProvisioning;
           message = ''
             Specifying an admin account password or oauth2 basicSecretFile requires kanidm to be built with the secret provisioning patches.
             You may want to set `services.kanidm.package = pkgs.kanidm.withSecretProvisioning;`.
           '';
         }
         # Entity names must be globally unique:
-        (let
-          # Filter all names that occurred in more than one entity type.
-          duplicateNames = lib.filterAttrs (_: v: builtins.length v > 1) entitiesByName;
-        in {
-          assertion = cfg.provision.enable -> duplicateNames == {};
-          message = ''
-            services.kanidm.provision requires all entity names (group, person, oauth2, ...) to be unique!
-            ${lib.concatLines (lib.mapAttrsToList (name: xs: "  - '${name}' used as: ${toString xs}") duplicateNames)}'';
-        })
+        (
+          let
+            # Filter all names that occurred in more than one entity type.
+            duplicateNames = lib.filterAttrs (_: v: builtins.length v > 1) entitiesByName;
+          in
+          {
+            assertion = cfg.provision.enable -> duplicateNames == { };
+            message = ''
+              services.kanidm.provision requires all entity names (group, person, oauth2, ...) to be unique!
+              ${lib.concatLines (
+                lib.mapAttrsToList (name: xs: "  - '${name}' used as: ${toString xs}") duplicateNames
+              )}'';
+          }
+        )
       ]
-      ++ lib.flip lib.mapAttrsToList (filterPresent cfg.provision.persons) (person: personCfg:
+      ++ lib.flip lib.mapAttrsToList (filterPresent cfg.provision.persons) (
+        person: personCfg:
         assertGroupsKnown "services.kanidm.provision.persons.${person}.groups" personCfg.groups
       )
-      ++ lib.flip lib.mapAttrsToList (filterPresent cfg.provision.groups) (group: groupCfg:
+      ++ lib.flip lib.mapAttrsToList (filterPresent cfg.provision.groups) (
+        group: groupCfg:
         assertEntitiesKnown "services.kanidm.provision.groups.${group}.members" groupCfg.members
       )
-      ++ lib.concatLists (lib.flip lib.mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
-        oauth2: oauth2Cfg:
+      ++ lib.concatLists (
+        lib.flip lib.mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
+          oauth2: oauth2Cfg:
           [
-            (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (lib.attrNames oauth2Cfg.scopeMaps))
-            (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (lib.attrNames oauth2Cfg.supplementaryScopeMaps))
+            (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
+              lib.attrNames oauth2Cfg.scopeMaps
+            ))
+            (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (
+              lib.attrNames oauth2Cfg.supplementaryScopeMaps
+            ))
           ]
-          ++ lib.concatLists (lib.flip lib.mapAttrsToList oauth2Cfg.claimMaps (claim: claimCfg: [
-            (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (lib.attrNames claimCfg.valuesByGroup))
-            # At least one group must map to a value in each claim map
-            {
-              assertion = (cfg.provision.enable && cfg.enableServer) -> lib.any (xs: xs != []) (lib.attrValues claimCfg.valuesByGroup);
-              message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
-            }
-            # Public clients cannot define a basic secret
-            {
-              assertion = (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public) -> oauth2Cfg.basicSecretFile == null;
-              message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot specify a basic secret";
-            }
-            # Public clients cannot disable PKCE
-            {
-              assertion = (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public) -> !oauth2Cfg.allowInsecureClientDisablePkce;
-              message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot disable PKCE";
-            }
-            # Non-public clients cannot enable localhost redirects
-            {
-              assertion = (cfg.provision.enable && cfg.enableServer && !oauth2Cfg.public) -> !oauth2Cfg.enableLocalhostRedirects;
-              message = "services.kanidm.provision.systems.oauth2.${oauth2} is a non-public client and thus cannot enable localhost redirects";
-            }
-          ]))
-      ));
+          ++ lib.concatLists (
+            lib.flip lib.mapAttrsToList oauth2Cfg.claimMaps (
+              claim: claimCfg: [
+                (assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (
+                  lib.attrNames claimCfg.valuesByGroup
+                ))
+                # At least one group must map to a value in each claim map
+                {
+                  assertion =
+                    (cfg.provision.enable && cfg.enableServer)
+                    -> lib.any (xs: xs != [ ]) (lib.attrValues claimCfg.valuesByGroup);
+                  message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
+                }
+                # Public clients cannot define a basic secret
+                {
+                  assertion =
+                    (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public) -> oauth2Cfg.basicSecretFile == null;
+                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot specify a basic secret";
+                }
+                # Public clients cannot disable PKCE
+                {
+                  assertion =
+                    (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public)
+                    -> !oauth2Cfg.allowInsecureClientDisablePkce;
+                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot disable PKCE";
+                }
+                # Non-public clients cannot enable localhost redirects
+                {
+                  assertion =
+                    (cfg.provision.enable && cfg.enableServer && !oauth2Cfg.public)
+                    -> !oauth2Cfg.enableLocalhostRedirects;
+                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a non-public client and thus cannot enable localhost redirects";
+                }
+              ]
+            )
+          )
+        )
+      );
 
     environment.systemPackages = lib.mkIf cfg.enableClient [ cfg.package ];
 
@@ -676,9 +778,12 @@ in
       after = [ "network.target" ];
       serviceConfig = lib.mkMerge [
         # Merge paths and ignore existing prefixes needs to sidestep mkMerge
-        (defaultServiceConfig // {
-          BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ certPaths);
-        })
+        (
+          defaultServiceConfig
+          // {
+            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ certPaths);
+          }
+        )
         {
           StateDirectory = "kanidm";
           StateDirectoryMode = "0700";
@@ -701,7 +806,11 @@ in
           PrivateUsers = lib.mkForce false;
           # Port needs to be exposed to the host network
           PrivateNetwork = lib.mkForce false;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
           TemporaryFileSystem = "/:ro";
         }
       ];
@@ -712,7 +821,10 @@ in
       description = "Kanidm PAM daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      restartTriggers = [ unixConfigFile clientConfigFile ];
+      restartTriggers = [
+        unixConfigFile
+        clientConfigFile
+      ];
       serviceConfig = lib.mkMerge [
         defaultServiceConfig
         {
@@ -737,7 +849,11 @@ in
           ];
           # Needs to connect to kanidmd
           PrivateNetwork = lib.mkForce false;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
           TemporaryFileSystem = "/:ro";
         }
       ];
@@ -747,9 +863,15 @@ in
     systemd.services.kanidm-unixd-tasks = lib.mkIf cfg.enablePam {
       description = "Kanidm PAM home management daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "kanidm-unixd.service" ];
+      after = [
+        "network.target"
+        "kanidm-unixd.service"
+      ];
       partOf = [ "kanidm-unixd.service" ];
-      restartTriggers = [ unixConfigFile clientConfigFile ];
+      restartTriggers = [
+        unixConfigFile
+        clientConfigFile
+      ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/kanidm_unixd_tasks";
 
@@ -769,7 +891,12 @@ in
           "/run/kanidm-unixd:/var/run/kanidm-unixd"
         ];
         # CAP_DAC_OVERRIDE is needed to ignore ownership of unixd socket
-        CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_FOWNER" "CAP_DAC_OVERRIDE" "CAP_DAC_READ_SEARCH" ];
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_FOWNER"
+          "CAP_DAC_OVERRIDE"
+          "CAP_DAC_READ_SEARCH"
+        ];
         IPAddressDeny = "any";
         # Need access to users
         PrivateUsers = false;
@@ -784,15 +911,11 @@ in
 
     # These paths are hardcoded
     environment.etc = lib.mkMerge [
-      (lib.mkIf cfg.enableServer {
-        "kanidm/server.toml".source = serverConfigFile;
-      })
+      (lib.mkIf cfg.enableServer { "kanidm/server.toml".source = serverConfigFile; })
       (lib.mkIf options.services.kanidm.clientSettings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })
-      (lib.mkIf cfg.enablePam {
-        "kanidm/unixd".source = unixConfigFile;
-      })
+      (lib.mkIf cfg.enablePam { "kanidm/unixd".source = unixConfigFile; })
     ];
 
     system.nssModules = lib.mkIf cfg.enablePam [ cfg.package ];
@@ -801,12 +924,8 @@ in
     system.nssDatabases.passwd = lib.optional cfg.enablePam "kanidm";
 
     users.groups = lib.mkMerge [
-      (lib.mkIf cfg.enableServer {
-        kanidm = { };
-      })
-      (lib.mkIf cfg.enablePam {
-        kanidm-unixd = { };
-      })
+      (lib.mkIf cfg.enableServer { kanidm = { }; })
+      (lib.mkIf cfg.enablePam { kanidm-unixd = { }; })
     ];
     users.users = lib.mkMerge [
       (lib.mkIf cfg.enableServer {
@@ -827,6 +946,10 @@ in
     ];
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen Flakebi oddlama ];
+  meta.maintainers = with lib.maintainers; [
+    erictapen
+    Flakebi
+    oddlama
+  ];
   meta.buildDocsInSandbox = false;
 }

@@ -1043,19 +1043,27 @@ let
           "Managed"
           "OtherInformation"
           "RouterLifetimeSec"
+          "RetransmitSec"
           "RouterPreference"
+          "HopLimit"
           "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitDomains"
           "Domains"
           "DNSLifetimeSec"
+          "HomeAgent"
+          "HomeAgentLifetimeSec"
+          "HomeAgentPreference"
         ])
         (assertValueOneOf "Managed" boolValues)
         (assertValueOneOf "OtherInformation" boolValues)
         (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+        (assertInt "HopLimit")
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitDomains" boolValues)
+        (assertValueOneOf "HomeAgent" boolValues)
+        (assertInt "HomeAgentPreference")
       ];
 
       sectionIPv6PREF64Prefix = checkUnitConfigWithLegacyKey "ipv6PREF64PrefixConfig" "IPv6PREF64Prefix" [

@@ -3996,6 +3996,8 @@ self: super: with self; {
 
   ephemeral-port-reserve = callPackage ../development/python-modules/ephemeral-port-reserve { };
 
+  epicstore-api = callPackage ../development/python-modules/epicstore-api { };
+
   epion = callPackage ../development/python-modules/epion { };
 
   epitran = callPackage ../development/python-modules/epitran { };
@@ -4649,14 +4651,6 @@ self: super: with self; {
 
   oelint-parser = callPackage ../development/python-modules/oelint-parser { };
 
-  openllm = callPackage ../development/python-modules/openllm {
-    triton = self.triton-cuda;
-  };
-
-  openllm-client = callPackage ../development/python-modules/openllm-client { };
-
-  openllm-core = callPackage ../development/python-modules/openllm-core { };
-
   openstep-parser = callPackage ../development/python-modules/openstep-parser { };
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
@@ -4704,6 +4698,10 @@ self: super: with self; {
   freebox-api = callPackage ../development/python-modules/freebox-api { };
 
   freertos-gdb = callPackage ../development/python-modules/freertos-gdb { };
+
+  freesasa = callPackage ../development/python-modules/freesasa {
+    inherit (pkgs) freesasa;
+  };
 
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
@@ -5146,6 +5144,8 @@ self: super: with self; {
   google-cloud-monitoring = callPackage ../development/python-modules/google-cloud-monitoring { };
 
   google-cloud-netapp = callPackage ../development/python-modules/google-cloud-netapp { };
+
+  google-cloud-network-connectivity = callPackage ../development/python-modules/google-cloud-network-connectivity { };
 
   google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
 
@@ -5920,6 +5920,8 @@ self: super: with self; {
 
   ilua = callPackage ../development/python-modules/ilua { };
 
+  ilcli = callPackage ../development/python-modules/ilcli { };
+
   imagecodecs-lite = callPackage ../development/python-modules/imagecodecs-lite { };
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
@@ -6620,6 +6622,8 @@ self: super: with self; {
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
+  kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
+
   keba-kecontact = callPackage ../development/python-modules/keba-kecontact { };
 
   keep = callPackage ../development/python-modules/keep { };
@@ -6667,7 +6671,7 @@ self: super: with self; {
   khanaa = callPackage ../development/python-modules/khanaa {};
 
   kicad = toPythonModule (pkgs.kicad.override {
-    python311 = python;
+    python3 = python;
   }).src;
 
   kinparse = callPackage ../development/python-modules/kinparse { };
@@ -9376,6 +9380,8 @@ self: super: with self; {
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
 
+  py-machineid = callPackage ../development/python-modules/py-machineid { };
+
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
@@ -10598,6 +10604,8 @@ self: super: with self; {
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
 
+  pytouchlinesl = callPackage ../development/python-modules/pytouchlinesl { };
+
   pyuca = callPackage ../development/python-modules/pyuca { };
 
   pyunpack = callPackage ../development/python-modules/pyunpack { };
@@ -11547,8 +11555,6 @@ self: super: with self; {
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
 
-  pygeoip = callPackage ../development/python-modules/pygeoip { };
-
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
@@ -11999,6 +12005,8 @@ self: super: with self; {
   pyopengl = callPackage ../development/python-modules/pyopengl { };
 
   pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
+
+  pyopengltk = callPackage ../development/python-modules/pyopengltk { };
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
@@ -14374,8 +14382,6 @@ self: super: with self; {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
-  shapely_1_8 = callPackage ../development/python-modules/shapely/1.8.nix { };
-
   shaperglot = callPackage ../development/python-modules/shaperglot { };
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
@@ -14791,6 +14797,8 @@ self: super: with self; {
   sparqlwrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   sparse = callPackage ../development/python-modules/sparse { };
+
+  sparsezoo = callPackage ../development/python-modules/sparsezoo { };
 
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 
@@ -15996,8 +16004,6 @@ self: super: with self; {
 
   trezor = callPackage ../development/python-modules/trezor { };
 
-  trfl = callPackage ../development/python-modules/trfl { };
-
   trimesh = callPackage ../development/python-modules/trimesh { };
 
   trino-python-client = callPackage ../development/python-modules/trino-python-client { };
@@ -16985,6 +16991,8 @@ self: super: with self; {
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;
   };
+
+  ufal-chu-liu-edmonds = callPackage ../development/python-modules/ufal-chu-liu-edmonds { };
 
   ufmt = callPackage ../development/python-modules/ufmt { };
 

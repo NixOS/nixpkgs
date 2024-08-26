@@ -141,7 +141,7 @@ in {
   authelia = handleTest ./authelia.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
-  ayatana-indicators = handleTest ./ayatana-indicators.nix {};
+  ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = handleTest ./babeld.nix {};
   bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
@@ -545,6 +545,7 @@ in {
   lomiri-calculator-app = runTest ./lomiri-calculator-app.nix;
   lomiri-camera-app = runTest ./lomiri-camera-app.nix;
   lomiri-clock-app = runTest ./lomiri-clock-app.nix;
+  lomiri-docviewer-app = runTest ./lomiri-docviewer-app.nix;
   lomiri-filemanager-app = runTest ./lomiri-filemanager-app.nix;
   lomiri-gallery-app = runTest ./lomiri-gallery-app.nix;
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};
@@ -680,6 +681,7 @@ in {
   nix-config = handleTest ./nix-config.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
   nix-misc = handleTest ./nix/misc.nix {};
+  nix-upgrade = handleTest ./nix/upgrade.nix {inherit (pkgs) nixVersions;};
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = handleTest ./nix-serve.nix {};
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};

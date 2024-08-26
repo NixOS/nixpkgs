@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.8.2";
+  version = "2024.8.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -1069,7 +1069,8 @@
       pyephember
     ];
     "epic_games_store" = ps: with ps; [
-    ]; # missing inputs: epicstore-api
+      epicstore-api
+    ];
     "epion" = ps: with ps; [
       epion
     ];
@@ -5023,6 +5024,7 @@
     "enocean"
     "enphase_envoy"
     "environment_canada"
+    "epic_games_store"
     "epion"
     "epson"
     "eq3btsmart"

@@ -75,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-deu8zvgseDg2gQEnZiCda4TrbA6pleE9iItoZlsoMtE=";
   };
 
+  # Fixes broken OpenGL applications on Apple silicon (Asahi Linux)
+  # Based on commit https://github.com/hyprwm/Hyprland/commit/279ec1c291021479b050c83a0435ac7076c1aee0
+  patches = [ ./asahi-fix.patch ];
+
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp

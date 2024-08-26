@@ -22,14 +22,11 @@ buildPythonPackage rec {
   };
 
   # xrootd<6.0.0,>=5.6.4 not satisfied by version 5.7rc20240303
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'xrootd = "^5.6.4"' ""
-  '';
+  pythonRelaxDeps = [ "xrootd" ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     snakemake-interface-storage-plugins
     snakemake-interface-common
     xrootd
