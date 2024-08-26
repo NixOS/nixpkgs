@@ -19540,6 +19540,7 @@ with pkgs;
 
   botan3 = callPackage ../development/libraries/botan/3.0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (darwin.apple_sdk) Libsystem;
   };
 
   box2d = callPackage ../development/libraries/box2d {

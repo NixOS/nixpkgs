@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
+{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost, libcxx
 # Passed by version specific builders
 , baseVersion, revision, hash
 , sourceExtension ? "tar.xz"
@@ -9,6 +9,7 @@
 , knownVulnerabilities ? [ ]
 , CoreServices ? null
 , Security ? null
+, Libsystem ? null
 , ...
 }:
 
@@ -31,7 +32,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ bzip2 zlib gmp boost ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  ++ lib.optionals stdenv.isDarwin [
+    # Trying to do something about libcxx losing priority for stdint.h
+    libcxx
+    CoreServices Security Libsystem
+    libcxx
+  ];
 
   configurePhase = ''
     runHook preConfigure
