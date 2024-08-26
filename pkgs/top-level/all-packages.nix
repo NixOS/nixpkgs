@@ -12673,10 +12673,6 @@ with pkgs;
 
   snort = callPackage ../applications/networking/ids/snort { };
 
-  so = callPackage ../development/tools/so {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   soapui = callPackage ../applications/networking/soapui {
     jdk = if stdenv.isDarwin
       then (jdk11.override { enableJavaFX = true; })
