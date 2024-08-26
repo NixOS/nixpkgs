@@ -1,4 +1,4 @@
-{ fetchgit, fetchurl, lib, writers, python3Packages, runCommand, cargo, jq }:
+{ fetchgit, fetchurl, lib, writers, python3Packages, runCommand, applyPatches, writeTextFile, cargo, jq }:
 
 {
   # Cargo lock file
@@ -6,6 +6,9 @@
 
   # Cargo lock file contents as string
 , lockFileContents ? null
+
+  # Applying patches requires IFD thus cannot be used in nixpkgs.
+, patches ? null
 
   # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
 , allowBuiltinFetchGit ? false
@@ -41,11 +44,32 @@ let
         sha = builtins.elemAt parts 4;
       } // lib.optionalAttrs (type != null) { inherit type value; };
 
-  # shadows args.lockFileContents
-  lockFileContents =
-    if lockFile != null
-    then builtins.readFile lockFile
+  lockFileContents' =
+    if (args.lockFile or null) != null
+    then builtins.readFile args.lockFile
     else args.lockFileContents;
+
+  lockFile' = (
+    applyPatches {
+      name = "cargo-lockFileContents-patched";
+      inherit patches;
+      unpackPhase = "cp $src ./Cargo.lock && chmod +w Cargo.lock";
+      installPhase = "cp ./Cargo.lock $out";
+      src =
+        if (args.lockFile or null) != null then
+          args.lockFile
+        else
+          writeTextFile {
+            name = "cargo-lockFileContents";
+            text = lockFileContents';
+          };
+    }
+  );
+
+  # shadows args.lockFile
+  lockFile = if patches != null then lockFile' else (args.lockFile or null);
+  # shadows args.lockFileContents
+  lockFileContents = if patches != null then builtins.readFile lockFile else lockFileContents';
 
   parsedLockFile = builtins.fromTOML lockFileContents;
 
