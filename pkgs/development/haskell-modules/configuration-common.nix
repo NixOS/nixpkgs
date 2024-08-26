@@ -204,16 +204,6 @@ self: super: {
   # https://github.com/yesodweb/shakespeare/issues/280
   shakespeare = doDistribute self.shakespeare_2_1_0_1;
 
-  # https://github.com/mpickering/eventlog2html/pull/187
-  eventlog2html = lib.pipe super.eventlog2html [
-    doJailbreak
-    (appendPatch (fetchpatch {
-      name = "blaze-html-compat.patch";
-      url = "https://github.com/mpickering/eventlog2html/commit/666aee9ee44c571173a73036b36ad4154c188481.patch";
-      sha256 = "sha256-9PLygLEpJ6pAZ31gSWiEMqWxmvElT6Unc/pgr6ULIaw=";
-    }))
-   ];
-
   # 2023-08-09: Jailbreak because of vector < 0.13
   # 2023-11-09: don't check because of https://github.com/tweag/monad-bayes/pull/326
   monad-bayes = dontCheck (doJailbreak super.monad-bayes);
