@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
   meta.maintainers = with lib.maintainers; [ hexa ];
 
   nodes = {
-    machine = { config, ... }: {
+    machine = {
       services.frigate = {
         enable = true;
 
@@ -44,20 +44,29 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
           Restart = "always";
         };
       };
+
+      environment.systemPackages = with pkgs; [ httpie ];
     };
   };
 
   testScript = ''
     start_all()
 
+    # wait until frigate is up
     machine.wait_for_unit("frigate.service")
-
-    # Frigate startup
     machine.wait_for_open_port(5001)
-    machine.wait_until_succeeds("journalctl -u frigate.service -o cat | grep -q 'Created a default user'")
 
-    #machine.log(machine.succeed("curl -vvv --fail http://localhost/api/version")[1])
+    # extract admin password from logs
+    machine.wait_until_succeeds("journalctl -u frigate.service -o cat | grep -q 'Password: '")
+    password = machine.execute("journalctl -u frigate.service -o cat | grep -oP '([a-f0-9]{32})'")[1]
 
+    # login and store session
+    machine.log(machine.succeed(f"http --check-status --session=frigate post http://localhost/api/login user=admin password={password}"))
+
+    # make authenticated api requested
+    machine.log(machine.succeed("http --check-status --session=frigate get http://localhost/api/version"))
+
+    # wait for a recording to appear
     machine.wait_for_file("/var/cache/frigate/test@*.mp4")
   '';
 })
