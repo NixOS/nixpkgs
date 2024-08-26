@@ -6991,6 +6991,12 @@
     githubId = 14952658;
     name = "Tom Dohrmann";
   };
+  frectonz = {
+    name = "Fraol Lemecha";
+    email = "fraol0912@gmail.com";
+    github = "frectonz";
+    githubId = 53809656;
+  };
   fredeb = {
     email = "im@fredeb.dev";
     github = "FredeEB";
