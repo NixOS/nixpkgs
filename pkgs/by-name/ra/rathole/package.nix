@@ -9,18 +9,18 @@
   darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rathole";
-  version = "0.5.0";
+  version = "0.5.0-unstable-2024-06-06";
 
   src = fetchFromGitHub {
     owner = "rapiz1";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YfLzR1lHk+0N3YU1XTNxz+KE1S3xaiKJk0zASm6cr1s=";
+    repo = "rathole";
+    rev = "be14d124a22e298d12d92e56ef4fec0e51517998";
+    hash = "sha256-C0/G4JOZ4pTAvcKZhRHsGvlLlwAyWBQ0rMScLvaLSuA=";
   };
 
-  cargoHash = "sha256-UyQXAUPnp32THZJAs/p3bIXZjcXTvjy207QBVLCfkr8=";
+  cargoHash = "sha256-zlwIgzqpoEgYqZe4Gv8owJQ3m7UFgPA5joRMiyq+T/M=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -30,18 +30,18 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  doCheck = false; # https://github.com/rapiz1/rathole/issues/222
-
   passthru.tests = {
     inherit (nixosTests) rathole;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Reverse proxy for NAT traversal";
     homepage = "https://github.com/rapiz1/rathole";
-    changelog = "https://github.com/rapiz1/rathole/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
     mainProgram = "rathole";
+    maintainers = with lib.maintainers; [
+      dit7ya
+      xokdvium
+    ];
   };
 }
