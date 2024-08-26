@@ -10,12 +10,13 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
+  pydantic,
   responses,
 }:
 
 buildPythonPackage rec {
   pname = "fhir-py";
-  version = "1.4.2";
+  version = "2.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "beda-software";
     repo = "fhir-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kYqoRso1ypN5novRxMMzz1h2NGNybbw5lK4+HErG79I=";
+    hash = "sha256-WDYDQqeNwt4cKEgF+HqMOuEwUezS10YUOZp+eAui6nM=";
   };
 
   build-system = [ flit-core ];
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-cov-stub
+    pydantic
     responses
   ];
 

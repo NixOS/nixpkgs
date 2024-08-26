@@ -1,33 +1,34 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qttools
-, qtx11extras
-, qtmultimedia
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qtmpris
-, qtdbusextended
-, gsettings-qt
-, elfutils
-, ffmpeg
-, ffmpegthumbnailer
-, mpv
-, xorg
-, pcre
-, libdvdread
-, libdvdnav
-, libunwind
-, libva
-, zstd
-, glib
-, gst_all_1
-, gtest
-, libpulseaudio
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qttools,
+  qtx11extras,
+  qtmultimedia,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  qtmpris,
+  qtdbusextended,
+  gsettings-qt,
+  elfutils,
+  ffmpeg,
+  ffmpegthumbnailer,
+  mpv,
+  xorg,
+  pcre,
+  libdvdread,
+  libdvdnav,
+  libunwind,
+  libva,
+  zstd,
+  glib,
+  gst_all_1,
+  gtest,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,11 +42,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-1UbrNufetedla8TMFPze1hP/R2cZN7SEYEtrK4/5/RQ=";
   };
 
-  patches = [
-    ./dont_use_libPath.diff
-  ];
+  patches = [ ./dont_use_libPath.diff ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,34 +56,36 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    dtkwidget
-    qt5integration
-    qt5platform-plugins
-    qtx11extras
-    qtmultimedia
-    qtdbusextended
-    qtmpris
-    gsettings-qt
-    elfutils
-    ffmpeg
-    ffmpegthumbnailer
-    xorg.libXtst
-    xorg.libXdmcp
-    xorg.xcbproto
-    pcre.dev
-    libdvdread
-    libdvdnav
-    libunwind
-    libva
-    zstd
-    mpv
-    gtest
-    libpulseaudio
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-  ]);
+  buildInputs =
+    [
+      dtkwidget
+      qt5integration
+      qt5platform-plugins
+      qtx11extras
+      qtmultimedia
+      qtdbusextended
+      qtmpris
+      gsettings-qt
+      elfutils
+      ffmpeg
+      ffmpegthumbnailer
+      xorg.libXtst
+      xorg.libXdmcp
+      xorg.xcbproto
+      pcre.dev
+      libdvdread
+      libdvdnav
+      libunwind
+      libva
+      zstd
+      mpv
+      gtest
+      libpulseaudio
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+    ]);
 
   propagatedBuildInputs = [
     qtmultimedia
@@ -94,14 +98,20 @@ stdenv.mkDerivation rec {
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
   ];
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
   strictDeps = true;
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ mpv ffmpeg ffmpegthumbnailer gst_all_1.gstreamer gst_all_1.gst-plugins-base ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        mpv
+        ffmpeg
+        ffmpegthumbnailer
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-base
+      ]
+    }"
   ];
 
   preFixup = ''

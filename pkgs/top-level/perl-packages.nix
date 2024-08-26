@@ -844,10 +844,11 @@ with self; {
     # Use TLS endpoints for downloads and metadata by default
     preConfigure = ''
       substituteInPlace bin/cpanm \
-        --replace http://www.cpan.org https://www.cpan.org \
-        --replace http://backpan.perl.org https://backpan.perl.org \
-        --replace http://fastapi.metacpan.org https://fastapi.metacpan.org \
-        --replace http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
+        --replace-fail http://www.cpan.org https://www.cpan.org \
+        --replace-fail http://cpan.metacpan.org https://cpan.metacpan.org \
+        --replace-fail http://backpan.perl.org https://backpan.perl.org \
+        --replace-fail http://fastapi.metacpan.org https://fastapi.metacpan.org \
+        --replace-fail http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
     '';
     propagatedBuildInputs = [ IOSocketSSL ];
     meta = {
