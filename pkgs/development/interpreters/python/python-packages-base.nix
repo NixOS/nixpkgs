@@ -95,25 +95,18 @@ let
 
     # Example
     :::{.example}
-    ## Using `toPythonModule` to provide `home-assistant` as a library to a python script.
-    ```python
-    # main.py
-    import homeassistant
-
-    print("Hello ", homeassistant)
-    ```
+    ## Using `toPythonModule` to provide `opencv` as a library to a python script.
 
     ```nix
-    pkgs.writers.writePython3Bin "hello-home-assistant" {
-      libraries = [
-        (pkgs.python3Packages.toPythonModule pkgs.home-assistant)
-      ];
-    } ./main.py;
+    pkgs.python3.withPackages (ps: [
+      (ps.toPythonModule (pkgs.opencv.override { enablePython = true; pythonPackages = ps; } ))
+    ])
+    ->
+    out -> /nix/store/sixwhy65vfvlhacgf2c3gnxm1sjp6if1-python3-3.12.4-env
     ```
 
     ```bash
-    ./result/bin/hello-home-assistant
-    Hello <module 'homeassistant' from '/nix/store/zzf1q2h482kw82f23qp4vz8gw8s15rr6-python3-3.12.4-env/lib/python3.12/site-packages/homeassistant/__init__.py'>
+    ./result/bin/python -c "import cv2"
     ```
     :::
   */
