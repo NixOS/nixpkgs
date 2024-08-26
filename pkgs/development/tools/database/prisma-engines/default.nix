@@ -14,13 +14,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.16.1";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-uJJX5lI0YFXygWLeaOuYxjgyswJcjSujPcqHn1aKn8M=";
+    hash = "sha256-ucAOz00dBgX2Bb63ueaBbyu1XtVQD+96EncUyo7STwA=";
   };
 
   # Use system openssl.
@@ -43,6 +43,12 @@ rustPlatform.buildRustPackage rec {
     openssl
     protobuf
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  # FIXME: Workaround Rust 1.80 support by updating time to 0.3.36
+  # https://github.com/prisma/prisma-engines/issues/4989
+  postPatch = ''
+    ln -sfn ${./Cargo.lock} Cargo.lock
+  '';
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
