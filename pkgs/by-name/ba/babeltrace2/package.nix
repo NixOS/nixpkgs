@@ -16,7 +16,7 @@
   enablePython ? false,
   python ? null,
   pythonPackages ? null,
-  swig,
+  swig4,
   ensureNewerSourcesForZipFilesHook,
 }:
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       docbook_xsl
     ]
     ++ lib.optionals enablePython [
-      swig
+      swig4
       pythonPackages.setuptools
       ensureNewerSourcesForZipFilesHook
     ];
