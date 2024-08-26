@@ -414,7 +414,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1y25ac341d77dkb94qny3h5id2xlpqh9hrjr0s6pp66xghbcvzn4";
+      sha256 = "1h0vbz95jgj8c380rpy688frnbwind5c2y3ylaw06l2l3j6gdaq3";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
