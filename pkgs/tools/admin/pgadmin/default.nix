@@ -173,7 +173,7 @@ pythonPackages.buildPythonApplication rec {
     python-dateutil
     sqlalchemy
     itsdangerous
-    flask-security-too
+    flask-security
     bcrypt
     cryptography
     sshtunnel

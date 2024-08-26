@@ -47,7 +47,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "flask-security-too";
+  pname = "flask-security";
   version = "5.5.0";
   pyproject = true;
 
@@ -123,9 +123,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_security" ];
 
   meta = with lib; {
-    changelog = "https://github.com/Flask-Middleware/flask-security/blob/${version}/CHANGES.rst";
-    homepage = "https://github.com/Flask-Middleware/flask-security";
-    description = "Simple security for Flask apps (fork)";
+    changelog = "https://github.com/pallets-eco/flask-security/blob/${version}/CHANGES.rst";
+    homepage = "https://github.com/pallets-eco/flask-security";
+    description = "Quickly add security features to your Flask application";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
   };
