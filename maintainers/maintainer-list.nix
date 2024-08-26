@@ -13993,6 +13993,12 @@
     githubId = 254443;
     name = "Mathieu Rene";
   };
+  mrflos = {
+    email = "mrflos@yeswiki.pro";
+    github = "mrflos";
+    githubId = 124845;
+    name = "Florian Schmitt";
+  };
   mrfreezeex = {
     email = "arthur@cri.epita.fr";
     github = "MrFreezeex";
