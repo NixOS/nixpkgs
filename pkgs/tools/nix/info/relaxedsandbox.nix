@@ -1,6 +1,7 @@
 let
-  pkgs = import <nixpkgs> {};
-in pkgs.runCommand "diagnostics-sandbox"
+  pkgs = import <nixpkgs> { };
+in
+pkgs.runCommand "diagnostics-sandbox"
   {
     __noChroot = true;
   }
