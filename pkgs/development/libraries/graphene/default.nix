@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   in lib.optionalString withIntrospection ''
     if [ -x '${introspectionPy}' ] ; then
       wrapProgram '${introspectionPy}' \
-        --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ glib.out (placeholder "out") ]}"
     fi
   '';
 
