@@ -1,15 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
-  setuptools,
+  flit-core,
 
   # extras: babel
   babel,
   flask-babel,
 
   # extras: common
+  argon2-cffi,
   bcrypt,
   bleach,
   flask-mailman,
@@ -31,12 +32,14 @@
   flask-login,
   flask-principal,
   flask-wtf,
+  markupsafe,
   passlib,
   importlib-resources,
   wtforms,
 
   # tests
-  argon2-cffi,
+  authlib,
+  flask-sqlalchemy-lite,
   freezegun,
   mongoengine,
   mongomock,
@@ -48,18 +51,24 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.5.0";
+  version = "5.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "flask_security_too";
-    inherit version;
-    hash = "sha256-nuYOqKgH3Wfk2IFEDUhWUB6aP1xZ+c4DK7n0zB01TSk=";
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
+    repo = "flask-security";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail phonenumberslite phonenumbers
+  '';
+
+  build-system = [ flit-core ];
 
   # flask-login>=0.6.2 not satisfied by version 0.7.0.dev0
   pythonRelaxDeps = [ "flask-login" ];
@@ -70,17 +79,19 @@ buildPythonPackage rec {
     flask-login
     flask-principal
     flask-wtf
+    markupsafe
     passlib
     importlib-resources
     wtforms
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     babel = [
       babel
       flask-babel
     ];
     common = [
+      argon2-cffi
       bcrypt
       bleach
       flask-mailman
@@ -100,7 +111,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs =
     [
-      argon2-cffi
+      authlib
+      flask-sqlalchemy-lite
       freezegun
       mongoengine
       mongomock
@@ -108,12 +120,15 @@ buildPythonPackage rec {
       pony
       pytestCheckHook
       zxcvbn
-      freezegun
     ]
-    ++ passthru.optional-dependencies.babel
-    ++ passthru.optional-dependencies.common
-    ++ passthru.optional-dependencies.fsqla
-    ++ passthru.optional-dependencies.mfa;
+    ++ optional-dependencies.babel
+    ++ optional-dependencies.common
+    ++ optional-dependencies.fsqla
+    ++ optional-dependencies.mfa;
+
+  preCheck = ''
+    pybabel compile --domain flask_security -d flask_security/translations
+  '';
 
   disabledTests = [
     # needs /etc/resolv.conf
