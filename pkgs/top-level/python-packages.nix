@@ -4524,6 +4524,8 @@ self: super: with self; {
 
   flask-sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
+  flask-sqlalchemy-lite = callPackage ../development/python-modules/flask-sqlalchemy-lite { };
+
   flask-sslify = callPackage ../development/python-modules/flask-sslify { };
 
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
