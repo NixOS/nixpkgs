@@ -48,10 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DHPP_FCL_HAS_QHULL=ON"
-    "-DINSTALL_DOCUMENTATION=ON"
-  ] ++ lib.optionals (!pythonSupport) [
-    "-DBUILD_PYTHON_INTERFACE=OFF"
+    (lib.cmakeBool "HPP_FCL_HAS_QHULL" true)
+    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
   ];
 
   doCheck = true;
