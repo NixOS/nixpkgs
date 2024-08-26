@@ -17,6 +17,7 @@ let
       lomiri-calculator-app = callPackage ./applications/lomiri-calculator-app { };
       lomiri-camera-app = callPackage ./applications/lomiri-camera-app { };
       lomiri-clock-app = callPackage ./applications/lomiri-clock-app { };
+      lomiri-docviewer-app = callPackage ./applications/lomiri-docviewer-app { };
       lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
       lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
