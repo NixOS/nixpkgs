@@ -1,25 +1,21 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
+{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
 , openssl, nss, lib, runCommandCC, writeText }:
 
 lib.fix (self:
 stdenv.mkDerivation rec {
   pname = "xmlsec";
-  version = "1.2.34";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "sha256-Us7UlD81vX0IGKOCmMFSjKSsilRED9cRNKB9LRNwomI=";
+    sha256 = "sha256-L/1K0fhg7JPkemgDEKsryUlovQdWbnGXa9lhM9lQSRc=";
   };
 
   patches = [
     ./lt_dladdsearchdir.patch
+    ./remove_bsd_base64_decode_flag.patch
+  ];
 
-    # Fix build with libxml2 2.12
-    (fetchpatch {
-      url = "https://github.com/lsh123/xmlsec/commit/ffb327376f5bb69e8dfe7f805529e45a40118c2b.patch";
-      hash = "sha256-o8CLemOiGIHJsYfVQtNzJNVyk03fdmCbvgA8c3OYxo4=";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
   postPatch = ''
     substituteAllInPlace src/dl.c
   '';
@@ -39,9 +35,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ nss.tools ];
   preCheck = ''
-    substituteInPlace tests/testrun.sh \
-      --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
-      --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+    export TMPFOLDER=$(mktemp -d)
+    substituteInPlace tests/testrun.sh --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000'
   '';
 
   # enable deprecated soap headers required by lasso

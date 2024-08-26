@@ -65,6 +65,7 @@ in
 , mdbook-linkcheck
 , nlohmann_json
 , nixosTests
+, nixVersions
 , openssl
 , perl
 , pkg-config
@@ -261,6 +262,7 @@ self = stdenv.mkDerivation {
       # Basic smoke test that needs to pass when upgrading nix.
       # Note that this test does only test the nixVersions.stable attribute.
       misc = nixosTests.nix-misc.default;
+      upgrade = nixosTests.nix-upgrade;
 
       srcVersion = runCommand "nix-src-version" {
         inherit version;
