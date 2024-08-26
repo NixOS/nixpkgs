@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XXkVwTr8cbYfzXWWkPERTmjfE86JHUUuU6yxjp9k6II=";
   };
 
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
+
   nativeBuildInputs = [
     cmake
     gfortran
