@@ -1,28 +1,32 @@
-{ lib
-, stdenv
-, callPackage
-, fetchurl
-, cmake
-, flex
-, bison
-, openssl
-, libkqueue
-, libpcap
-, zlib
-, file
-, curl
-, libmaxminddb
-, gperftools
-, python3
-, swig4
-, gettext
-, coreutils
-, ncurses
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  cmake,
+  flex,
+  bison,
+  openssl,
+  libkqueue,
+  libpcap,
+  zlib,
+  file,
+  curl,
+  libmaxminddb,
+  gperftools,
+  python3,
+  swig4,
+  gettext,
+  coreutils,
+  ncurses,
 }:
 
 let
   broker = callPackage ./broker { };
-  python = python3.withPackages (p: [ p.gitpython p.semantic-version ]);
+  python = python3.withPackages (p: [
+    p.gitpython
+    p.semantic-version
+  ]);
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
@@ -35,9 +39,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  patches = [
-    ./fix-installation.patch
-  ];
+  patches = [ ./fix-installation.patch ];
 
   nativeBuildInputs = [
     bison
@@ -58,11 +60,7 @@ stdenv.mkDerivation rec {
     openssl
     zlib
     python
-  ] ++ lib.optionals stdenv.isLinux [
-    libkqueue
-  ] ++ lib.optionals stdenv.isDarwin [
-    gettext
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ libkqueue ] ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   postPatch = ''
     patchShebangs ./ci/collect-repo-info.py
@@ -78,9 +76,7 @@ stdenv.mkDerivation rec {
     "-DZEEK_STATE_DIR=/var/lib/zeek"
     "-DZEEK_SPOOL_DIR=/var/spool/zeek"
     "-DDISABLE_JAVASCRIPT=ON"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ "-DLIBKQUEUE_ROOT_DIR=${libkqueue}" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
@@ -105,7 +101,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub tobim ];
+    maintainers = with maintainers; [
+      pSub
+      tobim
+    ];
     platforms = platforms.unix;
   };
 }
