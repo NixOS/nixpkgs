@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "0.54-unstable-2024-08-11";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
