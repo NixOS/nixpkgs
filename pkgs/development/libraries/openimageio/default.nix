@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , boost
 , cmake
 , giflib
@@ -23,6 +24,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-FtUZqk1m9ahdnwhrBeMFkUbV0dangMY/w9ShevCASfo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-40630.patch";
+      url = "https://github.com/AcademySoftwareFoundation/OpenImageIO/commit/0a2dcb4cf2c3fd4825a146cd3ad929d9d8305ce3.patch";
+      hash = "sha256-zwKcXRVjf8oq3MO6twfjbY9oM1M7GtV7usrXCT5cwWo=";
+    })
+  ];
 
   # Workaround broken zlib version detecion in CMake < 3.37.
   postPatch = ''
