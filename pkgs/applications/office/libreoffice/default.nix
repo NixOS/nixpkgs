@@ -561,8 +561,9 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = optionalString (variant != "collabora") ''
-    mkdir -p $out/share/icons
+    mkdir -p $out/{include,share/icons}
 
+    cp -r include/LibreOfficeKit $out/include/
     cp -r sysui/desktop/icons/hicolor $out/share/icons
 
     # Rename icons for consistency
