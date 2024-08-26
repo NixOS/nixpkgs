@@ -17,22 +17,26 @@
   tesseract,
   leptonica,
   mujs,
+  desktop-file-utils,
+  appstream-glib,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.4.2";
+  version = "0.4.4";
   pname = "zathura-pdf-mupdf";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/zathura-pdf-mupdf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fFC+z9mJX9ccExsV336Ut+zJJa8UdfUz/qVp9YgcnhM=";
+    hash = "sha256-ASViSQHKvjov5jMVpG59lmoyPAKP9TiQ3694Vq2x9Pw=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    desktop-file-utils
+    appstream-glib
   ];
 
   buildInputs = [

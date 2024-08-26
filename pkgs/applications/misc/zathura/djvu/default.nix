@@ -10,21 +10,25 @@
   girara,
   djvulibre,
   gettext,
+  desktop-file-utils,
+  appstream-glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-djvu";
-  version = "0.2.9";
+  version = "0.2.10";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura-djvu/download/zathura-djvu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lub4pu5TIxBzsvcAMmSHL4RQHmPD2nvwWY0EYoawwgA=";
+    hash = "sha256-MunYmSmnbNfT/Lr3n0QYaL2r7fFzF9HRhD+qHxkzjZU=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    desktop-file-utils
+    appstream-glib
   ];
 
   buildInputs = [

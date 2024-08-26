@@ -9,15 +9,17 @@
   girara,
   gettext,
   libarchive,
+  desktop-file-utils,
+  appstream-glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-cb";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura-cb/download/zathura-cb-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ibDKF6gMuh6p/Rs7cvOnFz8KrToGqMNk2GXEmZwYu8g=";
+    hash = "sha256-TiAepUzcIKkyWMQ1VvY4lEGvmXQN59ymyh/1JBcvvUc=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
+    desktop-file-utils
+    appstream-glib
   ];
 
   buildInputs = [
