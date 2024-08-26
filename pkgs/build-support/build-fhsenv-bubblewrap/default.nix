@@ -184,7 +184,7 @@ let
     # loop through all directories in the root
     for dir in /*; do
       # if it is a directory and it is not ignored
-      if [[ -d "$dir" ]] && [[ ! "''${ignored[@]}" =~ "$dir" ]]; then
+      if [[ -d "$dir" ]] && [[ ! "''${ignored[*]}" =~ " $dir " ]]; then
         # add it to the mount list
         auto_mounts+=(--bind "$dir" "$dir")
       fi
