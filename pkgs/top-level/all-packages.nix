@@ -16431,7 +16431,7 @@ with pkgs;
   luarocks-nix = luaPackages.luarocks-nix;
 
   luarocks-packages-updater = callPackage ../by-name/lu/luarocks-packages-updater/package.nix {
-    pluginupdate = ../../maintainers/scripts/pluginupdate.py;
+    pluginupdate = ../../maintainers/scripts/pluginupdate-py;
   };
 
   luau = callPackage ../development/interpreters/luau { };
