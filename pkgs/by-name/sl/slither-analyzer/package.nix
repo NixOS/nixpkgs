@@ -7,29 +7,30 @@
   nix-update-script,
   solc,
   withSolc ? false,
-  testers
+  testers,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "slither-analyzer";
-  version = "0.10.3";
+  version = "0.10.4";
   pyproject = true;
-
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-KWLv0tpd1FHZ9apipVPWw6VjtfYpngsH7XDQQ3luBZA=";
+    hash = "sha256-UtpeE5tICBbK7TR9ZnwNYfPVNUOSkhUh2qnVQO21SYs=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    python3Packages.setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools-scm
+  ];
+
+  dependencies = with python3Packages; [
     crytic-compile
     web3
     packaging
