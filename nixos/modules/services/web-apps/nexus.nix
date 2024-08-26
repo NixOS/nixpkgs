@@ -14,7 +14,7 @@ in
 
       package = lib.mkPackageOption pkgs "nexus" { };
 
-      jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
+      jdkPackage = lib.mkPackageOption pkgs "openjdk17" { };
 
       user = mkOption {
         type = types.str;
@@ -53,7 +53,6 @@ in
           -Xmx1200M
           -XX:MaxDirectMemorySize=2G
           -XX:+UnlockDiagnosticVMOptions
-          -XX:+UnsyncloadClass
           -XX:+LogVMOutput
           -XX:LogFile=${cfg.home}/nexus3/log/jvm.log
           -XX:-OmitStackTraceInFastThrow
@@ -73,7 +72,6 @@ in
             -Xmx1200M
             -XX:MaxDirectMemorySize=2G
             -XX:+UnlockDiagnosticVMOptions
-            -XX:+UnsyncloadClass
             -XX:+LogVMOutput
             -XX:LogFile=''${home}/nexus3/log/jvm.log
             -XX:-OmitStackTraceInFastThrow
