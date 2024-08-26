@@ -10,7 +10,7 @@
 , yaml-cpp
 , python3
 , sqlite
-, swig
+, swig4
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     python3
     python3.pkgs.numpy
     sqlite
-    swig
+    swig4
   ];
 
   cmakeFlags = [
