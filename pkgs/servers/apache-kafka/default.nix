@@ -7,6 +7,7 @@ let
       scalaVersion = "2.13";
       sha256 = "sha256-4Cl8xv2wnvnZkFdRsl0rYpwXUo+GKbYFYe7/h84pCZw=";
       jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.kafka_3_8;
     };
     "3_7" = {
       kafkaVersion = "3.7.1";
