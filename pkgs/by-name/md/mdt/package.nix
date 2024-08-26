@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdt";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "henriklovhaug";
     repo = "md-tui";
     rev = "v${version}";
-    hash = "sha256-J1UtyxDT8+UmBwayUMtcPOtnVVkRZLg6ECXnqDSJ2Ew=";
+    hash = "sha256-HUrL/+uXQ3753Qb5FZkftGZO+u+MsocFO3L3OzarEhg=";
   };
 
-  cargoHash = "sha256-X6Pl3oMsFHaKMdXLfPxQ9xSRfRMo4eueLkmDoDBqjaM=";
+  cargoHash = "sha256-O25cb4aNQiU4T2SzxgzjFqL+pCzbM0d+DkkZHvCkMv8=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
