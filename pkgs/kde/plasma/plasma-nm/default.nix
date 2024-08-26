@@ -13,12 +13,8 @@ mkKdeDerivation {
 
   patches = [
     (substituteAll {
-      src = ./0002-openvpn-binary-path.patch;
-      inherit openvpn;
-    })
-    (substituteAll {
-      src = ./0003-strongswan-binary-path.patch;
-      inherit strongswan;
+      src = ./0000-binary-path.patch;
+      inherit openvpn strongswan;
     })
   ];
 
