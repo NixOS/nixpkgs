@@ -1,0 +1,18 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools" ]
+
+[project]
+name = "neovim-plugins-updater"
+version = "0.0.1"
+description = """Module to update luarocks-based neovim plugins"""
+
+[project.urls]
+Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/lu/neovim-plugins-updater"
+
+[project.scripts]
+neovim-plugins-updater = "updater:main"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4

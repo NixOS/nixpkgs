@@ -2,29 +2,38 @@
 , makeWrapper
 , python3Packages
 , lib
-, luarocks-package-updater
+, luarocks-packages-updater
 # , nix-prefetch-git
 , nix-prefetch-scripts
 # , luarocks-nix
 , lua5_1
+, pluginupdate
 }:
+let
+  path = lib.makeBinPath [
+  ];
+
+  attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
+  pname = attrs.project.name;
+  inherit (attrs.project) version;
+in
 
 python3Packages.buildPythonApplication {
-  pname = "neovim-plugins-updater";
-  version = "0.1";
+  inherit pname version;
+  pyproject = true;
 
-  format = "other";
+  src = lib.cleanSource ./.;
 
   nativeBuildInputs = [
+    makeWrapper
     python3Packages.setuptools
-    python3Packages.wrapPython
   ];
   propagatedBuildInputs = [
     python3Packages.gitpython
-    (python3Packages.toPythonModule luarocks-package-updater)
+    (python3Packages.toPythonModule luarocks-packages-updater)
+
   ];
 
-  dontUnpack = true;
 
   #      --prefix PATH : "${path}"
   postFixup = ''
@@ -47,6 +56,6 @@ python3Packages.buildPythonApplication {
     export PYTHONPATH="maintainers/scripts/pluginupdate-py:$PYTHONPATH"
   '';
 
-  meta.mainProgram = "luarocks-packages-updater";
+  meta.mainProgram = "neovim-plugins-updater";
 }
 

@@ -1,6 +1,8 @@
-
+#!/usr/bin/env python3
 
 import updater
+# --
+# import luarocks.updater
 
 INPUT_FILENAME = "pkgs/applications/editors/vim/plugins/neovim-luarocks-plugins.csv"
 # PKG_LIST = "maintainers/scripts/luarocks-packages.csv"

@@ -16430,6 +16430,10 @@ with pkgs;
     pluginupdate = ../../maintainers/scripts/pluginupdate-py;
   };
 
+  neovim-plugins-updater = callPackage ../by-name/ne/neovim-plugins-updater/package.nix {
+    pluginupdate = ../../maintainers/scripts/pluginupdate-py;
+  };
+
   luau = callPackage ../development/interpreters/luau { };
 
   lune = callPackage ../development/interpreters/lune { };
