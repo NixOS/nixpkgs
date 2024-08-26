@@ -67,8 +67,13 @@ let
   ) [ ];
 
   defaultServiceConfig = {
+    # Setting the type to notify enables additional healthchecks, ensuring units
+    # after and requiring kanidm-* wait for it to complete startup
+    Type = "notify";
     BindReadOnlyPaths = [
       "/nix/store"
+      # For healthcheck notifications
+      "/run/systemd/notify"
       "-/etc/resolv.conf"
       "-/etc/nsswitch.conf"
       "-/etc/hosts"
