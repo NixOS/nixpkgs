@@ -6,7 +6,7 @@ rec {
 
   inherit (src) packageVersion firefox source;
 
-  extraPatches = [ ];
+  extraPatches = [ "${source}/patches/pref-pane/pref-pane-small.patch" ];
 
   extraConfigureFlags = [
     "--with-app-name=librewolf"
@@ -26,6 +26,12 @@ rec {
     cp ${source}/assets/search-config.json services/settings/dumps/main/search-config.json
     sed -i '/MOZ_SERVICES_HEALTHREPORT/ s/True/False/' browser/moz.configure
     sed -i '/MOZ_NORMANDY/ s/True/False/' browser/moz.configure
+
+    cp ${source}/patches/pref-pane/category-librewolf.svg browser/themes/shared/preferences
+    cp ${source}/patches/pref-pane/librewolf.css browser/themes/shared/preferences
+    cp ${source}/patches/pref-pane/librewolf.inc.xhtml browser/components/preferences
+    cp ${source}/patches/pref-pane/librewolf.js browser/components/preferences
+    cat ${source}/patches/pref-pane/preferences.ftl >> browser/locales/en-US/browser/preferences/preferences.ftl
   '';
 
   extraPrefsFiles = [ "${source}/settings/librewolf.cfg" ];
