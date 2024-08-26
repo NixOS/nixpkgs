@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre, nixosTests }:
+{ lib, stdenv, fetchurl, cmake, swig4, wireshark, check, rsync, libpcap, gawk, libedit, pcre, nixosTests }:
 
 let version = "0.3.0"; in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ swig wireshark check rsync libpcap gawk libedit pcre ];
+  buildInputs = [ swig4 wireshark check rsync libpcap gawk libedit pcre ];
 
   passthru.tests = { inherit (nixosTests) haka; };
 
