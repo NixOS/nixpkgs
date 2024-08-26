@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "onedrive";
     maintainers = with lib.maintainers; [
+      AndersonTorres
       peterhoeg
       bertof
     ];
