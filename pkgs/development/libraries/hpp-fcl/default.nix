@@ -55,9 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  pythonImportsCheck = lib.optionals (!pythonSupport) [
-    "hppfcl"
-  ];
+  # pythonImportsCheck, but in stdenv.mkDerivation
+  postInstall = lib.optionalString pythonSupport ''
+    PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
+    python -c "import hppfcl"
+  '';
 
   outputs = [ "dev" "out" "doc" ];
   postFixup = ''
