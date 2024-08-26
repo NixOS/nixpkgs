@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pefile";
-  version = "2023.2.7";
+  version = "2024.8.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # DON'T fetch from github, the repo is >60 MB due to test artifacts, which we cannot use
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-guYRQASz1pEcd8OVPjg4ZUsEURuLZuhYPbcMZZmAF9w=";
+    hash = "sha256-P/bF2LQ+jDe7bm3VCFZY1linoL3NILagex/PwcTp1jI=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
