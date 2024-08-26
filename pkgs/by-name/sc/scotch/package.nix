@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
   nativeBuildInputs = [
     cmake
     gfortran
