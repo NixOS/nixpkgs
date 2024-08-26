@@ -6360,8 +6360,6 @@ with pkgs;
 
   bumpver = callPackage ../applications/version-management/bumpver { };
 
-  bup = callPackage ../tools/backup/bup { };
-
   bupstash = darwin.apple_sdk_11_0.callPackage ../tools/backup/bupstash { };
 
   burp = callPackage ../tools/backup/burp { };
