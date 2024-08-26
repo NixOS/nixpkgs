@@ -6,7 +6,7 @@
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.3";
+  version = "0.33.4";
 
   pythonDeps = with python3.pkgs; [ setuptools tornado ]
     ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    hash = "sha256-w7yPs7hG4v0Kd9i2tYhWH7vW95MAMfI/8g61MB6bfps=";
+    hash = "sha256-9rWzHONcu4W/JcnDUGPbuGksroODbhdL6bNF+3Dd2ag=";
   };
 
   buildInputs = [ git python3 ];
