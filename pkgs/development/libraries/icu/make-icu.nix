@@ -20,9 +20,17 @@ let
     '';
 
     # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
-    postPatch = if (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl") && lib.versionOlder version "62.1"
-      then "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
-      else null; # won't find locale_t on darwin
+    postPatch = lib.optionalString ((stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl") && lib.versionOlder version "62.1") ''
+      substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'
+    ''
+    # Remove CC/CXX references from tools/toolutil/udbgutil.cpp and do not
+    # embed build platform alias in the output for reproducibility.
+    + ''
+      substituteInPlace tools/toolutil/Makefile.in \
+        --replace-fail \
+        'CPPFLAGS+=  "-DU_BUILD=\"@build@\"" "-DU_HOST=\"@host@\"" "-DU_CC=\"@CC@\"" "-DU_CXX=\"@CXX@\""' \
+        'CPPFLAGS += "-DU_HOST=\"@host@\"" "-DU_CC=\"''${NIX_CC_BASENAME}\"" "-DU_CXX=\"''${NIX_CXX_BASENAME}\""'
+    '';
 
     inherit patchFlags patches;
 
