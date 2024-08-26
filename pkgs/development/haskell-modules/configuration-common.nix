@@ -199,6 +199,11 @@ self: super: {
     ])
   ];
 
+  # Version 2.1.1 is deprecated, but part of Stackage LTS at the moment.
+  # https://github.com/commercialhaskell/stackage/issues/7500
+  # https://github.com/yesodweb/shakespeare/issues/280
+  shakespeare = doDistribute self.shakespeare_2_1_0_1;
+
   # https://github.com/mpickering/eventlog2html/pull/187
   eventlog2html = lib.pipe super.eventlog2html [
     doJailbreak
