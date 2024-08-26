@@ -139,6 +139,7 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    ./gbm.patch
   ];
 
   postPatch = ''
@@ -302,6 +303,9 @@ in stdenv.mkDerivation {
   postInstall = ''
     # Move driver-related bits to $drivers
     moveToOutput "lib/lib*_mesa*" $drivers
+    moveToOutput "lib/libgallium*" $drivers
+    moveToOutput "lib/gbm" $drivers
+    moveToOutput "lib/libglapi*" $drivers
     moveToOutput "lib/libpowervr_rogue*" $drivers
     moveToOutput "lib/libxatracker*" $drivers
     moveToOutput "lib/libvulkan_*" $drivers
@@ -371,7 +375,7 @@ in stdenv.mkDerivation {
     done
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so
+    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/libgallium*.so
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([
