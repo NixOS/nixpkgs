@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   replaceVars,
   git,
@@ -12,7 +12,7 @@
   hatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hatch";
   version = "1.12.0";
   pyproject = true;
@@ -24,16 +24,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-HW2vDVsFrdFRRaPNuGDg9DZpJd8OuYDIqA3KQRa3m9o=";
   };
 
-  patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3.pkgs.uv; }) ];
+  patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     hatchling
     hatch-vcs
   ];
 
   pythonRemoveDeps = [ "uv" ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     hatchling
     httpx
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs =
-    with python3.pkgs;
+    with python3Packages;
     [
       binary
       git
