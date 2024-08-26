@@ -210,6 +210,14 @@ in
         '';
       };
 
+      enableCompass = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Compass source.
+        '';
+      };
+
       staticSource = {
         enable = mkEnableOption "Geoclue fixed location source";
         location = mkOption {
@@ -342,6 +350,9 @@ in
           submission-url = cfg.submissionUrl;
           submission-nick = cfg.submissionNick;
         };
+        compass = {
+          enable = cfg.enableCompass;
+        };
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
     })
     (lib.mkIf cfg.staticSource.enable {
@@ -351,6 +362,7 @@ in
         enableCDMA = lib.mkDefault false;
         enableModemGPS = lib.mkDefault false;
         enableWifi = lib.mkDefault false;
+        enableCompass = lib.mkDefault false;
       };
 
       environment.etc."geoclue/conf.d/static.conf".text = ''
