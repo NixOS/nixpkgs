@@ -1,27 +1,52 @@
 {
-  stdenv,
+  lib,
   fetchurl,
+  stdenv,
   unzip,
+  writeText,
 }:
 let
-  version = "4.4.2";
-in stdenv.mkDerivation {
   pname = "yeswiki";
-  inherit version;
+  version = "4.4.4";
+  channel = "doryphore";
+in
+stdenv.mkDerivation {
+  inherit pname channel version;
 
   src = fetchurl {
-    url = "https://repository.yeswiki.net/doryphore/yeswiki-doryphore-${version}.zip";
-    hash = "sha256-TNiVBragEnLkMTu/Op6sCFsk9wWXUQ2GUPqmWgPV/vk=";
+    url = "https://repository.yeswiki.net/${channel}/${pname}-${channel}-${version}.zip";
+    sha256 = "sha256-1gtDYdlEnk+RSYElE47lb2AgC1oGPmdBwVd3L4goHec=";
   };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/
-    cp -R . $out/
-    runHook postInstall
-  '';
+  installPhase =
+    let
+      localConfig = writeText "wakka.config.php" ''
+        <?php
+          return require(getenv('YESWIKI_CONFIG'));
+        ?>
+      '';
+    in
+    ''
+      runHook preInstall
+
+      mkdir -p $out/
+      cp -R . $out/
+      cp ${localConfig} $out/wakka.config.php
+      cd $out
+
+      runHook postInstall
+    '';
+
+  meta = with lib; {
+    description = "Publish, edit and share your content with a user-friendly tool for building collaborative platforms";
+    license = licenses.agpl3Plus;
+    homepage = "https://www.yeswiki.net";
+    maintainers = with maintainers; [
+      ppom
+      mrflos
+    ];
+    platforms = platforms.all;
+  };
 }
