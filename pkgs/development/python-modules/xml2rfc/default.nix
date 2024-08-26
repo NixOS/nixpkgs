@@ -22,13 +22,12 @@
   pythonOlder,
   pyyaml,
   requests,
-  six,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.21.0";
+  version = "3.23.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -37,15 +36,13 @@ buildPythonPackage rec {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7lYNEyoLYbxn1ld08eXaN8BumYhN9EftpHQKxdu64MY=";
+    hash = "sha256-6yjWDHcEp1NLqyNopaKvLHtCstpVRPBdy2UiLa5Zvnw=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "SHELL := /bin/bash" "SHELL := bash" \
-      --replace "test flaketest" "test"
-    substituteInPlace setup.py \
-      --replace "'tox'," ""
+      --replace-fail "SHELL := /bin/bash" "SHELL := bash" \
+      --replace-fail "test flaketest" "test"
   '';
 
   propagatedBuildInputs = [
@@ -64,7 +61,6 @@ buildPythonPackage rec {
     pypdf2
     pyyaml
     requests
-    six
     wcwidth
   ];
 
