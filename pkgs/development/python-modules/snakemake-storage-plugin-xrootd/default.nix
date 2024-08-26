@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-xrootd";
-  version = "unstable-2023-12-16";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
-    rev = "408f1e956b5427c34b49eeca340492a438e8eccb";
-    hash = "sha256-CcSG//D9kz0Q4LtaSngJpCtY0dbNFFuKMVmBxR1fcMo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Wo6eF8XlHh9OiD2rTMCchyq1sQ8gjkKnoD4JsKDmJ2A=";
   };
 
   # xrootd<6.0.0,>=5.6.4 not satisfied by version 5.7rc20240303
