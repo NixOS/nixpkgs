@@ -545,128 +545,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--docdir=${placeholder "doc"}/share/doc/ffmpeg"
   ] ++ [
     /*
-     *  External libraries
-     */
-    (enableFeature features.alsa.enable "alsa")
-    (enableFeature features.aom.enable "libaom")
-    (enableFeature withAppKit "appkit")
-  ] ++ optionals (versionAtLeast version "6.1") [
-    (enableFeature withAribcaption "libaribcaption")
-  ] ++ [
-    (enableFeature withAss "libass")
-    (enableFeature withAudioToolbox "audiotoolbox")
-    (enableFeature withAvFoundation "avfoundation")
-    (enableFeature withAvisynth "avisynth")
-    (enableFeature withBluray "libbluray")
-    (enableFeature withBs2b "libbs2b")
-    (enableFeature withBzlib "bzlib")
-    (enableFeature withCaca "libcaca")
-    (enableFeature withCelt "libcelt")
-    (enableFeature withChromaprint "chromaprint")
-    (enableFeature withCodec2 "libcodec2")
-    (enableFeature withCoreImage "coreimage")
-    (enableFeature withCuda "cuda")
-    (enableFeature withCudaLLVM "cuda-llvm")
-    (enableFeature withCuvid "cuvid")
-    (enableFeature withDav1d "libdav1d")
-    (enableFeature withDc1394 "libdc1394")
-    (enableFeature withDrm "libdrm")
-  ] ++ optionals (versionAtLeast version "7") [
-    (enableFeature withDvdnav "libdvdnav")
-    (enableFeature withDvdread "libdvdread")
-  ] ++ [
-    (enableFeature withFdkAac "libfdk-aac")
-    (enableFeature withNvcodec "ffnvcodec")
-    (enableFeature withFlite "libflite")
-    (enableFeature withFontconfig "fontconfig")
-    (enableFeature withFontconfig "libfontconfig")
-    (enableFeature withFreetype "libfreetype")
-    (enableFeature withFrei0r "frei0r")
-    (enableFeature withFribidi "libfribidi")
-    (enableFeature withGme "libgme")
-    (enableFeature withGnutls "gnutls")
-    (enableFeature withGsm "libgsm")
-  ] ++ optionals (versionAtLeast version "6.1") [
-    (enableFeature withHarfbuzz "libharfbuzz")
-  ] ++ [
-    (enableFeature withIconv "iconv")
-    (enableFeature withJack "libjack")
-  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
-    (enableFeature withJxl "libjxl")
-  ] ++ [
-    (enableFeature withLadspa "ladspa")
-    (enableFeature withLzma "lzma")
-    (enableFeature withMfx "libmfx")
-    (enableFeature withModplug "libmodplug")
-    (enableFeature withMp3lame "libmp3lame")
-    (enableFeature withMysofa "libmysofa")
-    (enableFeature withNvdec "nvdec")
-    (enableFeature withNvenc "nvenc")
-    (enableFeature withOpenal "openal")
-    (enableFeature withOpencl "opencl")
-    (enableFeature withOpencoreAmrnb "libopencore-amrnb")
-    (enableFeature withOpencoreAmrwb "libopencore-amrwb")
-    (enableFeature withOpengl "opengl")
-    (enableFeature withOpenh264 "libopenh264")
-    (enableFeature withOpenjpeg "libopenjpeg")
-    (enableFeature withOpenmpt "libopenmpt")
-    (enableFeature withOpus "libopus")
-  ] ++ optionals (versionAtLeast version "5.0") [
-    (enableFeature withPlacebo "libplacebo")
-  ] ++ [
-    (enableFeature withPulse "libpulse")
-  ] ++ optionals (versionAtLeast version "7") [
-    (enableFeature withQrencode "libqrencode")
-    (enableFeature withQuirc "libquirc")
-  ] ++ [
-    (enableFeature withRav1e "librav1e")
-    (enableFeature withRtmp "librtmp")
-    (enableFeature withSamba "libsmbclient")
-    (enableFeature withSdl2 "sdl2")
-  ] ++ optionals (versionAtLeast version "5.0") [
-    (enableFeature withShaderc "libshaderc")
-  ] ++ [
-    (enableFeature withSoxr "libsoxr")
-    (enableFeature withSpeex "libspeex")
-    (enableFeature withSrt "libsrt")
-    (enableFeature withSsh "libssh")
-    (enableFeature withSvg "librsvg")
-    (enableFeature withSvtav1 "libsvtav1")
-    (enableFeature withTensorflow "libtensorflow")
-    (enableFeature withTheora "libtheora")
-    (enableFeature withV4l2 "libv4l2")
-    (enableFeature withV4l2M2m "v4l2-m2m")
-    (enableFeature withVaapi "vaapi")
-    (enableFeature withVdpau "vdpau")
-  ] ++ optionals (versionAtLeast version "6.0")  [
-    (enableFeature withVpl "libvpl")
-  ] ++ [
-    (enableFeature withVideoToolbox "videotoolbox")
-    (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
-    (enableFeature withVmaf "libvmaf")
-    (enableFeature withVoAmrwbenc "libvo-amrwbenc")
-    (enableFeature withVorbis "libvorbis")
-    (enableFeature withVpx "libvpx")
-    (enableFeature withVulkan "vulkan")
-    (enableFeature withWebp "libwebp")
-    (enableFeature withX264 "libx264")
-    (enableFeature withX265 "libx265")
-    (enableFeature withXavs "libxavs")
-    (enableFeature withXcb "libxcb")
-    (enableFeature withXcbShape "libxcb-shape")
-    (enableFeature withXcbShm "libxcb-shm")
-    (enableFeature withXcbxfixes "libxcb-xfixes")
-  ] ++ optionals (versionAtLeast version "7")  [
-    (enableFeature withXevd "libxevd")
-    (enableFeature withXeve "libxeve")
-  ] ++ [
-    (enableFeature withXlib "xlib")
-    (enableFeature withXml2 "libxml2")
-    (enableFeature withXvid "libxvid")
-    (enableFeature withZimg "libzimg")
-    (enableFeature withZlib "zlib")
-    (enableFeature withZmq "libzmq")
-    /*
      * Developer flags
      */
     (enableFeature withDebug "debug")
@@ -680,7 +558,11 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals stdenv.cc.isClang [
     "--cc=clang"
     "--cxx=clang++"
-  ];
+  ] ++ lib.pipe eval.config.features [
+    (lib.filterAttrs (n: v: lib.versionAtLeast version v.version))
+    (lib.mapAttrsToList (n: feature: (map (lib.enableFeature feature.enable) feature.flags)))
+    lib.flatten
+  ]);
 
   # ffmpeg embeds the configureFlags verbatim in its binaries and because we
   # configure binary, include, library dir etc., this causes references in
