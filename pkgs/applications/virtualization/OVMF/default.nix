@@ -1,5 +1,5 @@
 { stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
-, fetchurl, python3, pexpect, xorriso, qemu, dosfstools, mtools
+, fetchFromGitLab, python3, pexpect, xorriso, qemu, dosfstools, mtools
 , fdSize2MB ? false
 , fdSize4MB ? secureBoot
 , secureBoot ? false
@@ -12,7 +12,7 @@
 # to use as the PK and first KEK for the keystore.
 #
 # By default, we use Debian's cert. This default
-# should chnage to a NixOS cert once we have our
+# should change to a NixOS cert once we have our
 # own secure boot signing infrastructure.
 #
 # Ignored if msVarsTemplate is false.
@@ -66,9 +66,18 @@ let
 
   OvmfPkKek1AppPrefix = "4e32566d-8e9e-4f52-81d3-5bb9715f9727";
 
-  debian-edk-src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/e/edk2/edk2_2023.11-5.debian.tar.xz";
-    sha256 = "1yxlab4md30pxvjadr6b4xn6cyfw0c292q63pyfv4vylvhsb24g4";
+  debian-edk-src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "qemu-team";
+    repo = "edk2";
+    nonConeMode = true;
+    sparseCheckout = [
+      "debian/edk2-vars-generator.py"
+      "debian/python"
+      "debian/PkKek-1-*.pem"
+    ];
+    rev = "refs/tags/debian/2023.11-5";
+    hash = "sha256-4vDOoZbWQg7yKXiQprK8CRzKGkbKQYlAgQzTqmNxxjU=";
   };
 
   buildPrefix = "Build/*/*";
@@ -111,7 +120,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   env.PYTHON_COMMAND = "python3";
 
   postUnpack = lib.optionalDrvAttr msVarsTemplate ''
-    unpackFile ${debian-edk-src}
+    ln -s ${debian-edk-src}/debian
   '';
 
   postConfigure = lib.optionalDrvAttr msVarsTemplate ''
@@ -166,7 +175,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
   '' + lib.optionalString stdenv.hostPlatform.isAarch ''
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
-    # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
+    # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/rpms/edk2/blob/main/f/edk2.spec
     mkdir -vp $fd/AAVMF
     ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
     ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
