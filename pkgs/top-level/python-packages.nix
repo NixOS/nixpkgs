@@ -10952,6 +10952,8 @@ self: super: with self; {
 
   psycopg2cffi = callPackage ../development/python-modules/psycopg2cffi { };
 
+  psycopg2-binary = callPackage ../development/python-modules/psycopg2-binary { };
+
   psygnal = callPackage ../development/python-modules/psygnal { };
 
   ptable = callPackage ../development/python-modules/ptable { };
