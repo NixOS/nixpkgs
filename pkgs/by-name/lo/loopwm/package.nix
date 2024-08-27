@@ -29,6 +29,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "macOS Window management made elegant";
     homepage = "https://github.com/MrKai77/Loop";

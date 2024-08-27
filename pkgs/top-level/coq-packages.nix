@@ -159,6 +159,7 @@ let
             paco = self.paco.override { version = "4.1.2"; };
           };
        }));
+      waterproof = callPackage ../development/coq-modules/waterproof {};
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };

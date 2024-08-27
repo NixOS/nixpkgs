@@ -10658,8 +10658,6 @@ with pkgs;
 
   nb = callPackage ../tools/misc/nb { };
 
-  nbqa = callPackage ../tools/misc/nbqa { };
-
   kb = callPackage ../tools/misc/kb { };
 
   notable = callPackage ../applications/misc/notable { };
@@ -13684,8 +13682,6 @@ with pkgs;
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
   };
-
-  video-trimmer = callPackage ../applications/video/video-trimmer { };
 
   via = callPackage ../tools/misc/via { };
 
@@ -18720,10 +18716,6 @@ with pkgs;
   } // (config.radare or {}));
 
   ran = callPackage ../servers/http/ran { };
-
-  rathole = callPackage ../tools/networking/rathole {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
 
   retry = callPackage ../tools/system/retry { };
 
@@ -33334,8 +33326,6 @@ with pkgs;
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
 
   tart = callPackage ../applications/virtualization/tart { };
-
-  viber = callPackage ../applications/networking/instant-messengers/viber { };
 
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
