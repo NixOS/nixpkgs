@@ -24,7 +24,7 @@
   proj,
   protobufc,
   python3,
-  swig,
+  swig4,
   zlib,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       pkg-config
     ]
     ++ lib.optionals withPython [
-      swig
+      swig4
       python3.pkgs.setuptools
     ];
 
