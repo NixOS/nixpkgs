@@ -18,9 +18,6 @@
 # however there are no strong reasons to prefer this or the other one AFAIK
 # Eg superserver is said to be most efficiently using resources according to
 # https://www.firebirdsql.org/manual/qsg25-classic-or-super.html
-
-with lib;
-
 let
 
   cfg = config.services.firebird;
@@ -40,34 +37,34 @@ in
 
     services.firebird = {
 
-      enable = mkEnableOption "the Firebird super server";
+      enable = lib.mkEnableOption "the Firebird super server";
 
-      package = mkPackageOption pkgs "firebird" {
+      package = lib.mkPackageOption pkgs "firebird" {
         example = "firebird_3";
         extraDescription = ''
           For SuperServer use override: `pkgs.firebird_3.override { superServer = true; };`
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 3050;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           Port Firebird uses.
         '';
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "firebird";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           User account under which firebird runs.
         '';
       };
 
-      baseDir = mkOption {
+      baseDir = lib.mkOption {
         default = "/var/lib/firebird";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
@@ -81,7 +78,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.firebird.enable {
+  config = lib.mkIf config.services.firebird.enable {
 
     environment.systemPackages = [cfg.package];
 
