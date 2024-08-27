@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ tbb zlib python3 perl ];
 
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) ["-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"];
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isx86) ["-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"];
 
   # ctest fails because of missing dependencies between tests
   doCheck = false;

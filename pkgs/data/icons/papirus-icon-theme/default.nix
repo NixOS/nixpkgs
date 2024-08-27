@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
   propagatedBuildInputs = [
     breeze-icons
     hicolor-icon-theme
-  ] ++ lib.optional withElementary [
+  ] ++ lib.optionals withElementary [
     elementary-icon-theme
   ];
 

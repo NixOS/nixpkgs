@@ -332,7 +332,7 @@ in
    { commit = "1e961ed49b18e176c7457f53df2433421387c23b"; sha256 = "04dnqqs4qsvz4g8cq6db5id41kzys7hzhcaycwmc9rpqygs2ajwz"; }
    { commit = "e137c72d099f9b3b47f4cc718aa11eab14df1a9c"; sha256 = "1ms0dmz74yf6kwgjfs4d2fhj8y6mcp2n184r3jk44wx2xc24vgb2"; }])
 
-++ optional (is49 && !atLeast6) [
+++ optionals (is49 && !atLeast6) [
   # gcc-11 compatibility
   (fetchpatch {
     name = "gcc4-char-reload.patch";

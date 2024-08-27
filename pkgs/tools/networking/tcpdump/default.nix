@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform.isStatic) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isStatic) [ pkg-config ];
 
   nativeCheckInputs = [ perl ];
 
   buildInputs = [ libpcap ];
 
-  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "ac_cv_linux_vers=2";
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "ac_cv_linux_vers=2" ];
 
   meta = with lib; {
     description = "Network sniffer";

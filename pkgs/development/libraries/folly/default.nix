@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     # see https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
   ];
 

@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     simdutf
     skia
     woff2
-  ] ++ lib.optional stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit

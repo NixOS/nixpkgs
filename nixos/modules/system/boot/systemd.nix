@@ -143,7 +143,7 @@ let
       "systemd-bootctl.socket"
       "systemd-creds@.service"
       "systemd-creds.socket"
-    ] ++ lib.optional cfg.package.withTpm2Tss [
+    ] ++ lib.optionals cfg.package.withTpm2Tss [
       "systemd-pcrlock@.service"
       "systemd-pcrlock.socket"
     ] ++ [

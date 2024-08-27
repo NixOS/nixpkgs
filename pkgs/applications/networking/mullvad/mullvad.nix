@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  checkFlags = "--skip=version_check";
+  checkFlags = [ "--skip=version_check" ];
 
   nativeBuildInputs = [
     pkg-config

@@ -238,9 +238,9 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-qRW92gPtACjk+ifptkw5mujhHlkCF56M3azGIjLiMKE=";
       revert = true;
     })
-  ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
-  ] ++ lib.optional stdenv.hostPlatform.isMusl (
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
         url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-89b75b46371d5e9172cb496b461824d8551a2af5.tar.gz";

@@ -236,7 +236,7 @@ in
         wants = [ "network.target" ];
         before = [ "network-online.target" ];
 
-        restartTriggers = optional (enableNTPService || cfg.runHook != "") [ exitHook ];
+        restartTriggers = optionals (enableNTPService || cfg.runHook != "") [ exitHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by

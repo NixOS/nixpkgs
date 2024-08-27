@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   # Allow for sommelier to be disabled as it can cause problems.
   wrapArgs = [
-    "--prefix PATH : ${lib.makeBinPath (lib.optional withSommelier [ sommelier ] ++ [ passt ])}"
+    "--prefix PATH : ${lib.makeBinPath (lib.optionals withSommelier [ sommelier ] ++ [ passt ])}"
   ];
 
   postFixup = ''

@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";
-  cargoTestFlags = "--package tpnote-lib";
+  cargoTestFlags = [ "--package" "tpnote-lib" ];
   doCheck = true;
 
   meta = {

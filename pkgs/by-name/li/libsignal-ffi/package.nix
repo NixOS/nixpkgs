@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MFTTrIJ9+1NgaL9KD4t0KYR2feHow+HtyYXQWJgKilM=";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeBuildInputs = [
     protobuf

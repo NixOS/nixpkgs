@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  patches = lib.optional isPy3k [ ./0001-nose-python-3.12-fixes.patch ];
+  patches = lib.optionals isPy3k [ ./0001-nose-python-3.12-fixes.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \

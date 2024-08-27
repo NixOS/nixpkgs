@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   # The tests relies on the presence of network connection
   doCheck = false;
 
-  cargoBuildFlags = "--bin minijinja-cli";
+  cargoBuildFlags = [ "--bin" "minijinja-cli" ];
 
   meta = with lib; {
     description = "Command Line Utility to render MiniJinja/Jinja2 templates";
