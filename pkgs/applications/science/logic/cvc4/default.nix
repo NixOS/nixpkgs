@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, cln, gmp, git, swig, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, cln, gmp, git, swig4, pkg-config
 , readline, libantlr3c, boost, jdk, python3, antlr3_4
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ gmp git python3.pkgs.toml readline swig libantlr3c antlr3_4 boost jdk python3 ]
+  buildInputs = [ gmp git python3.pkgs.toml readline swig4 libantlr3c antlr3_4 boost jdk python3 ]
     ++ lib.optionals (!stdenv.isDarwin) [ cln ];
   configureFlags = [
     "--enable-language-bindings=c,c++,java"
