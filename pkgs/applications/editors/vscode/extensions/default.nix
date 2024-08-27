@@ -3919,7 +3919,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
           homepage = "https://github.com/signageos/vscode-sops";
           license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 

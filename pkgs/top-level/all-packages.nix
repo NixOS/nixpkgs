@@ -11891,6 +11891,10 @@ with pkgs;
 
   pngquant = callPackage ../tools/graphics/pngquant { };
 
+  inherit (callPackages ../development/tools/pnpm { })
+    pnpm_8 pnpm_9;
+  pnpm = pnpm_9;
+
   po4a = perlPackages.Po4a;
 
   poac = callPackage ../development/tools/poac {
@@ -20101,7 +20105,7 @@ with pkgs;
 
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = if stdenv.hostPlatform.useAndroidPrebuilt
-    then pkgs."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries
+    then pkgs."androidndkPkgs_${stdenv.hostPlatform.androidNdkVer}".libraries
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
@@ -39172,10 +39176,6 @@ with pkgs;
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn { };
-
-  deploy-rs = callPackage ../tools/package-management/deploy-rs {
-    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
-  };
 
   dockutil = callPackage ../os-specific/darwin/dockutil { };
 
