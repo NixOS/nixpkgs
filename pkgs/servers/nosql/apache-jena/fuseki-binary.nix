@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp -r . "$out"
     chmod +x $out/fuseki
     ln -s "$out"/{fuseki-backup,fuseki-server,fuseki} "$out/bin"
-    for i in "$out"/bin/*; do
+    for i in "$out"/bin/fuseki*; do
       # It is necessary to set the default $FUSEKI_BASE directory to a writable location
       # By default it points to $FUSEKI_HOME/run which is in the nix store
       wrapProgram "$i" \

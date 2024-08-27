@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/main/fakeroot/fakeroot-no64.patch?id=f68c541324ad07cc5b7f5228501b5f2ce4b36158";
       sha256 = "sha256-NCDaB4nK71gvz8iQxlfaQTazsG0SBUQ/RAnN+FqwKkY=";
     })
+  ] ++ [
     (fetchpatch {
       name = "addendum-charset-conversion.patch";
       url = "https://salsa.debian.org/clint/fakeroot/-/commit/b769fb19fd89d696a5e0fd70b974f833f6a0655a.patch";

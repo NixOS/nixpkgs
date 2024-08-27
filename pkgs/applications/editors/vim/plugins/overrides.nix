@@ -40,6 +40,7 @@
 , pandoc
 , parinfer-rust
 , phpactor
+, ranger
 , ripgrep
 , skim
 , sqlite
@@ -140,6 +141,11 @@
 
   advanced-git-search-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
+  };
+
+  animation-nvim = super.animation-nvim.overrideAttrs {
+    dependencies = with self; [ middleclass ];
+    nvimRequireCheck = "animation";
   };
 
   autosave-nvim = super.autosave-nvim.overrideAttrs {
@@ -1004,6 +1010,8 @@
 
   lz-n = neovimUtils.buildNeovimPlugin { luaAttr = "lz-n"; };
 
+  lzn-auto-require = neovimUtils.buildNeovimPlugin { luaAttr = "lzn-auto-require"; };
+
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";
     version = "2023-03-13";
@@ -1075,6 +1083,11 @@
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
     meta.maintainers = with lib.maintainers; [ vcunat ];
+  };
+
+  middleclass = neovimUtils.buildNeovimPlugin {
+    luaAttr = "middleclass";
+    nvimRequireCheck = "middleclass";
   };
 
   minimap-vim = super.minimap-vim.overrideAttrs {
@@ -1187,6 +1200,10 @@
 
     doInstallCheck = true;
     nvimRequireCheck = "dapui";
+  };
+
+  nvim-dap-rr = super.nvim-dap-rr.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
   };
 
   nvim-genghis = super.nvim-genghis.overrideAttrs {
@@ -1381,6 +1398,14 @@
     dependencies = with self; [ cmd-parser-nvim ];
   };
 
+  ranger-nvim = super.ranger-nvim.overrideAttrs {
+    patches = [ ./patches/ranger.nvim/fix-paths.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/ranger-nvim.lua --replace '@ranger@' ${ranger}
+    '';
+  };
+
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter plenary-nvim ];
   };
@@ -1400,6 +1425,8 @@
   roslyn-nvim = super.roslyn-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig ];
   };
+
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rtp-nvim"; };
 
   rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = "rustaceanvim"; };
 
@@ -2090,7 +2117,8 @@
   };
 
   windows-nvim = super.windows-nvim.overrideAttrs {
-    dependencies = with self; [ luaPackages.middleclass animation-nvim ];
+    dependencies = with self; [ middleclass animation-nvim ];
+    nvimRequireCheck = "windows";
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {

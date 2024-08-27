@@ -143,6 +143,7 @@ let
           --transform 'flags=rSh;s|/nix/store/||' \
           --files-from ${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
           | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
+            --quiet \
             --force-uid=0 \
             --force-gid=0 \
             -L ${nixStoreFilesystemLabel} \

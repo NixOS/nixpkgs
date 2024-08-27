@@ -50,7 +50,9 @@ rustPlatform.buildRustPackage rec {
   dontUseCargoParallelTests = true;
 
   checkFlags = lib.optionals stdenv.isDarwin [
-    "--skip=test_diff_same_non_empty_file"
+    # This test tries to read /etc/passwd, which fails with the sandbox
+    # enabled on Darwin
+    "--skip=test_diff_real_files"
   ];
 
   meta = with lib; {

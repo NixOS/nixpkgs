@@ -314,7 +314,7 @@ self: super: builtins.intersectAttrs super {
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
   # Doesn't declare boost dependency
-  nix-serve-ng = overrideSrc {
+  nix-serve-ng = (overrideSrc {
     version = "1.0.0-unstable-2023-12-18";
     src = pkgs.fetchFromGitHub {
       repo = "nix-serve-ng";
@@ -322,7 +322,9 @@ self: super: builtins.intersectAttrs super {
       rev = "21e65cb4c62b5c9e3acc11c3c5e8197248fa46a4";
       hash = "sha256-qseX+/8drgwxOb1I3LKqBYMkmyeI5d5gmHqbZccR660=";
     };
-  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
+  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng)).override {
+      nix = pkgs.nixVersions.nix_2_18;
+  };
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -682,9 +684,6 @@ self: super: builtins.intersectAttrs super {
   # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
-
-  # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend pkgs.opencv3 super.opencv-extra;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;

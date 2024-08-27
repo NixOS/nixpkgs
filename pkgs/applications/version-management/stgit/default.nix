@@ -18,15 +18,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stgit";
-  version = "2.4.9";
+  version = "2.4.10";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    hash = "sha256-b8uzekKnNAJGeDYI2puHUaxY6K0s5tWxAWGpufJi/jk=";
+    hash = "sha256-3z0MwqE7+jEuWK1/OUGDolUWzi9soKWvVtlhyA9zJEA=";
   };
-  cargoHash = "sha256-0bbOAo48xRiCyivO3fuThXAIEFgFbxh6ZtFOPikZi88=";
+  cargoHash = "sha256-9cfgKOIxnh1YLeUVLFnRQz6PqeLrz/6Sc2QybCXo6/w=";
 
   nativeBuildInputs = [
     pkg-config installShellFiles makeWrapper asciidoc xmlto docbook_xsl

@@ -84,7 +84,7 @@ in
       description = ''
         **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
 
-        Enable use of NVidia GPUs from within podman containers.
+        Enable use of Nvidia GPUs from within podman containers.
       '';
     };
 
@@ -170,7 +170,7 @@ in
     lib.mkIf cfg.enable {
       warnings = lib.optionals cfg.enableNvidia [
         ''
-          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set hardware.nvidia-container-toolkit.enable instead.
         ''
       ];
 
@@ -189,11 +189,6 @@ in
         enable = true; # Enable common /etc/containers configuration
         containersConf.settings = {
           network.network_backend = "netavark";
-        } // lib.optionalAttrs cfg.enableNvidia {
-          engine = {
-            conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
-            runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
-          };
         };
       };
 

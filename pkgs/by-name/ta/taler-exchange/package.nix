@@ -34,6 +34,8 @@ stdenv.mkDerivation {
     hash = "sha256-yHRRMlqFA2OiFg0rBVzn7130wyVaxKn2dChFTPnVtbs=";
   };
 
+  patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

@@ -34,13 +34,13 @@
 
 let
   pname = "pulsar";
-  version = "1.119.0";
+  version = "1.120.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-wW+mbN+XPpqdksFrJ37eHMYccXxg9zIR139SkuawTmA=";
+    x86_64-linux.hash = "sha256-35/ZMi6YsXs27icV3kXuKl3Kl8IHLLYbV0aO49qMJ2Q=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-XSEAo/wGNdzx8MtUrCJ6U1pDoY1p+cTdVAn1NsayZW4=";
+    aarch64-linux.hash = "sha256-N1CAWeBHePd2KnnePEJQnvIKfIxal1RQ5UB8pxpVJCk=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
@@ -232,6 +232,7 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bryango ];
     knownVulnerabilities = [
+      # electron 12.2.3, efforts are in place to bump it
       "CVE-2023-5217"
       "CVE-2022-21718"
       "CVE-2022-29247"

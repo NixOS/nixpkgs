@@ -1,44 +1,41 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
-, rust-jemalloc-sys
-, ruff-lsp
-, nix-update-script
-, testers
-, ruff
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
+  rust-jemalloc-sys,
+  ruff-lsp,
+  nix-update-script,
+  testers,
+  ruff,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-/tD1TJRq+/2/KMmRHqB8ZbShoDkXG9nnBqacxXYKjbg=";
+    hash = "sha256-pdaOTMzEOfAKFK+P/4f51bQbmCssMNvq2OGvGVPzvhw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-0.18.0" = "sha256-Gu7YVqEDJUSzBqTeZH1xU0b3CWsWZrEvjIg7QpUaKBw=";
+      "salsa-0.18.0" = "sha256-EjpCTOB6E7n5oNn1bvzNyznzs0uRJvAXrNsZggk4hgM=";
     };
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
@@ -59,6 +56,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = lib.optionals stdenv.isDarwin [
     "--skip=changed_file"
     "--skip=changed_metadata"
+    "--skip=changed_versions_file"
     "--skip=deleted_file"
     "--skip=directory_deleted"
     "--skip=directory_moved_to_trash"

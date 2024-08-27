@@ -73,8 +73,7 @@ in
 , sqlite
 , util-linuxMinimal
 , xz
-
-, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
@@ -104,6 +103,8 @@ self = stdenv.mkDerivation {
   hardeningDisable = [
     "shadowstack"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+
+  nativeInstallCheckInputs = lib.optional atLeast221 git ++ lib.optional atLeast219 man;
 
   nativeBuildInputs = [
     pkg-config
@@ -155,11 +156,6 @@ self = stdenv.mkDerivation {
     aws-sdk-cpp
   ];
 
-  installCheckInputs = lib.optionals atLeast221 [
-    git
-  ] ++ lib.optionals atLeast219 [
-    man
-  ];
 
   propagatedBuildInputs = [
     boehmgc
@@ -246,6 +242,9 @@ self = stdenv.mkDerivation {
   # See https://github.com/NixOS/nix/issues/5687
   + lib.optionalString (atLeast25 && stdenv.isDarwin) ''
     echo "exit 99" > tests/gc-non-blocking.sh
+  '' + ''
+    # nixStatic otherwise does not find its man pages in tests.
+    export MANPATH=$man/share/man:$MANPATH
   '';
 
   separateDebugInfo = stdenv.isLinux && (atLeast24 -> !enableStatic);

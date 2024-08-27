@@ -38,25 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     "icons"
   ];
   pname = "alephone";
-  version = "1.8.1";
+  version = "1.10";
 
   src = fetchurl {
     url =
       let
-        date = "20240513";
+        date = "20240822";
       in
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    sha256 = "sha256-IUvMfG4jtN/QXq4DQIDuI0+Bl3MSSwDGKOyjfcRWgvE=";
+    hash = "sha256-Es2Uo0RIJHYeO/60XiHVLJe9Eoan8DREtAI2KGjuLaM=";
   };
-
-  patches = [
-    # Fix build with miniupnpc 2.2.8
-    # https://github.com/Aleph-One-Marathon/alephone/pull/503
-    (fetchpatch2 {
-      url = "https://github.com/Aleph-One-Marathon/alephone/commit/e25c4bc1ac02619e811b8f19bf4c2f617550e124.patch?full_index=1";
-      hash = "sha256-BFLLSTjNl/+/kVb+t6EyW1jhAlKN/G+Q99TICV9VHOY=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

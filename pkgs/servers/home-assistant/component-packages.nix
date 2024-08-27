@@ -1069,7 +1069,8 @@
       pyephember
     ];
     "epic_games_store" = ps: with ps; [
-    ]; # missing inputs: epicstore-api
+      epicstore-api
+    ];
     "epion" = ps: with ps; [
       epion
     ];
@@ -5023,6 +5024,7 @@
     "enocean"
     "enphase_envoy"
     "environment_canada"
+    "epic_games_store"
     "epion"
     "epson"
     "eq3btsmart"

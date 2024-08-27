@@ -13,6 +13,8 @@ melpaBuild {
     hash = "sha256-VXz3pO6N94XM8FzLSAoYrj3NEh4wp0UiuG6ad8M7nVU=";
   };
 
+  ignoreCompilationError = false;
+
   meta = {
     homepage = "https://www.emacswiki.org/emacs/sv-kalender.el";
     description = "Swedish calendar for Emacs";

@@ -24,11 +24,13 @@
   pytestCheckHook,
   pythonOlder,
   tensorflow-probability,
+
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.25.2";
+  version = "2.25.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-+82zQtC20Q2u3/ujnt8UfmK4oYCpH6Eo2TTlk2g3z+s=";
+    hash = "sha256-m0Fngbvt/N95/1moc8PW1KU/yfRE/NC+1d0Ste7V8HU=";
   };
 
   pythonRelaxDeps = [
@@ -89,6 +91,13 @@ buildPythonPackage rec {
     "tests/tensor/"
     "tests/sparse/sandbox/"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "rel-(.+)"
+    ];
+  };
 
   meta = {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
