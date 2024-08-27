@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.unit;
 
@@ -10,30 +7,30 @@ let
 in {
   options = {
     services.unit = {
-      enable = mkEnableOption "Unit App Server";
-      package = mkPackageOption pkgs "unit" { };
-      user = mkOption {
-        type = types.str;
+      enable = lib.mkEnableOption "Unit App Server";
+      package = lib.mkPackageOption pkgs "unit" { };
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "unit";
         description = "User account under which unit runs.";
       };
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "unit";
         description = "Group account under which unit runs.";
       };
-      stateDir = mkOption {
-        type = types.path;
+      stateDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/spool/unit";
         description = "Unit data directory.";
       };
-      logDir = mkOption {
-        type = types.path;
+      logDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/log/unit";
         description = "Unit log directory.";
       };
-      config = mkOption {
-        type = types.str;
+      config = lib.mkOption {
+        type = lib.types.str;
         default = ''
           {
             "listeners": {},
@@ -75,7 +72,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 
@@ -135,14 +132,14 @@ in {
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "unit") {
+    users.users = lib.optionalAttrs (cfg.user == "unit") {
       unit = {
         group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "unit") {
+    users.groups = lib.optionalAttrs (cfg.group == "unit") {
       unit = { };
     };
 

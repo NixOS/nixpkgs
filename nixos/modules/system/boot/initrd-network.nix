@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.boot.initrd.network;
@@ -47,8 +44,8 @@ in
 
   options = {
 
-    boot.initrd.network.enable = mkOption {
-      type = types.bool;
+    boot.initrd.network.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Add network connectivity support to initrd. The network may be
@@ -65,8 +62,8 @@ in
       '';
     };
 
-    boot.initrd.network.flushBeforeStage2 = mkOption {
-      type = types.bool;
+    boot.initrd.network.flushBeforeStage2 = lib.mkOption {
+      type = lib.types.bool;
       default = !config.boot.initrd.systemd.enable;
       defaultText = "!config.boot.initrd.systemd.enable";
       description = ''
@@ -79,10 +76,10 @@ in
       '';
     };
 
-    boot.initrd.network.udhcpc.enable = mkOption {
+    boot.initrd.network.udhcpc.enable = lib.mkOption {
       default = config.networking.useDHCP && !config.boot.initrd.systemd.enable;
       defaultText = "networking.useDHCP";
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Enables the udhcpc service during stage 1 of the boot process. This
         defaults to {option}`networking.useDHCP`. Therefore, this useful if
@@ -90,9 +87,9 @@ in
       '';
     };
 
-    boot.initrd.network.udhcpc.extraArgs = mkOption {
+    boot.initrd.network.udhcpc.extraArgs = lib.mkOption {
       default = [];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         Additional command-line arguments passed verbatim to
         udhcpc if {option}`boot.initrd.network.enable` and
@@ -100,9 +97,9 @@ in
       '';
     };
 
-    boot.initrd.network.postCommands = mkOption {
+    boot.initrd.network.postCommands = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Shell commands to be executed after stage 1 of the
         boot has initialised the network.
@@ -112,15 +109,15 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
-    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
     '';
 
-    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore (
+    boot.initrd.preLVMCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (lib.mkBefore (
       # Search for interface definitions in command line.
       ''
         ifaces=""
@@ -134,7 +131,7 @@ in
       ''
 
       # Otherwise, use DHCP.
-      + optionalString doDhcp ''
+      + lib.optionalString doDhcp ''
         # Bring up all interfaces.
         for iface in ${dhcpIfShellExpr}; do
           echo "bringing up network interface $iface..."
@@ -150,7 +147,7 @@ in
 
       + cfg.postCommands));
 
-    boot.initrd.postMountCommands = mkIf (cfg.flushBeforeStage2 && !config.boot.initrd.systemd.enable) ''
+    boot.initrd.postMountCommands = lib.mkIf (cfg.flushBeforeStage2 && !config.boot.initrd.systemd.enable) ''
       for iface in $ifaces; do
         ip address flush dev "$iface"
         ip link set dev "$iface" down

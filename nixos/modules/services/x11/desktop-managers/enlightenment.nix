@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
 
   e = pkgs.enlightenment;
@@ -17,24 +14,24 @@ in
 
 {
   meta = {
-    maintainers = teams.enlightenment.members;
+    maintainers = lib.teams.enlightenment.members;
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
   ];
 
   options = {
 
-    services.xserver.desktopManager.enlightenment.enable = mkOption {
-      type = types.bool;
+    services.xserver.desktopManager.enlightenment.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Enable the Enlightenment desktop environment.";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
       enlightenment.econnman
@@ -96,7 +93,7 @@ in
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.libinput.enable = mkDefault true;
+    services.libinput.enable = lib.mkDefault true;
 
     services.dbus.packages = [ e.efl ];
 

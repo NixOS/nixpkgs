@@ -1,30 +1,27 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.powerdns-admin;
 
   configText = ''
     ${cfg.config}
   ''
-  + optionalString (cfg.secretKeyFile != null) ''
+  + lib.optionalString (cfg.secretKeyFile != null) ''
     with open('${cfg.secretKeyFile}') as file:
       SECRET_KEY = file.read()
   ''
-  + optionalString (cfg.saltFile != null) ''
+  + lib.optionalString (cfg.saltFile != null) ''
     with open('${cfg.saltFile}') as file:
       SALT = file.read()
   '';
 in
 {
   options.services.powerdns-admin = {
-    enable = mkEnableOption "the PowerDNS web interface";
+    enable = lib.mkEnableOption "the PowerDNS web interface";
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [ "-b" "127.0.0.1:8000" ]
       '';
       description = ''
@@ -32,8 +29,8 @@ in
       '';
     };
 
-    config = mkOption {
-      type = types.str;
+    config = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = ''
         BIND_ADDRESS = '127.0.0.1'
@@ -47,8 +44,8 @@ in
       '';
     };
 
-    secretKeyFile = mkOption {
-      type = types.nullOr types.path;
+    secretKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       example = "/etc/powerdns-admin/secret";
       description = ''
         The secret used to create cookies.
@@ -57,8 +54,8 @@ in
       '';
     };
 
-    saltFile = mkOption {
-      type = types.nullOr types.path;
+    saltFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       example = "/etc/powerdns-admin/salt";
       description = ''
         The salt used for serialization.
@@ -68,7 +65,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.powerdns-admin = {
       description = "PowerDNS web interface";
       wantedBy = [ "multi-user.target" ];
@@ -77,7 +74,7 @@ in
       environment.FLASK_CONF = builtins.toFile "powerdns-admin-config.py" configText;
       environment.PYTHONPATH = pkgs.powerdns-admin.pythonPath;
       serviceConfig = {
-        ExecStart = "${pkgs.powerdns-admin}/bin/powerdns-admin --pid /run/powerdns-admin/pid ${escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${pkgs.powerdns-admin}/bin/powerdns-admin --pid /run/powerdns-admin/pid ${lib.escapeShellArgs cfg.extraArgs}";
         # Set environment variables only for starting flask database upgrade
         ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py SESSION_TYPE= ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -95,8 +92,8 @@ in
           "-/etc/hosts"
           "-/etc/localtime"
         ]
-        ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
-        ++ (optional (cfg.saltFile != null) cfg.saltFile);
+        ++ (lib.optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
+        ++ (lib.optional (cfg.saltFile != null) cfg.saltFile);
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";

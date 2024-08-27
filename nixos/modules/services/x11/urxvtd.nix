@@ -1,15 +1,10 @@
 { config, lib, pkgs, ... }:
-
-# maintainer: siddharthist
-
-with lib;
-
 let
   cfg = config.services.urxvtd;
 in {
   options.services.urxvtd = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable urxvtd, the urxvt terminal daemon. To use urxvtd, run
@@ -17,10 +12,10 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "rxvt-unicode" { };
+    package = lib.mkPackageOption pkgs "rxvt-unicode" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.urxvtd = {
       description = "urxvt terminal daemon";
       wantedBy = [ "graphical-session.target" ];
@@ -38,6 +33,6 @@ in {
     environment.variables.RXVT_SOCKET = "/run/user/$(id -u)/urxvtd-socket";
   };
 
-  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+  meta.maintainers = with lib.maintainers; [ rnhmjoj siddharthist ];
 
 }

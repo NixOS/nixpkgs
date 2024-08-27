@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.nginx.gitweb;
   gitwebConfig = config.services.gitweb;
-  package = pkgs.gitweb.override (optionalAttrs gitwebConfig.gitwebTheme {
+  package = pkgs.gitweb.override (lib.optionalAttrs gitwebConfig.gitwebTheme {
     gitwebTheme = true;
   });
 
@@ -14,41 +11,41 @@ in
 
   options.services.nginx.gitweb = {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         If true, enable gitweb in nginx.
       '';
     };
 
-    location = mkOption {
+    location = lib.mkOption {
       default = "/gitweb";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Location to serve gitweb on.
       '';
     };
 
-    user = mkOption {
+    user = lib.mkOption {
       default = "nginx";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Existing user that the CGI process will belong to. (Default almost surely will do.)
       '';
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = "nginx";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Group that the CGI process will belong to. (Set to `config.services.gitolite.group` if you are using gitolite.)
       '';
     };
 
-    virtualHost = mkOption {
+    virtualHost = lib.mkOption {
       default = "_";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         VirtualHost to serve gitweb on. Default is catch-all.
       '';
@@ -56,7 +53,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.gitweb = {
       description = "GitWeb service";

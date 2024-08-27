@@ -2,17 +2,13 @@
 # main server configuration, and for the virtual hosts.  (The latter
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
-
 { lib, config }:
-
-with lib;
-
 {
   options = {
-    basicAuth = mkOption {
-      type = types.attrsOf types.str;
+    basicAuth = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           user = "password";
         };
@@ -25,8 +21,8 @@ with lib;
       '';
     };
 
-    basicAuthFile = mkOption {
-      type = types.nullOr types.path;
+    basicAuthFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
@@ -37,8 +33,8 @@ with lib;
       '';
     };
 
-    proxyPass = mkOption {
-      type = types.nullOr types.str;
+    proxyPass = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "http://www.example.org/";
       description = ''
@@ -47,8 +43,8 @@ with lib;
       '';
     };
 
-    proxyWebsockets = mkOption {
-      type = types.bool;
+    proxyWebsockets = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       example = true;
       description = ''
@@ -56,8 +52,8 @@ with lib;
       '';
     };
 
-    index = mkOption {
-      type = types.nullOr types.str;
+    index = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "index.php index.html";
       description = ''
@@ -65,8 +61,8 @@ with lib;
       '';
     };
 
-    tryFiles = mkOption {
-      type = types.nullOr types.str;
+    tryFiles = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "$uri =404";
       description = ''
@@ -74,8 +70,8 @@ with lib;
       '';
     };
 
-    root = mkOption {
-      type = types.nullOr types.path;
+    root = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/your/root/directory";
       description = ''
@@ -83,8 +79,8 @@ with lib;
       '';
     };
 
-    alias = mkOption {
-      type = types.nullOr types.path;
+    alias = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/your/alias/directory";
       description = ''
@@ -92,8 +88,8 @@ with lib;
       '';
     };
 
-    return = mkOption {
-      type = with types; nullOr (oneOf [ str int ]);
+    return = lib.mkOption {
+      type = with lib.types; nullOr (oneOf [ str int ]);
       default = null;
       example = "301 http://example.com$request_uri";
       description = ''
@@ -101,8 +97,8 @@ with lib;
       '';
     };
 
-    fastcgiParams = mkOption {
-      type = types.attrsOf (types.either types.str types.path);
+    fastcgiParams = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.either lib.types.str lib.types.path);
       default = {};
       description = ''
         FastCGI parameters to override.  Unlike in the Nginx
@@ -111,16 +107,16 @@ with lib;
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         These lines go to the end of the location verbatim.
       '';
     };
 
-    priority = mkOption {
-      type = types.int;
+    priority = lib.mkOption {
+      type = lib.types.int;
       default = 1000;
       description = ''
         Order of this location block in relation to the others in the vhost.
@@ -129,10 +125,10 @@ with lib;
       '';
     };
 
-    recommendedProxySettings = mkOption {
-      type = types.bool;
+    recommendedProxySettings = lib.mkOption {
+      type = lib.types.bool;
       default = config.services.nginx.recommendedProxySettings;
-      defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
+      defaultText = lib.literalExpression "config.services.nginx.recommendedProxySettings";
       description = ''
         Enable recommended proxy settings.
       '';

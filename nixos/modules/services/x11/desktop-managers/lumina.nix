@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   xcfg = config.services.xserver;
@@ -11,13 +8,13 @@ in
 
 {
   meta = {
-    maintainers = teams.lumina.members;
+    maintainers = lib.teams.lumina.members;
   };
 
   options = {
 
-    services.xserver.desktopManager.lumina.enable = mkOption {
-      type = types.bool;
+    services.xserver.desktopManager.lumina.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Enable the Lumina desktop manager";
     };
@@ -25,7 +22,7 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.displayManager.sessionPackages = [
       pkgs.lumina.lumina

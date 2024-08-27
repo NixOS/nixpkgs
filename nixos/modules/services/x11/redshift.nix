@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.redshift;
@@ -10,24 +7,24 @@ let
 in {
 
   imports = [
-    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
+    (lib.mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
       (config:
-        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
+        let value = lib.getAttrFromPath [ "services" "redshift" "latitude" ] config;
         in if value == null then
           throw "services.redshift.latitude is set to null, you can remove this"
           else builtins.fromJSON value))
-    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
+    (lib.mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
       (config:
-        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
+        let value = lib.getAttrFromPath [ "services" "redshift" "longitude" ] config;
         in if value == null then
           throw "services.redshift.longitude is set to null, you can remove this"
           else builtins.fromJSON value))
-    (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
+    (lib.mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
   ];
 
   options.services.redshift = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable Redshift to change your screen's colour temperature depending on
@@ -36,16 +33,16 @@ in {
     };
 
     temperature = {
-      day = mkOption {
-        type = types.int;
+      day = lib.mkOption {
+        type = lib.types.int;
         default = 5500;
         description = ''
           Colour temperature to use during the day, between
           `1000` and `25000` K.
         '';
       };
-      night = mkOption {
-        type = types.int;
+      night = lib.mkOption {
+        type = lib.types.int;
         default = 3700;
         description = ''
           Colour temperature to use at night, between
@@ -55,16 +52,16 @@ in {
     };
 
     brightness = {
-      day = mkOption {
-        type = types.str;
+      day = lib.mkOption {
+        type = lib.types.str;
         default = "1";
         description = ''
           Screen brightness to apply during the day,
           between `0.1` and `1.0`.
         '';
       };
-      night = mkOption {
-        type = types.str;
+      night = lib.mkOption {
+        type = lib.types.str;
         default = "1";
         description = ''
           Screen brightness to apply during the night,
@@ -73,10 +70,10 @@ in {
       };
     };
 
-    package = mkPackageOption pkgs "redshift" { };
+    package = lib.mkPackageOption pkgs "redshift" { };
 
-    executable = mkOption {
-      type = types.str;
+    executable = lib.mkOption {
+      type = lib.types.str;
       default = "/bin/redshift";
       example = "/bin/redshift-gtk";
       description = ''
@@ -84,8 +81,8 @@ in {
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "-v" "-m randr" ];
       description = ''
@@ -95,7 +92,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 

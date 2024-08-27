@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.crowd;
@@ -10,7 +7,7 @@ let
     home = cfg.home;
     port = cfg.listenPort;
     openidPassword = cfg.openidPassword;
-  } // (optionalAttrs cfg.proxy.enable {
+  } // (lib.optionalAttrs cfg.proxy.enable {
     proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
   });
 
@@ -34,90 +31,90 @@ in
 {
   options = {
     services.crowd = {
-      enable = mkEnableOption "Atlassian Crowd service";
+      enable = lib.mkEnableOption "Atlassian Crowd service";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "crowd";
         description = "User which runs Crowd.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "crowd";
         description = "Group which runs Crowd.";
       };
 
-      home = mkOption {
-        type = types.str;
+      home = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/crowd";
         description = "Home directory of the Crowd instance.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Address to listen on.";
       };
 
-      listenPort = mkOption {
-        type = types.port;
+      listenPort = lib.mkOption {
+        type = lib.types.port;
         default = 8092;
         description = "Port to listen on.";
       };
 
-      openidPassword = mkOption {
-        type = types.str;
+      openidPassword = lib.mkOption {
+        type = lib.types.str;
         default = "WILL_NEVER_BE_SET";
         description = "Application password for OpenID server.";
       };
 
-      openidPasswordFile = mkOption {
-        type = types.nullOr types.str;
+      openidPasswordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Path to the file containing the application password for OpenID server.";
       };
 
-      catalinaOptions = mkOption {
-        type = types.listOf types.str;
+      catalinaOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "-Xms1024m" "-Xmx2048m" ];
         description = "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
-        enable = mkEnableOption "reverse proxy support";
+        enable = lib.mkEnableOption "reverse proxy support";
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           example = "crowd.example.com";
           description = "Virtual hostname at the proxy";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 443;
           example = 80;
           description = "Port used at the proxy";
         };
 
-        scheme = mkOption {
-          type = types.str;
+        scheme = lib.mkOption {
+          type = lib.types.str;
           default = "https";
           example = "http";
           description = "Protocol used at the proxy.";
         };
 
-        secure = mkOption {
-          type = types.bool;
+        secure = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether the connections to the proxy should be considered secure.";
         };
       };
 
-      package = mkPackageOption pkgs "atlassian-crowd" { };
+      package = lib.mkPackageOption pkgs "atlassian-crowd" { };
 
-      jrePackage = mkPackageOption pkgs "oraclejre8" {
+      jrePackage = lib.mkPackageOption pkgs "oraclejre8" {
         extraDescription = ''
         ::: {.note }
         Atlassian only supports the Oracle JRE (JRASERVER-46152).
@@ -127,7 +124,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
@@ -156,9 +153,9 @@ in
 
       environment = {
         JAVA_HOME = "${cfg.jrePackage}";
-        CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
+        CATALINA_OPTS = lib.concatStringsSep " " cfg.catalinaOptions;
         CATALINA_TMPDIR = "/tmp";
-        JAVA_OPTS = mkIf (cfg.openidPasswordFile != null) "-Dcrowd.properties=${cfg.home}/crowd.properties";
+        JAVA_OPTS = lib.mkIf (cfg.openidPasswordFile != null) "-Dcrowd.properties=${cfg.home}/crowd.properties";
       };
 
       preStart = ''
@@ -167,11 +164,11 @@ in
 
         sed -e 's,port="8095",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''
-          -e 's,compression="on",compression="off" protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${boolToString cfg.proxy.secure}",' \
+          -e 's,compression="on",compression="off" protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${lib.boolToString cfg.proxy.secure}",' \
         '') + ''
           ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
 
-        ${optionalString (cfg.openidPasswordFile != null) ''
+        ${lib.optionalString (cfg.openidPasswordFile != null) ''
           install -m660 ${crowdPropertiesFile} ${cfg.home}/crowd.properties
           ${pkgs.replace-secret}/bin/replace-secret \
             '@NIXOS_CROWD_OPENID_PW@' \

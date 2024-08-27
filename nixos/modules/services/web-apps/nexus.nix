@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.nexus;
@@ -10,44 +7,44 @@ in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption "Sonatype Nexus3 OSS service";
+      enable = lib.mkEnableOption "Sonatype Nexus3 OSS service";
 
       package = lib.mkPackageOption pkgs "nexus" { };
 
       jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nexus";
         description = "User which runs Nexus3.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nexus";
         description = "Group which runs Nexus3.";
       };
 
-      home = mkOption {
-        type = types.str;
+      home = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/sonatype-work";
         description = "Home directory of the Nexus3 instance.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Address to listen on.";
       };
 
-      listenPort = mkOption {
-        type = types.int;
+      listenPort = lib.mkOption {
+        type = lib.types.int;
         default = 8081;
         description = "Port to listen on.";
       };
 
-      jvmOpts = mkOption {
-        type = types.lines;
+      jvmOpts = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           -Xms1200M
           -Xmx1200M
@@ -67,7 +64,7 @@ in
           -Dkaraf.startLocalConsole=false
           -Djava.endorsed.dirs=${cfg.package}/lib/endorsed
         '';
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           '''
             -Xms1200M
             -Xmx1200M
@@ -98,7 +95,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.${cfg.user} = {
       isSystemUser = true;
       inherit (cfg) group home;

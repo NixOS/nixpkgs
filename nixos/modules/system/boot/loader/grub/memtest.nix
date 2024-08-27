@@ -1,8 +1,5 @@
 # This module adds Memtest86+ to the GRUB boot menu.
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   memtest86 = pkgs.memtest86plus;
   cfg = config.boot.loader.grub.memtest86;
@@ -13,19 +10,19 @@ in
 
     boot.loader.grub.memtest86 = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Make Memtest86+, a memory testing program, available from the GRUB
           boot menu.
         '';
       };
 
-      params = mkOption {
+      params = lib.mkOption {
         default = [];
         example = [ "console=ttyS0,115200" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           Parameters added to the Memtest86+ command line. As of memtest86+ 5.01
           the following list of (apparently undocumented) parameters are
@@ -58,7 +55,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.loader.grub.extraEntries = ''
       menuentry "Memtest86+" {
         linux @bootRoot@/memtest.bin ${toString cfg.params}

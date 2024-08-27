@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.xserver.desktopManager.surf-display;
 
@@ -45,18 +42,18 @@ let
 in {
   options = {
     services.xserver.desktopManager.surf-display = {
-      enable = mkEnableOption "surf-display as a kiosk browser session";
+      enable = lib.mkEnableOption "surf-display as a kiosk browser session";
 
-      defaultWwwUri = mkOption {
-        type = types.str;
+      defaultWwwUri = lib.mkOption {
+        type = lib.types.str;
         default = "${pkgs.surf-display}/share/surf-display/empty-page.html";
-        defaultText = literalExpression ''"''${pkgs.surf-display}/share/surf-display/empty-page.html"'';
+        defaultText = lib.literalExpression ''"''${pkgs.surf-display}/share/surf-display/empty-page.html"'';
         example = "https://www.example.com/";
         description = "Default URI to display.";
       };
 
-      inactivityInterval = mkOption {
-        type = types.int;
+      inactivityInterval = lib.mkOption {
+        type = lib.types.int;
         default = 300;
         example = 0;
         description = ''
@@ -69,16 +66,16 @@ in {
         '';
       };
 
-      screensaverSettings = mkOption {
-        type = types.separatedString " ";
+      screensaverSettings = lib.mkOption {
+        type = lib.types.separatedString " ";
         default = "";
         description = ''
           Screensaver settings, see `man 1 xset` for possible options.
         '';
       };
 
-      pointerButtonMap = mkOption {
-        type = types.str;
+      pointerButtonMap = lib.mkOption {
+        type = lib.types.str;
         default = "1 0 0 4 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
         description = ''
           Disable right and middle pointer device click in browser sessions
@@ -87,15 +84,15 @@ in {
         '';
       };
 
-      hideIdlePointer = mkOption {
-        type = types.str;
+      hideIdlePointer = lib.mkOption {
+        type = lib.types.str;
         default = "yes";
         example = "no";
         description = "Hide idle mouse pointer.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           # Enforce fixed resolution for all displays (default: not set):
@@ -118,7 +115,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.displayManager.sessionPackages = [
       pkgs.surf-display
     ];

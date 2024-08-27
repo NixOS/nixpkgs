@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
 
   cfg = config.services.prosody-filer;
@@ -11,9 +9,9 @@ in {
 
   options = {
     services.prosody-filer = {
-      enable = mkEnableOption "Prosody Filer XMPP upload file server";
+      enable = lib.mkEnableOption "Prosody Filer XMPP upload file server";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Configuration for Prosody Filer.
           Refer to <https://github.com/ThomasLeister/prosody-filer#configure-prosody-filer> for details on supported values.
@@ -26,20 +24,20 @@ in {
           storeDir = "/srv/http/nginx/prosody-upload";
         };
 
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
-            listenport = mkDefault "127.0.0.1:5050";
-            uploadSubDir = mkDefault "upload/";
+            listenport = lib.mkDefault "127.0.0.1:5050";
+            uploadSubDir = lib.mkDefault "upload/";
           }
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.prosody-filer.settings = {
-      listenport = mkDefault "127.0.0.1:5050";
-      uploadSubDir = mkDefault "upload/";
+      listenport = lib.mkDefault "127.0.0.1:5050";
+      uploadSubDir = lib.mkDefault "upload/";
     };
 
     users.users.prosody-filer = {

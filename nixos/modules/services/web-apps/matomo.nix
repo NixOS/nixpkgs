@@ -1,5 +1,4 @@
 { config, lib, options, pkgs, ... }:
-with lib;
 let
   cfg = config.services.matomo;
   fpm = config.services.phpfpm.pools.${pool};
@@ -14,12 +13,12 @@ let
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
-    (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])
-    (mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
-    (mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
-    (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
-    (mkRenamedOptionModule [ "services" "matomo" "periodicArchiveProcessingUrl" ] [ "services" "matomo" "hostname" ])
+    (lib.mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])
+    (lib.mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
+    (lib.mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
+    (lib.mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
+    (lib.mkRenamedOptionModule [ "services" "matomo" "periodicArchiveProcessingUrl" ] [ "services" "matomo" "hostname" ])
   ];
 
   options = {
@@ -27,8 +26,8 @@ in {
       # NixOS PR for database setup: https://github.com/NixOS/nixpkgs/pull/6963
       # Matomo issue for automatic Matomo setup: https://github.com/matomo-org/matomo/issues/10257
       # TODO: find a nice way to do this when more NixOS MySQL and / or Matomo automatic setup stuff is implemented.
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable Matomo web analytics with php-fpm backend.
@@ -36,10 +35,10 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "matomo" { };
+      package = lib.mkPackageOption pkgs "matomo" { };
 
-      webServerUser = mkOption {
-        type = types.nullOr types.str;
+      webServerUser = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "lighttpd";
         description = ''
@@ -50,8 +49,8 @@ in {
         '';
       };
 
-      periodicArchiveProcessing = mkOption {
-        type = types.bool;
+      periodicArchiveProcessing = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Enable periodic archive processing, which generates aggregated reports from the visits.
@@ -64,10 +63,10 @@ in {
         '';
       };
 
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         default = "${user}.${config.networking.fqdnOrHostName}";
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           "${user}.''${config.${options.networking.fqdnOrHostName}}"
         '';
         example = "matomo.yourdomain.org";
@@ -77,9 +76,9 @@ in {
         '';
       };
 
-      nginx = mkOption {
-        type = types.nullOr (types.submodule (
-          recursiveUpdate
+      nginx = lib.mkOption {
+        type = lib.types.nullOr (lib.types.submodule (
+          lib.recursiveUpdate
             (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
             {
               # enable encryption by default,
@@ -90,7 +89,7 @@ in {
         )
         );
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             serverAliases = [
               "matomo.''${config.networking.domain}"
@@ -112,8 +111,8 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    warnings = mkIf (cfg.nginx != null && cfg.webServerUser != null) [
+  config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf (cfg.nginx != null && cfg.webServerUser != null) [
       "If services.matomo.nginx is set, services.matomo.nginx.webServerUser is ignored and should be removed."
     ];
 
@@ -210,7 +209,7 @@ in {
       };
     };
 
-    systemd.timers.matomo-archive-processing = mkIf cfg.periodicArchiveProcessing {
+    systemd.timers.matomo-archive-processing = lib.mkIf cfg.periodicArchiveProcessing {
       description = "Automatically archive Matomo reports every hour";
 
       wantedBy = [ "timers.target" ];
@@ -241,7 +240,7 @@ in {
           error_log = 'stderr'
           log_errors = on
         '';
-        settings = mapAttrs (name: mkDefault) {
+        settings = lib.mapAttrs (name: lib.mkDefault) {
           "listen.owner" = socketOwner;
           "listen.group" = "root";
           "listen.mode" = "0660";
@@ -258,14 +257,14 @@ in {
     };
 
 
-    services.nginx.virtualHosts = mkIf (cfg.nginx != null) {
+    services.nginx.virtualHosts = lib.mkIf (cfg.nginx != null) {
       # References:
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
-      "${cfg.hostname}" = mkMerge [ cfg.nginx {
+      "${cfg.hostname}" = lib.mkMerge [ cfg.nginx {
         # don't allow to override the root easily, as it will almost certainly break Matomo.
         # disadvantage: not shown as default in docs.
-        root = mkForce "${cfg.package}/share";
+        root = lib.mkForce "${cfg.package}/share";
 
         # define locations here instead of as the submodule option's default
         # so that they can easily be extended with additional locations if required

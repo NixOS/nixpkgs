@@ -1,9 +1,6 @@
 { config, lib, pkgs, utils, ...}:
-
 with utils.systemdUtils.unitOptions;
 with utils.systemdUtils.lib;
-with lib;
-
 let
   cfg = config.systemd.nspawn;
 
@@ -46,12 +43,12 @@ let
 
   instanceOptions = {
     options =
-    (getAttrs [ "enable" ] sharedOptions)
+    (lib.getAttrs [ "enable" ] sharedOptions)
     // {
-      execConfig = mkOption {
+      execConfig = lib.mkOption {
         default = {};
         example = { Parameters = "/bin/sh"; };
-        type = types.addCheck (types.attrsOf unitOption) checkExec;
+        type = lib.types.addCheck (lib.types.attrsOf unitOption) checkExec;
         description = ''
           Each attribute in this set specifies an option in the
           `[Exec]` section of this unit. See
@@ -59,10 +56,10 @@ let
         '';
       };
 
-      filesConfig = mkOption {
+      filesConfig = lib.mkOption {
         default = {};
         example = { Bind = [ "/home/alice" ]; };
-        type = types.addCheck (types.attrsOf unitOption) checkFiles;
+        type = lib.types.addCheck (lib.types.attrsOf unitOption) checkFiles;
         description = ''
           Each attribute in this set specifies an option in the
           `[Files]` section of this unit. See
@@ -70,10 +67,10 @@ let
         '';
       };
 
-      networkConfig = mkOption {
+      networkConfig = lib.mkOption {
         default = {};
         example = { Private = false; };
-        type = types.addCheck (types.attrsOf unitOption) checkNetwork;
+        type = lib.types.addCheck (lib.types.attrsOf unitOption) checkNetwork;
         description = ''
           Each attribute in this set specifies an option in the
           `[Network]` section of this unit. See
@@ -103,9 +100,9 @@ in {
 
   options = {
 
-    systemd.nspawn = mkOption {
+    systemd.nspawn = lib.mkOption {
       default = {};
-      type = with types; attrsOf (submodule instanceOptions);
+      type = with lib.types; attrsOf (submodule instanceOptions);
       description = "Definition of systemd-nspawn configurations.";
     };
 
@@ -113,11 +110,11 @@ in {
 
   config =
     let
-      units = mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
+      units = lib.mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in lib.nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
     in
-      mkMerge [
-        (mkIf (cfg != {}) {
-          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits {
+      lib.mkMerge [
+        (lib.mkIf (cfg != {}) {
+          environment.etc."systemd/nspawn".source = lib.mkIf (cfg != {}) (generateUnits {
             allowCollisions = false;
             type = "nspawn";
             inherit units;
@@ -128,7 +125,7 @@ in {
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
           systemd.services."systemd-nspawn@".environment = {
-            SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = mkDefault "1";
+            SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = lib.mkDefault "1";
           };
         }
       ];

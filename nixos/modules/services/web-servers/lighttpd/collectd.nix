@@ -1,7 +1,4 @@
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.lighttpd.collectd;
   opt = options.services.lighttpd.collectd;
@@ -25,12 +22,12 @@ in
 
   options.services.lighttpd.collectd = {
 
-    enable = mkEnableOption "collectd subservice accessible at http://yourserver/collectd";
+    enable = lib.mkEnableOption "collectd subservice accessible at http://yourserver/collectd";
 
-    collectionCgi = mkOption {
-      type = types.path;
+    collectionCgi = lib.mkOption {
+      type = lib.types.path;
       default = defaultCollectionCgi;
-      defaultText = literalMD ''
+      defaultText = lib.literalMD ''
         `config.${options.services.collectd.package}` configured for lighttpd
       '';
       description = ''
@@ -40,7 +37,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.lighttpd.enableModules = [ "mod_cgi" "mod_alias" "mod_setenv" ];
 
     services.lighttpd.extraConfig = ''

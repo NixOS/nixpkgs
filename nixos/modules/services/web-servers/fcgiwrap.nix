@@ -1,39 +1,36 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
-  forEachInstance = f: flip mapAttrs' config.services.fcgiwrap.instances (
-    name: cfg: nameValuePair "fcgiwrap-${name}" (f cfg)
+  forEachInstance = f: lib.flip lib.mapAttrs' config.services.fcgiwrap.instances (
+    name: cfg: lib.nameValuePair "fcgiwrap-${name}" (f cfg)
   );
 
 in {
-  imports = forEach [
+  imports = lib.forEach [
     "enable"
     "user"
     "group"
     "socketType"
     "socketAddress"
     "preforkProcesses"
-  ] (attr: mkRemovedOptionModule [ "services" "fcgiwrap" attr ] ''
+  ] (attr: lib.mkRemovedOptionModule [ "services" "fcgiwrap" attr ] ''
       The global shared fcgiwrap instance is no longer supported due to
       security issues.
       Isolated instances should instead be configured through
       `services.fcgiwrap.instances.*'.
   '');
 
-  options.services.fcgiwrap.instances = mkOption {
+  options.services.fcgiwrap.instances = lib.mkOption {
     description = "Configuration for fcgiwrap instances.";
     default = { };
-    type = types.attrsOf (types.submodule ({ config, ... }: { options = {
-      process.prefork = mkOption {
-        type = types.ints.positive;
+    type = lib.types.attrsOf (lib.types.submodule ({ config, ... }: { options = {
+      process.prefork = lib.mkOption {
+        type = lib.types.ints.positive;
         default = 1;
         description = "Number of processes to prefork.";
       };
 
-      process.user = mkOption {
-        type = types.nullOr types.str;
+      process.user = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           User as which this instance of fcgiwrap will be run.
@@ -41,20 +38,20 @@ in {
         '';
       };
 
-      process.group = mkOption {
-        type = types.nullOr types.str;
+      process.group = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = "Group as which this instance of fcgiwrap will be run.";
       };
 
-      socket.type = mkOption {
-        type = types.enum [ "unix" "tcp" "tcp6" ];
+      socket.type = lib.mkOption {
+        type = lib.types.enum [ "unix" "tcp" "tcp6" ];
         default = "unix";
         description = "Socket type: 'unix', 'tcp' or 'tcp6'.";
       };
 
-      socket.address = mkOption {
-        type = types.str;
+      socket.address = lib.mkOption {
+        type = lib.types.str;
         default = "/run/fcgiwrap-${config._module.args.name}.sock";
         example = "1.2.3.4:5678";
         description = ''
@@ -63,26 +60,26 @@ in {
         '';
       };
 
-      socket.user = mkOption {
-        type = types.nullOr types.str;
+      socket.user = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           User to be set as owner of the UNIX socket.
         '';
       };
 
-      socket.group = mkOption {
-        type = types.nullOr types.str;
+      socket.group = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Group to be set as owner of the UNIX socket.
         '';
       };
 
-      socket.mode = mkOption {
-        type = types.nullOr types.str;
+      socket.mode = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = if config.socket.type == "unix" then "0600" else null;
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           if config.socket.type == "unix" then "0600" else null
         '';
         description = ''
@@ -94,7 +91,7 @@ in {
   };
 
   config = {
-    assertions = concatLists (mapAttrsToList (name: cfg: [
+    assertions = lib.concatLists (lib.mapAttrsToList (name: cfg: [
       {
         assertion = cfg.socket.type == "unix" -> cfg.socket.user != null;
         message = "Socket owner is required for the UNIX socket type.";
@@ -119,13 +116,13 @@ in {
 
     systemd.services = forEachInstance (cfg: {
       after = [ "nss-user-lookup.target" ];
-      wantedBy = optional (cfg.socket.type != "unix") "multi-user.target";
+      wantedBy = lib.optional (cfg.socket.type != "unix") "multi-user.target";
 
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.fcgiwrap}/sbin/fcgiwrap ${cli.toGNUCommandLineShell {} ({
+          ${pkgs.fcgiwrap}/sbin/fcgiwrap ${lib.cli.toGNUCommandLineShell {} ({
             c = cfg.process.prefork;
-          } // (optionalAttrs (cfg.socket.type != "unix") {
+          } // (lib.optionalAttrs (cfg.socket.type != "unix") {
             s = "${cfg.socket.type}:${cfg.socket.address}";
           }))}
         '';
@@ -137,7 +134,7 @@ in {
       });
     });
 
-    systemd.sockets = forEachInstance (cfg: mkIf (cfg.socket.type == "unix") {
+    systemd.sockets = forEachInstance (cfg: lib.mkIf (cfg.socket.type == "unix") {
       wantedBy = [ "sockets.target" ];
       socketConfig = {
         ListenStream = cfg.socket.address;
