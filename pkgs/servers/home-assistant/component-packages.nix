@@ -1821,13 +1821,14 @@
       habluetooth
       hassil
       home-assistant-intents
+      idasen-ha
       ifaddr
       mutagen
       pymicro-vad
       pyserial
       pyudev
       zeroconf
-    ]; # missing inputs: idasen-ha
+    ];
     "idteck_prox" = ps: with ps; [
     ]; # missing inputs: rfk101py
     "ifttt" = ps: with ps; [
@@ -5164,6 +5165,7 @@
     "iaqualink"
     "ibeacon"
     "icloud"
+    "idasen_desk"
     "ifttt"
     "ign_sismologia"
     "image"
