@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "multiset";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jpPlhvaI0uKwD6WEPiqC9p6XHhrHrT14+dKkdgjem6Y=";
+    hash = "sha256-fFmnhihLnDOd9PIZ3LtM5fRNOsGyD5ImNsTXieic97U=";
   };
 
   postPatch = ''
