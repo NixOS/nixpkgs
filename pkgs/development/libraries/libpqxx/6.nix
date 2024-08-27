@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://pqxx.org/development/libpqxx/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [ ];
   };
 }

@@ -184,6 +184,6 @@ stdenv.mkDerivation {
     '';
 
   meta = meta // {
-    maintainers = with lib.maintainers; [ eelco ftrvxmtrx sheenobu timokau ma27 ];
+    maintainers = with lib.maintainers; [ ftrvxmtrx sheenobu timokau ma27 ];
   };
 }
