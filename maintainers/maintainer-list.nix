@@ -21407,6 +21407,11 @@
     github = "uncenter";
     githubId = 47499684;
   };
+  uncl0g = {
+    github = "uncl0g";
+    githubId = 135540116;
+    name = "uncl0g";
+  };
   unclamped = {
     name = "Maru";
     email = "clear6860@tutanota.com";
