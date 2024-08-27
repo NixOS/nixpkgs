@@ -133,7 +133,7 @@ let
   in passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";
-    libPrefix = "python${pythonVersion}";
+    libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
