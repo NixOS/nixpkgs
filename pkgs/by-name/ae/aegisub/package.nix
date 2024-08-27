@@ -1,52 +1,60 @@
 {
   lib,
-  alsa-lib,
-  boost,
-  cmake,
   config,
-  darwin,
-  expat,
+  stdenv,
   fetchFromGitHub,
+  fetchurl,
   fetchpatch,
-  ffmpeg,
-  ffms,
-  fftw,
-  fontconfig,
-  freetype,
-  fribidi,
-  glib,
-  harfbuzz,
-  hunspell,
-  icu,
-  intltool,
-  libGL,
-  libGLU,
-  libX11,
-  libass,
-  libiconv,
-  libpulseaudio,
-  libuchardet,
+
+  meson,
+  cmake,
   luajit,
   ninja,
-  openal,
-  pcre,
   pkg-config,
-  portaudio,
-  stdenv,
-  which,
+  intltool,
+  python3,
+  gettext,
   wrapGAppsHook3,
+
+  adwaita-icon-theme,
+  dav1d,
+  expat,
+  ffmpeg,
+  fftw,
+  freetype,
+  fontconfig,
+  iconv,
+  icu,
+  jansson,
+  libass,
+  libGL,
+  libGLU,
+  libpng,
+  libuchardet,
+  libX11,
   wxGTK,
   zlib,
-  # Boolean guard flags
+
   alsaSupport ? stdenv.isLinux,
+  alsa-lib,
   openalSupport ? true,
-  portaudioSupport ? true,
+  openal,
+  portaudioSupport ? false,
+  portaudio,
   pulseaudioSupport ? config.pulseaudio or stdenv.isLinux,
+  libpulseaudio,
   spellcheckSupport ? true,
-  useBundledLuaJIT ? false,
+  hunspell,
+
+  gst_all_1,
+  llvmPackages_15,
+  darwin,
 }:
 
 let
+  inherit (llvmPackages_15) stdenv;
+
+  inherit (darwin.stubs) setfile;
   inherit (darwin.apple_sdk.frameworks)
     AppKit
     Carbon
@@ -54,105 +62,234 @@ let
     CoreFoundation
     CoreText
     IOKit
-    OpenAL;
+    OpenAL
+    QuartzCore
+    AGL
+    OpenGL
+    Kernel
+    QTKit
+    AVFoundation
+    AVKit
+    ;
+
+  lua = luajit.override {
+    enable52Compat = true;
+    packageOverrides =
+      ps: with ps; [
+        luafilesystem
+        moonscript
+      ];
+  };
+
+  # from subprojects folder
+  bestsource = fetchFromGitHub {
+    owner = "vapoursynth";
+    repo = "bestsource";
+    rev = "ba1249c1f5443be6d0ec2be32490af5bbc96bf99";
+    hash = "sha256-9BnyRzF33otju3W503O18JuTyvp+hFxk6JMwrozKoZY=";
+    fetchSubmodules = true;
+  };
+
+  vapoursynth = fetchFromGitHub {
+    owner = "vapoursynth";
+    repo = "vapoursynth";
+    rev = "R59";
+    hash = "sha256-6w7GSC5ZNIhLpulni4sKq0OvuxHlTJRilBFGH5PQW8U=";
+    fetchSubmodules = true;
+  };
+
+  AviSynthPlus = fetchFromGitHub {
+    owner = "AviSynth";
+    repo = "AviSynthPlus";
+    rev = "v3.7.2";
+    hash = "sha256-PNIrDRJNKWEBPEKlCq0nE6UW0prVswE6mW+Fi4ROTAc=";
+    fetchSubmodules = true;
+  };
+
+  wxWidgets = fetchFromGitHub {
+    owner = "wxWidgets";
+    repo = "wxWidgets";
+    rev = "v3.1.7";
+    hash = "sha256-9qYPatpTT28H+fz77o7/Y3YVmiK0OCsiQT5QAYe93M0=";
+    fetchSubmodules = true;
+  };
+
+  ffms2 = fetchFromGitHub {
+    owner = "arch1t3cht";
+    repo = "ffms2";
+    rev = "f463e4cae01e57f130742ebc7594a926da9d7261";
+    hash = "sha256-tnFoVTr0dI+Kzl/Q70pXS9FAkgf2fy+XiGV0X5Tybr4=";
+    fetchSubmodules = true;
+  };
+
+  boost = fetchurl {
+    url = "https://boostorg.jfrog.io/artifactory/main/release/1.74.0/source/boost_1_74_0.tar.gz";
+    hash = "sha256-r/8205KIUSC8rAeRSMF30fb3cw7D1HIzqlGwr6TblKU=";
+  };
+
+  gtest = fetchurl {
+    url = "https://github.com/google/googletest/archive/release-1.8.1.zip";
+    hash = "sha256-kngnwYPQFzTMXP74Xg/z9akv/mGI4NGOkJxe/r8ooMc=";
+  };
+
+  gtest_patch = fetchurl {
+    url = "https://wrapdb.mesonbuild.com/v1/projects/gtest/1.8.1/1/get_zip";
+    hash = "sha256-959f1G4JUHs/LgmlHqbrIAIO/+VDM19a7lnzDMjRWAU=";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "3.3.3";
+  version = "11";
 
   src = fetchFromGitHub {
-    owner = "wangqr";
-    repo = "aegisub";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-oKhLv81EFudrJaaJ2ga3pVh4W5Hd2YchpjsoYoqRm78=";
+    owner = "arch1t3cht";
+    repo = "Aegisub";
+    rev = "feature_${finalAttrs.version}";
+    hash = "sha256-yEXDwne+wros0WjOwQbvMIXk0UXV5TOoV/72K12vi/c=";
   };
 
   nativeBuildInputs = [
+    meson
     cmake
-    intltool
-    luajit
+    lua
     ninja
     pkg-config
-    which
+    intltool
+    python3
+    gettext
     wrapGAppsHook3
-    wxGTK
   ];
 
-  buildInputs = [
-    boost
-    expat
-    ffmpeg
-    ffms
-    fftw
-    fontconfig
-    freetype
-    fribidi
-    glib
-    harfbuzz
-    icu
-    libGL
-    libGLU
-    libX11
-    libass
-    libiconv
-    libuchardet
-    pcre
-    wxGTK
-    zlib
-  ]
-  ++ lib.optionals alsaSupport [ alsa-lib ]
-  ++ lib.optionals openalSupport [
-    (if stdenv.isDarwin then OpenAL else openal)
-  ]
-  ++ lib.optionals portaudioSupport [ portaudio ]
-  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-  ++ lib.optionals spellcheckSupport [ hunspell ]
-  ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Carbon
-    Cocoa
-    CoreFoundation
-    CoreText
-    IOKit
-  ];
+  buildInputs =
+    [
+      dav1d
+      expat
+      ffmpeg
+      fftw
+      freetype
+      fontconfig
+      iconv
+      icu
+      jansson
+      libass
+      libGL
+      libGLU
+      libpng
+      libuchardet
+      libX11
+      zlib
+    ]
+    ++ lib.optionals alsaSupport [ alsa-lib ]
+    ++ lib.optionals openalSupport [ openal ]
+    ++ lib.optionals portaudioSupport [ portaudio ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals spellcheckSupport [ hunspell ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      adwaita-icon-theme
+      wxGTK
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Carbon
+      Cocoa
+      CoreFoundation
+      CoreText
+      IOKit
+      OpenAL
+      QuartzCore
 
-  hardeningDisable = [
-    "bindnow"
-    "relro"
-  ];
+      # wxWidgets
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      setfile
+      Kernel
+      QTKit
+      AVFoundation
+      AVKit
+    ];
 
   patches = [
+    # Replace bestaudiosource with bestscore
     (fetchpatch {
-      name = "move-iconv-include-to-charset_conv.h.patch";
-      url = "https://github.com/arch1t3cht/Aegisub/commit/b8f4c98c4cbc698e4adbba302c2dc328fe193435.patch";
-      hash = "sha256-dCm/VG+8yK7qWKWF4Ew/M2hbbAC/d3hiuRglR9BvWtw=";
+      name = "0001-bas-to-bs.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-bas-to-bs.patch?h=aegisub-arch1t3cht&id=bbbea73953858fc7bf2775a0fb92cec49afb586c";
+      hash = "sha256-T0Msa8rpE3Qo++Tq6J/xdsDX9f1vVIj/b9rR/iuIGK4=";
     })
-  ] ++ lib.optionals (!useBundledLuaJIT) [
-    ./000-remove-bundled-luajit.patch
+    # Fix unable to generate git_version.h
+    ./0002-remove-git-version.patch
+    # Fix meson unable exec python respack
+    ./0003-respack-unable-run.patch
+    # Fix avisynth_wrap build error on MacOS
+    ./0004-avisynth_wrap-mutex.patch
   ];
 
-  # error: unknown type name 'NSUInteger'
-  postPatch = ''
-    substituteInPlace src/dialog_colorpicker.cpp \
-      --replace "NSUInteger" "size_t"
-  '';
+  mesonBuildType = "release";
+  dontUseCmakeConfigure = true;
 
-  env = {
-    NIX_CFLAGS_COMPILE = "-I${lib.getDev luajit}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib luajit}/lib";
-  };
+  mesonFlags = [
+    "--force-fallback-for=ffms2"
+    (lib.mesonOption "default_library" "static")
+    (lib.mesonBool "local_boost" true)
+
+    (lib.mesonOption "default_audio_output" "auto")
+    (lib.mesonEnable "alsa" alsaSupport)
+    (lib.mesonEnable "openal" openalSupport)
+    (lib.mesonEnable "libpulse" pulseaudioSupport)
+    (lib.mesonEnable "portaudio" portaudioSupport)
+    (lib.mesonEnable "directsound" false)
+    (lib.mesonEnable "xaudio2" false)
+
+    (lib.mesonEnable "ffms2" true)
+    (lib.mesonEnable "avisynth" true)
+    (lib.mesonEnable "bestsource" true)
+    (lib.mesonEnable "vapoursynth" true)
+
+    (lib.mesonEnable "fftw3" true)
+    (lib.mesonEnable "uchardet" true)
+    (lib.mesonEnable "csri" true)
+    (lib.mesonEnable "hunspell" spellcheckSupport)
+  ];
 
   preConfigure = ''
-    export FORCE_GIT_VERSION=${finalAttrs.version}
+    cp -r --no-preserve=mode ${bestsource} subprojects/bestsource
+    cp -r --no-preserve=mode ${AviSynthPlus} subprojects/avisynth
+    cp -r --no-preserve=mode ${vapoursynth} subprojects/vapoursynth
+    cp -r --no-preserve=mode ${ffms2} subprojects/ffms2
+    sed -i '28i\#include <string>' subprojects/bestsource/src/videosource.h
+
+    mkdir subprojects/packagecache
+    cp -r --no-preserve=mode ${gtest} subprojects/packagecache/gtest-1.8.1.zip
+    cp -r --no-preserve=mode ${gtest_patch} subprojects/packagecache/gtest-1.8.1-1-wrap.zip
+    cp -r --no-preserve=mode ${boost} subprojects/packagecache/boost_1_74_0.tar.gz
+
+    meson subprojects packagefiles --apply bestsource
+    meson subprojects packagefiles --apply avisynth
+    meson subprojects packagefiles --apply vapoursynth
+    meson subprojects packagefiles --apply ffms2
   '';
 
-  cmakeBuildDir = "build-directory";
-
-  strictDeps = true;
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    cp -r --no-preserve=mode ${wxWidgets} subprojects/wxWidgets
+    meson subprojects packagefiles --apply wxWidgets
+    substituteInPlace subprojects/wxWidgets/configure --replace \
+      'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
+    substituteInPlace subprojects/wxWidgets/configure --replace \
+      'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
+    substituteInPlace subprojects/wxWidgets/configure --replace \
+      /usr /no-such-path
+    substituteInPlace subprojects/wxWidgets/configure --replace \
+      'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
+      'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
+    substituteInPlace subprojects/wxWidgets/configure --replace \
+      "-framework System" "-lSystem"
+    substituteInPlace subprojects/wxWidgets/build/cmake/files.cmake --replace \
+      "wx/thrimpl.cpp" ""
+    meson subprojects packagefiles --apply wxWidgets
+  '';
 
   meta = {
-    homepage = "https://github.com/wangqr/Aegisub";
-    description = "Advanced subtitle editor; wangqr's fork";
+    homepage = "https://github.com/arch1t3cht/Aegisub";
+    description = "Advanced subtitle editor; arch1t3cht's fork";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
       modifying subtitles. Aegisub makes it quick and easy to time subtitles to
@@ -161,11 +298,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
     # softwares - so the resulting program will be GPL
-    license = with lib.licenses; [
-      bsd3
-    ];
+    license = with lib.licenses; [ bsd3 ];
     mainProgram = "aegisub";
-    maintainers = with lib.maintainers; [ AndersonTorres wegank ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      wegank
+      hobr
+    ];
     platforms = lib.platforms.unix;
   };
 })

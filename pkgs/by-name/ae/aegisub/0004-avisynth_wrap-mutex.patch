@@ -1,0 +1,44 @@
+diff --git a/src/avisynth_wrap.cpp b/src/avisynth_wrap.cpp
+index 3473efd94..d350d2c39 100644
+--- a/src/avisynth_wrap.cpp
++++ b/src/avisynth_wrap.cpp
+@@ -76,6 +76,10 @@ AviSynthWrapper::AviSynthWrapper() try {
+ #undef _Lstr
+ #undef CONCATENATE
+ #else
++		#ifndef RTLD_DEEPBIND
++		#define RTLD_DEEPBIND   0x00008
++		#endif
++
+ 		hLib = dlopen(AVISYNTH_SO, RTLD_LAZY | RTLD_LOCAL | RTLD_DEEPBIND);
+ #endif
+
+diff --git a/src/avisynth_wrap.h b/src/avisynth_wrap.h
+index ece6fac63..eec0c2525 100644
+--- a/src/avisynth_wrap.h
++++ b/src/avisynth_wrap.h
+@@ -35,18 +35,18 @@
+ #ifdef WITH_AVISYNTH
+
+ #include <libaegisub/exception.h>
++#include <mutex>
+
+ class IScriptEnvironment;
+-namespace std { class mutex; }
+
+ class AviSynthWrapper {
+-	AviSynthWrapper(AviSynthWrapper const&);
++    AviSynthWrapper(AviSynthWrapper const&);
+ public:
+-	std::mutex& GetMutex() const;
+-	IScriptEnvironment *GetEnv() const;
++    std::mutex& GetMutex() const;
++    IScriptEnvironment *GetEnv() const;
+
+-	AviSynthWrapper();
+-	~AviSynthWrapper();
++    AviSynthWrapper();
++    ~AviSynthWrapper();
+ };
+
+ #endif
