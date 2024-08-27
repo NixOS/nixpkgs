@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eaglemode";
-  version = "0.96.1";
+  version = "0.96.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
-    hash = "sha256-FIhCcMghzLg7Odcsou9hBw7kIaqLVUFEAKUk9uwRNNw=";
+    hash = "sha256:1al5n2mcjp0hmsvi4hsdmzd7i0id5i3255xplk0il1nmzydh312a";
   };
 
   # Fixes "Error: No time zones found." on the clock
