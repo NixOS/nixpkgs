@@ -168,7 +168,6 @@
 , "prebuild-install"
 , "prettier"
 , "prettier-plugin-toml"
-, "prisma"
 , "@prisma/language-server"
 , "pscid"
 , "pulp"
