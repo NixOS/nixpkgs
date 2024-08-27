@@ -119,6 +119,7 @@ in {
   alloy = handleTest ./alloy.nix {};
   allTerminfo = handleTest ./all-terminfo.nix {};
   alps = handleTest ./alps.nix {};
+  amazon-cloudwatch-agent = handleTest ./amazon-cloudwatch-agent.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
   amd-sev = runTest ./amd-sev.nix;
