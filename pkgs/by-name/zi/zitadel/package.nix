@@ -153,5 +153,8 @@ buildGoModule rec {
     license = licenses.asl20;
     sourceProvenance = [ sourceTypes.fromSource ];
     maintainers = with maintainers; [ Sorixelle ];
+    knownVulnerabilities = [
+      "CVE-2024-41952"
+    ];
   };
 }
