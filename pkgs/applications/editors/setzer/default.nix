@@ -1,5 +1,5 @@
 { lib
-, python3
+, python3Packages
 , fetchFromGitHub
 , meson
 , ninja
@@ -18,18 +18,17 @@
 , webkitgtk_6_0
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "setzer";
-  version = "65";
+  version = "66";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
-    rev = "v${version}";
-    hash = "sha256-5Hpj/RkD11bNcr9/gQG0Y7BNMsh1BGZQiN4IMbI4osc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hqwwDR9jCk2XptcqpaReZ73jqpq4JpYD3Rc2OmrEPxg=";
   };
-
-  format = "other";
 
   nativeBuildInputs = [
     meson
@@ -52,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     bibtexparser
     numpy
     pdfminer-six
@@ -64,14 +63,18 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LaTeX editor written in Python with Gtk";
     mainProgram = "setzer";
-    homepage = src.meta.homepage;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    homepage = "https://www.cvfosammmm.org/setzer/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
