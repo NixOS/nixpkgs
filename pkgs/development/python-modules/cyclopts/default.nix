@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "2.9.7";
+  version = "2.9.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "BrianPugh";
     repo = "cyclopts";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RLRhZ5WneZ5aiBRtj9H6tPIZfKFd5O7wYKc8BLVPmZ8=";
+    hash = "sha256-smrx8YSVp3Jr+BAM9ZOfOVS9HOwPveBLHFmcs5ZhQ1M=";
   };
 
   build-system = [
