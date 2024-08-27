@@ -504,6 +504,7 @@ with lib.maintainers;
     githubTeams = [ "k3s" ];
     members = [
       euank
+      frederictobiasc
       marcusramberg
       mic92
       rorosen
