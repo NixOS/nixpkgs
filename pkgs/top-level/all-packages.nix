@@ -17332,7 +17332,7 @@ with pkgs;
   ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 
   antares = callPackage ../by-name/an/antares/package.nix {
-    electron = electron_29;
+    electron = electron_30;
   };
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
