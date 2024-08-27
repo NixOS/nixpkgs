@@ -42,7 +42,7 @@ buildGoModule rec {
     description = "CLI to install, manage & troubleshoot Kubernetes clusters running Cilium";
     license = lib.licenses.asl20;
     homepage = "https://www.cilium.io/";
-    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly superherointj ];
+    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly ];
     mainProgram = "cilium";
   };
 }

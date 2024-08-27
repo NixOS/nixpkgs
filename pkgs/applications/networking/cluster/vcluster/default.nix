@@ -52,6 +52,6 @@ buildGoModule rec {
     homepage = "https://www.vcluster.com/";
     license = lib.licenses.asl20;
     mainProgram = "vcluster";
-    maintainers = with lib.maintainers; [ berryp peterromfeldhk qjoly superherointj ];
+    maintainers = with lib.maintainers; [ berryp peterromfeldhk qjoly ];
   };
 }
