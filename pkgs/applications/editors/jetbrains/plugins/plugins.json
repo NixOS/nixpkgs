@@ -309,6 +309,16 @@
       },
       "name": "-deprecated-rust-beta"
     },
+    "8327": {
+      "compatible": [
+        "idea-community",
+        "idea-ultimate"
+      ],
+      "builds": {
+        "242.21829.142": "https://plugins.jetbrains.com/files/8327/585232/MinecraftDev-2024.2-1.8.1.zip"
+      },
+      "name": "minecraft-development"
+    },
     "8554": {
       "compatible": [
         "goland",
@@ -728,6 +738,7 @@
     "https://plugins.jetbrains.com/files/7322/595111/python-ce-242.21829.142.zip": "sha256-DwQNhbNO1zk75lcf35spNnzo0u103UAhXignhO+grek=",
     "https://plugins.jetbrains.com/files/7391/561441/asciidoctor-intellij-plugin-0.42.2.zip": "sha256-oKczkLHAk2bJRNRgToVe0ySEJGF8+P4oWqQ33olwzWw=",
     "https://plugins.jetbrains.com/files/7391/591338/asciidoctor-intellij-plugin-0.43.1.zip": "sha256-AGP8YY6NG/hy7xIDoiJy3GZHRB9stVNYYoHtqOmYCx0=",
+    "https://plugins.jetbrains.com/files/8327/585232/MinecraftDev-2024.2-1.8.1.zip": "sha256-DoL+BctbcXT55bjcvmtx5wqfPK+VoAunyfvupoV459c=",
     "https://plugins.jetbrains.com/files/8554/579645/featuresTrainer-242.20224.175.zip": "sha256-5gYFQjYWFro/nDxCn8q51GkLLv3JkJDS7jr70xhM0Q0=",
     "https://plugins.jetbrains.com/files/8554/588322/featuresTrainer-242.21829.14.zip": "sha256-pL+j0K6U0DZibnmcIE6kY9Kj/+5g8akuHeuppuZiEII=",
     "https://plugins.jetbrains.com/files/8607/587258/NixIDEA-0.4.0.15.zip": "sha256-j5/LgTrFJ4OEIlocX4jcjgYzHlBId1nh1NfE2qLc1HQ=",
