@@ -76,8 +76,8 @@ let
       "debian/python"
       "debian/PkKek-1-*.pem"
     ];
-    rev = "refs/tags/debian/2023.11-5";
-    hash = "sha256-4vDOoZbWQg7yKXiQprK8CRzKGkbKQYlAgQzTqmNxxjU=";
+    rev = "refs/tags/debian/2024.05-1";
+    hash = "sha256-uAjXJaHOVh944ZxcA2IgCsrsncxuhc0JKlsXs0E03s0=";
   };
 
   buildPrefix = "Build/*/*";
