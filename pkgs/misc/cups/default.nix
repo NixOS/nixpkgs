@@ -19,6 +19,7 @@
 , libpaper ? null
 , coreutils
 , nixosTests
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "man" ];
 
   patches = [
-    ./2.4.8-CVE-2024-35235.patch
+    (fetchpatch {
+      name = "CVE-2024-35235.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/b273a1f29bda87317c551614cf9ab6125f56e317.patch";
+      hash = "sha256-nzWKEMOEBKZMjqVPl2mcATtXZSrh++yhv9VMvbA+49E=";
+    })
   ];
 
   postPatch = ''
