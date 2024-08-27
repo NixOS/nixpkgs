@@ -3,10 +3,11 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  cereal,
+  cereal_1_3_2,
   cmake,
   doxygen,
   eigen,
+  graphviz,
   jrl-cmakemodules,
   simde,
   matio,
@@ -15,46 +16,23 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "simple-robotics";
     repo = "proxsuite";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3kzFYADk3sCMU827KowilPlmOqgv69DJ3mOb7623Qdg=";
+    hash = "sha256-iKc55WDHArmmIM//Wir6FHrNV84HnEDcBUlwnsbtMME=";
   };
 
   patches = [
-    # Allow use of system jrl-cmakemodules
-    # This was merged upstream, and can be removed on next release
+    # Fix use of system cereal
+    # This was merged upstream and can be removed on next release
     (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite/pull/334/commits/2bcadd4993a9940c545136faa71bf1e97a972735.patch";
-      hash = "sha256-BPtwogSwSXcEd5FM4eTTCq6LpGWvQ1SOCFmv/GVhl18=";
-    })
-    # Allow use of system cereal
-    # This was merged upstream, and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite/pull/334/commits/878337c6284c9fd73b19f1f80d5fa802def8cdc6.patch";
-      hash = "sha256-+HWYHLGtygjlvjM+FSD9WFDIwO+qPLlzci+7q42bo0I=";
-    })
-    # Allow use of system pybind11
-    # upstream will move to nanobind for next release, so this can be dismissed
-    (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite/pull/337/commits/bbed9bdfb214da7c6c6909582971bd8b877f87c2.patch";
-      hash = "sha256-pYikPZinjmk7gsagiaIcQspmGFYwlhdiKdZPnqo7pcQ=";
+      url = "https://github.com/Simple-Robotics/proxsuite/pull/352/commits/8305864f13ca7dff7210f89004a56652b71f8891.patch";
+      hash = "sha256-XMS/zHFVrEp1P6aDlGrLbrcmuKq42+GdZRH9ObewNCY=";
     })
   ];
-
-  postPatch = ''
-    # discard failing tests for now
-    substituteInPlace test/CMakeLists.txt \
-      --replace-fail "proxsuite_test(dense_maros_meszaros src/dense_maros_meszaros.cpp)" "" \
-      --replace-fail "proxsuite_test(sparse_maros_meszaros src/sparse_maros_meszaros.cpp)" ""
-
-    # fix CMake syntax
-    substituteInPlace bindings/python/CMakeLists.txt \
-      --replace-fail "SYSTEM PRIVATE" "PRIVATE"
-  '';
 
   outputs = [
     "doc"
@@ -76,9 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     doxygen
+    graphviz
   ];
   propagatedBuildInputs = [
-    cereal
+    cereal_1_3_2
     eigen
     jrl-cmakemodules
     simde
