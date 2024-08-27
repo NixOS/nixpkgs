@@ -2,7 +2,7 @@
 , talloc
 , pkg-config
 , ncurses
-, docutils, swig, python3, coreutils, enablePython ? true }:
+, docutils, swig4, python3, coreutils, enablePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "proot";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ ncurses talloc ] ++ lib.optional enablePython python3;
-  nativeBuildInputs = [ pkg-config docutils ] ++ lib.optional enablePython swig;
+  nativeBuildInputs = [ pkg-config docutils ] ++ lib.optional enablePython swig4;
 
   enableParallelBuilding = true;
 
