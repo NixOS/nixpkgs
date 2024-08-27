@@ -19018,7 +19018,7 @@ with pkgs;
 
   swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
   swig4 = callPackage ../development/tools/misc/swig/4.nix { };
-  swig = swig3;
+  swig = swig4;
   swigWithJava = swig;
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
