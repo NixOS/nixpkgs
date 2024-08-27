@@ -24,6 +24,12 @@
   copyDesktopItems,
   directoryListingUpdater,
   htmldoc,
+  binutils,
+  gzip,
+  p7zip,
+  xz,
+  zip,
+  extraRuntimeDeps ? [ ],
 }:
 
 stdenv.mkDerivation rec {
@@ -81,10 +87,21 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      runtimeDeps = lib.makeBinPath [
-        ghostscript # renders the manual
-        htmldoc # renders HTML files in file browser
-      ];
+      runtimeDeps = lib.makeBinPath (
+        [
+          ghostscript # renders the manual
+          htmldoc # renders HTML files in file browser
+          perl # various display scripts use Perl
+
+          # archive formats in the file browser:
+          binutils
+          gzip
+          p7zip
+          xz
+          zip
+        ]
+        ++ extraRuntimeDeps
+      );
     in
     ''
       runHook preInstall
