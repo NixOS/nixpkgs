@@ -24,7 +24,7 @@
 , graphviz
 , pkg-config
 , python3
-, swig
+, swig4
 , armadillo
 , arrow-cpp
 , c-blosc
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3.pkgs.setuptools
     python3.pkgs.wrapPython
-    swig
+    swig4
   ] ++ lib.optionals useJava [ ant jdk ];
 
   cmakeFlags = [
