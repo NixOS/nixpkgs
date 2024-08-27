@@ -54,7 +54,7 @@ rec {
   # update to ffmpeg
   # Packages which use ffmpeg as a library, should pin to the relevant major
   # version number which the upstream support.
-  ffmpeg = ffmpeg_6;
-  ffmpeg-headless = ffmpeg_6-headless;
-  ffmpeg-full = ffmpeg_6-full;
+  ffmpeg = ffmpeg_7;
+  ffmpeg-headless = ffmpeg_7-headless;
+  ffmpeg-full = ffmpeg_7-full;
 }
