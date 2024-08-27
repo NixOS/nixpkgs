@@ -211,12 +211,12 @@ buildPythonPackage {
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scipy/scipy/releases/tag/v${version}";
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
