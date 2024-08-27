@@ -1,7 +1,7 @@
 { lib
 , stdenv
-, fetchzip
 , fetchurl
+, fetchzip
 , fetchFromGitHub
 , squashfsTools
 , curl
@@ -13,20 +13,12 @@ stdenv.mkDerivation rec {
   version = "4.10.2710.0";
   lacrosVersion = "120.0.6098.0";
 
-  widevine-installer = if stdenv.isAarch64 then stdenv.mkDerivation rec {
-    name = "widevine-installer";
-    src = fetchFromGitHub {
+  widevineInstaller = if stdenv.isAarch64 then fetchFromGitHub {
       owner = "AsahiLinux";
-      repo = "${name}";
+      repo = "widevine-installer";
       rev = "7a3928fe1342fb07d96f61c2b094e3287588958b";
       sha256 = "sha256-XI1y4pVNpXS+jqFs0KyVMrxcULOJ5rADsgvwfLF6e0Y=";
-    };
-
-    installPhase = ''
-      mkdir -p "$out/bin/"
-      cp widevine_fixup.py "$out/bin/"
-    '';
-  } else null;
+    } else null;
 
   src = if stdenv.isAarch64 then fetchurl {
     url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/chromeos-lacros-arm64-squash-zstd-${lacrosVersion}";
@@ -37,12 +29,12 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ squashfsTools curl python3];
+  buildInputs = [ squashfsTools curl python3 ];
 
   unpackPhase = if stdenv.isAarch64 then ''
     curl -# -o lacros.squashfs "file://$src"
     unsquashfs -q lacros.squashfs 'WidevineCdm/*'
-    python3 ${widevine-installer}/bin/widevine_fixup.py squashfs-root/WidevineCdm/_platform_specific/cros_arm64/libwidevinecdm.so libwidevinecdm.so
+    python3 ${widevineInstaller}/widevine_fixup.py squashfs-root/WidevineCdm/_platform_specific/cros_arm64/libwidevinecdm.so libwidevinecdm.so
     cp squashfs-root/WidevineCdm/manifest.json .
     cp squashfs-root/WidevineCdm/LICENSE LICENSE.txt
   '' else null;
@@ -52,16 +44,20 @@ stdenv.mkDerivation rec {
 
     install -vD manifest.json $out/share/google/chrome/WidevineCdm/manifest.json
     install -vD LICENSE.txt $out/share/google/chrome/WidevineCdm/LICENSE.txt
-    install -vD libwidevinecdm.so $out/share/google/chrome/WidevineCdm/_platform_specific/linux_${ if stdenv.isAarch64 then "arm64" else "x64" }/libwidevinecdm.so
+    install -vD libwidevinecdm.so $out/share/google/chrome/WidevineCdm/_platform_specific/linux_${
+    if stdenv.targetPlatform.isAarch64 then "arm64"
+    else if stdenv.targetPlatform.isx86_64 then "x64"
+    else throw "Unsupported platform ${stdenv.targetPlatform.config}"
+    }/libwidevinecdm.so
 
     runHook postInstall
   '';
 
 # Accoring to widevine-installer: "Hack because Chromium hardcodes a check for this right now..."
-  postInstall = if stdenv.isAarch64 then ''
+  postInstall = lib.optionalString stdenv.isAarch64 ''
     mkdir -p "$out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64"
     touch "$out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"
-  '' else null;
+  '';
 
   meta = with lib; {
     description = "Widevine CDM";
