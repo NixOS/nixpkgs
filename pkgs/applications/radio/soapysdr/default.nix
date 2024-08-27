@@ -10,7 +10,7 @@
   ncurses,
   usePython ? false,
   python ? null,
-  swig3,
+  swig,
   extraPackages ? [ ],
   buildPackages,
   testers,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals usePython [
       python
-      swig3
+      swig
     ];
 
   propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
