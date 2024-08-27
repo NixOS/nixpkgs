@@ -41,6 +41,11 @@ in buildNpmPackage rec {
     ./electron-builder-package-lock.patch
   ];
 
+  postPatch = ''
+    # remove code under unfree license
+    rm -r bitwarden_license
+  '';
+
   nodejs = nodejs_20;
 
   makeCacheWritable = true;
