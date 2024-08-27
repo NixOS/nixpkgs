@@ -17,7 +17,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${name}-bin";
-  version = "30.3.3";
+  version = "31.4.0";
 
   src = fetchurl {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/PkgTTC-${name}-${version}.zip";
