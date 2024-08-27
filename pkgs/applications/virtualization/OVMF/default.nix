@@ -191,6 +191,6 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = metaPlatforms;
     maintainers = with lib.maintainers; [ adamcstephens raitobezarius mjoerg ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 })
