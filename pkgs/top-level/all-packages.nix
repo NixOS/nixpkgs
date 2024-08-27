@@ -4420,8 +4420,6 @@ with pkgs;
 
   cht-sh = callPackage ../tools/misc/cht.sh { };
 
-  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
-
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
   clac = callPackage ../tools/misc/clac { };
