@@ -231,9 +231,9 @@ stdenv.mkDerivation (finalAttrs: {
       validate-icon = runCommand "test-icon-validation" { } ''
         ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon \
           --sandbox 512 512 \
-          "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg" > "$out"
+          "${nixos-icons}/share/icons/hicolor/512x512/apps/nix-snowflake.png" > "$out"
 
-        grep format=svg "$out"
+        grep format=png "$out"
       '';
 
       version = testers.testVersion { package = finalAttrs.finalPackage; };

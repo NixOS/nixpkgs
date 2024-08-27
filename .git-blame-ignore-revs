@@ -168,3 +168,6 @@ fc7a83f8b62e90de5679e993d4d49ca014ea013d
 
 # nrr: format with nixfmt-rfc-style (#334578)
 cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
+
+# nixos/kanidm: inherit lib, nixfmt
+8f18393d380079904d072007fb19dc64baef0a3a

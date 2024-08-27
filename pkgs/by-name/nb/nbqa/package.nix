@@ -1,20 +1,27 @@
-{ black
-, blacken-docs
-, fetchFromGitHub
-, lib
-, python3
-, ruff
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+
+  # optional-dependencies
+  black,
+  blacken-docs,
+  ruff,
+
+  # passthru
+  testers,
+  nbqa,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
-  version = "1.8.7";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbQA-dev";
     repo = "nbQA";
     rev = "refs/tags/${version}";
-    hash = "sha256-zn+e/svaxeJU9P1sIaRrVuKW0+FM0GLKZTUx3PfuThk=";
+    hash = "sha256-9s+q2unh+jezU0Er7ZH0tvgntmPFts9OmsgAMeQXRrY=";
   };
 
   build-system = with python3.pkgs; [
@@ -33,7 +40,8 @@ python3.pkgs.buildPythonApplication rec {
     ruff = [ ruff ];
   };
 
-  dependencies = with python3.pkgs;
+  dependencies =
+    with python3.pkgs;
     [
       autopep8
       ipython
@@ -89,6 +97,12 @@ python3.pkgs.buildPythonApplication rec {
     # Test data not found
     "tests/test_include_exclude.py"
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = nbqa;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/nbQA-dev/nbQA";
