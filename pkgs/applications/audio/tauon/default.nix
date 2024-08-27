@@ -23,7 +23,7 @@
   wavpack,
   ffmpeg,
   pulseaudio,
-  withDiscordRPC ? false,
+  withDiscordRPC ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
