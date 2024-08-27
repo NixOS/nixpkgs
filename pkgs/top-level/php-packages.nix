@@ -680,7 +680,8 @@ in {
           configureFlags = [
             "--enable-soap"
           ];
-          doCheck = stdenv.isDarwin;  # TODO: a couple tests still fail on *-linux
+          # Fails to load session functions on PHP 8.4
+          doCheck = lib.versions.majorMinor php.version != "8.4" || stdenv.isDarwin;
           internalDeps = [ php.extensions.session ];
           patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
             # Fix tests with libxml2 2.12
@@ -712,6 +713,7 @@ in {
               excludes = [ "NEWS" ];
             })
           ];
+          env.SKIP_ONLINE_TESTS = true;
         }
         {
           name = "sockets";
