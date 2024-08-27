@@ -3367,8 +3367,6 @@ with pkgs;
     httpServer = true;
   };
 
-  antennas = callPackage ../servers/antennas { };
-
   apg = callPackage ../tools/security/apg { };
 
   apt-dater = callPackage ../tools/package-management/apt-dater {
@@ -39030,8 +39028,6 @@ with pkgs;
   tunnelx = callPackage ../applications/gis/tunnelx { };
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
-
-  tvheadend = callPackage ../servers/tvheadend { };
 
   twitch-cli = callPackage ../development/tools/twitch-cli { };
 
