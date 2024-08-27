@@ -5767,6 +5767,14 @@
     githubId = 119483;
     name = "Matthew Brown";
   };
+  edgar-vincent = {
+    name = "Edgar Vincent";
+    email = "e-v@posteo.net";
+    matrix = "@edgar.vincent:matrix.org";
+    github = "edgar-vincent";
+    githubId = 63352906;
+    keys = [ { fingerprint = "922F CA48 5FDB 20B1 ED1B  A61F 284D 11D3 33C4 D21B"; } ];
+  };
   edlimerkaj = {
     name = "Edli Merkaj";
     email = "edli.merkaj@identinet.io";
