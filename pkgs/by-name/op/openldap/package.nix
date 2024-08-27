@@ -129,6 +129,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests) openldap;
+    kerberosWithLdap = nixosTests.kerberos.ldap;
   };
 
   meta = with lib; {
