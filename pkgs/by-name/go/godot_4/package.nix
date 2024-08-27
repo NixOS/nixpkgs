@@ -192,7 +192,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [
       shiryel
-      superherointj
     ];
     mainProgram = "godot4";
   };

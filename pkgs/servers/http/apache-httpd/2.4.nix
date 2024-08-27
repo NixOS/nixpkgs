@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
+{ lib, stdenv, fetchurl, fetchpatch2, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt, buildPackages
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -19,9 +19,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-Z0GI579EztgtqNtSLalGhJ4iCA1z0WyT9/TfieJXKew=";
   };
 
+  patches = [
+    # Fix cross-compilation by using CC_FOR_BUILD for generator program
+    # https://issues.apache.org/bugzilla/show_bug.cgi?id=51257#c6
+    (fetchpatch2 {
+      name = "apache-httpd-cross-compile.patch";
+      url = "https://gitlab.com/buildroot.org/buildroot/-/raw/5dae8cddeecf16c791f3c138542ec51c4e627d75/package/apache/0001-cross-compile.patch";
+      hash = "sha256-KGnAa6euOt6dkZQwURyVITcfqTkDkSR8zpE97DywUUw=";
+    })
+  ];
+
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ which ];
 
@@ -70,6 +82,10 @@ stdenv.mkDerivation rec {
 
     (lib.enableFeature luaSupport "lua")
     (lib.withFeatureAs luaSupport "lua" lua5)
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # skip bad config check when cross compiling
+    # https://gitlab.com/buildroot.org/buildroot/-/blob/5dae8cddeecf16c791f3c138542ec51c4e627d75/package/apache/apache.mk#L23
+    "ap_cv_void_ptr_lt_long=no"
   ];
 
   enableParallelBuilding = true;

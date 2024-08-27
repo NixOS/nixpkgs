@@ -771,7 +771,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bradgashler.htmltagwrap";
           homepage = "https://github.com/bgashler1/vscode-htmltagwrap";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
@@ -2357,6 +2357,22 @@ let
         };
       };
 
+      huytd.nord-light = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nord-light";
+          publisher = "huytd";
+          version = "0.1.1";
+          hash = "sha256-q2GG3j5j3CLGF02J7/plywKLkhUmm2Gn3MiSVmiZ+48=";
+        };
+        meta = {
+          description = "Light theme for VSCode based on the Nord color palette";
+          license = lib.licenses.mit;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=huytd.nord-light";
+          homepage = "https://github.com/huytd/vscode-nord-light";
+          maintainers = [ lib.maintainers.Flameopathic ];
+        };
+      };
+
       ibm.output-colorizer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "output-colorizer";
@@ -2584,7 +2600,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-nix-syntax";
           homepage = "https://github.com/jeff-hykin/better-nix-syntax";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
@@ -4285,7 +4301,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
           homepage = "https://github.com/signageos/vscode-sops";
           license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 

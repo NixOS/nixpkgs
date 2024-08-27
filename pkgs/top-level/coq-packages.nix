@@ -19,6 +19,7 @@ let
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics {};
       addition-chains = callPackage ../development/coq-modules/addition-chains {};
+      async-test = callPackage ../development/coq-modules/async-test {};
       atbr = callPackage ../development/coq-modules/atbr {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
@@ -72,6 +73,7 @@ let
       hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       high-school-geometry = callPackage ../development/coq-modules/high-school-geometry {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
+      http = callPackage ../development/coq-modules/http {};
       hydra-battles = callPackage ../development/coq-modules/hydra-battles {};
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
@@ -79,6 +81,8 @@ let
       iris-named-props = callPackage ../development/coq-modules/iris-named-props {};
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
+      itree-io = callPackage ../development/coq-modules/itree-io { };
+      json = callPackage ../development/coq-modules/json {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };

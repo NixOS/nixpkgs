@@ -6807,6 +6807,12 @@
     name = "Sebastian Neubauer";
     keys = [ { fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672"; } ];
   };
+  Flameopathic = {
+    email = "flameopathic@gmail.com";
+    github = "Flameopathic";
+    githubId = 64027365;
+    name = "Erin Pletches";
+  };
   flandweber = {
     email = "finn@landweber.xyz";
     github = "flandweber";
@@ -6990,6 +6996,12 @@
     github = "Freax13";
     githubId = 14952658;
     name = "Tom Dohrmann";
+  };
+  frectonz = {
+    name = "Fraol Lemecha";
+    email = "fraol0912@gmail.com";
+    github = "frectonz";
+    githubId = 53809656;
   };
   fredeb = {
     email = "im@fredeb.dev";
@@ -19934,13 +19946,6 @@
     githubId = 36031171;
     name = "Supa";
   };
-  superherointj = {
-    email = "sergiomarcelo@yandex.com";
-    github = "superherointj";
-    githubId = 5861043;
-    matrix = "@superherointj:matrix.org";
-    name = "Sérgio Marcelo";
-  };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
     matrix = "@sandro:supersandro.de";
@@ -20412,6 +20417,13 @@
     github = "TerrorJack";
     githubId = 3889585;
     name = "Cheng Shao";
+  };
+  terryg = {
+    name = "Terry Garcia";
+    email = "terry@terryg.org";
+    github = "TerryGarcia";
+    githubId = 159372832;
+    keys = [ { fingerprint = "6F54 C08C 37C8 EC78 15FA  0D01 A721 8CBA 2D80 15C3"; } ];
   };
   tesq0 = {
     email = "mikolaj.galkowski@gmail.com";
@@ -21916,6 +21928,14 @@
     github = "vq";
     githubId = 230381;
     name = "Daniel Nilsson";
+  };
+  vrifox = {
+    email = "vrifox@vrifox.cc";
+    github = "vrifox";
+    githubId = 109021367;
+    keys = [ { fingerprint = "413C 73F0 C5BD 6318 826A  42D9 D400 98E5 B60B 2197"; } ];
+    matrix = "@vri:cozy.town";
+    name = "Vri";
   };
   vrinek = {
     email = "vrinek@hey.com";

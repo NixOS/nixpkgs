@@ -25,13 +25,13 @@
 }:
 
 let
-  version = "2.11.4";
+  version = "2.11.6";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qqOTW7qgaZfNFYgVIDdwVh9KlT3Z6g8EALMOv39aRVc=";
+    hash = "sha256-RNX+KS2h9zrOK8QzeQWH55pkNPTDW4gic2HLG+XXLRg=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -76,7 +76,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-dze03mkWMA2o3v3aoPTrDtUndTdP7Tk4gvFp4nq80po=";
+    npmDepsHash = "sha256-ML1Yp3JIMbRF6kVu190ReoY7oDUtUfNkHE7dHF6YUAE=";
 
     nativeBuildInputs = [
       pkg-config
@@ -261,7 +261,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python path frontend tesseract5;
-    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
+    nltkData = with nltk-data; [ punkt_tab snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 
@@ -271,6 +271,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
+    maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
   };
 }

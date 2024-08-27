@@ -8,11 +8,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-pass";
-  version = "1.22.0";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "https://proton.me/download/PassDesktop/linux/x64/ProtonPass_${finalAttrs.version}.deb";
-    hash = "sha256-ARIUHmU/YN8IoAFMkcxzGAoH31vbJLT7HfYD6a57QaY=";
+    hash = "sha256-DIA54xxJ8Nhh8wb4p13yjdenqgTgenAH4Tmbqk3IXwo=";
   };
 
   dontConfigure = true;

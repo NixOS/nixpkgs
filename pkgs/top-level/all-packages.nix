@@ -905,8 +905,6 @@ with pkgs;
 
   umoci = callPackage ../applications/virtualization/umoci { };
 
-  dippi = callPackage ../tools/graphics/dippi { };
-
   diswall = callPackage ../applications/networking/diswall { };
 
   dupeguru = callPackage ../applications/misc/dupeguru {
@@ -5783,7 +5781,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  nltk-data = callPackage ../tools/text/nltk_data { };
+  nltk-data = callPackage ../tools/text/nltk-data { };
 
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
@@ -12673,10 +12671,6 @@ with pkgs;
 
   snort = callPackage ../applications/networking/ids/snort { };
 
-  so = callPackage ../development/tools/so {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   soapui = callPackage ../applications/networking/soapui {
     jdk = if stdenv.isDarwin
       then (jdk11.override { enableJavaFX = true; })
@@ -17452,6 +17446,8 @@ with pkgs;
 
   automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
 
+  automake117x = callPackage ../development/tools/misc/automake/automake-1.17.x.nix { };
+
   avrdude = callPackage ../development/embedded/avrdude { };
 
   b4 = callPackage ../development/tools/b4 { };
@@ -19020,8 +19016,6 @@ with pkgs;
 
   systemfd = callPackage ../development/tools/systemfd { };
 
-  swig1 = callPackage ../development/tools/misc/swig { };
-  swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
   swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
   swig4 = callPackage ../development/tools/misc/swig/4.nix { };
   swig = swig3;
@@ -19128,25 +19122,6 @@ with pkgs;
   ttags = callPackage ../development/tools/misc/ttags { };
 
   ttyd = callPackage ../servers/ttyd { };
-
-  turbogit = callPackage ../development/tools/turbogit {
-    libgit2 = libgit2.overrideAttrs rec {
-      version = "1.3.0";
-      src = pkgs.fetchFromGitHub {
-        owner = "libgit2";
-        repo = "libgit2";
-        rev = "v${version}";
-        hash = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
-      };
-      patches = [];
-      # tests fail on old version
-      doCheck = false;
-      meta = libgit2.meta // {
-        maintainers = [ ];
-        knownVulnerabilities = [ "CVE-2024-24575" "CVE-2024-24577" "CVE-2022-29187" "CVE 2022-24765" ];
-      };
-    };
-  };
 
   tweak = callPackage ../applications/editors/tweak { };
 
@@ -21790,8 +21765,6 @@ with pkgs;
     python = python3;
   };
 
-  libresample = callPackage ../development/libraries/libresample { };
-
   librevenge = callPackage ../development/libraries/librevenge { };
 
   librime = callPackage ../development/libraries/librime { };
@@ -23378,7 +23351,6 @@ with pkgs;
 
   rtrlib = callPackage ../development/libraries/rtrlib { };
 
-  kissfft = callPackage ../development/libraries/kissfft { };
   kissfftFloat = kissfft.override {
     datatype = "float";
   };
@@ -26022,6 +25994,7 @@ with pkgs;
     server = server-pgsql;
   };
 
+  zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
   zabbix64 = recurseIntoAttrs (zabbixFor "v64");
   zabbix50 = recurseIntoAttrs (zabbixFor "v50");
@@ -38391,8 +38364,6 @@ with pkgs;
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
   museeks = callPackage ../applications/audio/museeks { };
-
-  musly = callPackage ../applications/audio/musly { };
 
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
