@@ -44,10 +44,7 @@ let
 
       DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     } // optionalAttrs (cfg.wayland.compositor == "kwin") {
-      GreeterEnvironment = concatStringsSep " " [
-        "LANG=C.UTF-8"
-        "QT_WAYLAND_SHELL_INTEGRATION=layer-shell"
-      ];
+      GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
       InputMethod = ""; # needed if we are using --inputmethod with kwin
     };
 
