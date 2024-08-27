@@ -82,6 +82,7 @@ in rec {
         (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
+        (onFullSupported "nixos.tests.nextcloud.basic29")
         # FIXME: broken by QEMU 8.2.3 upgrade, reenable when fixed
         # Upstream issue: https://gitlab.com/qemu-project/qemu/-/issues/2321
         # (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
