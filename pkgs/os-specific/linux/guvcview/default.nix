@@ -5,7 +5,7 @@
 , pkg-config
 , portaudio
 , SDL2
-, ffmpeg_7
+, ffmpeg
 , udev
 , libusb1
 , libv4l
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     alsa-lib
-    ffmpeg_7
+    ffmpeg
     libusb1
     libv4l
     portaudio

@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg_7, libheif, exiftool, imagemagick, makeWrapper, testers
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, imagemagick, makeWrapper, testers
 , nixosTests
 , librsvg }:
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
       --set PHOTOPRISM_RAWTHERAPEE_BIN ${rawtherapee}/bin/rawtherapee-cli \
       --set PHOTOPRISM_HEIFCONVERT_BIN ${libheif}/bin/heif-convert \
       --set PHOTOPRISM_RSVGCONVERT_BIN ${librsvg}/bin/rsvg-convert \
-      --set PHOTOPRISM_FFMPEG_BIN ${ffmpeg_7}/bin/ffmpeg \
+      --set PHOTOPRISM_FFMPEG_BIN ${ffmpeg}/bin/ffmpeg \
       --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool \
       --set PHOTOPRISM_IMAGEMAGICK_BIN ${imagemagick}/bin/convert
 
