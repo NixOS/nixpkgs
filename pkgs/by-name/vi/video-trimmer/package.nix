@@ -71,7 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
     description = "Trim videos quickly";
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      aleksana
+    ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "video-trimmer";
