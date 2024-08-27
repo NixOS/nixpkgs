@@ -82,6 +82,10 @@ let
     config = lib.mkIf (config.overlay.lowerdir != null) {
       fsType = "overlay";
       device = lib.mkDefault "overlay";
+      depends = map (x: "${x}") (config.overlay.lowerdir ++ lib.optionals (config.overlay.upperdir != null) [
+        config.overlay.upperdir
+        config.overlay.workdir
+      ]);
 
       options =
         let
@@ -96,7 +100,7 @@ let
         ] ++ lib.optionals (config.overlay.upperdir != null) [
           "upperdir=${upperdir}"
           "workdir=${workdir}"
-        ] ++ (map (s: "x-systemd.requires-mounts-for=${s}") lowerdir);
+        ];
     };
 
   };
