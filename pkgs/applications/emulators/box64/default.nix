@@ -8,6 +8,7 @@
   withDynarec ? (
     stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64
   ),
+  appleSilicon ? false,
   runCommand,
   hello-x86_64,
 }:
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "RV64" stdenv.hostPlatform.isRiscV64)
       (lib.cmakeBool "PPC64LE" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
       (lib.cmakeBool "LARCH64" stdenv.hostPlatform.isLoongArch64)
+      (lib.cmakeBool "M1" (appleSilicon && stdenv.hostPlatform.isAarch64))
     ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
@@ -100,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       gador
       OPNA2608
+      dxwil
     ];
     mainProgram = "box64";
     platforms = [
