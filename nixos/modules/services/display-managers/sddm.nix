@@ -8,6 +8,7 @@ let
 
   sddm = cfg.package.override (old: {
     withWayland = cfg.wayland.enable;
+    withLayerShellQt = cfg.wayland.compositor == "kwin";
     extraPackages = old.extraPackages or [ ] ++ cfg.extraPackages;
   });
 
