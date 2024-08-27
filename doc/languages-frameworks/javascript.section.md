@@ -310,6 +310,120 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 - `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from npm distributed with `nodejs_16`.
 - `node2nix` does not like missing packages from npm. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of npm.
 
+### pnpm {#javascript-pnpm}
+
+Pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8` and `pnpm_9`, which support different sets of lock file versions.
+
+When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The functions `pnpm_8.fetchDeps` and `pnpm_9.fetchDeps` can create this pnpm store derivation. In conjunction, the setup hooks `pnpm_8.configHook` and `pnpm_9.configHook` will prepare the build environment to install the prefetched dependencies store. Here is an example for a package that contains a `package.json` and a `pnpm-lock.yaml` files using the above `pnpm_` attributes:
+
+```nix
+{
+  stdenv,
+  nodejs,
+  # This is pinned as { pnpm = pnpm_9; }
+  pnpm
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = ...;
+
+  nativeBuildInputs = [
+    nodejs
+    pnpm.configHook
+  ];
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "...";
+  };
+})
+```
+
+NOTE: It is highly recommended to use a pinned version of pnpm (i.e. `pnpm_8` or `pnpm_9`), to increase future reproducibility. It might also be required to use an older version, if the package needs support for a certain lock file version.
+
+In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e. `inherit (finalAttrs) patches`.
+
+`pnpm.configHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array.
+
+#### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
+
+If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchDeps`.
+If `sourceRoot` is different between the parent derivation and `fetchDeps`, you will have to set `pnpmRoot` to effectively be the same location as it is in `fetchDeps`.
+
+Assuming the following directory structure, we can define `sourceRoot` and `pnpmRoot` as follows:
+
+```
+.
+├── frontend
+│   ├── ...
+│   ├── package.json
+│   └── pnpm-lock.yaml
+└── ...
+```
+
+```nix
+  ...
+  pnpmDeps = pnpm.fetchDeps {
+    ...
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+  };
+
+  # by default the working directory is the extracted source
+  pnpmRoot = "frontend";
+```
+
+#### PNPM Workspaces {#javascript-pnpm-workspaces}
+
+If you need to use a PNPM workspace for your project, then set `pnpmWorkspace = "<workspace project name>"` in your `pnpm.fetchDeps` call,
+which will make PNPM only install dependencies for that workspace package.
+
+For example:
+
+```nix
+...
+pnpmWorkspace = "@astrojs/language-server";
+pnpmDeps = pnpm.fetchDeps {
+  inherit (finalAttrs) pnpmWorkspace;
+  ...
+}
+```
+
+The above would make `pnpm.fetchDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
+Note that you do not need to set `sourceRoot` to make this work.
+
+Usually in such cases, you'd want to use `pnpm --filter=$pnpmWorkspace build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
+
+```nix
+buildPhase = ''
+  runHook preBuild
+
+  pnpm --filter=@astrojs/language-server build
+
+  runHook postBuild
+'';
+```
+
+#### Additional PNPM Commands and settings {#javascript-pnpm-extraCommands}
+
+If you require setting an additional PNPM configuration setting (such as `dedupe-peer-dependents` or similar),
+set `prePnpmInstall` to the right commands to run. For example:
+
+```nix
+prePnpmInstall = ''
+  pnpm config set dedupe-peer-dependants false
+'';
+pnpmDeps = pnpm.fetchDeps {
+  inherit (finalAttrs) prePnpmInstall;
+  ...
+};
+```
+
+In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
+
+
 ### yarn2nix {#javascript-yarn2nix}
 
 #### Preparation {#javascript-yarn2nix-preparation}
