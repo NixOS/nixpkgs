@@ -1643,6 +1643,7 @@
   ./tasks/filesystems.nix
   ./tasks/filesystems/apfs.nix
   ./tasks/filesystems/bcachefs.nix
+  ./tasks/filesystems/bindfs.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/ecryptfs.nix
