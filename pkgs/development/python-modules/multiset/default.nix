@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "multiset";
   version = "3.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,14 +22,14 @@ buildPythonPackage rec {
     sed -i '/python_requires/d' setup.cfg
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  pythonImportsCheck = [ "multiset" ];
-
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "multiset" ];
 
   meta = with lib; {
     description = "Implementation of a multiset";
