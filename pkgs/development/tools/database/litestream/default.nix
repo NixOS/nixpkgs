@@ -30,5 +30,6 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://litestream.io/";
     maintainers = with maintainers; [ fbrs ];
+    knownVulnerabilities = [ "CVE-2024-41254" ];
   };
 }
