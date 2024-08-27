@@ -100,12 +100,13 @@ edk2 = stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     changelog = "https://github.com/tianocore/edk2/releases/tag/edk2-stable${edk2.version}";
-    license = licenses.bsd2;
-    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64 ++ riscv64;
+    license = lib.licenses.bsd2;
+    platforms = with lib.platforms; aarch64 ++ arm ++ i686 ++ x86_64 ++ riscv64;
+    maintainers = [ lib.maintainers.mjoerg ];
   };
 
   passthru = {
