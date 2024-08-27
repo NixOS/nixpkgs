@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyemby";
-  version = "1.9";
+  version = "1.10";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = pname;
     rev = version;
-    hash = "sha256-4mOQLfPbRzZzpNLvekJHVKiqdGGKPhW6BpKkyRfk2Pc=";
+    hash = "sha256-+A/SNMCUqo9TwWsQXwOKJCqmYhbilIdHYazLNQY+NkU=";
   };
 
   propagatedBuildInputs = [
