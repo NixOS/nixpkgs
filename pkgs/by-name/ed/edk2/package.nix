@@ -1,12 +1,12 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
+, applyPatches
 , libuuid
 , bc
 , lib
 , buildPackages
 , nixosTests
-, runCommand
 , writeScript
 }:
 
@@ -31,22 +31,9 @@ buildType = if stdenv.isDarwin then
   else
     "GCC5";
 
-edk2 = stdenv.mkDerivation rec {
+edk2 = stdenv.mkDerivation {
   pname = "edk2";
   version = "202402";
-
-  patches = [
-    # pass targetPrefix as an env var
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
-      hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
-    })
-    # https://github.com/tianocore/edk2/pull/5658
-    (fetchpatch {
-      url = "https://github.com/tianocore/edk2/commit/a34ff4a8f69a7b8a52b9b299153a8fac702c7df1.patch";
-      hash = "sha256-u+niqwjuLV5tNPykW4xhb7PW2XvUmXhx5uvftG1UIbU=";
-    })
-  ];
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
@@ -56,20 +43,55 @@ edk2 = stdenv.mkDerivation rec {
     hash = "sha256-Nurm6QNKCyV6wvbj0ELdYAL7mbZ0yg/tTwnEJ+N18ng=";
   };
 
-  # We don't want EDK2 to keep track of OpenSSL,
-  # they're frankly bad at it.
-  src = runCommand "edk2-unvendored-src" { } ''
-    cp --no-preserve=mode -r ${srcWithVendoring} $out
-    rm -rf $out/CryptoPkg/Library/OpensslLib/openssl
-    mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
-    tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
-    chmod -R +w $out/
+  src = applyPatches {
+    name = "edk2-${edk2.version}-unvendored-src";
+    src = edk2.srcWithVendoring;
 
-    # Fix missing INT64_MAX include that edk2 explicitly does not provide
-    # via it's own <stdint.h>. Let's pull in openssl's definition instead:
-    sed -i $out/CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
-        -e '1i #include "internal/numbers.h"'
-  '';
+    patches = [
+      # pass targetPrefix as an env var
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
+        hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
+      })
+      # https://github.com/tianocore/edk2/pull/5658
+      (fetchpatch {
+        name = "fix-cross-compilation-antlr-dlg.patch";
+        url = "https://github.com/tianocore/edk2/commit/a34ff4a8f69a7b8a52b9b299153a8fac702c7df1.patch";
+        hash = "sha256-u+niqwjuLV5tNPykW4xhb7PW2XvUmXhx5uvftG1UIbU=";
+      })
+    ];
+
+    postPatch = ''
+      # We don't want EDK2 to keep track of OpenSSL, they're frankly bad at it.
+      rm -r CryptoPkg/Library/OpensslLib/openssl
+      mkdir -p CryptoPkg/Library/OpensslLib/openssl
+      (
+      cd CryptoPkg/Library/OpensslLib/openssl
+      tar --strip-components=1 -xf ${buildPackages.openssl.src}
+
+      # Fix missing INT64_MAX include that edk2 explicitly does not provide
+      # via it's own <stdint.h>. Let's pull in openssl's definition instead:
+      sed -i crypto/property/property_parse.c \
+          -e '1i #include "internal/numbers.h"'
+
+      # Apply OpenSSL patches.
+      ${lib.pipe buildPackages.openssl.patches [
+        (builtins.filter (
+          patch:
+          !builtins.elem (baseNameOf patch) [
+            # Exclude patches not required in this context.
+            "nix-ssl-cert-file.patch"
+            "openssl-disable-kernel-detection.patch"
+            "use-etc-ssl-certs-darwin.patch"
+            "use-etc-ssl-certs.patch"
+          ]
+        ))
+        (map (patch: "patch -p1 < ${patch}\n"))
+        lib.concatStrings
+      ]}
+      )
+    '';
+  };
 
   nativeBuildInputs = [ pythonEnv ];
   depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.bash ];
