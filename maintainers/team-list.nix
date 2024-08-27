@@ -507,7 +507,6 @@ with lib.maintainers;
       marcusramberg
       mic92
       rorosen
-      superherointj
       wrmilling
       yajo
     ];
@@ -951,7 +950,6 @@ with lib.maintainers;
   stridtech = {
     # Verify additions by approval of an already existing member of the team
     members = [
-      superherointj
       ulrikstrid
     ];
     scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
