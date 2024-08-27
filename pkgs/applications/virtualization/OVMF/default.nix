@@ -138,7 +138,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   '' + lib.optionalString msVarsTemplate ''
     (
     cd ${buildPrefix}
-    python3 $NIX_BUILD_TOP/debian/edk2-vars-generator.py \
+    # locale must be set on Darwin for invocations of mtools to work correctly
+    LC_ALL=C python3 $NIX_BUILD_TOP/debian/edk2-vars-generator.py \
       --flavor ${msVarsArgs.flavor} \
       --enrolldefaultkeys ${msVarsArgs.archDir}/EnrollDefaultKeys.efi \
       --shell ${msVarsArgs.archDir}/Shell.efi \
