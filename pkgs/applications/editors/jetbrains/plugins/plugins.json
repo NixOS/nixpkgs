@@ -626,6 +626,16 @@
       },
       "name": "github-copilot"
     },
+    "18032": {
+      "compatible": [
+        "idea-community",
+        "idea-ultimate"
+      ],
+      "builds": {
+        "242.21829.142": "https://plugins.jetbrains.com/files/18032/594467/vineflower-intellij-plugin-1.2.0.zip"
+      },
+      "name": "vineflower"
+    },
     "18444": {
       "compatible": [
         "clion",
@@ -752,6 +762,7 @@
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
     "https://plugins.jetbrains.com/files/164/590339/IdeaVIM-2.16.0.zip": "sha256-uMIrYoZE16X/K96HuDJx8QMh6wUbi4+qSw+HJAq7ukI=",
     "https://plugins.jetbrains.com/files/17718/590469/github-copilot-intellij-1.5.20.6554.zip": "sha256-QNVo6sLKwj+jJ2PMcJ3P5cAr1LwhFpH2+uglWO9ncQE=",
+    "https://plugins.jetbrains.com/files/18032/594467/vineflower-intellij-plugin-1.2.0.zip": "sha256-w92j6LAHFAikFAIrOUg8a5C7odVD624nIcQT050hLDo=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
     "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip": "sha256-pHmcD0gITA5E9vwHajnHfk+x7V6ijpXoTc4f/4xGRT4=",
     "https://plugins.jetbrains.com/files/20146/537545/Mermaid-0.0.22_IJ.232.zip": "sha256-DUiIQYIzYoXmgtBakSLtMB+xxJMaR70Jgg9erySa3wQ=",
