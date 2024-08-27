@@ -3369,8 +3369,6 @@ with pkgs;
     httpServer = true;
   };
 
-  antennas = callPackage ../servers/antennas { };
-
   apg = callPackage ../tools/security/apg { };
 
   apt-dater = callPackage ../tools/package-management/apt-dater {
@@ -4423,8 +4421,6 @@ with pkgs;
   chisel = callPackage ../tools/networking/chisel { };
 
   cht-sh = callPackage ../tools/misc/cht.sh { };
-
-  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
@@ -24272,10 +24268,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   };
 
-  yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-  };
-
   yubihsm-connector = callPackage ../tools/security/yubihsm-connector { };
 
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
@@ -39028,8 +39020,6 @@ with pkgs;
   tunnelx = callPackage ../applications/gis/tunnelx { };
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
-
-  tvheadend = callPackage ../servers/tvheadend { };
 
   twitch-cli = callPackage ../development/tools/twitch-cli { };
 

@@ -1,31 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, openssl
-, check
-, pcsclite
-, PCSC
-, gengetopt
-, help2man
-, cmake
-, zlib
-, nix-update-script
-, testers
-, withApplePCSC ? stdenv.isDarwin
+{
+  lib,
+  check,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  gengetopt,
+  help2man,
+  nix-update-script,
+  openssl,
+  pcsclite,
+  pkg-config,
+  stdenv,
+  testers,
+  zlib,
+  withApplePCSC ? stdenv.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
-  version = "2.5.2";
+  version = "2.6.0";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubico-piv-tool";
     rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
-    hash = "sha256-SBVYr6OcWqT+WKOZgIeZ1TmqCbcGAjbq/HaWIwPduFw=";
+    hash = "sha256-53cgwXMzVKnouwHhbt6pODhjF2MH0sK5CPWpbZe71jE=";
   };
 
   postPatch = ''
@@ -33,17 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    pkg-config
     cmake
     gengetopt
     help2man
+    pkg-config
   ];
 
   buildInputs = [
     openssl
-    zlib.dev
-  ]
-  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+    zlib
+  ] ++ (if withApplePCSC then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
     (lib.cmakeBool "GENERATE_MAN_PAGES" true)
@@ -60,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
+      extraArgs = [
+        "--version-regex"
+        "yubico-piv-tool-([0-9.]+)$"
+      ];
     };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -87,8 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ viraptor anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      viraptor
+      anthonyroussel
+    ];
     mainProgram = "yubico-piv-tool";
-    pkgConfigModules = [ "ykcs11" "ykpiv" ];
+    pkgConfigModules = [
+      "ykcs11"
+      "ykpiv"
+    ];
   };
 })
