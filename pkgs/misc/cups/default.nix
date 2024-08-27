@@ -39,6 +39,23 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenPrinting/cups/commit/b273a1f29bda87317c551614cf9ab6125f56e317.patch";
       hash = "sha256-nzWKEMOEBKZMjqVPl2mcATtXZSrh++yhv9VMvbA+49E=";
     })
+    # the following three patches fix a regression introduced by the patch above
+    (fetchpatch {
+      name = "CVE-2024-35235-fixup-domainsocket-1.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/6131f6a73c188f3db0ec94ae488991ce80cfd7ea.patch";
+      hash = "sha256-uftOI0zkwPXsW8CY8BoOkx4BysjDUc66LuzyZDjUHCI=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-35235-fixup-domainsocket-2.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/4417cd366f7baf64f4ada3efbb3ec13cd773a0f4.patch";
+      hash = "sha256-ighA4Vmf43iiwkNl71//Ml8ynh8nF/bcNOKELeJFPKo=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-35235-fixup-domainsocket-3.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/145b946a86062aafab76c656ee9c1112bfd4f804.patch";
+      includes = [ "scheduler/conf.c" ];
+      hash = "sha256-2jQFHUFav8XDfqA/PVKNvbUnZI34na8Wbuu4XRy3uqc=";
+    })
   ];
 
   postPatch = ''
