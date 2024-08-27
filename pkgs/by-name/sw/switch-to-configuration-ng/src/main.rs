@@ -1781,11 +1781,6 @@ won't take effect until you reboot the system.
                 }
             }
         }
-
-        block_on_jobs(&dbus_conn, &submitted_jobs);
-
-        remove_file_if_exists(RESTART_LIST_FILE)
-            .with_context(|| format!("Failed to remove {}", RESTART_LIST_FILE))?;
     }
 
     // Start all active targets, as well as changed units we stopped above. The latter is necessary
@@ -1817,6 +1812,9 @@ won't take effect until you reboot the system.
     }
 
     block_on_jobs(&dbus_conn, &submitted_jobs);
+
+    remove_file_if_exists(RESTART_LIST_FILE)
+        .with_context(|| format!("Failed to remove {}", RESTART_LIST_FILE))?;
 
     remove_file_if_exists(START_LIST_FILE)
         .with_context(|| format!("Failed to remove {}", START_LIST_FILE))?;
