@@ -99,6 +99,10 @@ buildGoModule rec {
   name = "zitadel";
   inherit version;
 
+  patches = [
+    ./2.42.x-CVE-2024-41953.patch
+  ];
+
   src = zitadelRepo;
 
   nativeBuildInputs = [ sass statik ];
