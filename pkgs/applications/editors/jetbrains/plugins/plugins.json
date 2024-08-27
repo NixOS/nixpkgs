@@ -657,6 +657,37 @@
       },
       "name": "netbeans-6-5-keymap"
     },
+    "20123": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "241.18034.1093": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "241.18968.39": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.20224.385": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.20224.413": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.20224.424": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.20224.425": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.20224.427": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.20224.431": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.21829.142": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.21829.149": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip",
+        "242.21829.153": "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip"
+      },
+      "name": "gdscript"
+    },
     "20146": {
       "compatible": [
         "clion",
@@ -722,6 +753,7 @@
     "https://plugins.jetbrains.com/files/164/590339/IdeaVIM-2.16.0.zip": "sha256-uMIrYoZE16X/K96HuDJx8QMh6wUbi4+qSw+HJAq7ukI=",
     "https://plugins.jetbrains.com/files/17718/590469/github-copilot-intellij-1.5.20.6554.zip": "sha256-QNVo6sLKwj+jJ2PMcJ3P5cAr1LwhFpH2+uglWO9ncQE=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
+    "https://plugins.jetbrains.com/files/20123/563619/GdScript-2.5.6.zip": "sha256-pHmcD0gITA5E9vwHajnHfk+x7V6ijpXoTc4f/4xGRT4=",
     "https://plugins.jetbrains.com/files/20146/537545/Mermaid-0.0.22_IJ.232.zip": "sha256-DUiIQYIzYoXmgtBakSLtMB+xxJMaR70Jgg9erySa3wQ=",
     "https://plugins.jetbrains.com/files/2162/542984/StringManipulation-9.14.1.zip": "sha256-OqeQCqFe8iW/8NPg+9i+UKh+twIPQ9uLZrItMukCi7k=",
     "https://plugins.jetbrains.com/files/22407/591052/intellij-rust-241.38968.39.zip": "sha256-Pgtj1czuScTmog7oh/2aME9jv4KlhT/ep6hwjSB73Ak=",
