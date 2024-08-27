@@ -100,12 +100,6 @@ buildPythonPackage rec {
     hash = "sha256-3gaxm425XdM9DcF8kmx8nr7Z9XIHS2+sT2UGimgU0BA=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    # Don't crash when running in Darwin sandbox
-    # Submitted upstream: https://github.com/matplotlib/matplotlib/pull/28498
-    ./darwin-sandbox-crash.patch
-  ];
-
   env.XDG_RUNTIME_DIR = "/tmp";
 
   # Matplotlib tries to find Tcl/Tk by opening a Tk window and asking the
