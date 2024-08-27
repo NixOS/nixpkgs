@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "prox";
-  # While upstream did release a v1.0.0, v0.5.2 is actually newer: https://github.com/fgrosse/prox/releases/tag/v0.5.2
-  version = "0.5.2";
+  # While upstream did release a v1.0.0, v1.1.0 is actually newer: https://github.com/fgrosse/prox/releases/tag/v1.1.0
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "fgrosse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mqx8ICne0NnyW0N1Jeu+PJXWDBr12OASLxlePI6v6Bc=";
+    sha256 = "sha256-KSHTlcAmnuU8F17N0LBS0s5b/k6Of0OEHVd3v50bH3g=";
   };
 
-  vendorHash = "sha256-4gZfEbyAzAzxtOR6FhP7eUSdln+fANn87+duCq1aq5A=";
+  vendorHash = "sha256-i4QJ84Tne1E8s2Fprd5xeWlTQBIb/9tvwws80yHXhbg=";
 
   postPatch = ''
     substituteInPlace cmd/prox/version.go \
