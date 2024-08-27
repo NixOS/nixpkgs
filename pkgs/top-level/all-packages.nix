@@ -13683,8 +13683,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  video-trimmer = callPackage ../applications/video/video-trimmer { };
-
   via = callPackage ../tools/misc/via { };
 
   vial = callPackage ../tools/misc/vial { };
