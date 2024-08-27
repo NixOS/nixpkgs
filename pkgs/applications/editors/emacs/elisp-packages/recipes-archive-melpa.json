@@ -18390,6 +18390,36 @@
   }
  },
  {
+  "ename": "consult-gh",
+  "commit": "139d2c2d0806559265946345c9efa0c26ae939ad",
+  "sha256": "01rw5yz96awm9qipklh4yh8ww6xwfnd76cpfskifwdm12bwgvd1w",
+  "fetcher": "github",
+  "repo": "armindarvish/consult-gh",
+  "unstable": {
+   "version": [
+    20240824,
+    2055
+   ],
+   "deps": [
+    "consult",
+    "markdown-mode"
+   ],
+   "commit": "b1d85d179438e4b6469e1b78906a7dde8f07c822",
+   "sha256": "0fsxgj1bsqg5l23yl1zmdwl78vwdkxszk542yhhmv7mlydg6wv2n"
+  },
+  "stable": {
+   "version": [
+    1,
+    0
+   ],
+   "deps": [
+    "consult"
+   ],
+   "commit": "077c076f1623fd8f2b93f6eb6f8c79ea58662783",
+   "sha256": "114nx7p3gc495hgy0b8227i653qnyawjwrmx1qjpl0gfq3vgnqd9"
+  }
+ },
+ {
   "ename": "consult-ghq",
   "commit": "513921c684fbab5ff57e47c509a89b15d7d3a5ce",
   "sha256": "091018x5y28lbffjrb75a5r2cvprlhz0jdj371nlyvrpsdgdfs4f",

@@ -174,6 +174,10 @@ let
         # upstream issue: missing package version
         cmake-mode = dontConfigure super.cmake-mode;
 
+        consult-gh = super.consult-gh.overrideAttrs(old: {
+          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
+        });
+
         company-rtags = fix-rtags super.company-rtags;
 
         easy-kill-extras = super.easy-kill-extras.override {
