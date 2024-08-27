@@ -12332,8 +12332,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  sonar-scanner-cli = callPackage ../tools/security/sonar-scanner-cli { };
-
   snapshot = callPackage ../applications/graphics/snapshot { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
