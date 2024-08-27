@@ -33,14 +33,14 @@ buildType = if stdenv.isDarwin then
 
 edk2 = stdenv.mkDerivation {
   pname = "edk2";
-  version = "202402";
+  version = "202405";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-Nurm6QNKCyV6wvbj0ELdYAL7mbZ0yg/tTwnEJ+N18ng=";
+    hash = "sha256-+phKAr3xc4T8tg6YAoGgRWCmxZiFzhazEAai48ICnKM=";
   };
 
   src = applyPatches {
@@ -58,6 +58,13 @@ edk2 = stdenv.mkDerivation {
         name = "fix-cross-compilation-antlr-dlg.patch";
         url = "https://github.com/tianocore/edk2/commit/a34ff4a8f69a7b8a52b9b299153a8fac702c7df1.patch";
         hash = "sha256-u+niqwjuLV5tNPykW4xhb7PW2XvUmXhx5uvftG1UIbU=";
+      })
+      # TODO: remove on next version of edk2
+      # https://github.com/tianocore/edk2/pull/5690
+      (fetchpatch {
+        name = "fix-stuck-system.patch";
+        url = "https://github.com/tianocore/edk2/commit/ced13b93afea87a8a1fe6ddbb67240a84cb2e3d3.patch";
+        hash = "sha256-RHfJ9OcMGs3jDg2jQyzcjbYkJcmc/SZyrdXBsUw9vDA=";
       })
     ];
 
