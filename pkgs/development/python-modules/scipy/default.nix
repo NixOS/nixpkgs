@@ -95,7 +95,7 @@ buildPythonPackage {
       --replace-fail "pybind11>=2.12.0,<2.13.0" "pybind11>=2.12.0" \
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     gfortran
     meson-python
@@ -120,7 +120,7 @@ buildPythonPackage {
     xsimd
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   __darwinAllowLocalNetworking = true;
 
