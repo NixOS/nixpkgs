@@ -1,12 +1,15 @@
 {
+  curl,
   esbuild,
   fetchFromGitHub,
   git,
+  jq,
   lib,
-  nix-update-script,
+  nix-update,
   nodejs,
   pnpm,
   stdenv,
+  writeShellScript,
   buildWebExtension ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -69,7 +72,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
+  # Vencord had a single "devbuild" release that we do not care about
+  passthru.updateScript = writeShellScript "update-vencord" ''
+    export PATH="${
+      lib.makeBinPath [
+        curl
+        jq
+        nix-update
+      ]
+    }:$PATH"
+    ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
+    latestTag=$(echo "$ghTags" | jq -r .[0].name)
+
+    echo "Latest tag: $latestTag"
+
+    exec nix-update --version "$latestTag" "$@"
+  '';
 
   meta = with lib; {
     description = "Vencord web extension";
