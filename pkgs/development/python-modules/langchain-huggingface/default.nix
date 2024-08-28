@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "0.0.3";
+  version = "0.2.35";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-huggingface==${version}";
-    hash = "sha256-4k3C6T2N7SBM/wP8KAwMQqt9DkXDdYNt2i/OkZilWw0=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-IZxMiJA2a7cfc+w7miUnOaCCn4FudG4CNlAIRDBmkfk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
