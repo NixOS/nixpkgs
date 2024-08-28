@@ -9,6 +9,7 @@
   glib,
   gnome,
   gnome-desktop,
+  gnome-settings-daemon,
   graphene,
   gst_all_1,
   gtk-doc,
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     budgie-screensaver
     glib
     gnome-desktop
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gnome.mutter
     zenity
     graphene

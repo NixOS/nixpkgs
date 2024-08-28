@@ -114,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-settings-daemon";
-      attrPath = "gnome.gnome-settings-daemon";
     };
   };
 

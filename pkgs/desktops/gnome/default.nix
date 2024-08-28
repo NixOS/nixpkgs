@@ -23,11 +23,6 @@ in
 
   gnome-shell = callPackage ./core/gnome-shell { };
 
-  gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
-
-  # Using 43 to match Mutter used in Pantheon
-  gnome-settings-daemon43 = callPackage ./core/gnome-settings-daemon/43 { };
-
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
   mutter = callPackage ./core/mutter { };
@@ -134,6 +129,8 @@ in
   gnome-robots = lib.warn "The ‘gnome.gnome-robots’ was moved to top-level. Please use ‘pkgs.gnome-robots’ directly." pkgs.gnome-robots; # Added on 2024-08-11.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
   gnome-session-ctl = lib.warn "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly." pkgs.gnome-session-ctl; # Added on 2024-08-28.
+  gnome-settings-daemon = lib.warn "The ‘gnome.gnome-settings-daemon’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon’ directly." pkgs.gnome-settings-daemon; # Added on 2024-08-28.
+  gnome-settings-daemon43 = lib.warn "The ‘gnome.gnome-settings-daemon43’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon43’ directly." pkgs.gnome-settings-daemon43; # Added on 2024-08-28.
   gnome-shell-extensions = lib.warn "The ‘gnome.gnome-shell-extensions’ was moved to top-level. Please use ‘pkgs.gnome-shell-extensions’ directly." pkgs.gnome-shell-extensions; # Added on 2024-08-11.
   gnome-software = lib.warn "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly." pkgs.gnome-software; # Added on 2024-08-11.
   gnome-sound-recorder = lib.warn "The ‘gnome.gnome-sound-recorder’ was moved to top-level. Please use ‘pkgs.gnome-sound-recorder’ directly." pkgs.gnome-sound-recorder; # Added on 2024-08-11.
