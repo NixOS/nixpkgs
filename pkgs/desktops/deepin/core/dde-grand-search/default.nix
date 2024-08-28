@@ -8,7 +8,7 @@
   wrapQtAppsHook,
   dtkwidget,
   dde-qt-dbus-factory,
-  dde-dock,
+  dde-tray-loader,
   deepin-pdfium,
   qt5integration,
   qt5platform-plugins,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
-    dde-dock
+    dde-tray-loader
     dde-qt-dbus-factory
     deepin-pdfium
     qt5integration

@@ -156,8 +156,6 @@ in
             deepin-desktop-base
 
             startdde
-            # TODO: should remove dde-dock, but dde-shell still need it's dconfig
-            dde-dock
             dde-shell
             dde-launchpad
             dde-session-ui
