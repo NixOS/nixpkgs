@@ -1,25 +1,29 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  darwin,
+  ocl-icd,
   buildPythonPackage,
+  fetchFromGitHub,
 
   # build-system
   cmake,
-  scikit-build-core,
-  pathspec,
-  ninja,
   nanobind,
+  ninja,
+  numpy,
+  pathspec,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
 
   # dependencies
-  darwin,
-  numpy,
-  ocl-icd,
-  opencl-headers,
   platformdirs,
-  pybind11,
-  pytestCheckHook,
   pytools,
+
+  # checks
+  pytestCheckHook,
 }:
 
 let
