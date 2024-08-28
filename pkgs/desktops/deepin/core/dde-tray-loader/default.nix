@@ -2,11 +2,14 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   extra-cmake-modules,
   pkg-config,
   dtkwidget,
   dde-qt-dbus-factory,
+  qt5integration,
+  qt5platform-plugins,
   wayland,
   wayland-scanner,
   xorg,
@@ -15,19 +18,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-tray-loader";
-  version = "0.0.5";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-tray-loader";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-ssgDLBzDFDs8FgtMHwa2k+3E3wOc8i0sVvYiYkb7lyE=";
+    rev = finalAttrs.version;
+    hash = "sha256-kz8+essf6O3ckeY5/5a/Z6539qNcfOnGbGTqSo5swhc=";
   };
 
-  postPatch = ''
-    substituteInPlace plugins/dde-dock/CMakeLists.txt \
-      --replace 'add_subdirectory("eye-comfort-mode")' " "
-  '';
+  patches = [
+    (fetchpatch {
+      name = "set-version-for-dde-dock_pc.patch";
+      url = "https://github.com/linuxdeepin/dde-tray-loader/commit/0f9b90a9aa8096a92c21c8f01d29b4785aaf04e5.patch";
+      hash = "sha256-A6k8XjyIDbA+XuUxYWd5yxFJ8yOWMOtUH5Vg10o//YM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -41,7 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dtkwidget
     dde-qt-dbus-factory
+    qt5integration
+    qt5platform-plugins
     libsForQt5.qtbase
+    libsForQt5.qtsvg
     libsForQt5.qtwayland
     libsForQt5.networkmanager-qt
     libsForQt5.libdbusmenu
