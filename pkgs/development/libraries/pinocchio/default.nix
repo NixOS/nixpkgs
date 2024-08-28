@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # example-robot-data models are used in checks.
     # Upstream provide them as git submodule, but we can use our own version instead.
-    rmdir models/example-robot-data
+    test -d models/example-robot-data && rmdir models/example-robot-data
     ln -s ${example-robot-data.src} models/example-robot-data
 
     # allow package:// uri use in examples
