@@ -1,7 +1,4 @@
 { config, lib, options, pkgs, utils, ... }:
-
-with lib;
-
 let
   cfg = config.networking.wireless;
   opt = options.networking.wireless;
@@ -9,13 +6,13 @@ let
   wpa3Protocols = [ "SAE" "FT-SAE" ];
   hasMixedWPA = opts:
     let
-      hasWPA3 = !mutuallyExclusive opts.authProtocols wpa3Protocols;
-      others = subtractLists wpa3Protocols opts.authProtocols;
+      hasWPA3 = !lib.mutuallyExclusive opts.authProtocols wpa3Protocols;
+      others = lib.subtractLists wpa3Protocols opts.authProtocols;
     in hasWPA3 && others != [];
 
   # Gives a WPA3 network higher priority
   increaseWPA3Priority = opts:
-    opts // optionalAttrs (hasMixedWPA opts)
+    opts // lib.optionalAttrs (hasMixedWPA opts)
       { priority = if opts.priority == null
                      then 1
                      else opts.priority + 1;
@@ -23,30 +20,30 @@ let
 
   # Creates a WPA2 fallback network
   mkWPA2Fallback = opts:
-    opts // { authProtocols = subtractLists wpa3Protocols opts.authProtocols; };
+    opts // { authProtocols = lib.subtractLists wpa3Protocols opts.authProtocols; };
 
   # Networks attrset as a list
-  networkList = mapAttrsToList (ssid: opts: opts // { inherit ssid; })
+  networkList = lib.mapAttrsToList (ssid: opts: opts // { inherit ssid; })
                 cfg.networks;
 
   # List of all networks (normal + generated fallbacks)
   allNetworks =
     if cfg.fallbackToWPA2
       then map increaseWPA3Priority networkList
-           ++ map mkWPA2Fallback (filter hasMixedWPA networkList)
+           ++ map mkWPA2Fallback (lib.filter hasMixedWPA networkList)
       else networkList;
 
   # Content of wpa_supplicant.conf
-  generatedConfig = concatStringsSep "\n" (
+  generatedConfig = lib.concatStringsSep "\n" (
     (map mkNetwork allNetworks)
-    ++ optional cfg.userControlled.enable (concatStringsSep "\n"
+    ++ lib.optional cfg.userControlled.enable (lib.concatStringsSep "\n"
       [ "ctrl_interface=/run/wpa_supplicant"
         "ctrl_interface_group=${cfg.userControlled.group}"
         "update_config=1"
       ])
     ++ [ "pmf=1" ]
-    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
-    ++ optional (cfg.extraConfig != "") cfg.extraConfig);
+    ++ lib.optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
+    ++ lib.optional (cfg.extraConfig != "") cfg.extraConfig);
 
   configIsGenerated = with cfg;
     networks != {} || extraConfig != "" || userControlled.enable;
@@ -72,28 +69,28 @@ let
     options = [
       "ssid=${quote opts.ssid}"
       (if pskString != null || opts.auth != null
-        then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
+        then "key_mgmt=${lib.concatStringsSep " " opts.authProtocols}"
         else "key_mgmt=NONE")
-    ] ++ optional opts.hidden "scan_ssid=1"
-      ++ optional (pskString != null) "psk=${pskString}"
-      ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
-      ++ optional (opts.priority != null) "priority=${toString opts.priority}"
-      ++ optional (opts.extraConfig != "") opts.extraConfig;
+    ] ++ lib.optional opts.hidden "scan_ssid=1"
+      ++ lib.optional (pskString != null) "psk=${pskString}"
+      ++ lib.optionals (opts.auth != null) (lib.filter (x: x != "") (lib.splitString "\n" opts.auth))
+      ++ lib.optional (opts.priority != null) "priority=${toString opts.priority}"
+      ++ lib.optional (opts.extraConfig != "") opts.extraConfig;
   in ''
     network={
-    ${concatMapStringsSep "\n" indent options}
+    ${lib.concatMapStringsSep "\n" indent options}
     }
   '';
 
   # Creates a systemd unit for wpa_supplicant bound to a given (or any) interface
   mkUnit = iface:
     let
-      deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
+      deviceUnit = lib.optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
       configStr = if cfg.allowAuxiliaryImperativeNetworks
         then "-c /etc/wpa_supplicant.conf -I ${finalConfig}"
         else "-c ${finalConfig}";
     in {
-      description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
+      description = "WPA Supplicant instance" + lib.optionalString (iface != null) " for interface ${iface}";
 
       after = deviceUnit;
       before = [ "network.target" ];
@@ -109,19 +106,19 @@ let
       serviceConfig.UMask = "066";
       serviceConfig.RuntimeDirectory = "wpa_supplicant";
       serviceConfig.RuntimeDirectoryMode = "700";
-      serviceConfig.EnvironmentFile = mkIf (cfg.environmentFile != null)
+      serviceConfig.EnvironmentFile = lib.mkIf (cfg.environmentFile != null)
         (builtins.toString cfg.environmentFile);
 
       script =
       ''
-        ${optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
+        ${lib.optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
           if [ -f /etc/wpa_supplicant.conf ]; then
             echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
           fi
         ''}
 
         # ensure wpa_supplicant.conf exists, or the daemon will fail to start
-        ${optionalString cfg.allowAuxiliaryImperativeNetworks ''
+        ${lib.optionalString cfg.allowAuxiliaryImperativeNetworks ''
           touch /etc/wpa_supplicant.conf
         ''}
 
@@ -140,7 +137,7 @@ let
           touch ${finalConfig}
         fi
 
-        iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
+        iface_args="-s ${lib.optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
 
         ${if iface == null then ''
           # detect interfaces automatically
@@ -177,10 +174,10 @@ let
 in {
   options = {
     networking.wireless = {
-      enable = mkEnableOption "wpa_supplicant";
+      enable = lib.mkEnableOption "wpa_supplicant";
 
-      interfaces = mkOption {
-        type = types.listOf types.str;
+      interfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "wlan0" "wlan1" ];
         description = ''
@@ -193,13 +190,13 @@ in {
         '';
       };
 
-      driver = mkOption {
-        type = types.str;
+      driver = lib.mkOption {
+        type = lib.types.str;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
       };
 
-      allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
+      allowAuxiliaryImperativeNetworks = lib.mkEnableOption "support for imperative & declarative networks" // {
         description = ''
           Whether to allow configuring networks "imperatively" (e.g. via
           `wpa_supplicant_gui`) and declaratively via
@@ -209,8 +206,8 @@ in {
         '';
       };
 
-      scanOnLowSignal = mkOption {
-        type = types.bool;
+      scanOnLowSignal = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to periodically scan for (better) networks when the signal of
@@ -219,8 +216,8 @@ in {
         '';
       };
 
-      fallbackToWPA2 = mkOption {
-        type = types.bool;
+      fallbackToWPA2 = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to fall back to WPA2 authentication protocols if WPA3 failed.
@@ -231,8 +228,8 @@ in {
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/secrets/wireless.env";
         description = ''
@@ -267,11 +264,11 @@ in {
         '';
       };
 
-      networks = mkOption {
-        type = types.attrsOf (types.submodule {
+      networks = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule {
           options = {
-            psk = mkOption {
-              type = types.nullOr types.str;
+            psk = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               description = ''
                 The network's pre-shared key in plaintext defaulting
@@ -288,8 +285,8 @@ in {
               '';
             };
 
-            pskRaw = mkOption {
-              type = types.nullOr types.str;
+            pskRaw = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               description = ''
                 The network's pre-shared key in hex defaulting
@@ -306,7 +303,7 @@ in {
               '';
             };
 
-            authProtocols = mkOption {
+            authProtocols = lib.mkOption {
               default = [
                 # WPA2 and WPA3
                 "WPA-PSK" "WPA-EAP" "SAE"
@@ -319,7 +316,7 @@ in {
               #   /^#$/{ run=0 }
               #   /^# [A-Z0-9-]{2,}/{ if(run){printf("\"%s\"\n", $2)} }
               # ' /run/current-system/sw/share/doc/wpa_supplicant/wpa_supplicant.conf.example
-              type = types.listOf (types.enum [
+              type = lib.types.listOf (lib.types.enum [
                 "WPA-PSK"
                 "WPA-EAP"
                 "IEEE8021X"
@@ -348,8 +345,8 @@ in {
               '';
             };
 
-            auth = mkOption {
-              type = types.nullOr types.str;
+            auth = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               example = ''
                 eap=PEAP
@@ -374,13 +371,13 @@ in {
               '';
             };
 
-            hidden = mkOption {
-              type = types.bool;
+            hidden = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Set this to `true` if the SSID of the network is hidden.
               '';
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 { echelon = {
                     hidden = true;
                     psk = "abcdefgh";
@@ -389,8 +386,8 @@ in {
               '';
             };
 
-            priority = mkOption {
-              type = types.nullOr types.int;
+            priority = lib.mkOption {
+              type = lib.types.nullOr lib.types.int;
               default = null;
               description = ''
                 By default, all networks will get same priority group (0). If some of the
@@ -403,8 +400,8 @@ in {
               '';
             };
 
-            extraConfig = mkOption {
-              type = types.str;
+            extraConfig = lib.mkOption {
+              type = lib.types.str;
               default = "";
               example = ''
                 bssid_blacklist=02:11:22:33:44:55 02:22:aa:44:55:66
@@ -426,7 +423,7 @@ in {
           /etc/wpa_supplicant.conf as the configuration file.
         '';
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";           # (password will be written to /nix/store!)
             };
@@ -445,8 +442,8 @@ in {
       };
 
       userControlled = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
@@ -459,26 +456,26 @@ in {
           '';
         };
 
-        group = mkOption {
-          type = types.str;
+        group = lib.mkOption {
+          type = lib.types.str;
           default = "wheel";
           example = "network";
           description = "Members of this group can control wpa_supplicant.";
         };
       };
 
-      dbusControlled = mkOption {
-        type = types.bool;
+      dbusControlled = lib.mkOption {
+        type = lib.types.bool;
         default = lib.length cfg.interfaces < 2;
-        defaultText = literalExpression "length config.${opt.interfaces} < 2";
+        defaultText = lib.literalExpression "lib.length config.${opt.interfaces} < 2";
         description = ''
           Whether to enable the DBus control interface.
           This is only needed when using NetworkManager or connman.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = ''
           p2p_disabled=1
@@ -493,22 +490,22 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = flip mapAttrsToList cfg.networks (name: cfg: {
+  config = lib.mkIf cfg.enable {
+    assertions = lib.flip lib.mapAttrsToList cfg.networks (name: cfg: {
       assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     }) ++ [
       {
-        assertion = length cfg.interfaces > 1 -> !cfg.dbusControlled;
+        assertion = lib.length cfg.interfaces > 1 -> !cfg.dbusControlled;
         message =
           let daemon = if config.networking.networkmanager.enable then "NetworkManager" else
                        if config.services.connman.enable then "connman" else null;
-              n = toString (length cfg.interfaces);
+              n = toString (lib.length cfg.interfaces);
           in ''
             It's not possible to run multiple wpa_supplicant instances with DBus support.
             Note: you're seeing this error because `networking.wireless.interfaces` has
             ${n} entries, implying an equal number of wpa_supplicant instances.
-          '' + optionalString (daemon != null) ''
+          '' + lib.optionalString (daemon != null) ''
             You don't need to change `networking.wireless.interfaces` when using ${daemon}:
             in this case the interfaces will be configured automatically for you.
           '';
@@ -518,22 +515,22 @@ in {
     hardware.wirelessRegulatoryDatabase = true;
 
     environment.systemPackages = [ pkgs.wpa_supplicant ];
-    services.dbus.packages = optional cfg.dbusControlled pkgs.wpa_supplicant;
+    services.dbus.packages = lib.optional cfg.dbusControlled pkgs.wpa_supplicant;
 
     systemd.services =
       if cfg.interfaces == []
         then { wpa_supplicant = mkUnit null; }
-        else listToAttrs (map (i: nameValuePair "wpa_supplicant-${i}" (mkUnit i)) cfg.interfaces);
+        else lib.listToAttrs (map (i: lib.nameValuePair "wpa_supplicant-${i}" (mkUnit i)) cfg.interfaces);
 
     # Restart wpa_supplicant after resuming from sleep
-    powerManagement.resumeCommands = concatStringsSep "\n" (
-      optional (cfg.interfaces == []) "${systemctl} try-restart wpa_supplicant"
+    powerManagement.resumeCommands = lib.concatStringsSep "\n" (
+      lib.optional (cfg.interfaces == []) "${systemctl} try-restart wpa_supplicant"
       ++ map (i: "${systemctl} try-restart wpa_supplicant-${i}") cfg.interfaces
     );
 
     # Restart wpa_supplicant when a wlan device appears or disappears. This is
     # only needed when an interface hasn't been specified by the user.
-    services.udev.extraRules = optionalString (cfg.interfaces == []) ''
+    services.udev.extraRules = lib.optionalString (cfg.interfaces == []) ''
       ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", \
       RUN+="${systemctl} try-restart wpa_supplicant.service"
     '';
