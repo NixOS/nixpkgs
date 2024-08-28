@@ -4,18 +4,15 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 {
 
   ###### interface
 
   options = {
 
-    services.oidentd.enable = mkOption {
+    services.oidentd.enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable ‘oidentd’, an implementation of the Ident
         protocol (RFC 1413).  It allows remote systems to identify the
@@ -27,7 +24,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.oidentd.enable {
+  config = lib.mkIf config.services.oidentd.enable {
     systemd.services.oidentd = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
