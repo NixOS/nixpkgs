@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, rustPlatform
-, gettext
-, meson
-, ninja
-, fetchurl
-, pkg-config
-, gtk4
-, glib
-, gdk-pixbuf
-, desktop-file-utils
-, appstream-glib
-, wrapGAppsHook4
-, python3
-, gnome
-, libadwaita
-, librsvg
-, rustc
-, cargo
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  gettext,
+  meson,
+  ninja,
+  fetchurl,
+  pkg-config,
+  gtk4,
+  glib,
+  gdk-pixbuf,
+  desktop-file-utils,
+  appstream-glib,
+  wrapGAppsHook4,
+  python3,
+  gnome,
+  libadwaita,
+  librsvg,
+  rustc,
+  cargo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-tour";
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-tour/${lib.versions.major finalAttrs.version}/gnome-tour-${finalAttrs.version}.tar.xz";
     hash = "sha256-8yZSqp1+8GQ3YM5jkyCCz9NkHnczt2xCm3jQl4O3xGo=";
   };
 
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-tour";
     };
   };
 
@@ -72,4 +73,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

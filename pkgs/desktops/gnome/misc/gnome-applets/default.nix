@@ -1,32 +1,34 @@
-{ lib, stdenv
-, fetchurl
-, gettext
-, itstool
-, libxml2
-, pkg-config
-, gnome-panel
-, gtk3
-, glib
-, libwnck
-, libgtop
-, libnotify
-, upower
-, wirelesstools
-, linuxPackages
-, adwaita-icon-theme
-, libgweather
-, gucharmap
-, tracker
-, polkit
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  itstool,
+  libxml2,
+  pkg-config,
+  gnome-panel,
+  gtk3,
+  glib,
+  libwnck,
+  libgtop,
+  libnotify,
+  upower,
+  wirelesstools,
+  linuxPackages,
+  adwaita-icon-theme,
+  libgweather,
+  gucharmap,
+  tracker,
+  polkit,
+  gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-applets";
   version = "3.52.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-applets/${lib.versions.majorMinor finalAttrs.version}/gnome-applets-${finalAttrs.version}.tar.xz";
     hash = "sha256-bz07QoZW/21bHT7lzLfs49Kxi1S/BFes9DtxHlXi1iw=";
   };
 
@@ -64,8 +66,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-applets";
+      attrPath = "gnome.gnome-applets";
       versionPolicy = "odd-unstable";
     };
   };
@@ -78,4 +80,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

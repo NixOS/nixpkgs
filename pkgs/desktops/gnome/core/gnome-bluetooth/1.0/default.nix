@@ -1,38 +1,44 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, gnome
-, adwaita-icon-theme
-, meson
-, ninja
-, pkg-config
-, gtk3
-, gettext
-, glib
-, udev
-, itstool
-, libxml2
-, wrapGAppsHook3
-, libnotify
-, libcanberra-gtk3
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, python3
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  gnome,
+  adwaita-icon-theme,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  gettext,
+  glib,
+  udev,
+  itstool,
+  libxml2,
+  wrapGAppsHook3,
+  libnotify,
+  libcanberra-gtk3,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  python3,
+  gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-bluetooth";
   version = "3.34.5";
 
   # TODO: split out "lib"
-  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+    "man"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-bluetooth/${lib.versions.majorMinor finalAttrs.version}/gnome-bluetooth-${finalAttrs.version}.tar.xz";
     sha256 = "bJSeUsi+zCBU2qzWBJAfZs5c9wml+pHEu3ysyTm1Pqk=";
   };
 
@@ -82,7 +88,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-bluetooth";
       attrPath = "gnome.gnome-bluetooth_1_0";
       freeze = true;
     };
@@ -96,4 +102,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-}
+})

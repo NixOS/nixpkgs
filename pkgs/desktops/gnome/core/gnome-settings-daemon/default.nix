@@ -1,49 +1,50 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, perl
-, gettext
-, gtk3
-, glib
-, libnotify
-, libgnomekbd
-, libpulseaudio
-, alsa-lib
-, libcanberra-gtk3
-, upower
-, colord
-, libgweather
-, polkit
-, gsettings-desktop-schemas
-, geoclue2
-, systemd
-, libgudev
-, libwacom
-, libxslt
-, libxml2
-, modemmanager
-, networkmanager
-, gnome-desktop
-, geocode-glib_2
-, docbook_xsl
-, wrapGAppsHook3
-, python3
-, tzdata
-, gcr_4
-, gnome-session-ctl
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  perl,
+  gettext,
+  gtk3,
+  glib,
+  libnotify,
+  libgnomekbd,
+  libpulseaudio,
+  alsa-lib,
+  libcanberra-gtk3,
+  upower,
+  colord,
+  libgweather,
+  polkit,
+  gsettings-desktop-schemas,
+  geoclue2,
+  systemd,
+  libgudev,
+  libwacom,
+  libxslt,
+  libxml2,
+  modemmanager,
+  networkmanager,
+  gnome-desktop,
+  geocode-glib_2,
+  docbook_xsl,
+  wrapGAppsHook3,
+  python3,
+  tzdata,
+  gcr_4,
+  gnome-session-ctl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
     hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
   };
 
@@ -103,7 +104,6 @@ stdenv.mkDerivation rec {
   # we're using plain
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
-
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
@@ -113,8 +113,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-settings-daemon";
+      attrPath = "gnome.gnome-settings-daemon";
     };
   };
 
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})
