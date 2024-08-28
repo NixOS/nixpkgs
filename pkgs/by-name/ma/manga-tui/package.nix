@@ -9,7 +9,7 @@
   darwin,
 }:
 let
-  version = "0.2.0";
+  version = "0.3.1";
 in
 rustPlatform.buildRustPackage {
   pname = "manga-tui";
@@ -19,15 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "josueBarretogit";
     repo = "manga-tui";
     rev = "v${version}";
-    hash = "sha256-rGdncPEHbjA86RB0NjWgmci3Dz2c92o3mgC3eCt8Nxs=";
+    hash = "sha256-672AuQWviwihnUS3G0xSn4IAMHy0fPE1VLDfu8wrPGg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ratatui-image-1.0.5" = "sha256-bUPKCK3AKO5fnv7a8PApZTI0LPBShNBsvgyunLMdIqg=";
-    };
-  };
+  cargoHash = "sha256-yf0hISz/jHtrO1clTSIKfxFiwI+W0Mu3mY+XW6+ynJU=";
 
   nativeBuildInputs = [ pkg-config ];
 
