@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-azure-dynamic-sessions";
-  version = "0.1.0";
+  version = "0.2.35";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-azure-dynamic-sessions==${version}";
-    hash = "sha256-jz4IBMnWuk8FsSsyfLN14B0xWZrmZrvEW95a45S+FOo=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-IZxMiJA2a7cfc+w7miUnOaCCn4FudG4CNlAIRDBmkfk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/azure-dynamic-sessions";
