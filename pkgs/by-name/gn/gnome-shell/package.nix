@@ -231,7 +231,6 @@ stdenv.mkDerivation (finalAttrs: {
     mozillaPlugin = "/lib/mozilla/plugins";
     updateScript = gnome.updateScript {
       packageName = "gnome-shell";
-      attrPath = "gnome.gnome-shell";
     };
   };
 

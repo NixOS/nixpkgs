@@ -13,6 +13,7 @@
   gsettings-desktop-schemas,
   gnome-desktop,
   gnome-settings-daemon,
+  gnome-shell,
   dbus,
   json-glib,
   libICE,
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/libexec/gnome-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share" \
+      --suffix XDG_DATA_DIRS : "${gnome-shell}/share" \
       --suffix XDG_CONFIG_DIRS : "${gnome-settings-daemon}/etc/xdg"
   '';
 

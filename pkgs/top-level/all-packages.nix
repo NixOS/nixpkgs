@@ -28019,9 +28019,7 @@ with pkgs;
 
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
-  mojave-gtk-theme = callPackage ../data/themes/mojave {
-    inherit (gnome) gnome-shell;
-  };
+  mojave-gtk-theme = callPackage ../data/themes/mojave { };
 
   moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
@@ -28533,9 +28531,7 @@ with pkgs;
 
   vimix-cursor-theme = callPackage ../data/icons/vimix-cursor-theme { };
 
-  vimix-gtk-themes = callPackage ../data/themes/vimix {
-    inherit (gnome) gnome-shell;
-  };
+  vimix-gtk-themes = callPackage ../data/themes/vimix { };
 
   vimix-icon-theme = callPackage ../data/icons/vimix-icon-theme { };
 
@@ -28551,9 +28547,7 @@ with pkgs;
 
   whitesur-cursors = callPackage ../data/icons/whitesur-cursors { };
 
-  whitesur-gtk-theme = callPackage ../data/themes/whitesur {
-    inherit (gnome) gnome-shell;
-  };
+  whitesur-gtk-theme = callPackage ../data/themes/whitesur { };
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 

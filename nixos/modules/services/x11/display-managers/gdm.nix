@@ -181,7 +181,11 @@ in
     ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
-    systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
+    systemd.packages = with pkgs.gnome; [
+      gdm
+      gnome-session
+      pkgs.gnome-shell
+    ];
     environment.systemPackages = [ pkgs.adwaita-icon-theme ];
 
     # We dont use the upstream gdm service
