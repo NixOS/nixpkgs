@@ -6,6 +6,7 @@
   pkg-config,
   libsodium,
   asciidoc,
+  xmlto,
   enableDrafts ? false,
 }:
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     asciidoc
+    xmlto
   ];
 
   buildInputs = [ libsodium ];
@@ -38,6 +40,29 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace '$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
+  postBuild = ''
+    # From https://gitlab.archlinux.org/archlinux/packaging/packages/zeromq/-/blob/main/PKGBUILD
+    # man pages aren't created when using cmake
+    # https://github.com/zeromq/libzmq/issues/4160
+    pushd ../doc
+    for FILE in *.txt; do
+        asciidoc \
+            -d manpage \
+            -b docbook \
+            -f asciidoc.conf \
+            -a zmq_version="${finalAttrs.version}" \
+            "''${FILE}"
+        xmlto --skip-validation man "''${FILE%.txt}.xml"
+    done
+    popd
+  '';
+
+  postInstall = ''
+    # Install manually created man pages
+    install -vDm644 -t "$out/share/man/man3" ../doc/*.3
+    install -vDm644 -t "$out/share/man/man7" ../doc/*.7
   '';
 
   meta = {
