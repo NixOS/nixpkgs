@@ -13,6 +13,7 @@
 */
 
 let
+  lib = import ../../lib;
   ensureList = x: if builtins.isList x then x else [ x ];
   allowUnfreePredicate =
     p:
@@ -53,11 +54,11 @@ assert builtins.elem variant [
 ];
 
 let
-  release-lib = import ./release-lib.nix (
-    { inherit supportedSystems nixpkgsArgs; } // builtins.removeAttrs args [ "variant" ]
+  mkReleaseLib = import ./release-lib.nix;
+  release-lib = mkReleaseLib (
+    { inherit supportedSystems nixpkgsArgs; } // lib.intersectAttrs (lib.functionArgs mkReleaseLib) args
   );
 
-  inherit (release-lib) lib;
   inherit (release-lib)
     linux
     mapTestOn
