@@ -6,6 +6,7 @@
   installShellFiles,
   makeBinaryWrapper,
   scdoc,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -42,6 +43,8 @@ buildGoModule rec {
     wrapProgram "$out/bin/ijq" \
       --prefix PATH : "${lib.makeBinPath [ jq ]}"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Interactive wrapper for jq";
