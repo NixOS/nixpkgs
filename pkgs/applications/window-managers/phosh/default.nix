@@ -18,6 +18,7 @@
 , glib
 , gtk4
 , gnome
+, gnome-bluetooth
 , gnome-desktop
 , gcr
 , pam
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     gmobile
-    gnome.gnome-bluetooth
+    gnome-bluetooth
     gnome.gnome-control-center
     gnome-desktop
     gnome.gnome-session

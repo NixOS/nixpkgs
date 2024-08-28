@@ -375,7 +375,7 @@ in
             pkgs.adwaita-icon-theme
             nixos-background-info
             pkgs.gnome-backgrounds
-            gnome-bluetooth
+            pkgs.gnome-bluetooth
             pkgs.gnome-color-manager
             gnome-control-center
             pkgs.gnome-shell-extensions
