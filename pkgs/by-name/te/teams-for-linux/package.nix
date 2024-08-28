@@ -9,7 +9,7 @@
   nodejs,
   fetchYarnDeps,
   fixup-yarn-lock,
-  electron,
+  electron_29,
   alsa-utils,
   which,
   testers,
@@ -59,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${
         if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"
       } \
-      -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=${electron_29.dist} \
+      -c.electronVersion=${electron_29.version}
 
     runHook postBuild
   '';
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # Linux needs 'aplay' for notification sounds
-    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
+    makeWrapper '${electron_29}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${
           lib.makeBinPath [
