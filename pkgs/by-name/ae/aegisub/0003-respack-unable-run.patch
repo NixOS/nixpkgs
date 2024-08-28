@@ -1,0 +1,22 @@
+diff --git a/src/libresrc/meson.build b/src/libresrc/meson.build
+index dcecf7842..06f4591b3 100644
+--- a/src/libresrc/meson.build
++++ b/src/libresrc/meson.build
+@@ -13,7 +13,7 @@ endforeach
+ 
+ resrc = [
+     custom_target('bitmap.{cpp,h}',
+-                  command: [respack, '@INPUT@', '@OUTPUT@'],
++                  command: ['python3', respack, '@INPUT@', '@OUTPUT@'],
+                   input: files(bitmap_manifest),
+                   depend_files: bitmap_files,
+                   output: ['bitmap.cpp', 'bitmap.h'])
+@@ -45,7 +45,7 @@ foreach rfile : fs.read(resmanifest).strip().split('\n')
+ endforeach
+ 
+ resrc += custom_target('default_config.{cpp,h}',
+-                        command: [respack, '@INPUT0@', '@OUTPUT@'],
++                        command: ['python3', respack, '@INPUT0@', '@OUTPUT@'],
+                         input: [files(resmanifest)],
+                         depend_files: resmanifest_files,
+                         output: ['default_config.cpp', 'default_config.h'])
