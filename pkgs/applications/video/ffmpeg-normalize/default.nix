@@ -1,30 +1,36 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, ffmpeg
-, ffmpeg-progress-yield
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  ffmpeg,
 }:
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.26.1";
+  version = "1.28.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OwREpfWaP0tdAjMGjGpVIAQn8rlTTjSfT+0t5g/2yjQ=";
+    hash = "sha256-8wNPuVRQRQpFK6opgwqdKYMYmAFRqq8p/T5V9kC8QaY=";
   };
 
-  propagatedBuildInputs = [ ffmpeg ffmpeg-progress-yield ];
+  propagatedBuildInputs = [
+    ffmpeg
+    python3Packages.ffmpeg-progress-yield
+  ];
+  dependencies = with python3Packages; [ colorlog ];
 
   checkPhase = ''
     $out/bin/ffmpeg-normalize --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Normalize audio via ffmpeg";
     homepage = "https://github.com/slhck/ffmpeg-normalize";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      prusnak
+    ];
     mainProgram = "ffmpeg-normalize";
   };
 }
