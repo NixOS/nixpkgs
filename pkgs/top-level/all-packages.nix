@@ -20001,8 +20001,6 @@ with pkgs;
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
-  ffmpeg-normalize = python3Packages.callPackage ../applications/video/ffmpeg-normalize { };
-
   ffms = callPackage ../development/libraries/ffms { };
 
   fftw = callPackage ../development/libraries/fftw { };
@@ -28567,7 +28565,7 @@ with pkgs;
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
-  whitesur-kde = libsForQt5.callPackage ../data/themes/whitesur-kde { };
+  whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
