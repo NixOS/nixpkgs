@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, meson
-, fetchurl
-, python3
-, pkg-config
-, gtk4
-, glib
-, gtksourceview5
-, gsettings-desktop-schemas
-, wrapGAppsHook4
-, ninja
-, gnome
-, cairo
-, enchant
-, icu
-, itstool
-, libadwaita
-, editorconfig-core-c
-, libxml2
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  meson,
+  fetchurl,
+  python3,
+  pkg-config,
+  gtk4,
+  glib,
+  gtksourceview5,
+  gsettings-desktop-schemas,
+  wrapGAppsHook4,
+  ninja,
+  gnome,
+  cairo,
+  enchant,
+  icu,
+  itstool,
+  libadwaita,
+  editorconfig-core-c,
+  libxml2,
+  desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-text-editor";
   version = "46.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major finalAttrs.version}/gnome-text-editor-${finalAttrs.version}.tar.xz";
     hash = "sha256-AFtIEEqQm+Zq4HRI0rxXBsfRE3gQV6JP9tpVvfMkxz0=";
   };
 
@@ -67,4 +68,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
-}
+})

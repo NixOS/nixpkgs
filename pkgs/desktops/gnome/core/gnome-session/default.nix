@@ -1,42 +1,46 @@
-{ fetchurl
-, lib
-, stdenv
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, gnome-desktop
-, dbus
-, json-glib
-, libICE
-, xmlto
-, docbook_xsl
-, docbook_xml_dtd_412
-, python3
-, libxslt
-, gettext
-, makeWrapper
-, systemd
-, xorg
-, libepoxy
-, bash
-, gnome-session-ctl
+{
+  fetchurl,
+  lib,
+  stdenv,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  gnome-desktop,
+  dbus,
+  json-glib,
+  libICE,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  python3,
+  libxslt,
+  gettext,
+  makeWrapper,
+  systemd,
+  xorg,
+  libepoxy,
+  bash,
+  gnome-session-ctl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
   version = "46.0";
 
-  outputs = [ "out" "sessions" ];
+  outputs = [
+    "out"
+    "sessions"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-session/${lib.versions.major finalAttrs.version}/gnome-session-${finalAttrs.version}.tar.xz";
     hash = "sha256-xuFiSvYJC8ThoZH+Imir+nqN4HgxynpX8hfmeb97mlQ=";
   };
 
@@ -133,4 +137,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

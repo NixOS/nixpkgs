@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, wrapGAppsHook3
-, meson
-, vala
-, pkg-config
-, ninja
-, itstool
-, clutter-gtk
-, libgee
-, libgnome-games-support
-, gnome
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  wrapGAppsHook3,
+  meson,
+  vala,
+  pkg-config,
+  ninja,
+  itstool,
+  clutter-gtk,
+  libgee,
+  libgnome-games-support,
+  gnome,
+  gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-twenty-forty-eight";
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-2048/${lib.versions.majorMinor version}/gnome-2048-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-2048/${lib.versions.majorMinor finalAttrs.version}/gnome-2048-${finalAttrs.version}.tar.xz";
     sha256 = "0s5fg4z5in1h39fcr69j1qc5ynmg7a8mfprk3mc3c0csq3snfwz2";
   };
 
@@ -63,4 +64,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

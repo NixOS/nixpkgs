@@ -26,7 +26,7 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-bluetooth";
   version = "46.1";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-bluetooth/${lib.versions.major version}/gnome-bluetooth-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-bluetooth/${lib.versions.major finalAttrs.version}/gnome-bluetooth-${finalAttrs.version}.tar.xz";
     hash = "sha256-VsRKFwNFmOlgdFivrhvnXz3l798OYjVfCbpY/HvDEqw=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-}
+})

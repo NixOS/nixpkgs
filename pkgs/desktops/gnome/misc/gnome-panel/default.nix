@@ -1,35 +1,40 @@
-{ stdenv
-, lib
-, fetchurl
-, autoreconfHook
-, dconf
-, evolution-data-server
-, gdm
-, geocode-glib_2
-, gettext
-, glib
-, gnome-desktop
-, gnome-menus
-, gnome
-, gtk3
-, itstool
-, libgweather
-, libwnck
-, libxml2
-, pkg-config
-, polkit
-, systemd
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoreconfHook,
+  dconf,
+  evolution-data-server,
+  gdm,
+  geocode-glib_2,
+  gettext,
+  glib,
+  gnome-desktop,
+  gnome-menus,
+  gnome,
+  gtk3,
+  itstool,
+  libgweather,
+  libwnck,
+  libxml2,
+  pkg-config,
+  polkit,
+  systemd,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-panel";
   version = "3.52.0";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-panel/${lib.versions.majorMinor finalAttrs.version}/gnome-panel-${finalAttrs.version}.tar.xz";
     hash = "sha256-nim6iHPN5A1AwpNKRk+PQ7ousbUisZFEfKon3XhTxdQ=";
   };
 
@@ -91,8 +96,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-panel";
+      attrPath = "gnome.gnome-panel";
       versionPolicy = "odd-unstable";
     };
   };
@@ -105,4 +110,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})
