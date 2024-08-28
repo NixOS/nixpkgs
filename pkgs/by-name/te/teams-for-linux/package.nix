@@ -126,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       muscaln
       qjoly
       chvp
+      khaneliman
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
