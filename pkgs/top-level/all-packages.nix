@@ -10093,6 +10093,8 @@ with pkgs;
     faslExt = "fas";
   };
 
+  mkCapsule = callPackage ../../pkgs/by-name/li/libcapsule/mkCapsule.nix { };
+
   # Steel Bank Common Lisp
   sbcl_2_4_6 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.6"; };
