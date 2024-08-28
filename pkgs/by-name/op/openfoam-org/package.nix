@@ -98,5 +98,9 @@ stdenv.mkDerivation {
     cp -r bin $out/opt/OpenFOAM-12
     cp -r platforms $out/opt/OpenFOAM-12
     cp -r etc $out/opt/OpenFOAM-12
+    cp -r applications $out/opt/OpenFOAM-12
+    cp -r src $out/opt/OpenFOAM-12
+    cp -r doc $out/opt/OpenFOAM-12
+    cp -r tutorials $out/opt/OpenFOAM-12
   '';
 }
