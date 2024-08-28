@@ -1,29 +1,26 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.chatgpt-retrieval-plugin;
 in
 {
   options.services.chatgpt-retrieval-plugin = {
-    enable = mkEnableOption "chatgpt-retrieval-plugin service";
+    enable = lib.mkEnableOption "chatgpt-retrieval-plugin service";
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       description = "Port the chatgpt-retrieval-plugin service listens on.";
     };
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       example = "0.0.0.0";
       description = "The hostname or IP address for chatgpt-retrieval-plugin to bind to.";
     };
 
-    bearerTokenPath = mkOption {
-      type = types.path;
+    bearerTokenPath = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to the secret bearer token used for the http api authentication.
       '';
@@ -31,8 +28,8 @@ in
       example = "config.age.secrets.CHATGPT_RETRIEVAL_PLUGIN_BEARER_TOKEN.path";
     };
 
-    openaiApiKeyPath = mkOption {
-      type = types.path;
+    openaiApiKeyPath = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path to the secret openai api key used for embeddings.
       '';
@@ -40,14 +37,14 @@ in
       example = "config.age.secrets.CHATGPT_RETRIEVAL_PLUGIN_OPENAI_API_KEY.path";
     };
 
-    datastore = mkOption {
-      type = types.enum [ "pinecone" "weaviate" "zilliz" "milvus" "qdrant" "redis" ];
+    datastore = lib.mkOption {
+      type = lib.types.enum [ "pinecone" "weaviate" "zilliz" "milvus" "qdrant" "redis" ];
       default = "qdrant";
       description = "This specifies the vector database provider you want to use to store and query embeddings.";
     };
 
-    qdrantCollection = mkOption {
-      type = types.str;
+    qdrantCollection = lib.mkOption {
+      type = lib.types.str;
       description = ''
         name of the qdrant collection used to store documents.
       '';
@@ -55,7 +52,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -94,7 +91,7 @@ in
 
       environment = {
         DATASTORE = cfg.datastore;
-        QDRANT_COLLECTION = mkIf (cfg.datastore == "qdrant") cfg.qdrantCollection;
+        QDRANT_COLLECTION = lib.mkIf (cfg.datastore == "qdrant") cfg.qdrantCollection;
       };
     };
 
