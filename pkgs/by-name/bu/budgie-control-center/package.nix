@@ -21,6 +21,7 @@
   glib-networking,
   glibc,
   gnome,
+  gnome-bluetooth_1_0,
   gnome-color-manager,
   gnome-desktop,
   gnome-remote-desktop,
@@ -116,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     adwaita-icon-theme
     cheese
-    gnome.gnome-bluetooth_1_0
+    gnome-bluetooth_1_0
     gnome-remote-desktop
     gnome.gnome-settings-daemon
     gnome-user-share

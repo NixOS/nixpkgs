@@ -74,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-bluetooth";
-      attrPath = "gnome.gnome-bluetooth";
     };
   };
 

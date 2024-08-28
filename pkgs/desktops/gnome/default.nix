@@ -17,10 +17,6 @@ in
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
-
-  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
-
   gnome-control-center = callPackage ./core/gnome-control-center { };
 
   gnome-session = callPackage ./core/gnome-session { };
@@ -109,6 +105,8 @@ in
   gitg = lib.warn "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly." pkgs.gitg; # Added on 2024-06-22.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
   gnome-backgrounds = lib.warn "The ‘gnome.gnome-backgrounds’ was moved to top-level. Please use ‘pkgs.gnome-backgrounds’ directly." pkgs.gnome-backgrounds; # Added on 2024-08-11.
+  gnome-bluetooth = lib.warn "The ‘gnome.gnome-bluetooth’ was moved to top-level. Please use ‘pkgs.gnome-bluetooth’ directly." pkgs.gnome-bluetooth; # Added on 2024-08-28.
+  gnome-bluetooth_1_0 = lib.warn "The ‘gnome.gnome-bluetooth_1_0’ was moved to top-level. Please use ‘pkgs.gnome-bluetooth_1_0’ directly." pkgs.gnome-bluetooth_1_0; # Added on 2024-08-28.
   gnome-boxes = lib.warn "The ‘gnome.gnome-boxes’ was moved to top-level. Please use ‘pkgs.gnome-boxes’ directly." pkgs.gnome-boxes; # Added on 2024-08-11.
   gnome-characters = lib.warn "The ‘gnome.gnome-characters’ was moved to top-level. Please use ‘pkgs.gnome-characters’ directly." pkgs.gnome-characters; # Added on 2024-08-11.
   gnome-chess = lib.warn "The ‘gnome.gnome-chess’ was moved to top-level. Please use ‘pkgs.gnome-chess’ directly." pkgs.gnome-chess; # Added on 2024-08-11.
