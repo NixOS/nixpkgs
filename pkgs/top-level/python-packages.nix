@@ -2719,6 +2719,8 @@ self: super: with self; {
 
   curio = callPackage ../development/python-modules/curio { };
 
+  curio-compat = callPackage ../development/python-modules/curio-compat { };
+
   curlify = callPackage ../development/python-modules/curlify { };
 
   curl-cffi = callPackage ../development/python-modules/curl-cffi { };
