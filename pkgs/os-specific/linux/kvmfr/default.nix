@@ -16,6 +16,14 @@ stdenv.mkDerivation {
       hash = "sha256-97nZsIH+jKCvSIPf1XPf3i8Wbr24almFZzMOhjhLOYk=";
       stripLen = 1;
     })
+
+    # securtiy patch for potential buffer overflow
+    # https://github.com/gnif/LookingGlass/issues/1133
+    (fetchpatch {
+      url = "https://github.com/gnif/LookingGlass/commit/3ea37b86e38a87ee35eefb5d8fcc38b8dc8e2903.patch";
+      hash = "sha256-Kk1gN1uB86ZJA374zmzM9dwwfMZExJcix3hee7ifpp0=";
+      stripLen = 1;
+    })
   ];
 
   makeFlags = [
