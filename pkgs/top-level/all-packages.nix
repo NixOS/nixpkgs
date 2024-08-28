@@ -8220,8 +8220,6 @@ with pkgs;
 
   gnulib = callPackage ../development/tools/gnulib { };
 
-  gnupatch = callPackage ../tools/text/gnupatch { };
-
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
