@@ -84,10 +84,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyopencl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    license = licenses.mit;
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    license = lib.licenses.mit;
   };
 }
