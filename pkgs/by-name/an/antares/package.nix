@@ -1,30 +1,34 @@
-{ fetchFromGitHub
-, lib
-, buildNpmPackage
-, electron
-, nodejs
+{
+  fetchFromGitHub,
+  lib,
+  buildNpmPackage,
+  electron,
+  nodejs,
+  fetchpatch,
 }:
 
 buildNpmPackage rec {
   pname = "antares";
-  version = "0.7.24";
+  version = "0.7.28";
 
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
     rev = "v${version}";
-    hash = "sha256-jMtUDqxWwfXl9x61ycohTaacNAhWawL3Z4+OPW5nbOI=";
+    hash = "sha256-nEI1G0A1c+xjALbIcItzh4CFxAeQPOD8h+Bs0aYnEfU=";
   };
 
-  npmDepsHash = "sha256-GC1hdRO8rrM97AMYCxWeNtJhyVdbKgitKLkWX7kGCwg=";
+  npmDepsHash = "sha256-lSkZTa2zt8BeucOih8XjQ7QW/tg34umIRe4a4DDBW34=";
+
+  patches = [
+    # In version 0.7.28, package-lock is not updated properly so this patch update it to be able to build the package
+    # This patch will probably be removed in the next version
+    ./npm-lock.patch
+  ];
 
   buildInputs = [ nodejs ];
 
-  buildPhase = ''
-    runHook preBuild
-    npm run compile
-    runHook postBuild
-  '';
+  npmBuildScript = "compile";
 
   installPhase = ''
     runHook preInstall
@@ -36,7 +40,7 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  dontNpmBuild = true;
+  npmFlags = [ "--legacy-peer-deps" ];
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
 
