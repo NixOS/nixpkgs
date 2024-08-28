@@ -31,6 +31,7 @@
   enableZstd ? true,
   enableMixmaster ? false,
   enableLua ? false,
+  enableSmimeKeys ? true,
   withContrib ? true,
 }:
 
@@ -117,6 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     ''
       wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
+    ''
+    + lib.optionalString enableSmimeKeys ''
+      install -m 755 $src/contrib/smime_keys $out/bin;
+      substituteInPlace $out/bin/smime_keys \
+        --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl';
     ''
     # https://github.com/neomutt/neomutt-contrib
     # Contains vim-keys, keybindings presets and more.
