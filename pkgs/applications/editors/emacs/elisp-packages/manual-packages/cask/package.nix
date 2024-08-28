@@ -1,30 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bash
-, emacs
-, python3
+{
+  lib,
+  ansi,
+  coreutils,
+  dash,
+  ecukes,
+  el-mock,
+  ert-async,
+  ert-runner,
+  f,
+  fetchFromGitHub,
+  git,
+  gitUpdater,
+  melpaBuild,
+  noflet,
+  package-build,
+  s,
+  servant,
+  shell-split-string,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+melpaBuild (finalAttrs: {
   pname = "cask";
   version = "0.8.8";
 
   src = fetchFromGitHub {
+    name = "cask-source-${finalAttrs.version}";
     owner = "cask";
     repo = "cask";
     rev = "v${finalAttrs.version}";
     hash = "sha256-TlReq5sLVJj+pXmJSnepKQkNEWVhnh30iq4egM1HJMU=";
   };
 
-  doCheck = true;
+  patches = [
+    # Uses LISPDIR substitution var
+    ./0000-cask-lispdir.diff
+  ];
 
-  nativeBuildInputs = [ emacs ];
-  buildInputs = [
-    bash
-    python3
-  ]
-  ++ (with emacs.pkgs; [
+  packageRequires = [
     ansi
     dash
     ecukes
@@ -38,40 +50,35 @@ stdenv.mkDerivation (finalAttrs: {
     s
     servant
     shell-split-string
-  ]);
+  ];
+
+  ignoreCompilationError = false;
 
   strictDeps = true;
 
-  buildPhase = ''
-    runHook preBuild
-
-    emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el
-
-    runHook postBuild
+  postPatch = ''
+    lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.version} \
+      substituteAllInPlace bin/cask
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    install -Dm444 -t $out/share/emacs/site-lisp/cask *.el *.elc
-    install -Dm555 -t $out/share/emacs/site-lisp/cask/bin bin/cask
-    ln -s $out/share/emacs/site-lisp/cask/bin/cask $out/bin/cask
-
-    runHook postInstall
+  postInstall = ''
+    install -D -t $out/bin bin/cask
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
+  meta = {
+    homepage = "https://github.com/cask/cask";
     description = "Project management for Emacs";
-    mainProgram = "cask";
     longDescription = ''
       Cask is a project management tool for Emacs that helps automate the
       package development cycle; development, dependencies, testing, building,
       packaging and more.
     '';
-    homepage = "https://cask.readthedocs.io/en/latest/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "cask";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 })

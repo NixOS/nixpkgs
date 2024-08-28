@@ -1,0 +1,24 @@
+diff -Naur cask-source-0.8.8-old/bin/cask cask-source-0.8.8/bin/cask
+--- cask-source-0.8.8-old/bin/cask	1969-12-31 21:00:01.000000000 -0300
++++ cask-source-0.8.8/bin/cask	2024-08-30 18:34:48.986474121 -0300
+@@ -37,19 +37,6 @@
+ 		EMACSLOADPATH="$($CASK load-path)" PATH="$($CASK path)" EMACS="$EMACS" "$@"
+ 		;;
+ 	*)
+-		WHICH=${WHICH:-which}
+-		READLINK=$($WHICH readlink || true)
+-		if [ "$(uname || true)" == "Darwin" ] ; then
+-			READLINK=
+-		fi
+-		READLINK=${READLINK:-$($WHICH greadlink || true)}
+-		if [ ! -z "$READLINK" ] ; then
+-			SRCDIR__=$($READLINK -f "$CASK")
+-		else
+-			SRCDIR__=$(python -c "import os, sys; print(os.path.realpath(sys.argv[1]))" "$CASK")
+-		fi
+-		SRCDIR_=$(dirname "$SRCDIR__")
+-		SRCDIR=$(dirname "$SRCDIR_")
+-		"$EMACS" -Q --script "$SRCDIR/cask-cli.el" -- $subcommand "$@"
++		"$EMACS" -Q --script "@lispdir@/cask-cli.el" -- $subcommand "$@"
+ 		;;
+ esac
