@@ -124,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-session";
-      attrPath = "gnome.gnome-session";
     };
     providedSessions = [
       "gnome"

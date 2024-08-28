@@ -36509,7 +36509,7 @@ with pkgs;
 
   gnome-browser-connector = callPackage ../desktops/gnome/extensions/gnome-browser-connector { };
 
-  gnome-session-ctl = callPackage ../desktops/gnome/core/gnome-session/ctl.nix { };
+  gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };
 
   # Using 43 to match Mutter used in Pantheon
   gnome-settings-daemon43 = callPackage ../by-name/gn/gnome-settings-daemon/43 { };
