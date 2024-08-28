@@ -153,7 +153,7 @@ in
           XDG_DATA_DIRS = lib.makeSearchPath "share" [
             gdm # for gnome-login.session
             config.services.displayManager.sessionData.desktops
-            pkgs.gnome.gnome-control-center # for accessibility icon
+            pkgs.gnome-control-center # for accessibility icon
             pkgs.adwaita-icon-theme
             pkgs.hicolor-icon-theme # empty icon theme as a base
           ];

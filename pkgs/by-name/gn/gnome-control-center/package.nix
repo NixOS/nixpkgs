@@ -207,7 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-control-center";
-      attrPath = "gnome.gnome-control-center";
     };
   };
 
