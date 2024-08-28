@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-with lib;
 let
   cfg = config.virtualisation.digitalOcean;
   defaultConfigFile = pkgs.writeText "digitalocean-configuration.nix" ''
@@ -11,16 +10,16 @@ let
     }
   '';
 in {
-  options.virtualisation.digitalOcean.rebuildFromUserData = mkOption {
-    type = types.bool;
+  options.virtualisation.digitalOcean.rebuildFromUserData = lib.mkOption {
+    type = lib.types.bool;
     default = true;
     example = true;
     description = "Whether to reconfigure the system from Digital Ocean user data";
   };
-  options.virtualisation.digitalOcean.defaultConfigFile = mkOption {
-    type = types.path;
+  options.virtualisation.digitalOcean.defaultConfigFile = lib.mkOption {
+    type = lib.types.path;
     default = defaultConfigFile;
-    defaultText = literalMD ''
+    defaultText = lib.literalMD ''
       The default configuration imports user-data if applicable and
       `(modulesPath + "/virtualisation/digital-ocean-config.nix")`.
     '';
@@ -32,7 +31,7 @@ in {
   };
 
   config = {
-    systemd.services.digitalocean-init = mkIf cfg.rebuildFromUserData {
+    systemd.services.digitalocean-init = lib.mkIf cfg.rebuildFromUserData {
       description = "Reconfigure the system from Digital Ocean userdata on startup";
       wantedBy = [ "network-online.target" ];
       unitConfig = {
@@ -49,7 +48,7 @@ in {
       path = [ pkgs.jq pkgs.gnused pkgs.gnugrep config.systemd.package config.nix.package config.system.build.nixos-rebuild ];
       environment = {
         HOME = "/root";
-        NIX_PATH = concatStringsSep ":" [
+        NIX_PATH = lib.concatStringsSep ":" [
           "/nix/var/nix/profiles/per-user/root/channels/nixos"
           "nixos-config=/etc/nixos/configuration.nix"
           "/nix/var/nix/profiles/per-user/root/channels"
@@ -91,5 +90,5 @@ in {
         '';
     };
   };
-  meta.maintainers = with maintainers; [ arianvp eamsden ];
+  meta.maintainers = with lib.maintainers; [ arianvp eamsden ];
 }
