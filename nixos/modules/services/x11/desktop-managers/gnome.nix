@@ -108,7 +108,7 @@ in
             favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
           '''
         '';
-        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
+        description = "List of desktop files to put as favorite apps into pkgs.gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -309,7 +309,7 @@ in
       services.xserver.desktopManager.gnome.sessionPath =
         let
           mandatoryPackages = [
-            pkgs.gnome.gnome-shell
+            pkgs.gnome-shell
           ];
           optionalPackages = [
             pkgs.gnome-shell-extensions
@@ -331,7 +331,7 @@ in
 
       systemd.packages = with pkgs.gnome; [
         gnome-session
-        gnome-shell
+        pkgs.gnome-shell
       ];
 
       services.udev.packages = [
@@ -368,8 +368,8 @@ in
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
         let
-          mandatoryPackages = with pkgs.gnome; [
-            gnome-shell
+          mandatoryPackages = [
+            pkgs.gnome-shell
           ];
           optionalPackages = with pkgs.gnome; [
             pkgs.adwaita-icon-theme

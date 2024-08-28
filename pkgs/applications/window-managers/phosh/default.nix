@@ -20,6 +20,7 @@
 , gnome
 , gnome-bluetooth
 , gnome-desktop
+, gnome-shell
 , gcr
 , pam
 , systemd
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gnome-shell}"
       --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
     )
   '';
