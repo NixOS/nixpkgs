@@ -21,8 +21,6 @@ in
 
   gnome-session = callPackage ./core/gnome-session { };
 
-  gnome-session-ctl = callPackage ./core/gnome-session/ctl.nix { };
-
   gnome-shell = callPackage ./core/gnome-shell { };
 
   gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
@@ -135,6 +133,7 @@ in
   gnome-remote-desktop = lib.warn "The ‘gnome.gnome-remote-desktop’ was moved to top-level. Please use ‘pkgs.gnome-remote-desktop’ directly." pkgs.gnome-remote-desktop; # Added on 2024-08-11.
   gnome-robots = lib.warn "The ‘gnome.gnome-robots’ was moved to top-level. Please use ‘pkgs.gnome-robots’ directly." pkgs.gnome-robots; # Added on 2024-08-11.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
+  gnome-session-ctl = lib.warn "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly." pkgs.gnome-session-ctl; # Added on 2024-08-28.
   gnome-shell-extensions = lib.warn "The ‘gnome.gnome-shell-extensions’ was moved to top-level. Please use ‘pkgs.gnome-shell-extensions’ directly." pkgs.gnome-shell-extensions; # Added on 2024-08-11.
   gnome-software = lib.warn "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly." pkgs.gnome-software; # Added on 2024-08-11.
   gnome-sound-recorder = lib.warn "The ‘gnome.gnome-sound-recorder’ was moved to top-level. Please use ‘pkgs.gnome-sound-recorder’ directly." pkgs.gnome-sound-recorder; # Added on 2024-08-11.
