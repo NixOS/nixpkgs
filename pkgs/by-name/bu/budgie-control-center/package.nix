@@ -25,6 +25,7 @@
   gnome-color-manager,
   gnome-desktop,
   gnome-remote-desktop,
+  gnome-settings-daemon,
   gnome-user-share,
   gsettings-desktop-schemas,
   gsound,
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     cheese
     gnome-bluetooth_1_0
     gnome-remote-desktop
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gnome-user-share
     gnome.mutter
     gsettings-desktop-schemas

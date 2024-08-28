@@ -8,6 +8,7 @@
 , glib
 , gnome
 , gnome-desktop
+, gnome-settings-daemon
 , gnome-shell-extensions
 , gobject-introspection
 , gsettings-desktop-schemas
@@ -48,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     glib
     gnome-desktop
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gnome.gnome-shell
     # Makes it possible to select user themes through the `user-theme` extension
     gnome-shell-extensions

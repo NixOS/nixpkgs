@@ -15,6 +15,7 @@
 , libnotify
 , itstool
 , gnome
+, gnome-settings-daemon
 , adwaita-icon-theme
 , libxml2
 , gsettings-desktop-schemas
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     udisks2
     adwaita-icon-theme
     systemd
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gsettings-desktop-schemas
   ];
 

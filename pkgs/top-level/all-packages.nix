@@ -36517,6 +36517,9 @@ with pkgs;
 
   gnome-session-ctl = callPackage ../desktops/gnome/core/gnome-session/ctl.nix { };
 
+  # Using 43 to match Mutter used in Pantheon
+  gnome-settings-daemon43 = callPackage ../by-name/gn/gnome-settings-daemon/43 { };
+
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });

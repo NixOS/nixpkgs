@@ -12,6 +12,7 @@
   gtk3,
   gsettings-desktop-schemas,
   gnome-desktop,
+  gnome-settings-daemon,
   dbus,
   json-glib,
   libICE,
@@ -75,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     xorg.xtrans
     adwaita-icon-theme
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gsettings-desktop-schemas
     systemd
     libepoxy
@@ -114,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share" \
-      --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
+      --suffix XDG_CONFIG_DIRS : "${gnome-settings-daemon}/etc/xdg"
   '';
 
   separateDebugInfo = true;
