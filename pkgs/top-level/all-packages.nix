@@ -184,6 +184,25 @@ with pkgs;
     autoconf = autoconf271;
   };
 
+  gnulibBootstrapHook = callPackage (
+    {
+      makeSetupHook,
+      gnulib,
+      autoconf,
+      automake,
+    }:
+    makeSetupHook {
+      name = "gnulib-bootstrap-hook";
+      propagatedBuildInputs = [
+        autoconf
+        automake
+      ];
+      substitutions = {
+        inherit gnulib;
+      };
+    } ../build-support/setup-hooks/gnulib-bootstrap.sh
+  ) { };
+
   autorestic = callPackage ../tools/backup/autorestic { };
 
   autoPatchelfHook = makeSetupHook {
