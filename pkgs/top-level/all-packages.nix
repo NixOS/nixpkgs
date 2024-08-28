@@ -28571,7 +28571,7 @@ with pkgs;
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
-  whitesur-kde = libsForQt5.callPackage ../data/themes/whitesur-kde { };
+  whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
