@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   pkg = pkgs.ostinato;
   cfg = config.services.ostinato;
@@ -13,8 +10,8 @@ let
     Address=${cfg.rpcServer.address}
 
     [PortList]
-    Include=${concatStringsSep "," cfg.portList.include}
-    Exclude=${concatStringsSep "," cfg.portList.exclude}
+    Include=${lib.concatStringsSep "," cfg.portList.include}
+    Exclude=${lib.concatStringsSep "," cfg.portList.exclude}
   '';
 
 in
@@ -26,18 +23,18 @@ in
 
     services.ostinato = {
 
-      enable = mkEnableOption "Ostinato agent-controller (Drone)";
+      enable = lib.mkEnableOption "Ostinato agent-controller (Drone)";
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 7878;
         description = ''
           Port to listen on.
         '';
       };
 
-      rateAccuracy = mkOption {
-        type = types.enum [ "High" "Low" ];
+      rateAccuracy = lib.mkOption {
+        type = lib.types.enum [ "High" "Low" ];
         default = "High";
         description = ''
           To ensure that the actual transmit rate is as close as possible to
@@ -49,8 +46,8 @@ in
       };
 
       rpcServer = {
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           default = "0.0.0.0";
           description = ''
             By default, the Drone RPC server will listen on all interfaces and
@@ -62,8 +59,8 @@ in
       };
 
       portList = {
-        include = mkOption {
-          type = types.listOf types.str;
+        include = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [];
           example = [ "eth*" "lo*" ];
           description = ''
@@ -71,8 +68,8 @@ in
             by drone, it be allowed by this include list.
           '';
         };
-        exclude = mkOption {
-          type = types.listOf types.str;
+        exclude = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [];
           example = [ "usbmon*" "eth0" ];
           description = ''
@@ -87,7 +84,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkg ];
 
