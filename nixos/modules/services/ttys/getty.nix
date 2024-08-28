@@ -1,20 +1,17 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.getty;
 
   baseArgs = [
     "--login-program" "${cfg.loginProgram}"
-  ] ++ optionals (cfg.autologinUser != null) [
+  ] ++ lib.optionals (cfg.autologinUser != null) [
     "--autologin" cfg.autologinUser
-  ] ++ optionals (cfg.loginOptions != null) [
+  ] ++ lib.optionals (cfg.loginOptions != null) [
     "--login-options" cfg.loginOptions
   ] ++ cfg.extraArgs;
 
   gettyCmd = args:
-    "@${pkgs.util-linux}/sbin/agetty agetty ${escapeShellArgs baseArgs} ${args}";
+    "@${pkgs.util-linux}/sbin/agetty agetty ${lib.escapeShellArgs baseArgs} ${args}";
 
 in
 
@@ -23,16 +20,16 @@ in
   ###### interface
 
   imports = [
-    (mkRenamedOptionModule [ "services" "mingetty" ] [ "services" "getty" ])
-    (mkRemovedOptionModule [ "services" "getty" "serialSpeed" ] ''set non-standard baudrates with `boot.kernelParams` i.e. boot.kernelParams = ["console=ttyS2,1500000"];'')
+    (lib.mkRenamedOptionModule [ "services" "mingetty" ] [ "services" "getty" ])
+    (lib.mkRemovedOptionModule [ "services" "getty" "serialSpeed" ] ''set non-standard baudrates with `boot.kernelParams` i.e. boot.kernelParams = ["console=ttyS2,1500000"];'')
   ];
 
   options = {
 
     services.getty = {
 
-      autologinUser = mkOption {
-        type = types.nullOr types.str;
+      autologinUser = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Username of the account that will be automatically logged in at the console.
@@ -40,17 +37,17 @@ in
         '';
       };
 
-      loginProgram = mkOption {
-        type = types.path;
+      loginProgram = lib.mkOption {
+        type = lib.types.path;
         default = "${pkgs.shadow}/bin/login";
-        defaultText = literalExpression ''"''${pkgs.shadow}/bin/login"'';
+        defaultText = lib.literalExpression ''"''${pkgs.shadow}/bin/login"'';
         description = ''
           Path to the login binary executed by agetty.
         '';
       };
 
-      loginOptions = mkOption {
-        type = types.nullOr types.str;
+      loginOptions = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Template for arguments to be passed to
@@ -64,8 +61,8 @@ in
         example = "-h darkstar -- \\u";
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           Additional arguments passed to agetty.
@@ -73,16 +70,16 @@ in
         example = [ "--nohostname" ];
       };
 
-      greetingLine = mkOption {
-        type = types.str;
+      greetingLine = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Welcome line printed by agetty.
           The default shows current NixOS version label, machine type and tty.
         '';
       };
 
-      helpLine = mkOption {
-        type = types.lines;
+      helpLine = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Help line printed by agetty below the welcome line.
@@ -101,8 +98,8 @@ in
   config = {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
-    services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
-    services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
+    services.getty.greetingLine = lib.mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.helpLine = lib.mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [
@@ -143,10 +140,10 @@ in
         ];
         serviceConfig.Restart = "always";
         restartIfChanged = false;
-        enable = mkDefault config.boot.isContainer;
+        enable = lib.mkDefault config.boot.isContainer;
       };
 
-    environment.etc.issue = mkDefault
+    environment.etc.issue = lib.mkDefault
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 
@@ -158,5 +155,5 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ RossComputerGuy ];
+  meta.maintainers = with lib.maintainers; [ RossComputerGuy ];
 }
