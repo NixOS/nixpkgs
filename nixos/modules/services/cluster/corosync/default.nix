@@ -1,42 +1,40 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.corosync;
 in
 {
   # interface
   options.services.corosync = {
-    enable = mkEnableOption "corosync";
+    enable = lib.mkEnableOption "corosync";
 
-    package = mkPackageOption pkgs "corosync" { };
+    package = lib.mkPackageOption pkgs "corosync" { };
 
-    clusterName = mkOption {
-      type = types.str;
+    clusterName = lib.mkOption {
+      type = lib.types.str;
       default = "nixcluster";
       description = "Name of the corosync cluster.";
     };
 
-    extraOptions = mkOption {
-      type = with types; listOf str;
+    extraOptions = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [];
       description = "Additional options with which to start corosync.";
     };
 
-    nodelist = mkOption {
+    nodelist = lib.mkOption {
       description = "Corosync nodelist: all cluster members.";
       default = [];
-      type = with types; listOf (submodule {
+      type = with lib.types; listOf (submodule {
         options = {
-          nodeid = mkOption {
+          nodeid = lib.mkOption {
             type = int;
             description = "Node ID number";
           };
-          name = mkOption {
+          name = lib.mkOption {
             type = str;
             description = "Node name";
           };
-          ring_addrs = mkOption {
+          ring_addrs = lib.mkOption {
             type = listOf str;
             description = "List of addresses, one for each ring.";
           };
@@ -46,7 +44,7 @@ in
   };
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     environment.etc."corosync/corosync.conf".text = ''
@@ -58,11 +56,11 @@ in
       }
 
       nodelist {
-        ${concatMapStrings ({ nodeid, name, ring_addrs }: ''
+        ${lib.concatMapStrings ({ nodeid, name, ring_addrs }: ''
           node {
             nodeid: ${toString nodeid}
             name: ${name}
-            ${concatStrings (imap0 (i: addr: ''
+            ${lib.concatStrings (lib.imap0 (i: addr: ''
               ring${toString i}_addr: ${addr}
             '') ring_addrs)}
           }
@@ -73,7 +71,7 @@ in
         # only corosync_votequorum is supported
         provider: corosync_votequorum
         wait_for_all: 0
-        ${optionalString (builtins.length cfg.nodelist < 3) ''
+        ${lib.optionalString (builtins.length cfg.nodelist < 3) ''
           two_node: 1
         ''}
       }
