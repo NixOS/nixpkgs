@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
     };
   };
 
