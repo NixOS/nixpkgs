@@ -15,11 +15,22 @@ let
       fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
         version = "0.9.3";
         format = "setuptools";
+        pyproject = null;
         src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
         };
+        propagatedBuildInputs = [
+          super.six
+          super.mock
+          super.pyfakefs
+        ];
+        checkPhase = ''
+          runHook preCheck
+          python -m unittest discover -v
+          runHook postCheck
+        '';
       });
     };
   };
