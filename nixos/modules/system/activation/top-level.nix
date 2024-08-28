@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   systemBuilder =
     ''
@@ -31,9 +28,9 @@ let
 
       cp "$extraDependenciesPath" "$out/extra-dependencies"
 
-      ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
+      ${lib.optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
         ${config.boot.bootspec.writer}
-        ${optionalString config.boot.bootspec.enableValidation
+        ${lib.optionalString config.boot.bootspec.enableValidation
           ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
       ''}
 
@@ -61,14 +58,14 @@ let
 
   # Handle assertions and warnings
 
-  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+  failedAssertions = map (x: x.message) (lib.filter (x: !x.assertion) config.assertions);
 
   baseSystemAssertWarn = if failedAssertions != []
-    then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
-    else showWarnings config.warnings baseSystem;
+    then throw "\nFailed assertions:\n${lib.concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else lib.showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = foldr ({ oldDependency, newDependency }: drv:
+  system = lib.foldr ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
@@ -84,14 +81,14 @@ in
 {
   imports = [
     ../build.nix
-    (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
-    (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
-    (mkRenamedOptionModule [ "system" "forbiddenDependenciesRegex" ] [ "system" "forbiddenDependenciesRegexes" ])
+    (lib.mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
+    (lib.mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
+    (lib.mkRenamedOptionModule [ "system" "forbiddenDependenciesRegex" ] [ "system" "forbiddenDependenciesRegexes" ])
   ];
 
   options = {
 
-    system.boot.loader.id = mkOption {
+    system.boot.loader.id = lib.mkOption {
       internal = true;
       default = "";
       description = ''
@@ -99,28 +96,28 @@ in
       '';
     };
 
-    system.boot.loader.kernelFile = mkOption {
+    system.boot.loader.kernelFile = lib.mkOption {
       internal = true;
       default = pkgs.stdenv.hostPlatform.linux-kernel.target;
-      defaultText = literalExpression "pkgs.stdenv.hostPlatform.linux-kernel.target";
-      type = types.str;
+      defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform.linux-kernel.target";
+      type = lib.types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
       '';
     };
 
-    system.boot.loader.initrdFile = mkOption {
+    system.boot.loader.initrdFile = lib.mkOption {
       internal = true;
       default = "initrd";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Name of the initrd file to be passed to the bootloader.
       '';
     };
 
     system.build = {
-      toplevel = mkOption {
-        type = types.package;
+      toplevel = lib.mkOption {
+        type = lib.types.package;
         readOnly = true;
         description = ''
           This option contains the store path that typically represents a NixOS system.
@@ -131,8 +128,8 @@ in
     };
 
 
-    system.copySystemConfiguration = mkOption {
-      type = types.bool;
+    system.copySystemConfiguration = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         If enabled, copies the NixOS configuration file
@@ -143,8 +140,8 @@ in
       '';
     };
 
-    system.systemBuilderCommands = mkOption {
-      type = types.lines;
+    system.systemBuilderCommands = lib.mkOption {
+      type = lib.types.lines;
       internal = true;
       default = "";
       description = ''
@@ -152,8 +149,8 @@ in
       '';
     };
 
-    system.systemBuilderArgs = mkOption {
-      type = types.attrsOf types.unspecified;
+    system.systemBuilderArgs = lib.mkOption {
+      type = lib.types.attrsOf lib.types.unspecified;
       internal = true;
       default = {};
       description = ''
@@ -161,18 +158,18 @@ in
       '';
     };
 
-    system.forbiddenDependenciesRegexes = mkOption {
+    system.forbiddenDependenciesRegexes = lib.mkOption {
       default = [];
       example = ["-dev$"];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         POSIX Extended Regular Expressions that match store paths that
         should not appear in the system closure, with the exception of {option}`system.extraDependencies`, which is not checked.
       '';
     };
 
-    system.extraSystemBuilderCmds = mkOption {
-      type = types.lines;
+    system.extraSystemBuilderCmds = lib.mkOption {
+      type = lib.types.lines;
       internal = true;
       default = "";
       description = ''
@@ -180,8 +177,8 @@ in
       '';
     };
 
-    system.extraDependencies = mkOption {
-      type = types.listOf types.pathInStore;
+    system.extraDependencies = lib.mkOption {
+      type = lib.types.listOf lib.types.pathInStore;
       default = [];
       description = ''
         A list of paths that should be included in the system
@@ -193,8 +190,8 @@ in
       '';
     };
 
-    system.checks = mkOption {
-      type = types.listOf types.package;
+    system.checks = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [];
       description = ''
         Packages that are added as dependencies of the system's build, usually
@@ -205,18 +202,18 @@ in
       '';
     };
 
-    system.replaceRuntimeDependencies = mkOption {
+    system.replaceRuntimeDependencies = lib.mkOption {
       default = [];
       example = lib.literalExpression "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
-      type = types.listOf (types.submodule (
+      type = lib.types.listOf (lib.types.submodule (
         { ... }: {
-          options.original = mkOption {
-            type = types.package;
+          options.original = lib.mkOption {
+            type = lib.types.package;
             description = "The original package to override.";
           };
 
-          options.replacement = mkOption {
-            type = types.package;
+          options.replacement = lib.mkOption {
+            type = lib.types.package;
             description = "The replacement package.";
           };
         })
@@ -232,13 +229,13 @@ in
       '';
     };
 
-    system.name = mkOption {
-      type = types.str;
+    system.name = lib.mkOption {
+      type = lib.types.str;
       default =
         if config.networking.hostName == ""
         then "unnamed"
         else config.networking.hostName;
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         if config.networking.hostName == ""
         then "unnamed"
         else config.networking.hostName;
@@ -251,8 +248,8 @@ in
       '';
     };
 
-    system.includeBuildDependencies = mkOption {
-      type = types.bool;
+    system.includeBuildDependencies = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to include the build closure of the whole system in
@@ -284,12 +281,12 @@ in
     ];
 
     system.extraSystemBuilderCmds =
-      optionalString
+      lib.optionalString
         config.system.copySystemConfiguration
         ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
         '' +
-      optionalString
+      lib.optionalString
         (config.system.forbiddenDependenciesRegexes != []) (lib.concatStringsSep "\n" (map (regex: ''
           if [[ ${regex} != "" && -n $closureInfo ]]; then
             if forbiddenPaths="$(grep -E -- "${regex}" $closureInfo/store-paths)"; then
@@ -317,7 +314,7 @@ in
       # In fact, using them runs the risk of accidentally adding unneeded paths
       # to the system closure, which defeats the purpose of the `system.checks`
       # option, as opposed to `system.extraDependencies`.
-      passedChecks = concatStringsSep " " config.system.checks;
+      passedChecks = lib.concatStringsSep " " config.system.checks;
     }
     // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != []) {
       closureInfo = pkgs.closureInfo { rootPaths = [
