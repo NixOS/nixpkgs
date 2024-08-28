@@ -1,0 +1,25 @@
+query($login:String!, $after:String) {
+  user(login:$login) {
+    issueComments(
+      first: 100, after: $after, orderBy: {
+        field: UPDATED_AT,
+        direction: DESC
+      }){
+      totalCount
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        id
+        updatedAt
+        url
+        repository {
+          id
+          # name
+          # owner { login }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+query($org: String!){
+  organization(login:$org){
+    id
+    repositories(first:100) {
+      totalCount
+      nodes { id name }
+    }
+  }
+}

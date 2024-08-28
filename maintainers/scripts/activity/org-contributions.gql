@@ -1,0 +1,29 @@
+query($login:String!, $orgId:ID!) {
+  user(login:$login) {
+    contributionsCollection(
+      organizationID:$orgId,
+      from:"2024-01-01T00:00:00Z",
+      to:"2025-01-01T00:00:00Z"
+    ){
+      issueContributions(first:1){
+        nodes {
+          issue { id url updatedAt }
+        }
+      }
+      pullRequestContributions(first:1){
+        nodes {
+          pullRequest { id url updatedAt }
+        }
+      }
+      commitContributionsByRepository {
+        contributions(first:1) {
+          nodes {
+            repository{name}
+            occurredAt
+            commitCount
+          }
+        }
+      }
+    }
+  }
+}
