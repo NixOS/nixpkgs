@@ -200,7 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = gnome.updateScript {
       packageName = "mutter";
-      attrPath = "gnome.mutter";
     };
   };
 

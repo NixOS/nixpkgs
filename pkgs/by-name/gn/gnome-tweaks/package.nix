@@ -18,6 +18,7 @@
 , libgudev
 , libnotify
 , libxml2
+, mutter
 , pkg-config
 , python3Packages
 , wrapGAppsHook4
@@ -53,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     gnome.gnome-shell
     # Makes it possible to select user themes through the `user-theme` extension
     gnome-shell-extensions
-    gnome.mutter
+    mutter
     gsettings-desktop-schemas
     gtk4
     libadwaita

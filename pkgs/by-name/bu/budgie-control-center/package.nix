@@ -48,6 +48,7 @@
   libxslt,
   meson,
   modemmanager,
+  mutter,
   networkmanager,
   networkmanagerapplet,
   ninja,
@@ -122,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-remote-desktop
     gnome-settings-daemon
     gnome-user-share
-    gnome.mutter
+    mutter
     gsettings-desktop-schemas
     gsound
     gtk3
@@ -176,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       # WM keyboard shortcuts
-      --prefix XDG_DATA_DIRS : "${gnome.mutter}/share"
+      --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
   '';
 

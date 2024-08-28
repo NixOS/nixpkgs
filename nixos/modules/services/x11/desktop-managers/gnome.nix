@@ -334,10 +334,10 @@ in
         gnome-shell
       ];
 
-      services.udev.packages = with pkgs.gnome; [
+      services.udev.packages = [
         # Force enable KMS modifiers for devices that require them.
-        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
-        mutter
+        # https://gitlab.gnome.org/GNOME/pkgs.mutter/-/merge_requests/1443
+        pkgs.mutter
       ];
 
       services.avahi.enable = mkDefault true;
