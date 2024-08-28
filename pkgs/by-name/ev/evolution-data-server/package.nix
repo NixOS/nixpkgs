@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, substituteAll
 , pkg-config
 , gnome
 , _experimental-update-script-combinators
@@ -13,7 +12,6 @@
 , libsecret
 , icu
 , sqlite
-, tzdata
 , libcanberra-gtk3
 , p11-kit
 , db
@@ -40,6 +38,7 @@
 , withGtk3 ? true
 , withGtk4 ? false
 , libphonenumber
+, libuuid
 , gnome-online-accounts
 , libgweather
 , boost
@@ -50,21 +49,16 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.52.4";
+  version = "3.53.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
-    hash = "sha256-GzaoOdscjYmAZuGb54uZWTCgovKohvFJ5PZOF1XwZPc=";
+    hash = "sha256-QRhmMD/rQoac1mHXr+ygF/hh/ABHy4Dgmt8QXsqiIbU=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit tzdata;
-    })
-
     # Avoid using wrapper function, which the hardcode gsettings
     # patch generator cannot handle.
     ./drop-tentative-settings-constructor.patch
@@ -104,6 +98,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     pcre
     libphonenumber
+    libuuid
     boost
     protobuf
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
