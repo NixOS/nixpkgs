@@ -15174,6 +15174,8 @@ self: super: with self; {
 
   strct = callPackage ../development/python-modules/strct { };
 
+  streamcontroller-plugin-tools = callPackage ../development/python-modules/streamcontroller-plugin-tools { };
+
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
@@ -17167,6 +17169,8 @@ self: super: with self; {
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
 
   usb-devices = callPackage ../development/python-modules/usb-devices { };
+
+  usb-monitor = callPackage ../development/python-modules/usb-monitor { };
 
   usbrelay-py = callPackage ../os-specific/linux/usbrelay/python.nix { };
 

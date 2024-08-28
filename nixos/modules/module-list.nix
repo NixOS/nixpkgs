@@ -286,6 +286,7 @@
   ./programs/ssh.nix
   ./programs/starship.nix
   ./programs/steam.nix
+  ./programs/streamcontroller.nix
   ./programs/streamdeck-ui.nix
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
@@ -1401,6 +1402,7 @@
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii.nix
+  ./services/web-apps/firefly-iii-data-importer.nix
   ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
   ./services/web-apps/freshrss.nix
