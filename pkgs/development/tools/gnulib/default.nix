@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchFromSavannah, python3, perl }:
+{ lib, stdenv, fetchFromSavannah, python3Minimal, perl }:
 
 stdenv.mkDerivation rec {
   pname = "gnulib";
-  version = "20231109";
+  version = "1.0";
 
   src = fetchFromSavannah {
     repo = "gnulib";
-    rev = "2dd1a7984c6b3e6056cef7e3f9933e0039c21634";
-    hash = "sha256-QtWf3mljEnr0TTogkoKN63Y5HTm14A2e/sIXX3xe2SE=";
+    rev = "v${version}";
+    hash = "sha256-8c/qz58w93PU4EiEKRLeSBLQ6eA6o1BdIOtiM9fs5g4=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     --replace-fail 'exec perl' 'exec ${lib.getExe perl}'
   '';
 
-  buildInputs = [ python3 ];
+  buildInputs = [ python3Minimal ];
 
   installPhase = ''
     mkdir -p $out/bin
