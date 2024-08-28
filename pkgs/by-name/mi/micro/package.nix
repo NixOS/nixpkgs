@@ -27,13 +27,13 @@
 let
   self = buildGoModule {
     pname = "micro";
-    version = "2.0.13";
+    version = "2.0.14";
 
     src = fetchFromGitHub {
       owner = "zyedidia";
       repo = "micro";
       rev = "v${self.version}";
-      hash = "sha256-fe+7RkUwCveBk14bYzg5uLGOqTVVJsrqixBQhCS79hY=";
+      hash = "sha256-avLVl6mn0xKgIy0BNnPZ8ypQhn8Ivj7gTgWbebDSjt0=";
     };
 
     vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
