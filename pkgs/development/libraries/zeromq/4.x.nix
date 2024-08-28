@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # fails all the tests (ctest)
 
   cmakeFlags = [
+    (lib.cmakeBool "WITH_LIBSODIUM" true)
+    (lib.cmakeBool "ENABLE_CURVE" true)
     (lib.cmakeBool "ENABLE_DRAFTS" enableDrafts)
   ];
 
