@@ -16,18 +16,20 @@
   ffmpeg,
   ffmpegthumbnailer,
   pcre,
+  lucenepp,
+  boost,
   dbus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-grand-search";
-  version = "5.4.9";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-WybwV1QIuV7O1SSgQU1ABsMf5QW9KJ95YyIa8Tz8pJ0=";
+    hash = "sha256-6s6M0cL8gjq1B5tuIRGPi8D69p4T8hPJv5QvBIvsO1w=";
   };
 
   nativeBuildInputs = [
@@ -48,13 +50,14 @@ stdenv.mkDerivation rec {
     ffmpeg
     ffmpegthumbnailer
     pcre
+    lucenepp
+    boost
   ];
 
   patches = [
     # This patch revert the commit e6735e7
     # FIXME: why StartManager can't work, is dde-api-proxy still required?
     ./fix-dbus-path-for-daemon.diff
-    ./patch-check-v23-interface.diff
   ];
 
   postPatch = ''
@@ -69,10 +72,7 @@ stdenv.mkDerivation rec {
     substituteAllInPlace src/grand-search-daemon/data/com.deepin.dde.daemon.GrandSearch.service
   '';
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-    "-DNIX_DEEPIN_VERSION=23"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
   meta = {
     description = "System-wide desktop search for DDE";
