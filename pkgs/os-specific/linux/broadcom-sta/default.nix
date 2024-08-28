@@ -54,17 +54,21 @@ stdenv.mkDerivation {
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
   unpackPhase = ''
+    runHook preUnpack
     sourceRoot=broadcom-sta
     mkdir "$sourceRoot"
     tar xvf "$src" -C "$sourceRoot"
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
     binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
     docDir="$out/share/doc/broadcom-sta/"
     mkdir -p "$binDir" "$docDir"
     cp wl.ko "$binDir"
     cp lib/LICENSE.txt "$docDir"
+    runHook postInstall
   '';
 
   meta = {
