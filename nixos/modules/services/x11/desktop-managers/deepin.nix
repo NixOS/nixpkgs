@@ -176,6 +176,8 @@ in
             dde-application-manager
             deepin-service-manager
             dde-grand-search
+            dde-api-proxy
+            dde-tray-loader
           ];
           optionalPackages = [
             onboard # dde-dock plugin
@@ -215,6 +217,7 @@ in
         dde-application-manager
         deepin-service-manager
         dde-grand-search
+        dde-api-proxy
       ];
 
       systemd.packages = with pkgs.deepin; [
@@ -229,6 +232,7 @@ in
         dde-session
         dde-application-manager
         deepin-service-manager
+        dde-api-proxy
       ];
     };
 }
