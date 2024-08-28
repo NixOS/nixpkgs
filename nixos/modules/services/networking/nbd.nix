@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 let
   inherit (lib)
     mkIf
@@ -75,13 +74,11 @@ in
     services.nbd = {
       server = {
         enable = lib.mkEnableOption "the Network Block Device (nbd) server";
-
         listenPort = mkOption {
           type = types.port;
           default = 10809;
           description = "Port to listen on. The port is NOT automatically opened in the firewall.";
         };
-
         extraOptions = mkOption {
           type = iniFields;
           default = {
@@ -92,7 +89,6 @@ in
             {manpage}`nbd-server(5)`.
           '';
         };
-
         exports = mkOption {
           description = "Files or block devices to make available over the network.";
           default = { };
@@ -103,7 +99,6 @@ in
                 description = "File or block device to export.";
                 example = "/dev/sdb1";
               };
-
               allowAddresses = mkOption {
                 type = nullOr (listOf str);
                 default = null;
@@ -113,7 +108,6 @@ in
                 ];
                 description = "IPs and subnets that are authorized to connect for this device. If not specified, the server will allow all connections.";
               };
-
               extraOptions = mkOption {
                 type = iniFields;
                 default = {
@@ -128,7 +122,6 @@ in
             };
           });
         };
-
         listenAddress = mkOption {
           type = nullOr str;
           description = "Address to listen on. If not specified, the server will listen on all interfaces.";
@@ -138,7 +131,6 @@ in
       };
     };
   };
-
   config = mkIf cfg.server.enable {
     assertions = [
       {
@@ -146,9 +138,7 @@ in
         message = "services.nbd.server exports must not be named 'generic'";
       }
     ];
-
     boot.kernelModules = [ "nbd" ];
-
     systemd.services.nbd-server = {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
@@ -157,10 +147,8 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.nbd}/bin/nbd-server -C ${serverConfig}";
         Type = "forking";
-
         DeviceAllow = map (path: "${path} rw") allowedDevices;
         BindPaths = boundPaths;
-
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
         LockPersonality = true;
