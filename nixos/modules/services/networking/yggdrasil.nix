@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   keysPath = "/var/lib/yggdrasil/keys.json";
 
@@ -11,16 +10,16 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "yggdrasil" "config" ]
       [ "services" "yggdrasil" "settings" ])
   ];
 
-  options = with types; {
+  options = with lib.types; {
     services.yggdrasil = {
-      enable = mkEnableOption "the yggdrasil system service";
+      enable = lib.mkEnableOption "the yggdrasil system service";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         default = { };
         example = {
@@ -57,7 +56,7 @@ in
         '';
       };
 
-      configFile = mkOption {
+      configFile = lib.mkOption {
         type = nullOr path;
         default = null;
         example = "/run/keys/yggdrasil.conf";
@@ -72,14 +71,14 @@ in
         '';
       };
 
-      group = mkOption {
-        type = types.nullOr types.str;
+      group = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "wheel";
         description = "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
       };
 
-      openMulticastPort = mkOption {
+      openMulticastPort = lib.mkOption {
         type = bool;
         default = false;
         description = ''
@@ -94,7 +93,7 @@ in
         '';
       };
 
-      denyDhcpcdInterfaces = mkOption {
+      denyDhcpcdInterfaces = lib.mkOption {
         type = listOf str;
         default = [ ];
         example = [ "tap*" ];
@@ -108,15 +107,15 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "yggdrasil" { };
+      package = lib.mkPackageOption pkgs "yggdrasil" { };
 
-      persistentKeys = mkEnableOption ''
+      persistentKeys = lib.mkEnableOption ''
         persistent keys. If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
         restarted. Keys are stored at ${keysPath}
       '';
 
-      extraArgs = mkOption {
+      extraArgs = lib.mkOption {
         type = listOf str;
         default = [ ];
         example = [ "-loglevel" "info" ];
@@ -126,7 +125,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
     let
       binYggdrasil = "${cfg.package}/bin/yggdrasil";
       binHjson = "${pkgs.hjson-go}/bin/hjson-cli";
@@ -204,7 +203,7 @@ in
           RuntimeDirectoryMode = "0750";
           BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
           LoadCredential =
-            mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
+            lib.mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
@@ -224,7 +223,7 @@ in
       };
 
       networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
-      networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [ 9001 ];
+      networking.firewall.allowedUDPPorts = lib.mkIf cfg.openMulticastPort [ 9001 ];
 
       # Make yggdrasilctl available on the command line.
       environment.systemPackages = [ cfg.package ];
