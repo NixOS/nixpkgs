@@ -3,13 +3,13 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, fetchpatch, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
+      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
       , removeReferencesTo
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
+      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs && !stdenv.hostPlatform.isStatic
       , enableSystemd ? null
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
@@ -100,7 +100,7 @@ let
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
-      ++ lib.optionals systemdSupport' [ systemd ]
+      ++ lib.optionals systemdSupport' [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals stdenv'.isLinux [ linux-pam ]
