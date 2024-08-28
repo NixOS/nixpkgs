@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.bookstack;
   bookstack = pkgs.bookstack.override {
@@ -28,34 +25,34 @@ let
 
 in {
   imports = [
-    (mkRemovedOptionModule [ "services" "bookstack" "extraConfig" ] "Use services.bookstack.config instead.")
-    (mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
+    (lib.mkRemovedOptionModule [ "services" "bookstack" "extraConfig" ] "Use services.bookstack.config instead.")
+    (lib.mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
   ];
 
   options.services.bookstack = {
 
-    enable = mkEnableOption "BookStack";
+    enable = lib.mkEnableOption "BookStack";
 
-    user = mkOption {
+    user = lib.mkOption {
       default = "bookstack";
       description = "User bookstack runs as.";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = "bookstack";
       description = "Group bookstack runs as.";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    appKeyFile = mkOption {
+    appKeyFile = lib.mkOption {
       description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
         generated with `head -c 32 /dev/urandom | base64`.
       '';
       example = "/run/keys/bookstack-appkey";
-      type = types.path;
+      type = lib.types.path;
     };
 
     hostname = lib.mkOption {
@@ -68,7 +65,7 @@ in {
       '';
     };
 
-    appURL = mkOption {
+    appURL = lib.mkOption {
       description = ''
         The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database. Command example: `php artisan bookstack:update-url https://old.example.com https://new.example.com`
@@ -76,39 +73,39 @@ in {
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
       defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';
       example = "https://example.com";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       description = "BookStack data directory";
       default = "/var/lib/bookstack";
-      type = types.path;
+      type = lib.types.path;
     };
 
     database = {
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Database host address.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3306;
         description = "Database host port.";
       };
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "bookstack";
         description = "Database name.";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = user;
-        defaultText = literalExpression "user";
+        defaultText = lib.literalExpression "user";
         description = "Database username.";
       };
-      passwordFile = mkOption {
-        type = with types; nullOr path;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/bookstack-dbpassword";
         description = ''
@@ -116,47 +113,47 @@ in {
           {option}`database.user`.
         '';
       };
-      createLocally = mkOption {
-        type = types.bool;
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Create the database and database user locally.";
       };
     };
 
     mail = {
-      driver = mkOption {
-        type = types.enum [ "smtp" "sendmail" ];
+      driver = lib.mkOption {
+        type = lib.types.enum [ "smtp" "sendmail" ];
         default = "smtp";
         description = "Mail driver to use.";
       };
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Mail host address.";
       };
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 1025;
         description = "Mail host port.";
       };
-      fromName = mkOption {
-        type = types.str;
+      fromName = lib.mkOption {
+        type = lib.types.str;
         default = "BookStack";
         description = "Mail \"from\" name.";
       };
-      from = mkOption {
-        type = types.str;
+      from = lib.mkOption {
+        type = lib.types.str;
         default = "mail@bookstackapp.com";
         description = "Mail \"from\" email.";
       };
-      user = mkOption {
-        type = with types; nullOr str;
+      user = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         example = "bookstack";
         description = "Mail username.";
       };
-      passwordFile = mkOption {
-        type = with types; nullOr path;
+      passwordFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/bookstack-mailpassword";
         description = ''
@@ -164,22 +161,22 @@ in {
           {option}`mail.user`.
         '';
       };
-      encryption = mkOption {
-        type = with types; nullOr (enum [ "tls" ]);
+      encryption = lib.mkOption {
+        type = with lib.types; nullOr (enum [ "tls" ]);
         default = null;
         description = "SMTP encryption mechanism to use.";
       };
     };
 
-    maxUploadSize = mkOption {
-      type = types.str;
+    maxUploadSize = lib.mkOption {
+      type = lib.types.str;
       default = "18M";
       example = "1G";
       description = "The maximum size for uploads (e.g. images).";
     };
 
-    poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+    poolConfig = lib.mkOption {
+      type = with lib.types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -194,13 +191,13 @@ in {
       '';
     };
 
-    nginx = mkOption {
-      type = types.submodule (
-        recursiveUpdate
+    nginx = lib.mkOption {
+      type = lib.types.submodule (
+        lib.recursiveUpdate
           (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
       );
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           serverAliases = [
             "bookstack.''${config.networking.domain}"
@@ -215,8 +212,8 @@ in {
       '';
     };
 
-    config = mkOption {
-      type = with types;
+    config = lib.mkOption {
+      type = with lib.types;
         attrsOf
           (nullOr
             (either
@@ -229,7 +226,7 @@ in {
               ])
               (submodule {
                 options = {
-                  _secret = mkOption {
+                  _secret = lib.mkOption {
                     type = nullOr str;
                     description = ''
                       The path to a file containing the value the
@@ -240,7 +237,7 @@ in {
                 };
               })));
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           ALLOWED_IFRAME_HOSTS = "https://example.com";
           WKHTMLTOPDF = "/home/user/bins/wkhtmltopdf";
@@ -273,7 +270,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       { assertion = db.createLocally -> db.user == user;
@@ -310,9 +307,9 @@ in {
 
     environment.systemPackages = [ artisan ];
 
-    services.mysql = mkIf db.createLocally {
+    services.mysql = lib.mkIf db.createLocally {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ db.name ];
       ensureUsers = [
         { name = db.user;
@@ -337,12 +334,12 @@ in {
     };
 
     services.nginx = {
-      enable = mkDefault true;
+      enable = lib.mkDefault true;
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
       recommendedGzipSettings = true;
-      virtualHosts.${cfg.hostname} = mkMerge [ cfg.nginx {
-        root = mkForce "${bookstack}/public";
+      virtualHosts.${cfg.hostname} = lib.mkMerge [ cfg.nginx {
+        root = lib.mkForce "${bookstack}/public";
         locations = {
           "/" = {
             index = "index.php";
@@ -361,7 +358,7 @@ in {
     systemd.services.bookstack-setup = {
       description = "Preparation tasks for BookStack";
       before = [ "phpfpm-bookstack.service" ];
-      after = optional db.createLocally "mysql.service";
+      after = lib.optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
@@ -374,12 +371,12 @@ in {
       path = [ pkgs.replace-secret ];
       script =
         let
-          isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+          isSecret = v: lib.isAttrs v && v ? _secret && lib.isString v._secret;
           bookstackEnvVars = lib.generators.toKeyValue {
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString = v: with builtins;
-                if isInt         v then toString v
-                else if isString v then v
+                if lib.isInt         v then toString v
+                else if lib.isString v then v
                 else if true  == v then "true"
                 else if false == v then "false"
                 else if isSecret v then hashString "sha256" v._secret
@@ -388,10 +385,10 @@ in {
           };
           secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
           mkSecretReplacement = file: ''
-            replace-secret ${escapeShellArgs [ (builtins.hashString "sha256" file) file "${cfg.dataDir}/.env" ]}
+            replace-secret ${lib.escapeShellArgs [ (builtins.hashString "sha256" file) file "${cfg.dataDir}/.env" ]}
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
+          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ {} null ])) cfg.config;
           bookstackEnv = pkgs.writeText "bookstack.env" (bookstackEnvVars filteredConfig);
         in ''
         # error handling
@@ -433,19 +430,19 @@ in {
     };
 
     users = {
-      users = mkIf (user == "bookstack") {
+      users = lib.mkIf (user == "bookstack") {
         bookstack = {
           inherit group;
           isSystemUser = true;
         };
         "${config.services.nginx.user}".extraGroups = [ group ];
       };
-      groups = mkIf (group == "bookstack") {
+      groups = lib.mkIf (group == "bookstack") {
         bookstack = {};
       };
     };
 
   };
 
-  meta.maintainers = with maintainers; [ ymarkus ];
+  meta.maintainers = with lib.maintainers; [ ymarkus ];
 }
