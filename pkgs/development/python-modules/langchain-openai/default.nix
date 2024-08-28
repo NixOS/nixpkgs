@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.1.22";
+  version = "0.2.35";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-5UAijSTfQ6nQxdZvKHl2o01wDW6+Jphf38V+dAs7Ffk=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-IZxMiJA2a7cfc+w7miUnOaCCn4FudG4CNlAIRDBmkfk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
