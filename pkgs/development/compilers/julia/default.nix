@@ -50,8 +50,8 @@ in
     { });
   julia_110 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.10.4";
-      hash = "sha256-8y5Sd/XYKmOCSILN6/rBWBmbuEgUw8AZo/7MNgFYYZE=";
+      version = "1.10.5";
+      hash = "sha256-X8lBWbh/NNGL9EoalA5Z9Ay+q5Mb/cDEdjIDu7aZUmA=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
       ];
