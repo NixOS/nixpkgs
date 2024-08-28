@@ -1,16 +1,12 @@
 # A module for ‘rtkit’, a DBus system service that hands out realtime
 # scheduling priority to processes that ask for it.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
 
   options = {
 
-    security.rtkit.enable = mkOption {
-      type = types.bool;
+    security.rtkit.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable the RealtimeKit system service, which hands
@@ -23,7 +19,7 @@ with lib;
   };
 
 
-  config = mkIf config.security.rtkit.enable {
+  config = lib.mkIf config.security.rtkit.enable {
 
     security.polkit.enable = true;
 
