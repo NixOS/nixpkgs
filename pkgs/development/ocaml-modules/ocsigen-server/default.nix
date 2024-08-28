@@ -17,7 +17,7 @@ let caml_ld_library_path =
 ; in
 
 buildDunePackage rec {
-  version = "5.1.2";
+  version = "6.0.0";
   pname = "ocsigenserver";
 
   minimalOCamlVersion = "4.08";
@@ -26,7 +26,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = "refs/tags/${version}";
-    hash = "sha256-piWHA4RMO370TETC9FtISyBvS1Uhk5CAGAtZleJTpjU=";
+    hash = "sha256-T3bgPZpDO6plgebLJDBtBuR2eR/bN3o24UAUv1VwgtI=";
   };
 
   nativeBuildInputs = [ makeWrapper which ];
