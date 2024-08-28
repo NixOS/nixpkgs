@@ -3,8 +3,8 @@
 let
   version = "6.30.223.271";
   hashes = {
-    i686-linux   = "1kaqa2dw3nb8k23ffvx46g8jj3wdhz8xa6jp1v3wb35cjfr712sg";
-    x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
+    i686-linux   = "sha256-T4twspOsjMXHDlca1dGHjQ8p0TOkb+eGmGjZwZtQWM0=";
+    x86_64-linux = "sha256-X3l3TVvuyPdja1nA+wegMQju8eP9MkVjiyCFjHFBRL4=";
   };
 
   arch = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
-    sha256 = hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    hash = hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   hardeningDisable = [ "pic" ];
