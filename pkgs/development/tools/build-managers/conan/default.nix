@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "conan";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = "refs/tags/${version}";
-    hash = "sha256-4GCLmPEoCX1Cw+H6Bo1KA4+9GX35HgONAmMF/WNX6ag=";
+    hash = "sha256-knwxK/raC3Y6VngCZ4XVKGPuKFKyo+0ALo4zP+bCN5g=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
