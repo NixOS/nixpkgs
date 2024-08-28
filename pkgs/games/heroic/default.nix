@@ -1,48 +1,40 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchYarnDeps
-, yarn
-, fixup-yarn-lock
+, pnpm
 , nodejs
-, python3
 , makeWrapper
 , electron
 , vulkan-helper
 , gogdl
 , legendary-gl
 , nile
+, comet-gog
 }:
 
-let appName = "heroic";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.14.1";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
-    rev = "v${version}";
-    hash = "sha256-AnyltqNP+XyVzgCobM3g6DIXntD3spKecYtCRx+8oic=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+OQRcBOf9Y34DD7FOp/3SO05mREG6or/HPiOkasHWPM=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-3CYSw1Qy363eyhy3UyFgihSau+miNHwvKjhlq/kWxWQ=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-3PiB8CT7wxGmvRuQQ5FIAmBqBm9+R55ry+N/qUYWzuk=";
   };
 
   nativeBuildInputs = [
-    yarn
-    fixup-yarn-lock
     nodejs
-    python3
+    pnpm.configHook
     makeWrapper
   ];
 
   patches = [
-    # Reverts part of upstream PR 2761 so that we don't have to use a non-free Electron fork.
-    # https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/2761
-    ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
   ];
@@ -51,64 +43,52 @@ in stdenv.mkDerivation rec {
     # We are not packaging this as an Electron application bundle, so Electron
     # reports to the application that is is not "packaged", which causes Heroic
     # to take some incorrect codepaths meant for development environments.
-    substituteInPlace src/**/*.ts --replace 'app.isPackaged' 'true'
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-
-    runHook postConfigure
+    substituteInPlace src/**/*.ts --replace-quiet 'app.isPackaged' 'true'
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    yarn --offline vite build
-
+    pnpm --offline electron-vite build
     # Remove dev dependencies.
-    yarn install --production --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    pnpm --ignore-scripts prune --prod
+    # Clean up broken symlinks left behind by `pnpm prune`
+    find node_modules/.bin -xtype l -delete
 
     runHook postBuild
   '';
 
   # --disable-gpu-compositing is to work around upstream bug
   # https://github.com/electron/electron/issues/32317
-  installPhase = let
-    binPlatform = if stdenv.isDarwin then "darwin" else "linux";
-  in ''
+  installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{applications,${appName}}
-    cp -r . $out/share/${appName}
-    rm -rf $out/share/${appName}/{.devcontainer,.vscode,.husky,.idea,.github}
+    mkdir -p $out/share/{applications,heroic}
+    cp -r . $out/share/heroic
+    rm -rf $out/share/heroic/{.devcontainer,.vscode,.husky,.idea,.github}
 
-    chmod -R u+w "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
-    rm -rf "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
-    mkdir -p "$out/share/${appName}/build/bin/${binPlatform}"
+    chmod -R u+w "$out/share/heroic/public/bin" "$out/share/heroic/build/bin"
+    rm -rf "$out/share/heroic/public/bin" "$out/share/heroic/build/bin"
+    mkdir -p "$out/share/heroic/build/bin/x64/linux"
     ln -s \
-      "${gogdl}/bin/gogdl" \
-      "${legendary-gl}/bin/legendary" \
-      "${nile}/bin/nile" \
-      "${lib.optionalString stdenv.isLinux "${vulkan-helper}/bin/vulkan-helper"}" \
-      "$out/share/${appName}/build/bin/${binPlatform}"
+      "${lib.getExe gogdl}" \
+      "${lib.getExe legendary-gl}" \
+      "${lib.getExe nile}" \
+      "${lib.getExe comet-gog}" \
+      "${lib.getExe vulkan-helper}" \
+      "$out/share/heroic/build/bin/x64/linux/"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
       --add-flags --disable-gpu-compositing \
-      --add-flags $out/share/${appName} \
+      --add-flags $out/share/heroic \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
 
-    substituteInPlace "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.desktop" \
-      --replace "Exec=heroic-run" "Exec=heroic"
+    substituteInPlace "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" \
+      --replace-fail "Exec=heroic-run" "Exec=heroic"
     mkdir -p "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
-    ln -s "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
-    ln -s "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
+    ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
+    ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
 
     runHook postInstall
   '';
@@ -119,7 +99,11 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aidalgol ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
-    mainProgram = appName;
+    # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
+    # It may also work on other Linux targets, but all the game stores only
+    # support x86 Linux, so it would require extra hacking to run games via QEMU
+    # user emulation.  Upstream provide Linux builds only for x86_64.
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "heroic";
   };
-}
+})
