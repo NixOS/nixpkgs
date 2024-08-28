@@ -35,7 +35,7 @@ in
 buildPythonPackage rec {
   pname = "pyopencl";
   version = "2024.2.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     hash = "sha256-DfZCtTeN1a1KS2qUU6iztba4opAVC/RUCe/hnkqTbII=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     nanobind
     ninja
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     pybind11
   ] ++ os-specific-buildInputs;
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     cffi
     decorator
