@@ -4,8 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
-
 let
   nncpCfgFile = "/run/nncp.hjson";
   programCfg = config.programs.nncp;
@@ -20,13 +18,13 @@ in
 
     services.nncp = {
       caller = {
-        enable = mkEnableOption ''
+        enable = lib.mkEnableOption ''
           cron'ed NNCP TCP daemon caller.
           The daemon will take configuration from
           [](#opt-programs.nncp.settings)
         '';
-        extraArgs = mkOption {
-          type = with types; listOf str;
+        extraArgs = lib.mkOption {
+          type = with lib.types; listOf str;
           description = "Extra command-line arguments to pass to caller.";
           default = [ ];
           example = [ "-autotoss" ];
@@ -34,15 +32,15 @@ in
       };
 
       daemon = {
-        enable = mkEnableOption ''
+        enable = lib.mkEnableOption ''
           NNCP TCP synronization daemon.
           The daemon will take configuration from
           [](#opt-programs.nncp.settings)
         '';
         socketActivation = {
-          enable = mkEnableOption "socket activation for nncp-daemon";
-          listenStreams = mkOption {
-            type = with types; listOf str;
+          enable = lib.mkEnableOption "socket activation for nncp-daemon";
+          listenStreams = lib.mkOption {
+            type = with lib.types; listOf str;
             description = ''
               TCP sockets to bind to.
               See [](#opt-systemd.sockets._name_.listenStreams).
@@ -50,8 +48,8 @@ in
             default = [ "5400" ];
           };
         };
-        extraArgs = mkOption {
-          type = with types; listOf str;
+        extraArgs = lib.mkOption {
+          type = with lib.types; listOf str;
           description = "Extra command-line arguments to pass to daemon.";
           default = [ ];
           example = [ "-autotoss" ];
@@ -61,7 +59,7 @@ in
     };
   };
 
-  config = mkIf (programCfg.enable or callerCfg.enable or daemonCfg.enable) {
+  config = lib.mkIf (programCfg.enable or callerCfg.enable or daemonCfg.enable) {
 
     assertions = [
       {
@@ -92,7 +90,7 @@ in
       };
     };
 
-    systemd.services."nncp-daemon" = mkIf daemonCfg.enable {
+    systemd.services."nncp-daemon" = lib.mkIf daemonCfg.enable {
       enable = !daemonCfg.socketActivation.enable;
       description = "NNCP TCP syncronization daemon.";
       documentation = [ "http://www.nncpgo.org/nncp_002ddaemon.html" ];
@@ -106,7 +104,7 @@ in
       };
     };
 
-    systemd.services."nncp-daemon@" = mkIf daemonCfg.socketActivation.enable {
+    systemd.services."nncp-daemon@" = lib.mkIf daemonCfg.socketActivation.enable {
       description = "NNCP TCP syncronization daemon.";
       documentation = [ "http://www.nncpgo.org/nncp_002ddaemon.html" ];
       after = [ "network.target" ];
@@ -120,7 +118,7 @@ in
       };
     };
 
-    systemd.sockets.nncp-daemon = mkIf daemonCfg.socketActivation.enable {
+    systemd.sockets.nncp-daemon = lib.mkIf daemonCfg.socketActivation.enable {
       inherit (daemonCfg.socketActivation) listenStreams;
       description = "socket for NNCP TCP syncronization.";
       conflicts = [ "nncp-daemon.service" ];
