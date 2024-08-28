@@ -68,6 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [
+      zendo
+      aleksana
+    ];
   };
 })
