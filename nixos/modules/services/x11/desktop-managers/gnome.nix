@@ -123,7 +123,7 @@ in
         description = "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption "gnome-session debug messages";
+      debug = mkEnableOption "pkgs.gnome-session debug messages";
 
       flashback = {
         enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
@@ -196,7 +196,7 @@ in
       services.gnome.core-shell.enable = true;
       services.gnome.core-utilities.enable = mkDefault true;
 
-      services.displayManager.sessionPackages = [ pkgs.gnome.gnome-session.sessions ];
+      services.displayManager.sessionPackages = [ pkgs.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${lib.concatMapStrings (p: ''
@@ -249,7 +249,7 @@ in
       ]
       # For /share/applications/${wmName}.desktop
       ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
-      # For /share/gnome-session/sessions/gnome-flashback-${wmName}.session
+      # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
       ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
@@ -287,7 +287,7 @@ in
           buildPortalsInGnome = false;
         })
       ];
-      xdg.portal.configPackages = mkDefault [ pkgs.gnome.gnome-session ];
+      xdg.portal.configPackages = mkDefault [ pkgs.gnome-session ];
 
       networking.networkmanager.enable = mkDefault true;
 
@@ -329,8 +329,8 @@ in
       services.gvfs.enable = true;
       services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (mkDefault true));
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-session
+      systemd.packages = [
+        pkgs.gnome-session
         pkgs.gnome-shell
       ];
 

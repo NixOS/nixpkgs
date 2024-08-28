@@ -19,8 +19,6 @@ in
 
   gnome-control-center = callPackage ./core/gnome-control-center { };
 
-  gnome-session = callPackage ./core/gnome-session { };
-
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
@@ -121,6 +119,7 @@ in
   gnome-remote-desktop = lib.warn "The ‘gnome.gnome-remote-desktop’ was moved to top-level. Please use ‘pkgs.gnome-remote-desktop’ directly." pkgs.gnome-remote-desktop; # Added on 2024-08-11.
   gnome-robots = lib.warn "The ‘gnome.gnome-robots’ was moved to top-level. Please use ‘pkgs.gnome-robots’ directly." pkgs.gnome-robots; # Added on 2024-08-11.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
+  gnome-session = lib.warn "The ‘gnome.gnome-session’ was moved to top-level. Please use ‘pkgs.gnome-session’ directly." pkgs.gnome-session; # Added on 2024-08-28.
   gnome-session-ctl = lib.warn "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly." pkgs.gnome-session-ctl; # Added on 2024-08-28.
   gnome-settings-daemon = lib.warn "The ‘gnome.gnome-settings-daemon’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon’ directly." pkgs.gnome-settings-daemon; # Added on 2024-08-28.
   gnome-settings-daemon43 = lib.warn "The ‘gnome.gnome-settings-daemon43’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon43’ directly." pkgs.gnome-settings-daemon43; # Added on 2024-08-28.

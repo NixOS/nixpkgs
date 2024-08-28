@@ -20,6 +20,7 @@
 , gnome
 , gnome-bluetooth
 , gnome-desktop
+, gnome-session
 , gnome-shell
 , gcr
 , pam
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-bluetooth
     gnome.gnome-control-center
     gnome-desktop
-    gnome.gnome-session
+    gnome-session
     gtk4
     pam
     systemd
@@ -112,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gnome-shell}"
-      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
+      --set GNOME_SESSION "${gnome-session}/bin/gnome-session"
     )
   '';
 

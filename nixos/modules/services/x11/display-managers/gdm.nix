@@ -183,7 +183,7 @@ in
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
     systemd.packages = with pkgs.gnome; [
       gdm
-      gnome-session
+      pkgs.gnome-session
       pkgs.gnome-shell
     ];
     environment.systemPackages = [ pkgs.adwaita-icon-theme ];
@@ -236,7 +236,7 @@ in
       EnvironmentFile = "-/etc/locale.conf";
     };
 
-    systemd.services.display-manager.path = [ pkgs.gnome.gnome-session ];
+    systemd.services.display-manager.path = [ pkgs.gnome-session ];
 
     # Allow choosing an user account
     services.accounts-daemon.enable = true;
