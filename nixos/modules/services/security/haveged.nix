@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.haveged;
 
@@ -15,14 +12,14 @@ in
 
     services.haveged = {
 
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         haveged entropy daemon, which refills /dev/random when low.
         NOTE: does nothing on kernels newer than 5.6
       '';
       # source for the note https://github.com/jirka-h/haveged/issues/57
 
-      refill_threshold = mkOption {
-        type = types.int;
+      refill_threshold = lib.mkOption {
+        type = lib.types.int;
         default = 1024;
         description = ''
           The number of bits of available entropy beneath which
@@ -34,7 +31,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # https://github.com/jirka-h/haveged/blob/a4b69d65a8dfc5a9f52ff8505c7f58dcf8b9234f/contrib/Fedora/haveged.service
     systemd.services.haveged = {
