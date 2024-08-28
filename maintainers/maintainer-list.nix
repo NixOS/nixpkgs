@@ -12334,6 +12334,13 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
+  lytedev = {
+    email = "daniel+nixpkgs@gmail.com";
+    github = "lytedev";
+    githubId = 508402;
+    name = "Daniel Flanagan";
+    keys = [ { fingerprint = "823E B345 6C62 D193 8904  2027 5B20 20A0 F992 1EF4"; } ];
+  };
   m00wl = {
     name = "Moritz Lumme";
     email = "moritz.lumme@gmail.com";
