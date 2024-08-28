@@ -4255,6 +4255,7 @@ broken-packages:
   - OpenCLWrappers # failure in job https://hydra.nixos.org/build/233222391 at 2023-09-02
   - opencog-atomspace # failure in job https://hydra.nixos.org/build/233237785 at 2023-09-02
   - opencv # failure in job https://hydra.nixos.org/build/252717564 at 2024-03-16
+  - opencv-extra # broken eval by missing system dependency
   - opencv-raw # failure in job https://hydra.nixos.org/build/233211286 at 2023-09-02
   - opendatatable # failure in job https://hydra.nixos.org/build/233254960 at 2023-09-02
   - openexchangerates # failure in job https://hydra.nixos.org/build/233203238 at 2023-09-02
