@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.localtimed;
 in {
@@ -9,8 +6,8 @@ in {
 
   options = {
     services.localtimed = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable `localtimed`, a simple daemon for keeping the
@@ -18,12 +15,12 @@ in {
           geoclue2 to determine the current location.
         '';
       };
-      package = mkPackageOption pkgs "localtime" { };
-      geoclue2Package = mkPackageOption pkgs "geoclue2-with-demo-agent" { };
+      package = lib.mkPackageOption pkgs "localtime" { };
+      geoclue2Package = lib.mkPackageOption pkgs "geoclue2-with-demo-agent" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.geoclue2.appConfig.localtimed = {
       isAllowed = true;
       isSystem = true;
