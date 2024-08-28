@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "ijq";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromSourcehut {
     owner = "~gpanders";
     repo = "ijq";
     rev = "v${version}";
-    hash = "sha256-rnSpXMadZW6I+7tIYqr1Cb4z00gdREsqin/r6OXaDMA=";
+    hash = "sha256-7vG9T+gC6HeSGwFDf3m7nM0hBz32n6ATiM30AKNC1Og=";
   };
 
   vendorHash = "sha256-zRa8MPWFvcoVm+LstbSAl1VY3oWMujZPjWS/ti1VXjE=";
