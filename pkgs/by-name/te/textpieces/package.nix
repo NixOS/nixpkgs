@@ -19,19 +19,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "textpieces";
-  version = "4.0.6";
+  version = "4.1.0";
 
   src = fetchFromGitLab {
     owner = "liferooter";
     repo = "textpieces";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6kbGvCiaoOY+pwSmaDn1N/rbTBzEehNi/j+RI05nn6o=";
+    hash = "sha256-0bc2Q3k08ZItRH7teQCv7uQyj4Rig6LtZmO5Vu48vxo=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "textpieces-core-1.0.0" = "sha256-HaLkL2HhH1khwsSdH64pZYtJ/WG+MLiEQPScDte/PAg=";
+      "textpieces-core-1.1.2" = "sha256-fAATzugZ4kpUqHx8H4yuNH9Weeubkp8eAHAe94rMBmA=";
     };
   };
 
@@ -56,10 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Swiss knife of text processing";
-    longDescription = "A small tool for quick text transformations such as checksums, encoding, decoding and so on.";
+    longDescription = ''
+      A small tool for quick text transformations such as
+      checksums, encoding, decoding and so on.
+    '';
     homepage = "https://gitlab.com/liferooter/textpieces";
     mainProgram = "textpieces";
-    license = lib.licenses.gpl3Plus;
+    license = with lib.licenses; [
+      gpl3Plus
+      # and
+      cc0
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
