@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch2
 , nix
 , perlPackages
 , buildEnv
@@ -131,6 +132,18 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "4bb2f08be14ff86d57b94b520a6cd2181efaee36";
     hash = "sha256-NzsqjLSobba4BJ5FS3vccC9rAH0OE9XI97geGj0KHts=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/NixOS/hydra/commit/916531dc9ccee52e6dab256232933fcf6d198158.patch";
+      hash = "sha256-JOtlYr+K934UIqHvfLMd/jfRRU+Tci0kvtyhOvlwxEs=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2024-45049.patch";
+      url = "https://github.com/NixOS/hydra/commit/f73043378907c2c7e44f633ad764c8bdd1c947d5.patch";
+      hash = "sha256-IS6GCuRLW+ULDD7udpGX2tO85bV2gGOX6DLLw3NTkJU=";
+    })
+  ];
 
   buildInputs = [
     unzip
