@@ -89,5 +89,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyopencl/pyopencl";
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
