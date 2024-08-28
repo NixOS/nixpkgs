@@ -1,99 +1,98 @@
 { lib, pkgs, config, utils, ... }:
-with lib;
 let
   cfg = config.services.lemmy;
   settingsFormat = pkgs.formats.json { };
 in
 {
-  meta.maintainers = with maintainers; [ happysalada ];
+  meta.maintainers = with lib.maintainers; [ happysalada ];
   meta.doc = ./lemmy.md;
 
   imports = [
-    (mkRemovedOptionModule [ "services" "lemmy" "jwtSecretPath" ] "As of v0.13.0, Lemmy auto-generates the JWT secret.")
+    (lib.mkRemovedOptionModule [ "services" "lemmy" "jwtSecretPath" ] "As of v0.13.0, Lemmy auto-generates the JWT secret.")
   ];
 
   options.services.lemmy = {
 
-    enable = mkEnableOption "lemmy a federated alternative to reddit in rust";
+    enable = lib.mkEnableOption "lemmy a federated alternative to reddit in rust";
 
     server = {
-      package = mkPackageOption pkgs "lemmy-server" {};
+      package = lib.mkPackageOption pkgs "lemmy-server" {};
     };
 
     ui = {
-      package = mkPackageOption pkgs "lemmy-ui" {};
+      package = lib.mkPackageOption pkgs "lemmy-ui" {};
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 1234;
         description = "Port where lemmy-ui should listen for incoming requests.";
       };
     };
 
-    caddy.enable = mkEnableOption "exposing lemmy with the caddy reverse proxy";
-    nginx.enable = mkEnableOption "exposing lemmy with the nginx reverse proxy";
+    caddy.enable = lib.mkEnableOption "exposing lemmy with the caddy reverse proxy";
+    nginx.enable = lib.mkEnableOption "exposing lemmy with the nginx reverse proxy";
 
     database = {
-      createLocally = mkEnableOption "creation of database on the instance";
+      createLocally = lib.mkEnableOption "creation of database on the instance";
 
-      uri = mkOption {
-        type = with types; nullOr str;
+      uri = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = "The connection URI to use. Takes priority over the configuration file if set.";
       };
 
-      uriFile = mkOption {
-        type = with types; nullOr path;
+      uriFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         description = "File which contains the database uri.";
       };
     };
 
-    pictrsApiKeyFile = mkOption {
-      type = with types; nullOr path;
+    pictrsApiKeyFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = "File which contains the value of `pictrs.api_key`.";
     };
 
-    smtpPasswordFile = mkOption {
-      type = with types; nullOr path;
+    smtpPasswordFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = "File which contains the value of `email.smtp_password`.";
     };
 
-    adminPasswordFile = mkOption {
-      type = with types; nullOr path;
+    adminPasswordFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = "File which contains the value of `setup.admin_password`.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
       description = "Lemmy configuration";
 
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        options.hostname = mkOption {
-          type = types.str;
+        options.hostname = lib.mkOption {
+          type = lib.types.str;
           default = null;
           description = "The domain name of your instance (eg 'lemmy.ml').";
         };
 
-        options.port = mkOption {
-          type = types.port;
+        options.port = lib.mkOption {
+          type = lib.types.port;
           default = 8536;
           description = "Port where lemmy should listen for incoming requests.";
         };
 
         options.captcha = {
-          enabled = mkOption {
-            type = types.bool;
+          enabled = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = "Enable Captcha.";
           };
-          difficulty = mkOption {
-            type = types.enum [ "easy" "medium" "hard" ];
+          difficulty = lib.mkOption {
+            type = lib.types.enum [ "easy" "medium" "hard" ];
             default = "medium";
             description = "The difficultly of the captcha to solve.";
           };
@@ -113,7 +112,7 @@ in
       secrets = lib.filterAttrs (option: data: data.path != null) secretOptions;
     in
     lib.mkIf cfg.enable {
-      services.lemmy.settings = lib.attrsets.recursiveUpdate (mapAttrs (name: mkDefault)
+      services.lemmy.settings = lib.attrsets.lib.recursiveUpdate (lib.mapAttrs (name: lib.mkDefault)
         {
           bind = "127.0.0.1";
           tls_enabled = true;
@@ -131,7 +130,7 @@ in
           rate_limit.image = 6;
           rate_limit.image_per_second = 3600;
         } // {
-          database = mapAttrs (name: mkDefault) {
+          database = lib.mapAttrs (name: lib.mkDefault) {
             user = "lemmy";
             host = "/run/postgresql";
             port = 5432;
@@ -141,7 +140,7 @@ in
         }) (lib.foldlAttrs (acc: option: data: acc // lib.setAttrByPath data.setting { _secret = option; }) {} secrets);
         # the option name is the id of the credential loaded by LoadCredential
 
-      services.postgresql = mkIf cfg.database.createLocally {
+      services.postgresql = lib.mkIf cfg.database.createLocally {
         enable = true;
         ensureDatabases = [ cfg.settings.database.database ];
         ensureUsers = [{
@@ -152,8 +151,8 @@ in
 
       services.pict-rs.enable = true;
 
-      services.caddy = mkIf cfg.caddy.enable {
-        enable = mkDefault true;
+      services.caddy = lib.mkIf cfg.caddy.enable {
+        enable = lib.mkDefault true;
         virtualHosts."${cfg.settings.hostname}" = {
           extraConfig = ''
             handle_path /static/* {
@@ -190,8 +189,8 @@ in
         };
       };
 
-      services.nginx = mkIf cfg.nginx.enable {
-        enable = mkDefault true;
+      services.nginx = lib.mkIf cfg.nginx.enable {
+        enable = lib.mkDefault true;
         virtualHosts."${cfg.settings.hostname}".locations = let
           ui = "http://127.0.0.1:${toString cfg.ui.port}";
           backend = "http://127.0.0.1:${toString cfg.settings.port}";
@@ -232,7 +231,7 @@ in
           message = "if you want to create the database locally, you need to use a local database";
         }
         {
-          assertion = (!(hasAttrByPath ["federation"] cfg.settings)) && (!(hasAttrByPath ["federation" "enabled"] cfg.settings));
+          assertion = (!(lib.hasAttrByPath ["federation"] cfg.settings)) && (!(lib.hasAttrByPath ["federation" "enabled"] cfg.settings));
           message = "`services.lemmy.settings.federation` was removed in 0.17.0 and no longer has any effect";
         }
         {
@@ -248,7 +247,7 @@ in
 
         environment = {
           LEMMY_CONFIG_LOCATION = if secrets == {} then settingsFormat.generate "config.hjson" cfg.settings else substitutedConfig;
-          LEMMY_DATABASE_URL = if cfg.database.uri != null then cfg.database.uri else (mkIf (cfg.database.createLocally) "postgres:///lemmy?host=/run/postgresql&user=lemmy");
+          LEMMY_DATABASE_URL = if cfg.database.uri != null then cfg.database.uri else (lib.mkIf (cfg.database.createLocally) "postgres:///lemmy?host=/run/postgresql&user=lemmy");
         };
 
         documentation = [
@@ -264,7 +263,7 @@ in
 
         # substitute secrets and prevent others from reading the result
         # if somehow $CREDENTIALS_DIRECTORY is not set we fail
-        preStart = mkIf (secrets != {}) ''
+        preStart = lib.mkIf (secrets != {}) ''
           set -u
           umask u=rw,g=,o=
           cd "$CREDENTIALS_DIRECTORY"
