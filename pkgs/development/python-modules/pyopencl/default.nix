@@ -1,54 +1,52 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  darwin,
+  ocl-icd,
   buildPythonPackage,
+  fetchFromGitHub,
 
   # build-system
   cmake,
-  scikit-build-core,
-  pathspec,
-  ninja,
   nanobind,
+  ninja,
+  numpy,
+  pathspec,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
 
   # dependencies
-  appdirs,
-  cffi,
-  darwin,
-  decorator,
-  mako,
-  numpy,
-  ocl-icd,
-  oldest-supported-numpy,
-  opencl-headers,
   platformdirs,
-  pybind11,
-  pytestCheckHook,
   pytools,
-  six,
+
+  # checks
+  pytestCheckHook,
 }:
 
 let
-  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+  os-specific-buildInputs =
+    if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.2.6";
-  format = "pyproject";
+  version = "2024.2.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pyopencl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nP7ZAGeRXrjqDRWlc2SDP1hk1fseGeu9Zx0lOp9Pchs=";
+    hash = "sha256-DfZCtTeN1a1KS2qUU6iztba4opAVC/RUCe/hnkqTbII=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     nanobind
     ninja
     numpy
-    oldest-supported-numpy
     pathspec
     scikit-build-core
   ];
@@ -60,15 +58,10 @@ buildPythonPackage rec {
     pybind11
   ] ++ os-specific-buildInputs;
 
-  propagatedBuildInputs = [
-    appdirs
-    cffi
-    decorator
-    mako
+  dependencies = [
     numpy
     platformdirs
     pytools
-    six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -83,9 +76,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyopencl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    license = licenses.mit;
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    # ld: symbol(s) not found for architecture arm64
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

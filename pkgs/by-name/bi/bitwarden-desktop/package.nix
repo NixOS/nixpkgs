@@ -120,7 +120,7 @@ in buildNpmPackage rec {
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
 
     popd

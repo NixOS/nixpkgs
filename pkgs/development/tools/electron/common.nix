@@ -27,7 +27,7 @@ let
 
   fetchedDeps = lib.mapAttrs (name: fetchdep) info.deps;
 
-in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
+in ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
   buildTargets = [ "electron:electron_dist_zip" ];
@@ -243,5 +243,10 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     mainProgram = "electron";
     hydraPlatforms = lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version)) ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+  };
+})).overrideAttrs (finalAttrs: prevAttrs: {
+  # this was the only way I could get the package to properly reference itself
+  passthru = prevAttrs.passthru // {
+    dist = finalAttrs.finalPackage + "/libexec/electron";
   };
 })
