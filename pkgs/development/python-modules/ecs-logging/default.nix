@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "ecs-logging";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "ecs-logging-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-Gf44bT3/gmHy+yaQ1+bhCFB33ym2G14tzNqTQyC3BJU=";
+    hash = "sha256-djCEutZqcyRfRme+omiwl3ofBUBli71TnfVu59i7vlE=";
   };
 
   nativeBuildInputs = [ flit-core ];

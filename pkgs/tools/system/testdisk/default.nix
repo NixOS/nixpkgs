@@ -68,6 +68,6 @@ assert enableQt -> qwt != null;
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with maintainers; [ fgaz eelco ];
+    maintainers = with maintainers; [ fgaz ];
   };
 }

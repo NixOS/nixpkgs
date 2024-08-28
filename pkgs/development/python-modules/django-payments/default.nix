@@ -9,6 +9,7 @@
   mercadopago,
   pythonOlder,
   requests,
+  setuptools,
   setuptools-scm,
   sphinx-rtd-theme,
   stripe,
@@ -18,7 +19,7 @@
 buildPythonPackage rec {
   pname = "django-payments";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,12 +32,15 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "django-phonenumber-field[phonenumberslite]" "django-phonenumber-field"
+      --replace-fail "django-phonenumber-field[phonenumberslite]" "django-phonenumber-field"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-phonenumber-field
     requests

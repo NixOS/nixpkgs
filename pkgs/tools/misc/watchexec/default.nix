@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-S0c/UqdbEqhZRkxZonW1TPQLmGbZeiK14yPbW5dpI70=";
+    hash = "sha256-mH670pBxSQQ4mTtX6O71aRRxRVyz0J7r4227UsUJ5LE=";
   };
 
-  cargoHash = "sha256-IuubIEu2mY3h1i9gJgQlyVoGwUYWsdp8+hKYyz0j3is=";
+  cargoHash = "sha256-cBxFaERUDaOxAYfpvBdJa9LxvrG2niJqVovcZDucbUA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [ "--skip=help" "--skip=help_short" ];
 
   postPatch = ''
-    rm .cargo/config
+    rm .cargo/config.toml
   '';
 
   postInstall = ''

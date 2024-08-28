@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cscorley/whatthepatch";
     changelog = "https://github.com/cscorley/whatthepatch/blob/${version}/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
   };
 }

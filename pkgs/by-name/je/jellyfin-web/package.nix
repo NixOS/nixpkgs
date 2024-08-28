@@ -27,7 +27,7 @@ let
 in
 buildNpmPackage' rec {
   pname = "jellyfin-web";
-  version = "10.9.7";
+  version = "10.9.10";
 
   src =
     assert version == jellyfin.version;
@@ -35,10 +35,10 @@ buildNpmPackage' rec {
       owner = "jellyfin";
       repo = "jellyfin-web";
       rev = "v${version}";
-      hash = "sha256-vjp96NTcSY1Uj1PeEOPIdZuMFNcO3ZyjRvYYT0AQCrk=";
+      hash = "sha256-6t/kCuMbSug1q1EdQFAMqf/sWa+LAO46OUG0FL84UiE=";
     };
 
-  npmDepsHash = "sha256-CKUssg4YWZd2Gzz7FtO5zA4ngQeLXkFu0VskXrFNwjM=";
+  npmDepsHash = "sha256-R4myooMkKdvOFvyNqKIlZ2GozNOkg8YNTvomkt4aRIU=";
 
   npmBuildScript = [ "build:production" ];
 

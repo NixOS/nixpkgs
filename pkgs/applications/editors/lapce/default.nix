@@ -39,28 +39,27 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-x/EObvrMZ3bkdHk5SbfQEarXA7jcQ9rEFZINQrHjcl4=";
+    sha256 = "sha256-Bwo6twEi9m3T5OybWkWGAyTRumusCWW7mkx/OAJkfXs=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "floem-0.1.1" = "sha256-/RUsi0LUJ/LjDj8xjoiF+f4MeUjFASL0TDS0eDUEHio=";
+      "alacritty_terminal-0.24.1-dev" = "sha256-aVB1CNOLjNh6AtvdbomODNrk00Md8yz8QzldzvDo1LI=";
+      "floem-0.1.1" = "sha256-zV2nk3cvmw8lzqL4Xx5SCTX156tiN6sUAEdfy0dJvDY=";
       "human-sort-0.2.2" = "sha256-tebgIJGXOY7pwWRukboKAzXY47l4Cn//0xMKQTaGu8w=";
+      "locale_config-0.3.1-alpha.0" = "sha256-cCEO+dmU05TKkpH6wVK6tiH94b7k2686xyGxlhkcmAM=";
       "lsp-types-0.95.1" = "sha256-+tWqDBM5x/gvQOG7V3m2tFBZB7smgnnZHikf9ja2FfE=";
       "psp-types-0.1.0" = "sha256-/oFt/AXxCqBp21hTSYrokWsbFYTIDCrHMUBuA2Nj5UU=";
       "regalloc2-0.9.3" = "sha256-tzXFXs47LDoNBL1tSkLCqaiHDP5vZjvh250hz0pbEJs=";
-      "structdesc-0.1.0" = "sha256-gMTnRudc3Tp9JRa+Cob5Ke23aqajP8lSun5CnT13+eQ=";
+      "structdesc-0.1.0" = "sha256-KiR0R2YWZ7BucXIIeziu2FPJnbP7WNSQrxQhcNlpx2Q=";
       "tracing-0.2.0" = "sha256-31jmSvspNstOAh6VaWie+aozmGu4RpY9Gx2kbBVD+CI=";
-      "tree-sitter-bash-0.19.0" = "sha256-gTsA874qpCI/N5tmBI5eT8KDaM25gXM4VbcCbUU2EeI=";
-      "tree-sitter-md-0.1.2" = "sha256-gKbjAcY/x9sIxiG7edolAQp2JWrx78mEGeCpayxFOuE=";
-      "tree-sitter-yaml-0.0.1" = "sha256-bQ/APnFpes4hQLv37lpoADyjXDBY7J4Zg+rLyUtbra4=";
       "wasi-experimental-http-wasmtime-0.10.0" = "sha256-FuF3Ms1bT9bBasbLK+yQ2xggObm/lFDRyOvH21AZnQI=";
     };
   };

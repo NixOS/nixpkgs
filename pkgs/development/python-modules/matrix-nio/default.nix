@@ -65,6 +65,10 @@ buildPythonPackage rec {
     unpaddedbase64
   ];
 
+  pythonRelaxDeps = [
+    "aiohttp-socks" # Pending matrix-nio/matrix-nio#516
+  ];
+
   passthru.optional-dependencies = {
     e2e = [
       atomicwrites

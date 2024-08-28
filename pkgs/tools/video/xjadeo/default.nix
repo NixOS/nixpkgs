@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg_4, freetype, libGLU
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg_7, freetype, libGLU
 , libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg_7
     libjack2
     libX11
     xorg.libXext

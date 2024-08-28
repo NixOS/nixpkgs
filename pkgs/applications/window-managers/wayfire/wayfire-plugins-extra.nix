@@ -12,18 +12,17 @@
 , nlohmann_json
 , xcbutilwm
 , gtkmm3
-, gtk-layer-shell
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-plugins-extra";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire-plugins-extra";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MF4tDzIZnnTXH2ZUxltIw1RP3pfRQFGrc/n9H47yW0g";
+    hash = "sha256-TukDomxqfrM45+C7azfO8jVaqk3E5irdphH8U5IYItg=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     xcbutilwm
     gtkmm3
-    gtk-layer-shell
   ];
 
   mesonFlags = [

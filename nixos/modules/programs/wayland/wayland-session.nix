@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   enableXWayland ? true,
   enableWlrPortal ? true,
 }:
@@ -11,15 +10,12 @@
     pam.services.swaylock = {};
   };
 
-  hardware.graphics.enable = lib.mkDefault true;
-  fonts.enableDefaultPackages = lib.mkDefault true;
-
   programs = {
     dconf.enable = lib.mkDefault true;
     xwayland.enable = lib.mkDefault enableXWayland;
   };
 
-  xdg.icons.enable = true;
+  services.graphical-desktop.enable = true;
 
   xdg.portal.wlr.enable = enableWlrPortal;
 

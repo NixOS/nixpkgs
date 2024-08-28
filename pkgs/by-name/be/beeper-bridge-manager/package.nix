@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "bbctl";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "beeper";
     repo = "bridge-manager";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xaBLI5Y7PxHbmlwD72AKNrgnz3D+3WVhb2GJr5cmyfs=";
+    hash = "sha256-MAve7ZNS20XBJ7Qp3mehznli04+MS7RiVWW1txdf19U=";
   };
 
-  vendorHash = "sha256-VnqihTEGfrLxRfuscrWWBbhZ/tr8BhVnCd+FKblW5gI=";
+  vendorHash = "sha256-uz4pao8Y/Sb3fffi9d0lbWQEUMohbthA6t6k6PfQz2M=";
 
   meta = {
     description = "Tool for running self-hosted bridges with the Beeper Matrix server. ";

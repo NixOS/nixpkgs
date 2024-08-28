@@ -16,6 +16,8 @@ melpaBuild {
 
   packageRequires = [ haskell-mode ];
 
+  ignoreCompilationError = false;
+
   meta = {
     inherit (hsc3.meta) homepage license;
     description = "Emacs mode for hsc3";

@@ -76,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   postInstall = ''
-    mv $out/share/php/${pname}/* $out/
+    mv $out/share/php/firefly-iii/* $out/
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache

@@ -11,15 +11,14 @@
 
 buildPythonPackage rec {
   pname = "nltk";
-  version = "3.8.1";
+  version = "3.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-GDTaPQaCy6Tyzt4vmq1rD6+2RhukUdsO+2+cOXmNZNM=";
+    hash = "sha256-h9EnvT3kvYmk+BJl5fpZyxsZmydEAXU3D3QX0rx66Gg=";
   };
 
   propagatedBuildInputs = [

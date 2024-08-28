@@ -1,37 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, dwayland
-, qtbase
-, qttools
-, qtx11extras
-, wrapQtAppsHook
-, extra-cmake-modules
-, gsettings-qt
-, libepoxy
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kcrash
-, kdbusaddons
-, kiconthemes
-, kglobalaccel
-, kidletime
-, knotifications
-, kpackage
-, plasma-framework
-, kcmutils
-, knewstuff
-, kdecoration
-, kscreenlocker
-, breeze-qt5
-, libinput
-, mesa
-, lcms2
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland,
+  dwayland,
+  qtbase,
+  qttools,
+  qtx11extras,
+  wrapQtAppsHook,
+  extra-cmake-modules,
+  gsettings-qt,
+  libepoxy,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  kcrash,
+  kdbusaddons,
+  kiconthemes,
+  kglobalaccel,
+  kidletime,
+  knotifications,
+  kpackage,
+  plasma-framework,
+  kcmutils,
+  knewstuff,
+  kdecoration,
+  kscreenlocker,
+  breeze-qt5,
+  libinput,
+  mesa,
+  lcms2,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,9 +46,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-EjPPjdxa+iL/nXhuccoM3NiLmGXh7Un2aGz8O3sP6xE=";
   };
 
-  patches = [
-    ./0001-hardcode-fallback-background.diff
-  ];
+  patches = [ ./0001-hardcode-fallback-background.diff ];
 
   # Avoid using absolute path to distinguish applications
   postPatch = ''
@@ -101,11 +100,12 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
   ];
 
-  cmakeFlags = [
-    "-DKWIN_BUILD_RUNNERS=OFF"
-  ];
+  cmakeFlags = [ "-DKWIN_BUILD_RUNNERS=OFF" ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Fork of kwin, an easy to use, but flexible, composited Window Manager";

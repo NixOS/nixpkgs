@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "1.0.0";
+  version = "1.1.0";
 
   disabled = python3.pythonOlder "3.8";
 
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pT2GGoNPCHBZZbbBE93cJjgogBNcdpvLmrVakNMu6tY=";
+    hash = "sha256-xzIYlOZ1HeW+jbVDVlUPTIooFraQ0cJltsDoCzVMNsA=";
   };
 
   pythonRelaxDeps = true;

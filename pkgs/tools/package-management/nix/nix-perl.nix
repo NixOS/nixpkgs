@@ -8,7 +8,6 @@
 , boost
 , autoreconfHook
 , autoconf-archive
-, nlohmann_json
 , xz
 , Security
 , meson
@@ -18,6 +17,7 @@
 
 let
   atLeast223 = lib.versionAtLeast nix.version "2.23";
+  atLeast224 = lib.versionAtLeast nix.version "2.24";
 
   mkConfigureOption = { mesonOption, autoconfOption, value }:
     let
@@ -30,7 +30,14 @@ in stdenv.mkDerivation (finalAttrs: {
   pname = "nix-perl";
   inherit (nix) version src;
 
-  postUnpack = "sourceRoot=$sourceRoot/perl";
+  postUnpack = "sourceRoot=$sourceRoot/${lib.optionalString atLeast224 "src"}/perl";
+
+  # TODO: Remove this once the nix build also uses meson
+  postPatch = lib.optionalString atLeast224 ''
+    substituteInPlace lib/Nix/Store.xs \
+      --replace-fail 'config-util.hh' 'nix/config.h' \
+      --replace-fail 'config-store.hh' 'nix/config.h'
+  '';
 
   buildInputs = [
     boost

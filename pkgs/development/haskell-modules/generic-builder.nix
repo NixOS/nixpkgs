@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, runCommand
+, jailbreak-cabal, hscolour, cpphs, runCommandCC
 , ghcWithHoogle, ghcWithPackages
 , nodejs
 }:
@@ -790,7 +790,7 @@ stdenv.mkDerivation ({
           lib.optionals (!isCross) setupHaskellDepends);
 
         ghcCommandCaps = lib.toUpper ghcCommand';
-      in runCommand name {
+      in runCommandCC name {
         inherit shellHook;
 
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;

@@ -1,25 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gettext, makeWrapper, bzip2
-, curl, libjpeg, libxml2, xz, lua, ode, libGL, libpng, SDL, SDL_mixer, SDL_net
-, SDL_ttf, sqlite, libxdg_basedir, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, makeWrapper, bzip2
+, curl, libjpeg, libxml2, xz, lua, ode, libGL, libGLU, libpng
+, pkg-config, SDL2, SDL2_mixer, SDL2_net , SDL2_ttf
+, sqlite, libxdg_basedir, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "xmoto";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "00f5ha79lfa2iiaz66wl0hl5dapa1l15qdr7m7knzi0ll7j6z66n";
+    rev = "v${version}";
+    hash = "sha256-n58GB5HA50ybSq0ssvJMq+p3I3JThHUGLZ5sHy/245M=";
   };
-
-  patches = [
-    # Fix build with Nix
-    (fetchpatch {
-      url = "https://github.com/xmoto/xmoto/commit/536dcc7ec77a4c4c454b86220e85b1cb3cd1c7f7.patch";
-      sha256 = "0h9lld668jrbmrqva89zqwp63jiagjj86prkxzx6372p3kk9y7g7";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -36,15 +29,21 @@ stdenv.mkDerivation rec {
     lua
     ode
     libGL
+    libGLU
     libpng
-    SDL
-    SDL_mixer
-    SDL_net
-    SDL_ttf
+    SDL2
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
     sqlite
     libxdg_basedir
     zlib
   ];
+
+  # Should normally come from SDL2_ttf pkg-config, but xmoto does not
+  # use it and uses include directories directly. Let's re-inject the
+  # path here.
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
 
   preFixup = ''
     wrapProgram "$out/bin/xmoto" \

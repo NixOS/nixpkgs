@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "taskchampion-sync-server";
-  version = "0.4.1-unstable-2024-04-08";
+  version = "0.4.1-unstable-2024-08-20";
   src = fetchFromGitHub {
       owner = "GothenburgBitFactory";
       repo = "taskchampion-sync-server";
-      rev = "31cb732f0697208ef9a8d325a79688612087185a";
+      rev = "af918bdf0dea7f7b6e920680c947fc37b37ffffb";
       fetchSubmodules = false;
-      sha256 = "sha256-CUgXJcrCOenbw9ZDFBody5FAvpT1dsZBojJk3wOv9U4=";
+      sha256 = "sha256-BTGD7hZysmOlsT2W+gqj8+Sj6iBN9Jwiyzq5D03PDzM=";
     };
 
-  cargoHash = "sha256-TpShnVQ2eFNLXJzOTlWVaLqT56YkP4zCGCf3yVtNcvI=";
+  cargoHash = "sha256-/HfkE+R8JoNGkCCNQpE/JjGSqPHvjCPnTjOFPCFfJ7A=";
 
   # cargo tests fail when checkType="release" (default)
   checkType = "debug";

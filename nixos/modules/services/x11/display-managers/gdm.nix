@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.xserver.displayManager;
-  gdm = pkgs.gnome.gdm;
+  gdm = pkgs.gdm;
   pamCfg = config.security.pam.services;
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
@@ -40,24 +38,24 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ] [
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ] [
       "services"
       "displayManager"
       "autoLogin"
       "enable"
     ])
-    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ] [
+    (lib.mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ] [
       "services"
       "displayManager"
       "autoLogin"
       "user"
     ])
 
-    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "nvidiaWayland" ] "We defer to GDM whether Wayland should be enabled.")
+    (lib.mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "nvidiaWayland" ] "We defer to GDM whether Wayland should be enabled.")
   ];
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -66,38 +64,38 @@ in
 
     services.xserver.displayManager.gdm = {
 
-      enable = mkEnableOption "GDM, the GNOME Display Manager";
+      enable = lib.mkEnableOption "GDM, the GNOME Display Manager";
 
-      debug = mkEnableOption "debugging messages in GDM";
+      debug = lib.mkEnableOption "debugging messages in GDM";
 
       # Auto login options specific to GDM
-      autoLogin.delay = mkOption {
-        type = types.int;
+      autoLogin.delay = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         description = ''
           Seconds of inactivity after which the autologin will be performed.
         '';
       };
 
-      wayland = mkOption {
-        type = types.bool;
+      wayland = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Allow GDM to run on Wayland instead of Xserver.
         '';
       };
 
-      autoSuspend = mkOption {
+      autoSuspend = lib.mkOption {
         default = true;
         description = ''
           On the GNOME Display Manager login screen, suspend the machine after inactivity.
           (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      banner = mkOption {
-        type = types.nullOr types.lines;
+      banner = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         example = ''
           foo
@@ -109,7 +107,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsFormat.type;
         default = { };
         example = {
@@ -128,7 +126,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.gdm.enable {
+  config = lib.mkIf cfg.gdm.enable {
 
     services.xserver.displayManager.lightdm.enable = false;
 
@@ -151,7 +149,7 @@ in
       {
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
-            (filter (arg: arg != "-terminate") cfg.xserverArgs);
+            (lib.filter (arg: arg != "-terminate") cfg.xserverArgs);
           XDG_DATA_DIRS = lib.makeSearchPath "share" [
             gdm # for gnome-login.session
             config.services.displayManager.sessionData.desktops
@@ -159,14 +157,14 @@ in
             pkgs.adwaita-icon-theme
             pkgs.hicolor-icon-theme # empty icon theme as a base
           ];
-        } // optionalAttrs (xSessionWrapper != null) {
+        } // lib.optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
           # this environment variable.
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
-        preStart = optionalString (defaultSessionName != null) ''
+        preStart = lib.optionalString (defaultSessionName != null) ''
           # Set default session in session chooser to a specified values – basically ignore session history.
           ${setSessionScript}/bin/set-session ${config.services.displayManager.sessionData.autologinSession}
         '';
@@ -174,10 +172,10 @@ in
 
     systemd.tmpfiles.rules = [
       "d /run/gdm/.config 0711 gdm gdm"
-    ] ++ optionals config.hardware.pulseaudio.enable [
+    ] ++ lib.optionals config.hardware.pulseaudio.enable [
       "d /run/gdm/.config/pulse 0711 gdm gdm"
       "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
-    ] ++ optionals config.services.gnome.gnome-initial-setup.enable [
+    ] ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
       # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
       "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
     ];
@@ -219,7 +217,7 @@ in
     # conflicts display-manager.service, then when nixos-rebuild
     # switch starts multi-user.target, display-manager.service is
     # stopped so plymouth-quit.service can be started.)
-    systemd.services.plymouth-quit = mkIf config.boot.plymouth.enable {
+    systemd.services.plymouth-quit = lib.mkIf config.boot.plymouth.enable {
       wantedBy = lib.mkForce [];
     };
 
@@ -261,20 +259,20 @@ in
     # Otherwise with TimedLogin with zero seconds the prompt is still
     # presented and there's a little delay.
     services.xserver.displayManager.gdm.settings = {
-      daemon = mkMerge [
+      daemon = lib.mkMerge [
         { WaylandEnable = cfg.gdm.wayland; }
         # nested if else didn't work
-        (mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
+        (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
           TimedLoginEnable = true;
           TimedLogin = config.services.displayManager.autoLogin.user;
           TimedLoginDelay = cfg.gdm.autoLogin.delay;
         })
-        (mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
+        (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
           AutomaticLoginEnable = true;
           AutomaticLogin = config.services.displayManager.autoLogin.user;
         })
       ];
-      debug = mkIf cfg.gdm.debug {
+      debug = lib.mkIf cfg.gdm.debug {
         Enable = true;
       };
     };
@@ -312,7 +310,7 @@ in
         auth      requisite     pam_nologin.so
         auth      required      pam_succeed_if.so uid >= 1000 quiet
         ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
-          auth       [success=ok default=1]      ${pkgs.gnome.gdm}/lib/security/pam_gdm.so
+          auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
         ''}
         auth      required      pam_permit.so
@@ -327,16 +325,16 @@ in
 
       # This would block password prompt when included by gdm-password.
       # GDM will instead run gdm-fingerprint in parallel.
-      login.fprintAuth = mkIf config.services.fprintd.enable false;
+      login.fprintAuth = lib.mkIf config.services.fprintd.enable false;
 
-      gdm-fingerprint.text = mkIf config.services.fprintd.enable ''
+      gdm-fingerprint.text = lib.mkIf config.services.fprintd.enable ''
         auth       required                    pam_shells.so
         auth       requisite                   pam_nologin.so
         auth       requisite                   pam_faillock.so      preauth
         auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
         auth       required                    pam_env.so
         ${lib.optionalString pamCfg.login.enableGnomeKeyring ''
-          auth       [success=ok default=1]      ${pkgs.gnome.gdm}/lib/security/pam_gdm.so
+          auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
         ''}
 

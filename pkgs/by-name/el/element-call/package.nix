@@ -6,6 +6,7 @@
 , yarnBuildHook
 , nodejs
 , npmHooks
+, olm
 }:
 
 let
@@ -52,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [ kilimnik ];
     mainProgram = "element-call";
+    inherit (olm.meta) knownVulnerabilities;
   };
 })

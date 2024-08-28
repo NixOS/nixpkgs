@@ -22,14 +22,14 @@ let
 
     nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
-    prePatch = with lib; ''
+    prePatch = ''
       rm -rf GLPlugin
       ln -s ${glplugin} GLPlugin
       substituteInPlace plugins-scripts/Makefile.am \
-        --replace /bin/cat  ${getBin coreutils}/bin/cat \
-        --replace /bin/echo ${getBin coreutils}/bin/echo \
-        --replace /bin/grep ${getBin gnugrep}/bin/grep \
-        --replace /bin/sed  ${getBin gnused}/bin/sed
+        --replace /bin/cat  ${lib.getBin coreutils}/bin/cat \
+        --replace /bin/echo ${lib.getBin coreutils}/bin/echo \
+        --replace /bin/grep ${lib.getBin gnugrep}/bin/grep \
+        --replace /bin/sed  ${lib.getBin gnused}/bin/sed
     '';
 
     postInstall = ''
@@ -42,10 +42,10 @@ let
       done
     '';
 
-    meta = with lib; {
+    meta = {
       homepage    = "https://labs.consol.de/";
-      license     = licenses.gpl2Only;
-      maintainers = with maintainers; [ peterhoeg ];
+      license     = lib.licenses.gpl2Only;
+      maintainers = with lib.maintainers; [ peterhoeg ];
       inherit description;
     };
   };

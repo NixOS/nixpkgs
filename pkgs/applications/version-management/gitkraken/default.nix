@@ -55,8 +55,6 @@
   cacert,
 }:
 
-with lib;
-
 let
   pname = "gitkraken";
   version = "10.2.0";
@@ -82,7 +80,7 @@ let
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gitkraken.com/git-client";
     description = "Simplifying Git for any OS";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -108,7 +106,7 @@ let
     dontBuild = true;
     dontConfigure = true;
 
-    libPath = makeLibraryPath [
+    libPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       curlWithGnuTls
       udev

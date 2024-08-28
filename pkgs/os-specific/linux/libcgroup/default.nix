@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pam, bison, flex, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, pam, bison, flex, systemdLibs, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libcgroup";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-x2yBqpr3LedtWmpZ4K1ipZxIualNJuDtC4FVGzzcQn8=";
+    hash = "sha256-CnejQcOyW3QzHuvsAdKe4M4XgmG9ufRaEBdO48+8ZqQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex ];
-  buildInputs = [ pam ];
+  buildInputs = [ pam systemdLibs ];
 
   postPatch = ''
     substituteInPlace src/tools/Makefile.am \

@@ -88,14 +88,15 @@ open a PR fixing the script, and update Xen manually:
 
 ### For Both Update Methods
 
-1. Update `packages.nix` with the new versions. Don't forget the `slim` packages!
+1. Update `packages.nix` and `../../../top-level/all-packages.nix` with the new
+   versions. Don't forget the `slim` packages!
 1. Make sure all branches build. (Both the `standard` and `slim` versions)
 1. Use the NixOS module to test if dom0 boots successfully on all new versions.
 1. Make sure the `meta` attributes evaluate to something that makes sense. The
    following one-line command is useful for testing this:
 
    ```console
-   xenToEvaluate=xen; echo -e "\033[1m$(nix eval .#"$xenToEvaluate".meta.description 2> /dev/null | tail -c +2 | head -c -2)\033[0m\n\n$(nix eval .#"$xenToEvaluate".meta.longDescription 2> /dev/null | tail -c +2 | head -c -2)"
+   xenToEvaluate=xen; echo -e "\033[1m$(nix eval .#"$xenToEvaluate".meta.description --raw 2> /dev/null)\033[0m\n\n$(nix eval .#"$xenToEvaluate".meta.longDescription --raw 2> /dev/null)"
    ```
 
    Change the value of `xenToEvaluate` to evaluate all relevant Xen packages.
@@ -118,7 +119,7 @@ are requested by the main Xen build.
 Building `xen.efi` requires an `ld` with PE support.[^2]
 
 We use a `makeFlag` to override the `$LD` environment variable to point to our
-patched `efiBinutils`. For more information, see the comment in `./generic.nix`.
+patched `efiBinutils`. For more information, see the comment in `./generic/default.nix`.
 
 > [!TIP]
 > If you are certain you will not be running Xen in an x86 EFI environment, disable

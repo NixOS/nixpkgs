@@ -1,7 +1,5 @@
 { lib
-# Python 3.12 demonstrates a peculiar segmentation fault with pyqt5. Using
-# pyqt6 with Python 3.12 should work, but this is not released yet.
-, python311Packages
+, python312Packages
 , fetchFromGitHub
 
 , chromaprint
@@ -13,7 +11,7 @@
 }:
 
 let
-  pythonPackages = python311Packages;
+  pythonPackages = python312Packages;
   pyqt5 =
     if enablePlayback then
       pythonPackages.pyqt5-multimedia
@@ -23,19 +21,20 @@ in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
   # nix-update --commit picard --version-regex 'release-(.*)'
-  version = "2.12";
+  version = "2.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-+++NDJzXw4tA5eQd24r+l3UK3YS8Jy1t9WNiEU9sH0Q=";
+    hash = "sha256-wKPE4lj3DIlY+X5A/MqhnwyrhPTXGjmUnLK1VWXUOas=";
   };
 
   nativeBuildInputs = [
     gettext
     qt5.wrapQtAppsHook
+    pythonPackages.pytestCheckHook
   ] ++ lib.optionals (pyqt5.multimediaEnabled) [
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -68,6 +67,7 @@ pythonPackages.buildPythonApplication rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+  doCheck = true;
 
   # In order to spare double wrapping, we use:
   preFixup = ''
@@ -76,12 +76,13 @@ pythonPackages.buildPythonApplication rec {
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
     description = "Official MusicBrainz tagger";
     mainProgram = "picard";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

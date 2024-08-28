@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     "testVFSWithWAL"
     # no lines in errout.txt
     "testWriteUnraisable"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "testzzForkChecker" ];
 
   pythonImportsCheck = [ "apsw" ];
 

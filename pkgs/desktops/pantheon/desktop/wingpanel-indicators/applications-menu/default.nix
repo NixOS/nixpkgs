@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , substituteAll
 , meson
@@ -39,6 +40,14 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       bc = "${bc}/bin/bc";
+    })
+
+    # Build against switchboard-3
+    # https://github.com/elementary/applications-menu/pull/580
+    (fetchpatch {
+      url = "https://github.com/elementary/applications-menu/commit/9191ee5a2ee33477515d331b96945d51a13074a9.patch";
+      excludes = [ ".github/workflows/githubci.yml" ];
+      hash = "sha256-/LOIEOg9fVfKv/BWFsP1VyuUOIFYem9Gk+3e49M2b9E=";
     })
   ];
 

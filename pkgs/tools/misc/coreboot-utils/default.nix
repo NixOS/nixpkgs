@@ -3,12 +3,12 @@
 let
   version = "24.05";
 
-  commonMeta = with lib; {
+  commonMeta = {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
-    license = with licenses; [ gpl2Only gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger jmbaur ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Only gpl2Plus ];
+    maintainers = with lib.maintainers; [ felixsinger jmbaur ];
+    platforms = lib.platforms.linux;
   };
 
   generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation ({

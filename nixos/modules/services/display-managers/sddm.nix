@@ -8,6 +8,7 @@ let
 
   sddm = cfg.package.override (old: {
     withWayland = cfg.wayland.enable;
+    withLayerShellQt = cfg.wayland.compositor == "kwin";
     extraPackages = old.extraPackages or [ ] ++ cfg.extraPackages;
   });
 
@@ -43,11 +44,8 @@ let
       DefaultSession = optionalString (config.services.displayManager.defaultSession != null) "${config.services.displayManager.defaultSession}.desktop";
 
       DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
-    } // optionalAttrs (cfg.wayland.compositor == "kwin") {
-      GreeterEnvironment = concatStringsSep " " [
-        "LANG=C.UTF-8"
-        "QT_WAYLAND_SHELL_INTEGRATION=layer-shell"
-      ];
+    } // optionalAttrs (cfg.wayland.enable && cfg.wayland.compositor == "kwin") {
+      GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
       InputMethod = ""; # needed if we are using --inputmethod with kwin
     };
 

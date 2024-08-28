@@ -96,6 +96,8 @@ stdenv.mkDerivation rec {
     substituteInPlace regress/Makefile --replace-fail 's,\$$libdir,$(REGRESS_INSTALLDIR)/lib,g' "s,\\$\$libdir,$PWD/regress/00-regress-install$out/lib,g" \
       --replace-fail '$(REGRESS_INSTALLDIR)/share/contrib/postgis/*.sql' "$PWD/regress/00-regress-install$out/share/postgresql/contrib/postgis/*.sql"
     substituteInPlace doc/postgis-out.xml --replace-fail "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
+    # The test suite hardcodes it to use /tmp.
+    export PGIS_REG_TMPDIR="$TMPDIR/pgis_reg"
   '';
 
   # create aliases for all commands adding version information

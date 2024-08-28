@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helm-mapkubeapis";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm-mapkubeapis";
     rev = "v${version}";
-    hash = "sha256-6NeePXTdp5vlBLfIlWeXQZMZ0Uz/e1ZCgZmJvBJfaFw=";
+    hash = "sha256-SYNCzVGGeuRj0PoOKU+1zydvAXVg4gUpIsqBTGChOgE=";
   };
 
-  vendorHash = "sha256-rVrQqeakPQl3rjzmqzHw74ffreLEVzP153wWJ8TEOIM=";
+  vendorHash = "sha256-G3Q8XCwKLgHeWLF46C5lWfvuynr/cJbkq7xdydfTHZ4=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''

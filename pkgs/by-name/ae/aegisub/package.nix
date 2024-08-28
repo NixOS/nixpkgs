@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   # error: unknown type name 'NSUInteger'
   postPatch = ''
     substituteInPlace src/dialog_colorpicker.cpp \
-      --replace "NSUInteger" "size_t"
+      --replace-fail "NSUInteger" "size_t"
   '';
 
   env = {

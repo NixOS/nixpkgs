@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/jbeverly/pam_ssh_agent_auth";
     description = "PAM module for authentication through the SSH agent";
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

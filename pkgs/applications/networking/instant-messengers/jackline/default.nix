@@ -23,6 +23,7 @@ buildDunePackage rec {
   buildInputs = [
     erm_xmpp
     tls
+    tls-lwt
     mirage-crypto-pk
     x509
     domain-name

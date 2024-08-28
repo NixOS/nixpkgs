@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
+, fetchpatch2
 , pkg-config
 , qtbase
 , qtimageformats
@@ -29,6 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-918hWy5be5mHINLbFJPiE29wlL1kRUD4MS3AjML/6fs=";
   };
+
+  patches = [
+    # https://github.com/zealdocs/zeal/pull/1644
+    (fetchpatch2 {
+      name = "fix-qtconcurrent-component.patch";
+      url = "https://github.com/zealdocs/zeal/commit/c432a0ac22b59ed44bdcec8819c030d993177883.patch";
+      hash = "sha256-DW7rBRMnXm7r+jps1/3RTXA1PpwEUCprW9qrHMRii84=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

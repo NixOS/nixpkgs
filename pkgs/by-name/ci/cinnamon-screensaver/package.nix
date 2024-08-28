@@ -13,7 +13,7 @@
 , libxslt
 , gtk3
 , libgnomekbd
-, gnome
+, caribou
 , libtool
 , wrapGAppsHook3
 , gobject-introspection
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     cinnamon-desktop
     cinnamon-common
     libgnomekbd
-    gnome.caribou
+    caribou
   ];
 
   postPatch = ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # https://github.com/NixOS/nixpkgs/issues/101881
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+      --prefix XDG_DATA_DIRS : "${caribou}/share"
     )
   '';
 

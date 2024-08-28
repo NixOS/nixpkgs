@@ -7,6 +7,7 @@
 
 let
   inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (lib.attrsets) mapAttrs' filterAttrs;
   inherit (builtins) isString match typeOf;
 
 in
@@ -287,10 +288,38 @@ rec {
     all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /**
+    Mapping of SPDX ID to the attributes in lib.licenses.
+
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.licensesSpdx` usage example
+
+    ```nix
+    lib.licensesSpdx.MIT == lib.licenses.mit
+    => true
+    lib.licensesSpdx."MY LICENSE"
+    => error: attribute 'MY LICENSE' missing
+    ```
+
+    :::
+  */
+  licensesSpdx =
+    mapAttrs'
+    (_key: license: {
+      name = license.spdxId;
+      value = license;
+    })
+    (filterAttrs (_key: license: license ? spdxId) lib.licenses);
+
+  /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
     or warn and fallback to `{ shortName = <license string>; }`.
 
-    For SPDX IDs, see https://spdx.org/licenses
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
 
     # Type
 
@@ -325,7 +354,8 @@ rec {
     Get the corresponding attribute in lib.licenses from the SPDX ID
     or fallback to the given default value.
 
-    For SPDX IDs, see https://spdx.org/licenses
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
 
     # Inputs
 
@@ -361,10 +391,12 @@ rec {
   */
   getLicenseFromSpdxIdOr =
     let
-      spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
-        (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
+      lowercaseLicenses = lib.mapAttrs' (name: value: {
+        name = lib.toLower name;
+        inherit value;
+      }) licensesSpdx;
     in licstr: default:
-      spdxLicenses.${ lib.toLower licstr } or default;
+      lowercaseLicenses.${ lib.toLower licstr } or default;
 
   /**
     Get the path to the main program of a package based on meta.mainProgram

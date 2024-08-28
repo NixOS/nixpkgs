@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/${pname}/examples/
+    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
   passthru.updateScript = unstableGitUpdater { };

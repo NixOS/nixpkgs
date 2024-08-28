@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.11";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://releases.pagure.org/tmpwatch/tmpwatch-${version}.tar.bz2";
     sha256 = "1m5859ngwx61l1i4s6fja2avf1hyv6w170by273w8nsin89825lk";
   };
 

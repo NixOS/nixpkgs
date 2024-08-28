@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.2.11";
 
   src = fetchurl {
-    url = "mirror://alsa/tinycompress/${pname}-${version}.tar.bz2";
+    url = "mirror://alsa/tinycompress/tinycompress-${version}.tar.bz2";
     hash = "sha256-6754jCgyjnzKJFqvkZSlrQ3JHp4NyIPCz5/rbULJ8/w=";
   };
 

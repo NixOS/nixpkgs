@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation {
   pname = "rakshasa-rtorrent";
-  version = "0.9.8-unstable-2024-08-09";
+  version = "0.9.8-unstable-2024-08-20";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "892e595015404c125df4a836b2a4fa18c01b4586";
-    hash = "sha256-y7VlpviWT4kq4sfeWq00qM40tBAyGFBAplwrji45dOc=";
+    rev = "eacf9798e2787df7dd4d5c800a46bac7931ac41c";
+    hash = "sha256-VJ2QJfBRUgk0KcCZTHtlyBIMVhs0UfYWAPlTeA98VZU=";
   };
 
   outputs = [ "out" "man" ];

@@ -49,6 +49,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test is flaky
     "test_start_already_exists"
+    # Tests require a Docker setup
+    "celery_setup_worker"
   ];
 
   meta = with lib; {

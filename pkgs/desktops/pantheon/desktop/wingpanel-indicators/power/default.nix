@@ -8,9 +8,9 @@
 , meson
 , ninja
 , vala
+, elementary-settings-daemon
 , gtk3
 , granite
-, bamf
 , libgtop
 , libnotify
 , udev
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "6.2.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EEY32O7GeXBHSjZQ3XGogT1sUzIKGX+CzcGx8buGLq4=";
+    sha256 = "sha256-RelK4HIyTQ6kXi7/K8U33sKIrDrhA3IFVnnvX4x88UQ=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
+    elementary-settings-daemon
     granite
     gtk3
     libgee

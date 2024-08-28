@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-dictionary/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-dictionary/${lib.versions.major version}/gnome-dictionary-${version}.tar.xz";
     sha256 = "1d8dhcfys788vv27v34i3s3x3jdvdi2kqn2a5p8c937a9hm0qr9f";
   };
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://git.savannah.gnu.org/cgit/gnucap.git/snapshot/${pname}-${version}.tar.gz";
+    url = "https://git.savannah.gnu.org/cgit/gnucap.git/snapshot/gnucap-${version}.tar.gz";
     hash = "sha256-MUCtGw3BxGWgXgUwzklq5T1y9kjBTnFBa0/GK0hhl0E=";
   };
 

@@ -7,6 +7,7 @@
   installShellFiles,
   stdenv,
   testers,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "artalk";
@@ -56,6 +57,7 @@ buildGoModule rec {
 
   passthru.tests = {
     version = testers.testVersion { package = artalk; };
+    inherit (nixosTests) artalk;
   };
 
   meta = {

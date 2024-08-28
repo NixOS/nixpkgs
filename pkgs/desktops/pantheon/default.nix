@@ -4,7 +4,6 @@
 lib.makeScope pkgs.newScope (self: with self; {
 
   switchboardPlugs = [
-    switchboard-plug-a11y
     switchboard-plug-about
     switchboard-plug-applications
     switchboard-plug-bluetooth
@@ -26,7 +25,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanelIndicators = [
     wingpanel-applications-menu
-    wingpanel-indicator-a11y
     wingpanel-indicator-bluetooth
     wingpanel-indicator-datetime
     wingpanel-indicator-keyboard
@@ -34,8 +32,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-nightlight
     wingpanel-indicator-notifications
     wingpanel-indicator-power
-    wingpanel-indicator-session
     wingpanel-indicator-sound
+    wingpanel-quick-settings
   ];
 
   maintainers = lib.teams.pantheon.members;
@@ -155,13 +153,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-notifications = callPackage ./desktop/wingpanel-indicators/notifications { };
 
-  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power {
-    inherit (gnome) gnome-power-manager;
-  };
-
-  wingpanel-indicator-session = callPackage ./desktop/wingpanel-indicators/session { };
+  wingpanel-indicator-power = callPackage ./desktop/wingpanel-indicators/power { };
 
   wingpanel-indicator-sound = callPackage ./desktop/wingpanel-indicators/sound { };
+
+  wingpanel-quick-settings = callPackage ./desktop/wingpanel-indicators/quick-settings { };
 
   #### SWITCHBOARD
 
@@ -170,8 +166,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   switchboard-with-plugs = callPackage ./apps/switchboard/wrapper.nix {
     plugs = null;
   };
-
-  switchboard-plug-a11y = callPackage ./apps/switchboard-plugs/a11y { };
 
   switchboard-plug-about = callPackage ./apps/switchboard-plugs/about { };
 
@@ -245,5 +239,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-bluetooth-contract = throw "pantheon.gnome-bluetooth-contract has been removed, abandoned by upstream."; # added 2022-06-30
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
+
+  switchboard-plug-a11y = throw "pantheon.switchboard-plug-a11y has been removed, abandoned by upstream."; # added 2024-08-23
+
+  wingpanel-indicator-session = throw "pantheon.wingpanel-indicator-session has been removed, abandoned by upstream."; # added 2024-08-23
 
 }

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, linux-pam, libxcb, makeBinaryWrapper, zig_0_12
-, callPackage }:
+, callPackage, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "ly";
@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   postPatch = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
+
+  passthru.tests = { inherit (nixosTests) ly; };
 
   meta = with lib; {
     description = "TUI display manager";

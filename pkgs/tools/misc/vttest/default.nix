@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://invisible-mirror.net/archives/${pname}/${pname}-${version}.tgz"
-      "ftp://ftp.invisible-island.net/${pname}/${pname}-${version}.tgz"
+      "https://invisible-mirror.net/archives/vttest/vttest-${version}.tgz"
+      "ftp://ftp.invisible-island.net/vttest/vttest-${version}.tgz"
     ];
     sha256 = "sha256-wZVEnrLSKZyjwKJHiKmqtWn+QcLg6DEotcKbqW5auxs=";
   };

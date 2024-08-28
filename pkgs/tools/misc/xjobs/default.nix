@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "20200726";
 
   src = fetchurl {
-    url = "mirror://sourceforge//xjobs/files/${pname}-${version}.tgz";
+    url = "mirror://sourceforge//xjobs/files/xjobs-${version}.tgz";
     sha256 = "0ay6gn43pnm7r1jamwgpycl67bjg5n87ncl27jb01w2x6x70z0i3";
   };
 
@@ -22,16 +22,16 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     runHook preCheck
-    ./${pname} -V
+    ./xjobs -V
     runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,etc}
-    install -m755 ${pname} $out/bin/${pname}
-    install -m644 ${pname}.rc $out/etc/${pname}.rc
-    installManPage ${pname}.1
+    install -m755 xjobs $out/bin/xjobs
+    install -m644 xjobs.rc $out/etc/xjobs.rc
+    installManPage xjobs.1
     runHook postInstall
   '';
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cups tcl tk ];
 
   sourceRoot = ".";
-  unpackCmd = "dpkg-deb -x $curSrc/${pname}_${version}_${debPlatform}.deb .";
+  unpackCmd = "dpkg-deb -x $curSrc/fxlinuxprintutil_${version}_${debPlatform}.deb .";
 
   dontConfigure = true;
   dontBuild = true;

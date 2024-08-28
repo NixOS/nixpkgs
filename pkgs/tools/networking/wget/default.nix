@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
+{ lib, stdenv, fetchurl, fetchpatch, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
 , python3, lzip, darwin
 , withLibpsl ? false, libpsl
@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-runtime-dep-on-openssl-headers.patch
+    (fetchpatch {
+      name = "CVE-2024-38428.patch";
+      url = "https://git.savannah.gnu.org/cgit/wget.git/patch/?id=ed0c7c7e0e8f7298352646b2fd6e06a11e242ace";
+      hash = "sha256-4ZVPufgG/h0UkxF9hQBAtF6QAG4GEz9hHeqEsD47q4U=";
+    })
   ];
 
   preConfigure = ''

@@ -11,23 +11,23 @@
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MnQEYPrkJVs+yxRRYF5FpDDc6k6qAbAnSzNl+p1bmgY=";
+    hash = "sha256-CAodXoc2T/vyAQKWYCm3te3urbSpGMZ7gmYlvDmTEQY=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

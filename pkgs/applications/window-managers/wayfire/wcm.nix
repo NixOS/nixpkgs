@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wcm";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wcm";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UwHJ4Wi83ATnA1CQKNSt8Qga7ooLnAY7QARz2FXvUIo=";
+    hash = "sha256-oaaEtyu/9XVhFTkmD7WjScMycpKf+M7oPyQatbY23Vo=";
   };
 
   nativeBuildInputs = [

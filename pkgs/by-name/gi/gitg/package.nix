@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   version = "44";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gitg/${lib.versions.majorMinor version}/gitg-${version}.tar.xz";
     hash = "sha256-NCoxaE2rlnHNNBvT485mWtzuBGDCoIHdxJPNvAMTJTA=";
   };
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gitg";
     };
   };
 

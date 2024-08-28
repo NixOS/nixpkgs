@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.10.1";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     rev = "refs/tags/release/${version}";
-    hash = "sha256-38r1CwS4BUqhzAUmBvxuqKquGfGlgSekKXe7EbumSe0=";
+    hash = "sha256-X39XOv8HJdSjMjMMnmB7Gxjseg5k/LuKICTxapcHVsU=";
   };
 
   patches = [ ./unwrap-subprocess.patch ];

@@ -303,6 +303,7 @@ in stdenv.mkDerivation rec {
     # fix: strip: error: unknown argument '-n'
     substituteInPlace \
       src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
+      src/runtime/src/native/managed/native-library.targets \
       --replace-fail ' -no_code_signature_warning' ""
 
     # ld: library not found for -ld_classic

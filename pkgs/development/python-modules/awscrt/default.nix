@@ -5,7 +5,6 @@
   cmake,
   perl,
   stdenv,
-  gcc10,
   CoreFoundation,
   Security,
   pythonOlder,
@@ -28,13 +27,7 @@ buildPythonPackage rec {
     Security
   ];
 
-  # gcc <10 is not supported, LLVM on darwin is just fine
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
-      gcc10
-      perl
-    ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.isDarwin) [ perl ];
 
   dontUseCmakeConfigure = true;
 

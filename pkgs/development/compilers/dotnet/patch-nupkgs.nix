@@ -34,6 +34,7 @@ in writeShellScriptBin "patch-nupkgs" (''
       if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
   }
   cd "$1"
+'' + lib.optionalString stdenv.isLinux ''
   for x in */* */*; do
     # .nupkg.metadata is written last, so we know the packages is complete
     [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \

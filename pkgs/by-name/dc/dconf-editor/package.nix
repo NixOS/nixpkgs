@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "45.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/dconf-editor/${lib.versions.major version}/dconf-editor-${version}.tar.xz";
     sha256 = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "dconf-editor";
     };
   };
 

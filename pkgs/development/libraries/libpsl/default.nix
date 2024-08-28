@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   # bin/psl-make-dafsa brings a large runtime closure through python3
-  outputs = [ "bin" "out" "dev" ];
+  outputs = lib.optional (!stdenv.hostPlatform.isStatic) "bin" ++ [ "out" "dev" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -40,14 +40,13 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-    python3
-  ];
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) python3;
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     patchShebangs src/psl-make-dafsa
   '';
 

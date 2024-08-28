@@ -26,7 +26,7 @@ If you cause a regression (we've all been there), you are responsible for fixing
 
 To merge code, you need to be a committer, or use the merge-bot, but currently the merge-bot only works for packages located at `pkgs/by-name/`, which means, K3s still need to be migrated there before you can use merge-bot for merging. As a non-committer, once you have approved a PR you need to forward the request to a committer. For deciding which committer, give preference initially to K3s committers, but any committer can commit. A committer usually has a green approval in PRs.
 
-K3s's committers currently are: superherointj, marcusramberg, Mic92.
+K3s's committers currently are: marcusramberg, Mic92.
 
 @euank is often silent but still active and has always handled anything dreadful, internal parts of K3s/Kubernetes or architecture things, he initially packaged K3s for nixpkgs, think of him as a last resort, when we fail to accomplish a fix, he comes to rescue us from ourselves.
 

@@ -32,7 +32,7 @@
 , openclSupport ? !stdenv.isDarwin
   # This argument lets one run CUDA & OpenCL tests on non-NixOS systems by
   # telling Nix where to find the drivers. If you know the version of the
-  # NVidia driver that is installed on your system, you can do:
+  # Nvidia driver that is installed on your system, you can do:
   #
   # arrayfire.override {
   #   nvidiaComputeDrivers =

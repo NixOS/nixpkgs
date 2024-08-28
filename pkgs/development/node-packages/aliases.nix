@@ -9,16 +9,16 @@ pkgs: lib: self: super:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias: with lib;
+  removeRecurseForDerivations = alias:
     if alias.recurseForDerivations or false
-    then removeAttrs alias ["recurseForDerivations"]
+    then lib.removeAttrs alias ["recurseForDerivations"]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias: with lib;
-    if isDerivation alias then
-      dontDistribute alias
+  removeDistribute = alias:
+    if lib.isDerivation alias then
+      lib.dontDistribute alias
     else alias;
 
   # Make sure that we are not shadowing something from node-packages.nix.
@@ -110,6 +110,7 @@ mapAliases {
   inherit (pkgs) hyperpotamus; # added 2023-08-19
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
+  inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
@@ -126,6 +127,7 @@ mapAliases {
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) nodemon; # added 2024-06-28
   inherit (pkgs) npm-check-updates; # added 2023-08-22
@@ -154,6 +156,7 @@ mapAliases {
   surge = pkgs.surge-cli; # Added 2023-09-08
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
   inherit (pkgs) textlint; # Added 2024-05-13

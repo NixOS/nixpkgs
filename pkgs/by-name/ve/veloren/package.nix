@@ -50,6 +50,9 @@ rustPlatform.buildRustPackage {
   ];
 
   postPatch = ''
+    # Use our Cargo.lock
+    cp ${./Cargo.lock} Cargo.lock
+
     # Force vek to build in unstable mode
     cat <<'EOF' | tee "$cargoDepsCopy"/vek-*/build.rs
     fn main() {

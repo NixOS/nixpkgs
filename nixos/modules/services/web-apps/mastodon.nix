@@ -775,7 +775,7 @@ in {
       '' +  lib.optionalString (!databaseActuallyCreateLocally) ''
         unset PGPASSWORD
       '';
-      path = [ cfg.package pkgs.postgresql ];
+      path = [ cfg.package config.services.postgresql.package ];
       environment = env // lib.optionalAttrs (!databaseActuallyCreateLocally) {
         PGHOST = cfg.database.host;
         PGPORT = toString cfg.database.port;

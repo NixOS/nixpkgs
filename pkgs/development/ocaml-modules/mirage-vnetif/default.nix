@@ -1,19 +1,18 @@
 { lib, buildDunePackage, fetchurl
 , lwt, mirage-net
-, cstruct, ipaddr, macaddr, mirage-profile
+, cstruct, ipaddr, macaddr
 , duration, logs
 }:
 
 buildDunePackage rec {
   pname = "mirage-vnetif";
-  version = "0.6.0";
+  version = "0.6.2";
 
   minimalOCamlVersion = "4.06";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-fzRoNFqdnj4Ke+eNdo5crvbnKDx6/+dQyu+K3rD5dYw=";
+    hash = "sha256-SorcrPRhhCYhHasLQGHvTtLo229/3xVB6f7/XOlFRSI=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +21,6 @@ buildDunePackage rec {
     cstruct
     ipaddr
     macaddr
-    mirage-profile
     duration
     logs
   ];

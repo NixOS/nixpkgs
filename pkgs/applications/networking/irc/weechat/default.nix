@@ -36,14 +36,14 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "4.3.5";
+      version = "4.4.1";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-        hash = "sha256-5tvEyDLaXFuF5Jb+/BUjf7viqPe6L76B7gcdwMZrS+M=";
+        hash = "sha256-5d4L0UwqV6UFgTqDw9NyZI0tlXPccoNoV78ocXMmk2w=";
       };
 
       # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -51,30 +51,28 @@ let
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
-      cmakeFlags = with lib; [
+      cmakeFlags = [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
         "-DENABLE_DOC_INCOMPLETE=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
-        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
+        ++ lib.optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
       nativeBuildInputs = [ cmake pkg-config asciidoctor ] ++ lib.optional enableTests cpputest;
-      buildInputs = with lib; [
-          ncurses openssl aspell cjson gnutls gettext zlib curl
-          libgcrypt ]
-        ++ optionals stdenv.isDarwin [ libobjc libresolv ]
-        ++ concatMap (p: p.buildInputs) enabledPlugins
+      buildInputs = [ ncurses openssl aspell cjson gnutls gettext zlib curl libgcrypt ]
+        ++ lib.optionals stdenv.isDarwin [ libobjc libresolv ]
+        ++ lib.concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
       env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
         + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
-      postInstall = with lib; ''
-        for p in ${concatMapStringsSep " " (p: p.name) enabledPlugins}; do
+      postInstall = ''
+        for p in ${lib.concatMapStringsSep " " (p: p.name) enabledPlugins}; do
           from=$out/lib/weechat/plugins/$p.so
           to=''${!p}/lib/weechat/plugins/$p.so
           mkdir -p $(dirname $to)

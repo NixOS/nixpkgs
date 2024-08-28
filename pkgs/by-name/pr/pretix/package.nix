@@ -51,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.7.0";
+  version = "2024.7.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-08ykuFPcG3WvinJd9zadirXFqsMt9GbdOGU2CGbW7ls=";
+    hash = "sha256-lOcV3+CNGyKR0QiQXr/hP/9rhWauEvnSLOvxmQa/DSg=";
   };
 
   npmDeps = buildNpmPackage {

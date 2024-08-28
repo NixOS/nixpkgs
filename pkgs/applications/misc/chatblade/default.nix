@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "chatblade";
-  version = "0.4.0";
+  version = "0.6.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AjE+1MkSkZOtEUPKEPBKQ3n+aOB8cwsorBpL5skNskU=";
+    hash = "sha256-N4YzXOlD1ULhiHrqA6CLOwBStQSEbz8yqtOt5mCRWLQ=";
   };
 
   doCheck = false; # there are no tests
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     openai
     platformdirs
     pygments
+    pylatexenc
     pyyaml
     regex
     requests

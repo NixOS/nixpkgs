@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "tfsec";
-  version = "1.28.9";
+  version = "1.28.10";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";

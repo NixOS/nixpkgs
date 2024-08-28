@@ -6,7 +6,12 @@
   sassc,
   gnome-themes-extra,
   gtk-engine-murrine,
-  colorVariants ? [] # default: install all icons
+  unstableGitUpdater,
+  colorVariants ? [ ],
+  sizeVariants ? [ ],
+  themeVariants ? [ ],
+  tweakVariants ? [ ],
+  iconVariants ? [ ],
 }:
 
 let
@@ -15,45 +20,109 @@ let
     "dark"
     "light"
   ];
-
+  sizeVariantList = [
+    "compact"
+    "standard"
+  ];
+  themeVariantList = [
+    "default"
+    "green"
+    "grey"
+    "orange"
+    "pink"
+    "purple"
+    "red"
+    "teal"
+    "yellow"
+    "all"
+  ];
+  tweakVariantList = [
+    "moon"
+    "storm"
+    "black"
+    "float"
+    "outline"
+    "macos"
+  ];
+  iconVariantList = [
+    "Dark-Cyan"
+    "Dark"
+    "Light"
+    "Moon"
+  ];
 in
-lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib.checkListOfEnum
+  "${pname}: sizeVariants"
+  sizeVariantList
+  sizeVariants
+  lib.checkListOfEnum
+  "${pname}: themeVariants"
+  themeVariantList
+  themeVariants
+  lib.checkListOfEnum
+  "${pname}: tweakVariants"
+  tweakVariantList
+  tweakVariants
+  lib.checkListOfEnum
+  "${pname}: iconVariants"
+  iconVariantList
+  iconVariants
 
-stdenvNoCC.mkDerivation {
-  inherit pname;
-  version = "0-unstable-2024-06-27";
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname;
+    version = "0-unstable-2024-07-22";
 
-  src = fetchFromGitHub {
-    owner = "Fausto-Korpsvart";
-    repo = "Tokyonight-GTK-Theme";
-    rev = "2f566d89856516bef988df3cc32261f752299886";
-    hash = "sha256-oKqLb66N4swHfhjUZJIGryE0D9MkuLdKFQa6j3TFmOg=";
-  };
+    src = fetchFromGitHub {
+      owner = "Fausto-Korpsvart";
+      repo = "Tokyonight-GTK-Theme";
+      rev = "a9a25010e9fbfca783c3c27258dbad76a9cc7842";
+      hash = "sha256-HbrDDiMej4DjvskGItele/iCUY1NzlWlu3ZneA76feM=";
+    };
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  nativeBuildInputs = [ gnome.gnome-shell sassc ];
-  buildInputs = [ gnome-themes-extra ];
+    nativeBuildInputs = [
+      gnome.gnome-shell
+      sassc
+    ];
+    buildInputs = [ gnome-themes-extra ];
 
-  dontBuild = true;
+    dontBuild = true;
 
-  postPatch = ''
-    patchShebangs themes/install.sh
-  '';
+    passthru.updateScript = unstableGitUpdater { };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/themes
-    cd themes
-    ./install.sh -n Tokyonight -c ${lib.concatStringsSep " " (if colorVariants != [] then colorVariants else colorVariantList)} --tweaks macos -d "$out/share/themes"
-    runHook postInstall
-  '';
+    postPatch = ''
+      patchShebangs themes/install.sh
+    '';
 
-  meta = with lib; {
-    description = "GTK theme based on the Tokyo Night colour palette";
-    homepage = "https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ garaiza-93 Madouura d3vil0p3r ];
-    platforms = platforms.unix;
-  };
-}
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/themes
+      cd themes
+      ./install.sh -n Tokyonight \
+      ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
+      ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
+      ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
+      ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
+      -d "$out/share/themes"
+      cd ../icons
+      ${lib.optionalString (iconVariants != [ ]) ''
+        mkdir -p $out/share/icons
+        cp -a ${toString (map (v: "Tokyonight-${v}") iconVariants)} $out/share/icons/
+      ''}
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "GTK theme based on the Tokyo Night colour palette";
+      homepage = "https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme";
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [
+        garaiza-93
+        Madouura
+        d3vil0p3r
+      ];
+      platforms = lib.platforms.unix;
+    };
+  }

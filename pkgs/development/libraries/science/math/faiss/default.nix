@@ -49,8 +49,7 @@ stdenv.mkDerivation {
   outputs = [
     "out"
     "demos"
-    "dist"
-  ];
+  ] ++ lib.optionals pythonSupport [ "dist" ];
 
   src = fetchFromGitHub {
     owner = "facebookresearch";

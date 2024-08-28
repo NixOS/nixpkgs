@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     description = "Language that compiles to regular expressions";
     homepage = "https://github.com/yoav-lavi/melody";
     license = licenses.mit;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
     mainProgram = "melody";
   };
 }

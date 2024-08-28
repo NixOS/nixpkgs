@@ -42,10 +42,9 @@ let
 
     nativeBuildInputs =
       old.nativeBuildInputs or []
-      ++ [ xmlstarlet ]
-      ++ lib.optional stdenv.isLinux patchNupkgs;
+      ++ [ xmlstarlet patchNupkgs ];
 
-    postPatch = old.postPatch or "" + lib.optionalString stdenv.isLinux ''
+    postPatch = old.postPatch or "" + ''
       xmlstarlet ed \
         --inplace \
         -s //Project -t elem -n Import \

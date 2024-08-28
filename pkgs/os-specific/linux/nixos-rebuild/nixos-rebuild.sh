@@ -725,8 +725,7 @@ EOF
                     .nixosVersion, .kernelVersion, .configurationRevision,
                     (.specialisations | join(" "))
                 ] | @tsv' |
-                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation" |
-                ${PAGER:cat}
+                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation"
         else
             jq --slurp .
         fi

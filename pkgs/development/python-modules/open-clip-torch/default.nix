@@ -1,43 +1,46 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  braceexpand,
+  fetchFromGitHub,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
   ftfy,
   huggingface-hub,
-  pandas,
   protobuf,
-  pytestCheckHook,
   regex,
   sentencepiece,
   timm,
   torch,
   torchvision,
   tqdm,
+
+  # checks
+  pytestCheckHook,
+  braceexpand,
+  pandas,
   transformers,
-  setuptools,
   webdataset,
-  wheel,
-  fetchFromGitHub,
+
+  stdenv,
 }:
 buildPythonPackage rec {
   pname = "open-clip-torch";
-  version = "2.24.0";
+  version = "2.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlfoundations";
     repo = "open_clip";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ugbXnXiOY9FrNvr8ZxnAgZO/SLCVoXbRgupi8cUwflU=";
+    hash = "sha256-XjPOsGet8VNzwEwzz14f1nF3XOgpkb4OERIc6VrDDZ8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ftfy
     huggingface-hub
     protobuf
@@ -59,7 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "open_clip" ];
 
-  disabledTestPaths = lib.optionals (stdenv.isAarch64 || stdenv.isDarwin) [ "tests/test_wds.py" ];
+  # -> On Darwin:
+  # AttributeError: Can't pickle local object 'build_params.<locals>.<lambda>'
+  # -> On Linux:
+  # KeyError: Caught KeyError in DataLoader worker process 0
+  disabledTestPaths = [ "tests/test_wds.py" ];
 
   disabledTests =
     [
@@ -79,11 +86,14 @@ buildPythonPackage rec {
       "test_training_clip_with_jit"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source implementation of CLIP";
     homepage = "https://github.com/mlfoundations/open_clip";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ iynaix ];
+    changelog = "https://github.com/mlfoundations/open_clip/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "open-clip";
+    # Segfaults during pythonImportsCheck phase
+    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=strict-prototypes"
+    "-Wno-error=deprecated-declarations"
   ]);
 
   enableParallelBuilding = true;

@@ -1,5 +1,5 @@
-{ lib, callPackage, stdenv, fetchFromGitHub, cmake, bison, flex, libusb1, elfutils
-, libftdi1, readline, hidapi, libserialport
+{ lib, callPackage, stdenv, fetchFromGitHub, cmake, bison, flex, pkg-config, libusb1, elfutils
+, libftdi1, readline, hidapi, libserialport, libusb-compat-0_1
 # Documentation building doesn't work on Darwin. It fails with:
 #   Undefined subroutine &Locale::Messages::dgettext called in ... texi2html
 #
@@ -12,16 +12,16 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avrdude";
-  version = "7.3";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "avrdudes";
-    repo = "avdude";
+    repo = "avrdude";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JqW3AOMmAfcy+PQRcqviWlxA6GoMSEfzIFt1pRYY7Dw=";
+    sha256 = "w58HVCvKuWpGJwllupbj7ndeq4iE9LPs/IjFSUN0DOU=";
   };
 
-  nativeBuildInputs = [ cmake bison flex ] ++ lib.optionals docSupport [
+  nativeBuildInputs = [ cmake bison flex pkg-config ] ++ lib.optionals docSupport [
     unixtools.more
     texliveMedium
     texinfo
@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libftdi1
     libserialport
     readline
+    libusb-compat-0_1
   ];
 
   postPatch = lib.optionalString (!useElfutils) ''
@@ -46,11 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   #   -DHAVE_LINUXGPIO=ON    because it's incompatible with libgpiod 2.x
   cmakeFlags = lib.optionals docSupport [ "-DBUILD_DOC=ON" ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-DHAVE_LINUXSPI=ON" "-DHAVE_PARPORT=ON" ];
-
-  # dvips output references texlive in comments, resulting in a huge closure
-  postInstall = lib.optionalString docSupport ''
-    rm $out/share/doc/avrdude/*.ps
-  '';
 
   passthru = {
     # Vendored and mutated copy of libelf for avrdudes use.

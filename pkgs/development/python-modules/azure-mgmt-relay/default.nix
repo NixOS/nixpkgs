@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrestazure,
   azure-common,
   azure-mgmt-core,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-relay";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     sha256 = "c93b7550e64b6734bf23ce57ca974a3ea929b734c58d1fe3669728c4fd2d2eb3";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrestazure
     azure-common
     azure-mgmt-core
@@ -28,8 +31,6 @@ buildPythonPackage rec {
 
   preBuild = ''
     rm -f azure_bdist_wheel.py
-    substituteInPlace setup.cfg \
-      --replace "azure-namespace-package = azure-mgmt-nspkg" ""
   '';
 
   pythonNamespaces = [ "azure.mgmt" ];

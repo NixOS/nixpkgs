@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "gerrit";
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       "singleusergroup"
       "webhooks"
     ];
+    tests = {
+      inherit (nixosTests) gerrit;
+    };
   };
 
   meta = with lib; {

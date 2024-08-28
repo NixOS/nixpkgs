@@ -10,15 +10,15 @@
 assert sshSupport -> openssh != null;
 
 let
-  repoName = with lib;
+  repoName =
     let
-      fst = head;
-      snd = l: head (tail l);
-      trd = l: head (tail (tail l));
+      fst = lib.head;
+      snd = l: lib.head (lib.tail l);
+      trd = l: lib.head (lib.tail (lib.tail l));
       path_ =
-        (p: if head p == "" then tail p else p) # ~ drop final slash if any
-        (reverseList (splitString "/" url));
-      path = [ (removeSuffix "/" (head path_)) ] ++ (tail path_);
+        (p: if lib.head p == "" then lib.tail p else p) # ~ drop final slash if any
+        (lib.reverseList (lib.splitString "/" url));
+      path = [ (lib.removeSuffix "/" (lib.head path_)) ] ++ (lib.tail path_);
     in
       # ../repo/trunk -> repo
       if fst path == "trunk" then snd path

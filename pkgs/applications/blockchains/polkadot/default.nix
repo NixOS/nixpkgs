@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , lib
 , openssl
 , pkg-config
@@ -18,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "stable2407";
+  version = "stable2407-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-${version}";
-    hash = "sha256-g+jReHOAkaWjr1yJILFL4mSYGEfRBlSCrUHp8ro22SA=";
+    hash = "sha256-IYRkXmFBjRAYSROL37EgEjC7wM1N97HabuSHtcSUxdg=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -51,15 +50,6 @@ rustPlatform.buildRustPackage rec {
       "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
     };
   };
-
-  cargoPatches = [
-    # NOTE: bump `time` dependency to be able to build with rust 1.80
-    # should be removed on the next release
-    (fetchpatch {
-      url = "https://github.com/paritytech/polkadot-sdk/pull/5149.patch";
-      hash = "sha256-FNG9XLeMRJOT6k7mcs6GemtQ3oUrH/hOYG0JNQP0akU=";
-    })
-  ];
 
   buildType = "production";
 

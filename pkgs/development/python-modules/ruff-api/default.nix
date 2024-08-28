@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ruff-api";
-  version = "0.0.7";
+  version = "0.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "amyreese";
     repo = "ruff-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wST5TfIcw5rezaL9ZygoK3RYsGA9wzfnC3aDdc3g4tU=";
+    hash = "sha256-BW/qXq4HemqxhvjIKrrn07eqGJwAbYei7e+I+oHxujU=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

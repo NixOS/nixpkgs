@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.95";
 
   src = fetchurl {
-    url = "https://www.lcdf.org/gifsicle/${pname}-${version}.tar.gz";
+    url = "https://www.lcdf.org/gifsicle/gifsicle-${version}.tar.gz";
     sha256 = "sha256-snEWRwCf0qExMPO+FgUy7UZTjnYr/A8CDepQYYp9yVA=";
   };
 

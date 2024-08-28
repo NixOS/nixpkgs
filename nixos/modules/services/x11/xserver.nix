@@ -453,6 +453,8 @@ in
         description = "Contents of the first Monitor section of the X server configuration file.";
       };
 
+      enableTearFree = mkEnableOption "the TearFree option in the first Device section";
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -810,6 +812,7 @@ in
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName or driver.name}"
+          ${indent (optionalString cfg.enableTearFree ''Option "TearFree" "true"'')}
           ${indent cfg.deviceSection}
           ${indent (driver.deviceSection or "")}
           ${indent xrandrDeviceSection}

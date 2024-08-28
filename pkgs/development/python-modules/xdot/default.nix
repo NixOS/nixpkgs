@@ -10,29 +10,38 @@
   graphviz,
   gtk3,
   numpy,
+  packaging,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xdot";
-  version = "1.3";
-  format = "setuptools";
+  version = "1.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
     repo = "xdot.py";
     rev = version;
-    hash = "sha256-0UfvN7z7ThlFu825h03Z5Wur9zbiUpvD5cb5gcIhQQI=";
+    hash = "sha256-fkO1bINRkCCzVRrQg9+vIODbN+bpXq2OHBKkzzZUZNA=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3
   ];
-  propagatedBuildInputs = [
-    pygobject3
+
+  buildInputs = [
     graphviz
     gtk3
+  ];
+
+  dependencies = [
+    pygobject3
     numpy
+    packaging
   ];
   nativeCheckInputs = [ xvfb-run ];
 

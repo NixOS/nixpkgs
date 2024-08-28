@@ -1,5 +1,5 @@
 { lib, mkCoqDerivation
-, coq, flocq
+, coq, flocq, MenhirLib
 , ocamlPackages, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
 , version ? null
@@ -50,7 +50,7 @@ compcert = mkCoqDerivation {
 
   nativeBuildInputs = with ocamlPackages; [ makeWrapper ocaml findlib menhir coq coq2html ];
   buildInputs = with ocamlPackages; [ menhirLib ];
-  propagatedBuildInputs = [ flocq ];
+  propagatedBuildInputs = [ flocq MenhirLib ];
 
   enableParallelBuilding = true;
 
@@ -66,6 +66,7 @@ compcert = mkCoqDerivation {
     -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
     -toolprefix ${tools}/bin/ \
     -use-external-Flocq \
+    -use-external-MenhirLib \
     ${target} \
   '';  # don't remove the \ above, the command gets appended in override below
 

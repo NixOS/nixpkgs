@@ -79,20 +79,6 @@ let
     sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
-  gdbm3 = gdbm.overrideAttrs (old: rec {
-    version = "1.8.3";
-
-    src = fetchurl {
-      url = "mirror://gnu/gdbm/gdbm-${version}.tar.gz";
-      sha256 = "sha256-zDQDOKLii0AFirnrU1SiHVP4ihWC6iG6C7GFw3ooHck=";
-    };
-
-    installPhase = ''
-      mkdir -p $out/lib
-      cp .libs/libgdbm*.so* $out/lib/
-    '';
-  });
-
   vmware-unpack-env = buildFHSEnv rec {
     name = "vmware-unpack-env";
     targetPkgs = pkgs: [ zlib ];
@@ -114,7 +100,7 @@ stdenv.mkDerivation rec {
     libxslt
     libxml2
     libuuid
-    gdbm3
+    gdbm
     readline
     xz
     cups

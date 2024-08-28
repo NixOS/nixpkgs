@@ -37,12 +37,13 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [ travisbhartwell manveru ];
+    maintainers = with maintainers; [ yayayayaka teutat3s ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = optional (versionOlder version "29.0.0") "Electron version ${version} is EOL";
+    # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
+    knownVulnerabilities = optional (versionOlder version "30.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {

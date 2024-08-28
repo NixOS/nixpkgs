@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib; [
-    (enableFeature doCheck "unit-tests")
-    (enableFeature doCheck "tests")
+  configureFlags = [
+    (lib.enableFeature doCheck "unit-tests")
+    (lib.enableFeature doCheck "tests")
   ];
 
   makeFlags = [

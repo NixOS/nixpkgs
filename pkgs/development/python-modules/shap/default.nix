@@ -11,7 +11,6 @@
   lightgbm,
   lime,
   matplotlib,
-  nose,
   numba,
   numpy,
   oldest-supported-numpy,
@@ -108,7 +107,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipython
     matplotlib
-    nose
     pytest-mpl
     pytestCheckHook
     # optional dependencies, which only serve to enable more tests:

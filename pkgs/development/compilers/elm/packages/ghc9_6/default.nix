@@ -1,8 +1,9 @@
 { pkgs, lib, makeWrapper, nodejs, fetchElmDeps }:
 
 self: pkgs.haskell.packages.ghc96.override {
-  overrides = self: super: with pkgs.haskell.lib.compose; with lib;
+  overrides = self: super:
     let
+      inherit (pkgs.haskell.lib.compose) overrideCabal;
       elmPkgs = rec {
         elm = overrideCabal
           (drv: {
@@ -21,8 +22,8 @@ self: pkgs.haskell.packages.ghc96.override {
 
             description = "Delightful language for reliable webapps";
             homepage = "https://elm-lang.org/";
-            license = licenses.bsd3;
-            maintainers = with maintainers; [ domenkozar turbomack ];
+            license = lib.licenses.bsd3;
+            maintainers = with lib.maintainers; [ domenkozar turbomack ];
           })
           (self.callPackage ./elm { });
 

@@ -21,7 +21,9 @@
   glib-networking,
   glibc,
   gnome,
+  gnome-color-manager,
   gnome-desktop,
+  gnome-remote-desktop,
   gnome-user-share,
   gsettings-desktop-schemas,
   gsound,
@@ -78,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./paths.patch;
       budgie_desktop = budgie-desktop;
-      gcm = gnome.gnome-color-manager;
+      gcm = gnome-color-manager;
       inherit
         cups
         glibc
@@ -115,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     cheese
     gnome.gnome-bluetooth_1_0
-    gnome.gnome-remote-desktop
+    gnome-remote-desktop
     gnome.gnome-settings-daemon
     gnome-user-share
     gnome.mutter

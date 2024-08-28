@@ -11,6 +11,7 @@
 , qtcharts
 , qtdeclarative
 , qtgraphicaleffects
+, qtimageformats
 , qtmultimedia
 , qtquickcontrols2
 , qtsensors
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtcharts
     qtdeclarative
     qtgraphicaleffects
+    qtimageformats
     qtmultimedia
     qtquickcontrols2
     qtsensors

@@ -214,6 +214,7 @@
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/i3lock.nix
+  ./programs/iio-hyprland.nix
   ./programs/immersed-vr.nix
   ./programs/iotop.nix
   ./programs/java.nix
@@ -286,6 +287,7 @@
   ./programs/ssh.nix
   ./programs/starship.nix
   ./programs/steam.nix
+  ./programs/streamcontroller.nix
   ./programs/streamdeck-ui.nix
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
@@ -310,6 +312,7 @@
   ./programs/wayland/miracle-wm.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
+  ./programs/wayland/uwsm.nix
   ./programs/wayland/waybar.nix
   ./programs/wayland/wayfire.nix
   ./programs/weylus.nix
@@ -458,6 +461,7 @@
   ./services/continuous-integration/woodpecker/server.nix
   ./services/databases/aerospike.nix
   ./services/databases/cassandra.nix
+  ./services/databases/chromadb.nix
   ./services/databases/clickhouse.nix
   ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
@@ -967,7 +971,6 @@
   ./services/networking/adguardhome.nix
   ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
-  ./services/networking/antennas.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
@@ -1208,7 +1211,6 @@
   ./services/networking/spacecookie.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
-  ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/sslh.nix
   ./services/networking/strongswan-swanctl/module.nix
@@ -1239,7 +1241,6 @@
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
   ./services/networking/trickster.nix
-  ./services/networking/tvheadend.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
   ./services/networking/unbound.nix
@@ -1402,6 +1403,7 @@
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii.nix
+  ./services/web-apps/firefly-iii-data-importer.nix
   ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
   ./services/web-apps/freshrss.nix
@@ -1418,6 +1420,7 @@
   ./services/web-apps/healthchecks.nix
   ./services/web-apps/hedgedoc.nix
   ./services/web-apps/hledger-web.nix
+  ./services/web-apps/homebox.nix
   ./services/web-apps/honk.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
@@ -1466,6 +1469,7 @@
   ./services/web-apps/phylactery.nix
   ./services/web-apps/photoprism.nix
   ./services/web-apps/pict-rs.nix
+  ./services/web-apps/pingvin-share.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/powerdns-admin.nix

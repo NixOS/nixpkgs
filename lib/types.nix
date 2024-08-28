@@ -219,7 +219,7 @@ rec {
     else "(${t.description})";
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # nixos/doc/manual/development/option-types.section.md!
   types = rec {
 
     raw = mkOptionType {

@@ -3,7 +3,7 @@ let
   pname = "synology-drive-client";
   baseUrl = "https://global.synologydownload.com/download/Utility/SynologyDriveClient";
   version = "3.5.0-16084";
-  buildNumber = with lib; last (splitString "-" version);
+  buildNumber = lib.last (lib.splitString "-" version);
   meta = with lib; {
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";

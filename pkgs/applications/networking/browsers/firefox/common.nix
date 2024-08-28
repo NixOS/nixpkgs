@@ -234,41 +234,42 @@ buildStdenv.mkDerivation {
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "122") [
-    # dbus cflags regression fix
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+  patches = lib.optionals (lib.versionAtLeast version "111") [ ./env_var_for_system_dir-ff111.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionOlder version "131") [
     (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f1f5f98290b3";
-      hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
+      name = "cbindgen-0.27.0-compat.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
+      hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
-  ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
-  ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "120.0.1") [
+  ++ lib.optionals (lib.versionOlder version "130" && lib.versionAtLeast version "128") [
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1898476
     (fetchpatch {
-      # Do not crash on systems without an expected statically assumed page size.
-      # https://phabricator.services.mozilla.com/D194458
-      name = "mozbz1866025.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
-      hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
+      name = "mozbz-1898476-1.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f9323daf7abe";
+      hash = "sha256-fvIowXJLWnm16LeiSz6EasGypTi1ilG+s/T6+lNLbMQ=";
+    })
+    (fetchpatch {
+      name = "mozbz-1898476-2.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/a264ff9e9f6f";
+      hash = "sha256-9vkI/Ho4BXvLnoRGdfTzUODcIlA6K3RjbdhZjb/LEz0=";
+    })
+    (fetchpatch {
+      name = "mozbz-1898476-3.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/eb230ecdf8eb";
+      hash = "sha256-IaLltxf5W1WEzxvbi10wphqXVQPtBiLc2zlk38CIiz4=";
     })
   ]
-  ++ lib.optionals (lib.versionOlder version "122") [
-    ./bindgen-0.64-clang-18.patch
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
-    ./122.0-libvpx-mozbz1875201.patch
-  ]
+  ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch  ]
   ++ lib.optionals (lib.versionOlder version "123") [
     (fetchpatch {
       name = "clang-18.patch";
       url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
-  ]
-  ++ lib.optionals (lib.versionOlder version "115.12") [
-    ./rust-1.78.patch
   ]
   ++ extraPatches;
 

@@ -1,5 +1,6 @@
 # shellcheck shell=bash disable=SC2154
 export MSBUILDALWAYSOVERWRITEREADONLYFILES=1
+export MSBUILDTERMINALLOGGER=false
 
 declare -Ag _nugetInputs
 

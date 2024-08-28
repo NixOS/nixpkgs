@@ -199,7 +199,7 @@ let
           stripDebugList = [ "share" ];
         });
 
-        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: lib.optionalAttrs (lib.versionOlder old.version "20240808.2016") {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
@@ -252,7 +252,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/109
           CXXFLAGS = "-std=c++17";
 
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -321,9 +321,8 @@ let
           '';
           dontUseCmakeBuildDir = true;
           doCheck = pkgs.stdenv.isLinux;
-          packageRequires = [ self.emacs ];
-          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
+          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -545,7 +544,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
-          nativeBuildInputs = [ pkgs.pkg-config ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
           postPatch = ''
             substituteInPlace telega-customize.el \
@@ -601,7 +600,7 @@ let
             export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -687,7 +686,7 @@ let
         };
 
         vterm = super.vterm.overrideAttrs (old: {
-          nativeBuildInputs = [ pkgs.cmake ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake ];
           buildInputs = old.buildInputs ++ [ self.emacs pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"

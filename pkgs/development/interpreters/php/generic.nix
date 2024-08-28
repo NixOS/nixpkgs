@@ -164,7 +164,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject buildComposerWithPlugin composerHooks mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository mkComposerVendor buildComposerProject buildComposerProject2 buildComposerWithPlugin composerHooks composerHooks2 mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -313,7 +313,11 @@ let
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
-          patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+          patches = lib.optionals (lib.versionOlder version "8.4")  [
+            ./fix-paths-php7.patch
+          ] ++ lib.optionals (lib.versionAtLeast version "8.4") [
+            ./fix-paths-php84.patch
+          ] ++ extraPatches;
 
           separateDebugInfo = true;
 

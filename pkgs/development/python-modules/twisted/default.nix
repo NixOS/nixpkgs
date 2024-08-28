@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "24.3.0";
+  version = "24.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-azi27Ocpa14SLJ6xfaLuqz2YoZj1DKnv0A+wPltP1K4=";
+    hash = "sha256-WmAUfwRBh6En7H2pbRcNSbzOUMb9NvWU5g9Fh+/005Q=";
   };
 
   patches = [
@@ -73,12 +73,6 @@ buildPythonPackage rec {
       url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
-
-    # https://github.com/twisted/twisted/security/advisories/GHSA-cf56-g6w6-pqq2
-    ./CVE-2024-41671.patch
-
-    # https://github.com/twisted/twisted/security/advisories/GHSA-c8m8-j448-xjx7
-    ./CVE-2024-41810.patch
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -279,7 +279,7 @@ in
         ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
 
         # Unmount the top /etc mount to atomically reveal the new mount.
-        umount --recursive /etc
+        umount --lazy --recursive /etc
       fi
     '' else ''
       # Set up the statically computed bits of /etc.

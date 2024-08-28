@@ -2,6 +2,8 @@
 
 let
   inherit (pkgs) lib;
+
+  disableParallelBuilding = haskellLib.overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -34,6 +36,7 @@ self: super: {
   hpc = null;
   integer-gmp = null;
   mtl = null;
+  os-string = null;
   parsec = null;
   pretty = null;
   process = null;
@@ -49,4 +52,7 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
+
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/23392
+  gi-gtk = disableParallelBuilding super.gi-gtk;
 }

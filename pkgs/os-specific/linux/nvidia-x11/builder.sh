@@ -81,6 +81,9 @@ installPhase() {
         mkdir $i/lib/vdpau
         mv $i/lib/libvdpau* $i/lib/vdpau
 
+        # Compatibility with openssl 1.1, unused
+        rm -f $i/lib/libnvidia-pkcs11.so*
+
         # Install ICDs, make absolute paths.
         # Be careful not to modify any original files because this runs twice.
 

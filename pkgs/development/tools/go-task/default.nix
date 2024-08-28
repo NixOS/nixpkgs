@@ -46,6 +46,13 @@ buildGoModule rec {
     ln -s $out/bin/task $out/bin/go-task
 
     installShellCompletion completion/{bash,fish,zsh}/*
+
+    substituteInPlace $out/share/bash-completion/completions/task.bash \
+      --replace-warn 'complete -F _task task' 'complete -F _task task go-task'
+    substituteInPlace $out/share/fish/vendor_completions.d/task.fish \
+      --replace-warn 'complete -c $GO_TASK_PROGNAME' 'complete -c $GO_TASK_PROGNAME -c go-task'
+    substituteInPlace $out/share/zsh/site-functions/_task \
+      --replace-warn '#compdef task' '#compdef task go-task'
   '';
 
   passthru.tests = {

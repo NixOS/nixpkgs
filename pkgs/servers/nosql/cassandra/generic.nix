@@ -122,6 +122,10 @@ stdenv.mkDerivation rec {
     description = "Massively scalable open source NoSQL database";
     platforms = platforms.unix;
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode  # bundled dependency libsigar
+    ];
     maintainers = [ maintainers.roberth ];
   } // extraMeta;
 }

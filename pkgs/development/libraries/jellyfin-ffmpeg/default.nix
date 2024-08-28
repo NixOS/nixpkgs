@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "6.0.1-6";
+  version = "6.0.1-8";
 in
 
 (ffmpeg_6-full.override {
@@ -14,7 +14,7 @@ in
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-jy5LPurjuSIMZlzVZcuaqAwAZunbYc9/6aJf+hna0Kw=";
+    hash = "sha256-29g3BUdNcFEGjHkc/1qxOGazIfg0DLDIwoiDCI/aEKc=";
   };
 }).overrideAttrs (old: {
   pname = "jellyfin-ffmpeg";

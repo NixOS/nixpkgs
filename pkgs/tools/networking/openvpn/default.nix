@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.11";
+  version = "2.6.12";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1grfQT034R5uY1McrPJlWQZ1YEa07f/oihO54v7EDV4=";
+    hash = "sha256-HGEP3etobjTxNnw0fgJ+QY4HUjoQ9NjOSiwq8vYaGSk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

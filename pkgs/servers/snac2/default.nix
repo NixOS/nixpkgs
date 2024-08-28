@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "snac2";
-  version = "2.56";
+  version = "2.57";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "grunfink";
     repo = pname;
     rev = version;
-    hash = "sha256-/e2eUlcYvSQKrYvRAdjx6uKR7DnMipvblKZaHMr1go4=";
+    hash = "sha256-ZszPHGEIcZEzFWSJ7jioQvLn5dwn9yjOvMMskMQKv8Y=";
   };
 
   buildInputs = [ curl openssl ];

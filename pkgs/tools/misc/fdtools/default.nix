@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://code.dogmap.org/${pname}/releases/${pname}-${version}.tar.bz2";
+    url = "https://code.dogmap.org/fdtools/releases/fdtools-${version}.tar.bz2";
     inherit sha256;
   };
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   ];
 
   configurePhase = ''
-    cd ${pname}-${version}
+    cd fdtools-${version}
     sed -e 's|gcc|$CC|' \
       conf-compile/defaults/host_link.sh \
       > conf-compile/host_link.sh
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $lib/lib
     mkdir -p $dev/include
-    docdir=$doc/share/doc/${pname}
+    docdir=$doc/share/doc/fdtools
     mkdir -p $docdir
 
     mv library/fdtools.a $lib/lib/fdtools.a

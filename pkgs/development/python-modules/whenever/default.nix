@@ -14,11 +14,13 @@
   pytest-mypy-plugins,
   hypothesis,
   freezegun,
+  time-machine,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.6.1";
+  version = "0.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,12 +29,12 @@ buildPythonPackage rec {
     owner = "ariebovenberg";
     repo = "whenever";
     rev = "refs/tags/${version}";
-    hash = "sha256-uUjQtaqPO/Ie7vVddQhc3dxORX2PxNRaDJzCr+vieUo=";
+    hash = "sha256-aQ6mE9UZg/wa+N2kErDo3edXVvjL/4Bhjmi6//CCmJw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-8U3pGKY9UQ0JpzUn3Ny6YSD3wzXPDi1pupD5fpEJFvw=";
+    hash = "sha256-B1weEmW+Q7VxwnLxv9QH75I6IgEICTd70ci/I14ehLY=";
   };
 
   build-system = [
@@ -53,6 +55,7 @@ buildPythonPackage rec {
     # pytest-benchmark # developer sanity check, should not block distribution
     hypothesis
     freezegun
+    time-machine
   ];
 
   disabledTestPaths = [
@@ -68,6 +71,8 @@ buildPythonPackage rec {
   # a bunch of failures, including an assumption of what the timezone on the host is
   # TODO: try enabling on bump
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Strict, predictable, and typed datetimes";

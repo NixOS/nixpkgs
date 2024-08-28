@@ -13,7 +13,7 @@
 
   # for tests
   pytestCheckHook,
-  symbiyosys,
+  sby,
   yices,
   yosys,
 }:
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    symbiyosys
+    sby
     yices
     yosys
   ];

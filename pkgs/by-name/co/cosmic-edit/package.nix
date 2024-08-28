@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-edit";
     rev = "epoch-${version}";
     hash = "sha256-ZG5Ctyp2crTDS0WxhQqwN4T6WR5qW79HTbICMlOA3P8=";
   };
@@ -93,7 +93,7 @@ rustPlatform.buildRustPackage rec {
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
-    wrapProgram "$out/bin/${pname}" \
+    wrapProgram "$out/bin/cosmic-edit" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader libxkbcommon wayland

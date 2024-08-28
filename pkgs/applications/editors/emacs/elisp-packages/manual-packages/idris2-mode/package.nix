@@ -24,6 +24,8 @@ melpaBuild {
     prop-menu
   ];
 
+  ignoreCompilationError = false;
+
   passthru.updateScript = gitUpdater { };
 
   meta = {

@@ -1,15 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  unstableGitUpdater,
+}:
 
 python3Packages.buildPythonPackage {
   pname = "edl";
-  version = "unstable-2022-09-07";
+  version = "3.52.1-unstable-2024-07-05";
 
   src = fetchFromGitHub {
     owner = "bkerler";
     repo = "edl";
-    rev = "f6b94da5faa003b48d24a5f4a8f0b8495626fd5b";
+    rev = "53671740213046bcf875acd2feb1c1d07fb1605c";
     fetchSubmodules = true;
-    hash = "sha256-bxnRy+inWNArE2gUA/qDPy7NKvqBm43sbxdIaTc9N28=";
+    hash = "sha256-jm5BSnjAuqOa5oHhboruqQJ9BdsyjQic4vbwSNgIneQ=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -40,13 +46,17 @@ python3Packages.buildPythonPackage {
     cp $src/Drivers/51-edl.rules $out/etc/udev/rules.d/51-edl.rules
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     homepage = "https://github.com/bkerler/edl";
     description = "Qualcomm EDL tool (Sahara / Firehose / Diag)";
     license = licenses.mit;
-    maintainers = with maintainers; [ lorenz ];
+    maintainers = with maintainers; [
+      lorenz
+      xddxdd
+    ];
     # Case-sensitive files in 'Loader' submodule
     broken = stdenv.isDarwin;
   };
 }
-

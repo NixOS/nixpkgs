@@ -129,8 +129,6 @@ in
         };
       };
 
-      programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gnome3;
-
       # To make a Sway session available if a display manager like SDDM is enabled:
       services.displayManager.sessionPackages = lib.optional (cfg.package != null) cfg.package;
 
@@ -139,7 +137,7 @@ in
     }
 
     (import ./wayland-session.nix {
-      inherit lib pkgs;
+      inherit lib;
       enableXWayland = cfg.xwayland.enable;
     })
   ]);

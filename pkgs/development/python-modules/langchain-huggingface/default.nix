@@ -66,10 +66,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-  };
-
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface==${version}";
     description = "An integration package connecting Huggingface related classes and LangChain";

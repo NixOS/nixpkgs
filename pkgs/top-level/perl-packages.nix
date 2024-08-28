@@ -844,10 +844,11 @@ with self; {
     # Use TLS endpoints for downloads and metadata by default
     preConfigure = ''
       substituteInPlace bin/cpanm \
-        --replace http://www.cpan.org https://www.cpan.org \
-        --replace http://backpan.perl.org https://backpan.perl.org \
-        --replace http://fastapi.metacpan.org https://fastapi.metacpan.org \
-        --replace http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
+        --replace-fail http://www.cpan.org https://www.cpan.org \
+        --replace-fail http://cpan.metacpan.org https://cpan.metacpan.org \
+        --replace-fail http://backpan.perl.org https://backpan.perl.org \
+        --replace-fail http://fastapi.metacpan.org https://fastapi.metacpan.org \
+        --replace-fail http://cpanmetadb.plackperl.org https://cpanmetadb.plackperl.org
     '';
     propagatedBuildInputs = [ IOSocketSSL ];
     meta = {
@@ -1022,7 +1023,7 @@ with self; {
       description = "Simple Statistics";
       homepage = "https://github.com/nferraz/st";
       license = with lib.licenses; [ mit ];
-      maintainers = [ maintainers.eelco ];
+      maintainers = [ ];
       mainProgram = "st";
     };
   };
@@ -7303,10 +7304,10 @@ with self; {
 
   DBI = buildPerlPackage {
     pname = "DBI";
-    version = "1.643";
+    version = "1.644";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TIMB/DBI-1.643.tar.gz";
-      hash = "sha256-iiuZPbVgosNzwXTul2pRAn3XgOx2auF2IMIDk9LoNvo=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.644.tar.gz";
+      hash = "sha256-Ipe5neCeZwhmQLWQaZ4OmC+0adpjqT/ijcFHgtt6U8g=";
     };
     postInstall = lib.optionalString (perl ? crossVersion) ''
       mkdir -p $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI
@@ -17039,7 +17040,7 @@ with self; {
       description = "Postmodern object system for Perl 5";
       homepage = "http://moose.perl.org";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.eelco ];
+      maintainers = [ ];
       mainProgram = "moose-outdated";
     };
   };
@@ -23666,11 +23667,11 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz";
       hash = "sha256-9PVui70GxP5K4G2xIYbeyt+6wep3XqGMbAKJSB0V7AU=";
     };
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
       description = "Lib/Safe/Hole.pm";
       homepage = "https://github.com/toddr/Safe-Hole";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin;
     };
   };
 
@@ -24121,7 +24122,7 @@ with self; {
     meta = {
       description = "Perl Template Toolkit Plugin for IO::All";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ eelco ];
+      maintainers = [ ];
     };
   };
 

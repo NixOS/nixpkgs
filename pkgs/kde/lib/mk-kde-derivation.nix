@@ -46,11 +46,14 @@ self: {
         fullName = "W3C Software Notice and Document License (2015-05-13)";
       };
 
+      "LGPL" = lib.licenses.lgpl2Plus;
+
       # Technically not exact
       "bzip2-1.0.6" = lib.licenses.bsdOriginal;
 
       # FIXME: typo lol
       "ICS" = lib.licenses.isc;
+      "BSD-3-clause" = lib.licenses.bsd3;
 
       # These are only relevant to Qt commercial users
       "Qt-Commercial-exception-1.0" = null;

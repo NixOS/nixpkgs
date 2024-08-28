@@ -8,16 +8,18 @@
 
 melpaBuild {
   pname = "ligo-mode";
-  version = "1.7.0-unstable-2024-08-01";
+  version = "1.7.0-unstable-2024-08-22";
 
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
-    rev = "454e4a505212b8bd80ac3c75a1432320b9be2604";
-    hash = "sha256-Z7bv+ulGwnczrSWWC1RIUzSI4wAF9AtObdi5bBfYsOs=";
+    rev = "47128d41a9329356cbad40a982d8144da19a9218";
+    hash = "sha256-IrxPnbWrhqe3TxELsqa2y4NdcfEJMGUcGCdNuDG+rfs=";
   };
 
   files = ''("tools/emacs/ligo-mode.el")'';
+
+  ignoreCompilationError = false;
 
   passthru.updateScript = unstableGitUpdater { };
 

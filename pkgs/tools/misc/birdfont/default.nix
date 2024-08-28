@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.33.3";
 
   src = fetchurl {
-    url = "https://birdfont.org/releases/${pname}-${version}.tar.xz";
+    url = "https://birdfont.org/releases/birdfont-${version}.tar.xz";
     sha256 = "sha256-NNw7203BtHhNyyQezb3/EP98cTsu7ABDFBnM5Ms2ePY=";
   };
 

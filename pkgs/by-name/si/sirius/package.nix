@@ -38,13 +38,13 @@ assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
 
 stdenv.mkDerivation rec {
   pname = "SIRIUS";
-  version = "7.5.2";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DYie6ufgZNqg7ohlIed3Bo+sqLKHOxWXTwAkea2guLk=";
+    hash = "sha256-AdjqyHZRMl9zxwuTBzNXJkPi8EIhG/u98XJMEjHi/6k=";
   };
 
 

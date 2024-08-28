@@ -58,6 +58,11 @@ in {
 
   inherit (builders.v1) buildComposerProject buildComposerWithPlugin composerHooks mkComposerRepository;
 
+  # Next version of the builder
+  buildComposerProject2 = builders.v2.buildComposerProject;
+  composerHooks2 = builders.v2.composerHooks;
+  mkComposerVendor = builders.v2.mkComposerVendor;
+
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = origArgs:
@@ -417,14 +422,6 @@ in {
               hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
               excludes = [ "NEWS" ];
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.4") [
-            # Fix compatibility with libxml2 ≥ 2.13.2
-            # https://github.com/php/php-src/issues/15331
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/8d7365b6f009ba43e305d6459013ac4fbed7c606.diff?full_index=1";
-              hash = "sha256-ct0Ml9kjjcRLryjxMsUQQsDXiDExjpnCnWKf+mYgTsQ=";
-              excludes = [ "NEWS" ];
-            })
           ];
         }
         {
@@ -509,7 +506,7 @@ in {
           # The configure script doesn't correctly add library link
           # flags, so we add them to the variable used by the Makefile
           # when linking.
-          MYSQLND_SHARED_LIBADD = "-lssl -lcrypto";
+          MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
           # The configure script builds a config.h which is never
           # included. Let's include it in the main header file
           # included by all .c-files.

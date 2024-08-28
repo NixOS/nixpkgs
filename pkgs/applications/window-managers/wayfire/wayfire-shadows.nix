@@ -8,6 +8,8 @@
 , wayfire
 , libxkbcommon
 , libGL
+, libinput
+, xcbutilwm
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayfire
     libxkbcommon
     libGL
+    libinput
+    xcbutilwm
   ];
 
   env = {

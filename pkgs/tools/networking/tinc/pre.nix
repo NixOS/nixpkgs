@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "tinc";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ];
+
+  passthru.tests = { inherit (nixosTests) tinc; };
 
   meta = with lib; {
     description = "VPN daemon with full mesh routing";

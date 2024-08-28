@@ -1,5 +1,6 @@
 { lib, stdenv, wlroots, pkg-config, wayland-scanner
 , libxkbcommon, pixman, udev, wayland, wayland-protocols
+, nixosTests
 }:
 
 stdenv.mkDerivation {
@@ -17,6 +18,8 @@ stdenv.mkDerivation {
     cp tinywl/tinywl $out/bin
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) tinywl; };
 
   meta = {
     homepage = "https://gitlab.freedesktop.org/wlroots/wlroots/tree/master/tinywl";

@@ -94,7 +94,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Pythonic bindings for FFmpeg/Libav";
+    description = "Pythonic bindings for FFmpeg";
     mainProgram = "pyav";
     homepage = "https://github.com/PyAV-Org/PyAV";
     changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";

@@ -6,6 +6,7 @@
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -29,10 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-OHC+Ul64BYCsgoFDxI1hPjBGkd/pQ0j0c9Pt5lWg1E0=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=pytrydan --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonRelaxDeps = [ "tenacity" ];
 
   build-system = [ poetry-core ];
 
@@ -46,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
     syrupy

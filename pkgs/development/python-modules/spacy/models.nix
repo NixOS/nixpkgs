@@ -88,14 +88,14 @@ let
         popd || exit
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Models for the spaCy NLP library";
         homepage = "https://github.com/explosion/spacy-models";
-        license = licenses.${license};
+        license = lib.licenses.${license};
       };
     };
 
   makeModelSet =
-    models: with lib; listToAttrs (map (m: nameValuePair m.pname (buildModelPackage m)) models);
+    models: lib.listToAttrs (map (m: lib.nameValuePair m.pname (buildModelPackage m)) models);
 in
 makeModelSet (lib.importJSON ./models.json)

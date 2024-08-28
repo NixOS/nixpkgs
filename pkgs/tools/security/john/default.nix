@@ -17,6 +17,8 @@
   withOpenCL ? true,
   opencl-headers,
   ocl-icd,
+  # include non-free ClamAV unrar code
+  enableUnfree ? false,
   substituteAll,
   makeWrapper,
 }:
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
-  ];
+  ] ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
   buildInputs =
     [
@@ -131,7 +133,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "John the Ripper password cracker";
-    license = licenses.gpl2Plus;
+    license = [ licenses.gpl2Plus ] ++ lib.optionals enableUnfree [ licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
     maintainers = with maintainers; [
       offline

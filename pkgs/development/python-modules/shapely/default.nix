@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.5";
+  version = "2.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v/I2a8eGv6bLNT1rR9BEPFcMMndmEuUn7ke232P8/jI=";
+    hash = "sha256-mX9hWbFIQFnsI5ysqlNGf9i1Vk2r4YbNhKwpRGY7C/Y=";
   };
 
   nativeBuildInputs = [

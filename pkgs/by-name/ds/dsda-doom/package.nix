@@ -1,63 +1,56 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, SDL2
-, SDL2_mixer
-, SDL2_image
-, fluidsynth
-, soundfont-fluid
-, portmidi
-, dumb
-, libvorbis
-, libmad
-, libGLU
-, libzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  SDL2_mixer,
+  SDL2_image,
+  fluidsynth,
+  portmidi,
+  dumb,
+  libvorbis,
+  libmad,
+  libGLU,
+  libzip,
+  alsa-lib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dsda-doom";
-  version = "0.28.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
     rev = "v${version}";
-    hash = "sha256-4oVQcZ/GOYc9lXMgb3xMXg9ZNB9rYBosbf09cXge6MI=";
+    hash = "sha256-X2v9eKiIYX4Zi3C1hbUoW4mceRVa6sxpBsP4Npyo4hM=";
   };
 
   sourceRoot = "${src.name}/prboom2";
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    SDL2
-    SDL2_mixer
-    SDL2_image
-    fluidsynth
-    portmidi
+    alsa-lib
     dumb
-    libvorbis
-    libmad
+    fluidsynth
     libGLU
+    libmad
+    libvorbis
     libzip
+    portmidi
+    SDL2
+    SDL2_image
+    SDL2_mixer
   ];
 
-  # Fixes impure path to soundfont
-  prePatch = ''
-    substituteInPlace src/m_misc.c --replace \
-      "/usr/share/sounds/sf3/default-GM.sf3" \
-      "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kraflab/dsda-doom";
     description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
     mainProgram = "dsda-doom";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.Gliczy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Gliczy ];
   };
 }

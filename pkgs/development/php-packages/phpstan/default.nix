@@ -4,7 +4,7 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpstan";
   version = "1.11.8";
 
@@ -15,7 +15,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-wF2OqJ0kg+wEjSq8mAyF5em5RAqjyXqKFkdAjxOrePM=";
   };
 
-  vendorHash = "sha256-8WJg3zfPk0tFU5GZvjnqG8iS4p9oOoBWDX0jYhQ1AXw=";
+  vendorHash = "sha256-NLaOxWMhTViv7OfXE5b7NTeL/jD7Fvbx/1ihGlRJCws=";
   composerStrictValidation = false;
 
   meta = {

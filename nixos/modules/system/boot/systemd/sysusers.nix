@@ -82,7 +82,7 @@ in
       (username: opts: {
         assertion = (opts.password == opts.initialPassword || opts.password == null) &&
           (opts.hashedPassword == opts.initialHashedPassword || opts.hashedPassword == null);
-        message = "${username} uses password or hashedPassword. systemd-sysupdate only supports initial passwords. It'll never update your passwords.";
+        message = "user '${username}' uses password or hashedPassword. systemd-sysupdate only supports initial passwords. It'll never update your passwords.";
       })
       systemUsers;
 

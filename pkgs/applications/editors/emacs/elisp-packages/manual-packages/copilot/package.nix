@@ -30,6 +30,8 @@ melpaBuild {
 
   propagatedUserEnvPkgs = [ nodejs ];
 
+  ignoreCompilationError = false;
+
   meta = {
     description = "Unofficial copilot plugin for Emacs";
     homepage = "https://github.com/copilot-emacs/copilot.el";

@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
 , git
-, go
+, go_1_23
 , enumer
 , mockgen
 , nodejs
@@ -14,22 +14,22 @@
 , nixosTests
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "evcc";
-  version = "0.129.0";
+  version = "0.130.6";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-LoDY6mVV2iDWUo1fUPrOjTTaQudkxrBTkCeIGQWSN8M=";
+    hash = "sha256-8ThvDl/dxD2YO9Z+iVhq+JQmnL8M9RdWVfHykoRIERg=";
   };
 
-  vendorHash = "sha256-AY1MXFgd6dK1w36iV0vur7ACGn5FTfPICEHXCnRfcb8=";
+  vendorHash = "sha256-L04EQwA2HYLTtYZMP2K7ubuq8IqbqHNEF9W3UmM4pOg=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-XG9nefBefF2gdDWA9IYBI2dv6Lig2LqGgOnTjyni0fM=";
+    hash = "sha256-8DfLh6RhBI6GeTSIvmXCZ8Yudt5TYnimUoAdbOYfWfw=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildGoModule rec {
   overrideModAttrs = _: {
     nativeBuildInputs = [
       enumer
-      go
+      go_1_23
       git
       cacert
       mockgen

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
-  version = "0.2.7";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "curlpipe";
     repo = pname;
     rev = version;
-    hash = "sha256-4I6RjSCfNyeSQwGn6zX9AhePkqr+uOuhXdV0tat1LqI=";
+    hash = "sha256-g5M/d6pts4Y17CpWJAsWFL5KCq1YFaACJq6n6BQw7mo=";
   };
 
-  cargoHash = "sha256-VFrN58SRTRGH+RSc59RIdsysR3umnrU2KM5XVCp9u1Q=";
+  cargoHash = "sha256-6+W/guijsb9+ip1cvke8JLVa4h1nU2zQJCrLv64vsa0=";
 
   meta = with lib; {
     description = "Independent Rust text editor that runs in your terminal";

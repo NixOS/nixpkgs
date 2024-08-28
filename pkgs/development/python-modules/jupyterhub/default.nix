@@ -42,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,12 +51,12 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "jupyterhub";
     rev = "refs/tags/${version}";
-    hash = "sha256-YGDbyWe3JSXbluOX6qyLqzl92Z/f5sD/5TPc2LR7W80=";
+    hash = "sha256-3L83FLhLCdTgOuFRgRMbz316cYbai0Z+hJwxXUCYB2Y=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-7G/Y2yaMi9cyf20/o8rLXKIE6SdZ74HSWJ3Wfypl4Cc=";
+    hash = "sha256-b7j6iGYXrwco4YruqRPEEi4yWRF6otTUD2jKCEPcLTE=";
   };
 
   postPatch = ''

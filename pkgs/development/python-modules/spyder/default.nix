@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+
+  # dependencies
   atomicwrites,
   chardet,
   cloudpickle,
@@ -44,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.5";
+  version = "5.5.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y+JZO/LfWi1QzoSSV1uDI4zxLcte0HwVMNmBK0aXgd4=";
+    hash = "sha256-lYtmn0oBXFw5EFDrbv+o2EZWqL/Eel9GrbopeEnYK90=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];

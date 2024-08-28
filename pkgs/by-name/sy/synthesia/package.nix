@@ -20,11 +20,11 @@ stdenvNoCC.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "synthesia";
       desktopName = "Synthesia";
       comment = meta.description;
-      exec = pname;
-      icon = pname;
+      exec = "synthesia";
+      icon = "synthesia";
       categories = [ "Game" "Audio" ];
       startupWMClass = "synthesia.exe";
     })
@@ -47,11 +47,11 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    cat <<'EOF' > $out/bin/${pname}
+    cat <<'EOF' > $out/bin/synthesia
     #!${runtimeShell}
     export PATH=${wineWowPackages.stable}/bin:$PATH
     export WINEARCH=win64
-    export WINEPREFIX="''${SYNTHESIA_HOME:-"''${XDG_DATA_HOME:-"''${HOME}/.local/share"}/${pname}"}/wine"
+    export WINEPREFIX="''${SYNTHESIA_HOME:-"''${XDG_DATA_HOME:-"''${HOME}/.local/share"}/synthesia"}/wine"
     export WINEDLLOVERRIDES="mscoree=" # disable mono
     if [ ! -d "$WINEPREFIX" ] ; then
       mkdir -p "$WINEPREFIX"
@@ -59,8 +59,8 @@ stdenvNoCC.mkDerivation rec {
     fi
     wine "$WINEPREFIX/drive_c/Program Files (x86)/Synthesia/Synthesia.exe"
     EOF
-    chmod +x $out/bin/${pname}
-    install -Dm644 ${icon} $out/share/icons/hicolor/48x48/apps/${pname}.png
+    chmod +x $out/bin/synthesia
+    install -Dm644 ${icon} $out/share/icons/hicolor/48x48/apps/synthesia.png
     runHook postInstall
   '';
 

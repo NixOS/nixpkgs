@@ -38,6 +38,7 @@ let requireXcode = version: sha256:
       description = "Apple's XCode SDK";
       license = licenses.unfree;
       platforms = platforms.darwin ++ platforms.linux;
+      sourceProvenance = [ sourceTypes.binaryNativeCode ];
     };
 
   in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });

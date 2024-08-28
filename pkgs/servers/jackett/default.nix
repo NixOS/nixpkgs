@@ -5,6 +5,7 @@
 , dotnetCorePackages
 , openssl
 , mono
+, nixosTests
 }:
 
 buildDotnetModule rec {
@@ -37,6 +38,8 @@ buildDotnetModule rec {
     ln -s $out/bin/Jackett $out/bin/jackett || :
   '';
   passthru.updateScript = ./updater.sh;
+
+  passthru.tests = { inherit (nixosTests) jackett; };
 
   meta = with lib; {
     description = "API Support for your favorite torrent trackers";

@@ -410,8 +410,30 @@ in {
 
     networking.firewall.allowedUDPPorts = mkIf cfg.raopOpenFirewall [ 6001 6002 ];
 
-    users = mkIf cfg.systemWide {
-      users.pipewire = {
+    # See https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/src/modules/module-rt/25-pw-rlimits.conf.in
+    security.pam.loginLimits = [
+      {
+        domain = "@pipewire";
+        item = "rtprio";
+        type = "-";
+        value = 95;
+      }
+      {
+        domain = "@pipewire";
+        item = "nice";
+        type = "-";
+        value = -19;
+      }
+      {
+        domain = "@pipewire";
+        item = "memlock";
+        type = "-";
+        value = 4194304;
+      }
+    ];
+
+    users = {
+      users.pipewire = mkIf cfg.systemWide {
         uid = config.ids.uids.pipewire;
         group = "pipewire";
         extraGroups = [

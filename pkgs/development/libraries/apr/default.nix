@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     mainProgram = "apr-1-config";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
   };
 }

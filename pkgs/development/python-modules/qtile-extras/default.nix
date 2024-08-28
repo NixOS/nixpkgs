@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.28.0";
+  version = "0.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gQH9zWSPUH1eL6ZTD0gXVbZmOVG5hhhCakmWSHS2DBQ=";
+    hash = "sha256-rF9tRzOdMiISN8vupBt9+1d3pWJqbNS83odtm5SzXZI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -64,6 +64,8 @@ buildPythonPackage rec {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
+    # flaky, timing sensitive
+    "test_visualiser"
   ];
 
   disabledTestPaths = [

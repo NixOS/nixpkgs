@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
@@ -9,12 +10,12 @@
 }:
 
 let
-  version = "1.11.0";
+  version = "1.12.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     rev = "v${version}";
-    hash = "sha256-tBbvmM66zCNpKqeekPY48j0t5PjLHeyQ8+kJ6755ivo=";
+    hash = "sha256-Lwd0P1ssAITLH256uMXNb5b1OcFAy8OVjjpnmfNVUvQ=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -101,6 +102,9 @@ pythonpkgs.buildPythonApplication rec {
 
     substituteInPlace mealie/db/init_db.py \
       --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
+
+    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
+      --replace-fail '"script_location", path.join(PROJECT_DIR, "alembic")' '"script_location", "${src}/alembic"'
   '';
 
   postInstall = let

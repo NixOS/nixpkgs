@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.3.3";
+  version = "1.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,13 +32,14 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     rev = "refs/tags/${version}";
-    hash = "sha256-ye6uNnwvJ3RXmKM8ix/sBiJgeCFQazNVgHZkBAnL0nw=";
+    hash = "sha256-XouTXv8wNPPBKVs2mCue1o4hfHlPlq6uXBuDXiZLIHI=";
   };
 
   pythonRelaxDeps = [
     "docstring-parser"
-    "pydantic"
     "jiter"
+    "pydantic"
+    "tenacity"
   ];
 
   build-system = [ poetry-core ];
@@ -68,8 +69,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require OpenAI API key
-    "test_partial"
     "successfully"
+    "test_mode_functions_deprecation_warning"
+    "test_partial"
   ];
 
   disabledTestPaths = [

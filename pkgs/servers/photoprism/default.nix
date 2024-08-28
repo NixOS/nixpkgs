@@ -1,4 +1,5 @@
 { pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg_7, libheif, exiftool, imagemagick, makeWrapper, testers
+, nixosTests
 , librsvg }:
 
 let
@@ -78,6 +79,7 @@ stdenv.mkDerivation {
   '';
 
   passthru.tests.version = testers.testVersion { package = pkgs.photoprism; };
+  passthru.tests.photoprism = nixosTests.photoprism;
 
   meta = with lib; {
     homepage = "https://photoprism.app";

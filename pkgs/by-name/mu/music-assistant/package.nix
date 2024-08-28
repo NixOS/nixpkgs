@@ -11,19 +11,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      aiojellyfin = super.aiojellyfin.overridePythonAttrs rec {
-        version = "0.9.2";
-
-        src = fetchFromGitHub {
-          owner = "jc2k";
-          repo = "aiojellyfin";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-q+b1tKr46qq3PULPkCaQk2VoC1aaNxPK/E1Kj4PABfI=";
-        };
-
-        doCheck = false;
-      };
-
       music-assistant-frontend = self.callPackage ./frontend.nix { };
     };
   };
@@ -37,14 +24,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.1.1";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     rev = "refs/tags/${version}";
-    hash = "sha256-ALsl2xfAFYejDEhR5/ZpeIxoHFgvz471tb4OP5xQAUE=";
+    hash = "sha256-7PIyo3srKwftakDiaxvZjrzo/1I9LGUwG+QGfIU5pRA=";
   };
 
   patches = [

@@ -53,13 +53,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.72";
+  version = "1.73.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-DePcBVNXIWIlOXyNeNMUFFIQxQuwqG8KBUh2/X7R6X8=";
+    hash = "sha256-LRXtmQ5u+/vgcU6YC9IN2CazfDtg5+jZnJV2o9jEAaY=";
   };
 
   enableParallelBuilding = true;
@@ -164,13 +164,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
+    changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
     description = "Way to run various GGML and GGUF models";
     license = lib.licenses.agpl3Only;
+    mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
       donteatoreo
     ];
-    mainProgram = "koboldcpp";
     platforms = lib.platforms.unix;
   };
 })

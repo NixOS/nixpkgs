@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/colord/releases/colord-gtk-${version}.tar.xz";
     sha256 = "wXa4ibdWMKF/Tj1+8kwJo+EjaOYzSWCHRZyLU6w6Ei0=";
   };
 

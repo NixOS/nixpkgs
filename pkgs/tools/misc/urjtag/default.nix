@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "2021.03";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/project/urjtag/urjtag/${version}/urjtag-${version}.tar.xz";
     hash = "sha256-sKLqokVROvCW3E13AQmDIzXGlMbBKqXpL++uhoVBbxw=";
   };
 

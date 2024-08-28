@@ -4,6 +4,7 @@
 , fetchpatch
 , python3
 , installShellFiles
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -87,10 +88,12 @@ python3.pkgs.buildPythonApplication rec {
       rm -r "${sitePackages}/usr"
     '';
 
+  passthru.tests = { inherit (nixosTests) fail2ban; };
+
   meta = with lib; {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eelco lovek323 ];
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

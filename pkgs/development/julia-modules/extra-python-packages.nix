@@ -3,9 +3,6 @@
 }:
 
 # This file contains an extra mapping from Julia packages to the Python packages they depend on.
-
-with lib;
-
 rec {
   packageMapping = {
     ExcelFiles = ["xlrd"];
@@ -14,9 +11,9 @@ rec {
     SymPy = ["sympy"];
   };
 
-  getExtraPythonPackages = names: concatMap (name: let
-    allCandidates = if hasAttr name packageMapping then getAttr name packageMapping else [];
+  getExtraPythonPackages = names: lib.concatMap (name: let
+    allCandidates = if lib.hasAttr name packageMapping then lib.getAttr name packageMapping else [];
   in
-    filter (x: hasAttr x python3.pkgs) allCandidates
+    lib.filter (x: lib.hasAttr x python3.pkgs) allCandidates
   ) names;
 }

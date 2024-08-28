@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, stdenv, pkgsi686Linux }:
+{ lib, callPackage, fetchFromGitHub, fetchgit, fetchpatch, stdenv, pkgsi686Linux }:
 
 let
   generic = args: let
@@ -42,12 +42,12 @@ rec {
   };
 
   latest = selectHighestVersion production (generic {
-    version = "555.58.02";
-    sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
-    sha256_aarch64 = "sha256-wb20isMrRg8PeQBU96lWJzBMkjfySAUaqt4EgZnhyF8=";
-    openSha256 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
-    settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
-    persistencedSha256 = "sha256-a1D7ZZmcKFWfPjjH1REqPM5j/YLWKnbkP9qfRyIyxAw=";
+    version = "560.35.03";
+    sha256_64bit = "sha256-8pMskvrdQ8WyNBvkU/xPc/CtcYXCa7ekP73oGuKfH+M=";
+    sha256_aarch64 = "sha256-s8ZAVKvRNXpjxRYqM3E5oss5FdqW+tv1qQC2pDjfG+s=";
+    openSha256 = "sha256-/32Zf0dKrofTmPZ3Ratw4vDM7B+OgpC4p7s+RHUjCrg=";
+    settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
+    persistencedSha256 = "sha256-E2J2wYYyRu7Kc3MMZz/8ZIemcZg68rkzvqEwFAL3fFs=";
   });
 
   beta = selectHighestVersion latest (generic {
@@ -62,11 +62,11 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "550.40.67";
+    version = "550.40.70";
     persistencedVersion = "550.54.14";
     settingsVersion = "550.54.14";
-    sha256_64bit = "sha256-c28Nq5jA6CMrDqu8szIHSrxNTlzNr7NRrYQLmL26Brg=";
-    openSha256 = "sha256-SdkHGIfyujPCZ908LVc96kkl7gX0ovWjUuB7Vc5HYag=";
+    sha256_64bit = "sha256-tZhIf1TzbcRnEaJjB3ZvsiA0IkdjG/Ak412po14p+N8=";
+    openSha256 = "sha256-HyaBybZkQfuUvW8tmw09i/c8gOjMFAXEMhoyBohBrRo=";
     settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
     persistencedSha256 = "sha256-XaPN8jVTjdag9frLPgBtqvO/goB5zxeGzaTU0CdL6C4=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
@@ -128,14 +128,33 @@ rec {
   };
 
   # Last one supporting x86
-  legacy_390 = generic {
+  legacy_390 = let
+    # Source corresponding to https://aur.archlinux.org/packages/nvidia-390xx-dkms
+    aurPatches = fetchgit {
+      url = "https://aur.archlinux.org/nvidia-390xx-utils.git";
+      rev = "ebb48c240ce329e89ad3b59e78c8c708f46f27b3";
+      hash = "sha256-AGx3/EQ81awBMs6rrXTGWJmyq+UjBCPp6/9z1BQBB9E=";
+    };
+    patchset = [
+      "kernel-4.16+-memory-encryption.patch"
+      "kernel-6.2.patch"
+      "kernel-6.3.patch"
+      "kernel-6.4.patch"
+      "kernel-6.5.patch"
+      "kernel-6.6.patch"
+      "kernel-6.8.patch"
+      "gcc-14.patch"
+      "kernel-6.10.patch"
+    ];
+  in generic {
     version = "390.157";
     sha256_32bit = "sha256-VdZeCkU5qct5YgDF8Qgv4mP7CVHeqvlqnP/rioD3B5k=";
     sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
     settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
     persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
 
-    broken = kernel.kernelAtLeast "6.2";
+    patches = map (patch: "${aurPatches}/${patch}") patchset;
+    broken = kernel.kernelAtLeast "6.11 ";
 
     # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
     # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
