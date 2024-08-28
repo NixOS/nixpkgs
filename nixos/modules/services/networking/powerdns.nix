@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.powerdns;
   configDir = pkgs.writeTextDir "pdns.conf" "${cfg.extraConfig}";
@@ -9,10 +6,10 @@ let
 in {
   options = {
     services.powerdns = {
-      enable = mkEnableOption "PowerDNS domain name server";
+      enable = lib.mkEnableOption "PowerDNS domain name server";
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "launch=bind";
         description = ''
           PowerDNS configuration. Refer to
@@ -21,8 +18,8 @@ in {
         '';
       };
 
-      secretFile = mkOption {
-        type = types.nullOr types.path;
+      secretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/powerdns.env";
         description = ''
@@ -36,7 +33,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc.pdns.source = finalConfigDir;
 
