@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.services.ocserv;
@@ -15,10 +12,10 @@ in
 
 {
   options.services.ocserv = {
-    enable = mkEnableOption "ocserv";
+    enable = lib.mkEnableOption "ocserv";
 
-    config = mkOption {
-      type = types.lines;
+    config = lib.mkOption {
+      type = lib.types.lines;
 
       description = ''
         Configuration content to start an OCServ server.
@@ -81,7 +78,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.ocserv ];
     environment.etc."ocserv/ocserv.conf".text = cfg.config;
 
