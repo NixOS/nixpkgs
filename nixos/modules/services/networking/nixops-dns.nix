@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   pkg = pkgs.nixops-dns;
   cfg = config.services.nixops-dns;
@@ -9,8 +7,8 @@ in
 {
   options = {
     services.nixops-dns = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the nixops-dns resolution
@@ -18,8 +16,8 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The user the nixops-dns daemon should run as.
           This should be the user, which is also used for nixops and
@@ -27,8 +25,8 @@ in
         '';
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Fake domain name to resolve to NixOps virtual machines.
 
@@ -37,8 +35,8 @@ in
         default = "ops";
       };
 
-      dnsmasq = mkOption {
-        type = types.bool;
+      dnsmasq = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Enable dnsmasq forwarding to nixops-dns. This allows to use
@@ -50,7 +48,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.nixops-dns = {
       description = "nixops-dns: DNS server for resolving NixOps machines";
       wantedBy = [ "multi-user.target" ];
@@ -62,7 +60,7 @@ in
       };
     };
 
-    services.dnsmasq = mkIf cfg.dnsmasq {
+    services.dnsmasq = lib.mkIf cfg.dnsmasq {
       enable = true;
       resolveLocalQueries = true;
       servers = [
