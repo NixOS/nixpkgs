@@ -71,6 +71,8 @@
           /usr/local/nvidia/lib64.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "nvidia-container-toolkit" { };
     };
 
   };
@@ -129,6 +131,7 @@
           let
             script = pkgs.callPackage ./cdi-generate.nix {
               inherit (config.hardware.nvidia-container-toolkit) mounts;
+              nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
               nvidia-driver = config.hardware.nvidia.package;
               deviceNameStrategy = config.hardware.nvidia-container-toolkit.device-name-strategy;
             };

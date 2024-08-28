@@ -6,25 +6,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.5";
+  version = "4.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vxMhFs2mLbVQndlC2UpeDP+M4pwU9Y4cZHbZ8y3vWbI=";
+    hash = "sha256-OhZXxGkcO/dlYth9xUnpd/IbyvsbjMzwqQ9lPSvnFSs=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = true;
 
-  # Remove when https://github.com/spotDL/spotify-downloader/issues/2119 is fixed
-  patches = [ ./is_lrc_valid-failure.patch ];
-
   dependencies = with python3.pkgs; [
-    bandcamp-api
     beautifulsoup4
     fastapi
     mutagen
@@ -36,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     rapidfuzz
     requests
     rich
-    setuptools
     soundcloud-v2
     spotipy
     syncedlyrics

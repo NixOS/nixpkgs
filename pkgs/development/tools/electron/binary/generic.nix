@@ -42,7 +42,8 @@ let
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = optional (versionOlder version "29.0.0") "Electron version ${version} is EOL";
+    # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
+    knownVulnerabilities = optional (versionOlder version "30.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {

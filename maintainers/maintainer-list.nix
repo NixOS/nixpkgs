@@ -2736,7 +2736,7 @@
   };
   blitz = {
     email = "js@alien8.de";
-    matrix = "@js:ukvly.org";
+    matrix = "@blitz:chat.x86.lol";
     github = "blitz";
     githubId = 37907;
     name = "Julian Stecklina";
@@ -16685,6 +16685,13 @@
     githubId = 74465;
     name = "James Fargher";
   };
+  progrm_jarvis = {
+    email = "mrjarviscraft+nix@gmail.com";
+    github = "JarvisCraft";
+    githubId = 7693005;
+    name = "Petr Portnov";
+    keys = [ { fingerprint = "884B 08D2 8DFF 6209 1857  C1C7 7E8F C8F7 D1BB 84A3"; } ];
+  };
   progval = {
     email = "progval+nix@progval.net";
     github = "progval";
@@ -18995,6 +19002,12 @@
     github = "shrimpram";
     githubId = 67710369;
     keys = [ { fingerprint = "EA88 EA07 26E9 6CBF 6365  3966 163B 16EE 76ED 24CE"; } ];
+  };
+  shved = {
+    name = "Yury Shvedov";
+    email = "mestofel13@gmail.com";
+    github = "ein-shved";
+    githubId = 3513222;
   };
   shyim = {
     email = "s.sayakci@gmail.com";
