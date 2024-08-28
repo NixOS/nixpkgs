@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.shairport-sync;
@@ -16,8 +13,8 @@ in
 
     services.shairport-sync = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable the shairport-sync daemon.
@@ -27,8 +24,8 @@ in
         '';
       };
 
-      arguments = mkOption {
-        type = types.str;
+      arguments = lib.mkOption {
+        type = lib.types.str;
         default = "-v -o pa";
         description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
@@ -36,16 +33,16 @@ in
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to automatically open ports in the firewall.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "shairport";
         description = ''
           User account name under which to run shairport-sync. The account
@@ -53,8 +50,8 @@ in
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "shairport";
         description = ''
           Group account name under which to run shairport-sync. The account
@@ -69,7 +66,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.shairport-sync.enable {
+  config = lib.mkIf config.services.shairport-sync.enable {
 
     services.avahi.enable = true;
     services.avahi.publish.enable = true;
@@ -82,12 +79,12 @@ in
         createHome = true;
         home = "/var/lib/shairport-sync";
         group = cfg.group;
-        extraGroups = [ "audio" ] ++ optional config.hardware.pulseaudio.enable "pulse";
+        extraGroups = [ "audio" ] ++ lib.optional config.hardware.pulseaudio.enable "pulse";
       };
       groups.${cfg.group} = {};
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 5000 ];
       allowedUDPPortRanges = [ { from = 6001; to = 6011; } ];
     };
