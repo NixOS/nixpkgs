@@ -1,21 +1,19 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let cfg = config.services.espanso;
 in {
   meta = { maintainers = with lib.maintainers; [ n8henrie numkem ]; };
 
   options = {
     services.espanso = {
-      enable = mkEnableOption "Espanso";
-      wayland = mkEnableOption "use the Wayland compatible espanso package";
-      package = mkPackageOption pkgs "espanso" {
+      enable = lib.mkEnableOption "Espanso";
+      wayland = lib.mkEnableOption "use the Wayland compatible espanso package";
+      package = lib.mkPackageOption pkgs "espanso" {
         example = "pkgs.espanso-wayland";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.espanso = {
       description = "Espanso daemon";
       serviceConfig = {
