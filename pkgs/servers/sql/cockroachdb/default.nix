@@ -44,6 +44,7 @@ buildFHSEnv {
       mit
       cockroachdb-community-license
     ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ rushmorem thoughtpolice ];
   };

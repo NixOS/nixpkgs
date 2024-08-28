@@ -21177,6 +21177,12 @@
     githubId = 16036882;
     name = "Thibault Gagnaux";
   };
+  tri-ler = {
+    github = "tri-ler";
+    githubId = 47867303;
+    email = "tylerh689@gmail.com";
+    name = "Tyler Hong";
+  };
   trino = {
     email = "muehlhans.hubert@ekodia.de";
     github = "hmuehlhans";

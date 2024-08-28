@@ -13,7 +13,6 @@
 , file
 , fontsConf
 , git
-, glxinfo
 , gnugrep
 , gnused
 , gnutar
@@ -30,6 +29,7 @@
 , libX11
 , libxcb
 , libxkbcommon
+, mesa-demos
 , xcbutilwm
 , xcbutilrenderutil
 , xcbutilkeysyms
@@ -107,7 +107,7 @@ let
 
           # For Android emulator
           file
-          glxinfo
+          mesa-demos
           pciutils
           setxkbmap
 
