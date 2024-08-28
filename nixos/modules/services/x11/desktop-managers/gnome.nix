@@ -371,13 +371,13 @@ in
           mandatoryPackages = [
             pkgs.gnome-shell
           ];
-          optionalPackages = with pkgs.gnome; [
+          optionalPackages = [
             pkgs.adwaita-icon-theme
             nixos-background-info
             pkgs.gnome-backgrounds
             pkgs.gnome-bluetooth
             pkgs.gnome-color-manager
-            gnome-control-center
+            pkgs.gnome-control-center
             pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs

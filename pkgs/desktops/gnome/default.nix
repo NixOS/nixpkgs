@@ -17,8 +17,6 @@ in
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  gnome-control-center = callPackage ./core/gnome-control-center { };
-
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
@@ -100,6 +98,7 @@ in
   gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
   gnome-calendar = lib.warn "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly." pkgs.gnome-calendar; # Added on 2024-06-22.
   gnome-contacts = lib.warn "The ‘gnome.gnome-contacts’ was moved to top-level. Please use ‘pkgs.gnome-contacts’ directly." pkgs.gnome-contacts; # Added on 2024-08-11.
+  gnome-control-center = lib.warn "The ‘gnome.gnome-control-center’ was moved to top-level. Please use ‘pkgs.gnome-control-center’ directly." pkgs.gnome-control-center; # Added on 2024-08-28.
   gnome-dictionary = lib.warn "The ‘gnome.gnome-dictionary’ was moved to top-level. Please use ‘pkgs.gnome-dictionary’ directly." pkgs.gnome-dictionary; # Added on 2024-06-22.
   gnome-disk-utility = lib.warn "The ‘gnome.gnome-disk-utility’ was moved to top-level. Please use ‘pkgs.gnome-disk-utility’ directly." pkgs.gnome-disk-utility; # Added on 2024-06-22.
   gnome-font-viewer = lib.warn "The ‘gnome.gnome-font-viewer’ was moved to top-level. Please use ‘pkgs.gnome-font-viewer’ directly." pkgs.gnome-font-viewer; # Added on 2024-06-22.

@@ -17,8 +17,8 @@
 , evince
 , glib
 , gtk4
-, gnome
 , gnome-bluetooth
+, gnome-control-center
 , gnome-desktop
 , gnome-session
 , gnome-shell
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     gmobile
     gnome-bluetooth
-    gnome.gnome-control-center
+    gnome-control-center
     gnome-desktop
     gnome-session
     gtk4
