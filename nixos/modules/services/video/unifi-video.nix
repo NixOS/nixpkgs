@@ -1,5 +1,4 @@
 { config, lib, options, pkgs, utils, ... }:
-with lib;
 let
   cfg = config.services.unifi-video;
   opt = options.services.unifi-video;
@@ -95,48 +94,48 @@ in
 
   options.services.unifi-video = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether or not to enable the unifi-video service.
       '';
     };
 
-    jrePackage = mkPackageOption pkgs "jre8" { };
+    jrePackage = lib.mkPackageOption pkgs "jre8" { };
 
-    unifiVideoPackage = mkPackageOption pkgs "unifi-video" { };
+    unifiVideoPackage = lib.mkPackageOption pkgs "unifi-video" { };
 
-    mongodbPackage = mkPackageOption pkgs "mongodb" {
+    mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
       default = "mongodb-5_0";
     };
 
-    logDir = mkOption {
-      type = types.str;
+    logDir = lib.mkOption {
+      type = lib.types.str;
       default = "${stateDir}/logs";
       description = ''
         Where to store the logs.
       '';
     };
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "${stateDir}/data";
       description = ''
         Where to store the database and other data.
       '';
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether or not to open the required ports on the firewall.
       '';
     };
 
-    maximumJavaHeapSize = mkOption {
-      type = types.nullOr types.int;
+    maximumJavaHeapSize = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = 1024;
       example = 4096;
       description = ''
@@ -144,19 +143,19 @@ in
       '';
     };
 
-    pidFile = mkOption {
-      type = types.path;
+    pidFile = lib.mkOption {
+      type = lib.types.path;
       default = "${cfg.dataDir}/unifi-video.pid";
-      defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
+      defaultText = lib.literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
       description = "Location of unifi-video pid file.";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    warnings = optional
-      (options.services.unifi-video.openFirewall.highestPrio >= (mkOptionDefault null).priority)
+    warnings = lib.optional
+      (options.services.unifi-video.openFirewall.highestPrio >= (lib.mkOptionDefault null).priority)
       "The current services.unifi-video.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
 
     users.users.unifi-video = {
@@ -167,7 +166,7 @@ in
     };
     users.groups.unifi-video = {};
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       # https://help.ui.com/hc/en-us/articles/217875218-UniFi-Video-Ports-Used
       allowedTCPPorts = [
         7080 # HTTP portal
@@ -234,8 +233,8 @@ in
       path = with pkgs; [ gawk coreutils busybox which jre8 lsb-release libcap util-linux ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${(removeSuffix "\n" cmd)} ${mainClass} start";
-        ExecStop = "${(removeSuffix "\n" cmd)} stop ${mainClass} stop";
+        ExecStart = "${(lib.removeSuffix "\n" cmd)} ${mainClass} start";
+        ExecStop = "${(lib.removeSuffix "\n" cmd)} stop ${mainClass} stop";
         Restart = "on-failure";
         UMask = "0077";
         User = "unifi-video";
@@ -245,7 +244,7 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "unifi-video" "openPorts" ] [ "services" "unifi-video" "openFirewall" ])
+    (lib.mkRenamedOptionModule [ "services" "unifi-video" "openPorts" ] [ "services" "unifi-video" "openFirewall" ])
   ];
 
   meta.maintainers = with lib.maintainers; [ rsynnest ];
