@@ -25,11 +25,6 @@ in
 
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
-  mutter = callPackage ./core/mutter { };
-
-  # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
-  mutter43 = callPackage ./core/mutter/43 { };
-
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
     withGnome = true;
   };
@@ -150,6 +145,8 @@ in
   iagno = lib.warn "The ‘gnome.iagno’ was moved to top-level. Please use ‘pkgs.iagno’ directly." pkgs.iagno; # Added on 2024-08-11.
   lightsoff = lib.warn "The ‘gnome.lightsoff’ was moved to top-level. Please use ‘pkgs.lightsoff’ directly." pkgs.lightsoff; # Added on 2024-08-11.
   metacity = lib.warn "The ‘gnome.metacity’ was moved to top-level. Please use ‘pkgs.metacity’ directly." pkgs.metacity; # Added on 2024-08-11.
+  mutter = lib.warn "The ‘gnome.mutter’ was moved to top-level. Please use ‘pkgs.mutter’ directly." pkgs.mutter; # Added on 2024-08-28.
+  mutter43 = lib.warn "The ‘gnome.mutter43’ was moved to top-level. Please use ‘pkgs.mutter43’ directly." pkgs.mutter43; # Added on 2024-08-28.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
   nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
   polari = lib.warn "The ‘gnome.polari’ was moved to top-level. Please use ‘pkgs.polari’ directly." pkgs.polari; # Added on 2024-08-11.
