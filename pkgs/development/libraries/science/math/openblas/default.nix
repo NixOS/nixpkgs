@@ -114,6 +114,13 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    s390x-linux = {
+      BINARY = 64;
+      TARGET = setTarget "ZARCH_GENERIC";
+      DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = true;
+    };
   };
 in
 
