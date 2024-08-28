@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.boot.loader.raspberryPi;
 
@@ -18,7 +15,6 @@ let
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
-  optional = pkgs.lib.optionalString;
 
   configTxt =
     pkgs.writeText "config.txt" (''
@@ -29,7 +25,7 @@ let
       # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
       # when attempting to show low-voltage or overtemperature warnings.
       avoid_warnings=1
-    '' + optional isAarch64 ''
+    '' + lib.optionalString isAarch64 ''
       # Boot in 64-bit mode.
       arm_64bit=1
     '' + (if cfg.uboot.enable then ''
@@ -37,7 +33,7 @@ let
     '' else ''
       kernel=kernel.img
       initramfs initrd followkernel
-    '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
+    '') + lib.optionalString (cfg.firmwareConfig != null) cfg.firmwareConfig);
 
 in
 
@@ -45,9 +41,9 @@ in
   options = {
 
     boot.loader.raspberryPi = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to create files with the system generations in
           `/boot`.
@@ -59,16 +55,16 @@ in
         '';
       };
 
-      version = mkOption {
+      version = lib.mkOption {
         default = 2;
-        type = types.enum [ 0 1 2 3 4 ];
+        type = lib.types.enum [ 0 1 2 3 4 ];
         description = "";
       };
 
       uboot = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = false;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             Enable using uboot as bootmanager for the raspberry pi.
 
@@ -78,10 +74,10 @@ in
           '';
         };
 
-        configurationLimit = mkOption {
+        configurationLimit = lib.mkOption {
           default = 20;
           example = 10;
-          type = types.int;
+          type = lib.types.int;
           description = ''
             Maximum number of configurations in the boot menu.
 
@@ -93,9 +89,9 @@ in
 
       };
 
-      firmwareConfig = mkOption {
+      firmwareConfig = lib.mkOption {
         default = null;
-        type = types.nullOr types.lines;
+        type = lib.types.nullOr lib.types.lines;
         description = ''
           Extra options that will be appended to `/boot/config.txt` file.
           For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
@@ -108,8 +104,8 @@ in
     };
   };
 
-  config = mkMerge[
-    (mkIf cfg.uboot.enable {
+  config = lib.mkMerge[
+    (lib.mkIf cfg.uboot.enable {
       warnings = [
         ''
           The option set for `boot.loader.raspberrypi.uboot` has been recommended against
@@ -123,7 +119,7 @@ in
         ''
       ];
     })
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
       warnings = [
         ''
           The option set for `boot.loader.raspberrypi` has been recommended against
@@ -137,8 +133,8 @@ in
         ''
       ];
     })
-    (mkIf cfg.enable {
-      assertions = singleton {
+    (lib.mkIf cfg.enable {
+      assertions = lib.singleton {
         assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
         message = "Only Raspberry Pi >= 3 supports aarch64.";
       };
