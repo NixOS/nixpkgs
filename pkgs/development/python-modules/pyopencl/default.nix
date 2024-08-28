@@ -12,20 +12,14 @@
   nanobind,
 
   # dependencies
-  appdirs,
-  cffi,
   darwin,
-  decorator,
-  mako,
   numpy,
   ocl-icd,
-  oldest-supported-numpy,
   opencl-headers,
   platformdirs,
   pybind11,
   pytestCheckHook,
   pytools,
-  six,
 }:
 
 let
@@ -49,7 +43,6 @@ buildPythonPackage rec {
     nanobind
     ninja
     numpy
-    oldest-supported-numpy
     pathspec
     scikit-build-core
   ];
@@ -62,14 +55,9 @@ buildPythonPackage rec {
   ] ++ os-specific-buildInputs;
 
   dependencies = [
-    appdirs
-    cffi
-    decorator
-    mako
     numpy
     platformdirs
     pytools
-    six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
