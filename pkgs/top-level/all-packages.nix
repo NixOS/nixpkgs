@@ -14917,6 +14917,7 @@ with pkgs;
   flutterPackages-source = recurseIntoAttrs (callPackage ../development/compilers/flutter { useNixpkgsEngine = true; });
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
+  flutter324 = flutterPackages.v3_24;
   flutter323 = flutterPackages.v3_23;
   flutter322 = flutterPackages.v3_22;
   flutter319 = flutterPackages.v3_19;
@@ -26217,7 +26218,9 @@ with pkgs;
 
   firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
 
-  firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater { };
+  firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater {
+    flutter = flutterPackages.v3_22;
+  };
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
