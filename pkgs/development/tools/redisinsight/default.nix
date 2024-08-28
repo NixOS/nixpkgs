@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
