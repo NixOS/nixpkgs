@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.jicofo;
 
@@ -10,10 +7,10 @@ let
   configFile = format.generate "jicofo.conf" cfg.config;
 in
 {
-  options.services.jicofo = with types; {
-    enable = mkEnableOption "Jitsi Conference Focus - component of Jitsi Meet";
+  options.services.jicofo = with lib.types; {
+    enable = lib.mkEnableOption "Jitsi Conference Focus - component of Jitsi Meet";
 
-    xmppHost = mkOption {
+    xmppHost = lib.mkOption {
       type = str;
       example = "localhost";
       description = ''
@@ -21,7 +18,7 @@ in
       '';
     };
 
-    xmppDomain = mkOption {
+    xmppDomain = lib.mkOption {
       type = nullOr str;
       example = "meet.example.org";
       description = ''
@@ -31,7 +28,7 @@ in
       '';
     };
 
-    componentPasswordFile = mkOption {
+    componentPasswordFile = lib.mkOption {
       type = str;
       example = "/run/keys/jicofo-component";
       description = ''
@@ -39,7 +36,7 @@ in
       '';
     };
 
-    userName = mkOption {
+    userName = lib.mkOption {
       type = str;
       default = "focus";
       description = ''
@@ -47,7 +44,7 @@ in
       '';
     };
 
-    userDomain = mkOption {
+    userDomain = lib.mkOption {
       type = str;
       example = "auth.meet.example.org";
       description = ''
@@ -55,7 +52,7 @@ in
       '';
     };
 
-    userPasswordFile = mkOption {
+    userPasswordFile = lib.mkOption {
       type = str;
       example = "/run/keys/jicofo-user";
       description = ''
@@ -63,7 +60,7 @@ in
       '';
     };
 
-    bridgeMuc = mkOption {
+    bridgeMuc = lib.mkOption {
       type = str;
       example = "jvbbrewery@internal.meet.example.org";
       description = ''
@@ -71,10 +68,10 @@ in
       '';
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       type = format.type;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           jicofo.bridge.max-bridge-participants = 42;
         }
@@ -85,7 +82,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.jicofo.config = {
       jicofo = {
         bridge.brewery-jid = cfg.bridgeMuc;
@@ -120,7 +117,7 @@ in
       restartTriggers = [
         configFile
       ];
-      environment.JAVA_SYS_PROPS = concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") jicofoProps);
+      environment.JAVA_SYS_PROPS = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${toString v}") jicofoProps);
 
       script = ''
         export JICOFO_AUTH_PASS="$(<${cfg.userPasswordFile})"
@@ -154,7 +151,7 @@ in
 
     environment.etc."jitsi/jicofo/sip-communicator.properties".text = "";
     environment.etc."jitsi/jicofo/logging.properties".source =
-      mkDefault "${pkgs.jicofo}/etc/jitsi/jicofo/logging.properties-journal";
+      lib.mkDefault "${pkgs.jicofo}/etc/jitsi/jicofo/logging.properties-journal";
   };
 
   meta.maintainers = lib.teams.jitsi.members;
