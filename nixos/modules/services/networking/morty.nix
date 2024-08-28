@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.morty;
@@ -16,16 +13,16 @@ in
 
     services.morty = {
 
-      enable = mkEnableOption "Morty proxy server. See https://github.com/asciimoo/morty";
+      enable = lib.mkEnableOption "Morty proxy server. See https://github.com/asciimoo/morty";
 
-      ipv6 = mkOption {
-        type = types.bool;
+      ipv6 = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Allow IPv6 HTTP requests?";
       };
 
-      key = mkOption {
-        type = types.str;
+      key = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           HMAC url validation key (hexadecimal encoded).
@@ -35,22 +32,22 @@ in
         '';
       };
 
-      timeout = mkOption {
-        type = types.int;
+      timeout = lib.mkOption {
+        type = lib.types.int;
         default = 2;
         description = "Request timeout in seconds.";
       };
 
-      package = mkPackageOption pkgs "morty" { };
+      package = lib.mkPackageOption pkgs "morty" { };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3000;
         description = "Listing port";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "The address on which the service listens";
       };
@@ -61,7 +58,7 @@ in
 
   ###### Service definition
 
-  config = mkIf config.services.morty.enable {
+  config = lib.mkIf config.services.morty.enable {
 
     users.users.morty =
       { description = "Morty user";
@@ -81,8 +78,8 @@ in
           User = "morty";
           ExecStart = ''${cfg.package}/bin/morty              \
             -listen ${cfg.listenAddress}:${toString cfg.port} \
-            ${optionalString cfg.ipv6 "-ipv6"}                \
-            ${optionalString (cfg.key != "") "-key " + cfg.key} \
+            ${lib.optionalString cfg.ipv6 "-ipv6"}                \
+            ${lib.optionalString (cfg.key != "") "-key " + cfg.key} \
           '';
         };
       };
