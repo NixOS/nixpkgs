@@ -84,7 +84,8 @@ mapAliases {
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
-  eslint_d = pkgs.eslint_d; # Added 2023-05-26
+  inherit (pkgs) eslint; # Added 2024-08-28
+  inherit (pkgs) eslint_d; # Added 2023-05-26
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
