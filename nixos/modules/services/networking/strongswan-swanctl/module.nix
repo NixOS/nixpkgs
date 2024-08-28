@@ -1,22 +1,20 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 with (import ./param-lib.nix lib);
 
 let
   cfg = config.services.strongswan-swanctl;
   configFile = pkgs.writeText "swanctl.conf"
       ( (paramsToConf cfg.swanctl swanctlParams)
-      + (concatMapStrings (i: "\ninclude ${i}") cfg.includes));
+      + (lib.concatMapStrings (i: "\ninclude ${i}") cfg.includes));
   swanctlParams = import ./swanctl-params.nix lib;
 in  {
   options.services.strongswan-swanctl = {
-    enable = mkEnableOption "strongswan-swanctl service";
+    enable = lib.mkEnableOption "strongswan-swanctl service";
 
-    package = mkPackageOption pkgs "strongswan" { };
+    package = lib.mkPackageOption pkgs "strongswan" { };
 
-    strongswan.extraConfig = mkOption {
-      type = types.str;
+    strongswan.extraConfig = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         Contents of the `strongswan.conf` file.
@@ -24,8 +22,8 @@ in  {
     };
 
     swanctl = paramsToOptions swanctlParams;
-    includes = mkOption {
-      type = types.listOf types.path;
+    includes = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
       default = [];
       description = ''
         Extra configuration files to include in the swanctl configuration. This can be used to provide secret values from outside the nix store.
@@ -33,7 +31,7 @@ in  {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       { assertion = !config.services.strongswan.enable;
