@@ -1,18 +1,16 @@
 { lib } :
-
-with lib;
 {
   options = {
 
-    interface = mkOption {
-      type = types.str;
+    interface = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Interface for inside_network, bound by vrrp.
       '';
     };
 
-    state = mkOption {
-      type = types.enum [ "MASTER" "BACKUP" ];
+    state = lib.mkOption {
+      type = lib.types.enum [ "MASTER" "BACKUP" ];
       default = "BACKUP";
       description = ''
         Initial state. As soon as the other machine(s) come up, an election will
@@ -21,16 +19,16 @@ with lib;
       '';
     };
 
-    virtualRouterId = mkOption {
-      type = types.ints.between 1 255;
+    virtualRouterId = lib.mkOption {
+      type = lib.types.ints.between 1 255;
       description = ''
         Arbitrary unique number 1..255. Used to differentiate multiple instances
         of vrrpd running on the same NIC (and hence same socket).
       '';
     };
 
-    priority = mkOption {
-      type = types.int;
+    priority = lib.mkOption {
+      type = lib.types.int;
       default = 100;
       description = ''
         For electing MASTER, highest priority wins. To be MASTER, make 50 more
@@ -38,8 +36,8 @@ with lib;
       '';
     };
 
-    noPreempt = mkOption {
-      type = types.bool;
+    noPreempt = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         VRRP will normally preempt a lower priority machine when a higher
@@ -50,16 +48,16 @@ with lib;
       '';
     };
 
-    useVmac = mkOption {
-      type = types.bool;
+    useVmac = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Use VRRP Virtual MAC.
       '';
     };
 
-    vmacInterface = mkOption {
-      type = types.nullOr types.str;
+    vmacInterface = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
          Name of the vmac interface to use. keepalived will come up with a name
@@ -67,16 +65,16 @@ with lib;
       '';
     };
 
-    vmacXmitBase = mkOption {
-      type = types.bool;
+    vmacXmitBase = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Send/Recv VRRP messages from base interface instead of VMAC interface.
       '';
     };
 
-    unicastSrcIp = mkOption {
-      type = types.nullOr types.str;
+    unicastSrcIp = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
          Default IP for binding vrrpd is the primary IP on interface. If you
@@ -85,8 +83,8 @@ with lib;
       '';
     };
 
-    unicastPeers = mkOption {
-      type = types.listOf types.str;
+    unicastPeers = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         Do not send VRRP adverts over VRRP multicast group. Instead it sends
@@ -97,8 +95,8 @@ with lib;
       '';
     };
 
-    virtualIps = mkOption {
-      type = types.listOf (types.submodule (import ./virtual-ip-options.nix {
+    virtualIps = lib.mkOption {
+      type = lib.types.listOf (lib.types.submodule (import ./virtual-ip-options.nix {
         inherit lib;
       }));
       default = [];
@@ -106,22 +104,22 @@ with lib;
       description = "Declarative vhost config";
     };
 
-    trackScripts = mkOption {
-      type = types.listOf types.str;
+    trackScripts = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "chk_cmd1" "chk_cmd2" ];
       description = "List of script names to invoke for health tracking.";
     };
 
-    trackInterfaces = mkOption {
-      type = types.listOf types.str;
+    trackInterfaces = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "eth0" "eth1" ];
       description = "List of network interfaces to monitor for health tracking.";
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Extra lines to be added verbatim to the vrrp_instance section.
