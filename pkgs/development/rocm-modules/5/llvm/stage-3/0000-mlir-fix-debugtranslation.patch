@@ -1,0 +1,36 @@
+From f1d1e10ec7e1061bf0b90abbc1e298d9438a5e74 Mon Sep 17 00:00:00 2001
+From: Scott Linder <Scott.Linder@amd.com>
+Date: Mon, 11 Sep 2023 18:37:37 +0000
+Subject: [PATCH] [HeterogeneousDWARF] Update MLIR DI Metadata handling
+
+Pass a default DW_MSPACE_LLVM_none to satisfy new API
+
+Change-Id: I50df461f00b5510a715f55f61107122318102d22
+---
+ lib/Target/LLVMIR/DebugTranslation.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Target/LLVMIR/DebugTranslation.cpp b/lib/Target/LLVMIR/DebugTranslation.cpp
+index 2053f5bcef06aa6..635ee5d7e5fefdc 100644
+--- a/lib/Target/LLVMIR/DebugTranslation.cpp
++++ b/lib/Target/LLVMIR/DebugTranslation.cpp
+@@ -148,7 +148,8 @@ llvm::DIDerivedType *DebugTranslation::translateImpl(DIDerivedTypeAttr attr) {
+       /*File=*/nullptr, /*Line=*/0,
+       /*Scope=*/nullptr, translate(attr.getBaseType()), attr.getSizeInBits(),
+       attr.getAlignInBits(), attr.getOffsetInBits(),
+-      /*DWARFAddressSpace=*/std::nullopt, /*Flags=*/llvm::DINode::FlagZero);
++      /*DWARFAddressSpace=*/std::nullopt, llvm::dwarf::DW_MSPACE_LLVM_none,
++      /*Flags=*/llvm::DINode::FlagZero);
+ }
+ 
+ llvm::DIFile *DebugTranslation::translateImpl(DIFileAttr attr) {
+@@ -185,7 +186,8 @@ DebugTranslation::translateImpl(DILocalVariableAttr attr) {
+       llvmCtx, translate(attr.getScope()), getMDStringOrNull(attr.getName()),
+       translate(attr.getFile()), attr.getLine(), translate(attr.getType()),
+       attr.getArg(),
+-      /*Flags=*/llvm::DINode::FlagZero, attr.getAlignInBits(),
++      /*Flags=*/llvm::DINode::FlagZero, llvm::dwarf::DW_MSPACE_LLVM_none,
++      attr.getAlignInBits(),
+       /*Annotations=*/nullptr);
+ }
+ 

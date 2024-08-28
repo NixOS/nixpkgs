@@ -1,0 +1,40 @@
+diff --git a/back.c b/back.c
+index f364e31..c1810dc 100644
+--- a/back.c
++++ b/back.c
+@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #include "cmd.h"
+ 
+ #define CFGFILE		"/etc/spnavrc"
+-#define PIDFILE		"/var/run/spnavd.pid"
+ 
+ int get_daemon_pid(void);
+ static int update_cfg(void);
+@@ -97,11 +96,26 @@ int get_daemon_pid(void)
+ {
+ 	FILE *fp;
+ 	char buf[64];
++	char* xdg_runtime_dir;
++	char* pidfile;
+ 
+-	if(!(fp = fopen(PIDFILE, "r"))) {
++	if(!(xdg_runtime_dir = getenv("XDG_RUNTIME_DIR"))){
++		fprintf(stderr, "XDG_RUNTIME_DIR not set, can't find spacenav pid file\n");
++		return -1;
++	}
++	pidfile = malloc(strlen(xdg_runtime_dir) + strlen("/spnavd.pid") + 1);
++	if (pidfile == NULL) {
++		fprintf(stderr, "failed to allocate memory\n");
++		return -1;
++	}
++	sprintf(pidfile, "%s/spnavd.pid", xdg_runtime_dir);
++
++	if(!(fp = fopen(pidfile, "r"))) {
+ 		fprintf(stderr, "no spacenav pid file, can't find daemon\n");
++		free(pidfile);
+ 		return -1;
+ 	}
++	free(pidfile);
+ 	if(!fgets(buf, sizeof buf, fp) || !isdigit(buf[0])) {
+ 		fprintf(stderr, "corrupted pidfile, can't find the daemon\n");
+ 		fclose(fp);

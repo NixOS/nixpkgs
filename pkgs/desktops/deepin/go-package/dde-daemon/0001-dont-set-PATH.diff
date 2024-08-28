@@ -1,0 +1,15 @@
+diff --git a/grub2/modify_manger.go b/grub2/modify_manger.go
+index a811770b..30e9561e 100644
+--- a/grub2/modify_manger.go
++++ b/grub2/modify_manger.go
+@@ -21,7 +21,6 @@ const (
+ )
+ 
+ func init() {
+-	_ = os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+ }
+ 
+ type modifyManager struct {
+-- 
+2.39.2
+

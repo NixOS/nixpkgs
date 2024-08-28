@@ -1,0 +1,11 @@
+--- a/Onboard/ClickSimulator.py
++++ b/Onboard/ClickSimulator.py
+@@ -479,7 +479,7 @@ class CSMousetweaks(ConfigObject, ClickSimulator):
+         self._daemon_running_notify_callbacks = []
+
+     def _launch_daemon(self, delay):
+-        self.launcher.launch_delayed(["mousetweaks"], delay)
++        self.launcher.launch_delayed(["@mousetweaks@/bin/mousetweaks"], delay)
+
+     def _set_connection(self, active):
+         ''' Update interface object, state and notify listeners '''

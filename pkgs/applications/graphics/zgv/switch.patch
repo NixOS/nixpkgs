@@ -1,0 +1,14 @@
+GCC complains
+
+diff -ur src/zgv_io.c src/zgv_io.c
+--- src/zgv_io.c	2005-01-20 15:07:46.000000000 -0800
++++ src/zgv_io.c	2016-06-29 10:19:40.169897611 -0700
+@@ -645,7 +645,7 @@
+         case SDLK_INSERT:	return(RK_INSERT);
+         case SDLK_DELETE:	return(RK_DELETE);
+         case SDLK_RETURN:	return(RK_ENTER);
+-        default:
++        default: ;
+           /* stop complaints */
+         }
+ 

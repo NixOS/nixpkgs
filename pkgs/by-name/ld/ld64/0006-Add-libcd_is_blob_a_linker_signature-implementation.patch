@@ -1,0 +1,113 @@
+From add8bae5577ebe1c98cf7a711f87a3578a51d313 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 8 Apr 2024 22:42:40 -0400
+Subject: [PATCH 6/8] Add libcd_is_blob_a_linker_signature implementation
+
+---
+ compat/libcodedirectory.c | 74 +++++++++++++++++++++++++++++++++++++++
+ src/ld/libcodedirectory.h |  8 +++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 compat/libcodedirectory.c
+
+diff --git a/compat/libcodedirectory.c b/compat/libcodedirectory.c
+new file mode 100644
+index 0000000..e584dfc
+--- /dev/null
++++ b/compat/libcodedirectory.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: APSL-2.0
++// libcd_is_blob_a_linker_signature implementation written by Randy Eckenrode © 2024
++
++#include <libcodedirectory.h>
++
++#include <stdbool.h>
++
++// References:
++// - https://forums.developer.apple.com/forums/thread/702351
++// - https://redmaple.tech/blogs/macho-files/#codedirectory-blob
++
++static inline uint32_t read32be(const uint8_t* data)
++{
++    return (data[0] << 24) + (data[1] << 16) + (data[2] << 8) + data[3];
++}
++
++static inline bool is_embedded_signature(uint32_t magic) {
++    switch (magic) {
++    case CSMAGIC_EMBEDDED_SIGNATURE:
++    case CSMAGIC_EMBEDDED_SIGNATURE_OLD:
++        return true;
++    default:
++        return false;
++    }
++}
++
++static inline const uint8_t* find_code_directory(const uint8_t* data, size_t size) {
++    const uint8_t* index_ptr = data + offsetof(CS_SuperBlob, index);
++    
++    // There also needs to be space for the actual blobs, but there must be at least enough space
++    // for the blob indexes. If there’s not, then something’s wrong, and the blob is invalid.
++    uint32_t count = read32be(data + offsetof(CS_SuperBlob, count));
++    if (count > ((data + size) - index_ptr) / sizeof(CS_BlobIndex)) {
++        return NULL;
++    }
++
++    for (uint32_t n = 0; n < count; ++n) {
++        const uint8_t* current_index_ptr = index_ptr + n * sizeof(CS_BlobIndex);
++        uint32_t type = read32be(current_index_ptr + offsetof(CS_BlobIndex, type));
++        if (type == CSSLOT_CODEDIRECTORY) {
++            uint32_t offset = read32be(current_index_ptr + offsetof(CS_BlobIndex, offset));
++            if (offset > size - sizeof(CS_CodeDirectory)) {
++                return NULL;
++            } else {
++                return data + offset;
++            }
++        }
++    }
++    return NULL;
++}
++
++enum libcd_signature_query_ret
++libcd_is_blob_a_linker_signature(const uint8_t* data, size_t size, int* linker_signed)
++{
++    if (size < sizeof(CS_SuperBlob) + sizeof(CS_BlobIndex) + sizeof(CS_CodeDirectory)) {
++        return LIBCD_SIGNATURE_QUERY_INVALID_ARGUMENT;
++    }
++
++    if (!is_embedded_signature(read32be(data + offsetof(CS_SuperBlob, magic)))) {
++        return LIBCD_SIGNATURE_QUERY_NOT_A_SIGNATURE;
++    }
++
++    const uint8_t* cd = find_code_directory(data, size);
++    if (!cd) {
++        return LIBCD_SIGNATURE_QUERY_INVALID_ARGUMENT;
++    }
++
++    uint32_t flags = read32be(cd + offsetof(CS_CodeDirectory, flags));
++    if ((flags & CS_LINKER_SIGNED) == CS_LINKER_SIGNED) {
++        *linker_signed = 1;
++    }
++
++    return LIBCD_SIGNATURE_QUERY_SUCCESS;
++}
+diff --git a/src/ld/libcodedirectory.h b/src/ld/libcodedirectory.h
+index 0e989a9..7532648 100644
+--- a/src/ld/libcodedirectory.h
++++ b/src/ld/libcodedirectory.h
+@@ -116,6 +116,14 @@ enum libcd_set_linkage_ret {
+ 
+ enum libcd_set_linkage_ret libcd_set_linkage(libcd *s, int linkage_hash_type, uint8_t *linkage_hash);
+ 
++enum libcd_signature_query_ret {
++    LIBCD_SIGNATURE_QUERY_SUCCESS,
++    LIBCD_SIGNATURE_QUERY_INVALID_ARGUMENT,
++    LIBCD_SIGNATURE_QUERY_NOT_A_SIGNATURE,
++};
++
++enum libcd_signature_query_ret libcd_is_blob_a_linker_signature(const uint8_t* data, size_t size, int* linker_signed);
++
+ __END_DECLS
+ 
+ #endif // H_LIBCODEDIRECTORY
+-- 
+2.45.1
+

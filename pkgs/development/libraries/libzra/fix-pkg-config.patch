@@ -1,0 +1,150 @@
+From 7be7e35d61d8d499599623502a35460d410de114 Mon Sep 17 00:00:00 2001
+From: Alexander Shpilkin <ashpilkin@gmail.com>
+Date: Thu, 26 May 2022 16:03:27 +0300
+Subject: [PATCH] Squashed commit of the following:
+
+commit 9aacb9d5da65a64c3845937a6f9eede329d43989
+Author: W. Felix Handte <w@felixhandte.com>
+Date:   Tue Dec 8 20:46:02 2020 -0500
+
+    Apply Same Strategy to CMake
+
+    (cherry picked from commit a75f9ce3e924564ab358c2c1aa95b6268383ec42)
+
+commit e21b7ad0d98d1322ea92f99fcd1f85e2d6b6f6b7
+Author: W. Felix Handte <w@felixhandte.com>
+Date:   Tue Dec 8 20:10:05 2020 -0500
+
+    Avoid Use of Regexes in Building Package-Config File
+
+    (cherry picked from commit b521183c74795bd9bdd9bdebe74af01cae4d3d43)
+---
+ build/cmake/lib/CMakeLists.txt | 29 ++++++++++++++++++++++++----
+ lib/Makefile                   | 35 ++++++++++++++++------------------
+ lib/libzstd.pc.in              |  6 +++---
+ 3 files changed, 44 insertions(+), 26 deletions(-)
+
+diff --git a/build/cmake/lib/CMakeLists.txt b/build/cmake/lib/CMakeLists.txt
+index 32ae7525..466c2c7b 100644
+--- a/build/cmake/lib/CMakeLists.txt
++++ b/build/cmake/lib/CMakeLists.txt
+@@ -137,12 +137,33 @@ endif ()
+ if (UNIX)
+     # pkg-config
+     set(PREFIX "${CMAKE_INSTALL_PREFIX}")
+-    set(LIBDIR "${CMAKE_INSTALL_LIBDIR}")
+-    set(INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}")
++    set(EXEC_PREFIX "\\$$\{prefix}")
++    set(LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
++    set(INCLUDEDIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+     set(VERSION "${zstd_VERSION}")
++
++    string(LENGTH "${PREFIX}" PREFIX_LENGTH)
++    string(SUBSTRING "${LIBDIR}" 0 ${PREFIX_LENGTH} LIBDIR_PREFIX)
++    string(SUBSTRING "${LIBDIR}" ${PREFIX_LENGTH} -1 LIBDIR_SUFFIX)
++    string(SUBSTRING "${INCLUDEDIR}" 0 ${PREFIX_LENGTH} INCLUDEDIR_PREFIX)
++    string(SUBSTRING "${INCLUDEDIR}" ${PREFIX_LENGTH} -1 INCLUDEDIR_SUFFIX)
++
++    if ("${INCLUDEDIR_PREFIX}" STREQUAL "${PREFIX}")
++        set(INCLUDEDIR_PREFIX "\\$$\{prefix}")
++    endif()
++    if ("${LIBDIR_PREFIX}" STREQUAL "${PREFIX}")
++        set(LIBDIR_PREFIX "\\$$\{exec_prefix}")
++    endif()
++
+     add_custom_target(libzstd.pc ALL
+-            ${CMAKE_COMMAND} -DIN="${LIBRARY_DIR}/libzstd.pc.in" -DOUT="libzstd.pc"
+-            -DPREFIX="${PREFIX}" -DLIBDIR="${LIBDIR}" -DINCLUDEDIR="${INCLUDEDIR}" -DVERSION="${VERSION}"
++            ${CMAKE_COMMAND}
++            -DIN="${LIBRARY_DIR}/libzstd.pc.in"
++            -DOUT="libzstd.pc"
++            -DPREFIX="${PREFIX}"
++            -DEXEC_PREFIX="${EXEC_PREFIX}"
++            -DINCLUDEDIR="${INCLUDEDIR_PREFIX}${INCLUDEDIR_SUFFIX}"
++            -DLIBDIR="${LIBDIR_PREFIX}${LIBDIR_SUFFIX}"
++            -DVERSION="${VERSION}"
+             -P "${CMAKE_CURRENT_SOURCE_DIR}/pkgconfig.cmake"
+             COMMENT "Creating pkg-config file")
+ 
+diff --git a/lib/Makefile b/lib/Makefile
+index 4a9ab799..2893ec21 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -257,6 +257,8 @@ ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU OpenBSD FreeBSD Ne
+ 
+ all: libzstd.pc
+ 
++HAS_EXPLICIT_EXEC_PREFIX := $(if $(or $(EXEC_PREFIX),$(exec_prefix)),1,)
++
+ DESTDIR     ?=
+ # directory variables : GNU conventions prefer lowercase
+ # see https://www.gnu.org/prep/standards/html_node/Makefile-Conventions.html
+@@ -270,24 +272,17 @@ LIBDIR      ?= $(libdir)
+ includedir  ?= $(PREFIX)/include
+ INCLUDEDIR  ?= $(includedir)
+ 
+-PCLIBDIR ?= $(shell echo "$(LIBDIR)" | sed -n $(SED_ERE_OPT) -e "s@^$(EXEC_PREFIX)(/|$$)@@p")
+-PCINCDIR ?= $(shell echo "$(INCLUDEDIR)" | sed -n $(SED_ERE_OPT) -e "s@^$(PREFIX)(/|$$)@@p")
++PCINCDIR := $(patsubst $(PREFIX)%,%,$(INCLUDEDIR))
++PCLIBDIR := $(patsubst $(EXEC_PREFIX)%,%,$(LIBDIR))
+ 
+-ifeq (,$(PCLIBDIR))
+-# Additional prefix check is required, since the empty string is technically a
+-# valid PCLIBDIR
+-ifeq (,$(shell echo "$(LIBDIR)" | sed -n $(SED_ERE_OPT) -e "\\@^$(EXEC_PREFIX)(/|$$)@ p"))
+-$(error configured libdir ($(LIBDIR)) is outside of prefix ($(PREFIX)), can't generate pkg-config file)
+-endif
+-endif
++# If we successfully stripped off a prefix, we'll add a reference to the
++# relevant pc variable.
++PCINCPREFIX := $(if $(findstring $(INCLUDEDIR),$(PCINCDIR)),,$${prefix})
++PCLIBPREFIX := $(if $(findstring $(LIBDIR),$(PCLIBDIR)),,$${exec_prefix})
+ 
+-ifeq (,$(PCINCDIR))
+-# Additional prefix check is required, since the empty string is technically a
+-# valid PCINCDIR
+-ifeq (,$(shell echo "$(INCLUDEDIR)" | sed -n $(SED_ERE_OPT) -e "\\@^$(PREFIX)(/|$$)@ p"))
+-$(error configured includedir ($(INCLUDEDIR)) is outside of exec_prefix ($(EXEC_PREFIX)), can't generate pkg-config file)
+-endif
+-endif
++# If no explicit EXEC_PREFIX was set by the caller, write it out as a reference
++# to PREFIX, rather than as a resolved value.
++PCEXEC_PREFIX := $(if $(HAS_EXPLICIT_EXEC_PREFIX),$(EXEC_PREFIX),$${prefix})
+ 
+ ifneq (,$(filter $(shell uname),FreeBSD NetBSD DragonFly))
+ PKGCONFIGDIR ?= $(PREFIX)/libdata/pkgconfig
+@@ -308,9 +303,11 @@ INSTALL_DATA    ?= $(INSTALL) -m 644
+ libzstd.pc:
+ libzstd.pc: libzstd.pc.in
+ 	@echo creating pkgconfig
+-	$(Q)@sed $(SED_ERE_OPT) -e 's|@PREFIX@|$(PREFIX)|' \
+-          -e 's|@LIBDIR@|$(PCLIBDIR)|' \
+-          -e 's|@INCLUDEDIR@|$(PCINCDIR)|' \
++	$(Q)@sed $(SED_ERE_OPT) \
++	        -e 's|@PREFIX@|$(PREFIX)|' \
++	        -e 's|@EXEC_PREFIX@|$(PCEXEC_PREFIX)|' \
++          -e 's|@INCLUDEDIR@|$(PCINCPREFIX)$(PCINCDIR)|' \
++          -e 's|@LIBDIR@|$(PCLIBPREFIX)$(PCLIBDIR)|' \
+           -e 's|@VERSION@|$(VERSION)|' \
+           $< >$@
+ 
+diff --git a/lib/libzstd.pc.in b/lib/libzstd.pc.in
+index 8ec0235a..8465c977 100644
+--- a/lib/libzstd.pc.in
++++ b/lib/libzstd.pc.in
+@@ -3,9 +3,9 @@
+ #   BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)
+ 
+ prefix=@PREFIX@
+-exec_prefix=${prefix}
+-includedir=${prefix}/@INCLUDEDIR@
+-libdir=${exec_prefix}/@LIBDIR@
++exec_prefix=@EXEC_PREFIX@
++includedir=@INCLUDEDIR@
++libdir=@LIBDIR@
+ 
+ Name: zstd
+ Description: fast lossless compression algorithm library
+-- 
+2.36.0
+

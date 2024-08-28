@@ -1,0 +1,28 @@
+diff --git a/Makefile.am b/Makefile.am
+index 0e69cd4..b4a1f1a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -26,7 +26,7 @@ dist_pkgconfig_DATA=libuldaq.pc
+ # fpga/USB_DIO32HS.bin
+ 
+ if OS_LINUX
+-rulesdatadir=/lib/udev/rules.d/
++rulesdatadir=$(libdir)/udev/rules.d/
+ dist_rulesdata_DATA=rules/50-uldaq.rules
+ endif
+ 
+@@ -42,14 +42,6 @@ dist-up: dist
+ 	mkdir -p $(reldir)
+ 	cp $(distdir).tar.bz2 $(reldir)
+ 
+-if OS_LINUX
+-install-data-hook:
+-	udevadm control --reload-rules && \
+-	test -f "/etc/redhat-release" && echo "/usr/local/lib" > /etc/ld.so.conf.d/uldaq.conf || echo "" && \
+-	test -f "/etc/arch-release" && echo "/usr/local/lib" > /etc/ld.so.conf.d/uldaq.conf || echo "" && \
+-	ldconfig
+-endif
+-
+ if OS_LINUX
+ uninstall-hook:
+ 	test -f "/etc/ld.so.conf.d/uldaq.conf" &&  rm "/etc/ld.so.conf.d/uldaq.conf" || echo ""

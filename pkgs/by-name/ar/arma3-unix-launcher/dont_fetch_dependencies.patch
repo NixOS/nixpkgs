@@ -1,0 +1,115 @@
+diff --git a/cmake/external_dependencies.cmake b/cmake/external_dependencies.cmake
+index 2eb6ec5..9f1d67e 100644
+--- a/cmake/external_dependencies.cmake
++++ b/cmake/external_dependencies.cmake
+@@ -4,7 +4,7 @@ include(FetchContent)
+ 
+ function(setup_library SOURCE_TO_TEST)
+     set(boolArgs HEADER_ONLY)
+-    set(oneValueArgs NAME CXX_FLAGS GIT_REPOSITORY GIT_TAG TEST_DEFINITIONS TEST_LINK_LIBS)
++    set(oneValueArgs NAME CXX_FLAGS URL GIT_TAG TEST_DEFINITIONS TEST_LINK_LIBS)
+     set(multiValueArgs WHEN)
+     cmake_parse_arguments(LIB_SETUP "${boolArgs}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+ 
+@@ -27,12 +27,11 @@ function(setup_library SOURCE_TO_TEST)
+     endif()
+ 
+     FetchContent_Declare(${LIB_SETUP_NAME}
+-                         GIT_REPOSITORY ${LIB_SETUP_GIT_REPOSITORY}
+-                         GIT_TAG ${LIB_SETUP_GIT_TAG})
++        URL ${LIB_SETUP_URL})
+     FetchContent_GetProperties(${LIB_SETUP_NAME})
+     set(POPULATED "${LIB_SETUP_NAME}_POPULATED")
+     if (NOT "${POPULATED}")
+-        message("-- Downloading ${LIB_SETUP_NAME} from ${LIB_SETUP_GIT_REPOSITORY}")
++        message("-- Downloading ${LIB_SETUP_NAME} from ${LIB_SETUP_URL}")
+         FetchContent_Populate(${LIB_SETUP_NAME})
+         set(SRCDIR "${LIB_SETUP_NAME}_SOURCE_DIR")
+         set(BINDIR "${LIB_SETUP_NAME}_BINARY_DIR")
+@@ -51,8 +50,7 @@ function(setup_argparse)
+             }")
+     setup_library("${CHECK_SOURCE}"
+                   NAME argparse
+-                  GIT_REPOSITORY https://github.com/p-ranav/argparse.git
+-                  GIT_TAG 45664c4
++                  URL @argparse_src@
+                   HEADER_ONLY
+                   )
+     if (NOT TARGET argparse::argparse)
+@@ -64,7 +62,7 @@ function(setup_curlpp)
+     set(CHECK_SOURCE "#error unimplemented}")
+     setup_library("${CHECK_SOURCE}"
+                   NAME curlpp
+-                  GIT_REPOSITORY https://github.com/jpbarrette/curlpp.git
++                  URL @curlpp_src@
+                   )
+     if (NOT APPLE)
+         set(CURLPP_LIB_PATH1 "${curlpp_BINARY_DIR}/libcurlpp.so" PARENT_SCOPE)
+@@ -79,7 +77,7 @@ function(setup_doctest)
+                       #include <doctest/doctest.h>")
+     setup_library("${CHECK_SOURCE}"
+                   NAME doctest
+-                  GIT_REPOSITORY https://github.com/onqtam/doctest.git
++                  URL @doctest_src@
+                   HEADER_ONLY
+                   )
+     add_library(doctest::doctest ALIAS doctest)
+@@ -100,8 +98,7 @@ function(setup_fmt)
+         }")
+     setup_library("${CHECK_SOURCE}"
+                   NAME fmt
+-                  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+-                  GIT_TAG 8.1.1
++                  URL @fmt_src@
+                   TEST_LINK_LIBS fmt
+                   )
+ 
+@@ -126,7 +123,7 @@ function(setup_nlohmann_json)
+         add_library(nlohmann_json INTERFACE)
+     else()
+         FetchContent_Declare(nlohmann_json
+-                             URL https://github.com/nlohmann/json/releases/download/v3.7.3/include.zip)
++                             URL @nlohmann_json_src@)
+         FetchContent_GetProperties(nlohmann_json)
+         if (NOT nlohmann_json_POPULATED)
+             FetchContent_Populate(nlohmann_json)
+@@ -146,8 +143,7 @@ function(setup_pugixml)
+         }")
+     setup_library("${CHECK_SOURCE}"
+                   NAME pugixml
+-                  GIT_REPOSITORY https://github.com/muttleyxd/pugixml.git
+-                  GIT_TAG simple-build-for-a3ul
++                  URL @pugixml_src@
+                   TEST_LINK_LIBS pugixml
+                   )
+     get_target_property(TARGET_TYPE pugixml TYPE)
+@@ -188,8 +184,7 @@ function(setup_spdlog)
+ 
+     setup_library("${CHECK_SOURCE}"
+                   NAME spdlog
+-                  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+-                  GIT_TAG v1.x
++                  URL @spdlog_src@
+                   TEST_DEFINITIONS -DSPDLOG_FMT_EXTERNAL
+                   TEST_LINK_LIBS ${FMT_TARGET_NAME}
+                   CXX_FLAGS "-Wno-attributes -Wno-reorder -Wno-redundant-move"
+@@ -198,8 +193,7 @@ endfunction()
+ 
+ function(setup_steamworkssdk)
+     FetchContent_Declare(steamworkssdk
+-        URL https://github.com/julianxhokaxhiu/SteamworksSDKCI/releases/download/1.53/SteamworksSDK-v1.53.0_x64.zip
+-        URL_HASH MD5=322c2c90c3ab76201c92f4a2c443f664
++        URL @steamworkssdk_src@
+         CONFIGURE_COMMAND ""
+         BUILD_COMMAND ""
+         )
+@@ -241,8 +235,7 @@ function(setup_trompeloeil)
+                       int main() { }")
+     setup_library("${CHECK_SOURCE}"
+                   NAME trompeloeil
+-                  GIT_REPOSITORY https://github.com/rollbear/trompeloeil.git
+-                  GIT_TAG 64fd171
++                  URL @trompeloeil_src@
+                   HEADER_ONLY
+                   )
+     add_library(trompeloeil::trompeloeil ALIAS trompeloeil)

@@ -1,0 +1,22 @@
+--- gwyddion-2.55.orig/configure	2019-11-04 01:25:31.000000000 -0800
++++ gwyddion-2.55/configure	2020-03-20 18:49:43.860452655 -0700
+@@ -18560,7 +18560,7 @@
+ fi
+   if test "x$embed_pygtk" = xno; then
+     if test "x$PYGTK_CODEGENDIR" = 'x'; then
+-      PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygtk-2.0`
++      PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygobject-2.0`
+     fi
+   else
+     # Some silly OSes want to remove pygtk2.  We can build pygwy without
+--- gwyddion-2.55.orig/configure.ac	2019-11-04 01:25:16.000000000 -0800
++++ gwyddion-2.55/configure.ac	2020-03-20 18:52:55.042724547 -0700
+@@ -270,7 +270,7 @@
+                     [embed_pygtk=yes; pygwy_warn=" (embedded pygtk2)"])
+   if test "x$embed_pygtk" = xno; then
+     if test "x$PYGTK_CODEGENDIR" = 'x'; then
+-      PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygtk-2.0`
++      PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygobject-2.0`
+     fi
+   else
+     # Some silly OSes want to remove pygtk2.  We can build pygwy without

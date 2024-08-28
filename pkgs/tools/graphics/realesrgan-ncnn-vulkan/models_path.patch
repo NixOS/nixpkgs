@@ -1,0 +1,22 @@
+diff --git a/main.cpp b/main.cpp
+index ebe0e62..ef3a1ed 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -109,7 +109,7 @@ static void print_usage()
+     fprintf(stderr, "  -o output-path       output image path (jpg/png/webp) or directory\n");
+     fprintf(stderr, "  -s scale             upscale ratio (can be 2, 3, 4. default=4)\n");
+     fprintf(stderr, "  -t tile-size         tile size (>=32/0=auto, default=0) can be 0,0,0 for multi-gpu\n");
+-    fprintf(stderr, "  -m model-path        folder path to the pre-trained models. default=models\n");
++    fprintf(stderr, "  -m model-path        folder path to the pre-trained models. default=REPLACE_MODELS\n");
+     fprintf(stderr, "  -n model-name        model name (default=realesr-animevideov3, can be realesr-animevideov3 | realesrgan-x4plus | realesrgan-x4plus-anime | realesrnet-x4plus)\n");
+     fprintf(stderr, "  -g gpu-id            gpu device to use (default=auto) can be 0,1,2 for multi-gpu\n");
+     fprintf(stderr, "  -j load:proc:save    thread count for load/proc/save (default=1:2:2) can be 1:2,2,2:2 for multi-gpu\n");
+@@ -438,7 +438,7 @@ int main(int argc, char** argv)
+     path_t outputpath;
+     int scale = 4;
+     std::vector<int> tilesize;
+-    path_t model = PATHSTR("models");
++    path_t model = PATHSTR("REPLACE_MODELS");
+     path_t modelname = PATHSTR("realesr-animevideov3");
+     std::vector<int> gpuid;
+     int jobs_load = 1;

@@ -1,0 +1,37 @@
+From a26bb162d9403138d64b84e8fa4f0471084c45b2 Mon Sep 17 00:00:00 2001
+From: "Kirill A. Korinsky" <kirill@korins.ky>
+Date: Fri, 8 Jul 2022 21:21:25 +0200
+Subject: [PATCH] Allow system's nspr and icu on bootstrapped sysroot
+
+This patch partially reverts https://github.com/mozilla/gecko-dev/commit/9aa3587bbf0416dd2eb5b614f7b301c71c64286b
+---
+ build/moz.configure/nspr.configure | 2 +-
+ js/moz.configure                   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build/moz.configure/nspr.configure b/build/moz.configure/nspr.configure
+index bc6d62982b87a..8346f08b86923 100644
+--- a/build/moz.configure/nspr.configure
++++ b/build/moz.configure/nspr.configure
+@@ -19,7 +19,7 @@ def enable_nspr_build(enable):
+         return enable
+ 
+ 
+-system_lib_option(
++option(
+     "--with-system-nspr",
+     help="Use system NSPR",
+     when=use_pkg_config,
+diff --git a/js/moz.configure b/js/moz.configure
+index 8fb51095876fa..7629b29d33c8f 100644
+--- a/js/moz.configure
++++ b/js/moz.configure
+@@ -1296,7 +1296,7 @@ set_define(
+ 
+ # ECMAScript Internationalization API Support (uses ICU)
+ # ======================================================
+-system_lib_option(
++option(
+     "--with-system-icu",
+     help="Use system ICU",
+     when=use_pkg_config,

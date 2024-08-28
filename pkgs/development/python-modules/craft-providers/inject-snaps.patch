@@ -1,0 +1,58 @@
+diff --git a/craft_providers/base.py b/craft_providers/base.py
+index 3c914a2..d9c2cf9 100644
+--- a/craft_providers/base.py
++++ b/craft_providers/base.py
+@@ -655,37 +655,22 @@ class Base(ABC):
+                     ),
+                 )
+ 
+-            if snap.channel:
+-                try:
+-                    snap_installer.install_from_store(
+-                        executor=executor,
+-                        snap_name=snap.name,
+-                        channel=snap.channel,
+-                        classic=snap.classic,
+-                    )
+-                except SnapInstallationError as error:
+-                    raise BaseConfigurationError(
+-                        brief=(
+-                            f"failed to install snap {snap.name!r} from store"
+-                            f" channel {snap.channel!r} in target environment."
+-                        ),
+-                        details=error.details,
+-                    ) from error
+-            else:
+-                try:
+-                    snap_installer.inject_from_host(
+-                        executor=executor,
+-                        snap_name=snap.name,
+-                        classic=snap.classic,
+-                    )
+-                except SnapInstallationError as error:
+-                    raise BaseConfigurationError(
+-                        brief=(
+-                            f"failed to inject host's snap {snap.name!r} "
+-                            "into target environment."
+-                        ),
+-                        details=error.details,
+-                    ) from error
++            try:
++                channel = "latest/beta"
++                snap_installer.install_from_store(
++                    executor=executor,
++                    snap_name=snap.name,
++                    channel=channel,
++                    classic=snap.classic,
++                )
++            except SnapInstallationError as error:
++                raise BaseConfigurationError(
++                    brief=(
++                        f"failed to install snap {snap.name!r} from store"
++                        f" channel {channel!r} in target environment."
++                    ),
++                    details=error.details,
++                ) from error
+ 
+     def wait_until_ready(self, executor: Executor) -> None:
+         """Wait until base instance is ready.

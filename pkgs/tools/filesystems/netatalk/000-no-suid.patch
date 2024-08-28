@@ -1,0 +1,11 @@
+diff --git a/bin/afppasswd/Makefile.am b/bin/afppasswd/Makefile.am
+index 578eac1..d17aa22 100644
+--- a/bin/afppasswd/Makefile.am
++++ b/bin/afppasswd/Makefile.am
+@@ -16,5 +16,5 @@ AM_CFLAGS = @SSL_CFLAGS@ -I$(top_srcdir)/sys \
+ 
+ install-exec-hook:
+ if HAVE_OPENSSL
+-	chmod u+s $(DESTDIR)$(bindir)/afppasswd
++#	chmod u+s $(DESTDIR)$(bindir)/afppasswd
+ endif

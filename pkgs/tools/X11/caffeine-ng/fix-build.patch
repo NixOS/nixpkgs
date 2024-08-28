@@ -1,0 +1,24 @@
+diff --git a/meson.build b/meson.build
+index 3e4f9ea..5b82861 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2,10 +2,6 @@ project(
+     'caffeine-ng',
+     version: run_command('./scripts/read_version.sh', check: true).stdout().strip(),
+     meson_version: '>=0.63.0',
+-    default_options: [
+-      # The default can yield broken results.
+-      'python.install_env=auto'
+-    ]
+ )
+ 
+ dependency('pygobject-3.0')
+@@ -82,7 +78,7 @@ configure_file(
+ 
+ install_data(
+   'share/applications/caffeine.desktop',
+-  install_dir: '/etc/xdg/autostart',
++  install_dir: join_paths(get_option('sysconfdir'), 'xdg/autostart'),
+ )
+ 
+ install_data(

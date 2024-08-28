@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# gem "rails"
+gem "rrule", "0.4.4", require: false

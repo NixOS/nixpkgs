@@ -1,0 +1,53 @@
+diff --git a/src/common/gnomesettings.cpp b/src/common/gnomesettings.cpp
+index 961f75d..d947eb2 100644
+--- a/src/common/gnomesettings.cpp
++++ b/src/common/gnomesettings.cpp
+@@ -210,7 +210,7 @@ GnomeSettingsPrivate::GnomeSettingsPrivate(QObject *parent)
+                                               QStringLiteral("SettingChanged"), this, SLOT(portalSettingChanged(QString,QString,QDBusVariant)));
+     }
+ 
+-    if (QGuiApplication::platformName() != QStringLiteral("xcb")) {
++    if (true) {
+         cursorSizeChanged();
+         cursorThemeChanged();
+     }
+@@ -347,11 +347,11 @@ void GnomeSettingsPrivate::gsettingPropertyChanged(GSettings *settings, gchar *k
+     } else if (changedProperty == QStringLiteral("monospace-font-name")) {
+         gnomeSettings->fontChanged();
+     } else if (changedProperty == QStringLiteral("cursor-size")) {
+-        if (QGuiApplication::platformName() != QStringLiteral("xcb")) {
++        if (true) {
+             gnomeSettings->cursorSizeChanged();
+         }
+     } else if (changedProperty == QStringLiteral("cursor-theme")) {
+-        if (QGuiApplication::platformName() != QStringLiteral("xcb")) {
++        if (true) {
+             gnomeSettings->cursorThemeChanged();
+         }
+     // Org.gnome.wm.preferences
+@@ -393,13 +393,23 @@ void GnomeSettingsPrivate::cursorBlinkTimeChanged()
+ void GnomeSettingsPrivate::cursorSizeChanged()
+ {
+     int cursorSize = getSettingsProperty<int>(QStringLiteral("cursor-size"));
+-    qputenv("XCURSOR_SIZE", QString::number(cursorSize).toUtf8());
++    if (QGuiApplication::platformName() != QStringLiteral("xcb")) {
++        qputenv("XCURSOR_SIZE", QString::number(cursorSize).toUtf8());
++    }
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++    m_hints[QPlatformTheme::MouseCursorSize] = QSize(cursorSize, cursorSize);
++#endif
+ }
+ 
+ void GnomeSettingsPrivate::cursorThemeChanged()
+ {
+     const QString cursorTheme = getSettingsProperty<QString>(QStringLiteral("cursor-theme"));
+-    qputenv("XCURSOR_THEME", cursorTheme.toUtf8());
++    if (QGuiApplication::platformName() != QStringLiteral("xcb")) {
++        qputenv("XCURSOR_THEME", cursorTheme.toUtf8());
++    }
++#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++    m_hints[QPlatformTheme::MouseCursorTheme] = cursorTheme;
++#endif
+ }
+ 
+ void GnomeSettingsPrivate::fontChanged()

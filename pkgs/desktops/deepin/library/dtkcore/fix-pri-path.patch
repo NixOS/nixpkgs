@@ -1,0 +1,17 @@
+diff --git a/misc/qt_lib_dtkcore.pri.in b/misc/qt_lib_dtkcore.pri.in
+index a331f52..ce01dc0 100644
+--- a/misc/qt_lib_dtkcore.pri.in
++++ b/misc/qt_lib_dtkcore.pri.in
+@@ -4,9 +4,9 @@ QT.dtkcore.MINOR_VERSION = @PROJECT_VERSION_MINOR@
+ QT.dtkcore.PATCH_VERSION = @PROJECT_VERSION_PATCH@
+ QT.dtkcore.name = dtkcore
+ QT.dtkcore.module = dtk@DTK_VERSION_MAJOR@core
+-QT.dtkcore.tools = @CMAKE_INSTALL_PREFIX@/@TOOL_INSTALL_DIR@
+-QT.dtkcore.libs = @CMAKE_INSTALL_PREFIX@/@LIBRARY_INSTALL_DIR@
+-QT.dtkcore.includes = @CMAKE_INSTALL_PREFIX@/@INCLUDE_INSTALL_DIR@
++QT.dtkcore.tools = @TOOL_INSTALL_DIR@
++QT.dtkcore.libs = @LIBRARY_INSTALL_DIR@
++QT.dtkcore.includes = @INCLUDE_INSTALL_DIR@
+ QT.dtkcore.frameworks =
+ QT.dtkcore.depends = core dbus xml
+ QT.dtkcore.module_config = v2 ltcg
