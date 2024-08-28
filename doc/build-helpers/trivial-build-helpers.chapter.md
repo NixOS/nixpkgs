@@ -437,7 +437,6 @@ writeScript "my-file"
   Contents of File
   ''
 ```
-:::
 
 This is equivalent to:
 
@@ -450,6 +449,7 @@ writeTextFile {
   executable = true;
 }
 ```
+:::
 
 ### `writeScriptBin` {#trivial-builder-writeScriptBin}
 
