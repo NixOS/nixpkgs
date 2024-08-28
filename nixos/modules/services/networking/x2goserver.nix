@@ -1,28 +1,25 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.x2goserver;
 
   defaults = {
     superenicer = { enable = cfg.superenicer.enable; };
   };
-  confText = generators.toINI {} (recursiveUpdate defaults cfg.settings);
+  confText = lib.generators.toINI {} (lib.recursiveUpdate defaults cfg.settings);
   x2goServerConf = pkgs.writeText "x2goserver.conf" confText;
 
   x2goAgentOptions = pkgs.writeText "x2goagent.options" ''
     X2GO_NXOPTIONS=""
-    X2GO_NXAGENT_DEFAULT_OPTIONS="${concatStringsSep " " cfg.nxagentDefaultOptions}"
+    X2GO_NXAGENT_DEFAULT_OPTIONS="${lib.concatStringsSep " " cfg.nxagentDefaultOptions}"
   '';
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "programs" "x2goserver" ] [ "services" "x2goserver" ])
+    (lib.mkRenamedOptionModule [ "programs" "x2goserver" ] [ "services" "x2goserver" ])
   ];
 
   options.services.x2goserver = {
-    enable = mkEnableOption "x2goserver" // {
+    enable = lib.mkEnableOption "x2goserver" // {
       description = ''
         Enables the x2goserver module.
         NOTE: This will create a good amount of symlinks in `/usr/local/bin`
@@ -30,7 +27,7 @@ in {
     };
 
     superenicer = {
-      enable = mkEnableOption "superenicer" // {
+      enable = lib.mkEnableOption "superenicer" // {
         description = ''
           Enables the SupeReNicer code in x2gocleansessions, this will renice
           suspended sessions to nice level 19 and renice them to level 0 if the
@@ -39,22 +36,22 @@ in {
       };
     };
 
-    nxagentDefaultOptions = mkOption {
-      type = types.listOf types.str;
+    nxagentDefaultOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "-extension GLX" "-nolisten tcp" ];
       description = ''
         List of default nx agent options.
       '';
     };
 
-    settings = mkOption {
-      type = types.attrsOf types.attrs;
+    settings = lib.mkOption {
+      type = lib.types.attrsOf lib.types.attrs;
       default = {};
       description = ''
         x2goserver.conf ini configuration as nix attributes. See
         `x2goserver.conf(5)` for details
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           superenicer = {
             "enable" = "yes";
@@ -66,7 +63,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # x2goserver can run X11 program even if "services.xserver.enable = false"
     xdg = {
