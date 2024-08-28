@@ -1,20 +1,17 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.ebusd;
 in
 {
-  meta.maintainers = with maintainers; [ nathan-gs ];
+  meta.maintainers = with lib.maintainers; [ nathan-gs ];
 
   options.services.ebusd = {
-    enable = mkEnableOption "ebusd, a daemon for communication with eBUS heating systems";
+    enable = lib.mkEnableOption "ebusd, a daemon for communication with eBUS heating systems";
 
-    package = mkPackageOption pkgs "ebusd" { };
+    package = lib.mkPackageOption pkgs "ebusd" { };
 
-    device = mkOption {
-      type = types.str;
+    device = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = "IP:PORT";
       description = ''
@@ -29,32 +26,32 @@ in
       '';
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       default = 8888;
-      type = types.port;
+      type = lib.types.port;
       description = ''
         The port on which to listen on
       '';
     };
 
-    readonly = mkOption {
-      type = types.bool;
+    readonly = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
          Only read from device, never write to it
       '';
     };
 
-    configpath = mkOption {
-      type = types.str;
+    configpath = lib.mkOption {
+      type = lib.types.str;
       default = "https://cfg.ebusd.eu/";
       description = ''
         Directory to read CSV config files from. This can be a local folder or a URL.
       '';
     };
 
-    scanconfig = mkOption {
-      type = types.str;
+    scanconfig = lib.mkOption {
+      type = lib.types.str;
       default = "full";
       description = ''
         Pick CSV config files matching initial scan ("none" or empty for no initial scan message, "full" for full scan, or a single hex address to scan, default is to send a broadcast ident message).
@@ -67,61 +64,61 @@ in
       # "all" must come first so it can be overridden by more specific areas
       areas = [ "all" "main" "network" "bus" "update" "other" ];
       levels = [ "none" "error" "notice" "info" "debug" ];
-    in listToAttrs (map (area: nameValuePair area (mkOption {
-      type = types.enum levels;
+    in lib.listToAttrs (map (area: lib.nameValuePair area (lib.mkOption {
+      type = lib.types.enum levels;
       default = "notice";
       example = "debug";
       description = ''
-        Only write log for matching `AREA`s (${concatStringsSep "|" areas}) below or equal to `LEVEL` (${concatStringsSep "|" levels})
+        Only write log for matching `AREA`s (${lib.concatStringsSep "|" areas}) below or equal to `LEVEL` (${lib.concatStringsSep "|" levels})
       '';
     })) areas);
 
     mqtt = {
-      enable = mkEnableOption "support for MQTT";
+      enable = lib.mkEnableOption "support for MQTT";
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = ''
           Connect to MQTT broker on HOST.
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 1883;
-        type = types.port;
+        type = lib.types.port;
         description = ''
           The port on which to connect to MQTT
         '';
       };
 
-      home-assistant = mkOption {
-        type = types.bool;
+      home-assistant = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Adds the Home Assistant topics to MQTT, read more at [MQTT Integration](https://github.com/john30/ebusd/wiki/MQTT-integration)
         '';
       };
 
-      retain = mkEnableOption "set the retain flag on all topics instead of only selected global ones";
+      retain = lib.mkEnableOption "set the retain flag on all topics instead of only selected global ones";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The MQTT user to use
         '';
       };
 
-      password = mkOption {
-        type = types.str;
+      password = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The MQTT password.
         '';
       };
     };
 
-    extraArguments = mkOption {
-      type = types.listOf types.str;
+    extraArguments = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         Extra arguments to the ebus daemon
@@ -130,41 +127,41 @@ in
   };
 
   config = let
-    usesDev = hasPrefix "/" cfg.device;
-  in mkIf cfg.enable {
+    usesDev = lib.hasPrefix "/" cfg.device;
+  in lib.mkIf cfg.enable {
     systemd.services.ebusd = {
       description = "EBUSd Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = let
-          args = cli.toGNUCommandLineShell { optionValueSeparator = "="; } (foldr (a: b: a // b) { } [
+          args = lib.cli.toGNUCommandLineShell { optionValueSeparator = "="; } (lib.foldr (a: b: a // b) { } [
             {
               inherit (cfg) device port configpath scanconfig readonly;
               foreground = true;
               updatecheck = "off";
-              log = mapAttrsToList (name: value: "${name}:${value}") cfg.logs;
+              log = lib.mapAttrsToList (name: value: "${name}:${value}") cfg.logs;
               mqttretain = cfg.mqtt.retain;
             }
-            (optionalAttrs cfg.mqtt.enable {
+            (lib.optionalAttrs cfg.mqtt.enable {
               mqtthost  = cfg.mqtt.host;
               mqttport  = cfg.mqtt.port;
               mqttuser  = cfg.mqtt.user;
               mqttpass  = cfg.mqtt.password;
             })
-            (optionalAttrs cfg.mqtt.home-assistant {
+            (lib.optionalAttrs cfg.mqtt.home-assistant {
               mqttint = "${cfg.package}/etc/ebusd/mqtt-hassio.cfg";
               mqttjson = true;
             })
           ]);
-        in "${cfg.package}/bin/ebusd ${args} ${escapeShellArgs cfg.extraArguments}";
+        in "${cfg.package}/bin/ebusd ${args} ${lib.escapeShellArgs cfg.extraArguments}";
 
         DynamicUser = true;
         Restart = "on-failure";
 
         # Hardening
         CapabilityBoundingSet = "";
-        DeviceAllow = optionals usesDev [ cfg.device ];
+        DeviceAllow = lib.optionals usesDev [ cfg.device ];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = false;
