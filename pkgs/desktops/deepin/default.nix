@@ -62,6 +62,7 @@ let
       dde-widgets = callPackage ./core/dde-widgets { };
       dde-shell = callPackage ./core/dde-shell { };
       dde-grand-search = callPackage ./core/dde-grand-search { };
+      dde-tray-loader = callPackage ./core/dde-tray-loader { };
 
       #### Dtk Application
       deepin-album = callPackage ./apps/deepin-album { };
