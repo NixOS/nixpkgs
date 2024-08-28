@@ -213,6 +213,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/NixOS/hydra/commit/b72528be5074f3e62e9ae2c2ae8ef9c07a0b4dd3.patch";
       hash = "sha256-+y27N8AIaHj13mj0LwW7dkpzfzZ4xfjN8Ld23c5mzuU=";
     })
+    (fetchpatch2 {
+      url = "https://github.com/NixOS/hydra/commit/916531dc9ccee52e6dab256232933fcf6d198158.patch";
+      hash = "sha256-JOtlYr+K934UIqHvfLMd/jfRRU+Tci0kvtyhOvlwxEs=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2024-45049.patch";
+      url = "https://github.com/NixOS/hydra/commit/f73043378907c2c7e44f633ad764c8bdd1c947d5.patch";
+      hash = "sha256-IS6GCuRLW+ULDD7udpGX2tO85bV2gGOX6DLLw3NTkJU=";
+    })
   ];
 
   postPatch = ''
