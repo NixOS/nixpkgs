@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.atd;
@@ -16,16 +13,16 @@ in
 
   options = {
 
-    services.atd.enable = mkOption {
-      type = types.bool;
+    services.atd.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable the {command}`at` daemon, a command scheduler.
       '';
     };
 
-    services.atd.allowEveryone = mkOption {
-      type = types.bool;
+    services.atd.allowEveryone = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to make {file}`/var/spool/at{jobs,spool}`
@@ -40,7 +37,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # Not wrapping "batch" because it's a shell script (kernel drops perms
     # anyway) and it's patched to invoke the "at" setuid wrapper.
