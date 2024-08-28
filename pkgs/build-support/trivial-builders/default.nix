@@ -828,24 +828,8 @@ rec {
   */
   copyPathsToStore = builtins.map copyPathToStore;
 
-  # TODO: move applyPatches docs to the Nixpkgs manual
-  /* Applies a list of patches to a source directory.
-
-    Example:
-
-    # Patching nixpkgs:
-
-    applyPatches {
-      src = pkgs.path;
-      patches = [
-        (pkgs.fetchpatch {
-          url = "https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch";
-          sha256 = "1nlzx171y3r3jbk0qhvnl711kmdk57jlq4na8f8bs8wz2pbffymr";
-        })
-      ];
-    }
-
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-applyPatches
   applyPatches =
     { src
     , name ? (if builtins.typeOf src == "path"

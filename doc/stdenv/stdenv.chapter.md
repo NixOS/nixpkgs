@@ -610,7 +610,7 @@ The unpack phase evaluates the string `$unpackCmd` for any unrecognised file. Th
 
 ### The patch phase {#ssec-patch-phase}
 
-The patch phase applies the list of patches defined in the `patches` variable.
+The patch phase applies the list of patches defined in the `patches` variable using the [`applyPatches`](#fun-applyPatches) function.
 
 #### Variables controlling the patch phase {#variables-controlling-the-patch-phase}
 
@@ -620,7 +620,7 @@ Set to true to skip the patch phase.
 
 ##### `patches` {#var-stdenv-patches}
 
-The list of patches. They must be in the format accepted by the `patch` command, and may optionally be compressed using `gzip` (`.gz`), `bzip2` (`.bz2`) or `xz` (`.xz`).
+The list of patches. They must be in the format accepted by the `patch` command, and may optionally be compressed using `gzip` (`.gz`), `bzip2` (`.bz2`) or `xz` (`.xz`, `.lzma`).
 
 ##### `patchFlags` {#var-stdenv-patchFlags}
 
@@ -1134,6 +1134,29 @@ Example removing all references to the compiler in the output:
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
   '';
 }
+```
+
+### `applyPatches` [ `-p` \<patch-set\> ... ] [--] [ \<additional-arguments\> ... ] {#fun-applyPatches}
+
+Applies a set of patches to the current directory. Patch files are automatically
+decompressed using `gzip` (`.gz`), `bzip2` (`.bz2`) or `xz` (`.xz`, `.lzma`)
+based on the file name extension. Additional arguments are passed directly to
+the `patch` command.
+
+A patch set is either a path to an individual patch file or a directory containing
+multiple patch files. If a directory contains a `series` file, it is treated as
+a list of patch files to apply. The `series` file lists patch file paths, one
+per line, relative to the patch set directory. Empty lines and comments (lines
+starting with `#`) are ignored. It is an error if a line starts with either `-`
+or `+`.
+
+When processing a directory without a `series` file, only files with standard
+patch extensions `.patch` and `.diff` will be considered for application,
+optionally with compressed file name extension (e.g. `.patch.gz`).
+
+Example:
+```shell
+applyPatches -p patches -- -p1
 ```
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}

@@ -1314,38 +1314,92 @@ unpackPhase() {
     runHook postUnpack
 }
 
+# Docs in doc/stdenv/stdenv.chapter.md
+# See https://nixos.org/manual/nixpkgs/unstable/#fun-applyPatches
+applyPatches() {
+    local -a patchSets=() patchFlags
+    local o OPTIND OPTARG
+    while getopts p: o; do
+        case "$o" in
+            p)
+                patchSets+=( "$OPTARG" )
+                ;;
+        esac
+    done
+    shift $((OPTIND-1))
+    patchFlags=( "$@" )
+
+    local -a patchFiles=()
+    local p
+
+    local -i n
+    local line lines
+    for p in "${patchSets[@]}"; do
+        if [[ -f $p/series ]]; then
+            # We support a simple series file with a list of patches. Empty
+            # lines and comments are ignored. Guards-like conditions (see
+            # guards(1) from quilt) are explicitly forbidden to avoid breaking
+            # changes if support is added in the future.
+            mapfile -t lines <"$p/series"
+            n=0
+            for line in "${lines[@]}"; do
+                case "$line" in
+                -* | +*)
+                    echo "invalid line in patch series file $p/series: $line" >&2
+                    return 1
+                    ;;
+                "" | "#"*)
+                    continue
+                    ;;
+                esac
+                lines[n]=$p/$line
+                n+=1
+            done
+            patchFiles+=( "${lines[@]::n}" )
+        elif [[ -d $p ]]; then
+            # NB nullglob is set in stdenv.
+            patchFiles+=( "$p"/*.{patch,diff}{,.gz,.bz2,.xz,.lzma} )
+        else
+            patchFiles+=( "$p" )
+        fi
+    done
+
+    local -a uncompress=()
+    for p in "${patchFiles[@]}"; do
+        echo "applying patch $p"
+        case "$p" in
+            *.gz)
+                uncompress=(gzip -d)
+                ;;
+            *.bz2)
+                uncompress=(bzip2 -d)
+                ;;
+            *.xz)
+                uncompress=(xz -d)
+                ;;
+            *.lzma)
+                uncompress=(lzma -d)
+                ;;
+        esac
+        # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
+        if [[ ${#uncompress[@]} -gt 0 ]]; then
+            "${uncompress[@]}" <"$p" 2>&1 | patch "${patchFlags[@]}"
+        else
+            patch "${patchFlags[@]}" <"$p"
+        fi
+    done
+}
 
 patchPhase() {
     runHook prePatch
 
-    local -a patchesArray
+    : "${patchFlags:=-p1}"
+
+    local -a patchesArray flagsArray
     concatTo patchesArray patches
+    concatTo flagsArray patchFlags
 
-    for i in "${patchesArray[@]}"; do
-        echo "applying patch $i"
-        local uncompress=cat
-        case "$i" in
-            *.gz)
-                uncompress="gzip -d"
-                ;;
-            *.bz2)
-                uncompress="bzip2 -d"
-                ;;
-            *.xz)
-                uncompress="xz -d"
-                ;;
-            *.lzma)
-                uncompress="lzma -d"
-                ;;
-        esac
-
-        local -a flagsArray
-        : "${patchFlags:=-p1}"
-        concatTo flagsArray patchFlags
-        # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
-        # shellcheck disable=SC2086
-        $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
-    done
+    applyPatches "${patchesArray[@]/#/-p}" -- "${flagsArray[@]}"
 
     runHook postPatch
 }
