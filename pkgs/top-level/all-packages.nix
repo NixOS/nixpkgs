@@ -36515,6 +36515,8 @@ with pkgs;
 
   gnome-browser-connector = callPackage ../desktops/gnome/extensions/gnome-browser-connector { };
 
+  gnome-session-ctl = callPackage ../desktops/gnome/core/gnome-session/ctl.nix { };
+
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
