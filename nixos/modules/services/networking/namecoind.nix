@@ -1,8 +1,4 @@
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg     = config.services.namecoind;
   dataDir = "/var/lib/namecoind";
@@ -10,7 +6,7 @@ let
   useRPC  = (cfg.rpc.user != null) && (cfg.rpc.password != null);
 
   listToConf = option: list:
-    concatMapStrings (value :"${option}=${value}\n") list;
+    lib.concatMapStrings (value :"${option}=${value}\n") list;
 
   configFile = pkgs.writeText "namecoin.conf" (''
     server=1
@@ -21,13 +17,13 @@ let
     gen=${if cfg.generate then "1" else "0"}
     ${listToConf "addnode" cfg.extraNodes}
     ${listToConf "connect" cfg.trustedNodes}
-  '' + optionalString useRPC ''
+  '' + lib.optionalString useRPC ''
     rpcbind=${cfg.rpc.address}
     rpcport=${toString cfg.rpc.port}
     rpcuser=${cfg.rpc.user}
     rpcpassword=${cfg.rpc.password}
     ${listToConf "rpcallowip" cfg.rpc.allowFrom}
-  '' + optionalString useSSL ''
+  '' + lib.optionalString useSSL ''
     rpcssl=1
     rpcsslcertificatechainfile=${cfg.rpc.certificate}
     rpcsslprivatekeyfile=${cfg.rpc.key}
@@ -44,10 +40,10 @@ in
 
     services.namecoind = {
 
-      enable = mkEnableOption "namecoind, Namecoin client";
+      enable = lib.mkEnableOption "namecoind, Namecoin client";
 
-      wallet = mkOption {
-        type = types.path;
+      wallet = lib.mkOption {
+        type = lib.types.path;
         default = "${dataDir}/wallet.dat";
         description = ''
           Wallet file. The ownership of the file has to be
@@ -55,24 +51,24 @@ in
         '';
       };
 
-      generate = mkOption {
-        type = types.bool;
+      generate = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to generate (mine) Namecoins.
         '';
       };
 
-      extraNodes = mkOption {
-        type = types.listOf types.str;
+      extraNodes = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           List of additional peer IP addresses to connect to.
         '';
       };
 
-      trustedNodes = mkOption {
-        type = types.listOf types.str;
+      trustedNodes = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           List of the only peer IP addresses to connect to. If specified
@@ -80,40 +76,40 @@ in
         '';
       };
 
-      rpc.user = mkOption {
-        type = types.nullOr types.str;
+      rpc.user = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           User name for RPC connections.
         '';
       };
 
-      rpc.password = mkOption {
-        type = types.nullOr types.str;
+      rpc.password = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Password for RPC connections.
         '';
       };
 
-      rpc.address = mkOption {
-        type = types.str;
+      rpc.address = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = ''
           IP address the RPC server will bind to.
         '';
       };
 
-      rpc.port = mkOption {
-        type = types.port;
+      rpc.port = lib.mkOption {
+        type = lib.types.port;
         default = 8332;
         description = ''
           Port the RPC server will bind to.
         '';
       };
 
-      rpc.certificate = mkOption {
-        type = types.nullOr types.path;
+      rpc.certificate = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/var/lib/namecoind/server.cert";
         description = ''
@@ -121,8 +117,8 @@ in
         '';
       };
 
-      rpc.key = mkOption {
-        type = types.nullOr types.path;
+      rpc.key = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/var/lib/namecoind/server.pem";
         description = ''
@@ -131,8 +127,8 @@ in
       };
 
 
-      rpc.allowFrom = mkOption {
-        type = types.listOf types.str;
+      rpc.allowFrom = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "127.0.0.1" ];
         description = ''
           List of IP address ranges allowed to use the RPC API.
@@ -147,7 +143,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.namecoin = {
       uid  = config.ids.uids.namecoin;
@@ -180,7 +176,7 @@ in
         Restart            = "always";
       };
 
-      preStart = optionalString (cfg.wallet != "${dataDir}/wallet.dat")  ''
+      preStart = lib.optionalString (cfg.wallet != "${dataDir}/wallet.dat")  ''
         # check wallet file permissions
         if [ "$(stat --printf '%u' ${cfg.wallet})" != "${toString config.ids.uids.namecoin}" \
            -o "$(stat --printf '%g' ${cfg.wallet})" != "${toString config.ids.gids.namecoin}" \
