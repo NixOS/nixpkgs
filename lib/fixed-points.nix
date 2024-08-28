@@ -463,8 +463,17 @@ rec {
     # Type
 
     ```
-    toExtension ::: (a | a -> a | a -> a -> a) -> a -> a -> a
-    a = AttrSet & !Function
+    toExtension ::
+      b' -> Any -> Any -> b'
+    or
+    toExtension ::
+      (a -> b') -> Any -> a -> b'
+    or
+    toExtension ::
+      (a -> a -> b) -> a -> a -> b
+    where b' = ! Callable
+
+    Set a = b = b' = AttrSet & ! Callable to make toExtension return an extending function.
     ```
 
     # Examples
