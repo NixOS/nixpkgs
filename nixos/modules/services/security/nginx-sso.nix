@@ -1,21 +1,18 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.nginx.sso;
-  pkg = getBin cfg.package;
+  pkg = lib.getBin cfg.package;
   configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
 in {
   options.services.nginx.sso = {
-    enable = mkEnableOption "nginx-sso service";
+    enable = lib.mkEnableOption "nginx-sso service";
 
-    package = mkPackageOption pkgs "nginx-sso" { };
+    package = lib.mkPackageOption pkgs "nginx-sso" { };
 
-    configuration = mkOption {
-      type = types.attrsOf types.unspecified;
+    configuration = lib.mkOption {
+      type = lib.types.attrsOf lib.types.unspecified;
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };
 
@@ -41,7 +38,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.nginx-sso = {
       description = "Nginx SSO Backend";
       after = [ "network.target" ];
