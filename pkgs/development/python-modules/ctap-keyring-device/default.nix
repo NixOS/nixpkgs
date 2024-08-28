@@ -4,28 +4,34 @@
   fetchPypi,
   setuptools-scm,
   # install requirements
+  six,
   fido2,
   keyring,
   cryptography,
   # test requirements
   pytestCheckHook,
+  unittestCheckHook,
+  mock,
 }:
 
 let
   fido2_0 = fido2.overridePythonAttrs (oldAttrs: rec {
     version = "0.9.3";
-    format = "setuptools";
     src = fetchPypi {
       inherit (oldAttrs) pname;
       inherit version;
       hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
     };
+    build-system = [ setuptools-scm ];
+    dependencies = oldAttrs.dependencies ++ [ six ];
+    nativeCheckInputs = [ unittestCheckHook mock ];
   });
 in
 buildPythonPackage rec {
   pname = "ctap-keyring-device";
   version = "1.0.6";
-  format = "setuptools";
+  pyproject = true;
+  build-system = [ setuptools-scm ];
 
   src = fetchPypi {
     inherit version pname;
@@ -38,16 +44,12 @@ buildPythonPackage rec {
       --replace "--flake8 --black --cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
   pythonRemoveDeps = [
     # This is a darwin requirement missing pyobjc
     "pyobjc-framework-LocalAuthentication"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     keyring
     fido2_0
     cryptography
@@ -55,7 +57,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ctap_keyring_device" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disabled tests that needs pyobjc or windows
