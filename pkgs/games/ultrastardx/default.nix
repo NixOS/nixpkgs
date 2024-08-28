@@ -13,7 +13,7 @@
 , SDL2_gfx
 , SDL2_mixer
 , SDL2_net, SDL2_ttf
-, ffmpeg_4
+, ffmpeg_7
 , sqlite
 , zlib
 , libX11
@@ -25,7 +25,7 @@ let
   sharedLibs = [
     pcre portaudio freetype
     SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg_4
+    sqlite lua zlib libX11 libGLU libGL ffmpeg_7
   ];
 
 in stdenv.mkDerivation rec {
@@ -45,26 +45,6 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/config.inc.in \
       --subst-var-by libpcre_LIBNAME libpcre.so.1
-
-    # ultrastardx binds to libffmpeg (and sublibs), specifying a very restrictive
-    # upper bounds on the minor versions of .so files.
-    # We can assume ffmpeg_4 won’t break any major ABI compatibility, since it's
-    # effectively EOL
-    sed \
-      -e 's/^  LIBAVCODEC_MAX_VERSION_MINOR.*$/  LIBAVCODEC_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/avcodec.pas
-    sed \
-      -e 's/^  LIBAVFORMAT_MAX_VERSION_MINOR.*$/  LIBAVFORMAT_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/avformat.pas
-    sed \
-      -e 's/^  LIBAVUTIL_MAX_VERSION_MINOR.*$/  LIBAVUTIL_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/avutil.pas
-    sed \
-      -e 's/^  LIBSWRESAMPLE_MAX_VERSION_MINOR.*$/  LIBSWRESAMPLE_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/swresample.pas
-    sed \
-      -e 's/^  LIBSWSCALE_MAX_VERSION_MINOR.*$/  LIBSWSCALE_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/swscale.pas
   '';
 
   preBuild =
