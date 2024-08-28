@@ -13088,6 +13088,8 @@ self: super: with self; {
 
   python-socketio = callPackage ../development/python-modules/python-socketio { };
 
+  python-socketio-v4 = callPackage ../development/python-modules/python-socketio-v4 { };
+
   python-socks = callPackage ../development/python-modules/python-socks { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
