@@ -195,6 +195,7 @@ mapAliases ({
   flask_principal = flask-principal; # added 2023-08-23
   flask-restplus = throw "flask-restplus is no longer maintained, use flask-restx instead"; # added 2023-02-21
   flask_script = flask-script; # added 2023-08-23
+  flask-security-too = flask-security; # added 2024-08-26
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24

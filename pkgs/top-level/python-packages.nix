@@ -4512,7 +4512,7 @@ self: super: with self; {
 
   flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
 
-  flask-security-too = callPackage ../development/python-modules/flask-security-too { };
+  flask-security = callPackage ../development/python-modules/flask-security { };
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
@@ -4523,6 +4523,8 @@ self: super: with self; {
   flask-sockets = callPackage ../development/python-modules/flask-sockets { };
 
   flask-sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
+
+  flask-sqlalchemy-lite = callPackage ../development/python-modules/flask-sqlalchemy-lite { };
 
   flask-sslify = callPackage ../development/python-modules/flask-sslify { };
 
