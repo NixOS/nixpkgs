@@ -30,6 +30,7 @@
   redis,
   reflex,
   reflex-hosting-cli,
+  reflex-chakra,
   rich,
   sqlmodel,
   starlette-admin,
@@ -45,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.5.9";
+  version = "0.5.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
-    rev = "v${version}";
-    hash = "sha256-QeEggHPilCLjUQ76AYDkqdf1iWLwCyAYTnf17RdhDq0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8nwVB5FthDbhQRO663vRTqT8KPtStbdSgEoZ75EnhmE=";
   };
 
   pythonRelaxDeps = [ "fastapi" ];
@@ -82,6 +83,7 @@ buildPythonPackage rec {
     python-socketio
     redis
     reflex-hosting-cli
+    reflex-chakra
     rich
     sqlmodel
     starlette-admin
