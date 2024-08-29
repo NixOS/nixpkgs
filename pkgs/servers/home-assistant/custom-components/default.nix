@@ -58,6 +58,8 @@
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
+  solis-sensor = callPackage ./solis-sensor {};
+
   somweb = callPackage ./somweb {};
 
   spook = callPackage ./spook {};
