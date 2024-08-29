@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 a.out "$out/bin/nawk"
+    mv a.out nawk
+    installBin nawk
     mv awk.1 nawk.1
     installManPage nawk.1
     runHook postInstall
