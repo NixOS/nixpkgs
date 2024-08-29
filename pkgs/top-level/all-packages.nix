@@ -11072,7 +11072,7 @@ with pkgs;
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
   openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
-    stdenv = clangStdenv;
+    inherit (llvmPackages_17) stdenv;
   };
 
   namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };

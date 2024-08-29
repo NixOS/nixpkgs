@@ -5630,6 +5630,12 @@
     githubId = 6689924;
     name = "David Terry";
   };
+  dxwil = {
+    email = "dovydas@kersys.lt";
+    github = "dxwil";
+    githubId = 90563298;
+    name = "Dovydas Kersys";
+  };
   dylan-gonzalez = {
     email = "dylcg10@gmail.com";
     github = "dylan-gonzalez";
@@ -12283,6 +12289,12 @@
     github = "Lurkki14";
     githubId = 44469719;
     name = "Jussi Kuokkanen";
+  };
+  lutzberger = {
+    email = "lutz.berger@airbus.com";
+    github = "lutzberger";
+    githubId = 115777584;
+    name = "Lutz Berger";
   };
   lux = {
     email = "lux@lux.name";
