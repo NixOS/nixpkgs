@@ -1,13 +1,14 @@
 #!/usr/bin/env bb
 
-(require '[babashka.curl :as curl])
+(require '[babashka.curl :as curl]
+         '[babashka.cli :as cli])
 
 (def graphql-path
   (str
    (or (System/getenv "NIXOS_ACTIVITY_GQL_PATH")
        (fs/cwd))))
 
-(println "graphql path:" graphql-path)
+;; (println "graphql path:" graphql-path)
 
 (defn get-access-token []
   (or (System/getenv "ACCESS_TOKEN")
@@ -34,10 +35,7 @@
                                (get headers "x-ratelimit-limit")))
   {:total (:total_count body)
    :latest (-> body :items first
-               (select-keys [:node_id :url :updated_at :commit])
-               #_(dissoc :repository :author
-                       :committer :parents :score :comments_url :html_url :sha
-                       :labels :assignees ))})
+               (select-keys [:node_id :url :updated_at :commit]))})
 (defn search-issues [& {:keys [q]}]
   (->
    (curl/get "https://api.github.com/search/issues"
@@ -101,101 +99,15 @@
 
 (def org-id "O_kgDOAAdwkA")
 
-(comment
-  ;; to regenerate repo map
-  (let [{:keys [totalCount nodes]}
-        (unwrap (file-query :org-repos {:org "nixos"})
-                [:organization :repositories])]
-    (assert (<= totalCount 100)
-            "More than 100 repos in NixOS org")
-    (into {} (map (juxt :name :id)) nodes)))
-
-(def repo-map
-  {"ofborg" "MDEwOlJlcG9zaXRvcnkxMDg3NzEyMzk=",
-   "language-nix" "MDEwOlJlcG9zaXRvcnkyMTYxMzYzNg==",
-   "marketing" "R_kgDOLWZbjA",
-   "nixops-dashboard" "MDEwOlJlcG9zaXRvcnk0NjI5NTY2MA==",
-   "cabal2nix" "MDEwOlJlcG9zaXRvcnkyMTYxMDMx",
-   "org" "R_kgDOLmjLpw",
-   "first-time-contribution-tagger" "R_kgDOJvBNDQ",
-   "foundation" "MDEwOlJlcG9zaXRvcnkzODY4NDIwNQ==",
-   "teams-collaboration" "R_kgDOKxmm7w",
-   "nixpkgs-merge-bot" "R_kgDOKgBr_w",
-   "nix.dev" "MDEwOlJlcG9zaXRvcnk1ODA0Mzg4Ng==",
-   "nixos" "MDEwOlJlcG9zaXRvcnk0NTQyNzEx",
-   "security" "MDEwOlJlcG9zaXRvcnk2ODk2NTk5NQ==",
-   "amis" "R_kgDOKxghxQ",
-   "nixos-channel-scripts" "MDEwOlJlcG9zaXRvcnkzMDQyNTU0Ng==",
-   "package-list" "MDEwOlJlcG9zaXRvcnkyMjU1ODgz",
-   "hydra-ant-logger" "MDEwOlJlcG9zaXRvcnkyNjY5MjM3",
-   "darwin-stubs" "MDEwOlJlcG9zaXRvcnkzMTIwMDQ5NTc=",
-   "calamares-nixos-extensions" "R_kgDOGjVhbw",
-   "experimental-nix-installer" "R_kgDOJhZmPw",
-   "reproducible.nixos.org" "R_kgDOJPeMLQ",
-   "jailbreak-cabal" "MDEwOlJlcG9zaXRvcnk1NjcwNTYz",
-   "nixpkgs-check-by-name" "R_kgDOLhHQ0w",
-   "nixpkgs-channels" "MDEwOlJlcG9zaXRvcnkzMTcxNjkxNw==",
-   "nixos-metrics" "R_kgDOG5X19A",
-   ".github" "MDEwOlJlcG9zaXRvcnkxOTgzNzUxNDg=",
-   "nixos-wiki-infra" "R_kgDOJhfr7w",
-   "nixos-planet" "MDEwOlJlcG9zaXRvcnkyNTQ1OTE4MDA=",
-   "hydra-provisioner" "MDEwOlJlcG9zaXRvcnk0MTQzMTgxNw==",
-   "nixos-artwork" "MDEwOlJlcG9zaXRvcnkyNTY4MjEzMg==",
-   "rfc39" "MDEwOlJlcG9zaXRvcnkyMDEzODY1NjY=",
-   "nixpart" "MDEwOlJlcG9zaXRvcnkxMDk1NzYxMw==",
-   "nixops-hetzner" "MDEwOlJlcG9zaXRvcnkyMDQ3NjkwNDg=",
-   "nix-book" "R_kgDOHWt3AQ",
-   "ofborg-viewer" "MDEwOlJlcG9zaXRvcnkxMTgwNzA2MjQ=",
-   "rfc39-record" "MDEwOlJlcG9zaXRvcnkzMjUwODU5OTc=",
-   "hydra-scale-equinix-metal" "R_kgDOLiDiZw",
-   "nix-pills" "MDEwOlJlcG9zaXRvcnkxMDAyNDg4NDQ=",
-   "patchelf" "MDEwOlJlcG9zaXRvcnkyOTI4MTY0",
-   "flake-regressions" "R_kgDOKiganA",
-   "nixops" "MDEwOlJlcG9zaXRvcnkyNjM3MjAz",
-   "hydra" "MDEwOlJlcG9zaXRvcnkyNjY5MDQx",
-   "flake-registry" "MDEwOlJlcG9zaXRvcnkxODgxMDg1NDM=",
-   "whats-new-in-nix" "R_kgDOJHHfzA",
-   "nixos-common-styles" "MDEwOlJlcG9zaXRvcnkzMjIxMzI4MzY=",
-   "npm2nix" "MDEwOlJlcG9zaXRvcnkxOTM2ODc1Mg==",
-   "distribution-nixpkgs" "MDEwOlJlcG9zaXRvcnk2MTE0NzM1Nw==",
-   "equinix-metal-builders" "MDEwOlJlcG9zaXRvcnkxOTg1Mjc3MTc=",
-   "nix-mode" "MDEwOlJlcG9zaXRvcnk2NTk0MDc2Mw==",
-   "nix-idea" "MDEwOlJlcG9zaXRvcnk2NzY4NTI5Nw==",
-   "docker" "MDEwOlJlcG9zaXRvcnkxMzgxOTA2Nzg=",
-   "templates" "MDEwOlJlcG9zaXRvcnkyNjk0MzE0MDk=",
-   "nixos-search" "MDEwOlJlcG9zaXRvcnkyNTA3MTI1Nzc=",
-   "mobile-nixos-website" "MDEwOlJlcG9zaXRvcnkyMTkxNTgxMjY=",
-   "nixos-weekly" "MDEwOlJlcG9zaXRvcnk2NjU3OTg1NA==",
-   "infra" "MDEwOlJlcG9zaXRvcnkxMDQwNTU3MQ==",
-   "nixpkgs" "MDEwOlJlcG9zaXRvcnk0NTQyNzE2",
-   "flake-regressions-data" "R_kgDOKqcSUw",
-   "snapd-nix-base" "MDEwOlJlcG9zaXRvcnkxOTI1NjQ2MDc=",
-   "bundlers" "R_kgDOGtZjhA",
-   "aarch64-build-box" "MDEwOlJlcG9zaXRvcnkxMTQwNjU2MzU=",
-   "nixops-aws" "MDEwOlJlcG9zaXRvcnkyMDQ3NjkxNzA=",
-   "rfcs" "MDEwOlJlcG9zaXRvcnk4MTY2MjUwMQ==",
-   "GSoC" "R_kgDOLMcmwQ",
-   "moderation" "R_kgDOGTEbJw",
-   "nixos-status" "MDEwOlJlcG9zaXRvcnkzMTgxOTMwNjE=",
-   "release-wiki" "MDEwOlJlcG9zaXRvcnkzMDA1MjYxMzk=",
-   "nixos-summer" "MDEwOlJlcG9zaXRvcnkzNDc1MDMzNDY=",
-   "nix-eclipse" "MDEwOlJlcG9zaXRvcnkyNjY5MjYx",
-   "nix-constitutional-assembly" "R_kgDOMDSWnw",
-   "nix" "MDEwOlJlcG9zaXRvcnkzMzg2MDg4",
-   "systemd" "MDEwOlJlcG9zaXRvcnk0MTMwMDYzMA==",
-   "nixos-hardware" "MDEwOlJlcG9zaXRvcnk1MTI5MjQ5MQ==",
-   "20th-nix" "R_kgDOJJ7TAA",
-   "rfc-steering-committee" "MDEwOlJlcG9zaXRvcnkxOTA3NTYxMTY=",
-   "nixos-homepage" "MDEwOlJlcG9zaXRvcnkxNDM5NjkwMA==",
-   "nixfmt" "MDEwOlJlcG9zaXRvcnkxNDMyOTIyNzA=",
-   "hackage-db" "MDEwOlJlcG9zaXRvcnkyMjY0MDIx",
-   "mvn2nix-maven-plugin" "MDEwOlJlcG9zaXRvcnkzNzg1MjA4MQ=="})
+(def repo-map (edn/read (java.io.PushbackReader.
+                         (io/reader (io/file graphql-path
+                                             "repos.edn")))))
 
 (def interesting-repo?
-  #_(into #{}
-          (map repo-map)
-          ["nix" "nixpkgs"])
-  (into #{} (vals repo-map)))
+  (into #{}
+        (map repo-map)
+        #_["nix" "nixpkgs"]
+        (keys repo-map)))
 
 (defn issue-comment-page [login after-cursor]
   (.println System/err (format "Fetching issue comments for %s after page %s" login after-cursor))
@@ -225,6 +137,11 @@
    :committed-commit (search-commits
                       :q {:org "NixOS" :committer user})})
 
+(defn latest-contributions [user]
+  (->
+   (file-query :org-contributions {:login user :orgId org-id})
+   (unwrap [:user :contributionsCollection])))
+
 (comment
 
   (file-query :issue-comments {:login "bendlas"})
@@ -233,3 +150,73 @@
   (file-query :org-contributions {:login "bendlas" :orgId org-id})
 
   )
+
+;;; CLI
+
+(defn exit-error [{:keys [spec type cause msg option] :as data}]
+  (if (= :org.babashka/cli type)
+    (case cause
+      :require
+      (println
+       (format "Missing required argument: %s\n" option))
+      :validate
+      (println
+       (format "%s does not exist!\n" msg))))
+  (System/exit 1))
+
+(def user-spec
+  {:user {:require true
+          :desc "A GitHub user to operate on"}})
+
+(defn entry-point [f & opt-names]
+  (fn [{:as arg :keys [opts]}]
+    (assoc arg :entry-fn
+           #(apply f (map opts opt-names)))))
+
+(declare help-dispatch)
+(def table
+  [{:cmds ["issue-comment-for"]
+    :spec user-spec
+    :error-fn exit-error
+    :fn #(assoc % :entry latest-issue-comment
+                :eargs [(-> % :opts :user)] )
+    :args->opts [:user]}
+   {:cmds ["contributions-for"]
+    :spec user-spec
+    :error-fn exit-error
+    :fn #(assoc % :entry latest-contributions
+                :eargs [(-> % :opts :user)])
+    :args->opts [:user]}
+   {:cmds ["search-for"]
+    :spec user-spec
+    :error-fn exit-error
+    :fn #(assoc % :entry search-for
+                :eargs [(-> % :opts :user)])
+    :args->opts [:user]}
+   {:cmds [] :fn #(assoc % :help true)}])
+
+(defn show-help [{:as arg :keys [dispatch]}]6
+  (if-let [dc (some #(and (= (:cmds %)
+                             dispatch)
+                          %)
+                    table)]
+    (do
+      (apply println (concat (:cmds dc) (:args->opts dc)))
+      (println
+       (cli/format-opts
+        (assoc dc
+               :order (vec (keys (:spec dc)))))))
+    (doseq [{:keys [cmds args->opts]} table]
+      (apply println "" (concat cmds args->opts)))))
+
+(defn -main [& args]
+  (let [{:as arg :keys [opts help entry eargs]} (cli/dispatch table args)]
+    (if (or help (get opts :h) (get opts :help))
+      (show-help arg)
+      (let [res (apply entry eargs)]
+        (.println System/err "------")
+        (json/generate-stream res *out*
+                              {:pretty true})))))
+
+(when (= *file* (System/getProperty "babashka.file"))
+  (apply -main *command-line-args*))
