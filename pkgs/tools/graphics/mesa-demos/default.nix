@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     mesa
+    mesa.osmesa
     wayland
     wayland-protocols
     vulkan-loader
