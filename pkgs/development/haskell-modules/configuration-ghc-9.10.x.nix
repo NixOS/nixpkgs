@@ -68,11 +68,14 @@ self: super: {
   apply-refact = doDistribute self.apply-refact_0_14_0_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
   extensions = doDistribute self.extensions_0_1_0_2;
+  fourmolu = doDistribute self.fourmolu_0_16_2_0;
   hashable = doDistribute self.hashable_1_4_7_0;
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20240511;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   lens = doDistribute self.lens_5_3_2;
   lukko = doDistribute self.lukko_0_1_2;
+  ormolu = doDistribute self.ormolu_0_7_7_0;
   primitive = doDistribute (dontCheck self.primitive_0_9_0_0); # tests introduce a recursive dependency via hspec
   quickcheck-instances = doDistribute self.quickcheck-instances_0_3_31;
   rebase = doDistribute self.rebase_1_21_1;
@@ -83,15 +86,15 @@ self: super: {
   uuid-types = doDistribute self.uuid-types_1_0_6;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
-  ghc-exactprint = doDistribute self.ghc-exactprint_1_10_0_0;
-  ghc-exactprint_1_10_0_0 = addBuildDepends [
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_9_0_0;
+  ghc-exactprint_1_9_0_0 = addBuildDepends [
     self.Diff
     self.extra
     self.ghc-paths
     self.silently
     self.syb
     self.HUnit
-  ] super.ghc-exactprint_1_10_0_0;
+  ] super.ghc-exactprint_1_9_0_0;
 
   #
   # Jailbreaks
@@ -120,4 +123,8 @@ self: super: {
   lukko_0_1_2 = dontCheck super.lukko_0_1_2; # doesn't compile with tasty ==1.4.*
   resolv = dontCheck super.resolv; # doesn't compile with filepath ==1.5.*
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
+
+  haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));
+
+
 }
