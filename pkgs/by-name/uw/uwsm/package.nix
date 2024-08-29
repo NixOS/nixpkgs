@@ -2,13 +2,16 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  makeBinaryWrapper,
   meson,
   ninja,
   scdoc,
   pkg-config,
   nix-update-script,
+  bash,
   dmenu,
   libnotify,
+  newt,
   python3Packages,
   util-linux,
   fumonSupport ? true,
@@ -24,28 +27,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.17.0";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-M2j7l5XTSS2IzaJofAHct1tuAO2A9Ps9mCgAWKEvzoE=";
+    hash = "sha256-/LmSc1AKNZ/VZ2rkUsOvwqpJmPgb6dThTtOu44BriQs=";
   };
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     meson
     ninja
     pkg-config
     scdoc
   ];
 
-  buildInputs = [
-    libnotify
-    util-linux
+  propagatedBuildInputs = [
+    util-linux # waitpid
+    newt # whiptail
+    libnotify # notify
+    bash # sh
+    python
   ] ++ (lib.optionals uuctlSupport [ dmenu ]);
-
-  propagatedBuildInputs = [ python ];
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
@@ -61,11 +66,34 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  postInstall =
+    let
+      wrapperArgs = ''
+        --prefix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}"
+      '';
+    in
+    ''
+      wrapProgram $out/bin/uwsm ${wrapperArgs}
+      ${lib.optionalString uuctlSupport ''
+        wrapProgram $out/bin/uuctl ${wrapperArgs}
+      ''}
+      ${lib.optionalString uwsmAppSupport ''
+        wrapProgram $out/bin/uwsm-app ${wrapperArgs}
+      ''}
+      ${lib.optionalString fumonSupport ''
+        wrapProgram $out/bin/fumon ${wrapperArgs}
+      ''}
+    '';
+
   meta = {
     description = "Universal wayland session manager";
     homepage = "https://github.com/Vladimir-csp/uwsm";
+    mainProgram = "uwsm";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      kai-tub
+    ];
     platforms = lib.platforms.linux;
   };
 })
