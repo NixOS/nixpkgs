@@ -30,11 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-6WPV08CV+rko/tRnsT5GyTGYaJbiIKTvpisfRwizBIo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "django-phonenumber-field[phonenumberslite]" "django-phonenumber-field"
-  '';
-
   build-system = [
     setuptools
     setuptools-scm
@@ -44,7 +39,7 @@ buildPythonPackage rec {
     django
     django-phonenumber-field
     requests
-  ] ++ django-phonenumber-field.optional-dependencies.phonenumbers;
+  ] ++ django-phonenumber-field.optional-dependencies.phonenumberslite;
 
   # require internet connection
   doCheck = false;
