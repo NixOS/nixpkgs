@@ -143,19 +143,19 @@ let
   # When upgrading, you can get these hashes from prefetch.sh. See
   # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
   gpuSrcs = {
-    "cuda12.2-3.9" = fetchurl {
+    "cuda12.4-3.9" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp39-cp39-manylinux2014_x86_64.whl";
       hash = "sha256-d8LIl22gIvmWfoyKfXKElZJXicPQIZxdS4HumhwQGCw=";
     };
-    "cuda12.2-3.10" = fetchurl {
+    "cuda12.4-3.10" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp310-cp310-manylinux2014_x86_64.whl";
       hash = "sha256-PXtWv+UEcMWF8LhWe6Z1UGkf14PG3dkJ0Iop0LiimnQ=";
     };
-    "cuda12.2-3.11" = fetchurl {
+    "cuda12.4-3.11" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp311-cp311-manylinux2014_x86_64.whl";
       hash = "sha256-QO2WSOzmJ48VaCha596mELiOfPsAGLpGctmdzcCHE/o=";
     };
-    "cuda12.2-3.12" = fetchurl {
+    "cuda12.4-3.12" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp312-cp312-manylinux2014_x86_64.whl";
       hash = "sha256-ixWMaIChy4Ammsn23/3cCoala0lFibuUxyUr3tjfFKU=";
     };
