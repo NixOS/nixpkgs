@@ -34,10 +34,10 @@ in
 
       stateDir = mkOption {
         type = types.path;
-        default = "/var/spool/varnish/${config.networking.hostName}";
-        defaultText = literalExpression ''"/var/spool/varnish/''${config.networking.hostName}"'';
+        default = "/run/varnish/${config.networking.hostName}";
+        defaultText = literalExpression ''"/run/varnish/''${config.networking.hostName}"'';
         description = ''
-          Directory holding all state for Varnish to run.
+          Directory holding all state for Varnish to run. Note that this should be a tmpfs in order to avoid performance issues and crashes.
         '';
       };
 
@@ -68,11 +68,11 @@ in
       description = "Varnish";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = ''
+      preStart = mkIf (!(lib.hasPrefix "/run/" cfg.stateDir)) ''
         mkdir -p ${cfg.stateDir}
         chown -R varnish:varnish ${cfg.stateDir}
       '';
-      postStop = ''
+      postStop = mkIf (!(lib.hasPrefix "/run/" cfg.stateDir)) ''
         rm -rf ${cfg.stateDir}
       '';
       serviceConfig = {
@@ -83,6 +83,7 @@ in
         RestartSec = "5s";
         User = "varnish";
         Group = "varnish";
+        RuntimeDirectory = mkIf (lib.hasPrefix "/run/" cfg.stateDir) (lib.removePrefix "/run/" cfg.stateDir);
         AmbientCapabilities = "cap_net_bind_service";
         NoNewPrivileges = true;
         LimitNOFILE = 131072;
