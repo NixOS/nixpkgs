@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation {
   inherit pname;
-  version = "2.4";
+  version = "2.4-unstable-2025-02-17";
 
   src = fetchFromGitHub {
     owner = "tome2";
     repo = "tome2";
-    rev = "2209ab83f31967b6ca0b1ba6ef298bde5a82fbd4";
-    hash = "sha256-bZx+v7soiRqsfpeNZBJmtyVXBSIjujRZ+SypEuctIG8=";
+    rev = "3892fbcb1c2446afcb0c34f59e2a24f78ae672c4";
+    hash = "sha256-E6T5ZnsAzZ4cy2S8WvB0k3W4XGFsiA3TKTCSBqje+tw=";
   };
 
   buildInputs = [
