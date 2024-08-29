@@ -7,7 +7,7 @@ with lib;
 
 let
 
-  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
     [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
@@ -48,7 +48,7 @@ let
     ];
   defaultPackages =
     map
-      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
       defaultPackageNames;
   defaultPackagesText = "[ ${concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
 
