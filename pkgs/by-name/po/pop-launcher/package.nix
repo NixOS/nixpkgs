@@ -18,15 +18,15 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/lib.rs \
-        --replace '/usr/lib/pop-launcher' "$out/share/pop-launcher"
+        --replace-fail '/usr/lib/pop-launcher' "$out/share/pop-launcher"
     substituteInPlace plugins/src/scripts/mod.rs \
-        --replace '/usr/lib/pop-launcher' "$out/share/pop-launcher"
+        --replace-fail '/usr/lib/pop-launcher' "$out/share/pop-launcher"
     substituteInPlace plugins/src/calc/mod.rs \
-        --replace 'Command::new("qalc")' 'Command::new("${libqalculate}/bin/qalc")'
+        --replace-fail 'Command::new("qalc")' 'Command::new("${libqalculate}/bin/qalc")'
     substituteInPlace plugins/src/find/mod.rs \
-        --replace 'spawn("fd")' 'spawn("${fd}/bin/fd")'
+        --replace-fail 'spawn("fd")' 'spawn("${fd}/bin/fd")'
     substituteInPlace plugins/src/terminal/mod.rs \
-        --replace '/usr/bin/gnome-terminal' 'gnome-terminal'
+        --replace-fail '/usr/bin/gnome-terminal' 'gnome-terminal'
   '';
 
   cargoHash = "sha256-cTvrq0fH057UIx/O9u8zHMsg+psMGg1q9klV5OMxtok=";

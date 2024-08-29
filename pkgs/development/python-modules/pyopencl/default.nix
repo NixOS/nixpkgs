@@ -1,34 +1,31 @@
 {
   lib,
   stdenv,
-  darwin,
-  ocl-icd,
-  buildPythonPackage,
   fetchFromGitHub,
+  buildPythonPackage,
 
   # build-system
   cmake,
-  nanobind,
-  ninja,
-  numpy,
-  pathspec,
   scikit-build-core,
-
-  # buildInputs
-  opencl-headers,
-  pybind11,
+  pathspec,
+  ninja,
+  nanobind,
 
   # dependencies
+  darwin,
+  numpy,
+  ocl-icd,
+  opencl-headers,
   platformdirs,
+  pybind11,
   pytools,
 
-  # checks
+  # tests
   pytestCheckHook,
 }:
 
 let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";
@@ -39,7 +36,8 @@ buildPythonPackage rec {
     owner = "inducer";
     repo = "pyopencl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DfZCtTeN1a1KS2qUU6iztba4opAVC/RUCe/hnkqTbII=";
+    fetchSubmodules = true;
+    hash = "sha256-VeaEDYnGfMYf9/WqMIZ9g4KounD48eWF3Romt79RMEQ=";
   };
 
   build-system = [
@@ -66,23 +64,28 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preBuild = ''
+  preCheck = ''
     export HOME=$(mktemp -d)
-    rm -rf pyopencl
+
+    # import from $out
+    rm -r pyopencl
   '';
 
-  # gcc: error: pygpu_language_opencl.cpp: No such file or directory
+  # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
   doCheck = false;
 
-  pythonImportsCheck = [ "pyopencl" ];
+  pythonImportsCheck = [
+    "pyopencl"
+    "pyopencl.array"
+    "pyopencl.cltypes"
+    "pyopencl.elementwise"
+    "pyopencl.tools"
+  ];
 
-  meta = {
-    description = "Python wrapper for OpenCL";
-    homepage = "https://github.com/pyopencl/pyopencl";
+  meta = with lib; {
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
-    # ld: symbol(s) not found for architecture arm64
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    description = "Python wrapper for OpenCL";
+    homepage = "https://github.com/inducer/pyopencl";
+    license = licenses.mit;
   };
 }
