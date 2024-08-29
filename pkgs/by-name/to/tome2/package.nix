@@ -35,8 +35,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "tome2";
     repo = "tome2";
-    rev = "4e6a906c80ff07b75a6acf4ff585b47303805e46";
-    sha256 = "06bddj55y673d7bnzblk8n01z32l6k2rad3bpzr8dmw464hx4wwf";
+    rev = "2209ab83f31967b6ca0b1ba6ef298bde5a82fbd4";
+    hash = "sha256-bZx+v7soiRqsfpeNZBJmtyVXBSIjujRZ+SypEuctIG8=";
   };
 
   buildInputs = [
