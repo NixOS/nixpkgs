@@ -79,6 +79,7 @@ buildPythonPackage rec {
     "pyopencl"
     "pyopencl.array"
     "pyopencl.cltypes"
+    "pyopencl.compyte"
     "pyopencl.elementwise"
     "pyopencl.tools"
   ];
