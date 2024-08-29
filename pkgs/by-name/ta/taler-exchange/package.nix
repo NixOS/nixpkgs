@@ -20,16 +20,13 @@
   texinfo,
 }:
 
-let
-  version = "0.12.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  inherit version;
+  version = "0.12.0";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-yHRRMlqFA2OiFg0rBVzn7130wyVaxKn2dChFTPnVtbs=";
   };
@@ -80,7 +77,7 @@ stdenv.mkDerivation {
 
   checkTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = ''
       Taler is an electronic payment system providing the ability to pay
       anonymously using digital cash.  Taler consists of a network protocol
@@ -93,8 +90,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://taler.net/";
     changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ astro ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = lib.platforms.linux;
   };
-}
+})
