@@ -7916,6 +7916,8 @@ self: super: with self; {
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
+  mktestdocs = callPackage ../development/python-modules/mktestdocs { };
+
   ml-collections = callPackage ../development/python-modules/ml-collections { };
 
   ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
