@@ -38917,8 +38917,6 @@ with pkgs;
 
   jx = callPackage ../applications/networking/cluster/jx { };
 
-  prow = callPackage ../applications/networking/cluster/prow { };
-
   pv-migrate = callPackage ../applications/networking/cluster/pv-migrate { };
 
   tagref = callPackage ../tools/misc/tagref { };
