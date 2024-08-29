@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.prometheus.xmpp-alerts;
   settingsFormat = pkgs.formats.yaml {};
@@ -9,15 +6,15 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "prometheus" "xmpp-alerts" "configuration" ]
       [ "services" "prometheus" "xmpp-alerts" "settings" ])
   ];
 
   options.services.prometheus.xmpp-alerts = {
-    enable = mkEnableOption "XMPP Web hook service for Alertmanager";
+    enable = lib.mkEnableOption "XMPP Web hook service for Alertmanager";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
       default = {};
 
@@ -29,7 +26,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.prometheus-xmpp-alerts = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
