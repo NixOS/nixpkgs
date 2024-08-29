@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   click,
   urllib3,
@@ -13,34 +13,37 @@
   jinja2,
   marshmallow,
   authlib,
-  jwt,
   rich,
   typer,
   pydantic,
   safety-schemas,
   typing-extensions,
   filelock,
+  psutil,
+  git,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.4";
+  version = "3.2.6";
 
   disabled = pythonOlder "3.7";
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-usAgIBbXNqIRgFeWSg45g/og/yVj/RA8rD86we0/6hE=";
+  src = fetchFromGitHub {
+    owner = "pyupio";
+    repo = "safety";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pC9ruEGT3v5C5EpxIN+uZX+6sVYG4+MpXU0gt9yb+IE=";
   };
 
   postPatch = ''
     substituteInPlace safety/safety.py \
-      --replace-fail "telemetry=True" "telemetry=False"
+      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/util.py \
-      --replace-fail "telemetry = True" "telemetry = False"
+      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/cli.py \
       --replace-fail "disable-optional-telemetry', default=False" \
                      "disable-optional-telemetry', default=True"
@@ -66,24 +69,26 @@ buildPythonPackage rec {
     jinja2
     marshmallow
     authlib
-    jwt
     rich
     typer
     pydantic
     safety-schemas
     typing-extensions
     filelock
+    psutil
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    git
+    pytestCheckHook
+  ];
 
   # Disable tests depending on online services
   disabledTests = [
     "test_announcements_if_is_not_tty"
     "test_check_live"
-    "test_check_live_cached"
+    "test_debug_flag"
     "test_get_packages_licenses_without_api_key"
-    "test_validate_with_policy_file_using_invalid_keyword"
     "test_validate_with_basic_policy_file"
   ];
 

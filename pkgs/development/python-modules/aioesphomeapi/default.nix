@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "24.6.1";
+  version = "25.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,13 +35,15 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wvfAkV+EjGytPog3ik7NAC0rW8nkHufenGfapeQr1X0=";
+    hash = "sha256-pQ8RR8e9NVQNBKaQMI60WYANI0rSK5L/H+5e2Tu7zUU=";
   };
 
   build-system = [
     setuptools
     cython
   ];
+
+  pythonRelaxDeps = [ "cryptography" ];
 
   dependencies = [
     aiohappyeyeballs

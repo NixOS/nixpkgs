@@ -136,8 +136,8 @@ let
   libGccJitLibraryPaths = [
     "${lib.getLib libgccjit}/lib/gcc"
     "${lib.getLib stdenv.cc.libc}/lib"
-  ] ++ lib.optionals (stdenv.cc?cc.libgcc) [
-    "${lib.getLib stdenv.cc.cc.libgcc}/lib"
+  ] ++ lib.optionals (stdenv.cc?cc.lib.libgcc) [
+    "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
 
   inherit (if variant == "macport"

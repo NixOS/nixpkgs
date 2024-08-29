@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-L0MbABgUniuI5NXc4ffBUsQRI716W/FiH38bGthpXzI=";
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} LICENSE *.md
+    install -Dm444 -t $out/share/doc/envsubst LICENSE *.md
   '';
 
   meta = with lib; {

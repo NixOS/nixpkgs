@@ -18,20 +18,23 @@
   requests,
   rich,
   semver,
+  setuptools,
   tailer,
 }:
 
 buildPythonPackage rec {
   pname = "localstack";
-  version = "3.5.0";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sd5B4+pvUwNXfP3hsqBkUoHo06YyzUGCUHzc8f77Vx4=";
+    hash = "sha256-MAECVYO6+1JqSZN8PFvHcMWizeYBUnU+7o7l48uwpv4=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     apispec

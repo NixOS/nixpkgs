@@ -53,6 +53,7 @@ buildPythonPackage {
     description = "AWS plugin for NixOps";
     homepage = "https://github.com/NixOS/nixops-aws";
     license = licenses.lgpl3Only;
+    broken = true; # fails with `nose-1.3.7 not supported for interpreter python3.12`
     maintainers = nixops.meta.maintainers;
   };
 }

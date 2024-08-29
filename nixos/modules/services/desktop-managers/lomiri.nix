@@ -24,8 +24,10 @@ in {
         lomiri-calculator-app
         lomiri-camera-app
         lomiri-clock-app
+        lomiri-docviewer-app
         lomiri-download-manager
         lomiri-filemanager-app
+        lomiri-gallery-app
         lomiri-polkit-agent
         lomiri-schemas # exposes some required dbus interfaces
         lomiri-session # wrappers to properly launch the session

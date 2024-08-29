@@ -35,7 +35,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.3.1";
+  version = "8.3.2";
 
   pyproject = true;
 
@@ -43,7 +43,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-cdRlUY9hAJ8US93aiJymzsV27JVPY7lWCK7IUdjDmYE=";
+    hash = "sha256-JlmVnSpbMjMpJBXyRxF/LqJ+0e5fty6BK+sCPJ2Uw9I=";
   };
 
   patches = [
@@ -88,8 +88,7 @@ python.pkgs.buildPythonApplication rec {
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
     substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' "" \
-      --replace-fail "--cov=snapcraft" ""
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -155,6 +154,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       pytest-check
+      pytest-cov-stub
       pytest-mock
       pytest-subprocess
       pytestCheckHook

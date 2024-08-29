@@ -21,16 +21,17 @@
 , pango
 , pkg-config
 , nltk-data
+, xorg
 }:
 
 let
-  version = "2.11.2";
+  version = "2.11.6";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2VmV8Z8TDacc4qZePG87ZgnBydLdm+anpmk8gFKbSLM=";
+    hash = "sha256-RNX+KS2h9zrOK8QzeQWH55pkNPTDW4gic2HLG+XXLRg=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -75,7 +76,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-gbHavMUmsZaRSfBkdrrNpTO0R8zacb8110U8n5Y09oU=";
+    npmDepsHash = "sha256-ML1Yp3JIMbRF6kVu190ReoY7oDUtUfNkHE7dHF6YUAE=";
 
     nativeBuildInputs = [
       pkg-config
@@ -121,6 +122,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
+    xorg.lndir
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -194,9 +196,9 @@ python.pkgs.buildPythonApplication rec {
   in ''
     runHook preInstall
 
-    mkdir -p $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx/static/frontend
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
-    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
+    lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "${pythonPath}" \
@@ -217,6 +219,7 @@ python.pkgs.buildPythonApplication rec {
     daphne
     factory-boy
     imagehash
+    pytest-cov-stub
     pytest-django
     pytest-env
     pytest-httpx
@@ -238,10 +241,6 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-
-    # Disable unneeded code coverage test
-    substituteInPlace src/setup.cfg \
-      --replace-fail "--cov --cov-report=html --cov-report=xml" ""
   '';
 
   disabledTests = [
@@ -259,7 +258,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python path frontend tesseract5;
-    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
+    nltkData = with nltk-data; [ punkt_tab snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 
@@ -269,6 +268,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
+    maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
   };
 }

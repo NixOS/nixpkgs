@@ -2,37 +2,45 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  numpy,
-  treelog,
-  stringly,
   flit-core,
+  appdirs,
   bottombar,
+  numpy,
+  nutils-poly,
+  psutil,
+  stringly,
+  treelog,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "8.7";
-  format = "pyproject";
+  version = "8.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wxouS0FXrdIhm6nTVBuzkwHceJnZ7f7k8nMFxFsZchE=";
+    hash = "sha256-E/y1YXW+0+LfntRQsdIU9rMOmN8mlFwXktD/sViJo3I=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    numpy
-    treelog
-    stringly
+  dependencies = [
+    appdirs
     bottombar
+    numpy
+    nutils-poly
+    psutil
+    stringly
+    treelog
   ];
+
+  pythonRelaxDeps = [ "psutil" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, php
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpactor";
   version = "2024.06.30.0";
 
@@ -15,17 +16,13 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-QcKkkgpWWypapQPawK1hu+6tkF9c5ICPeEPWqCwrUBM=";
   };
 
-  vendorHash = "sha256-onUhRO6d2osf7n5QlYY86eamlCCslQMVltAv1shskgI=";
+  vendorHash = "sha256-Q72EeGeVqjaOZeW8VAB59OY0E/wvL8Ljq/9XC4iK/rg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postPatch = ''
-    patchShebangs bin/phpactor
-  '';
-
   postInstall = ''
     installShellCompletion --cmd phpactor \
-      --bash <($out/bin/phpactor completion bash)
+    --bash <(php $out/bin/phpactor completion bash)
   '';
 
   meta = {

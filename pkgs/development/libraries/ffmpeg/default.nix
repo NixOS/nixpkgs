@@ -18,8 +18,8 @@ let
     );
 
   v4 = {
-    version = "4.4.4";
-    hash = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
+    version = "4.4.5";
+    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
   };
 
   v6 = {
@@ -34,6 +34,9 @@ let
 in
 
 rec {
+  # We keep FFmpeg 4 around for now mainly for a couple of binary
+  # packages (Spotify and REAPER). Please don’t add new source packages
+  # that depend on this version.
   ffmpeg_4 = mkFFmpeg v4 "small";
   ffmpeg_4-headless = mkFFmpeg v4 "headless";
   ffmpeg_4-full = mkFFmpeg v4 "full";

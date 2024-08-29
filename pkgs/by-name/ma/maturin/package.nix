@@ -1,5 +1,4 @@
 {
-  callPackage,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -9,6 +8,7 @@
   testers,
   nix-update-script,
   maturin,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +35,16 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     tests = {
       version = testers.testVersion { package = maturin; };
-      pyo3 = callPackage ./pyo3-test { };
+      pyo3 = python3.pkgs.callPackage ./pyo3-test {
+        format = "pyproject";
+        buildAndTestSubdir = "examples/word-count";
+        preConfigure = "";
+
+        nativeBuildInputs = with rustPlatform; [
+          cargoSetupHook
+          maturinBuildHook
+        ];
+      };
     };
 
     updateScript = nix-update-script { };

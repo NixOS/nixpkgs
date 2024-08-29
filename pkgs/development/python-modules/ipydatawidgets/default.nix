@@ -3,8 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   isPy27,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
   nbval,
   jupyter-packaging,
   ipywidgets,
@@ -37,12 +36,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
     nbval
   ];
-
-  checkPhase = "pytest ipydatawidgets/tests";
 
   meta = {
     description = "Widgets to help facilitate reuse of large datasets across different widgets";

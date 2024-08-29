@@ -6,6 +6,8 @@
 , lapack
 , gfortran
 , enableAMPL ? true, libamplsolver
+, enableMUMPS ? true, mumps, mpi
+, enableSPRAL ? true, spral
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -23,21 +25,30 @@ stdenv.mkDerivation rec {
 
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];
 
-  configureFlags = [
+  configureFlags = lib.optionals enableAMPL [
     "--with-asl-cflags=-I${libamplsolver}/include"
     "--with-asl-lflags=-lamplsolver"
+  ] ++ lib.optionals enableMUMPS [
+    "--with-mumps-cflags=-I${mumps}/include"
+    "--with-mumps-lflags=-ldmumps"
+  ] ++ lib.optionals enableSPRAL [
+    "--with-spral-cflags=-I${spral}/include"
+    "--with-spral-lflags=-lspral"
   ];
 
   nativeBuildInputs = [ pkg-config gfortran ];
-  buildInputs = [ blas lapack ] ++ lib.optionals enableAMPL [ libamplsolver ];
+  buildInputs = [ blas lapack ]
+    ++ lib.optionals enableAMPL [ libamplsolver ]
+    ++ lib.optionals enableMUMPS [ mumps mpi ]
+    ++ lib.optionals enableSPRAL [ spral ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Software package for large-scale nonlinear optimization";
     homepage = "https://projects.coin-or.org/Ipopt";
-    license = licenses.epl10;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

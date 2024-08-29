@@ -136,6 +136,10 @@ let
       libdbusmenu
     ];
 
+    preFixup = ''
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}")
+    '';
+
     postFixup = ''
       makeWrapper $out/opt/Wire/wire-desktop $out/bin/wire-desktop \
         "''${gappsWrapperArgs[@]}"

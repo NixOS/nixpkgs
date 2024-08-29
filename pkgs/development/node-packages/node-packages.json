@@ -1,7 +1,6 @@
 [
   "@angular/cli"
 , "@antfu/ni"
-, "@astrojs/language-server"
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
@@ -116,7 +115,6 @@
 , "he"
 , "hs-airdrop"
 , "ijavascript"
-, "inliner"
 , "imapnotify"
 , "insect"
 , "intelephense"
@@ -151,7 +149,6 @@
 , "multi-file-swagger"
 , "neovim"
 , "nijs"
-, "node-gyp"
 , "node-gyp-build"
 , "node-red"
 , "node2nix"
@@ -197,7 +194,6 @@
 , "svelte-check"
 , "svgo"
 , "tailwindcss"
-, "teck-programmer"
 , "tern"
 , "thelounge-plugin-closepms"
 , "thelounge-plugin-giphy"
@@ -257,5 +253,4 @@
 , "wring"
 , "@yaegassy/coc-nginx"
 , "yalc"
-, "yarn"
 ]

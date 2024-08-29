@@ -1,36 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, doxygen
-, wrapQtAppsHook
-, wrapGAppsHook3
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, deepin-pw-check
-, qtbase
-, qtx11extras
-, qtmultimedia
-, polkit-qt
-, libxcrypt
-, librsvg
-, gtest
-, runtimeShell
-, dbus
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  doxygen,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  deepin-pw-check,
+  qtbase,
+  qtx11extras,
+  qtmultimedia,
+  polkit-qt,
+  libxcrypt,
+  librsvg,
+  gtest,
+  runtimeShell,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-control-center";
-  version = "6.0.55";
+  version = "6.0.59";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-dCUtCS7Vmd7LX34JA70P3dgsmSdRefgO//NERhKlRlE=";
+    hash = "sha256-OniY/B/9319AYYFFPnsUMNrnc0yVGG3rfCLPjgNFyag=";
   };
 
   postPatch = ''
@@ -89,7 +90,10 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Control panel of Deepin Desktop Environment";

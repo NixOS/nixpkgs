@@ -3,7 +3,6 @@
 , fetchPypi
 , alsa-utils
 , gobject-introspection
-, libappindicator-gtk3
 , libnotify
 , wlrctl
 , gtk3
@@ -18,11 +17,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ub/KcNG2jg4revtfOpr0vDyHzw3vCy+bqLeXX4Po+cw=";
+    hash = "sha256-k/CNxLScZDCXiwJhP5qh5HD5VUKlOLaYV8ICYgz6NKI=";
   };
 
   postPatch = ''
@@ -36,7 +35,6 @@ buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
     libnotify
   ];
 

@@ -36,17 +36,8 @@ rec {
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
 
-  # TODO: Move documentation for runCommandWith to the Nixpkgs manual
-  /*
-    Generalized version of the `runCommand`-variants
-    which does customized behavior via a single
-    attribute set passed as the first argument
-    instead of having a lot of variants like
-    `runCommand*`. Additionally it allows changing
-    the used `stdenv` freely and has a more explicit
-    approach to changing the arguments passed to
-    `stdenv.mkDerivation`.
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandWith
   runCommandWith =
     let
       # prevent infinite recursion for the default stdenv value
@@ -887,9 +878,8 @@ rec {
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file"
     {
-      outputHashAlgo = "sha256";
+      outputHash = "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=";
       outputHashMode = "recursive";
-      outputHash = "0ip26j2h11n1kgkz36rl4akv694yz65hr72q4kv4b3lxcbi65b3p";
       preferLocalBuild = true;
     } "touch $out";
 

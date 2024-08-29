@@ -17,23 +17,24 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "12.2.0";
+  version = "12.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "mikeboers";
+    owner = "PyAV-Org";
     repo = "PyAV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yPVAtL71pL/ok3bli+r/IruCrmmhNyv98pr7z3m8sbo=";
+    hash = "sha256-ezeYv55UzNnnYDjrMz5YS5g2pV6U/Fxx3e2bCoPP3eI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    pkg-config
     setuptools
   ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ffmpeg_6-headless ];
 
@@ -93,9 +94,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Pythonic bindings for FFmpeg/Libav";
+    description = "Pythonic bindings for FFmpeg";
     mainProgram = "pyav";
-    homepage = "https://github.com/mikeboers/PyAV/";
+    homepage = "https://github.com/PyAV-Org/PyAV";
     changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd2;
     maintainers = [ ];

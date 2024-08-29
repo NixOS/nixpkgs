@@ -227,19 +227,19 @@ let
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.openssl.org/";
       changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
       description = "Cryptographic library that implements the SSL and TLS protocols";
-      license = licenses.openssl;
+      license = lib.licenses.openssl;
       mainProgram = "openssl";
-      maintainers = with maintainers; [ thillux ] ++ lib.teams.stridtech.members;
+      maintainers = with lib.maintainers; [ thillux ] ++ lib.teams.stridtech.members;
       pkgConfigModules = [
         "libcrypto"
         "libssl"
         "openssl"
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     } // extraMeta;
   });
 
@@ -295,8 +295,8 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 
@@ -320,8 +320,8 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 
@@ -345,8 +345,8 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 }

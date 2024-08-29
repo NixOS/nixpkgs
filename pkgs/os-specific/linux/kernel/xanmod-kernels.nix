@@ -1,23 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, variant, ... } @ args:
 
 let
   # These names are how they are designated in https://xanmod.org.
 
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
-  ltsVariant = {
-    version = "6.6.44";
-    hash = "sha256-kRMx0NVZNZ0xcEq+Bg9NkzHgRCnblbamxLKUbzfp6h0=";
-    variant = "lts";
+  variants = {
+    lts = {
+      version = "6.6.47";
+      hash = "sha256-FF5kOUC3wIGPjf2f9pogaR51L8kdwJIpAmGc1h/LdV8=";
+    };
+    main = {
+      version = "6.10.6";
+      hash = "sha256-QG0rOysVFm+yeYbVX9OHotdq9IvCF+zxceUuG1yytrc=";
+    };
   };
 
-  mainVariant = {
-    version = "6.10.3";
-    hash = "sha256-Nwv7Ms8R6tTBK7oHeRf19S1OFCEJcf/fTXurHs+JI0Y=";
-    variant = "main";
-  };
-
-  xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
+  xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
     inherit version;
     pname = "linux-xanmod";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
@@ -52,7 +51,7 @@ let
       RCU_FANOUT = freeform "64";
       RCU_FANOUT_LEAF = freeform "16";
       RCU_BOOST = yes;
-      RCU_BOOST_DELAY = freeform "100";
+      RCU_BOOST_DELAY = freeform "0";
       RCU_EXP_KTHREAD = yes;
     };
 
@@ -64,7 +63,4 @@ let
     };
   } // (args.argsOverride or { }));
 in
-{
-  lts = xanmodKernelFor ltsVariant;
-  main = xanmodKernelFor mainVariant;
-}
+xanmodKernelFor variants.${variant}

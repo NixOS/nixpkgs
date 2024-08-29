@@ -15,6 +15,8 @@
 , python3
 , python39
 , python311
+, rust-cbindgen
+, rustPlatform
 , rustc
 , which
 , zip
@@ -59,10 +61,14 @@ stdenv.mkDerivation (finalAttrs: rec {
     # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
     # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
     ./add-riscv64-support.patch
-  ] ++ lib.optionals (lib.versionAtLeast version "102") [
+  ] ++ lib.optionals (lib.versionAtLeast version "102" && lib.versionOlder version "128") [
     # use pkg-config at all systems
     ./always-check-for-pkg-config.patch
     ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
+  ] ++ lib.optionals (lib.versionAtLeast version "128") [
+    # rebased version of the above 2 patches
+    ./always-check-for-pkg-config-128.patch
+    ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot-128.patch
   ] ++ lib.optionals (lib.versionAtLeast version "91" && stdenv.hostPlatform.system == "i686-linux") [
     # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
     ./fix-float-i686.patch
@@ -94,6 +100,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     rustc.llvmPackages.llvm # for llvm-objdump
     which
     zip
+  ] ++ lib.optionals (lib.versionAtLeast version "128") [
+    rust-cbindgen
+    rustPlatform.bindgenHook
   ] ++ lib.optionals (lib.versionOlder version "91") [
     autoconf213
     yasm # to buid icu? seems weird
@@ -161,7 +170,9 @@ stdenv.mkDerivation (finalAttrs: rec {
                    "class JS_PUBLIC_API SharedArrayRawBufferRefs {"
   '';
 
-  preConfigure = lib.optionalString (lib.versionOlder version "91") ''
+  preConfigure = lib.optionalString (lib.versionAtLeast version "128") ''
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
+  '' + lib.optionalString (lib.versionOlder version "91") ''
     export CXXFLAGS="-fpermissive"
   '' + ''
     export LIBXUL_DIST=$out

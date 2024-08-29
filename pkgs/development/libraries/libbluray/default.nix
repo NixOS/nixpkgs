@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 
+  env.JAVA_HOME = lib.optionalString withJava jdk17.home; # Fails at runtime without this
   env.NIX_LDFLAGS = lib.optionalString withAACS "-L${libaacs}/lib -laacs"
     + lib.optionalString withBDplus " -L${libbdplus}/lib -lbdplus";
 

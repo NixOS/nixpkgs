@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,10 @@ stdenv.mkDerivation rec {
     mv $out/bin/upnp-listdevices-* $out/bin/upnp-listdevices
     mv $out/bin/external-ip.sh $out/bin/external-ip
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) upnp;
+  };
 
   meta = with lib; {
     homepage = "https://miniupnp.tuxfamily.org/";

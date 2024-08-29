@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "smartcat";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "efugier";
     repo = "smartcat";
     rev = "refs/tags/${version}";
-    hash = "sha256-iCtNNKXo0peGGUaQXKaaYaEo7MAL70PX0BAWPERNmlo=";
+    hash = "sha256-/BJdLHK8rb9QVlkLbRCXIPlHiI2eThAZvhIhJWW43Q4=";
   };
 
-  cargoHash = "sha256-qNl2bI5VqpMfoFc+gZC4XHrNT9pnWseduYSOi5Dzr9M=";
+  cargoHash = "sha256-mMoLFlY4mExG7MCu2uXPzmG3krKIWOLwcnth8gt40eg=";
 
   nativeBuildInputs = [
     pkg-config

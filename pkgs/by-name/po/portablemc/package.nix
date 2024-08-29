@@ -43,7 +43,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "portablemc";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -51,8 +51,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mindstorm38";
     repo = "portablemc";
-    rev = "v${version}";
-    hash = "sha256-jCv4ncXUWbkWlBZr3P1hNeVpdQzY9HtrFz+pmKknL0I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JDosvjbpoDC+xJ15ejcMJd+jA09RLR+whVZblMu+ljk=";
   };
 
   patches = [

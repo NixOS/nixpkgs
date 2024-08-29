@@ -48,11 +48,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdk-pixbuf
-    libaom
     zlib
     libpng
     libjpeg
+  ];
+
+  propagatedBuildInputs = [
     dav1d
+    libaom
     libyuv
   ];
 

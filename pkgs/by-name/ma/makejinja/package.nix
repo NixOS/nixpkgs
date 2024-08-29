@@ -31,12 +31,10 @@ python3Packages.buildPythonApplication rec {
     ++ typed-settings.optional-dependencies.cattrs
     ++ typed-settings.optional-dependencies.click;
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-        --replace-fail "--cov makejinja --cov-report term-missing" ""
-  '';
-
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Generate entire directory structures using Jinja templates with support for external data and custom plugins";

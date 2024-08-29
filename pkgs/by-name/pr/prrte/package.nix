@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prrte";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
     rev = "v${version}";
-    sha256 = "sha256-RDxd4veLGbN+T7xCDnNp2lbOM7mwKKD+SKdPmExr1C8=";
+    sha256 = "sha256-0JHtUpGFdPKmgUk0+MNxTfZIUDz/vY/CV+Mqbmv0JFw=";
     fetchSubmodules = true;
   };
 

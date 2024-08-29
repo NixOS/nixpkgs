@@ -2,7 +2,7 @@
 
 ## Updating the CLI
 
-- Update `version` and `src.hash` in default.nix
+- Update `version` and `src.hash` in package.nix
 - Check out the changes made to the azure-cli [setup.py](https://github.com/Azure/azure-cli/blob/dev/src/azure-cli/setup.py) since the last release
 - Try build the CLI, will likely fail with `ModuleNotFoundError`, for example
   ```

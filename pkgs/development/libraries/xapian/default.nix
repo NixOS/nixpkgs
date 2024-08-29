@@ -7,6 +7,9 @@
 
 # tests
 , mu
+, perlPackages
+, python3
+, xapian-omega
 }:
 
 let
@@ -43,7 +46,9 @@ let
     '';
 
     passthru.tests = {
-      inherit mu;
+      inherit mu xapian-omega;
+      inherit (perlPackages) SearchXapian;
+      python-xapian = python3.pkgs.xapian;
     };
 
     meta = with lib; {
@@ -59,5 +64,5 @@ in {
   # Don't forget to change the hashes in xapian-omega and
   # python3Packages.xapian. They inherit the version from this package, and
   # should always be built with the equivalent xapian version.
-  xapian_1_4 = generic "1.4.25" "sha256-DJnf3YF1cctWibxBKn4CFAeTgxPzjqOnD6O/hkEGCO4=";
+  xapian_1_4 = generic "1.4.26" "sha256-nmp5A4BpZtFs4iC0k3fJyPrWZ8jw/8sjo0QpRiaTY6c=";
 }

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dex";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "jceb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03aapcywnz4kl548cygpi25m8adwbmqlmwgxa66v4156ax9dqs86";
+    sha256 = "sha256-1fgSz4f6W+Dr3mo4vQY8buD2dNC8RBMGrwCTOIzH7rQ=";
   };
 
   strictDeps = true;

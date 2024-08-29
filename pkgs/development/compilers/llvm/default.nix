@@ -7,6 +7,7 @@
   stdenv,
   gcc12Stdenv,
   pkgs,
+  recurseIntoAttrs,
   # This is the default binutils, but with *this* version of LLD rather
   # than the default LLVM version's, if LLD is the choice. We use these for
   # the `useLLVM` bootstrapping below.
@@ -22,11 +23,11 @@ let
     "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
-    "19.1.0-rc1".officialRelease.sha256 = "sha256-uaM+CKE+l+ksLtfhVMTLXbLlu+lUZScf+ucBcRENSDM=";
+    "19.1.0-rc3".officialRelease.sha256 = "sha256-SRonSpXt1pH6Xk+rQZk9mrfMdvYIvOImwUfMUu3sBgs=";
     "20.0.0-git".gitRelease = {
-      rev = "5f7e921fe3b5402127868faf5855a835cf238196";
-      rev-version = "20.0.0-unstable-2024-08-04";
-      sha256 = "sha256-gW5yPHqmM3sbL9KCt7oXHG8I1ECdKAxNlSZkubve60A=";
+      rev = "2579b411a13799534c8b8a22246134b88ba7785d";
+      rev-version = "20.0.0-unstable-2024-08-25";
+      sha256 = "sha256-/Gymj9bEoaAAH5kWPRflD+lBWyPjWBpYGnQsP5vAlsk=";
     };
   } // llvmVersions;
 
@@ -51,27 +52,29 @@ let
         args.name or (if (gitRelease != null) then "git" else lib.versions.major release_version);
     in
     lib.nameValuePair attrName (
-      callPackage ./common {
-        inherit (stdenvAdapters) overrideCC;
-        buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
-        targetLlvmLibraries =
-          targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
-        targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
-        stdenv =
-          if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
-            gcc12Stdenv
-          else
-            stdenv; # does not build with gcc13
-        inherit bootBintoolsNoLibc bootBintools;
-        inherit
-          officialRelease
-          gitRelease
-          monorepoSrc
-          version
-          ;
-      }
+      recurseIntoAttrs (
+        callPackage ./common {
+          inherit (stdenvAdapters) overrideCC;
+          buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
+          targetLlvmLibraries =
+            targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
+          targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
+          stdenv =
+            if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
+              gcc12Stdenv
+            else
+              stdenv; # does not build with gcc13
+          inherit bootBintoolsNoLibc bootBintools;
+          inherit
+            officialRelease
+            gitRelease
+            monorepoSrc
+            version
+            ;
+        }
+      )
     );
 
   llvmPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
 in
-llvmPackages
+llvmPackages // { inherit mkPackage; }

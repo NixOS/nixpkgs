@@ -5,7 +5,7 @@
 , eigen
 , fetchFromGitHub
 , fmt
-, freecad  # for passthru.tests
+, freecad
 , gfortran
 , gts
 , hdf5
@@ -30,11 +30,10 @@
 , wrapGAppsHook3
 , xercesc
 , zlib
+, withWayland ? false
 }:
-
 let
   opencascade-occt = opencascade-occt_7_6;
-  boost = python311Packages.boost;
   inherit (libsForQt5)
     qtbase
     qttools
@@ -42,8 +41,11 @@ let
     qtx11extras
     qtxmlpatterns
     soqt
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
+  inherit (libsForQt5.qt5) qtwayland;
   inherit (python311Packages)
+    boost
     gitpython
     matplotlib
     pivy
@@ -54,7 +56,8 @@ let
     python
     pyyaml
     scipy
-    shiboken2;
+    shiboken2
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
@@ -77,45 +80,48 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gitpython # for addon manager
-    boost
-    coin3d
-    doxygen
-    eigen
-    fmt
-    gts
-    hdf5
-    libGLU
-    libXmu
-    libf2c
-    matplotlib
-    medfile
-    mpi
-    ode
-    opencascade-occt
-    pivy
-    ply # for openSCAD file support
-    pycollada
-    pyside2
-    pyside2-tools
-    python
-    pyyaml # (at least for) PyrateWorkbench
-    qtbase
-    qttools
-    qtwebengine
-    qtxmlpatterns
-    scipy
-    shiboken2
-    soqt
-    swig
-    vtk
-    xercesc
-    zlib
-  ] ++ lib.optionals spaceNavSupport [
-    libspnav
-    qtx11extras
-  ];
+  buildInputs =
+    [
+      gitpython # for addon manager
+      boost
+      coin3d
+      doxygen
+      eigen
+      fmt
+      gts
+      hdf5
+      libGLU
+      libXmu
+      libf2c
+      matplotlib
+      medfile
+      mpi
+      ode
+      opencascade-occt
+      pivy
+      ply # for openSCAD file support
+      pycollada
+      pyside2
+      pyside2-tools
+      python
+      pyyaml # (at least for) PyrateWorkbench
+      qtbase
+      qttools
+      qtwayland
+      qtwebengine
+      qtxmlpatterns
+      scipy
+      shiboken2
+      soqt
+      swig
+      vtk
+      xercesc
+      zlib
+    ]
+    ++ lib.optionals spaceNavSupport [
+      libspnav
+      qtx11extras
+    ];
 
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
@@ -127,7 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_QT5=ON"
     "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
     "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
-    ("-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
+    (
+      "-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
       + ";${pyside2}/include/PySide2/QtCore"
       + ";${pyside2}/include/PySide2/QtWidgets"
       + ";${pyside2}/include/PySide2/QtGui"
@@ -144,11 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
-  qtWrapperArgs = [
-    "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-    "--prefix PATH : ${libredwg}/bin"
-    "--set QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs =
+    [
+      "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+      "--prefix PATH : ${libredwg}/bin"
+    ]
+    ++ lib.optionals (!withWayland) [ "--set QT_QPA_PLATFORM xcb" ];
 
   postFixup = ''
     mv $out/share/doc $out
@@ -164,11 +172,13 @@ stdenv.mkDerivation (finalAttrs: {
     # parse argv. This should catch if that ever regresses and also ensures
     # that PYTHONPATH is still respected enough for the FreeCAD console to
     # successfully run and check that it was included in `sys.path`.
-    python-path = runCommand "freecad-test-console" {
-      nativeBuildInputs = [ freecad ];
-    } ''
-      HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
-    '';
+    python-path =
+      runCommand "freecad-test-console"
+        {
+          nativeBuildInputs = [ freecad ];
+        } ''
+        HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
+      '';
   };
 
   meta = {

@@ -1,12 +1,5 @@
 `/usr/bin/env` is not available.
 
---- old/test/common/assertSnapshot.js
-+++ new/test/common/assertSnapshot.js
-@@ -81,2 +81,2 @@ async function spawnAndAssert(filename, transform = (x) => x, { tty = false, ...
--  const executable = tty ? 'tools/pseudo-tty.py' : process.execPath;
--  const args = tty ? [process.execPath, ...flags, filename] : [...flags, filename];
-+  const executable = tty ? 'python3' : process.execPath;
-+  const args = tty ? ['tools/pseudo-tty.py', process.execPath, ...flags, filename] : [...flags, filename];
 --- old/test/parallel/test-child-process-default-options.js
 +++ new/test/parallel/test-child-process-default-options.js
 @@ -35 +35 @@ if (isWindows) {

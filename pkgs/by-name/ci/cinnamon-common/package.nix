@@ -32,7 +32,7 @@
 , wrapGAppsHook3
 , libxml2
 , gtk-doc
-, gnome
+, caribou
 , python3
 , keybinder3
 , cairo
@@ -71,13 +71,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "6.2.8";
+  version = "6.2.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-d1r+ouomcmiqTMHL/iHNL1kUJZvy35e2Qpv5j3bHDAA=";
+    hash = "sha256-CW87zZogjdTOCp6mx5ctV6T9YQVQGo3yw0lPTkiCNkE=";
   };
 
   patches = [
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
 
     # bindings
     cairo
-    gnome.caribou
+    caribou
     keybinder3
     upower
     xapp
@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # https://github.com/NixOS/nixpkgs/issues/101881
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+      --prefix XDG_DATA_DIRS : "${caribou}/share"
     )
 
     buildPythonPath "$out ${python3.pkgs.python-xapp}"

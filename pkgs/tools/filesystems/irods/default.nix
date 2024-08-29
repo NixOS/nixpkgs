@@ -5,8 +5,7 @@
 let
   avro-cpp = avro-cpp_llvm;
   nanodbc = nanodbc_llvm;
-in
-let
+
   common = import ./common.nix {
     inherit lib stdenv bzip2 zlib autoconf automake cmake
       help2man texinfo libtool cppzmq libarchive

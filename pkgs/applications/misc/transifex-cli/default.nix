@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "transifex-cli";
-  version = "1.6.14";
+  version = "1.6.16";
 
   src = fetchFromGitHub {
     owner = "transifex";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-yKkRoeq0hPYMjZcoL9h3l8FimnCjjVSlk9whliEnkzE=";
+    sha256 = "sha256-4TYuWNpw1tc3igKe4ld6pN35W070fekCaxpHGb/ekuY=";
   };
 
-  vendorHash = "sha256-rcimaHr3fFeHSjZXw1w23cKISCT+9t8SgtPnY/uYGAU=";
+  vendorHash = "sha256-3gi2ysIb5256CdmtX38oIfeDwNCQojK+YB9aEm8H01Q=";
 
   ldflags = [
     "-s" "-w" "-X 'github.com/transifex/cli/internal/txlib.Version=${version}'"

@@ -6,12 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mlxbf-bootimages";
-  version = "4.0.3-12704";
+  version = "4.8.0-13249";
 
   src = fetchurl {
-    url = let mainVersion = builtins.elemAt (lib.splitString "-" version) 0; in
-      "https://linux.mellanox.com/public/repo/bluefield/${mainVersion}/bootimages/prod/${pname}-signed_${version}_arm64.deb";
-    hash = "sha256-e13XZhxf41240Qu+hh2a9+KIvZCL+8k5JyZrpJCHmI8=";
+    url = "https://linux.mellanox.com/public/repo/bluefield/${version}/bootimages/prod/${pname}-signed_${version}_arm64.deb";
+    hash = "sha256-VwbngA2UpHtvhCmL21qrebVSNG6/4PbkhnVAmERpek0=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     # they are unfree. See https://github.com/Mellanox/bootimages/issues/3
     license = licenses.unfree;
     platforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ nikstur ];
+    maintainers = with maintainers; [ nikstur thillux ];
   };
 }
 

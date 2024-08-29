@@ -12,6 +12,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  dwd = callPackage ./dwd { };
+
   elevenlabs_tts = callPackage ./elevenlabs_tts {};
 
   emporia_vue = callPackage ./emporia_vue {};
@@ -56,9 +58,15 @@
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
+  solis-sensor = callPackage ./solis-sensor {};
+
+  somweb = callPackage ./somweb {};
+
   spook = callPackage ./spook {};
 
   tuya_local = callPackage ./tuya_local {};
+
+  volkswagen_we_connect_id = callPackage ./volkswagen_we_connect_id { };
 
   volkswagencarnet = callPackage ./volkswagencarnet { };
 

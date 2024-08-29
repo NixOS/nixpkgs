@@ -40,16 +40,16 @@
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.7.1";
+    version = "2024.8.1";
     pyproject = true;
 
-    disabled = pythonOlder "3.9";
+    disabled = pythonOlder "3.10";
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
       rev = "refs/tags/${version}";
-      hash = "sha256-aHira3GKtw674VQ5bc5lFEWyuLf4ZWexKQP6eaGwbzg=";
+      hash = "sha256-ztB5T8VFc1WoQB7lWQlonAyq7duqft9OE5FYvmjZd48=";
     };
 
     build-system = [ setuptools ];

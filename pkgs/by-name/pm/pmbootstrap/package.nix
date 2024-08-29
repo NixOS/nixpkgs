@@ -26,9 +26,12 @@ python3Packages.buildPythonApplication rec {
   # Tests depend on sudo
   doCheck = stdenv.isLinux;
 
+  build-system = [
+    python3Packages.setuptools
+  ];
+
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
-    python3Packages.setuptools
     git
     openssl
     ps

@@ -17,14 +17,17 @@ let
 
   pkgs = import nixpkgs {
     inherit system;
-    config = {};
-    overlays = [];
+    config = { };
+    overlays = [ ];
   };
 in
 pkgs.mkShellNoCC {
-  packages = [
+  packages = with pkgs; [
     # The default formatter for Nix code
-    # https://github.com/NixOS/nixfmt
-    pkgs.nixfmt-rfc-style
+    # See https://github.com/NixOS/nixfmt
+    nixfmt-rfc-style
+    # Helper to review Nixpkgs PRs
+    # See CONTRIBUTING.md
+    nixpkgs-review
   ];
 }

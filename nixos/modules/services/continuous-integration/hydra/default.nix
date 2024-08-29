@@ -97,7 +97,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "hydra_unstable" { };
+      package = mkPackageOption pkgs "hydra" { };
 
       hydraURL = mkOption {
         type = types.str;
@@ -466,6 +466,7 @@ in
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" ];
         restartTriggers = [ hydraConf ];
+        path = [ pkgs.zstd ];
         environment = env // {
           PGPASSFILE = "${baseDir}/pgpass-queue-runner";
           HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-notify";
@@ -500,10 +501,15 @@ in
     # logs automatically after a step finishes, but this doesn't work
     # if the queue runner is stopped prematurely.
     systemd.services.hydra-compress-logs =
-      { path = [ pkgs.bzip2 ];
+      { path = [ pkgs.bzip2 pkgs.zstd ];
         script =
           ''
-            find /var/lib/hydra/build-logs -type f -name "*.drv" -mtime +3 -size +0c | xargs -r bzip2 -v -f
+            set -eou pipefail
+            compression=$(sed -nr 's/compress_build_logs_compression = ()/\1/p' ${baseDir}/hydra.conf)
+            if [[ $compression == zstd ]]; then
+              compression="zstd --rm"
+            fi
+            find ${baseDir}/build-logs -type f -name "*.drv" -mtime +3 -size +0c | xargs -r $compression --force --quiet
           '';
         startAt = "Sun 01:45";
       };

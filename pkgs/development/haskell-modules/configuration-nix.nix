@@ -156,16 +156,16 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      installHledgerExtraFiles = overrideCabal (drv: {
+      installHledgerExtraFiles = manpagePathPrefix: overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
         ];
         postInstall = ''
           for i in $(seq 1 9); do
-            installManPage *.$i
+            installManPage ./${manpagePathPrefix}/*.$i
           done
 
-          install -v -Dm644 *.info* -t "$out/share/info/"
+          install -v -Dm644 ./${manpagePathPrefix}/*.info* -t "$out/share/info/"
 
           if [ -e shell-completion/hledger-completion.bash ]; then
             installShellCompletion --name hledger shell-completion/hledger-completion.bash
@@ -181,25 +181,31 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerExtraFiles super.hledger;
-      hledger-web = installHledgerExtraFiles (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerExtraFiles super.hledger-ui;
+      hledger = installHledgerExtraFiles "" super.hledger;
+      hledger-web = installHledgerExtraFiles "" (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerExtraFiles "" super.hledger-ui;
 
-      hledger_1_30_1 = installHledgerExtraFiles
-        (doDistribute (super.hledger_1_30_1.override {
-          hledger-lib = self.hledger-lib_1_30;
+      hledger_1_34 = installHledgerExtraFiles "embeddedfiles"
+        (doDistribute (super.hledger_1_34.override {
+          hledger-lib = self.hledger-lib_1_34;
         }));
-      hledger-web_1_30 = installHledgerExtraFiles (hledgerWebTestFix
-        (doDistribute (super.hledger-web_1_30.override {
-          hledger = self.hledger_1_30_1;
-          hledger-lib = self.hledger-lib_1_30;
+      hledger-ui_1_34 = installHledgerExtraFiles ""
+        (doDistribute (super.hledger-ui_1_34.override {
+          hledger = self.hledger_1_34;
+          hledger-lib = self.hledger-lib_1_34;
+        }));
+      hledger-web_1_34 = installHledgerExtraFiles "" (hledgerWebTestFix
+        (doDistribute (super.hledger-web_1_34.override {
+          hledger = self.hledger_1_34;
+          hledger-lib = self.hledger-lib_1_34;
         })));
     }
   ) hledger
     hledger-web
     hledger-ui
-    hledger_1_30_1
-    hledger-web_1_30
+    hledger_1_34
+    hledger-ui_1_34
+    hledger-web_1_34
     ;
 
   cufft = overrideCabal (drv: {
@@ -308,7 +314,7 @@ self: super: builtins.intersectAttrs super {
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
   # Doesn't declare boost dependency
-  nix-serve-ng = overrideSrc {
+  nix-serve-ng = (overrideSrc {
     version = "1.0.0-unstable-2023-12-18";
     src = pkgs.fetchFromGitHub {
       repo = "nix-serve-ng";
@@ -316,7 +322,9 @@ self: super: builtins.intersectAttrs super {
       rev = "21e65cb4c62b5c9e3acc11c3c5e8197248fa46a4";
       hash = "sha256-qseX+/8drgwxOb1I3LKqBYMkmyeI5d5gmHqbZccR660=";
     };
-  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
+  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng)).override {
+      nix = pkgs.nixVersions.nix_2_18;
+  };
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -677,9 +685,6 @@ self: super: builtins.intersectAttrs super {
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
-  # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend pkgs.opencv3 super.opencv-extra;
-
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
@@ -843,6 +848,7 @@ self: super: builtins.intersectAttrs super {
   http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
   pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
+  pantry_0_10_0 = dontCheck super.pantry_0_10_0;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -1345,6 +1351,9 @@ self: super: builtins.intersectAttrs super {
 
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
 
+  feedback = self.generateOptparseApplicativeCompletions [ "feedback" ]
+    (enableSeparateBinOutput super.feedback);
+
   # Sydtest has a brittle test suite that will only work with the exact
   # versions that it ships with.
   sydtest = dontCheck super.sydtest;
@@ -1408,4 +1417,13 @@ self: super: builtins.intersectAttrs super {
   kmonad = enableSeparateBinOutput super.kmonad;
 
   xmobar = enableSeparateBinOutput super.xmobar;
+
+  # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
+  doctest = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [
+      # These tests require cabal-install
+      "--skip=/Cabal.Options"
+      "--skip=/Cabal.Paths/paths"
+    ];
+  }) super.doctest;
 }

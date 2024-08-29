@@ -173,14 +173,6 @@ let
           export HOME=$TMPDIR
         '';
 
-        # Work around useSystemCoreFoundationFramework hook causing issues with the ld64 upgrade.
-        # This will be fixed on staging in https://github.com/NixOS/nixpkgs/pull/329529
-        preBuild =
-          if lib.versionAtLeast ver.majMin "3.3" && stdenv.isDarwin && stdenv.isx86_64 then
-            "unset NIX_COREFOUNDATION_RPATH"
-          else
-            null;
-
         # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
         # mostly TZ- and patch-related tests
         # TZ- failures are caused by nix sandboxing, I didn't investigate others

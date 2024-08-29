@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "libpipeline";
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
+
+  # necessary to build on FreeBSD native pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   meta = with lib; {
     homepage = "http://libpipeline.nongnu.org";

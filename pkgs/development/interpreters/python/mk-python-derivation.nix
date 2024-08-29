@@ -22,7 +22,6 @@
 , pythonRemoveTestsDirHook
 , pythonRuntimeDepsCheckHook
 , setuptoolsBuildHook
-, setuptoolsCheckHook
 , wheelUnpackHook
 , eggUnpackHook
 , eggBuildHook
@@ -313,13 +312,7 @@ let
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
-    nativeInstallCheckInputs = [
-    ] ++ optionals (format' == "setuptools") [
-      # Longer-term we should get rid of this and require
-      # users of this function to set the `installCheckPhase` or
-      # pass in a hook that sets it.
-      setuptoolsCheckHook
-    ] ++ nativeCheckInputs;
+    nativeInstallCheckInputs = nativeCheckInputs;
     installCheckInputs = checkInputs;
 
     postFixup = optionalString (!dontWrapPythonPrograms) ''

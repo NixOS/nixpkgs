@@ -159,10 +159,10 @@ in
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates";
+      description = "Attribute set of feature gates.";
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
+      type = attrsOf bool;
     };
 
     kubeletClientCaFile = mkOption {
@@ -349,8 +349,8 @@ in
                 "--etcd-certfile=${cfg.etcd.certFile}"} \
               ${optionalString (cfg.etcd.keyFile != null)
                 "--etcd-keyfile=${cfg.etcd.keyFile}"} \
-              ${optionalString (cfg.featureGates != [])
-                "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
+              ${optionalString (cfg.featureGates != {})
+                "--feature-gates=${(concatStringsSep "," (builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates)))}"} \
               ${optionalString (cfg.basicAuthFile != null)
                 "--basic-auth-file=${cfg.basicAuthFile}"} \
               ${optionalString (cfg.kubeletClientCaFile != null)

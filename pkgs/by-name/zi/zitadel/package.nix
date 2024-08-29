@@ -15,14 +15,14 @@
 }:
 
 let
-  version = "2.42.10";
+  version = "2.58.3";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-Uv0iEIFkTdBAi0WDBQHf0ATs4L2FOU4NmiE9p1MHSa0=";
+    hash = "sha256-RXcJwGO8OQ38lbuy2uLTSkh6yUbyqY42FpwgMXC3g6c=";
   };
-  goModulesHash = "sha256-thd1bhbPVedYd+Yq1IYYUJFr66AWRTzA3DceCXFTEQo=";
+  goModulesHash = "sha256-gp17dP67HX7Tx3Gq+kEu9xCYkfs/rGpqLFiKT7cKlrc=";
 
   buildZitadelProtocGen = name:
     buildGoModule {
@@ -64,11 +64,10 @@ let
       src = zitadelRepo;
       patches = [ ./console-use-local-protobuf-plugins.patch ];
 
-      nativeBuildInputs = nativeBuildInputs ++ [ buf ];
+      nativeBuildInputs = nativeBuildInputs ++ [ buf cacert ];
 
       buildPhase = ''
         cd ${workDir}
-        export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
         HOME=$TMPDIR buf generate ${bufArgs}
       '';
 
@@ -92,7 +91,7 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-ntIKudNFBs7kHjK7cfzbOfDCA6J8uvJRUbCTa6afK/I=";
+    hash = "sha256-KRf11PNn7LtVFjG3NYUtPEJtLNbnxfzR4B69US07B3k=";
   };
 in
 buildGoModule rec {
@@ -148,6 +147,6 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
     sourceProvenance = [ sourceTypes.fromSource ];
-    maintainers = [ ];
+    maintainers = [ maintainers.nrabulinski ];
   };
 }

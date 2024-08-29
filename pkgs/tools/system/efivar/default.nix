@@ -2,41 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "efivar";
-  version = "38";
+  version = "39";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchFromGitHub {
-    owner = "rhinstaller";
+    owner = "rhboot";
     repo = "efivar";
     rev = version;
-    hash = "sha256-A38BKGMK3Vo+85wzgxmzTjzZXtpcY9OpbZaONWnMYNk=";
+    hash = "sha256-s/1k5a3n33iLmSpKQT5u08xoj8ypjf2Vzln88OBrqf0=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/rhboot/efivar/commit/15622b7e5761f3dde3f0e42081380b2b41639a48.patch";
-      sha256 = "sha256-SjZXj0hA2eQu2MfBoNjFPtd2DMYadtL7ZqwjKSf2cmI=";
-    })
-    # src/Makefile: build util.c separately for makeguids
-    # util.c needs to be built twice when cross-compiling
-    (fetchpatch {
-      url = "https://github.com/rhboot/efivar/commit/ca48d3964d26f5e3b38d73655f19b1836b16bd2d.patch";
-      hash = "sha256-DkNFIK4i7Eypyf2UeK7qHW36N2FSVRJ2rnOVLriWi5c=";
-    })
-    (fetchpatch {
-      name = "musl-backport.patch";
-      url = "https://github.com/rhboot/efivar/commit/cece3ffd5be2f8641eb694513f2b73e5eb97ffd3.patch";
-      sha256 = "7/E0gboU0A45/BY6jGPLuvds6qKtNjzpgKgdNTaVaZQ=";
-    })
-
-    # Fix build against gcc-13: https://github.com/rhboot/efivar/pull/242
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/rhboot/efivar/commit/52fece47d4f3ebd588bd85598bfc7a0142365f7e.patch";
-      hash = "sha256-tOmxbY7kD6kzbBZ2RhQ5gCCpHtu+2gRNa7VUAWdCKu0=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config mandoc ];
   buildInputs = [ popt ];

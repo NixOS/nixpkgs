@@ -7,13 +7,13 @@
 
 tcl.mkTclDerivation rec {
   pname = "tclcurl";
-  version = "7.22.0";
+  version = "7.22.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclcurl-fa";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FQSzujHuP7vGJ51sdXh+31gRKqn98dV1kIqMKSoVB0M=";
+    hash = "sha256-XQuP+SiqvGX3ckBShUxsGBADjV3QdvYpU4hW6LMbMMQ=";
   };
 
   buildInputs = [ curl ];

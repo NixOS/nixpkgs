@@ -8,7 +8,6 @@
 , libssh2
 , openssl
 , pcre
-, http-parser
 , libiconv
 , Security
 , staticBuild ? stdenv.hostPlatform.isStatic
@@ -16,11 +15,14 @@
 , libgit2-glib
 , python3Packages
 , gitstatus
+, llhttp
+, withGssapi ? false
+, krb5
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.7.2";
+  version = "1.8.1";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = ["lib" "dev" "out"];
@@ -28,13 +30,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
-    rev = "v${version}";
-    hash = "sha256-fVPY/byE2/rxmv/bUykcAbmUFMlF3UZogVuTzjOXJUU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-J2rCxTecyLbbDdsyBWn9w7r3pbKRMkI9E7RvRgAqBdY=";
   };
 
   cmakeFlags = [
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
+    (lib.cmakeBool "USE_GSSAPI" withGssapi)
     "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
   ] ++ lib.optionals stdenv.hostPlatform.isWindows [
     "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
@@ -44,7 +47,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
 
-  buildInputs = [ zlib libssh2 openssl pcre http-parser ]
+  buildInputs = [ zlib libssh2 openssl pcre llhttp ]
+    ++ lib.optional withGssapi krb5
     ++ lib.optional stdenv.isDarwin Security;
 
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
@@ -66,7 +70,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  passthru.tests = {
+  passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
     inherit gitstatus;
@@ -80,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
-}
+})

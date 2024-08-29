@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
 
   # build-system
   flit-core,
@@ -26,6 +27,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-QTLSEjdJtDH4GCamnKHN5pEjW41rRtAMXxyZZMM5K3w=";
   };
+
+  patches = [
+    # fix build with python 3.12
+    # https://github.com/florisla/stm32loader/pull/79
+    (fetchpatch2 {
+      url = "https://github.com/florisla/stm32loader/commit/96f59b2984b0d0371b2da0360d6e8d94d0b39a68.patch?full_index=1";
+      hash = "sha256-JUEjQWOnzeMA1OELS214OR7+MYUkCKN5lxwsmRoFbfo=";
+    })
+  ];
 
   nativeBuildInputs = [ flit-core ];
 

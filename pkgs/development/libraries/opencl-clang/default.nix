@@ -53,14 +53,14 @@ let
     };
   };
 
-  version = "unstable-2024-06-06";
+  version = "14.0.0-unstable-2024-07-09";
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "intel";
       repo = "opencl-clang";
       # https://github.com/intel/opencl-clang/compare/ocl-open-140
-      rev = "66a54cbef6726c4e791986779a60d7a45b09c9c9";
-      hash = "sha256-vM2IlF/e3b2GIXMaHYre+iQn4WKsFIU3x90Ee5KVHtI=";
+      rev = "470cf0018e1ef6fc92eda1356f5f31f7da452abc";
+      hash = "sha256-Ja+vJ317HI3Nh45kcAMhyLVTIqyy6pE5KAsKs4ou9J8=";
     };
 
     patches = [

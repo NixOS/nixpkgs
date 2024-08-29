@@ -3,6 +3,7 @@
 , hash
 , npmDepsHash
 , vendorHash
+, nixUpdateExtraArgs ? [ ]
 }:
 
 { bash
@@ -16,8 +17,6 @@
 , nix-update-script
 , nixosTests
 , openssh
-, pam
-, pamSupport ? true
 , sqliteSupport ? true
 , xorg
 , runCommand
@@ -67,8 +66,6 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  buildInputs = lib.optional pamSupport pam;
-
   nativeCheckInputs = [
     git
     openssh
@@ -82,8 +79,7 @@ buildGoModule rec {
     substituteInPlace modules/setting/server.go --subst-var data
   '';
 
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
 
   ldflags = [
     "-s"
@@ -114,7 +110,6 @@ buildGoModule rec {
       skippedTests = [
         "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
         "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
-        "TestPamAuth" # we don't have PAM set up in the build sandbox
         "TestPassword" # requires network: api.pwnedpasswords.com
         "TestCaptcha" # requires network: hcaptcha.com
         "TestDNSUpdate" # requires network: release.forgejo.org
@@ -154,7 +149,7 @@ buildGoModule rec {
     '';
 
     tests = if lts then nixosTests.forgejo-lts else nixosTests.forgejo;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = nixUpdateExtraArgs; };
   };
 
   meta = {

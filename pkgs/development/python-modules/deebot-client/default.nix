@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "8.2.0";
+  version = "8.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -30,13 +30,15 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-foIRWZcv+i/UZMMr1LjNiUpvJVD9UOWHPKHpcGHXfxQ=";
+    hash = "sha256-a6gFy+w+5FEs4YwS2Pfcyiv0grLcSzFpxxbcZ0AYIL4=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
   ];
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   dependencies = [
     aiohttp

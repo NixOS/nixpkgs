@@ -115,7 +115,7 @@ let
       license = licenses.asl20;
       homepage = "https://subversion.apache.org/";
       mainProgram = "svn";
-      maintainers = with maintainers; [ eelco lovek323 ];
+      maintainers = with maintainers; [ lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
 

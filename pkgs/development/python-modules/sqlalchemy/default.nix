@@ -41,8 +41,8 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.31";
-  format = "pyproject";
+  version = "2.0.32";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -50,11 +50,14 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-+bF7pdz8bxkR+mbrOI773qLoZVzBHpzKOENWPEuVFt8=";
+    hash = "sha256-B0T4GsTIis2ZZykRnNOFfhyfW4qU/waXeP0BS5+G1IM=";
   };
 
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=61.0,<69.3" "setuptools"
   '';
 
   nativeBuildInputs = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];

@@ -6,7 +6,6 @@
 , phpPackage
 , autoconf
 , pkg-config
-, aspell
 , bzip2
 , curl
 , cyrus_sasl
@@ -58,6 +57,11 @@ in {
   };
 
   inherit (builders.v1) buildComposerProject buildComposerWithPlugin composerHooks mkComposerRepository;
+
+  # Next version of the builder
+  buildComposerProject2 = builders.v2.buildComposerProject;
+  composerHooks2 = builders.v2.composerHooks;
+  mkComposerVendor = builders.v2.mkComposerVendor;
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -266,6 +270,9 @@ in {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
+    # Shadowed by built-in version on PHP < 8.3.
+    imap = callPackage ../development/php-packages/imap { };
+
     inotify = callPackage ../development/php-packages/inotify { };
 
     ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
@@ -323,6 +330,8 @@ in {
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
+
+    pspell = callPackage ../development/php-packages/pspell { };
 
     rdkafka = callPackage ../development/php-packages/rdkafka { };
 
@@ -383,7 +392,7 @@ in {
             "--enable-dom"
           ];
           # Add a PHP lower version bound constraint to avoid applying the patch on older PHP versions.
-          patches = lib.optionals ((lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.2.7") || (lib.versions.majorMinor php.version == "8.1" && lib.versionAtLeast php.version "8.1.27")) [
+          patches = lib.optionals ((lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.2.7") || (lib.versions.majorMinor php.version == "8.1")) [
             # Fix tests with libxml 2.12
             # Part of 8.3.1RC1+, 8.2.14RC1+
             (fetchpatch {
@@ -392,6 +401,14 @@ in {
               excludes = [
                 "NEWS"
               ];
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
             # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
@@ -452,6 +469,8 @@ in {
           name = "imap";
           buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
           configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
+          # Using version from PECL on new PHP versions.
+          enable = lib.versionOlder php.version "8.3";
         }
         {
           name = "intl";
@@ -487,7 +506,7 @@ in {
           # The configure script doesn't correctly add library link
           # flags, so we add them to the variable used by the Makefile
           # when linking.
-          MYSQLND_SHARED_LIBADD = "-lssl -lcrypto";
+          MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
           # The configure script builds a config.h which is never
           # included. Let's include it in the main header file
           # included by all .c-files.
@@ -584,7 +603,6 @@ in {
           doCheck = false;
         }
         { name = "posix"; doCheck = false; }
-        { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
         {
           name = "readline";
           buildInputs = [
@@ -617,7 +635,24 @@ in {
           configureFlags = [
             "--enable-simplexml"
           ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
+            })
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
+            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
             # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
@@ -647,7 +682,24 @@ in {
           ];
           doCheck = stdenv.isDarwin;  # TODO: a couple tests still fail on *-linux
           internalDeps = [ php.extensions.session ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
+            })
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
+            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
             # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
@@ -692,7 +744,24 @@ in {
             "--enable-xml"
           ];
           doCheck = false;
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
+            })
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
+            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
             # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
@@ -722,7 +791,24 @@ in {
           configureFlags = [
             "--enable-xmlwriter"
           ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
+            })
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
+            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
             # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
@@ -777,7 +863,7 @@ in {
       namedExtensions = builtins.map
         (drv: {
           name = drv.name;
-          value = mkExtension drv;
+          value = mkExtension (builtins.removeAttrs drv [ "enable" ]);
         })
         (builtins.filter (i: i.enable or true) extensionData);
 

@@ -65,8 +65,8 @@ rec {
       client1.wait_for_x()
       client2.wait_for_x()
 
-      client1.execute("quake3 +set r_fullscreen 0 +set name Foo +connect server &")
-      client2.execute("quake3 +set r_fullscreen 0 +set name Bar +connect server &")
+      client1.execute("quake3 +set r_fullscreen 0 +set name Foo +connect server >&2 &", check_return = False)
+      client2.execute("quake3 +set r_fullscreen 0 +set name Bar +connect server >&2 &", check_return = False)
 
       server.wait_until_succeeds("grep -q 'Foo.*entered the game' /tmp/log")
       server.wait_until_succeeds("grep -q 'Bar.*entered the game' /tmp/log")

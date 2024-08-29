@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cilium-cli";
-  version = "0.16.14";
+  version = "0.16.15";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VYfLy0vR3ON29EHUx1R2jF61+DbxH2RUsUQXFgxjMUU=";
+    hash = "sha256-5LqRHa0ytprwAAIl7iNZQ9zKnn5wNtFubQdvLuX9qGM=";
   };
 
   vendorHash = null;
@@ -42,7 +42,7 @@ buildGoModule rec {
     description = "CLI to install, manage & troubleshoot Kubernetes clusters running Cilium";
     license = lib.licenses.asl20;
     homepage = "https://www.cilium.io/";
-    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly superherointj ];
+    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly ];
     mainProgram = "cilium";
   };
 }

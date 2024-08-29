@@ -33,10 +33,17 @@ setupMpiCheck() {
 
   case $mpiType in
     openmpi)
-      # make sure the test starts even if we have less than the requested amount of cores
+      # Note, that openmpi-5 switched to using PRRTE.
+      # Thus we need to set PRTE_MCA_* instead of OMPI_MCA_*.
+      # We keep the openmpi-4 parameters for backward compatability.
+
+      # Make sure the test starts even if we have less than the requested amount of cores
       export OMPI_MCA_rmaps_base_oversubscribe=1
+      export PRTE_MCA_rmaps_default_mapping_policy=node:oversubscribe
+
       # Disable CPU pinning
       export OMPI_MCA_hwloc_base_binding_policy=none
+      export PRTE_MCA_hwloc_default_binding_policy=none
       ;;
     MPICH)
       # Fix to make mpich run in a sandbox

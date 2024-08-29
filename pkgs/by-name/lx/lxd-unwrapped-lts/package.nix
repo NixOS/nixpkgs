@@ -108,7 +108,7 @@ buildGoModule rec {
       asl20
       agpl3Plus
     ];
-    maintainers = teams.lxc.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

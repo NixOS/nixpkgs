@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "1.17.2";
+  version = "1.18.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
     owner = "dnkl";
     repo = "foot";
     rev = version;
-    hash = "sha256-p+qaWHBrUn6YpNyAmQf6XoQyO3degHP5oMN53/9gIr4=";
+    hash = "sha256:15s7fbkibvq53flf5yy9ad37y53pl83rcnjwlnfh96a4s5mj6v5d";
   };
 
   separateDebugInfo = true;
@@ -156,6 +156,8 @@ stdenv.mkDerivation {
     "-Dcustom-terminfo-install-location=${terminfoDir}"
     # Install systemd user units for foot-server
     "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
+    # Especially -Wunused-command-line-argument is a problem with clang
+    "-Dwerror=false"
   ];
 
   # build and run binary generating PGO profiles,

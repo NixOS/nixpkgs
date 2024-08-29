@@ -44,10 +44,10 @@ in
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates";
+      description = "Attribute set of feature gates.";
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
+      type = attrsOf bool;
     };
 
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes controller manager";
@@ -121,8 +121,8 @@ in
           --bind-address=${cfg.bindAddress} \
           ${optionalString (cfg.clusterCidr!=null)
             "--cluster-cidr=${cfg.clusterCidr}"} \
-          ${optionalString (cfg.featureGates != [])
-            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
+          ${optionalString (cfg.featureGates != {})
+            "--feature-gates=${concatStringsSep "," (builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates))}"} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
           ${optionalString (cfg.rootCaFile!=null)

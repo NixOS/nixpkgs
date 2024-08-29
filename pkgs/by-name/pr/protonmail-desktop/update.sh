@@ -9,8 +9,7 @@ latestVersion=$(curl https://api.github.com/repos/ProtonMail/inbox-desktop/relea
 
 declare -A platforms
 platforms[x86_64-linux]="amd64"
-platforms[x86_64-darwin]="x64"
-platforms[aarch64-darwin]="arm64"
+platforms[x86_64-darwin]="universal"
 
 for platform in "${!platforms[@]}"
 do

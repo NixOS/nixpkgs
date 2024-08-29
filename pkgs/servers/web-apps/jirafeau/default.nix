@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, writeText }:
+{ lib, stdenv, fetchFromGitLab, writeText, nixosTests }:
 let
   localConfig = writeText "config.local.php" ''
     <?php
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     cp -r * $out/
     cp ${localConfig} $out/lib/config.local.php
   '';
+
+  passthru.tests = { inherit (nixosTests) jirafeau; };
 
   meta = with lib; {
     description = "Website permitting upload of a file in a simple way and giving a unique link to it";

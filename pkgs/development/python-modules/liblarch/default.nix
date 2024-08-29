@@ -2,12 +2,12 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  python,
   pygobject3,
   xvfb-run,
   gobject-introspection,
   gtk3,
   pythonOlder,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +26,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     gobject-introspection # for setup hook
     gtk3
+    pytest
   ];
 
   buildInputs = [ gtk3 ];
@@ -34,8 +35,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    ${xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
-      ${python.interpreter} nix_run_setup test
+    ${xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' pytest
     runHook postCheck
   '';
 

@@ -5,13 +5,14 @@
   fetchFromGitHub,
   jupyterhub,
   pythonOlder,
+  setuptools,
   tornado,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,16 +24,13 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace systemdspawner/systemd.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
-
     substituteInPlace systemdspawner/systemdspawner.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
-  buildInputs = [ bash ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyterhub
     tornado
   ];

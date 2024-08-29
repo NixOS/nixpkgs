@@ -5,15 +5,15 @@
 , lldb
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "llef";
-  version = "unstable-2023-10-18";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "foundryzero";
     repo = "llef";
-    rev = "629bd75f44c356f7a3576a6436d3919ce111240d";
-    hash = "sha256-JtCHG89s436Di/6+V7Le4CZnkIPh/RYIllfXEO/B7+8";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tta99ncWJdnnSkVdnOwx36utEcefMy7fb5NDN2aZ5F0=";
   };
 
   dontBuild = true;
@@ -40,4 +40,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nrabulinski ];
     mainProgram = "llef";
   };
-}
+})

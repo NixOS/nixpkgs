@@ -11,6 +11,7 @@
   stdenv,
   systemd,
   testers,
+  nixosTests,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
@@ -60,7 +61,10 @@ python3Packages.buildPythonApplication rec {
                --replace "sleep " "${coreutils}/bin/sleep "
   '';
 
-  passthru.tests.version = testers.testVersion { package = borgmatic; };
+  passthru.tests = {
+    version = testers.testVersion { package = borgmatic; };
+    inherit (nixosTests) borgmatic;
+  };
 
   __darwinAllowLocalNetworking = true;
 

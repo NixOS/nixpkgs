@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , trezor-udev-rules
+, nixosTests
 , AppKit
 }:
 
@@ -36,6 +37,8 @@ buildGoModule rec {
     "-s" "-w"
     "-X main.githash=${commit}"
   ];
+
+  passthru.tests = { inherit (nixosTests) trezord; };
 
   meta = with lib; {
     description = "Trezor Communication Daemon aka Trezor Bridge";

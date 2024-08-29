@@ -108,11 +108,11 @@ in
 
   cqueues = prev.cqueues.overrideAttrs (oa: rec {
     # Parse out a version number without the Lua version inserted
-    version = with lib; let
+    version = let
       version' = prev.cqueues.version;
-      rel = splitVersion version';
-      date = head rel;
-      rev = last (splitString "-" (last rel));
+      rel = lib.splitVersion version';
+      date = lib.head rel;
+      rev = lib.last (lib.splitString "-" (lib.last rel));
     in
     "${date}-${rev}";
 
@@ -141,15 +141,6 @@ in
         cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
         rockspecFilename="$specDir/${pname}-${version}.rockspec"
       '';
-  });
-
-  fennel = prev.fennel.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs ++ [
-      installShellFiles
-    ];
-    postInstall = ''
-      installManPage fennel.1
-    '';
   });
 
   # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
@@ -212,7 +203,7 @@ in
     '';
     meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
 
-    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) final.luaffi;
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
   });
 
   lgi = prev.lgi.overrideAttrs (oa: {
@@ -511,6 +502,9 @@ in
 
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
 
+    # ld: symbol(s) not found for architecture arm64
+    # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+    meta.broken = stdenv.isDarwin;
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
@@ -750,6 +744,17 @@ in
     };
   })) {};
 
+  rtp-nvim  = prev.rtp-nvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
+
   rustaceanvim  = prev.rustaceanvim.overrideAttrs(oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [ final.nlua final.busted ];
@@ -810,7 +815,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
+      hash = "sha256-PLihirhJshcUQI3L1eTcnQiZvocDl29eQHhdBwJQRU8=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
@@ -825,17 +830,13 @@ in
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
-    nativeBuildInputs = let
-      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
-      # so we have to pass the correct package in here.
+    propagatedBuildInputs = let
+      # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+      # but that doesn't seem to work
       lua = lib.head oa.propagatedBuildInputs;
-    in oa.nativeBuildInputs ++ [
-      lua.pkgs.luarocks-build-treesitter-parser
-    ] ++ (lib.optionals stdenv.isDarwin [
-      clang
-      tree-sitter
-    ]);
-    meta.broken = (luaOlder "5.1" || stdenv.isDarwin);
+    in oa.propagatedBuildInputs ++ [
+      lua.pkgs.luarocks-build-treesitter-parser-cpp
+    ];
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
