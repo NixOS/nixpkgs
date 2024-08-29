@@ -24,7 +24,8 @@
 }:
 
 let
-  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+  os-specific-buildInputs =
+    if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";
@@ -80,10 +81,10 @@ buildPythonPackage rec {
     "pyopencl.tools"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+  meta = {
     description = "Python wrapper for OpenCL";
-    homepage = "https://github.com/inducer/pyopencl";
-    license = licenses.mit;
+    homepage = "https://github.com/pyopencl/pyopencl";
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    license = lib.licenses.mit;
   };
 }
