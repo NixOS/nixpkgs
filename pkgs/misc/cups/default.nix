@@ -141,6 +141,8 @@ stdenv.mkDerivation rec {
       cups-pdf
       printing-service
       printing-socket
+      printing-service-notcp
+      printing-socket-notcp
     ;
   };
 
