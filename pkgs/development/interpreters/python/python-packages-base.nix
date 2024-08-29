@@ -1,7 +1,8 @@
-{ pkgs
-, stdenv
-, lib
-, python
+{
+  pkgs,
+  stdenv,
+  lib,
+  python,
 }:
 
 self:
@@ -13,47 +14,65 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
-  makeOverridablePythonPackage = f: lib.mirrorFunctionArgs f (origArgs:
-    let
-      args = lib.fix (lib.extends
-        (_: previousAttrs: {
-          passthru = (previousAttrs.passthru or { }) // {
-            overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-          };
-        })
-        (_: origArgs));
-      result = f args;
-      overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
-    in
-      if builtins.isAttrs result then result
-      else if builtins.isFunction result then {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-        __functor = self: result;
+  makeOverridablePythonPackage =
+    f:
+    lib.mirrorFunctionArgs f (
+      origArgs:
+      let
+        args = lib.fix (
+          lib.extends (_: previousAttrs: {
+            passthru = (previousAttrs.passthru or { }) // {
+              overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+            };
+          }) (_: origArgs)
+        );
+        result = f args;
+        overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
+      in
+      if builtins.isAttrs result then
+        result
+      else if builtins.isFunction result then
+        {
+          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          __functor = self: result;
+        }
+      else
+        result
+    );
+
+  mkPythonDerivation =
+    if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
+
+  buildPythonPackage = makeOverridablePythonPackage (
+    lib.makeOverridable (
+      callPackage mkPythonDerivation {
+        inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
+        inherit toPythonModule; # Libraries provide modules
       }
-      else result);
+    )
+  );
 
-  mkPythonDerivation = if python.isPy3k then
-    ./mk-python-derivation.nix
-  else
-    ./python2/mk-python-derivation.nix;
-
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
-    inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
-    inherit toPythonModule; # Libraries provide modules
-  }));
-
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
-    namePrefix = "";        # Python applications should not have any prefix
-    toPythonModule = x: x;  # Application does not provide modules.
-  }));
+  buildPythonApplication = makeOverridablePythonPackage (
+    lib.makeOverridable (
+      callPackage mkPythonDerivation {
+        namePrefix = ""; # Python applications should not have any prefix
+        toPythonModule = x: x; # Application does not provide modules.
+      }
+    )
+  );
 
   # Check whether a derivation provides a Python module.
-  hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
+  hasPythonModule = drv: drv ? pythonModule && drv.pythonModule == python;
 
   # Get list of required Python modules given a list of derivations.
-  requiredPythonModules = drvs: let
-    modules = lib.filter hasPythonModule drvs;
-  in lib.unique ([python] ++ modules ++ lib.concatLists (lib.catAttrs "requiredPythonModules" modules));
+  requiredPythonModules =
+    drvs:
+    let
+      modules = lib.filter hasPythonModule drvs;
+    in
+    lib.unique (
+      [ python ] ++ modules ++ lib.concatLists (lib.catAttrs "requiredPythonModules" modules)
+    );
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
@@ -61,24 +80,54 @@ let
 
   removePythonPrefix = lib.removePrefix namePrefix;
 
-  # Convert derivation to a Python module.
-  toPythonModule = drv:
-    drv.overrideAttrs( oldAttrs: {
+  /**
+    A function that takes any derivation and returns a derivation that is a Python module like buildPythonPackage
+
+    # Inputs
+
+    `drv` (derivation)
+    : The derivation to convert to a python module
+
+    # Type
+    ```
+    derivation -> derivation
+    ```
+
+    # Example
+    :::{.example}
+    ## Using `toPythonModule` to provide `opencv` as a library to a python script.
+
+    ```nix
+    pkgs.python3.withPackages (ps: [
+      (ps.toPythonModule (pkgs.opencv.override { enablePython = true; pythonPackages = ps; } ))
+    ])
+    ->
+    out -> /nix/store/sixwhy65vfvlhacgf2c3gnxm1sjp6if1-python3-3.12.4-env
+    ```
+
+    ```bash
+    ./result/bin/python -c "import cv2"
+    ```
+    :::
+  */
+  toPythonModule =
+    drv:
+    drv.overrideAttrs (oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
-      passthru = (oldAttrs.passthru or {})// {
+      passthru = (oldAttrs.passthru or { }) // {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules =
-          builtins.addErrorContext
-          "while calculating requiredPythonModules for ${drv.name or drv.pname}:"
-          (requiredPythonModules drv.propagatedBuildInputs);
+        requiredPythonModules = builtins.addErrorContext "while calculating requiredPythonModules for ${drv.name or drv.pname}:" (
+          requiredPythonModules drv.propagatedBuildInputs
+        );
       };
     });
 
   # Convert a Python library to an application.
-  toPythonApplication = drv:
-    drv.overrideAttrs( oldAttrs: {
-      passthru = (oldAttrs.passthru or {}) // {
+  toPythonApplication =
+    drv:
+    drv.overrideAttrs (oldAttrs: {
+      passthru = (oldAttrs.passthru or { }) // {
         # Remove Python prefix from name so we have a "normal" name.
         # While the prefix shows up in the store path, it won't be
         # used by `nix-env`.
@@ -87,20 +136,45 @@ let
       };
     });
 
-  disabled = drv: throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}";
+  disabled =
+    drv:
+    throw "${
+      removePythonPrefix (drv.pname or drv.name)
+    } not supported for interpreter ${python.executable}";
 
   disabledIf = x: drv: if x then disabled drv else drv;
 
-in {
+in
+{
   inherit lib pkgs stdenv;
-  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy312 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru)
+    isPy27
+    isPy37
+    isPy38
+    isPy39
+    isPy310
+    isPy311
+    isPy312
+    isPy3k
+    isPyPy
+    pythonAtLeast
+    pythonOlder
+    ;
   inherit buildPythonPackage buildPythonApplication;
-  inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
+  inherit
+    hasPythonModule
+    requiredPythonModules
+    makePythonPath
+    disabled
+    disabledIf
+    ;
   inherit toPythonModule toPythonApplication;
 
   python = toPythonModule python;
 
   # Don't take pythonPackages from "global" pkgs scope to avoid mixing python versions.
   # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
-  pythonPackages = self // { __attrsFailEvaluation = true; };
+  pythonPackages = self // {
+    __attrsFailEvaluation = true;
+  };
 }
