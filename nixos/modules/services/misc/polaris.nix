@@ -2,8 +2,6 @@
 , pkgs
 , lib
 , ...}:
-
-with lib;
 let
   cfg = config.services.polaris;
   settingsFormat = pkgs.formats.toml {};
@@ -11,31 +9,31 @@ in
 {
   options = {
     services.polaris = {
-      enable = mkEnableOption "Polaris Music Server";
+      enable = lib.mkEnableOption "Polaris Music Server";
 
-      package = mkPackageOption pkgs "polaris" { };
+      package = lib.mkPackageOption pkgs "polaris" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "polaris";
         description = "User account under which Polaris runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "polaris";
         description = "Group under which Polaris is run.";
       };
 
-      extraGroups = mkOption {
-        type = types.listOf types.str;
+      extraGroups = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         description = "Polaris' auxiliary groups.";
-        example = literalExpression ''["media" "music"]'';
+        example = lib.literalExpression ''["media" "music"]'';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 5050;
         description = ''
           The port which the Polaris REST api and web UI should listen to.
@@ -43,7 +41,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsFormat.type;
         default = {};
         description = ''
@@ -51,7 +49,7 @@ in
           Although poorly documented, an example may be found here:
           [test-config.toml](https://github.com/agersant/polaris/blob/374d0ca56fc0a466d797a4b252e2078607476797/test-data/config.toml)
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             settings.reindex_every_n_seconds = 7*24*60*60; # weekly, default is 1800
             settings.album_art_pattern =
@@ -70,8 +68,8 @@ in
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open the configured port in the firewall.
@@ -80,7 +78,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.polaris = {
       description = "Polaris Music Server";
       after = [ "network.target" ];
@@ -93,13 +91,13 @@ in
         SupplementaryGroups = cfg.extraGroups;
         StateDirectory = "polaris";
         CacheDirectory = "polaris";
-        ExecStart = escapeShellArgs ([
+        ExecStart = lib.escapeShellArgs ([
           "${cfg.package}/bin/polaris"
           "--foreground"
           "--port" cfg.port
           "--database" "/var/lib/${StateDirectory}/db.sqlite"
           "--cache" "/var/cache/${CacheDirectory}"
-        ] ++ optionals (cfg.settings != {}) [
+        ] ++ lib.optionals (cfg.settings != {}) [
           "--config" (settingsFormat.generate "polaris-config.toml" cfg.settings)
         ]);
         Restart = "on-failure";
@@ -141,11 +139,11 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
 
   };
 
-  meta.maintainers = with maintainers; [ pbsds ];
+  meta.maintainers = with lib.maintainers; [ pbsds ];
 }
