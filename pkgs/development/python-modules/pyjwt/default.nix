@@ -9,6 +9,7 @@
   sphinxHook,
   sphinx-rtd-theme,
   zope-interface,
+  oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +49,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "jwt" ];
+
+  passthru.tests = {
+    inherit oauthlib;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/jpadilla/pyjwt/blob/${version}/CHANGELOG.rst";
