@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
     "doc"
+  ];
+
+  nativeBuildInputs = [
+    # Can also be built with the `./configure` script available in the release,
+    # however using cmake makes sure the resulting tree would include
+    # `OggConfig.cmake` and other cmake files useful when packages try to look it
+    # up with cmake.
+    cmake
   ];
 
   meta = {
