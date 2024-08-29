@@ -7,12 +7,20 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "swiftlint";
-  version = "0.56.1";
+  version = "0.56.2";
 
-  src = fetchurl {
-    url = "https://github.com/realm/SwiftLint/releases/download/${version}/portable_swiftlint.zip";
-    hash = "sha256-EEOEKwZsLOdSdf24uj1oN6uyY4Ox+HIkClXIJ1d+wpk=";
-  };
+  src = fetchurl (
+    if stdenvNoCC.isDarwin then
+      {
+        url = "https://github.com/realm/SwiftLint/releases/download/${version}/portable_swiftlint.zip";
+        hash = "sha256-vfwALzKDBN/tyhZWZs7Llf23yqt7R27FsPtV33884MI=";
+      }
+    else
+      {
+        url = "https://github.com/realm/SwiftLint/releases/download/${version}/swiftlint_linux.zip";
+        hash = "sha256-KN9NqH4OC8nbLC53VXMNAnjsTXRKnld28q0RPCAfG2M=";
+      }
+  );
 
   dontPatch = true;
   dontConfigure = true;
@@ -36,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     mainProgram = "swiftlint";
     maintainers = with maintainers; [ matteopacini ];
-    platforms = platforms.darwin;
+    platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
