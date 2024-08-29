@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "challenger";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchgit {
     url = "https://git.taler.net/challenger.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Qntwtcjjtu3Mbr8Wi5pgFq8KENaycGR4Y3hJ5+LBgTI=";
+    hash = "sha256-OlUgE40Qo7on9VaMGKJ/MRWActDBqPe7Ja95dv1OFhA=";
   };
 
   # https://git.taler.net/challenger.git/tree/bootstrap
