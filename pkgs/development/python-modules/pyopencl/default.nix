@@ -90,5 +90,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    # ld: symbol(s) not found for architecture arm64
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
