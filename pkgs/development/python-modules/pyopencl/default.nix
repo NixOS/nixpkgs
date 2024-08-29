@@ -12,20 +12,16 @@
   nanobind,
 
   # dependencies
-  appdirs,
-  cffi,
   darwin,
-  decorator,
-  mako,
   numpy,
   ocl-icd,
-  oldest-supported-numpy,
   opencl-headers,
   platformdirs,
   pybind11,
-  pytestCheckHook,
   pytools,
-  six,
+
+  # tests
+  pytestCheckHook,
 }:
 
 let
@@ -33,22 +29,22 @@ let
 in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.2.6";
-  format = "pyproject";
+  version = "2024.2.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pyopencl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nP7ZAGeRXrjqDRWlc2SDP1hk1fseGeu9Zx0lOp9Pchs=";
+    fetchSubmodules = true;
+    hash = "sha256-VeaEDYnGfMYf9/WqMIZ9g4KounD48eWF3Romt79RMEQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     nanobind
     ninja
     numpy
-    oldest-supported-numpy
     pathspec
     scikit-build-core
   ];
@@ -60,32 +56,36 @@ buildPythonPackage rec {
     pybind11
   ] ++ os-specific-buildInputs;
 
-  propagatedBuildInputs = [
-    appdirs
-    cffi
-    decorator
-    mako
+  dependencies = [
     numpy
     platformdirs
     pytools
-    six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preBuild = ''
+  preCheck = ''
     export HOME=$(mktemp -d)
-    rm -rf pyopencl
+
+    # import from $out
+    rm -r pyopencl
   '';
 
-  # gcc: error: pygpu_language_opencl.cpp: No such file or directory
+  # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
   doCheck = false;
 
-  pythonImportsCheck = [ "pyopencl" ];
+  pythonImportsCheck = [
+    "pyopencl"
+    "pyopencl.array"
+    "pyopencl.cltypes"
+    "pyopencl.elementwise"
+    "pyopencl.tools"
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
     description = "Python wrapper for OpenCL";
-    homepage = "https://github.com/pyopencl/pyopencl";
+    homepage = "https://github.com/inducer/pyopencl";
     license = licenses.mit;
   };
 }

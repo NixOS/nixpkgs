@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist="${electron_30}/libexec/electron" \
+      -c.electronDist="${electron_30.dist}" \
       -c.electronVersion="${electron_30.version}"
 
     runHook postBuild

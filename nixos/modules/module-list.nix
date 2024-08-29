@@ -193,6 +193,7 @@
   ./programs/fish.nix
   ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
+  ./programs/foot
   ./programs/freetds.nix
   ./programs/fuse.nix
   ./programs/fzf.nix
@@ -286,6 +287,7 @@
   ./programs/ssh.nix
   ./programs/starship.nix
   ./programs/steam.nix
+  ./programs/streamcontroller.nix
   ./programs/streamdeck-ui.nix
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
@@ -1401,6 +1403,7 @@
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii.nix
+  ./services/web-apps/firefly-iii-data-importer.nix
   ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
   ./services/web-apps/freshrss.nix
@@ -1489,6 +1492,7 @@
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/vikunja.nix
+  ./services/web-apps/wakapi.nix
   ./services/web-apps/weblate.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/wiki-js.nix

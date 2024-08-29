@@ -6,7 +6,7 @@
   cdrtools,
   curl,
   gawk,
-  glxinfo,
+  mesa-demos,
   gnugrep,
   gnused,
   jq,
@@ -49,7 +49,7 @@ let
       zsync
     ]
     ++ lib.optionals stdenv.isLinux [
-      glxinfo
+      mesa-demos
       usbutils
       xdg-user-dirs
     ];

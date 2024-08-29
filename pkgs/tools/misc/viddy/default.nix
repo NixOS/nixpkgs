@@ -6,21 +6,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "viddy";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "viddy";
     rev = "v${version}";
-    hash = "sha256-HFqkWJu1whShwEsSUZe5orWTNYyY3oZ6tBzAJF3SFDw=";
+    hash = "sha256-Rb4IBguyRLiwUR9dDKOagWSUjov0OzxiiuSg7epjCv0=";
   };
 
-  cargoHash = "sha256-oEzsJoVD9aSvphchm21dlmkwePMDSaxD7eoR850NbRk=";
+  cargoHash = "sha256-Lr/sl0IcoVGb22y5BQrGIUVx8Ny+bQg1MqUBRPqF1nk=";
 
   # requires nightly features
   env.RUSTC_BOOTSTRAP = 1;
 
-  env.VERGEN_BUILD_DATE = "2024-08-24"; # managed via the update script
+  env.VERGEN_BUILD_DATE = "2024-08-26"; # managed via the update script
   env.VERGEN_GIT_DESCRIBE = "Nixpkgs";
 
   passthru.updateScript.command = [ ./update.sh ];

@@ -8,9 +8,6 @@
   electron,
 }:
 
-let
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
-in
 buildNpmPackage rec {
   pname = "caprine";
   version = "2.60.1";
@@ -29,7 +26,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   postBuild = ''
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \

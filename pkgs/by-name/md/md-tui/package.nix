@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "md-tui";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "henriklovhaug";
     repo = "md-tui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HUrL/+uXQ3753Qb5FZkftGZO+u+MsocFO3L3OzarEhg=";
+    hash = "sha256-3lNipCYhzqeAAUQZ2ajcOakNDlwSwbUUvP8Dtu6gBsI=";
   };
 
-  cargoHash = "sha256-+fqp5FtZa53EkcHtTn1hvWzjYjlQWVKPbdRC1V0mYQU=";
+  cargoHash = "sha256-3hxU6yhMbcz3PhTDylJYnqI+eYoWJlf5Y2KecoY5zPo=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -13173,6 +13173,13 @@
     githubId = 191622;
     name = "Denys Pavlov";
   };
+  meator = {
+    email = "meator.dev@gmail.com";
+    github = "meator";
+    githubId = 67633081;
+    name = "meator";
+    keys = [ { fingerprint = "7B0F 58A5 E0F1 A2EA 1157  8A73 1A14 CB34 64CB E5BF"; } ];
+  };
   meditans = {
     email = "meditans@gmail.com";
     github = "meditans";
@@ -21169,6 +21176,12 @@
     github = "tricktron";
     githubId = 16036882;
     name = "Thibault Gagnaux";
+  };
+  tri-ler = {
+    github = "tri-ler";
+    githubId = 47867303;
+    email = "tylerh689@gmail.com";
+    name = "Tyler Hong";
   };
   trino = {
     email = "muehlhans.hubert@ekodia.de";
