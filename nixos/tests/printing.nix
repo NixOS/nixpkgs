@@ -54,8 +54,8 @@ import ./make-test-python.nix (
     start_all()
 
     with subtest("Make sure that cups is up on both sides and printers are set up"):
-        server.wait_for_unit("cups.${if socket then "socket" else "service"}")
-        client.wait_for_unit("cups.${if socket then "socket" else "service"}")
+        server.wait_for_unit("ensure-printers.service")
+        client.wait_for_unit("ensure-printers.service")
 
     assert "scheduler is running" in client.succeed("lpstat -r")
 
