@@ -13,9 +13,9 @@ buildLua rec {
 
   src = fetchFromGitHub {
     owner = "emilazy";
-    repo = pname;
+    repo = "mpv-notify-send";
     rev = "a2bab8b2fd8e8d14faa875b5cc3a73f1276cd88a";
-    sha256 = "sha256-EwVkhyB87TJ3i9xJmmZMSTMUKvfbImI1S+y1vgRWbDk=";
+    hash = "sha256-EwVkhyB87TJ3i9xJmmZMSTMUKvfbImI1S+y1vgRWbDk=";
   };
 
   patches = [
@@ -36,10 +36,10 @@ buildLua rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Lua script for mpv to send notifications with notify-send";
     homepage = "https://github.com/emilazy/mpv-notify-send";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ r3n3gad3p3arl ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ r3n3gad3p3arl ];
   };
 }
