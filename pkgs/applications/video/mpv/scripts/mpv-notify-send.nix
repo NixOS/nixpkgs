@@ -31,7 +31,7 @@ buildLua rec {
     "--prefix"
     "PATH"
     ":"
-    (lib.makeBinPath libnotify)
+    (lib.makeBinPath [ libnotify ])
   ];
 
   passthru.updateScript = unstableGitUpdater { };
