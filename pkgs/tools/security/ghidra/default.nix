@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+    ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
 
     wrapProgram "${pkg_path}/support/launch.sh" \
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}

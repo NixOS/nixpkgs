@@ -181,7 +181,7 @@ in {
           "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
         ]
       else
-        [ "--flake ${cfg.flake}" ]);
+        [ "--refresh" "--flake ${cfg.flake}" ]);
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";

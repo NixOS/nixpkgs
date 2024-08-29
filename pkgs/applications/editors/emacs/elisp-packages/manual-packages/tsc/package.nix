@@ -1,70 +1,52 @@
 { lib
-, symlinkJoin
 , melpaBuild
 , fetchFromGitHub
 , rustPlatform
-
-, runtimeShell
-, writeScript
-, python3
-, nix-prefetch-github
-, nix
+, stdenv
+, nix-update-script
 }:
 
 let
+  libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-  srcMeta = lib.importJSON ./src.json;
-  inherit (srcMeta) version;
-
-  src = fetchFromGitHub srcMeta.src;
-
-  tsc = melpaBuild {
-    inherit src;
-    inherit version;
-
-    pname = "tsc";
-
-    sourceRoot = "${src.name}/core";
-  };
-
-  tsc-dyn = rustPlatform.buildRustPackage {
-    inherit version;
-    inherit src;
-
+  tsc-dyn = rustPlatform.buildRustPackage rec {
     pname = "tsc-dyn";
+    version = "0.18.0";
 
-    nativeBuildInputs = [ rustPlatform.bindgenHook ];
+    src = fetchFromGitHub {
+      owner = "emacs-tree-sitter";
+      repo = "emacs-tree-sitter";
+      rev = version;
+      hash = "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=";
+    };
+
+    cargoLock = {
+      lockFile = ./Cargo.lock;
+      outputHashes = {
+        "tree-sitter-0.20.0" = "sha256-hGiJZFrQpO+xHXosbEKV2k64e2D8auNGEtdrFk2SsOU=";
+      };
+    };
+
     sourceRoot = "${src.name}/core";
 
     postInstall = ''
-      LIB=($out/lib/libtsc_dyn.*)
-      TSC_PATH=$out/share/emacs/site-lisp/elpa/tsc-${version}
-      install -d $TSC_PATH
-      install -m444 $out/lib/libtsc_dyn.* $TSC_PATH/''${LIB/*libtsc_/tsc-}
-      echo -n $version > $TSC_PATH/DYN-VERSION
-      rm -r $out/lib
+      pushd $out/lib
+      mv --verbose libtsc_dyn${libExt} tsc-dyn${libExt}
+      echo -n $version > DYN-VERSION
+      popd
     '';
-
-    inherit (srcMeta) cargoHash;
   };
+in melpaBuild {
+  pname = "tsc";
+  inherit (tsc-dyn) version src;
 
-in symlinkJoin {
-  name = "tsc-${version}";
-  paths = [ tsc tsc-dyn ];
+  files = ''("core/*.el" "${tsc-dyn}/lib/*")'';
+
+  ignoreCompilationError = false;
 
   passthru = {
-    updateScript = let
-      pythonEnv = python3.withPackages(ps: [ ps.requests ]);
-    in writeScript "tsc-update" ''
-      #!${runtimeShell}
-      set -euo pipefail
-      export PATH=${lib.makeBinPath [
-        nix-prefetch-github
-        nix
-        pythonEnv
-      ]}:$PATH
-      exec python3 ${builtins.toString ./update.py} ${builtins.toString ./.}
-    '';
+    inherit tsc-dyn;
+    updateScript = nix-update-script { attrPath = "emacsPackages.tsc.tsc-dyn"; };
   };
 
   meta = {

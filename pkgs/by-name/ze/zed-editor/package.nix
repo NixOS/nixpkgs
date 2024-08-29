@@ -35,13 +35,13 @@ assert withGLES -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.147.2";
+  version = "0.149.6";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Qjorf5cqfEnvlKX0WaE0VNJr99AGJsAJ/BEf8yfPv7E=";
+    hash = "sha256-YWXK5heCCw6eXhc1Fh7eIC0tzszC86FP3ovzkCYkdtc=";
     fetchSubmodules = true;
   };
 
@@ -50,11 +50,11 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "alacritty_terminal-0.24.1-dev" = "sha256-aVB1CNOLjNh6AtvdbomODNrk00Md8yz8QzldzvDo1LI=";
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-o3iYBrHcLXSrdvd0J/LXJb7VkTcFyB/S2Nk9WrmZupI=";
+      "blade-graphics-0.4.0" = "sha256-sGXhXmgtd7Wx/Gf7HCWro4RsQOGS4pQt8+S3T+2wMfY=";
       "cosmic-text-0.11.2" = "sha256-TLPDnqixuW+aPAhiBhSvuZIa69vgV3xLcw32OlkdCcM=";
       "font-kit-0.14.1" = "sha256-qUKvmi+RDoyhMrZ7T6SoVAyMc/aasQ9Y/okzre4SzXo=";
       "lsp-types-0.95.1" = "sha256-N4MKoU9j1p/Xeowki/+XiNQPwIcTm9DgmfM/Eieq4js=";
-      "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
+      "nvim-rs-0.8.0-pre" = "sha256-VA8zIynflul1YKBlSxGCXCwa2Hz0pT3mH6OPsfS7Izo=";
       "tree-sitter-0.22.6" = "sha256-P9pQcofDCIhOYWA1OC8TzB5UgWpD5GlDzX2DOS8SsH0=";
       "tree-sitter-gomod-1.0.2" = "sha256-/sjC117YAFniFws4F/8+Q5Wrd4l4v4nBUaO9IdkixSE=";
       "tree-sitter-gowork-0.0.1" = "sha256-803ujH5qwejQ2vQDDpma4JDC9a+vFX8ZQmr+77VyL2M=";
@@ -125,6 +125,9 @@ rustPlatform.buildRustPackage rec {
         "${src}/assets/fonts/zed-sans"
       ];
     };
+    # Setting this environment variable allows to disable auto-updates
+    # https://zed.dev/docs/development/linux#notes-for-packaging-zed
+    ZED_UPDATE_EXPLANATION = "zed has been installed using nix. Auto-updates have thus been disabled.";
   };
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";
@@ -133,6 +136,10 @@ rustPlatform.buildRustPackage rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
     patchelf --add-rpath ${wayland}/lib $out/libexec/*
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isLinux [

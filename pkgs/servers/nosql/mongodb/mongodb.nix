@@ -28,6 +28,7 @@
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
 , avxSupport ? stdenv.hostPlatform.avxSupport
+, passthru ? {}
 }:
 
 let
@@ -59,7 +60,7 @@ let
   inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
-  inherit version;
+  inherit version passthru;
   pname = "mongodb";
 
   src = fetchFromGitHub {

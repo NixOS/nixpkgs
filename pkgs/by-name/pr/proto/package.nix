@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "moonrepo";
-    repo = pname;
+    repo = "proto";
     rev = "v${version}";
     hash = "sha256-o/du9XmiS7U5ypm6osQtVTjrJY60iLCkJ4DWCYOeIoY=";
   };
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     # proto looks up a proto-shim executable file in $PROTO_LOOKUP_DIR
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/proto \
       --set PROTO_LOOKUP_DIR $out/bin
   '';
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aioqsw";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xXbOIG9gw1rO+iWdXNWWmweM83FpTLMuaDTcRZoMvL8=";
+    hash = "sha256-h/rTwMF3lc/hWwpzCvK6UMq0rjq3xkw/tEY3BqOPS2s=";
   };
 
   nativeBuildInputs = [

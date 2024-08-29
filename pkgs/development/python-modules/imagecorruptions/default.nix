@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   numpy,
   scikit-image,
   lib,
@@ -10,19 +11,18 @@
 buildPythonPackage rec {
   pname = "imagecorruptions";
   version = "1.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "044e173f24d5934899bdbf3596bfbec917e8083e507eed583ab217abebbe084d";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'opencv-python >= 3.4.5'," ""
-  '';
+  pythonRemoveDeps = [ "opencv-python" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scikit-image
     opencv4

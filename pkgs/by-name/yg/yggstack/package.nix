@@ -15,7 +15,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
-    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=yggstack"
     "-s"
     "-w"
   ];

@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, cf-terraforming, testers }:
+{ buildGoModule, fetchFromGitHub, lib, cf-terraforming, testers, installShellFiles, stdenv }:
 
 buildGoModule rec {
   pname = "cf-terraforming";
@@ -22,6 +22,15 @@ buildGoModule rec {
     package = cf-terraforming;
     command = "cf-terraforming version";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)''
+    installShellCompletion --cmd cf-terraforming \
+      --bash <($out/bin/cf-terraforming completion bash) \
+      --fish <($out/bin/cf-terraforming completion fish) \
+      --zsh <($out/bin/cf-terraforming completion zsh)
+  '';
 
   meta = with lib; {
     description = "Command line utility to facilitate terraforming your existing Cloudflare resources";

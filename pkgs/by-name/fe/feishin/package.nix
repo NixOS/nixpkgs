@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_30,
+  electron_31,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -15,12 +15,12 @@ let
 
   src = fetchFromGitHub {
     owner = "jeffvli";
-    repo = pname;
+    repo = "feishin";
     rev = "v${version}";
     hash = "sha256-UOY0wjWGK7sal/qQbbkHjFUIA49QtbO+Ei6hSTOyHWk=";
   };
 
-  electron = electron_30;
+  electron = electron_31;
 in
 buildNpmPackage {
   inherit pname version;
@@ -79,7 +79,7 @@ buildNpmPackage {
   postBuild =
     lib.optionalString stdenv.isDarwin ''
       # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
-      cp -r ${electron}/Applications/Electron.app ./
+      cp -r ${electron.dist}/Electron.app ./
       find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
       # Disable code signing during build on macOS.
@@ -90,7 +90,7 @@ buildNpmPackage {
     + ''
       npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${if stdenv.isDarwin then "./" else "${electron}/libexec/electron"} \
+        -c.electronDist=${if stdenv.isDarwin then "./" else electron.dist} \
         -c.electronVersion=${electron.version} \
         -c.npmRebuild=false
     '';
@@ -123,7 +123,7 @@ buildNpmPackage {
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
         ln -s \
           $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
-          $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
+          $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
       done
     ''
     + ''
@@ -135,7 +135,7 @@ buildNpmPackage {
       name = "feishin";
       desktopName = "Feishin";
       comment = "Full-featured Subsonic/Jellyfin compatible desktop music player";
-      icon = pname;
+      icon = "feishin";
       exec = "feishin %u";
       categories = [
         "Audio"

@@ -210,9 +210,7 @@ in rec {
       # Gather up the desired plugins.
       pluginEnv = buildEnv {
         name = "eclipse-plugins";
-        paths =
-          with lib;
-            filter (x: x ? isEclipsePlugin) (closePropagation plugins);
+        paths = lib.filter (x: x ? isEclipsePlugin) (lib.closePropagation plugins);
       };
 
       # Prepare the JVM arguments to add to the ini file. We here also

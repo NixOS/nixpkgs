@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, dtk6core
-, librsvg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  dtk6core,
+  librsvg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6gui";
-  version = "6.0.16";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6gui";
     rev = finalAttrs.version;
-    hash = "sha256-fnbCKqeeQE5WBnNJ0D1ihsZswDSJ/Oj98eUXFrOuk+w=";
+    hash = "sha256-w8tyc06v/juTP0YSsyWai1ONl4Aa7dzREIc5wLnI/vw=";
   };
 
   patches = [
@@ -56,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/libexec/dtk6/DGui/bin/*; do

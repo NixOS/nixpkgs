@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gowall";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gowall";
     rev = "v${version}";
-    hash = "sha256-BNksshg1yK3mQuBaC4S3HzwfJ8vW0XxfDkG7YJAF00E=";
+    hash = "sha256-R7dOONfyzj6V3101Rp/WhUcFpqrSKWEkVm4a2riXZAI=";
   };
 
-  vendorHash = "sha256-jNx4ehew+IBx7M6ey/rT0vb53+9OBVYSEDJv8JWfZIw=";
+  vendorHash = "sha256-H2Io1K2LEFmEPJYVcEaVAK2ieBrkV6u+uX82XOvNXj4=";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

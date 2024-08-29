@@ -6,16 +6,16 @@ final: prev:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias: with lib;
+  removeRecurseForDerivations = alias:
     if alias.recurseForDerivations or false then
-      removeAttrs alias ["recurseForDerivations"]
+      lib.removeAttrs alias ["recurseForDerivations"]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias: with lib;
-    if isDerivation alias then
-      dontDistribute alias
+  removeDistribute = alias:
+    if lib.isDerivation alias then
+      lib.dontDistribute alias
     else alias;
 
   # Make sure that we are not shadowing something from
@@ -99,6 +99,7 @@ mapAliases (with prev; {
   The_NERD_tree       = nerdtree;
   open-browser        = open-browser-vim;
   pathogen            = vim-pathogen;
+  peskcolor-vim       = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
   polyglot            = vim-polyglot;
   prettyprint         = vim-prettyprint;
   quickrun            = vim-quickrun;

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pybravia";
-  version = "0.3.3";
+  version = "0.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Drafteed";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Ux9EereKKbgaVQORliW6J5FSBlytLM+m4PVFBk+OW6k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1LfYEVclRneU3eD52kvzjLYyGdzYSWVDQ5EADOviglw=";
   };
 
   nativeBuildInputs = [ poetry-core ];

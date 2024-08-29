@@ -101,9 +101,9 @@ stdenv.mkDerivation rec {
     # Fix the installation script
     patchShebangs MathInstaller
     substituteInPlace MathInstaller \
-      --replace '`hostname`' "" \
-      --replace "chgrp" "# chgrp" \
-      --replace "chown" ": # chown"
+      --replace-fail '`hostname`' "" \
+      --replace-fail "chgrp" "# chgrp" \
+      --replace-fail "chown" ": # chown"
 
     # Install the desktop items
     export XDG_DATA_HOME="$out/share"
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
       --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
     if ! isELF "$out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer"; then
       substituteInPlace $out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer \
-        --replace "TopDirectory=" "TopDirectory=$out/libexec/${dirName} #";
+        --replace-fail "TopDirectory=" "TopDirectory=$out/libexec/${dirName} #";
     fi
 
     for path in WolframPlayer wolframplayer; do

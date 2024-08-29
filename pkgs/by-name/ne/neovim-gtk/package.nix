@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gdk-pixbuf gtk4 pango vte-gtk4 ];
 
+  patches = [ ./collect-box.patch ];
+
   postInstall = ''
     make PREFIX=$out install-resources
   '';

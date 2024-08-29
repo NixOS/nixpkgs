@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "halo";
   version = "2.18.0";
   src = fetchurl {
-    url = "https://github.com/halo-dev/halo/releases/download/v${version}/${pname}-${version}.jar";
+    url = "https://github.com/halo-dev/halo/releases/download/v${version}/halo-${version}.jar";
     hash = "sha256-XFV+cdqtBJID/s0I3Z6TBfeyzN/e9euUoQVTWy64NYM=";
   };
 

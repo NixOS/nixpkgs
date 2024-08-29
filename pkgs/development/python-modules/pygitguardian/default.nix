@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.15.2";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jmjlNGyGYsiwQ0qi8KiSUI38J4n1ZTzqxzY9Bn9OdqY=";
+    hash = "sha256-2yuYu02Nd9B3UfzrM0p19hDM5HmvigBf48gu+ZSO0kU=";
   };
 
   pythonRelaxDeps = [
@@ -69,6 +69,8 @@ buildPythonPackage rec {
     "test_quota_overview"
     "test_rate_limit"
     "test_read_metadata_bad_response"
+    "test_read_metadata_no_remediation_message"
+    "test_read_metadata_remediation_message"
     "test_sca_client_scan_diff"
     "test_sca_scan_all_with_params"
     "test_sca_scan_directory_invalid_tar"

@@ -1,10 +1,9 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p gitMinimal curl gnupg nix-prefetch-git nixfmt-rfc-style
 # shellcheck disable=SC2206,SC2207 shell=bash
-set -e
-
-# Set a temporary $HOME in /tmp for GPG.
-HOME=/tmp/xenUpdateScript
+set -o errexit
+set -o pipefail
+set -o nounset
 
 # This script expects to be called in an interactive terminal somewhere inside Nixpkgs.
 echo "Preparing..."
@@ -15,8 +14,8 @@ mkdir /tmp/xenUpdateScript
 
 # Import and verify PGP key.
 curl --silent --output /tmp/xenUpdateScript/xen.asc https://keys.openpgp.org/vks/v1/by-fingerprint/23E3222C145F4475FA8060A783FE14C957E82BD9
-gpg --quiet --import /tmp/xenUpdateScript/xen.asc
-fingerprint="$(gpg --with-colons --fingerprint "pgp@xen.org" 2>/dev/null | awk -F: '/^pub:.*/ { getline; print $10}')"
+gpg --homedir /tmp/xenUpdateScript/.gnupg --quiet --import /tmp/xenUpdateScript/xen.asc
+fingerprint="$(gpg --homedir /tmp/xenUpdateScript/.gnupg --with-colons --fingerprint "pgp@xen.org" 2>/dev/null | awk -F: '/^pub:.*/ { getline; print $10}')"
 echo -e "Please ascertain through multiple external sources that the \e[1;32mXen Project PGP Key Fingerprint\e[0m is indeed \e[1;33m$fingerprint\e[0m. If that is not the case, \e[1;31mexit immediately\e[0m."
 read -r -p $'Press \e[1;34menter\e[0m to continue with a pre-filled expected fingerprint, or input an arbitrary PGP fingerprint to match with the key\'s fingerprint: ' userInputFingerprint
 userInputFingerprint=${userInputFingerprint:-"23E3222C145F4475FA8060A783FE14C957E82BD9"}
@@ -32,7 +31,7 @@ latestVersion=$(echo "$versionList" | tr ' ' '\n' | tail --lines=1)
 branchList=($(echo "$versionList" | tr ' ' '\n' | sed s/\.[0-9]*$//g | awk '!seen[$0]++'))
 
 # Figure out which versions we're actually going to install.
-minSupportedBranch="$(grep "    knownVulnerabilities = lib.lists.optionals (lib.strings.versionOlder version " "$xenPath"/generic.nix | sed s/'    knownVulnerabilities = lib.lists.optionals (lib.strings.versionOlder version "'//g | sed s/'") \['//g)"
+minSupportedBranch="$(grep "  minSupportedVersion = " "$xenPath"/generic/default.nix | sed s/'  minSupportedVersion = "'//g | sed s/'";'//g)"
 supportedBranches=($(for version in "${branchList[@]}"; do if [ "$(printf '%s\n' "$minSupportedBranch" "$version" | sort -V | head -n1)" = "$minSupportedBranch" ]; then echo "$version"; fi; done))
 supportedVersions=($(for version in "${supportedBranches[@]}"; do echo "$versionList" | tr ' ' '\n' | grep "$version" | tail --lines=1; done))
 
@@ -51,7 +50,7 @@ for version in "${supportedVersions[@]}"; do
     # Verify PGP key automatically. If the fingerprint matches what the user specified, or the default fingerprint, then we consider it trusted.
     cd /tmp/xenUpdateScript/xen
     if [[ "$fingerprint" = "$userInputFingerprint" ]]; then
-        echo "$fingerprint:6:" | gpg --quiet --import-ownertrust
+        echo "$fingerprint:6:" | gpg --homedir /tmp/xenUpdateScript/.gnupg --quiet --import-ownertrust
         (git verify-tag RELEASE-"$version" 2>/dev/null && echo -e "\n\e[1;32mSuccessfully authenticated Xen $version.\e[0m") || (echo -e "\e[1;31merror:\e[0m Unable to verify tag \e[1;32mRELEASE-$version\e[0m.\n- It is possible that \e[1;33mthis script has broken\e[0m, the Xen Project has \e[1;33mcycled their PGP keys\e[0m, or a \e[1;31msupply chain attack is in progress\e[0m.\n\n\e[1;31mPlease update manually.\e[0m" && exit 1)
     else
         echo -e "\e[1;31merror:\e[0m Unable to verify \e[1;34mpgp@xen.org\e[0m's fingerprint.\n- It is possible that \e[1;33mthis script has broken\e[0m, the Xen Project has \e[1;33mcycled their PGP keys\e[0m, or an \e[1;31mimpersonation attack is in progress\e[0m.\n\n\e[1;31mPlease update manually.\e[0m" && exit 1
@@ -121,11 +120,10 @@ for version in "${supportedVersions[@]}"; do
     echo -e "Found the following patches:\n  \e[1;32mXen\e[0m:     \e[1;33m$discoveredXenPatchesEcho\e[0m\n  \e[1;36mQEMU\e[0m:    \e[1;33m$discoveredQEMUPatchesEcho\e[0m\n  \e[1;36mSeaBIOS\e[0m: \e[1;33m$discoveredSeaBIOSPatchesEcho\e[0m\n  \e[1;36mOVMF\e[0m:    \e[1;33m$discoveredOVMFPatchesEcho\e[0m\n  \e[1;36miPXE\e[0m:    \e[1;33m$discoveredIPXEPatchesEcho\e[0m"
 
     # Prepare patches that are called in ./patches.nix.
-    defaultPatchListInit=("QUBES_REPRODUCIBLE_BUILDS" "XSA_458")
+    defaultPatchListInit=("QUBES_REPRODUCIBLE_BUILDS" "XSA_458" "XSA_460" "XSA_461" )
     read -r -a defaultPatchList -p $'\nWould you like to override the \e[1;34mupstreamPatches\e[0m list for \e[1;32mXen '"$version"$'\e[0m? If no, press \e[1;34menter\e[0m to use the default patch list: [ \e[1;34m'"${defaultPatchListInit[*]}"$' \e[0m]: '
     defaultPatchList=(${defaultPatchList[@]:-${defaultPatchListInit[@]}})
-    spaceSeparatedPatchList=${defaultPatchList[*]}
-    upstreamPatches="upstreamPatches.${spaceSeparatedPatchList// / upstreamPatches.}"
+    upstreamPatches=${defaultPatchList[*]}
 
     # Write and format default.nix file.
     echo -e "\nWriting updated \e[1;34mversionDefinition\e[0m..."
@@ -139,17 +137,18 @@ for version in "${supportedVersions[@]}"; do
 }@genericDefinition:
 
 let
-  upstreamPatches = import ../patches.nix {
+  upstreamPatches = import ../generic/patches.nix {
     inherit lib;
     inherit fetchpatch;
   };
 
-  upstreamPatchList = lib.lists.flatten [
+  upstreamPatchList = lib.lists.flatten (with upstreamPatches; [
     $upstreamPatches
-  ];
+  ]);
 in
 
-callPackage (import ../generic.nix {
+callPackage (import ../generic/default.nix {
+  pname = "xen";
   branch = "$branch";
   version = "$version";
   latest = $latest;

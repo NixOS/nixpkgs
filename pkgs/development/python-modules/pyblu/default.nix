@@ -1,36 +1,46 @@
 {
   aiohttp,
+  aioresponses,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
+  lxml,
   poetry-core,
-  xmltodict,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "0.4.0";
+  version = "1.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qMbwrRD7ZUsHHOLF9yPvAxiTmJ8vJX1cyHX+4ONtsQ8=";
+  src = fetchFromGitHub {
+    owner = "LouisChrist";
+    repo = "pyblu";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ue6czsgeQjqPtbKmvvU+f49gKSzXJ8Yx9EzycUTtxE0=";
   };
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "lxml" ];
+
   dependencies = [
     aiohttp
-    xmltodict
+    lxml
   ];
 
   pythonImportsCheck = [ "pyblu" ];
 
-  # no tests on PyPI, no tags on GitHub
-  # https://github.com/LouisChrist/pyblu/issues/19
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   meta = {
+    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/v${version}";
     description = "BluOS API client";
     homepage = "https://github.com/LouisChrist/pyblu";
     license = lib.licenses.mit;

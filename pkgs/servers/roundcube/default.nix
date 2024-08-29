@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins }:
+{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "roundcube";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     name = "${roundcube.name}-with-plugins";
     paths = (f roundcubePlugins) ++ [ roundcube ];
   };
+
+  passthru.tests = { inherit (nixosTests) roundcube; };
 
   meta = {
     description = "Open Source Webmail Software";

@@ -46,6 +46,8 @@ let
     description = meta.description + lib.optionalString meta.isOpenSource (if fromSource then " (built from source)" else " (patched binaries from jetbrains)");
     maintainers = map (x: lib.maintainers."${x}") meta.maintainers;
     license = if meta.isOpenSource then lib.licenses.asl20 else lib.licenses.unfree;
+    sourceProvenance = if fromSource then [ lib.sourceTypes.fromSource ] else
+      (if stdenv.isDarwin then [ lib.sourceTypes.binaryNativeCode ] else [ lib.sourceTypes.binaryBytecode ]);
   };
 
   mkJetBrainsProduct =

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.4.4";
+  version = "4.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XFP2/gHi+uNXrTO3ltv9tOr+shFDVPRs85YIgGEU7Pg=";
+    hash = "sha256-5mGccMmQBtQfF1vV4bosjD39sAwrQdZQWZF5QuL2lxo=";
   };
 
   build-system = [ setuptools ];

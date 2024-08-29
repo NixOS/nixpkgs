@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   tag ? "",
 
   # build time
@@ -46,9 +45,9 @@
   xvfb-run,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "quodlibet${tag}";
-  version = "4.6.0";
+  version = "4.6.0-unstable-2024-08-08";
   pyproject = true;
 
   outputs = [
@@ -59,24 +58,11 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "quodlibet";
     repo = "quodlibet";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-dkO/CFN7Dk72xhtmcSDcwUciOPMeEjQS2mch+jSfiII=";
+    rev = "3dcf31dfc8db9806d1f73a47fdabc950d35ded1d";
+    hash = "sha256-8qWuxTvMF6ksDkbZ6wRLPCJK1cSqgGMPac/ht6qVpnA=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "python-3.12-startup.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/quodlibet/quodlibet/pull/4358.patch";
-      hash = "sha256-3IjtAX2mKO/Xi/iTwT5WBD5CMTRYFED7XMm/cx+29Zc=";
-    })
-    (fetchpatch {
-      name = "more-python-3.12-fixes.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/quodlibet/quodlibet/pull/4364.patch";
-      hash = "sha256-VRIQ+4e+X0kjZYuxV2wEjrFr+x5biwBtIR50K6hSfCY=";
-      excludes = [ "poetry.lock" ];
-    })
-    ./fix-gdist-python-3.12.patch
-  ];
+  patches = [ ./fix-gdist-python-3.12.patch ];
 
   build-system = [ python3.pkgs.setuptools ];
 

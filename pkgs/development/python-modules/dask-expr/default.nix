@@ -21,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.10";
+  version = "1.1.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-z/+0d/mcC51rXfSCkVosc2iJ9SKHuKlPO+n/+SisQBg=";
+    hash = "sha256-D26b8HkcRqsMuzSTZdmDmS59dlAbj4F93kfY27UAhKw=";
   };
 
   postPatch = ''

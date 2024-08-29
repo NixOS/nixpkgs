@@ -72,14 +72,14 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PYaqRNKIhQ1DnFRZYyJJfBszVM2Bmu7A/lvvzJ6lL3g=";
+    hash = "sha256-ltBPoFDA7GS9XRHyWeTRn1YTVqdaE/38KnkG4fp7Th8=";
   };
 
   patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];

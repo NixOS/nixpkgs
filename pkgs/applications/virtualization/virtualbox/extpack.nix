@@ -1,7 +1,4 @@
 { fetchurl, lib, virtualbox }:
-
-with lib;
-
 let
   inherit (virtualbox) version;
 in
@@ -15,7 +12,7 @@ fetchurl rec {
     let value = "d750fb17688d70e0cb2d7b06f1ad3a661303793f4d1ac39cfa9a54806b89da25";
     in assert (builtins.stringLength value) == 64; value;
 
-  meta = {
+  meta = with lib; {
     description = "Oracle Extension pack for VirtualBox";
     license = licenses.virtualbox-puel;
     homepage = "https://www.virtualbox.org/";

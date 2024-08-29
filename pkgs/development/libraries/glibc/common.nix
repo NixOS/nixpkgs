@@ -294,7 +294,7 @@ stdenv.mkDerivation ({
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ eelco ma27 connorbaker ];
+    maintainers = with maintainers; [ ma27 connorbaker ];
     platforms = platforms.linux;
   } // (args.meta or {});
 })

@@ -213,31 +213,46 @@ in {
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
     zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
 
-    linux_zen = (zenKernels {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    }).zen;
-
-    linux_lqx = (zenKernels {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    }).lqx;
-
-    # This contains the variants of the XanMod kernel
-    xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix {
+    linux_zen = zenKernels {
+      variant = "zen";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
     };
 
-    linux_xanmod = xanmodKernels.lts;
-    linux_xanmod_stable = xanmodKernels.main;
-    linux_xanmod_latest = xanmodKernels.main;
+    linux_lqx = zenKernels {
+      variant = "lqx";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
+    # This contains the variants of the XanMod kernel
+    xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
+
+    linux_xanmod = xanmodKernels {
+      variant = "lts";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+    linux_xanmod_stable = xanmodKernels {
+      variant = "main";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+    linux_xanmod_latest = xanmodKernels {
+      variant = "main";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 

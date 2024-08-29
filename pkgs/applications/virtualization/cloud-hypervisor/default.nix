@@ -4,22 +4,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "40.0";
+  version = "41.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zrMJGdbOukNbzmcTuIcHlwAbJvTzhz53dc4TO/Fplb4=";
+    hash = "sha256-CI7hWRZUexvmBZJ8cPXxZxwmcxLnw6h9PFMhoaj9jh4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "ub.patch";
-      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/02f146fef81c4aa4a7ef3555c176d3b533158d7a.patch";
-      hash = "sha256-g9WcGJy8Q+Bc0egDfoQVSVfKqyXa8vkIZk+aYQyFuy8=";
-    })
-  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

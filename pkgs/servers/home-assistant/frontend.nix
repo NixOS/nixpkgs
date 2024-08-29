@@ -22,8 +22,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Polymer frontend for Home Assistant";
-    homepage = "https://github.com/home-assistant/home-assistant-polymer";
+    description = "Frontend for Home Assistant";
+    homepage = "https://github.com/home-assistant/frontend";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

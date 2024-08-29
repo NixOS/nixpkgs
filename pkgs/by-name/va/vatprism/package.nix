@@ -78,7 +78,7 @@ maven.buildMavenPackage rec {
 
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk}/bin/java $out/bin/vatprism \
         --add-flags "-jar $out/vatsim-map-${version}-fat.jar" \
         --set JAVA_HOME ${jdk.home} \
         --suffix LD_LIBRARY_PATH : ${libPath}

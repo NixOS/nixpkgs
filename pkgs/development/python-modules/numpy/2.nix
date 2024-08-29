@@ -58,7 +58,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-z10cnmg3+K+fkra9PobVE83BH2D9YhhcxJ7H0aujSGQ=";
+    hash = "sha256-fckNoAgffh2knsTjmO3mqOnMT16+X54GtEPtiJ7pqqI=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [

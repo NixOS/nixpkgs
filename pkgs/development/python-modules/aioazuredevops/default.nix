@@ -34,6 +34,11 @@ buildPythonPackage rec {
     hash = "sha256-1v58I9WOyyrp9n+qdvVeMZ3EObqP/06XCOZYS0nEvPU=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
+  '';
+
   build-system = [
     incremental
     setuptools

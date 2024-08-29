@@ -160,7 +160,7 @@ stdenv.mkDerivation(finalAttrs: {
     # source code is not easily obtainable
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" true)
-    (lib.mesonEnable "bluez5-codec-ldac" true)
+    (lib.mesonEnable "bluez5-codec-ldac" (lib.meta.availableOn stdenv.hostPlatform ldacbt))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)

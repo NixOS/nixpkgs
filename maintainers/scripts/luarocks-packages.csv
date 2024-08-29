@@ -104,6 +104,7 @@ luv,,,,1.48.0-2,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 lyaml,,,,,,lblasc
 lz.n,,,,,,mrcjkb
+lzn-auto-require,,,,,,mrcjkb
 magick,,,,,5.1,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,

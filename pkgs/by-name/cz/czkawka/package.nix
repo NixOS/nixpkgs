@@ -28,14 +28,15 @@ let
     rev = version;
     hash = "sha256-SOWtLmehh1F8SoDQ+9d7Fyosgzya5ZztCv8IcJZ4J94=";
   };
-  cargoHash = "sha256-GOX7V6NLEMP06nMeRZINwcWCaHwK6T3nkRKl4e25DPg=";
+  cargoPatches = [ ./time.patch ];
+  cargoHash = "sha256-cQv8C0P3xizsvnJODkTMJQA98P4nYSCHFT75isJE6es=";
 
   buildRustPackage' = rustPlatform.buildRustPackage.override {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 in
 buildRustPackage' {
-  inherit pname version src cargoHash;
+  inherit pname version src cargoPatches cargoHash;
 
   nativeBuildInputs = [
     gobject-introspection

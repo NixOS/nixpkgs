@@ -4,7 +4,7 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "n98-magerun2";
   version = "7.4.0";
 
@@ -15,7 +15,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-OPvyZ0r7Zt4PC+rmRtBm9EkbaE4PeovnUHrhzXUqT8E=";
   };
 
-  vendorHash = "sha256-HSkcYbDQPK1ByG8Euq9YqzK0jqjKrWO+0R4ungFDOIY=";
+  vendorHash = "sha256-E2V5ARNCmGOmGGctfcjpW49cxFBcWyJEodBNjHhKQ+w=";
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";

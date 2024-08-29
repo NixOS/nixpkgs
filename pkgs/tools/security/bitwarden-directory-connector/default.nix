@@ -44,7 +44,7 @@ let
     ];
 
     nativeBuildInputs = [
-      python3
+      (python3.withPackages (ps: with ps; [ setuptools ]))
       pkg-config
     ];
 
@@ -66,7 +66,7 @@ in {
 
       npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${electron}/libexec/electron \
+        -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version} \
         -c.npmRebuild=false
 

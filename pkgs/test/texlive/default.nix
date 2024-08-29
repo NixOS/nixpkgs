@@ -190,7 +190,7 @@ rec {
 
   texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
-      (texlive.withPackages (ps: with ps; [ luatex ps.texdoc ps.texdoc.texdoc ]))
+      (texlive.withPackages (ps: [ ps.luatex ps.texdoc ps.texdoc.texdoc ]))
     ];
   } ''
     texdoc --version
@@ -668,14 +668,14 @@ rec {
   # verify that all fixed hashes are present
   # this is effectively an eval-time assertion, converted into a derivation for
   # ease of testing
-  fixedHashes = with lib; let
+  fixedHashes = let
     fods = lib.concatMap
-      (p: lib.optional (p ? tex && isDerivation p.tex) p.tex
+      (p: lib.optional (p ? tex && lib.isDerivation p.tex) p.tex
         ++ lib.optional (p ? texdoc) p.texdoc
         ++ lib.optional (p ? texsource) p.texsource
         ++ lib.optional (p ? tlpkg) p.tlpkg)
-      (attrValues texlive.pkgs);
-    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n") fods;
+      (lib.attrValues texlive.pkgs);
+    errorText = lib.concatMapStrings (p: lib.optionalString (! p ? outputHash) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n") fods;
   in runCommand "texlive-test-fixed-hashes" {
     inherit errorText;
     passAsFile = [ "errorText" ];

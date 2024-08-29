@@ -38,8 +38,11 @@ stdenv.mkDerivation {
     runHook preInstall
 
     for exe in "pdf-sign" "pdf-create-empty" "pdf-from-text"; do
-      install -Dm755 $exe -t $out/bin
-      wrapProgram $out/bin/$exe --prefix PATH : ${binPath}
+      # Install wrapped programs into $out/lib so that they are not renamed.
+      # Renaming them, like wrapProgram does, would produce the wrong output
+      # from `--help`.
+      install -Dm755 $exe -t $out/lib
+      makeWrapper $out/lib/$exe $out/bin/$exe --prefix PATH : ${binPath}
     done
 
     runHook postInstall

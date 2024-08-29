@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     npm exec electron-builder -- \
         --dir \
         --config electron-builder-${platformId}.yml \
-        -c.electronDist=${electron}/libexec/electron \
+        -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
 
     runHook postBuild

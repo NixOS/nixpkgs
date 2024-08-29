@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
     sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 

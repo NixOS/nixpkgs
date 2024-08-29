@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.118";
+  version = "0.0.119";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,13 +21,8 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-LudwIENP1KCX7+HwyklCUdAu5mRLDcnMEZBzbRH2FM0=";
+    hash = "sha256-QvytImEpDk+3IeWVh9bYaX60u+mx4SVXuRxAd/YjPTE=";
   };
-
-  patches = [
-    # https://github.com/zigpy/zha-device-handlers/pull/3296
-    ./zigpy-0.65.3-compat.patch
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

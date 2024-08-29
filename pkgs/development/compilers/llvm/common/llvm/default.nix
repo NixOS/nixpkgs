@@ -46,8 +46,7 @@ let
   inherit (lib) optional optionals optionalString;
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with lib;
-    concatStringsSep "." (take 1 (splitString "." release_version));
+  shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
   # Ordinarily we would just the `doCheck` and `checkDeps` functionality
   # `mkDerivation` gives us to manage our test dependencies (instead of breaking
@@ -71,7 +70,7 @@ let
     # platform here; the splicing that would ordinarily take care of this for
     # us does not seem to work once we use `withPackages`.
     let
-      checkDeps = ps: with ps; [ psutil ];
+      checkDeps = ps: [ ps.psutil ];
     in pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
   else python3;
 
@@ -323,7 +322,7 @@ stdenv.mkDerivation (rec {
 
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 
-  cmakeFlags = with stdenv; let
+  cmakeFlags = let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
     # CROSS_TOOLCHAIN_FLAGS_NATIVE when cross-compiling or llvm-config-native
@@ -367,7 +366,7 @@ stdenv.mkDerivation (rec {
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ] ++ optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ] ++ optionals isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [

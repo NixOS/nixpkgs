@@ -1,6 +1,11 @@
 # A test that containerdConfigTemplate settings get written to containerd/config.toml
 import ../make-test-python.nix (
-  { lib, k3s, ... }:
+  {
+    pkgs,
+    lib,
+    k3s,
+    ...
+  }:
   let
     nodeName = "test";
   in
@@ -9,6 +14,7 @@ import ../make-test-python.nix (
     nodes.machine =
       { ... }:
       {
+        environment.systemPackages = [ pkgs.jq ];
         # k3s uses enough resources the default vm fails.
         virtualisation.memorySize = 1536;
         virtualisation.diskSize = 4096;
@@ -38,7 +44,7 @@ import ../make-test-python.nix (
       start_all()
       machine.wait_for_unit("k3s")
       # wait until the node is ready
-      machine.wait_until_succeeds(r"""kubectl wait --for='jsonpath={.status.conditions[?(@.type=="Ready")].status}=True' nodes/${nodeName}""")
+      machine.wait_until_succeeds(r"""kubectl get node ${nodeName} -ojson | jq -e '.status.conditions[] | select(.type == "Ready") | .status == "True"'""")
       # test whether the config template file contains the magic comment
       out=machine.succeed("cat /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl")
       assert "MAGIC COMMENT" in out, "the containerd config template does not contain the magic comment"

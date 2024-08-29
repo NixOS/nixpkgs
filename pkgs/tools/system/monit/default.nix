@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Monitoring system";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ raskin wmertens ryantm ];
-    platforms = with lib; platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "monit";
   };
 }

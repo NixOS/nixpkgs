@@ -2,7 +2,7 @@
 , lib
 , makeWrapper
 , nodejs
-, nodePackages
+, node-gyp
 , pnpm_9
 , python3
 , stdenv
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    nodePackages.node-gyp # required for sqlite3 bindings
+    node-gyp # required for sqlite3 bindings
     pnpm_9.configHook
     python3 # required for sqlite3 bindings
   ] ++ lib.optional stdenv.isDarwin [ xcbuild ];

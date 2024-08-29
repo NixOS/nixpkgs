@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, dde-qt-dbus-factory
-, dde-dock
-, deepin-pdfium
-, qt5integration
-, qt5platform-plugins
-, taglib
-, ffmpeg
-, ffmpegthumbnailer
-, pcre
-, dbus
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  dtkwidget,
+  dde-qt-dbus-factory,
+  dde-dock,
+  deepin-pdfium,
+  qt5integration,
+  qt5platform-plugins,
+  taglib,
+  ffmpeg,
+  ffmpegthumbnailer,
+  pcre,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {

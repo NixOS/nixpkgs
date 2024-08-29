@@ -5,7 +5,7 @@
     sha256 = "0q3kg7dqvsiar3m70mvmn6bkkm4k1zn4fbh5r8ynib753wlhf504";
   }
 , ...
-}:
+} @ args:
 
 let
   majorMinor = lib.versions.majorMinor linux.modDirVersion;
@@ -45,4 +45,4 @@ in linux.override {
 
     maintainers = with lib.maintainers; [ qyliss ];
   };
-}
+} // (args.argsOverride or { })

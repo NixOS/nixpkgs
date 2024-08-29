@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'deps = [ "//third_party/zlib" ]' 'deps = []'
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [
     gn
     ninja
@@ -69,7 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
   ];
 
-  configurePhase = ''
+  configurePhase = let
+    cpu = {
+      "x86_64" = "x64";
+      "i686" = "x86";
+      "arm" = "arm";
+      "aarch64" = "arm64";
+    }.${stdenv.hostPlatform.parsed.cpu.name};
+  in ''
     runHook preConfigure
     gn gen build --args='${toString ([
       # Build in release mode
@@ -80,6 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
       "skia_use_wuffs=false"
       # Use system dependencies
       "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+      "cc=\"${stdenv.cc.targetPrefix}cc\""
+      "cxx=\"${stdenv.cc.targetPrefix}c++\""
+      "ar=\"${stdenv.cc.targetPrefix}ar\""
+      "target_cpu=\"${cpu}\""
     ] ++ map (lib: "skia_use_system_${lib}=true") [
       "zlib"
       "harfbuzz"
@@ -142,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://skia.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64;
     pkgConfigModules = [ "skia" ];
     # https://github.com/NixOS/nixpkgs/pull/325871#issuecomment-2220610016
     broken = stdenv.isDarwin;

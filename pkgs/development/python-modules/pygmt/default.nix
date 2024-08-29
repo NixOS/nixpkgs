@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pygmt";
   version = "0.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "8.7";
+  version = "8.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "evalf";
     repo = "nutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wxouS0FXrdIhm6nTVBuzkwHceJnZ7f7k8nMFxFsZchE=";
+    hash = "sha256-E/y1YXW+0+LfntRQsdIU9rMOmN8mlFwXktD/sViJo3I=";
   };
 
   build-system = [ flit-core ];

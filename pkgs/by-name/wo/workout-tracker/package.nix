@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   ...
 }:
 
@@ -20,6 +21,10 @@ buildGoModule rec {
   vendorHash = null;
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    inherit (nixosTests) workout-tracker;
+  };
 
   meta = {
     changelog = "https://github.com/jovandeginste/workout-tracker/releases/tag/v${version}";

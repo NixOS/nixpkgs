@@ -3,28 +3,18 @@
   python3Packages,
   fetchFromGitHub,
   procps,
-  fetchpatch2,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mackup";
-  version = "0.8.40";
+  version = "0.8.41";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lra";
     repo = "mackup";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hAIl9nGFRaROlt764IZg4ejw+b1dpnYpiYq4CB9dJqQ=";
+    rev = "${version}";
+    hash = "sha256-eWSBl8BTg2FLI21DQcnepBFPF08bfm0V8lYB4mMbAiw=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "remove-six.patch";
-      url = "https://github.com/lra/mackup/commit/31ae717d40360e2e9d2d46518f57dcdc95b165ca.patch";
-      hash = "sha256-M2gtY03SOlPefsHREPmeajhnfmIoHbNYjm+W4YZqwKM=";
-      excludes = [ "CHANGELOG.md" ];
-    })
-  ];
 
   postPatch = ''
     substituteInPlace mackup/utils.py \
@@ -40,6 +30,9 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests/*.py" ];
+
+  # Disabling tests failing on darwin due to a missing pgrep binary on procps
+  disabledTests = [ "test_is_process_running" ];
 
   meta = {
     description = "A tool to keep your application settings in sync (OS X/Linux)";

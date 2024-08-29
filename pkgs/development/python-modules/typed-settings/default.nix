@@ -7,6 +7,7 @@
   click-option-group,
   fetchPypi,
   hatchling,
+  hypothesis,
   jinja2,
   pydantic,
   pytestCheckHook,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     typing-extensions
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);

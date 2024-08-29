@@ -45,7 +45,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  pythonRelaxDeps = [ "requests" ];
+  pythonRelaxDeps = [
+    "pygit2"
+    "requests"
+  ];
 
   dependencies = [
     craft-archives

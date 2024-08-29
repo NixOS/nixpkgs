@@ -27,7 +27,7 @@ python311Packages.buildPythonApplication rec {
     ./disable-autoupdate.patch
   ];
 
-  postPatch = with lib; ''
+  postPatch = ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
@@ -47,7 +47,7 @@ python311Packages.buildPythonApplication rec {
     minimock
     pytest
     pytest-httpserver
-    pytest-cov
+    pytest-cov-stub
   ];
 
   doCheck = true;

@@ -1,9 +1,9 @@
 { wasm-bindgen-cli, ... }@args:
 import ../generic.nix (args // {
-  version = "16.0.4";
-  hash = "sha256-svDqcYm6PbmPyHhN00VKn/sGRkfb7ah2N7BtEVdZ9hg=";
-  vendorHash = "sha256-H4Rwel/UAvxY8/4CfSbneJYjt9HHgsuNbYXUM6MtqXM=";
-  yarnHash = "sha256-OHNnN66MevDiH4Zr6Uq3Om65XBzf4O3AIrPvhlvhkbE=";
+  version = "16.1.4";
+  hash = "sha256-WgMQzS7nwIwPojcf9HTLajLd0WV+RYEbyp/aWr9XFWc=";
+  vendorHash = "sha256-8WN4hVueA2o2bHhhxLGPYxPX+1qky8QHGTRqhEGNh9s=";
+  pnpmHash = "sha256-phDrOSFQsgA+I4PDK9LJasUBXBO8EkVtQIMx9M4v8u0=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

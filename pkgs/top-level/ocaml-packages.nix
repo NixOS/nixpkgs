@@ -225,8 +225,6 @@ let
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
-    cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
-
     cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
     coin =  callPackage ../development/ocaml-modules/coin { };
@@ -1117,8 +1115,6 @@ let
 
     mirage-bootvar-xen = callPackage ../development/ocaml-modules/mirage-bootvar-xen { };
 
-    mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
-
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-solo5 = callPackage ../development/ocaml-modules/mirage-clock/solo5.nix { };
@@ -1126,8 +1122,6 @@ let
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
 
     mirage-console = callPackage ../development/ocaml-modules/mirage-console { };
-
-    mirage-console-unix = callPackage ../development/ocaml-modules/mirage-console/unix.nix { };
 
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
