@@ -1,5 +1,4 @@
 { lib, pkgs, config, generators, ... }:
-with lib;
 let
   cfg = config.services.grafana-agent;
   settingsFormat = pkgs.formats.yaml { };
@@ -7,19 +6,19 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ flokli zimbatm ];
+    maintainers = with lib.maintainers; [ flokli zimbatm ];
   };
 
   options.services.grafana-agent = {
-    enable = mkEnableOption "grafana-agent";
+    enable = lib.mkEnableOption "grafana-agent";
 
-    package = mkPackageOption pkgs "grafana-agent" { };
+    package = lib.mkPackageOption pkgs "grafana-agent" { };
 
-    credentials = mkOption {
+    credentials = lib.mkOption {
       description = ''
         Credentials to load at service startup. Keys that are UPPER_SNAKE will be loaded as env vars. Values are absolute paths to the credentials.
       '';
-      type = types.attrsOf types.str;
+      type = lib.types.attrsOf lib.types.str;
       default = { };
 
       example = {
@@ -32,8 +31,8 @@ in
       };
     };
 
-    extraFlags = mkOption {
-      type = with types; listOf str;
+    extraFlags = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [ ];
       example = [ "-enable-features=integrations-next" "-disable-reporting" ];
       description = ''
@@ -43,14 +42,14 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Configuration for {command}`grafana-agent`.
 
         See <https://grafana.com/docs/agent/latest/configuration/>
       '';
 
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
       };
 
@@ -110,17 +109,17 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.grafana-agent.settings = {
       # keep this in sync with config.services.grafana-agent.settings.defaultText.
       metrics = {
-        wal_directory = mkDefault "\${STATE_DIRECTORY}";
-        global.scrape_interval = mkDefault "5s";
+        wal_directory = lib.mkDefault "\${STATE_DIRECTORY}";
+        global.scrape_interval = lib.mkDefault "5s";
       };
       integrations = {
-        agent.enabled = mkDefault true;
-        agent.scrape_integration = mkDefault true;
-        node_exporter.enabled = mkDefault true;
+        agent.enabled = lib.mkDefault true;
+        agent.scrape_integration = lib.mkDefault true;
+        node_exporter.enabled = lib.mkDefault true;
       };
     };
 
@@ -144,7 +143,7 @@ in
         # We can't use Environment=HOSTNAME=%H, as it doesn't include the domain part.
         export HOSTNAME=$(< /proc/sys/kernel/hostname)
 
-        exec ${lib.getExe cfg.package} -config.expand-env -config.file ${configFile} ${escapeShellArgs cfg.extraFlags}
+        exec ${lib.getExe cfg.package} -config.expand-env -config.file ${configFile} ${lib.escapeShellArgs cfg.extraFlags}
       '';
       serviceConfig = {
         Restart = "always";
