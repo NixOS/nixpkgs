@@ -5630,12 +5630,6 @@
     githubId = 6689924;
     name = "David Terry";
   };
-  dxwil = {
-    email = "dovydas@kersys.lt";
-    github = "dxwil";
-    githubId = 90563298;
-    name = "Dovydas Kersys";
-  };
   dylan-gonzalez = {
     email = "dylcg10@gmail.com";
     github = "dylan-gonzalez";
