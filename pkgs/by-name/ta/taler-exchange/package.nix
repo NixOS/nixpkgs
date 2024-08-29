@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-yHRRMlqFA2OiFg0rBVzn7130wyVaxKn2dChFTPnVtbs=";
+    hash = "sha256-elVZUuiIMLOG058n+Egpy9oD9T2sLDC4TUCYZTCi0bw=";
   };
 
   patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
@@ -60,9 +60,33 @@ stdenv.mkDerivation (finalAttrs: {
   preAutoreconf = ''
     ./contrib/gana-generate.sh
     pushd contrib
-    find wallet-core/aml-backoffice/ -type f -printf '  %p \\\n' | sort > Makefile.am.ext
+    rm -f Makefile.am
+    {
+      echo 'dist_amlspapkgdata_DATA = \'
+      find wallet-core/aml-backoffice/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
     truncate -s -2 Makefile.am.ext
+
+    {
+      echo ""
+      echo 'dist_kycspapkgdata_DATA = \'
+      find wallet-core/kyc/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
+    truncate -s -2 Makefile.am.ext
+
+    {
+      echo ""
+      echo 'dist_auditorspapkgdata_DATA = \'
+      find wallet-core/auditor-backoffice/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
+    truncate -s -2 Makefile.am.ext
+
     cat Makefile.am.in Makefile.am.ext >> Makefile.am
+    # Prevent accidental editing of the generated Makefile.am
+    chmod -w Makefile.am
     popd
   '';
 
