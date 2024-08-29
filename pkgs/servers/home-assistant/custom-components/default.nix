@@ -12,6 +12,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  deutschebahn = callPackage ./deutschebahn {};
+
   dwd = callPackage ./dwd { };
 
   elevenlabs_tts = callPackage ./elevenlabs_tts {};
