@@ -3,6 +3,7 @@
 import ./make-test-python.nix (
 { pkgs
 , socket ? true # whether to use socket activation
+, listenTcp ? true # whether to open port 631 on client
 , ...
 }:
 
@@ -39,9 +40,10 @@ in
     }];
   };
 
-  nodes.client = { ... }: {
+  nodes.client = { lib, ... }: {
     services.printing.enable = true;
     services.printing.startWhenNeeded = socket;
+    services.printing.listenAddresses = lib.mkIf (!listenTcp) [];
     # Add printer to the client as well, via IPP.
     hardware.printers.ensurePrinters = [{
       name = "DeskjetRemote";
@@ -67,7 +69,7 @@ in
         assert "/var/run/cups/cups.sock" in client.succeed("lpstat -H")
 
     with subtest("HTTP server is available too"):
-        client.succeed("curl --fail http://localhost:631/")
+        ${lib.optionalString listenTcp ''client.succeed("curl --fail http://localhost:631/")''}
         client.succeed(f"curl --fail http://{server.name}:631/")
         server.fail(f"curl --fail --connect-timeout 2 http://{client.name}:631/")
 

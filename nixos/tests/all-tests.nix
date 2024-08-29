@@ -828,8 +828,10 @@ in {
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   pretalx = runTest ./web-apps/pretalx.nix;
   pretix = runTest ./web-apps/pretix.nix;
-  printing-socket = handleTest ./printing.nix { socket = true; };
-  printing-service = handleTest ./printing.nix { socket = false; };
+  printing-socket = handleTest ./printing.nix { socket = true; listenTcp = true; };
+  printing-service = handleTest ./printing.nix { socket = false; listenTcp = true; };
+  printing-socket-notcp = handleTest ./printing.nix { socket = true; listenTcp = false; };
+  printing-service-notcp = handleTest ./printing.nix { socket = false; listenTcp = false; };
   private-gpt = handleTest ./private-gpt.nix {};
   privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix {};
