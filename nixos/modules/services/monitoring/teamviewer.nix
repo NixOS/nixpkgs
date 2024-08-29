@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.teamviewer;
@@ -14,13 +11,13 @@ in
 
   options = {
 
-    services.teamviewer.enable = mkEnableOption "TeamViewer daemon";
+    services.teamviewer.enable = lib.mkEnableOption "TeamViewer daemon";
 
   };
 
   ###### implementation
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
 
     environment.systemPackages = [ pkgs.teamviewer ];
 
