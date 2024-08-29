@@ -7,7 +7,6 @@
   # build-system
   cmake,
   scikit-build-core,
-  pathspec,
   ninja,
   nanobind,
 
@@ -45,7 +44,6 @@ buildPythonPackage rec {
     nanobind
     ninja
     numpy
-    pathspec
     scikit-build-core
   ];
 
