@@ -5,6 +5,7 @@
   gnunet,
   qrencode,
   taler-exchange,
+  taler-wallet-core,
   libtool,
   pkg-config,
   autoreconfHook,
@@ -12,23 +13,15 @@
   jq,
 }:
 
-let
-  taler-wallet-core = fetchgit {
-    url = "https://git.taler.net/wallet-core.git";
-    # https://taler.net/en/news/2024-23.html
-    rev = "v0.12.7";
-    hash = "sha256-5fyPPrRCKvHTgipIpKqHX3iH5f+wTuyfsAKgKmvl1nI=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-BNIVlL+YPqqRZUhHOR/eH38dSHn/kNyCbMyz0ICxAMk=";
+    hash = "sha256-N3atOOE21OEks3G1LPOM5qo/kq0D5D9gmTfURCBZx6M=";
   };
 
   postUnpack = ''
