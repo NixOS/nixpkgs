@@ -13,12 +13,13 @@
   setuptools-scm,
   sphinx-rtd-theme,
   stripe,
+  suds-community,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "django-payments";
-  version = "2.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-payments";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6WPV08CV+rko/tRnsT5GyTGYaJbiIKTvpisfRwizBIo=";
+    hash = "sha256-/XsqtExnNtUGqI40XvvcO/nGq56gbC/mPdtHv1QQyGo=";
   };
 
   build-system = [
@@ -46,19 +47,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "payments" ];
 
-  passthru.optional-dependencies = {
-    all = [
-      braintree # suds-community
-      mercadopago
-      cryptography
-      xmltodict
-      stripe
-    ];
+  optional-dependencies = {
     braintree = [ braintree ];
-    cybersource = [
-      # suds-community
-    ];
-    docs = [ sphinx-rtd-theme ];
+    cybersource = [ suds-community ];
     mercadopago = [ mercadopago ];
     sagepay = [ cryptography ];
     sofort = [ xmltodict ];
@@ -68,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Universal payment handling for Django";
     homepage = "https://github.com/jazzband/django-payments/";
-    changelog = "https://github.com/jazzband/django-payments/releases/tag/v${version}";
+    changelog = "https://github.com/jazzband/django-payments/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ derdennisop ];
   };
