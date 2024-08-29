@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.rmfakecloud;
   serviceDataDir = "/var/lib/rmfakecloud";
@@ -9,9 +6,9 @@ let
 in {
   options = {
     services.rmfakecloud = {
-      enable = mkEnableOption "rmfakecloud remarkable self-hosted cloud";
+      enable = lib.mkEnableOption "rmfakecloud remarkable self-hosted cloud";
 
-      package = mkPackageOption pkgs "rmfakecloud" {
+      package = lib.mkPackageOption pkgs "rmfakecloud" {
         extraDescription = ''
           ::: {.note}
           The default does not include the web user interface.
@@ -19,32 +16,32 @@ in {
         '';
       };
 
-      storageUrl = mkOption {
-        type = types.str;
+      storageUrl = lib.mkOption {
+        type = lib.types.str;
         example = "https://local.appspot.com";
         description = ''
           URL used by the tablet to access the rmfakecloud service.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3000;
         description = ''
           Listening port number.
         '';
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "info" "debug" "warn" "error" ];
+      logLevel = lib.mkOption {
+        type = lib.types.enum [ "info" "debug" "warn" "error" ];
         default = "info";
         description = ''
           Logging level.
         '';
       };
 
-      extraSettings = mkOption {
-        type = with types; attrsOf str;
+      extraSettings = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = { };
         example = { DATADIR = "/custom/path/for/rmfakecloud/data"; };
         description = ''
@@ -56,8 +53,8 @@ in {
         '';
       };
 
-      environmentFile = mkOption {
-        type = with types; nullOr path;
+      environmentFile = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         example = "/etc/secrets/rmfakecloud.env";
         description = ''
@@ -71,7 +68,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.rmfakecloud = {
       description = "rmfakecloud remarkable self-hosted cloud";
 
@@ -107,10 +104,10 @@ in {
         Restart = "always";
 
         EnvironmentFile =
-          mkIf (cfg.environmentFile != null) cfg.environmentFile;
+          lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
 
         AmbientCapabilities =
-          mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+          lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
 
         DynamicUser = true;
         PrivateDevices = true;
@@ -140,5 +137,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with lib.maintainers; [ pacien ];
 }
