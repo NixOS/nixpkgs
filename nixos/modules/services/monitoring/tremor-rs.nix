@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
 
   cfg = config.services.tremor-rs;
@@ -13,31 +11,31 @@ in {
     services.tremor-rs = {
       enable = lib.mkEnableOption "Tremor event- or stream-processing system";
 
-      troyFileList = mkOption {
-        type = types.listOf types.path;
+      troyFileList = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
         description = "List of troy files to load.";
       };
 
-      tremorLibDir = mkOption {
-        type = types.path;
+      tremorLibDir = lib.mkOption {
+        type = lib.types.path;
         default = "";
         description = "Directory where to find /lib containing tremor script files";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "The host tremor should be listening on";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 9898;
         description = "the port tremor should be listening on";
       };
 
-      loggerSettings = mkOption {
+      loggerSettings = lib.mkOption {
         description = "Tremor logger configuration";
         default = {};
         type = loggerSettingsFormat.type;
@@ -63,7 +61,7 @@ in {
           };
         };
 
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             refresh_rate = "30 seconds";
             appenders.stdout.kind = "console";
@@ -90,7 +88,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
 
     environment.systemPackages = [ pkgs.tremor-rs ] ;
 
@@ -103,7 +101,7 @@ in {
       environment.TREMOR_PATH = "${pkgs.tremor-rs}/lib:${cfg.tremorLibDir}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.tremor-rs}/bin/tremor --logger-config ${loggerConfigFile} server run ${concatStringsSep " " cfg.troyFileList} --api-host ${cfg.host}:${toString cfg.port}";
+        ExecStart = "${pkgs.tremor-rs}/bin/tremor --logger-config ${loggerConfigFile} server run ${lib.concatStringsSep " " cfg.troyFileList} --api-host ${cfg.host}:${toString cfg.port}";
         DynamicUser = true;
         Restart = "always";
         NoNewPrivileges = true;
