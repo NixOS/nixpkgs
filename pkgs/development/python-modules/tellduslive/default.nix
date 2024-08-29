@@ -6,38 +6,41 @@
   requests,
   requests-oauthlib,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tellduslive";
   version = "0.10.12";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "molobrakos";
-    repo = pname;
-    rev = "v${version}";
+    repo = "tellduslive";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     docopt
     requests
     requests-oauthlib
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "tellduslive" ];
 
   meta = with lib; {
     description = "Python module to communicate with Telldus Live";
-    mainProgram = "tellduslive";
     homepage = "https://github.com/molobrakos/tellduslive";
-    license = with licenses; [ unlicense ];
+    license = licenses.unlicense;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tellduslive";
   };
 }
