@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "notation";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "notaryproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Pi4Ddlx8G4dRDz79yTiPBf6gf0wsvoE9CuyeVGrHst0=";
+    hash = "sha256-TliXrI5G+1Zw5vhrpEtcjDv2EjRjUsGEfwKOOf8vtZg=";
   };
 
-  vendorHash = "sha256-REJPSBLXzIPAmxwzckufTqJvZCWUUkJLBmHTx2nv9QM=";
+  vendorHash = "sha256-kK4iwpzSz0JFnY1DbA7rjIzrqZO3imTCOfgtQKd0oV8=";
 
   nativeBuildInputs = [
     installShellFiles
