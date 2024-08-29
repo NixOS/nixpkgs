@@ -1,23 +1,45 @@
 #!/usr/bin/env bb
 
+;; to get a repl
+;; - Terminal
+;;       $ nix-shell -p babashka curl --run "bb"
+;;       user=> (load-file "activity.bb")
+;;       user=> (pprint (file-query :org-repos {:org "nixos"}))
+;; - IDE support
+;;       $ nix-shell -p babashka curl --run "bb nrepl-server"
+;;   - connect to 127.0.0.1:1667 with emacs/cider or vscode/calva
+
 (require '[babashka.curl :as curl]
          '[babashka.cli :as cli])
 
 (def graphql-path
+  "Make working directory overridable"
   (str
    (or (System/getenv "NIXOS_ACTIVITY_GQL_PATH")
        (fs/cwd))))
 
 ;; (println "graphql path:" graphql-path)
 
-(defn get-access-token []
+(defn get-access-token
+  "GitHub access token lookup"
+  []
   (or (System/getenv "ACCESS_TOKEN")
-      (slurp (fs/file (fs/home) ".config/nix/extra-token"))
-      (->> (line-seq (io/reader (fs/file (fs/home) ".config/nix/nix.conf")))
-           (map #(re-matches #"access-tokens\W*=.*github.com=(\w*)" %))
-           (map second)
-           (filter some?)
-           first)))
+      (try
+        (slurp (fs/file (fs/home) ".config/nix/gh-access-token"))
+        (catch Exception e nil))
+      (try
+        (->> (line-seq (io/reader (fs/file (fs/home) ".config/nix/nix.conf")))
+             (map #(re-matches #"access-tokens\W*=.*github.com=(\w*)" %))
+             (map second)
+             (filter some?)
+             first)
+        (catch Exception e nil))
+      (do (.println System/err "Please set GitHub Access Token
+  - ACCESS_TOKEN=<token>
+  - ~/.config/nix/gh-access-token <token>
+  - ~/.config/nix/nix.conf access-tokens = github.com=<token>
+")
+          (System/exit 1))))
 
 
 (defn query [q & [v]]
