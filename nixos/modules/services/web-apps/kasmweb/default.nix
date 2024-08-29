@@ -124,38 +124,31 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
     systemd.services = {
       "init-kasmweb" = {
         wantedBy = [
           "docker-kasm_db.service"
+          "podman-kasm_db.service"
         ];
-        before = [
-          "docker-kasm_db.service"
-          "docker-kasm_redis.service"
-          "docker-kasm_db_init.service"
-          "docker-kasm_api.service"
-          "docker-kasm_agent.service"
-          "docker-kasm_manager.service"
-          "docker-kasm_share.service"
-          "docker-kasm_guac.service"
-          "docker-kasm_proxy.service"
-        ];
+        wants = ["network-online.target"];
+        after = ["network-online.target"];
         serviceConfig = {
           Type = "oneshot";
+          TimeoutStartSec = 300;
           ExecStart = pkgs.substituteAll {
             src = ./initialize_kasmweb.sh;
             isExecutable = true;
-            binPath = lib.makeBinPath [ pkgs.docker pkgs.openssl pkgs.gnused ];
+            binPath = lib.makeBinPath [ pkgs.docker pkgs.openssl pkgs.gnused pkgs.yq-go ];
             runtimeShell = pkgs.runtimeShell;
             kasmweb = pkgs.kasmweb;
-            postgresUser = cfg.postgres.user;
-            postgresPassword = cfg.postgres.password;
+            postgresUser = "postgres";
+            postgresPassword = "postgres";
             inherit (cfg)
               datastorePath
               sslCertificate
               sslCertificateKey
               redisPassword
+              networkSubnet
               defaultUserPassword
               defaultAdminPassword
               defaultManagerToken
@@ -167,12 +160,14 @@ in
     };
 
     virtualisation = {
+      oci-containers.backend = "docker";
       oci-containers.containers = {
         kasm_db = {
-          image = "postgres:12-alpine";
+          image = "postgres:16-alpine";
+          autoStart = true;
           environment = {
-            POSTGRES_PASSWORD = cfg.postgres.password;
-            POSTGRES_USER = cfg.postgres.user;
+            POSTGRES_PASSWORD = "postgres";
+            POSTGRES_USER = "postgres";
             POSTGRES_DB = "kasm";
           };
           volumes = [
@@ -185,6 +180,7 @@ in
         kasm_db_init = {
           image = "kasmweb/api:${pkgs.kasmweb.version}";
           user = "root:root";
+          autoStart = true;
           volumes = [
             "${cfg.datastorePath}/:/opt/kasm/current/"
             "kasmweb_api_data:/tmp"
@@ -197,6 +193,7 @@ in
         kasm_redis = {
           image = "redis:5-alpine";
           entrypoint = "/bin/sh";
+          autoStart = true;
           cmd = [
             "-c"
             "redis-server --requirepass ${cfg.redisPassword}"
@@ -205,6 +202,7 @@ in
         };
         kasm_api = {
           image = "kasmweb/api:${pkgs.kasmweb.version}";
+          autoStart = false;
           user = "root:root";
           volumes = [
             "${cfg.datastorePath}/:/opt/kasm/current/"
@@ -215,15 +213,17 @@ in
         };
         kasm_manager = {
           image = "kasmweb/manager:${pkgs.kasmweb.version}";
+          autoStart = false;
           user = "root:root";
           volumes = [
             "${cfg.datastorePath}/:/opt/kasm/current/"
           ];
-          dependsOn = [ "kasm_db" "kasm_api" ];
+          dependsOn = [ "kasm_db_init" "kasm_db" "kasm_api" ];
           extraOptions = [ "--network=kasm_default_network" "--userns=host" "--read-only"];
         };
         kasm_agent = {
           image = "kasmweb/agent:${pkgs.kasmweb.version}";
+          autoStart = false;
           user = "root:root";
           volumes = [
             "${cfg.datastorePath}/:/opt/kasm/current/"
@@ -236,15 +236,17 @@ in
         };
         kasm_share = {
           image = "kasmweb/share:${pkgs.kasmweb.version}";
+          autoStart = false;
           user = "root:root";
           volumes = [
             "${cfg.datastorePath}/:/opt/kasm/current/"
           ];
-          dependsOn = [ "kasm_db" "kasm_redis" ];
+          dependsOn = [ "kasm_db_init" "kasm_db" "kasm_redis" ];
           extraOptions = [ "--network=kasm_default_network" "--userns=host" "--read-only" ];
         };
         kasm_guac = {
           image = "kasmweb/kasm-guac:${pkgs.kasmweb.version}";
+          autoStart = false;
           user = "root:root";
           volumes = [
             "${cfg.datastorePath}/:/opt/kasm/current/"
@@ -254,6 +256,7 @@ in
         };
         kasm_proxy = {
           image = "kasmweb/nginx:latest";
+          autoStart = false;
           ports = [ "${cfg.listenAddress}:${toString cfg.listenPort}:443" ];
           user = "root:root";
           volumes = [
