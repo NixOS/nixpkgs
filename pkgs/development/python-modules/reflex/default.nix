@@ -28,6 +28,7 @@
   python-multipart,
   python-socketio,
   redis,
+  reflex,
   reflex-hosting-cli,
   rich,
   sqlmodel,
@@ -124,6 +125,21 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "reflex" ];
+
+  # Cyclic dependencies are fun!
+  # This is reflex without reflex-chakra
+  passthru.sans-reverse-dependencies =
+    (reflex.override (old: {
+      reflex-chakra = null;
+    })).overridePythonAttrs
+      (old: {
+        pname = old.pname + "-sans-reverse-dependencies";
+        pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "reflex-chakra" ];
+        doInstallCheck = false;
+        doCheck = false;
+        pythonImportsCheck = null;
+        dontCheckRuntimeDeps = true;
+      });
 
   meta = with lib; {
     description = "Web apps in pure Python";
