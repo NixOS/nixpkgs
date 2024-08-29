@@ -23112,6 +23112,12 @@
     githubId = 1108325;
     name = "Théo Zimmermann";
   };
+  zincentimeter = {
+    email = "zincentimeter@outlook.com";
+    github = "zincentimeter";
+    githubId = 16429543;
+    name = "zincentimeter";
+  };
   zlepper = {
     name = "Rasmus Hansen";
     github = "zlepper";
