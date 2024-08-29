@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "10.0.1";
+  version = "10.1.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "erebe";
     repo = "wstunnel";
     rev = "v${version}";
-    hash = "sha256-lahuuVc+fbuWMXaWvt8C6j26Mo/1o5PkBfVH+lemdv4=";
+    hash = "sha256-nOks9OMA0z7e1nYnKxkSmEj5GXP00385E+jr67lzS5c=";
   };
 
-  cargoHash = "sha256-gNx01LHIcAbedO2X/OwwnQWd9d0Qc6ahe84IRUyptcY=";
+  cargoHash = "sha256-QJ5Fb1M5CLDd2bZPy2p9zqh2A9KIoHp7PA1fxX2RDjI=";
 
   nativeBuildInputs = [ versionCheckHook ];
 
