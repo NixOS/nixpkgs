@@ -173,31 +173,17 @@ in
         "Use services.xserver.fontPath instead of useXFS")
       (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
-      (lib.mkRenamedOptionModuleWith {
-        sinceRelease = 2311;
-        from = [ "services" "xserver" "layout" ];
-        to = [ "services" "xserver" "xkb" "layout" ];
-      })
-      (lib.mkRenamedOptionModuleWith {
-        sinceRelease = 2311;
-        from = [ "services" "xserver" "xkbModel" ];
-        to = [ "services" "xserver" "xkb" "model" ];
-      })
-      (lib.mkRenamedOptionModuleWith {
-        sinceRelease = 2311;
-        from = [ "services" "xserver" "xkbOptions" ];
-        to = [ "services" "xserver" "xkb" "options" ];
-      })
-      (lib.mkRenamedOptionModuleWith {
-        sinceRelease = 2311;
-        from = [ "services" "xserver" "xkbVariant" ];
-        to = [ "services" "xserver" "xkb" "variant" ];
-      })
-      (lib.mkRenamedOptionModuleWith {
-        sinceRelease = 2311;
-        from = [ "services" "xserver" "xkbDir" ];
-        to = [ "services" "xserver" "xkb" "dir" ];
-      })
+      (lib.mkRenamedOptionModule [ "services" "xserver" "layout" ] [ "environment" "xkb" "layout" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "extraLayouts" ] [ "environment" "xkb" "extraLayouts" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "layout" ] [ "environment" "xkb" "layout" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "dir" ] [ "environment" "xkb" "dir" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "model" ] [ "environment" "xkb" "model" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "options" ] [ "environment" "xkb" "options" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "variant" ] [ "environment" "xkb" "variant" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkbDir" ] [ "environment" "xkb" "dir" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkbModel" ] [ "environment" "xkb" "model" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkbOptions" ] [ "environment" "xkb" "options" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkbVariant" ] [ "environment" "xkb" "variant" ])
     ];
 
 
@@ -360,52 +346,6 @@ in
           Whether to update the DBus activation environment after launching the
           desktop manager.
         '';
-      };
-
-      xkb = {
-        layout = mkOption {
-          type = types.str;
-          default = "us";
-          description = ''
-            X keyboard layout, or multiple keyboard layouts separated by commas.
-          '';
-        };
-
-        model = mkOption {
-          type = types.str;
-          default = "pc104";
-          example = "presario";
-          description = ''
-            X keyboard model.
-          '';
-        };
-
-        options = mkOption {
-          type = types.commas;
-          default = "terminate:ctrl_alt_bksp";
-          example = "grp:caps_toggle,grp_led:scroll";
-          description = ''
-            X keyboard options; layout switching goes here.
-          '';
-        };
-
-        variant = mkOption {
-          type = types.str;
-          default = "";
-          example = "colemak";
-          description = ''
-            X keyboard variant.
-          '';
-        };
-
-        dir = mkOption {
-          type = types.path;
-          default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-          defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
-          description = ''
-            Path used for -xkbdir xserver parameter.
-          '';
-        };
       };
 
       config = mkOption {
@@ -641,6 +581,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.xkb.enable = true;
+
     services.displayManager.enable = true;
 
     services.xserver.displayManager.lightdm.enable =
@@ -685,7 +627,7 @@ in
         {
           "X11/xorg.conf".source = "${configFile}";
           # -xkbdir command line option does not seems to be passed to xkbcomp.
-          "X11/xkb".source = "${cfg.xkb.dir}";
+          "X11/xkb".source = "${config.environment.xkb.dir}";
         })
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
       // (let cfgPath = "X11/xorg.conf.d/10-evdev.conf"; in
@@ -741,7 +683,7 @@ in
 
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
-        "-xkbdir" "${cfg.xkb.dir}"
+        "-xkbdir" "${config.environment.xkb.dir}"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
@@ -757,18 +699,6 @@ in
       [ xorg.xorgserver.out
         xorg.xf86inputevdev.out
       ];
-
-    system.checks = singleton (pkgs.runCommand "xkb-validated" {
-      inherit (cfg.xkb) dir model layout variant options;
-      nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
-      preferLocalBuild = true;
-    } ''
-      ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
-        "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
-      }
-      XKB_CONFIG_ROOT="$dir" xkbvalidate "$model" "$layout" "$variant" "$options"
-      touch "$out"
-    '');
 
     services.xserver.config =
       ''

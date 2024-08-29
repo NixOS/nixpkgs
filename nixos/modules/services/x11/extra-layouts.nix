@@ -3,7 +3,7 @@
 with lib;
 
 let
-  layouts = config.services.xserver.xkb.extraLayouts;
+  layouts = config.environment.xkb.extraLayouts;
 
   layoutOpts = {
     options = {
@@ -79,7 +79,7 @@ let
   };
 
   xkb_patched = pkgs.xorg.xkeyboardconfig_custom {
-    layouts = config.services.xserver.xkb.extraLayouts;
+    layouts = config.environment.xkb.extraLayouts;
   };
 
 in
@@ -88,15 +88,14 @@ in
 
   imports = [
     (lib.mkRenamedOptionModuleWith {
-      sinceRelease = 2311;
       from = [ "services" "xserver" "extraLayouts" ];
-      to = [ "services" "xserver" "xkb" "extraLayouts" ];
+      to = [ "services" "xkb" "extraLayouts" ];
     })
   ];
 
   ###### interface
 
-  options.services.xserver.xkb = {
+  options.environment.xkb = {
     extraLayouts = mkOption {
       type = types.attrsOf (types.submodule layoutOpts);
       default = { };
@@ -125,18 +124,16 @@ in
 
   config = mkIf (layouts != { }) {
 
-    environment.sessionVariables = {
-      # runtime override supported by multiple libraries e. g. libxkbcommon
-      # https://xkbcommon.org/doc/current/group__include-path.html
-      XKB_CONFIG_ROOT = config.services.xserver.xkb.dir;
-    };
-
-    services.xserver = {
+    environment = {
       xkb.dir = "${xkb_patched}/etc/X11/xkb";
-      exportConfiguration = config.services.xserver.displayManager.startx.enable
-        || config.services.xserver.displayManager.sx.enable;
+      sessionVariables = {
+        # runtime override supported by multiple libraries e. g. libxkbcommon
+        # https://xkbcommon.org/doc/current/group__include-path.html
+        XKB_CONFIG_ROOT = config.environment.xkb.dir;
+      };
     };
 
+    services.xserver.exportConfiguration = config.services.xserver.displayManager.startx.enable
+        || config.services.xserver.displayManager.sx.enable;
   };
-
 }

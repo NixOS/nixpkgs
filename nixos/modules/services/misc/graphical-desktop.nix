@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.graphical-desktop;
-  xcfg = config.services.xserver;
   dmcfg = config.services.displayManager;
 in
 {
@@ -14,7 +13,7 @@ in
     services.graphical-desktop.enable =
       lib.mkEnableOption "bits and pieces required for a graphical desktop session"
       // {
-        default = xcfg.enable || dmcfg.enable;
+        default = config.services.xserver.enable || dmcfg.enable;
         defaultText = lib.literalExpression "(config.services.xserver.enable || config.services.displayManager.enable)";
         internal = true;
       };
@@ -31,20 +30,25 @@ in
 
     environment = {
       # localectl looks into 00-keyboard.conf
-      etc."X11/xorg.conf.d/00-keyboard.conf".text = ''
-        Section "InputClass"
-          Identifier "Keyboard catchall"
-          MatchIsKeyboard "on"
-          Option "XkbModel" "${xcfg.xkb.model}"
-          Option "XkbLayout" "${xcfg.xkb.layout}"
-          Option "XkbOptions" "${xcfg.xkb.options}"
-          Option "XkbVariant" "${xcfg.xkb.variant}"
-        EndSection
-      '';
+      etc."X11/xorg.conf.d/00-keyboard.conf".text =
+        let
+          inherit (config.environment) xkb;
+        in
+        ''
+          Section "InputClass"
+            Identifier "Keyboard catchall"
+            MatchIsKeyboard "on"
+            Option "XkbModel" "${xkb.model}"
+            Option "XkbLayout" "${xkb.layout}"
+            Option "XkbOptions" "${xkb.options}"
+            Option "XkbVariant" "${xkb.variant}"
+          EndSection
+        '';
       systemPackages = with pkgs; [
         nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
         xdg-utils
       ];
+      xkb.enable = true;
     };
 
     fonts.enableDefaultPackages = lib.mkDefault true;
@@ -55,7 +59,7 @@ in
 
     services.speechd.enable = lib.mkDefault true;
 
-    systemd.defaultUnit = lib.mkIf (xcfg.autorun || dmcfg.enable) "graphical.target";
+    systemd.defaultUnit = lib.mkIf (config.services.xserver.autorun || dmcfg.enable) "graphical.target";
 
     xdg = {
       autostart.enable = true;

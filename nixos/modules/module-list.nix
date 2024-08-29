@@ -46,6 +46,7 @@
   ./config/xdg/portals/wlr.nix
   ./config/xdg/sounds.nix
   ./config/xdg/terminal-exec.nix
+  ./config/xkb.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
@@ -1547,7 +1548,6 @@
   ./services/x11/display-managers/startx.nix
   ./services/x11/display-managers/sx.nix
   ./services/x11/display-managers/xpra.nix
-  ./services/x11/extra-layouts.nix
   ./services/x11/fractalart.nix
   ./services/x11/hardware/cmt.nix
   ./services/x11/hardware/digimend.nix

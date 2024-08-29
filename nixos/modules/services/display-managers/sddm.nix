@@ -113,11 +113,13 @@ let
             enable-tap = config.services.libinput.mouse.tapping;
             left-handed = config.services.libinput.mouse.leftHanded;
           };
-          keyboard = {
-            keymap_model = xcfg.xkb.model;
-            keymap_layout = xcfg.xkb.layout;
-            keymap_variant = xcfg.xkb.variant;
-            keymap_options = xcfg.xkb.options;
+          keyboard = let
+            inherit (config.environment) xkb;
+          in {
+            keymap_model = xkb.model;
+            keymap_layout = xkb.layout;
+            keymap_variant = xkb.variant;
+            keymap_options = xkb.options;
           };
         };
       in
