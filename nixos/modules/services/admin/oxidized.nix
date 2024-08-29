@@ -1,39 +1,36 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.oxidized;
 in
 {
   options.services.oxidized = {
-    enable = mkEnableOption "the oxidized configuration backup service";
+    enable = lib.mkEnableOption "the oxidized configuration backup service";
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "oxidized";
       description = ''
         User under which the oxidized service runs.
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "oxidized";
       description = ''
         Group under which the oxidized service runs.
       '';
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/oxidized";
       description = "State directory for the oxidized service.";
     };
 
-    configFile = mkOption {
-      type = types.path;
-      example = literalExpression ''
+    configFile = lib.mkOption {
+      type = lib.types.path;
+      example = lib.literalExpression ''
         pkgs.writeText "oxidized-config.yml" '''
           ---
           debug: true
@@ -67,9 +64,9 @@ in
       '';
     };
 
-    routerDB = mkOption {
-      type = types.path;
-      example = literalExpression ''
+    routerDB = lib.mkOption {
+      type = lib.types.path;
+      example = lib.literalExpression ''
         pkgs.writeText "oxidized-router.db" '''
           hostname-sw1:powerconnect:username1:password2
           hostname-sw2:procurve:username2:password2
@@ -82,7 +79,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.${cfg.group} = { };
     users.users.${cfg.user} = {
       description = "Oxidized service user";
