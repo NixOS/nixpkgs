@@ -1,19 +1,18 @@
 { lib, pkgs, config, ... }:
-with lib;
 let
   cfg = config.services.alloy;
 in
 {
   meta = {
-    maintainers = with maintainers; [ flokli hbjydev ];
+    maintainers = with lib.maintainers; [ flokli hbjydev ];
   };
 
   options.services.alloy = {
-    enable = mkEnableOption "Grafana Alloy";
+    enable = lib.mkEnableOption "Grafana Alloy";
 
-    package = mkPackageOption pkgs "grafana-alloy" { };
+    package = lib.mkPackageOption pkgs "grafana-alloy" { };
 
-    configPath = mkOption {
+    configPath = lib.mkOption {
       type = lib.types.path;
       default = "/etc/alloy";
       description = ''
@@ -43,7 +42,7 @@ in
       '';
     };
 
-    extraFlags = mkOption {
+    extraFlags = lib.mkOption {
       type = with lib.types; listOf str;
       default = [ ];
       example = [ "--server.http.listen-addr=127.0.0.1:12346" "--disable-reporting" ];
@@ -56,7 +55,7 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.alloy = {
       wantedBy = [ "multi-user.target" ];
       reloadTriggers = [ config.environment.etc."alloy/config.alloy".source or null ];
@@ -68,7 +67,7 @@ in
           # allow to read the systemd journal for loki log forwarding
           "systemd-journal"
         ];
-        ExecStart = "${lib.getExe cfg.package} run ${cfg.configPath} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${lib.getExe cfg.package} run ${cfg.configPath} ${lib.escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         ConfigurationDirectory = "alloy";
         StateDirectory = "alloy";
