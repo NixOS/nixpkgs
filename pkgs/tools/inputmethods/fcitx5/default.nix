@@ -33,6 +33,8 @@
 , xcb-imdkit
 , libxkbfile
 , nixosTests
+, qtwayland
+, wrapQtAppsHook
 }:
 let
   enDictVer = "20121020";
@@ -60,6 +62,7 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -90,6 +93,7 @@ stdenv.mkDerivation rec {
     xcb-imdkit
     xkeyboard_config
     libxkbfile
+    qtwayland
   ];
 
   passthru = {

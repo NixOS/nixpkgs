@@ -7652,7 +7652,7 @@ with pkgs;
 
   chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
 
-  fcitx5 = callPackage ../tools/inputmethods/fcitx5 { };
+  fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 { };
 
   fcitx5-bamboo = callPackage ../tools/inputmethods/fcitx5/fcitx5-bamboo.nix { };
 
@@ -7677,6 +7677,8 @@ with pkgs;
   fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
 
   fcitx5-hangul = callPackage ../tools/inputmethods/fcitx5/fcitx5-hangul.nix { };
+
+  fcitx5-im-emoji-picker = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-im-emoji-picker.nix { };
 
   fcitx5-rime = callPackage ../tools/inputmethods/fcitx5/fcitx5-rime.nix { };
 
