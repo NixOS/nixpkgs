@@ -12894,6 +12894,8 @@ self: super: with self; {
 
   python-engineio = callPackage ../development/python-modules/python-engineio { };
 
+  python-engineio-v3 = callPackage ../development/python-modules/python-engineio-v3 { };
+
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
@@ -13089,6 +13091,8 @@ self: super: with self; {
   };
 
   python-socketio = callPackage ../development/python-modules/python-socketio { };
+
+  python-socketio-v4 = callPackage ../development/python-modules/python-socketio-v4 { };
 
   python-socks = callPackage ../development/python-modules/python-socks { };
 
