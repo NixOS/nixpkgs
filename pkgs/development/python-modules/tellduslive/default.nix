@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tellduslive";
-  version = "0.10.11";
+  version = "0.10.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "molobrakos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0aqhj6fq2z2qb4jyk23ygjicf5nlj8lkya7blkyqb7jra5k1gyg0";
+    sha256 = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
   };
 
   propagatedBuildInputs = [
