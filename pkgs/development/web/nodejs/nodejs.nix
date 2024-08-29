@@ -270,6 +270,23 @@ let
     checkFlags = [
       # Do not create __pycache__ when running tests.
       "PYTHONDONTWRITEBYTECODE=1"
+    ] ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
+      # Python 3.12 introduced a warning for calling `os.fork()` in a
+      # multi‐threaded program. For some reason, the Node.js
+      # `tools/pseudo-tty.py` program used for PTY‐related tests
+      # triggers this warning on Hydra, on `x86_64-darwin` only,
+      # despite not creating any threads itself. This causes the
+      # Node.js test runner to misinterpret the warnings as part of the
+      # test output and fail. It does not reproduce reliably off Hydra
+      # on Intel Macs, or occur on the `aarch64-darwin` builds.
+      #
+      # This seems likely to be related to Rosetta 2, but it could also
+      # be some strange x86‐64‐only threading behaviour of the Darwin
+      # system libraries, or a bug in CPython, or something else
+      # haunted about the Nixpkgs/Hydra build environment. We silence
+      # the warnings in the hope that closing our eyes will make the
+      # ghosts go away.
+      "PYTHONWARNINGS=ignore::DeprecationWarning"
     ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
       "FLAKY_TESTS=skip"
       # Skip some tests that are not passing in this context
