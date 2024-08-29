@@ -12,7 +12,7 @@ buildLua rec {
   version = "0-unstable-2020-02-24";
 
   src = fetchFromGitHub {
-    owner = "emilazy";
+    owner = "Parranoh";
     repo = "mpv-notify-send";
     rev = "a2bab8b2fd8e8d14faa875b5cc3a73f1276cd88a";
     hash = "sha256-EwVkhyB87TJ3i9xJmmZMSTMUKvfbImI1S+y1vgRWbDk=";
@@ -38,7 +38,7 @@ buildLua rec {
 
   meta = {
     description = "Lua script for mpv to send notifications with notify-send";
-    homepage = "https://github.com/emilazy/mpv-notify-send";
+    homepage = "https://github.com/Parranoh/mpv-notify-send";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ r3n3gad3p3arl ];
   };
