@@ -11910,6 +11910,10 @@ self: super: with self; {
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
 
+  pymssql = callPackage ../development/python-modules/pymssql {
+    krb5-c = pkgs.krb5;
+  };
+
   pymsteams = callPackage ../development/python-modules/pymsteams { };
 
   py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
