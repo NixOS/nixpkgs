@@ -1,41 +1,58 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  undmg,
+  stdenv,
+  fetchFromGitHub,
+  xcbuild,
+  swift,
+  swiftPackages,
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "2.11.4";
+  version = "2.11.5";
 
-  src = fetchurl {
-    url = "https://github.com/exelban/stats/releases/download/v${finalAttrs.version}/Stats.dmg";
-    hash = "sha256-Cm5gu+rL3eerAOnNcNUL2MlXsxV2jMiJLwgGtskIVP4=";
+  src = fetchFromGitHub {
+    owner = "exelban";
+    repo = "Stats";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-SLI0qcSfDHQj6tsKXF1RSwYWZxAQurgw7AYGV009aRQ=";
   };
 
-  sourceRoot = ".";
+  nativeBuildInputs = [
+    xcbuild
+    swiftPackages.swift-docc
+  ];
 
-  nativeBuildInputs = [ undmg ];
+  buildPhase = ''
+    runHook preBuild
 
-  installPhase = ''
-    runHook preInstall
+    export SWIFT_LIBRARY_PATH=${swift.swift.lib}/${swift.swiftModuleSubdir}
 
-    mkdir -p $out/Applications
-    cp -r *.app $out/Applications
+    xcodebuild \
+      -scheme Stats \
+      -destination 'platform=macOS' \
+      -configuration Release build CODE_SIGNING_ALLOWED=NO \
+      -derivedDataPath "$(pwd)/build"
 
-    runHook postInstall
+    mkdir -p "$out/Applications"
+    cp -R "./build/Build/Products/Release/Stats.app" "$out/Applications/Stats.app"
+
+    runHook postBuild
   '';
+
+  patches = [ ./0001-Fixup-MARKETING_VERSION.patch ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "macOS system monitor in your menu bar";
-    homepage = "https://github.com/exelban/stats";
+    homepage = "https://github.com/exelban/Stats";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donteatoreo emilytrau ];
+    maintainers = with lib.maintainers; [
+      donteatoreo
+      emilytrau
+    ];
     platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
