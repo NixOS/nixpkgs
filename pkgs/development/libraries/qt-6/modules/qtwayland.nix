@@ -35,5 +35,11 @@ qtModule {
       url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/632127d7f1d86cba4dd17361f24f9fd70a0ae44c.diff";
       sha256 = "sha256-1EIcMj6+yIpqXAGZB3ZbrwRkl4n1o7TVP2SC1Nu1t78=";
     })
+
+    # Update wayland.xml to version 1.23.0
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/c2f61bc47baacf2e6a44c6c3c4e4cbf0abfa4095.diff";
+      sha256 = "sha256-ZcK/LT65oFvTzCukZB8aDYWH5L6RK5MOPs8VtpYQpq0=";
+    })
   ];
 }
