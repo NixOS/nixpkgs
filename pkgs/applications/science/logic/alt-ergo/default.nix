@@ -39,7 +39,17 @@ ocamlPackages.buildDunePackage {
   inherit pname version src;
 
   nativeBuildInputs = [ ocamlPackages.menhir ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
-  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ppxlib ]);
+  propagatedBuildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ppxlib ]);
+
+  outputs = [ "bin" "out" ];
+
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix $bin ${pname}
+    mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib
+    mv $bin/lib/alt-ergo $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/
+    runHook postInstall
+  '';
 
   meta = {
     description = "High-performance theorem prover and SMT solver";
