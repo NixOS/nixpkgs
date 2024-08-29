@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.parsoid;
@@ -15,19 +12,19 @@ let
       module = "lib/index.js";
       entrypoint = "apiServiceWorker";
       conf = {
-        mwApis = map (x: if isAttrs x then x else { uri = x; }) cfg.wikis;
+        mwApis = map (x: if lib.isAttrs x then x else { uri = x; }) cfg.wikis;
         serverInterface = cfg.interface;
         serverPort = cfg.port;
       };
     }];
   };
 
-  confFile = pkgs.writeText "config.yml" (builtins.toJSON (recursiveUpdate confTree cfg.extraConfig));
+  confFile = pkgs.writeText "config.yml" (builtins.toJSON (lib.recursiveUpdate confTree cfg.extraConfig));
 
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] "Use services.parsoid.wikis instead")
+    (lib.mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] "Use services.parsoid.wikis instead")
   ];
 
   ##### interface
@@ -36,8 +33,8 @@ in
 
     services.parsoid = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Parsoid -- bidirectional
@@ -45,40 +42,40 @@ in
         '';
       };
 
-      wikis = mkOption {
-        type = types.listOf (types.either types.str types.attrs);
+      wikis = lib.mkOption {
+        type = lib.types.listOf (lib.types.either lib.types.str lib.types.attrs);
         example = [ "http://localhost/api.php" ];
         description = ''
           Used MediaWiki API endpoints.
         '';
       };
 
-      workers = mkOption {
-        type = types.int;
+      workers = lib.mkOption {
+        type = lib.types.int;
         default = 2;
         description = ''
           Number of Parsoid workers.
         '';
       };
 
-      interface = mkOption {
-        type = types.str;
+      interface = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = ''
           Interface to listen on.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8000;
         description = ''
           Port to listen on.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.attrs;
+      extraConfig = lib.mkOption {
+        type = lib.types.attrs;
         default = {};
         description = ''
           Extra configuration to add to parsoid configuration.
@@ -91,7 +88,7 @@ in
 
   ##### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.parsoid = {
       description = "Bidirectional wikitext parser";
