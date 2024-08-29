@@ -6,17 +6,19 @@
 
   # build-system
   cmake,
-  scikit-build-core,
-  ninja,
   nanobind,
+  ninja,
+  numpy,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
+  darwin,
+  ocl-icd,
 
   # dependencies
-  darwin,
-  numpy,
-  ocl-icd,
-  opencl-headers,
   platformdirs,
-  pybind11,
   pytools,
 
   # tests
