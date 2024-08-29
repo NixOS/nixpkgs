@@ -5888,6 +5888,8 @@ self: super: with self; {
 
   idasen = callPackage ../development/python-modules/idasen { };
 
+  idasen-ha = callPackage ../development/python-modules/idasen-ha { };
+
   icoextract = toPythonModule (pkgs.icoextract.override {
     python3Packages = self;
   });
