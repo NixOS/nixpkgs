@@ -87,6 +87,9 @@ let
       dotnet-sdk ? dotnetCorePackages.sdk_6_0,
       # The dotnet runtime to use.
       dotnet-runtime ? dotnetCorePackages.runtime_6_0,
+
+      # TODO
+      allowPrivateDeps ? false,
       ...
     }@args:
     let
@@ -107,12 +110,28 @@ let
         dotnetFixupHook
         ;
 
+      _mkNugetDeps = if allowPrivateDeps
+        then mkNugetDeps.override {
+          fetchurl = { url, hash ? null, sha256 ? null, ... }:
+          let
+            sha = if (builtins.isNull hash) then
+              sha256
+            else
+              hash;
+          in
+          builtins.fetchurl {
+            inherit url;
+            sha256 = sha;
+          };
+        }
+        else mkNugetDeps;
+
       _nugetDeps =
         if (nugetDeps != null) then
           if lib.isDerivation nugetDeps then
             nugetDeps
           else
-            mkNugetDeps {
+            _mkNugetDeps {
               inherit name;
               sourceFile = nugetDeps;
             }
