@@ -61,6 +61,8 @@
 , withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 
 , buildPackages
+, gnome
+, remmina
 }:
 
 let
@@ -163,19 +165,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
   ] ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
-    WITH_CAIRO = (cairo != null);
-    WITH_CUPS = (cups != null);
-    WITH_FAAC = (withUnfree && faac != null);
-    WITH_FAAD2 = (faad2 != null);
-    WITH_FUSE = (stdenv.isLinux && fuse3 != null);
-    WITH_JPEG = (libjpeg_turbo != null);
-    WITH_KRB5 = (libkrb5 != null);
-    WITH_OPENH264 = (openh264 != null);
-    WITH_OPUS = (libopus != null);
+    WITH_CAIRO = cairo != null;
+    WITH_CUPS = cups != null;
+    WITH_FAAC = withUnfree && faac != null;
+    WITH_FAAD2 = faad2 != null;
+    WITH_FUSE = stdenv.isLinux && fuse3 != null;
+    WITH_JPEG = libjpeg_turbo != null;
+    WITH_KRB5 = libkrb5 != null;
+    WITH_OPENH264 = openh264 != null;
+    WITH_OPUS = libopus != null;
     WITH_OSS = false;
     WITH_MANPAGES = withManPages;
-    WITH_PCSC = (pcsclite != null);
-    WITH_PULSE = (libpulseaudio != null);
+    WITH_PCSC = pcsclite != null;
+    WITH_PULSE = libpulseaudio != null;
     WITH_SERVER = buildServer;
     WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
     WITH_VAAPI = false; # false is recommended by upstream
@@ -193,6 +195,11 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     "-framework AudioToolbox"
   ]);
+
+  passthru.tests = {
+    inherit remmina;
+    inherit (gnome) gnome-remote-desktop;
+  };
 
   meta = with lib; {
     description = "Remote Desktop Protocol Client";
