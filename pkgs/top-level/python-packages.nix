@@ -13656,6 +13656,10 @@ self: super: with self; {
 
   refery = callPackage ../development/python-modules/refery { };
 
+  reflex = callPackage ../development/python-modules/reflex { };
+
+  reflex-hosting-cli = callPackage ../development/python-modules/reflex-hosting-cli { };
+
   reflink = callPackage ../development/python-modules/reflink { };
 
   refoss-ha = callPackage ../development/python-modules/refoss-ha { };
@@ -15026,6 +15030,8 @@ self: super: with self; {
 
   sqlalchemy-continuum = callPackage ../development/python-modules/sqlalchemy-continuum { };
 
+  sqlalchemy-file = callPackage ../development/python-modules/sqlalchemy-file { };
+
   sqlalchemy-i18n = callPackage ../development/python-modules/sqlalchemy-i18n { };
 
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
@@ -15113,6 +15119,8 @@ self: super: with self; {
   stanza = callPackage ../development/python-modules/stanza { };
 
   starlette = callPackage ../development/python-modules/starlette { };
+
+  starlette-admin = callPackage ../development/python-modules/starlette-admin { };
 
   starlette-context = callPackage ../development/python-modules/starlette-context { };
 
