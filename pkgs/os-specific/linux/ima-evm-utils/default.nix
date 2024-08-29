@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ima-evm-utils";
-  version = "1.6";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "linux-integrity";
     repo = "ima-evm-utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rS2KChYKHnaR17VKYXyb28AsWnLZ8CRoHhLOUejO8Z8=";
+    hash = "sha256-v1U03qWyzbCtK98ffqZ7mtJBjZ04pbDcudHpHuMpVi4=";
   };
 
   strictDeps = true;
