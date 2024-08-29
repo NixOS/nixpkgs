@@ -35046,8 +35046,6 @@ with pkgs;
 
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
-  ethabi = callPackage ../applications/blockchains/ethabi { };
-
   pycoin = with python3Packages; toPythonApplication pycoin;
 
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
