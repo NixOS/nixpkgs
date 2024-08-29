@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.15.0";
+  version = "5.16.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-0OXNynf56On+emLO0ZfNIcoT3GEhSXdoQhfxapLYYic=";
+    sha256 = "sha256-gDinm7kILm4SKlWmaJ1grwRuketGs/aWlJfNEF+AIRo=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qbit spikespaz ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "tidal-hifi";
   };
 })
