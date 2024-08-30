@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 let
   inherit (lib)
@@ -30,6 +30,10 @@ let
     splitString
     types
     unique
+  ;
+
+  inherit (utils)
+    escapeSystemdExecArgs
   ;
 
   cfg = config.services.home-assistant;
@@ -125,6 +129,15 @@ in {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
     # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
     enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "--debug" ];
+      description = ''
+        Extra arguments to pass to the hass executable.
+      '';
+    };
 
     configDir = mkOption {
       default = "/var/lib/hass";
@@ -691,8 +704,14 @@ in {
           "zwave_js"
         ];
       in {
-        ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecStart = escapeSystemdExecArgs ([
+          (lib.getExe package)
+          "--config" cfg.configDir
+        ] ++ cfg.extraArgs);
+        ExecReload = (escapeSystemdExecArgs [
+          (lib.getExe' pkgs.coreutils "kill")
+          "-HUP"
+        ]) + " $MAINPID";
         User = "hass";
         Group = "hass";
         WorkingDirectory = cfg.configDir;
