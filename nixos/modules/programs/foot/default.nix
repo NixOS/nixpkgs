@@ -77,7 +77,7 @@ in
     };
     programs = {
       foot.settings.main.include = lib.optionals (cfg.theme != null) [
-        "${pkgs.foot.themes}/share/foot/themes/${cfg.theme}"
+        "${cfg.package.themes}/share/foot/themes/${cfg.theme}"
       ];
       # https://codeberg.org/dnkl/foot/wiki#user-content-shell-integration
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ". ${./bashrc} # enable shell integration for foot terminal";
