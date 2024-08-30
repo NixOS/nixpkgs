@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
   six,
@@ -9,15 +9,19 @@
 
 buildPythonPackage rec {
   pname = "suds";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HVz6dBFxk7JEpCM/JGxIPZ9BGYtEjF8UqLrRHE9knys=";
+  src = fetchFromGitHub {
+    owner = "suds-community";
+    repo = "suds";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YdL+zDelRspQ6VMqa45vK1DDS3HjFvKE1P02USVBrEo=";
   };
 
   build-system = [ setuptools ];
+
+  env.SUDS_PACKAGE = "suds";
 
   nativeCheckInputs = [
     pytestCheckHook
