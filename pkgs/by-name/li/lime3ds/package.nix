@@ -40,19 +40,13 @@
 , useDiscordRichPresence ? false , rapidjson
 }: let
   inherit (lib) optional optionals cmakeBool optionalString getLib makeLibraryPath;
-
-  compat-list = fetchurl {
-    name = "lime3ds-compat-list";
-    url = "https://raw.githubusercontent.com/Lime3DS/compatibility-list/fa9d49d22e698df2f238e53f2b34acda08b947f6/compatibility_list.json";
-    hash = "sha256-dNZuU8uFXJ5gw/rmtF6bAjtrvVBXP8aUNXVdBY1dT34=";
-  };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "lime3ds";
-  version = "2116";
+  version = "2117.1";
 
   src = fetchzip {
     url = "https://github.com/Lime3DS/Lime3DS/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ff4An+ZdxlY4H90Yep4lpKROOMEkDijb3dVFIgSPvWQ=";
+    hash = "sha256-v6AHzbuk5n55nTDO0UndtmdhovfY4kngC5TJaNIV5S4=";
   };
 
   nativeBuildInputs = [
@@ -104,10 +98,6 @@ in stdenv.mkDerivation (finalAttrs: {
     mkdir externals/dynarmic/src/dynarmic/ir/var
     ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
 
-    # Prep compatibilitylist
-    rm ./dist/compatibility_list/compatibility_list.json
-    ln -s ${compat-list} ./dist/compatibility_list/compatibility_list.json
-
     # We already know the submodules are present
     substituteInPlace CMakeLists.txt \
       --replace-fail "check_submodules_present()" ""
@@ -140,8 +130,6 @@ in stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
     (cmakeBool "DISABLE_SYSTEM_VMA" true)
     (cmakeBool "DISABLE_SYSTEM_XBYAK" true)
-    (cmakeBool "CITRA_ENABLE_COMPATIBILITY_REPORTING" true)
-    (cmakeBool "ENABLE_COMPATIBILITY_LIST_DOWNLOAD" false)
     (cmakeBool "ENABLE_SDL2_FRONTEND" enableSdl2Frontend)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
