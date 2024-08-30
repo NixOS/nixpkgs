@@ -20,6 +20,19 @@ in
   imports = [
     ../virtualisation/qemu-vm.nix
 
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "darwin-builder"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+
     # Avoid a dependency on stateVersion
     {
       disabledModules = [
@@ -35,13 +48,9 @@ in
     }
   ];
 
+  options.virtualisation.description = "The maximum disk space allocated to the runner in megabytes";
+
   options.virtualisation.darwin-builder = with lib; {
-    diskSize = mkOption {
-      default = 20 * 1024;
-      type = types.int;
-      example = 30720;
-      description = "The maximum disk space allocated to the runner in MB";
-    };
     memorySize = mkOption {
       default = 3 * 1024;
       type = types.int;
@@ -239,7 +248,7 @@ in
     '';
 
     virtualisation = {
-      diskSize = cfg.diskSize;
+      diskSize = lib.mkDefault (20 * 1024);
 
       memorySize = cfg.memorySize;
 
