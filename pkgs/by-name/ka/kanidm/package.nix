@@ -100,6 +100,9 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  # can take over 4 hours on 2 cores and needs 16GB+ RAM
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
     description = "A simple, secure and fast identity management platform";
