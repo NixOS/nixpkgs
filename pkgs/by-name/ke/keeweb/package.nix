@@ -7,11 +7,9 @@
   dpkg,
   autoPatchelfHook,
   wrapGAppsHook3,
-  makeWrapper,
   alsa-lib,
   at-spi2-atk,
   gdk-pixbuf,
-  glibc,
   nss,
   udev,
   gnome-keyring,
@@ -114,7 +112,6 @@ else
     nativeBuildInputs = [
       autoPatchelfHook
       wrapGAppsHook3
-      makeWrapper
     ];
 
     buildInputs = libraries;
