@@ -1060,6 +1060,11 @@ in {
   uptime-kuma = handleTest ./uptime-kuma.nix {};
   urn-timer = handleTest ./urn-timer.nix {};
   usbguard = handleTest ./usbguard.nix {};
+  userborn = runTest ./userborn.nix;
+  userborn-mutable-users = runTest ./userborn-mutable-users.nix;
+  userborn-immutable-users = runTest ./userborn-immutable-users.nix;
+  userborn-mutable-etc = runTest ./userborn-mutable-etc.nix;
+  userborn-immutable-etc = runTest ./userborn-immutable-etc.nix;
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   user-expiry = runTest ./user-expiry.nix;
   user-home-mode = handleTest ./user-home-mode.nix {};
