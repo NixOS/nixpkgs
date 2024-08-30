@@ -10,7 +10,9 @@
   pbr,
   requests,
   prettytable,
+  pythonOlder,
   requests-mock,
+  setuptools,
   simplejson,
   stestr,
   stevedore,
@@ -18,15 +20,19 @@
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.5.0";
-  format = "setuptools";
+  version = "9.6.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G51xev+TytQgBF+2xS9jdqty8IX4GTEwiSAg7EbJNVU=";
+    hash = "sha256-P+/eJoJS5S4w/idz9lgienjG3uN4/LEy0xyG5uybojg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     simplejson
     keystoneauth1
     oslo-i18n
@@ -45,7 +51,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "cinderclient" ];
