@@ -2,7 +2,6 @@
 , kernel ? null
 , stdenv
 , lib
-, linuxKernel
 , nixosTests
 , ...
 } @ args:
@@ -15,9 +14,7 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_2_2";
   # check the release notes for compatible kernels
-  kernelCompatible = kernel.kernelOlder "6.10";
-
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
+  kernelCompatible = kernel: kernel.kernelOlder "6.10";
 
   # this package should point to the latest release.
   version = "2.2.5";

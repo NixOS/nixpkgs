@@ -10109,6 +10109,8 @@ self: super: with self; {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+  phonenumberslite = callPackage ../development/python-modules/phonenumberslite { };
+
   photutils = callPackage ../development/python-modules/photutils { };
 
   pkgutil-resolve-name = callPackage ../development/python-modules/pkgutil-resolve-name { };
@@ -15279,6 +15281,8 @@ self: super: with self; {
   sudachipy = callPackage ../development/python-modules/sudachipy { };
 
   suds = callPackage ../development/python-modules/suds { };
+
+  suds-community = callPackage ../development/python-modules/suds-community { };
 
   sumo = callPackage ../development/python-modules/sumo { };
 

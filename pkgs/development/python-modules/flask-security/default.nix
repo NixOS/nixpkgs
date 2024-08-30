@@ -22,7 +22,7 @@
 
   # extras: mfa
   cryptography,
-  phonenumbers,
+  phonenumberslite,
   webauthn,
   qrcode,
 
@@ -63,11 +63,6 @@ buildPythonPackage rec {
     hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers
-  '';
-
   build-system = [ flit-core ];
 
   # flask-login>=0.6.2 not satisfied by version 0.7.0.dev0
@@ -103,7 +98,7 @@ buildPythonPackage rec {
     ];
     mfa = [
       cryptography
-      phonenumbers
+      phonenumberslite
       webauthn
       qrcode
     ];
