@@ -11,10 +11,10 @@ buildNpmPackage rec {
     owner = "mlamberts78";
     repo = "weather-chart-card";
     rev = "V${version}";
-    hash = "sha256-1wOIbA1tRlnbWJ/p/wAUpeDnz/Wzu+GmUammJ6VFxHc=";
+    hash = "sha256-1mM5zxBwYUqdoXQyyCJgaih+RlPL+VBWNNbFnErGSco=";
   };
 
-  npmDepsHash = "sha256-1HHbOt9HW+zJAhHEDy2V5eYyLv4e3OrUbnzqeJasSng=";
+  npmDepsHash = lib.fakeHash;
 
   installPhase = ''
     runHook preInstall
