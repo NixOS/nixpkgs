@@ -121,11 +121,14 @@ else
       mkdir -p $out/bin
       cp -r usr/share $out/share
 
+      runHook postInstall
+    '';
+
+    postFixup = ''
       makeWrapper $out/share/keeweb-desktop/keeweb $out/bin/keeweb \
         --argv0 "keeweb" \
         --add-flags "$out/share/keeweb-desktop/resources/app.asar" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libraries}"
-
-      runHook postInstall
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libraries}" \
+        ''${gappsWrapperArgs[@]}
     '';
   }
