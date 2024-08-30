@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight PyTorch wrapper for machine learning researchers";
     homepage = "https://github.com/Lightning-AI/pytorch-lightning";
-    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${src.rev}";
+    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tbenst ];
   };
