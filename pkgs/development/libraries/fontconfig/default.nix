@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     cd "$out/etc/fonts"
     xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
+      --stringparam includes /etc/fonts/conf.d \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
