@@ -146,7 +146,11 @@
 
 (defn issue-comment-page [login after-cursor]
   (.println System/err (format "Fetching issue comments for %s after page %s" login after-cursor))
-  (unwrap (file-query :issue-comments {:login "bendlas" :after after-cursor} "IssueCommentFor")
+  (unwrap (file-query :issue-comments
+                      {:login "bendlas"
+                       :after after-cursor
+                       :pageSize 100}
+                      "IssueCommentsFor")
           [:user :issueComments]))
 
 (defn issue-comments [login & [after-cursor]]
@@ -156,7 +160,7 @@
              (when (:hasNextPage pageInfo)
                (issue-comments login (:endCursor pageInfo)))))))
 
-(defn latest-issue-comment [login]
+(defn latest-issue-comment-for [login]
   (-> (issue-comments login)
    (->> (filter (comp interesting-repo? :id :repository)))
    first
@@ -172,7 +176,7 @@
    :committed-commit (search-commits
                       :q {:org "NixOS" :committer user})})
 
-(defn latest-contributions [user]
+(defn latest-contributions-for [user]
   (->
    (file-query :org-contributions {:login user :orgId org-id})
    (unwrap [:user :contributionsCollection])))
@@ -245,7 +249,7 @@ query Main($after:String,$pageSize:Int!) {
      (unwrap [])))
   )
 
-;;; CLI
+;;; CLI - Command line interface
 
 (defn exit-error [{:keys [spec type cause msg option] :as data}]
   (if (= :org.babashka/cli type)
@@ -269,25 +273,31 @@ query Main($after:String,$pageSize:Int!) {
 
 (declare help-dispatch)
 (def table
-  [{:cmds ["issue-comment-for"]
+  [{:cmds ["gh" "latest-issue-comment-for"]
     :spec user-spec
     :error-fn exit-error
-    :fn #(assoc % :entry latest-issue-comment
+    :fn #(assoc % :entry latest-issue-comment-for
                 :eargs [(-> % :opts :user)] )
     :args->opts [:user]}
-   {:cmds ["contributions-for"]
+   {:cmds ["gh" "latest-contributions-for"]
     :spec user-spec
     :error-fn exit-error
-    :fn #(assoc % :entry latest-contributions
+    :fn #(assoc % :entry latest-contributions-for
                 :eargs [(-> % :opts :user)])
     :args->opts [:user]}
-   {:cmds ["search-for"]
+   {:cmds ["gh" "search-for"]
     :spec user-spec
     :error-fn exit-error
     :fn #(assoc % :entry search-for
                 :eargs [(-> % :opts :user)])
     :args->opts [:user]}
-   {:cmds [] :fn #(assoc % :help true)}])
+   {:cmds ["maintainer" "map"]
+    :error-fn exit-error
+    :fn #(assoc % :entry read-maintainer-list)}
+   {:cmds ["maintainer" "names"]
+    :error-fn exit-error
+    :fn #(assoc % :entry (comp maintainer-names read-maintainer-list))}
+   {:cmds [] :fn #(assoc-in % [:opts :help] true)}])
 
 (defn show-help [{:as arg :keys [dispatch]}]6
   (if-let [dc (some #(and (= (:cmds %)
