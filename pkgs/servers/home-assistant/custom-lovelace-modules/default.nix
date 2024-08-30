@@ -32,5 +32,7 @@
 
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
+  weather-chart-card = callPackage ./weather-chart-card { };
+
   zigbee2mqtt-networkmap = callPackage ./zigbee2mqtt-networkmap { };
 }
