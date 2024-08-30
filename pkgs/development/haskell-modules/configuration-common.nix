@@ -943,22 +943,6 @@ self: super: {
     '';
   }) super.ghc-mod;
 
-  # Apply compatibility patches until a new release arrives
-  # https://github.com/phadej/spdx/issues/33
-  spdx = appendPatches [
-    (fetchpatch {
-      name = "spdx-ghc-9.4.patch";
-      url = "https://github.com/phadej/spdx/pull/30/commits/545dc69f433225c837375fba4cbbdb7f9cc7b09b.patch";
-      sha256 = "0p2h8dxkjy2v0dx7h6v62clmx5n5j3c4zh4myh926fijympi1glz";
-    })
-    (fetchpatch {
-      name = "spdx-ghc-9.6.patch";
-      url = "https://github.com/phadej/spdx/pull/32/commits/b51f665e9960614274ff6a9ac658802c1a785687.patch";
-      sha256 = "01vf1h0djr84yxsjfhym715ncx0w5q4l02k3dkbmg40pnc62ql4h";
-      excludes = [ ".github/**" ];
-    })
-  ] super.spdx;
-
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
 
@@ -2356,6 +2340,12 @@ self: super: {
   hadolint = super.hadolint.override {
     language-docker = self.language-docker_11_0_0;
   };
+
+  # Too strict lower bounds on (test) deps
+  # https://github.com/phadej/puresat/issues/6
+  puresat = doJailbreak super.puresat;
+  # https://github.com/phadej/spdx/issues/62
+  spdx = doJailbreak super.spdx;
 
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
