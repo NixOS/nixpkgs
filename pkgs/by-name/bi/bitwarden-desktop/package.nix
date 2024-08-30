@@ -28,25 +28,30 @@ let
   electron = electron_31;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.8.0";
+  version = "2024.8.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-szIa7fASDmeWKZPc6HtHKeXKerCAXrYZQWTVFMugAxk=";
+    hash = "sha256-FBNqgPjWSY8SCIGyKpoOl7I3pWQxDbWiFtcPZScDE4A=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
   ];
 
+  postPatch = ''
+    # remove code under unfree license
+    rm -r bitwarden_license
+  '';
+
   nodejs = nodejs_20;
 
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-5neEpU7ZhVO5OR181owsvAnFfl7lr0MymvqbRFCPs3M=";
+  npmDepsHash = "sha256-8cxhor90GqgO34AD8Jhd3N7PCnBnbhg8h7agVq0i3jk=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -62,7 +67,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-ya/5z5XpsyuWayziLxuETu/dY8LzZspaAMqL2p8jYN8=";
+    hash = "sha256-zc5AarCbrJixcin8t+Ws8fH0ULM9rp3sUFsDb0htPuM=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

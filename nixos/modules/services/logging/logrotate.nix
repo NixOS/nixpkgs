@@ -1,7 +1,4 @@
 { config, lib, pkgs, utils, ... }:
-
-with lib;
-
 let
   cfg = config.services.logrotate;
 
@@ -10,24 +7,24 @@ let
     else if builtins.elem n [ "frequency" ] then "${v}\n"
     else if builtins.elem n [ "firstaction" "lastaction" "prerotate" "postrotate" "preremove" ]
          then "${n}\n    ${v}\n  endscript\n"
-    else if isInt v then "${n} ${toString v}\n"
+    else if lib.isInt v then "${n} ${toString v}\n"
     else if v == true then "${n}\n"
     else if v == false then "no${n}\n"
     else "${n} ${v}\n";
-  generateSection = indent: settings: concatStringsSep (fixedWidthString indent " " "") (
-    filter (x: x != null) (mapAttrsToList generateLine settings)
+  generateSection = indent: settings: lib.concatStringsSep (lib.fixedWidthString indent " " "") (
+    lib.filter (x: x != null) (lib.mapAttrsToList generateLine settings)
   );
 
   # generateSection includes a final newline hence weird closing brace
   mkConf = settings:
     if settings.global or false then generateSection 0 settings
     else ''
-      ${concatMapStringsSep "\n" (files: ''"${files}"'') (toList settings.files)} {
+      ${lib.concatMapStringsSep "\n" (files: ''"${files}"'') (lib.toList settings.files)} {
         ${generateSection 2 settings}}
     '';
 
-  settings = sortProperties (attrValues (filterAttrs (_: settings: settings.enable) (
-    foldAttrs recursiveUpdate { } [
+  settings = lib.sortProperties (lib.attrValues (lib.filterAttrs (_: settings: settings.enable) (
+    lib.foldAttrs lib.recursiveUpdate { } [
       {
         header = {
           enable = true;
@@ -43,10 +40,10 @@ let
   )));
   configFile = pkgs.writeTextFile {
     name = "logrotate.conf";
-    text = concatStringsSep "\n" (
+    text = lib.concatStringsSep "\n" (
       map mkConf settings
     );
-    checkPhase = optionalString cfg.checkConfig ''
+    checkPhase = lib.optionalString cfg.checkConfig ''
       # logrotate --debug also checks that users specified in config
       # file exist, but we only have sandboxed users here so brown these
       # out. according to man page that means su, create and createolddir.
@@ -83,24 +80,24 @@ let
   };
 
   mailOption =
-    optionalString (foldr (n: a: a || (n.mail or false) != false) false (attrValues cfg.settings))
+    lib.optionalString (lib.foldr (n: a: a || (n.mail or false) != false) false (lib.attrValues cfg.settings))
     "--mail=${pkgs.mailutils}/bin/mail";
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "logrotate" "config" ] "Modify services.logrotate.settings.header instead")
-    (mkRemovedOptionModule [ "services" "logrotate" "extraConfig" ] "Modify services.logrotate.settings.header instead")
-    (mkRemovedOptionModule [ "services" "logrotate" "paths" ] "Add attributes to services.logrotate.settings instead")
+    (lib.mkRemovedOptionModule [ "services" "logrotate" "config" ] "Modify services.logrotate.settings.header instead")
+    (lib.mkRemovedOptionModule [ "services" "logrotate" "extraConfig" ] "Modify services.logrotate.settings.header instead")
+    (lib.mkRemovedOptionModule [ "services" "logrotate" "paths" ] "Add attributes to services.logrotate.settings instead")
   ];
 
   options = {
     services.logrotate = {
-      enable = mkEnableOption "the logrotate systemd service" // {
-        default = foldr (n: a: a || n.enable) false (attrValues cfg.settings);
-        defaultText = literalExpression "cfg.settings != {}";
+      enable = lib.mkEnableOption "the logrotate systemd service" // {
+        default = lib.foldr (n: a: a || n.enable) false (lib.attrValues cfg.settings);
+        defaultText = lib.literalExpression "cfg.settings != {}";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         description = ''
           logrotate freeform settings: each attribute here will define its own section,
@@ -111,7 +108,7 @@ in
           as logrotate config directives,
           refer to <https://linux.die.net/man/8/logrotate> for details.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             # global options
             header = {
@@ -138,24 +135,24 @@ in
             };
           };
           '';
-        type = types.attrsOf (types.submodule ({ name, ... }: {
-          freeformType = with types; attrsOf (nullOr (oneOf [ int bool str ]));
+        type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
+          freeformType = with lib.types; attrsOf (nullOr (oneOf [ int bool str ]));
 
           options = {
-            enable = mkEnableOption "setting individual kill switch" // {
+            enable = lib.mkEnableOption "setting individual kill switch" // {
               default = true;
             };
 
-            global = mkOption {
-              type = types.bool;
+            global = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Whether this setting is a global option or not: set to have these
                 settings apply to all files settings with a higher priority.
               '';
             };
-            files = mkOption {
-              type = with types; either str (listOf str);
+            files = lib.mkOption {
+              type = with lib.types; either str (listOf str);
               default = name;
               defaultText = ''
                 The attrset name if not specified
@@ -168,8 +165,8 @@ in
               '';
             };
 
-            frequency = mkOption {
-              type = types.nullOr types.str;
+            frequency = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               description = ''
                 How often to rotate the logs. Defaults to previously set global setting,
@@ -177,8 +174,8 @@ in
               '';
             };
 
-            priority = mkOption {
-              type = types.int;
+            priority = lib.mkOption {
+              type = lib.types.int;
               default = 1000;
               description = ''
                 Order of this logrotate block in relation to the others. The semantics are
@@ -190,8 +187,8 @@ in
         }));
       };
 
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = configFile;
         defaultText = ''
           A configuration file automatically generated by NixOS.
@@ -200,7 +197,7 @@ in
           Override the configuration file used by logrotate. By default,
           NixOS generates one automatically from [](#opt-services.logrotate.settings).
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           pkgs.writeText "logrotate.conf" '''
             missingok
             "/var/log/*.log" {
@@ -211,8 +208,8 @@ in
         '';
       };
 
-      checkConfig = mkOption {
-        type = types.bool;
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether the config should be checked at build time.
@@ -240,7 +237,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.logrotate = {
       description = "Logrotate Service";
       startAt = "hourly";

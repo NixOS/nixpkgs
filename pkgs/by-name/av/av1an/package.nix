@@ -2,7 +2,6 @@
   lib,
   symlinkJoin,
   makeBinaryWrapper,
-  testers,
   av1an-unwrapped,
   ffmpeg,
   python3Packages,
@@ -21,6 +20,7 @@
   withX265 ? true, # H.265/HEVC encoder
   withVmaf ? false, # Perceptual video quality assessment algorithm
 }:
+
 # av1an requires at least one encoder
 assert lib.assertMsg (lib.elem true [
   withAom
@@ -30,6 +30,7 @@ assert lib.assertMsg (lib.elem true [
   withX264
   withX265
 ]) "At least one encoder is required!";
+
 symlinkJoin {
   name = "av1an-${av1an-unwrapped.version}";
 

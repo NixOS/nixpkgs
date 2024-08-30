@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , stdenv
+, installShellFiles
 , libiconv
 , darwin
 }:
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config # required for openssl-sys
   ];
 
@@ -37,6 +39,13 @@ rustPlatform.buildRustPackage rec {
       # All other tests are integration tests which should not be run with Nix build
       "--lib"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd novops \
+      --bash <($out/bin/novops completion bash) \
+      --fish <($out/bin/novops completion fish) \
+      --zsh <($out/bin/novops completion zsh)
+  '';
 
   meta = with lib; {
     description = "Cross-platform secret & config manager for development and CI environments";

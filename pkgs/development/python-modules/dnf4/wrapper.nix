@@ -51,6 +51,6 @@ stdenv.mkDerivation {
   };
 
   meta = dnf4-unwrapped.meta // {
-    priority = (dnf4-unwrapped.meta.priority or 0) - 1;
+    priority = (dnf4-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

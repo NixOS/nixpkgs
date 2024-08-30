@@ -42,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.8.1";
+  version = "2024.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tFNBtjIxcn+Ux+QNWBbRCmCkgMuddodnKmeRCfT3PEs=";
+    hash = "sha256-Lgen4HNZpnd+IDXRHk3U0kFiFZh72RcqAOIg+eyd150=";
   };
 
   build-system = [

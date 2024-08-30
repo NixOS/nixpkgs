@@ -25,11 +25,6 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./sudo.patch ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
-  '';
-
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
@@ -37,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     sphinx
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytest-cov-stub pytestCheckHook ];
 
   postBuild = ''
     make man -C docs

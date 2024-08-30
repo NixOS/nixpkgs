@@ -16,11 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-5iMhl3Wcxwgq4Wr0TUcAuRnb2+y8DHBugnnkpcZfSAM=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail " --cov-append --cov-report term --cov depscan" ""
-  '';
-
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
@@ -40,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     httpretty
+    pytest-cov-stub
     pytestCheckHook
   ];
 

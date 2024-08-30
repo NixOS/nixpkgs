@@ -1004,10 +1004,6 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
-  lualine-nvim = super.lualine-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-web-devicons ];
-  };
-
   luasnip = super.luasnip.overrideAttrs {
     dependencies = with self; [ luaPackages.jsregexp ];
   };
