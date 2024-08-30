@@ -12,18 +12,20 @@
 (require '[babashka.curl :as curl]
          '[babashka.cli :as cli])
 
+(def wd (.getParentFile (fs/file *file*)))
+
 (def graphql-path
   "Make working directory overridable"
   (str
    (or (System/getenv "NIXOS_ACTIVITY_GQL_PATH")
-       (fs/cwd))))
+       wd)))
 
 (def maintainers-path
   "Make maintainers path overridable"
   (str
    (or (System/getenv "NIXOS_MAINTAINERS_PATH")
        (fs/canonicalize
-        (fs/file (fs/cwd) "../..")))))
+        (fs/file wd "../..")))))
 
 ;; (println "graphql path:" graphql-path)
 
