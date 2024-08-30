@@ -59,73 +59,76 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/onlyOFFICE/build_tools makes many assumptions,
     # so we do things 'manually' here...
 
+    echo "== cryptopp =="
     cd core/Common/3dParty/cryptopp/project
-    qmake -o Makefile cryptopp.pro
+    qmake "CONFIG+=debug" -o Makefile cryptopp.pro
+    #qmake -o Makefile cryptopp.pro
     make
     cd ../../../../..
 
+    echo "== XlsbFormatLib =="
     cd core/OOXML/Projects/Linux/XlsbFormatLib
-    qmake -o Makefile XlsbFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
     make
     cd ../../../../..
 
     cd core/MsBinaryFile/Projects/XlsFormatLib/Linux
-    qmake -o Makefile XlsFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
     make
     cd ../../../../..
 
     cd core/OdfFile/Projects/Linux
-    qmake -o Makefile OdfFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile OdfFormatLib.pro
     make
     cd ../../../..
 
     cd core/MsBinaryFile/Projects/DocFormatLib/Linux
-    qmake -o Makefile DocFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile DocFormatLib.pro
     make
     cd ../../../../..
 
     cd core/MsBinaryFile/Projects/PPTFormatLib/Linux
-    qmake -o Makefile PPTFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile PPTFormatLib.pro
     make
     cd ../../../../..
 
     cd core/RtfFile/Projects/Linux
-    qmake -o Makefile RtfFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile RtfFormatLib.pro
     make
     cd ../../../..
 
     cd core/TxtFile/Projects/Linux
-    qmake -o Makefile TxtXmlFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile TxtXmlFormatLib.pro
     make
     cd ../../../..
 
     cd core/OOXML/Projects/Linux/BinDocument
-    qmake -o Makefile BinDocument.pro
+    qmake "CONFIG+=debug" -o Makefile BinDocument.pro
     make
     cd ../../../../..
 
     cd core/OOXML/Projects/Linux/PPTXFormatLib
-    qmake -o Makefile PPTXFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile PPTXFormatLib.pro
     make
     cd ../../../../..
 
     cd core/OOXML/Projects/Linux/DocxFormatLib
-    qmake -o Makefile DocxFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile DocxFormatLib.pro
     make
     cd ../../../../..
 
     cd core/OOXML/Projects/Linux/XlsbFormatLib
-    qmake -o Makefile XlsbFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
     make
     cd ../../../../..
 
     cd core/MsBinaryFile/Projects/XlsFormatLib/Linux
-    qmake -o Makefile XlsFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
     make
     cd ../../../../..
 
     cd core/Common/cfcpp
-    qmake -o Makefile cfcpp.pro
+    qmake "CONFIG+=debug" -o Makefile cfcpp.pro
     make
     cd ../../..
 
@@ -136,29 +139,29 @@ stdenv.mkDerivation (finalAttrs: {
 
     # requires icu
     cd core/UnicodeConverter
-    qmake -o Makefile UnicodeConverter.pro
+    qmake "CONFIG+=debug" -o Makefile UnicodeConverter.pro
     make
     cd ../..
 
     # requires UnicodeConverter
     cd core/Common
-    qmake -o Makefile kernel.pro
+    qmake "CONFIG+=debug" -o Makefile kernel.pro
     make
     cd ../..
 
     # requires kernel
     cd core/Common/Network
-    qmake -o Makefile network.pro
+    qmake "CONFIG+=debug" -o Makefile network.pro
     make
     cd ../../..
 
     cd core/Common/3dParty/cryptopp/project
-    qmake -o Makefile cryptopp.pro
+    qmake "CONFIG+=debug" -o Makefile cryptopp.pro
     make
     cd ../../../../..
 
     cd core/MsBinaryFile/Projects/VbaFormatLib/Linux
-    qmake -o Makefile VbaFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile VbaFormatLib.pro
     make
     cd ../../../../..
 
@@ -180,7 +183,7 @@ EOL
     ln -s ${hyphen-src} core/Common/3dParty/hyphen/hyphen
 
     cd core/DesktopEditor/graphics/pro
-    qmake -o Makefile graphics.pro
+    qmake "CONFIG+=debug" -o Makefile graphics.pro
     cat Makefile
     make
     cd ../../../..
@@ -199,57 +202,57 @@ EOL
 
     # requires graphics, openssl (with MD2), v8
     cd core/DesktopEditor/doctrenderer
-    qmake -o Makefile doctrenderer.pro
+    qmake "CONFIG+=debug" -o Makefile doctrenderer.pro
     make
     cd ../../..
 
     # requires UnicodeConverter, kernel, graphics
     cd core/HtmlRenderer
-    qmake -o Makefile htmlrenderer.pro
+    qmake "CONFIG+=debug" -o Makefile htmlrenderer.pro
     make
     cd ../..
 
     # depends on kernel, kernel_network, graphics and gumbo-parser
     cd core/HtmlFile2
-    qmake -o Makefile HtmlFile2.pro
+    qmake "CONFIG+=debug" -o Makefile HtmlFile2.pro
     make
     cd ../..
 
     # requires kernel, graphics and HtmlFile2
     cd core/EpubFile
-    qmake -o Makefile CEpubFile.pro
+    qmake "CONFIG+=debug" -o Makefile CEpubFile.pro
     make
     cd ../..
 
     cd core/PdfFile
-    qmake -o Makefile PdfFile.pro
+    qmake "CONFIG+=debug" -o Makefile PdfFile.pro
     make
     cd ../..
 
     # requires UnicodeConverter, kernel, graphics and PdfFile
     cd core/DjVuFile
-    qmake -o Makefile DjVuFile.pro
+    qmake "CONFIG+=debug" -o Makefile DjVuFile.pro
     make
     cd ../..
 
     # requires UnicodeConverter, graphics, kernel, PdfFile
     cd core/XpsFile
-    qmake -o Makefile XpsFile.pro
+    qmake "CONFIG+=debug" -o Makefile XpsFile.pro
     make
     cd ../..
 
     cd core/Fb2File
-    qmake -o Makefile Fb2File.pro
+    qmake "CONFIG+=debug" -o Makefile Fb2File.pro
     make
     cd ../..
 
     cd core/DocxRenderer
-    qmake -o Makefile DocxRenderer.pro
+    qmake "CONFIG+=debug" -o Makefile DocxRenderer.pro
     make
     cd ../..
     
     cd core/X2tConverter/build/Qt
-    qmake -o Makefile X2tConverter.pro
+    qmake "CONFIG+=debug" -o Makefile X2tConverter.pro
     make
     cd ../../../..
     find .
