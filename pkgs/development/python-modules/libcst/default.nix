@@ -3,8 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  callPackage,
   cargo,
-  hypothesis,
+  hypothesmith,
+  libcst,
   libiconv,
   pytestCheckHook,
   python,
@@ -16,6 +18,7 @@
   setuptools-scm,
   typing-extensions,
   typing-inspect,
+  ufmt,
 }:
 
 buildPythonPackage rec {
@@ -41,12 +44,6 @@ buildPythonPackage rec {
 
   cargoRoot = "native";
 
-  postPatch = ''
-    # avoid infinite recursion by not formatting the release files
-    substituteInPlace libcst/codegen/generate.py \
-      --replace '"ufmt"' '"true"'
-  '';
-
   nativeBuildInputs = [
     setuptools-rust
     setuptools-scm
@@ -64,25 +61,29 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    hypothesis
+    hypothesmith
     pytestCheckHook
+    ufmt
   ];
 
   preCheck = ''
-    # otherwise import libcst.native fails
-    cp build/lib.*/libcst/native.* libcst/
-
-    ${python.interpreter} -m libcst.codegen.generate visitors
-    ${python.interpreter} -m libcst.codegen.generate return_types
-
-    # Can't run all tests due to circular dependency on hypothesmith -> libcst
-    rm -r {libcst/tests,libcst/codegen/tests,libcst/m*/tests}
+    # import from $out instead
+    rm libcst/__init__.py
   '';
 
   disabledTests = [
-    # No files are generated
-    "test_codemod_formatter_error_input"
+    # FIXME package pyre-test
+    "TypeInferenceProviderTest"
+    # we'd need to run `python -m libcst.codegen.generate all` but shouldn't modify $out
+    "test_codegen_clean_visitor_functions"
   ];
+
+  # circular dependency on hypothesmith and ufmt
+  doCheck = false;
+
+  passthru.tests = {
+    pytest = libcst.overridePythonAttrs { doCheck = true; };
+  };
 
   pythonImportsCheck = [ "libcst" ];
 
