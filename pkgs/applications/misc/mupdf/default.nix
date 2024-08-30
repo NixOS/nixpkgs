@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-    cp ./build/shared-release/libmupdf.so* $out/lib
+    cp ./build/shared-release/libmupdf${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib
   '' + (lib.optionalString (stdenv.isDarwin) ''
     for exe in $bin/bin/*; do
       install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
