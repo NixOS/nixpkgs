@@ -35,13 +35,29 @@ in
     package = lib.mkPackageOption pkgs "foot" { };
 
     settings = lib.mkOption {
-      inherit (settingsFormat) type;
-      default = { };
-      description = ''
-        Configuration for foot terminal emulator. Further information can be found in {command}`man 5 foot.ini`.
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
 
-        Global configuration has to be written under the [main] section.
+        options = {
+          main = lib.mkOption {
+            type = settingsFormat.type.nestedTypes.elemType;
+            default = { };
+            description = ''
+              Main configuration section (global section). All options that
+              could occur outside any section in {manpage}`foot.ini(5)` need to
+              be placed in this section.
+            '';
+          };
+        };
+      };
+
+      default = { };
+
+      description = ''
+        Configuration for foot terminal emulator. Further information can be
+        found in {manpage}`foot.ini(5)`.
       '';
+
       example = {
         main.font = "FreeMono:size=12";
         scrollback.lines = 100000;
