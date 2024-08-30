@@ -4226,6 +4226,13 @@
     githubId = 1707779;
     name = "Chris Ertel";
   };
+  crimeminister = {
+    email = "robert@crimeminister.org";
+    name = "Robert Medeiros";
+    github = "crimeminister";
+    githubId = 29072;
+    keys = [ { fingerprint = "E3BD A35E 590A 8D29 701A  9723 F448 7FA0 4BC6 44F2"; } ];
+  };
   crinklywrappr = {
     email = "crinklywrappr@pm.me";
     name = "Daniel Fitzpatrick";
