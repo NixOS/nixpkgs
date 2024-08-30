@@ -14,7 +14,6 @@
   glibc,
   nss,
   udev,
-  xorg,
   gnome-keyring,
   mesa,
   gtk3,
@@ -22,6 +21,13 @@
   libsecret,
   libappindicator,
   xdotool,
+  libX11,
+  libXcomposite,
+  libXext,
+  libXrandr,
+  libXScrnSaver,
+  libXtst,
+  libxshmfence,
 }:
 let
   pname = "keeweb";
@@ -51,13 +57,13 @@ let
     libGL
     nss
     udev
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXScrnSaver
-    xorg.libXtst
-    xorg.libxshmfence
+    libX11
+    libXcomposite
+    libXext
+    libXrandr
+    libXScrnSaver
+    libXtst
+    libxshmfence
     gnome-keyring
     mesa
     gtk3
