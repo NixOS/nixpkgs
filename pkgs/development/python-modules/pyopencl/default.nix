@@ -68,11 +68,12 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
 
-    # import from $out
-    rm -r pyopencl
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
   '';
 
-  # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
+  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
+  # tests are all the tests that are available.
   doCheck = false;
 
   pythonImportsCheck = [
