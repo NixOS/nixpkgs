@@ -8,7 +8,7 @@ if [[ ${TMPDIR:-} == /run/user/* ]]; then
 fi
 
 tmp=$(mktemp -d)
-trap 'chmod -R +w "$tmp" && rm -fr "$tmp"' EXIT
+trap 'rm -rf "$tmp"' EXIT
 
 HOME=$tmp/.home
 cd "$tmp"
