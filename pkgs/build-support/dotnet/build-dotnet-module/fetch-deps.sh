@@ -1,5 +1,12 @@
 set -e
 
+if [[ ${TMPDIR:-} == /run/user/* ]]; then
+    # /run/user is usually a tmpfs in RAM, which may be too small
+    # to store all downloaded dotnet packages
+    # `TMPDIR` is used by `mktemp` below.
+    unset TMPDIR
+fi
+
 tmp=$(mktemp -d)
 trap 'chmod -R +w "$tmp" && rm -fr "$tmp"' EXIT
 
