@@ -15284,6 +15284,8 @@ self: super: with self; {
 
   suds = callPackage ../development/python-modules/suds { };
 
+  suds-community = callPackage ../development/python-modules/suds-community { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
