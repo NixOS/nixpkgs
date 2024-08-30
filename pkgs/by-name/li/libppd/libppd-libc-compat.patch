@@ -1,0 +1,13 @@
+--- result/ppd/ppd-collection.cxx	1970-01-01 01:00:01.000000000 +0100
++++ mod/ppd/ppd-collection.cxx	2023-02-11 00:16:33.057044216 +0100
+@@ -24,6 +24,10 @@
+ #include "array-private.h"
+ #include <regex.h>
+ #include <sys/wait.h>
++#include <signal.h>
++#include <libgen.h>
++
++extern char **environ;
+ 
+ 
+ //
