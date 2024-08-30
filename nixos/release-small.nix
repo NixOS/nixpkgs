@@ -53,12 +53,8 @@ in rec {
         inherit (nixos'.tests.installer)
           lvm
           separateBoot
-          simple;
-      };
-      boot = {
-        inherit (nixos'.tests.boot)
-          biosCdrom
-          uefiCdrom;
+          simple
+          simpleUefiSystemdBoot;
       };
     };
   };
@@ -107,18 +103,16 @@ in rec {
         "nixpkgs.tarball"
         "nixpkgs.release-checks"
       ]
+      (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
       (map (onSystems [ "x86_64-linux" ]) [
-        "nixos.tests.boot.biosCdrom"
         "nixos.tests.installer.lvm"
         "nixos.tests.installer.separateBoot"
         "nixos.tests.installer.simple"
       ])
       (map onSupported [
         "nixos.dummy"
-        "nixos.iso_minimal"
         "nixos.manual"
         "nixos.tests.acme"
-        "nixos.tests.boot.uefiCdrom"
         "nixos.tests.containers-imperative"
         "nixos.tests.containers-ip"
         "nixos.tests.firewall"

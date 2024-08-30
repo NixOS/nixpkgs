@@ -86,6 +86,7 @@ in rec {
         # Upstream issue: https://gitlab.com/qemu-project/qemu/-/issues/2321
         # (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
+        (onSystems ["aarch64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolEscape")
