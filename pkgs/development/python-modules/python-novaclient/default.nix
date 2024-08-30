@@ -6,6 +6,7 @@
   iso8601,
   keystoneauth1,
   openssl,
+  openstackdocstheme,
   oslo-i18n,
   oslo-serialization,
   pbr,
@@ -13,6 +14,8 @@
   pythonOlder,
   requests-mock,
   setuptools,
+  sphinxcontrib-apidoc,
+  sphinxHook,
   stestr,
   testscenarios,
 }:
@@ -28,6 +31,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-lMrQ8PTBYc7VKl7NhdE0/Wc7mX2nGUoDHAymk0Q0Cw0=";
   };
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxcontrib-apidoc
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
 
   build-system = [ setuptools ];
 
