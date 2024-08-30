@@ -4,6 +4,7 @@
   fetchPypi,
   ddt,
   keystoneauth1,
+  openstackdocstheme,
   oslo-i18n,
   oslo-serialization,
   oslo-utils,
@@ -11,9 +12,11 @@
   requests,
   prettytable,
   pythonOlder,
+  reno,
   requests-mock,
   setuptools,
   simplejson,
+  sphinxHook,
   stestr,
   stevedore,
 }:
@@ -29,6 +32,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-P+/eJoJS5S4w/idz9lgienjG3uN4/LEy0xyG5uybojg=";
   };
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    reno
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
 
   build-system = [ setuptools ];
 
