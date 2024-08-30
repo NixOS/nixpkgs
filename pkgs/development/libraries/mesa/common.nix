@@ -29,7 +29,11 @@ rec {
     homepage = "https://www.mesa3d.org/";
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = with lib.licenses; [ mit ]; # X11 variant, in most files
-    platforms = lib.platforms.mesaPlatforms;
+    platforms = [
+      "i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux"
+      "armv6l-linux" "armv7l-linux" "armv7a-linux" "aarch64-linux"
+      "powerpc64-linux" "powerpc64le-linux" "aarch64-darwin" "riscv64-linux"
+    ];
     maintainers = with lib.maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 }
