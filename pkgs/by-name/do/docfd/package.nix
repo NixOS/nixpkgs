@@ -42,7 +42,6 @@ buildDunePackage' rec {
     cmdliner
     containers-data
     digestif
-    domainslib
     eio_main
     lwd
     nottui
