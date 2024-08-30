@@ -2533,7 +2533,7 @@ runTests {
           e = { a = 0; };
         };
       in
-        mapDataRecursiveCond (x: true) (path: x: path) (
+        mapDataRecursiveCond (path: x: true) (path: x: path) (
           attr
           // { nestedAttr = attr; }
           // { nestedList = [ attr attr ]; }

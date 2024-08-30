@@ -1263,9 +1263,9 @@ rec {
     data:
     let
       recurse = path: val:
-        if isAttrs val && cond val
+        if isAttrs val && cond path val
         then mapAttrs (n: v: recurse (path ++ [n]) v) val
-        else if isList val && cond val
+        else if isList val && cond path val
         then imap0 (i: v: recurse (path ++ [i]) v) val
         else f path val;
     in
