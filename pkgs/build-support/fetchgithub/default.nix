@@ -17,7 +17,9 @@ let
     else builtins.unsafeGetAttrPos "rev" args
   );
   baseUrl = "https://${githubBase}/${owner}/${repo}";
-  newMeta = meta // {
+  newMeta = {
+    changelog = "${baseUrl}/releases/tag/${lib.removePrefix "refs/tags/" rev}";
+  } // meta // {
     homepage = meta.homepage or baseUrl;
   } // lib.optionalAttrs (position != null) {
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
