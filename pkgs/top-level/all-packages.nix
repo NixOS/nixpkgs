@@ -3371,7 +3371,9 @@ with pkgs;
 
   base16384 = callPackage ../tools/text/base16384 { };
 
-  bashate = python3Packages.callPackage ../development/tools/bashate { };
+  bashate = python3Packages.callPackage ../development/tools/bashate {
+    python3Packages = python311Packages;
+  };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
