@@ -7,7 +7,7 @@ if [[ ${TMPDIR:-} == /run/user/* ]]; then
     unset TMPDIR
 fi
 
-tmp=$(mktemp -d)
+tmp=$(mktemp -dt "dotnet-deps.XXXXX")
 trap 'rm -rf "$tmp"' EXIT
 
 HOME=$tmp/.home
