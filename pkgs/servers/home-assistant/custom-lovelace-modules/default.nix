@@ -14,6 +14,8 @@
 
   decluttering-card = callPackage ./decluttering-card { };
 
+  ha-floorplan = callPackage ./ha-floorplan { };
+
   lg-webos-remote-control = callPackage ./lg-webos-remote-control { };
 
   light-entity-card = callPackage ./light-entity-card { };
