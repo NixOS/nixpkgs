@@ -1237,25 +1237,78 @@ rec {
     recurse [ ] set;
 
   /**
-    Like [`lib.attrsets.mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) but also recurses on lists. In other words it recurses over an arbitrary nesting of attrsets and lists.
+    `lib.attrsets.mapDataRecursiveCond` *`cond`* *`f`* *`data`*
 
-    :::{#map-data-recursive-cond-example .example}
-    # Map over leaf attributes defined by a condition
+    Recurses on the `data` structure and mutates the leafs by replacing them calling the `f` function is called.
+    `cond` decides if the function recurses in an attrset or list, or stops where it is.
 
-    Map derivations to their `name` attribute.
-    Derivatons are identified as attribute sets that contain `{ type = "derivation"; }`.
+    In other words, this function behaves like [`lib.attrsets.mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) but also recurses on lists.
+
+    # Type
+
+    ```
+    mapDataRecursiveCond :: ([String] -> Data -> Bool) -> ([String] -> a -> b) -> Data -> Data
+    ```
+
+    # Inputs
+
+    *`cond`* ([String] -> Data -> Bool)
+
+    : Takes the current path in the data structure and the current value at that path and returns a boolean.
+    : As long as the returned boolean is `true`, `mapDataRecursiveCond` will continue recursing in the `data` structure.
+    : If `false`, the function will stop there and pass the value as-is to the `f` function.
+
+    *`f`* ([String] -> Data -> Data)
+
+    : Takes the current path in the data structure and the current value at that path and returns a new value.
+    : This new value will replace the given value in the output data structure.
+
+    *`data`* (Data)
+
+    : The input `data` structure which will be recursed on.
+    : Can be an arbitrary nesting of attrsets, lists and simple values.
+
+    :::{.tip}
+
+    The following snippet shows a `data` structure with each item annotated with the `path` and `value` that will be given to the `cond` and `f` functions when recursing on the data structure.
+
     ```nix
-    mapDataRecursiveCond
-      (as: !(as ? "type" && as.type == "derivation"))
-      (x: x.name)
-      data
+    # Data         Path           Value
+    { a =       # [ "a" ]        [ "one" { b = 1; } ]
+      [ "one"   # [ "a" 0 ]      "one"
+        { b =   # [ "a" 1 ]      { b = 1; }
+          1 };  # [ "a" 1 "b" ]  1
+      ]
+    }
     ```
     :::
 
-    # Type
+    # Output
+
+    *`data`* (Data)
+
+    : The same data structure as given as input, with all leafs replaced by their value after applying the function `f`.
+
+    # Examples
+
+    :::{#map-data-recursive-example-1 .example}
+    # Map over attribute sets having a type attribute.
+
+    Recurse over an arbitrary data structure whose leafs are attribute sets with a type attribute.
+    Those leafs will be replaced by a string being the concatenation of the path of the attribute and the type attribute.
+
+    ```nix
+    nix-repl> :p lib.mapDataRecursiveCond (path: val: !(val ? type)) (path: val: "[ ${toString path} ] ${val.type}") {
+              deriv = { type = "derivation"; name = "deriv"; };
+              list = [ { type = "one"; }
+                       { type = "two"; } ];
+              other = { type = "other"; extra = "extra"; };
+              }
+    { deriv = "[ deriv ] derivation";
+      list = [ "[ list 0 ] one" "[ list 1 ] two" ];
+      other = "[ other ] other"; }
     ```
-    mapDataRecursiveCond :: (AttrSet -> Bool) -> ([String] -> a -> b) -> Data -> Data
-    ```
+    :::
   */
   mapDataRecursiveCond =
     cond:
