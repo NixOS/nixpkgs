@@ -720,6 +720,9 @@ in {
         Group = "hass";
         WorkingDirectory = cfg.configDir;
         Restart = "on-failure";
+
+        # Signal handling
+        # homeassistant/helpers/signal.py
         RestartForceExitStatus = "100";
         SuccessExitStatus = "100";
         KillSignal = "SIGINT";
