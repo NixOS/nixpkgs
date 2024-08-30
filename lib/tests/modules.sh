@@ -304,7 +304,7 @@ checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkP
 checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
-checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
+checkConfigError 'The option .undefinedPackage. was accessed but has no value defined. Try setting the option.' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
 checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
@@ -402,7 +402,7 @@ checkConfigOutput '^null$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-
 checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix ./define-value-string.nix
 # Check whether an freeform-typed value can depend on a declared option, this can only work with lazyAttrsOf
 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
-checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
+checkConfigError 'The option .* was accessed but has no value defined. Try setting the option.' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
 # submodules in freeformTypes should have their locations annotated
 checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freeform-submodules.nix
@@ -461,8 +461,8 @@ checkConfigOutput "{}" config.attrs.a ./emptyValues.nix
 checkConfigOutput "null" config.null.a ./emptyValues.nix
 checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 # These types don't have empty values
-checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
-checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
+checkConfigError 'The option .int.a. was accessed but has no value defined. Try setting the option.' config.int.a ./emptyValues.nix
+checkConfigError 'The option .nonEmptyList.a. was accessed but has no value defined. Try setting the option.' config.nonEmptyList.a ./emptyValues.nix
 
 # types.unique
 #   requires a single definition
