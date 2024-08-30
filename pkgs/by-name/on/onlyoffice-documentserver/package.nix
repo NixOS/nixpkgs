@@ -10,6 +10,7 @@
   liberation_ttf_v1,
   writeScript,
   xorg,
+  x2t,
 }:
 
 let
@@ -73,6 +74,7 @@ let
         targetPkgs = pkgs: [
           gcc-unwrapped.lib
           onlyoffice-documentserver
+          x2t
 
           # fonts
           corefonts
