@@ -49,10 +49,19 @@ in
     };
 
     theme = lib.mkOption {
-      type = with lib.types; nullOr str;
+      type =
+        with lib.types;
+        nullOr (oneOf [
+          path
+          str
+        ]);
       default = null;
       description = ''
-        Theme name. Check <https://codeberg.org/dnkl/foot/src/branch/master/themes> for available themes.
+        Theme to use for foot. This can be either a theme config file to include
+        (given as a path) or the name of one of the themes bundled with foot
+        (given as a plain string).
+        See <https://codeberg.org/dnkl/foot/src/branch/master/themes> for a
+        full list of available themes.
       '';
       example = "aeroroot";
     };
@@ -76,9 +85,12 @@ in
       etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
     };
     programs = {
-      foot.settings.main.include = lib.optionals (cfg.theme != null) [
-        "${cfg.package.themes}/share/foot/themes/${cfg.theme}"
-      ];
+      foot.settings.main.include = lib.mkIf (cfg.theme != null) (
+        if lib.hasPrefix "/" (toString cfg.theme) then
+          "${cfg.theme}"
+        else
+          "${cfg.package.themes}/share/foot/themes/${cfg.theme}"
+      );
       # https://codeberg.org/dnkl/foot/wiki#user-content-shell-integration
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ". ${./bashrc} # enable shell integration for foot terminal";
       fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration "source ${./config.fish} # enable shell integration for foot terminal";
