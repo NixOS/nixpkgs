@@ -2021,7 +2021,8 @@ with pkgs;
 
   vrrtest = callPackage ../tools/video/vrrtest { };
 
-  winbox = callPackage ../tools/admin/winbox {
+  winbox = winbox3;
+  winbox3 = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.stable;
   };
 
