@@ -1145,7 +1145,6 @@ rec {
     Like `mapAttrs`, except that it recursively applies itself to the *leaf* attributes of a potentially-nested attribute set:
     the second argument of the function will never be an attrset.
     Also, the first argument of the mapping function is a *list* of the attribute names that form the path to the leaf attribute.
-    This function recursively applies itself to lists too, in which case the list of attribute names will contain a number representing the index.
 
     For a function that gives you control over what counts as a leaf, see [`lib.attrsets.mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond).
 
@@ -1168,29 +1167,20 @@ rec {
     # Map over leaf attributes with lists
 
     ```nix
-    mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value]))
-      {
-        n = {
-          a = "A";
-          m = [
-            { b = "B"; c = "C"; }
-            { d = "D"; e = "E"; }
-          ];
-        };
-        f = "F";
-      }
+    nix-repl> :p lib.mapAttrsRecursive (path: value: lib.concatStringsSep "-" (path ++ [value])) {
+                f = "F";
+                n = {
+                  a = "A";
+                };
+              }
     ```
     evaluates to
     ```nix
     {
+      f = "f-F";
       n = {
         a = "n-a-A";
-        m = [
-          { b = "n-m-0-b-B"; c = "n-m-0-c-C"; }
-          { d = "n-m-1-d-D"; e = "n-m-1-e-E"; }
-        ];
       };
-      f = "f-F";
     }
     ```
     :::
