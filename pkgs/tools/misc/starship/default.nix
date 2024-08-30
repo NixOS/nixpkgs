@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , installShellFiles
 , cmake
@@ -21,6 +22,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-3IO9hHuhzJsCHU/6BA5ylEKQI2ik6ZiRul/iO/vzii4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-41815.patch";
+      url = "https://github.com/starship/starship/commit/cfc58161e0ec595db90af686ad77a73df6d44d74.patch";
+      hash = "sha256-JlhrcCsvIMH1XnFsx2b65Kbbe9Hsy7ffUMha1BISwtI=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles cmake ];
 
