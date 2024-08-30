@@ -26203,7 +26203,6 @@ with pkgs;
 
   evdev-proto = callPackage ../os-specific/bsd/freebsd/evdev-proto { };
 
-  fscryptctl = callPackage ../os-specific/linux/fscryptctl { };
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
 
