@@ -14532,6 +14532,11 @@ self: super: with self; {
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 
+  sirius = toPythonModule (pkgs.sirius.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
   sismic = callPackage ../development/python-modules/sismic { };
 
   sisyphus-control = callPackage ../development/python-modules/sisyphus-control { };
