@@ -90,6 +90,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "django-phonenumber-field"
     "importlib-metadata"
     "kombu"
     "markdown"
