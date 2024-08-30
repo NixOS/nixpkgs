@@ -481,6 +481,7 @@ let
         ]
         ++ optional (hasOutput "man") "man";
     }
+    // attrs.src.meta or { }
     // attrs.meta or { }
     # Fill `meta.position` to identify the source location of the package.
     // optionalAttrs (pos != null) {
