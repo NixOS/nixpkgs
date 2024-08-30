@@ -82,14 +82,15 @@ let
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
-      filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
+      filterAttrsRecursive foldlAttrs foldAttrs collect collect' nameValuePair mapAttrs
       mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
-      mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
+      mapAttrsRecursiveCond mapAttrsRecursiveCond' genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput getFirstOutput
       getBin getLib getStatic getDev getInclude getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
-      mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr getAttr isAttrs intersectAttrs removeAttrs;
+      mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr getAttr isAttrs intersectAttrs removeAttrs
+      replaceWithPlaceholder getPlaceholderReplacements getLoadCredentials updateToLoadCredentials;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists

@@ -7,14 +7,15 @@ let
     concatMapStringsSep
     concatStringsSep
     elem
-    escapeShellArg
     filter
     flatten
+    getExe
     getName
+    getPlaceholderReplacements
+    getLoadCredentials
     hasPrefix
     hasSuffix
     imap0
-    imap1
     isAttrs
     isDerivation
     isFloat
@@ -24,13 +25,16 @@ let
     isString
     listToAttrs
     mapAttrs
+    mapAttrsToList
     nameValuePair
     optionalString
     removePrefix
     removeSuffix
+    replaceWithPlaceholder
     replaceStrings
     stringToCharacters
     types
+    updateToLoadCredentials
     ;
 
   inherit (lib.strings) toJSON normalizePath escapeC;
@@ -289,43 +293,12 @@ utils = rec {
   # Like genJqSecretsReplacementSnippet, but allows the name of the
   # attr which identifies the secret to be changed.
   genJqSecretsReplacementSnippet' = attr: set: output:
-    let
-      secretsRaw = recursiveGetAttrsetWithJqPrefix set attr;
-      # Set default option values
-      secrets = mapAttrs (_name: set: {
-        quote = true;
-      } // set) secretsRaw;
-      stringOrDefault = str: def: if str == "" then def else str;
-    in ''
-      if [[ -h '${output}' ]]; then
-        rm '${output}'
-      fi
-
-      inherit_errexit_enabled=0
-      shopt -pq inherit_errexit && inherit_errexit_enabled=1
-      shopt -s inherit_errexit
-    ''
-    + concatStringsSep
-        "\n"
-        (imap1 (index: name: ''
-                  secret${toString index}=$(<'${secrets.${name}.${attr}}')
-                  export secret${toString index}
-                '')
-               (attrNames secrets))
-    + "\n"
-    + "${pkgs.jq}/bin/jq >'${output}' "
-    + escapeShellArg (stringOrDefault
-          (concatStringsSep
-            " | "
-            (imap1 (index: name: ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})'')
-                   (attrNames secrets)))
-          ".")
-    + ''
-       <<'EOF'
-      ${toJSON set}
-      EOF
-      (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
-    '';
+    genConfigOutOfBand {
+      config = set;
+      configLocation = output;
+      sourceField = attr;
+      generator = utils.genConfigOutOfBandFormatAdapter (pkgs.formats.json {});
+    };
 
   /* Remove packages of packagesToRemove from packages, based on their names.
      Relies on package names and has quadratic complexity so use with caution!
@@ -345,11 +318,145 @@ utils = rec {
 
   systemdUtils = {
     lib = import ./systemd-lib.nix { inherit lib config pkgs utils; };
-    unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
+    unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils utils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
     network = {
       units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
     };
   };
+
+  /**
+    Generate a configuration file from an attrset which can have some values coming out of band, replaced in the configuration file on the target system, usually in the `preStart` phase of a Systemd service or in the system activation script. This function returns the replacement script.
+
+
+    # Inputs
+
+    `config`
+
+    : Any combination of AttrSet and List. By default, all values will be stored verbatim in the nix store.
+    : For a value to be given out of band instead, the value must be replaced by an AttrSet with a `_secret` attribute. In this case, the `_secret` field must be a path to a file on the target filesystem that will contain the value to be inserted in the configuration file.
+    : If given, the `prefix` field will be prefixed to the out of band value before being replaced in the configuration file.
+    : If given, the `suffix` field will be suffixed to the out of band value before being replaced in the configuration file.
+
+    `configLocation`
+
+    : Location of the configuration file on the target filesystem, with all the values replaced.
+
+    `generator`
+
+    : Function to generate the configuration file from the first argument `config`.
+    : The format can be anything like JSON, YAML, INI or others.
+    : This function must create a file in the nix store and return the path to the file.
+    : This generated file will not have secrets embedded yet.
+    :
+    : For convenience and maintainability, adapter functions are provided to accommodate two use cases.
+    : When combining with a generator from `pkgs.formats`:
+
+    ```nix
+    genConfigOutOfBandFormatAdapter (pkgs.formats.yaml {});
+    ```
+
+    : When combining with a generator from `lib.generators`:
+
+    ```nix
+    genConfigOutOfBandGeneratorAdapter (lib.generators.toJSON {});
+    ```
+
+    `sourceField`
+
+    : The name of field used to determine if a value is given out of band or not can be changed. By default, the field is `_secret`. Only change this default for backwards compatibility.
+
+    # Type
+
+    ```
+    genConfigOutOfBand :: Any -> String -> (Any -> Path) -> Path
+    ```
+
+    # Examples
+    :::{.example}
+    ## `utils.genConfigOutOfBand` generating JSON file.
+
+    ```nix
+    aSecret = pkgs.writeText "a-secret.txt" "Secret of A";
+    bSecret = pkgs.writeText "b-secret.txt" "Secret of B";
+
+    config = {
+      a.a._secret = aSecret;
+      b = [{
+        _secret = bSecret;
+        prefix = "prefix-";
+        suffix = "-suffix";
+      }];
+      c = "not secret C";
+      d.d = "not secret D";
+    };
+
+    configLocation = "/var/lib/config.json";
+
+    generator = replaceSecretsFormatAdapter (pkgs.formats.json {});
+
+    systemd.service."myservice".preStart = genConfigOutOfBand {
+      inherit config configLocation generator;
+    };
+    ```
+
+    The resulting file will be:
+
+    ```json
+    {
+      "a": { "a": "Secret of A" },
+      "b": [ "prefix-Secret of B-suffix" ],
+      "c": "not a secret",
+      "d": { "d": "not a secret" }
+    }
+    ```
+  */
+  genConfigOutOfBand = { config, configLocation, generator, sourceField ? "_secret" }:
+    let
+      configWithPlaceholders = replaceWithPlaceholder sourceField config;
+
+      fileWithPlaceholders = generator "template" configWithPlaceholders;
+
+      replacements = getPlaceholderReplacements sourceField config;
+    in
+      replacePlaceholdersScript {
+        inherit sourceField fileWithPlaceholders configLocation replacements;
+      };
+
+  genConfigOutOfBandSystemd = { config, configLocation, generator, sourceField ? "_secret" }:
+    {
+      loadCredentials = getLoadCredentials sourceField config;
+      preStart = genConfigOutOfBand {
+        inherit configLocation generator sourceField;
+        config = updateToLoadCredentials sourceField "$CREDENTIALS_DIRECTORY" config;
+      };
+    };
+
+  genConfigOutOfBandFormatAdapter = format:
+    format.generate;
+
+  genConfigOutOfBandGeneratorAdapter = generator: name: value:
+    pkgs.writeText "generator-${name}" (generator value);
+
+  replacePlaceholdersScript = { sourceField, fileWithPlaceholders, configLocation, replacements }:
+    let
+      replaceSecret = pattern: args:
+        ''
+          ${getExe pkgs.replace-secret} \
+            ${pattern} "${args.${sourceField}}" "${configLocation}" \
+            --prefix="${args.prefix}" \
+            --suffix="${args.suffix}" \
+            --prefix-if-not-present="${args.prefixIfNotPresent}" \
+            --suffix-if-not-present="${args.suffixIfNotPresent}"
+        '';
+    in
+      ''
+      set -euo pipefail
+
+      test -d "$(dirname "${configLocation}")" || mkdir -p "$(dirname "${configLocation}")"
+      rm -f "${configLocation}"
+      install -Dm600 "${fileWithPlaceholders}" "${configLocation}"
+      ''
+      + concatStringsSep "\n" (mapAttrsToList replaceSecret replacements);
 };
 in utils

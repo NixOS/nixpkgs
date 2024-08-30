@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 with lib; let
@@ -221,26 +222,15 @@ in {
       type = with types;
         attrsOf
         (nullOr
-          (either
-            (oneOf [
-              bool
-              int
-              port
-              path
-              str
-            ])
-            (submodule {
-              options = {
-                _secret = mkOption {
-                  type = nullOr str;
-                  description = ''
-                    The path to a file containing the value the
-                    option should be set to in the final
-                    configuration file.
-                  '';
-                };
-              };
-            })));
+          (oneOf [
+            bool
+            int
+            port
+            path
+            str
+            outOfBand
+          ])
+        );
       default = {};
       example = ''
         {
@@ -289,6 +279,7 @@ in {
     services.monica.config = {
       APP_ENV = "production";
       APP_KEY._secret = cfg.appKeyFile;
+      APP_KEY.prefix = "base64:";
       APP_URL = cfg.appURL;
       DB_HOST = db.host;
       DB_PORT = db.port;
@@ -301,14 +292,16 @@ in {
       MAIL_PORT = mail.port;
       MAIL_USERNAME = mail.user;
       MAIL_ENCRYPTION = mail.encryption;
-      DB_PASSWORD._secret = db.passwordFile;
-      MAIL_PASSWORD._secret = mail.passwordFile;
       APP_SERVICES_CACHE = "/run/monica/cache/services.php";
       APP_PACKAGES_CACHE = "/run/monica/cache/packages.php";
       APP_CONFIG_CACHE = "/run/monica/cache/config.php";
       APP_ROUTES_CACHE = "/run/monica/cache/routes-v7.php";
       APP_EVENTS_CACHE = "/run/monica/cache/events.php";
       SESSION_SECURE_COOKIE = tlsEnabled;
+    } // optionalAttrs (db.passwordFile != null) {
+      DB_PASSWORD._secret = db.passwordFile;
+    } // optionalAttrs (mail.passwordFile != null) {
+      MAIL_PASSWORD._secret = mail.passwordFile;
     };
 
     environment.systemPackages = [artisan];
@@ -382,7 +375,6 @@ in {
       };
       path = [pkgs.replace-secret];
       script = let
-        isSecret = v: isAttrs v && v ? _secret && isString v._secret;
         monicaEnvVars = lib.generators.toKeyValue {
           mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
             mkValueString = v:
@@ -395,28 +387,21 @@ in {
                 then "true"
                 else if false == v
                 then "false"
-                else if isSecret v
-                then hashString "sha256" v._secret
                 else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
           };
         };
-        secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
-        mkSecretReplacement = file: ''
-          replace-secret ${escapeShellArgs [(builtins.hashString "sha256" file) file "${cfg.dataDir}/.env"]}
-        '';
-        secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
         filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [{} null])) cfg.config;
-        monicaEnv = pkgs.writeText "monica.env" (monicaEnvVars filteredConfig);
       in ''
         # error handling
         set -euo pipefail
 
-        # create .env file
-        install -T -m 0600 -o ${user} ${monicaEnv} "${cfg.dataDir}/.env"
-        ${secretReplacements}
-        if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
-          sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
-        fi
+         ''
+         + utils.genConfigOutOfBand {
+           config = filteredConfig;
+           configLocation = "${cfg.dataDir}/.env";
+           generator = utils.genConfigOutOfBandGeneratorAdapter monicaEnvVars;
+         }
+         + ''
 
         # migrate & seed db
         ${pkgs.php}/bin/php artisan key:generate --force

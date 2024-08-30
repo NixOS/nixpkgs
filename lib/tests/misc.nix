@@ -59,6 +59,8 @@ let
     getExe
     getExe'
     getLicenseFromSpdxIdOr
+    getLoadCredentials
+    getPlaceholderReplacements
     groupBy
     groupBy'
     hasAttrByPath
@@ -74,6 +76,7 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrsRecursiveCond'
     mapCartesianProduct
     matchAttrs
     mergeAttrs
@@ -88,6 +91,7 @@ let
     range
     recursiveUpdateUntil
     removePrefix
+    replaceWithPlaceholder
     replicate
     runTests
     setFunctionArgs
@@ -109,6 +113,7 @@ let
     toShellVars
     types
     updateManyAttrsByPath
+    updateToLoadCredentials
     versions
     xor
     ;
@@ -2460,5 +2465,200 @@ runTests {
       directory = ./packages-from-directory/c;
     };
     expected = "c";
+  };
+
+  testMapAttrRecursiveCond'TraverseAll = {
+    expr =
+      let
+        attr = {
+          a = 0;
+          b = 1;
+          c = [ 0 1 ];
+          d = [ { a = 0; } ];
+          e = { a = 0; };
+        };
+      in
+        mapAttrsRecursiveCond' (x: true) (path: x: path) (
+          attr
+          // { nestedAttr = attr; }
+          // { nestedList = [ attr attr ]; }
+        );
+    expected = {
+      a = [ "a" ];
+      b = [ "b" ];
+      c = [ [ "c" "0" ] [ "c" "1" ] ];
+      d = [ { a = [ "d" "0" "a" ]; } ];
+      e = { a = [ "e" "a" ]; };
+      nestedAttr = {
+        a = [ "nestedAttr" "a" ];
+        b = [ "nestedAttr" "b" ];
+        c = [ [ "nestedAttr" "c" "0" ] [ "nestedAttr" "c" "1" ] ];
+        d = [ { a = [ "nestedAttr" "d" "0" "a" ]; } ];
+        e = { a = [ "nestedAttr" "e" "a" ]; };
+      };
+      nestedList = [
+        {
+          a = [ "nestedList" "0" "a" ];
+          b = [ "nestedList" "0" "b" ];
+          c = [ [ "nestedList" "0" "c" "0" ] [ "nestedList" "0" "c" "1" ] ];
+          d = [ { a = [ "nestedList" "0" "d" "0" "a" ]; } ];
+          e = { a = [ "nestedList" "0" "e" "a" ]; };
+        }
+        {
+          a = [ "nestedList" "1" "a" ];
+          b = [ "nestedList" "1" "b" ];
+          c = [ [ "nestedList" "1" "c" "0" ] [ "nestedList" "1" "c" "1" ] ];
+          d = [ { a = [ "nestedList" "1" "d" "0" "a" ]; } ];
+          e = { a = [ "nestedList" "1" "e" "a" ]; };
+        }
+      ];
+    };
+  };
+
+  # Tests that withReplacements can:
+  # - recurse in attrs and lists
+  # - ._secret attribute is understood
+  # - .prefix and .suffix attributes are understood
+  # - if ._secret attribute is found, ignores other fields
+  testReplaceWithPlaceholder = {
+    expected =
+      let
+        item = root: {
+          a = "A";
+          b = "%SECRET_${root}B%";
+          c = "%SECRET_${root}C%";
+        };
+      in
+        (item "") // {
+          nestedAttr = item "NESTEDATTR_";
+          nestedList = [ (item "NESTEDLIST_0_") ];
+          doubleNestedList = [ { n = (item "DOUBLENESTEDLIST_0_N_"); } ];
+        };
+    expr =
+      let
+        item = {
+          a = "A";
+          b._secret = "/path/B";
+          b.transform = null;
+          c._secret = "/path/C";
+          c.transform = v: "prefix-${v}-suffix";
+          c.other = "other";
+        };
+      in
+        replaceWithPlaceholder "_secret" (
+          item // {
+            nestedAttr = item;
+            nestedList = [ item ];
+            doubleNestedList = [ { n = item; } ];
+          }
+        );
+  };
+
+  testReplaceWithPlaceholderRootList = {
+    expected =
+      let
+        item = root: {
+          a = "A";
+          b = "%SECRET_${root}B%";
+          c = "%SECRET_${root}C%";
+        };
+      in
+        [
+          (item "0_")
+          (item "1_")
+          [ (item "2_0_") ]
+          [ { n = (item "3_0_N_"); } ]
+        ];
+    expr =
+      let
+        item = {
+          a = "A";
+          b._secret = "/path/B";
+          b.transform = null;
+          c._secret = "/path/C";
+          c.transform = v: "prefix-${v}-suffix";
+          c.other = "other";
+        };
+      in
+        replaceWithPlaceholder "_secret" [
+          item
+          item
+          [ item ]
+          [ { n = item; } ]
+        ];
+  };
+
+  testGetPlaceholderReplacements = {
+    expected =
+      let
+        secrets = root: {
+          "%SECRET_${root}B%" = {
+            _secret = "/path/B";
+            prefix = null;
+            suffix = "";
+            prefixIfNotPresent = "";
+            suffixIfNotPresent = "";
+          };
+          "%SECRET_${root}C%" = {
+            _secret = "/path/C";
+            prefix = "prefix-";
+            suffix = "-suffix";
+            prefixIfNotPresent = "";
+            suffixIfNotPresent = "";
+          };
+        };
+      in
+        (secrets "") //
+        (secrets "NESTEDATTR_") //
+        (secrets "NESTEDLIST_0_") //
+        (secrets "DOUBLENESTEDLIST_0_N_");
+    expr =
+      let
+        item = {
+          a = "A";
+          b._secret = "/path/B";
+          b.prefix = null;
+          c._secret = "/path/C";
+          c.prefix = "prefix-";
+          c.suffix = "-suffix";
+          c.other = "other";
+        };
+      in
+        getPlaceholderReplacements "_secret" (
+          item // {
+            nestedAttr = item;
+            nestedList = [ item ];
+            doubleNestedList = [ { n = item; } ];
+          }
+        );
+  };
+
+  testGetLoadCredentials = {
+    expected = [
+      "a_a:/my/secret/location-a.txt"
+      "c:/my/secret/location-c.txt"
+    ];
+
+    expr = getLoadCredentials "_secret" {
+      a.a._secret = "/my/secret/location-a.txt";
+      b = "/something/else";
+      c._secret = "/my/secret/location-c.txt";
+    };
+  };
+
+  testUpdateToLoadCredentials = {
+    expected = {
+      a.a._secret = "$rootDir/a_a";
+      a.a.other = "other";
+      b = "/something/else";
+      c._secret = "$rootDir/c";
+    };
+
+    expr = updateToLoadCredentials "_secret" "$rootDir" {
+      a.a._secret = "/my/secret/location-a.txt";
+      a.a.other = "other";
+      b = "/something/else";
+      c._secret = "/my/secret/location-c.txt";
+    };
   };
 }

@@ -1,4 +1,4 @@
-{ config, options, pkgs, lib, ... }:
+{ config, options, pkgs, lib, utils, ... }:
 
 let
   cfg = config.services.keycloak;
@@ -616,10 +616,6 @@ in
               ]
               else [ ];
             secretPaths = catAttrs "_secret" (collect isSecret cfg.settings);
-            mkSecretReplacement = file: ''
-              replace-secret ${hashString "sha256" file} $CREDENTIALS_DIRECTORY/${baseNameOf file} /run/keycloak/conf/keycloak.conf
-            '';
-            secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
           in
           {
             after = databaseServices;
@@ -659,10 +655,13 @@ in
               ln -s ${themesBundle} /run/keycloak/themes
               ln -s ${keycloakBuild}/providers /run/keycloak/
 
-              install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
-
-              ${secretReplacements}
-
+              ''
+              + utils.genConfigOutOfBand {
+                config = filteredConfig;
+                configLocation = "/run/keycloak/conf/keycloak.conf";
+                generator = utils.genConfigOutOfBandGeneratorAdapter keycloakConfig;
+              }
+              + ''
               # Escape any backslashes in the db parameters, since
               # they're otherwise unexpectedly read as escape
               # sequences.

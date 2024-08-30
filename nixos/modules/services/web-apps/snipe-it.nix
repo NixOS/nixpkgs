@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -241,26 +241,15 @@ in {
       type = with types;
         attrsOf
           (nullOr
-            (either
-              (oneOf [
-                bool
-                int
-                port
-                path
-                str
-              ])
-              (submodule {
-                options = {
-                  _secret = mkOption {
-                    type = nullOr (oneOf [ str path ]);
-                    description = ''
-                      The path to a file containing the value the
-                      option should be set to in the final
-                      configuration file.
-                    '';
-                  };
-                };
-              })));
+            (oneOf [
+              bool
+              int
+              port
+              path
+              str
+              outOfBand
+            ])
+          );
       default = {};
       example = literalExpression ''
         {
@@ -309,12 +298,12 @@ in {
     services.snipe-it.config = {
       APP_ENV = "production";
       APP_KEY._secret = cfg.appKeyFile;
+      APP_KEY.prefixIfNotPresent = "base64:";
       APP_URL = cfg.appURL;
       DB_HOST = db.host;
       DB_PORT = db.port;
       DB_DATABASE = db.name;
       DB_USERNAME = db.user;
-      DB_PASSWORD._secret = db.passwordFile;
       MAIL_DRIVER = mail.driver;
       MAIL_FROM_NAME = mail.from.name;
       MAIL_FROM_ADDR = mail.from.address;
@@ -325,13 +314,16 @@ in {
       MAIL_PORT = mail.port;
       MAIL_USERNAME = mail.user;
       MAIL_ENCRYPTION = mail.encryption;
-      MAIL_PASSWORD._secret = mail.passwordFile;
       APP_SERVICES_CACHE = "/run/snipe-it/cache/services.php";
       APP_PACKAGES_CACHE = "/run/snipe-it/cache/packages.php";
       APP_CONFIG_CACHE = "/run/snipe-it/cache/config.php";
       APP_ROUTES_CACHE = "/run/snipe-it/cache/routes-v7.php";
       APP_EVENTS_CACHE = "/run/snipe-it/cache/events.php";
       SESSION_SECURE_COOKIE = tlsEnabled;
+    } // optionalAttrs (db.passwordFile != null) {
+      DB_PASSWORD._secret = db.passwordFile;
+    } // optionalAttrs (mail.passwordFile != null) {
+      MAIL_PASSWORD._secret = mail.passwordFile;
     };
 
     services.mysql = mkIf db.createLocally {
@@ -401,7 +393,6 @@ in {
       path = [ pkgs.replace-secret artisan ];
       script =
         let
-          isSecret  = v: isAttrs v && v ? _secret && (isString v._secret || builtins.isPath v._secret);
           snipeITEnvVars = lib.generators.toKeyValue {
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString = v: with builtins;
@@ -409,47 +400,24 @@ in {
                 else if isString     v then "\"${v}\""
                 else if true  ==     v then "true"
                 else if false ==     v then "false"
-                else if isSecret     v then
-                  if (isString v._secret) then
-                    hashString "sha256" v._secret
-                  else
-                    hashString "sha256" (builtins.readFile v._secret)
                 else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
             };
           };
-          secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
-          mkSecretReplacement = file: ''
-            replace-secret ${escapeShellArgs [
-              (
-                if (isString file) then
-                  builtins.hashString "sha256" file
-                else
-                  builtins.hashString "sha256" (builtins.readFile file)
-              )
-              file
-              "${cfg.dataDir}/.env"
-            ]}
-          '';
-          secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
           filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
-          snipeITEnv = pkgs.writeText "snipeIT.env" (snipeITEnvVars filteredConfig);
         in ''
           # error handling
           set -euo pipefail
 
           # set permissions
           umask 077
-
-          # create .env file
-          install -T -m 0600 -o ${user} ${snipeITEnv} "${cfg.dataDir}/.env"
-
-          # replace secrets
-          ${secretReplacements}
-
-          # prepend `base64:` if it does not exist in APP_KEY
-          if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
-              sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
-          fi
+          ''
+          + utils.genConfigOutOfBand {
+            config = filteredConfig;
+            configLocation = "${cfg.dataDir}/.env";
+            # generator = utils.genConfigOutOfBandGeneratorAdapter (x: generators.toINIWithGlobalSection {} { globalSection = x; });
+            generator = utils.genConfigOutOfBandGeneratorAdapter snipeITEnvVars;
+          }
+          + ''
 
           # purge cache
           rm "${cfg.dataDir}"/bootstrap/cache/*.php || true

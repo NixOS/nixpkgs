@@ -365,6 +365,7 @@ in {
   mimir = handleTest ./mimir.nix {};
   garage = handleTest ./garage {};
   gemstash = handleTest ./gemstash.nix {};
+  genConfigOutOfBand-test = handleTest ./genconfigoutofband-test.nix {};
   geoserver = runTest ./geoserver.nix;
   gerrit = handleTest ./gerrit.nix {};
   geth = handleTest ./geth.nix {};
