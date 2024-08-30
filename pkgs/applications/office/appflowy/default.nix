@@ -92,9 +92,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       name = "appflowy";
       desktopName = "AppFlowy";
       comment = finalAttrs.meta.description;
-      exec = "appflowy";
+      exec = "appflowy %U";
       icon = "appflowy";
       categories = [ "Office" ];
+      mimeTypes = [ "x-scheme-handler/appflowy-flutter" ];
     })
   ];
 
