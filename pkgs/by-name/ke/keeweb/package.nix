@@ -73,14 +73,14 @@ let
     xdotool
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free cross-platform password manager compatible with KeePass";
     mainProgram = "keeweb";
     homepage = "https://keeweb.info/";
     changelog = "https://github.com/keeweb/keeweb/blob/v${version}/release-notes.md";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;
   };
 in
