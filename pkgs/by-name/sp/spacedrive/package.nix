@@ -17,25 +17,24 @@
 
 let
   pname = "spacedrive";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src =
-    fetchurl
-      {
-        aarch64-darwin = {
-          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
-          hash = "sha256-9E7h03zJtH8b6khDcbBsB46iVWwl48s+GJuBMOmEre4=";
-        };
-        x86_64-darwin = {
-          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
-          hash = "sha256-h+B7tc6jXJUFNEMhG6ZNch+grtgUeAzfa37BDoZ6M8Q=";
-        };
-        x86_64-linux = {
-          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
-          hash = "sha256-E1mOODG4YzBc0TPZJmKgrt/c5hp5LwzLaYPl+J5dnkg=";
-        };
-      }
-      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+    {
+      aarch64-darwin = fetchurl {
+        url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
+        hash = "sha256-9E7h03zJtH8b6khDcbBsB46iVWwl48s+GJuBMOmEre4=";
+      };
+      x86_64-darwin = fetchurl {
+        url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
+        hash = "sha256-h+B7tc6jXJUFNEMhG6ZNch+grtgUeAzfa37BDoZ6M8Q=";
+      };
+      x86_64-linux = fetchurl {
+        url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
+        hash = "sha256-SbuL96xNEOPZ3Z5jd0gfJtNkUoEjO4W+P7K9mvyNmHA=";
+      };
+    }
+    .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   meta = {
     description = "Open source file manager, powered by a virtual distributed filesystem";
