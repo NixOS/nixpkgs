@@ -7,11 +7,11 @@ let
   inherit (builtins) head length;
   inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl imap0;
+  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl imap0 isList;
 in
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs isList getAttr removeAttrs intersectAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs intersectAttrs;
 
 
   /**
