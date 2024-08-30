@@ -248,6 +248,11 @@ in
               .rabbitmq.url = "${cfg.rabbitmqUrl}"
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
+            chmod u+w /run/onlyoffice/config/production-linux.json
+            jq '
+              .FileConverter.converter.x2tPath = "${pkgs.x2t}/bin/x2t"
+              ' /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
+
             if psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/removetbl.sql
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/createdb.sql
