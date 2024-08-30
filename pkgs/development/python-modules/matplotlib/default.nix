@@ -125,6 +125,9 @@ buildPythonPackage rec {
 
   buildInputs =
     [
+      # Intentionally not propagating it, so users will be able to use either
+      # numpy_1 or numpy_2
+      numpy
       ffmpeg-headless
       freetype
       qhull
@@ -159,7 +162,6 @@ buildPythonPackage rec {
       cycler
       fonttools
       kiwisolver
-      numpy
       packaging
       pillow
       pyparsing
