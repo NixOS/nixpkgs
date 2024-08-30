@@ -73,10 +73,15 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
+  buildInputs = [
+    hdf5
+    # intentionally not propagating it, to allow anyone to use either numpy_1
+    # or numpy_2
+    numpy
+  ] ++ lib.optional mpiSupport mpi;
 
   propagatedBuildInputs =
-    [ numpy ]
+    [ ]
     ++ lib.optionals mpiSupport [
       mpi4py
       openssh
