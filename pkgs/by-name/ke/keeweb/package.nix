@@ -1,5 +1,6 @@
 {
   lib,
+  libGL,
   stdenv,
   fetchurl,
   undmg,
@@ -47,6 +48,7 @@ let
     alsa-lib
     at-spi2-atk
     gdk-pixbuf
+    libGL
     nss
     udev
     xorg.libX11
