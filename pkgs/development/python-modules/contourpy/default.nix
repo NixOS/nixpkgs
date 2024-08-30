@@ -46,7 +46,9 @@ let
       pybind11
     ];
 
-    propagatedBuildInputs = [ numpy ];
+    # Intentionally not propagating it, so users will be able to use either
+    # numpy_1 or numpy_2
+    buildInputs = [ numpy ];
 
     passthru.optional-depdendencies = {
       bokeh = [
