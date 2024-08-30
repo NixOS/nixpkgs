@@ -1106,6 +1106,16 @@ with pkgs;
     wine = wineWowPackages.stable;
   };
 
+  x2t =
+    let openssl_with_md2 = openssl.override {
+        enableMD2 = true;
+        static = true;
+      };
+    in
+      callPackage ../by-name/x2/x2t/package.nix {
+        openssl = openssl_with_md2;
+      };
+
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
   };
