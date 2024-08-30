@@ -71,7 +71,9 @@ effectiveStdenv.mkDerivation rec {
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
     ++ lib.optionals rLibrary [ R ];
 
-  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+  buildInputs = [ gtest ]
+    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    ++ lib.optional cudaSupport cudaPackages.cuda_cudart
     ++ lib.optional ncclSupport cudaPackages.nccl;
 
   propagatedBuildInputs = lib.optionals rLibrary [
