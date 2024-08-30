@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
       "tcp_bind6_error_addrinuse" "tcp_bind_error_addrinuse_listen"
       # https://github.com/libuv/libuv/pull/4075#issuecomment-1935572237
       "thread_priority"
+      # Fails on exotic filesystems (https://github.com/NixOS/nixpkgs/issues/338114)
+      "fs_utime_round"
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
