@@ -2569,4 +2569,51 @@ runTests {
       ];
     };
   };
+
+  testMapDataRecursiveCondTraverseSome = {
+    expr =
+      let
+        attr = {
+          x = { cont = true; x = 0; };
+          y = { cont = false; y = 1; };
+          z = [ { cont = false; z1 = 0; }
+                { cont = true; z2 = 1; } ];
+        };
+      in
+        mapDataRecursiveCond (path: x: if x ? cont then x.cont else true) (path: x: path) (
+          attr
+          // { nestedAttr = attr; }
+          // { nestedList = [ attr attr ]; }
+        );
+    expected = {
+      x = { cont = [ "x" "cont" ]; x = [ "x" "x" ]; };
+      y = [ "y" ];
+      z = [ [ "z" 0 ]
+            { cont = [ "z" 1 "cont" ];
+              z2 = [ "z" 1 "z2" ]; } ];
+      nestedAttr = {
+        x = { cont = [ "nestedAttr" "x" "cont" ]; x = [ "nestedAttr" "x" "x" ]; };
+        y = [ "nestedAttr" "y" ];
+        z = [ [ "nestedAttr" "z" 0 ]
+              { cont = [ "nestedAttr" "z" 1 "cont" ];
+                z2 = [ "nestedAttr" "z" 1 "z2" ]; } ];
+      };
+      nestedList = [
+        {
+          x = { cont = [ "nestedList" 0 "x" "cont" ]; x = [ "nestedList" 0 "x" "x" ]; };
+          y = [ "nestedList" 0 "y" ];
+          z = [ [ "nestedList" 0 "z" 0 ]
+                { cont = [ "nestedList" 0 "z" 1 "cont" ];
+                  z2 = [ "nestedList" 0 "z" 1 "z2" ]; } ];
+        }
+        {
+          x = { cont = [ "nestedList" 1 "x" "cont" ]; x = [ "nestedList" 1 "x" "x" ]; };
+          y = [ "nestedList" 1 "y" ];
+          z = [ [ "nestedList" 1 "z" 0 ]
+                { cont = [ "nestedList" 1 "z" 1 "cont" ];
+                  z2 = [ "nestedList" 1 "z" 1 "z2" ]; } ];
+        }
+      ];
+    };
+  };
 }
