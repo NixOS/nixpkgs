@@ -93,6 +93,7 @@ let
 
     meta = {
       homepage = "https://micro-editor.github.io";
+      changelog = "https://github.com/zyedidia/micro/releases/";
       description = "Modern and intuitive terminal-based text editor";
       longDescription = ''
         micro is a terminal-based text editor that aims to be easy to use and
@@ -106,7 +107,10 @@ let
       '';
       license = lib.licenses.mit;
       mainProgram = "micro";
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      maintainers = with lib.maintainers; [
+        AndersonTorres
+        pbsds
+      ];
     };
   };
 in
