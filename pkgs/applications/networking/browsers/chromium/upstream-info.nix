@@ -1,11 +1,11 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-4wp3nlGkuNDlmF+3bmJOmaMccQcsXBZaVO95Se6Vj1M=";
+      hash_darwin = "sha256-tC2BZmjKeYjBfwJINtgVQEJjiqJidVtnXdxigFkR2/M=";
       hash_darwin_aarch64 =
-        "sha256-La32ZBMgdWyl4nFoh4LfaxsoZJxrYkB/fbYOzltG8e8=";
-      hash_linux = "sha256-qhoTtgPNrs2jMEVbVuVZAsQDygm72xfhWvhDC/mDUzc=";
-      version = "128.0.6613.84";
+        "sha256-MRXiiQPY8EZ85zRCmJyxuI7SG5RbalBBg+vt0goeWus=";
+      hash_linux = "sha256-rQ/WYDghBXewFqMTGf7ZJGp2mMiPwjf8ImNyTvXulQU=";
+      version = "128.0.6613.86";
     };
     deps = {
       gn = {
@@ -15,8 +15,8 @@
         version = "2024-06-11";
       };
     };
-    hash = "sha256-kUHJtJ4X8UDMP2TgHdFd6gEPzU28mBgxtGceVZCl5xM=";
-    version = "128.0.6613.84";
+    hash = "sha256-wqhaK1VuE1qPLt+f/x2KrtwZGxKFluTOWYMau+cSl2E=";
+    version = "128.0.6613.113";
   };
   ungoogled-chromium = {
     deps = {
@@ -27,11 +27,11 @@
         version = "2024-06-11";
       };
       ungoogled-patches = {
-        hash = "sha256-UneOTEWgAbWCuzqtJgw+t5LJXBYmjpXBTxjhMMqzd/A=";
-        rev = "128.0.6613.84-1";
+        hash = "sha256-2P9c+zS741H4/jTp92mno4egju9r0tGTLkXHAFhM9mA=";
+        rev = "128.0.6613.113-1";
       };
     };
-    hash = "sha256-kUHJtJ4X8UDMP2TgHdFd6gEPzU28mBgxtGceVZCl5xM=";
-    version = "128.0.6613.84";
+    hash = "sha256-wqhaK1VuE1qPLt+f/x2KrtwZGxKFluTOWYMau+cSl2E=";
+    version = "128.0.6613.113";
   };
 }

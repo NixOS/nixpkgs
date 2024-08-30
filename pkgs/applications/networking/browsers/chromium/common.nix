@@ -104,14 +104,12 @@ let
     "flac"
     "libjpeg"
     "libpng"
-  ] ++ lib.optionals (!chromiumVersionAtLeast "124") [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
-    "libwebp"
-  ] ++ [
+    # "libwebp"
     "libxslt"
     # "opus"
   ];
@@ -278,20 +276,6 @@ let
       # Rebased variant of patch right above to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
       ./patches/chromium-126-llvm-17.patch
-    ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
-      # Fix build with at-spi2-core ≥ 2.49
-      # This version is still needed for electron.
-      (githubPatch {
-        commit = "fc09363b2278893790d131c72a4ed96ec9837624";
-        hash = "sha256-l60Npgs/+0ozzuKWjwiHUUV6z59ObUjAPTfXN7eXpzw=";
-      })
-    ] ++ lib.optionals (!chromiumVersionAtLeast "121.0.6104.0") [
-      # Fix build with at-spi2-core ≥ 2.49
-      # https://chromium-review.googlesource.com/c/chromium/src/+/5001687
-      (githubPatch {
-        commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
-        hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
-      })
     ] ++ lib.optionals (versionRange "121" "126") [
       # M121 is the first version to require the new rust toolchain.
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
@@ -473,10 +457,6 @@ let
       use_system_libffi = true;
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
       rust_sysroot_absolute = "${buildPackages.rustc}";
-      # Rust is enabled for M121+, see next section:
-      enable_rust = false;
-    } // lib.optionalAttrs (chromiumVersionAtLeast "121") {
-      # M121 the first version to actually require a functioning rust toolchain
       enable_rust = true;
       # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
       # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
@@ -497,10 +477,12 @@ let
     } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
     // (extraAttrs.gnFlags or {}));
 
-    # We cannot use chromiumVersionAtLeast in mkDerivation's env attrset due
-    # to infinite recursion when chromium.override is used (e.g. electron).
-    # To work aroud this, we use export in the preConfigure phase.
-    preConfigure = lib.optionalString (chromiumVersionAtLeast "121") ''
+    # TODO: Migrate this to env.RUSTC_BOOTSTRAP next mass-rebuild.
+    # Chromium expects nightly/bleeding edge rustc features to be available.
+    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
+    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
+    # enable those features in our stable builds.
+    preConfigure = ''
       export RUSTC_BOOTSTRAP=1
     '';
 
