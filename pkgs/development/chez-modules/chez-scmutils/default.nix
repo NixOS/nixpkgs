@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-scmutils";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-scmutils";
     rev = "v${version}";
-    sha256 = "sha256-9GBoHbLNEnPz81s2rBYO3S0bXldetwc8eu9i5CgvYFE=";
+    sha256 = "sha256-y2ug7GfmkJC6jddgB8YllsumjmGxFJxTGTpPf1Vcs/s=";
   };
 
   buildInputs = [ chez chez-srfi chez-mit ];
 
-  buildPhase = ''
-    make PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
+  lib-path = "lib/csv${lib.versions.majorMinor chez.version}-site";
 
-  installPhase = ''
-    make install PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
+  makeFlags = [
+    "CHEZ=${lib.getExe chez}"
+    "PREFIX=$(out)"
+    "CHEZSCHEMELIBDIRS=${chez-srfi}/${lib-path}:${chez-mit}/${lib-path}"
+  ];
 
   doCheck = false;
 
