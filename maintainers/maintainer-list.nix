@@ -5630,12 +5630,6 @@
     githubId = 6689924;
     name = "David Terry";
   };
-  dxwil = {
-    email = "dovydas@kersys.lt";
-    github = "dxwil";
-    githubId = 90563298;
-    name = "Dovydas Kersys";
-  };
   dylan-gonzalez = {
     email = "dylcg10@gmail.com";
     github = "dylan-gonzalez";
@@ -18241,6 +18235,13 @@
     github = "rzetterberg";
     githubId = 766350;
     name = "Richard Zetterberg";
+  };
+  s0me1newithhand7s = {
+    name = "hand7s";
+    email = "s0me1newithhand7s@gmail.com";
+    matrix = "@s0me1newithhand7s:matrix.org";
+    github = "s0me1newithhand7s";
+    githubId = 117505144;
   };
   s1341 = {
     email = "s1341@shmarya.net";

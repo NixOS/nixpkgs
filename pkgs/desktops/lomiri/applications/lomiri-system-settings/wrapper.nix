@@ -65,6 +65,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = lomiri-system-settings-unwrapped.meta // {
     description = "System Settings application for Lomiri (wrapped)";
-    priority = (lomiri-system-settings-unwrapped.meta.priority or 0) - 1;
+    priority = (lomiri-system-settings-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 })

@@ -46,14 +46,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.29";
+  version = "3.15.2";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-q3HEbFqUeNczKYUlou+quxawCTjpM5JNLrML84tZVYE=";
+    hash = "sha256-g6H68dYMmpQYlwhZ6b84yY/qbAP18iNrmYOWf9rL5gc=";
   };
 
   patches = [
@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
+    wayland-scanner
     # For `libdisplay-info`
     python3
     hwdata
@@ -100,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
-    wayland-scanner
   ];
 
   buildInputs = [

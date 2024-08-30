@@ -1,9 +1,5 @@
 # Upower daemon.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.upower;
@@ -18,8 +14,8 @@ in
 
     services.upower = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Upower, a DBus service that provides power
@@ -27,10 +23,10 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "upower" { };
+      package = lib.mkPackageOption pkgs "upower" { };
 
-      enableWattsUpPro = mkOption {
-        type = types.bool;
+      enableWattsUpPro = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable the Watts Up Pro device.
@@ -47,8 +43,8 @@ in
         '';
       };
 
-      noPollBatteries = mkOption {
-        type = types.bool;
+      noPollBatteries = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Don't poll the kernel for battery level changes.
@@ -59,8 +55,8 @@ in
         '';
       };
 
-      ignoreLid = mkOption {
-        type = types.bool;
+      ignoreLid = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Do we ignore the lid state
@@ -73,8 +69,8 @@ in
         '';
       };
 
-      usePercentageForPolicy = mkOption {
-        type = types.bool;
+      usePercentageForPolicy = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Policy for warnings and action based on battery levels
@@ -87,8 +83,8 @@ in
         '';
       };
 
-      percentageLow = mkOption {
-        type = types.ints.unsigned;
+      percentageLow = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 10;
         description = ''
           When `usePercentageForPolicy` is
@@ -105,8 +101,8 @@ in
         '';
       };
 
-      percentageCritical = mkOption {
-        type = types.ints.unsigned;
+      percentageCritical = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 3;
         description = ''
           When `usePercentageForPolicy` is
@@ -123,8 +119,8 @@ in
         '';
       };
 
-      percentageAction = mkOption {
-        type = types.ints.unsigned;
+      percentageAction = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 2;
         description = ''
           When `usePercentageForPolicy` is
@@ -141,8 +137,8 @@ in
         '';
       };
 
-      timeLow = mkOption {
-        type = types.ints.unsigned;
+      timeLow = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 1200;
         description = ''
           When `usePercentageForPolicy` is
@@ -155,8 +151,8 @@ in
         '';
       };
 
-      timeCritical = mkOption {
-        type = types.ints.unsigned;
+      timeCritical = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 300;
         description = ''
           When `usePercentageForPolicy` is
@@ -169,8 +165,8 @@ in
         '';
       };
 
-      timeAction = mkOption {
-        type = types.ints.unsigned;
+      timeAction = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 120;
         description = ''
           When `usePercentageForPolicy` is
@@ -183,8 +179,8 @@ in
         '';
       };
 
-      criticalPowerAction = mkOption {
-        type = types.enum [ "PowerOff" "Hibernate" "HybridSleep" ];
+      criticalPowerAction = lib.mkOption {
+        type = lib.types.enum [ "PowerOff" "Hibernate" "HybridSleep" ];
         default = "HybridSleep";
         description = ''
           The action to take when `timeAction` or
@@ -200,7 +196,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 
@@ -210,7 +206,7 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    environment.etc."UPower/UPower.conf".text = generators.toINI {} {
+    environment.etc."UPower/UPower.conf".text = lib.generators.toINI {} {
       UPower = {
         EnableWattsUpPro = cfg.enableWattsUpPro;
         NoPollBatteries = cfg.noPollBatteries;
