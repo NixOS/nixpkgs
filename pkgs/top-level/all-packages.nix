@@ -19021,9 +19021,7 @@ with pkgs;
 
   szyszka = callPackage ../tools/misc/szyszka { };
 
-  taplo = callPackage ../development/tools/taplo {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  taplo = callPackage ../development/tools/taplo { };
 
   taoup = callPackage ../tools/misc/taoup { };
 
