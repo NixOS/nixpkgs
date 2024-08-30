@@ -249,6 +249,47 @@ query Main($after:String,$pageSize:Int!) {
      (unwrap [])))
   )
 
+;;; graphql explorer
+
+;; proxying requests to https://api.github.com/graphql
+;; in order to work with CORS rules
+
+(require '[org.httpkit.server :as server]
+         '[org.httpkit.client :as client])
+(defn router
+  "HTTP routes for explorer"
+  [auth-header]
+  (fn [req]
+    (try (let [resp (case (:uri req)
+                      "/" {:headers {"Content-Type" "text/html"}
+                           :body (fs/file wd "explorer/index.html")}
+                      "/graphql" (select-keys
+                                  @(client/post "https://api.github.com/graphql"
+                                                {:headers {"Authorization" auth-header}
+                                                 :body (:body req)})
+                                  [:status :body])
+                      {:status 404})]
+           resp)
+         (catch Exception e
+           (println "Request error" e)
+           {:status 500}))))
+
+(defn serve-explorer
+  "Start server for graphiql explorer"
+  [access-token]
+  (server/run-server
+   (router (str "bearer " access-token))
+   {:port 1337
+    :legacy-return-value? false})
+  (println "Running on localhost:1337")
+  (shell/sh "xdg-open" "http://localhost:1337")
+  @(promise))
+
+(comment
+  ;; run webserver in a thread, so that repl doesn't hang
+  (def server (future (serve-explorer (get-access-token))))
+  #__)
+
 ;;; CLI - Command line interface
 
 (defn exit-error [{:keys [spec type cause msg option] :as data}]
@@ -291,6 +332,9 @@ query Main($after:String,$pageSize:Int!) {
     :fn #(assoc % :entry search-for
                 :eargs [(-> % :opts :user)])
     :args->opts [:user]}
+   {:cmds ["gh" "explorer"]
+    :error-fn exit-error
+    :fn #(assoc % :entry (partial serve-explorer (get-access-token)))}
    {:cmds ["maintainer" "map"]
     :error-fn exit-error
     :fn #(assoc % :entry read-maintainer-list)}
