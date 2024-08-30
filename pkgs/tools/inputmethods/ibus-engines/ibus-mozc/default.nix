@@ -12,19 +12,19 @@ let
   zip-codes = fetchFromGitHub {
     owner = "musjj";
     repo = "jp-zip-codes";
-    rev = "119c888a38032a92e139c52cd26f45bb495c4d54";
-    hash = "sha256-uyAL2TcFJsYZACFDAxIQ4LE40Hi4PVrQRnJl5O5+RmU=";
+    rev = "94139331b79d8e23cd089fb9ad511ce55079154a";
+    hash = "sha256-e+wsJv2cP2wUwVNimWy0eYr32pr7YUy8pJAYDYbk0zo=";
   };
 in
 buildBazelPackage rec {
   pname = "ibus-mozc";
-  version = "2.29.5374.102";
+  version = "2.30.5544.102";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
     rev = version;
-    hash = "sha256-AcIN5sWPBe4JotAUYv1fytgQw+mJzdFhKuVPLR48soA=";
+    hash = "sha256-w0bjoMmq8gL7DSehEG7cKqp5e4kNOXnCYLW31Zl9FRs=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ buildBazelPackage rec {
   inherit bazel;
 
   fetchAttrs = {
-    sha256 = "sha256-ToBLVJpAQErL/P1bfWJca2FjhDW5XTrwuJQLquwlrhA=";
+    sha256 = "sha256-+N7AhSemcfhq6j0IUeWZ0DyVvr1l5FbAkB+kahTy3pM=";
 
     # remove references of buildInputs and zip code files
     preInstall = ''
