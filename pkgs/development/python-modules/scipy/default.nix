@@ -131,9 +131,11 @@ buildPythonPackage {
     pybind11
     pooch
     xsimd
+    # Intentionally not propagating it, so users will be able to use either
+    # numpy_1 or numpy_2, although only a specific numpy's headers are used
+    # during compilation.
+    numpy
   ];
-
-  dependencies = [ numpy ];
 
   __darwinAllowLocalNetworking = true;
 
