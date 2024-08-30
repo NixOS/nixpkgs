@@ -42,14 +42,22 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "x2t";
   version = "8.1.1";
 
-  src = /home/aengelen/dev/documentserver;
-  #src = fetchFromGitHub {
-  #  owner = "ONLYOFFICE";
-  #  repo = "DocumentServer";
-  #  rev = "v${finalAttrs.version}";
-  #  fetchSubmodules = true;
-  #  hash = "sha256-GuTDN7KLuhxW4ZHBazbW4Czi0EJoGraZd35MA7g2ElA=";
-  #};
+  src = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "core";
+    # corresponds to documentserver 8.1.1
+    rev = "90d46b55d8d10814f961661f815189e16d2271b9";
+    hash = "sha256-1gH3AFYE4v21+3C4QKboHKaP0XmEN7gr1lG8+pT4SC4=";
+  };
+  patchFlags = [ "-p1" "-l" ];
+  patches = [
+    # https://github.com/ONLYOFFICE/core/pull/1631
+    ./doctrenderer-format-security.patch
+    ./fontengine-format-security.patch
+    # Not sure what's going on here...
+    ./MsBinaryFile-pragma-regions.patch
+  ];
+
   nativeBuildInputs = [ pkg-config qt5.full ];
   buildInputs = [ gumbo boost libxml2.dev icu freetype.dev ];
   dontStrip = true;
@@ -59,202 +67,211 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/onlyOFFICE/build_tools makes many assumptions,
     # so we do things 'manually' here...
 
+    substituteInPlace \
+      --replace-fail "ICU_MAJOR_VER = 58" "ICU_MAJOR_VER = 74" \
+      Common/3dParty/icu/icu.pri
+
+    # https://github.com/ONLYOFFICE/core/pull/1637
+    # (but not as patch because line endings)
+    substituteInPlace \
+      --replace-fail "TRUE" "true" \
+      UnicodeConverter/UnicodeConverter.cpp
+
+    substituteInPlace \
+      --replace-fail "fprintf(_file, sParam.c_str());" "fprintf(_file, \"%s\", sParam.c_str());" \
+      DesktopEditor/doctrenderer/nativecontrol.h
+
     echo "== cryptopp =="
-    cd core/Common/3dParty/cryptopp/project
+    cd Common/3dParty/cryptopp/project
     qmake "CONFIG+=debug" -o Makefile cryptopp.pro
     #qmake -o Makefile cryptopp.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
     echo "== XlsbFormatLib =="
-    cd core/OOXML/Projects/Linux/XlsbFormatLib
+    cd OOXML/Projects/Linux/XlsbFormatLib
     qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/MsBinaryFile/Projects/XlsFormatLib/Linux
+    cd MsBinaryFile/Projects/XlsFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/OdfFile/Projects/Linux
+    cd OdfFile/Projects/Linux
     qmake "CONFIG+=debug" -o Makefile OdfFormatLib.pro
     make
-    cd ../../../..
+    cd ../../..
 
-    cd core/MsBinaryFile/Projects/DocFormatLib/Linux
+    cd MsBinaryFile/Projects/DocFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile DocFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/MsBinaryFile/Projects/PPTFormatLib/Linux
+    cd MsBinaryFile/Projects/PPTFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile PPTFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/RtfFile/Projects/Linux
+    cd RtfFile/Projects/Linux
     qmake "CONFIG+=debug" -o Makefile RtfFormatLib.pro
     make
-    cd ../../../..
+    cd ../../..
 
-    cd core/TxtFile/Projects/Linux
+    cd TxtFile/Projects/Linux
     qmake "CONFIG+=debug" -o Makefile TxtXmlFormatLib.pro
     make
-    cd ../../../..
+    cd ../../..
 
-    cd core/OOXML/Projects/Linux/BinDocument
+    cd OOXML/Projects/Linux/BinDocument
     qmake "CONFIG+=debug" -o Makefile BinDocument.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/OOXML/Projects/Linux/PPTXFormatLib
+    cd OOXML/Projects/Linux/PPTXFormatLib
     qmake "CONFIG+=debug" -o Makefile PPTXFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/OOXML/Projects/Linux/DocxFormatLib
+    cd OOXML/Projects/Linux/DocxFormatLib
     qmake "CONFIG+=debug" -o Makefile DocxFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/OOXML/Projects/Linux/XlsbFormatLib
+    cd OOXML/Projects/Linux/XlsbFormatLib
     qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/MsBinaryFile/Projects/XlsFormatLib/Linux
+    cd MsBinaryFile/Projects/XlsFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
     make
-    cd ../../../../..
+    cd ../../../..
 
-    cd core/Common/cfcpp
+    cd Common/cfcpp
     qmake "CONFIG+=debug" -o Makefile cfcpp.pro
     make
-    cd ../../..
+    cd ../..
 
-    cd core/Common/3dParty/icu
+    cd Common/3dParty/icu
     mkdir linux_64
     ln -s ${icu}/lib linux_64/build
-    cd ../../../..
-
-    # requires icu
-    cd core/UnicodeConverter
-    qmake "CONFIG+=debug" -o Makefile UnicodeConverter.pro
-    make
-    cd ../..
-
-    # requires UnicodeConverter
-    cd core/Common
-    qmake "CONFIG+=debug" -o Makefile kernel.pro
-    make
-    cd ../..
-
-    # requires kernel
-    cd core/Common/Network
-    qmake "CONFIG+=debug" -o Makefile network.pro
-    make
     cd ../../..
 
-    cd core/Common/3dParty/cryptopp/project
+    # requires icu
+    cd UnicodeConverter
+    qmake "CONFIG+=debug" -o Makefile UnicodeConverter.pro
+    make
+    cd ..
+
+    # requires UnicodeConverter
+    cd Common
+    qmake "CONFIG+=debug" -o Makefile kernel.pro
+    make
+    cd ..
+
+    # requires kernel
+    cd Common/Network
+    qmake "CONFIG+=debug" -o Makefile network.pro
+    make
+    cd ../..
+
+    cd Common/3dParty/cryptopp/project
     qmake "CONFIG+=debug" -o Makefile cryptopp.pro
     make
-    cd ../../../../..
-
-    cd core/MsBinaryFile/Projects/VbaFormatLib/Linux
-    qmake "CONFIG+=debug" -o Makefile VbaFormatLib.pro
-    make
-    cd ../../../../..
-
-    #cd core/OfficeUtils
-    ##g++ -std=c++11 -c *.cpp *.c $CXXFLAGS
-    #qmake OfficeUtils.pro
-    #cd ../..
-
-    cd core/Common/3dParty/html
-    ln -s ${katana-parser-src} katana-parser
     cd ../../../..
 
-    # core/Common/3dParty/harfbuzz/make.py
-    cat >core/Common/3dParty/harfbuzz/harfbuzz.pri <<EOL
+    cd MsBinaryFile/Projects/VbaFormatLib/Linux
+    qmake "CONFIG+=debug" -o Makefile VbaFormatLib.pro
+    make
+    cd ../../../..
+
+    cd Common/3dParty/html
+    ln -s ${katana-parser-src} katana-parser
+    cd ../../..
+
+    # Common/3dParty/harfbuzz/make.py
+    cat >Common/3dParty/harfbuzz/harfbuzz.pri <<EOL
 INCLUDEPATH += ${harfbuzz.dev}/include/harfbuzz
 LIBS += -L${harfbuzz}/lib -lharfbuzz
 EOL
-    ln -s ${gumbo-parser-src} core/Common/3dParty/html/gumbo-parser
-    ln -s ${hyphen-src} core/Common/3dParty/hyphen/hyphen
+    ln -s ${gumbo-parser-src} Common/3dParty/html/gumbo-parser
+    ln -s ${hyphen-src} Common/3dParty/hyphen/hyphen
 
-    cd core/DesktopEditor/graphics/pro
+    cd DesktopEditor/graphics/pro
     qmake "CONFIG+=debug" -o Makefile graphics.pro
     cat Makefile
     make
-    cd ../../../..
+    cd ../../..
 
-    mkdir -p core/Common/3dParty/openssl/build/linux_64/lib
-    ln -s ${openssl.dev}/include core/Common/3dParty/openssl/build/linux_64/include
+    mkdir -p Common/3dParty/openssl/build/linux_64/lib
+    ln -s ${openssl.dev}/include Common/3dParty/openssl/build/linux_64/include
     for i in ${openssl.out}/lib/*; do
-      ln -s $i core/Common/3dParty/openssl/build/linux_64/lib/$(basename $i)
+      ln -s $i Common/3dParty/openssl/build/linux_64/lib/$(basename $i)
     done
 
-    mkdir -p core/Common/3dParty/v8_89/v8/out.gn/linux_64
-    ln -s ${v8}/lib core/Common/3dParty/v8_89/v8/out.gn/linux_64/obj
+    mkdir -p Common/3dParty/v8_89/v8/out.gn/linux_64
+    ln -s ${v8}/lib Common/3dParty/v8_89/v8/out.gn/linux_64/obj
     for i in ${v8.src}/*; do
-      ln -s $i core/Common/3dParty/v8_89/v8/$(basename $i)
+      ln -s $i Common/3dParty/v8_89/v8/$(basename $i)
     done
 
     # requires graphics, openssl (with MD2), v8
-    cd core/DesktopEditor/doctrenderer
+    cd DesktopEditor/doctrenderer
     qmake "CONFIG+=debug" -o Makefile doctrenderer.pro
     make
-    cd ../../..
+    cd ../..
 
     # requires UnicodeConverter, kernel, graphics
-    cd core/HtmlRenderer
+    cd HtmlRenderer
     qmake "CONFIG+=debug" -o Makefile htmlrenderer.pro
     make
-    cd ../..
+    cd ..
 
     # depends on kernel, kernel_network, graphics and gumbo-parser
-    cd core/HtmlFile2
+    cd HtmlFile2
     qmake "CONFIG+=debug" -o Makefile HtmlFile2.pro
     make
-    cd ../..
+    cd ..
 
     # requires kernel, graphics and HtmlFile2
-    cd core/EpubFile
+    cd EpubFile
     qmake "CONFIG+=debug" -o Makefile CEpubFile.pro
     make
-    cd ../..
+    cd ..
 
-    cd core/PdfFile
+    cd PdfFile
     qmake "CONFIG+=debug" -o Makefile PdfFile.pro
     make
-    cd ../..
+    cd ..
 
     # requires UnicodeConverter, kernel, graphics and PdfFile
-    cd core/DjVuFile
+    cd DjVuFile
     qmake "CONFIG+=debug" -o Makefile DjVuFile.pro
     make
-    cd ../..
+    cd ..
 
     # requires UnicodeConverter, graphics, kernel, PdfFile
-    cd core/XpsFile
+    cd XpsFile
     qmake "CONFIG+=debug" -o Makefile XpsFile.pro
     make
-    cd ../..
+    cd ..
 
-    cd core/Fb2File
+    cd Fb2File
     qmake "CONFIG+=debug" -o Makefile Fb2File.pro
     make
-    cd ../..
+    cd ..
 
-    cd core/DocxRenderer
+    cd DocxRenderer
     qmake "CONFIG+=debug" -o Makefile DocxRenderer.pro
     make
-    cd ../..
+    cd ..
     
-    cd core/X2tConverter/build/Qt
+    cd X2tConverter/build/Qt
     qmake "CONFIG+=debug" -o Makefile X2tConverter.pro
     make
-    cd ../../../..
+    cd ../../..
     find .
 
     runHook postBuild
@@ -264,10 +281,10 @@ EOL
     runHook preInstall
 
     mkdir -p $out/lib
-    cp core/build/lib/linux_64/*.so $out/lib
+    cp build/lib/linux_64/*.so $out/lib
 
     mkdir -p $out/bin
-    cp core/build/bin/linux_64/x2t $out/bin
+    cp build/bin/linux_64/x2t $out/bin
 
     patchelf --add-rpath ${icu}/lib $out/bin/x2t
 
