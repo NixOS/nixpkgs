@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     description = "Circuit IR compilers and tools";
     homepage = "https://circt.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sharzy pineapplehunter ];
+    maintainers = with lib.maintainers; [ sharzy pineapplehunter sequencer ];
     platforms = lib.platforms.all;
   };
 }
