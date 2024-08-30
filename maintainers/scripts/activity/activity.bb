@@ -18,6 +18,13 @@
    (or (System/getenv "NIXOS_ACTIVITY_GQL_PATH")
        (fs/cwd))))
 
+(def maintainers-path
+  "Make maintainers path overridable"
+  (str
+   (or (System/getenv "NIXOS_MAINTAINERS_PATH")
+       (fs/canonicalize
+        (fs/file (fs/cwd) "../..")))))
+
 ;; (println "graphql path:" graphql-path)
 
 (defn get-access-token
@@ -42,12 +49,14 @@
           (System/exit 1))))
 
 
-(defn query [q & [v]]
+(defn query [q & [v n]]
   (->
    (curl/post "https://api.github.com/graphql"
               {:headers {"Authorization" (str "bearer " (get-access-token))}
+               :throw false
                :body (json/encode {:query q
-                                   :variables v})})
+                                   :variables v
+                                   :operationName n})})
    (update :body json/decode keyword)))
 
 (defn unpack-search-result [{:keys [status headers body]}]
@@ -94,9 +103,11 @@
    (update :body json/decode keyword)
    (unpack-search-result)))
 
-(defn file-query [query-name & [variables]]
-  (query (slurp (fs/file graphql-path (str (name query-name) ".gql")))
-         variables))
+(defn file-query [file-name & [variables operation-name extra-query]]
+  (query (str (slurp (fs/file graphql-path (str (name file-name) ".gql")))
+              extra-query)
+         variables
+         operation-name))
 
 (defn unwrap [response path]
   (let [{:keys [status headers body err]} response
@@ -133,7 +144,7 @@
 
 (defn issue-comment-page [login after-cursor]
   (.println System/err (format "Fetching issue comments for %s after page %s" login after-cursor))
-  (unwrap (file-query :issue-comments {:login "bendlas" :after after-cursor})
+  (unwrap (file-query :issue-comments {:login "bendlas" :after after-cursor} "IssueCommentFor")
           [:user :issueComments]))
 
 (defn issue-comments [login & [after-cursor]]
@@ -171,6 +182,65 @@
   (def icb (issue-comments "bendlas"))
   (file-query :org-contributions {:login "bendlas" :orgId org-id})
 
+(comment
+  (file-query :issue-comments
+              {:pageSize 1} #_{:after nil}
+              "Main"
+              "
+query Main($after:String,$pageSize:Int!) {
+  bendlas:user(login:\"bendlas\") { ...issueCommentFields }
+  grahamc:user(login:\"grahamc\") { ...issueCommentFields }
+}
+")
+  )
+
+  )
+
+(defn gql-sanitize [user]
+  (str "_" (str/replace user #"[^a-zA-Z0-9]" "_")))
+
+(defn issue-comments-queries [users]
+  (str/join
+   (concat
+    ["query Main($after:String,$pageSize:Int!) {\n"]
+    (mapcat
+     (fn [user]
+       ["  " (gql-sanitize user) ":user(login:\"" user "\") { ...issueCommentFields }\n"])
+     users)
+    ["}"])))
+
+(comment
+  (println (issue-comments-queries ["SuperSandro2000" "bendlas" "superherointj" "thiagokokada"]))
+  (file-query :issue-comments
+              {:pageSize 1} #_{:after nil}
+              "Main"
+              (issue-comments-queries ["SuperSandro2000" "bendlas" "superherointj" "thiagokokada"]))
+  )
+
+(defn read-maintainer-list []
+  (-> (shell/sh "nix" "eval" "--impure" "--json" "--expr"
+                (str "import "
+                     (fs/file maintainers-path "maintainer-list.nix")))
+      :out json/parse-string))
+
+(defn maintainer-names [ml]
+  (mapv (fn [[k {:strs [github]}]]
+          (or github
+              (do (.println System/err (str "WARNING: User " k " has no associated github user"))
+                  k)))
+        ml))
+
+(comment
+  (def x
+    (->
+     (file-query :issue-comments
+                 {:pageSize 6} #_{:after nil}
+                 "Main"
+                 (issue-comments-queries
+                  (take 40
+                        (maintainer-names
+                         (read-maintainer-list)))))
+     (unwrap [])))
   )
 
 ;;; CLI

@@ -1,25 +1,32 @@
-query($login:String!, $after:String) {
+query IssueCommentsFor($login:String!, $after:String, $pageSize:Int!) {
   user(login:$login) {
-    issueComments(
-      first: 100, after: $after, orderBy: {
-        field: UPDATED_AT,
-        direction: DESC
-      }){
-      totalCount
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      nodes {
+    ...issueCommentFields
+  }
+}
+
+fragment issueCommentFields on User {
+  issueComments(
+    first: $pageSize, after: $after, orderBy: {
+      field: UPDATED_AT,
+      direction: DESC
+    }){
+    totalCount
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    nodes {
+      id
+      updatedAt
+      url
+      repository {
         id
-        updatedAt
-        url
-        repository {
-          id
-          # name
-          # owner { login }
-        }
+        # name
+        # owner { login }
       }
     }
   }
 }
+
+## this file is used as a prelude to construct named queries, to fetch
+## many users at once
