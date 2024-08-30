@@ -4,18 +4,23 @@
 , sha256 ? ""
 , appName ? null
 , appVersion ? null
-, licenses
+, license ? null
+, licenses ? [ ]
 , patches ? [ ]
 , description ? null
 , homepage ? null
 , unpack ? false # whether to use fetchzip rather than fetchurl
 }:
+let
+  licenses' = lib.optional (license != null) license ++ licenses;
+  licenses'' = assert lib.assertMsg (lib.length licenses' > 0) "License(s) for ${url} must be specified"; licenses';
+in
 applyPatches ({
   inherit patches;
   src = (if unpack then fetchzip else fetchurl) {
     inherit url hash sha256;
     meta = {
-      license = map (license: lib.licenses.${license}) licenses;
+      license = map (license: lib.licenses.${license}) licenses'';
       longDescription = description;
       inherit homepage;
     } // lib.optionalAttrs (description != null) {
