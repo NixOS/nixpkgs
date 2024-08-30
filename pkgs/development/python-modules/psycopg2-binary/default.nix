@@ -3,7 +3,7 @@
   psycopg2,
 }:
 mkPythonMetaPackage {
-  pname = "pscycopg2-binary";
+  pname = "psycopg2-binary";
   inherit (psycopg2) version;
   dependencies = [ psycopg2 ];
   optional-dependencies = psycopg2.optional-dependencies or { };

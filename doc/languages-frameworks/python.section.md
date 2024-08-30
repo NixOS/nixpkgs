@@ -368,7 +368,7 @@ In nixpkgs this is used to package Python packages with split binary/source dist
 
 ```nix
 mkPythonMetaPackage {
-  pname = "pscycopg2-binary";
+  pname = "psycopg2-binary";
   inherit (psycopg2) optional-dependencies version;
   dependencies = [ psycopg2 ];
   meta = {
