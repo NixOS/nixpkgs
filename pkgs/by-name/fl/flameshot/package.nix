@@ -9,6 +9,7 @@
   makeBinaryWrapper,
   nix-update-script,
   enableWlrSupport ? false,
+  enableMonochromeIcon ? false,
 }:
 
 stdenv.mkDerivation {
@@ -33,10 +34,15 @@ stdenv.mkDerivation {
     })
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
-    (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
+      (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
+      (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
+    ];
 
   nativeBuildInputs = [
     cmake
