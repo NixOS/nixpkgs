@@ -4492,7 +4492,7 @@ checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
 
 [[package]]
 name = "uv"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4898,6 +4898,7 @@ dependencies = [
  "path-slash",
  "serde",
  "tempfile",
+ "tokio",
  "tracing",
  "urlencoding",
  "uv-warnings",
@@ -5042,6 +5043,8 @@ dependencies = [
  "uv-state",
  "uv-warnings",
  "which",
+ "windows-registry",
+ "windows-result",
  "windows-sys 0.59.0",
  "winsafe 0.0.22",
 ]
@@ -5246,7 +5249,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.4.0"
+version = "0.4.1"
 
 [[package]]
 name = "uv-virtualenv"
@@ -5281,6 +5284,7 @@ dependencies = [
  "fs-err",
  "glob",
  "insta",
+ "itertools 0.13.0",
  "pep440_rs",
  "pep508_rs",
  "pypi-types",
