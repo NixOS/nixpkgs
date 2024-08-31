@@ -2,7 +2,6 @@
   buildPythonPackage,
   cirq-aqt,
   cirq-core,
-  cirq-ft,
   cirq-google,
   cirq-ionq,
   cirq-pasqal,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cirq-aqt
     cirq-core
-    cirq-ft
     cirq-ionq
     cirq-google
     cirq-rigetti
@@ -34,7 +32,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "cirq-aqt"
     "cirq-core"
-    "cirq-ft"
     "cirq-google"
     "cirq-ionq"
     "cirq-pasqal"

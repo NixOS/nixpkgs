@@ -2221,8 +2221,6 @@ self: super: with self; {
 
   cirq-core = callPackage ../development/python-modules/cirq-core { };
 
-  cirq-ft = callPackage ../development/python-modules/cirq-ft { };
-
   cirq-ionq = callPackage ../development/python-modules/cirq-ionq { };
 
   cirq-google = callPackage ../development/python-modules/cirq-google { };
