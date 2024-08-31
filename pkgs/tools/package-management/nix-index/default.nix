@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     description = "Files database for nixpkgs";
     homepage = "https://github.com/nix-community/nix-index";
     changelog = "https://github.com/nix-community/nix-index/blob/${src.rev}/CHANGELOG.md";
+    mainProgram = "nix-index";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ bennofs figsoda ncfavier ];
   };
