@@ -32878,9 +32878,17 @@ with pkgs;
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
+    inherit (darwin.apple_sdk_12_3.frameworks) CoreServices Cocoa Hypervisor Kernel vmnet;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
+    stdenv =
+      if stdenv.hostPlatform.isDarwin then
+        overrideSDK stdenv {
+          darwinSdkVersion = "12.3";
+          darwinMinVersion = "12.0";
+        }
+      else
+        stdenv;
   };
 
   qemu-python-utils = python3Packages.toPythonApplication (
