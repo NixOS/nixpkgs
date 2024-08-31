@@ -11,10 +11,12 @@ buildNpmPackage rec {
     owner = "rianadon";
     repo = "timer-bar-card";
     rev = "v${version}";
-    hash = "sha256-o1OIbA1tRlnbWJ/p/wAUpeDnz/Wzu+GmUammJ6VFxHc=";
+    hash = "sha256-iPfLZ87+vTwP5MAbielbP+1IayN9L0N26yLmggtKeVM=";
   };
 
-  npmDepsHash = "sha256-x1HbOt9HW+zJAhHEDy2V5eYyLv4e3OrUbnzqeJasSng=";
+  npmDepsHash = "sha256-nFLWixY6gt6qNarg8u9lpXb6IBN9RJPbGFeOAL5q1Yk=";
+
+  makeCacheWritable = true;
 
   installPhase = ''
     runHook preInstall
