@@ -32,6 +32,8 @@
 
   template-entity-row = callPackage ./template-entity-row { };
 
+  timer-bar-card = callPackage ./timer-bar-card { };
+
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
   zigbee2mqtt-networkmap = callPackage ./zigbee2mqtt-networkmap { };
