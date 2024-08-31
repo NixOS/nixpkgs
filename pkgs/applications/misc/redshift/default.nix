@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchFromGitLab
 , autoconf, automake, gettext, intltool
-, libtool, pkg-config, wrapGAppsHook3, wrapPython, gobject-introspection
+, libtool, pkg-config, wrapGAppsHook3, wrapPython, gobject-introspection, wayland-scanner
 , gtk3, python, pygobject3, pyxdg
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
@@ -26,6 +26,8 @@ let
 
       strictDeps = true;
 
+      depsBuildBuild = [ pkg-config ];
+
       nativeBuildInputs = [
         autoconf
         automake
@@ -37,7 +39,7 @@ let
         wrapPython
         gobject-introspection
         python
-      ];
+      ] ++ lib.optionals (pname == "gammastep") [ wayland-scanner ];
 
       configureFlags = [
         "--enable-randr=${if withRandr then "yes" else "no"}"
