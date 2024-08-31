@@ -1,21 +1,29 @@
-{ lib, pkgs, runCommand, prisma }:
+{
+  lib,
+  runCommand,
+  prisma,
+  prisma-engines,
+  sqlite-interactive,
+}:
 
 let
-  inherit (prisma) packageName;
   prismaMajorVersion = lib.versions.majorMinor prisma.version;
-  enginesMajorVersion = lib.versions.majorMinor pkgs.prisma-engines.version;
+  enginesMajorVersion = lib.versions.majorMinor prisma-engines.version;
 in
-
-runCommand "${packageName}-tests" {
-  nativeBuildInputs = with pkgs; [ prisma sqlite-interactive ];
-  meta.timeout = 60;
-}
+runCommand "prisma-cli-tests"
+  {
+    nativeBuildInputs = [
+      prisma
+      sqlite-interactive
+    ];
+    meta.timeout = 60;
+  }
   ''
     mkdir $out
     cd $out
 
     if [ "${prismaMajorVersion}" != "${enginesMajorVersion}" ]; then
-      echo "nodePackages.prisma in version ${prismaMajorVersion} and prisma-engines in ${enginesMajorVersion}. Major versions must match."
+      echo "prisma in version ${prismaMajorVersion} and prisma-engines in ${enginesMajorVersion}. Major versions must match."
       exit 1
     fi
 
