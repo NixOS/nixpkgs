@@ -119,15 +119,15 @@ in
     ];
     environment.etc =
       let
-        lib.optionalFile = p: f: v: lib.optionalAttrs (v != { }) {
+        optionalFile = p: f: v: lib.optionalAttrs (v != { }) {
           "xdg/fcitx5/${p}".text = f v;
         };
       in
       lib.attrsets.mergeAttrsList [
-        (lib.optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
-        (lib.optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
+        (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
+        (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
         (lib.concatMapAttrs
-          (name: value: lib.optionalFile
+          (name: value: optionalFile
             "conf/${name}.conf"
             (lib.generators.toINIWithGlobalSection { })
             value)
