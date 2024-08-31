@@ -317,10 +317,10 @@ EOL
     runHook preInstall
 
     mkdir -p $out/lib
-    cp build/lib/linux_64/*.so $out/lib
+    cp ../build/lib/linux_64/*.so $out/lib
 
     mkdir -p $out/bin
-    cp build/bin/linux_64/x2t $out/bin
+    cp ../build/bin/linux_64/x2t $out/bin
 
     patchelf --add-rpath ${icu}/lib $out/bin/x2t
 
