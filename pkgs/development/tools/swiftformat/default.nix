@@ -1,45 +1,50 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  swiftformat,
+  testers,
+}:
 
-# This derivation is impure: it relies on an Xcode toolchain being installed
-# and available in the expected place. The values of sandboxProfile and
-# hydraPlatforms are copied pretty directly from the MacVim derivation, which
-# is also impure.
-
+let
+  srcName = if stdenv.isDarwin then "swiftformat" else "swiftformat_linux";
+in
 stdenv.mkDerivation rec {
   pname = "swiftformat";
-  version = "0.47.10";
+  version = "0.54.5";
 
-  src = fetchFromGitHub {
-    owner = "nicklockwood";
-    repo = "SwiftFormat";
-    rev = version;
-    sha256 = "1gqxpymbhpmap0i2blg9akarlql4mkzv45l4i212gsxcs991b939";
+  src = fetchurl {
+    url = "https://github.com/nicklockwood/SwiftFormat/releases/download/${version}/${srcName}.zip";
+    hash =
+      if stdenv.isDarwin then
+        "sha256-R8GziLeWlJT2cPHhIzD3SBE2IvZsnh8xacYXXKgHfWc="
+      else
+        "sha256-Uf09R6MpWdRy0CldGZswq24l4MyvNQ26fE47DvX9ypA=";
   };
 
-  preConfigure = "LD=$CC";
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
 
-  buildPhase = ''
-    /usr/bin/xcodebuild -project SwiftFormat.xcodeproj \
-      -scheme "SwiftFormat (Command Line Tool)" \
-      CODE_SIGN_IDENTITY= SYMROOT=build OBJROOT=build
+  nativeBuildInputs = [ unzip ];
+
+  sourceRoot = ".";
+
+  unpackPhase = ''
+    unzip -j $src ${srcName}
+    mkdir -p $out/bin
+    mv ${srcName} $out/bin/swiftformat
   '';
 
-  installPhase = ''
-    install -D -m 0555 build/Release/swiftformat $out/bin/swiftformat
-  '';
-
-  sandboxProfile = ''
-    (allow file-read* file-write* process-exec mach-lookup)
-    ; block homebrew dependencies
-    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
-  '';
+  passthru.tests.version = testers.testVersion { package = swiftformat; };
 
   meta = with lib; {
     description = "Code formatting and linting tool for Swift";
     homepage = "https://github.com/nicklockwood/SwiftFormat";
     license = licenses.mit;
     maintainers = [ maintainers.bdesham ];
-    platforms = platforms.darwin;
-    hydraPlatforms = [];
+    platforms = platforms.darwin ++ [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
