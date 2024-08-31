@@ -20,11 +20,12 @@
   libopus,
   openscad,
   libxcrypt-legacy,
+  snis-assets,
 }:
 
 stdenv.mkDerivation {
   pname = "snis_launcher";
-  version = "unstable-2024-08-02";
+  version = "2024-08-02";
 
   src = fetchFromGitHub {
     owner = "smcameron";
@@ -68,10 +69,18 @@ stdenv.mkDerivation {
     alsa-utils
     libopus
     libxcrypt-legacy
+    snis-assets
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-  buildTargets = [ "models" ];
+  buildFlags = [
+    "all"
+    "models"
+  ];
+
+  postInstall = ''
+    cp -srn ${snis-assets}/share $out
+  '';
 
   meta = with lib; {
     description = "Space Nerds In Space, a multi-player spaceship bridge simulator";
