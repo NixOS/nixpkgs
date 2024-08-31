@@ -129,6 +129,9 @@ self: super: builtins.intersectAttrs super {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
+  # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
+  streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
+
   threadscope = enableSeparateBinOutput super.threadscope;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
