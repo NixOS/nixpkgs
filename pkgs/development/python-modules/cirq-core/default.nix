@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KHwVq0qVtc8E9i2lugILYNwk9awq952w0x4DM+HG7Pg=";
+    hash = "sha256-1GcRDVgYF+1igZQFlQbiWZmU1WNIJh4CcOftQe6OP6I=";
   };
 
   sourceRoot = "${src.name}/${pname}";
