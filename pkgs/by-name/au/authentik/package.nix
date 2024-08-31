@@ -153,25 +153,6 @@ let
         pythonImportsCheck = [ "rest_framework" ];
       };
 
-      tenant-schemas-celery = prev.buildPythonPackage rec {
-        pname = "tenant-schemas-celery";
-        version = "3.0.0";
-        src = fetchFromGitHub {
-          owner = "maciej-gol";
-          repo = pname;
-          rev = version;
-          hash = "sha256-3ZUXSAOBMtj72sk/VwPV24ysQK+E4l1HdwKa78xrDtg=";
-        };
-        format = "setuptools";
-        doCheck = false;
-
-        propagatedBuildInputs = with final; [
-          freezegun
-          more-itertools
-          psycopg2
-        ];
-      };
-
       scim2-filter-parser = prev.buildPythonPackage rec {
         pname = "scim2-filter-parser";
         version = "0.5.1";
