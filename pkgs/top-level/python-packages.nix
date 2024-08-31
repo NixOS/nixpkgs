@@ -3395,6 +3395,8 @@ self: super: with self; {
 
   django-csp = callPackage ../development/python-modules/django-csp { };
 
+  django-cte = callPackage ../development/python-modules/django-cte { };
+
   django-currentuser = callPackage ../development/python-modules/django-currentuser { };
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
