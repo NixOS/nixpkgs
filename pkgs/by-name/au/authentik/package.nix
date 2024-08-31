@@ -153,29 +153,6 @@ let
         pythonImportsCheck = [ "rest_framework" ];
       };
 
-      scim2-filter-parser = prev.buildPythonPackage rec {
-        pname = "scim2-filter-parser";
-        version = "0.5.1";
-        # For some reason the normal fetchPypi does not work
-        src = fetchzip {
-          url = "https://files.pythonhosted.org/packages/54/df/ad9718acce76e81a93c57327356eecd23701625f240fbe03d305250399e6/scim2_filter_parser-0.5.1.tar.gz";
-          hash = "sha256-DZAdRj6qyySggsvJZC47vdvXbHrB1ra3qiYBEUiceJ4=";
-        };
-
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace-fail 'poetry>=0.12' 'poetry-core>=1.0.0' \
-            --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
-        '';
-
-        nativeBuildInputs = [ prev.poetry-core ];
-        pyproject = true;
-
-        propagatedBuildInputs = with final; [
-          sly
-        ];
-      };
-
       authentik-django = prev.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
