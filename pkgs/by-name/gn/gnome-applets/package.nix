@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-applets";
-      attrPath = "gnome.gnome-applets";
       versionPolicy = "odd-unstable";
     };
   };
