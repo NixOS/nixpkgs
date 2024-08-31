@@ -110,24 +110,6 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      django-pglock = prev.buildPythonPackage rec {
-        pname = "django-pglock";
-        version = "1.5.1";
-        src = fetchFromGitHub {
-          owner = "Opus10";
-          repo = pname;
-          rev = version;
-          hash = "sha256-ZoEHDkGmrcNiMe/rbwXsEPZo3LD93cZp6zjftMKjLeg=";
-        };
-        nativeBuildInputs = with prev; [
-          poetry-core
-        ];
-        propagatedBuildInputs = with final; [
-          django
-          django-pgactivity
-        ];
-        pyproject = true;
-      };
       django-tenants = prev.django-tenants.overrideAttrs {
         version = "3.6.1-unstable-2024-01-11";
         src = fetchFromGitHub {
