@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
     sed "/\.mk3/d" -i libschily/Targets.man
     substituteInPlace man/Makefile --replace "man4" ""
     substituteInPlace RULES/rules.prg --replace "/bin/" ""
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+
     ln -sv i386-darwin-clang64.rul RULES/arm64-darwin-cc.rul
     ln -sv i386-darwin-clang64.rul RULES/arm64-darwin-clang.rul
     ln -sv i386-darwin-clang64.rul RULES/arm64-darwin-clang64.rul
+    ln -sv i586-linux-cc.rul RULES/riscv64-linux-cc.rul
   '';
 
   dontConfigure = true;
