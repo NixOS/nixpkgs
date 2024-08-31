@@ -15,6 +15,7 @@
   libpulseaudio,
   qtbase,
   qtsvg,
+  qtwayland,
   sonivox,
   qt5compat ? null,
 }:
@@ -24,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-p0N8EeCtVEPCGzPwiRxPdI1XT5XQ5pcKYEDJXbYYTrM=";
+    hash = "sha256-U5Cm9pTDxC8NzyQfjaC/eBBDUWELV4jq4ov4QGefM9g=";
   };
 
   patches = [ ./drumstick-plugins.patch ];
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     qtbase
     qtsvg
+    qtwayland
     sonivox
   ] ++ lib.optionals isQt6 [ qt5compat ];
 
