@@ -502,6 +502,11 @@ in
         else lib.unique (lib.forEach cfg.upsd.listen (listen: listen.port));
     };
 
+    systemd.slices.system-ups = {
+      description = "Network UPS Tools (NUT) Slice";
+      documentation = [ "https://networkupstools.org/" ];
+    };
+
     systemd.services.upsmon = let
       secrets = lib.mapAttrsToList (name: monitor: "upsmon_password_${name}") cfg.upsmon.monitor;
       createUpsmonConf = installSecrets upsmonConf "/run/nut/upsmon.conf" secrets;
@@ -516,6 +521,7 @@ in
         ExecStart = "${pkgs.nut}/sbin/upsmon";
         ExecReload = "${pkgs.nut}/sbin/upsmon -c reload";
         LoadCredential = lib.mapAttrsToList (name: monitor: "upsmon_password_${name}:${monitor.passwordFile}") cfg.upsmon.monitor;
+        Slice = "system-ups.slice";
       };
       environment.NUT_CONFPATH = "/etc/nut";
       environment.NUT_STATEPATH = "/var/lib/nut";
@@ -536,6 +542,7 @@ in
         ExecStart = "${pkgs.nut}/sbin/upsd -u root";
         ExecReload = "${pkgs.nut}/sbin/upsd -c reload";
         LoadCredential = lib.mapAttrsToList (name: user: "upsdusers_password_${name}:${user.passwordFile}") cfg.users;
+        Slice = "system-ups.slice";
       };
       environment.NUT_CONFPATH = "/etc/nut";
       environment.NUT_STATEPATH = "/var/lib/nut";
@@ -554,6 +561,7 @@ in
         RemainAfterExit = true;
         # TODO: replace 'root' by another username.
         ExecStart = "${pkgs.nut}/bin/upsdrvctl -u root start";
+        Slice = "system-ups.slice";
       };
       environment.NUT_CONFPATH = "/etc/nut";
       environment.NUT_STATEPATH = "/var/lib/nut";
