@@ -47,8 +47,6 @@ in
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
-  gnome-applets = callPackage ./misc/gnome-applets { };
-
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
 }) // lib.optionalAttrs config.allowAliases {
@@ -81,6 +79,7 @@ in
   geary = lib.warn "The ‘gnome.geary’ was moved to top-level. Please use ‘pkgs.geary’ directly." pkgs.geary; # Added on 2024-06-22.
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gitg = lib.warn "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly." pkgs.gitg; # Added on 2024-06-22.
+  gnome-applets = lib.warn "The ‘gnome.gnome-applets’ was moved to top-level. Please use ‘pkgs.gnome-applets’ directly." pkgs.gnome-applets; # Added on 2024-08-31.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
   gnome-backgrounds = lib.warn "The ‘gnome.gnome-backgrounds’ was moved to top-level. Please use ‘pkgs.gnome-backgrounds’ directly." pkgs.gnome-backgrounds; # Added on 2024-08-11.
   gnome-bluetooth = lib.warn "The ‘gnome.gnome-bluetooth’ was moved to top-level. Please use ‘pkgs.gnome-bluetooth’ directly." pkgs.gnome-bluetooth; # Added on 2024-08-28.

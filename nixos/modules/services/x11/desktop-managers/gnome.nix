@@ -162,8 +162,8 @@ in
         };
 
         panelModulePackages = mkOption {
-          default = [ pkgs.gnome.gnome-applets ];
-          defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
+          default = [ pkgs.gnome-applets ];
+          defaultText = literalExpression "[ pkgs.gnome-applets ]";
           type = types.listOf types.package;
           description = ''
             Packages containing modules that should be made available to `pkgs.gnome-panel` (usually for applets).
