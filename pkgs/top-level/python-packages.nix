@@ -8066,8 +8066,6 @@ self: super: with self; {
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
-  mox3 = callPackage ../development/python-modules/mox3 { };
-
   mozart-api = callPackage ../development/python-modules/mozart-api { };
 
   mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
