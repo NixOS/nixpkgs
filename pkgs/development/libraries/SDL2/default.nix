@@ -5,7 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
-  libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms,
+  libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
   libGL,
   alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     mainProgram = "wflinfo";
     homepage = "https://www.waffle-gl.org/";
     license = licenses.bsd2;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ Flakebi ];
   };
 }

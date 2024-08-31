@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.2.116";
+  version = "9.2.117";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "ailment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BRT6yboFdQ9/S+XYJAz885QbxbRx/BmL18o3ic4fv7o=";
+    hash = "sha256-OYbLaMtelNxohrOfb4A9NC9Zado+0qvm3i2zgkgt6p4=";
   };
 
   build-system = [ setuptools ];
