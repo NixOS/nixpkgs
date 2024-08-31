@@ -50,5 +50,6 @@ rustPlatform.buildRustPackage rec {
     '';
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "rmpc";
+    platforms = lib.platforms.linux;
   };
 }
