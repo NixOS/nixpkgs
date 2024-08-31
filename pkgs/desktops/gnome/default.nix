@@ -51,10 +51,6 @@ in
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
-  gnome-panel = callPackage ./misc/gnome-panel { };
-
-  gnome-panel-with-modules = callPackage ./misc/gnome-panel/wrapper.nix { };
-
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
   libgnome-keyring = lib.warn "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly." pkgs.libgnome-keyring; # Added on 2024-06-22.
@@ -114,6 +110,8 @@ in
   gnome-nibbles = lib.warn "The ‘gnome.gnome-nibbles’ was moved to top-level. Please use ‘pkgs.gnome-nibbles’ directly." pkgs.gnome-nibbles; # Added on 2024-08-11.
   gnome-notes = lib.warn "The ‘gnome.gnome-notes’ was moved to top-level. Please use ‘pkgs.gnome-notes’ directly." pkgs.gnome-notes; # Added on 2024-08-11.
   gnome-packagekit = lib.warn "The ‘gnome.gnome-packagekit’ was moved to top-level. Please use ‘pkgs.gnome-packagekit’ directly." pkgs.gnome-packagekit; # Added on 2024-06-22.
+  gnome-panel = lib.warn "The ‘gnome.gnome-panel’ was moved to top-level. Please use ‘pkgs.gnome-panel’ directly." pkgs.gnome-panel; # Added on 2024-08-31.
+  gnome-panel-with-modules = lib.warn "The ‘gnome.gnome-panel-with-modules’ was moved to top-level. Please use ‘pkgs.gnome-panel-with-modules’ directly." pkgs.gnome-panel-with-modules; # Added on 2024-08-31.
   gnome-power-manager = lib.warn "The ‘gnome.gnome-power-manager’ was moved to top-level. Please use ‘pkgs.gnome-power-manager’ directly." pkgs.gnome-power-manager; # Added on 2024-08-11.
   gnome-remote-desktop = lib.warn "The ‘gnome.gnome-remote-desktop’ was moved to top-level. Please use ‘pkgs.gnome-remote-desktop’ directly." pkgs.gnome-remote-desktop; # Added on 2024-08-11.
   gnome-robots = lib.warn "The ‘gnome.gnome-robots’ was moved to top-level. Please use ‘pkgs.gnome-robots’ directly." pkgs.gnome-robots; # Added on 2024-08-11.

@@ -166,7 +166,7 @@ in
           defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
           type = types.listOf types.package;
           description = ''
-            Packages containing modules that should be made available to `gnome-panel` (usually for applets).
+            Packages containing modules that should be made available to `pkgs.gnome-panel` (usually for applets).
 
             If you're packaging something to use here, please install the modules in `$out/lib/gnome-panel/modules`.
           '';
@@ -243,7 +243,7 @@ in
 
       environment.systemPackages = with pkgs.gnome; [
         gnome-flashback
-        (gnome-panel-with-modules.override {
+        (pkgs.gnome-panel-with-modules.override {
           panelModulePackages = cfg.flashback.panelModulePackages;
         })
       ]

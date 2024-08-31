@@ -8149,6 +8149,8 @@ with pkgs;
 
   gnome-solanum = callPackage ../applications/misc/gnome-solanum { };
 
+  gnome-panel-with-modules = callPackage ../by-name/gn/gnome-panel/wrapper.nix { };
+
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos { };
