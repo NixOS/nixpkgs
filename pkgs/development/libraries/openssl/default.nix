@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
-, makeWrapper
+, makeBinaryWrapper
 , withCryptodev ? false, cryptodev
 , withZlib ? false, zlib
 , enableSSL2 ? false
@@ -70,7 +70,7 @@ let
       stdenv.cc.isGNU;
 
     nativeBuildInputs =
-         lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
       ++ [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
