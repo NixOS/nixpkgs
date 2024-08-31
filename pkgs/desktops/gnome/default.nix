@@ -19,30 +19,6 @@ in
 
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
-  networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
-    withGnome = true;
-  };
-
-  networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
-    withGnome = true;
-  };
-
-  networkmanager-openconnect = pkgs.networkmanager-openconnect.override {
-    withGnome = true;
-  };
-
-  networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override {
-    withGnome = true;
-  };
-
-  networkmanager-l2tp = pkgs.networkmanager-l2tp.override {
-    withGnome = true;
-  };
-
-  networkmanager-iodine = pkgs.networkmanager-iodine.override {
-    withGnome = true;
-  };
-
   nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
 
 }) // lib.optionalAttrs config.allowAliases {
@@ -139,6 +115,12 @@ in
   mutter = lib.warn "The ‘gnome.mutter’ was moved to top-level. Please use ‘pkgs.mutter’ directly." pkgs.mutter; # Added on 2024-08-28.
   mutter43 = lib.warn "The ‘gnome.mutter43’ was moved to top-level. Please use ‘pkgs.mutter43’ directly." pkgs.mutter43; # Added on 2024-08-28.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
+  networkmanager-openvpn = lib.warn "The ‘gnome.networkmanager-openvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-openvpn’ directly." pkgs.networkmanager-openvpn; # Added on 2024-08-31.
+  networkmanager-vpnc = lib.warn "The ‘gnome.networkmanager-vpnc’ was moved to top-level. Please use ‘pkgs.networkmanager-vpnc’ directly." pkgs.networkmanager-vpnc; # Added on 2024-08-31.
+  networkmanager-openconnect = lib.warn "The ‘gnome.networkmanager-openconnect’ was moved to top-level. Please use ‘pkgs.networkmanager-openconnect’ directly." pkgs.networkmanager-openconnect; # Added on 2024-08-31.
+  networkmanager-fortisslvpn = lib.warn "The ‘gnome.networkmanager-fortisslvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-fortisslvpn’ directly." pkgs.networkmanager-fortisslvpn; # Added on 2024-08-31.
+  networkmanager-l2tp = lib.warn "The ‘gnome.networkmanager-l2tp’ was moved to top-level. Please use ‘pkgs.networkmanager-l2tp’ directly." pkgs.networkmanager-l2tp; # Added on 2024-08-31.
+  networkmanager-iodine = lib.warn "The ‘gnome.networkmanager-iodine’ was moved to top-level. Please use ‘pkgs.networkmanager-iodine’ directly." pkgs.networkmanager-iodine; # Added on 2024-08-31.
   nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
   polari = lib.warn "The ‘gnome.polari’ was moved to top-level. Please use ‘pkgs.polari’ directly." pkgs.polari; # Added on 2024-08-11.
   pomodoro = lib.warn "The ‘gnome.pomodoro’ was moved to top-level. Please use ‘pkgs.gnome-pomodoro’ directly." pkgs.gnome-pomodoro; # Added on 2024-06-22.
