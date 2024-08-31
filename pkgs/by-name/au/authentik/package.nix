@@ -110,19 +110,6 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      django-cte = prev.buildPythonPackage rec {
-        pname = "django-cte";
-        version = "1.3.3";
-        src = fetchFromGitHub {
-          owner = "dimagi";
-          repo = pname;
-          rev = "v${version}";
-          hash = "sha256-OCENg94xHBeeE4A2838Cu3q2am2im2X4SkFSjc6DuhE=";
-        };
-        doCheck = false; # Tests require postgres
-        format = "setuptools";
-      };
-
       django-pgactivity = prev.buildPythonPackage rec {
         pname = "django-pgactivity";
         version = "1.4.1";
