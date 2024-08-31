@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.3.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-ixkIDJbysa3TOJiNmAG2SuJwCv5MaX6nCtUnS4901rg=";
+    hash = "sha256-JCBXoqtewl4WZsAGMhmbvbdXQnLKOP43VYOqH2bs30k=";
   };
 
   pythonRelaxDeps = [
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [
     "twitchdl"
     "twitchdl.cli"
-    "twitchdl.download"
+    "twitchdl.naming"
     "twitchdl.entities"
     "twitchdl.http"
     "twitchdl.output"
