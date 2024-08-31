@@ -2,10 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, Cocoa
+, qt6
+, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,14 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtdeclarative
+    qt6.qtbase
+    qt6.qtdeclarative
   ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
+    darwin.apple_sdk.frameworks.Cocoa
   ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''

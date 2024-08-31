@@ -10782,10 +10782,6 @@ with pkgs;
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
-  notes = qt6Packages.callPackage ../applications/office/notes {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   notes-up = callPackage ../applications/office/notes-up { };
 
   notify-osd-customizable = callPackage ../applications/misc/notify-osd-customizable { };
