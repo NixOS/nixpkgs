@@ -1,13 +1,14 @@
-{ libsForQt5
-, stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, nix-update-script
-, fetchpatch
-, grim
-, makeBinaryWrapper
-, enableWlrSupport ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libsForQt5,
+  grim,
+  makeBinaryWrapper,
+  nix-update-script,
+  enableWlrSupport ? false,
 }:
 
 stdenv.mkDerivation {
@@ -31,12 +32,6 @@ stdenv.mkDerivation {
       hash = "sha256-SnjVbFMDKD070vR4vGYrwLw6scZAFaQA4b+MbI+0W9E=";
     })
   ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
-    };
-  };
 
   cmakeFlags = [
     (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
@@ -64,11 +59,18 @@ stdenv.mkDerivation {
       ''${qtWrapperArgs[@]}
   '';
 
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  };
+
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
     homepage = "https://github.com/flameshot-org/flameshot";
     mainProgram = "flameshot";
-    maintainers = with maintainers; [ scode oxalica ];
+    maintainers = with maintainers; [
+      scode
+      oxalica
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };
