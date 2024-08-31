@@ -100,21 +100,21 @@ stdenv.mkDerivation (finalAttrs: {
     echo "== UnicodeConverter =="
     # requires icu
     cd UnicodeConverter
-    qmake -o Makefile UnicodeConverter.pro
+    qmake "CONFIG+=debug" -o Makefile UnicodeConverter.pro
     make
     cd ..
 
     # requires UnicodeConverter
     echo "== kernel =="
     cd Common
-    qmake -o Makefile kernel.pro
+    qmake "CONFIG+=debug" -o Makefile kernel.pro
     make
     cd ..
 
     echo "== kernel_network =="
     # requires kernel
     cd Common/Network
-    qmake -o Makefile network.pro
+    qmake "CONFIG+=debug" -o Makefile network.pro
     make
     cd ../..
 
@@ -126,49 +126,49 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "== cryptopp =="
     cd Common/3dParty/cryptopp/project
-    qmake -o Makefile cryptopp.pro
+    qmake "CONFIG+=debug" -o Makefile cryptopp.pro
     make
     cd ../../../..
 
     echo "== XlsbFormatLib =="
     cd OOXML/Projects/Linux/XlsbFormatLib
-    qmake -o Makefile XlsbFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
     make
     cd ../../../..
 
     echo "== MsBinaryFile =="
     cd MsBinaryFile/Projects/XlsFormatLib/Linux
-    qmake -o Makefile XlsFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
     make
     cd ../../../..
 
     echo "== OdfFile =="
     cd OdfFile/Projects/Linux
-    qmake -o Makefile OdfFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile OdfFormatLib.pro
     make
     cd ../../..
 
     echo "== DocFormatLib =="
     cd MsBinaryFile/Projects/DocFormatLib/Linux
-    qmake "CONFIG+=debug" -o Makefile DocFormatLib.pro
+    qmake "CONFIG+=debug" "CONFIG+=debug" -o Makefile DocFormatLib.pro
     make
     cd ../../../..
 
     echo "== PPTFormatLib =="
     cd MsBinaryFile/Projects/PPTFormatLib/Linux
-    qmake -o Makefile PPTFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile PPTFormatLib.pro
     make
     cd ../../../..
 
     echo "== RtfFile =="
     cd RtfFile/Projects/Linux
-    qmake -o Makefile RtfFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile RtfFormatLib.pro
     make
     cd ../../..
 
     echo "== TxtFile =="
     cd TxtFile/Projects/Linux
-    qmake -o Makefile TxtXmlFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile TxtXmlFormatLib.pro
     make
     cd ../../..
 
@@ -180,31 +180,31 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "== PPTXFormatLib =="
     cd OOXML/Projects/Linux/PPTXFormatLib
-    qmake -o Makefile PPTXFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile PPTXFormatLib.pro
     make
     cd ../../../..
 
     echo "== XlsbFormatLib =="
     cd OOXML/Projects/Linux/XlsbFormatLib
-    qmake -o Makefile XlsbFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
     make
     cd ../../../..
 
     echo "== XlsFormatLib =="
     cd MsBinaryFile/Projects/XlsFormatLib/Linux
-    qmake -o Makefile XlsFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
     make
     cd ../../../..
 
     echo "== cfcpp =="
     cd Common/cfcpp
-    qmake -o Makefile cfcpp.pro
+    qmake "CONFIG+=debug" -o Makefile cfcpp.pro
     make
     cd ../..
 
     echo "== VbaFormatLib =="
     cd MsBinaryFile/Projects/VbaFormatLib/Linux
-    qmake -o Makefile VbaFormatLib.pro
+    qmake "CONFIG+=debug" -o Makefile VbaFormatLib.pro
     make
     cd ../../../..
 
@@ -224,7 +224,7 @@ EOL
 
     echo "== graphics =="
     cd DesktopEditor/graphics/pro
-    qmake -o Makefile graphics.pro
+    qmake "CONFIG+=debug" -o Makefile graphics.pro
     cat Makefile
     make
     cd ../../..
@@ -246,54 +246,54 @@ EOL
     echo "== doctrenderer =="
     # requires graphics, openssl (with MD2), v8
     cd DesktopEditor/doctrenderer
-    qmake -o Makefile doctrenderer.pro
+    qmake "CONFIG+=debug" -o Makefile doctrenderer.pro
     make
     cd ../..
 
     echo "== HtmlRenderer =="
     # requires UnicodeConverter, kernel, graphics
     cd HtmlRenderer
-    qmake -o Makefile htmlrenderer.pro
+    qmake "CONFIG+=debug" -o Makefile htmlrenderer.pro
     make
     cd ..
 
     echo "== HtmlFile2 =="
     # depends on kernel, kernel_network, graphics and gumbo-parser
     cd HtmlFile2
-    qmake -o Makefile HtmlFile2.pro
+    qmake "CONFIG+=debug" -o Makefile HtmlFile2.pro
     make
     cd ..
 
     echo "== EpubFile =="
     # requires kernel, graphics and HtmlFile2
     cd EpubFile
-    qmake -o Makefile CEpubFile.pro
+    qmake "CONFIG+=debug" -o Makefile CEpubFile.pro
     make
     cd ..
 
     echo "== PdfFile =="
     cd PdfFile
-    qmake -o Makefile PdfFile.pro
+    qmake "CONFIG+=debug" -o Makefile PdfFile.pro
     make
     cd ..
 
     echo "== DjVuFile =="
     # requires UnicodeConverter, kernel, graphics and PdfFile
     cd DjVuFile
-    qmake -o Makefile DjVuFile.pro
+    qmake "CONFIG+=debug" -o Makefile DjVuFile.pro
     make
     cd ..
 
     echo "== XpsFile =="
     # requires UnicodeConverter, graphics, kernel, PdfFile
     cd XpsFile
-    qmake -o Makefile XpsFile.pro
+    qmake "CONFIG+=debug" -o Makefile XpsFile.pro
     make
     cd ..
 
     echo "== Fb2File =="
     cd Fb2File
-    qmake -o Makefile Fb2File.pro
+    qmake "CONFIG+=debug" -o Makefile Fb2File.pro
     make
     cd ..
 
