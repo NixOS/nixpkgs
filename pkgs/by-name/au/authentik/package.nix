@@ -110,25 +110,6 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      django-tenants = prev.buildPythonPackage rec {
-        pname = "django-tenants";
-        version = "unstable-2024-01-11";
-        src = fetchFromGitHub {
-          owner = "rissson";
-          repo = pname;
-          rev = "a7f37c53f62f355a00142473ff1e3451bb794eca";
-          hash = "sha256-YBT0kcCfETXZe0j7/f1YipNIuRrcppRVh1ecFS3cvNo=";
-        };
-        format = "setuptools";
-        doCheck = false; # Tests require postgres
-
-        propagatedBuildInputs = with final; [
-          django
-          psycopg
-          gunicorn
-        ];
-      };
-
       django-cte = prev.buildPythonPackage rec {
         pname = "django-cte";
         version = "1.3.3";
@@ -178,7 +159,15 @@ let
         ];
         pyproject = true;
       };
-
+      django-tenants = prev.django-tenants.overrideAttrs {
+        version = "3.6.1-unstable-2024-01-11";
+        src = fetchFromGitHub {
+          owner = "rissson";
+          repo = "django-tenants";
+          rev = "a7f37c53f62f355a00142473ff1e3451bb794eca";
+          hash = "sha256-YBT0kcCfETXZe0j7/f1YipNIuRrcppRVh1ecFS3cvNo=";
+        };
+      };
       # Use 3.14.0 until https://github.com/encode/django-rest-framework/issues/9358 is fixed.
       # Otherwise applying blueprints/default/default-brand.yaml fails with:
       #   authentik.flows.models.RelatedObjectDoesNotExist: FlowStageBinding has no target.
