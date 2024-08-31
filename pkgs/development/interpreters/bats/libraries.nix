@@ -53,12 +53,12 @@
 
   bats-detik = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-detik";
-    version = "1.3.0";
+    version = "1.3.2";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-detik";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-cbWNZ9a/Q9reJLQxUyTdqfLykOJcJKnoKB123ao8/xM=";
+      hash = "sha256-Lz5BPKHtgdakKRALPZFFgz91d07Ubk5rUgA+Ep2aoG8=";
     };
     dontBuild = true;
     installPhase = ''
