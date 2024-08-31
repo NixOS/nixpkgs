@@ -1,15 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, perl, pandoc, python3, git
-, par2cmdline ? null, par2Support ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  pandoc,
+  python3,
+  git,
+
+  par2Support ? true,
+  par2cmdline ? null,
 }:
 
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.3";
+  version = "0.33.4";
 
-  pythonDeps = with python3.pkgs; [ setuptools tornado ]
-    ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ];
+  pythonDeps =
+    with python3.pkgs;
+    [
+      setuptools
+      tornado
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      pyxattr
+      pylibacl
+      fuse
+    ];
 in
 
 stdenv.mkDerivation {
@@ -20,11 +38,18 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    hash = "sha256-w7yPs7hG4v0Kd9i2tYhWH7vW95MAMfI/8g61MB6bfps=";
+    hash = "sha256-9rWzHONcu4W/JcnDUGPbuGksroODbhdL6bNF+3Dd2ag=";
   };
 
-  buildInputs = [ git python3 ];
-  nativeBuildInputs = [ pandoc perl makeWrapper ];
+  buildInputs = [
+    git
+    python3
+  ];
+  nativeBuildInputs = [
+    pandoc
+    perl
+    makeWrapper
+  ];
 
   postPatch = "patchShebangs .";
 
@@ -37,7 +62,8 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+    "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   postInstall = ''
     wrapProgram $out/bin/bup \
