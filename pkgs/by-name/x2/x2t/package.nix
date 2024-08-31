@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./fontengine-format-security.patch
     # Not sure what's going on here...
     ./MsBinaryFile-pragma-regions.patch
+    # Interestingly only seems to pop up when debug mode is enabled
+    ./xlsx-missing-import.patch
   ];
 
   nativeBuildInputs = [ pkg-config qt5.full ];
@@ -80,6 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace \
       --replace-fail "fprintf(_file, sParam.c_str());" "fprintf(_file, \"%s\", sParam.c_str());" \
       DesktopEditor/doctrenderer/nativecontrol.h
+
+    echo "== DocxFormatLib =="
+    cd OOXML/Projects/Linux/DocxFormatLib
+    qmake "CONFIG+=debug" -o Makefile DocxFormatLib.pro
+    make
+    cd ../../../..
 
     echo "== cryptopp =="
     cd Common/3dParty/cryptopp/project
@@ -131,11 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     cd OOXML/Projects/Linux/PPTXFormatLib
     qmake "CONFIG+=debug" -o Makefile PPTXFormatLib.pro
-    make
-    cd ../../../..
-
-    cd OOXML/Projects/Linux/DocxFormatLib
-    qmake "CONFIG+=debug" -o Makefile DocxFormatLib.pro
     make
     cd ../../../..
 
