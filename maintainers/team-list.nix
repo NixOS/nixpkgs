@@ -306,6 +306,7 @@ with lib.maintainers;
       leona
       osnyx
       ma27
+      laalsaas
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
