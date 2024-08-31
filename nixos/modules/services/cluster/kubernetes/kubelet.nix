@@ -66,6 +66,7 @@ let
     // lib.optionalAttrs (cfg.clusterDomain != "")  { clusterDomain = cfg.clusterDomain; }
     // lib.optionalAttrs (cfg.clusterDns != "")     { clusterDNS = [ cfg.clusterDns ] ; }
     // lib.optionalAttrs (cfg.featureGates != {})   { featureGates = cfg.featureGates; }
+    // lib.optionalAttrs (cfg.extraConfig != {})    cfg.extraConfig
   ));
 
   manifestPath = "kubernetes/manifests";
@@ -182,6 +183,12 @@ in
       description = "Kubernetes kubelet extra command line options.";
       default = "";
       type = separatedString " ";
+    };
+
+    extraConfig = mkOption {
+      description = "Kubernetes kubelet extra configuration file entries.";
+      default = {};
+      type = attrsOf attrs;
     };
 
     featureGates = mkOption {
