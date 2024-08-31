@@ -246,7 +246,7 @@ in
       }
       {
         assertion = cfg.minSpareServers < cfg.maxSpareServers;
-        message = "services.hydra.minSpareServers cannot be bigger than servives.hydra.maxSpareServers";
+        message = "services.hydra.minSpareServers cannot be bigger than services.hydra.maxSpareServers";
       }
     ];
 
