@@ -14865,6 +14865,8 @@ with pkgs;
 
   dasm = callPackage ../development/compilers/dasm { };
 
+  codd = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../development/tools/database/codd { });
+
   dbmate = callPackage ../development/tools/database/dbmate { };
 
   dbmonster = callPackage ../tools/security/dbmonster { };
