@@ -11,7 +11,7 @@ let
   '';
   securityWarning = ''
     The fcgiwrap module is configured with a global shared instance.
-    This has security implications: <TODO: advisory link>.
+    This has security implications. See advisory: https://discourse.nixos.org/t/51419
     Isolated instances should instead be configured through `services.fcgiwrap.instances.*'.
     The global options at `services.fcgiwrap.*` will be removed in NixOS 24.11.
   '';

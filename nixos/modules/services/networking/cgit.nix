@@ -178,7 +178,7 @@ in
     warnings = flatten (flip mapAttrsToList cfgs (inst: cfg:
       optional (cfg.user == "root") ''
         `services.cgit.${inst}` is configured to run as root.
-        This has security implications: <TODO: advisory link>.
+        This has security implications. See advisory: https://discourse.nixos.org/t/51419
         It is recommended to set an unprivileged user explicitly.
         This default user will be set to "cgit" in NixOS 24.11.
       ''
