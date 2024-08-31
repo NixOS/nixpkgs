@@ -5,7 +5,7 @@
 }:
 
 buildNpmPackage rec {
-  pname = "ha-floorplan";
+  pname = "floorplan";
   version = "1.0.44";
 
   src = fetchFromGitHub {
