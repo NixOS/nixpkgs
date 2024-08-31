@@ -28,16 +28,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFmWZlDcsSk+7EGkoK0SkAhNsrIQa55IRIVqisX3zqE=";
+    hash = "sha256-W5G7osV4du6w/BfyY9YrDzorcLNizRsoz70RMfO2AbY=";
   };
 
-  cargoHash = "sha256-8ZENe576gqm+FkQPCgz6mScqdacHilARFWmfe+kDL2A=";
+  cargoHash = "sha256-gJrzOK6vPPBgsQFkKrbMql00XSfKGjgpZhYJLTURxoI=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
@@ -110,10 +110,20 @@ rustPlatform.buildRustPackage rec {
       inherit (nixosTests) kanidm kanidm-provisioning;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      # avoid spurious releases and tags such as "debs"
+      extraArgs = [
+        "-vr"
+        "v(.*)"
+      ];
+    };
+
     inherit enableSecretProvisioning;
     withSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
   };
+
+  # can take over 4 hours on 2 cores and needs 16GB+ RAM
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";

@@ -33,7 +33,7 @@ in {
   src = fetchurl {
     inherit hash;
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-${suffix}";
-    name = lib.optionalString stdenv.isLinux "${pname}-${version}.AppImage";
+    name = lib.optionalString stdenv.isLinux "logseq-${version}.AppImage";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -52,35 +52,35 @@ in {
    appimageContents = appimageTools.extract { inherit pname src version; };
   in
   ''
-    mkdir -p $out/bin $out/share/${pname} $out/share/applications
-    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
-    cp -a ${appimageContents}/Logseq.desktop $out/share/applications/${pname}.desktop
+    mkdir -p $out/bin $out/share/logseq $out/share/applications
+    cp -a ${appimageContents}/{locales,resources} $out/share/logseq
+    cp -a ${appimageContents}/Logseq.desktop $out/share/applications/logseq.desktop
 
     # remove the `git` in `dugite` because we want the `git` in `nixpkgs`
-    chmod +w -R $out/share/${pname}/resources/app/node_modules/dugite/git
-    chmod +w $out/share/${pname}/resources/app/node_modules/dugite
-    rm -rf $out/share/${pname}/resources/app/node_modules/dugite/git
-    chmod -w $out/share/${pname}/resources/app/node_modules/dugite
+    chmod +w -R $out/share/logseq/resources/app/node_modules/dugite/git
+    chmod +w $out/share/logseq/resources/app/node_modules/dugite
+    rm -rf $out/share/logseq/resources/app/node_modules/dugite/git
+    chmod -w $out/share/logseq/resources/app/node_modules/dugite
 
     mkdir -p $out/share/pixmaps
-    ln -s $out/share/${pname}/resources/app/icons/logseq.png $out/share/pixmaps/${pname}.png
+    ln -s $out/share/logseq/resources/app/icons/logseq.png $out/share/pixmaps/logseq.png
 
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace Exec=Logseq Exec=${pname} \
-      --replace Icon=Logseq Icon=${pname}
+    substituteInPlace $out/share/applications/logseq.desktop \
+      --replace Exec=Logseq Exec=logseq \
+      --replace Icon=Logseq Icon=logseq
   '') + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications/Logseq.app,bin}
     cp -R . $out/Applications/Logseq.app
-    makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/${pname}
+    makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
   '' + ''
     runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/logseq \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
-      --add-flags $out/share/${pname}/resources/app \
+      --add-flags $out/share/logseq/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 

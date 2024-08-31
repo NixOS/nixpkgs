@@ -1,31 +1,41 @@
 {
   lib,
-  anyio,
   buildPythonPackage,
-  cached-property,
-  dirty-equals,
-  distro,
   fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatchling,
-  httpx,
-  numpy,
-  pandas,
-  pandas-stubs,
-  pydantic,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
   pythonOlder,
-  respx,
+
+  # build-system
+  hatchling,
+  hatch-fancy-pypi-readme,
+
+  # dependencies
+  anyio,
+  cached-property,
+  distro,
+  httpx,
+  jiter,
+  pydantic,
   sniffio,
   tqdm,
   typing-extensions,
+
+  numpy,
+  pandas,
+  pandas-stubs,
+
+  # check deps
+  pytestCheckHook,
+  dirty-equals,
+  inline-snapshot,
+  pytest-asyncio,
+  pytest-mock,
+  respx,
+
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.39.0";
+  version = "1.42.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -34,7 +44,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jOtJu5Luvwnel2GLBjZHDP3MuXTWXFZKYHQfdmyEyTs=";
+    hash = "sha256-Pj4MmylUB6JGTlueOgtAd9RgOxn3QoPe2Xf1hYnOZ9c=";
   };
 
   build-system = [
@@ -43,13 +53,14 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    httpx
-    pydantic
-    typing-extensions
     anyio
     distro
+    httpx
+    jiter
+    pydantic
     sniffio
     tqdm
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   passthru.optional-dependencies = {
@@ -64,10 +75,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    dirty-equals
+    inline-snapshot
     pytest-asyncio
     pytest-mock
     respx
-    dirty-equals
   ];
 
   pytestFlagsArray = [
@@ -77,10 +89,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests make network requests
-    "test_streaming_response"
     "test_copy_build_request"
-
-    # Test fails with pytest>=8
     "test_basic_attribute_access_works"
   ];
 

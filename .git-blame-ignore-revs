@@ -154,6 +154,9 @@ bdfde18037f8d9f9b641a4016c8ada4dc4cbf856
 # nixos/ollama: format with nixfmt-rfc-style (#329561)
 246d1ee533810ac1946d863bbd9de9b525818d56
 
+# steam: cleanup (#216972)
+ad815aebfbfe1415ff6436521d545029c803c3fb
+
 # nixos/nvidia: apply nixfmt-rfc-style (#313440)
 fbdcdde04a7caa007e825a8b822c75fab9adb2d6
 
@@ -165,3 +168,6 @@ fc7a83f8b62e90de5679e993d4d49ca014ea013d
 
 # nrr: format with nixfmt-rfc-style (#334578)
 cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
+
+# nixos/kanidm: inherit lib, nixfmt
+8f18393d380079904d072007fb19dc64baef0a3a

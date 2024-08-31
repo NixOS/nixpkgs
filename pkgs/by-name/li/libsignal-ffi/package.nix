@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, runCommand, xcodebuild, protobuf, boringssl }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, runCommand, xcodebuild, protobuf, boringssl, darwin }:
 let
   # boring-sys expects the static libraries in build/ instead of lib/
   boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-MFTTrIJ9+1NgaL9KD4t0KYR2feHow+HtyYXQWJgKilM=";
   };
+
+  buildInputs = lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeBuildInputs = [
     protobuf

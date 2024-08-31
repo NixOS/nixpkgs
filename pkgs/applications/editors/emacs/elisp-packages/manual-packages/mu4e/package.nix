@@ -27,6 +27,8 @@ elpaBuild {
     popd
   '';
 
+  ignoreCompilationError = false;
+
   meta = mu.meta // {
     description = "Full-featured e-mail client";
   };

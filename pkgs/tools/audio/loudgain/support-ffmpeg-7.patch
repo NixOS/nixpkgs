@@ -1,0 +1,123 @@
+From 50741b98fb4b932759f05e8d208d80d93bcc8261 Mon Sep 17 00:00:00 2001
+From: Hugh McMaster <hugh.mcmaster@outlook.com>
+Date: Mon, 29 Jul 2024 23:15:35 +1000
+Subject: [PATCH] src/scan.c: Update for FFmpeg 7.0
+
+---
+ src/scan.c | 40 +++++++++++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 19 deletions(-)
+
+diff --git a/src/scan.c b/src/scan.c
+index 85b36b3..91eb261 100644
+--- a/src/scan.c
++++ b/src/scan.c
+@@ -119,7 +119,7 @@ int scan_file(const char *file, unsigned index) {
+ 	AVCodecContext *ctx;
+ 
+ 	AVFrame *frame;
+-	AVPacket packet;
++	AVPacket *packet;
+ 
+ 	SwrContext *swr;
+ 
+@@ -177,8 +177,8 @@ int scan_file(const char *file, unsigned index) {
+ 	}
+ 
+   // try to get default channel layout (they aren’t specified in .wav files)
+-  if (!ctx->channel_layout)
+-    ctx->channel_layout = av_get_default_channel_layout(ctx->channels);
++  if (ctx->ch_layout.order == AV_CHANNEL_ORDER_UNSPEC)
++    av_channel_layout_default(&ctx->ch_layout, ctx->ch_layout.nb_channels);
+ 
+   // show some information about the file
+   // only show bits/sample where it makes sense
+@@ -187,21 +187,21 @@ int scan_file(const char *file, unsigned index) {
+     snprintf(infotext, sizeof(infotext), "%d bit, ",
+       ctx->bits_per_raw_sample > 0 ? ctx->bits_per_raw_sample : ctx->bits_per_coded_sample);
+   }
+-  av_get_channel_layout_string(infobuf, sizeof(infobuf), -1, ctx->channel_layout);
++  av_channel_layout_describe(&ctx->ch_layout, infobuf, sizeof(infobuf));
+   ok_printf("Stream #%d: %s, %s%d Hz, %d ch, %s",
+-    stream_id, codec->long_name, infotext, ctx->sample_rate, ctx->channels, infobuf);
++    stream_id, codec->long_name, infotext, ctx->sample_rate, ctx->ch_layout.nb_channels, infobuf);
+ 
+ 	scan_codecs[index] = codec -> id;
+ 
+-	av_init_packet(&packet);
++	packet = av_packet_alloc();
+ 
+-	packet.data = buffer;
+-	packet.size = buffer_size;
++	packet->data = buffer;
++	packet->size = buffer_size;
+ 
+ 	swr = swr_alloc();
+ 
+ 	*ebur128 = ebur128_init(
+-		ctx -> channels, ctx -> sample_rate,
++		ctx->ch_layout.nb_channels, ctx->sample_rate,
+ 		EBUR128_MODE_S | EBUR128_MODE_I | EBUR128_MODE_LRA |
+ 		EBUR128_MODE_SAMPLE_PEAK | EBUR128_MODE_TRUE_PEAK
+ 	);
+@@ -222,10 +222,10 @@ int scan_file(const char *file, unsigned index) {
+ 
+ 	progress_bar(0, 0, 0, 0);
+ 
+-	while (av_read_frame(container, &packet) >= 0) {
+-		if (packet.stream_index == stream_id) {
++	while (av_read_frame(container, packet) >= 0) {
++		if (packet->stream_index == stream_id) {
+ 
+-      rc = avcodec_send_packet(ctx, &packet);
++      rc = avcodec_send_packet(ctx, packet);
+       if (rc < 0) {
+         err_printf("Error while sending a packet to the decoder");
+         break;
+@@ -252,7 +252,7 @@ int scan_file(const char *file, unsigned index) {
+       av_frame_unref(frame);
+     }
+ 
+-		av_packet_unref(&packet);
++		av_packet_unref(packet);
+ 	}
+ 
+   // complete progress bar for very short files (only cosmetic)
+@@ -263,9 +263,11 @@ int scan_file(const char *file, unsigned index) {
+ 
+ 	av_frame_free(&frame);
+ 
++        av_packet_free(&packet);
++
+ 	swr_free(&swr);
+ 
+-	avcodec_close(ctx);
++	avcodec_free_context(&ctx);
+ 
+ 	avformat_close_input(&container);
+ 
+@@ -413,12 +415,12 @@ static void scan_frame(ebur128_state *ebur128, AVFrame *frame,
+ 	int                 out_linesize;
+ 	enum AVSampleFormat out_fmt = AV_SAMPLE_FMT_S16;
+ 
+-	av_opt_set_channel_layout(swr, "in_channel_layout", frame -> channel_layout, 0);
+-	av_opt_set_channel_layout(swr, "out_channel_layout", frame -> channel_layout, 0);
++	av_opt_set_chlayout(swr, "in_chlayout", &frame->ch_layout, 0);
++	av_opt_set_chlayout(swr, "out_chlayout", &frame->ch_layout, 0);
+ 
+   // add channel count to properly handle .wav reading
+-  av_opt_set_int(swr, "in_channel_count",  frame -> channels, 0);
+-  av_opt_set_int(swr, "out_channel_count", frame -> channels, 0);
++  av_opt_set_int(swr, "in_channel_count",  frame->ch_layout.nb_channels, 0);
++  av_opt_set_int(swr, "out_channel_count", frame->ch_layout.nb_channels, 0);
+ 
+   av_opt_set_int(swr, "in_sample_rate", frame -> sample_rate, 0);
+   av_opt_set_int(swr, "out_sample_rate", frame -> sample_rate, 0);
+@@ -434,7 +436,7 @@ static void scan_frame(ebur128_state *ebur128, AVFrame *frame,
+ 	}
+ 
+ 	out_size = av_samples_get_buffer_size(
+-		&out_linesize, frame -> channels, frame -> nb_samples, out_fmt, 0
++		&out_linesize, frame->ch_layout.nb_channels, frame->nb_samples, out_fmt, 0
+ 	);
+ 
+ 	out_data = av_malloc(out_size);

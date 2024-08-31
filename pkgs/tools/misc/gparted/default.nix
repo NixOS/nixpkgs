@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gparted/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/gparted/gparted-${version}.tar.gz";
     sha256 = "sha256-m59Rs85JTdy1mlXhrmZ5wJQ2YE4zHb9aU21g3tbG6ls=";
   };
 

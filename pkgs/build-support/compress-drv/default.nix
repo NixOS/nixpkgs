@@ -41,7 +41,7 @@
   compressDrv pkgs.spdx-license-list-data.json {
     formats = ["json"];
     compressors = {
-      "json" = "${zopfli}/bin/zopfli --keep {}";
+      gz = "${zopfli}/bin/zopfli --keep {}";
     };
   }
   =>

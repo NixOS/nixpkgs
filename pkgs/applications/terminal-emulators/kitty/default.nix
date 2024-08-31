@@ -2,6 +2,7 @@
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
+, nerdfonts
 , lcms2
 , librsync
 , openssl
@@ -15,6 +16,7 @@
 , UserNotifications
 , libcanberra
 , libicns
+, wayland-scanner
 , libpng
 , python3
 , zlib
@@ -31,20 +33,20 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.35.2";
+  version = "0.36.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5ZkQfGlW7MWYCJZSwK/u8x9jKrZEqupsNvW30DLipDM=";
+    hash = "sha256-7+MxxgQQlAje7klfJvvEWe8CfxyN0oTGQJ/QOORFUsY=";
   };
 
   goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-NzDA9b3RAfMx+Jj7cSF8pEsKUkoBECBUXl2QFSmkmwM=";
+    vendorHash = "sha256-YN4sSdDNDIVgtcykg60H0bZEryRHJJfZ5rXWUMYXGr4=";
   }).goModules;
 
   buildInputs = [
@@ -81,10 +83,16 @@ buildPythonApplication rec {
     sphinxext-opengraph
     sphinx-inline-tabs
     go
+    fontconfig
+    (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   outputs = [ "out" "terminfo" "shell_integration" "kitten" ];
 

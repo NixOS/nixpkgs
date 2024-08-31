@@ -5,26 +5,28 @@
 , icalendar
 , icalevents
 , lxml
+, pycryptodome
 , recurring-ical-events
 }:
 
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "waste_collection_schedule";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hacs_${domain}";
     rev = "refs/tags/${version}";
-    hash = "sha256-nStfENwlPXPEvK13e8kUpPav6ul6XQO/rViHRHlZpKI=";
+    hash = "sha256-BRxBZecOg8R4yF1lVEfOWMmuYK4JQ1ORsY4bclVYOow=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     icalendar
     icalevents
     lxml
+    pycryptodome
     recurring-ical-events
   ];
 

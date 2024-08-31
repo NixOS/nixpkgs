@@ -1,6 +1,6 @@
 let
   majorMinorToVersionMap = {
-    "14" = "14.1.0";
+    "14" = "14.2.0";
     "13" = "13.3.0";
     "12" = "12.4.0";
     "11" = "11.5.0";
@@ -18,7 +18,7 @@ let
 
   # TODO(amjoseph): convert older hashes to SRI form
   srcHashForVersion = version: {
-    "14.1.0" = "sha256-4oPGVJh6/j3p2AgLwL15U0tcoNaBpzoR/ytdN2dCaEA=";
+    "14.2.0" = "sha256-p7Obxpy/niWCbFpgqyZHcAH3wI2FzsBLwOKcq+1vPMk=";
     "13.3.0" = "sha256-CEXpYhyVQ6E/SE6UWEpJ/8ASmXDpkUYkI1/B0GGgwIM=";
     "12.4.0" = "sha256-cE9lJgTMvMsUvavzR4yVEciXiLEss7v/3tNzQZFqkXU=";
     "11.5.0" = "sha256-puIYaOrVRc+H8MAfhCduS1KB1nIJhZHByJYkHwk2NHg=";

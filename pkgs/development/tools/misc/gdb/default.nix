@@ -27,6 +27,7 @@ let
 in
 
 assert pythonSupport -> python3 != null;
+assert lib.asserts.assertMsg (stdenv.targetPlatform.system != "aarch64-darwin") "GDB does not support aarch64-darwin as a target";
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
@@ -154,8 +155,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    # GDB upstream does not support ARM darwin
-    platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ ["x86_64-darwin"];
+    platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ darwin;
     maintainers = with lib.maintainers; [ pierron globin lsix ];
   };
 }

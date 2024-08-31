@@ -150,7 +150,8 @@ stdenv.mkDerivation {
       stripLen = 1;
       extraPrefix = "libs/python/";
     })
-  ];
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch;
 
   meta = with lib; {
     homepage = "http://boost.org/";

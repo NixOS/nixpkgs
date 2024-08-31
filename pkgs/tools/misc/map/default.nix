@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/${pname}"
-    cp README* LICENSE "$out/share/doc/${pname}"
+    mkdir -p "$out/share/doc/map"
+    cp README* LICENSE "$out/share/doc/map"
   '';
 
   doCheck = true;

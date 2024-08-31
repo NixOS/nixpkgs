@@ -22,6 +22,7 @@ dont-distribute-packages:
  - Advise-me
  - AlgoRhythm
  - AlignmentAlgorithms
+ - Allure
  - AndroidViewHierarchyImporter
  - Annotations
  - ApplePush
@@ -246,6 +247,7 @@ dont-distribute-packages:
  - KiCS-prophecy
  - LDAPv3
  - LPPaver
+ - LambdaHack
  - LambdaINet
  - LambdaPrettyQuote
  - LambdaShell
@@ -462,7 +464,6 @@ dont-distribute-packages:
  - aivika-distributed
  - alg
  - algebra-checkers
- - algebra-driven-design
  - algebra-sql
  - algebraic
  - algebraic-graphs-io
@@ -627,7 +628,6 @@ dont-distribute-packages:
  - beam-automigrate
  - beam-postgres
  - beam-th
- - bearriver
  - beautifHOL
  - bech32-th
  - bein
@@ -726,7 +726,6 @@ dont-distribute-packages:
  - buster-network
  - butterflies
  - bytable
- - bytelog
  - bytestring-builder-varword
  - bytestring-read
  - bytetrie
@@ -804,7 +803,7 @@ dont-distribute-packages:
  - chart-cli
  - chart-svg
  - chart-svg-various
- - chart-svg_0_6_0_0
+ - chart-svg_0_6_1_0
  - chart-unit
  - chassis
  - chatty
@@ -826,6 +825,7 @@ dont-distribute-packages:
  - chu2
  - chuchu
  - chunks
+ - circuit-notation
  - citation-resolve
  - citeproc-hs-pandoc-filter
  - clac
@@ -1052,6 +1052,8 @@ dont-distribute-packages:
  - data-basic
  - data-cycle
  - data-default-extra
+ - data-effects
+ - data-effects-th
  - data-layer
  - data-lens-ixset
  - data-object-json
@@ -1207,7 +1209,6 @@ dont-distribute-packages:
  - dsh-sql
  - dsmc-tools
  - dtd
- - dunai-test
  - dvda
  - dynamic-cabal
  - dynamic-pipeline
@@ -1348,12 +1349,10 @@ dont-distribute-packages:
  - feature-flipper-postgres
  - fedora-composes
  - fedora-img-dl
- - fedora-repoquery
  - feed-gipeda
  - feed-translator
  - feed2lj
  - feed2twitter
- - feedback
  - fei-base
  - fei-dataiter
  - fei-datasets
@@ -1972,7 +1971,7 @@ dont-distribute-packages:
  - hasloGUI
  - hasmtlib
  - hasql-cursor-query
- - hasql-interpolate_1_0_0_0
+ - hasql-interpolate_1_0_1_0
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
@@ -2107,6 +2106,8 @@ dont-distribute-packages:
  - hmeap-utils
  - hmep
  - hmt-diagrams
+ - hnix-store-json
+ - hnix-store-remote_0_7_0_0
  - hnormalise
  - hoauth2-demo
  - hoauth2-providers-tutorial
@@ -2463,6 +2464,7 @@ dont-distribute-packages:
  - knit-haskell
  - koji-install
  - koji-tool
+ - koji-tool_1_2
  - korfu
  - ks-test
  - kubernetes-client
@@ -2762,6 +2764,7 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
+ - monomer
  - monomer-flatpak-example
  - monte-carlo
  - moo
@@ -2889,7 +2892,6 @@ dont-distribute-packages:
  - network-stream
  - network-topic-models
  - network-transport-inmemory
- - network-unexceptional
  - network-uri-json
  - network-websocket
  - neural
@@ -2911,7 +2913,7 @@ dont-distribute-packages:
  - nonlinear-optimization-backprop
  - not-gloss
  - not-gloss-examples
- - nothunks_0_2_1_0
+ - nothunks_0_2_1_1
  - notmuch-web
  - now-haskell
  - nri-env-parser
@@ -3320,7 +3322,6 @@ dont-distribute-packages:
  - reddit
  - redis-io
  - rediscaching-haxl
- - reduce-equations
  - refh
  - reflex-animation
  - reflex-backend-wai
@@ -3520,7 +3521,11 @@ dont-distribute-packages:
  - scrabble-bot
  - scrapbook
  - scroll
+ - sdl-try-drivers
+ - sdl2-cairo
+ - sdl2-gfx
  - sdl2-sprite
+ - sdl2-ttf
  - sdp-binary
  - sdp-deepseq
  - sdp-hashable
@@ -3698,7 +3703,6 @@ dont-distribute-packages:
  - soap-tls
  - sock2stream
  - socket-io
- - sockets
  - sockets-and-pipes
  - socketson
  - solga-swagger
@@ -3835,7 +3839,6 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - sys-process
  - syslog
- - systemd-api
  - systemstats
  - systranything
  - t3-client

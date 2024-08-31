@@ -52,8 +52,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # wrapGAppsHook4 propogates gtk4 -- which provides gtk4-update-icon-cache instead
-  preInstall = ''
-    substituteInPlace /build/source/meson_post_install.py \
+  postPatch = ''
+    substituteInPlace meson_post_install.py \
       --replace-fail gtk-update-icon-cache gtk4-update-icon-cache
   '';
 

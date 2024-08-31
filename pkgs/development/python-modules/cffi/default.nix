@@ -21,12 +21,12 @@ if isPyPy then
 else
   buildPythonPackage rec {
     pname = "cffi";
-    version = "1.16.0";
+    version = "1.17.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-vLPvQ+WGZbvaL7GYaY/K5ndkg+DEpjGqVkeAbCXgLMA=";
+      hash = "sha256-8xV2JLdVi5FMsDn9Gvc15egEmofIF8whUQmtHId533Y=";
     };
 
     patches =
@@ -42,19 +42,6 @@ else
         # deemed safe to trust in cffi.
         #
         ./darwin-use-libffi-closures.diff
-
-        (fetchpatch2 {
-          # https://github.com/python-cffi/cffi/pull/34
-          name = "python-3.13-compat-1.patch";
-          url = "https://github.com/python-cffi/cffi/commit/49127c6929bfc7186fbfd3819dd5e058ad888de4.patch";
-          hash = "sha256-RbspsjwDf4uwJxMqG0JZGvipd7/JqXJ2uVB7PO4Qcms=";
-        })
-        (fetchpatch2 {
-          # https://github.com/python-cffi/cffi/pull/24
-          name = "python-3.13-compat-2.patch";
-          url = "https://github.com/python-cffi/cffi/commit/14723b0bbd127790c450945099db31018d80fa83.patch";
-          hash = "sha256-H5rFgRRTr27l5S6REo8+7dmPDQW7WXhP4f4DGZjdi+s=";
-        })
       ]
       ++ lib.optionals (stdenv.cc.isClang && (ccVersion == "boot" || lib.versionAtLeast ccVersion "13")) [
         # -Wnull-pointer-subtraction is enabled with -Wextra. Suppress it to allow the following tests

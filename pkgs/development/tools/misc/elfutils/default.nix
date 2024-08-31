@@ -107,6 +107,6 @@ stdenv.mkDerivation rec {
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
     license = with licenses; [ gpl2Only lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ eelco r-burns ];
+    maintainers = with maintainers; [ r-burns ];
   };
 }

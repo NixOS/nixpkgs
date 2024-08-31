@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "QDiskInfo";
-  version = "0.2";
+  pname = "qdiskinfo";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "edisionnano";
     repo = "QDiskInfo";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-YLNpQOmh/exBJDuYRUEvzNv/El4x+PttEoj+aCur9wg=";
+    hash = "sha256-0zF3Nc5K8+K68HOSy30ieYvYP9/oSkTe0+cp0hVo9Gs=";
   };
 
   nativeBuildInputs = [

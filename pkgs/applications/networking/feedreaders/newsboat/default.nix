@@ -66,5 +66,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dotlambda nicknovitski ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;
+    mainProgram = "newsboat";
   };
 }

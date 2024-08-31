@@ -361,6 +361,22 @@ modifications.
 
 Do pay attention to passing in the right Python version!
 
+#### `mkPythonMetaPackage` function {#mkpythonmetapackage-function}
+
+This will create a meta package containing [metadata files](https://packaging.python.org/en/latest/specifications/recording-installed-packages/) to satisfy a dependency on a package, without it actually having been installed into the environment.
+In nixpkgs this is used to package Python packages with split binary/source distributions such as [psycopg2](https://pypi.org/project/psycopg2/)/[psycopg2-binary](https://pypi.org/project/psycopg2-binary/).
+
+```nix
+mkPythonMetaPackage {
+  pname = "psycopg2-binary";
+  inherit (psycopg2) optional-dependencies version;
+  dependencies = [ psycopg2 ];
+  meta = {
+    inherit (psycopg2.meta) description homepage;
+  };
+}
+```
+
 #### `python.buildEnv` function {#python.buildenv-function}
 
 Python environments can be created using the low-level `pkgs.buildEnv` function.

@@ -19,8 +19,8 @@
           message = "`system.etc.overlay.enable` requires `boot.initrd.systemd.enable`";
         }
         {
-          assertion = (!config.system.etc.overlay.mutable) -> config.systemd.sysusers.enable;
-          message = "`system.etc.overlay.mutable = false` requires `systemd.sysusers.enable`";
+          assertion = (!config.system.etc.overlay.mutable) -> (config.systemd.sysusers.enable || config.services.userborn.enable);
+          message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
         }
         {
           assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6";
@@ -64,7 +64,7 @@
             ] ++ lib.optionals (!config.system.etc.overlay.mutable) [
               "ro"
             ]);
-            wantedBy = [ "initrd-fs.target" ];
+            requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
             requires = lib.mkIf config.system.etc.overlay.mutable [ "rw-etc.service" ];
             after = lib.mkIf config.system.etc.overlay.mutable [ "rw-etc.service" ];

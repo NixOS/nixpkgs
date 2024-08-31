@@ -25,6 +25,8 @@
   AVKit,
   CoreAudio,
   swift,
+
+  mesa,
 }:
 
 let
@@ -336,7 +338,7 @@ python3.pkgs.buildPythonApplication {
     '';
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [
       euank
       oxij

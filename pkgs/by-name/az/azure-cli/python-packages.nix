@@ -42,27 +42,30 @@ let
           ./0001-optional-immutable-configuration-dir.patch
         ];
 
-        propagatedBuildInputs = with self; [
-          argcomplete
-          azure-cli-telemetry
-          azure-common
-          azure-mgmt-core
-          cryptography
-          distro
-          humanfriendly
-          jmespath
-          knack
-          msal-extensions
-          msal
-          msrestazure
-          packaging
-          paramiko
-          pkginfo
-          psutil
-          pyjwt
-          pyopenssl
-          requests
-        ];
+        propagatedBuildInputs =
+          with self;
+          [
+            argcomplete
+            azure-cli-telemetry
+            azure-common
+            azure-mgmt-core
+            cryptography
+            distro
+            humanfriendly
+            jmespath
+            knack
+            msal-extensions
+            msal
+            msrestazure
+            packaging
+            paramiko
+            pkginfo
+            psutil
+            pyjwt
+            pyopenssl
+            requests
+          ]
+          ++ requests.optional-dependencies.socks;
 
         nativeCheckInputs = with self; [ pytest ];
 

@@ -75,8 +75,8 @@
 # @raitobezarius is not "code owner", but is listed here to be notified of changes
 # pertaining to the Nix package manager.
 # i.e. no authority over those files.
-pkgs/tools/package-management/nix/                    @raitobezarius
-nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+pkgs/tools/package-management/nix/                    @NixOS/nix-team @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -111,7 +111,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /nixos/virtualisation/qemu-vm.nix           @raitobezarius
 
 # ACME
-/nixos/modules/security/acme                @arianvp @flokli @aanderse # no merge permission: @m1cr0man @emilazy
+/nixos/modules/security/acme                @arianvp @flokli @aanderse @emilazy # no merge permission: @m1cr0man
 
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd

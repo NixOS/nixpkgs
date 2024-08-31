@@ -7,6 +7,7 @@
   autoreconfHook,
   bison,
   bubblewrap,
+  buildPackages,
   bzip2,
   coreutils,
   curl,
@@ -40,6 +41,7 @@
   p11-kit,
   pkg-config,
   polkit,
+  pkgsCross,
   python3,
   shared-mime-info,
   socat,
@@ -205,8 +207,12 @@ stdenv.mkDerivation (finalAttrs: {
       PATH=${lib.makeBinPath [ vsc-py ]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
 
       substituteInPlace configure.ac \
-        --replace-fail '$BWRAP --version' 'echo ${bubblewrap.version}' \
-        --replace-fail '$DBUS_PROXY --version' 'echo ${xdg-dbus-proxy.version}'
+        --replace-fail '$BWRAP --' ${
+          lib.escapeShellArg (stdenv.hostPlatform.emulator buildPackages + " $BWRAP --")
+        } \
+        --replace-fail '$DBUS_PROXY --' ${
+          lib.escapeShellArg (stdenv.hostPlatform.emulator buildPackages + " $DBUS_PROXY --")
+        }
     '';
 
   passthru = {
@@ -218,14 +224,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
 
     tests = {
+      cross = pkgsCross.aarch64-multiplatform.flatpak;
+
       installedTests = nixosTests.installed-tests.flatpak;
 
       validate-icon = runCommand "test-icon-validation" { } ''
         ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon \
           --sandbox 512 512 \
-          "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg" > "$out"
+          "${nixos-icons}/share/icons/hicolor/512x512/apps/nix-snowflake.png" > "$out"
 
-        grep format=svg "$out"
+        grep format=png "$out"
       '';
 
       version = testers.testVersion { package = finalAttrs.finalPackage; };

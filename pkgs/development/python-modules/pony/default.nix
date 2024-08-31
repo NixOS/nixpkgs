@@ -3,35 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "pony";
-  version = "0.7.17";
+  version = "0.7.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "ponyorm";
     repo = "pony";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wBqw+YHKlxYplgsYL1pbkusHyPfCaVPcH/Yku6WDYbE=";
+    hash = "sha256-2qGkHPBbfFrjJatKVa44bDbn/i3/YH/8LWd8CXyFRqo=";
   };
 
-  patches = [
-    # https://github.com/ponyorm/pony/pull/713
-    (fetchpatch {
-      name = "py312-compat.patch";
-      url = "https://github.com/ponyorm/pony/commit/5a37f6d59b6433d17d6d56b54f3726190e98c98f.patch";
-      hash = "sha256-niOoANOYHqrcmEXRZEDew2BM8P/s7UFnn0qpgB8V0Mk=";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

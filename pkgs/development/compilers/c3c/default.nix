@@ -8,7 +8,7 @@
   libxml2,
   libffi,
   xar,
-  testers,
+  versionCheckHook,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
@@ -48,9 +48,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Compiler for the C3 language";

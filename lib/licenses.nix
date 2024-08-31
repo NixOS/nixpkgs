@@ -229,6 +229,7 @@ lib.mapAttrs mkLicense ({
   };
 
   bsl11 = {
+    spdxId = "BUSL-1.1";
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
@@ -401,6 +402,12 @@ lib.mapAttrs mkLicense ({
   cecill-c = {
     spdxId = "CECILL-C";
     fullName  = "CeCILL-C Free Software License Agreement";
+  };
+
+  cockroachdb-community-license = {
+    fullName = "CockroachDB Community License Agreement";
+    url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
+    free = false;
   };
 
   cpal10 = {
@@ -826,11 +833,6 @@ lib.mapAttrs mkLicense ({
     fullName = "PNG Reference Library version 2";
   };
 
-  libssh2 = {
-    fullName = "libssh2 License";
-    url = "https://www.libssh2.org/license.html";
-  };
-
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
@@ -872,8 +874,6 @@ lib.mapAttrs mkLicense ({
     url = "https://opensource.org/licenses/MirOS";
   };
 
-  # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
@@ -882,6 +882,12 @@ lib.mapAttrs mkLicense ({
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
+  };
+
+  mit-modern = {
+    # Also known as Zsh license
+    spdxId = "MIT-Modern-Variant";
+    fullName = "MIT License Modern Variant";
   };
 
   mitAdvertising = {
@@ -1314,11 +1320,6 @@ lib.mapAttrs mkLicense ({
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
-  };
-
-  zsh = {
-    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
-    fullName = "Zsh License";
   };
 
   zpl20 = {
