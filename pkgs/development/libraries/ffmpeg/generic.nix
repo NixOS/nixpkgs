@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
+{ lib, config, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -81,6 +81,7 @@
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
+, withNpp ? withFullDeps && withUnfree && config.cudaSupport # Nvidia Performance Primitives-based code
 , withNvdec ? withHeadlessDeps && withNvcodec
 , withNvenc ? withHeadlessDeps && withNvcodec
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
@@ -333,6 +334,12 @@
 , CoreImage
 , VideoToolbox
 , xcode # unfree contains metalcc and metallib
+/*
+ *  Cuda Packages
+ */
+, cuda_cudart
+, cuda_nvcc
+, libnpp
 /*
  *  Testing
  */
@@ -610,6 +617,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMp3lame "libmp3lame")
     (enableFeature withMysofa "libmysofa")
+    (enableFeature withNpp "libnpp")
     (enableFeature withNvdec "nvdec")
     (enableFeature withNvenc "nvenc")
     (enableFeature withOpenal "openal")
@@ -762,6 +770,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
+  ++ optionals withNpp [ libnpp cuda_cudart cuda_nvcc ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
   ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
