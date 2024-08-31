@@ -228,7 +228,7 @@ in
           assert (lib.assertMsg namesAreUnique "Flashback WM names must be unique.");
           map
             (wm:
-              pkgs.gnome.gnome-flashback.mkSessionForWm {
+              pkgs.gnome-flashback.mkSessionForWm {
                 inherit (wm) wmName wmLabel wmCommand;
               }
             ) flashbackWms;
@@ -237,20 +237,20 @@ in
         enableGnomeKeyring = true;
       };
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-flashback
-      ] ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      systemd.packages = [
+        pkgs.gnome-flashback
+      ] ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      environment.systemPackages = with pkgs.gnome; [
-        gnome-flashback
+      environment.systemPackages = [
+        pkgs.gnome-flashback
         (pkgs.gnome-panel-with-modules.override {
           panelModulePackages = cfg.flashback.panelModulePackages;
         })
       ]
       # For /share/applications/${wmName}.desktop
-      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
+      ++ (map (wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
       # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
+      ++ (map (wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {

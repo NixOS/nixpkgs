@@ -45,10 +45,6 @@ in
 
   nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
 
-#### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
-
-  gnome-flashback = callPackage ./misc/gnome-flashback { };
-
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
   libgnome-keyring = lib.warn "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly." pkgs.libgnome-keyring; # Added on 2024-06-22.
@@ -96,6 +92,7 @@ in
   gnome-control-center = lib.warn "The ‘gnome.gnome-control-center’ was moved to top-level. Please use ‘pkgs.gnome-control-center’ directly." pkgs.gnome-control-center; # Added on 2024-08-28.
   gnome-dictionary = lib.warn "The ‘gnome.gnome-dictionary’ was moved to top-level. Please use ‘pkgs.gnome-dictionary’ directly." pkgs.gnome-dictionary; # Added on 2024-06-22.
   gnome-disk-utility = lib.warn "The ‘gnome.gnome-disk-utility’ was moved to top-level. Please use ‘pkgs.gnome-disk-utility’ directly." pkgs.gnome-disk-utility; # Added on 2024-06-22.
+  gnome-flashback = lib.warn "The ‘gnome.gnome-flashback’ was moved to top-level. Please use ‘pkgs.gnome-flashback’ directly." pkgs.gnome-flashback; # Added on 2024-08-31.
   gnome-font-viewer = lib.warn "The ‘gnome.gnome-font-viewer’ was moved to top-level. Please use ‘pkgs.gnome-font-viewer’ directly." pkgs.gnome-font-viewer; # Added on 2024-06-22.
   gnome-initial-setup = lib.warn "The ‘gnome.gnome-initial-setup’ was moved to top-level. Please use ‘pkgs.gnome-initial-setup’ directly." pkgs.gnome-initial-setup; # Added on 2024-08-11.
   gnome-keyring = lib.warn "The ‘gnome.gnome-keyring’ was moved to top-level. Please use ‘pkgs.gnome-keyring’ directly." pkgs.gnome-keyring; # Added on 2024-06-22.

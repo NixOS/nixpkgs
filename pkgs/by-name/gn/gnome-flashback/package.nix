@@ -128,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-flashback";
-      attrPath = "gnome.gnome-flashback";
       versionPolicy = "odd-unstable";
     };
 
