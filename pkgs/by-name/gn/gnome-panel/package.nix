@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-panel";
-      attrPath = "gnome.gnome-panel";
       versionPolicy = "odd-unstable";
     };
   };

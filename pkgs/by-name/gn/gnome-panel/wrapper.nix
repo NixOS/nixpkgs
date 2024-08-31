@@ -3,6 +3,7 @@
   lib,
   buildEnv,
   gnome,
+  gnome-panel,
   xorg,
   glib,
   wrapGAppsHook3,
@@ -10,7 +11,7 @@
 }:
 
 let
-  inherit (gnome) gnome-panel gnome-flashback;
+  inherit (gnome) gnome-flashback;
 
   # We always want to find the built-in panel applets.
   selectedPanelModulePackages = [
