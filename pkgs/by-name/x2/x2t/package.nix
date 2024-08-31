@@ -70,18 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     # so we do things 'manually' here...
 
     substituteInPlace \
-      --replace-fail "ICU_MAJOR_VER = 58" "ICU_MAJOR_VER = 74" \
-      Common/3dParty/icu/icu.pri
+      Common/3dParty/icu/icu.pri \
+      --replace-fail "ICU_MAJOR_VER = 58" "ICU_MAJOR_VER = 74"
 
     # https://github.com/ONLYOFFICE/core/pull/1637
     # (but not as patch because line endings)
     substituteInPlace \
-      --replace-fail "TRUE" "true" \
-      UnicodeConverter/UnicodeConverter.cpp
+      UnicodeConverter/UnicodeConverter.cpp \
+      --replace-fail "TRUE" "true"
 
     substituteInPlace \
-      --replace-fail "fprintf(_file, sParam.c_str());" "fprintf(_file, \"%s\", sParam.c_str());" \
-      DesktopEditor/doctrenderer/nativecontrol.h
+      DesktopEditor/doctrenderer/nativecontrol.h \
+      --replace-fail "fprintf(f, strVal.c_str());" "fprintf(f, \"%s\", strVal.c_str());" \
+      --replace-fail "fprintf(_file, sParam.c_str());" "fprintf(_file, \"%s\", sParam.c_str());"
 
     echo "== DocxFormatLib =="
     cd OOXML/Projects/Linux/DocxFormatLib
