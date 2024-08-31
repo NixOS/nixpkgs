@@ -119,7 +119,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # need more work
-  pytestFlagsArray = "tests/test_defaults.py";
+  pytestFlags = [ "tests/test_defaults.py" ];
   pythonImportsCheck = [ "bokeh" ];
   preCheck = ''
     cp -rv ''${src_test}/tests/* ./tests/

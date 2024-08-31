@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   # integration tests are not run but the macros need this variable to be set
   GHC_VERSIONS = "";
-  checkFlags = "--test \"unit\"";
+  checkFlags = [ "--test" "unit" ];
 
   meta = with lib; {
     description = "Ghci-based file watching recompiler for Haskell development";

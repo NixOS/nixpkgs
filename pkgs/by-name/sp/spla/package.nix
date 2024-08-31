@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ]
-  ++ lib.optional (gpuBackend == "cuda") "-DSPLA_GPU_BACKEND=CUDA"
-  ++ lib.optional (gpuBackend == "rocm") [ "-DSPLA_GPU_BACKEND=ROCM" ]
+  ++ lib.optionals (gpuBackend == "cuda") [ "-DSPLA_GPU_BACKEND=CUDA" ]
+  ++ lib.optionals (gpuBackend == "rocm") [ "-DSPLA_GPU_BACKEND=ROCM" ]
   ;
 
   preFixup = ''

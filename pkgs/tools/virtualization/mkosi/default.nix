@@ -85,7 +85,7 @@ buildPythonApplication rec {
     kmod
     systemdForMkosi
     util-linux
-  ] ++ lib.optional withQemu [
+  ] ++ lib.optionals withQemu [
     qemu
   ];
 

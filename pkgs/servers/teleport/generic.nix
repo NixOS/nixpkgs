@@ -85,7 +85,7 @@ let
       hash = pnpmHash;
     } else null;
 
-    nativeBuildInputs = [ nodejs ] ++ lib.optional (lib.versionAtLeast version "15") [
+    nativeBuildInputs = [ nodejs ] ++ lib.optionals (lib.versionAtLeast version "15") [
       binaryen
       cargo
       nodejs

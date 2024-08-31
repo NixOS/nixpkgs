@@ -926,7 +926,7 @@ self: super:
       "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
       "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
       "--with-xkb-output=$out/share/X11/xkb/compiled"
-    ] ++ lib.optional stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.isDarwin [
       "--without-dtrace"
     ];
 
@@ -935,7 +935,7 @@ self: super:
       xorg.libXfont2
       xorg.xtrans
       xorg.libxcvt
-    ] ++ lib.optional stdenv.isDarwin [ Xplugin ];
+    ] ++ lib.optionals stdenv.isDarwin [ Xplugin ];
   });
 
   lndir = super.lndir.overrideAttrs (attrs: {

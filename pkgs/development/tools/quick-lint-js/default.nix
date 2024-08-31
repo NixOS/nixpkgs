@@ -22,7 +22,7 @@ let
       # Temporary workaround for https://github.com/NixOS/nixpkgs/pull/108496#issuecomment-1192083379
       "-DCMAKE_SKIP_BUILD_RPATH=ON"
     ];
-    ninjaFlags = "quick-lint-js-build-tools";
+    ninjaFlags = [ "quick-lint-js-build-tools" ];
 
     installPhase = ''
       runHook preInstall

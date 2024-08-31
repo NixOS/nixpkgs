@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     # To achieve this, we coerce the output to a string to prevent
     # mkDerivation's splicing logic from kicking in.
     "${glib.dev}"
-  ] ++ optional enableAirplay2 [
+  ] ++ optionals enableAirplay2 [
     unixtools.xxd
   ];
 

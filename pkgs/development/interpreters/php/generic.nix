@@ -258,7 +258,7 @@ let
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-zts"
             ++ lib.optional staticSupport "--enable-static"
-            ++ lib.optional (!zendSignalsSupport) ["--disable-zend-signals"]
+            ++ lib.optional (!zendSignalsSupport) "--disable-zend-signals"
             ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
 

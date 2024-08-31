@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     msgpack-c
   ] ++ lib.optionals lz4Support [
     lz4
-  ] ++ lib.optional zlibSupport [
+  ] ++ lib.optionals zlibSupport [
     zlib
   ] ++ lib.optionals suggestSupport [
     zeromq

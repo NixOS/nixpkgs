@@ -92,7 +92,7 @@ in {
         Restart = "on-failure";
         CacheDirectory = "vmagent";
         ExecStart = startCommandLine;
-        LoadCredential = lib.optional (cfg.remoteWrite.basicAuthPasswordFile != null) [
+        LoadCredential = lib.optionals (cfg.remoteWrite.basicAuthPasswordFile != null) [
           "remote_write_basic_auth_password:${cfg.remoteWrite.basicAuthPasswordFile}"
         ];
       };

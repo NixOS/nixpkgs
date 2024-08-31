@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # upstream repo includes a build/ directory
   cmakeBuildDir = "_build";
 
-  cmakeFlags = lib.optional asLibrary [
+  cmakeFlags = lib.optionals asLibrary [
     "-DBUILD_SHARED_LIBS=ON"
   ];
 

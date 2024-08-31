@@ -75,7 +75,7 @@ let
             "-DRULES_INSTALL_DIR=lib/udev/rules.d"
             "-DINDI_DATA_DIR=share/indi/"
           ]
-          ++ lib.optional doCheck [
+          ++ lib.optionals doCheck [
             "-DINDI_BUILD_UNITTESTS=ON"
             "-DINDI_BUILD_INTEGTESTS=ON"
           ]

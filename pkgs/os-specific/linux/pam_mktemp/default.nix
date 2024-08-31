@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  patchFlags = "-p2";
+  patchFlags = [ "-p2" ];
 
   dontConfigure = true;
 
