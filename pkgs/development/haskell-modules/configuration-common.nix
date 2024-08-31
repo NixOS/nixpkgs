@@ -1959,6 +1959,9 @@ self: super: {
     "--haddock-option=--optghc=-fno-safe-haskell"
   ] super.alg;
 
+  # Missing test files in 1.8.1.0, fixed in 1.8.1.1
+  sequence-formats = dontCheck super.sequence-formats;
+
   # Windows.normalise changed in filepath >= 1.4.100.4 which fails the equivalency
   # test suite. This is of no great consequence for us, though.
   # Patch solving this has been submitted to upstream by me (@sternenseemann).
