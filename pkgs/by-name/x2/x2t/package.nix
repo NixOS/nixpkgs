@@ -101,111 +101,111 @@ stdenv.mkDerivation (finalAttrs: {
     # requires icu
     cd UnicodeConverter
     qmake "CONFIG+=debug" -o Makefile UnicodeConverter.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     # requires UnicodeConverter
     echo "== kernel =="
     cd Common
     qmake "CONFIG+=debug" -o Makefile kernel.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== kernel_network =="
     # requires kernel
     cd Common/Network
     qmake "CONFIG+=debug" -o Makefile network.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../..
 
     echo "== DocxFormatLib =="
     cd OOXML/Projects/Linux/DocxFormatLib
     qmake "CONFIG+=debug" -o Makefile DocxFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== cryptopp =="
     cd Common/3dParty/cryptopp/project
     qmake "CONFIG+=debug" -o Makefile cryptopp.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== XlsbFormatLib =="
     cd OOXML/Projects/Linux/XlsbFormatLib
     qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== MsBinaryFile =="
     cd MsBinaryFile/Projects/XlsFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== OdfFile =="
     cd OdfFile/Projects/Linux
     qmake "CONFIG+=debug" -o Makefile OdfFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../..
 
     echo "== DocFormatLib =="
     cd MsBinaryFile/Projects/DocFormatLib/Linux
     qmake "CONFIG+=debug" "CONFIG+=debug" -o Makefile DocFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== PPTFormatLib =="
     cd MsBinaryFile/Projects/PPTFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile PPTFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== RtfFile =="
     cd RtfFile/Projects/Linux
     qmake "CONFIG+=debug" -o Makefile RtfFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../..
 
     echo "== TxtFile =="
     cd TxtFile/Projects/Linux
     qmake "CONFIG+=debug" -o Makefile TxtXmlFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../..
 
     echo "== BinDocument =="
     cd OOXML/Projects/Linux/BinDocument
     qmake "CONFIG+=debug" -o Makefile BinDocument.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== PPTXFormatLib =="
     cd OOXML/Projects/Linux/PPTXFormatLib
     qmake "CONFIG+=debug" -o Makefile PPTXFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== XlsbFormatLib =="
     cd OOXML/Projects/Linux/XlsbFormatLib
     qmake "CONFIG+=debug" -o Makefile XlsbFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== XlsFormatLib =="
     cd MsBinaryFile/Projects/XlsFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile XlsFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== cfcpp =="
     cd Common/cfcpp
     qmake "CONFIG+=debug" -o Makefile cfcpp.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../..
 
     echo "== VbaFormatLib =="
     cd MsBinaryFile/Projects/VbaFormatLib/Linux
     qmake "CONFIG+=debug" -o Makefile VbaFormatLib.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../../..
 
     echo "== katana-parser =="
@@ -226,7 +226,7 @@ EOL
     cd DesktopEditor/graphics/pro
     qmake "CONFIG+=debug" -o Makefile graphics.pro
     cat Makefile
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../..
 
     echo "== openssl =="
@@ -247,66 +247,66 @@ EOL
     # requires graphics, openssl (with MD2), v8
     cd DesktopEditor/doctrenderer
     qmake "CONFIG+=debug" -o Makefile doctrenderer.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../..
 
     echo "== HtmlRenderer =="
     # requires UnicodeConverter, kernel, graphics
     cd HtmlRenderer
     qmake "CONFIG+=debug" -o Makefile htmlrenderer.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== HtmlFile2 =="
     # depends on kernel, kernel_network, graphics and gumbo-parser
     cd HtmlFile2
     qmake "CONFIG+=debug" -o Makefile HtmlFile2.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== EpubFile =="
     # requires kernel, graphics and HtmlFile2
     cd EpubFile
     qmake "CONFIG+=debug" -o Makefile CEpubFile.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== PdfFile =="
     cd PdfFile
     qmake "CONFIG+=debug" -o Makefile PdfFile.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== DjVuFile =="
     # requires UnicodeConverter, kernel, graphics and PdfFile
     cd DjVuFile
     qmake "CONFIG+=debug" -o Makefile DjVuFile.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== XpsFile =="
     # requires UnicodeConverter, graphics, kernel, PdfFile
     cd XpsFile
     qmake "CONFIG+=debug" -o Makefile XpsFile.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== Fb2File =="
     cd Fb2File
     qmake "CONFIG+=debug" -o Makefile Fb2File.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
 
     echo "== DocxRenderer =="
     cd DocxRenderer
     qmake "CONFIG+=debug" -o Makefile DocxRenderer.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ..
     
     echo "== X2tConverter =="
     cd X2tConverter/build/Qt
     qmake "CONFIG+=debug" -o Makefile X2tConverter.pro
-    make
+    make -j$NIX_BUILD_CORES
     cd ../../..
     find .
 
