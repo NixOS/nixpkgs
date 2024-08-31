@@ -1,28 +1,21 @@
 { lib
 , stdenv
-, fetchpatch
 , nixosTests
 , python3
-, fetchPypi
+, fetchFromGitHub
 , radicale3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "etesync-dav";
-  version = "0.32.1";
+  version = "0.32.1-unstable-2024-09-02";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pOLug5MnVdKaw5wedABewomID9LU0hZPCf4kZKKU1yA=";
+  src = fetchFromGitHub {
+    owner = "etesync";
+    repo = "etesync-dav";
+    rev = "b9b23bf6fba60d42012008ba06023bccd9109c08";
+    hash = "sha256-wWhwnOlwE1rFgROTSj90hlSw4k48fIEdk5CJOXoecuQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "add-missing-comma-in-setup.py.patch";
-      url = "https://github.com/etesync/etesync-dav/commit/040cb7b57205e70515019fb356e508a6414da11e.patch";
-      hash = "sha256-87IpIQ87rgpinvbRwUlWd0xeegn0zfVSiDFYNUqPerg=";
-    })
-  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     appdirs
