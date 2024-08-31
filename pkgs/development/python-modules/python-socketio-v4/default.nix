@@ -28,7 +28,7 @@ buildPythonPackage rec {
     six
   ];
 
-  optional-dependencies = {
+  passthru.optional-dependencies = {
     client = [
       requests
       websocket-client
