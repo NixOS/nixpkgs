@@ -2255,6 +2255,12 @@
     githubId = 80325;
     name = "Benjamin Andresen";
   };
+  banh-canh = {
+    email = "vhvictorhang@gmail.com";
+    github = "Banh-Canh";
+    githubId = 66330398;
+    name = "Victor Hang";
+  };
   barab-i = {
     email = "barab_i@outlook.com";
     github = "barab-i";
