@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "hcledit";
-  version = "0.2.13";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AKNvbvRfy5QpbR1WLBlf4YcbTdX9rTGS/bovDWQXYZo=";
+    hash = "sha256-7Yay4a55AIzhJHkUh3lCNjklPOZm9VwrmAAyLIW6XJ0=";
   };
 
   vendorHash = "sha256-G6jmdosQHBA+n7MgVAlzdSTqPYb5d+k4b4EzAI384FQ=";

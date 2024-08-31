@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.31.0";
+  version = "0.31.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JmJfLRszP0uKsQ6HjTUbh9YeEGa06qBuJwbmu1lzZCw=";
+    hash = "sha256-ggI0beyE3gfgs5hyh7Rn9YDDkIvqqd0hA/XCy55/r2E=";
   };
 
   postPatch = ''

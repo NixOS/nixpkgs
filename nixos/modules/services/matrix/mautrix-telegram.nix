@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   dataDir = "/var/lib/mautrix-telegram";
   registrationFile = "${dataDir}/telegram-registration.yaml";
@@ -13,10 +10,10 @@ let
 in {
   options = {
     services.mautrix-telegram = {
-      enable = mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
+      enable = lib.mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
 
-      settings = mkOption rec {
-        apply = recursiveUpdate default;
+      settings = lib.mkOption rec {
+        apply = lib.recursiveUpdate default;
         inherit (settingsFormat) type;
         default = {
           homeserver = {
@@ -64,7 +61,7 @@ in {
             };
           };
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             homeserver = {
               address = "http://localhost:8008";
@@ -95,8 +92,8 @@ in {
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           File containing environment variables to be passed to the mautrix-telegram service,
@@ -120,11 +117,11 @@ in {
         '';
       };
 
-      serviceDependencies = mkOption {
-        type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
-        defaultText = literalExpression ''
-          optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+      serviceDependencies = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
+        defaultText = lib.literalExpression ''
+          lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         '';
         description = ''
           List of Systemd services to require and wait for when starting the application service.
@@ -133,7 +130,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.mautrix-telegram = {
       description = "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
 
@@ -192,5 +189,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien vskilet ];
+  meta.maintainers = with lib.maintainers; [ pacien vskilet ];
 }
