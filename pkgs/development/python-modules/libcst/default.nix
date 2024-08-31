@@ -24,9 +24,9 @@
 buildPythonPackage rec {
   pname = "libcst";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "instagram";
@@ -44,9 +44,12 @@ buildPythonPackage rec {
 
   cargoRoot = "native";
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-rust
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
     rustc
@@ -54,7 +57,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-extensions
     typing-inspect
     pyyaml
@@ -87,11 +90,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libcst" ];
 
-  meta = with lib; {
+  meta = {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
       psfl
