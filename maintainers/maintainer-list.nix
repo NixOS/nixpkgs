@@ -3812,6 +3812,12 @@
     githubId = 199180;
     name = "Claes Wallin";
   };
+  claes = {
+    email = "claes.holmerson@gmail.com";
+    github = "claes";
+    githubId = 43564;
+    name = "Claes Holmerson";
+  };
   clebs = {
     email = "borja.clemente@gmail.com";
     github = "clebs";
@@ -9257,6 +9263,12 @@
     email = "jan@kaifer.cz";
     github = "jankaifer";
     githubId = 12820484;
+  };
+  janlikar = {
+    name = "Jan Likar";
+    email = "jan.likar@protonmail.com";
+    github = "janlikar";
+    githubId = 4228250;
   };
   jansol = {
     email = "jan.solanti@paivola.fi";
@@ -18770,6 +18782,12 @@
     github = "seqizz";
     githubId = 307899;
     name = "Gurkan Gur";
+  };
+  sequencer = {
+    email = "liu@jiuyang.me";
+    github = "sequencer";
+    githubId = 5791019;
+    name = "Jiuyang Liu";
   };
   serge = {
     email = "sb@canva.com";

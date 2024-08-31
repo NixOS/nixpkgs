@@ -96,6 +96,9 @@ python3Packages.buildPythonApplication rec {
       "test_uv_env"
       "test_pyenv"
       "test_pypirc"
+      # Relies on FHS
+      # Could not read ELF interpreter from any of the following paths: /bin/sh, /usr/bin/env, /bin/dash, /bin/ls
+      "test_new_selected_python"
     ]
     ++ lib.optionals stdenv.isDarwin [
       # https://github.com/NixOS/nixpkgs/issues/209358

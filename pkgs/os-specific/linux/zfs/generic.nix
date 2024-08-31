@@ -2,6 +2,7 @@ let
   genericBuild =
   { pkgs, lib, stdenv, fetchFromGitHub
   , autoreconfHook269, util-linux, nukeReferences, coreutils
+  , linuxKernel
   , perl
   , configFile ? "all"
 
@@ -27,8 +28,6 @@ let
   , kernelModuleAttribute
   , extraPatches ? []
   , rev ? "zfs-${version}"
-  , isUnstable ? false
-  , latestCompatibleLinuxPackages
   , kernelCompatible ? null
   , maintainers ? (with lib.maintainers; [ amarshall ])
   , tests
@@ -199,7 +198,13 @@ let
     outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
     passthru = {
-      inherit enableMail latestCompatibleLinuxPackages kernelModuleAttribute;
+      inherit enableMail kernelModuleAttribute;
+      latestCompatibleLinuxPackages = lib.pipe linuxKernel.packages [
+        builtins.attrValues
+        (builtins.filter (kPkgs: (builtins.tryEval kPkgs).success && kPkgs ? kernel && kPkgs.kernel.passthru.isVanilla && kernelCompatible kPkgs.kernel))
+        (builtins.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)))
+        lib.last
+      ];
       # The corresponding userspace tools to this instantiation
       # of the ZFS package set.
       userspaceTools = genericBuild (outerArgs // {
@@ -236,7 +241,7 @@ let
       mainProgram = "zfs";
       # If your Linux kernel version is not yet supported by zfs, try zfs_unstable.
       # On NixOS set the option `boot.zfs.package = pkgs.zfs_unstable`.
-      broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
+      broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
     };
   };
 in

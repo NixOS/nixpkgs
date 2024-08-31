@@ -19021,9 +19021,7 @@ with pkgs;
 
   szyszka = callPackage ../tools/misc/szyszka { };
 
-  taplo = callPackage ../development/tools/taplo {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  taplo = callPackage ../development/tools/taplo { };
 
   taoup = callPackage ../tools/misc/taoup { };
 
@@ -22882,8 +22880,6 @@ with pkgs;
   oneDNN = callPackage ../development/libraries/oneDNN { };
 
   oneDNN_2 = callPackage ../development/libraries/oneDNN/2.nix { };
-
-  onedrive = callPackage ../applications/networking/sync/onedrive { };
 
   oneko = callPackage ../applications/misc/oneko { };
 

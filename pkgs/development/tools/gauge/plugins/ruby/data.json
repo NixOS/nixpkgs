@@ -1,19 +1,19 @@
 {
-  "version": "0.8.0",
+  "version": "0.9.2",
   "aarch64-darwin": {
-    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.8.0/gauge-ruby-0.8.0-darwin.arm64.zip",
-    "hash": "sha256-HQ7reuC7dQUMbhEzUBiEelPmFBsFJBHe42lmFufkZJY="
+    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.9.2/gauge-ruby-0.9.2-darwin.arm64.zip",
+    "hash": "sha256-QPwqgQ+Qd+eHbw445GstcPqEODoKcvvt+YJxsJqxtPc="
   },
   "x86_64-darwin": {
-    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.8.0/gauge-ruby-0.8.0-darwin.x86_64.zip",
-    "hash": "sha256-poxT9wYgs21GRx/eVvD7jA1T0VBDEHgH0Zv941pZcKA="
+    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.9.2/gauge-ruby-0.9.2-darwin.x86_64.zip",
+    "hash": "sha256-AWe5S8QXkps6eV1+1GZbHY/S+kY/QQoiG/gbddZHZdk="
   },
   "aarch64-linux": {
-    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.8.0/gauge-ruby-0.8.0-linux.arm64.zip",
-    "hash": "sha256-SAEHPaWScux6C05jQBfDuLBN2J22Df9eKVM46kWawiU="
+    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.9.2/gauge-ruby-0.9.2-linux.arm64.zip",
+    "hash": "sha256-7d6FETLrd7OePiWWRu+5OMKKH9t9H+ZnQCqqYTsuRrk="
   },
   "x86_64-linux": {
-    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.8.0/gauge-ruby-0.8.0-linux.x86_64.zip",
-    "hash": "sha256-aXLDK/7phdsX0CmIuxfK39mdrjGo2IpwYBL7uolP5Mk="
+    "url": "https://github.com/getgauge/gauge-ruby/releases/download/v0.9.2/gauge-ruby-0.9.2-linux.x86_64.zip",
+    "hash": "sha256-iPHQ5Tx3iCb/e3RoF5P2grCbNBFuagezQrABK7snFvw="
   }
 }
