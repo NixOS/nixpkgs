@@ -84,6 +84,40 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "fprintf(f, strVal.c_str());" "fprintf(f, \"%s\", strVal.c_str());" \
       --replace-fail "fprintf(_file, sParam.c_str());" "fprintf(_file, \"%s\", sParam.c_str());"
 
+    substituteInPlace \
+      ./Common/Network/FileTransporter/src/manager.cpp \
+      --replace-fail "../core" ""
+    substituteInPlace \
+      ./Test/Applications/TestDownloader/mainwindow.h \
+      --replace-fail "../core" ""
+
+    echo "== icu =="
+    cd Common/3dParty/icu
+    mkdir linux_64
+    ln -s ${icu}/lib linux_64/build
+    cd ../../..
+
+    echo "== UnicodeConverter =="
+    # requires icu
+    cd UnicodeConverter
+    qmake -o Makefile UnicodeConverter.pro
+    make
+    cd ..
+
+    # requires UnicodeConverter
+    echo "== kernel =="
+    cd Common
+    qmake -o Makefile kernel.pro
+    make
+    cd ..
+
+    echo "== kernel_network =="
+    # requires kernel
+    cd Common/Network
+    qmake -o Makefile network.pro
+    make
+    cd ../..
+
     echo "== DocxFormatLib =="
     cd OOXML/Projects/Linux/DocxFormatLib
     qmake "CONFIG+=debug" -o Makefile DocxFormatLib.pro
@@ -165,33 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     echo "== cfcpp =="
     cd Common/cfcpp
     qmake -o Makefile cfcpp.pro
-    make
-    cd ../..
-
-    echo "== icu =="
-    cd Common/3dParty/icu
-    mkdir linux_64
-    ln -s ${icu}/lib linux_64/build
-    cd ../../..
-
-    echo "== UnicodeConverter =="
-    # requires icu
-    cd UnicodeConverter
-    qmake -o Makefile UnicodeConverter.pro
-    make
-    cd ..
-
-    # requires UnicodeConverter
-    echo "== kernel =="
-    cd Common
-    qmake -o Makefile kernel.pro
-    make
-    cd ..
-
-    echo "== kernel_network =="
-    # requires kernel
-    cd Common/Network
-    qmake -o Makefile network.pro
     make
     cd ../..
 
