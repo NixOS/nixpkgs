@@ -99,6 +99,6 @@ buildPythonPackage rec {
       asl20
       psfl
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
