@@ -15521,6 +15521,8 @@ self: super: with self; {
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
+  tenant-schemas-celery = callPackage ../development/python-modules/tenant-schemas-celery { };
+
   tencentcloud-sdk-python = callPackage ../development/python-modules/tencentcloud-sdk-python { };
 
   tendo = callPackage ../development/python-modules/tendo { };
