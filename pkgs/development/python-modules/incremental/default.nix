@@ -28,7 +28,7 @@ let
 
     dependencies = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-    optional-dependencies = {
+    passthru.optional-dependencies = {
       scripts = [ click ];
     };
 
