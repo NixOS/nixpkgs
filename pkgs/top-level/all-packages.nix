@@ -1139,9 +1139,11 @@ with pkgs;
           if stdenv.isDarwin || stdenv.hostPlatform.isWindows
             then false
             else old.gssSupport or true; # `? true` is the default
-        libkrb5 = buildPackages.libkrb5.override {
+        libkrb5 = buildPackages.krb5.override {
           fetchurl = stdenv.fetchurlBoot;
           inherit pkg-config perl openssl;
+          withLibedit = false;
+          byacc = buildPackages.byacc.override { fetchurl = stdenv.fetchurlBoot; };
           keyutils = buildPackages.keyutils.override { fetchurl = stdenv.fetchurlBoot; };
         };
         nghttp2 = buildPackages.nghttp2.override {
@@ -5654,7 +5656,7 @@ with pkgs;
         substitutions = {
           crossFile = writeText "cross-file.conf" ''
               [binaries]
-              exe_wrapper = ${lib.escapeShellArg (stdenv.targetPlatform.emulator pkgs)}
+              exe_wrapper = '${lib.escape [ "'" "\\" ] (stdenv.targetPlatform.emulator pkgs)}'
             '';
         };
       }
@@ -16976,8 +16978,8 @@ with pkgs;
     ruby_3_2
     ruby_3_3;
 
-  ruby = ruby_3_1;
-  rubyPackages = rubyPackages_3_1;
+  ruby = ruby_3_3;
+  rubyPackages = rubyPackages_3_3;
 
   rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
@@ -20973,7 +20975,7 @@ with pkgs;
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
   };
-  libkrb5 = krb5.override { type = "lib"; };
+  libkrb5 = krb5; # TODO(de11n) Try to make krb5 reuse libkrb5 as a dependency
 
   kronosnet = callPackage ../development/libraries/kronosnet { };
 
@@ -22429,10 +22431,6 @@ with pkgs;
   libzip = callPackage ../development/libraries/libzip { };
 
   libzdb = callPackage ../development/libraries/libzdb { };
-
-  libwacom = callPackage ../development/libraries/libwacom { };
-
-  libwacom-surface = callPackage ../development/libraries/libwacom/surface.nix { };
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
@@ -24106,7 +24104,7 @@ with pkgs;
   wavpack = callPackage ../development/libraries/wavpack { };
 
   wayland = darwin.apple_sdk_11_0.callPackage ../development/libraries/wayland { };
-  wayland-scanner = wayland.bin;
+  wayland-scanner = callPackage ../development/libraries/wayland/scanner.nix { };
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 

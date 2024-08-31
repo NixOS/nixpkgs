@@ -23,7 +23,7 @@ melpaBuild {
 
   postInstall = ''
     mkdir -p ''${!outputDoc}/share/doc/pod-mode/
-    install -Dm644 -t ''${!outputDoc}/share/doc/pod-mode/ $sourceRoot/ChangeLog $sourceRoot/README
+    install -Dm644 -t ''${!outputDoc}/share/doc/pod-mode/ ChangeLog README
   '';
 
   ignoreCompilationError = false;

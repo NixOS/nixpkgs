@@ -56,6 +56,7 @@ buildPythonPackage rec {
   # but not mlflow has a 'skinny' install option which does not require `shap`.
   pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [
+    "gunicorn"
     "packaging"
     "pytz"
     "pyarrow"
