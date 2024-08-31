@@ -30,7 +30,7 @@ buildNpmPackage rec {
   passthru.entrypoint = "timer-bar-card.js";
 
   meta = with lib; {
-    description = "";
+    description = "A progress bar display for Home Assistant timers";
     homepage = "https://github.com/rianadon/timer-bar-card";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
