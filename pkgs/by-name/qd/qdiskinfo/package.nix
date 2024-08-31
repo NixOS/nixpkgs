@@ -5,6 +5,8 @@
   fetchFromGitHub,
   cmake,
   qt6,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -35,9 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    install -Dm644 $src/dist/QDiskInfo.svg $out/share/icons/hicolor/scalable/apps/QDiskInfo.svg
+
     wrapProgram $out/bin/QDiskInfo \
       --suffix PATH : ${smartmontools}/bin
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "QDiskInfo";
+      exec = "QDiskInfo";
+      icon = "QDiskInfo";
+      comment = finalAttrs.meta.description;
+      desktopName = "QDiskInfo";
+      categories = [ "Utility" ];
+    })
+  ];
 
   meta = {
     description = "CrystalDiskInfo alternative for Linux";
