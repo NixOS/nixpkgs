@@ -4,6 +4,7 @@
   lib,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   stdenv,
   testers,
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
+    updateScript = nix-update-script { };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
