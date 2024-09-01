@@ -12743,8 +12743,6 @@ with pkgs;
 
   sqls = callPackage ../applications/misc/sqls { };
 
-  stardrop = callPackage ../by-name/st/stardrop/package.nix { };
-
   stdman = callPackage ../data/documentation/stdman { };
 
   stderred = callPackage ../tools/misc/stderred { };
