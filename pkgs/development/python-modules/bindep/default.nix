@@ -43,6 +43,7 @@ buildPythonPackage rec {
     description = "Bindep is a tool for checking the presence of binary packages needed to use an application / library";
     homepage = "https://docs.opendev.org/opendev/bindep/latest/";
     license = licenses.asl20;
+    mainProgram = "bindep";
     maintainers = teams.openstack.members;
   };
 }
