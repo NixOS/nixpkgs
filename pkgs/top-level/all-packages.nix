@@ -19925,8 +19925,6 @@ with pkgs;
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
-  liberasurecode = callPackage ../applications/misc/liberasurecode { };
-
   example-robot-data = callPackage ../development/libraries/example-robot-data { };
 
   exiv2 = callPackage ../development/libraries/exiv2 { };
