@@ -44,8 +44,13 @@ rustPlatform.buildRustPackage rec {
   };
   };
 
-  nativeBuildInputs =
-    [ just pkg-config makeBinaryWrapper rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ 
+    just 
+    pkg-config 
+    makeBinaryWrapper 
+    rustPlatform.bindgenHook 
+  ];
+  
   buildInputs = [ 
     wayland 
     libxkbcommon 
