@@ -15,26 +15,21 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
+    repo = "brother";
     rev = "refs/tags/${version}";
-    hash = "sha256-5fd+UznnOFnqYL8CPX90Y2z6q35oUH638mz4l+Ux6oE=";
+    hash = "sha256-JnIJgR8OiN6y6ib0Y+FXa98Q/4dtvJ8q2r6tgQSRvN4=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail pysnmp-lextudio pysnmp
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     dacite
     pysnmp
   ];
