@@ -65,8 +65,7 @@ ninjaInstallPhase() {
     local flagsArray=(
         "-j$buildCores"
     )
-    : "${installTargets:=install}"
-    concatTo flagsArray ninjaFlags ninjaFlagsArray installTargets
+    concatTo flagsArray ninjaFlags ninjaFlagsArray installTargets=install
 
     echoCmd 'install flags' "${flagsArray[@]}"
     TERM=dumb ninja "${flagsArray[@]}"

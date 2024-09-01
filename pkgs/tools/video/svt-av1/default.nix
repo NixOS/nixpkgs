@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jrfnUcDTbrf3wWs0D57ueeLmndhpOQChM7gBB14MzcQ=";
+    hash = "sha256-LkTcy+CiuhlRnQsjNMA0hTVRVx7pbYs1ujMWjLrhvEU=";
   };
 
   nativeBuildInputs = [

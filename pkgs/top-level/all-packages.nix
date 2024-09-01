@@ -1204,8 +1204,6 @@ with pkgs;
     inherit url;
   };
 
-  installShellFiles = callPackage ../build-support/install-shell-files { };
-
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
@@ -14004,8 +14002,6 @@ with pkgs;
 
   vul = callPackage ../applications/misc/vul { };
 
-  xar = callPackage ../tools/compression/xar { };
-
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
@@ -18997,7 +18993,7 @@ with pkgs;
 
   swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
   swig4 = callPackage ../development/tools/misc/swig/4.nix { };
-  swig = swig3;
+  swig = swig4;
   swigWithJava = swig;
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };

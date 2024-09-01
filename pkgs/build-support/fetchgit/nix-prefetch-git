@@ -17,9 +17,9 @@ branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 out=${out:-}
 http_proxy=${http_proxy:-}
 
-# allow overwriting cacert's ca-bundle.crt with a custom one
-# this can be done by setting NIX_GIT_SSL_CAINFO and NIX_SSL_CERT_FILE environment variables for the nix-daemon
-GIT_SSL_CAINFO=${NIX_GIT_SSL_CAINFO:-$GIT_SSL_CAINFO}
+# NOTE: use of NIX_GIT_SSL_CAINFO is for backwards compatibility; NIX_SSL_CERT_FILE is preferred
+# as of PR#303307
+GIT_SSL_CAINFO=${NIX_GIT_SSL_CAINFO:-$NIX_SSL_CERT_FILE}
 
 # populated by clone_user_rev()
 fullRev=

@@ -1,21 +1,31 @@
-From 276833851657c85651c053ee16b8e1a8dc768a50 Mon Sep 17 00:00:00 2001
-From: Andrew Childs <andrew.childs@bibo.com.ph>
-Date: Sun, 15 Nov 2020 19:12:56 +0900
-Subject: [PATCH 2/2] Use pkg-config for libxml2
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 18:58:14 +0300
+Subject: [PATCH 10/19] Update configure.ac for openssl, libxml2, liblzma and
+ musl-fts
 
+Simplifies libxml2 detection, adds detection for liblzma (from xz),
+openssl and fts (for musl libc).
 ---
- configure.ac | 66 +++++++++-------------------------------------------
- 1 file changed, 11 insertions(+), 55 deletions(-)
+ xar/configure.ac | 83 +++++++++++++++++-------------------------------
+ 1 file changed, 30 insertions(+), 53 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 358ab89..984a694 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -268,61 +268,17 @@ dnl Configure libxml2.
- dnl 
- LIBXML2_VERSION_MIN=2.6.11
+diff --git a/xar/configure.ac b/xar/configure.ac
+index 0cc04dd..e466ee0 100644
+--- a/xar/configure.ac
++++ b/xar/configure.ac
+@@ -272,63 +272,14 @@ AC_PREFIX_DEFAULT(/usr/local)
  
--have_libxml2="1"
+ AC_CHECK_FUNC([asprintf], AC_DEFINE([HAVE_ASPRINTF], [], [HAVE_ASPRINTF]))
+ 
++AC_SEARCH_LIBS([fts_close], [fts])
++
+ dnl 
+ dnl Configure libxml2.
+ dnl 
+-LIBXML2_VERSION_MIN=2.6.11
+-
+ have_libxml2="1"
 -
 -AC_ARG_WITH([xml2-config], [  --with-xml2-config      libxml2 config program],
 -if test "x${with_xml2_config}" = "xno" ; then
@@ -67,23 +77,51 @@ index 358ab89..984a694 100644
 -  dnl Final sanity check, to make sure that xmlwriter is present.
 -  AC_CHECK_HEADER([libxml/xmlwriter.h], , [have_libxml2="0"])
 -fi
--if test "x${have_libxml2}" = "x0" ; then
--  AC_MSG_ERROR([Cannot build without libxml2])
--fi
-+PKG_PROG_PKG_CONFIG
-+
-+PKG_CHECK_MODULES(LIBXML2_PKGCONFIG, [libxml-2.0 >= ${LIBXML2_VERSION_MIN}],
-+  [
-+    have_libxml2=1
-+    CPPFLAGS="${CPPFLAGS} ${LIBXML2_PKGCONFIG_CFLAGS}"
-+    LIBS="${LIBS} ${LIBXML2_PKGCONFIG_LIBS}"
-+  ],
-+  [
-+    have_libxml2=0
-+  ])
++AC_CHECK_HEADERS([libxml/xmlwriter.h], , [have_libxml2="0"])
++AC_CHECK_LIB([xml2], [xmlInitParser], , [have_libxml2="0"])
+ if test "x${have_libxml2}" = "x0" ; then
+   AC_MSG_ERROR([Cannot build without libxml2])
+ fi
+@@ -343,6 +294,22 @@ if test "x${have_libz}" = "x0" ; then
+   AC_MSG_ERROR([Cannot build without libz])
+ fi
  
++dnl 
++dnl Configure openssl.
++dnl 
++have_openssl="1"
++AC_CHECK_HEADERS([openssl/evp.h], , [have_openssl="0"])
++AC_CHECK_LIB([crypto], [OPENSSL_config], , [have_openssl="0"])
++if test "x${have_openssl}" = "x0" ; then
++  case "${host}" in
++    *-*-darwin*)
++      ;;
++    *)
++      AC_MSG_ERROR([Cannot build without OpenSSL for non-Darwin host])
++      ;;
++  esac
++fi
++
  dnl 
- dnl Configure libcrypto (part of OpenSSL).
+ dnl Configure libbz2.
+ dnl 
+@@ -353,6 +320,16 @@ if test "x${have_libbz2}" = "x1" ; then
+   AC_DEFINE([HAVE_LIBBZ2], [], [HAVE_LIBBZ2])
+ fi
+ 
++dnl 
++dnl Configure liblzma.
++dnl 
++have_liblzma="1"
++AC_CHECK_HEADERS([lzma.h], , [have_liblzma="0"])
++AC_CHECK_LIB([lzma], [lzma_stream_decoder], , [have_liblzma="0"])
++if test "x${have_liblzma}" = "x1" ; then
++  AC_DEFINE([HAVE_LIBLZMA], [], [HAVE_LIBLZMA])
++fi
++
+ dnl 
+ dnl Configure libpthread.
+ dnl 
 -- 
-2.28.0
+2.44.1
 
