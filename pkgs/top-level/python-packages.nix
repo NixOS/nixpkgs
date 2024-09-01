@@ -7643,6 +7643,7 @@ self: super: with self; {
   mdformat-footnote = callPackage ../development/python-modules/mdformat-footnote { };
   mdformat-frontmatter = callPackage ../development/python-modules/mdformat-frontmatter { };
   mdformat-gfm = callPackage ../development/python-modules/mdformat-gfm { };
+  mdformat-gfm-alerts = callPackage ../development/python-modules/mdformat-gfm-alerts { };
   mdformat-mkdocs = callPackage ../development/python-modules/mdformat-mkdocs { };
   mdformat-nix-alejandra = callPackage ../development/python-modules/mdformat-nix-alejandra { };
   mdformat-simple-breaks = callPackage ../development/python-modules/mdformat-simple-breaks { };
