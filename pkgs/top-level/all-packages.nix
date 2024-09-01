@@ -8936,8 +8936,6 @@ with pkgs;
 
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
 
-  jq = callPackage ../development/tools/jq { };
-
   jiq = callPackage ../development/tools/misc/jiq { };
 
   jql = callPackage ../development/tools/jql { };
