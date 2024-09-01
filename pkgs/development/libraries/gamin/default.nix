@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, glib, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gamin";
   version = "0.1.10";
 
   src = fetchurl {
-    url = "https://www.gnome.org/~veillard/gamin/sources/gamin-${version}.tar.gz";
-    sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
+    url = "mirror://gnome/sources/gamin/${lib.versions.majorMinor finalAttrs.version}/gamin-${finalAttrs.version}.tar.gz";
+    hash = "sha256-KAhfCui+EOq1gv8YavT7C+ksxsYrXMGc0JspXHwomaE=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
 
   meta = with lib; {
-    homepage    = "https://people.gnome.org/~veillard/gamin/";
+    homepage    = "https://gitlab.gnome.org/Archive/gamin";
     description = "File and directory monitoring system";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
     platforms   = platforms.unix;
   };
-}
+})
 
