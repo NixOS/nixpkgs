@@ -3,7 +3,7 @@
 , python3
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "zigpy-cli";
   version = "1.0.5";
   pyproject = true;
