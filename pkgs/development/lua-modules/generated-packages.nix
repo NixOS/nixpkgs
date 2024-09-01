@@ -1104,7 +1104,7 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://linrongbin16.github.io/lsp-progress.nvim/";
     description = "A performant lsp progress status for Neovim.";
-    maintainers = with lib.maintainers; [ linrongbin16 ];
+    maintainers = with lib.maintainers; [ gepbird ];
     license.fullName = "MIT";
   };
 }) {};
