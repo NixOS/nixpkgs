@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20240322";
+  version = "20240827";
 
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";
-    rev = "refs/tags/G${version}";
-    hash = "sha256-k5rDaRKYPwdP4SmEXlrqsA2NLZDlqXBclz1Lwmufa2M=";
+    rev = "refs/tags/version-${version}";
+    hash = "sha256-RlhKBvydesUdBaFUHk3sSM6SRIZ7q5IqnibX+hps+Tc=";
   };
 
   nativeBuildInputs = [ bison flex ];
