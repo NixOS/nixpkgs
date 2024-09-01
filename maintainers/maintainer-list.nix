@@ -15774,6 +15774,12 @@
     githubId = 110892040;
     name = "Mykyta Polchanov";
   };
+  mzabani = {
+    email = "mzabani@gmail.com";
+    github = "mzabani";
+    githubId = 4662691;
+    name = "Marcelo Zabani";
+  };
   mzacho = {
     email = "nixpkgs@martinzacho.net";
     github = "mzacho";
