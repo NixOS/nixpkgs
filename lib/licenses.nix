@@ -92,6 +92,11 @@ lib.mapAttrs mkLicense ({
     free = false;
   };
 
+  ampas = {
+    spdxId = "AMPAS";
+    fullName = "Academy of Motion Picture Arts and Sciences BSD";
+  };
+
   aom = {
     fullName = "Alliance for Open Media Patent License 1.0";
     url = "https://aomedia.org/license/patent-license/";
