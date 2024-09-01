@@ -5,10 +5,11 @@
   doxygen,
   fetchFromGitHub,
   installShellFiles,
+  testers,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liberasurecode";
   version = "1.6.4";
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "liberasurecode";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-KYXlRjUudWhFbhyv9V1fmqwBw3/vTBfusxafaNG+Q40=";
   };
 
@@ -56,10 +57,15 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     description = "Erasure Code API library written in C with pluggable Erasure Code backends";
     homepage = "https://github.com/openstack/liberasurecode";
     license = licenses.bsd2;
     maintainers = teams.openstack.members;
+    pkgConfigModules = [ "erasurecode-1" ];
   };
-}
+})
