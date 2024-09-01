@@ -14,23 +14,23 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.34.131"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.35.10"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UC3a/h1if88eTAB8hkVOXdAR26fFi9jopTaKefPjh9w=";
+    hash = "sha256-bIoTd7Zjag2AIYEV4c1BvM66Ci8FC3nCBvTPjQAsVNc=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jmespath
     python-dateutil
     urllib3
