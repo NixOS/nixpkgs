@@ -4,7 +4,7 @@
   fetchFromGitHub,
   freezegun,
   dacite,
-  pysnmp-lextudio,
+  pysnmp,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
@@ -27,11 +27,16 @@ buildPythonPackage rec {
     hash = "sha256-5fd+UznnOFnqYL8CPX90Y2z6q35oUH638mz4l+Ux6oE=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail pysnmp-lextudio pysnmp
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dacite
-    pysnmp-lextudio
+    pysnmp
   ];
 
   nativeCheckInputs = [
