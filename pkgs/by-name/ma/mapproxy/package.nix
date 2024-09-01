@@ -15,8 +15,11 @@ buildPythonApplication rec {
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
-  propagatedBuildInputs = [
+
+  dependencies = [
     boto3 # needed for caches service
+    future
+    jsonschema
     pillow
     pyyaml
     pyproj
@@ -24,6 +27,7 @@ buildPythonApplication rec {
     gdal
     lxml
     setuptools
+    werkzeug
   ];
   # Tests are disabled:
   # 1) Dependency list is huge.
