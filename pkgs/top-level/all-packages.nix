@@ -1482,8 +1482,6 @@ with pkgs;
 
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
-  acpica-tools = callPackage ../tools/system/acpica-tools { };
-
   amdgpu_top = callPackage ../tools/system/amdgpu_top { };
 
   acquire = with python3Packages; toPythonApplication acquire;

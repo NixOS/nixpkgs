@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
       You can sort and hide games or download cover art from SteamGridDB.
     '';
     homepage = "https://apps.gnome.org/Cartridges/";
-    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${src.rev}";
+    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "cartridges";
