@@ -85,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "File explorer in your terminal";
     mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
-    changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
+    changelog = "https://github.com/juftin/browsr/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

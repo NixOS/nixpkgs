@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Working with molecular structures in pandas DataFrames";
     homepage = "https://github.com/BioPandas/biopandas";
-    changelog = "https://github.com/BioPandas/biopandas/releases/tag/${src.rev}";
+    changelog = "https://github.com/BioPandas/biopandas/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
   };
