@@ -25,13 +25,16 @@ buildPythonPackage rec {
     hash = "sha256-fiUguOzNF9T3CcGD1mYl2b5QFbvBG8wNOd3Or2NR66E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [ "s3transfer" ];
+  pythonRelaxDeps = [
+    "botocore"
+    "s3transfer"
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     botocore
     jmespath
     s3transfer
