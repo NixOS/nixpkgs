@@ -1,26 +1,26 @@
 diff --git a/tests/async_client_test.py b/tests/async_client_test.py
-index 846c854a32..3a66af2baa 100644
+index b0f7a5a..2494fc6 100644
 --- a/tests/async_client_test.py
 +++ b/tests/async_client_test.py
-@@ -129,7 +129,10 @@
+@@ -140,7 +140,10 @@ from nio.api import (
+     ThreadInclusion,
  )
- from nio.api import EventFormat, ResizingMethod, RoomPreset, RoomVisibility
  from nio.client.async_client import connect_wrapper, on_request_chunk_sent
 -from nio.crypto import OlmDevice, Session, decrypt_attachment
 +try:
 +    from nio.crypto import OlmDevice, Session, decrypt_attachment
 +except ImportError:
 +    pass
+ from nio.responses import PublicRoom, PublicRoomsResponse
  
- TEST_ROOM_ID = "!testroom:example.org"
- 
+ BASE_URL_V1 = f"https://example.org{MATRIX_API_PATH_V1}"
 diff --git a/tests/conftest.py b/tests/conftest.py
-index ae37ca1169..e5f791a31e 100644
+index 0c67ee0..6b77e02 100644
 --- a/tests/conftest.py
 +++ b/tests/conftest.py
-@@ -9,11 +9,17 @@
-     async_client_pair,
+@@ -10,11 +10,17 @@ from conftest_async import (  # noqa: F401
      async_client_pair_same_user,
+     unauthed_async_client,
  )
 -from olm import Account
 +try:
@@ -40,10 +40,10 @@ index ae37ca1169..e5f791a31e 100644
  ALICE_ID = "@alice:example.org"
  ALICE_DEVICE_ID = "JLAFKJWSCS"
 diff --git a/tests/helpers.py b/tests/helpers.py
-index 63445b605a..05096d1dc3 100644
+index 63445b6..05096d1 100644
 --- a/tests/helpers.py
 +++ b/tests/helpers.py
-@@ -26,8 +26,11 @@
+@@ -26,8 +26,11 @@ from hyperframe.frame import (
      WindowUpdateFrame,
  )
  
