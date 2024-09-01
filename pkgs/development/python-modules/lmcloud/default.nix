@@ -5,8 +5,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   httpx,
+  pytest-asyncio,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
+  syrupy,
   websockets,
 }:
 
@@ -33,8 +36,11 @@ buildPythonPackage rec {
     websockets
   ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    syrupy
+  ];
 
   pythonImportsCheck = [ "lmcloud" ];
 
