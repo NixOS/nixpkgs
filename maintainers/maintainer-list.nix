@@ -3536,6 +3536,12 @@
     matrix = "@chayleaf:matrix.pavluk.org";
     name = "Anna Pavlyuk";
   };
+  cheeseecake = {
+    email = "chanelnjw@gmail.com";
+    github = "cheeseecake";
+    githubId = 34784816;
+    name = "Chanel";
+  };
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
