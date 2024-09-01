@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  glibcLocales,
   lib,
   meson,
   ninja,
@@ -27,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
   ];
+
+  checkInputs = [
+    glibcLocales
+  ];
+
+  doCheck = true;
+  mesonFlags = [ "-Dbuild_tests=${lib.boolToString finalAttrs.doCheck}" ];
 
   passthru = {
     updateScript = nix-update-script { };
