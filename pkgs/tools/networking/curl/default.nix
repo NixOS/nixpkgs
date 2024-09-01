@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.all;
     # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin");
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
   };
