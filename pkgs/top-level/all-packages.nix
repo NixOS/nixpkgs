@@ -6469,8 +6469,6 @@ with pkgs;
 
   circus = with python310Packages; toPythonApplication circus;
 
-  cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
-
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
