@@ -54,7 +54,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs =
     [ just pkg-config makeBinaryWrapper rustPlatform.bindgenHook ];
-  buildInputs = [ wayland libxkbcommon alsa-lib ffmpeg llvmPackages.clang ];
+  buildInputs = [ 
+    wayland 
+    libxkbcommon 
+    alsa-lib 
+    ffmpeg 
+    llvmPackages.clang 
+  ];
 
   dontUseJustBuild = true;
 
