@@ -11,15 +11,12 @@
 }:
 
 let
-  # Function to convert a word to PascalCase
-  pascal = x: lib.toUpper (lib.substring 0 1 x) + lib.substring 1 (lib.stringLength x) x;
-
   pname = "stardrop";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Floogen";
-    repo = pname;
+    repo = "stardrop";
     rev = "v${version}";
     hash = "sha256-VN0SrvBT5JUNraeh6YyRhcnoOl+mOB2/zk/rQeJidI8=";
   };
@@ -29,8 +26,8 @@ let
 
     patches = [ ./csproj-build.patch ];
 
-    projectFile = "${pascal pname}/${pascal pname}.csproj";
-    executables = ["${pascal pname}"];
+    projectFile = "Stardrop/Stardrop.csproj";
+    executables = ["Stardrop"];
 
     dotnet-sdk = dotnetCorePackages.sdk_7_0;
     dotnet-runtime = dotnetCorePackages.runtime_7_0;
@@ -38,9 +35,9 @@ let
 
     postInstall = ''
       mkdir -pv $out/share/icon/
-      cp ${pascal pname}/Assets/icon.ico $out/share/icon/${pname}.ico
+      cp Stardrop/Assets/icon.ico $out/share/icon/stardrop.ico
       for theme in ${lib.concatStringsSep " " (map (t: "${t}") extraThemes)}; do
-        cp -rv $theme $out/lib/${pname}/Themes/
+        cp -rv $theme $out/lib/stardrop/Themes/
       done
     '';
 
@@ -48,13 +45,13 @@ let
 
     desktopItems = [
     (makeDesktopItem {
-      name = "${pascal pname}";
-      exec = "${pname}";
-      icon = "${pname}";
+      name = "Stardrop";
+      exec = "stardrop";
+      icon = "stardrop";
+      desktopName = "stardrop";
       comment = meta.description;
-      desktopName = "${pname}";
       categories = [ "Game" ];
-      startupWMClass = "${pname}";
+      startupWMClass = "stardrop";
       })
     ];
   };
@@ -70,8 +67,8 @@ let
   fhs = buildFHSEnv (
     appimageTools.defaultFhsEnvArgs // {
       inherit pname version meta;
-      runScript = writeShellScript "${pname}-wrapper.sh" ''
-        exec ${unwrapped}/bin/${pascal pname} "$@"
+      runScript = writeShellScript "stardrop-wrapper.sh" ''
+        exec ${unwrapped}/bin/Stardrop "$@"
       '';
 
       extraInstallCommands = ''
