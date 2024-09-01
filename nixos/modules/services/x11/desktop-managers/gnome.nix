@@ -108,7 +108,7 @@ in
             favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
           '''
         '';
-        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
+        description = "List of desktop files to put as favorite apps into pkgs.gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -123,7 +123,7 @@ in
         description = "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption "gnome-session debug messages";
+      debug = mkEnableOption "pkgs.gnome-session debug messages";
 
       flashback = {
         enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
@@ -162,11 +162,11 @@ in
         };
 
         panelModulePackages = mkOption {
-          default = [ pkgs.gnome.gnome-applets ];
-          defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
+          default = [ pkgs.gnome-applets ];
+          defaultText = literalExpression "[ pkgs.gnome-applets ]";
           type = types.listOf types.package;
           description = ''
-            Packages containing modules that should be made available to `gnome-panel` (usually for applets).
+            Packages containing modules that should be made available to `pkgs.gnome-panel` (usually for applets).
 
             If you're packaging something to use here, please install the modules in `$out/lib/gnome-panel/modules`.
           '';
@@ -196,7 +196,7 @@ in
       services.gnome.core-shell.enable = true;
       services.gnome.core-utilities.enable = mkDefault true;
 
-      services.displayManager.sessionPackages = [ pkgs.gnome.gnome-session.sessions ];
+      services.displayManager.sessionPackages = [ pkgs.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${lib.concatMapStrings (p: ''
@@ -228,7 +228,7 @@ in
           assert (lib.assertMsg namesAreUnique "Flashback WM names must be unique.");
           map
             (wm:
-              pkgs.gnome.gnome-flashback.mkSessionForWm {
+              pkgs.gnome-flashback.mkSessionForWm {
                 inherit (wm) wmName wmLabel wmCommand;
               }
             ) flashbackWms;
@@ -237,20 +237,20 @@ in
         enableGnomeKeyring = true;
       };
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-flashback
-      ] ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      systemd.packages = [
+        pkgs.gnome-flashback
+      ] ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      environment.systemPackages = with pkgs.gnome; [
-        gnome-flashback
-        (gnome-panel-with-modules.override {
+      environment.systemPackages = [
+        pkgs.gnome-flashback
+        (pkgs.gnome-panel-with-modules.override {
           panelModulePackages = cfg.flashback.panelModulePackages;
         })
       ]
       # For /share/applications/${wmName}.desktop
-      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
-      # For /share/gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
+      ++ (map (wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
+      # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
+      ++ (map (wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {
@@ -287,7 +287,7 @@ in
           buildPortalsInGnome = false;
         })
       ];
-      xdg.portal.configPackages = mkDefault [ pkgs.gnome.gnome-session ];
+      xdg.portal.configPackages = mkDefault [ pkgs.gnome-session ];
 
       networking.networkmanager.enable = mkDefault true;
 
@@ -309,7 +309,7 @@ in
       services.xserver.desktopManager.gnome.sessionPath =
         let
           mandatoryPackages = [
-            pkgs.gnome.gnome-shell
+            pkgs.gnome-shell
           ];
           optionalPackages = [
             pkgs.gnome-shell-extensions
@@ -329,15 +329,15 @@ in
       services.gvfs.enable = true;
       services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (mkDefault true));
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-session
-        gnome-shell
+      systemd.packages = [
+        pkgs.gnome-session
+        pkgs.gnome-shell
       ];
 
-      services.udev.packages = with pkgs.gnome; [
+      services.udev.packages = [
         # Force enable KMS modifiers for devices that require them.
-        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
-        mutter
+        # https://gitlab.gnome.org/GNOME/pkgs.mutter/-/merge_requests/1443
+        pkgs.mutter
       ];
 
       services.avahi.enable = mkDefault true;
@@ -368,16 +368,16 @@ in
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
         let
-          mandatoryPackages = with pkgs.gnome; [
-            gnome-shell
+          mandatoryPackages = [
+            pkgs.gnome-shell
           ];
-          optionalPackages = with pkgs.gnome; [
+          optionalPackages = [
             pkgs.adwaita-icon-theme
             nixos-background-info
             pkgs.gnome-backgrounds
-            gnome-bluetooth
+            pkgs.gnome-bluetooth
             pkgs.gnome-color-manager
-            gnome-control-center
+            pkgs.gnome-control-center
             pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs

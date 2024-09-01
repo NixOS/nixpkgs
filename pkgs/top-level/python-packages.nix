@@ -2219,8 +2219,6 @@ self: super: with self; {
 
   cirq-core = callPackage ../development/python-modules/cirq-core { };
 
-  cirq-ft = callPackage ../development/python-modules/cirq-ft { };
-
   cirq-ionq = callPackage ../development/python-modules/cirq-ionq { };
 
   cirq-google = callPackage ../development/python-modules/cirq-google { };
@@ -7645,6 +7643,7 @@ self: super: with self; {
   mdformat-footnote = callPackage ../development/python-modules/mdformat-footnote { };
   mdformat-frontmatter = callPackage ../development/python-modules/mdformat-frontmatter { };
   mdformat-gfm = callPackage ../development/python-modules/mdformat-gfm { };
+  mdformat-gfm-alerts = callPackage ../development/python-modules/mdformat-gfm-alerts { };
   mdformat-mkdocs = callPackage ../development/python-modules/mdformat-mkdocs { };
   mdformat-nix-alejandra = callPackage ../development/python-modules/mdformat-nix-alejandra { };
   mdformat-simple-breaks = callPackage ../development/python-modules/mdformat-simple-breaks { };
@@ -9711,6 +9710,8 @@ self: super: with self; {
 
   orvibo = callPackage ../development/python-modules/orvibo { };
 
+  os-client-config = callPackage ../development/python-modules/os-client-config { };
+
   os-service-types = callPackage ../development/python-modules/os-service-types { };
 
   osc = callPackage ../development/python-modules/osc { };
@@ -9756,6 +9757,8 @@ self: super: with self; {
   oslotest = callPackage ../development/python-modules/oslotest { };
 
   ospd = callPackage ../development/python-modules/ospd { };
+
+  osprofiler = callPackage ../development/python-modules/osprofiler { };
 
   osqp = callPackage ../development/python-modules/osqp { };
 
@@ -10507,6 +10510,8 @@ self: super: with self; {
 
   pystac = callPackage ../development/python-modules/pystac { };
 
+  pystac-client = callPackage ../development/python-modules/pystac-client { };
+
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
   pysuez = callPackage ../development/python-modules/pysuez { };
@@ -10582,6 +10587,8 @@ self: super: with self; {
   };
 
   python-motionmount = callPackage ../development/python-modules/python-motionmount { };
+
+  python-octaviaclient = callPackage ../development/python-modules/python-octaviaclient { };
 
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
 
@@ -13010,6 +13017,8 @@ self: super: with self; {
   python-musicpd = callPackage ../development/python-modules/python-musicpd { };
 
   python-mystrom = callPackage ../development/python-modules/python-mystrom { };
+
+  python-neutronclient = callPackage ../development/python-modules/python-neutronclient { };
 
   python-nest = callPackage ../development/python-modules/python-nest { };
 

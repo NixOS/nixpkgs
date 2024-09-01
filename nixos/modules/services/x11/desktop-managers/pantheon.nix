@@ -177,7 +177,7 @@ in
         pkgs.pantheon.mutter
       ];
       systemd.packages = with pkgs; [
-        gnome.gnome-session
+        gnome-session
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
