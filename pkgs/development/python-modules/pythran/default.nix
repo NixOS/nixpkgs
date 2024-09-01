@@ -61,10 +61,23 @@ buildPythonPackage rec {
   dependencies = [
     ply
     gast
-    numpy
     beniget
     setuptools
   ];
+  buildInputs = [
+    numpy
+  ];
+  outputs = [
+    "out"
+    # The pythran{,-config} executables are not meant to be functional, unless
+    # used within an environment that incldues numpy, which is intentionally
+    # not propagated.
+    "bin"
+  ];
+  postInstall = ''
+    moveToOutput bin/pythran "''${!outputBin}"
+    moveToOutput bin/pythran-config "''${!outputBin}"
+  '';
 
   pythonImportsCheck = [
     "pythran"
