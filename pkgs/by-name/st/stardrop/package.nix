@@ -1,6 +1,6 @@
 {
   lib,
-  iconConvTools,
+  imagemagick,
   fetchFromGitHub,
   buildFHSEnv,
   appimageTools,
@@ -37,25 +37,27 @@ let
 
     nativeBuildInputs = [
       copyDesktopItems
-      iconConvTools
+      imagemagick
     ];
 
-    postInstall = ''
-      for theme in ${lib.concatStringsSep " " (map (t: "${t}") extraThemes)}; do
-        cp -rv $theme $out/lib/stardrop/Themes/
-      done
-    '';
+    postInstall = builtins.concatStringsSep "\n" (
+      map (theme: "cp ${theme} $out/lib/stardrop/Themes/${builtins.baseNameOf theme}") extraThemes
+    );
 
     postFixup = ''
-      icoFileToHiColorTheme $src/Stardrop/Assets/icon.ico stardrop $out
+      for size in 16 24 32 48 64 128 256; do
+        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+          magick ${./stardrop.ico} -background none -resize "$size"x"$size" -flatten \
+            $out/share/icons/hicolor/"$size"x"$size"/apps/stardrop.png
+      done;
     '';
 
     desktopItems = [
       (makeDesktopItem {
-        name = "Stardrop";
+        name = "stardrop";
+        desktopName = "Stardrop";
         exec = "stardrop --nxm %u";
         icon = "stardrop";
-        desktopName = "Stardrop";
         comment = meta.description;
         categories = [ "Game" ];
         startupWMClass = "stardrop";
