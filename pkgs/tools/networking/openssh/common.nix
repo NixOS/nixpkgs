@@ -24,7 +24,7 @@
 , etcDir ? null
 , withKerberos ? false
 , withLdns ? true
-, libkrb5
+, krb5
 , libfido2
 , libxcrypt
 , hostname
@@ -60,15 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ]
-    # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
+    # This is not the same as the krb5 from the inputs! pkgs.krb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
-    ++ lib.optional withKerberos pkgs.libkrb5
+    ++ lib.optional withKerberos pkgs.krb5
     ++ extraNativeBuildInputs;
   buildInputs = [ zlib libedit ]
     ++ [ (if linkOpenssl then openssl else libxcrypt) ]
     ++ lib.optional withFIDO libfido2
-    ++ lib.optional withKerberos libkrb5
+    ++ lib.optional withKerberos krb5
     ++ lib.optional withLdns ldns
     ++ lib.optional withPAM pam;
 
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature dsaKeysSupport "dsa-keys")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
-    ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
+    ++ lib.optional withKerberos (assert krb5 != null; "--with-kerberos5=${lib.getDev krb5}")
     ++ lib.optional stdenv.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"

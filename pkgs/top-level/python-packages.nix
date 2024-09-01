@@ -253,8 +253,6 @@ self: super: with self; {
 
   aiohttp-fast-zlib = callPackage ../development/python-modules/aiohttp-fast-zlib { };
 
-  aiohttp-isal = callPackage ../development/python-modules/aiohttp-isal { };
-
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
   aiohttp-middlewares = callPackage ../development/python-modules/aiohttp-middlewares { };
@@ -8067,8 +8065,6 @@ self: super: with self; {
   mouseinfo = callPackage ../development/python-modules/mouseinfo { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
-
-  mox3 = callPackage ../development/python-modules/mox3 { };
 
   mozart-api = callPackage ../development/python-modules/mozart-api { };
 

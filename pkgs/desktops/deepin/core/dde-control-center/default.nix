@@ -8,6 +8,7 @@
   doxygen,
   wrapQtAppsHook,
   wrapGAppsHook3,
+  wayland-scanner,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     doxygen
     wrapQtAppsHook
     wrapGAppsHook3
+    wayland-scanner
   ];
   dontWrapGApps = true;
 

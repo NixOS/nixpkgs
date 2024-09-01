@@ -8707,51 +8707,6 @@ let
         sha512 = "j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==";
       };
     };
-    "@prisma/debug-5.17.0" = {
-      name = "_at_prisma_slash_debug";
-      packageName = "@prisma/debug";
-      version = "5.17.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@prisma/debug/-/debug-5.17.0.tgz";
-        sha512 = "l7+AteR3P8FXiYyo496zkuoiJ5r9jLQEdUuxIxNCN1ud8rdbH3GTxm+f+dCyaSv9l9WY+29L9czaVRXz9mULfg==";
-      };
-    };
-    "@prisma/engines-5.17.0" = {
-      name = "_at_prisma_slash_engines";
-      packageName = "@prisma/engines";
-      version = "5.17.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@prisma/engines/-/engines-5.17.0.tgz";
-        sha512 = "+r+Nf+JP210Jur+/X8SIPLtz+uW9YA4QO5IXA+KcSOBe/shT47bCcRMTYCbOESw3FFYFTwe7vU6KTWHKPiwvtg==";
-      };
-    };
-    "@prisma/engines-version-5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053" = {
-      name = "_at_prisma_slash_engines-version";
-      packageName = "@prisma/engines-version";
-      version = "5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@prisma/engines-version/-/engines-version-5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053.tgz";
-        sha512 = "tUuxZZysZDcrk5oaNOdrBnnkoTtmNQPkzINFDjz7eG6vcs9AVDmA/F6K5Plsb2aQc/l5M2EnFqn3htng9FA4hg==";
-      };
-    };
-    "@prisma/fetch-engine-5.17.0" = {
-      name = "_at_prisma_slash_fetch-engine";
-      packageName = "@prisma/fetch-engine";
-      version = "5.17.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@prisma/fetch-engine/-/fetch-engine-5.17.0.tgz";
-        sha512 = "ESxiOaHuC488ilLPnrv/tM2KrPhQB5TRris/IeIV4ZvUuKeaicCl4Xj/JCQeG9IlxqOgf1cCg5h5vAzlewN91Q==";
-      };
-    };
-    "@prisma/get-platform-5.17.0" = {
-      name = "_at_prisma_slash_get-platform";
-      packageName = "@prisma/get-platform";
-      version = "5.17.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@prisma/get-platform/-/get-platform-5.17.0.tgz";
-        sha512 = "UlDgbRozCP1rfJ5Tlkf3Cnftb6srGrEQ4Nm3og+1Se2gWmCZ0hmPIi+tQikGDUVLlvOWx3Gyi9LzgRP+HTXV9w==";
-      };
-    };
     "@prisma/prisma-schema-wasm-5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053" = {
       name = "_at_prisma_slash_prisma-schema-wasm";
       packageName = "@prisma/prisma-schema-wasm";
@@ -81402,31 +81357,6 @@ in
       description = "An opinionated `toml` formatter plugin for Prettier";
       homepage = "https://github.com/un-ts/prettier/tree/master/packages/prettier";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  prisma = nodeEnv.buildNodePackage {
-    name = "prisma";
-    packageName = "prisma";
-    version = "5.17.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/prisma/-/prisma-5.17.0.tgz";
-      sha512 = "m4UWkN5lBE6yevqeOxEvmepnL5cNPEjzMw2IqDB59AcEV6w7D8vGljDLd1gPFH+W6gUxw9x7/RmN5dCS/WTPxA==";
-    };
-    dependencies = [
-      sources."@prisma/debug-5.17.0"
-      sources."@prisma/engines-5.17.0"
-      sources."@prisma/engines-version-5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053"
-      sources."@prisma/fetch-engine-5.17.0"
-      sources."@prisma/get-platform-5.17.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Prisma is an open-source database toolkit. It includes a JavaScript/TypeScript ORM for Node.js, migrations and a modern GUI to view and edit the data in your database. You can use Prisma in new projects or add it to an existing one.";
-      homepage = "https://www.prisma.io";
-      license = "Apache-2.0";
     };
     production = true;
     bypassCache = true;
