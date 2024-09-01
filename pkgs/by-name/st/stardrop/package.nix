@@ -1,5 +1,6 @@
 {
   lib,
+  iconConvTools,
   fetchFromGitHub,
   buildFHSEnv,
   appimageTools,
@@ -34,25 +35,31 @@ let
     dotnet-runtime = dotnetCorePackages.runtime_7_0;
     nugetDeps = ./deps.nix;
 
+    nativeBuildInputs = [
+      copyDesktopItems
+      iconConvTools
+    ];
+
     postInstall = ''
-      mkdir -pv $out/share/icon/
-      cp Stardrop/Assets/icon.ico $out/share/icon/stardrop.ico
       for theme in ${lib.concatStringsSep " " (map (t: "${t}") extraThemes)}; do
         cp -rv $theme $out/lib/stardrop/Themes/
       done
     '';
 
-    nativeBuildInputs = [ copyDesktopItems ];
+    postFixup = ''
+      icoFileToHiColorTheme $src/Stardrop/Assets/icon.ico stardrop $out
+    '';
 
     desktopItems = [
       (makeDesktopItem {
         name = "Stardrop";
-        exec = "stardrop";
+        exec = "stardrop --nxm %u";
         icon = "stardrop";
-        desktopName = "stardrop";
+        desktopName = "Stardrop";
         comment = meta.description;
         categories = [ "Game" ];
         startupWMClass = "stardrop";
+        mimeTypes = [ "x-scheme-handler/nxm" ];
       })
     ];
   };
