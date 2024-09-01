@@ -1,17 +1,21 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "mapproxy";
   version = "3.0.1";
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2So0e5VDWde33bNksdhzdaiOp4XkHcyULeBifV5OtKM=";
+
+  src = fetchFromGitHub {
+    owner = "mapproxy";
+    repo = "mapproxy";
+    rev = version;
+    hash = "sha256-74hUJIy1+DaKjUsCgd4+2MdMPGqqDUuHDrhBCFNn8Dk=";
   };
+
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
