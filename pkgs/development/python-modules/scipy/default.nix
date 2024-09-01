@@ -96,12 +96,15 @@ buildPythonPackage {
   # both numpy 2 and numpy 1 should work, but they seem to worry about numpy
   # incompatibilities that we here with Nixpkgs' Python ecosystem, shouldn't
   # experience.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
-      --replace-fail "pybind11>=2.12.0,<2.13.0" "pybind11>=2.12.0" \
-  '';
-
+  postPatch =
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "pybind11>=2.12.0,<2.13.0" "pybind11>=2.12.0"
+    ''
+    + lib.optionalString (!numpy.isNumpy2) ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'numpy>=2.0.0rc1,' 'numpy'
+    '';
   build-system =
     [
       cython
