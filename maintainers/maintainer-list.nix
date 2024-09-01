@@ -95,6 +95,11 @@
     github = "0x120581f";
     githubId = 130835755;
   };
+  _0x3f = {
+    name = "0x3f";
+    github = "0x3fiona";
+    githubId = 178507884;
+  };
   _0x4A6F = {
     email = "mail-maintainer@0x4A6F.dev";
     matrix = "@0x4a6f:matrix.org";
