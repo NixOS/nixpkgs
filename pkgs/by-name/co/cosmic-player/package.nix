@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, makeBinaryWrapper
-, alsa-lib
-, cosmic-icons
-, ffmpeg
-, llvmPackages
-, just
-, pkg-config
-, libxkbcommon
-, wayland
-, xorg
+{ 
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  makeBinaryWrapper,
+  alsa-lib,
+  cosmic-icons,
+  ffmpeg,
+  llvmPackages,
+  just,
+  pkg-config,
+  libxkbcommon,
+  wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
