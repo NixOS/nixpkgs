@@ -1110,6 +1110,8 @@ self: super: with self; {
 
   axisregistry = callPackage ../development/python-modules/axisregistry { };
 
+  ayla-iot-unofficial = callPackage ../development/python-modules/ayla-iot-unofficial { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
