@@ -12421,6 +12421,8 @@ self: super: with self; {
 
   pysml = callPackage ../development/python-modules/pysml { };
 
+  pysmlight = callPackage ../development/python-modules/pysmlight { };
+
   pysmt = callPackage ../development/python-modules/pysmt { };
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
