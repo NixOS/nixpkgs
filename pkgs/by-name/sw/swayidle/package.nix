@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ]
                 ++ lib.optionals systemdSupport [ systemd ];
