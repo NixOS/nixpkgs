@@ -39,6 +39,9 @@
 
   # Reverse dependency
   sage,
+  # Tests (temporary)
+  scipy,
+  numpy_1,
 }:
 
 let
@@ -221,6 +224,9 @@ buildPythonPackage {
       ++ (builtins.attrNames datasetsHashes);
     tests = {
       inherit sage;
+      withNumpy_1 = scipy.override {
+        numpy = numpy_1;
+      };
     };
   };
 
