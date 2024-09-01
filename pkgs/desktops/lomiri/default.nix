@@ -88,6 +88,7 @@ let
 
       #### QML / QML-related
       lomiri-notifications = callPackage ./qml/lomiri-notifications { };
+      lomiri-online-accounts-plugins = callPackage ./qml/lomiri-online-accounts-plugins { };
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
       qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
