@@ -192,7 +192,11 @@ in {
   relaxBuildSystemRequiresHook = callPackage ({ makePythonHook, packaging, tomlkit }:
     makePythonHook {
       name = "relax-build-system-requires-hook";
-      propagatedBuildInputs = [ packaging tomlkit ];
+      propagatedBuildInputs = [
+        packaging
+        # minimize dependencies
+        (tomlkit.overridePythonAttrs { doCheck = false; })
+      ];
       substitutions = {
         inherit pythonInterpreter;
         hook = ./relax-build-system-requires-hook.py;
