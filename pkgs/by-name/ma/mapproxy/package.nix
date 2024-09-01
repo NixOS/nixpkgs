@@ -1,15 +1,16 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 with python3.pkgs;
 buildPythonApplication rec {
-  pname = "MapProxy";
+  pname = "mapproxy";
   version = "3.0.1";
   src = fetchPypi {
-  inherit pname version;
-  hash = "sha256-2So0e5VDWde33bNksdhzdaiOp4XkHcyULeBifV5OtKM=";
+    inherit pname version;
+    hash = "sha256-2So0e5VDWde33bNksdhzdaiOp4XkHcyULeBifV5OtKM=";
   };
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
@@ -34,9 +35,9 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-  description = "Open source proxy for geospatial data";
-  homepage = "https://mapproxy.org/";
-  license = lib.licenses.asl20;
-  maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ rakesh4g ]);
+    description = "Open source proxy for geospatial data";
+    homepage = "https://mapproxy.org/";
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ rakesh4g ]);
   };
 }
