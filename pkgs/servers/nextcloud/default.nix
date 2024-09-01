@@ -3,8 +3,8 @@
 , nextcloud29Packages
 }:
 
-let
-  generic = {
+rec {
+  mkNextcloudDerivation = {
     version, hash
   , eol ? false, extraVulnerabilities ? []
   , packages
@@ -40,19 +40,16 @@ let
         ++ (optional eol "Nextcloud version ${version} is EOL");
     };
   };
-in {
-  nextcloud28 = generic {
+
+  nextcloud28 = mkNextcloudDerivation {
     version = "28.0.9";
     hash = "sha256-DZd3NkDn+A6gqTP7+L0pe/JB2ghy+hzFQ1D/F5Nmmxs=";
     packages = nextcloud28Packages;
   };
 
-  nextcloud29 = generic {
+  nextcloud29 = mkNextcloudDerivation {
     version = "29.0.5";
     hash = "sha256-x/6cYeXsMKXlmejxUqGCXfaE0w6JnbDKqIaMjWe1Oiw=";
     packages = nextcloud29Packages;
   };
-
-  # tip: get the sha with:
-  # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }

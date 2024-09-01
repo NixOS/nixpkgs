@@ -10597,7 +10597,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackages ../servers/nextcloud {})
-    nextcloud28 nextcloud29;
+    mkNextcloudDerivation nextcloud28 nextcloud29;
 
   nextcloud28Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/28.json;
@@ -10605,7 +10605,6 @@ with pkgs;
   nextcloud29Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/29.json;
   };
-
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
