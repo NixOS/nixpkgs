@@ -13,6 +13,8 @@
   openssl,
   # should find out if newer versions work...
   v8,
+  # cheating a bit ;)
+  onlyoffice-documentserver
 }:
 
 let
@@ -321,6 +323,19 @@ EOL
 
     mkdir -p $out/bin
     cp build/bin/linux_64/debug/x2t $out/bin
+
+    cat >$out/bin/DoctRenderer.config <<EOF
+      <Settings>
+        <file>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/common/Native/native.js</file>
+        <file>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/common/Native/jquery_native.js</file>
+        <!-- cheating even more: this means x2t only works when the onlyoffice module is installed
+             and the user is in the onlyoffice group -->
+        <allfonts>/var/lib/onlyoffice/documentserver/server/FileConverter/bin/AllFonts.js</allfonts>
+        <file>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/web-apps/vendor/xregexp/xregexp-all-min.js</file>
+        <sdkjs>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs</sdkjs>
+        <dictionaries>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/dictionaries</dictionaries>
+      </Settings>
+EOF
 
     patchelf --add-rpath ${icu}/lib $out/bin/x2t
 
