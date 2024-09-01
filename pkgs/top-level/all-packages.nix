@@ -35424,7 +35424,16 @@ with pkgs;
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
-  chiaki4deck = qt6Packages.callPackage ../games/chiaki4deck { };
+  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng {
+    libplacebo = libplacebo.overrideAttrs (old: {
+      version = "6.338.2-unstable-2024-01-29";
+      src = old.src.override {
+        # broken with 7.349.0 -- pinning to rev used by upstream https://github.com/streetpea/chiaki-ng/blob/96d535db41bb9c3b37fbffcf2402d51e891ff960/scripts/build-libplacebo.sh#L9
+        rev = "c320f61e601caef2be081ce61138e5d51c1be21d";
+        hash = "sha256-ZlKYgWz/Rkp4IPt6cJ+KNnzBB2s8jGZEamSAOIGyDuE=";
+      };
+    });
+  };
 
   chromium-bsu = callPackage ../games/chromium-bsu { };
 
