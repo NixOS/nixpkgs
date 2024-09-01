@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-R4ycoSn9LjRD/icxS0VeIR4NjGC8j/ffcDhz3u7lgMI=";
   };
 
-  outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
+  outputs = [ "bin" "doc" "man" "dev" "out" ];
 
   # https://github.com/jqlang/jq/issues/2871
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
