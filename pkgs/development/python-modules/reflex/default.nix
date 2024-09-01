@@ -27,7 +27,9 @@
   python-engineio,
   python-multipart,
   python-socketio,
+  pythonOlder,
   redis,
+  reflex-chakra,
   reflex-hosting-cli,
   rich,
   sqlmodel,
@@ -44,17 +46,23 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.5.9";
+  version = "0.5.10";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
-    rev = "v${version}";
-    hash = "sha256-QeEggHPilCLjUQ76AYDkqdf1iWLwCyAYTnf17RdhDq0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8nwVB5FthDbhQRO663vRTqT8KPtStbdSgEoZ75EnhmE=";
   };
 
-  pythonRelaxDeps = [ "fastapi" ];
+  pythonRelaxDeps = [
+    "fastapi"
+    "gunicorn"
+  ];
+
   pythonRemoveDeps = [
     "setuptools"
     "build"
@@ -80,6 +88,7 @@ buildPythonPackage rec {
     python-multipart
     python-socketio
     redis
+    reflex-chakra
     reflex-hosting-cli
     rich
     sqlmodel
@@ -106,7 +115,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # touches network
+    # Tests touche network
     "test_find_and_check_urls"
     "test_event_actions"
     "test_upload_file"
@@ -118,6 +127,7 @@ buildPythonPackage rec {
     "test_preprocess" # KeyError: 'reflex___state____state'
     "test_send" # AssertionError: Expected 'post' to have been called once. Called 0 times.
   ];
+
   disabledTestPaths = [
     "benchmarks/"
     "integration/"

@@ -24570,7 +24570,12 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_7;
+  sbcl_2_4_8 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.8"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_8;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -29729,8 +29734,6 @@ with pkgs;
 
   keepass-diff = callPackage ../applications/misc/keepass-diff { };
 
-  keeweb = callPackage ../applications/misc/keeweb { };
-
   evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
@@ -31565,11 +31568,6 @@ with pkgs;
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
-
-  handbrake = callPackage ../applications/video/handbrake {
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox Foundation VideoToolbox;
-    inherit (darwin) libobjc;
-  };
 
   handlr = callPackage ../tools/misc/handlr { };
 

@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "license-generator";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-OIut6eE8cm7eBeHwuCUqSMDH48ZiJpF4vFaQ6wVLnfg=";
+    hash = "sha256-RofgO5pJJlHP1rHFK5pgvi1TF77ZYrLYP5EML43zQMI=";
   };
 
-  cargoHash = "sha256-tv3Qx4JP2Lbl+k686mX7acabh7nyP1E9w7cQUnjh+pE=";
+  cargoHash = "sha256-6iJJ6ZK5ZUfKG+1qYehz1LeYs6kzS1QlTjIogCLWjZA=";
 
   meta = with lib; {
     description = "Command-line tool for generating license files";
