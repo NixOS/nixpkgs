@@ -214,9 +214,6 @@ because their behaviour is different:
   paths included in this list. Items listed in `install_requires` go here.
 * `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_requires` go here.
 
-Aside from propagating dependencies,
-  `buildPythonPackage` also injects code into and wraps executables with the
-  paths included in this list. Items listed in `extras_requires` go here.
 
 ##### Overriding Python packages {#overriding-python-packages}
 
@@ -2049,8 +2046,8 @@ no maintainer, so maintenance falls back to the package set maintainers.
 
 ### Updating packages in bulk {#python-package-bulk-updates}
 
-There is a tool to update alot of python libraries in bulk, it exists at
-`maintainers/scripts/update-python-libraries` with this repository.
+A tool to bulk-update numerous Python libraries is available in the
+repository at `maintainers/scripts/update-python-libraries`.
 
 It can quickly update minor or major versions for all packages selected
 and create update commits, and supports the `fetchPypi`, `fetchurl` and
