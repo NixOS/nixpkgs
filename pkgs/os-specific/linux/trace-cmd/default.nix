@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchzip, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
+{ lib, stdenv, fetchpatch, fetchzip, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight, gitUpdater }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
   version = "3.2";
@@ -60,6 +60,12 @@ stdenv.mkDerivation rec {
     "includedir=${placeholder "dev"}/include"
     "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
   ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git";
+    rev-prefix = "trace-cmd-v";
+  };
 
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
