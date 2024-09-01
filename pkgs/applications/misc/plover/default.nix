@@ -75,7 +75,6 @@
     propagatedBuildInputs = [
       babel
       pyqt5
-      qt5.qtwayland
       xlib
       pyserial
       appdirs
@@ -84,6 +83,8 @@
       plover_stroke
       rtf_tokenize
     ];
+
+    buildInputs = [ qt5.qtwayland ];
 
     nativeCheckInputs = [ pytestCheckHook mock ];
 
