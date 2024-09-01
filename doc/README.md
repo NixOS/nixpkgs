@@ -247,7 +247,7 @@ You, as the writer of documentation, are still in charge of its content.
   :::
   ```
 
-- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
+- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nix.dev/manual/nix/latest/language/values).
   For example:
 
   ```markdown

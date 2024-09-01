@@ -3,7 +3,7 @@
 `pkgs.mkBinaryCache` is a function for creating Nix flat-file binary caches.
 Such a cache exists as a directory on disk, and can be used as a Nix substituter by passing `--substituter file:///path/to/cache` to Nix commands.
 
-Nix packages are most commonly shared between machines using [HTTP, SSH, or S3](https://nixos.org/manual/nix/stable/package-management/sharing-packages.html), but a flat-file binary cache can still be useful in some situations.
+Nix packages are most commonly shared between machines using [HTTP, SSH, or S3](https://nix.dev/manual/nix/latest/package-management/sharing-packages.html), but a flat-file binary cache can still be useful in some situations.
 For example, you can copy it directly to another machine, or make it available on a network file system.
 It can also be a convenient way to make some Nix packages available inside a container via bind-mounting.
 
@@ -13,7 +13,7 @@ The transitive closure of these derivations' outputs will be copied into the cac
 
 ::: {.note}
 This function is meant for advanced use cases.
-The more idiomatic way to work with flat-file binary caches is via the [nix-copy-closure](https://nixos.org/manual/nix/stable/command-ref/nix-copy-closure.html) command.
+The more idiomatic way to work with flat-file binary caches is via the [nix-copy-closure](https://nix.dev/manual/nix/latest/command-ref/nix-copy-closure.html) command.
 You may also want to consider [dockerTools](#sec-pkgs-dockerTools) for your containerization needs.
 :::
 

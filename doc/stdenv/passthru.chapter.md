@@ -1,7 +1,7 @@
 # Passthru-attributes {#chap-passthru}
 []{#var-stdenv-passthru} []{#special-variables} <!-- legacy anchors -->
 
-As opposed to most other `mkDerivation` input attributes, `passthru` is not passed to the derivation's [`builder` executable](https://nixos.org/manual/nix/stable/expressions/derivations.html#attr-builder).
+As opposed to most other `mkDerivation` input attributes, `passthru` is not passed to the derivation's [`builder` executable](https://nix.dev/manual/nix/latest/expressions/derivations.html#attr-builder).
 Changing it will not trigger a rebuild – it is "passed through".
 Its value can be accessed as if it was set inside a derivation.
 

@@ -17,8 +17,8 @@ Names and values are case-sensitive.
 
 | Namespace     | Description |
 |---------------|-------------|
-| [`nix:narinfo`](#sec-interop.cylonedx-narinfo) | Namespace for properties that are specific to how a component is stored as a [Nix archive](https://nixos.org/manual/nix/stable/glossary#gloss-nar) (NAR) in a [binary cache](https://nixos.org/manual/nix/stable/glossary#gloss-binary-cache). |
-| [`nix:fod`](#sec-interop.cylonedx-fod) | Namespace for properties that describe a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation). |
+| [`nix:narinfo`](#sec-interop.cylonedx-narinfo) | Namespace for properties that are specific to how a component is stored as a [Nix archive](https://nix.dev/manual/nix/latest/glossary#gloss-nar) (NAR) in a [binary cache](https://nix.dev/manual/nix/latest/glossary#gloss-binary-cache). |
+| [`nix:fod`](#sec-interop.cylonedx-fod) | Namespace for properties that describe a [fixed-output derivation](https://nix.dev/manual/nix/latest/glossary#gloss-fixed-output-derivation). |
 
 
 ### `nix:narinfo` {#sec-interop.cylonedx-narinfo}
@@ -43,7 +43,7 @@ The `nix:narinfo` properties should be accompanied by a `nix:store_path` propert
 
 ### `nix:fod` {#sec-interop.cylonedx-fod}
 
-FOD properties describe a [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation).
+FOD properties describe a [fixed-output derivation](https://nix.dev/manual/nix/latest/glossary#gloss-fixed-output-derivation).
 The `nix:fod:method` property is required and must be accompanied by a `nix:store_path` property within the same property list.
 All other properties in this namespace are method-specific.
 To reproduce the build of a component the `nix:fod:method` value is resolved to an [appropriate function](#chap-pkgs-fetchers) within Nixpkgs whose arguments intersect with the given properties.

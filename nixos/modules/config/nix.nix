@@ -356,7 +356,7 @@ in
         '';
         description = ''
           Configuration for Nix, see
-          <https://nixos.org/manual/nix/stable/command-ref/conf-file.html> or
+          <https://nix.dev/manual/nix/latest/command-ref/conf-file.html> or
           {manpage}`nix.conf(5)` for available options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
 

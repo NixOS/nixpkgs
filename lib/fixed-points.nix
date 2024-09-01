@@ -12,7 +12,7 @@ rec {
 
     This section explains `fix` by refactoring from syntactic recursion to a call of `fix` instead.
 
-    For context, Nix lets you define attributes in terms of other attributes syntactically using the [`rec { }` syntax](https://nixos.org/manual/nix/stable/language/constructs.html#recursive-sets).
+    For context, Nix lets you define attributes in terms of other attributes syntactically using the [`rec { }` syntax](https://nix.dev/manual/nix/latest/language/constructs.html#recursive-sets).
 
     ```nix
     nix-repl> rec {

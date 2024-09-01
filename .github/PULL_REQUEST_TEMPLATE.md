@@ -14,7 +14,7 @@ For new packages please briefly describe the package or provide a link to its ho
   - [ ] aarch64-linux
   - [ ] x86_64-darwin
   - [ ] aarch64-darwin
-- For non-Linux: Is sandboxing enabled in `nix.conf`? (See [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file.html))
+- For non-Linux: Is sandboxing enabled in `nix.conf`? (See [Nix manual](https://nix.dev/manual/nix/latest/command-ref/conf-file.html))
   - [ ] `sandbox = relaxed`
   - [ ] `sandbox = true`
 - [ ] Tested, as applicable:

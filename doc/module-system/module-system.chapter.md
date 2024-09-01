@@ -34,7 +34,7 @@ If the `class` attribute is set and non-`null`, the module system will reject `i
 
 The `class` value should be a string in lower [camel case](https://en.wikipedia.org/wiki/Camel_case).
 
-If applicable, the `class` should match the "prefix" of the attributes used in (experimental) [flakes](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#description). Some examples are:
+If applicable, the `class` should match the "prefix" of the attributes used in (experimental) [flakes](https://nix.dev/manual/nix/latest/command-ref/new-cli/nix3-flake.html#description). Some examples are:
 
  - `nixos` as in `flake.nixosModules`
  - `nixosTest`: modules that constitute a [NixOS VM test](https://nixos.org/manual/nixos/stable/index.html#sec-nixos-tests)

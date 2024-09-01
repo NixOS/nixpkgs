@@ -6,7 +6,7 @@ The purpose of this library is to process [filesystem paths]. It does not read f
 It exists to support the native Nix [path value type] with extra functionality.
 
 [filesystem paths]: https://en.m.wikipedia.org/wiki/Path_(computing)
-[path value type]: https://nixos.org/manual/nix/stable/language/values.html#type-path
+[path value type]: https://nix.dev/manual/nix/latest/language/values.html#type-path
 
 As an extension of the path value type, it inherits the same intended use cases and limitations:
 - Only use paths to access files at evaluation time, such as the local project source.
@@ -20,7 +20,7 @@ Overall, this library works with two types of paths:
   A subpath refers to a specific file or directory within an absolute base directory.
   It is a stricter form of a relative path, notably [without support for `..` components][parents] since those could escape the base directory.
 
-[string value type]: https://nixos.org/manual/nix/stable/language/values.html#type-string
+[string value type]: https://nix.dev/manual/nix/latest/language/values.html#type-string
 
 This library is designed to be as safe and intuitive as possible, throwing errors when operations are attempted that would produce surprising results, and giving the expected result otherwise.
 

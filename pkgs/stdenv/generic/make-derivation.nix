@@ -155,7 +155,7 @@ let
 # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
 #   Details on how to use this mkDerivation function
 #
-# * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
+# * https://nix.dev/manual/nix/latest/expressions/derivations.html#derivations
 #   Explanation about derivations in general
 {
 
@@ -509,10 +509,10 @@ mkDerivationSimple = overrideAttrs:
 # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
 #   Details on how to use this mkDerivation function
 #
-# * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
+# * https://nix.dev/manual/nix/latest/expressions/derivations.html#derivations
 #   Explanation about derivations in general
 #
-# * [package attributes]: https://nixos.org/manual/nix/stable/glossary#package-attribute-set
+# * [package attributes]: https://nix.dev/manual/nix/latest/glossary#package-attribute-set
 {
 
 # Configure Phase

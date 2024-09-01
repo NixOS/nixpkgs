@@ -1348,4 +1348,4 @@ relevant.
 [profiling]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
 [search.nixos.org]: https://search.nixos.org
 [turtle]: https://hackage.haskell.org/package/turtle
-[import-from-derivation]: https://nixos.org/manual/nix/stable/language/import-from-derivation
+[import-from-derivation]: https://nix.dev/manual/nix/latest/language/import-from-derivation

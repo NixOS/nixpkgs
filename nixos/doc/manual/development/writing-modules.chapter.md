@@ -61,7 +61,7 @@ The meaning of each part is as follows.
 
 -   The first line makes the current Nix expression a function. The variable
     `pkgs` contains Nixpkgs (by default, it takes the `nixpkgs` entry of
-    `NIX_PATH`, see the [Nix manual](https://nixos.org/manual/nix/stable/#sec-common-env)
+    `NIX_PATH`, see the [Nix manual](https://nix.dev/manual/nix/latest/#sec-common-env)
     for further details), while `config` contains the full system
     configuration. This line can be omitted if there is no reference to
     `pkgs` and `config` inside the module.

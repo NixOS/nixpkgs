@@ -32,7 +32,7 @@ Again, it's possible to launch the interpreter from the shell. The Ruby interpre
 
 #### Load Ruby environment from `.nix` expression {#load-ruby-environment-from-.nix-expression}
 
-As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
+As explained [in the `nix-shell` section](https://nix.dev/manual/nix/latest/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
 Say we want to have Ruby, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
 ```nix
