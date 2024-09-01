@@ -13274,6 +13274,8 @@ self: super: with self; {
 
   pyvicare = callPackage ../development/python-modules/pyvicare { };
 
+  pyvicare-neo = callPackage ../development/python-modules/pyvicare-neo { };
+
   pyvirtualdisplay = callPackage ../development/python-modules/pyvirtualdisplay { };
 
   pyvis = callPackage ../development/python-modules/pyvis { };
