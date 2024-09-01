@@ -2163,6 +2163,23 @@ let
         };
       };
 
+      gracefulpotato.gruvbox-ish = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gruvbox-ish";
+          publisher = "GracefulPotato";
+          version = "0.5.18";
+          hash = "sha256-cV8Waun91SF5hdCIA+CSDkkaqBuT7qyEdvtA6GGdkrk=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/GracefulPotato.gruvbox-ish/changelog";
+          description = "Gruvbox-like theme";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GracefulPotato.gruvbox-ish";
+          homepage = "https://github.com/graceful-potato/gruvbox-ish";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.leodog896 ];
+        };
+      };
+
       grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gc-excelviewer";
