@@ -57,7 +57,7 @@ let
   };
 
   meta = {
-    description = "Stardrop is an open-source, cross-platform mod manager for the game Stardew Valley";
+    description = "Open-source, cross-platform mod manager for the game Stardew Valley";
     homepage = "https://github.com/Floogen/Stardrop";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jh-devv ];
