@@ -61,10 +61,16 @@ stdenv.mkDerivation rec {
   # jq is linked to libjq:
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  # Break the dependency cycle: $dev refers to $bin via propagated-build-outputs, and
-  # $bin refers to $dev because of https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
+  # jq binary includes the whole `configureFlags` in:
+  # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
+  # Strip unnecessary dependencies here to reduce closure size and break the
+  # dependency cycle: $dev also refers to $bin via propagated-build-outputs
   postFixup = ''
-    remove-references-to -t "$dev" "$bin/bin/jq"
+    remove-references-to \
+      -t "$dev" \
+      -t "$man" \
+      -t "$doc" \
+      "$bin/bin/jq"
   '';
 
   doInstallCheck = true;
