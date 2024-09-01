@@ -33106,11 +33106,7 @@ with pkgs;
 
   rke = callPackage ../applications/networking/cluster/rke { };
 
-  inherit (callPackage ../applications/networking/cluster/rke2 {
-    buildGoModule = buildGo121Module;
-    go = go_1_21;
-  }) rke2_stable;
-  inherit (callPackage ../applications/networking/cluster/rke2 { }) rke2_latest rke2_testing;
+  inherit (callPackage ../applications/networking/cluster/rke2 { }) rke2_stable rke2_latest rke2_testing;
   rke2 = rke2_stable;
 
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
