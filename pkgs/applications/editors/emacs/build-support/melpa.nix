@@ -126,6 +126,11 @@ EOF
   buildPhase = args.buildPhase or ''
     runHook preBuild
 
+    # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
+    if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
+      foundMakefile=1
+    fi
+
     pushd "$NIX_BUILD_TOP"
 
     emacs --batch -Q \
