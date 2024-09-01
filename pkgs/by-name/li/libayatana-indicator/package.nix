@@ -2,6 +2,7 @@
   ayatana-ido,
   cmake,
   fetchFromGitHub,
+  glib,
   gtk3,
   lib,
   pkg-config,
@@ -21,12 +22,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    glib # for glib-mkenums
     pkg-config
   ];
 
   buildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [ ayatana-ido ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Ayatana Indicators Shared Library";
