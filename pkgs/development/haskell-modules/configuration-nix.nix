@@ -1367,7 +1367,7 @@ self: super: builtins.intersectAttrs super {
     }) super)
       gi-javascriptcore
       gi-webkit2webextension
-      gi-gtk_4_0_8
+      gi-gtk_4_0_9
       gi-gdk_4_0_8
       gi-gsk
       gi-adwaita
