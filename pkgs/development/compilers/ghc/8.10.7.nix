@@ -184,6 +184,9 @@ let
           if stdenv.targetPlatform.isDarwin
           then cc.bintools
           else cc.bintools.bintools;
+
+        # clang is used as an assembler on darwin with the LLVM backend
+        clang = cc;
       }.${name};
     in
     "${tools}/bin/${tools.targetPrefix}${name}";
@@ -335,7 +338,17 @@ stdenv.mkDerivation (rec {
     export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
   '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-    export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+    # The executable we specify via $CLANG is used as an assembler (exclusively, it seems, but this isn't
+    # clarified in any user facing documentation). As such, it'll be called on assembly produced by $CC
+    # which usually comes from the darwin stdenv. To prevent a situation where $CLANG doesn't understand
+    # the assembly it is given, we need to make sure that it matches the LLVM version of $CC if possible.
+    # It is unclear (at the time of writing 2024-09-01)  whether $CC should match the LLVM version we use
+    # for llc and opt which would require using a custom darwin stdenv for targetCC.
+    export CLANG="${
+      if targetCC.isClang
+      then toolPath "clang" targetCC
+      else "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+    }"
   '' + ''
     # No need for absolute paths since these tools only need to work during the build
     export CC_STAGE0="$CC_FOR_BUILD"
@@ -477,10 +490,14 @@ stdenv.mkDerivation (rec {
       "LLVM llc command" "${lib.getBin llvmPackages.llvm}/bin/llc" \
       "LLVM opt command" "${lib.getBin llvmPackages.llvm}/bin/opt"
   ''
-  # FIXME(@sternenseemann): use installCC instead if possible
   + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
     ghc-settings-edit "$settingsFile" \
-      "LLVM clang command" "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+      "LLVM clang command" "${
+        # See comment for CLANG in preConfigure
+        if installCC.isClang
+        then toolPath "clang" installCC
+        else "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+      }"
   ''
   + ''
 
