@@ -80,7 +80,7 @@ buildPythonPackage rec {
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
-      set -eu -o pipefail
+      set -u -o pipefail +e
       nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
       nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
       nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
