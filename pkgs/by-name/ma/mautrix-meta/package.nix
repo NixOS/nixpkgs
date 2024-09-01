@@ -1,5 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
+, nix-update-script
 , lib
 , nixosTests
 , olm
@@ -29,7 +30,10 @@ buildGoModule rec {
         mautrix-meta-sqlite
         ;
     };
+
+    updateScript = nix-update-script { };
   };
+
 
   meta = {
     homepage = "https://github.com/mautrix/meta";
