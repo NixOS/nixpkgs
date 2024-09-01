@@ -29729,8 +29729,6 @@ with pkgs;
 
   keepass-diff = callPackage ../applications/misc/keepass-diff { };
 
-  keeweb = callPackage ../applications/misc/keeweb { };
-
   evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
