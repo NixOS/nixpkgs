@@ -14204,7 +14204,9 @@ self: super: with self; {
 
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
-  scipy = callPackage ../development/python-modules/scipy { };
+  scipy = callPackage ../development/python-modules/scipy {
+    numpy = numpy_2;
+  };
 
   scmrepo = callPackage ../development/python-modules/scmrepo { };
 
