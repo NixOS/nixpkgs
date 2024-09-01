@@ -112,6 +112,7 @@ mapAliases {
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
+  inherit (pkgs) intelephense; # added 2024-08-31
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
