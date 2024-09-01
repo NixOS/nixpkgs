@@ -216,22 +216,23 @@ in rec {
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "unstable-2021-04-04";
+    version = "0-unstable-2024-08-26";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
-      sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
+      rev = "bf9e666f2a6a8172ebe99fff61b574ba740cffc2";
+      sha256 = "sha256-kIhJKgo1BDTeFyAPa//f/TrhPfV9Rfk9y4qMhIpCydk=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-    for f in extrakto.sh open.sh tmux-extrakto.sh; do
-      wrapProgram $target/scripts/$f \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
-        )}
-    done
+      for f in extrakto.py extrakto_plugin.py; do
+        sed -i -e 's|#!/usr/bin/env python3|#!${pkgs.python3}/bin/python3|g' $target/$f
+      done
 
+      wrapProgram $target/scripts/open.sh \
+        --prefix PATH : ${ with pkgs; lib.makeBinPath
+          [ fzf xclip wl-clipboard ]
+        }
     '';
     meta = {
       homepage = "https://github.com/laktak/extrakto";
