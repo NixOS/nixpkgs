@@ -18,6 +18,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-02Zkp7Vc1M5iZsG4iJL30S73T2HHg3lqrPJ9mW3FOuk=";
   };
 
+  # upstream uses `#![deny(warnings)]` which breaks our build
+  RUSTFLAGS = "--cap-lints allow";
+
   cargoHash = "sha256-zp7qklME28HNGomAcQgrEi7W6zQ1QCJc4FjxtnKySUE=";
 
   nativeBuildInputs = [

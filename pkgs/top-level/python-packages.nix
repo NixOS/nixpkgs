@@ -13662,6 +13662,8 @@ self: super: with self; {
 
   reflex = callPackage ../development/python-modules/reflex { };
 
+  reflex-chakra = callPackage ../development/python-modules/reflex-chakra { };
+
   reflex-hosting-cli = callPackage ../development/python-modules/reflex-hosting-cli { };
 
   reflink = callPackage ../development/python-modules/reflink { };
