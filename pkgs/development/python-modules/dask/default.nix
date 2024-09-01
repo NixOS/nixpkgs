@@ -34,22 +34,19 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.8.1";
+    version = "2024.9.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.10";
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
       rev = "refs/tags/${version}";
-      hash = "sha256-ztB5T8VFc1WoQB7lWQlonAyq7duqft9OE5FYvmjZd48=";
+      hash = "sha256-CaTxhYT2diFOBylLH36iIR1ooWzi2e/RNOnvc11DtDY=";
     };
 
     build-system = [ setuptools ];
