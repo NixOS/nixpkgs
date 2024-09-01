@@ -17,65 +17,9 @@ in
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
-
-  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
-
-  gnome-control-center = callPackage ./core/gnome-control-center { };
-
-  gnome-session = callPackage ./core/gnome-session { };
-
-  gnome-session-ctl = callPackage ./core/gnome-session/ctl.nix { };
-
-  gnome-shell = callPackage ./core/gnome-shell { };
-
-  gnome-settings-daemon = callPackage ./core/gnome-settings-daemon { };
-
-  # Using 43 to match Mutter used in Pantheon
-  gnome-settings-daemon43 = callPackage ./core/gnome-settings-daemon/43 { };
-
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
-  mutter = callPackage ./core/mutter { };
-
-  # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
-  mutter43 = callPackage ./core/mutter/43 { };
-
-  networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
-    withGnome = true;
-  };
-
-  networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
-    withGnome = true;
-  };
-
-  networkmanager-openconnect = pkgs.networkmanager-openconnect.override {
-    withGnome = true;
-  };
-
-  networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override {
-    withGnome = true;
-  };
-
-  networkmanager-l2tp = pkgs.networkmanager-l2tp.override {
-    withGnome = true;
-  };
-
-  networkmanager-iodine = pkgs.networkmanager-iodine.override {
-    withGnome = true;
-  };
-
   nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
-
-#### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
-
-  gnome-applets = callPackage ./misc/gnome-applets { };
-
-  gnome-flashback = callPackage ./misc/gnome-flashback { };
-
-  gnome-panel = callPackage ./misc/gnome-panel { };
-
-  gnome-panel-with-modules = callPackage ./misc/gnome-panel/wrapper.nix { };
 
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
@@ -107,8 +51,11 @@ in
   geary = lib.warn "The ‘gnome.geary’ was moved to top-level. Please use ‘pkgs.geary’ directly." pkgs.geary; # Added on 2024-06-22.
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gitg = lib.warn "The ‘gnome.gitg’ was moved to top-level. Please use ‘pkgs.gitg’ directly." pkgs.gitg; # Added on 2024-06-22.
+  gnome-applets = lib.warn "The ‘gnome.gnome-applets’ was moved to top-level. Please use ‘pkgs.gnome-applets’ directly." pkgs.gnome-applets; # Added on 2024-08-31.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
   gnome-backgrounds = lib.warn "The ‘gnome.gnome-backgrounds’ was moved to top-level. Please use ‘pkgs.gnome-backgrounds’ directly." pkgs.gnome-backgrounds; # Added on 2024-08-11.
+  gnome-bluetooth = lib.warn "The ‘gnome.gnome-bluetooth’ was moved to top-level. Please use ‘pkgs.gnome-bluetooth’ directly." pkgs.gnome-bluetooth; # Added on 2024-08-28.
+  gnome-bluetooth_1_0 = lib.warn "The ‘gnome.gnome-bluetooth_1_0’ was moved to top-level. Please use ‘pkgs.gnome-bluetooth_1_0’ directly." pkgs.gnome-bluetooth_1_0; # Added on 2024-08-28.
   gnome-boxes = lib.warn "The ‘gnome.gnome-boxes’ was moved to top-level. Please use ‘pkgs.gnome-boxes’ directly." pkgs.gnome-boxes; # Added on 2024-08-11.
   gnome-characters = lib.warn "The ‘gnome.gnome-characters’ was moved to top-level. Please use ‘pkgs.gnome-characters’ directly." pkgs.gnome-characters; # Added on 2024-08-11.
   gnome-chess = lib.warn "The ‘gnome.gnome-chess’ was moved to top-level. Please use ‘pkgs.gnome-chess’ directly." pkgs.gnome-chess; # Added on 2024-08-11.
@@ -118,8 +65,10 @@ in
   gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
   gnome-calendar = lib.warn "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly." pkgs.gnome-calendar; # Added on 2024-06-22.
   gnome-contacts = lib.warn "The ‘gnome.gnome-contacts’ was moved to top-level. Please use ‘pkgs.gnome-contacts’ directly." pkgs.gnome-contacts; # Added on 2024-08-11.
+  gnome-control-center = lib.warn "The ‘gnome.gnome-control-center’ was moved to top-level. Please use ‘pkgs.gnome-control-center’ directly." pkgs.gnome-control-center; # Added on 2024-08-28.
   gnome-dictionary = lib.warn "The ‘gnome.gnome-dictionary’ was moved to top-level. Please use ‘pkgs.gnome-dictionary’ directly." pkgs.gnome-dictionary; # Added on 2024-06-22.
   gnome-disk-utility = lib.warn "The ‘gnome.gnome-disk-utility’ was moved to top-level. Please use ‘pkgs.gnome-disk-utility’ directly." pkgs.gnome-disk-utility; # Added on 2024-06-22.
+  gnome-flashback = lib.warn "The ‘gnome.gnome-flashback’ was moved to top-level. Please use ‘pkgs.gnome-flashback’ directly." pkgs.gnome-flashback; # Added on 2024-08-31.
   gnome-font-viewer = lib.warn "The ‘gnome.gnome-font-viewer’ was moved to top-level. Please use ‘pkgs.gnome-font-viewer’ directly." pkgs.gnome-font-viewer; # Added on 2024-06-22.
   gnome-initial-setup = lib.warn "The ‘gnome.gnome-initial-setup’ was moved to top-level. Please use ‘pkgs.gnome-initial-setup’ directly." pkgs.gnome-initial-setup; # Added on 2024-08-11.
   gnome-keyring = lib.warn "The ‘gnome.gnome-keyring’ was moved to top-level. Please use ‘pkgs.gnome-keyring’ directly." pkgs.gnome-keyring; # Added on 2024-06-22.
@@ -133,10 +82,17 @@ in
   gnome-nibbles = lib.warn "The ‘gnome.gnome-nibbles’ was moved to top-level. Please use ‘pkgs.gnome-nibbles’ directly." pkgs.gnome-nibbles; # Added on 2024-08-11.
   gnome-notes = lib.warn "The ‘gnome.gnome-notes’ was moved to top-level. Please use ‘pkgs.gnome-notes’ directly." pkgs.gnome-notes; # Added on 2024-08-11.
   gnome-packagekit = lib.warn "The ‘gnome.gnome-packagekit’ was moved to top-level. Please use ‘pkgs.gnome-packagekit’ directly." pkgs.gnome-packagekit; # Added on 2024-06-22.
+  gnome-panel = lib.warn "The ‘gnome.gnome-panel’ was moved to top-level. Please use ‘pkgs.gnome-panel’ directly." pkgs.gnome-panel; # Added on 2024-08-31.
+  gnome-panel-with-modules = lib.warn "The ‘gnome.gnome-panel-with-modules’ was moved to top-level. Please use ‘pkgs.gnome-panel-with-modules’ directly." pkgs.gnome-panel-with-modules; # Added on 2024-08-31.
   gnome-power-manager = lib.warn "The ‘gnome.gnome-power-manager’ was moved to top-level. Please use ‘pkgs.gnome-power-manager’ directly." pkgs.gnome-power-manager; # Added on 2024-08-11.
   gnome-remote-desktop = lib.warn "The ‘gnome.gnome-remote-desktop’ was moved to top-level. Please use ‘pkgs.gnome-remote-desktop’ directly." pkgs.gnome-remote-desktop; # Added on 2024-08-11.
   gnome-robots = lib.warn "The ‘gnome.gnome-robots’ was moved to top-level. Please use ‘pkgs.gnome-robots’ directly." pkgs.gnome-robots; # Added on 2024-08-11.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
+  gnome-session = lib.warn "The ‘gnome.gnome-session’ was moved to top-level. Please use ‘pkgs.gnome-session’ directly." pkgs.gnome-session; # Added on 2024-08-28.
+  gnome-session-ctl = lib.warn "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly." pkgs.gnome-session-ctl; # Added on 2024-08-28.
+  gnome-settings-daemon = lib.warn "The ‘gnome.gnome-settings-daemon’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon’ directly." pkgs.gnome-settings-daemon; # Added on 2024-08-28.
+  gnome-settings-daemon43 = lib.warn "The ‘gnome.gnome-settings-daemon43’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon43’ directly." pkgs.gnome-settings-daemon43; # Added on 2024-08-28.
+  gnome-shell = lib.warn "The ‘gnome.gnome-shell’ was moved to top-level. Please use ‘pkgs.gnome-shell’ directly." pkgs.gnome-shell; # Added on 2024-08-28.
   gnome-shell-extensions = lib.warn "The ‘gnome.gnome-shell-extensions’ was moved to top-level. Please use ‘pkgs.gnome-shell-extensions’ directly." pkgs.gnome-shell-extensions; # Added on 2024-08-11.
   gnome-software = lib.warn "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly." pkgs.gnome-software; # Added on 2024-08-11.
   gnome-sound-recorder = lib.warn "The ‘gnome.gnome-sound-recorder’ was moved to top-level. Please use ‘pkgs.gnome-sound-recorder’ directly." pkgs.gnome-sound-recorder; # Added on 2024-08-11.
@@ -156,7 +112,15 @@ in
   iagno = lib.warn "The ‘gnome.iagno’ was moved to top-level. Please use ‘pkgs.iagno’ directly." pkgs.iagno; # Added on 2024-08-11.
   lightsoff = lib.warn "The ‘gnome.lightsoff’ was moved to top-level. Please use ‘pkgs.lightsoff’ directly." pkgs.lightsoff; # Added on 2024-08-11.
   metacity = lib.warn "The ‘gnome.metacity’ was moved to top-level. Please use ‘pkgs.metacity’ directly." pkgs.metacity; # Added on 2024-08-11.
+  mutter = lib.warn "The ‘gnome.mutter’ was moved to top-level. Please use ‘pkgs.mutter’ directly." pkgs.mutter; # Added on 2024-08-28.
+  mutter43 = lib.warn "The ‘gnome.mutter43’ was moved to top-level. Please use ‘pkgs.mutter43’ directly." pkgs.mutter43; # Added on 2024-08-28.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
+  networkmanager-openvpn = lib.warn "The ‘gnome.networkmanager-openvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-openvpn’ directly." pkgs.networkmanager-openvpn; # Added on 2024-08-31.
+  networkmanager-vpnc = lib.warn "The ‘gnome.networkmanager-vpnc’ was moved to top-level. Please use ‘pkgs.networkmanager-vpnc’ directly." pkgs.networkmanager-vpnc; # Added on 2024-08-31.
+  networkmanager-openconnect = lib.warn "The ‘gnome.networkmanager-openconnect’ was moved to top-level. Please use ‘pkgs.networkmanager-openconnect’ directly." pkgs.networkmanager-openconnect; # Added on 2024-08-31.
+  networkmanager-fortisslvpn = lib.warn "The ‘gnome.networkmanager-fortisslvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-fortisslvpn’ directly." pkgs.networkmanager-fortisslvpn; # Added on 2024-08-31.
+  networkmanager-l2tp = lib.warn "The ‘gnome.networkmanager-l2tp’ was moved to top-level. Please use ‘pkgs.networkmanager-l2tp’ directly." pkgs.networkmanager-l2tp; # Added on 2024-08-31.
+  networkmanager-iodine = lib.warn "The ‘gnome.networkmanager-iodine’ was moved to top-level. Please use ‘pkgs.networkmanager-iodine’ directly." pkgs.networkmanager-iodine; # Added on 2024-08-31.
   nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
   polari = lib.warn "The ‘gnome.polari’ was moved to top-level. Please use ‘pkgs.polari’ directly." pkgs.polari; # Added on 2024-08-11.
   pomodoro = lib.warn "The ‘gnome.pomodoro’ was moved to top-level. Please use ‘pkgs.gnome-pomodoro’ directly." pkgs.gnome-pomodoro; # Added on 2024-06-22.

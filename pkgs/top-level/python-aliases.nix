@@ -98,6 +98,7 @@ mapAliases ({
   chiavdf = throw "chiavdf has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   chia-rs = throw "chia-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   class-registry = phx-class-registry; # added 2021-10-05
+  cirq-ft = throw "cirq-ft is not longer provieded by cirq upstream"; # added 2024-08-31
   cld2-cffi = throw "cld2-cffi has been removed, as the last release was in 2016"; # added 2024-05-20
   clvm = throw "clvm has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   clvm-rs = throw "clvm-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
