@@ -243,7 +243,13 @@ let
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+        --add-flags ${
+          lib.concatStringsSep " " [
+            (lib.escapeShellArg commandLineArgs)
+            # Disables auto updates and browser outdated popup
+            "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'"
+          ]
+        }
 
       for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
         patchelf --set-rpath $rpath $elf
@@ -283,7 +289,13 @@ let
 
       mkdir -p $out/bin
       makeWrapper $out/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $out/bin/google-chrome-stable \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+        --add-flags ${
+          lib.concatStringsSep " " [
+            (lib.escapeShellArg commandLineArgs)
+            # Disables auto updates and browser outdated popup
+            "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'"
+          ]
+        }
 
       runHook postInstall
     '';
