@@ -9,6 +9,8 @@
   pnpm_9,
   electron,
   makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -20,6 +22,15 @@ let
   };
 
   platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
+
+  desktopEntry = makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
@@ -68,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpm.configHook
     makeWrapper
+    copyDesktopItems
   ];
 
   pnpmDeps = pnpm.fetchDeps {
@@ -117,11 +129,15 @@ stdenv.mkDerivation (finalAttrs: {
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
         --inherit-argv0
+
+    install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
 
     runHook postInstall
   '';
+
+  desktopItems = [ desktopEntry ];
 
   meta = {
     description = "Privacy-first personal knowledge management system that supports complete offline usage, as well as end-to-end encrypted data sync";
