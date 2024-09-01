@@ -21627,8 +21627,6 @@ with pkgs;
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   libindicator = callPackage ../development/libraries/libindicator { };
 
-  libayatana-indicator = callPackage ../development/libraries/libayatana-indicator { };
-
   libinotify-kqueue = callPackage ../development/libraries/libinotify-kqueue { };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
