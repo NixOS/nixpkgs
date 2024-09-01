@@ -1,16 +1,26 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, jre_headless }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  jre_headless,
+}:
 
 stdenv.mkDerivation rec {
   pname = "maestro";
-  version = "1.36.0";
+  version = "1.37.9";
 
   src = fetchurl {
     url = "https://github.com/mobile-dev-inc/maestro/releases/download/cli-${version}/maestro.zip";
-    sha256 = "18zffmqz32dfb66yy48z3dl258rlfc8m2r4021hbrbixvk7k3qb7";
+    sha256 = "sha256-bWZuD2+v6molwW1ef2a3djBnVfYscBjILLGXeeSUmoU=";
   };
 
   dontUnpack = true;
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase = ''
     mkdir $out

@@ -33343,8 +33343,6 @@ with pkgs;
 
   maestral-gui = qt6Packages.callPackage ../applications/networking/maestral-qt { };
 
-  maestro = callPackage ../development/mobile/maestro { };
-
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   lemurs = callPackage ../applications/display-managers/lemurs { };
