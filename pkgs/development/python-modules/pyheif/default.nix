@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyheif";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hqXFF0N51xRrXtGmiJL69yaKE1+39QOaARv7em6QMgA=";
+    hash = "sha256-6bTBHrrUgvwloIBM4pW0S2YMv3gpoij1awcfMl+eDeQ=";
   };
 
   propagatedBuildInputs = [
