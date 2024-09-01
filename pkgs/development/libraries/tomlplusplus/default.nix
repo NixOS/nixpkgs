@@ -4,7 +4,9 @@
   lib,
   meson,
   ninja,
+  pkg-config,
   stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,13 +24,21 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     cmake
     ninja
+    pkg-config
   ];
+
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/marzer/tomlplusplus";
     description = "Header-only TOML config file parser and serializer for C++17";
     license = licenses.mit;
     maintainers = with maintainers; [ Scrumplex ];
+    pkgConfigModules = [ "tomlplusplus" ];
     platforms = platforms.unix;
   };
 })
