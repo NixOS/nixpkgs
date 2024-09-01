@@ -9170,6 +9170,8 @@ self: super: with self; {
 
   nibe = callPackage ../development/python-modules/nibe { };
 
+  nice-go = callPackage ../development/python-modules/nice-go { };
+
   nidaqmx = callPackage ../development/python-modules/nidaqmx { };
 
   nikola = callPackage ../development/python-modules/nikola { };
