@@ -1371,6 +1371,7 @@ self: super: builtins.intersectAttrs super {
       gi-gdk_4_0_8
       gi-gsk
       gi-adwaita
+      sdl2-ttf
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [

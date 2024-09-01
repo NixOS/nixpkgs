@@ -2901,7 +2901,6 @@ self: super: {
   # Workaround for Cabal failing to find nonexistent SDL2 library?!
   # https://github.com/NixOS/nixpkgs/issues/260863
   sdl2-gfx = overrideCabal { __propagatePkgConfigDepends = false; } super.sdl2-gfx;
-  sdl2-ttf = overrideCabal { __onlyPropagateKnownPkgConfigModules = true; } super.sdl2-ttf;
 
   # Needs git for compile-time insertion of commit hash into --version string.
   kmonad = overrideCabal (drv: {
