@@ -13,7 +13,6 @@
 , openldap
 , openssl
 , libpcap
-, python311Packages
 , curl
 , Security
 , CoreFoundation
@@ -32,7 +31,7 @@
 }:
 
 let
-  scons = buildPackages.scons.override{ python3Packages = python311Packages; };
+  scons = buildPackages.scons.override { python3Packages = buildPackages.python311Packages; };
   python = scons.python.withPackages (ps: with ps; [
     pyyaml
     cheetah3
