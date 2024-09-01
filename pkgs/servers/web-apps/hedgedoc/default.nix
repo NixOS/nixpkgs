@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "1.9.9";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     rev = version;
-    hash = "sha256-6eKTgEZ+YLoSmPQWBS95fJ+ioIxeTVlT+moqslByPPw=";
+    hash = "sha256-cRIpcoD9WzLYxKYpkvhRxUmeyJR5z2QyqApzWvQND+s=";
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -42,12 +42,14 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-Ga+tl4oZlum43tdfez1oWGMHZAfyePGl47S+9NRRvW8=";
+    outputHash = "sha256-RV9xzNVE4//tPVWVaET78ML3ah+hkZ8x6mTAxe5/pdE=";
   };
 
 in stdenv.mkDerivation {
   pname = "hedgedoc";
   inherit version src;
+
+  patches = [ ./fix-lock.patch ];
 
   nativeBuildInputs = [
     makeBinaryWrapper

@@ -1,0 +1,26 @@
+diff --git a/yarn.lock b/yarn.lock
+index ace3967..d32e3a2 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -1264,7 +1264,7 @@ __metadata:
+     eslint: "npm:8.57.0"
+     eslint-config-standard: "npm:17.1.0"
+     eslint-plugin-import: "npm:2.29.1"
+-    eslint-plugin-n: "npm:14.0.0"
++    eslint-plugin-n: "npm:15.0.0"
+     eslint-plugin-promise: "npm:6.6.0"
+     eslint-plugin-standard: "npm:4.1.0"
+     exports-loader: "npm:1.1.1"
+@@ -6076,9 +6076,9 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"eslint-plugin-n@npm:14.0.0":
+-  version: 14.0.0
+-  resolution: "eslint-plugin-n@npm:14.0.0"
++"eslint-plugin-n@npm:15.0.0":
++  version: 15.0.0
++  resolution: "eslint-plugin-n@npm:15.0.0"
+   dependencies:
+     eslint-plugin-es: "npm:^4.1.0"
+     eslint-utils: "npm:^3.0.0"
