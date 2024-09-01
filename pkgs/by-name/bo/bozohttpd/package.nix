@@ -1,13 +1,15 @@
 {
   lib,
-  stdenv,
-  fetchurl,
   bmake,
+  fetchurl,
   groff,
   inetutils,
-  wget,
-  openssl,
   libxcrypt,
+  lua,
+  openssl,
+  stdenv,
+  wget,
+  # Boolean flags
   minimal ? false,
   userSupport ? !minimal,
   cgiSupport ? !minimal,
@@ -15,71 +17,76 @@
   dynamicContentSupport ? !minimal,
   sslSupport ? !minimal,
   luaSupport ? !minimal,
-  lua,
   htpasswdSupport ? !minimal,
 }:
 
-let
-  inherit (lib) optional optionals;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bozohttpd";
   version = "20240126";
 
   # bozohttpd is developed in-tree in pkgsrc, canonical hashes can be found at:
   # http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/www/bozohttpd/distinfo
   src = fetchurl {
-    url = "http://eterna23.net/${pname}/${pname}-${version}.tar.bz2";
+    url = "http://eterna23.net/bozohttpd/bozohttpd-${finalAttrs.version}.tar.bz2";
     hash = "sha512-fr1PnyYAS3wkpmj/npRC3A87UL9LIXw4thlM4GfrtlJbuX5EkWGVJnHJW/EmYp7z+N91dcdRJgdO79l6WJsKpg==";
   };
 
   buildInputs = [
-    openssl
     libxcrypt
-  ] ++ optional (luaSupport) lua;
+    openssl
+  ] ++ lib.optionals (luaSupport) [ lua ];
+
   nativeBuildInputs = [
     bmake
     groff
   ];
 
-  COPTS =
-    [
-      "-D_DEFAULT_SOURCE"
-      "-D_GNU_SOURCE"
-
-      # ensure that we can serve >2GB files even on 32-bit systems.
-      "-D_LARGEFILE_SOURCE"
-      "-D_FILE_OFFSET_BITS=64"
-
-      # unpackaged dependency: https://man.netbsd.org/blocklist.3
-      "-DNO_BLOCKLIST_SUPPORT"
-    ]
-    ++ optional (!userSupport) "-DNO_USER_SUPPORT"
-    ++ optional (!dirIndexSupport) "-DNO_DIRINDEX_SUPPORT"
-    ++ optional (!dynamicContentSupport) "-DNO_DYNAMIC_CONTENT"
-    ++ optional (!luaSupport) "-DNO_LUA_SUPPORT"
-    ++ optional (!sslSupport) "-DNO_SSL_SUPPORT"
-    ++ optional (!cgiSupport) "-DNO_CGIBIN_SUPPORT"
-    ++ optional (htpasswdSupport) "-DDO_HTPASSWD";
-
-  _LDADD =
-    [ "-lm" ]
-    ++ optional (stdenv.hostPlatform.libc != "libSystem") "-lcrypt"
-    ++ optional (luaSupport) "-llua"
-    ++ optionals (sslSupport) [
-      "-lssl"
-      "-lcrypto"
-    ];
-  makeFlags = [ "LDADD=$(_LDADD)" ];
-
-  doCheck = true;
   nativeCheckInputs = [
     inetutils
     wget
   ];
-  checkFlags = optional (!cgiSupport) "CGITESTS=";
 
-  meta = with lib; {
+  env = {
+    COPTS = lib.concatStringsSep " " (
+      [
+        "-D_DEFAULT_SOURCE"
+        "-D_GNU_SOURCE"
+
+        # ensure that we can serve >2GB files even on 32-bit systems.
+        "-D_LARGEFILE_SOURCE"
+        "-D_FILE_OFFSET_BITS=64"
+
+        # unpackaged dependency: https://man.netbsd.org/blocklist.3
+        "-DNO_BLOCKLIST_SUPPORT"
+      ]
+      ++ lib.optionals (htpasswdSupport) [ "-DDO_HTPASSWD" ]
+      ++ lib.optionals (!cgiSupport) [ "-DNO_CGIBIN_SUPPORT" ]
+      ++ lib.optionals (!dirIndexSupport) [ "-DNO_DIRINDEX_SUPPORT" ]
+      ++ lib.optionals (!dynamicContentSupport) [ "-DNO_DYNAMIC_CONTENT" ]
+      ++ lib.optionals (!luaSupport) [ "-DNO_LUA_SUPPORT" ]
+      ++ lib.optionals (!sslSupport) [ "-DNO_SSL_SUPPORT" ]
+      ++ lib.optionals (!userSupport) [ "-DNO_USER_SUPPORT" ]
+    );
+
+    _LDADD = lib.concatStringsSep " " (
+      [ "-lm" ]
+      ++ lib.optionals (stdenv.hostPlatform.libc != "libSystem") [ "-lcrypt" ]
+      ++ lib.optionals (luaSupport) [ "-llua" ]
+      ++ lib.optionals (sslSupport) [
+        "-lcrypto"
+        "-lssl"
+      ]
+    );
+  };
+
+  makeFlags = [ "LDADD=$(_LDADD)" ];
+
+  checkFlags = lib.optionals (!cgiSupport) [ "CGITESTS=" ];
+
+  doCheck = true;
+
+  meta = {
+    homepage = "http://www.eterna23.net/bozohttpd/";
     description = "Bozotic HTTP server; small and secure";
     longDescription = ''
       bozohttpd is a small and secure HTTP version 1.1 server. Its main
@@ -91,10 +98,10 @@ stdenv.mkDerivation rec {
       single machine. It is capable of servicing pages via the IPv6 protocol.
       It has SSL support. It has no configuration file by design.
     '';
-    homepage = "http://www.eterna.com.au/bozohttpd/";
-    changelog = "http://www.eterna.com.au/bozohttpd/CHANGES";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.embr ];
-    platforms = platforms.all;
+    changelog = "http://www.eterna23.net/bozohttpd/CHANGES";
+    license = lib.licenses.bsd2;
+    mainProgram = "bozohttpd";
+    maintainers = [ lib.maintainers.embr ];
+    platforms = lib.platforms.all;
   };
-}
+})
