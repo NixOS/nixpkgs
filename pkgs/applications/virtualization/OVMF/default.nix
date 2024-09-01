@@ -75,8 +75,8 @@ let
 
 in
 
-assert platformSpecific ? ${cpuName};
 assert msVarsTemplate -> fdSize4MB;
+assert msVarsTemplate -> platformSpecific ? ${cpuName};
 assert msVarsTemplate -> platformSpecific.${cpuName} ? msVarsArgs;
 
 edk2.mkDerivation projectDscPath (finalAttrs: {
