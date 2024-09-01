@@ -88,10 +88,6 @@ final: prev: {
     nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs.psc-package final.pulp ];
   });
 
-  intelephense = prev.intelephense.override (oldAttrs: {
-    meta = oldAttrs.meta // { license = lib.licenses.unfree; };
-  });
-
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
