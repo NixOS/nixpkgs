@@ -6781,9 +6781,11 @@
     github = "FirelightFlagboy";
     githubId = 30697622;
     name = "Firelight Flagboy";
-    keys = [{
-      fingerprint = "D6E2 4BD5 680C 609D D146  99B4 4304 CE0B A5E8 67D1";
-    }];
+    keys = [
+      {
+        fingerprint = "D6E2 4BD5 680C 609D D146  99B4 4304 CE0B A5E8 67D1";
+      }
+    ];
   };
   FireyFly = {
     email = "nix@firefly.nu";
