@@ -1,4 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{
+  lib,
+  ...
+}:
 
 let
   configDir = "/var/lib/foobar";
@@ -242,4 +245,4 @@ in {
         hass.log(hass.succeed("systemctl cat home-assistant.service"))
         hass.log(hass.succeed("systemd-analyze security home-assistant.service"))
   '';
-})
+}
