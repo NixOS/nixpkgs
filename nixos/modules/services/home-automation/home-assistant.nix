@@ -118,6 +118,12 @@ in {
     (mkRemovedOptionModule [ "services" "home-assistant" "applyDefaultConfig" ] "The default config was migrated into services.home-assistant.config")
     (mkRemovedOptionModule [ "services" "home-assistant" "autoExtraComponents" ] "Components are now parsed from services.home-assistant.config unconditionally")
     (mkRenamedOptionModule [ "services" "home-assistant" "port" ] [ "services" "home-assistant" "config" "http" "server_port" ])
+
+    # Migrations in NixOS 24.11
+    (mkRenamedOptionModule [ "services" "home-assistant" "extraPackages" ] [ "services" "home-assistant" "extraPythonPackages" ])
+    (mkRenamedOptionModule [ "services" "home-assistant" "extraComponents" ] [ "services" "home-assistant" "integrations" ])
+    (mkRenamedOptionModule [ "services" "home-assistant" "customComponents" ] [ "services" "home-assistant" "integrationPackages" ])
+    (mkRenamedOptionModule [ "services" "home-assistant" "customLovelaceModules" ] [ "services" "home-assistant" "lovelaceResourcePackages" ])
   ];
 
   meta = {
@@ -128,7 +134,7 @@ in {
   options.services.home-assistant = {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
     # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
-    enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
+    enable = mkEnableOption "Home Assistant. Check the [wiki](https://wiki.nixos.org/wiki/Home_Assistant) to get started!";
 
     extraArgs = mkOption {
       type = types.listOf types.str;
@@ -147,9 +153,12 @@ in {
 
     defaultIntegrations = mkOption {
       type = types.listOf (types.enum availableComponents);
-      # https://github.com/home-assistant/core/blob/dev/homeassistant/bootstrap.py#L109
+      # https://github.com/home-assistant/core/blob/2024.8.3/homeassistant/bootstrap.py#L178
       default = [
+        # core functionality
+        "analytics"
         "application_credentials"
+        "backup"
         "frontend"
         "hardware"
         "logger"
@@ -174,46 +183,43 @@ in {
         "input_text"
         "schedule"
         "timer"
-
-        # non-supervisor
-        "backup"
       ];
       readOnly = true;
       description = ''
-        List of integrations set are always set up, unless in recovery mode.
+        List of integrations that are always set up, unless in recovery mode.
       '';
     };
 
-    extraComponents = mkOption {
+    integrations = mkOption {
       type = types.listOf (types.enum availableComponents);
       default = [
         # List of components required to complete the onboarding
-        "default_config"
+        # homeassistant/components/onboarding/__init__.py
+        "google_translate"
         "met"
-        "esphome"
+        "radio_browser"
+        "shopping_list"
+        "analytics"
       ] ++ optionals pkgs.stdenv.hostPlatform.isAarch [
-        # Use the platform as an indicator that we might be running on a RaspberryPi and include
-        # relevant components
         "rpi_power"
       ];
-      example = literalExpression ''
-        [
-          "analytics"
-          "default_config"
-          "esphome"
-          "my"
-          "shopping_list"
-          "wled"
-        ]
-      '';
+      example = [
+        "analytics"
+        "default_config"
+        "esphome"
+        "my"
+        "shopping_list"
+        "wled"
+      ];
       description = ''
-        List of [components](https://www.home-assistant.io/integrations/) that have their dependencies included in the package.
+        List of [built-in integrations](https://www.home-assistant.io/integrations/) for which dependencies will be provided.
 
-        The component name can be found in the URL, for example `https://www.home-assistant.io/integrations/ffmpeg/` would map to `ffmpeg`.
+        Its names can be found in the documentation URL, for example `https://www.home-assistant.io/integrations/ffmpeg/`
+        would map to `ffmpeg`.
       '';
     };
 
-    extraPackages = mkOption {
+    extraPythonPackages = mkOption {
       type = types.functionTo (types.listOf types.package);
       default = _: [];
       defaultText = literalExpression ''
@@ -226,16 +232,15 @@ in {
         ];
       '';
       description = ''
-        List of packages to add to propagatedBuildInputs.
+        List of additional libraries to provide in the Python environment.
 
-        A popular example is `python3Packages.psycopg2`
-        for PostgreSQL support in the recorder component.
+        A popular example is `python3Packages.psycopg2` for PostgreSQL support in the recorder component.
       '';
     };
 
-    customComponents = mkOption {
+    integrationPackages = mkOption {
       type = types.listOf (
-        types.addCheck types.package (p: p.isHomeAssistantComponent or false) // {
+        types.addCheck types.package (pkg: pkg.isHomeAssistantComponent or false) // {
           name = "home-assistant-component";
           description = "package that is a Home Assistant component";
         }
@@ -247,13 +252,13 @@ in {
         ];
       '';
       description = ''
-        List of custom component packages to install.
+        List of community-maintained integration packages to install.
 
         Available components can be found below `pkgs.home-assistant-custom-components`.
       '';
     };
 
-    customLovelaceModules = mkOption {
+    lovelaceResourcePackages = mkOption {
       type = types.listOf types.package;
       default = [];
       example = literalExpression ''
@@ -263,12 +268,15 @@ in {
         ];
       '';
       description = ''
-        List of custom lovelace card packages to load as lovelace resources.
+        List of lovelace module packages (usually for cards/widgets) to load as lovelace resources.
 
-        Available cards can be found below `pkgs.home-assistant-custom-lovelace-modules`.
+        Available resource packages can be found below `pkgs.home-assistant-custom-lovelace-modules`.
 
         ::: {.note}
-        Automatic loading only works with lovelace in `yaml` mode.
+        Automatic loading only works with lovelace in `yaml` mode. In `storage` mode resources need to be configured
+        from the "Manage resources" section that appears in the burger menu when editing dashboards.
+
+        The base url for resources is `/local/nixos-lovelace-modules/` followed by the `.js` entrypoint of the card.
         :::
       '';
     };
@@ -398,7 +406,7 @@ in {
             themes = "!include_dir_merge_named themes";
           };
           http = {};
-          feedreader.urls = [ "https://nixos.org/blogs.xml" ];
+          feedreader.urls = [ "https://lobste.rs/t/nix.rss" ];
         }
       '';
       description = ''
@@ -479,7 +487,7 @@ in {
           extraPackages = python3Packages: with python3Packages; [
             psycopg2
           ];
-          extraComponents = [
+          integrations = [
             "default_config"
             "esphome"
             "met"
