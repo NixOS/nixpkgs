@@ -22,7 +22,6 @@ dont-distribute-packages:
  - Advise-me
  - AlgoRhythm
  - AlignmentAlgorithms
- - Allure
  - AndroidViewHierarchyImporter
  - Annotations
  - ApplePush
@@ -247,7 +246,6 @@ dont-distribute-packages:
  - KiCS-prophecy
  - LDAPv3
  - LPPaver
- - LambdaHack
  - LambdaINet
  - LambdaPrettyQuote
  - LambdaShell
@@ -2771,7 +2769,6 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
- - monomer
  - monomer-flatpak-example
  - monte-carlo
  - moo
@@ -3529,11 +3526,7 @@ dont-distribute-packages:
  - scrabble-bot
  - scrapbook
  - scroll
- - sdl-try-drivers
- - sdl2-cairo
- - sdl2-gfx
  - sdl2-sprite
- - sdl2-ttf
  - sdp-binary
  - sdp-deepseq
  - sdp-hashable

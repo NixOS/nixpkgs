@@ -5268,7 +5268,6 @@ broken-packages:
   - sde-solver # failure in job https://hydra.nixos.org/build/233251017 at 2023-09-02
   - sdl2-cairo-image # failure in job https://hydra.nixos.org/build/233210135 at 2023-09-02
   - sdl2-compositor # failure in job https://hydra.nixos.org/build/233198910 at 2023-09-02
-  - sdl2 # failure in job https://hydra.nixos.org/build/269670352 at 2024-08-19
   - sdl2-fps # failure in job https://hydra.nixos.org/build/233195346 at 2023-09-02
   - sdl2-image # failure in job https://hydra.nixos.org/build/233216837 at 2023-09-02
   - sdl2-mixer # failure in job https://hydra.nixos.org/build/233228951 at 2023-09-02
