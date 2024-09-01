@@ -109,6 +109,8 @@ buildPythonPackage {
       meson-python
       nukeReferences
       pythran
+      # For the f2py executable
+      numpy
       pkg-config
       setuptools
     ]
