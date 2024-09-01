@@ -3160,6 +3160,7 @@ dont-distribute-packages:
  - poseidon
  - poseidon-postgis
  - postgresql-common-persistent
+ - postgresql-libpq_0_10_2_0
  - postgresql-pure
  - postgresql-simple-ltree
  - postgresql-simple-queue
