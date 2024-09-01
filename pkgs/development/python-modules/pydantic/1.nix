@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   cython_0,
+  distutils,
   email-validator,
   fetchFromGitHub,
   pytest-mock,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.16";
+  version = "1.10.18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,46 +26,32 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dn/ZsxbkyK2sJxpo6IsoMBRjq1STdu+xuqHXoNG+Kzk=";
+    hash = "sha256-IFctgyZAURVlUAYppwWjGU1k7Alo9w28CQfhdSjxZJ8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     cython_0
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dotenv = [ python-dotenv ];
     email = [ email-validator ];
   };
 
   nativeCheckInputs = [
+    distutils
     pytest-mock
     pytest7CheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [
-    # https://github.com/pydantic/pydantic/issues/4817
-    "-W"
-    "ignore::pytest.PytestReturnNotNoneWarning"
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # depends on distuils
-    "test_cython_function_untouched"
-    # AssertionError on exact types and wording
-    "test_model_subclassing_abstract_base_classes_without_implementation_raises_exception"
-    "test_partial_specification_name"
-    "test_secretfield"
-  ];
 
   enableParallelBuilding = true;
 
