@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  glib,
   gtk3,
   lib,
   pkg-config,
@@ -20,10 +21,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    glib # for glib-mkenums
     pkg-config
   ];
 
   buildInputs = [ gtk3 ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Ayatana Display Indicator Objects";
