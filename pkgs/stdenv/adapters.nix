@@ -138,11 +138,16 @@ rec {
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv: stdenv.override (old: {
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs (prevAttrs: {
-      NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
-        + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (prevAttrs.nativeBuildInputs or []);
-    }));
+    (mkDerivationSuper args).overrideAttrs (prevAttrs:
+      if prevAttrs ? env.NIX_CFLAGS_LINK then {
+        env = prevAttrs.env // {
+          NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK
+            + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+        };
+      } else {
+        NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
+          + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+      }));
   });
 
   # Puts all the other ones together
