@@ -1,9 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.beesd;
 
-  logLevels = { emerg = 0; alert = 1; crit = 2; err = 3; warning = 4; notice = 5; info = 6; debug = 7; };
+  logLevels = {
+    emerg = 0;
+    alert = 1;
+    crit = 2;
+    err = 3;
+    warning = 4;
+    notice = 5;
+    info = 6;
+    debug = 7;
+  };
 
   fsOptions = with lib.types; {
     options.spec = lib.mkOption {
@@ -23,7 +37,7 @@ let
       example = "LABEL=MyBulkDataDrive";
     };
     options.hashTableSizeMB = lib.mkOption {
-      type = lib.types.addCheck lib.types.int (n: mod n 16 == 0);
+      type = lib.types.addCheck lib.types.int (n: lib.mod n 16 == 0);
       default = 1024; # 1GB; default from upstream beesd script
       description = ''
         Hash table size in MB; must be a multiple of 16.
@@ -84,8 +98,9 @@ in
     };
   };
   config = {
-    systemd.services = lib.mapAttrs'
-      (name: fs: lib.nameValuePair "beesd@${name}" {
+    systemd.services = lib.mapAttrs' (
+      name: fs:
+      lib.nameValuePair "beesd@${name}" {
         description = "Block-level BTRFS deduplication for %i";
         after = [ "sysinit.target" ];
 
@@ -120,7 +135,7 @@ in
           };
         unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
         wantedBy = [ "multi-user.target" ];
-      })
-      cfg.filesystems;
+      }
+    ) cfg.filesystems;
   };
 }
