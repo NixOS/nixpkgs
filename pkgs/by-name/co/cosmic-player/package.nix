@@ -1,4 +1,4 @@
-{ 
+{
   lib,
   stdenv,
   fetchFromGitHub,
@@ -41,22 +41,22 @@ rustPlatform.buildRustPackage rec {
       "smithay-clipboard-0.8.0" = "sha256-MqzynFCZvzVg9/Ry/zrbH5R6//erlZV+nmQ2St63Wnc=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
-  };
+    };
   };
 
-  nativeBuildInputs = [ 
-    just 
-    pkg-config 
-    makeBinaryWrapper 
-    rustPlatform.bindgenHook 
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+    rustPlatform.bindgenHook
   ];
-  
-  buildInputs = [ 
-    wayland 
-    libxkbcommon 
-    alsa-lib 
-    ffmpeg 
-    llvmPackages.clang 
+
+  buildInputs = [
+    wayland
+    libxkbcommon
+    alsa-lib
+    ffmpeg
+    llvmPackages.clang
   ];
 
   dontUseJustBuild = true;
