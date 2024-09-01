@@ -30,16 +30,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioazuredevops = super.aioazuredevops.overridePythonAttrs (old: rec {
-        version = "2.1.1";
-        src = fetchFromGitHub {
-          owner = "timmo001";
-          repo = "aioazuredevops";
-          rev = "refs/tags/${version}";
-          hash = "sha256-rnvWjsTRBoojsuNG3uSdBlyycE4XSrhgjmb77jy7fxY=";
-        };
-      });
-
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -51,16 +41,6 @@ let
         nativeCheckInputs = with self; [
           aresponses
         ];
-      });
-
-      aiolyric = super.aiolyric.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.1";
-        src = fetchFromGitHub {
-          owner = "timmo001";
-          repo = "aiolyric";
-          rev = "refs/tags/${version}";
-          hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
-        };
       });
 
       aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
@@ -275,23 +255,6 @@ let
         ];
       });
 
-      pytibber = super.pytibber.overridePythonAttrs (oldAttrs: rec {
-        version = "0.28.2";
-        src = fetchFromGitHub {
-          owner = "Danielhiversen";
-          repo = "pyTibber";
-          rev = "refs/tags/${version}";
-          hash = "sha256-vi5f4V0nPb9K3nwdmwMDoNE85Or6haOWjMY4d/2Fj2s=";
-        };
-        dependencies = with self; [
-          aiohttp
-          async-timeout
-          gql
-          python-dateutil
-          websockets
-        ];
-      });
-
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
         version = "1.0.1";
         src = fetchFromGitHub {
@@ -471,7 +434,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.8.3";
+  hassVersion = "2024.9.0b2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -489,13 +452,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-4UQ2+MpcngkAKQxfA9y0JUKQ3/m0Y7t2K80ujLoJUvU=";
+    hash = "sha256-bb4zKTJfp9IGfLdln7Gf7QXADH96pOc81KvrJG62JLA=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-iGAH6hxLgqAEovI82W0FREw7nqgX+4J+gm4cCGIS7h4=";
+    hash = "sha256-HF3PGpN91CrHWez2KcLMo5miDvplXLVpZe+63mz3O/g=";
   };
 
   build-system = with python.pkgs; [
@@ -513,7 +476,9 @@ in python.pkgs.buildPythonApplication rec {
     "httpx"
     "orjson"
     "pillow"
+    "pyjwt"
     "pyopenssl"
+    "pyyaml"
     "requests"
     "sqlalchemy"
     "typing-extensions"
@@ -533,7 +498,7 @@ in python.pkgs.buildPythonApplication rec {
     # Patch path to ffmpeg binary
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
-      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
+      ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
   ];
 
