@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildFHSEnv
-, appimageTools
-, buildDotnetModule
-, dotnetCorePackages
-, writeShellScript
-, makeDesktopItem
-, copyDesktopItems
-, extraThemes ? [ ]
+{
+  lib,
+  fetchFromGitHub,
+  buildFHSEnv,
+  appimageTools,
+  buildDotnetModule,
+  dotnetCorePackages,
+  writeShellScript,
+  makeDesktopItem,
+  copyDesktopItems,
+  extraThemes ? [ ],
 }:
 
 let
@@ -27,7 +28,7 @@ let
     patches = [ ./csproj-build.patch ];
 
     projectFile = "Stardrop/Stardrop.csproj";
-    executables = ["Stardrop"];
+    executables = [ "Stardrop" ];
 
     dotnet-sdk = dotnetCorePackages.sdk_7_0;
     dotnet-runtime = dotnetCorePackages.runtime_7_0;
@@ -44,14 +45,14 @@ let
     nativeBuildInputs = [ copyDesktopItems ];
 
     desktopItems = [
-    (makeDesktopItem {
-      name = "Stardrop";
-      exec = "stardrop";
-      icon = "stardrop";
-      desktopName = "stardrop";
-      comment = meta.description;
-      categories = [ "Game" ];
-      startupWMClass = "stardrop";
+      (makeDesktopItem {
+        name = "Stardrop";
+        exec = "stardrop";
+        icon = "stardrop";
+        desktopName = "stardrop";
+        comment = meta.description;
+        categories = [ "Game" ];
+        startupWMClass = "stardrop";
       })
     ];
   };
@@ -65,7 +66,8 @@ let
   };
 
   fhs = buildFHSEnv (
-    appimageTools.defaultFhsEnvArgs // {
+    appimageTools.defaultFhsEnvArgs
+    // {
       inherit pname version meta;
       runScript = writeShellScript "stardrop-wrapper.sh" ''
         exec ${unwrapped}/bin/Stardrop "$@"
@@ -77,4 +79,5 @@ let
     }
   );
 
-in fhs
+in
+fhs
