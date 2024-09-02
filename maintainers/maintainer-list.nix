@@ -20623,6 +20623,13 @@
     githubId = 3512122;
     keys = [ { fingerprint = "5F29 132D EFA8 5DA0 B598  5BF2 5941 754C 1CDE 33BB"; } ];
   };
+  TheColorman = {
+    name = "colorman";
+    email = "nixpkgs@colorman.me";
+    github = "TheColorman";
+    githubId = 18369995;
+    keys = [ { fingerprint = "3D8C A43C FBA2 5D28 0196  19F0 AB11 0475 B417 291D"; } ];
+  };
   thedavidmeister = {
     email = "thedavidmeister@gmail.com";
     github = "thedavidmeister";
