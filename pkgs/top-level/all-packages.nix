@@ -16908,8 +16908,6 @@ with pkgs;
 
   pw-volume = callPackage ../tools/audio/pw-volume { };
 
-  pyradio = callPackage ../applications/audio/pyradio { };
-
   racket = callPackage ../development/interpreters/racket {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
