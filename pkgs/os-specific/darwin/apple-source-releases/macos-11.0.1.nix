@@ -14,7 +14,6 @@ diskdev_cmds = applePackage' "diskdev_cmds" "667.40.1" "macos-11.0.1" "0wr60vyvg
 file_cmds = applePackage' "file_cmds" "321.40.3" "macos-11.0.1" "0p077lnbcy8266m03a0fssj4214bjxh88y3qkspnzcvi0g84k43q" {};
 libresolv = applePackage' "libresolv" "68" "macos-11.0.1" "045ahh8nvaam9whryc2f5g5xagwp7d187r80kcff82snp5p66aq1" {};
 libutil = applePackage' "libutil" "58.40.2" "macos-11.0.1" "11s0vizk7bg0k0yjx21j8vaji4j4vk57131qbp07i9lpksb3bcy4" {};
-mDNSResponder = applePackage' "mDNSResponder" "1310.40.42" "macos-11.0.1" "0xxrqqbqsf0pagfs1yzwfbwf7lhr0sns97k18y7kh4ri0p09h44c" {};
 network_cmds = applePackage' "network_cmds" "606.40.2" "macos-11.0.1" "1jsy13nraarafq6wmgh3wyir8wrwfra148xsjns7cw7q5xn40a1w" {};
 objc4 = applePackage' "objc4" "818.2" "macos-11.0.1" "0m8mk1qd18wqjfn2jsq2lx6fxvllhmadmvz11jzg8vjw8pq91nw2" {};
 ppp = applePackage' "ppp" "877.40.2" "macos-11.0.1" "06xznc77j45zzi12m4cmr3jj853qlc8dbmynbg1z6m9qf5phdbgk" {};
