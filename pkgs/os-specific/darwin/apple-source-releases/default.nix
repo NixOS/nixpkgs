@@ -292,7 +292,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
       applePackage "xnu" "osx-10.12.6" "sha256-C8TPQlUT3RbzAy8YnZPNtr70hpaVG9Llv0h42s3NENI=" {}
     else macosPackages_11_0_1.xnu;
     hfs             = applePackage "hfs"               "osx-10.12.6"     "sha256-eGi18HQFJrU5UHoBOE0LqO5gQ0xOf8+OJuAWQljfKE4=" {};
-    Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "sha256-YHbGws901xONzAbo6sB5zSea4Wp0sgYUJ8YgwVfWxnE=" {};
     adv_cmds        = callPackage ./adv_cmds/package.nix { };
     basic_cmds      = callPackage ./basic_cmds/package.nix { };
     developer_cmds  = callPackage ./developer_cmds/package.nix { };

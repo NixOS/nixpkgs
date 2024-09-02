@@ -5,7 +5,6 @@
 {
 Csu = applePackage' "Csu" "88" "macos-11.0.1" "1lzp9x8iv60c2h12q2s89nf49b5hvpqq4a9li44zr2fxszn8lqxh" {};
 ICU = callPackage ./ICU/package.nix { };
-Librpcsvc = applePackage' "Librpcsvc" "26" "macos-11.0.1" "0wf6srbw28664wa0dckldbhrl9ydg70fms06rj6i7mvlrz1ccxk0" {};
 Libsystem = applePackage' "Libsystem" "1292.50.1" "macos-11.0.1" "0d3flh1p4kskic8ypi8wia4kinfbprx9fvyfqc3mcq0710i0gy77" {};
 PowerManagement = applePackage' "PowerManagement" "1132.50.3" "macos-11.0.1" "1sb2nz92vdf6v3h17ry0vgw0z9zsva82lhdrhsf3k60jhfw1fi2v" {};
 Security = applePackage' "Security" "59754.41.1" "macos-11.0.1" "0jq70mnwkvrrhws64ipx0i68pi3n0sk95jlhacxxikdj9f4hpbsw" {};
