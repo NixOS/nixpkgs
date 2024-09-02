@@ -29,6 +29,7 @@
     x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
     aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
     riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
+    loongarch64 = "OvmfPkg/LoongArchVirt/LoongArchVirtQemu.dsc";
   }.${stdenv.hostPlatform.parsed.cpu.name}
   or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}")
 , fwPrefix ? {
@@ -36,6 +37,7 @@
     x86_64 = "OVMF";
     aarch64 = "AAVMF";
     riscv64 = "RISCV_VIRT";
+    loongarch64 = "LOONGARCH_VIRT";
   }.${stdenv.hostPlatform.parsed.cpu.name}
   or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}")
 , metaPlatforms ? edk2.meta.platforms
@@ -84,8 +86,8 @@ let
 
 in
 
-assert platformSpecific ? ${cpuName};
 assert msVarsTemplate -> fdSize4MB;
+assert msVarsTemplate -> platformSpecific ? ${cpuName};
 assert msVarsTemplate -> platformSpecific.${cpuName} ? msVarsArgs;
 
 edk2.mkDerivation projectDscPath (finalAttrs: {
@@ -130,17 +132,17 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     export PYTHONPATH=$NIX_BUILD_TOP/debian/python:$PYTHONPATH
   '';
 
-  postBuild = lib.optionalString stdenv.hostPlatform.isAarch ''
+  postBuild = lib.optionalString (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isLoongArch64) ''
     (
     cd ${buildPrefix}/FV
     cp QEMU_EFI.fd ${fwPrefix}_CODE.fd
     cp QEMU_VARS.fd ${fwPrefix}_VARS.fd
-
+    )
+  '' + lib.optionalString stdenv.hostPlatform.isAarch ''
     # QEMU expects 64MiB CODE and VARS files on ARM/AARCH64 architectures
     # Truncate the firmware files to the expected size
-    truncate -s 64M ${fwPrefix}_CODE.fd
-    truncate -s 64M ${fwPrefix}_VARS.fd
-    )
+    truncate -s 64M ${buildPrefix}/FV/${fwPrefix}_CODE.fd
+    truncate -s 64M ${buildPrefix}/FV/${fwPrefix}_VARS.fd
   '' + lib.optionalString stdenv.hostPlatform.isRiscV ''
     truncate -s 32M ${buildPrefix}/FV/${fwPrefix}_CODE.fd
     truncate -s 32M ${buildPrefix}/FV/${fwPrefix}_VARS.fd
@@ -165,7 +167,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   postInstall = ''
     mkdir -vp $fd/FV
   '' + lib.optionalString (builtins.elem fwPrefix [
-    "OVMF" "AAVMF" "RISCV_VIRT"
+    "OVMF" "AAVMF" "RISCV_VIRT" "LOONGARCH_VIRT"
   ]) ''
     mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
   '' + lib.optionalString stdenv.hostPlatform.isx86 ''
