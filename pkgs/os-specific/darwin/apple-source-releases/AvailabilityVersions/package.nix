@@ -1,16 +1,26 @@
 {
   lib,
-  stdenvNoCC,
-  appleDerivation',
-  gnused,
-  python3,
+  apple-sdk,
+  buildPackages,
+  mkAppleDerivation,
   unifdef,
 }:
 
-appleDerivation' stdenvNoCC {
-  nativeBuildInputs = [ unifdef ];
+let
+  inherit (buildPackages) gnused python3;
+in
+mkAppleDerivation (finalAttrs: {
+  releaseName = "AvailabilityVersions";
 
-  patches = [ ./0001-Support-setting-an-upper-bound-on-versions.patch ];
+  patches = [
+    # Add support for setting an upper bound, which is needed by the `gen-headers` script.
+    # It avoids having pre-process the DSL to remove unwanted versions.
+    ./patches/0001-Support-setting-an-upper-bound-on-versions.patch
+  ];
+
+  noCC = true;
+
+  nativeBuildInputs = [ unifdef ];
 
   buildPhase = ''
     runHook preBuild
@@ -33,7 +43,7 @@ appleDerivation' stdenvNoCC {
     cp -r availability.dsl templates "$out/share/availability/"
 
     substitute availability "$out/libexec/availability" \
-      --replace-fail '/usr/bin/env python3' '${lib.getBin python3}/bin/python3' \
+      --replace-fail '/usr/bin/env python3' '${lib.getExe python3}' \
       --replace-fail 'f"{os.path.abspath(os.path.dirname(sys.argv[0]))}/' "\"$out/share/availability/"
     chmod a+x "$out/libexec/availability"
 
@@ -61,7 +71,7 @@ appleDerivation' stdenvNoCC {
         --preprocess "$out/share/availability/templates/\$header_src" "\$dest/include/\$header"
     done
 
-    # `__ENVIRONMENT_OS_VERSION_MIN_REQUIRED__` is only defined by clang 17+, so define it for older versions.
+    # __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__ is only defined by clang 17+, so define it for older versions.
     ${lib.getExe gnused} -E '/#ifndef __MAC_OS_X_VERSION_MIN_REQUIRED/{
         i#ifndef __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__
         i#define __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__ __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
@@ -95,5 +105,9 @@ appleDerivation' stdenvNoCC {
     runHook postInstall
   '';
 
-  meta.mainProgram = "gen-headers";
-}
+  meta = {
+    description = "Generates Darwin Availability headers";
+    mainProgram = "gen-headers";
+    platforms = lib.platforms.unix;
+  };
+})
