@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    numpy_2
+    numpy
   ];
 
   nativeBuildInputs = lib.optionals cudaSupport [
@@ -160,6 +160,9 @@ buildPythonPackage rec {
       cudaSupport = false;
       doFullCheck = true;
       testsWithoutSandbox = false;
+    };
+    numpy_2 = numba.override {
+      numpy = numpy_2;
     };
   };
 
