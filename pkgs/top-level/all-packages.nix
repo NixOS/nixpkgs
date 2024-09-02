@@ -23462,8 +23462,6 @@ with pkgs;
     libGLU = null;
   });
 
-  SDL_compat = callPackage ../development/libraries/SDL_compat { };
-
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
