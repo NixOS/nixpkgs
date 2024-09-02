@@ -243,6 +243,11 @@ impure-cmds // appleSourcePackages // chooseLibs // {
       setupHook = null;
     });
 
+  xcodeProjectCheckHook = pkgs.makeSetupHook {
+    name = "xcode-project-check-hook";
+    propagatedBuildInputs = [ pkgs.pkgsBuildHost.openssl ];
+  } ../os-specific/darwin/xcode-project-check-hook/setup-hook.sh;
+
   # Formerly the CF attribute. Use this is you need the open source release.
   swift-corelibs-foundation = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
 
