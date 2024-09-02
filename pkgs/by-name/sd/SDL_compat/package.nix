@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform multimedia library - build SDL 1.2 applications against 2.0";
-    mainProgram = "sdl-config";
     homepage = "https://www.libsdl.org/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    mainProgram = "sdl-config";
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
   };
 }
