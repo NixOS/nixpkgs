@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   cryptography,
+  esptool,
   fetchFromGitHub,
   netifaces,
   pyserial,
   pythonOlder,
+  replaceVars,
   setuptools,
 }:
 
@@ -22,6 +24,12 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-YSaabiCsSoG3BZ/0gM/fRIKQKdQ9MRtlHe+tPnzFJSw=";
   };
+
+  patches = [
+    (replaceVars ./unvendor-esptool.patch {
+      esptool = lib.getExe esptool;
+    })
+  ];
 
   build-system = [ setuptools ];
 
