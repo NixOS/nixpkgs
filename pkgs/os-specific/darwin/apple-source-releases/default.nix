@@ -273,7 +273,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     launchd         = applePackage "launchd"           "osx-10.9.5"      "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs=" {};
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "sha256-L5rQ+UBpf3B+W1U+gZKk7fXulslHsc8lxnCsplV+nr0=" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.12.4"     "sha256-xUqoG5JK4P3nXeoVUOBzodVK9fjH/I3xJ6WRtM39bdw=" {};
-    Libnotify       = applePackage "Libnotify"         "osx-10.12.6"     "sha256-6wvMBxAUfiYcQtmlfYCj1d3kFmFM/jdboTd7hRvi3e4=" {};
     libmalloc       = if isSdk10_12 then
       applePackage "libmalloc" "osx-10.12.6" "sha256-brfG4GEF2yZipKdhlPq6DhT2z5hKYSb2MAmffaikdO4=" {}
     else macosPackages_11_0_1.libmalloc;
