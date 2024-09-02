@@ -71,7 +71,7 @@ else # Only set up Qt once.
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then
-        postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
+        appendToVar postPhases postPatchMkspecs
     fi
 
     qtPreHook() {

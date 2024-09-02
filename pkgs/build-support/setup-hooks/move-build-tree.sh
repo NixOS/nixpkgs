@@ -5,7 +5,7 @@ moveBuildDir() {
     cd $out/.build
 }
 
-postPhases+=" removeBuildDir"
+appendToVar postPhases removeBuildDir
 
 removeBuildDir() {
     rm -rf $out/.build
