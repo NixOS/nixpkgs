@@ -1,34 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, installShellFiles
-, zlib
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  doxygen,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liberasurecode";
-  version = "1.6.3";
+  version = "1.6.4";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "openstack";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-HCp+FQ9nq4twk6FtfKhzT80wXXJbvG+clrDO2/9ATpU=";
+    repo = "liberasurecode";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-KYXlRjUudWhFbhyv9V1fmqwBw3/vTBfusxafaNG+Q40=";
   };
 
   postPatch = ''
     substituteInPlace doc/doxygen.cfg.in \
-      --replace "GENERATE_MAN           = NO" "GENERATE_MAN           = YES"
+      --replace-fail "GENERATE_MAN           = NO" "GENERATE_MAN           = YES"
 
     substituteInPlace Makefile.am src/Makefile.am \
-      --replace "-Werror" ""
+      --replace-fail "-Werror" ""
   '';
 
-  nativeBuildInputs = [ autoreconfHook doxygen installShellFiles ];
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    installShellFiles
+  ];
 
   buildInputs = [ zlib ];
 
@@ -47,10 +57,15 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     description = "Erasure Code API library written in C with pluggable Erasure Code backends";
     homepage = "https://github.com/openstack/liberasurecode";
     license = licenses.bsd2;
     maintainers = teams.openstack.members;
+    pkgConfigModules = [ "erasurecode-1" ];
   };
-}
+})
