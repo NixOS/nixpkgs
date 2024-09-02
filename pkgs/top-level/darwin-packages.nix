@@ -42,11 +42,19 @@ makeScopeWithSplicing' {
   f = lib.extends aliases (self: let
   inherit (self) mkDerivation callPackage;
 
-  # Must use pkgs.callPackage to avoid infinite recursion.
-
   # Open source packages that are built from source
-  appleSourcePackages = pkgs.callPackage ../os-specific/darwin/apple-source-releases { } self;
+  apple-source-packages = lib.packagesFromDirectoryRecursive {
+    callPackage = self.callPackage;
+    directory = ../os-specific/darwin/apple-source-releases;
+  };
 
+  # Compatibility packages that aren’t necessary anymore
+  apple-source-headers = {
+    libresolvHeaders = lib.getDev self.libresolv;
+    libutilHeaders = lib.getDev self.libutil;
+  };
+
+  # Must use pkgs.callPackage to avoid infinite recursion.
   impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
 
   # macOS 10.12 SDK
@@ -104,7 +112,7 @@ makeScopeWithSplicing' {
   ] (mkStub apple_sdk.version);
 in
 
-impure-cmds // appleSourcePackages // stubs // {
+impure-cmds // apple-source-packages // apple-source-headers // stubs // {
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
