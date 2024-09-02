@@ -92,6 +92,7 @@ makeScopeWithSplicing' {
     "hfsHeaders"
     "launchd"
     "libclosure"
+    "libdispatch"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
