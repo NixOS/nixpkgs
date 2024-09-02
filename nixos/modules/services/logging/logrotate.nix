@@ -97,6 +97,8 @@ in
         defaultText = lib.literalExpression "cfg.settings != {}";
       };
 
+      allowNetworking = lib.mkEnableOption "network access for logrotate";
+
       settings = lib.mkOption {
         default = { };
         description = ''
@@ -240,12 +242,55 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.logrotate = {
       description = "Logrotate Service";
+      documentation = [
+        "man:logrotate(8)"
+        "man:logrotate(5)"
+      ];
       startAt = "hourly";
 
       serviceConfig = {
-        Restart = "no";
-        User = "root";
-        ExecStart = "${pkgs.logrotate}/sbin/logrotate ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
+        Type = "oneshot";
+        ExecStart = "${lib.getExe pkgs.logrotate} ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
+
+        # performance
+        Nice = 19;
+        IOSchedulingClass = "best-effort";
+        IOSchedulingPriority = 7;
+
+        # hardening
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_SETGID"
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+          "@chown"
+        ];
+        UMask = "0027";
+      } // lib.optionalAttrs (!cfg.allowNetworking) {
+        PrivateNetwork = true;
+        RestrictAddressFamilies = "none";
       };
     };
     systemd.services.logrotate-checkconf = {
