@@ -1083,6 +1083,12 @@
     githubId = 169249;
     name = "Alex Brandt";
   };
+  alx = {
+    email = "nix@alexgirard.com";
+    github = "alx";
+    githubId = 373;
+    name = "Alexandre Girard Davila";
+  };
   alxsimon = {
     email = "alexis.simon@normalesup.org";
     github = "alxsimon";
