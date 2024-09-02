@@ -16,6 +16,6 @@ neovimRequireCheckHook () {
 }
 
 echo "Using neovimRequireCheckHook"
-preDistPhases+=" neovimRequireCheckHook"
+appendToVar preDistPhases neovimRequireCheckHook
 
 
