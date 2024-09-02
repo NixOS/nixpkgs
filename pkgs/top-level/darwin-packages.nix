@@ -70,6 +70,7 @@ makeScopeWithSplicing' {
   } // lib.genAttrs [
     "CF"
     "CarbonHeaders"
+    "CommonCrypto"
   ] (mkStub apple_sdk.version);
 in
 
