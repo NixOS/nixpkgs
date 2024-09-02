@@ -262,9 +262,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     AvailabilityVersions = callPackage ./AvailabilityVersions/package.nix { };
     copyfile        = callPackage ./copyfile/package.nix { };
     Csu             = callPackage ./Csu/package.nix { };
-    libplatform     = if isSdk10_12 then
-      applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {}
-    else macosPackages_11_0_1.libplatform;
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = callPackage ./libresolv/package.nix { };
     libutil         = callPackage ./libutil/package.nix { };
