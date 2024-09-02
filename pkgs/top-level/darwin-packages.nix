@@ -100,6 +100,7 @@ makeScopeWithSplicing' {
     "mDNSResponder"
     "objc4"
     "ppp"
+    "xnu"
   ] (mkStub apple_sdk.version);
 in
 
