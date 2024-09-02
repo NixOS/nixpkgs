@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "cached-ipaddress";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "cached-ipaddress";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iTQ1DSCZqjAzsf95nYUxnNj5YCb1Y4JIUW5VGIi7yoY=";
+    hash = "sha256-Ec2tW1X0iYdQFd5XFRABwUTPjqxV5lhwT6UEimmF+/o=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
       --replace "Cython>=3.0.5" "Cython"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
