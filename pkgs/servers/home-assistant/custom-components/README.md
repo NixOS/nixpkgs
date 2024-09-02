@@ -31,7 +31,7 @@ buildHomeAssistantComponent {
     # owner, repo, rev, hash
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     # python requirements, as specified in manifest.json
   ];
 

@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-J9n4PFcd87L301B2YktrLcxp5Vu1HwDeCYnrMEJ0+TA=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     flatdict
     pymiele
   ];
