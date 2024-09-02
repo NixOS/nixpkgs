@@ -2,7 +2,10 @@
 , rustPlatform
 , fetchFromGitHub
 , rustfmt
-, perl
+, stdenv
+, pkg-config
+, openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +21,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3ah6cHyCppkLJ2e73aGhVemyMRBl9R5a6ufWHmrJHSk=";
 
-  # openssl crate requires perl during build process
+  env.OPENSSL_NO_VENDOR = 1;
+
   nativeBuildInputs = [
-    perl
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   nativeCheckInputs = [
