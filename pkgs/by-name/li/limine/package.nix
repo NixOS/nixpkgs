@@ -88,6 +88,7 @@ stdenv.mkDerivation {
     maintainers = [
       maintainers._48cf
       maintainers.phip1611
+      maintainers.sanana
     ];
   };
 }
