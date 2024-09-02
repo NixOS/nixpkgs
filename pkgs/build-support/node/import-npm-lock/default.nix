@@ -72,6 +72,10 @@ lib.fix (self: {
     # Example: { "node_modules/axios" = { curlOptsList = [ "--verbose" ]; }; }
     # This will download the axios package with curl's verbose option.
     , fetcherOpts ?  {}
+    # A map from node_module path to an alternative package to use instead of fetching the source in package-lock.json.
+    # Example: { "node_modules/axios" = stdenv.mkDerivation { ... }; }
+    # This is usefull if you want to inject custom sources for a specific package.
+    , packageSourceOverrides ? {}
     }:
     let
       mapLockDependencies =
@@ -94,10 +98,10 @@ lib.fix (self: {
           mapAttrs
             (modulePath: module:
               let
-                src = fetchModule {
+                src = packageSourceOverrides.${modulePath} or (fetchModule {
                   inherit module npmRoot;
                   fetcherOpts = fetcherOpts.${modulePath} or {};
-                };
+                });
               in
               cleanModule module
               // lib.optionalAttrs (src != null) {
