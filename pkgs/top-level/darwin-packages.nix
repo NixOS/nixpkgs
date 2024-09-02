@@ -81,6 +81,7 @@ makeScopeWithSplicing' {
     "Libsystem"
     "LibsystemCross"
     "Security"
+    "architecture"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
