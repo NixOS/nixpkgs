@@ -21,8 +21,8 @@ let
 
   # fork with patches, far behind upstream
   asio = fetchurl {
-    url = "https://github.com/diasurgical/asio/archive/bd1c839ef741b14365e77964bdd5a78994c05934.tar.gz";
-    sha256 = "sha256-ePcdyvOfO5tyPVP+8t3+cS/XeEp47lfaE8gERRVoJSM=";
+    url = "https://github.com/diasurgical/asio/archive/4bcf552fcea3e1ae555dde2ab33bc9fa6770da4d.tar.gz";
+    sha256 = "sha256-AFBy5OFsAzxZsiI4DirIHh+VjFkdalEhN9OGqhC0Cvc=";
   };
 
   # fork with patches, upstream seems to be dead
@@ -67,13 +67,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "devilutionx";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
     rev = version;
-    sha256 = "sha256-XILPpIYSC0+CbhyVXCNvAknAhqU7VW1dWZCh2BapQjs=";
+    sha256 = "sha256-4cA2OHTc51U8XIk3iS16En7JJExkcn4a4VdtjNkZfH8=";
   };
 
   postPatch = ''
