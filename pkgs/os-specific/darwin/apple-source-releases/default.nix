@@ -260,10 +260,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
 
     inherit (self.adv_cmds) ps locale;
     AvailabilityVersions = callPackage ./AvailabilityVersions/package.nix { };
-    configd         = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
-      Security      = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
-      inherit (pkgs.darwin.apple_sdk.libs) xpc;
-    };
     copyfile        = callPackage ./copyfile/package.nix { };
     Csu             = callPackage ./Csu/package.nix { };
     dtrace          = applePackage "dtrace"            "osx-10.12.6"     "sha256-Icr22ozixHquI0kRB2XZ+LlxD6V46sJHsHy4L/tDXZg=" {};
@@ -304,11 +300,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
 
     # `configdHeaders` can’t use an override because `pkgs.darwin.configd` on aarch64-darwin will
     # be replaced by SystemConfiguration.framework from the macOS SDK.
-    configdHeaders  = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
-      headersOnly = true;
-      Security    = null;
-      xpc         = null;
-    };
     libutilHeaders  = lib.getDev self.libutil;
     hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };
     libresolvHeaders= lib.getDev self.libresolv;

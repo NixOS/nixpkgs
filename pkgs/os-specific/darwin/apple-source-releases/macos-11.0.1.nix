@@ -9,7 +9,6 @@ PowerManagement = applePackage' "PowerManagement" "1132.50.3" "macos-11.0.1" "1s
 adv_cmds = applePackage' "adv_cmds" "176" "macos-11.0.1" "0sskwl3jc7llbrlyd1i7qlb03yhm1xkbxd1k9xhh7f9wqhlzq31j" {};
 basic_cmds = applePackage' "basic_cmds" "55" "macos-11.0.1" "1913pzk376zfap2fwmrb233rkn4h4l2c65nd7s8ixvrz1r7cz0q5" {};
 bootstrap_cmds = callPackage ./bootstrap_cmds/package.nix { };
-configd = applePackage' "configd" "1109.40.9" "macos-11.0.1" "024ny63lpwzgnm8g28hh8dldvmmislmrl298n721rm0blqjhahz5" {};
 copyfile = applePackage' "copyfile" "173.40.2" "macos-11.0.1" "1j20909inn2iw8n51b8vk551wznfi3bhfziy8nbv08qj5lk50m04" {};
 diskdev_cmds = applePackage' "diskdev_cmds" "667.40.1" "macos-11.0.1" "0wr60vyvgkbc4wyldnsqas0xss2k1fgmbdk3vnhj6v6jqa98l1ny" {};
 dtrace = applePackage' "dtrace" "370.40.1" "macos-11.0.1" "1qj74mix1x3drffr1qpafm57aby42bc61kynba5q0ppbcf0lrbp1" {};
