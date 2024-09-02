@@ -74,6 +74,7 @@ makeScopeWithSplicing' {
     "CoreSymbolication"
     "IOKit"
     "Libc"
+    "Libinfo"
   ] (mkStub apple_sdk.version);
 in
 
