@@ -67,6 +67,7 @@ makeScopeWithSplicing' {
 
   stubs = {
     inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
+    libobjc = self.objc4;
   } // lib.genAttrs [
     "CF"
     "CarbonHeaders"
@@ -97,8 +98,10 @@ makeScopeWithSplicing' {
     "libplatform"
     "libpthread"
     "mDNSResponder"
+    "objc4"
   ] (mkStub apple_sdk.version);
 in
+
 impure-cmds // appleSourcePackages // stubs // {
 
   stdenvNoCF = stdenv.override {
@@ -190,8 +193,6 @@ impure-cmds // appleSourcePackages // stubs // {
   };
 
   iproute2mac = callPackage ../os-specific/darwin/iproute2mac { };
-
-  libobjc = self.objc4;
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
