@@ -1,30 +1,33 @@
 {
-  lib,
-  stdenv,
-  symlinkJoin,
-  prismlauncher-unwrapped,
   addDriverRunpath,
   alsa-lib,
   flite,
   gamemode,
-  glfw,
-  glfw-wayland-minecraft,
-  mesa-demos,
-  jdk8,
+  glfw3-minecraft,
   jdk17,
   jdk21,
+  jdk8,
   kdePackages,
+  lib,
   libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXrandr,
+  libXxf86vm,
   libjack2,
   libpulseaudio,
   libusb1,
-  makeWrapper,
+  mesa-demos,
   openal,
   pciutils,
   pipewire,
+  prismlauncher-unwrapped,
+  stdenv,
+  symlinkJoin,
   udev,
   vulkan-loader,
-  xorg,
+  xrandr,
 
   additionalLibs ? [ ],
   additionalPrograms ? [ ],
@@ -37,15 +40,6 @@
   ],
   msaClientID ? null,
   textToSpeechSupport ? stdenv.isLinux,
-
-  # Adds `glfw-wayland-minecraft` to `LD_LIBRARY_PATH`
-  # when launched on wayland, allowing for the game to be run natively.
-  # Make sure to enable "Use system installation of GLFW" in instance settings
-  # for this to take effect
-  #
-  # Warning: This build of glfw may be unstable, and the launcher
-  # itself can take slightly longer to start
-  withWaylandGLFW ? false,
 }:
 
 assert lib.assertMsg (
@@ -56,10 +50,6 @@ assert lib.assertMsg (
   textToSpeechSupport -> stdenv.isLinux
 ) "textToSpeechSupport only has an effect on Linux.";
 
-assert lib.assertMsg (
-  withWaylandGLFW -> stdenv.isLinux
-) "withWaylandGLFW is only available on Linux.";
-
 let
   prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
 in
@@ -69,11 +59,7 @@ symlinkJoin {
 
   paths = [ prismlauncher' ];
 
-  nativeBuildInputs =
-    [ kdePackages.wrapQtAppsHook ]
-    # purposefully using a shell wrapper here for variable expansion
-    # see https://github.com/NixOS/nixpkgs/issues/172583
-    ++ lib.optional withWaylandGLFW makeWrapper;
+  nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
 
   buildInputs =
     [
@@ -84,30 +70,17 @@ symlinkJoin {
       lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.isLinux
     ) kdePackages.qtwayland;
 
-  env = {
-    waylandPreExec = lib.optionalString withWaylandGLFW ''
-      if [ -n "$WAYLAND_DISPLAY" ]; then
-        export LD_LIBRARY_PATH=${lib.getLib glfw-wayland-minecraft}/lib:"$LD_LIBRARY_PATH"
-      fi
-    '';
-  };
-
-  postBuild =
-    lib.optionalString withWaylandGLFW ''
-      qtWrapperArgs+=(--run "$waylandPreExec")
-    ''
-    + ''
-      wrapQtAppsHook
-    '';
+  postBuild = ''
+    wrapQtAppsHook
+  '';
 
   qtWrapperArgs =
     let
       runtimeLibs =
         [
-          # lwjgl
           stdenv.cc.cc.lib
           ## native versions
-          glfw
+          glfw3-minecraft
           openal
 
           ## openal
@@ -118,11 +91,11 @@ symlinkJoin {
 
           ## glfw
           libGL
-          xorg.libX11
-          xorg.libXext
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXxf86vm
+          libX11
+          libXcursor
+          libXext
+          libXrandr
+          libXxf86vm
 
           udev # oshi
 
@@ -136,7 +109,7 @@ symlinkJoin {
       runtimePrograms = [
         mesa-demos
         pciutils # need lspci
-        xorg.xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
+        xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ] ++ additionalPrograms;
 
     in
