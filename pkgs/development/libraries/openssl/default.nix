@@ -87,6 +87,7 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         powerpc64-linux = "./Configure linux-ppc64";
+        riscv32-linux = "./Configure ${if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"}";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
