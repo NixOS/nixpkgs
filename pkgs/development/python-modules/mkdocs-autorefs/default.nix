@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
   version = "1.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -28,9 +28,9 @@ buildPythonPackage rec {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown
     mkdocs
   ];
