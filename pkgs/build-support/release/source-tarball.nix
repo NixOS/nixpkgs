@@ -31,7 +31,7 @@ stdenv.mkDerivation (
 
     showBuildStats = true;
 
-    preConfigurePhases = "autoconfPhase";
+    preConfigurePhases = [ "autoconfPhase" ];
     postPhases = "finalPhase";
 
     # Autoconfiscate the sources.

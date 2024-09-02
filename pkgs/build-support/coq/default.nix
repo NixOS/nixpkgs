@@ -146,7 +146,7 @@ stdenv.mkDerivation (removeAttrs ({
 })
 // (optionalAttrs (args?useMelquiondRemake) rec {
   COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
-  preConfigurePhases = "autoconf";
+  preConfigurePhases = [ "autoconf" ];
   configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
   buildPhase = "./remake -j$NIX_BUILD_CORES";
   installPhase = "./remake install";
