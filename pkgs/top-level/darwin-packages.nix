@@ -85,6 +85,7 @@ makeScopeWithSplicing' {
     "configd"
     "configdHeaders"
     "darwin-stubs"
+    "dtrace"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
