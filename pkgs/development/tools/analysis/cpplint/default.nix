@@ -6,15 +6,15 @@
 
 python3Packages.buildPythonApplication {
   pname = "cpplint";
-  version = "1.7-unreleased";
+  version = "2.0-unreleased";
   pyproject = true;
 
   # Fetch from github instead of pypi, since the test cases are not in the pypi archive
   src = fetchFromGitHub {
     owner = "cpplint";
     repo = "cpplint";
-    rev = "9be08b54bf2621eb8e52f813f33f5310af4b334e";
-    hash = "sha256-OnN0egGviM1zQqwG1KkbO6+QDnGdblyP7KstkUl1xZY=";
+    rev = "a3afd5c9a12a0ca46cc9d435b6aafdeb17d48e9a";
+    hash = "sha256-Uchx9H7yHLlj71BWcQ0DlT8FOpFQ/9dURVzwuZqyBqw=";
   };
 
   postPatch = ''
