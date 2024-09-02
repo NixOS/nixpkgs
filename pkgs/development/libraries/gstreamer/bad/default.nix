@@ -129,6 +129,11 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit (addDriverRunpath) driverLink;
     })
+
+    # vtdec: Use kVTVideoDecoderReferenceMissingErr only when defined
+    # <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7157>
+    # TODO: Remove this when the build with the newer SDK works.
+    ./darwin-old-sdk-fix.patch
   ];
 
   nativeBuildInputs = [
