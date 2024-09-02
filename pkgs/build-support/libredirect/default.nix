@@ -45,6 +45,7 @@ else stdenv.mkDerivation rec {
       -isystem ${llvmPackages.libclang.lib}/lib/clang/*/include \
       -L${llvmPackages.clang.libc}/lib \
       -Wl,-install_name,$libName \
+      -Wl,-install_name,$out/lib/$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
       -shared -o "$libName"
     '' else if stdenv.hostPlatform.isDarwin then ''
