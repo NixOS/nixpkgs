@@ -262,7 +262,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     AvailabilityVersions = callPackage ./AvailabilityVersions/package.nix { };
     copyfile        = callPackage ./copyfile/package.nix { };
     Csu             = callPackage ./Csu/package.nix { };
-    dtrace          = applePackage "dtrace"            "osx-10.12.6"     "sha256-Icr22ozixHquI0kRB2XZ+LlxD6V46sJHsHy4L/tDXZg=" {};
     dyld            = applePackage "dyld"              "osx-10.12.6"     "sha256-JmKnOZtBPf96zEx7vhYHLBSTOPyKN71IdYE3R0IeJww=" {};
     eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "sha256-54P3+YhVhOanoZQoqswDnr/GbR/AdEERse135nyuIQo=" {};
     launchd         = applePackage "launchd"           "osx-10.9.5"      "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs=" {};
