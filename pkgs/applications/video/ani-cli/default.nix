@@ -1,23 +1,29 @@
-{ fetchFromGitHub
-, makeWrapper
-, stdenvNoCC
-, lib
-, gnugrep
-, gnused
-, curl
-, catt
-, syncplay
-, ffmpeg
-, fzf
-, aria2
-, withMpv ? true, mpv
-, withVlc ? false, vlc
-, withIina ? false, iina
-, chromecastSupport ? false
-, syncSupport ? false
+{
+  fetchFromGitHub,
+  makeWrapper,
+  stdenvNoCC,
+  lib,
+  gnugrep,
+  gnused,
+  curl,
+  catt,
+  syncplay,
+  ffmpeg,
+  fzf,
+  aria2,
+  mpv,
+  vlc,
+  iina,
+  withMpv ? true,
+  withVlc ? false,
+  withIina ? false,
+  chromecastSupport ? false,
+  syncSupport ? false,
 }:
 
-assert withMpv || withVlc || withIina;
+let
+  players = lib.optional withMpv mpv ++ lib.optional withVlc vlc ++ lib.optional withIina iina;
+in
 
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
@@ -31,15 +37,14 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  runtimeDependencies =
-    let player = []
-        ++ lib.optional withMpv mpv
-        ++ lib.optional withVlc vlc
-        ++ lib.optional withIina iina;
-    in [ gnugrep gnused curl fzf ffmpeg aria2 ]
-      ++ player
-      ++ lib.optional chromecastSupport catt
-      ++ lib.optional syncSupport syncplay;
+  runtimeDependencies = [
+    gnugrep
+    gnused
+    curl
+    fzf
+    ffmpeg
+    aria2
+  ] ++ lib.optional chromecastSupport catt ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall
@@ -47,7 +52,8 @@ stdenvNoCC.mkDerivation rec {
     install -Dm755 ani-cli $out/bin/ani-cli
 
     wrapProgram $out/bin/ani-cli \
-      --prefix PATH : ${lib.makeBinPath runtimeDependencies}
+      --prefix PATH : ${lib.makeBinPath runtimeDependencies} \
+      ${lib.optionalString (builtins.length players > 0) "--suffix PATH : ${lib.makeBinPath players}"}
 
     runHook postInstall
   '';
