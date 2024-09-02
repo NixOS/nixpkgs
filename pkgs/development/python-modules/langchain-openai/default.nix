@@ -19,6 +19,7 @@
   responses,
   syrupy,
   toml,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -83,6 +84,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-openai==(.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";

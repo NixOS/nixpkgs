@@ -13008,6 +13008,8 @@ self: super: with self; {
 
   python-mimeparse = callPackage ../development/python-modules/python-mimeparse { };
 
+  python-mistralclient = callPackage ../development/python-modules/python-mistralclient { };
+
   python-mnist = callPackage ../development/python-modules/python-mnist { };
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };

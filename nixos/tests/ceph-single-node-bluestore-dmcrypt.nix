@@ -16,8 +16,11 @@ import ./make-test-python.nix (
   in
   {
     name = "basic-single-node-ceph-cluster-bluestore-dmcrypt";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ nh2 ];
+    meta = {
+      maintainers = with lib.maintainers; [
+        benaryorg
+        nh2
+      ];
     };
 
     nodes = {

@@ -102,6 +102,7 @@ let
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
           then if stdenv.hostPlatform.isx86_64 then "./Configure linux-x86_64"
+          else if stdenv.hostPlatform.isMicroBlaze then "./Configure linux-latomic"
           else if stdenv.hostPlatform.isMips32 then "./Configure linux-mips32"
           else if stdenv.hostPlatform.isMips64n32 then "./Configure linux-mips64"
           else if stdenv.hostPlatform.isMips64n64 then "./Configure linux64-mips64"

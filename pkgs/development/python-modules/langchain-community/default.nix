@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.12";
+  version = "0.2.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-HsKWGiWA6uKmRQOMw3efXkjwbBuvDHhf5waNvnvBdG4=";
+    hash = "sha256-R1C+tEXCLqYHzQ2zrYaYa6cqJn/UWZEHBMC+WjbdQaQ=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -90,6 +90,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_ovhcloud_embed_documents"
+    "test_yandex"
     # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
     # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"
