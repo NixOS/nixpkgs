@@ -228,21 +228,30 @@ in
 self:
 
 let
-  macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
-  developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
+  macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage' callPackage; };
+  developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage' callPackage; };
 
   applePackage' = namePath: version: sdkName: sha256:
     let
       pname = builtins.head (lib.splitString "/" namePath);
       appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
       appleDerivation = appleDerivation' stdenv;
-      callPackage = self.newScope { inherit appleDerivation' appleDerivation; python3 = pkgs.buildPackages.python3Minimal; };
+      callPackage = self.newScope {
+        inherit appleDerivation' appleDerivation mkAppleDerivation;
+        python3 = pkgs.buildPackages.python3Minimal;
+      };
     in callPackage (./. + "/${namePath}");
 
   applePackage = namePath: sdkName: sha256: let
     pname = builtins.head (lib.splitString "/" namePath);
     version = versions.${sdkName}.${pname};
   in applePackage' namePath version sdkName sha256;
+
+  callPackage = self.newScope { inherit mkAppleDerivation; };
+
+  mkAppleDerivation = pkgs.callPackage ./mkAppleDerivation.nix {
+    inherit (pkgs.darwin) bootstrapStdenv xcodeProjectCheckHook;
+  };
 
   # Only used for bootstrapping. It’s convenient because it was the last version to come with a real makefile.
   adv_cmds-boot = applePackage "adv_cmds/boot.nix" "osx-10.5.8" "sha256-/OJLNpATyS31W5nWfJgSVO5itp8j55TRwG57/QLT5Fg=" {};
