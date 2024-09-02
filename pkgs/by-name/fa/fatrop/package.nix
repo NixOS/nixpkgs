@@ -2,6 +2,7 @@
   blasfeo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   llvmPackages,
   python3Packages,
@@ -11,25 +12,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fatrop";
-  version = "0.0.1";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "meco-group";
     repo = "fatrop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-c4qYh8RutRsMIx3m0oxXy73fnLTBGVZ1QjFcLEJ413Y=";
+    hash = "sha256-vCGix3qYQR9bY9GoIyBMrTNvsMgt0h7TZUye6wlH9H8=";
   };
 
-  postPatch = lib.optionalString pythonSupport ''
-    # avoid submodule
-    rmdir external/pybind11
-    ln -s ${python3Packages.pybind11.src} external/pybind11
-
-    # install python module
-    echo ""  >> fatropy/CMakeLists.txt
-    echo "install(DIRECTORY fatropy DESTINATION ${python3Packages.python.sitePackages})" >> fatropy/CMakeLists.txt
-    echo "install(TARGETS _fatropy DESTINATION ${python3Packages.python.sitePackages}/fatropy)" >> fatropy/CMakeLists.txt
-  '';
+  patches = lib.optionals pythonSupport [
+    # fix python packaging
+    # ref. https://github.com/meco-group/fatrop/pull/17
+    # this was merged upstream and can be removed on next release
+    (fetchpatch {
+      url = "https://github.com/meco-group/fatrop/pull/17/commits/22e33c216e47df90dc060686d7d1806233642249.patch";
+      hash = "sha256-0/uSHAXVzXVyR+kklQGvraLA6sJbHzUcAp3eEHQK068=";
+    })
+    (fetchpatch {
+      url = "https://github.com/meco-group/fatrop/pull/17/commits/0c03fd9fec95de42976fed1770a15081d0874ee2.patch";
+      hash = "sha256-FenQ05rqn9EbU0wDVQQ1OFxSXj1fL/rOFKOcP8t1NwY=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs =
