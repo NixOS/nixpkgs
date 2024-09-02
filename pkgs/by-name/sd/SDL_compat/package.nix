@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]
     ++ optionals openglSupport [ libGLU ];
 
-  enableParallelBuilding = true;
 
   inherit (SDL1) setupHook;
 
