@@ -51,6 +51,15 @@ buildPythonPackage rec {
     hash = "sha256-M09yte0BGC5w3AZSwDUr9qKUrotqVklO8mwyms9B95Y=";
   };
 
+  # the fastapi script is already provided by fastapi-cli; the one provided by fastapi itself is
+  # simply a wrapper that provides an error message when fastapi-cli is not installed.
+  # including this script results in a name clash when trying to use fastapi in any python
+  # environment.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'fastapi = "fastapi.cli:main"' ""
+  '';
+
   build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
