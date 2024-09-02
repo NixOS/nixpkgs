@@ -3,7 +3,7 @@
 , useSteamRun ? true }:
 
 let
-  rev = "1.0.9";
+  rev = "1.1.0";
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
@@ -13,7 +13,7 @@ in
       owner = "goatcorp";
       repo = "XIVLauncher.Core";
       inherit rev;
-      hash = "sha256-UOKJMQPule0swwm5p6OPcOt1SYHji2J4MWvN6nGkj/M=";
+      hash = "sha256-vf9cGY+JvMBpQliS1LDmbWjtAbXByrIeXThKtJGQrO8=";
       fetchSubmodules = true;
     };
 
@@ -26,7 +26,7 @@ in
 
     # please do not unpin these even if they match the defaults, xivlauncher is sensitive to .NET versions
     dotnet-sdk = dotnetCorePackages.sdk_8_0;
-    dotnet-runtime = dotnetCorePackages.runtime_6_0;
+    dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
     dotnetFlags = [
       "-p:BuildHash=${rev}"
@@ -52,7 +52,7 @@ in
       }).run;
     in ''
       substituteInPlace $out/bin/XIVLauncher.Core \
-        --replace 'exec' 'exec ${steam-run}/bin/steam-run'
+        --replace-fail 'exec' 'exec ${steam-run}/bin/steam-run'
     '') + ''
       wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
       # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065
