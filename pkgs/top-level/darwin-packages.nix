@@ -72,6 +72,7 @@ makeScopeWithSplicing' {
     "CarbonHeaders"
     "CommonCrypto"
     "CoreSymbolication"
+    "IOKit"
   ] (mkStub apple_sdk.version);
 in
 
