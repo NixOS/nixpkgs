@@ -50,6 +50,13 @@ buildPythonPackage rec {
     hash = "sha256-pkjGy/Ksx6Vaae6ef6TyK99pqoKKWHobxc//CM88LdM=";
   };
 
+  postPatch = ''
+    # thinc version 8.3.0 had no functional changes
+    # also see https://github.com/explosion/spaCy/issues/13607
+    substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail "thinc>=8.2.2,<8.3.0" "thinc>=8.2.2,<8.4.0"
+  '';
+
   pythonRelaxDeps = [
     "smart-open"
     "typer"
