@@ -1,13 +1,12 @@
 {
   lib,
   stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  callPackage,
+  micro-headless,
   wl-clipboard,
   xclip,
+  symlinkJoin,
   makeWrapper,
+
   # Boolean flags
   withXclip ? stdenv.isLinux,
   withWlClipboard ?
@@ -25,93 +24,29 @@
 }:
 
 let
-  self = buildGoModule {
-    pname = "micro";
-    version = "2.0.14";
-
-    src = fetchFromGitHub {
-      owner = "zyedidia";
-      repo = "micro";
-      rev = "v${self.version}";
-      hash = "sha256-avLVl6mn0xKgIy0BNnPZ8ypQhn8Ivj7gTgWbebDSjt0=";
-    };
-
-    vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
-
-    nativeBuildInputs = [
-      installShellFiles
-      makeWrapper
-    ];
-
-    outputs = [
-      "out"
-      "man"
-    ];
-
-    subPackages = [ "cmd/micro" ];
-
-    ldflags =
-      let
-        t = "github.com/zyedidia/micro/v2/internal";
-      in
-      [
-        "-s"
-        "-w"
-        "-X ${t}/util.Version=${self.version}"
-        "-X ${t}/util.CommitHash=${self.src.rev}"
-      ];
-
-    strictDeps = true;
-
-    preBuild = ''
-      GOOS= GOARCH= go generate ./runtime
-    '';
-
-    postInstall = ''
-      installManPage assets/packaging/micro.1
-      install -Dm444 assets/packaging/micro.desktop $out/share/applications/micro.desktop
-      install -Dm644 assets/micro-logo-mark.svg $out/share/icons/hicolor/scalable/apps/micro.svg
-    '';
-
-    postFixup =
-      let
-        clipboardPackages =
-          lib.optionals withXclip [ xclip ]
-          ++ lib.optionals withWlClipboard [ wl-clipboard ];
-      in
-      lib.optionalString (withXclip || withWlClipboard) ''
-        wrapProgram "$out/bin/micro" \
-                  --prefix PATH : "${lib.makeBinPath clipboardPackages}"
-      '';
-
-    passthru = {
-      tests = lib.packagesFromDirectoryRecursive {
-        inherit callPackage;
-        directory = ./tests;
-      };
-    };
-
-    meta = {
-      homepage = "https://micro-editor.github.io";
-      changelog = "https://github.com/zyedidia/micro/releases/";
-      description = "Modern and intuitive terminal-based text editor";
-      longDescription = ''
-        micro is a terminal-based text editor that aims to be easy to use and
-        intuitive, while also taking advantage of the capabilities of modern
-        terminals.
-
-        As its name indicates, micro aims to be somewhat of a successor to the
-        nano editor by being easy to install and use. It strives to be enjoyable
-        as a full-time editor for people who prefer to work in a terminal, or
-        those who regularly edit files over SSH.
-      '';
-      license = lib.licenses.mit;
-      mainProgram = "micro";
-      maintainers = with lib.maintainers; [
-        AndersonTorres
-        pbsds
-      ];
-    };
-  };
+  clipboardPackages =
+    lib.optionals withXclip [ xclip ]
+    ++ lib.optionals withWlClipboard [ wl-clipboard ];
 in
-self
+
+symlinkJoin rec {
+  pname = "micro";
+  inherit (micro-headless) version outputs meta;
+  name = "${pname}-${version}";
+
+  paths = [ micro-headless ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postBuild =
+    lib.concatLines (
+      lib.forEach (lib.remove "out" micro-headless.outputs) (
+        output: "ln -s --no-target-directory ${micro-headless.${output}} \$${output}"
+      )
+    )
+    + lib.optionalString (clipboardPackages != [ ]) ''
+      rm $out/bin/micro
+      makeWrapper ${micro-headless}/bin/micro $out/bin/micro \
+        --prefix PATH : "${lib.makeBinPath clipboardPackages}"
+    '';
+}

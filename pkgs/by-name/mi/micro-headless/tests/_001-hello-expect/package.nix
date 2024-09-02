@@ -1,6 +1,6 @@
 {
   expect,
-  micro,
+  micro-headless,
   runCommand,
 }:
 
@@ -14,7 +14,7 @@ runCommand "micro-expect-hello-world"
   {
     nativeBuildInputs = [
       expect
-      micro
+      micro-headless
     ];
   }
   # Micro needs a writable $HOME for throwing its configuration
