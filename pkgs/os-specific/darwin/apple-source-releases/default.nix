@@ -264,7 +264,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     Csu             = callPackage ./Csu/package.nix { };
     libresolv       = callPackage ./libresolv/package.nix { };
     libutil         = callPackage ./libutil/package.nix { };
-    objc4           = applePackage "objc4"             "osx-10.12.6"     "sha256-ZsxRpdsfv3Dxs7yBBCkjbKXKR6aXwkEpxc1XYXz7ueM=" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "sha256-M1zoEjjeKIDUEP6ACbpUJk3OXjobw4g/qzUmxGdX1J0=" {};
     removefile      = callPackage ./removefile/package.nix { };
     xnu             = if isSdk10_12 then
