@@ -35,24 +35,24 @@ in {
       });
 
       # provide component dependencies explicitly from the module
-      extraComponents = [
+      integrations = [
         "mqtt"
       ];
 
       # provide package for postgresql support
-      extraPackages = python3Packages: with python3Packages; [
+      extraPythonPackages = python3Packages: with python3Packages; [
         psycopg2
       ];
 
-      # test loading custom components
-      customComponents = with pkgs.home-assistant-custom-components; [
+      # test loading community maintained integration packages
+      integrationPackages = with pkgs.home-assistant-custom-components; [
         prometheus_sensor
         # tests loading multiple components from a single package
         spook
       ];
 
-      # test loading lovelace modules
-      customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
+      # test loading lovelace resource modules
+      lovelaceResourcePackages = with pkgs.home-assistant-custom-lovelace-modules; [
         mini-graph-card
       ];
 
@@ -131,8 +131,8 @@ in {
     specialisation.removeCustomThings = {
       inheritParentConfig = true;
       configuration.services.home-assistant = {
-        customComponents = lib.mkForce [];
-        customLovelaceModules = lib.mkForce [];
+        integrationPackages = lib.mkForce [];
+        lovelaceResourcePackages = lib.mkForce [];
       };
     };
   };
