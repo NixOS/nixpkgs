@@ -21765,6 +21765,12 @@
     github = "vector1dev";
     githubId = 127302590;
   };
+  vedantmgoyal9 = {
+    name = "Vedant Mohan Goyal";
+    matrix = "@vedantmgoyal:beeper.com";
+    github = "vedantmgoyal9";
+    githubId = 83997633;
+  };
   veehaitch = {
     name = "Vincent Haupert";
     email = "mail@vincent-haupert.de";
