@@ -47,29 +47,32 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Fix build with system spral
+    # This was merged upstream and can be removed on next release
     (fetchpatch {
       name = "add-FindSPRAL.cmake.patch";
       url = "https://github.com/casadi/casadi/pull/3792/commits/28bc1b03e67ae06dea0c8557057020f5651be7ad.patch";
       hash = "sha256-t0+RnXoFakmoX93MhN08RWAbCg6Nerh42LicBBgAkRQ=";
     })
+    # Fix build with fatrop
+    # This was merged upstream and can be removed on next release
+    (fetchpatch {
+      url = "https://github.com/casadi/casadi/pull/3832/commits/4d4edb21521817fc980da5e570a607ad2f15aaa2.patch";
+      hash = "sha256-ui8pMaBz848Yv5xNlruPp9IFUhc97ZgvXGXqpxJG1Es=";
+    })
   ];
 
   postPatch =
     ''
-      # fix case of fatropConfig.cmake & hpipmConfig.cmake
+      # fix case of hpipmConfig.cmake
       substituteInPlace CMakeLists.txt --replace-fail \
         "FATROP HPIPM" \
-        "fatrop hpipm"
+        "FATROP hpipm"
 
       # nix provide lib/clang headers in libclang, not in llvm.
       substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
         '$'{CLANG_LLVM_LIB_DIR} \
         ${llvmPackages_17.libclang.lib}/lib
-
-      # fix fatrop includes
-      substituteInPlace casadi/interfaces/fatrop/fatrop_conic_interface.hpp --replace-fail \
-        "<ocp/" \
-        "<fatrop/ocp/"
 
       # fix mumps lib name. No idea where this comes from.
       substituteInPlace cmake/FindMUMPS.cmake --replace-fail \
@@ -173,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CSPARSE" true)
     (lib.cmakeBool "WITH_BLASFEO" true)
     (lib.cmakeBool "WITH_HPIPM" true)
-    (lib.cmakeBool "WITH_FATROP" false) # invalid new-expression of abstract class type 'casadi::CasadiStructuredQP'
+    (lib.cmakeBool "WITH_FATROP" true)
     (lib.cmakeBool "WITH_BUILD_FATROP" false)
     (lib.cmakeBool "WITH_SUPERSCS" false) # packaging too chaotic
     (lib.cmakeBool "WITH_BUILD_OSQP" false)
