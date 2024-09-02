@@ -262,7 +262,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     AvailabilityVersions = callPackage ./AvailabilityVersions/package.nix { };
     copyfile        = callPackage ./copyfile/package.nix { };
     Csu             = callPackage ./Csu/package.nix { };
-    libdispatch     = applePackage "libdispatch"       "osx-10.12.4"     "sha256-xUqoG5JK4P3nXeoVUOBzodVK9fjH/I3xJ6WRtM39bdw=" {};
     libmalloc       = if isSdk10_12 then
       applePackage "libmalloc" "osx-10.12.6" "sha256-brfG4GEF2yZipKdhlPq6DhT2z5hKYSb2MAmffaikdO4=" {}
     else macosPackages_11_0_1.libmalloc;
