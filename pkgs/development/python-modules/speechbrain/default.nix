@@ -1,13 +1,14 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # dependencies
   huggingface-hub,
   hyperpyyaml,
   joblib,
-  lib,
   numpy,
   packaging,
-  pythonOlder,
   sentencepiece,
   scipy,
   torch,
@@ -17,19 +18,17 @@
 
 buildPythonPackage rec {
   pname = "speechbrain";
-  version = "1.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "speechbrain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s23RHxqr+ZCWPYNchFpyYa01mY+Bum3thgNbJP8rAmA=";
+    hash = "sha256-JoVu53HuTPkUIyJGqLE80yu7jzPje8/r5Hk6lJsz2XA=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     huggingface-hub
     hyperpyyaml
     joblib
@@ -46,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "speechbrain" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch-based Speech Toolkit";
     homepage = "https://speechbrain.github.io";
     changelog = "https://github.com/speechbrain/speechbrain/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
