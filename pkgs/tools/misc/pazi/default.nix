@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "euank";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z8x70mwg0mvz6iap92gil37d4kpg5dizlyfx3zk7984ynycgap8";
+    sha256 = "sha256-PDgk6VQ/J9vkFJ0N+BH9LqHOXRYM+a+WhRz8QeLZGiM=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoHash = "sha256-TJbwLbmexu/PLhKPJl7DttZz/WbEJNJerQimUMqlVcU=";
+  cargoHash = "sha256-7ChHYcyzRPFkZ+zh9lBOHcOizDvJf2cp9ULoI7Ofmqk=";
 
   meta = with lib; {
     description = "Autojump \"zap to directory\" helper";
