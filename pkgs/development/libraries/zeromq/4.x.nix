@@ -8,6 +8,13 @@
   asciidoc,
   xmlto,
   enableDrafts ? false,
+  # for passthru.tests
+  azmq,
+  cppzmq,
+  czmq,
+  zmqpp,
+  ffmpeg,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
     install -vDm644 -t "$out/share/man/man3" ../doc/*.3
     install -vDm644 -t "$out/share/man/man7" ../doc/*.7
   '';
+
+  passthru.tests = {
+    inherit
+      azmq
+      cppzmq
+      czmq
+      zmqpp
+      ;
+    pyzmq = python3.pkgs.pyzmq;
+    ffmpeg = ffmpeg.override { withZmq = true; };
+  };
 
   meta = {
     branch = "4";
