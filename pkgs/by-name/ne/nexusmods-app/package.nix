@@ -71,24 +71,22 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = true;
 
-  dotnetTestFlags = [
-    "--environment=USER=nobody"
-    (
-      "--filter="
-      + lib.strings.concatStringsSep "&" (
-        [
-          "Category!=Disabled"
-          "FlakeyTest!=True"
-          "RequiresNetworking!=True"
-          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
-        ]
-        ++ lib.optionals (!_7zz.meta.unfree) [
-          "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-        ]
-      )
-    )
+  dotnetTestFlags = [ "--environment=USER=nobody" ];
+
+  testFilters = [
+    "Category!=Disabled"
+    "FlakeyTest!=True"
+    "RequiresNetworking!=True"
   ];
+
+  disabledTests =
+    [
+      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
+      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+    ]
+    ++ lib.optionals (!_7zz.meta.unfree) [
+      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+    ];
 
   passthru = {
     tests =
