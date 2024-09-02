@@ -281,7 +281,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     else macosPackages_11_0_1.libplatform;
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = callPackage ./libresolv/package.nix { };
-    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" { inherit (pkgs.darwin.apple_sdk) sdkRoot; };
     libutil         = callPackage ./libutil/package.nix { };
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "sha256-CC0sndP/mKYe3dZu3v7fjuDASV4V4w7dAcnWMvpoquE=" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "sha256-ddZr6tropkpdMJhq/kUlm3OwO8b0yxtkrMpwec8R4FY=" {};
