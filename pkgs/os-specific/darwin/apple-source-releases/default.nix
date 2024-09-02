@@ -262,7 +262,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     AvailabilityVersions = callPackage ./AvailabilityVersions/package.nix { };
     copyfile        = callPackage ./copyfile/package.nix { };
     Csu             = callPackage ./Csu/package.nix { };
-    libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = callPackage ./libresolv/package.nix { };
     libutil         = callPackage ./libutil/package.nix { };
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "sha256-CC0sndP/mKYe3dZu3v7fjuDASV4V4w7dAcnWMvpoquE=" {};

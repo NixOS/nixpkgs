@@ -12,7 +12,6 @@ bootstrap_cmds = callPackage ./bootstrap_cmds/package.nix { };
 copyfile = applePackage' "copyfile" "173.40.2" "macos-11.0.1" "1j20909inn2iw8n51b8vk551wznfi3bhfziy8nbv08qj5lk50m04" {};
 diskdev_cmds = applePackage' "diskdev_cmds" "667.40.1" "macos-11.0.1" "0wr60vyvgkbc4wyldnsqas0xss2k1fgmbdk3vnhj6v6jqa98l1ny" {};
 file_cmds = applePackage' "file_cmds" "321.40.3" "macos-11.0.1" "0p077lnbcy8266m03a0fssj4214bjxh88y3qkspnzcvi0g84k43q" {};
-libpthread = applePackage' "libpthread" "454.40.3" "macos-11.0.1" "0zljbw8mpb80n1if65hhi9lkgwbgjr8vc9wvf7q1nl3mzyl35f8p" {};
 libresolv = applePackage' "libresolv" "68" "macos-11.0.1" "045ahh8nvaam9whryc2f5g5xagwp7d187r80kcff82snp5p66aq1" {};
 libunwind = applePackage' "libunwind" "200.10" "macos-11.0.1" "0wa4ssr7skn5j0ncm1rigd56qmbs982zvwr3qpjn28krwp8wvigd" {};
 libutil = applePackage' "libutil" "58.40.2" "macos-11.0.1" "11s0vizk7bg0k0yjx21j8vaji4j4vk57131qbp07i9lpksb3bcy4" {};

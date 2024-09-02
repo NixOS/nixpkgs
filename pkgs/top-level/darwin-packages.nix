@@ -95,6 +95,7 @@ makeScopeWithSplicing' {
     "libdispatch"
     "libmalloc"
     "libplatform"
+    "libpthread"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
