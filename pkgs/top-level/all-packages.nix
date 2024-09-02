@@ -20336,8 +20336,6 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
-  relibc = callPackage ../development/libraries/relibc { };
-
   # Only supported on Linux and only on glibc
   glibcLocales =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
