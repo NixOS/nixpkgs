@@ -756,12 +756,9 @@ let
               && stdenv.targetPlatform.useLLVM or false
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-          nixSupport.cc-ldflags =
-            lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD)
-              (
-                [ "-L${targetLlvmLibraries.libunwind}/lib" ]
-                ++ lib.optional (lib.versionAtLeast metadata.release_version "17") "--undefined-version"
-              );
+          nixSupport.cc-ldflags = lib.optionals (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
 
