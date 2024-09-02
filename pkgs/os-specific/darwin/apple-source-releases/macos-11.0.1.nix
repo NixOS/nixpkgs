@@ -19,5 +19,4 @@ removefile = applePackage' "removefile" "49.40.3" "macos-11.0.1" "0870ihxpmvj8gg
 shell_cmds = applePackage' "shell_cmds" "216.40.4" "macos-11.0.1" "0wbysc9lwf1xgl686r3yn95rndcmqlp17zc1ig9gsl5fxyy5bghh" {};
 text_cmds = applePackage' "text_cmds" "106" "macos-11.0.1" "17fn35m6i866zjrf8da6cq6crydp6vp4zq0aaab243rv1fx303yy" {};
 top = applePackage' "top" "129" "macos-11.0.1" "0d9pqmv3mwkfcv7c05hfvnvnn4rbsl92plr5hsazp854pshzqw2k" {};
-xnu = applePackage' "xnu" "7195.50.7.100.1" "macos-11.0.1" "11zjmpw11rcc6a0xlbwramra1rsr65s4ypnxwpajgbr2c657lipl" {};
 }
