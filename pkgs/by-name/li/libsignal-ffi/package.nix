@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, runCommand, xcodebuild, protobuf, boringssl, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  runCommand,
+  xcodebuild,
+  protobuf,
+  boringssl,
+  darwin,
+}:
 let
   # boring-sys expects the static libraries in build/ instead of lib/
   boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
@@ -39,7 +49,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  cargoBuildFlags = [ "-p" "libsignal-ffi" ];
+  cargoBuildFlags = [
+    "-p"
+    "libsignal-ffi"
+  ];
 
   meta = with lib; {
     description = "C ABI library which exposes Signal protocol logic";
