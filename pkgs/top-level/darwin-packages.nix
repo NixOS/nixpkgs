@@ -73,6 +73,7 @@ makeScopeWithSplicing' {
     "CommonCrypto"
     "CoreSymbolication"
     "IOKit"
+    "Libc"
   ] (mkStub apple_sdk.version);
 in
 
