@@ -87,6 +87,7 @@ makeScopeWithSplicing' {
     "darwin-stubs"
     "dtrace"
     "dyld"
+    "eap8021x"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
