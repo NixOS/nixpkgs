@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "autorefs";
     rev = "refs/tags/${version}";
-    hash = "sha256-quN5Ow5mEQ1o5RGYVCcFLrMG9bl51Mg/hrc+VR/SVwM=";
+    hash = "sha256-C1ca7tx9s88U7Xp/bd3KhlWeb32a612RyCVBQz0vJ1g=";
   };
 
   postPatch = ''
