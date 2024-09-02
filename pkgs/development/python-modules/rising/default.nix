@@ -1,45 +1,51 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  pytestCheckHook,
-  dill,
+
+  # dependencies
   lightning-utilities,
   numpy,
   torch,
   threadpoolctl,
   tqdm,
+
+  # tests
+  dill,
+  pytestCheckHook,
+
+  stdenv,
+
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "rising";
   version = "0.3.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PhoenixDL";
-    repo = pname;
+    repo = "rising";
     rev = "refs/tags/v${version}";
     hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 
-
   pythonRelaxDeps = [ "lightning-utilities" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lightning-utilities
     numpy
     torch
     threadpoolctl
     tqdm
   ];
+
   nativeCheckInputs = [
     dill
     pytestCheckHook
   ];
+
   disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
     "test_progressive_resize_integration"
@@ -60,5 +66,7 @@ buildPythonPackage rec {
     homepage = "https://rising.rtfd.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    # AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?
+    broken = pythonAtLeast "3.12";
   };
 }
