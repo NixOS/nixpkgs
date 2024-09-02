@@ -4,7 +4,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   chromium,
-  chromedriver,
   python3,
 }:
 buildNpmPackage {
@@ -19,7 +18,7 @@ buildNpmPackage {
   };
   npmDepsHash = "sha256-wiBpWw9nb/pWVGIc4Vl/IxxR5ic0LzLMMr3WxRNvYdM=";
 
-  nativeCheckInputs = [chromium chromedriver];
+  nativeCheckInputs = [chromium];
   doCheck = stdenv.isLinux;
 
   postBuild = ''
@@ -34,8 +33,7 @@ buildNpmPackage {
 
     ./single-file \
       --browser-headless \
-      --web-driver-executable-path=chromedriver \
-      --back-end=webdriver-chromium \
+      --browser-executable-path chromium-browser\
       http://127.0.0.1:8000
 
     grep -F 'Page saved with SingleFile' 'Directory listing for'*.html
