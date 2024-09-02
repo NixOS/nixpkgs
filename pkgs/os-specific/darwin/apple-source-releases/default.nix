@@ -261,7 +261,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     inherit (self.adv_cmds) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "sha256-cUKeMx6mOAxBSRHIdfzsrR65Qv86m7+20XvpKqVfwVI=" {};
     AvailabilityVersions = callPackage ./AvailabilityVersions/package.nix { };
-    CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "sha256-FLgODBrfv+XsGaAjddncYAm/BIJJYw6LcwX/z7ncKFM=" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
       Security      = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
       inherit (pkgs.darwin.apple_sdk.libs) xpc;

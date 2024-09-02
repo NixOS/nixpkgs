@@ -3,7 +3,6 @@
 { applePackage', callPackage }:
 
 {
-CommonCrypto = applePackage' "CommonCrypto" "60178.40.2" "macos-11.0.1" "129gsxhhcxqycg0zjrdrz2ay4dv2ih1ckafqh33qrc499z8dam2p" {};
 Csu = applePackage' "Csu" "88" "macos-11.0.1" "1lzp9x8iv60c2h12q2s89nf49b5hvpqq4a9li44zr2fxszn8lqxh" {};
 ICU = callPackage ./ICU/package.nix { };
 Libc = applePackage' "Libc" "1439.40.11" "macos-11.0.1" "12k5sbz2k1pl839w2lk9iw414zzl50zdjzgq2x6bm20yjbfj69qm" {};
