@@ -9,10 +9,23 @@
   llvmPackages
 , mtools
 , nasm
+  # Optional features
+, enableAllTargets ? true
+, x86Support ? enableAllTargets || stdenv.targetPlatform.isx86
+, x86BiosSupport ? enableAllTargets || x86Support
+, x86BiosCdSupport ? enableAllTargets || x86BiosSupport
+, x86BiosPxeSupport ? enableAllTargets || x86BiosSupport
+, x86UefiSupport ? enableAllTargets || x86Support
+, x86_32UefiSupport ? enableAllTargets || x86UefiSupport
+, x86_64UefiSupport ? enableAllTargets || x86UefiSupport
+, aarch64UefiSupport ? enableAllTargets || stdenv.targetPlatform.isAarch64
+, riscv64UefiSupport ? enableAllTargets || stdenv.targetPlatform.isRiscV64
+, loongArch64UefiSupport ? enableAllTargets || stdenv.targetPlatform.isLoongArch64
+, uefiCdSupport ? enableAllTargets
 }:
 
 let
-  version = "7.9.1";
+  version = "8.0.9";
 in
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
@@ -24,20 +37,33 @@ stdenv.mkDerivation {
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
-    sha256 = "sha256-cR6ilV5giwvbqUoOGbnXQnqZzUz/oL7OGZPYNoFKvy0=";
+    sha256 = "sha256-1UC/vrlPZyxcwWNlYU0+xby7VfX+dhpSSKtRZyA6tdU=";
   };
+
+  hardeningDisable = [
+    # clang for riscv does not support this
+    "zerocallusedregs"
+  ];
 
   nativeBuildInputs = [
     llvmPackages.bintools
     # gcc is used for the host tool, while clang is used for the bootloader.
     llvmPackages.clang
     llvmPackages.lld
-    mtools
-    nasm
-  ];
+  ] ++
+    lib.optional x86Support nasm ++
+    lib.optional uefiCdSupport mtools;
 
   configureFlags = [
-    "--enable-all"
+    (lib.enableFeature x86BiosCdSupport "bios-cd")
+    (lib.enableFeature x86BiosPxeSupport "bios-pxe")
+    (lib.enableFeature x86BiosSupport "bios")
+    (lib.enableFeature x86_32UefiSupport "uefi-ia32")
+    (lib.enableFeature x86_64UefiSupport "uefi-x86_64")
+    (lib.enableFeature aarch64UefiSupport "uefi-aarch64")
+    (lib.enableFeature riscv64UefiSupport "uefi-riscv64")
+    (lib.enableFeature loongArch64UefiSupport "uefi-loongarch64")
+    (lib.enableFeature uefiCdSupport "uefi-cd")
   ];
 
   installFlags = [ "destdir=$out" "manprefix=/share" ];
@@ -55,7 +81,7 @@ stdenv.mkDerivation {
       licenses.mit # limine-efi, stb
       licenses.zlib # tinf
     ];
-    # The platforms on that the Liminine binary and helper tools can run, not
+    # The platforms on that the Limine binary and helper tools can run, not
     # necessarily the platforms for that bootable images can be created.
     platforms = platforms.unix;
     badPlatforms = platforms.darwin;
