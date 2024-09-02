@@ -76,9 +76,9 @@ makeScopeWithSplicing' {
     "Libc"
     "Libinfo"
     "Libm"
+    "Libnotify"
   ] (mkStub apple_sdk.version);
 in
-
 impure-cmds // appleSourcePackages // stubs // {
 
   stdenvNoCF = stdenv.override {
