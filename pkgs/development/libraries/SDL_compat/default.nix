@@ -11,6 +11,7 @@
 , libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms
 , openglSupport ? libGLSupported
 , libGLU
+, SDL1
 }:
 
 let
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  setupHook = ../SDL/setup-hook.sh;
+  inherit (SDL1) setupHook;
 
   postFixup = ''
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
