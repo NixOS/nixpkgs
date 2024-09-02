@@ -31259,8 +31259,6 @@ with pkgs;
 
   kubectl-explore = callPackage ../applications/networking/cluster/kubectl-explore { };
 
-  kubectl-gadget = callPackage ../applications/networking/cluster/kubectl-gadget { };
-
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 
   kubectl-klock = callPackage ../applications/networking/cluster/kubectl-klock { };
