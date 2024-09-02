@@ -122,7 +122,7 @@ in {
     # Cause a configuration change that requires a service restart as we added a new runtime dependency
     specialisation.newFeature = {
       inheritParentConfig = true;
-      configuration.services.home-assistant.config.backup = {};
+      configuration.services.home-assistant.config.prometheus = {};
     };
 
     specialisation.removeCustomThings = {
@@ -224,7 +224,7 @@ in {
 
     with subtest("Check that new components get setup after restart"):
         journal = get_journal_since(cursor)
-        for domain in ["backup"]:
+        for domain in ["prometheus"]:
             assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
     with subtest("Check custom components and custom lovelace modules get removed"):
