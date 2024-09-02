@@ -124,6 +124,7 @@ rustPlatform.buildRustPackage rec {
       unfreeRedistributable
     ];
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "modrinth-app";
     platforms = with lib; platforms.linux ++ platforms.darwin;
     # this builds on architectures like aarch64, but the launcher itself does not support them yet
     broken = !stdenv.isx86_64;
