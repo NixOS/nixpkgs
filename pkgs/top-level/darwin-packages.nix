@@ -99,6 +99,7 @@ makeScopeWithSplicing' {
     "libpthread"
     "mDNSResponder"
     "objc4"
+    "ppp"
   ] (mkStub apple_sdk.version);
 in
 
