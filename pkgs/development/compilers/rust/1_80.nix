@@ -119,6 +119,7 @@ import ./default.nix
       aarch64-apple-darwin = "e70a9362975b94df7dbc6e2ed5ceab4254dd32f72ba497ff4a70440ace3f729f";
       powerpc64le-unknown-linux-gnu = "9865eeebb5bb20006367d3148d9116576499ec958d847e22b645f008a1bc4170";
       riscv64gc-unknown-linux-gnu = "c8d38e600ef4dea8b375df2d08153393816ffd3dcab18e4d081ddc19e28b5a40";
+      s390x-unknown-linux-gnu = "1e9f1b27ce47d831108e1d1bb6ef7ab86f95bedfea843318292f821142fe1f6c";
       x86_64-unknown-freebsd = "3c8005f488b8dda0fc6d47928868200852106cac2b568934ae9a2e5c89d3a50d";
     };
 
