@@ -80,6 +80,7 @@ makeScopeWithSplicing' {
     "Librpcsvc"
     "Libsystem"
     "LibsystemCross"
+    "Security"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {

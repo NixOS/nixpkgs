@@ -6,7 +6,6 @@
 Csu = applePackage' "Csu" "88" "macos-11.0.1" "1lzp9x8iv60c2h12q2s89nf49b5hvpqq4a9li44zr2fxszn8lqxh" {};
 ICU = callPackage ./ICU/package.nix { };
 PowerManagement = applePackage' "PowerManagement" "1132.50.3" "macos-11.0.1" "1sb2nz92vdf6v3h17ry0vgw0z9zsva82lhdrhsf3k60jhfw1fi2v" {};
-Security = applePackage' "Security" "59754.41.1" "macos-11.0.1" "0jq70mnwkvrrhws64ipx0i68pi3n0sk95jlhacxxikdj9f4hpbsw" {};
 adv_cmds = applePackage' "adv_cmds" "176" "macos-11.0.1" "0sskwl3jc7llbrlyd1i7qlb03yhm1xkbxd1k9xhh7f9wqhlzq31j" {};
 architecture = applePackage' "architecture" "279" "macos-11.0.1" "19s93rqr9r98qh0rlndf7kv3v4n1ifh9i539mbpsx6kbixcx8vvp" {};
 basic_cmds = applePackage' "basic_cmds" "55" "macos-11.0.1" "1913pzk376zfap2fwmrb233rkn4h4l2c65nd7s8ixvrz1r7cz0q5" {};
