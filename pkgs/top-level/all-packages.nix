@@ -7727,8 +7727,6 @@ with pkgs;
 
   filegive = callPackage ../tools/networking/filegive { };
 
-  fileschanged = callPackage ../tools/misc/fileschanged { };
-
   filet = callPackage ../applications/misc/filet { };
 
   findex = callPackage ../applications/misc/findex { };
@@ -20122,9 +20120,6 @@ with pkgs;
   };
 
   game-music-emu = callPackage ../development/libraries/audio/game-music-emu { };
-
-  gamin = callPackage ../development/libraries/gamin { };
-  fam = gamin; # added 2018-04-25
 
   ganv = callPackage ../development/libraries/ganv { };
 
