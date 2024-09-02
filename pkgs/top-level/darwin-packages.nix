@@ -77,6 +77,7 @@ makeScopeWithSplicing' {
     "Libinfo"
     "Libm"
     "Libnotify"
+    "Librpcsvc"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
