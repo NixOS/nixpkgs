@@ -8013,6 +8013,11 @@ self: super: with self; {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
+  mim-solvers = toPythonModule (pkgs.mim-solvers.override {
+    python3Packages = self;
+    pythonSupport = true;
+  });
+
   minari = callPackage ../development/python-modules/minari { };
 
   mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
