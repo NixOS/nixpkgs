@@ -23452,7 +23452,10 @@ with pkgs;
 
   scope-lite = callPackage ../development/libraries/scope-lite { };
 
-  SDL_classic = callPackage ../development/libraries/SDL ({
+  SDL = SDL_classic;
+  SDL_classic = SDL1;
+
+  SDL1 = callPackage ../development/libraries/SDL1 ({
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   } // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
     # libGLU doesn’t work with Android’s SDL
@@ -23463,8 +23466,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
-
-  SDL = SDL_classic;
 
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
