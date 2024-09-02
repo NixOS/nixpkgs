@@ -23,6 +23,8 @@ else if stdenv.isAarch64 then
   "AARCH64"
 else if stdenv.hostPlatform.isRiscV64 then
   "RISCV64"
+else if stdenv.hostPlatform.isLoongArch64 then
+  "LOONGARCH64"
 else
   throw "Unsupported architecture";
 
@@ -128,7 +130,7 @@ edk2 = stdenv.mkDerivation {
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     changelog = "https://github.com/tianocore/edk2/releases/tag/edk2-stable${edk2.version}";
     license = lib.licenses.bsd2;
-    platforms = with lib.platforms; aarch64 ++ arm ++ i686 ++ x86_64 ++ riscv64;
+    platforms = with lib.platforms; aarch64 ++ arm ++ i686 ++ x86_64 ++ loongarch64 ++ riscv64;
     maintainers = [ lib.maintainers.mjoerg ];
   };
 
