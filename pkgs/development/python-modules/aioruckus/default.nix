@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioruckus";
-  version = "0.40";
+  version = "0.41";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "ms264556";
     repo = "aioruckus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oEm0+ktEJHJPg4PUPfSmG9SyVRDrxs7kosQ0tIY+bRc=";
+    hash = "sha256-acu0EWP/k0qyylPtM8IBxhJhhQhXpbG2NheYpD8RTG8=";
   };
 
   postPatch = ''
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytestCheckHook
   ];
