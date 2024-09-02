@@ -107,6 +107,6 @@ qtPreHook() {
         exit 1
     fi
 }
-prePhases+=" qtPreHook"
+appendToVar prePhases qtPreHook
 
 fi

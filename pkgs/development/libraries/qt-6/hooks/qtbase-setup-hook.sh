@@ -81,7 +81,7 @@ else # Only set up Qt once.
             exit 1
         fi
     }
-    prePhases+=" qtPreHook"
+    appendToVar prePhases qtPreHook
 
     addQtModulePrefix() {
         addToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH $1
