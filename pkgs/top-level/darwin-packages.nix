@@ -88,6 +88,8 @@ makeScopeWithSplicing' {
     "dtrace"
     "dyld"
     "eap8021x"
+    "hfs"
+    "hfsHeaders"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
