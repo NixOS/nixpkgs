@@ -13,6 +13,7 @@
   python-ironicclient,
   python-keystoneclient,
   python-manilaclient,
+  python-mistralclient,
   python-neutronclient,
   python-openstackclient,
   requests-mock,
@@ -74,6 +75,7 @@ buildPythonPackage rec {
         python-heatclient
         python-ironicclient
         python-manilaclient
+        python-mistralclient
         python-neutronclient
       ];
     };
