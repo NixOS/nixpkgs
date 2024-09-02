@@ -254,6 +254,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
+/pkgs/development/compilers/idris2 @mattpolzin
 
 # Bazel
 /pkgs/development/tools/build-managers/bazel @Profpatsch
