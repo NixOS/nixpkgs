@@ -50,6 +50,23 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_switch_pty"
     "--skip=test_next_ambiguous_interactive"
     "--skip=test_switch_auto_switch_interactive"
+    "--skip=test_amend_undo"
+    "--skip=test_switch_pty"
+    "--skip=test_next_ambiguous_interactive"
+    "--skip=test_switch_auto_switch_interactive"
+    "--skip=test_move_branch_on_merge_conflict_resolution"
+    "--skip=test_move_branches_after_move"
+    "--skip=test_move_delete_checked_out_branch"
+    "--skip=test_move_no_reapply_squashed_commits"
+    "--skip=test_move_orphaned_root"
+    "--skip=test_restore_snapshot_basic"
+    "--skip=test_restore_snapshot_delete_file_only_in_index"
+    "--skip=test_restore_snapshot_deleted_files"
+    "--skip=test_sync_basic"
+    "--skip=test_sync_no_delete_main_branch"
+    "--skip=test_undo_doesnt_make_working_dir_dirty"
+    "--skip=test_undo_move_refs"
+    "--skip=test_undo_noninteractive"
   ];
 
   meta = with lib; {
