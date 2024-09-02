@@ -90,6 +90,7 @@ makeScopeWithSplicing' {
     "eap8021x"
     "hfs"
     "hfsHeaders"
+    "launchd"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
