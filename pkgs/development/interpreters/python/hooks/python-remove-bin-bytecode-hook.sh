@@ -13,5 +13,5 @@ pythonRemoveBinBytecodePhase () {
 }
 
 if [ -z "${dontUsePythonRemoveBinBytecode-}" ]; then
-    preDistPhases+=" pythonRemoveBinBytecodePhase"
+    appendToVar preDistPhases pythonRemoveBinBytecodePhase
 fi
