@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.libsdl.org/";
     license = lib.licenses.zlib;
     mainProgram = "sdl-config";
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ peterhoeg ]);
     platforms = lib.platforms.all;
   };
 }
