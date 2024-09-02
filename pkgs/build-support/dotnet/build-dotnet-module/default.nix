@@ -67,7 +67,12 @@ let
       # platforms in meta.platforms which are supported by the sdk.
       runtimeId ? null,
 
+      # Test filters. This gets passed to `dotnet test --filter`, concatenated using `&`.
+      # You may also use `disabledTests` to filter tests based on their name.
+      # See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details for more details.
+      testFilters ? [ ],
       # Tests to disable. This gets passed to `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all frameworks.
+      # You may also use `testFilters` to pass more generic filters to `dotnet test --filter`.
       # See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details for more details.
       disabledTests ? [ ],
       # The project file to run unit tests against. This is usually referenced in the regular project file, but sometimes it needs to be manually set.
@@ -132,6 +137,7 @@ let
       dotnetBuildType = buildType;
       dotnetProjectFiles = projectFiles;
       dotnetTestProjectFiles = testProjectFiles;
+      dotnetTestFilters = testFilters;
       dotnetDisabledTests = disabledTests;
       dotnetRuntimeIds = lib.singleton (
         if runtimeId != null then runtimeId else systemToDotnetRid stdenvNoCC.hostPlatform.system

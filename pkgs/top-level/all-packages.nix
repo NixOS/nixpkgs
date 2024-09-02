@@ -20332,8 +20332,6 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
-  relibc = callPackage ../development/libraries/relibc { };
-
   # Only supported on Linux and only on glibc
   glibcLocales =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
@@ -25961,8 +25959,6 @@ with pkgs;
 
   fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
 
-  mapproxy = callPackage ../servers/geospatial/mapproxy { };
-
   martin = callPackage ../servers/geospatial/martin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -29153,10 +29149,6 @@ with pkgs;
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
   chatty = callPackage ../applications/networking/instant-messengers/chatty { };
-
-  chirp = callPackage ../applications/radio/chirp {
-    python3 = python311;
-  };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
