@@ -153,6 +153,8 @@ impure-cmds // appleSourcePackages // stubs // {
     propagatedBuildInputs = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
+  libunwind = callPackage ../os-specific/darwin/libunwind { };
+
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
