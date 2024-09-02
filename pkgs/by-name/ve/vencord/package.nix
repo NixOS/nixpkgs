@@ -14,21 +14,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.9.8";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    # Allow Vencord to query the Git commit during build
-    leaveDotGit = true;
-    hash = "sha256-Bk9njsqZ/Gjp7ac9LRVAacw8BcP0GolrPjQypClQakQ=";
+    hash = "sha256-0N7RfRbtibWWKGtx8JfFlgC6RQFi2xvxgVI9MrldfhI=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname src;
 
-    hash = "sha256-BuY0IAbZYZSTIZDtN5F54qVBckIuOzswWCIE8c/yO88=";
+    hash = "sha256-bosCE9gBFCcM3Ww6sJmhps/cl4lovXKMieYpkqAMst8=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
       )
     );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
+    # TODO: somehow update this automatically
+    VENCORD_HASH = "deadbeef";
   };
 
   buildPhase = ''
