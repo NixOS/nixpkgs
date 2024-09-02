@@ -60,10 +60,10 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-greeter"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter"
     "--set"
     "daemon-src"
-    "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-greeter-daemon"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter-daemon"
   ];
 
   postPatch = ''
