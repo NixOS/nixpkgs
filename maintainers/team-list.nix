@@ -753,6 +753,7 @@ with lib.maintainers;
     members = [
       SuperSandro2000
       anthonyroussel
+      vinetos
     ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";

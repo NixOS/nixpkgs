@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-json";
-  version = "0.1.5";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_json";
     inherit version;
-    hash = "sha256-H+CG+2FtoOF/DUG6EuAWzY2xe1upLX0pakVutJTZFE0=";
+    hash = "sha256-Sxya3Iw75sl6mGmKvRMe9Y8bIWh4cfXQPYbCyAvhnvU=";
   };
 
   build-system = [ poetry-core ];

@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
     description = "Brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
     mainProgram = "typst-lsp";
-    changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
+    changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = with lib.licenses; [
       asl20
       mit

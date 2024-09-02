@@ -39,11 +39,10 @@ python3Packages.buildPythonApplication rec {
     janus
     keyring
     logbook
-    matrix-nio
+    (matrix-nio.override { withOlm = true; })
     peewee
     prompt-toolkit
   ]
-  ++ matrix-nio.optional-dependencies.e2e
   ++ lib.optionals enableDbusUi optional-dependencies.ui;
 
   optional-dependencies.ui = with python3Packages; [

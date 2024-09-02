@@ -2447,6 +2447,13 @@
     github = "beezow";
     githubId = 42082156;
   };
+  benaryorg = {
+    name = "benaryorg";
+    email = "binary@benary.org";
+    github = "benaryorg";
+    githubId = 6145260;
+    keys = [ { fingerprint = "804B 6CB8 AED5 61D9 3DAD  4DC5 E2F2 2C5E DF20 119D"; } ];
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     matrix = "@bendlas:matrix.org";
@@ -15631,6 +15638,12 @@
     githubId = 5948762;
     name = "Berk Özkütük";
   };
+  ozwaldorf = {
+    email = "self@ossian.dev";
+    github = "ozwaldorf";
+    githubId = 8976745;
+    name = "Ossian Mapes";
+  };
   p3psi = {
     name = "Elliot Boo";
     email = "p3psi.boo@gmail.com";
@@ -15788,6 +15801,12 @@
     github = "pathob";
     githubId = 4580157;
     name = "Patrick Hobusch";
+  };
+  patka = {
+    email = "patka@patka.dev";
+    github = "patka-123";
+    githubId = 69802930;
+    name = "patka";
   };
   patrickdag = {
     email = "patrick-nixos@failmail.dev";

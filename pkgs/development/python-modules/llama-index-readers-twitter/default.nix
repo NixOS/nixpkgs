@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-twitter";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_twitter";
     inherit version;
-    hash = "sha256-ZPwluiPdSkwMZ3JQy/HHhR7erYhUE9BWtplkfHk+TK8=";
+    hash = "sha256-1bxg/tbv5NrMezm9OQUojiQGutv+yhWY4gkeUXb4z2o=";
   };
 
   build-system = [ poetry-core ];

@@ -64,7 +64,7 @@ let
   } // lib.optionalAttrs (cfg.tlsCertFile != null)  { tlsCertFile = cfg.tlsCertFile; }
     // lib.optionalAttrs (cfg.tlsKeyFile != null)   { tlsPrivateKeyFile = cfg.tlsKeyFile; }
     // lib.optionalAttrs (cfg.clusterDomain != "")  { clusterDomain = cfg.clusterDomain; }
-    // lib.optionalAttrs (cfg.clusterDns != "")     { clusterDNS = [ cfg.clusterDns ] ; }
+    // lib.optionalAttrs (cfg.clusterDns != [])     { clusterDNS = cfg.clusterDns; }
     // lib.optionalAttrs (cfg.featureGates != {})   { featureGates = cfg.featureGates; }
   ));
 
@@ -112,8 +112,8 @@ in
 
     clusterDns = mkOption {
       description = "Use alternative DNS.";
-      default = "10.1.0.1";
-      type = str;
+      default = [ "10.1.0.1" ];
+      type = listOf str;
     };
 
     clusterDomain = mkOption {

@@ -62,7 +62,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${src.rev}";
+    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     homepage = "https://github.com/AdaCore/e3-core/";
     description = "Core framework for developing portable automated build systems";
     license = licenses.gpl3Only;

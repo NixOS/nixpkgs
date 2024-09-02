@@ -1484,13 +1484,9 @@ with pkgs;
 
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
-  acpica-tools = callPackage ../tools/system/acpica-tools { };
-
   amdgpu_top = callPackage ../tools/system/amdgpu_top { };
 
   acquire = with python3Packages; toPythonApplication acquire;
-
-  act = callPackage ../development/tools/misc/act { };
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
@@ -1858,8 +1854,6 @@ with pkgs;
   licenseclassifier = callPackage ../development/tools/misc/licenseclassifier { };
 
   license-cli = callPackage ../tools/misc/license-cli { };
-
-  license-generator = callPackage ../tools/misc/license-generator { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
 
@@ -6471,8 +6465,6 @@ with pkgs;
 
   circus = with python310Packages; toPythonApplication circus;
 
-  cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
-
   cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
@@ -8150,6 +8142,8 @@ with pkgs;
   gnome-secrets = callPackage ../applications/misc/gnome-secrets { };
 
   gnome-solanum = callPackage ../applications/misc/gnome-solanum { };
+
+  gnome-panel-with-modules = callPackage ../by-name/gn/gnome-panel/wrapper.nix { };
 
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
@@ -21144,8 +21138,6 @@ with pkgs;
 
   libbs2b = callPackage ../development/libraries/audio/libbs2b { };
 
-  libbytesize = callPackage ../development/libraries/libbytesize { };
-
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcacard = callPackage ../development/libraries/libcacard { };
@@ -22979,6 +22971,7 @@ with pkgs;
   heatclient = with python311Packages; toPythonApplication python-heatclient;
   ironicclient = with python311Packages; toPythonApplication python-ironicclient;
   manilaclient = with python311Packages; toPythonApplication python-manilaclient;
+  mistralclient = with python311Packages; toPythonApplication python-mistralclient;
   swiftclient = with python311Packages; toPythonApplication python-swiftclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
@@ -24572,7 +24565,12 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_7;
+  sbcl_2_4_8 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.8"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_8;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -28019,9 +28017,7 @@ with pkgs;
 
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
-  mojave-gtk-theme = callPackage ../data/themes/mojave {
-    inherit (gnome) gnome-shell;
-  };
+  mojave-gtk-theme = callPackage ../data/themes/mojave { };
 
   moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
@@ -28533,9 +28529,7 @@ with pkgs;
 
   vimix-cursor-theme = callPackage ../data/icons/vimix-cursor-theme { };
 
-  vimix-gtk-themes = callPackage ../data/themes/vimix {
-    inherit (gnome) gnome-shell;
-  };
+  vimix-gtk-themes = callPackage ../data/themes/vimix { };
 
   vimix-icon-theme = callPackage ../data/icons/vimix-icon-theme { };
 
@@ -28551,9 +28545,7 @@ with pkgs;
 
   whitesur-cursors = callPackage ../data/icons/whitesur-cursors { };
 
-  whitesur-gtk-theme = callPackage ../data/themes/whitesur {
-    inherit (gnome) gnome-shell;
-  };
+  whitesur-gtk-theme = callPackage ../data/themes/whitesur { };
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
@@ -29730,8 +29722,6 @@ with pkgs;
   };
 
   keepass-diff = callPackage ../applications/misc/keepass-diff { };
-
-  keeweb = callPackage ../applications/misc/keeweb { };
 
   evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
@@ -31568,11 +31558,6 @@ with pkgs;
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
-  handbrake = callPackage ../applications/video/handbrake {
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox Foundation VideoToolbox;
-    inherit (darwin) libobjc;
-  };
-
   handlr = callPackage ../tools/misc/handlr { };
 
   jftui = callPackage ../applications/video/jftui { };
@@ -33358,8 +33343,6 @@ with pkgs;
   maestral = with python3Packages; toPythonApplication maestral;
 
   maestral-gui = qt6Packages.callPackage ../applications/networking/maestral-qt { };
-
-  maestro = callPackage ../development/mobile/maestro { };
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
@@ -35438,7 +35421,16 @@ with pkgs;
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
-  chiaki4deck = qt6Packages.callPackage ../games/chiaki4deck { };
+  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng {
+    libplacebo = libplacebo.overrideAttrs (old: {
+      version = "6.338.2-unstable-2024-01-29";
+      src = old.src.override {
+        # broken with 7.349.0 -- pinning to rev used by upstream https://github.com/streetpea/chiaki-ng/blob/96d535db41bb9c3b37fbffcf2402d51e891ff960/scripts/build-libplacebo.sh#L9
+        rev = "c320f61e601caef2be081ce61138e5d51c1be21d";
+        hash = "sha256-ZlKYgWz/Rkp4IPt6cJ+KNnzBB2s8jGZEamSAOIGyDuE=";
+      };
+    });
+  };
 
   chromium-bsu = callPackage ../games/chromium-bsu { };
 
@@ -36511,13 +36503,14 @@ with pkgs;
 
   gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };
 
-  gnome-text-editor = callPackage ../desktops/gnome/apps/gnome-text-editor { };
-
-  gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
+  gnome-bluetooth_1_0 = callPackage ../by-name/gn/gnome-bluetooth/1.0 { };
 
   gnome-browser-connector = callPackage ../desktops/gnome/extensions/gnome-browser-connector { };
 
-  gnome-2048 = callPackage ../desktops/gnome/games/gnome-2048 { };
+  gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };
+
+  # Using 43 to match Mutter used in Pantheon
+  gnome-settings-daemon43 = callPackage ../by-name/gn/gnome-settings-daemon/43 { };
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
@@ -36546,6 +36539,9 @@ with pkgs;
   });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
+
+  # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
+  mutter43 = callPackage ../by-name/mu/mutter/43 { };
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
 
@@ -38165,8 +38161,6 @@ with pkgs;
 
   helmsman = callPackage ../applications/networking/cluster/helmsman { };
 
-  velero = callPackage ../applications/networking/cluster/velero { };
-
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
@@ -39430,10 +39424,6 @@ with pkgs;
   undaemonize = callPackage ../tools/system/undaemonize { };
 
   houdini = callPackage ../applications/misc/houdini { };
-
-  openfst = callPackage ../development/libraries/openfst { };
-
-  opengrm-ngram = callPackage ../development/libraries/opengrm-ngram { };
 
   openring = callPackage ../applications/misc/openring { };
 

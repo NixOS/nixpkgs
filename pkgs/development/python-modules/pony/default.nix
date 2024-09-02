@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pony";
-  version = "0.7.18";
+  version = "0.7.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ponyorm";
     repo = "pony";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2qGkHPBbfFrjJatKVa44bDbn/i3/YH/8LWd8CXyFRqo=";
+    hash = "sha256-fYzwdHRB9QrIJPEk8dqtPggSnJeugDyC9zQSM6u3rN0=";
   };
 
   build-system = [ setuptools ];

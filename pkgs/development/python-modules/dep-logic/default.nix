@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dep_logic" ];
 
   meta = {
-    changelog = "https://github.com/pdm-project/dep-logic/releases/tag/${src.rev}";
+    changelog = "https://github.com/pdm-project/dep-logic/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Python dependency specifications supporting logical operations";
     homepage = "https://github.com/pdm-project/dep-logic";
     license = lib.licenses.asl20;

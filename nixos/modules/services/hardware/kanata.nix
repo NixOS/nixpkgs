@@ -115,7 +115,7 @@ let
           --cfg ${keyboard.configFile} \
           --symlink-path ''${RUNTIME_DIRECTORY}/${name} \
           ${lib.optionalString (keyboard.port != null) "--port ${toString keyboard.port}"} \
-          ${utils.lib.escapeSystemdExecArgs keyboard.extraArgs}
+          ${utils.escapeSystemdExecArgs keyboard.extraArgs}
       '';
 
       DynamicUser = true;

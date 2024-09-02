@@ -6,17 +6,19 @@
 
   # build-system
   cmake,
-  scikit-build-core,
-  ninja,
   nanobind,
+  ninja,
+  numpy,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
+  darwin,
+  ocl-icd,
 
   # dependencies
-  darwin,
-  numpy,
-  ocl-icd,
-  opencl-headers,
   platformdirs,
-  pybind11,
   pytools,
 
   # tests
@@ -24,7 +26,8 @@
 }:
 
 let
-  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+  os-specific-buildInputs =
+    if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";
@@ -65,25 +68,30 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
 
-    # import from $out
-    rm -r pyopencl
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
   '';
 
-  # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
+  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
+  # tests are all the tests that are available.
   doCheck = false;
 
   pythonImportsCheck = [
     "pyopencl"
     "pyopencl.array"
     "pyopencl.cltypes"
+    "pyopencl.compyte"
     "pyopencl.elementwise"
     "pyopencl.tools"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+  meta = {
     description = "Python wrapper for OpenCL";
-    homepage = "https://github.com/inducer/pyopencl";
-    license = licenses.mit;
+    homepage = "https://github.com/pyopencl/pyopencl";
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    # ld: symbol(s) not found for architecture arm64
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

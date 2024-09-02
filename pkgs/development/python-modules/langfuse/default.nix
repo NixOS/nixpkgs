@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Instrument your LLM app with decorators or low-level SDK and get detailed tracing/observability";
     homepage = "https://github.com/langfuse/langfuse-python";
-    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${src.rev}";
+    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

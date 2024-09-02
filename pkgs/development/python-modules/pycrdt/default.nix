@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CRDTs based on Yrs";
     homepage = "https://github.com/jupyter-server/pycrdt";
-    changelog = "https://github.com/jupyter-server/pycrdt/releases/tag/${src.rev}";
+    changelog = "https://github.com/jupyter-server/pycrdt/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = teams.jupyter.members;
   };

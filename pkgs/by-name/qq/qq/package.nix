@@ -87,8 +87,8 @@ stdenv.mkDerivation {
     makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libuuid]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libuuid ]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
       "''${gappsWrapperArgs[@]}"
 

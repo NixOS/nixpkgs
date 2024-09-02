@@ -18,6 +18,7 @@
   responses,
   syrupy,
   toml,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -61,6 +62,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_azure_dynamic_sessions" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-azure-dynamic-sessions==(.*)"
+    ];
+  };
 
   meta = {
     description = "Integration package connecting Azure Container Apps dynamic sessions and LangChain";

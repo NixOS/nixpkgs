@@ -121,8 +121,8 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [
-        "${src}/assets/fonts/zed-mono"
-        "${src}/assets/fonts/zed-sans"
+        "${src}/assets/fonts/plex-mono"
+        "${src}/assets/fonts/plex-sans"
       ];
     };
     # Setting this environment variable allows to disable auto-updates
