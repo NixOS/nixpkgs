@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
+  fetchpatch,
   pkg-config,
   libplist,
   openssl,
@@ -32,9 +33,19 @@ stdenv.mkDerivation (finalAttrs: {
   stripDebugFlags = [ "--strip-unneeded" ];
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  dontConfigure = true;
+
+  patches = [
+    (fetchpatch {
+      name = "fix-memory-issues-with-various-entitlements.patch";
+      url = "https://github.com/ProcursusTeam/ldid/commit/f38a095aa0cc721c40050cb074116c153608a11b.patch";
+      hash = "sha256-D5o/E2tCbuNOv2D9UVaLEx8ZiwSB/wT0hf7XaTGzxE0=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "pkg-config" "$PKG_CONFIG"
+      --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
   postInstall = ''
