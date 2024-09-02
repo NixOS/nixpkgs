@@ -41,10 +41,9 @@ else stdenv.mkDerivation rec {
     # like arm64(e).
     PATH=${bintools-unwrapped}/bin:${llvmPackages.clang-unwrapped}/bin:$PATH \
       clang -arch x86_64 -arch arm64 -arch arm64e \
-      -isystem ${llvmPackages.clang.libc}/include \
+      -isystem "$SDKROOT/usr/include" \
       -isystem ${llvmPackages.libclang.lib}/lib/clang/*/include \
-      -L${llvmPackages.clang.libc}/lib \
-      -Wl,-install_name,$libName \
+      "-L$SDKROOT/usr/lib" \
       -Wl,-install_name,$out/lib/$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
       -shared -o "$libName"
