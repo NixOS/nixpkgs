@@ -69,6 +69,7 @@ makeScopeWithSplicing' {
     inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
   } // lib.genAttrs [
     "CF"
+    "CarbonHeaders"
   ] (mkStub apple_sdk.version);
 in
 
