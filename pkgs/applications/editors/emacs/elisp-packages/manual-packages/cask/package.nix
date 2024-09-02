@@ -1,34 +1,31 @@
 {
   lib,
   ansi,
-  coreutils,
-  dash,
-  ecukes,
-  el-mock,
-  ert-async,
-  ert-runner,
+  cl-generic,
+  cl-lib,
+  commander,
+
+  epl,
   f,
   fetchFromGitHub,
   git,
   gitUpdater,
   melpaBuild,
-  noflet,
   package-build,
   s,
-  servant,
-  shell-split-string,
+  shut-up,
 }:
 
 melpaBuild (finalAttrs: {
   pname = "cask";
-  version = "0.8.8";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     name = "cask-source-${finalAttrs.version}";
     owner = "cask";
     repo = "cask";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TlReq5sLVJj+pXmJSnepKQkNEWVhnh30iq4egM1HJMU=";
+    hash = "sha256-91rJFsp2SLk/JY+v6G5JmXH5bg9QnT+qhI8ccNJlI4A=";
   };
 
   patches = [
@@ -38,29 +35,28 @@ melpaBuild (finalAttrs: {
 
   packageRequires = [
     ansi
-    dash
-    ecukes
-    el-mock
-    ert-async
-    ert-runner
+    cl-generic
+    cl-lib
+    commander
+    epl
     f
     git
-    noflet
     package-build
     s
-    servant
-    shell-split-string
+    shut-up
   ];
 
   ignoreCompilationError = false;
 
   strictDeps = true;
 
+  # use melpaVersion so that it works for unstable releases too
   postPatch = ''
-    lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.version} \
+    lispdir=$out/share/emacs/site-lisp/elpa/cask-${finalAttrs.melpaVersion} \
       substituteAllInPlace bin/cask
   '';
 
+  # TODO: use installBin as soon as installBin arrives Master branch
   postInstall = ''
     install -D -t $out/bin bin/cask
   '';
