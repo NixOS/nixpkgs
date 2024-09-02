@@ -10,20 +10,28 @@ with lib;
 let
 
   cfg = config.virtualbox;
+  virtualisationOptions = import ./virtualisation-options.nix;
 
 in
 {
+  imports = [
+    virtualisationOptions.diskSize
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "virtualbox"
+        "baseImageSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options = {
     virtualbox = {
-      baseImageSize = mkOption {
-        type = with types; either (enum [ "auto" ]) int;
-        default = "auto";
-        example = 50 * 1024;
-        description = ''
-          The size of the VirtualBox base image in MiB.
-        '';
-      };
       baseImageFreeSpace = mkOption {
         type = with types; int;
         default = 30 * 1024;
@@ -184,6 +192,8 @@ in
 
   config = {
 
+    virtualisation.diskSize = lib.mkDefault (50 * 1024);
+
     virtualbox.params = mkMerge [
       (mapAttrs (name: mkDefault) {
         acpi = "on";
@@ -207,7 +217,7 @@ in
 
       inherit pkgs lib config;
       partitionTableType = "legacy";
-      diskSize = cfg.baseImageSize;
+      inherit (config.virtualisation) diskSize;
       additionalSpace = "${toString cfg.baseImageFreeSpace}M";
 
       postVM = ''
