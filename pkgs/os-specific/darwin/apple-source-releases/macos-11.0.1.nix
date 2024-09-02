@@ -12,7 +12,6 @@ bootstrap_cmds = callPackage ./bootstrap_cmds/package.nix { };
 copyfile = applePackage' "copyfile" "173.40.2" "macos-11.0.1" "1j20909inn2iw8n51b8vk551wznfi3bhfziy8nbv08qj5lk50m04" {};
 diskdev_cmds = applePackage' "diskdev_cmds" "667.40.1" "macos-11.0.1" "0wr60vyvgkbc4wyldnsqas0xss2k1fgmbdk3vnhj6v6jqa98l1ny" {};
 file_cmds = applePackage' "file_cmds" "321.40.3" "macos-11.0.1" "0p077lnbcy8266m03a0fssj4214bjxh88y3qkspnzcvi0g84k43q" {};
-hfs = applePackage' "hfs" "556.41.1" "macos-11.0.1" "0a0s6b12b0q07wslfifna0bj51dml9v098i4crr2m1vivnx4xj75" {};
 libclosure = applePackage' "libclosure" "78" "macos-11.0.1" "0vf9n0k3m8dbprv1bf45zqg0g43bidy2i5z1v9a826bsf8lv7am7" {};
 libdispatch = applePackage' "libdispatch" "1271.40.12" "macos-11.0.1" "1ck5srcjapg18vqb8wl08gacs7ndc6xr067qjn3ngx39q1jdcywz" {};
 libmalloc = applePackage' "libmalloc" "317.40.8" "macos-11.0.1" "sha256-Tdhb0mq3w4Hwvp3xHB79Vr22hCOQK6h28HCsd7jvITI=" {};
