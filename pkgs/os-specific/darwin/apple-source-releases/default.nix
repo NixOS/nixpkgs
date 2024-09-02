@@ -264,7 +264,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     Csu             = callPackage ./Csu/package.nix { };
     libresolv       = callPackage ./libresolv/package.nix { };
     libutil         = callPackage ./libutil/package.nix { };
-    libunwind       = applePackage "libunwind"         "osx-10.12.6"     "sha256-CC0sndP/mKYe3dZu3v7fjuDASV4V4w7dAcnWMvpoquE=" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "sha256-ddZr6tropkpdMJhq/kUlm3OwO8b0yxtkrMpwec8R4FY=" {};
     objc4           = applePackage "objc4"             "osx-10.12.6"     "sha256-ZsxRpdsfv3Dxs7yBBCkjbKXKR6aXwkEpxc1XYXz7ueM=" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "sha256-M1zoEjjeKIDUEP6ACbpUJk3OXjobw4g/qzUmxGdX1J0=" {};
