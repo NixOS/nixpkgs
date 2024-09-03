@@ -763,8 +763,8 @@ rec {
       "sha256-5dPgAwcPymYdrKT+YhyRkFOhfDj71xfA/P50KdurMXI=";
 
   mypy-boto3-kinesis-video-webrtc-storage =
-    buildMypyBoto3Package "kinesis-video-webrtc-storage" "1.34.0"
-      "sha256-Oi6r/AxePB0znUPg3fb22qZLDS4Cola5Vvs38Railnc=";
+    buildMypyBoto3Package "kinesis-video-webrtc-storage" "1.35.0"
+      "sha256-8DtIRagCl2UAfHGZSxX8BuHdrWHVSHSJ+Wftr3mA3x4=";
 
   mypy-boto3-kinesisanalytics =
     buildMypyBoto3Package "kinesisanalytics" "1.34.0"
