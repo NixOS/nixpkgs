@@ -9,6 +9,7 @@
 , knownVulnerabilities ? [ ]
 , CoreServices ? null
 , Security ? null
+, static ? stdenv.hostPlatform.isStatic # generates static libraries *only*
 , ...
 }:
 
@@ -43,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--cc=clang"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "--cpu=aarch64"
+  ] ++ lib.optionals static [
+    "--enable-static-library"
+    "--disable-shared-library"
   ];
 
   configurePhase = ''
