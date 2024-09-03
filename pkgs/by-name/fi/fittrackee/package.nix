@@ -37,11 +37,6 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-lTDS+HfYG6ayXDotu7M2LUrw+1ZhQ0ftw0rTn4Mr3rQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail psycopg2-binary psycopg2
-  '';
-
   build-system = [
     python.pkgs.poetry-core
   ];
@@ -70,7 +65,7 @@ python.pkgs.buildPythonApplication rec {
       gpxpy
       gunicorn
       humanize
-      psycopg2
+      psycopg2-binary
       pyjwt
       pyopenssl
       pytz
