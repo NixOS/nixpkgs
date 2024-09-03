@@ -1367,8 +1367,8 @@ rec {
       "sha256-DtF++oBv7Jb7yXY2ymC/KsQDgMPqWJWP3MZQOlx/NXM=";
 
   mypy-boto3-swf =
-    buildMypyBoto3Package "swf" "1.34.0"
-      "sha256-T8QYHzRjjQyLGqSwc7J6hPXqpeoeCUvlpHbXwnT99rQ=";
+    buildMypyBoto3Package "swf" "1.35.0"
+      "sha256-72VjJGOWAphFUZfMxzSaYyycUtoL1St08G/SAEhDriQ=";
 
   mypy-boto3-synthetics =
     buildMypyBoto3Package "synthetics" "1.34.0"
