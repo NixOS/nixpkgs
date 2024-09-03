@@ -23449,8 +23449,6 @@ with pkgs;
 
   SDL = SDL1;
 
-  SDL_classic = SDL1;
-
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
