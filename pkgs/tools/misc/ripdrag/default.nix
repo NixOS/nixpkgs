@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripdrag";
-  version = "0.4.9";
+  version = "0.4.10";
 
   src = fetchFromGitHub {
     owner = "nik012003";
     repo = "ripdrag";
     rev = "v${version}";
-    hash = "sha256-fsCIyaGCLwf1T8xyVCTjg51TXS8v0l9dBHRB8wdyN5g=";
+    hash = "sha256-aK/1f56sHspohbYO0z2Hf1NDJsN8Dbf1NoL/QadbVSY=";
   };
 
-  cargoHash = "sha256-ZzD+WkmvZX4YXtOwWHw/7t9N/xgKWrMfCThcYFyHG/g=";
+  cargoHash = "sha256-9POXKvbt1Xr1wKYHhfLb14puKorLIlT1ckzEVd6eWa0=";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
 
