@@ -5,6 +5,7 @@
   setuptools,
   packaging,
   tenacity,
+  kaleido,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     tenacity
+    kaleido
   ];
 
   pythonImportsCheck = [ "plotly" ];
