@@ -27,6 +27,23 @@ in
     '';
   };
 
+  # Success case for `replaceVars.withoutCheck`.
+  replaceVars-without-check = testEqualContents {
+    assertion = "replaceVars-without-check";
+    actual = replaceVars.withoutCheck ./source.txt {
+      "equal in" = "are the same in";
+      brotherhood = "shared humanity";
+    };
+
+    expected = builtins.toFile "expected" ''
+      All human beings are born @free@ and are the same in dignity and rights.
+      They are endowed with reason and conscience and should act towards
+      one another in a spirit of shared humanity.
+
+        -- eroosevelt@humanrights.un.org
+    '';
+  };
+
   # There might eventually be a usecase for this, but it's not supported at the moment.
   replaceVars-fails-on-directory =
     runCommand "replaceVars-fails" { failed = testBuildFailure (replaceVars emptyDirectory { }); }
@@ -38,6 +55,14 @@ in
   replaceVars-fails-in-build-phase =
     runCommand "replaceVars-fails"
       { failed = testBuildFailure (replaceVars emptyFile { not-found = "boo~"; }); }
+      ''
+        grep -e "ERROR: pattern @not-found@ doesn't match anything in file.*empty-file" $failed/testBuildFailure.log
+        touch $out
+      '';
+
+  replaceVars-without-check-fails-in-build-phase =
+    runCommand "replaceVars-fails"
+      { failed = testBuildFailure (replaceVars.withoutCheck emptyFile { not-found = "boo~"; }); }
       ''
         grep -e "ERROR: pattern @not-found@ doesn't match anything in file.*empty-file" $failed/testBuildFailure.log
         touch $out
