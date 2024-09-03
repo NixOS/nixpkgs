@@ -22611,6 +22611,12 @@
     githubId = 529003;
     name = "Christine Dodrill";
   };
+  xeals = {
+    email = "dev@xeal.me";
+    github = "xeals";
+    githubId = 21125058;
+    name = "xeals";
+  };
   xeji = {
     email = "xeji@cat3.de";
     github = "xeji";
