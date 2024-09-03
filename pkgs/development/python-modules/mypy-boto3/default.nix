@@ -1227,8 +1227,8 @@ rec {
       "sha256-MP/jfdOOSre34FgPQA8bFIFy6TH14RGM3Hi5qsI+VZs=";
 
   mypy-boto3-savingsplans =
-    buildMypyBoto3Package "savingsplans" "1.34.67"
-      "sha256-t+0Ko+Onv24p1Sn59mvR/auXkDTowOEpKwpzuMUqk8w=";
+    buildMypyBoto3Package "savingsplans" "1.35.0"
+      "sha256-u7RvDLzY2r6bnnfR9xN5qGnnqlGmDwH/GUZTU90/+YE=";
 
   mypy-boto3-scheduler =
     buildMypyBoto3Package "scheduler" "1.34.0"
