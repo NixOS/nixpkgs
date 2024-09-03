@@ -2172,7 +2172,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/GracefulPotato.gruvbox-ish/changelog";
-          description = "Gruvbox-like theme";
+          description = "VSCode extension providing the gruvbox-ish theme, a gruvbox-like theme";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=GracefulPotato.gruvbox-ish";
           homepage = "https://github.com/graceful-potato/gruvbox-ish";
           license = lib.licenses.unfree;
