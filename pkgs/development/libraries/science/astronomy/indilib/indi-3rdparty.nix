@@ -24,6 +24,7 @@
   libexif,
   libftdi1,
   libgphoto2,
+  libgpiod_1,
   libpng,
   libraw,
   ninja,
@@ -44,7 +45,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-0M+k3A2Lw9EU9V5bX9dGztmdcJzc71XQZv8srmY5NmY=";
+    hash = "sha256-RhtdhMvseQUUFcKDuR1N5qc/86IxmQ/7owpjT+qweqc=";
   };
 
   buildIndi3rdParty =
@@ -217,7 +218,7 @@ let
     pname = "libfishcamp";
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/firmware" "lib/firmware"
     '';
 
     buildInputs = [
@@ -327,7 +328,7 @@ let
 
     postPatch = ''
       substituteInPlace CMakeLists.txt \
-        --replace "set (PK_DATADIR /usr/share/pktriggercord)" "set (PK_DATADIR $out/share/pkgtriggercord)"
+        --replace-fail "set (PK_DATADIR /usr/share/pktriggercord)" "set (PK_DATADIR $out/share/pkgtriggercord)"
     '';
 
     buildInputs = [ indilib ];
@@ -342,7 +343,7 @@ let
     pname = "libplayerone";
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
-        --replace "/bin/echo" "${coreutils}/bin/echo" \
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
         --replace "/bin/sh" "${bash}/bin/sh"
     '';
 
@@ -362,14 +363,13 @@ let
     pname = "libqhy";
 
     postPatch = ''
-      sed -ie 's/LIBQHY_SOVERSION "24"/LIBQHY_SOVERSION "20"/' CMakeLists.txt
-      substituteInPlace CMakeLists.txt \
+      substituteInPlace --replace-fail CMakeLists.txt \
         --replace "/lib/firmware" "lib/firmware"
 
       substituteInPlace 85-qhyccd.rules \
-        --replace "/sbin/fxload" "${fxload}/sbin/fxload" \
-        --replace "/lib/firmware" "$out/lib/firmware" \
-        --replace "/bin/sleep" "${coreutils}/bin/sleep"
+        --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
+        --replace-fail "/lib/firmware" "$out/lib/firmware" \
+        --replace-fail "/bin/sleep" "${coreutils}/bin/sleep"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 85-qhyccd.rules
     '';
@@ -418,10 +418,10 @@ let
     pname = "libsbig";
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/firmware" "lib/firmware"
       substituteInPlace 51-sbig-debian.rules \
-        --replace "/sbin/fxload" "${fxload}/sbin/fxload" \
-        --replace "/lib/firmware" "$out/lib/firmware"
+        --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
+        --replace-fail "/lib/firmware" "$out/lib/firmware"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 51-sbig-debian.rules
     '';
@@ -516,7 +516,7 @@ in
       libnova
     ];
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 
@@ -637,11 +637,11 @@ in
 
     postPatch = ''
       substituteInPlace CMakeLists.txt \
-        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
-        --replace "/lib/firmware" "lib/firmware"
+        --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace-fail "/lib/firmware" "lib/firmware"
       substituteInPlace 99-meadedsi.rules \
-        --replace "/sbin/fxload" "${fxload}/sbin/fxload" \
-        --replace "/lib/firmware" "$out/lib/firmware"
+        --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
+        --replace-fail "/lib/firmware" "$out/lib/firmware"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 99-meadedsi.rules
     '';
@@ -723,6 +723,16 @@ in
       zlib
     ];
     propagatedBuildInputs = [ libgphoto2 ];
+  };
+
+  indi-gpio = buildIndi3rdParty {
+    pname = "indi-gpio";
+    buildInputs = [
+      indilib
+      libgpiod_1
+      libnova
+      zlib
+    ];
   };
 
   indi-gpsd = buildIndi3rdParty {
@@ -862,7 +872,7 @@ in
     ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 
@@ -918,7 +928,7 @@ in
     ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
 
     meta.platforms = libqsi.meta.platforms;
@@ -1015,7 +1025,7 @@ in
       libusb1
     ];
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 
