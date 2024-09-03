@@ -31088,11 +31088,7 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  inherit (callPackage ../applications/networking/cluster/k3s {
-    buildGoModule = buildGo121Module;
-    go = go_1_21;
-  }) k3s_1_29;
-  inherit (callPackage ../applications/networking/cluster/k3s { }) k3s_1_28 k3s_1_30;
+  inherit (callPackage ../applications/networking/cluster/k3s { }) k3s_1_28 k3s_1_29 k3s_1_30;
   k3s = k3s_1_30;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
