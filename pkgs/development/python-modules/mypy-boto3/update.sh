@@ -5,14 +5,14 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/mypy-boto3/default.nix
 
-nix-update python312Packages.botocore-stubs --commit --build
+#nix-update python312Packages.botocore-stubs --commit --build
 
 packages=(
   mypy-boto3-accessanalyzer
   mypy-boto3-account
   mypy-boto3-acm
   mypy-boto3-acm-pca
-  mypy-boto3-alexaforbusiness
+  # mypy-boto3-alexaforbusiness
   mypy-boto3-amp
   mypy-boto3-amplify
   mypy-boto3-amplifybackend
@@ -39,7 +39,7 @@ packages=(
   mypy-boto3-autoscaling-plans
   mypy-boto3-backup
   mypy-boto3-backup-gateway
-  mypy-boto3-backupstorage
+#  mypy-boto3-backupstorage
   mypy-boto3-batch
   mypy-boto3-billingconductor
   mypy-boto3-braket
@@ -365,25 +365,31 @@ packages=(
   mypy-boto3-xray)
 
 for package in "${packages[@]}"; do
-  echo "Updating ${package} ..."
-
-  old_version=$(awk -v pkg="$package" -F'"' '$1 ~ pkg " = " {print $4}' ${source_file})
+  package_short_name="${package#mypy-boto3-}"
+  old_version=$(awk -v pkg="\"$package_short_name\"" -F'"' '$0 ~ pkg {printf $4}' ${source_file})
   version=$(curl -s https://pypi.org/pypi/${package}/json | jq -r '.info.version')
 
+  echo "Updating ${package} from ${old_version} to ${version}"
+
   if [ "${version}" != "${old_version}" ]; then
-    url="https://pypi.io/packages/source/m/${package}/${package}-${version}.tar.gz"
+    url="https://pypi.io/packages/source/m/${package//-/_}/${package//-/_}-${version}.tar.gz"
     hash=$(nix-prefetch-url --type sha256 $url)
     sri_hash="$(nix hash to-sri --type sha256 $hash)"
 
-    awk -i inplace -v package="$package" -v new_version="$version" -v new_sha256="$sri_hash" '
-      $1 == package {
-        $5 = "\"" new_version "\"";
-        $6 = "\"" new_sha256 "\";";
+    awk -i inplace -v pkg="\"$package_short_name\"" -v new_version="$version" -v new_sha256="$sri_hash" '
+      # Match the line containing the package name
+      $0 ~ pkg && $0 ~ /buildMypyBoto3Package/ {
+        # Update the version
+        sub(/"[^"]+"/, "\"" new_version "\"", $3);
+        print;
+        # Update the next line with the new sha256
+        getline;
+        sub(/"[^"]+"/, "\"" new_sha256 "\"");
       }
-      {print}
-    ' $source_file
+      { print }
+    ' ${source_file}
 
-    nixpkgs-fmt ${source_file}
+    nixfmt ${source_file}
 
     git commit ${source_file} -m "python312Packages.${package}: ${old_version} -> ${version}"
   fi
