@@ -32,6 +32,7 @@ specialisation=
 buildHost=
 targetHost=
 remoteSudo=
+noSSHTTY=
 verboseScript=
 noFlake=
 attr=
@@ -163,6 +164,9 @@ while [ "$#" -gt 0 ]; do
       --use-remote-sudo)
         remoteSudo=1
         ;;
+      --no-ssh-tty)
+        noSSHTTY=1
+        ;;
       --flake)
         flake="$1"
         shift 1
@@ -238,12 +242,18 @@ targetHostCmd() {
 }
 
 targetHostSudoCmd() {
+    local t=
+    if [[ ! "${noSSHTTY:-x}" = 1 ]]; then
+        t="-t"
+    fi
+
     if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
         # sudo usage, and an experience that is more consistent with local deployment.
-        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        # But if the user really doesn't want it, don't do it.
+        SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     fi
 }
 
