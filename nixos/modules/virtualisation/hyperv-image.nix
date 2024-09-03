@@ -50,7 +50,7 @@ in
   };
 
   config = {
-    virtualisation.diskSize = lib.mkDefault (2 * 1024);
+    virtualisation.diskSize = lib.mkDefault (4 * 1024);
 
     system.build.hypervImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
