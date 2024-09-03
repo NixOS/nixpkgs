@@ -2548,8 +2548,9 @@ self: super: {
     relative = "dependent-sum-template";
   }) super.dependent-sum-template;
 
-  # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
-  system-fileio = doJailbreak super.system-fileio;
+  # doJailbreak: too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
+  # dontCheck:   tests don't typecheck after ghc 8.4 (possibly introduced by api change of unix library)
+  system-fileio = doJailbreak (dontCheck super.system-fileio);
 
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
