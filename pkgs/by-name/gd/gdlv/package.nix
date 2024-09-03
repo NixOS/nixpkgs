@@ -3,10 +3,10 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  Foundation,
-  CoreGraphics,
-  Metal,
   AppKit,
+  CoreGraphics,
+  Foundation,
+  Metal,
 }:
 buildGoModule rec {
   pname = "gdlv";
@@ -30,10 +30,10 @@ buildGoModule rec {
   subPackages = ".";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Foundation
-    CoreGraphics
-    Metal
     AppKit
+    CoreGraphics
+    Foundation
+    Metal
   ];
 
   meta = with lib; {
