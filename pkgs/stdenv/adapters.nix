@@ -75,8 +75,15 @@ rec {
         ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
       '';
     in
+    # Return the stdenv libc++ in case it’s the same version as the LLVM version. This can happen on Darwin
+    # when `overrideLibcxx` is used with an LLVM stdenv version that matches the default LLVM version.
+    if stdenvLibcxxVersion == llvmLibcxxVersion then
+      overrideCC stdenv (stdenv.cc.override {
+        libcxx = stdenvLibcxx;
+        extraPackages = [ pkgs.buildPackages.targetPackages.llvmPackages.compiler-rt ];
+      })
     # Check the version for the stdenv’s libc++ version to avoid trying to override it multiple times.
-    if lib.hasPrefix stdenvLibcxxVersion llvmLibcxxVersion then
+    else if lib.hasPrefix stdenvLibcxxVersion llvmLibcxxVersion then
       stdenv
     else
       overrideCC stdenv (stdenv.cc.override {
