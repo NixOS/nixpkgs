@@ -5,16 +5,19 @@
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
-, OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
+, darwin
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
 let
+  inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   extraPropagatedBuildInputs = [ ]
     ++ lib.optionals x11Support [ libXext libICE libXrandr ]
-    ++ lib.optionals (openglSupport && stdenv.isLinux) [ libGL libGLU ]
+    ++ lib.optionals (openglSupport && stdenv.isLinux) [ libGL ]
+    # libGLU doesn’t work with Android's SDL
+    ++ lib.optionals (openglSupport && stdenv.isLinux && (!stdenv.hostPlatform.isAndroid)) [ libGLU ]
     ++ lib.optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
