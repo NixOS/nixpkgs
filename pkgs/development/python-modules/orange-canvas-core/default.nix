@@ -24,6 +24,8 @@
   qt5,
   pytest-qt,
   pytestCheckHook,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -91,5 +93,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/biolab/orange-canvas-core/releases/tag/${version}";
     license = [ lib.licenses.gpl3 ];
     maintainers = [ lib.maintainers.lucasew ];
+    # Segmentation fault during tests
+    broken = stdenv.isDarwin;
   };
 }
