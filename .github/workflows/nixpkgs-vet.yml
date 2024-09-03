@@ -1,42 +1,30 @@
-# Checks pkgs/by-name (see pkgs/by-name/README.md)
-# using the nixpkgs-check-by-name tool (see https://github.com/NixOS/nixpkgs-check-by-name)
-#
-# When you make changes to this workflow, also update pkgs/test/check-by-name/run-local.sh adequately
+# Checks pkgs/by-name (see pkgs/by-name/README.md) using the `nixpkgs-vet` tool (see https://github.com/NixOS/nixpkgs-vet)
+# When you make changes to this workflow, please also update `ci/nixpkgs-vet.sh` to reflect the impact of your work to the CI.
 name: Check pkgs/by-name
 
 on:
-  # Using pull_request_target instead of pull_request avoids having to approve first time contributors
+  # Using pull_request_target instead of pull_request avoids having to approve first time contributors.
   pull_request_target:
-    # This workflow depends on the base branch of the PR,
-    # but changing the base branch is not included in the default trigger events,
-    # which would be `opened`, `synchronize` or `reopened`.
-    # Instead it causes an `edited` event, so we need to add it explicitly here
-    # While `edited` is also triggered when the PR title/body is changed,
-    # this PR action is fairly quick, and PR's don't get edited that often,
-    # so it shouldn't be a problem
-    # There is a feature request for adding a `base_changed` event:
-    # https://github.com/orgs/community/discussions/35058
+    # This workflow depends on the base branch of the PR, but changing the base branch is not included in the default trigger events, which would be `opened`, `synchronize` or `reopened`.
+    # Instead it causes an `edited` event, so we need to add it explicitly here.
+    # While `edited` is also triggered when the PR title/body is changed, this PR action is fairly quick, and PRs don't get edited **that** often, so it shouldn't be a problem.
+    # There is a feature request for adding a `base_changed` event: https://github.com/orgs/community/discussions/35058
     types: [opened, synchronize, reopened, edited]
 
 permissions: {}
 
-# We don't use a concurrency group here, because the action is triggered quite often (due to the PR edit
-# trigger), and contributers would get notified on any canceled run.
-# There is a feature request for supressing notifications on concurrency-canceled runs:
-# https://github.com/orgs/community/discussions/13015
+# We don't use a concurrency group here, because the action is triggered quite often (due to the PR edit trigger), and contributors would get notified on any canceled run.
+# There is a feature request for suppressing notifications on concurrency-canceled runs: https://github.com/orgs/community/discussions/13015
 
 jobs:
   check:
     name: pkgs-by-name-check
-    # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases
+    # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases.
     runs-on: ubuntu-latest
-    # This should take 1 minute at most, but let's be generous.
-    # The default of 6 hours is definitely too long
+    # This should take 1 minute at most, but let's be generous. The default of 6 hours is definitely too long.
     timeout-minutes: 10
     steps:
-      # This step has to be in this file,
-      # because it's needed to determine which revision of the repository to fetch,
-      # and we can only use other files from the repository once it's fetched.
+      # This step has to be in this file, because it's needed to determine which revision of the repository to fetch, and we can only use other files from the repository once it's fetched.
       - name: Resolving the merge commit
         env:
           GH_TOKEN: ${{ github.token }}
@@ -99,27 +87,28 @@ jobs:
         if: env.mergedSha
       - name: Fetching the pinned tool
         if: env.mergedSha
-        # Update the pinned version using pkgs/test/check-by-name/update-pinned-tool.sh
+        # Update the pinned version using ci/nixpkgs-vet/update-pinned-tool.sh
         run: |
-          # The pinned version of the tooling to use
-          toolVersion=$(<pkgs/test/check-by-name/pinned-version.txt)
-          # Fetch the x86_64-linux-specific release artifact containing the Gzipped NAR of the pre-built tool
-          toolPath=$(curl -sSfL https://github.com/NixOS/nixpkgs-check-by-name/releases/download/"$toolVersion"/x86_64-linux.nar.gz \
+          # The pinned version of the tooling to use.
+          toolVersion=$(<ci/nixpkgs-vet/pinned-version.txt)
+
+          # Fetch the x86_64-linux-specific release artifact containing the gzipped NAR of the pre-built tool.
+          toolPath=$(curl -sSfL https://github.com/NixOS/nixpkgs-vet/releases/download/"$toolVersion"/x86_64-linux.nar.gz \
             | gzip -cd | nix-store --import | tail -1)
-          # Adds a result symlink as a GC root
+
+          # Adds a result symlink as a GC root.
           nix-store --realise "$toolPath" --add-root result
-      - name: Running nixpkgs-check-by-name
+      - name: Running nixpkgs-vet
         if: env.mergedSha
         env:
-          # Force terminal colors to be enabled. The library that
-          # nixpkgs-check-by-name uses respects: https://bixense.com/clicolors/
+          # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
           CLICOLOR_FORCE: 1
         run: |
-          if result/bin/nixpkgs-check-by-name --base "$base" .; then
+          if result/bin/nixpkgs-vet --base "$base" .; then
             exit 0
           else
             exitCode=$?
-            echo "To run locally: ./maintainers/scripts/check-by-name.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
-            echo "If you're having trouble, ping @NixOS/nixpkgs-check-by-name"
+            echo "To run locally: ./ci/nixpkgs-vet.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
+            echo "If you're having trouble, ping @NixOS/nixpkgs-vet"
             exit "$exitCode"
           fi
