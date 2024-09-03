@@ -6,6 +6,8 @@
   fetchFromGitHub,
   habluetooth,
   orjson,
+  pytest-asyncio,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
   yarl,
@@ -35,8 +37,10 @@ buildPythonPackage rec {
     yarl
   ];
 
-  # Project has no test
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "aioshelly" ];
 
