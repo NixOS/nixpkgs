@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "botan";
   version = "${baseVersion}.${revision}";
 
+  __structuredAttrs = true;
+
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
@@ -33,9 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ bzip2 zlib gmp boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
+  botanConfigureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--with-bzip2"
+    "--with-zlib"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "--cc=clang"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "--cpu=aarch64"
+  ];
+
   configurePhase = ''
     runHook preConfigure
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"} ${lib.optionalString stdenv.hostPlatform.isAarch64 " --cpu=aarch64"}
+    python configure.py ''${botanConfigureFlags[@]} ${extraConfigureFlags}
     runHook postConfigure
   '';
 
