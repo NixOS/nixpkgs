@@ -96,10 +96,10 @@
 
   firefox-esr-128 = buildMozillaMach rec {
     pname = "firefox";
-    version = "128.1.0esr";
+    version = "128.2.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "8055a7f83acf0cab6124ba5809aff1c082e81a0d30ff318ec719f8fd3f4af9aa60e2094c1abd6c981193d751075a9569370176e20e50f3c1959fe27a15511388";
+      sha512 = "9a689929f6f86d795ea2c0318bb78f77f72a552f40715a1108dbd6361b0dedc3aaf049f1883424012459899607067d5a8374d895564591ec6679a1ce80708d7d";
     };
 
     meta = {
