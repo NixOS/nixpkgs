@@ -22,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-0uSoZC2cUgdOGE5saLlx5n0gbVPX61kkASCBFD4F5QM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ pysigma ];
+  dependencies = [ pysigma ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
