@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  setupHook = ../SDL/setup-hook.sh;
+  setupHook = ./setup-hook.sh;
 
   postFixup = ''
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
