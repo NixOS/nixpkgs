@@ -4,6 +4,11 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+
+  # for passthru.tests
+  pyramid,
+  routes,
+  tokenlib,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +34,10 @@ buildPythonPackage rec {
     "tests/test_in_wsgiref.py"
     "tests/test_client_functional.py"
   ];
+
+  passthru.tests = {
+    inherit pyramid routes tokenlib;
+  };
 
   meta = with lib; {
     description = "WSGI request and response object";
