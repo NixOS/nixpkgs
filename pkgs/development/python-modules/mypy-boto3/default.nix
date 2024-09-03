@@ -587,8 +587,8 @@ rec {
       "sha256-pF7qaGPmxuFQjSQ+Rh93asMwSVUghdFSiQgLkF7YgdM=";
 
   mypy-boto3-grafana =
-    buildMypyBoto3Package "grafana" "1.34.58"
-      "sha256-dr+fCDf0DcWGxPPLMnzqrOCRMfoLhznyv6n679fFU/0=";
+    buildMypyBoto3Package "grafana" "1.35.0"
+      "sha256-AxH6/D5K4m2nmZor6T6bb7/PbimJSI+0DxyLOXUexnI=";
 
   mypy-boto3-greengrass =
     buildMypyBoto3Package "greengrass" "1.34.0"
