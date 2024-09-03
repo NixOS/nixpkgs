@@ -179,8 +179,8 @@ rec {
       "sha256-PlOL9fmTgWo8jF17Um+aDDNShQWpCxkkp5dFBHl/494=";
 
   mypy-boto3-braket =
-    buildMypyBoto3Package "braket" "1.34.39"
-      "sha256-laMrKu9oN5a9yvB8lyhdjpq5hm1HGAFn3iJ0lReRpOI=";
+    buildMypyBoto3Package "braket" "1.35.0"
+      "sha256-6iUVQMXsam6ALxL+g7o/l3KIQLjnBlp3qgkuarPW/SU=";
 
   mypy-boto3-budgets =
     buildMypyBoto3Package "budgets" "1.34.0"
