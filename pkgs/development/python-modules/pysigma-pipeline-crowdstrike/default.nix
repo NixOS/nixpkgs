@@ -30,6 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.pipelines.crowdstrike" ];
 
+  disabledTests = [
+    # Windows binary not mocked
+    "test_crowdstrike_pipeline_parentimage"
+  ];
+
   meta = with lib; {
     description = "Library to support CrowdStrike pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike";
