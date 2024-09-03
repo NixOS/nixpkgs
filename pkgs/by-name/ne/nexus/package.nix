@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nexus";
-  version = "3.70.1-02";
+  version = "3.71.0-06";
 
   src = fetchurl {
-    url = "https://download.sonatype.com/nexus/3/nexus-${version}-java11-unix.tar.gz";
-    hash = "sha256-OMb4HXjC9q5GH0kdkyHTbpj/Lhnu42UnDZvJI3fTZYg=";
+    url = "https://download.sonatype.com/nexus/3/nexus-${version}-unix.tar.gz";
+    hash = "sha256-sCUodVgYRnf8IxA1yfXl5sxLwcr9dtE6BiM6TtCdCPY=";
   };
 
   preferLocalBuild = true;
