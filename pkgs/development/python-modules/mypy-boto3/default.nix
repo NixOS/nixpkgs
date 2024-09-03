@@ -103,8 +103,8 @@ rec {
       "sha256-jwjD2mkz6YpUEOwEHMNiIzBNoVwYUUONQjKZemGFEl8=";
 
   mypy-boto3-appflow =
-    buildMypyBoto3Package "appflow" "1.34.0"
-      "sha256-XruMwzBrjV7QTHOcHKqszt75cHX+578wbTwFMwyXHzE=";
+    buildMypyBoto3Package "appflow" "1.35.0"
+      "sha256-tNCfrUzsRHhpfIY+D2Y+OscMnYw7lGeYhFvs+wHq9zk=";
 
   mypy-boto3-appintegrations =
     buildMypyBoto3Package "appintegrations" "1.34.6"
