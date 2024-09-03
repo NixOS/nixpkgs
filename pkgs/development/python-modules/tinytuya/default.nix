@@ -1,21 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cryptography,
-  requests,
   colorama,
+  cryptography,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tinytuya";
   version = "1.15.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jasonacox";
