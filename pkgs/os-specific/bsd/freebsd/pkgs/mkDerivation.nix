@@ -7,7 +7,7 @@
   buildPackages,
   stdenvNoLibcxx ? overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx,
   versionData,
-  patches,
+  patchesRoot,
   compatIfNeeded,
   freebsd-lib,
   filterSource,
@@ -118,7 +118,7 @@ lib.makeOverridable (
     // {
       patches =
         (lib.optionals (attrs.autoPickPatches or true) (
-          freebsd-lib.filterPatches patches (
+          freebsd-lib.filterPatches patchesRoot (
             attrs.extraPaths or [ ] ++ (lib.optional (attrs ? path) attrs.path)
           )
         ))

@@ -44,7 +44,7 @@ mkDerivation {
       "contrib/libc-vis"
     ]
     ++ lib.optionals (versionData.major == 13) [ "contrib/tzcode/stdtime" ]
-    ++ lib.optionals (versionData.major == 14) [ "contrib/tzcode" ]
+    ++ lib.optionals (versionData.major >= 14) [ "contrib/tzcode" ]
     ++ [
 
       # libthr
