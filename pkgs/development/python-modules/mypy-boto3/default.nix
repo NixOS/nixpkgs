@@ -655,8 +655,8 @@ rec {
       "sha256-6Dy72Ui8OI7ROdKCBEKvHTGco33OcI30QpXErPz7MPg=";
 
   mypy-boto3-iot-jobs-data =
-    buildMypyBoto3Package "iot-jobs-data" "1.34.0"
-      "sha256-ceqk+Gt+IcIVuLp/LMsrjnUXrPt+SY+mI8G3hKdE7TY=";
+    buildMypyBoto3Package "iot-jobs-data" "1.35.0"
+      "sha256-pHVZNE6mAr/IJrM/jY8fiEt1o8hQOJ1aw+oKuKijpyU=";
 
   mypy-boto3-iot-roborunner =
     buildMypyBoto3Package "iot-roborunner" "1.34.0"
