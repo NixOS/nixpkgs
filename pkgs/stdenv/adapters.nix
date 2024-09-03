@@ -60,6 +60,7 @@ rec {
     assert lib.versionAtLeast stdenv.cc.libcxx.version "12";
     let
       llvmLibcxxVersion = lib.getVersion llvmLibcxx;
+      stdenvLibcxxVersion = lib.getVersion stdenvLibcxx;
 
       stdenvLibcxx = pkgs.stdenv.cc.libcxx;
       llvmLibcxx = stdenv.cc.libcxx;
@@ -74,12 +75,16 @@ rec {
         ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
       '';
     in
-    overrideCC stdenv (stdenv.cc.override {
-      inherit libcxx;
-      extraPackages = [
-        pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
-      ];
-    });
+    # Check the version for the stdenv’s libc++ version to avoid trying to override it multiple times.
+    if lib.hasPrefix stdenvLibcxxVersion llvmLibcxxVersion then
+      stdenv
+    else
+      overrideCC stdenv (stdenv.cc.override {
+        inherit libcxx;
+        extraPackages = [
+          pkgs.buildPackages.targetPackages."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt
+        ];
+      });
 
   # Override the setup script of stdenv.  Useful for testing new
   # versions of the setup script without causing a rebuild of
