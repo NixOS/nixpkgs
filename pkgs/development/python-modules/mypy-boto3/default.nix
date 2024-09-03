@@ -983,8 +983,8 @@ rec {
       "sha256-z1YOK7DoyTEWnaWJ8x8VKZNETw/7jPXBjmN4ZX7m5E0=";
 
   mypy-boto3-nimble =
-    buildMypyBoto3Package "nimble" "1.34.0"
-      "sha256-i0E9kLunDRl+XzU3Ti3vxqHNa2oGHQQ9xDjCtNKi1Lw=";
+    buildMypyBoto3Package "nimble" "1.35.0"
+      "sha256-gs9eGyRaZN7Fsl0D5fSqtTiYZ+Exp0s8QW/X8ZR7guA=";
 
   mypy-boto3-oam =
     buildMypyBoto3Package "oam" "1.34.73"
