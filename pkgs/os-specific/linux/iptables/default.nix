@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl2Plus;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
+    mainProgram = "iptables";
   };
 }
