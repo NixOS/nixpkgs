@@ -25,7 +25,7 @@
 let
   pname = "openjfx-modular-sdk";
   major = "22";
-  update = ".0.1";
+  update = ".0.2";
   build = "-ga";
   repover = "${major}${update}${build}";
   jdk = openjdk21_headless;
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     owner = "openjdk";
     repo = "jfx22u";
     rev = repover;
-    hash = "sha256-VoEufSO+LciUCvoAM86MG1iMjCA3FSb60Ik4OP2Rk/Q=";
+    hash = "sha256-7Q9nZ2p3KfQPt1A2ULwk64OU/5/ghEkcsf9ECD6Ln2g=";
   };
 
   buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_6 ];

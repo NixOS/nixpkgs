@@ -7,8 +7,8 @@
   }
  },
  "https://github.com": {
-  "unicode-org/icu/releases/download/release-73-1/icu4c-73_1-data-bin-l": {
-   "zip": "sha256-QDgpjuAqDDiRcYXvj/Tr3pyLVSx3f9A+TfbGtLGCXiA="
+  "unicode-org/icu/releases/download/release-74-2/icu4c-74_2-data-bin-l": {
+   "zip": "sha256-Ks2xuYIigECWPRg7LdnTISUsYT4PTbIT1LvBBBfN5Wk="
   }
  },
  "https://repo.maven.apache.org/maven2": {
