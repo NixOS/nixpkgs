@@ -3,6 +3,7 @@
   stdenv,
   python,
   buildPythonPackage,
+  callPackage,
   fetchurl,
   autoPatchelfHook,
   bash,
@@ -95,6 +96,8 @@ buildPythonPackage rec {
     #ln -s ${dejavu_fonts}/share/fonts/truetype/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu/
     #ln -s ${lato}/share/fonts/lato/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato/
   '';
+
+  passthru.tests.kaleido = callPackage ./tests.nix { };
 
   meta = {
     description = "Fast static image export for web-based visualization libraries with zero dependencies";
