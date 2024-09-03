@@ -5041,8 +5041,6 @@ with pkgs;
 
   filebench = callPackage ../tools/misc/filebench { };
 
-  filebot = callPackage ../applications/video/filebot { };
-
   fileshare = callPackage ../servers/fileshare { };
 
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
@@ -11492,8 +11490,8 @@ with pkgs;
 
   playwright = with python3Packages; toPythonApplication playwright;
 
-  playwright-driver = callPackage ../development/web/playwright/driver.nix { };
-  playwright-test = callPackage ../development/web/playwright-test/wrapped.nix { };
+  playwright-driver = (callPackage ../development/web/playwright/driver.nix { }).playwright-core;
+  playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
   please = callPackage ../tools/security/please { };
 
@@ -22234,7 +22232,7 @@ with pkgs;
 
   libunwind =
     if stdenv.isDarwin then darwin.libunwind
-    else if stdenv.hostPlatform.system == "riscv32-linux" then llvmPackages_14.libunwind
+    else if stdenv.hostPlatform.system == "riscv32-linux" then llvmPackages.libunwind
     else callPackage ../development/libraries/libunwind { };
 
   libuv = darwin.apple_sdk_11_0.callPackage ../development/libraries/libuv { };
