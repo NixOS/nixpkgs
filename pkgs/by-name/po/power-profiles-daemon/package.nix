@@ -26,7 +26,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "power-profiles-daemon";
   version = "0.22";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "upower";
     repo = "power-profiles-daemon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-NzaneS/Za73HSK2abBZNmP+ZPbhIG+JXfBTPHm2vBeU=";
   };
 
@@ -141,4 +141,4 @@ stdenv.mkDerivation rec {
       lyndeno
     ];
   };
-}
+})
