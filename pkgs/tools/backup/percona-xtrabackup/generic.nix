@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    rev = "percona-xtrabackup-${finalAttrs.version}";
     inherit hash fetchSubmodules;
   };
 

@@ -12,6 +12,8 @@ lib:
   # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
   # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
   chartVersions,
+  # Air gap container images that are released as assets with every k3s release
+  imagesVersions,
   # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
   k3sCNIVersion,
   k3sCNISha256 ? lib.fakeHash,
@@ -30,41 +32,42 @@ lib:
 # It is likely we will have to split out additional builders for additional
 # versions in the future, or customize this one further.
 {
-  lib,
-  makeWrapper,
-  socat,
-  iptables,
-  iproute2,
-  ipset,
+  bash,
   bridge-utils,
   btrfs-progs,
-  conntrack-tools,
   buildGoModule,
-  runc,
-  rsync,
-  kmod,
-  libseccomp,
-  pkg-config,
+  conntrack-tools,
+  coreutils,
   ethtool,
-  util-linux,
   fetchFromGitHub,
+  fetchgit,
   fetchurl,
   fetchzip,
-  fetchgit,
-  zstd,
-  yq-go,
-  sqlite,
-  nixosTests,
-  pkgsBuildBuild,
-  go,
-  runCommand,
-  bash,
-  procps,
-  coreutils,
-  gnugrep,
   findutils,
+  gnugrep,
   gnused,
+  go,
+  iproute2,
+  ipset,
+  iptables,
+  kmod,
+  lib,
+  libseccomp,
+  makeWrapper,
+  nixosTests,
+  pkg-config,
+  pkgsBuildBuild,
+  procps,
+  rsync,
+  runc,
+  runCommand,
+  socat,
+  sqlite,
+  stdenv,
   systemd,
+  util-linux,
+  yq-go,
+  zstd,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -121,6 +124,39 @@ let
   # bundled into the k3s binary
   traefikChart = fetchurl chartVersions.traefik;
   traefik-crdChart = fetchurl chartVersions.traefik-crd;
+
+  mutFirstChar =
+    f: s:
+    let
+      firstChar = f (lib.substring 0 1 s);
+      rest = lib.substring 1 (-1) s;
+    in
+    firstChar + rest;
+
+  kebabToCamel =
+    s:
+    mutFirstChar lib.toLower (lib.concatMapStrings (mutFirstChar lib.toUpper) (lib.splitString "-" s));
+
+  # finds the images archive for the desired architecture, aborts in case no suitable archive is found
+  findImagesArchive =
+    arch:
+    let
+      imagesVersionsNames = builtins.attrNames imagesVersions;
+    in
+    lib.findFirst (
+      n: lib.hasInfix arch n
+    ) (abort "k3s: no airgap images for ${arch} available") imagesVersionsNames;
+
+  # a shortcut that provides the images archive for the host platform. Currently only supports
+  # aarch64 (arm64) and x86_64 (amd64), aborts on other architectures.
+  airgapImages = fetchurl (
+    if stdenv.isAarch64 then
+      imagesVersions.${findImagesArchive "arm64"}
+    else if stdenv.isx86_64 then
+      imagesVersions.${findImagesArchive "amd64"}
+    else
+      abort "k3s: airgap images cannot be found automatically for architecture ${stdenv.hostPlatform.linuxArch}, consider using an image archive with an explicit architecture."
+  );
 
   # so, k3s is a complicated thing to package
   # This derivation attempts to avoid including any random binaries from the
@@ -417,21 +453,26 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  passthru = {
-    k3sCNIPlugins = k3sCNIPlugins;
-    k3sContainerd = k3sContainerd;
-    k3sRepo = k3sRepo;
-    k3sRoot = k3sRoot;
-    k3sServer = k3sServer;
-    mkTests =
-      version:
-      let
-        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-      in
-      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
-    tests = passthru.mkTests k3sVersion;
-    updateScript = updateScript;
-  };
+  passthru =
+    {
+      inherit airgapImages;
+      k3sCNIPlugins = k3sCNIPlugins;
+      k3sContainerd = k3sContainerd;
+      k3sRepo = k3sRepo;
+      k3sRoot = k3sRoot;
+      k3sServer = k3sServer;
+      mkTests =
+        version:
+        let
+          k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+        in
+        lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+      tests = passthru.mkTests k3sVersion;
+      updateScript = updateScript;
+    }
+    // (lib.mapAttrs' (
+      name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
+    ) imagesVersions);
 
   meta = baseMeta;
 }

@@ -5,7 +5,6 @@
 , nixosTests
 , cargo-pgrx_0_10_2
 , nix-update-script
-, stdenv
 }:
 
 (buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
@@ -40,8 +39,5 @@
     maintainers = with maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
     license = licenses.tsl;
-
-    # as it needs to be used with timescaledb, simply use the condition from there
-    broken = stdenv.isDarwin;
   };
 }

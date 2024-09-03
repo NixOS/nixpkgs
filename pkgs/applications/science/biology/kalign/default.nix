@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast multiple sequence alignment program";
     mainProgram = "kalign";
     homepage = "https://github.com/TimoLassmann/kalign";
-    changelog = "https://github.com/TimoLassmann/kalign/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/TimoLassmann/kalign/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;

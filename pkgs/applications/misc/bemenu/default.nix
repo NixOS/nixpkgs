@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
-, pango, fribidi, harfbuzz, pcre, pkg-config, scdoc
+, pango, fribidi, harfbuzz, pkg-config, scdoc
 , ncursesSupport ? true, ncurses
 , waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
 , x11Support ? true, xorg
@@ -20,15 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config scdoc ]
     ++ lib.optionals waylandSupport [ wayland-scanner ];
 
-  buildInputs = with lib; [
+  buildInputs = [
     cairo
     fribidi
     harfbuzz
     libxkbcommon
     pango
-  ] ++ optional ncursesSupport ncurses
-    ++ optionals waylandSupport [ wayland wayland-protocols ]
-    ++ optionals x11Support [
+  ] ++ lib.optional ncursesSupport ncurses
+    ++ lib.optionals waylandSupport [ wayland wayland-protocols ]
+    ++ lib.optionals x11Support [
       xorg.libX11 xorg.libXinerama xorg.libXft
       xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
     ];

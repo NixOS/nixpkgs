@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Simple lua-python parser";
     homepage = "https://github.com/SirAnthony/slpp";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

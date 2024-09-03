@@ -70,7 +70,7 @@ let
         require_once(ABSPATH . 'wp-settings.php');
       ?>
     '';
-    checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+    checkPhase = "${pkgs.php}/bin/php --syntax-check $target";
   };
 
   mkPhpValue = v: let
@@ -426,6 +426,7 @@ in
             # standard wordpress .htaccess contents
             <IfModule mod_rewrite.c>
               RewriteEngine On
+              RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
               RewriteBase /
               RewriteRule ^index\.php$ - [L]
               RewriteCond %{REQUEST_FILENAME} !-f

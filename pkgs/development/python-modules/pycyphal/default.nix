@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  can,
+  python-can,
   cobs,
   libpcap,
   nunavut,
@@ -11,7 +11,6 @@
   pyserial,
   pytestCheckHook,
   pytest-asyncio,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    transport-can-pythoncan = [ can ] ++ can.optional-dependencies.serial;
+    transport-can-pythoncan = [ python-can ] ++ python-can.optional-dependencies.serial;
     transport-serial = [
       cobs
       pyserial

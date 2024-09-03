@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-2e31ZuGJvpvu7L2Lb+n6bZWpC1JhETzEzSiNaxxsAtA=";
   };
 
-  cargoSha256 = "sha256-NsxGpjuZPpz4gCJRp5IOcfRFh8DTud47nV2bE0/kc2Q=";
+  cargoHash = "sha256-NsxGpjuZPpz4gCJRp5IOcfRFh8DTud47nV2bE0/kc2Q=";
 
   postPatch = ''
     # drop hardcoded linker names, fixing static build

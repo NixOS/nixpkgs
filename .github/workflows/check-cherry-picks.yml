@@ -10,6 +10,7 @@ permissions: {}
 
 jobs:
   check:
+    name: cherry-pick-check
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://alfaview.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];
   };

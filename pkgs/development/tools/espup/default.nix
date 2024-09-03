@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "espup";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
     rev = "v${version}";
-    hash = "sha256-cbBfzx195zk98IbSNSx99CF1RqH+ySpy6SQk5y8rvq4=";
+    hash = "sha256-7rxT3Stbfec7oxZOBN87lICmq+V8OZMCXb5F6Ca6jS4=";
   };
 
-  cargoHash = "sha256-N1TpBN5wULY+brBxUfwFrBTLKrVI8Cq3OX8fJqLHwAI=";
+  cargoHash = "sha256-GfoM2ngwnovQdbiEUQrkrrMpq4fo37VVOmnkK/5l+C8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=toolchain::rust::tests::test_xtensa_rust_parse_version"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd espup \
       --bash <($out/bin/espup completions bash) \
       --fish <($out/bin/espup completions fish) \

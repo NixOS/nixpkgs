@@ -57,6 +57,6 @@ in stdenv.mkDerivation rec {
       url = "https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html";
       free = false;
     };
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

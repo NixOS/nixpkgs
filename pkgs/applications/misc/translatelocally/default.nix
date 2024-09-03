@@ -4,17 +4,17 @@
 }:
 
 let
-  rev = "a210037760ca3ca9016ca1831c97531318df70fe";
+  rev = "27771d884d3607cf6331da16b15e27aba819573d";
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "translatelocally";
-  version = "unstable-2023-09-20";
+  version = "0-unstable-2024-05-12";
 
   src = fetchFromGitHub {
     owner = "XapaJIaMnu";
     repo = "translateLocally";
     inherit rev;
-    hash = "sha256-T7cZdR09yDrPTwYxvDIaKTdV4mrB+gTHYVfch5BQ+PE=";
+    hash = "sha256-oPtiyONqkZ5xOIhDezk8mkmi9O8gNYwHo0gcqSa89qI=";
     fetchSubmodules = true;
   };
 
@@ -42,6 +42,7 @@ in stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtbase
     qt6.qtsvg
+    qt6.qtwayland
     libarchive
     pcre2
     protobuf

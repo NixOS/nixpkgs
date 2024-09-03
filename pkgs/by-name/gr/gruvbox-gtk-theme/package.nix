@@ -2,11 +2,15 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gnome,
   sassc,
   gnome-themes-extra,
   gtk-engine-murrine,
-  colorVariants ? [] # default: install all icons
+  unstableGitUpdater,
+  colorVariants ? [ ],
+  sizeVariants ? [ ],
+  themeVariants ? [ ],
+  tweakVariants ? [ ],
+  iconVariants ? [ ],
 }:
 
 let
@@ -15,49 +19,104 @@ let
     "dark"
     "light"
   ];
-
+  sizeVariantList = [
+    "compact"
+    "standard"
+  ];
+  themeVariantList = [
+    "default"
+    "green"
+    "grey"
+    "orange"
+    "pink"
+    "purple"
+    "red"
+    "teal"
+    "yellow"
+    "all"
+  ];
+  tweakVariantList = [
+    "medium"
+    "soft"
+    "black"
+    "float"
+    "outline"
+    "macos"
+  ];
+  iconVariantList = [
+    "Dark"
+    "Light"
+  ];
 in
-lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib.checkListOfEnum
+  "${pname}: sizeVariants"
+  sizeVariantList
+  sizeVariants
+  lib.checkListOfEnum
+  "${pname}: themeVariants"
+  themeVariantList
+  themeVariants
+  lib.checkListOfEnum
+  "${pname}: tweakVariants"
+  tweakVariantList
+  tweakVariants
+  lib.checkListOfEnum
+  "${pname}: iconVariants"
+  iconVariantList
+  iconVariants
 
-stdenvNoCC.mkDerivation {
-  inherit pname;
-  version = "0-unstable-2024-06-27";
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname;
+    version = "0-unstable-2024-07-22";
 
-  src = fetchFromGitHub {
-    owner = "Fausto-Korpsvart";
-    repo = "Gruvbox-GTK-Theme";
-    rev = "f568ccd7bf7570d8a27feb62e318b07b88e24b94";
-    hash = "sha256-4vGwPggHdNjtQ03UFgN4OH5+ZEkdIlivCdYuZ0Dsd5Q=";
-  };
+    src = fetchFromGitHub {
+      owner = "Fausto-Korpsvart";
+      repo = "Gruvbox-GTK-Theme";
+      rev = "f14a99e1369a6348a4ecd4a5b2d9c067b83f7b2a";
+      hash = "sha256-WuZX2A5nLk8vMlK0ZlDlbeb79wCCWrGUf2CbqfnbUzk=";
+    };
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  nativeBuildInputs = [ gnome.gnome-shell sassc ];
-  buildInputs = [ gnome-themes-extra ];
+    nativeBuildInputs = [ sassc ];
+    buildInputs = [ gnome-themes-extra ];
 
-  dontBuild = true;
+    dontBuild = true;
 
-  postPatch = ''
-    patchShebangs themes/install.sh
-  '';
+    passthru.updateScript = unstableGitUpdater { };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/themes
-    cd themes
-    ./install.sh -n Gruvbox -c ${lib.concatStringsSep " " (if colorVariants != [] then colorVariants else colorVariantList)} --tweaks macos -d "$out/share/themes"
-    runHook postInstall
-  '';
+    postPatch = ''
+      patchShebangs themes/install.sh
+    '';
 
-  meta = {
-    description = "GTK theme based on the Gruvbox colour palette";
-    homepage = "https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      luftmensch-luftmensch
-      math-42
-      d3vil0p3r
-    ];
-  };
-}
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/themes
+      cd themes
+      ./install.sh -n Gruvbox \
+      ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
+      ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
+      ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
+      ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
+      -d "$out/share/themes"
+      cd ../icons
+      ${lib.optionalString (iconVariants != [ ]) ''
+        mkdir -p $out/share/icons
+        cp -a ${toString (map (v: "Gruvbox-${v}") iconVariants)} $out/share/icons/
+      ''}
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "GTK theme based on the Gruvbox colour palette";
+      homepage = "https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme";
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
+        luftmensch-luftmensch
+        math-42
+        d3vil0p3r
+      ];
+    };
+  }

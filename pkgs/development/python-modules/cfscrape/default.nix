@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Python module to bypass Cloudflare's anti-bot page";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

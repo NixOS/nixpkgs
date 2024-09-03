@@ -13,12 +13,43 @@ set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
 
 # https://stackoverflow.com/a/246128/6605742
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 cd "$DIR"/modules
 
 pass=0
 fail=0
+
+# loc
+#   prints the location of the call of to the function that calls it
+# loc n
+#   prints the location n levels up the call stack
+loc() {
+    local caller depth
+    depth=1
+    if [[ $# -gt 0 ]]; then
+        depth=$1
+    fi
+    # ( lineno fnname file ) of the caller
+    caller=( $(caller $depth) )
+    echo "${caller[2]}:${caller[0]}"
+}
+
+line() {
+    echo "----------------------------------------"
+}
+logStartFailure() {
+    line
+}
+logEndFailure() {
+    line
+    echo
+}
+
+logFailure() {
+    # bold red
+    printf '\033[1;31mTEST FAILED\033[0m at %s\n' "$(loc 2)"
+}
 
 evalConfig() {
     local attr=$1
@@ -31,7 +62,7 @@ reportFailure() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
+    echo "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
     evalConfig "$attr" "$@" || true
     ((++fail))
 }
@@ -42,8 +73,12 @@ checkConfigOutput() {
     if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
-        echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
+        logStartFailure
+        echo "ACTUAL:"
         reportFailure "$@"
+        echo "EXPECTED: result matching '$outputContains'"
+        logFailure
+        logEndFailure
     fi
 }
 
@@ -52,14 +87,22 @@ checkConfigError() {
     local err=""
     shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
-        echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
+        logStartFailure
+        echo "ACTUAL: exit code 0, output:"
         reportFailure "$@"
+        echo "EXPECTED: non-zero exit code"
+        logFailure
+        logEndFailure
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
         else
-            echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
+            logStartFailure
+            echo "ACTUAL:"
             reportFailure "$@"
+            echo "EXPECTED: error matching '$errorContains'"
+            logFailure
+            logEndFailure
         fi
     fi
 }
@@ -204,6 +247,14 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-if-foo-e
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-if-enable.nix
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable-if.nix
 
+# Check importApply
+checkConfigOutput '"abc"' config.value ./importApply.nix
+# importApply does not set a key.
+# Disabling the function file is not sufficient, because importApply can't reasonably assume that the key is unique.
+# e.g. user may call it multiple times with different arguments and expect each of the module to apply.
+# While this is excusable for the disabledModules aspect, it is not for the deduplication of modules.
+checkConfigOutput '"abc"' config.value ./importApply-disabling.nix
+
 # Check disabledModules with config definitions and option declarations.
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"
@@ -261,7 +312,7 @@ checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkP
 checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
-checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
+checkConfigError 'The option .undefinedPackage. was accessed but has no value defined. Try setting the option.' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
 checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
@@ -359,7 +410,7 @@ checkConfigOutput '^null$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-
 checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix ./define-value-string.nix
 # Check whether an freeform-typed value can depend on a declared option, this can only work with lazyAttrsOf
 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
-checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
+checkConfigError 'The option .* was accessed but has no value defined. Try setting the option.' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
 # submodules in freeformTypes should have their locations annotated
 checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freeform-submodules.nix
@@ -418,8 +469,8 @@ checkConfigOutput "{}" config.attrs.a ./emptyValues.nix
 checkConfigOutput "null" config.null.a ./emptyValues.nix
 checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 # These types don't have empty values
-checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
-checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
+checkConfigError 'The option .int.a. was accessed but has no value defined. Try setting the option.' config.int.a ./emptyValues.nix
+checkConfigError 'The option .nonEmptyList.a. was accessed but has no value defined. Try setting the option.' config.nonEmptyList.a ./emptyValues.nix
 
 # types.unique
 #   requires a single definition
@@ -499,21 +550,21 @@ checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
 # Declaration positions
 # Line should be present for direct options
-checkConfigOutput '^10$' options.imported.line10.declarationPositions.0.line ./declaration-positions.nix
-checkConfigOutput '/declaration-positions.nix"$' options.imported.line10.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^14$' options.imported.line14.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.imported.line14.declarationPositions.0.file ./declaration-positions.nix
 # Generated options may not have line numbers but they will at least get the
 # right file
-checkConfigOutput '/declaration-positions.nix"$' options.generated.line18.declarationPositions.0.file ./declaration-positions.nix
-checkConfigOutput '^null$' options.generated.line18.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.generated.line22.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^null$' options.generated.line22.declarationPositions.0.line ./declaration-positions.nix
 # Submodules don't break it
-checkConfigOutput '^39$' config.submoduleLine34.submodDeclLine39.0.line ./declaration-positions.nix
-checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine34.submodDeclLine39.0.file ./declaration-positions.nix
+checkConfigOutput '^45$' config.submoduleLine38.submodDeclLine45.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine38.submodDeclLine45.0.file ./declaration-positions.nix
 # New options under freeform submodules get collected into the parent submodule
 # (consistent with .declarations behaviour, but weird; notably appears in system.build)
-checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.0.line ./declaration-positions.nix
-checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.1.line ./declaration-positions.nix
+checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line ./declaration-positions.nix
 # nested options work
-checkConfigOutput '^30$' options.nested.nestedLine30.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
 cat <<EOF
 ====== module tests ======

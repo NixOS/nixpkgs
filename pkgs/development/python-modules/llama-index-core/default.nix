@@ -22,6 +22,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  pyvis,
   pyyaml,
   requests,
   spacy,
@@ -46,7 +47,7 @@ in
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.10.48.post1";
+  version = "0.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -55,7 +56,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O8mHttYMRUzWvhydQsOux7tynhDuMKapsSDJQXL0MRQ=";
+    hash = "sha256-bgkuX7ukN7aEnaUyIbPQ7FoUtsUT9Tq326RQgXNnOpg=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -91,6 +92,7 @@ buildPythonPackage rec {
     openai
     pandas
     pillow
+    pyvis
     pyyaml
     requests
     spacy
@@ -131,6 +133,12 @@ buildPythonPackage rec {
     "tests/text_splitter/"
     "tests/token_predictor/"
     "tests/tools/"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_from_namespaced_persist_dir"
+    "test_from_persist_dir"
   ];
 
   meta = with lib; {

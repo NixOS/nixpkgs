@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
   sourceRoot = main_src.name;
 
   nativeBuildInputs
-     = [ cmake ]
+     = [ cmake python3 ]
     ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
-     = [ boostPython python3 eigen python3Packages.apycula ]
+     = [ boostPython eigen python3Packages.apycula ]
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 

@@ -1,6 +1,5 @@
 { fetchFromGitHub
 , stdenv
-, makeDesktopItem
 , lib
 , openssl
 , boost

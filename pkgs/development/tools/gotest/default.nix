@@ -20,6 +20,6 @@ buildGoModule rec {
     mainProgram = "gotest";
     homepage = "https://github.com/rakyll/gotest";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

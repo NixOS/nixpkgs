@@ -3,15 +3,13 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, llvm_17
+, llvm_18
 , curl
 , tzdata
-, libconfig
 , lit
 , gdb
 , unzip
 , darwin
-, bash
 , callPackage
 , makeWrapper
 , runCommand
@@ -64,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_17.dev makeWrapper ninja unzip
+    cmake ldcBootstrap lit lit.python llvm_18.dev makeWrapper ninja unzip
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -148,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 
+  passthru.ldcBootstrap = ldcBootstrap;
   passthru.tests = let
     ldc = finalAttrs.finalPackage;
     helloWorld = stdenv.mkDerivation (finalAttrs: {

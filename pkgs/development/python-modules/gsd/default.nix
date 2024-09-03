@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "gsd";
-  version = "3.3.0";
+  version = "3.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "glotzerlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-sDb6TJvN7yFiRabc66zIjk6w9CEUYMhpe+fWv+apvkI=";
+    hash = "sha256-9C66k3OI+Xw+DPe8ZxuQmOiXmPWDTvJ2tVLHhfsEhgU=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/glotzerlab/gsd";
     changelog = "https://github.com/glotzerlab/gsd/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

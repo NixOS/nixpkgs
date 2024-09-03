@@ -15,7 +15,16 @@ buildGoModule rec {
   subPackages = [
     "cmd/mimir"
     "cmd/mimirtool"
-  ];
+  ] ++ (map (pathName: "tools/${pathName}") [
+    "compaction-planner"
+    "copyblocks"
+    "copyprefix"
+    "delete-objects"
+    "list-deduplicated-blocks"
+    "listblocks"
+    "markblocks"
+    "undelete-blocks"
+  ]);
 
   passthru = {
     updateScript = nix-update-script {

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       bsd3
       isc
       mit
-      zsh
+      mit-modern
     ];
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.olejorgenb ];

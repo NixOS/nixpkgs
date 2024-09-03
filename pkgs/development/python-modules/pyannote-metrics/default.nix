@@ -61,7 +61,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyannote/pyannote-metrics";
     changelog = "http://pyannote.github.io/pyannote-metrics/changelog.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pyannote-metrics";
   };
 }

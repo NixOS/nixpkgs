@@ -3,16 +3,13 @@
 , cmake
 , pkg-config
 , python3
-, ruby
 , rake
-, git
 , curl
 , fetchFromGitHub
 , libGL
 , libGLU
 , alsa-lib
 , libX11
-, xorgproto
 , libICE
 , libXi
 , libXScrnSaver
@@ -30,7 +27,6 @@
 , libdecor
 , pipewire
 , libpulseaudio
-, libiconv
 # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
 # that enables some additional features. It is, however, fully open source.
 , withPro ? false

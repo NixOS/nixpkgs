@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pagmo2";
-  version = "2.19.0";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
      owner = "esa";
      repo = "pagmo2";
      rev = "v${version}";
-     sha256 = "sha256-z5kg2xKZ666EPK844yp+hi4iGisaIPme9xNdzsAEEjw=";
+     sha256 = "sha256-ido3e0hQLDEPT0AmsfAVTPlGbWe5QBkxgRO6Fg1wp/c=";
   };
 
   nativeBuildInputs = [ cmake ];

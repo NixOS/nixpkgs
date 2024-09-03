@@ -6,6 +6,7 @@
 # Take packages from self first, then python.pkgs (and secondarily pkgs)
 lib.makeScope (self: newScope (self.python.pkgs // self)) (self: {
   python = python3.override {
+    self = self.python;
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy_1_4;
       moto = super.moto.overridePythonAttrs (oldAttrs: {

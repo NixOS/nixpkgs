@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   flask,
   mutagen,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "podcats";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";
@@ -18,12 +19,14 @@ buildPythonPackage rec {
     sha256 = "0zjdgry5n209rv19kj9yaxy7c7zq5gxr488izrgs4sc75vdzz8xc";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace podcats.py \
-      --replace 'debug=True' 'debug=True, use_reloader=False'
+      --replace-fail 'debug=True' 'debug=True, use_reloader=False'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     mutagen
   ];

@@ -530,9 +530,6 @@ let
                 global-module: mod-stats
                 dnssec-signing: off
                 zonefile-sync: -1
-                journal-db: /var/lib/knot/journal
-                kasp-db: /var/lib/knot/kasp
-                timer-db: /var/lib/knot/timer
                 zonefile-load: difference
                 storage: ${pkgs.buildEnv {
                   name = "foo";
@@ -1001,13 +998,24 @@ let
       metricProvider = {
         services.postgresql.enable = true;
         services.pgbouncer = {
-          # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
-          ignoreStartupParameters = "extra_float_digits";
           enable = true;
-          listenAddress = "*";
-          databases = { postgres = "host=/run/postgresql/ port=5432 auth_user=postgres dbname=postgres"; };
-          authType = "any";
-          maxClientConn = 99;
+          settings = {
+            pgbouncer = {
+              listen_addr = "*";
+              auth_type = "any";
+              max_client_conn = 99;
+              # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+              ignore_startup_parameters = "extra_float_digits";
+            };
+            databases = {
+              postgres = concatStringsSep " " [
+                "host=/run/postgresql"
+                "port=5432"
+                "auth_user=postgres"
+                "dbname=postgres"
+              ];
+            };
+          };
         };
       };
       exporterTest = ''

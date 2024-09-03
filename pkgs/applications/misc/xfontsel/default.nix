@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Allows testing the fonts available in an X server";
     mainProgram = "xfontsel";
     license = with licenses; [ x11 smlnj mit ];
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

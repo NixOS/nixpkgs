@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/bundlewrap-keepass";
     description = "Use secrets from keepass in your BundleWrap repo";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

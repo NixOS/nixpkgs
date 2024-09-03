@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://fox-toolkit.org";
     license = licenses.lgpl3Plus;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

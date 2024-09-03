@@ -7,15 +7,17 @@
 , darwin
 , testers
 , komac
+, dbus
+, zstd
 }:
 
 let
-  version = "2.2.1";
+  version = "2.6.0";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
     rev = "v${version}";
-    hash = "sha256-dPX8/JUQ+vugd+M/jIjBf4/sNbac0FVQ0obhyAAGI84=";
+    hash = "sha256-YFaa2kU42NlhRivBEPV1mSr3j95P4NFwUKM0Xx8tpfg=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -23,15 +25,24 @@ rustPlatform.buildRustPackage {
 
   pname = "komac";
 
-  cargoHash = "sha256-CDPN90X3m/9FRLolAVCIcAuajZbB5OAgLcFXq2ICS8g=";
+  cargoHash = "sha256-kb18phtY5rRNUw0ZaZu2tipAaOURSy+2duf/+cOj5Y8=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = [
+    dbus
     openssl
+    zstd
   ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+    YRX_REGENERATE_MODULES_RS = "no";
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   passthru.tests.version = testers.testVersion {
     inherit version;
@@ -45,7 +56,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/russellbanks/Komac";
     changelog = "https://github.com/russellbanks/Komac/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kachick ];
+    maintainers = with maintainers; [ kachick HeitorAugustoLN ];
     mainProgram = "komac";
   };
 }

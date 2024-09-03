@@ -35,6 +35,6 @@ buildGoModule rec {
     mainProgram = "textql";
     homepage = "https://github.com/dinedal/textql";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

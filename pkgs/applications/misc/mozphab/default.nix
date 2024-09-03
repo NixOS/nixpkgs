@@ -57,6 +57,14 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
+  disabledTests = [
+    # AttributeError: 'called_once' is not a valid assertion.
+    "test_commit"
+    # AttributeError: 'not_called' is not a valid assertion.
+    "test_finalize_no_evolve"
+    "test_patch"
+  ];
+
   disabledTestPaths = [
     # codestyle doesn't matter to us
     "tests/test_style.py"
@@ -79,7 +87,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
     license = licenses.mpl20;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

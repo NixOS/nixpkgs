@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, dtk6gui
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  dtk6gui,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6declarative";
-  version = "6.0.16";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6declarative";
     rev = finalAttrs.version;
-    hash = "sha256-OvLmK/UAuF9VEnT7DO3/m7S9Xjze5WQuZAYBTcgZbyk=";
+    hash = "sha256-/bQGb87UbnIRWwR6Of67VrRUkrNk6dmY7bjgwDXc30Y";
   };
 
   patches = [
@@ -32,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
-    dtk6gui
-  ] ++ (with qt6Packages ; [
-    qtbase
-    qtdeclarative
-    qtshadertools
-    qt5compat
-  ]);
+  propagatedBuildInputs =
+    [ dtk6gui ]
+    ++ (with qt6Packages; [
+      qtbase
+      qtdeclarative
+      qtshadertools
+      qt5compat
+    ]);
 
   cmakeFlags = [
     "-DDTK_VERSION=${finalAttrs.version}"
@@ -57,7 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QML2_IMPORT_PATH=${lib.getBin qt6Packages.qtdeclarative}/${qt6Packages.qtbase.qtQmlPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   meta = {
     description = "Widget development toolkit based on QtQuick/QtQml";

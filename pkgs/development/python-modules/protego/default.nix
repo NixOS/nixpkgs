@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapy/protego";
     changelog = "https://github.com/scrapy/protego/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

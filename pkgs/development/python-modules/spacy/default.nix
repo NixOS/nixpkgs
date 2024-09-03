@@ -20,7 +20,6 @@
   preshed,
   pydantic,
   pytestCheckHook,
-  python,
   pythonOlder,
   requests,
   setuptools,
@@ -135,6 +134,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -10,11 +10,11 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.1.3";
+  version = "5.1.4";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-1TkCV3Cjg/5YZODceV5mQDsPYk09IU7+UHwPRwt2vAQ=";
+    hash = "sha256-UEgG3bQT5GPMfh/nxC1aXGsb8HKE5Ov5ax0ULjLr73U=";
   };
 
   unpackPhase = "tar xvf $src";

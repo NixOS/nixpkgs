@@ -11,7 +11,6 @@
   markupsafe,
   pydantic,
   pytestCheckHook,
-  pythonImportsCheckHook,
   pyyaml,
   rich,
   setuptools,

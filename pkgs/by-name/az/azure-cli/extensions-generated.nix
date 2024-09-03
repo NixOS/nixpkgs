@@ -59,9 +59,9 @@
   };
   aks-preview = mkAzExtension rec {
     pname = "aks-preview";
-    version = "6.0.0b1";
+    version = "7.0.0b6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "2e04cfef1cb404760006d73786c57259f8e5c92bc42b9eaca7314301ce0ba1a4";
+    sha256 = "268457ea6463d03775caa822b4b7a70749c503b47cb2aa9c898e1186cfb423f6";
     description = "Provides a preview for upcoming AKS features";
   };
   akshybrid = mkAzExtension rec {
@@ -87,9 +87,9 @@
   };
   amg = mkAzExtension rec {
     pname = "amg";
-    version = "1.3.5";
+    version = "2.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/amg-${version}-py3-none-any.whl";
-    sha256 = "5eb4615d05dd85021d7d00311fdc25645535fe69e07cea1eca68d58cfb7bd44e";
+    sha256 = "b28952d967b9a1e0d81dac280bdff23b44fdbb06dedd66cdf99477bdd7541d6c";
     description = "Microsoft Azure Command-Line Tools Azure Managed Grafana Extension";
   };
   amlfs = mkAzExtension rec {
@@ -143,9 +143,9 @@
   };
   azure-firewall = mkAzExtension rec {
     pname = "azure-firewall";
-    version = "1.0.1";
+    version = "1.2.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-${version}-py2.py3-none-any.whl";
-    sha256 = "920023c55ae72d7e85baa43d81d96683be0e8348228b6f8e89e479fd4092c0f8";
+    sha256 = "5468cc09b8ea7918176b5e95aa3c24c7ad9b7d1b68c47d16bf522a053fd811e8";
     description = "Manage Azure Firewall resources";
   };
   azurelargeinstance = mkAzExtension rec {
@@ -171,9 +171,9 @@
   };
   bastion = mkAzExtension rec {
     pname = "bastion";
-    version = "1.0.2";
+    version = "1.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/bastion-${version}-py3-none-any.whl";
-    sha256 = "1637b37374e8956d555ee89e005ceb952aed4e754b93a8ec887a4f90ce4e36f8";
+    sha256 = "d90bc404d2f9d22435a2bd34bd1fd6094d71d6f1719763c72ee6e4835ec8a99d";
     description = "Microsoft Azure Command-Line Tools Bastion Extension";
   };
   billing-benefits = mkAzExtension rec {
@@ -227,9 +227,9 @@
   };
   connectedmachine = mkAzExtension rec {
     pname = "connectedmachine";
-    version = "1.0.0b1";
+    version = "1.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedmachine-${version}-py3-none-any.whl";
-    sha256 = "f829b171bc489bd1bffea518040acc74608581dae798f4b23bedfe8bf7445383";
+    sha256 = "8b8c4340c4c6552e3826220ffb95bf619447675b0469304b71fa80e2e4e31c81";
     description = "Microsoft Azure Command-Line Tools ConnectedMachine Extension";
   };
   connectedvmware = mkAzExtension rec {
@@ -318,9 +318,9 @@
   };
   dataprotection = mkAzExtension rec {
     pname = "dataprotection";
-    version = "1.5.1";
+    version = "1.5.3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-${version}-py3-none-any.whl";
-    sha256 = "2089e0c5ce213e0d79148cc2724c28679d93dc70a1e7290ee2ec99e5e0eed513";
+    sha256 = "4671ce89e39065695f21626350dfcad5438bdbefc714cf35e85ee5eab0f96661";
     description = "Microsoft Azure Command-Line Tools DataProtectionClient Extension";
   };
   datashare = mkAzExtension rec {
@@ -444,9 +444,9 @@
   };
   fleet = mkAzExtension rec {
     pname = "fleet";
-    version = "1.2.0";
+    version = "1.2.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/fleet-${version}-py3-none-any.whl";
-    sha256 = "6e9504f22893636a14990955bfb731e77a2f681b100f2cb20cc2455ce15a2b8b";
+    sha256 = "d7e3525249c0c4e5ae0988500e36847b4363d734f7b16e7a0f9a9e54623081ae";
     description = "Microsoft Azure Command-Line Tools Fleet Extension";
   };
   fluid-relay = mkAzExtension rec {
@@ -514,9 +514,9 @@
   };
   hdinsightonaks = mkAzExtension rec {
     pname = "hdinsightonaks";
-    version = "1.0.0b2";
+    version = "1.0.0b3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/hdinsightonaks-${version}-py3-none-any.whl";
-    sha256 = "c323291952f9ec6014af5f760b26860bd8029aa04cc226fd5996f20726641c59";
+    sha256 = "f549b85107b7b83ff64fcfa5c90a5d7e900a5ea2efe76eec9b1f81689e58c365";
     description = "Microsoft Azure Command-Line Tools Hdinsightonaks Extension";
   };
   healthbot = mkAzExtension rec {
@@ -647,9 +647,9 @@
   };
   managednetworkfabric = mkAzExtension rec {
     pname = "managednetworkfabric";
-    version = "6.2.0";
+    version = "6.4.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/managednetworkfabric-${version}-py3-none-any.whl";
-    sha256 = "3761e2319e0a6bccde79d59e2ab2d508f00e601562c0b7e4bf290ff9d9b14479";
+    sha256 = "9d41078e0654aaae36a5f0f283f51de98cc4360582920536542546ed34ca0bc4";
     description = "Support for managednetworkfabric commands based on 2023-06-15 API version";
   };
   managementpartner = mkAzExtension rec {
@@ -742,6 +742,13 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/offazure-${version}-py3-none-any.whl";
     sha256 = "1918817070ae9e0ceef57b93366d18b6e8bf577fd632e7da999e1e2abbb53656";
     description = "Microsoft Azure Command-Line Tools AzureMigrateV2 Extension";
+  };
+  oracle-database = mkAzExtension rec {
+    pname = "oracle-database";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/oracle_database-${version}-py3-none-any.whl";
+    sha256 = "058c3de6c1e103ff0c62a188b1c606a35097a6652cb7eb6c3e5b77f77e15b5b1";
+    description = "Microsoft Azure Command-Line Tools OracleDatabase Extension";
   };
   orbital = mkAzExtension rec {
     pname = "orbital";
@@ -857,9 +864,9 @@
   };
   scvmm = mkAzExtension rec {
     pname = "scvmm";
-    version = "1.0.0";
+    version = "1.1.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/scvmm-${version}-py2.py3-none-any.whl";
-    sha256 = "565aa9d75dd4d276df2f8ffec5311bd2ae16a2d6172d525a7763fc5972b262b7";
+    sha256 = "7d704578bc5eb60b8105de0b4a924176581a4cf2fd162b0896d81246f7f73a68";
     description = "Microsoft Azure Command-Line Tools SCVMM Extension";
   };
   self-help = mkAzExtension rec {
@@ -906,9 +913,9 @@
   };
   stack-hci-vm = mkAzExtension rec {
     pname = "stack-hci-vm";
-    version = "1.1.16";
+    version = "1.1.20";
     url = "https://hciarcvmsstorage.z13.web.core.windows.net/cli-extensions/stack_hci_vm-${version}-py3-none-any.whl";
-    sha256 = "6b08c750b3c3898aab17c459ff626210c17ad12f960f2ab89204765a17d530da";
+    sha256 = "7de544b8058ab11d9713b551db65aeaec6b8e5832cdadbbf26ccb7a4a282db6b";
     description = "Microsoft Azure Command-Line Tools Stack-HCi-VM Extension";
   };
   standbypool = mkAzExtension rec {
@@ -1016,18 +1023,11 @@
     sha256 = "0ef7b4bf9ffd0aa1ad5c50e15a343276636bcfe0296e52d2ee5f0b75ce70633d";
     description = "Manage virtual WAN, hubs, VPN gateways and VPN sites";
   };
-  vm-repair = mkAzExtension rec {
-    pname = "vm-repair";
-    version = "1.0.7";
-    url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    sha256 = "989b15053fe19f1dbb37fd4a31720e2a1ca622ecadaaa4b5c568c44e44c20fa6";
-    description = "Auto repair commands to fix VMs";
-  };
   vmware = mkAzExtension rec {
     pname = "vmware";
-    version = "6.0.1";
+    version = "7.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vmware-${version}-py2.py3-none-any.whl";
-    sha256 = "2e07a4ddf1b244cfe8b63a29b7f82c3ec94294f10bacfe8fd604841d290020b5";
+    sha256 = "e0fadce4fc02996443a8e1673d19ebd24383c584ca89bd396ce963e85865ac0d";
     description = "Azure VMware Solution commands";
   };
   webapp = mkAzExtension rec {

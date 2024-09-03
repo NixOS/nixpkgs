@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.32.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2B9i9S6OY+7DEorZoXfQQx9cEU2Y8FoyIyytJ8C7dXU=";
+    hash = "sha256-U7ykTLEuREe2GTVswcAw3R3h4zbkWxuI2dt/2689xSA=";
   };
 
-  cargoHash = "sha256-S03fgnefhU6c5e9YtFMBart+nfBQj7f4O+lSPe8fgqg=";
+  cargoHash = "sha256-NoxYHwY5XpRiqrOjQsaSWQCXFalNAS9SchaKwHbB2uU=";
 
   nativeBuildInputs = [
     cmake
@@ -31,22 +31,17 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  nativeCheckInputs = [
-    git
-  ];
-
   checkFlags = [
-    # requires nightly version of cargo-rustdoc
-    "--skip=both_passing_manifest_path_and_directory_works"
-    "--skip=verify_binary_contains_lints"
-
     # requires internet access
     "--skip=detects_target_dependencies"
   ];
 
   preCheck = ''
     patchShebangs scripts/regenerate_test_rustdocs.sh
-    git init
+    substituteInPlace scripts/regenerate_test_rustdocs.sh \
+      --replace-fail \
+        'TOPLEVEL="$(git rev-parse --show-toplevel)"' \
+        "TOPLEVEL=$PWD"
     scripts/regenerate_test_rustdocs.sh
   '';
 

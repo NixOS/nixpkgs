@@ -1,6 +1,5 @@
 {
   lib,
-  azure-identity,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
@@ -19,11 +18,12 @@
   responses,
   syrupy,
   toml,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.1.6";
+  version = "0.1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-mongodb==${version}";
-    hash = "sha256-p/cdWFPc2Oi5aRmjj1oAixM6aDKw0TbyzMdP4h2acG4=";
+    hash = "sha256-fjSvn9O/CrKBexcwuILXFR7AGx/tZtGDWjA0L6XV4Hk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
@@ -63,8 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-mongodb==(.*)"
+    ];
   };
 
   meta = {

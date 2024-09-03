@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, xz, buildPackages }:
+{ stdenv, lib, fetchpatch, fetchFromGitHub, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-rCFBHs6rCSnp5FEwbUR5veNNTqSQpFblAv8ebSPX0qE=";
   };
+
+  patches = lib.optional (stdenv.targetPlatform.useLLVM or false) (fetchpatch {
+    url = "https://github.com/libunwind/libunwind/pull/770/commits/a69d0f14c9e6c46e82ba6e02fcdedb2eb63b7f7f.patch";
+    hash = "sha256-9oBZimCXonNN++jJs3emp9w+q1aj3eNzvSKPgh92itA=";
+  });
 
   postPatch = if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then ''
     substituteInPlace configure.ac --replace "-lgcc_s" ""

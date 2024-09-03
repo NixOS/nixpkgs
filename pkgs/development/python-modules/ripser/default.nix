@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://ripser.scikit-tda.org";
     changelog = "https://github.com/scikit-tda/ripser.py/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

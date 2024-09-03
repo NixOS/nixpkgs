@@ -192,7 +192,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [ lib.maintainers.tobim ];
     mainProgram = "gs";
   };
 }

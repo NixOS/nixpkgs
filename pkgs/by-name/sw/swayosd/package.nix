@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    name = "${pname}-${version}";
+    name = "swayosd-${version}";
     hash = "sha256-exbVanUvGp0ub4WE3VcsN8hkcK0Ipf0tNfd92UecICg=";
   };
 

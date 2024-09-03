@@ -5,7 +5,7 @@
   budgie-desktop-view,
   glib,
   gsettings-desktop-schemas,
-  gnome,
+  mutter,
   nixos-artwork,
   nixos-background-light ? nixos-artwork.wallpapers.nineish,
   nixos-background-dark ? nixos-artwork.wallpapers.nineish-dark-gray,
@@ -59,7 +59,7 @@ let
     budgie-desktop
     budgie-desktop-view
     gsettings-desktop-schemas
-    gnome.mutter
+    mutter
   ] ++ extraGSettingsOverridePackages;
 
 in

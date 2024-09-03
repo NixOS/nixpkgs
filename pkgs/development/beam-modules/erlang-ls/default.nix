@@ -1,5 +1,5 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
-, stdenv, writeScript, lib, erlang }:
+, stdenv, writeScript, lib }:
 let
   version = "0.52.0";
   owner = "erlang-ls";

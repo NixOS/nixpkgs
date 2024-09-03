@@ -152,10 +152,10 @@ index 5b4debf..77c8d9c 100644
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
 diff --git a/src/calendar/backends/contacts/e-cal-backend-contacts.c b/src/calendar/backends/contacts/e-cal-backend-contacts.c
-index 43bd383..4dce824 100644
+index 047fb97..960f44c 100644
 --- a/src/calendar/backends/contacts/e-cal-backend-contacts.c
 +++ b/src/calendar/backends/contacts/e-cal-backend-contacts.c
-@@ -1369,7 +1369,18 @@ e_cal_backend_contacts_init (ECalBackendContacts *cbc)
+@@ -1333,7 +1333,18 @@ e_cal_backend_contacts_init (ECalBackendContacts *cbc)
  		(GDestroyNotify) g_free,
  		(GDestroyNotify) contact_record_free);
  
@@ -202,7 +202,7 @@ index 2525856..7ecc1a8 100644
  				g_clear_object (&settings);
  			}
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index 44ba49c..dfac2a2 100644
+index a83d3d3..dc7acac 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
 @@ -2826,8 +2826,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)

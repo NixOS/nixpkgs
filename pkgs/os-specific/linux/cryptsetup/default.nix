@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # support, because the path still gets included in the binary even
     # though it isn't used.
     "--with-luks2-external-tokens-path=/"
-  ] ++ (with lib; mapAttrsToList (flip enableFeature)) programs;
+  ] ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ] ++ lib.optional (!withInternalArgon2) libargon2;

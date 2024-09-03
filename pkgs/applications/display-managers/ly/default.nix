@@ -1,25 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, git, linux-pam, libxcb }:
+{ stdenv, lib, fetchFromGitHub, linux-pam, libxcb, makeBinaryWrapper, zig_0_12
+, callPackage, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ly";
-  version = "0.6.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "fairyglade";
     repo = "ly";
-    rev = "v${version}";
-    hash = "sha256-78XD6DK9aQi8hITWJWnFZ3U9zWTcuw3vtRiU3Lhu7O4=";
-    fetchSubmodules = true;
+    rev = "v1.0.2";
+    hash = "sha256-VUtNEL7Te/ba+wvL0SsUHlyv2NPmkYKs76TnW8r3ysw=";
   };
 
-  hardeningDisable = [ "all" ];
-  nativeBuildInputs = [ git ];
+  nativeBuildInputs = [ makeBinaryWrapper zig_0_12.hook ];
   buildInputs = [ libxcb linux-pam ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp bin/ly $out/bin
+  postPatch = ''
+    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
+
+  passthru.tests = { inherit (nixosTests) ly; };
 
   meta = with lib; {
     description = "TUI display manager";

@@ -3,20 +3,21 @@
   clang,
   fetchFromGitHub,
   buildGoModule,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
     rev = "v${version}";
-    hash = "sha256-RO0XsGyIgf2PQekiC71HirEPp2SQDJpiAbjg7TyaGVQ=";
+    hash = "sha256-A82JwjZTzYvRc0PY2FekRUwLszdCEHv6wcLYHvqwiWU=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-KFe0hGAXn4mrWCsU91cfUZc21SgJes6XXFhAKrqmULE=";
+  vendorHash = "sha256-PCGv1DcOOP2LE5wGmnuB2t3aJP8nqJ/ChafVxeJnRIg=";
 
   proxyVendor = true;
 
@@ -45,6 +46,10 @@ buildGoModule rec {
     substituteInPlace $out/lib/systemd/system/dae.service \
       --replace /usr/bin/dae $out/bin/dae
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) dae;
+  };
 
   meta = with lib; {
     description = "Linux high-performance transparent proxy solution based on eBPF";

@@ -4,6 +4,7 @@
 , ncurses6, gmp, libiconv, numactl
 , llvmPackages
 , coreutils
+, rcodesign
 , targetPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
@@ -190,7 +191,15 @@ stdenv.mkDerivation rec {
   #           https://gitlab.haskell.org/ghc/ghc/-/issues/20059
   #       and update this comment accordingly.
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl ]
+    # Upstream binaries may not be linker-signed, which invalidates their signatures
+    # because `install_name_tool` will only replace a signature if it is both
+    # an ad hoc signature and the signature is flagged as linker-signed.
+    #
+    # rcodesign is used to replace the signature instead of sigtool because it
+    # supports setting the linker-signed flag, which will ensure future processing
+    # of the binaries does not invalidate their signatures.
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ rcodesign ];
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -236,15 +245,20 @@ stdenv.mkDerivation rec {
         ])
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.isDarwin (''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
         isScript $exe && continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
         install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+    '' + lib.optionalString stdenv.isAarch64 ''
+        # Resign the binary and set the linker-signed flag. Ignore failures when the file is an object file.
+        # Object files don’t have signatures, so ignoring the failures is harmless.
+        rcodesign sign --code-signature-flags linker-signed $exe || true
+    '' + ''
       done
-    '' +
+    '') +
 
     # Some scripts used during the build need to have their shebangs patched
     ''

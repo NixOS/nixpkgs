@@ -11,7 +11,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "pest-ide-tools";
   version = "0.3.11";
-  cargoSha256 = "sha256-ZD8UQbkk5JhkanBkzo+c86DZE4aD44ma5cN97aKx97U=";
+  cargoHash = "sha256-ZD8UQbkk5JhkanBkzo+c86DZE4aD44ma5cN97aKx97U=";
 
   src = fetchFromGitHub {
     owner = "pest-parser";

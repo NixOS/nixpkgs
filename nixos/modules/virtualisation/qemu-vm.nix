@@ -143,6 +143,7 @@ let
           --transform 'flags=rSh;s|/nix/store/||' \
           --files-from ${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
           | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
+            --quiet \
             --force-uid=0 \
             --force-gid=0 \
             -L ${nixStoreFilesystemLabel} \
@@ -328,7 +329,7 @@ in
 
     virtualisation.diskSize =
       mkOption {
-        type = types.nullOr types.ints.positive;
+        type = types.ints.positive;
         default = 1024;
         description = ''
             The disk size in megabytes of the virtual machine.

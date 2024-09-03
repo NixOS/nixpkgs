@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "hidapi";
-  version = "0.14.0";
+  version = "0.14.0.post2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7cb029286ced5426a381286526d9501846409701a29c2538615c3d1a612b8be";
+    sha256 = "sha256-bA6XumsFmjCdUbSVqPDV77zqh1a2QNmLb2u5/e8kWKw=";
   };
 
   nativeBuildInputs = [ cython_0 ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];

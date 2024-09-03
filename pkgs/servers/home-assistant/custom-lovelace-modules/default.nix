@@ -4,11 +4,17 @@
 {
   android-tv-card = callPackage ./android-tv-card { };
 
+  apexcharts-card = callPackage ./apexcharts-card { };
+
+  atomic-calendar-revive = callPackage ./atomic-calendar-revive { };
+
   button-card = callPackage ./button-card { };
 
   card-mod = callPackage ./card-mod { };
 
   decluttering-card = callPackage ./decluttering-card { };
+
+  hourly-weather = callPackage ./hourly-weather { };
 
   lg-webos-remote-control = callPackage ./lg-webos-remote-control { };
 
@@ -21,6 +27,10 @@
   multiple-entity-row = callPackage ./multiple-entity-row { };
 
   mushroom = callPackage ./mushroom { };
+
+  rmv-card = callPackage ./rmv-card { };
+
+  template-entity-row = callPackage ./template-entity-row { };
 
   valetudo-map-card = callPackage ./valetudo-map-card { };
 

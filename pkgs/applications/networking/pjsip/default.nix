@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.14.1";
 
   src = fetchFromGitHub {
-    owner = finalAttrs.pname;
+    owner = "pjsip";
     repo = "pjproject";
     rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-LDA3o1QMrAxcGuOi/YRoMzXmw/wFkfDs2wweZuIJ2RY=";

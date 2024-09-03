@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.2.1";
+  version = "6.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "rstcheck";
     repo = "rstcheck";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S04l+x/rIc/XSvq2lSKCQp6KK5mmKI2mOgPgJ3WKe5M=";
+    hash = "sha256-CB8UtYAJpPrUOGgHOIp9Ts0GaID6GdtKHWD/ihxRoNg=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     types-docutils
     pydantic
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

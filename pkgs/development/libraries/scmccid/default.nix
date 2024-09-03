@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "PCSC drivers for linux, for the SCM SCR3310 v2.0 card and others";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

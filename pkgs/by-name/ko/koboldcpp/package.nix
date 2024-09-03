@@ -22,7 +22,7 @@
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
-  cudaArches ? cudaPackages.cudaFlags.arches or [ ],
+  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
 
   clblastSupport ? stdenv.isLinux,
   clblast,
@@ -40,7 +40,7 @@ let
   makeBool = option: bool: (if bool then "${option}=1" else "");
 
   libraryPathWrapperArgs = lib.optionalString config.cudaSupport ''
-    --prefix LD_LIBRARY_PATH: "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
+    --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
   '';
 
   darwinFrameworks =
@@ -53,13 +53,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.70.1";
+  version = "1.74";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-wtSkmjx5mzESMvIflqH+QEavH5oeBgKBz8/JjU+CASo=";
+    hash = "sha256-tGG1+EGlCUmFpx/axijonOXydurwFxqjuoeDwHxC+pc=";
   };
 
   enableParallelBuilding = true;
@@ -129,7 +129,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
-    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=sm_${builtins.head cudaArches}")
+    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
   ];
 
   installPhase = ''
@@ -158,19 +158,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-      --prefix PATH ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
+      --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
+    changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
     description = "Way to run various GGML and GGUF models";
     license = lib.licenses.agpl3Only;
+    mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
       donteatoreo
     ];
-    mainProgram = "koboldcpp";
     platforms = lib.platforms.unix;
   };
 })

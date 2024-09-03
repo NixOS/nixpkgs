@@ -13,18 +13,17 @@
   libsForQt5,
   python3,
   stdenv,
-  yt-dlp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "4.8.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "media-downloader";
     rev = finalAttrs.version;
-    hash = "sha256-qSZb83gB9Kw6goY7RkWRWXpzHTF27EV5T59RitjSuc4=";
+    hash = "sha256-yAG9F9helGM8/TjJiqMDUviHK6uEUvHGny2QklwB2JY=";
   };
 
   nativeBuildInputs = [

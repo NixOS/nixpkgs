@@ -5,7 +5,6 @@
   setuptools,
   pbr,
   nose,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +21,6 @@ buildPythonPackage rec {
     pbr
     setuptools
   ];
-
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [ nose ];
 

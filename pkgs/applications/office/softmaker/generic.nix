@@ -124,7 +124,7 @@ in stdenv.mkDerivation {
     homepage = "https://www.softmaker.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

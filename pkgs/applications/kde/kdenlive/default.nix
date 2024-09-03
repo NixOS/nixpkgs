@@ -82,7 +82,6 @@ mkDerivation {
     kpurpose
     kdeclarative
     wrapGAppsHook3
-    glaxnimate
   ];
 
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it

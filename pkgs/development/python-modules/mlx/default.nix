@@ -7,7 +7,6 @@
   cmake,
   xcbuild,
   zsh,
-  darwin,
   blas,
   lapack,
 }:

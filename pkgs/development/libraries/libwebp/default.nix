@@ -13,7 +13,6 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 
 # for passthru.tests
-, freeimage
 , gd
 , graphicsmagick
 , haskellPackages

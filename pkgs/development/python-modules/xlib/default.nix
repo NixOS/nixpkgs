@@ -7,7 +7,6 @@
   setuptools,
   setuptools-scm,
   xorg,
-  python,
   mock,
   pytestCheckHook,
   util-linux,
@@ -53,6 +52,6 @@ buildPythonPackage rec {
     description = "Fully functional X client library for Python programs";
     homepage = "https://github.com/python-xlib/python-xlib";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

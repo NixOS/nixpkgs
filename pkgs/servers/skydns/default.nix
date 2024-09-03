@@ -29,7 +29,7 @@ buildGoModule rec {
     description = "Distributed service for announcement and discovery of services";
     homepage = "https://github.com/skynetservices/skydns";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "skydns";
   };
 }

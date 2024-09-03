@@ -8,7 +8,7 @@
 , perlPackages
 , makeWrapper
 , perl # for pod2man
-, darwin
+, cctools
 , gitUpdater
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     (perl.withPackages (p: [ p.IPCRun p.TimeDate p.TimeDuration ]))
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   makeFlags = [

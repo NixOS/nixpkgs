@@ -17,8 +17,6 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-PpJnVZFRxpUHux2jIBDtyBS4qNo6IJY4kwTAq6stEVQ=";
 
-  dontNpmBuild = true;
-
   meta = {
     description = "Fixes prettier formatting for go templates";
     mainProgram = "prettier-plugin-go-template";

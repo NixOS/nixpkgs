@@ -56,6 +56,7 @@ in stdenv.mkDerivation {
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ lovek323 manveru ];
+    broken      = stdenv.isDarwin; # fails due to old nokogiri https://github.com/sparklemotion/nokogiri/discussions/3152#discussioncomment-8806607
   };
 }
 # TODO: autoreconfHook this

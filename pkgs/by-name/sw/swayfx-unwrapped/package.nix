@@ -25,7 +25,7 @@
   scenefx,
   wayland-scanner,
   xcbutilwm,
-  wlroots,
+  wlroots_0_17,
   testers,
   nixosTests,
   # Used by the NixOS module:
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     scenefx
     wayland
     wayland-protocols
-    (wlroots.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_17.override { inherit (finalAttrs) enableXWayland; })
   ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
 
   mesonFlags =

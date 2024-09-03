@@ -30,8 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       pytenable
       typer
       validators
-    ]
-    ++ typer.optional-dependencies.all;
+    ];
 
   pythonImportsCheck = [ "audiness" ];
 

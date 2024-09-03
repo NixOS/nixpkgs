@@ -163,17 +163,6 @@ let
 
     propagatedBuildInputs = builtins.attrValues deps;
 
-    # don't use pure CF for dylibs that depend on frameworks
-    setupHook = ./framework-setup-hook.sh;
-
-    # Not going to be more specific than this for now
-    __propagatedImpureHostDeps = lib.optionals (name != "Kernel") [
-      # The setup-hook ensures that everyone uses the impure CoreFoundation who uses these SDK frameworks, so let's expose it
-      "/System/Library/Frameworks/CoreFoundation.framework"
-      "/System/Library/Frameworks/${name}.framework"
-      "/System/Library/Frameworks/${name}.framework/${name}"
-    ];
-
     meta = with lib; {
       description = "Apple SDK framework ${name}";
       maintainers = with maintainers; [ copumpkin ];
@@ -363,7 +352,7 @@ in rec {
 
   objc4 = pkgs.darwin.libobjc;
 
-  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12"; };
+  sdkRoot = pkgs.callPackage ./sdkRoot.nix { sdkVersion = "10.12.4"; };
 
   inherit (pkgs.darwin) Libsystem;
 

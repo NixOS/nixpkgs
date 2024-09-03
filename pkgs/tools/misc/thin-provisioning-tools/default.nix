@@ -58,6 +58,6 @@ rustPlatform.buildRustPackage rec {
     description = "Suite of tools for manipulating the metadata of the dm-thin device-mapper target";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   buildPythonPackage,
   fetchFromGitHub,

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "XFfTpX4c821pcTAJZFUjdqM940fRoBwkJC6KTknXtCw=";
   };
 
-  cargoSha256 = "6yPDkbag81TZ4k72rbmGT6HWKdGK4yfKxjGNFKEWXPI=";
+  cargoHash = "sha256-6yPDkbag81TZ4k72rbmGT6HWKdGK4yfKxjGNFKEWXPI=";
 
   meta = with lib; {
     description = "Fast duplicate file finder";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cython,
   fetchFromGitHub,
   pip,
   pytestCheckHook,
@@ -9,7 +8,6 @@
   setuptools-scm,
   setuptools,
   tomli,
-  wheel,
 }:
 
 buildPythonPackage rec {

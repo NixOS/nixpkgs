@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "testrail-api";
-  version = "1.13.1";
+  version = "1.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tolstislon";
     repo = "testrail-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-VH63shGCBOkbHcUFL4M/QvuVrS+y2JiM1YYBJgZ6r/w=";
+    hash = "sha256-GR1yhky33XZZFcPEO2WRvVUkmekG9HoM00doVgTCD+0=";
   };
 
   build-system = [

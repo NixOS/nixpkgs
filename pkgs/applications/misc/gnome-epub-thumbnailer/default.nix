@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-epub-thumbnailer";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-epub-thumbnailer/${lib.versions.majorMinor version}/gnome-epub-thumbnailer-${version}.tar.xz";
-    sha256 = "sha256-S7Ah++RCgNuY3xTBH6XkMgsWe4GpG9e6WGvqDE+il1I=";
+    sha256 = "sha256-+QYZ1YxpkC8u/1e58AQrRzeGEIP0dZIaMQ/sxhL8oBc=";
   };
 
   nativeBuildInputs = [

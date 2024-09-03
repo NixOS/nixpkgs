@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sissaschool/elementpath";
     changelog = "https://github.com/sissaschool/elementpath/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

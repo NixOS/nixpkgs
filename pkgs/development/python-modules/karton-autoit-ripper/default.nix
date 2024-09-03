@@ -3,6 +3,7 @@
   autoit-ripper,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   karton-core,
   malduck,
   pythonOlder,
@@ -12,30 +13,31 @@
 buildPythonPackage rec {
   pname = "karton-autoit-ripper";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "karton-autoit-ripper";
     rev = "refs/tags/v${version}";
     hash = "sha256-D+M3JsIN8LUWg8GVweEzySHI7KaBb6cNHHn4pXoq55M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "autoit-ripper"
+    "malduck"
+    "regex"
+  ];
+
+  dependencies = [
     autoit-ripper
     karton-core
     malduck
     regex
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "autoit-ripper==" "autoit-ripper>=" \
-      --replace "malduck==" "malduck>=" \
-      --replace "regex==" "regex>="
-  '';
 
   # Module has no tests
   doCheck = false;

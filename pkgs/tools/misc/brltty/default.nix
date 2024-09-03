@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "6.6";
 
   src = fetchurl {
-    url = "https://brltty.app/archive/${pname}-${version}.tar.gz";
+    url = "https://brltty.app/archive/brltty-${version}.tar.gz";
     sha256 = "E+j2mb8UTuGx6PkAOt03hQkvf1XvEHxJEuPBT2zMpPw=";
   };
 

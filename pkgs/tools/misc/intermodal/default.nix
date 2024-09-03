@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-7vtUMG6mxAHKnbouyTsaUf1myJssxYoqAIOjc6m86Fo=";
 
   # include_hidden test tries to use `chflags` on darwin
-  checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];
+  checkFlags = lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd imdl \
       --bash <($out/bin/imdl completions bash) \
       --fish <($out/bin/imdl completions fish) \

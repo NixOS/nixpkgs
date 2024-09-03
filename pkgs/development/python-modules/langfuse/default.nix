@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  anyio,
   backoff,
   httpx,
   idna,
@@ -16,22 +17,22 @@
 
 buildPythonPackage rec {
   pname = "langfuse";
-  version = "2.36.2";
+  version = "2.45.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7snmEjRRciYaxUm0wUwQn5HKTvQOPVH5rXVUGZ+BXgk=";
+    hash = "sha256-CErrC5hVBrdUFYxN3JxAIo5eb/OGnISWfzClSwrrYLM=";
   };
 
   build-system = [ poetry-core ];
 
-
   pythonRelaxDeps = [ "packaging" ];
 
   dependencies = [
+    anyio
     backoff
     httpx
     idna
@@ -54,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Instrument your LLM app with decorators or low-level SDK and get detailed tracing/observability";
     homepage = "https://github.com/langfuse/langfuse-python";
-    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${src.rev}";
+    changelog = "https://github.com/langfuse/langfuse-python/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

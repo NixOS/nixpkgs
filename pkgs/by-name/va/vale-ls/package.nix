@@ -9,15 +9,15 @@
 , vale
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "vale-ls";
-  version = "0.3.7-unstable-2024-03-13";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "errata-ai";
     repo = "vale-ls";
-    rev = "473e16bc88ec48b35e2bd208adc174878c4d5396";
-    hash = "sha256-ywJsnWMc9NSjYjsK6SXdMAQl+hcP+KQ7Xp1A99aeqAg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+2peLqj3/ny0hDwJVKEp2XS68VO50IvpCB2fvZoEdJo=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  cargoHash = "sha256-ifKdSTmVWfDZF5Kn9b5JpzDxa160oRTfzjvxeL9POBg=";
+  cargoHash = "sha256-YurMB54jeMQIAOgDQhXEYrkYUYrSl02M9JG5Wtp6Eb8=";
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \

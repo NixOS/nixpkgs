@@ -142,7 +142,7 @@ in {
       ]
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
-          cinnamon.nemo
+          nemo
           mate.eom
           mate.pluma
           mate.atril
@@ -222,7 +222,6 @@ in {
 
     # For BCC's Online Accounts panel.
     services.gnome.gnome-online-accounts.enable = mkDefault true;
-    services.gnome.gnome-online-miners.enable = true;
 
     # For BCC's Printers panel.
     services.printing.enable = mkDefault true;

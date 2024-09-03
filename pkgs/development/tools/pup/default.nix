@@ -18,6 +18,6 @@ buildGoModule rec {
     mainProgram = "pup";
     homepage = "https://github.com/ericchiang/pup";
     license = licenses.mit;
-    maintainers = with maintainers; [ yana ];
+    maintainers = [ ];
   };
 }

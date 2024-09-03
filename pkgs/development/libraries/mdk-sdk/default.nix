@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, autoPatchelfHook
 , alsa-lib, gcc-unwrapped, libX11, libcxx, libdrm, libglvnd, libpulseaudio, libxcb, mesa, wayland, xz, zlib
-, libva, libvdpau, addOpenGLRunpath
+, libva, libvdpau, addDriverRunpath
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   appendRunpaths = lib.makeLibraryPath [
-    libva libvdpau addOpenGLRunpath.driverLink
+    libva libvdpau addDriverRunpath.driverLink
   ];
 
   installPhase = ''

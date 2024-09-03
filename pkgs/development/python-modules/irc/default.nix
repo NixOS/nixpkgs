@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/irc";
     changelog = "https://github.com/jaraco/irc/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

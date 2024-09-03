@@ -179,7 +179,7 @@ let
       hasSharedLibraries = with final;
         (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
-         || isCygwin || isMinGW                                        # Windows
+         || isCygwin || isMinGW || isWindows                           # Windows
          || isWasm                                                     # WASM
         ) && !isStatic;
 
@@ -257,6 +257,22 @@ let
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
+
+      # Remove before 25.05
+      androidSdkVersion =
+        if (args ? sdkVer && !args ? androidSdkVersion) then
+          throw "For android `sdkVer` has been renamed to `androidSdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidSdkVersion
+        else
+          null;
+      androidNdkVersion =
+        if (args ? ndkVer && !args ? androidNdkVersion) then
+          throw "For android `ndkVer` has been renamed to `androidNdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidNdkVersion
+        else
+          null;
     } // (
       let
         selectEmulator = pkgs:
@@ -360,6 +376,7 @@ let
               "armv7l" = "armv7";
               "armv6l" = "arm";
               "armv5tel" = "armv5te";
+              "riscv32" = "riscv32gc";
               "riscv64" = "riscv64gc";
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;

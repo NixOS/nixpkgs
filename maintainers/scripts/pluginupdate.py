@@ -791,6 +791,11 @@ def update_plugins(editor: Editor, args):
     All input arguments are grouped in the `Editor`."""
 
     log.info("Start updating plugins")
+    if args.proc > 1 and args.github_token == None:
+        log.warning("You have enabled parallel updates but haven't set a github token.\n"
+        "You may be hit with `HTTP Error 429: too many requests` as a consequence."
+        "Either set --proc=1 or --github-token=YOUR_TOKEN. ")
+
     fetch_config = FetchConfig(args.proc, args.github_token)
     update = editor.get_update(args.input_file, args.outfile, fetch_config)
 

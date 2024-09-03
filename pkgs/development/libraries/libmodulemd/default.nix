@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     mainProgram = "modulemd-validator";
     homepage = "https://github.com/fedora-modularity/libmodulemd";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

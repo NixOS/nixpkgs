@@ -1,6 +1,5 @@
 {
   lib,
-  appdirs,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,

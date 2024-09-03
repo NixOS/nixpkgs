@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.1";
+  version = "1.8.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2TkieSQYxnlUroSD9wNKNaHUTLRksFWL/6XmSNGTCA4=";
+    hash = "sha256-SmSYhmLnVpBPEPO2o40wIv+e3cBbmZXSz+IKMRcnScw=";
   };
 
   patches =

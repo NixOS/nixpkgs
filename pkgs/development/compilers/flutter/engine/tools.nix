@@ -1,9 +1,11 @@
 {
+  stdenv,
   callPackage,
   fetchgit,
   fetchurl,
   writeText,
   runCommand,
+  buildPlatform,
   hostPlatform,
   darwin,
   writeShellScriptBin,
@@ -29,7 +31,9 @@
   },
 }:
 let
-  constants = callPackage ./constants.nix { targetPlatform = hostPlatform; };
+  constants = callPackage ./constants.nix { platform = buildPlatform; };
+  host-constants = callPackage ./constants.nix { platform = hostPlatform; };
+  stdenv-constants = callPackage ./constants.nix { platform = stdenv.hostPlatform; };
 in
 {
   depot_tools = fetchgit {
@@ -39,18 +43,45 @@ in
   };
 
   cipd =
-    runCommand "cipd-${cipdCommit}"
-      {
-        unwrapped = fetchurl {
-          name = "cipd-${cipdCommit}-unwrapped";
-          url = "https://chrome-infra-packages.appspot.com/client?platform=${constants.platform}&version=git_revision:${cipdCommit}";
-          sha256 = cipdHashes.${constants.platform};
-        };
-      }
-      ''
-        mkdir -p $out/bin
-        install -m755 $unwrapped $out/bin/cipd
-      '';
+    let
+      unwrapped =
+        runCommand "cipd-${cipdCommit}"
+          {
+            src = fetchurl {
+              name = "cipd-${cipdCommit}-unwrapped";
+              url = "https://chrome-infra-packages.appspot.com/client?platform=${stdenv-constants.platform}&version=git_revision:${cipdCommit}";
+              sha256 = cipdHashes.${stdenv-constants.platform};
+            };
+          }
+          ''
+            mkdir -p $out/bin
+            install -m755 $src $out/bin/cipd
+          '';
+    in
+    writeShellScriptBin "cipd" ''
+      params=$@
+
+      if [[ "$1" == "ensure" ]]; then
+        shift 1
+        params="ensure"
+
+        while [ "$#" -ne 0 ]; do
+          if [[ "$1" == "-ensure-file" ]]; then
+            ensureFile="$2"
+            shift 2
+            params="$params -ensure-file $ensureFile"
+
+            sed -i 's/''${platform}/${host-constants.platform}/g' "$ensureFile"
+            sed -i 's/gn\/gn\/${stdenv-constants.platform}/gn\/gn\/${constants.platform}/g' "$ensureFile"
+          else
+            params="$params $1"
+            shift 1
+          fi
+        done
+      fi
+
+      exec ${unwrapped}/bin/cipd $params
+    '';
 
   vpython =
     pythonPkg:

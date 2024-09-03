@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Offline thesaurus based on WordNet";
     homepage = "https://artha.sourceforge.net";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "artha";
   };

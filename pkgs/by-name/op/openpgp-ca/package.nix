@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openpgp-ca";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitLab {
     owner = "openpgp-ca";
     repo = "openpgp-ca";
     rev = "openpgp-ca/v${version}";
-    hash = "sha256-6K7H/d82Ge+JQykqTXAD43wlGTQl+U9D/vA+CNz4rfM=";
+    hash = "sha256-71SApct2yQV3ueWDlZv7ScK1s0nWWS57cPCvoMutlLA=";
   };
 
-  cargoHash = "sha256-PrbepiaQbfGEqJRIcOMR6ED3BLopZLhospTzWRUoW0A=";
+  cargoHash = "sha256-L0Z+Oxov0y+PipdXz8/3Y0MKYhr/lNYurphc9s0K+Dg=";
 
   nativeBuildInputs = [
     pkg-config

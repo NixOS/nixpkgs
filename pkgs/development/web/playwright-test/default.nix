@@ -8,7 +8,7 @@ let
   nodeEnv = import ./node-env.nix {
     inherit (pkgs) stdenv lib python2 runCommand writeTextFile writeShellScript;
     inherit pkgs nodejs;
-    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
+    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin or pkgs.darwin.cctools else null;
   };
 in
 import ./node-packages.nix {

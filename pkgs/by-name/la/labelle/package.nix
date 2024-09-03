@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "labelle";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labelle-org";
     repo = "labelle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Im1mZ9kJB+0uPAmEXpUWoOYBooejes05vTGLDqPCAN4=";
+    hash = "sha256-nGWffQAXlnKiWBUnSo/IKGdWsLdwLr9N4jAURcVGfj8=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/labelle-org/labelle/releases/tag/${src.rev}";
+    changelog = "https://github.com/labelle-org/labelle/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Print labels with LabelManager PnP from Dymo";
     homepage = "https://github.com/labelle-org/labelle";
     license = lib.licenses.asl20;

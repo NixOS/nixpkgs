@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchzip, fetchFromGitHub
-, appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
+, appleDerivation', AvailabilityVersions, sdkRoot, xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libmalloc, libplatform, libpthread
 , mDNSResponder, launchd, libutilHeaders, hfsHeaders, darwin-stubs
@@ -48,8 +48,10 @@ appleDerivation' stdenv {
 
     # Set up our include directories
     (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | copyHierarchy $out/include)
-    cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
+
+    # These headers are from a newer SDK, but they’re more compatible with GCC (and still work with older SDKs).
+    ${lib.getExe AvailabilityVersions} ${lib.getVersion sdkRoot} "$out"
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} \
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
@@ -59,7 +61,7 @@ appleDerivation' stdenv {
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
-    (cd ${lib.getDev buildPackages.darwin.cctools}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
+    (cd ${lib.getDev buildPackages.cctools}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
     for header in pthread.h pthread_impl.h pthread_spis.h sched.h; do
       ln -s "$out/include/pthread/$header" "$out/include/$header"
@@ -73,27 +75,6 @@ appleDerivation' stdenv {
     cp ${darling.src}/src/libc/os/activity.h $out/include/os
     cp ${darling.src}/src/libc/os/log.h $out/include/os
     cp ${darling.src}/src/duct/include/os/trace.h $out/include/os
-
-    cat <<EOF > $out/include/os/availability.h
-    #ifndef __OS_AVAILABILITY__
-    #define __OS_AVAILABILITY__
-    #include <AvailabilityInternal.h>
-
-    #if defined(__has_feature) && defined(__has_attribute) && __has_attribute(availability)
-      #define API_AVAILABLE(...) __API_AVAILABLE_GET_MACRO(__VA_ARGS__, __API_AVAILABLE4, __API_AVAILABLE3, __API_AVAILABLE2, __API_AVAILABLE1)(__VA_ARGS__)
-      #define API_DEPRECATED(...) __API_DEPRECATED_MSG_GET_MACRO(__VA_ARGS__, __API_DEPRECATED_MSG5, __API_DEPRECATED_MSG4, __API_DEPRECATED_MSG3, __API_DEPRECATED_MSG2, __API_DEPRECATED_MSG1)(__VA_ARGS__)
-      #define API_DEPRECATED_WITH_REPLACEMENT(...) __API_DEPRECATED_REP_GET_MACRO(__VA_ARGS__, __API_DEPRECATED_REP5, __API_DEPRECATED_REP4, __API_DEPRECATED_REP3, __API_DEPRECATED_REP2, __API_DEPRECATED_REP1)(__VA_ARGS__)
-      #define API_UNAVAILABLE(...) __API_UNAVAILABLE_GET_MACRO(__VA_ARGS__, __API_UNAVAILABLE3, __API_UNAVAILABLE2, __API_UNAVAILABLE1)(__VA_ARGS__)
-    #else
-
-      #define API_AVAILABLE(...)
-      #define API_DEPRECATED(...)
-      #define API_DEPRECATED_WITH_REPLACEMENT(...)
-      #define API_UNAVAILABLE(...)
-
-    #endif
-    #endif
-    EOF
 
     cat <<EOF > $out/include/TargetConditionals.h
     #ifndef __TARGETCONDITIONALS__

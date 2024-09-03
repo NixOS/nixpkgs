@@ -51,7 +51,7 @@ let
   # list of packages which are for x86 (only multiPkgs, only for x86_64 hosts)
   multiPaths = multiPkgs pkgsi686Linux;
 
-  # base packages of the chroot
+  # base packages of the fhsenv
   # these match the host's architecture, glibc_multi is used for multilib
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
@@ -84,7 +84,7 @@ let
   '';
 
   etcProfile = writeText "profile" ''
-    export PS1='${name}-chrootenv:\u@\h:\w\$ '
+    export PS1='${name}-fhsenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
     export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
@@ -123,8 +123,8 @@ let
     ${profile}
   '';
 
-  # Compose /etc for the chroot environment
-  etcPkg = runCommandLocal "${name}-chrootenv-etc" { } ''
+  # Compose /etc for the fhs environment
+  etcPkg = runCommandLocal "${name}-fhs-etc" { } ''
     mkdir -p $out/etc
     pushd $out/etc
 
@@ -149,22 +149,22 @@ let
               target=$(readlink $out/share/glib-2.0)
               rm $out/share/glib-2.0
               mkdir $out/share/glib-2.0
-              ln -fs $target/* $out/share/glib-2.0
+              ln -fsr $target/* $out/share/glib-2.0
           fi
 
           if [[ -L $out/share/glib-2.0/schemas ]]; then
               target=$(readlink $out/share/glib-2.0/schemas)
               rm $out/share/glib-2.0/schemas
               mkdir $out/share/glib-2.0/schemas
-              ln -fs $target/* $out/share/glib-2.0/schemas
+              ln -fsr $target/* $out/share/glib-2.0/schemas
           fi
 
           mkdir -p $out/share/glib-2.0/schemas
 
           for d in $out/share/gsettings-schemas/*; do
               # Force symlink, in case there are duplicates
-              ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
-              ln -fs $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
+              ln -fsr $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
+              ln -fsr $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
           done
 
           # and compile them
@@ -215,7 +215,7 @@ let
                  then setupLibDirsTarget
                  else setupLibDirsMulti;
 
-  # the target profile is the actual profile that will be used for the chroot
+  # the target profile is the actual profile that will be used for the fhs
   setupTargetProfile = ''
     mkdir -m0755 usr
     pushd usr

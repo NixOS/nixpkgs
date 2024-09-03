@@ -2,7 +2,6 @@
 , mkDerivation
 , extra-cmake-modules
 , shared-mime-info
-, kconfig
 , kdoctools
 , kio
 , ktextwidgets

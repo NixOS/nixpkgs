@@ -26,6 +26,8 @@ mkKdeDerivation {
     )
   ];
 
+  extraNativeBuildInputs = [ shared-mime-info ];
+
   extraBuildInputs = [
     qtsvg
     qtmultimedia
@@ -34,9 +36,7 @@ mkKdeDerivation {
     qqc2-desktop-style
 
     mlt
-    shared-mime-info
     libv4l
-    glaxnimate
   ];
 
   qtWrapperArgs = [

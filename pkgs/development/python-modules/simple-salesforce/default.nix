@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
     changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/v${version}/CHANGES";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -49,6 +49,7 @@
 , libmbim
 , libcbor
 , xz
+, nix-update-script
 , enableFlashrom ? false
 , enablePassim ? false
 }:
@@ -120,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.21";
+  version = "1.9.24";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -131,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-V3v3lTz3KUt/zEv5BuUcN7S2ZXHPbhYN5vsFPNuxbFY=";
+    hash = "sha256-jAR/c8hedprteCj5wrjST4yo8TxJ4JmLbPXSwBO3gJs=";
   };
 
   patches = [
@@ -325,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/bios-settings.d/README.md"
       "fwupd/fwupd.conf"

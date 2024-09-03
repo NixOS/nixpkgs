@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "pipx";
     rev = "refs/tags/${version}";
-    hash = "sha256-B57EIUIwy0XG5bnIwxYKgm3WwckdJWWAeUl84mWC1Ds=";
+    hash = "sha256-diHWzrSpXWbNosXKN5nj2FM09HicDhHWKxQDXc+AZ4o=";
   };
 
   build-system = [
@@ -41,7 +41,10 @@ buildPythonPackage rec {
     userpath
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    argcomplete
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -95,9 +98,9 @@ buildPythonPackage rec {
 
   postInstall = ''
     installShellCompletion --cmd pipx \
-      --bash <(${argcomplete}/bin/register-python-argcomplete pipx --shell bash) \
-      --zsh <(${argcomplete}/bin/register-python-argcomplete pipx --shell zsh) \
-      --fish <(${argcomplete}/bin/register-python-argcomplete pipx --shell fish)
+      --bash <(register-python-argcomplete pipx --shell bash) \
+      --zsh <(register-python-argcomplete pipx --shell zsh) \
+      --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
   meta = with lib; {

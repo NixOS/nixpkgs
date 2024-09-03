@@ -11,8 +11,9 @@ let
   optPam = shouldUsePkg pam;
   optLibidn = shouldUsePkg libidn;
   optGnutls = shouldUsePkg gnutls;
+
+  inherit (lib) enableFeature withFeature optionalString;
 in
-with lib;
 stdenv.mkDerivation rec {
   pname = "shishi";
   version = "1.0.2";
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/shishi/shishi-${version}.tar.gz";
     sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
   };
+
+  separateDebugInfo = true;
 
   # Fixes support for gcrypt 1.6+
   patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
@@ -64,7 +67,7 @@ stdenv.mkDerivation rec {
       -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage    = "https://www.gnu.org/software/shishi/";
     description = "Implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;

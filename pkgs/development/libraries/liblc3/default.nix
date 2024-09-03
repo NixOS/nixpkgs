@@ -27,9 +27,6 @@ stdenv.mkDerivation {
     ninja
   ];
 
-  # LTO does not work on Darwin: https://github.com/NixOS/nixpkgs/issues/19098
-  mesonFlags = lib.optionals stdenv.isDarwin [ "-Db_lto=false" ];
-
   meta = with lib; {
     description = "LC3 (Low Complexity Communication Codec) is an efficient low latency audio codec";
     homepage = "https://github.com/google/liblc3";

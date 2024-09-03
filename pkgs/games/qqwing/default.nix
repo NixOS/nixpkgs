@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qqwing";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

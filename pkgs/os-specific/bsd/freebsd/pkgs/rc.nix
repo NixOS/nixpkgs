@@ -9,6 +9,7 @@
   id,
   protect,
   mount,
+  fsck,
 }:
 let
   rcDepsPath = lib.makeBinPath [
@@ -20,16 +21,24 @@ let
     id
     mount
     protect
+    fsck
   ];
 in
 mkDerivation {
   path = "libexec/rc";
   MK_TESTS = "no";
 
+  outputs = [
+    "out"
+    "services"
+  ];
+
   postPatch =
     ''
-      substituteInPlace "$BSDSRCDIR/libexec/rc/rc.d/Makefile" "$BSDSRCDIR/libexec/rc/Makefile" --replace-fail /etc $out/etc
-      substituteInPlace "$BSDSRCDIR/libexec/rc/rc.d/Makefile" --replace-fail /var $out/var
+      substituteInPlace "$BSDSRCDIR/libexec/rc/Makefile" --replace-fail /etc $out/etc
+      substituteInPlace "$BSDSRCDIR/libexec/rc/rc.d/Makefile" \
+        --replace-fail /etc $services/etc \
+        --replace-fail /var $services/var
     ''
     + (
       let

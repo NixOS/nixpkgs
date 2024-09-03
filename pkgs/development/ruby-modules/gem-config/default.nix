@@ -17,11 +17,11 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+{ lib, fetchurl, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
+, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, lerc, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
@@ -126,7 +126,16 @@ in
   };
 
   curses = attrs: {
+    dontBuild = false;
     buildInputs = [ ncurses ];
+    patches = lib.optionals (lib.versionOlder attrs.version "1.4.5") [
+      # Fixes incompatible function pointer type error with clang 16. Fixed in 1.4.5 and newer.
+      # Upstream issue: https://github.com/ruby/curses/issues/85
+      (fetchpatch2 {
+        url = "https://github.com/ruby/curses/commit/13e00d07c3aaed83d5f138cf268cc33c9f025d0e.patch?full_index=1";
+        hash = "sha256-ZJ2egqj3Uwmi4KrF79dtwczpwUqFCp52/xQYUymYDmc=";
+      })
+    ];
   };
 
   dep-selector-libgecode = attrs: {
@@ -379,6 +388,7 @@ in
       gtk3
       cairo
       harfbuzz
+      lerc
       libdatrie
       libthai
       pcre
@@ -447,9 +457,20 @@ in
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
   };
 
+  hpricot = attrs: {
+    dontBuild = false;
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./hpricot-fix-incompatible-function-pointer-conversion.patch
+    ];
+  };
+
   iconv = attrs: {
     dontBuild = false;
-    buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    buildFlags = lib.optionals stdenv.isDarwin [
+      "--with-iconv-dir=${lib.getLib libiconv}"
+      "--with-iconv-include=${lib.getDev libiconv}/include"
+    ];
     patches = [
       # Fix incompatible function pointer conversion errors with clang 16
       ./iconv-fix-incompatible-function-pointer-conversions.patch
@@ -504,8 +525,8 @@ in
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
     ] ++ lib.optionals stdenv.isDarwin [
-      "--with-iconv-dir=${libiconv}"
-      "--with-opt-include=${libiconv}/include"
+      "--with-iconv-dir=${lib.getLib libiconv}"
+      "--with-opt-include=${lib.getDev libiconv}/include"
     ];
   };
 
@@ -783,10 +804,7 @@ in
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
-  } // (lib.optionalAttrs stdenv.isDarwin {
-    # https://github.com/NixOS/nixpkgs/issues/19098
-    buildFlags = [ "--disable-lto" ];
-  });
+  };
 
   sass-embedded = attrs: {
     # Patch the Rakefile to use our dart-sass and not try to fetch anything.

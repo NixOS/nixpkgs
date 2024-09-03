@@ -1,13 +1,9 @@
 # Telepathy daemon.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -16,8 +12,8 @@ with lib;
 
     services.telepathy = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Telepathy service, a communications framework
@@ -32,7 +28,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.telepathy.enable {
+  config = lib.mkIf config.services.telepathy.enable {
 
     environment.systemPackages = [ pkgs.telepathy-mission-control ];
 

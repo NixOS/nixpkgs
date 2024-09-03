@@ -3,17 +3,17 @@
 , fetchurl
 }:
 let
-  version = "0.16.13";
+  version = "0.16.14";
 in buildNpmPackage {
   pname = "svelte-language-server";
   inherit version;
 
   src = fetchurl {
     url = "https://registry.npmjs.org/svelte-language-server/-/svelte-language-server-${version}.tgz";
-    hash = "sha256-BtKeYAFDxaGPvN3d/2Kt+ViNukfKV92c6K0W2qdQHjU=";
+    hash = "sha256-vBnNrzjnWmlZZ1C5WO4VwlTI9+bNmxgFpLFzzExnW+U=";
   };
 
-  npmDepsHash = "sha256-YG6gxXDfgaHevwO62EdhWTXXZq/plC7Mx9RKZNDyLqo=";
+  npmDepsHash = "sha256-TiabvRCxMccsuIFm7t8vhXstX4WRSbndKnm1nKRmBfw=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -29,6 +29,6 @@ in buildNpmPackage {
     homepage = "https://github.com/sveltejs/language-tools";
     license = lib.licenses.mit;
     mainProgram = "svelteserver";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

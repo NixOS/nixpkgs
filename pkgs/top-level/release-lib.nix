@@ -119,7 +119,7 @@ let
   /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be
      interested in the result of cross building a package. */
-  crossMaintainers = [ maintainers.viric ];
+  crossMaintainers = [ ];
 
 
   # Generate attributes for all supported systems.
@@ -178,7 +178,7 @@ let
 
 in {
   /* Common platform groups on which to test packages. */
-  inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
+  inherit (platforms) unix linux darwin cygwin all;
 
   inherit
     assertTrue

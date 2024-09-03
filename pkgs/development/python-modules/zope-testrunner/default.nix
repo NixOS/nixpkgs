@@ -31,6 +31,6 @@ buildPythonPackage rec {
     mainProgram = "zope-testrunner";
     homepage = "https://pypi.python.org/pypi/zope.testrunner";
     license = licenses.zpl20;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
-, db, iptables, elfutils, libmnl
-, gitUpdater
+, db, iptables, elfutils, libmnl ,libbpf
+, gitUpdater, pkgsStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.9.0";
+  version = "6.10.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-L2Q9CeoRpKKgQ8kuK0abX3MijL8kGugGdgKW7Q7EE9A=";
+    hash = "sha256-kaYvgnN7RJBaAPqAM2nER9VJ6RTpoqQBj911sdVOjc4=";
   };
 
   postPatch = ''
@@ -47,9 +47,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libmnl ]
+  buildInputs = [ db iptables libmnl  ]
     # needed to uploaded bpf programs
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      elfutils libbpf
+  ];
 
   enableParallelBuilding = true;
 
@@ -58,12 +60,14 @@ stdenv.mkDerivation rec {
     url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
     rev-prefix = "v";
   };
+  # needed for nixos-anywhere
+  passthru.tests.static = pkgsStatic.iproute2;
 
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ primeos eelco fpletz globin ];
+    maintainers = with maintainers; [ primeos fpletz globin ];
   };
 }

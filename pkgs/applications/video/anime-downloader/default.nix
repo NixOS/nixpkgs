@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Simple but powerful anime downloader and streamer";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "anime";
   };
 }

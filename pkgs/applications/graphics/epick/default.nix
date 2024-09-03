@@ -8,7 +8,6 @@
 , freetype
 , libGL
 , xorg
-, darwin
 , AppKit
 }:
 
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-k0WQu1n1sAHVor58jr060vD5/2rDrt1k5zzJlrK9WrU=";
   };
 
-  cargoSha256 = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
+  cargoHash = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config

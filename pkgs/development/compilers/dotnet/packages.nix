@@ -1,6 +1,9 @@
 { stdenv
 , callPackage
 , vmr
+, xmlstarlet
+, strip-nondeterminism
+, zip
 }:
 
 let
@@ -16,6 +19,12 @@ in {
     src = vmr;
     dontUnpack = true;
 
+    nativeBuildInputs = [
+      xmlstarlet
+      strip-nondeterminism
+      zip
+    ];
+
     outputs = [ "out" "packages" "artifacts" ];
 
     installPhase = ''
@@ -26,11 +35,47 @@ in {
       mkdir "$out"/bin
       ln -s "$out"/dotnet "$out"/bin/dotnet
 
-      mkdir "$packages"
-      # this roughly corresponds to the {sdk,aspnetcore}_packages in ../update.sh
-      cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}/*Microsoft.{NET.ILLink.Tasks,NETCore,DotNet,AspNetCore}.*.nupkg "$packages"
+      mkdir -p "$packages" "$artifacts"
+      cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
+      chmod +w -R "$artifacts"
 
-      cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid} "$artifacts"
+      local package
+
+      for package in "$artifacts"/*.nupkg; do
+        local copy
+        case "$(basename "$package")" in
+          *Microsoft.NET.* | \
+          *Microsoft.ILLink.* | \
+          *Microsoft.Tasks.* | \
+          *Microsoft.NETCore.* | \
+          *Microsoft.DotNet.* | \
+          *Microsoft.AspNetCore.*) copy=1 ;;
+          *) copy= ;;
+        esac
+        if [[ -n $copy ]]; then
+          echo copying "$package" to packages
+          xmlstarlet \
+            sel -t \
+            -m /_:package/_:metadata \
+            -v _:id -nl \
+            -v _:version -nl \
+            "$package"/*.nuspec \
+            | tr A-Z a-z | (
+            read id
+            read version
+            mkdir -p "$packages"/share/nuget/packages/"$id"
+            cp -r "$package" "$packages"/share/nuget/packages/"$id"/"$version"
+          )
+        fi
+      done
+
+      for package in "$artifacts"/{,SourceBuildReferencePackages/}*.nupkg; do
+        echo packing "$package" to artifacts
+        (cd "$package" && zip -rq0 "$package.tmp" .)
+        strip-nondeterminism --type zip "$package.tmp"
+        rm -r "$package"
+        mv "$package.tmp" "$package"
+      done
 
       runHook postInstall
     '';

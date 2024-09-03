@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivation
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , copyDesktopItems
@@ -159,13 +158,13 @@ in
         --replace-fail '@quarto@' ${quarto}
     '';
 
-    hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
+    hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
     # These dicts contain identically-named dict files, so we only keep the
     # -large versions in case of clashes
-    largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d.name) hunspellDictionaries;
-    otherDicts = with lib; filter
-      (d: !(hasAttr "dictFileName" d &&
-        elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
+    largeDicts = lib.filter (d: lib.hasInfix "-large-wordlist" d.name) hunspellDictionaries;
+    otherDicts = lib.filter
+      (d: !(lib.hasAttr "dictFileName" d &&
+        lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
       hunspellDictionaries;
     dictionaries = largeDicts ++ otherDicts;
 

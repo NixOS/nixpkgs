@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-/AXE1e02NfxQzJZd0QX6gJDjmFFmuUTOndulZElgIMI=";
   };
 
-  cargoSha256 = "sha256-iuhJYibyQ7hdeXzqCW2PLq7FiKnZp2VHyKT4qO/6vrU=";
+  cargoHash = "sha256-iuhJYibyQ7hdeXzqCW2PLq7FiKnZp2VHyKT4qO/6vrU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/azur1s/octofetch";
     description = "Github user information on terminal";
     license = licenses.mit;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
     mainProgram = "octofetch";
   };
 }

@@ -16,7 +16,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
         linkConfig.RequiredForOnline = "no";
         networkConfig = {
           Address = "192.168.${toString vlan}.${toString id}/24";
-          IPForward = "yes";
+          IPv4Forwarding = "yes";
+          IPv6Forwarding = "yes";
         };
       };
     };
@@ -57,14 +58,16 @@ in {
 
         networks."10-vrf1" = {
           matchConfig.Name = "vrf1";
-          networkConfig.IPForward = "yes";
+          networkConfig.IPv4Forwarding = "yes";
+          networkConfig.IPv6Forwarding = "yes";
           routes = [
             { Destination = "192.168.1.2"; Metric = 100; }
           ];
         };
         networks."10-vrf2" = {
           matchConfig.Name = "vrf2";
-          networkConfig.IPForward = "yes";
+          networkConfig.IPv4Forwarding = "yes";
+          networkConfig.IPv6Forwarding = "yes";
           routes = [
             { Destination = "192.168.2.3"; Metric = 100; }
           ];
@@ -76,7 +79,8 @@ in {
           networkConfig = {
             VRF = "vrf1";
             Address = "192.168.1.1/24";
-            IPForward = "yes";
+            IPv4Forwarding = "yes";
+            IPv6Forwarding = "yes";
           };
         };
         networks."10-eth2" = {
@@ -85,7 +89,8 @@ in {
           networkConfig = {
             VRF = "vrf2";
             Address = "192.168.2.1/24";
-            IPForward = "yes";
+            IPv4Forwarding = "yes";
+            IPv6Forwarding = "yes";
           };
         };
       };

@@ -26,6 +26,7 @@
 , libXv
 , libdrm
 , enableWayland ? stdenv.isLinux
+, wayland-scanner
 , wayland
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
@@ -49,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.24.3";
 
   outputs = [ "out" "dev" ];
+
+  separateDebugInfo = true;
 
   src = let
     inherit (finalAttrs) pname version;
@@ -74,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals enableWayland [
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [

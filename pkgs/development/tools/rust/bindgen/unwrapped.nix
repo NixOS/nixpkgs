@@ -1,6 +1,4 @@
 { lib, fetchCrate, rustPlatform, clang, rustfmt
-, runtimeShell
-, bash
 }:
 let
   # bindgen hardcodes rustfmt outputs that use nightly features
@@ -43,7 +41,7 @@ in rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ johntitor ralith ];
+    maintainers = with maintainers; [ johntitor ];
     mainProgram = "bindgen";
     platforms = platforms.unix;
   };

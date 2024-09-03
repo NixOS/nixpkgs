@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     changelog = "https://pagure.io/newt/blob/master/f/CHANGES";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
   };
 }

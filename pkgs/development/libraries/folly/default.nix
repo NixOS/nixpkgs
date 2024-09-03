@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, overrideSDK
 , fetchFromGitHub
 , boost
 , cmake

@@ -578,7 +578,7 @@
   "brooklyn": {
     "description": "Protocol independent software which forwards messages between various chat services.",
     "name": "brooklyn",
-    "project_path": "playground/utils/brookyln",
+    "project_path": "playground/utils/brooklyn",
     "repo_path": "unmaintained/brooklyn"
   },
   "brprint3d": {
@@ -761,6 +761,12 @@
     "project_path": "extragear/libs/croutons",
     "repo_path": "libraries/croutons"
   },
+  "crow-translate": {
+    "description": "Application that allows you to translate and speak text",
+    "name": "crow-translate",
+    "project_path": "kde/office/crow-translate",
+    "repo_path": "office/crow-translate"
+  },
   "cutehmi": {
     "description": "Open-source HMI (Human Machine Interface) software written in C++ and QML",
     "name": "cutehmi",
@@ -857,6 +863,30 @@
     "project_path": "documentation/docs-kdenlive-org",
     "repo_path": "documentation/docs-kdenlive-org"
   },
+  "documentation-docs-krita-org": {
+    "description": "The Krita Manual. Built with Sphinx by Jenkins, available online at https://docs.krita.org\r\n\r\nCheck the krita_manual_readme.rst on how to help us!",
+    "name": "documentation-docs-krita-org",
+    "project_path": "documentation/docs-krita-org",
+    "repo_path": "documentation/docs-krita-org"
+  },
+  "documentation-docs-plasma-mobile-org": {
+    "description": "Plasma Mobile documentation based on Sphinx",
+    "name": "documentation-docs-plasma-mobile-org",
+    "project_path": "documentation/docs-plasma-mobile-org",
+    "repo_path": "documentation/docs-plasma-mobile-org"
+  },
+  "documentation-hig-kde-org": {
+    "description": "KDE Human Interface Guidelines website",
+    "name": "documentation-hig-kde-org",
+    "project_path": "documentation/hig-kde-org",
+    "repo_path": "documentation/hig-kde-org"
+  },
+  "documentation-openraster-org": {
+    "description": "Sphinx setup for the Openraster.org (ORA specification) website",
+    "name": "documentation-openraster-org",
+    "project_path": "documentation/openraster-org",
+    "repo_path": "documentation/openraster-org"
+  },
   "dolphin": {
     "description": "File manager by KDE",
     "name": "dolphin",
@@ -950,7 +980,7 @@
   "eyeos-style": {
     "description": "KStyle for EyeOS",
     "name": "eyeos-style",
-    "project_path": "playground/base/eyeos-style",
+    "project_path": "unmaintained/eyeos-style",
     "repo_path": "unmaintained/eyeos-style"
   },
   "falkon": {
@@ -1346,7 +1376,7 @@
   "kapa": {
     "description": "KDE Advanced Personal Assistant",
     "name": "kapa",
-    "project_path": "playground/base/kapa",
+    "project_path": "unmaintained/kapa",
     "repo_path": "unmaintained/kapa"
   },
   "kapidox": {
@@ -1616,7 +1646,7 @@
   "kcwsh": {
     "description": "This project provides a terminal wrapper, both abstracted and using a Qt based sample backend. It is used to make a windows port of konsole possible.",
     "name": "kcwsh",
-    "project_path": "playground/base/kcwsh",
+    "project_path": "unmaintained/kcwsh",
     "repo_path": "unmaintained/kcwsh"
   },
   "kdav": {
@@ -1655,6 +1685,12 @@
     "project_path": "unmaintained/kde-baseapps",
     "repo_path": "unmaintained/kde-baseapps"
   },
+  "kde-br-promo": {
+    "description": "General repository for KDE Brazil promo material (artwork, templates, talks, etc)",
+    "name": "kde-br-promo",
+    "project_path": "others/kde-br-promo",
+    "repo_path": "unmaintained/kde-br-promo"
+  },
   "kde-build-metadata": {
     "description": "DEPRECATED - CONTENT MOVED TO https://invent.kde.org/sysadmin/repo-metadata/-/tree/master/dependencies",
     "name": "kde-build-metadata",
@@ -1662,7 +1698,7 @@
     "repo_path": "sysadmin/kde-build-metadata"
   },
   "kde-builder": {
-    "description": "Script to streamline the process of setting up and maintaining a development environment for KDE software.",
+    "description": "A tool to streamline the process of setting up and maintaining a development environment for KDE software.",
     "name": "kde-builder",
     "project_path": "playground/sdk/kde-builder",
     "repo_path": "sdk/kde-builder"
@@ -1706,8 +1742,14 @@
   "kde-now": {
     "description": "Google Now alternative for the Plasma Desktop",
     "name": "kde-now",
-    "project_path": "playground/base/kde-now",
+    "project_path": "unmaintained/kde-now",
     "repo_path": "unmaintained/kde-now"
+  },
+  "kde-promo": {
+    "description": "This is an easy method for organizing KDE Promo materials.",
+    "name": "kde-promo",
+    "project_path": "others/kde-promo",
+    "repo_path": "unmaintained/kde-promo"
   },
   "kde-ruleset": {
     "description": "svn2git rules files and support scripts for KDE's SVN-to-Git migration",
@@ -1724,7 +1766,7 @@
   "kde-vdg-extras": {
     "description": "Colour schemes, avatars and other additional visual assets for KDE Software created by the KDE VDG",
     "name": "kde-vdg-extras",
-    "project_path": "playground/artwork/kde-xdg-extras",
+    "project_path": "playground/artwork/kde-vdg-extras",
     "repo_path": "plasma/kde-vdg-extras"
   },
   "kde-workspace": {
@@ -2549,6 +2591,12 @@
     "project_path": "kde/kdeedu/kig",
     "repo_path": "education/kig"
   },
+  "kig-data": {
+    "description": "Course data for Kig, provided by KDE Edu.",
+    "name": "kig-data",
+    "project_path": "others/kde-edu-courses/kig-data",
+    "repo_path": "unmaintained/kig-data"
+  },
   "kigo": {
     "description": "Kigo is an open-source implementation of the popular Go game",
     "name": "kigo",
@@ -2816,7 +2864,7 @@
   "klevernotes": {
     "description": "A note-taking and management application using markdown.",
     "name": "klevernotes",
-    "project_path": "kdereview/klevernotes",
+    "project_path": "extragear/office/klevernotes",
     "repo_path": "office/klevernotes"
   },
   "klickety": {
@@ -3557,6 +3605,12 @@
     "project_path": "extragear/graphics/krita-extensions/krita-linesampler",
     "repo_path": "unmaintained/krita-linesampler"
   },
+  "krita-marketing": {
+    "description": "Working together to creating marketing and introduction documents for Krita",
+    "name": "krita-marketing",
+    "project_path": "others/krita-marketing",
+    "repo_path": "unmaintained/krita-marketing"
+  },
   "krita-pyramidalsharpening": {
     "description": "Use a pyramid to reconstruct a sharper image.",
     "name": "krita-pyramidalsharpening",
@@ -3983,6 +4037,12 @@
     "project_path": "kde/kdeedu/kturtle",
     "repo_path": "education/kturtle"
   },
+  "kturtle-data": {
+    "description": "Course data for KTurtle, provided by KDE Edu.",
+    "name": "kturtle-data",
+    "project_path": "others/kde-edu-courses/kturtle-data",
+    "repo_path": "unmaintained/kturtle-data"
+  },
   "ktutorial": {
     "description": "A library and an editor for interactive tutorials in KDE applications",
     "name": "ktutorial",
@@ -4072,6 +4132,12 @@
     "name": "kvkbd",
     "project_path": "unmaintained/kvkbd",
     "repo_path": "unmaintained/kvkbd"
+  },
+  "kvtml-data": {
+    "description": "Course data for Vocabulary trainers, provided by KDE Edu.",
+    "name": "kvtml-data",
+    "project_path": "others/kde-edu-courses/kvtml-data",
+    "repo_path": "unmaintained/kvtml-data"
   },
   "kwallet": {
     "description": "KWallet: Credential Storage",
@@ -4604,38 +4670,38 @@
   "maui-agenda": {
     "description": "Maui Calendar App",
     "name": "maui-agenda",
-    "project_path": "playground/base/agenda",
-    "repo_path": "maui/agenda"
+    "project_path": "playground/base/maui-agenda",
+    "repo_path": "maui/maui-agenda"
   },
   "maui-booth": {
     "description": "A convergent camera app",
     "name": "maui-booth",
     "project_path": "playground/base/maui-booth",
-    "repo_path": "maui/booth"
+    "repo_path": "maui/maui-booth"
   },
   "maui-clip": {
     "description": "Video player and video collection manager",
     "name": "maui-clip",
     "project_path": "playground/base/maui-clip",
-    "repo_path": "maui/clip"
+    "repo_path": "maui/maui-clip"
   },
   "maui-communicator": {
     "description": "Contacts and dialer application",
     "name": "maui-communicator",
     "project_path": "playground/base/maui-communicator",
-    "repo_path": "maui/communicator"
+    "repo_path": "maui/maui-communicator"
   },
   "maui-era": {
     "description": "Maui Clock app",
     "name": "maui-era",
-    "project_path": "playground/base/era",
-    "repo_path": "maui/era"
+    "project_path": "playground/base/maui-era",
+    "repo_path": "maui/maui-era"
   },
   "maui-fiery": {
     "description": "A convergent web browser",
     "name": "maui-fiery",
     "project_path": "playground/base/maui-fiery",
-    "repo_path": "maui/fiery"
+    "repo_path": "maui/maui-fiery"
   },
   "maui-libdavclient": {
     "description": "DAV protocol support for Maui applications",
@@ -4647,25 +4713,25 @@
     "description": "Image gallery application",
     "name": "maui-pix",
     "project_path": "playground/base/maui-pix",
-    "repo_path": "maui/pix"
+    "repo_path": "maui/maui-pix"
   },
   "maui-shelf": {
     "description": "Document and EBook collection manager",
     "name": "maui-shelf",
     "project_path": "playground/base/maui-shelf",
-    "repo_path": "maui/shelf"
+    "repo_path": "maui/maui-shelf"
   },
   "maui-station": {
     "description": "Convergent terminal emulator",
     "name": "maui-station",
     "project_path": "playground/base/maui-station",
-    "repo_path": "maui/station"
+    "repo_path": "maui/maui-station"
   },
   "maui-strike": {
     "description": "Strike is a simple minimal IDE for the Linux phones. Code, build, and run from the phone.",
     "name": "maui-strike",
-    "project_path": "playground/sdk/strike",
-    "repo_path": "maui/strike"
+    "project_path": "playground/sdk/maui-strike",
+    "repo_path": "maui/maui-strike"
   },
   "mauikit": {
     "description": "Templated convergent controls and multi-platform utilities for Maui applications",
@@ -4678,6 +4744,12 @@
     "name": "mauikit-accounts",
     "project_path": "playground/libs/mauikit-accounts",
     "repo_path": "maui/mauikit-accounts"
+  },
+  "mauikit-archiver": {
+    "description": "tQuick plugin for online archived/compressed files management",
+    "name": "mauikit-archiver",
+    "project_path": "playground/base/mauikit-archiver",
+    "repo_path": "maui/mauikit-archiver"
   },
   "mauikit-calendar": {
     "description": "Calendar support components for Maui applications",
@@ -4697,11 +4769,23 @@
     "project_path": "playground/libs/mauikit-filebrowsing",
     "repo_path": "maui/mauikit-filebrowsing"
   },
+  "mauikit-git": {
+    "description": "Git support components for Maui applications",
+    "name": "mauikit-git",
+    "project_path": "playground/base/mauikit-git",
+    "repo_path": "maui/mauikit-git"
+  },
   "mauikit-imagetools": {
     "description": "MauiKit Image Tools Components",
     "name": "mauikit-imagetools",
     "project_path": "playground/libs/mauikit-imagetools",
     "repo_path": "maui/mauikit-imagetools"
+  },
+  "mauikit-sdk": {
+    "description": "SDK for Maui applications",
+    "name": "mauikit-sdk",
+    "project_path": "playground/base/mauikit-sdk",
+    "repo_path": "maui/mauikit-sdk"
   },
   "mauikit-terminal": {
     "description": "Terminal support components for Maui applications",
@@ -4734,7 +4818,7 @@
     "repo_path": "system/melon"
   },
   "merkuro": {
-    "description": "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)",
+    "description": "Merkuro is a application suite designed to make handling your emails, calendars, contacts, and tasks simple.",
     "name": "merkuro",
     "project_path": "kde/pim/merkuro",
     "repo_path": "pim/merkuro"
@@ -4828,6 +4912,12 @@
     "name": "mycroft-plasmoid",
     "project_path": "extragear/utils/mycroft-plasmoid",
     "repo_path": "utilities/mycroft-plasmoid"
+  },
+  "mycroft-plasmoid-mobile": {
+    "description": "Plasma Mobile integration of different Mycroft AI services",
+    "name": "mycroft-plasmoid-mobile",
+    "project_path": "playground/utils/mycroft-plasmoid-mobile",
+    "repo_path": "plasma-mobile/mycroft-plasmoid-mobile"
   },
   "mycroft-ptt-client": {
     "description": "A simple push to talk client for mycroft based on libinput for USB remotes or external devices that wish to activate the mycroft listener with a button press for Plasma Bigscreen",
@@ -5036,44 +5126,8 @@
   "osx-patches": {
     "description": "Fixes for KDE problems that occur on Apple OS X",
     "name": "osx-patches",
-    "project_path": "playground/base/osx-patches",
+    "project_path": "unmaintained/osx-patches",
     "repo_path": "unmaintained/osx-patches"
-  },
-  "others-kde-br-promo": {
-    "description": "General repository for KDE Brazil promo material (artwork, templates, talks, etc)",
-    "name": "others-kde-br-promo",
-    "project_path": "others/kde-br-promo",
-    "repo_path": "unmaintained/kde-br-promo"
-  },
-  "others-kde-promo": {
-    "description": "This is an easy method for organizing KDE Promo materials.",
-    "name": "others-kde-promo",
-    "project_path": "others/kde-promo",
-    "repo_path": "unmaintained/kde-promo"
-  },
-  "others-kig-data": {
-    "description": "Course data for Kig, provided by KDE Edu.",
-    "name": "others-kig-data",
-    "project_path": "others/kde-edu-courses/kig-data",
-    "repo_path": "unmaintained/kig-data"
-  },
-  "others-krita-marketing": {
-    "description": "Working together to creating marketing and introduction documents for Krita",
-    "name": "others-krita-marketing",
-    "project_path": "others/krita-marketing",
-    "repo_path": "unmaintained/krita-marketing"
-  },
-  "others-kturtle-data": {
-    "description": "Course data for KTurtle, provided by KDE Edu.",
-    "name": "others-kturtle-data",
-    "project_path": "others/kde-edu-courses/kturtle-data",
-    "repo_path": "unmaintained/kturtle-data"
-  },
-  "others-kvtml-data": {
-    "description": "Course data for Vocabulary trainers, provided by KDE Edu.",
-    "name": "others-kvtml-data",
-    "project_path": "others/kde-edu-courses/kvtml-data",
-    "repo_path": "unmaintained/kvtml-data"
   },
   "oxygen": {
     "description": "The Oxygen Style for Qt/KDE Applications",
@@ -5285,6 +5339,12 @@
     "project_path": "unmaintained/pim-storage-service-manager",
     "repo_path": "unmaintained/pim-storage-service-manager"
   },
+  "pim-technical-roadmap": {
+    "description": "Project to track the PIM Technical Roadmap",
+    "name": "pim-technical-roadmap",
+    "project_path": "playground/pim/pim-technical-roadmap",
+    "repo_path": "pim/pim-technical-roadmap"
+  },
   "pimcommon": {
     "description": "Common library components for KDE PIM",
     "name": "pimcommon",
@@ -5306,7 +5366,7 @@
   "plasma-active-maliit": {
     "description": "QML plugin for the Maliit vitual keyboard using KDE Plasma components, intended to be used in Plasma Active",
     "name": "plasma-active-maliit",
-    "project_path": "playground/base/plasma-active-maliit",
+    "project_path": "unmaintained/plasma-active-maliit",
     "repo_path": "unmaintained/plasma-active-maliit"
   },
   "plasma-active-window-control": {
@@ -5434,12 +5494,6 @@
     "name": "plasma-mobile-sounds",
     "project_path": "playground/mobile/plasma-mobile-sounds",
     "repo_path": "plasma-mobile/plasma-mobile-sounds"
-  },
-  "plasma-mycroft-mobile": {
-    "description": "Plasma Mobile integration of different Mycroft AI services",
-    "name": "plasma-mycroft-mobile",
-    "project_path": "playground/utils/mycroft-plasmoid-mobile",
-    "repo_path": "plasma-mobile/mycroft-plasmoid-mobile"
   },
   "plasma-nano": {
     "description": "A minimal Plasma shell package",
@@ -5696,7 +5750,7 @@
   "publictransport": {
     "description": "PublicTransport Applets, Runner, Data Engine & Tools.",
     "name": "publictransport",
-    "project_path": "playground/base/publictransport",
+    "project_path": "unmaintained/publictransport",
     "repo_path": "unmaintained/publictransport"
   },
   "pulseaudio-qt": {
@@ -5768,7 +5822,7 @@
   "qmlweb": {
     "description": "QmlWeb JavaScript Library",
     "name": "qmlweb",
-    "project_path": "playground/www/qmlweb",
+    "project_path": "unmaintained/qmlweb",
     "repo_path": "unmaintained/qmlweb"
   },
   "qqc2-breeze-style": {
@@ -6176,7 +6230,7 @@
   "sprinter-plugins": {
     "description": "Plugins for Sprinter",
     "name": "sprinter-plugins",
-    "project_path": "playground/libs/sprinter-plugins",
+    "project_path": "unmaintained/sprinter-plugins",
     "repo_path": "unmaintained/sprinter-plugins"
   },
   "stackfolder": {
@@ -7055,18 +7109,6 @@
     "project_path": "websites/docs-kde-org",
     "repo_path": "websites/docs-kde-org"
   },
-  "websites-docs-krita-org": {
-    "description": "The Krita Manual. Built with Sphinx by Jenkins, available online at https://docs.krita.org\r\n\r\nCheck the krita_manual_readme.rst on how to help us!",
-    "name": "websites-docs-krita-org",
-    "project_path": "websites/docs-krita-org",
-    "repo_path": "documentation/docs-krita-org"
-  },
-  "websites-docs-plasma-mobile-org": {
-    "description": "Plasma Mobile documentation based on Sphinx",
-    "name": "websites-docs-plasma-mobile-org",
-    "project_path": "websites/docs-plasma-mobile-org",
-    "repo_path": "documentation/docs-plasma-mobile-org"
-  },
   "websites-download-kde-org": {
     "description": "MirrorBrain configuration, templates, etc. \u2014 download.kde.org",
     "name": "websites-download-kde-org",
@@ -7192,12 +7234,6 @@
     "name": "websites-haruna-kde-org",
     "project_path": "websites/haruna-kde-org",
     "repo_path": "websites/haruna-kde-org"
-  },
-  "websites-hig-kde-org": {
-    "description": "KDE Human Interface Guidelines website",
-    "name": "websites-hig-kde-org",
-    "project_path": "websites/hig-kde-org",
-    "repo_path": "documentation/hig-kde-org"
   },
   "websites-hugo-bootstrap": {
     "description": "Tooling to provide the Bootstrap CSS/JS framework for Hugo",
@@ -7565,12 +7601,6 @@
     "project_path": "websites/okular-kde-org",
     "repo_path": "websites/okular-kde-org"
   },
-  "websites-openraster-org": {
-    "description": "Sphinx setup for the Openraster.org (ORA specification) website",
-    "name": "websites-openraster-org",
-    "project_path": "websites/openraster-org",
-    "repo_path": "documentation/openraster-org"
-  },
   "websites-paste-kde-org": {
     "description": "KDE Paste, powered by the Sticky Notes pastebin engine",
     "name": "websites-paste-kde-org",
@@ -7881,133 +7911,133 @@
     "description": "Backend for the Frontend System of WIkiToLearn",
     "name": "wikitolearn-backend-for-frontend",
     "project_path": "playground/www/wikitolearn-backend-for-frontend",
-    "repo_path": "wikitolearn/wikitolearn-backend-for-frontend"
+    "repo_path": "unmaintained/wikitolearn-backend-for-frontend"
   },
   "wikitolearn-chapters-backend": {
     "description": "Chapters Backend for WikiToLearn",
     "name": "wikitolearn-chapters-backend",
     "project_path": "playground/www/wikitolearn-chapters-backend",
-    "repo_path": "wikitolearn/wikitolearn-chapters-backend"
+    "repo_path": "unmaintained/wikitolearn-chapters-backend"
   },
   "wikitolearn-content-migration": {
     "description": "Content Migration Assistants for WikiToLearn",
     "name": "wikitolearn-content-migration",
     "project_path": "playground/www/wikitolearn-content-migration",
-    "repo_path": "wikitolearn/wikitolearn-content-migration"
+    "repo_path": "unmaintained/wikitolearn-content-migration"
   },
   "wikitolearn-course-midtier": {
     "description": "Mid Tier Course Support for WikiToLearn",
     "name": "wikitolearn-course-midtier",
     "project_path": "playground/www/wikitolearn-course-midtier",
-    "repo_path": "wikitolearn/wikitolearn-course-midtier"
+    "repo_path": "unmaintained/wikitolearn-course-midtier"
   },
   "wikitolearn-courses-backend": {
     "description": "Courses Backend for WikiToLearn",
     "name": "wikitolearn-courses-backend",
     "project_path": "playground/www/wikitolearn-courses-backend",
-    "repo_path": "wikitolearn/wikitolearn-courses-backend"
+    "repo_path": "unmaintained/wikitolearn-courses-backend"
   },
   "wikitolearn-coursessecurity-backend": {
     "description": "Backend Components of Course Security system for WikiToLearn",
     "name": "wikitolearn-coursessecurity-backend",
     "project_path": "playground/www/wikitolearn-coursessecurity-backend",
-    "repo_path": "wikitolearn/wikitolearn-coursessecurity-backend"
+    "repo_path": "unmaintained/wikitolearn-coursessecurity-backend"
   },
   "wikitolearn-docs": {
     "description": "Documentation for WikiToLearn",
     "name": "wikitolearn-docs",
     "project_path": "playground/www/wikitolearn-docs",
-    "repo_path": "wikitolearn/wikitolearn-docs"
+    "repo_path": "unmaintained/wikitolearn-docs"
   },
   "wikitolearn-docs-atundo": {
     "description": "Atundo Documentation for WikiToLearn",
     "name": "wikitolearn-docs-atundo",
     "project_path": "playground/www/wikitolearn-docs-atundo",
-    "repo_path": "wikitolearn/wikitolearn-docs-atundo"
+    "repo_path": "unmaintained/wikitolearn-docs-atundo"
   },
   "wikitolearn-frontend": {
     "description": "Frontend for WikiToLearn",
     "name": "wikitolearn-frontend",
     "project_path": "playground/www/wikitolearn-frontend",
-    "repo_path": "wikitolearn/wikitolearn-frontend"
+    "repo_path": "unmaintained/wikitolearn-frontend"
   },
   "wikitolearn-keycloak-mediawiki-btypepassword-patch": {
     "description": "btypepassword patch for Keycloak's Mediawiki integration",
     "name": "wikitolearn-keycloak-mediawiki-btypepassword-patch",
     "project_path": "playground/www/wikitolearn-keycloak-mediawiki-btypepassword-patch",
-    "repo_path": "wikitolearn/wikitolearn-keycloak-mediawiki-btypepassword-patch"
+    "repo_path": "unmaintained/wikitolearn-keycloak-mediawiki-btypepassword-patch"
   },
   "wikitolearn-keycloak-theme": {
     "description": "Keycloak Theme used by WikiToLearn",
     "name": "wikitolearn-keycloak-theme",
     "project_path": "playground/www/wikitolearn-keycloak-theme",
-    "repo_path": "wikitolearn/wikitolearn-keycloak-theme"
+    "repo_path": "unmaintained/wikitolearn-keycloak-theme"
   },
   "wikitolearn-math-backend": {
     "description": "Math Backend for WikiToLearn",
     "name": "wikitolearn-math-backend",
     "project_path": "playground/www/wikitolearn-math-backend",
-    "repo_path": "wikitolearn/wikitolearn-math-backend"
+    "repo_path": "unmaintained/wikitolearn-math-backend"
   },
   "wikitolearn-math-midtier": {
     "description": "Mid Tier Math Support for WikiToLearn",
     "name": "wikitolearn-math-midtier",
     "project_path": "playground/www/wikitolearn-math-midtier",
-    "repo_path": "wikitolearn/wikitolearn-math-midtier"
+    "repo_path": "unmaintained/wikitolearn-math-midtier"
   },
   "wikitolearn-media-midtier": {
     "description": "Mid Tier Media Support for WikiToLearn",
     "name": "wikitolearn-media-midtier",
     "project_path": "playground/www/wikitolearn-media-midtier",
-    "repo_path": "wikitolearn/wikitolearn-media-midtier"
+    "repo_path": "unmaintained/wikitolearn-media-midtier"
   },
   "wikitolearn-offline-extension": {
     "description": "OfflineExtension is an extension for WikiToLearn that will add offline support to the current Wiki Editor.",
     "name": "wikitolearn-offline-extension",
     "project_path": "playground/www/wikitolearn-offline-extension",
-    "repo_path": "wikitolearn/wikitolearn-offline-extension"
+    "repo_path": "unmaintained/wikitolearn-offline-extension"
   },
   "wikitolearn-pages-backend": {
     "description": "Pages Backend for WikiToLearn",
     "name": "wikitolearn-pages-backend",
     "project_path": "playground/www/wikitolearn-pages-backend",
-    "repo_path": "wikitolearn/wikitolearn-pages-backend"
+    "repo_path": "unmaintained/wikitolearn-pages-backend"
   },
   "wikitolearn-pdf-backend": {
     "description": "PDF Backend for WikiToLearn",
     "name": "wikitolearn-pdf-backend",
     "project_path": "playground/www/wikitolearn-pdf-backend",
-    "repo_path": "wikitolearn/wikitolearn-pdf-backend"
+    "repo_path": "unmaintained/wikitolearn-pdf-backend"
   },
   "wikitolearn-pwa-gateway": {
     "description": "PWA Gateway for WikiToLearn",
     "name": "wikitolearn-pwa-gateway",
     "project_path": "playground/www/wikitolearn-pwa-gateway",
-    "repo_path": "wikitolearn/wikitolearn-pwa-gateway"
+    "repo_path": "unmaintained/wikitolearn-pwa-gateway"
   },
   "wikitolearn-sdk": {
     "description": "SDK for WikiToLearn",
     "name": "wikitolearn-sdk",
     "project_path": "playground/www/wikitolearn-sdk",
-    "repo_path": "wikitolearn/wikitolearn-sdk"
+    "repo_path": "unmaintained/wikitolearn-sdk"
   },
   "wikitolearn-shared-services": {
     "description": "Shared Services for WikiToLearn",
     "name": "wikitolearn-shared-services",
     "project_path": "playground/www/wikitolearn-shared-services",
-    "repo_path": "wikitolearn/wikitolearn-shared-services"
+    "repo_path": "unmaintained/wikitolearn-shared-services"
   },
   "wikitolearn-shibboleth-discovery": {
     "description": "Shibboleth discovery support for WikiToLearn",
     "name": "wikitolearn-shibboleth-discovery",
     "project_path": "playground/www/wikitolearn-shibboleth-discovery",
-    "repo_path": "wikitolearn/wikitolearn-shibboleth-discovery"
+    "repo_path": "unmaintained/wikitolearn-shibboleth-discovery"
   },
   "wikitolearn-translation": {
     "description": "Translation Support for WikiToLearn",
     "name": "wikitolearn-translation",
     "project_path": "playground/www/wikitolearn-translation",
-    "repo_path": "wikitolearn/wikitolearn-translation"
+    "repo_path": "unmaintained/wikitolearn-translation"
   },
   "xbuilder": {
     "description": "SDK allowing creation of packages for Plasma Mobile",
@@ -8030,7 +8060,7 @@
   "xsettings-kde": {
     "description": "Allows XSettings aware applications (all GTK+ applications) to be informed instantly of changes in KDE configuration, such as theme name, default font and so on.",
     "name": "xsettings-kde",
-    "project_path": "playground/base/xsettings-kde",
+    "project_path": "unmaintained/xsettings-kde",
     "repo_path": "unmaintained/xsettings-kde"
   },
   "xutils": {

@@ -11,6 +11,7 @@
 , orc
 , gstreamer
 , gobject-introspection
+, wayland-scanner
 , enableZbar ? false
 , faacSupport ? false
 , faac
@@ -59,6 +60,7 @@
 , neon
 , openal
 , openexr_3
+, openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264
 , openh264
 , libopenmpt
 , pango
@@ -81,7 +83,7 @@
 , mjpegtools
 , libGLU
 , libGL
-, addOpenGLRunpath
+, addDriverRunpath
 , gtk3
 , libintl
 , game-music-emu
@@ -125,7 +127,7 @@ stdenv.mkDerivation rec {
     # Add fallback paths for nvidia userspace libraries
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
     })
   ];
 
@@ -141,7 +143,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
-    wayland # for wayland-scanner
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -175,7 +177,6 @@ stdenv.mkDerivation rec {
     neon
     openal
     openexr_3
-    openh264
     rtmpdump
     pango
     soundtouch
@@ -211,6 +212,8 @@ stdenv.mkDerivation rec {
     bluez
   ] ++ lib.optionals microdnsSupport [
     libmicrodns
+  ] ++ lib.optionals openh264Support [
+    openh264
   ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
@@ -300,6 +303,7 @@ stdenv.mkDerivation rec {
     "-Daja=disabled" # should pass libajantv2 via aja-sdk-dir instead
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
+    (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
   ]
   ++ lib.optionals (!stdenv.isLinux) [

@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Toblerity/rtree";
     changelog = "https://github.com/Toblerity/rtree/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ bgamari ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ bgamari ];
   };
 }

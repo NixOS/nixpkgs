@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vmware/pyvmomi";
     changelog = "https://github.com/vmware/pyvmomi/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

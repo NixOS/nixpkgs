@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wal-g";
-  version = "3.0.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "sha256-k+GaOb+o5b+Rmggk+Wq3NscDS+fIvyK0e/EhX6UMlqM=";
+    sha256 = "sha256-r46svvUAMjZx+Oc/vTWet9iZLEiXkRFevUz4x0OixVI=";
   };
 
-  vendorHash = "sha256-ZsVqR02D4YmZP/tVz2UWpXa6fM7HU7Hi2CSnvuVx9UU=";
+  vendorHash = "sha256-CfXLeFQA7ix1DP+DB5qWQryS2tLFNlfZrA3OBYxIpjU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,6 +35,6 @@ buildGoModule rec {
     license = licenses.asl20;
     description = "Archival restoration tool for PostgreSQL";
     mainProgram = "wal-g";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

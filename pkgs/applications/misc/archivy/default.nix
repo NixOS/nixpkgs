@@ -5,6 +5,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       wtforms = super.wtforms.overridePythonAttrs (oldAttrs: rec {
         version = "2.3.1";

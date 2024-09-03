@@ -3,6 +3,7 @@
   azure-identity,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   microsoft-kiota-abstractions,
   microsoft-kiota-authentication-azure,
   microsoft-kiota-http,
@@ -12,12 +13,11 @@
   microsoft-kiota-serialization-text,
   msgraph-core,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "msgraph-sdk";
-  version = "1.4.0";
+  version = "1.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,10 +26,10 @@ buildPythonPackage rec {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-afnxk79duKzTykNnSHPE6lZhMkOt+9JhEskj/KjQpQI=";
+    hash = "sha256-Ty9e+xJ3+h4d0hmwtiZA9k5WMeuvT4iwNpR06KRpnfI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     azure-identity

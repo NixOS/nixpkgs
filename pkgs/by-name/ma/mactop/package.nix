@@ -25,7 +25,7 @@ buildGoModule rec {
   meta = {
     description = "Terminal-based monitoring tool 'top' designed to display real-time metrics for Apple Silicon chips";
     homepage = "https://github.com/context-labs/mactop";
-    changelog = "https://github.com/context-labs/mactop/releases/tag/${src.rev}";
+    changelog = "https://github.com/context-labs/mactop/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "mactop";

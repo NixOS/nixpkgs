@@ -72,6 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws/aws-xray-sdk-python";
     changelog = "https://github.com/aws/aws-xray-sdk-python/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

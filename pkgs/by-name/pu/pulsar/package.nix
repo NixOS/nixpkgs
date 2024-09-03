@@ -34,13 +34,13 @@
 
 let
   pname = "pulsar";
-  version = "1.117.0";
+  version = "1.120.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-iDQV4wcb+TY5qv8X6UW6PumK9+i5cn705ZzCSx5VgMs=";
+    x86_64-linux.hash = "sha256-35/ZMi6YsXs27icV3kXuKl3Kl8IHLLYbV0aO49qMJ2Q=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-NJc6CQA7ZCX70ui+QcVcLW2qxM05A93yqpiiW+YosGc=";
+    aarch64-linux.hash = "sha256-N1CAWeBHePd2KnnePEJQnvIKfIxal1RQ5UB8pxpVJCk=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
@@ -78,7 +78,7 @@ let
   hunspellTargetDirs = "$out/opt/Pulsar/resources/app.asar.unpacked/node_modules/spellchecker/vendor/hunspell_dictionaries";
   hunspellCopyCommands = lib.concatMapStringsSep "\n" (lang: "cp -r ${lang}/* ${hunspellTargetDirs};") hunspellDirs;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   src = with sourcesPath; fetchurl {
@@ -226,11 +226,13 @@ stdenv.mkDerivation rec {
       Designed to be deeply customizable, but still approachable using the default configuration.
     '';
     homepage = "https://github.com/pulsar-edit/pulsar";
+    changelog = "https://github.com/pulsar-edit/pulsar/blob/v${version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bryango ];
     knownVulnerabilities = [
+      # electron 12.2.3, efforts are in place to bump it
       "CVE-2023-5217"
       "CVE-2022-21718"
       "CVE-2022-29247"

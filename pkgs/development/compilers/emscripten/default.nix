@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.55";
+  version = "3.1.64";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-7tZEZ7NN1jJBHa9G5sRz/ZpWJvgnTJj4i5EvQMsGQH4=";
+    npmDepsHash = "sha256-2dsIuB6P+Z3wflIsn6QaZvjHeHHGzsFAI3GcP3SfiP4=";
 
     dontBuild = true;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-3SqbkXI8xn4Zj3bDLCegxslYH5m/PkF6n/pPfm5z5VA=";
+    hash = "sha256-AbO1b4pxZ7I6n1dRzxhLC7DnXIUnaCK9SbLy96Qxqr0=";
     rev = version;
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./0001-emulate-clang-sysroot-include-logic.patch;
-      resourceDir = "${llvmEnv}/lib/clang/18/";
+      resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
   ];
 
@@ -50,9 +50,6 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     patchShebangs .
-
-    # emscripten 3.1.55 requires LLVM tip-of-tree instead of LLVM 18
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 19/EXPECTED_LLVM_VERSION = 18/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py

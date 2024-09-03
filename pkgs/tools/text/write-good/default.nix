@@ -23,6 +23,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/btford/write-good";
     license = lib.licenses.mit;
     mainProgram = "write-good";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

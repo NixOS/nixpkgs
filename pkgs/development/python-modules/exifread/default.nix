@@ -19,6 +19,6 @@ buildPythonPackage rec {
     mainProgram = "EXIF.py";
     homepage = "https://github.com/ianare/exif-py";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

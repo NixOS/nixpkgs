@@ -1,44 +1,69 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, ocaml-ng, zlib, pcre, pcre2, neko, mbedtls_2, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  ocaml-ng,
+  zlib,
+  pcre,
+  pcre2,
+  neko,
+  mbedtls_2,
+  Security,
+}:
 let
-  ocamlDependencies = version:
-    if lib.versionAtLeast version "4.3"
-    then with ocaml-ng.ocamlPackages_4_14; [
-      ocaml
-      findlib
-      sedlex
-      xml-light
-      ptmap
-      camlp5
-      sha
-      dune_3
-      luv
-      extlib
-    ] else with ocaml-ng.ocamlPackages_4_10; [
-      ocaml
-      findlib
-      sedlex
-      xml-light
-      ptmap
-      camlp5
-      sha
-      dune_3
-      luv
-      extlib-1-7-7
-    ];
+  ocamlDependencies =
+    version:
+    if lib.versionAtLeast version "4.3" then
+      with ocaml-ng.ocamlPackages_4_14;
+      [
+        ocaml
+        findlib
+        sedlex
+        xml-light
+        ptmap
+        camlp5
+        sha
+        dune_3
+        luv
+        extlib
+      ]
+    else
+      with ocaml-ng.ocamlPackages_4_10;
+      [
+        ocaml
+        findlib
+        sedlex
+        xml-light
+        ptmap
+        camlp5
+        sha
+        dune_3
+        luv
+        extlib-1-7-7
+      ];
 
   defaultPatch = ''
     substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
       --replace '"neko"' '"${neko}/bin/neko"'
   '';
 
-  generic = { hash, version, prePatch ? defaultPatch }:
+  generic =
+    {
+      hash,
+      version,
+      prePatch ? defaultPatch,
+    }:
     stdenv.mkDerivation {
       pname = "haxe";
       inherit version;
 
-      buildInputs = [ zlib neko ]
-        ++ (if lib.versionAtLeast version "4.3" then [pcre2] else [pcre])
+      buildInputs =
+        [
+          zlib
+          neko
+        ]
+        ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
         ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
         ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.isDarwin) Security
         ++ ocamlDependencies version;
@@ -53,7 +78,10 @@ let
 
       inherit prePatch;
 
-      buildFlags = [ "all" "tools" ];
+      buildFlags = [
+        "all"
+        "tools"
+      ];
 
       installPhase = ''
         install -vd "$out/bin" "$out/lib/haxe/std"
@@ -111,12 +139,21 @@ let
       meta = with lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
-        license = with licenses; [ gpl2Plus mit ]; # based on upstream opam file
-        maintainers = [ maintainers.marcweber maintainers.locallycompact maintainers.logo ];
+        license = with licenses; [
+          gpl2Plus
+          mit
+        ]; # based on upstream opam file
+        maintainers = [
+          maintainers.marcweber
+          maintainers.locallycompact
+          maintainers.logo
+          maintainers.bwkam
+        ];
         platforms = platforms.linux ++ platforms.darwin;
       };
     };
-in {
+in
+{
   haxe_4_0 = generic {
     version = "4.0.5";
     hash = "sha256-Ck/py+tZS7dBu/uikhSLKBRNljpg2h5PARX0Btklozg=";
@@ -126,7 +163,7 @@ in {
     hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
   };
   haxe_4_3 = generic {
-    version = "4.3.4";
-    hash = "sha256-XGV4VG8nUofHGjHbtrLA+2kIpnnPqw5IlcNrP3EsL+Q=";
+    version = "4.3.6";
+    hash = "sha256-m/A0xxB3fw+syPmH1GPKKCcj0a2G/HMRKOu+FKrO5jQ=";
   };
 }

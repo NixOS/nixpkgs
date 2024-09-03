@@ -1,9 +1,10 @@
 {
+  lib,
+  codeium,
   fetchFromGitHub,
   melpaBuild,
-  pkgs,
-  lib,
   substituteAll,
+  gitUpdater,
 }:
 
 melpaBuild {
@@ -19,17 +20,21 @@ melpaBuild {
 
   patches = [
     (substituteAll {
-      src = ./codeium.el.patch;
-      codeium = "${pkgs.codeium}/bin/codeium_language_server";
+      src = ./0000-set-codeium-command-executable.patch;
+      codeium = lib.getExe' codeium "codeium_language_server";
     })
   ];
+
+  ignoreCompilationError = false;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Free, ultrafast Copilot alternative for Emacs";
     homepage = "https://github.com/Exafunction/codeium.el";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.running-grass ];
-    platforms = pkgs.codeium.meta.platforms;
+    inherit (codeium.meta) platforms;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 

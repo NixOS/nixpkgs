@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vim inspired text editor";
     license = licenses.publicDomain;
     mainProgram = "kak";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ philiptaron ];
     platforms = platforms.unix;
   };
 })

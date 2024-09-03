@@ -38,14 +38,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.267";
+  version = "0.269";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-H3idND2cC0KSGa9EIEVN2diticfM9r6FwRqQYkWmEM0=";
+    hash = "sha256-ECOPohrfAVz0Rx/oYBFJvo91FoS76RJuBzadfXoXB4c=";
   };
 
   outputs = [ "out" "tools" ];

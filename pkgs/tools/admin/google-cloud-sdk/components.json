@@ -5,7 +5,7 @@
         "checksum": "5a65179c291bc480696ca323d2f8c4874985458303eff8f233e16cdca4e88e6f",
         "contents_checksum": "038c999c7a7d70d5133eab7dc5868c4c3d0358431dad250f9833306af63016c8",
         "size": 800,
-        "source": "components/google-cloud-sdk-alpha-20240628141907.tar.gz",
+        "source": "components/google-cloud-sdk-alpha-20240719191136.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -22,8 +22,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20240628141907,
-        "version_string": "2024.06.28"
+        "build_number": 20240719191136,
+        "version_string": "2024.07.19"
       }
     },
     {
@@ -72,7 +72,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for Anthos clusters.",
-        "display_name": "anthos-auth"
+        "display_name": "anthos-auth (Platform Specific)"
       },
       "id": "anthos-auth-darwin-arm",
       "is_configuration": false,
@@ -105,7 +105,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for Anthos clusters.",
-        "display_name": "anthos-auth"
+        "display_name": "anthos-auth (Platform Specific)"
       },
       "id": "anthos-auth-darwin-x86_64",
       "is_configuration": false,
@@ -138,7 +138,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for Anthos clusters.",
-        "display_name": "anthos-auth"
+        "display_name": "anthos-auth (Platform Specific)"
       },
       "id": "anthos-auth-linux-arm",
       "is_configuration": false,
@@ -171,7 +171,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for Anthos clusters.",
-        "display_name": "anthos-auth"
+        "display_name": "anthos-auth (Platform Specific)"
       },
       "id": "anthos-auth-linux-x86_64",
       "is_configuration": false,
@@ -204,7 +204,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for Anthos clusters.",
-        "display_name": "anthos-auth"
+        "display_name": "anthos-auth (Platform Specific)"
       },
       "id": "anthos-auth-windows-x86_64",
       "is_configuration": false,
@@ -258,15 +258,15 @@
       "platform_required": false,
       "version": {
         "build_number": 0,
-        "version_string": "0.2.51"
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "e1541d0f19866acd7f02ba9b730cd8baa79927214f51586785d22bd6dd9d96d0",
-        "contents_checksum": "37b07e4ab5884c8fc3163cf3f868b04de6b8fa65391d3f677f4638ed67bc6989",
-        "size": 70641868,
-        "source": "components/google-cloud-sdk-anthoscli-darwin-arm-20240510142152.tar.gz",
+        "checksum": "b1dff49fd8a5270c26f1e86f53d802dd0f2a9523b22dd7a51d23739cc1702820",
+        "contents_checksum": "f8a87d4f50dd802ec2d3894b09db6ea3278bc609f3f6a280ca27d65a311b6ce3",
+        "size": 70632402,
+        "source": "components/google-cloud-sdk-anthoscli-darwin-arm-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -274,7 +274,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-darwin-arm",
       "is_configuration": false,
@@ -290,16 +290,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "a79426a22ede74645a49f4f6ea2ead54f4bbb978d297507f0a9cc827aca74d4a",
-        "contents_checksum": "9cc851b3b90a0148b2136d673ef3750a16337270ec8850f6ce5678975058a9d5",
-        "size": 74278294,
-        "source": "components/google-cloud-sdk-anthoscli-darwin-x86-20240510142152.tar.gz",
+        "checksum": "ebf7083c6bbb2d84bc09c6b715d21bb06420b216ff52e91062266e9dcede1f0c",
+        "contents_checksum": "1335273de68c0184e0a2215e8dff6f2a601dc745baee6b00df8b296ead9bbb45",
+        "size": 74268845,
+        "source": "components/google-cloud-sdk-anthoscli-darwin-x86-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -307,7 +307,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-darwin-x86",
       "is_configuration": false,
@@ -323,16 +323,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "e0f65a9d0bcc4051d1cba885e4693ba002d868e8adcbfe860489836754db371c",
-        "contents_checksum": "9cc851b3b90a0148b2136d673ef3750a16337270ec8850f6ce5678975058a9d5",
-        "size": 74278297,
-        "source": "components/google-cloud-sdk-anthoscli-darwin-x86_64-20240510142152.tar.gz",
+        "checksum": "95cd26d9e914a9005476c95f79da7eda04bf9c7756a2e68f1e78a66c16546e3b",
+        "contents_checksum": "1335273de68c0184e0a2215e8dff6f2a601dc745baee6b00df8b296ead9bbb45",
+        "size": 74268848,
+        "source": "components/google-cloud-sdk-anthoscli-darwin-x86_64-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -340,7 +340,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-darwin-x86_64",
       "is_configuration": false,
@@ -356,16 +356,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "a2a7bc2c5b398f38b611b9fb7f4cea1fdfc9a730c27812423fadf76302536ecd",
-        "contents_checksum": "5ebfe3a26d5efed23f391e280010b1162a11e75b9b8369ae3c82980bd0dec1dd",
-        "size": 67807780,
-        "source": "components/google-cloud-sdk-anthoscli-linux-arm-20240510142152.tar.gz",
+        "checksum": "298acae5cd9f3f5f95ef15b43b92b604cb17efdf0f712f39aad805f28a17c36f",
+        "contents_checksum": "22fb27fa7110f719b143ef1e19fac7638567a6d7d48a909be7dd1a08badaa12f",
+        "size": 67808715,
+        "source": "components/google-cloud-sdk-anthoscli-linux-arm-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -373,7 +373,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-linux-arm",
       "is_configuration": false,
@@ -389,16 +389,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "fc5bcbc677a7066d48686c2fc8962172f56f2795378b5b95b65342246a3e550a",
-        "contents_checksum": "0795a21686a22fc15bf78e6055ae1a64aa98f0309baec8ad3f6bad75aade8f60",
-        "size": 65502037,
-        "source": "components/google-cloud-sdk-anthoscli-linux-x86-20240510142152.tar.gz",
+        "checksum": "1bb549e7745fbb6c422a66a69de83a4100548ef289415fbb80bf3424a27f0a5c",
+        "contents_checksum": "a5cf333202e0e3dacd64388c7604752c539f484159e83fff46026990b4b466b5",
+        "size": 65492449,
+        "source": "components/google-cloud-sdk-anthoscli-linux-x86-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -406,7 +406,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-linux-x86",
       "is_configuration": false,
@@ -422,16 +422,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "812d5fbea1d143efc81bb692e0868532a97f9a670043498961345c6a3bc2ebb8",
-        "contents_checksum": "6f1752f2e2fd0f524b35f6087029c44a7a4d1dca7fdd40de9cf375603eea3b0f",
-        "size": 72538768,
-        "source": "components/google-cloud-sdk-anthoscli-linux-x86_64-20240510142152.tar.gz",
+        "checksum": "69a107eef662d4ef0930a51bca72b585e4314f7f962cb54987cc072d87ff6891",
+        "contents_checksum": "878c7420eb7909d6c7073182f6ec1b96ea2adc6995d4a90e2e47634dd4c629d9",
+        "size": 72509283,
+        "source": "components/google-cloud-sdk-anthoscli-linux-x86_64-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -439,7 +439,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-linux-x86_64",
       "is_configuration": false,
@@ -455,16 +455,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "45f187c48434cae0b00da5c210480e607bbf187f43a40b66683b47e19bbb373b",
-        "contents_checksum": "e160ef2c6526ad052dfa619298d44383c7f7502392a92b38929521a9ca858630",
-        "size": 67424078,
-        "source": "components/google-cloud-sdk-anthoscli-windows-x86-20240510142152.tar.gz",
+        "checksum": "7e7147b4ec408e9cd8142bd0d6eac6b89b2bc545aa8421f67eaed7e8b8a1e9f2",
+        "contents_checksum": "c8a284c543bc838e22ac0b9762c6e1a559db867025305f38974f818ef0c44c2f",
+        "size": 67415658,
+        "source": "components/google-cloud-sdk-anthoscli-windows-x86-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -472,7 +472,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-windows-x86",
       "is_configuration": false,
@@ -488,16 +488,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
       "data": {
-        "checksum": "cb5f588dffbb5d629588ea15e6fb44536a477c6bf55c5ae02a0a4ef65f1e433a",
-        "contents_checksum": "c5ce5039556b91366d6ed1e35aeb57b796f0b73c135ac29178ee615e43805209",
-        "size": 73168252,
-        "source": "components/google-cloud-sdk-anthoscli-windows-x86_64-20240510142152.tar.gz",
+        "checksum": "f42e9bb1e16ea90787d639b08cd05a7e750b19cf9849d99aefe09d0808d2445c",
+        "contents_checksum": "031e4309260adf22c8cff1ad368c280186117c0906539b8180b642f9ffc0fa18",
+        "size": 73148423,
+        "source": "components/google-cloud-sdk-anthoscli-windows-x86_64-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -505,7 +505,7 @@
       ],
       "details": {
         "description": "The cli for Anthos infrastructure.",
-        "display_name": "anthoscli"
+        "display_name": "anthoscli (Platform Specific)"
       },
       "id": "anthoscli-windows-x86_64",
       "is_configuration": false,
@@ -521,8 +521,8 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
-        "version_string": "0.2.51"
+        "build_number": 20240712142834,
+        "version_string": "0.2.52"
       }
     },
     {
@@ -578,7 +578,7 @@
       ],
       "details": {
         "description": "Provides the tools to develop Go applications on App Engine.",
-        "display_name": "App Engine Go Extensions"
+        "display_name": "App Engine Go Extensions (Platform Specific)"
       },
       "id": "app-engine-go-darwin-arm",
       "is_configuration": false,
@@ -613,7 +613,7 @@
       ],
       "details": {
         "description": "Provides the tools to develop Go applications on App Engine.",
-        "display_name": "App Engine Go Extensions"
+        "display_name": "App Engine Go Extensions (Platform Specific)"
       },
       "id": "app-engine-go-darwin-x86_64",
       "is_configuration": false,
@@ -648,7 +648,7 @@
       ],
       "details": {
         "description": "Provides the tools to develop Go applications on App Engine.",
-        "display_name": "App Engine Go Extensions"
+        "display_name": "App Engine Go Extensions (Platform Specific)"
       },
       "id": "app-engine-go-linux-arm",
       "is_configuration": false,
@@ -683,7 +683,7 @@
       ],
       "details": {
         "description": "Provides the tools to develop Go applications on App Engine.",
-        "display_name": "App Engine Go Extensions"
+        "display_name": "App Engine Go Extensions (Platform Specific)"
       },
       "id": "app-engine-go-linux-x86",
       "is_configuration": false,
@@ -718,7 +718,7 @@
       ],
       "details": {
         "description": "Provides the tools to develop Go applications on App Engine.",
-        "display_name": "App Engine Go Extensions"
+        "display_name": "App Engine Go Extensions (Platform Specific)"
       },
       "id": "app-engine-go-linux-x86_64",
       "is_configuration": false,
@@ -753,7 +753,7 @@
       ],
       "details": {
         "description": "Provides the tools to develop Go applications on App Engine.",
-        "display_name": "App Engine Go Extensions"
+        "display_name": "App Engine Go Extensions (Platform Specific)"
       },
       "id": "app-engine-go-windows-x86",
       "is_configuration": false,
@@ -788,7 +788,7 @@
       ],
       "details": {
         "description": "Provides the tools to develop Go applications on App Engine.",
-        "display_name": "App Engine Go Extensions"
+        "display_name": "App Engine Go Extensions (Platform Specific)"
       },
       "id": "app-engine-go-windows-x86_64",
       "is_configuration": false,
@@ -858,7 +858,7 @@
       ],
       "details": {
         "description": "Provides the gRPC Python library for App Engine.",
-        "display_name": "gRPC Python library"
+        "display_name": "gRPC Python library (Platform Specific)"
       },
       "id": "app-engine-grpc-darwin-x86_64",
       "is_configuration": false,
@@ -893,7 +893,7 @@
       ],
       "details": {
         "description": "Provides the gRPC Python library for App Engine.",
-        "display_name": "gRPC Python library"
+        "display_name": "gRPC Python library (Platform Specific)"
       },
       "id": "app-engine-grpc-linux-x86",
       "is_configuration": false,
@@ -928,7 +928,7 @@
       ],
       "details": {
         "description": "Provides the gRPC Python library for App Engine.",
-        "display_name": "gRPC Python library"
+        "display_name": "gRPC Python library (Platform Specific)"
       },
       "id": "app-engine-grpc-linux-x86_64",
       "is_configuration": false,
@@ -963,7 +963,7 @@
       ],
       "details": {
         "description": "Provides the gRPC Python library for App Engine.",
-        "display_name": "gRPC Python library"
+        "display_name": "gRPC Python library (Platform Specific)"
       },
       "id": "app-engine-grpc-windows-x86",
       "is_configuration": false,
@@ -998,7 +998,7 @@
       ],
       "details": {
         "description": "Provides the gRPC Python library for App Engine.",
-        "display_name": "gRPC Python library"
+        "display_name": "gRPC Python library (Platform Specific)"
       },
       "id": "app-engine-grpc-windows-x86_64",
       "is_configuration": false,
@@ -1020,10 +1020,10 @@
     },
     {
       "data": {
-        "checksum": "240d499b86cd1fcdd44475ea579b6af6ab258d9a69f7f3d64c3288e0311f02b2",
-        "contents_checksum": "d72e0f41dc3538983c78d6ee3c798f3f334da441a61205924ab2276748f70014",
-        "size": 133675565,
-        "source": "components/google-cloud-sdk-app-engine-java-20240607152945.tar.gz",
+        "checksum": "55d136d6b2f08b31a70183e5b80cd5b408d200aee316e87402b50eae2251c15d",
+        "contents_checksum": "ee286f0c07a3b33f0193a5ba439375f221c5d42190df5f5e17333d6b60ae3f1b",
+        "size": 134048645,
+        "source": "components/google-cloud-sdk-app-engine-java-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1041,103 +1041,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20240607152945,
-        "version_string": "2.0.28"
-      }
-    },
-    {
-      "dependencies": [
-        "app-engine-php-darwin",
-        "app-engine-php-windows",
-        "app-engine-python",
-        "core"
-      ],
-      "details": {
-        "description": "Provides the PHP runtimes for the dev_appserver.",
-        "display_name": "gcloud app PHP Extensions"
-      },
-      "id": "app-engine-php",
-      "is_configuration": false,
-      "is_hidden": false,
-      "is_required": false,
-      "platform": {
-        "operating_systems": [
-          "CYGWIN",
-          "MACOSX",
-          "MSYS",
-          "WINDOWS"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 0,
-        "version_string": ""
-      }
-    },
-    {
-      "data": {
-        "checksum": "9d6d9d232739c8de9dcd7b35b7f8021136138e7892697229d3c04cb4a7aab494",
-        "contents_checksum": "5682195caf966a52c95bb865a3c2b607237ed97c36952b479ef358370401aaeb",
-        "size": 22985548,
-        "source": "components/google-cloud-sdk-app-engine-php-darwin-20170915105257.tar.gz",
-        "type": "tar"
-      },
-      "dependencies": [
-        "app-engine-php",
-        "app-engine-python",
-        "core"
-      ],
-      "details": {
-        "description": "Provides the PHP runtimes for the dev_appserver.",
-        "display_name": "gcloud app PHP Extensions"
-      },
-      "id": "app-engine-php-darwin",
-      "is_configuration": false,
-      "is_hidden": true,
-      "is_required": false,
-      "platform": {
-        "operating_systems": [
-          "MACOSX"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 20170915105257,
-        "version_string": "2017.09.15"
-      }
-    },
-    {
-      "data": {
-        "checksum": "c1f560a660d36d2bca873c01ca37a0790888713b2e056dfeeff3ea03f037235c",
-        "contents_checksum": "d11e66fd28ac784e4ef57b315bf626f01974db5cdbbc5e69f8e2689d4dc4de55",
-        "size": 20074666,
-        "source": "components/google-cloud-sdk-app-engine-php-windows-20170915105257.tar.gz",
-        "type": "tar"
-      },
-      "dependencies": [
-        "app-engine-php",
-        "app-engine-python",
-        "core"
-      ],
-      "details": {
-        "description": "Provides the PHP runtimes for the dev_appserver.",
-        "display_name": "gcloud app PHP Extensions"
-      },
-      "id": "app-engine-php-windows",
-      "is_configuration": false,
-      "is_hidden": true,
-      "is_required": false,
-      "platform": {
-        "operating_systems": [
-          "CYGWIN",
-          "MSYS",
-          "WINDOWS"
-        ]
-      },
-      "platform_required": false,
-      "version": {
-        "build_number": 20170915105257,
-        "version_string": "2017.09.15"
+        "build_number": 20240712142834,
+        "version_string": "2.0.29"
       }
     },
     {
@@ -1242,7 +1147,7 @@
       ],
       "details": {
         "description": "Provides appctl executable.",
-        "display_name": "Appctl"
+        "display_name": "Appctl (Platform Specific)"
       },
       "id": "appctl-darwin-x86",
       "is_configuration": false,
@@ -1275,7 +1180,7 @@
       ],
       "details": {
         "description": "Provides appctl executable.",
-        "display_name": "Appctl"
+        "display_name": "Appctl (Platform Specific)"
       },
       "id": "appctl-darwin-x86_64",
       "is_configuration": false,
@@ -1308,7 +1213,7 @@
       ],
       "details": {
         "description": "Provides appctl executable.",
-        "display_name": "Appctl"
+        "display_name": "Appctl (Platform Specific)"
       },
       "id": "appctl-linux-x86",
       "is_configuration": false,
@@ -1341,7 +1246,7 @@
       ],
       "details": {
         "description": "Provides appctl executable.",
-        "display_name": "Appctl"
+        "display_name": "Appctl (Platform Specific)"
       },
       "id": "appctl-linux-x86_64",
       "is_configuration": false,
@@ -1374,7 +1279,7 @@
       ],
       "details": {
         "description": "Provides appctl executable.",
-        "display_name": "Appctl"
+        "display_name": "Appctl (Platform Specific)"
       },
       "id": "appctl-windows-x86",
       "is_configuration": false,
@@ -1407,7 +1312,7 @@
       ],
       "details": {
         "description": "Provides appctl executable.",
-        "display_name": "Appctl"
+        "display_name": "Appctl (Platform Specific)"
       },
       "id": "appctl-windows-x86_64",
       "is_configuration": false,
@@ -1432,7 +1337,7 @@
         "checksum": "707d412854a14450b4fddee199d258e75946fe51b44eb2980c8cd7e274c15760",
         "contents_checksum": "0b4e9d8e6394dc841aece07ca4da91920a460cbd7ec22495be4a2b4f46635b4d",
         "size": 797,
-        "source": "components/google-cloud-sdk-beta-20240628141907.tar.gz",
+        "source": "components/google-cloud-sdk-beta-20240719191136.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1449,8 +1354,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20240628141907,
-        "version_string": "2024.06.28"
+        "build_number": 20240719191136,
+        "version_string": "2024.07.19"
       }
     },
     {
@@ -1505,7 +1410,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-darwin-arm",
       "is_configuration": false,
@@ -1539,7 +1444,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-darwin-x86",
       "is_configuration": false,
@@ -1573,7 +1478,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-darwin-x86_64",
       "is_configuration": false,
@@ -1607,7 +1512,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-linux-arm",
       "is_configuration": false,
@@ -1641,7 +1546,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-linux-x86",
       "is_configuration": false,
@@ -1675,7 +1580,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-linux-x86_64",
       "is_configuration": false,
@@ -1709,7 +1614,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-windows-x86",
       "is_configuration": false,
@@ -1743,7 +1648,7 @@
       ],
       "details": {
         "description": "Provides a tool for local Cloud Bigtable emulation.",
-        "display_name": "Cloud Bigtable Emulator"
+        "display_name": "Cloud Bigtable Emulator (Platform Specific)"
       },
       "id": "bigtable-windows-x86_64",
       "is_configuration": false,
@@ -1765,10 +1670,10 @@
     },
     {
       "data": {
-        "checksum": "dc8a494e45b8fb7ed07610415670c4c24d790996c9704ea4de134f5ced656eed",
-        "contents_checksum": "fa75ed5c31aec233af4d26393b6ae73335c66906079df0040bf97716fd7f61a6",
-        "size": 1805684,
-        "source": "components/google-cloud-sdk-bq-20240628141907.tar.gz",
+        "checksum": "64bb21d9904b8d0a8659268dcd8ad837f242dfb9a68520aa1a4961e148ebf978",
+        "contents_checksum": "afc3a525e40185957652ca0fc81d466d989c3af243425644d2863734acc583e5",
+        "size": 1808321,
+        "source": "components/google-cloud-sdk-bq-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -1787,8 +1692,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20240628141907,
-        "version_string": "2.1.6"
+        "build_number": 20240712142834,
+        "version_string": "2.1.7"
       }
     },
     {
@@ -1901,7 +1806,7 @@
       ],
       "details": {
         "description": "Provides stand-alone Python 2.7 install.",
-        "display_name": "Bundled Python 2.7"
+        "display_name": "Bundled Python 2.7 (Platform Specific)"
       },
       "id": "bundled-python-windows-x86",
       "is_configuration": false,
@@ -1936,7 +1841,7 @@
       ],
       "details": {
         "description": "Provides stand-alone Python 2.7 install.",
-        "display_name": "Bundled Python 2.7"
+        "display_name": "Bundled Python 2.7 (Platform Specific)"
       },
       "id": "bundled-python-windows-x86_64",
       "is_configuration": false,
@@ -2014,10 +1919,10 @@
     },
     {
       "data": {
-        "checksum": "400089c6607993c7b9e5f06616208e592a3a9892589e8c10167f70bfabdb5a2b",
-        "contents_checksum": "e147b6037ab53942f556f7914ce786005473f41d8b98c24b2d2ab9342e366b31",
-        "size": 78697278,
-        "source": "components/google-cloud-sdk-bundled-python3-unix-linux-x86_64-20240510142152.tar.gz",
+        "checksum": "fb1f862cee4cbc9231d9da6be07dc616b9d5f036c7484afced3e0792ed685915",
+        "contents_checksum": "39e7f47fac5b5738596d5b43c8dda500b684cfe85f14f0c7cd37f024e9b7da7c",
+        "size": 77646096,
+        "source": "components/google-cloud-sdk-bundled-python3-unix-linux-x86_64-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -2026,7 +1931,7 @@
       ],
       "details": {
         "description": "Provides stand-alone Python 3.11.8 installation for UNIX.",
-        "display_name": "Bundled Python 3.11"
+        "display_name": "Bundled Python 3.11 (Platform Specific)"
       },
       "id": "bundled-python3-unix-linux-x86_64",
       "is_configuration": false,
@@ -2042,7 +1947,7 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240510142152,
+        "build_number": 20240712142834,
         "version_string": "3.11.8"
       }
     },
@@ -2060,7 +1965,7 @@
       ],
       "details": {
         "description": "Provides stand-alone Python 3.11 install.",
-        "display_name": "Bundled Python 3.11"
+        "display_name": "Bundled Python 3.11 (Platform Specific)"
       },
       "id": "bundled-python3-windows-x86",
       "is_configuration": false,
@@ -2094,7 +1999,7 @@
       ],
       "details": {
         "description": "Provides stand-alone Python 3.11 install.",
-        "display_name": "Bundled Python 3.11"
+        "display_name": "Bundled Python 3.11 (Platform Specific)"
       },
       "id": "bundled-python3-windows-x86_64",
       "is_configuration": false,
@@ -2164,7 +2069,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-darwin-arm",
       "is_configuration": false,
@@ -2197,7 +2102,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-darwin-x86",
       "is_configuration": false,
@@ -2230,7 +2135,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-darwin-x86_64",
       "is_configuration": false,
@@ -2263,7 +2168,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-linux-arm",
       "is_configuration": false,
@@ -2296,7 +2201,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-linux-x86",
       "is_configuration": false,
@@ -2329,7 +2234,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-linux-x86_64",
       "is_configuration": false,
@@ -2362,7 +2267,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-windows-x86",
       "is_configuration": false,
@@ -2395,7 +2300,7 @@
       ],
       "details": {
         "description": "Provides the cbt tool for interacting with the Cloud Bigtable service.",
-        "display_name": "Cloud Bigtable Command Line Tool"
+        "display_name": "Cloud Bigtable Command Line Tool (Platform Specific)"
       },
       "id": "cbt-windows-x86_64",
       "is_configuration": false,
@@ -2458,7 +2363,7 @@
       ],
       "details": {
         "description": "Provides cloud-build-local executable.  See https://github.com/GoogleCloudPlatform/cloud-build-local",
-        "display_name": "Google Cloud Build Local Builder"
+        "display_name": "Google Cloud Build Local Builder (Platform Specific)"
       },
       "id": "cloud-build-local-darwin-x86_64",
       "is_configuration": false,
@@ -2491,7 +2396,7 @@
       ],
       "details": {
         "description": "Provides cloud-build-local executable.  See https://github.com/GoogleCloudPlatform/cloud-build-local",
-        "display_name": "Google Cloud Build Local Builder"
+        "display_name": "Google Cloud Build Local Builder (Platform Specific)"
       },
       "id": "cloud-build-local-linux-x86",
       "is_configuration": false,
@@ -2524,7 +2429,7 @@
       ],
       "details": {
         "description": "Provides cloud-build-local executable.  See https://github.com/GoogleCloudPlatform/cloud-build-local",
-        "display_name": "Google Cloud Build Local Builder"
+        "display_name": "Google Cloud Build Local Builder (Platform Specific)"
       },
       "id": "cloud-build-local-linux-x86_64",
       "is_configuration": false,
@@ -2642,7 +2547,7 @@
       ],
       "details": {
         "description": "Provides cloud-run-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-run-proxy",
-        "display_name": "Cloud Run Proxy"
+        "display_name": "Cloud Run Proxy (Platform Specific)"
       },
       "id": "cloud-run-proxy-darwin-arm",
       "is_configuration": false,
@@ -2675,7 +2580,7 @@
       ],
       "details": {
         "description": "Provides cloud-run-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-run-proxy",
-        "display_name": "Cloud Run Proxy"
+        "display_name": "Cloud Run Proxy (Platform Specific)"
       },
       "id": "cloud-run-proxy-darwin-x86_64",
       "is_configuration": false,
@@ -2708,7 +2613,7 @@
       ],
       "details": {
         "description": "Provides cloud-run-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-run-proxy",
-        "display_name": "Cloud Run Proxy"
+        "display_name": "Cloud Run Proxy (Platform Specific)"
       },
       "id": "cloud-run-proxy-linux-arm",
       "is_configuration": false,
@@ -2741,7 +2646,7 @@
       ],
       "details": {
         "description": "Provides cloud-run-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-run-proxy",
-        "display_name": "Cloud Run Proxy"
+        "display_name": "Cloud Run Proxy (Platform Specific)"
       },
       "id": "cloud-run-proxy-linux-x86_64",
       "is_configuration": false,
@@ -2774,7 +2679,7 @@
       ],
       "details": {
         "description": "Provides cloud-run-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-run-proxy",
-        "display_name": "Cloud Run Proxy"
+        "display_name": "Cloud Run Proxy (Platform Specific)"
       },
       "id": "cloud-run-proxy-windows-x86_64",
       "is_configuration": false,
@@ -2835,7 +2740,7 @@
       ],
       "details": {
         "description": "Provides a local emulator of Cloud Spanner.",
-        "display_name": "Cloud Spanner Emulator"
+        "display_name": "Cloud Spanner Emulator (Platform Specific)"
       },
       "id": "cloud-spanner-emulator-linux-x86_64",
       "is_configuration": false,
@@ -2904,7 +2809,7 @@
       ],
       "details": {
         "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
-        "display_name": "Cloud SQL Proxy v2"
+        "display_name": "Cloud SQL Proxy v2 (Platform Specific)"
       },
       "id": "cloud-sql-proxy-darwin-arm",
       "is_configuration": false,
@@ -2937,7 +2842,7 @@
       ],
       "details": {
         "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
-        "display_name": "Cloud SQL Proxy v2"
+        "display_name": "Cloud SQL Proxy v2 (Platform Specific)"
       },
       "id": "cloud-sql-proxy-darwin-x86_64",
       "is_configuration": false,
@@ -2970,7 +2875,7 @@
       ],
       "details": {
         "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
-        "display_name": "Cloud SQL Proxy v2"
+        "display_name": "Cloud SQL Proxy v2 (Platform Specific)"
       },
       "id": "cloud-sql-proxy-linux-arm",
       "is_configuration": false,
@@ -3003,7 +2908,7 @@
       ],
       "details": {
         "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
-        "display_name": "Cloud SQL Proxy v2"
+        "display_name": "Cloud SQL Proxy v2 (Platform Specific)"
       },
       "id": "cloud-sql-proxy-linux-x86",
       "is_configuration": false,
@@ -3036,7 +2941,7 @@
       ],
       "details": {
         "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
-        "display_name": "Cloud SQL Proxy v2"
+        "display_name": "Cloud SQL Proxy v2 (Platform Specific)"
       },
       "id": "cloud-sql-proxy-linux-x86_64",
       "is_configuration": false,
@@ -3069,7 +2974,7 @@
       ],
       "details": {
         "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
-        "display_name": "Cloud SQL Proxy v2"
+        "display_name": "Cloud SQL Proxy v2 (Platform Specific)"
       },
       "id": "cloud-sql-proxy-windows-x86",
       "is_configuration": false,
@@ -3102,7 +3007,7 @@
       ],
       "details": {
         "description": "Provides cloud-sql-proxy executable. See https://github.com/GoogleCloudPlatform/cloud-sql-proxy",
-        "display_name": "Cloud SQL Proxy v2"
+        "display_name": "Cloud SQL Proxy v2 (Platform Specific)"
       },
       "id": "cloud-sql-proxy-windows-x86_64",
       "is_configuration": false,
@@ -3171,7 +3076,7 @@
       ],
       "details": {
         "description": "Provides cloud_sql_proxy executable. See https://github.com/GoogleCloudPlatform/cloudsql-proxy",
-        "display_name": "Cloud SQL Proxy"
+        "display_name": "Cloud SQL Proxy (Platform Specific)"
       },
       "id": "cloud_sql_proxy-darwin-arm",
       "is_configuration": false,
@@ -3204,7 +3109,7 @@
       ],
       "details": {
         "description": "Provides cloud_sql_proxy executable. See https://github.com/GoogleCloudPlatform/cloudsql-proxy",
-        "display_name": "Cloud SQL Proxy"
+        "display_name": "Cloud SQL Proxy (Platform Specific)"
       },
       "id": "cloud_sql_proxy-darwin-x86_64",
       "is_configuration": false,
@@ -3237,7 +3142,7 @@
       ],
       "details": {
         "description": "Provides cloud_sql_proxy executable. See https://github.com/GoogleCloudPlatform/cloudsql-proxy",
-        "display_name": "Cloud SQL Proxy"
+        "display_name": "Cloud SQL Proxy (Platform Specific)"
       },
       "id": "cloud_sql_proxy-linux-arm",
       "is_configuration": false,
@@ -3270,7 +3175,7 @@
       ],
       "details": {
         "description": "Provides cloud_sql_proxy executable. See https://github.com/GoogleCloudPlatform/cloudsql-proxy",
-        "display_name": "Cloud SQL Proxy"
+        "display_name": "Cloud SQL Proxy (Platform Specific)"
       },
       "id": "cloud_sql_proxy-linux-x86",
       "is_configuration": false,
@@ -3303,7 +3208,7 @@
       ],
       "details": {
         "description": "Provides cloud_sql_proxy executable. See https://github.com/GoogleCloudPlatform/cloudsql-proxy",
-        "display_name": "Cloud SQL Proxy"
+        "display_name": "Cloud SQL Proxy (Platform Specific)"
       },
       "id": "cloud_sql_proxy-linux-x86_64",
       "is_configuration": false,
@@ -3336,7 +3241,7 @@
       ],
       "details": {
         "description": "Provides cloud_sql_proxy executable. See https://github.com/GoogleCloudPlatform/cloudsql-proxy",
-        "display_name": "Cloud SQL Proxy"
+        "display_name": "Cloud SQL Proxy (Platform Specific)"
       },
       "id": "cloud_sql_proxy-windows-x86",
       "is_configuration": false,
@@ -3369,7 +3274,7 @@
       ],
       "details": {
         "description": "Provides cloud_sql_proxy executable. See https://github.com/GoogleCloudPlatform/cloudsql-proxy",
-        "display_name": "Cloud SQL Proxy"
+        "display_name": "Cloud SQL Proxy (Platform Specific)"
       },
       "id": "cloud_sql_proxy-windows-x86_64",
       "is_configuration": false,
@@ -3435,7 +3340,7 @@
       ],
       "details": {
         "description": "Google Cloud Config Connector. See https://cloud.google.com/config-connector/docs/overview",
-        "display_name": "config-connector"
+        "display_name": "config-connector (Platform Specific)"
       },
       "id": "config-connector-darwin-arm",
       "is_configuration": false,
@@ -3468,7 +3373,7 @@
       ],
       "details": {
         "description": "Google Cloud Config Connector. See https://cloud.google.com/config-connector/docs/overview",
-        "display_name": "config-connector"
+        "display_name": "config-connector (Platform Specific)"
       },
       "id": "config-connector-darwin-x86_64",
       "is_configuration": false,
@@ -3501,7 +3406,7 @@
       ],
       "details": {
         "description": "Google Cloud Config Connector. See https://cloud.google.com/config-connector/docs/overview",
-        "display_name": "config-connector"
+        "display_name": "config-connector (Platform Specific)"
       },
       "id": "config-connector-linux-arm",
       "is_configuration": false,
@@ -3534,7 +3439,7 @@
       ],
       "details": {
         "description": "Google Cloud Config Connector. See https://cloud.google.com/config-connector/docs/overview",
-        "display_name": "config-connector"
+        "display_name": "config-connector (Platform Specific)"
       },
       "id": "config-connector-linux-x86_64",
       "is_configuration": false,
@@ -3567,7 +3472,7 @@
       ],
       "details": {
         "description": "Google Cloud Config Connector. See https://cloud.google.com/config-connector/docs/overview",
-        "display_name": "config-connector"
+        "display_name": "config-connector (Platform Specific)"
       },
       "id": "config-connector-windows-x86_64",
       "is_configuration": false,
@@ -3589,10 +3494,10 @@
     },
     {
       "data": {
-        "checksum": "c85aa9d08f077efdaa4154c8b25b05bcc43652341172876778b6c1006c0eb227",
-        "contents_checksum": "f04fb4fc18ab33e87bfc87d5fcd7af2a1a4eeb98f5a17a5bd9f280a6728b4806",
-        "size": 19841449,
-        "source": "components/google-cloud-sdk-core-20240628141907.tar.gz",
+        "checksum": "ae3adb2a9e4ccfba6b0d55457ba91e349a8cbeec5d667556c1e4a21109420394",
+        "contents_checksum": "8e708148fcae335c224df37c7c45ff44278fa12bb0b9d42ef396c61962ee6309",
+        "size": 20088401,
+        "source": "components/google-cloud-sdk-core-20240719191136.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -3613,8 +3518,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20240628141907,
-        "version_string": "2024.06.28"
+        "build_number": 20240719191136,
+        "version_string": "2024.07.19"
       }
     },
     {
@@ -3735,7 +3640,7 @@
       ],
       "details": {
         "description": "Provides docker-credential-gcr executable. See https://github.com/GoogleCloudPlatform/docker-credential-gcr",
-        "display_name": "Google Container Registry's Docker credential helper"
+        "display_name": "Google Container Registry's Docker credential helper (Platform Specific)"
       },
       "id": "docker-credential-gcr-darwin-x86",
       "is_configuration": false,
@@ -3768,7 +3673,7 @@
       ],
       "details": {
         "description": "Provides docker-credential-gcr executable. See https://github.com/GoogleCloudPlatform/docker-credential-gcr",
-        "display_name": "Google Container Registry's Docker credential helper"
+        "display_name": "Google Container Registry's Docker credential helper (Platform Specific)"
       },
       "id": "docker-credential-gcr-darwin-x86_64",
       "is_configuration": false,
@@ -3801,7 +3706,7 @@
       ],
       "details": {
         "description": "Provides docker-credential-gcr executable. See https://github.com/GoogleCloudPlatform/docker-credential-gcr",
-        "display_name": "Google Container Registry's Docker credential helper"
+        "display_name": "Google Container Registry's Docker credential helper (Platform Specific)"
       },
       "id": "docker-credential-gcr-linux-arm",
       "is_configuration": false,
@@ -3834,7 +3739,7 @@
       ],
       "details": {
         "description": "Provides docker-credential-gcr executable. See https://github.com/GoogleCloudPlatform/docker-credential-gcr",
-        "display_name": "Google Container Registry's Docker credential helper"
+        "display_name": "Google Container Registry's Docker credential helper (Platform Specific)"
       },
       "id": "docker-credential-gcr-linux-x86",
       "is_configuration": false,
@@ -3867,7 +3772,7 @@
       ],
       "details": {
         "description": "Provides docker-credential-gcr executable. See https://github.com/GoogleCloudPlatform/docker-credential-gcr",
-        "display_name": "Google Container Registry's Docker credential helper"
+        "display_name": "Google Container Registry's Docker credential helper (Platform Specific)"
       },
       "id": "docker-credential-gcr-linux-x86_64",
       "is_configuration": false,
@@ -3900,7 +3805,7 @@
       ],
       "details": {
         "description": "Provides docker-credential-gcr executable. See https://github.com/GoogleCloudPlatform/docker-credential-gcr",
-        "display_name": "Google Container Registry's Docker credential helper"
+        "display_name": "Google Container Registry's Docker credential helper (Platform Specific)"
       },
       "id": "docker-credential-gcr-windows-x86",
       "is_configuration": false,
@@ -3933,7 +3838,7 @@
       ],
       "details": {
         "description": "Provides docker-credential-gcr executable. See https://github.com/GoogleCloudPlatform/docker-credential-gcr",
-        "display_name": "Google Container Registry's Docker credential helper"
+        "display_name": "Google Container Registry's Docker credential helper (Platform Specific)"
       },
       "id": "docker-credential-gcr-windows-x86_64",
       "is_configuration": false,
@@ -3998,7 +3903,7 @@
       ],
       "details": {
         "description": "The enterprise-certificate-proxy component is used for certificate based access to Google Cloud resources. See https://github.com/googleapis/enterprise-certificate-proxy for more information.",
-        "display_name": "enterprise-certificate-proxy"
+        "display_name": "enterprise-certificate-proxy (Platform Specific)"
       },
       "id": "enterprise-certificate-proxy-darwin-arm",
       "is_configuration": false,
@@ -4031,7 +3936,7 @@
       ],
       "details": {
         "description": "The enterprise-certificate-proxy component is used for certificate based access to Google Cloud resources. See https://github.com/googleapis/enterprise-certificate-proxy for more information.",
-        "display_name": "enterprise-certificate-proxy"
+        "display_name": "enterprise-certificate-proxy (Platform Specific)"
       },
       "id": "enterprise-certificate-proxy-darwin-x86_64",
       "is_configuration": false,
@@ -4064,7 +3969,7 @@
       ],
       "details": {
         "description": "The enterprise-certificate-proxy component is used for certificate based access to Google Cloud resources. See https://github.com/googleapis/enterprise-certificate-proxy for more information.",
-        "display_name": "enterprise-certificate-proxy"
+        "display_name": "enterprise-certificate-proxy (Platform Specific)"
       },
       "id": "enterprise-certificate-proxy-linux-x86_64",
       "is_configuration": false,
@@ -4097,7 +4002,7 @@
       ],
       "details": {
         "description": "The enterprise-certificate-proxy component is used for certificate based access to Google Cloud resources. See https://github.com/googleapis/enterprise-certificate-proxy for more information.",
-        "display_name": "enterprise-certificate-proxy"
+        "display_name": "enterprise-certificate-proxy (Platform Specific)"
       },
       "id": "enterprise-certificate-proxy-windows-x86_64",
       "is_configuration": false,
@@ -4174,10 +4079,10 @@
     },
     {
       "data": {
-        "checksum": "77cacb09f213e98cd3461796567bb583dc05e7f2fe70c47da65e948daf2dfff7",
-        "contents_checksum": "d651a36a3f0e41f7cc7312d09bc3c089a55a583cdaaaa922b0d385e57dece361",
-        "size": 1242963,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-arm-20231215195722.tar.gz",
+        "checksum": "01619f4c6a7bf2e3e01de81927ce7e5c0b5ee845418e0892758455736514034f",
+        "contents_checksum": "eddf662d79aa713f86069b1d5beb20419795514256037ebd643825fc60cf6950",
+        "size": 1295444,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-arm-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4185,7 +4090,7 @@
       ],
       "details": {
         "description": "Command line tool that calculates CRC32C hashes on local files.",
-        "display_name": "Google Cloud CRC32C Hash Tool"
+        "display_name": "Google Cloud CRC32C Hash Tool (Platform Specific)"
       },
       "id": "gcloud-crc32c-darwin-arm",
       "is_configuration": false,
@@ -4201,16 +4106,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231215195722,
+        "build_number": 20240712142834,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "ef420a608c6446543cf660c7d168f6af297aebb760d163e11c3af278e34eb731",
-        "contents_checksum": "48cfe6b4f0f12b23a1271ef686966959314ba9d3ac21de9082009cbb5e9ab1d8",
-        "size": 1283814,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-x86_64-20231215195722.tar.gz",
+        "checksum": "8690ee8c426f0a839378d7b3431195dd3b9db25f7ebd618193b2d31221bae1b3",
+        "contents_checksum": "fe0d4da6db75b15d74b75ab1849699ceaec828d94586c016eb939480a3d4aa19",
+        "size": 1348172,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-darwin-x86_64-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4218,7 +4123,7 @@
       ],
       "details": {
         "description": "Command line tool that calculates CRC32C hashes on local files.",
-        "display_name": "Google Cloud CRC32C Hash Tool"
+        "display_name": "Google Cloud CRC32C Hash Tool (Platform Specific)"
       },
       "id": "gcloud-crc32c-darwin-x86_64",
       "is_configuration": false,
@@ -4234,16 +4139,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231215195722,
+        "build_number": 20240712142834,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "c42492e21729fd33b413c7151e9b9d8c1b352a0f5fa94dbd42e39b0a417ea9da",
-        "contents_checksum": "06647040a666b59ce69c90e6ba9cbfba3f1763236a0872af722e62ea30e51e34",
-        "size": 1214415,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-arm-20231215195722.tar.gz",
+        "checksum": "45281a275510e694ec8d7038cdc12440bbf4e8ac99eaf4facadcb9f0970e1dd2",
+        "contents_checksum": "39aa19b5b52f148daeed6c023eae051a3d3a73204f36bb1291e0ed893c0a3a04",
+        "size": 1274880,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-arm-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4251,7 +4156,7 @@
       ],
       "details": {
         "description": "Command line tool that calculates CRC32C hashes on local files.",
-        "display_name": "Google Cloud CRC32C Hash Tool"
+        "display_name": "Google Cloud CRC32C Hash Tool (Platform Specific)"
       },
       "id": "gcloud-crc32c-linux-arm",
       "is_configuration": false,
@@ -4267,16 +4172,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231215195722,
+        "build_number": 20240712142834,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "111269e6760bcf2c8d86c435ba6e1814b96281089d38dc73c699b9b12489c662",
-        "contents_checksum": "93fa6c57934e224e3e9e20eec8386ca1d3169b5a4e8f2515f1b042b11e000564",
-        "size": 1233668,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86-20231215195722.tar.gz",
+        "checksum": "80935422cdff13c6f146ce2ceef79df7184e6aedc1962325ec6349de1a40235d",
+        "contents_checksum": "3eb0e658ec47296ba5bd0dc47e639379f8e22cf26c287c855a03129efe81f625",
+        "size": 1277952,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4284,7 +4189,7 @@
       ],
       "details": {
         "description": "Command line tool that calculates CRC32C hashes on local files.",
-        "display_name": "Google Cloud CRC32C Hash Tool"
+        "display_name": "Google Cloud CRC32C Hash Tool (Platform Specific)"
       },
       "id": "gcloud-crc32c-linux-x86",
       "is_configuration": false,
@@ -4300,16 +4205,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231215195722,
+        "build_number": 20240712142834,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "3fe726e72437a2257264bedb9bb4d61949c15c80b9f587888717c267f65ab91e",
-        "contents_checksum": "0b6b618de4cf9fc339b414d44e6e834e6cdb5fae2ddb65bde3525ad78c595d51",
-        "size": 1287877,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86_64-20231215195722.tar.gz",
+        "checksum": "14d6d2178f84894c3518fe728bc6ec798efa629b6d2909357d2d917172f738c2",
+        "contents_checksum": "180f28ff98581f9c8a2b87b0323aeef1e387590d80ace7dc8c0628a9e6ad2c6d",
+        "size": 1350263,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-linux-x86_64-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4317,7 +4222,7 @@
       ],
       "details": {
         "description": "Command line tool that calculates CRC32C hashes on local files.",
-        "display_name": "Google Cloud CRC32C Hash Tool"
+        "display_name": "Google Cloud CRC32C Hash Tool (Platform Specific)"
       },
       "id": "gcloud-crc32c-linux-x86_64",
       "is_configuration": false,
@@ -4333,16 +4238,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231215195722,
+        "build_number": 20240712142834,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "46a658000be7850ef81652659448e70c67e089d20946a572c6ba521676af668c",
-        "contents_checksum": "58e78452a22e94789408f6afbb86a65544cb1fac500ef3fbe7422c5eb6b19c10",
-        "size": 1267116,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86-20231215195722.tar.gz",
+        "checksum": "dac408a36e4852744be49a4e35099b3edfb8a4e5c763b0c2804bb34eb33205d4",
+        "contents_checksum": "04b7b4c62d1890e519484ae22f53071c8109ed3555b288c03861e443490d6c3a",
+        "size": 1297402,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4350,7 +4255,7 @@
       ],
       "details": {
         "description": "Command line tool that calculates CRC32C hashes on local files.",
-        "display_name": "Google Cloud CRC32C Hash Tool"
+        "display_name": "Google Cloud CRC32C Hash Tool (Platform Specific)"
       },
       "id": "gcloud-crc32c-windows-x86",
       "is_configuration": false,
@@ -4366,16 +4271,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231215195722,
+        "build_number": 20240712142834,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "b9752b5c9eccc0105ef06f322b2dff92f2542884475708b864ae02e800ef7765",
-        "contents_checksum": "96506b713c645adb109e0a7bf83fef4af59a24cd7f714f8455b8d66af8946213",
-        "size": 1321071,
-        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86_64-20231215195722.tar.gz",
+        "checksum": "39f75b70032b44cd5c6300b28457daa8a3530fa944dd0abf8319ebc6297dc173",
+        "contents_checksum": "2f6f233cedbee66aa646c0315d8382405d033671db00d38b247afcd64b97226c",
+        "size": 1376457,
+        "source": "components/google-cloud-sdk-gcloud-crc32c-windows-x86_64-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4383,7 +4288,7 @@
       ],
       "details": {
         "description": "Command line tool that calculates CRC32C hashes on local files.",
-        "display_name": "Google Cloud CRC32C Hash Tool"
+        "display_name": "Google Cloud CRC32C Hash Tool (Platform Specific)"
       },
       "id": "gcloud-crc32c-windows-x86_64",
       "is_configuration": false,
@@ -4399,16 +4304,16 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20231215195722,
+        "build_number": 20240712142834,
         "version_string": "1.0.0"
       }
     },
     {
       "data": {
-        "checksum": "ca09bfbd8ebc1571dc9770caddbb3c9e7ace51b30707eb50ff8de7e8a7c8049f",
-        "contents_checksum": "f3c947eafda42461652eb08104d0309bd3e5b2d1b6edacf276385313880a4da1",
-        "size": 17415961,
-        "source": "components/google-cloud-sdk-gcloud-deps-20240628141907.tar.gz",
+        "checksum": "c0c348262e6e0cf59e569551ea49f32397af64456c4b177cde10769837affdcb",
+        "contents_checksum": "cbe989aff03e61af3e43395fa240ddc702451d928eb10a2ccffa713b27180d12",
+        "size": 17417303,
+        "source": "components/google-cloud-sdk-gcloud-deps-20240712142834.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4431,8 +4336,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20240628141907,
-        "version_string": "2024.06.28"
+        "build_number": 20240712142834,
+        "version_string": "2024.07.12"
       }
     },
     {
@@ -4449,7 +4354,7 @@
       ],
       "details": {
         "description": "Set of third_party gcloud cli dependencies.",
-        "display_name": "gcloud cli dependencies"
+        "display_name": "gcloud cli dependencies (Platform Specific)"
       },
       "id": "gcloud-deps-darwin-x86",
       "is_configuration": false,
@@ -4483,7 +4388,7 @@
       ],
       "details": {
         "description": "Set of third_party gcloud cli dependencies.",
-        "display_name": "gcloud cli dependencies"
+        "display_name": "gcloud cli dependencies (Platform Specific)"
       },
       "id": "gcloud-deps-darwin-x86_64",
       "is_configuration": false,
@@ -4517,7 +4422,7 @@
       ],
       "details": {
         "description": "Set of third_party gcloud cli dependencies.",
-        "display_name": "gcloud cli dependencies"
+        "display_name": "gcloud cli dependencies (Platform Specific)"
       },
       "id": "gcloud-deps-linux-x86",
       "is_configuration": false,
@@ -4551,7 +4456,7 @@
       ],
       "details": {
         "description": "Set of third_party gcloud cli dependencies.",
-        "display_name": "gcloud cli dependencies"
+        "display_name": "gcloud cli dependencies (Platform Specific)"
       },
       "id": "gcloud-deps-linux-x86_64",
       "is_configuration": false,
@@ -4585,7 +4490,7 @@
       ],
       "details": {
         "description": "Set of third_party gcloud cli dependencies.",
-        "display_name": "gcloud cli dependencies"
+        "display_name": "gcloud cli dependencies (Platform Specific)"
       },
       "id": "gcloud-deps-windows-x86",
       "is_configuration": false,
@@ -4619,7 +4524,7 @@
       ],
       "details": {
         "description": "Set of third_party gcloud cli dependencies.",
-        "display_name": "gcloud cli dependencies"
+        "display_name": "gcloud cli dependencies (Platform Specific)"
       },
       "id": "gcloud-deps-windows-x86_64",
       "is_configuration": false,
@@ -4668,10 +4573,10 @@
     },
     {
       "data": {
-        "checksum": "6c9cdcacbe7cff43bd94a255b5388a67a3f042db77071893029d4cf1530110a7",
-        "contents_checksum": "5b5391973a55924bc0e962bc2d8654749d68e30144a38723eda2a5fb5883b5ac",
-        "size": 7056653,
-        "source": "components/google-cloud-sdk-gcloud-man-pages-nix-20240628141907.tar.gz",
+        "checksum": "146b28c492f0d9d9b61dddf900e283d8574780c50b371454186be6059de9090c",
+        "contents_checksum": "0949914541210ca57cdf03cdc92a1d46421148628fc886fbaef65e5a2e16cd0c",
+        "size": 7076612,
+        "source": "components/google-cloud-sdk-gcloud-man-pages-nix-20240719191136.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -4696,7 +4601,7 @@
       },
       "platform_required": false,
       "version": {
-        "build_number": 20240628141907,
+        "build_number": 20240719191136,
         "version_string": ""
       }
     },
@@ -4749,7 +4654,7 @@
       ],
       "details": {
         "description": "The auth plugin for Kubectl on GKE.",
-        "display_name": "gke-gcloud-auth-plugin"
+        "display_name": "gke-gcloud-auth-plugin (Platform Specific)"
       },
       "id": "gke-gcloud-auth-plugin-darwin-arm",
       "is_configuration": false,
@@ -4782,7 +4687,7 @@
       ],
       "details": {
         "description": "The auth plugin for Kubectl on GKE.",
-        "display_name": "gke-gcloud-auth-plugin"
+        "display_name": "gke-gcloud-auth-plugin (Platform Specific)"
       },
       "id": "gke-gcloud-auth-plugin-darwin-x86_64",
       "is_configuration": false,
@@ -4815,7 +4720,7 @@
       ],
       "details": {
         "description": "The auth plugin for Kubectl on GKE.",
-        "display_name": "gke-gcloud-auth-plugin"
+        "display_name": "gke-gcloud-auth-plugin (Platform Specific)"
       },
       "id": "gke-gcloud-auth-plugin-linux-arm",
       "is_configuration": false,
@@ -4848,7 +4753,7 @@
       ],
       "details": {
         "description": "The auth plugin for Kubectl on GKE.",
-        "display_name": "gke-gcloud-auth-plugin"
+        "display_name": "gke-gcloud-auth-plugin (Platform Specific)"
       },
       "id": "gke-gcloud-auth-plugin-linux-x86",
       "is_configuration": false,
@@ -4881,7 +4786,7 @@
       ],
       "details": {
         "description": "The auth plugin for Kubectl on GKE.",
-        "display_name": "gke-gcloud-auth-plugin"
+        "display_name": "gke-gcloud-auth-plugin (Platform Specific)"
       },
       "id": "gke-gcloud-auth-plugin-linux-x86_64",
       "is_configuration": false,
@@ -4914,7 +4819,7 @@
       ],
       "details": {
         "description": "The auth plugin for Kubectl on GKE.",
-        "display_name": "gke-gcloud-auth-plugin"
+        "display_name": "gke-gcloud-auth-plugin (Platform Specific)"
       },
       "id": "gke-gcloud-auth-plugin-windows-x86",
       "is_configuration": false,
@@ -4947,7 +4852,7 @@
       ],
       "details": {
         "description": "The auth plugin for Kubectl on GKE.",
-        "display_name": "gke-gcloud-auth-plugin"
+        "display_name": "gke-gcloud-auth-plugin (Platform Specific)"
       },
       "id": "gke-gcloud-auth-plugin-windows-x86_64",
       "is_configuration": false,
@@ -5099,7 +5004,7 @@
       ],
       "details": {
         "description": "Performs database migrations to Cloud Spanner databases.",
-        "display_name": "Cloud Spanner Migration Tool"
+        "display_name": "Cloud Spanner Migration Tool (Platform Specific)"
       },
       "id": "harbourbridge-linux-x86_64",
       "is_configuration": false,
@@ -5163,7 +5068,7 @@
       ],
       "details": {
         "description": "Support tool for Cloud Service Mesh.",
-        "display_name": "istioctl"
+        "display_name": "istioctl (Platform Specific)"
       },
       "id": "istioctl-darwin-arm",
       "is_configuration": false,
@@ -5196,7 +5101,7 @@
       ],
       "details": {
         "description": "Support tool for Cloud Service Mesh.",
-        "display_name": "istioctl"
+        "display_name": "istioctl (Platform Specific)"
       },
       "id": "istioctl-darwin-x86_64",
       "is_configuration": false,
@@ -5229,7 +5134,7 @@
       ],
       "details": {
         "description": "Support tool for Cloud Service Mesh.",
-        "display_name": "istioctl"
+        "display_name": "istioctl (Platform Specific)"
       },
       "id": "istioctl-linux-arm",
       "is_configuration": false,
@@ -5262,7 +5167,7 @@
       ],
       "details": {
         "description": "Support tool for Cloud Service Mesh.",
-        "display_name": "istioctl"
+        "display_name": "istioctl (Platform Specific)"
       },
       "id": "istioctl-linux-x86_64",
       "is_configuration": false,
@@ -5326,7 +5231,7 @@
       ],
       "details": {
         "description": "Kubernetes Platform Toolkit for packaging, customizing and applying Resource configuration.",
-        "display_name": "kpt"
+        "display_name": "kpt (Platform Specific)"
       },
       "id": "kpt-darwin-arm",
       "is_configuration": false,
@@ -5359,7 +5264,7 @@
       ],
       "details": {
         "description": "Kubernetes Platform Toolkit for packaging, customizing and applying Resource configuration.",
-        "display_name": "kpt"
+        "display_name": "kpt (Platform Specific)"
       },
       "id": "kpt-darwin-x86_64",
       "is_configuration": false,
@@ -5392,7 +5297,7 @@
       ],
       "details": {
         "description": "Kubernetes Platform Toolkit for packaging, customizing and applying Resource configuration.",
-        "display_name": "kpt"
+        "display_name": "kpt (Platform Specific)"
       },
       "id": "kpt-linux-arm",
       "is_configuration": false,
@@ -5425,7 +5330,7 @@
       ],
       "details": {
         "description": "Kubernetes Platform Toolkit for packaging, customizing and applying Resource configuration.",
-        "display_name": "kpt"
+        "display_name": "kpt (Platform Specific)"
       },
       "id": "kpt-linux-x86_64",
       "is_configuration": false,
@@ -5492,7 +5397,7 @@
       ],
       "details": {
         "description": "Provides kubectl executables.",
-        "display_name": "kubectl"
+        "display_name": "kubectl (Platform Specific)"
       },
       "id": "kubectl-darwin-arm",
       "is_configuration": false,
@@ -5526,7 +5431,7 @@
       ],
       "details": {
         "description": "Provides kubectl executables.",
-        "display_name": "kubectl"
+        "display_name": "kubectl (Platform Specific)"
       },
       "id": "kubectl-darwin-x86_64",
       "is_configuration": false,
@@ -5560,7 +5465,7 @@
       ],
       "details": {
         "description": "Provides kubectl executables.",
-        "display_name": "kubectl"
+        "display_name": "kubectl (Platform Specific)"
       },
       "id": "kubectl-linux-arm",
       "is_configuration": false,
@@ -5594,7 +5499,7 @@
       ],
       "details": {
         "description": "Provides kubectl executables.",
-        "display_name": "kubectl"
+        "display_name": "kubectl (Platform Specific)"
       },
       "id": "kubectl-linux-x86",
       "is_configuration": false,
@@ -5628,7 +5533,7 @@
       ],
       "details": {
         "description": "Provides kubectl executables.",
-        "display_name": "kubectl"
+        "display_name": "kubectl (Platform Specific)"
       },
       "id": "kubectl-linux-x86_64",
       "is_configuration": false,
@@ -5694,7 +5599,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for GKE clusters.",
-        "display_name": "kubectl-oidc"
+        "display_name": "kubectl-oidc (Platform Specific)"
       },
       "id": "kubectl-oidc-darwin-arm",
       "is_configuration": false,
@@ -5727,7 +5632,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for GKE clusters.",
-        "display_name": "kubectl-oidc"
+        "display_name": "kubectl-oidc (Platform Specific)"
       },
       "id": "kubectl-oidc-darwin-x86_64",
       "is_configuration": false,
@@ -5760,7 +5665,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for GKE clusters.",
-        "display_name": "kubectl-oidc"
+        "display_name": "kubectl-oidc (Platform Specific)"
       },
       "id": "kubectl-oidc-linux-arm",
       "is_configuration": false,
@@ -5793,7 +5698,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for GKE clusters.",
-        "display_name": "kubectl-oidc"
+        "display_name": "kubectl-oidc (Platform Specific)"
       },
       "id": "kubectl-oidc-linux-x86_64",
       "is_configuration": false,
@@ -5826,7 +5731,7 @@
       ],
       "details": {
         "description": "Configure kubectl with OIDC credentials for GKE clusters.",
-        "display_name": "kubectl-oidc"
+        "display_name": "kubectl-oidc (Platform Specific)"
       },
       "id": "kubectl-oidc-windows-x86_64",
       "is_configuration": false,
@@ -5860,7 +5765,7 @@
       ],
       "details": {
         "description": "Provides kubectl executables.",
-        "display_name": "kubectl"
+        "display_name": "kubectl (Platform Specific)"
       },
       "id": "kubectl-windows-x86",
       "is_configuration": false,
@@ -5896,7 +5801,7 @@
       ],
       "details": {
         "description": "Provides kubectl executables.",
-        "display_name": "kubectl"
+        "display_name": "kubectl (Platform Specific)"
       },
       "id": "kubectl-windows-x86_64",
       "is_configuration": false,
@@ -5962,7 +5867,7 @@
       ],
       "details": {
         "description": "Provides kustomize executable.",
-        "display_name": "Kustomize"
+        "display_name": "Kustomize (Platform Specific)"
       },
       "id": "kustomize-darwin-arm",
       "is_configuration": false,
@@ -5995,7 +5900,7 @@
       ],
       "details": {
         "description": "Provides kustomize executable.",
-        "display_name": "Kustomize"
+        "display_name": "Kustomize (Platform Specific)"
       },
       "id": "kustomize-darwin-x86_64",
       "is_configuration": false,
@@ -6028,7 +5933,7 @@
       ],
       "details": {
         "description": "Provides kustomize executable.",
-        "display_name": "Kustomize"
+        "display_name": "Kustomize (Platform Specific)"
       },
       "id": "kustomize-linux-arm",
       "is_configuration": false,
@@ -6061,7 +5966,7 @@
       ],
       "details": {
         "description": "Provides kustomize executable.",
-        "display_name": "Kustomize"
+        "display_name": "Kustomize (Platform Specific)"
       },
       "id": "kustomize-linux-x86_64",
       "is_configuration": false,
@@ -6125,7 +6030,7 @@
       ],
       "details": {
         "description": "Locally extract packages/versions from a container image.",
-        "display_name": "On-Demand Scanning API extraction helper"
+        "display_name": "On-Demand Scanning API extraction helper (Platform Specific)"
       },
       "id": "local-extract-darwin-arm",
       "is_configuration": false,
@@ -6158,7 +6063,7 @@
       ],
       "details": {
         "description": "Locally extract packages/versions from a container image.",
-        "display_name": "On-Demand Scanning API extraction helper"
+        "display_name": "On-Demand Scanning API extraction helper (Platform Specific)"
       },
       "id": "local-extract-darwin-x86_64",
       "is_configuration": false,
@@ -6191,7 +6096,7 @@
       ],
       "details": {
         "description": "Locally extract packages/versions from a container image.",
-        "display_name": "On-Demand Scanning API extraction helper"
+        "display_name": "On-Demand Scanning API extraction helper (Platform Specific)"
       },
       "id": "local-extract-linux-arm",
       "is_configuration": false,
@@ -6224,7 +6129,7 @@
       ],
       "details": {
         "description": "Locally extract packages/versions from a container image.",
-        "display_name": "On-Demand Scanning API extraction helper"
+        "display_name": "On-Demand Scanning API extraction helper (Platform Specific)"
       },
       "id": "local-extract-linux-x86_64",
       "is_configuration": false,
@@ -6290,7 +6195,7 @@
       ],
       "details": {
         "description": "Provides log streaming services.",
-        "display_name": "Log Streaming"
+        "display_name": "Log Streaming (Platform Specific)"
       },
       "id": "log-streaming-darwin-arm",
       "is_configuration": false,
@@ -6323,7 +6228,7 @@
       ],
       "details": {
         "description": "Provides log streaming services.",
-        "display_name": "Log Streaming"
+        "display_name": "Log Streaming (Platform Specific)"
       },
       "id": "log-streaming-darwin-x86_64",
       "is_configuration": false,
@@ -6356,7 +6261,7 @@
       ],
       "details": {
         "description": "Provides log streaming services.",
-        "display_name": "Log Streaming"
+        "display_name": "Log Streaming (Platform Specific)"
       },
       "id": "log-streaming-linux-arm",
       "is_configuration": false,
@@ -6389,7 +6294,7 @@
       ],
       "details": {
         "description": "Provides log streaming services.",
-        "display_name": "Log Streaming"
+        "display_name": "Log Streaming (Platform Specific)"
       },
       "id": "log-streaming-linux-x86_64",
       "is_configuration": false,
@@ -6422,7 +6327,7 @@
       ],
       "details": {
         "description": "Provides log streaming services.",
-        "display_name": "Log Streaming"
+        "display_name": "Log Streaming (Platform Specific)"
       },
       "id": "log-streaming-windows-x86_64",
       "is_configuration": false,
@@ -6488,7 +6393,7 @@
       ],
       "details": {
         "description": "Provides minikube executable. See https://kubernetes.io/docs/tasks/tools/install-minikube/",
-        "display_name": "Minikube"
+        "display_name": "Minikube (Platform Specific)"
       },
       "id": "minikube-darwin-arm",
       "is_configuration": false,
@@ -6521,7 +6426,7 @@
       ],
       "details": {
         "description": "Provides minikube executable. See https://kubernetes.io/docs/tasks/tools/install-minikube/",
-        "display_name": "Minikube"
+        "display_name": "Minikube (Platform Specific)"
       },
       "id": "minikube-darwin-x86_64",
       "is_configuration": false,
@@ -6554,7 +6459,7 @@
       ],
       "details": {
         "description": "Provides minikube executable. See https://kubernetes.io/docs/tasks/tools/install-minikube/",
-        "display_name": "Minikube"
+        "display_name": "Minikube (Platform Specific)"
       },
       "id": "minikube-linux-arm",
       "is_configuration": false,
@@ -6587,7 +6492,7 @@
       ],
       "details": {
         "description": "Provides minikube executable. See https://kubernetes.io/docs/tasks/tools/install-minikube/",
-        "display_name": "Minikube"
+        "display_name": "Minikube (Platform Specific)"
       },
       "id": "minikube-linux-x86_64",
       "is_configuration": false,
@@ -6620,7 +6525,7 @@
       ],
       "details": {
         "description": "Provides minikube executable. See https://kubernetes.io/docs/tasks/tools/install-minikube/",
-        "display_name": "Minikube"
+        "display_name": "Minikube (Platform Specific)"
       },
       "id": "minikube-windows-x86_64",
       "is_configuration": false,
@@ -6681,7 +6586,7 @@
       ],
       "details": {
         "description": "Provides nomos executable.",
-        "display_name": "Nomos CLI"
+        "display_name": "Nomos CLI (Platform Specific)"
       },
       "id": "nomos-darwin-x86_64",
       "is_configuration": false,
@@ -6714,7 +6619,7 @@
       ],
       "details": {
         "description": "Provides nomos executable.",
-        "display_name": "Nomos CLI"
+        "display_name": "Nomos CLI (Platform Specific)"
       },
       "id": "nomos-linux-x86_64",
       "is_configuration": false,
@@ -6780,7 +6685,7 @@
       ],
       "details": {
         "description": "Package a Go module zip file from Go source code.",
-        "display_name": "Artifact Registry Go Module Package Helper"
+        "display_name": "Artifact Registry Go Module Package Helper (Platform Specific)"
       },
       "id": "package-go-module-darwin-arm",
       "is_configuration": false,
@@ -6813,7 +6718,7 @@
       ],
       "details": {
         "description": "Package a Go module zip file from Go source code.",
-        "display_name": "Artifact Registry Go Module Package Helper"
+        "display_name": "Artifact Registry Go Module Package Helper (Platform Specific)"
       },
       "id": "package-go-module-darwin-x86_64",
       "is_configuration": false,
@@ -6846,7 +6751,7 @@
       ],
       "details": {
         "description": "Package a Go module zip file from Go source code.",
-        "display_name": "Artifact Registry Go Module Package Helper"
+        "display_name": "Artifact Registry Go Module Package Helper (Platform Specific)"
       },
       "id": "package-go-module-linux-arm",
       "is_configuration": false,
@@ -6879,7 +6784,7 @@
       ],
       "details": {
         "description": "Package a Go module zip file from Go source code.",
-        "display_name": "Artifact Registry Go Module Package Helper"
+        "display_name": "Artifact Registry Go Module Package Helper (Platform Specific)"
       },
       "id": "package-go-module-linux-x86_64",
       "is_configuration": false,
@@ -6912,7 +6817,7 @@
       ],
       "details": {
         "description": "Package a Go module zip file from Go source code.",
-        "display_name": "Artifact Registry Go Module Package Helper"
+        "display_name": "Artifact Registry Go Module Package Helper (Platform Specific)"
       },
       "id": "package-go-module-windows-x86_64",
       "is_configuration": false,
@@ -6992,7 +6897,7 @@
       ],
       "details": {
         "description": "PowerShell cmdlets for the Google Cloud Platform.",
-        "display_name": "Cloud Tools for PowerShell"
+        "display_name": "Cloud Tools for PowerShell (Platform Specific)"
       },
       "id": "powershell-windows",
       "is_configuration": false,
@@ -7083,7 +6988,7 @@
       ],
       "details": {
         "description": "Provides skaffold executable.  See https://skaffold.dev/",
-        "display_name": "Skaffold"
+        "display_name": "Skaffold (Platform Specific)"
       },
       "id": "skaffold-darwin-arm",
       "is_configuration": false,
@@ -7117,7 +7022,7 @@
       ],
       "details": {
         "description": "Provides skaffold executable.  See https://skaffold.dev/",
-        "display_name": "Skaffold"
+        "display_name": "Skaffold (Platform Specific)"
       },
       "id": "skaffold-darwin-x86_64",
       "is_configuration": false,
@@ -7151,7 +7056,7 @@
       ],
       "details": {
         "description": "Provides skaffold executable.  See https://skaffold.dev/",
-        "display_name": "Skaffold"
+        "display_name": "Skaffold (Platform Specific)"
       },
       "id": "skaffold-linux-arm",
       "is_configuration": false,
@@ -7185,7 +7090,7 @@
       ],
       "details": {
         "description": "Provides skaffold executable.  See https://skaffold.dev/",
-        "display_name": "Skaffold"
+        "display_name": "Skaffold (Platform Specific)"
       },
       "id": "skaffold-linux-x86_64",
       "is_configuration": false,
@@ -7219,7 +7124,7 @@
       ],
       "details": {
         "description": "Provides skaffold executable.  See https://skaffold.dev/",
-        "display_name": "Skaffold"
+        "display_name": "Skaffold (Platform Specific)"
       },
       "id": "skaffold-windows-x86_64",
       "is_configuration": false,
@@ -7278,7 +7183,7 @@
       ],
       "details": {
         "description": "Performs database migrations to Cloud Spanner databases.",
-        "display_name": "Spanner migration tool"
+        "display_name": "Spanner migration tool (Platform Specific)"
       },
       "id": "spanner-migration-tool-linux-x86_64",
       "is_configuration": false,
@@ -7334,7 +7239,7 @@
       ],
       "details": {
         "description": "Provides Windows command line ssh tools.",
-        "display_name": "Windows command line ssh tools"
+        "display_name": "Windows command line ssh tools (Platform Specific)"
       },
       "id": "ssh-tools-windows",
       "is_configuration": false,
@@ -7397,7 +7302,7 @@
       ],
       "details": {
         "description": "Tools for working with Terraform data",
-        "display_name": "Terraform Tools"
+        "display_name": "Terraform Tools (Platform Specific)"
       },
       "id": "terraform-tools-darwin-arm",
       "is_configuration": false,
@@ -7430,7 +7335,7 @@
       ],
       "details": {
         "description": "Tools for working with Terraform data",
-        "display_name": "Terraform Tools"
+        "display_name": "Terraform Tools (Platform Specific)"
       },
       "id": "terraform-tools-darwin-x86_64",
       "is_configuration": false,
@@ -7463,7 +7368,7 @@
       ],
       "details": {
         "description": "Tools for working with Terraform data",
-        "display_name": "Terraform Tools"
+        "display_name": "Terraform Tools (Platform Specific)"
       },
       "id": "terraform-tools-linux-arm",
       "is_configuration": false,
@@ -7496,7 +7401,7 @@
       ],
       "details": {
         "description": "Tools for working with Terraform data",
-        "display_name": "Terraform Tools"
+        "display_name": "Terraform Tools (Platform Specific)"
       },
       "id": "terraform-tools-linux-x86_64",
       "is_configuration": false,
@@ -7529,7 +7434,7 @@
       ],
       "details": {
         "description": "Tools for working with Terraform data",
-        "display_name": "Terraform Tools"
+        "display_name": "Terraform Tools (Platform Specific)"
       },
       "id": "terraform-tools-windows-x86_64",
       "is_configuration": false,
@@ -7551,10 +7456,10 @@
     },
     {
       "data": {
-        "checksum": "a69ec16f040d496e7f6901717f9738255f66773b0eb20a96cb19688fe853f937",
-        "contents_checksum": "f4dad17b254ae4340379b1c061410d576644fe22f0a9576d29e343c677afda5a",
-        "size": 57476207,
-        "source": "components/google-cloud-sdk-tests-20240628141907.tar.gz",
+        "checksum": "ed0feffc4e67046a2d15e3f524dc4f7c7278eaf571e06e38031842b357b55879",
+        "contents_checksum": "67a9405c609b6bc0567cfb517d77d2e591a801d3dc482824190fc1ca4f8643cb",
+        "size": 57601363,
+        "source": "components/google-cloud-sdk-tests-20240719191136.tar.gz",
         "type": "tar"
       },
       "dependencies": [
@@ -7571,8 +7476,8 @@
       "platform": {},
       "platform_required": false,
       "version": {
-        "build_number": 20240628141907,
-        "version_string": "2024.06.28"
+        "build_number": 20240719191136,
+        "version_string": "2024.07.19"
       }
     }
   ],
@@ -7591,11 +7496,11 @@
   ],
   "post_processing_command": "components post-process",
   "release_notes_url": "RELEASE_NOTES",
-  "revision": 20240628141907,
+  "revision": 20240719191136,
   "schema_version": {
     "no_update": false,
     "url": "https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.tar.gz",
     "version": 3
   },
-  "version": "483.0.0"
+  "version": "485.0.0"
 }

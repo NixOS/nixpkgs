@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/tracerite";
     changelog = "https://github.com/sanic-org/tracerite/releases/tag/v${version}";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -10,27 +10,33 @@
 
 let
   mainProgram = "proton-mail";
+  srcHashes = {
+    # Upstream info: It's intended to stay like this in further releases
+    # https://github.com/NixOS/nixpkgs/pull/326152#discussion_r1679558135
+    universal-darwin = "sha256-6b+CNCvrkIA1CvSohSJZq/veZZNsA3lyhVv5SsBlJlw=";
+    x86_64-linux = "sha256-v8ufnQQEqTT5cr7fq8Fozje/NDlBzaCeKIzE6yU/biE=";
+  };
+
 in
 stdenv.mkDerivation rec {
   pname = "protonmail-desktop";
-  version = "1.0.4";
+  # Upstream info: "v"-prefix got dropped
+  version = "1.0.6";
 
-  src =
-    {
-      "x86_64-linux" = fetchurl {
-        url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/proton-mail_${version}_amd64.deb";
-        hash = "sha256-KY/rjiJozOQW27FYljy5N1VKuKroJz3V485DPaH01JY=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/Proton.Mail-darwin-x64-${version}.zip";
-        hash = "sha256-I5Yj1JR3DaAmC6WKI4X/d/q9rvmsck9SE3Mx3AY6yvU=";
-      };
-      "aarch64-darwin" = fetchurl {
-        url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/Proton.Mail-darwin-arm64-${version}.zip";
-        hash = "sha256-j1F8hhLSq/C1WQXGrYnvFK8nNz4qwoA1ohNzPsS3tiY=";
-      };
-    }
-    .${stdenv.hostPlatform.system};
+  src = fetchurl {
+    url =
+      if stdenv.isDarwin then
+        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/Proton.Mail-darwin-universal-${version}.zip"
+      else
+        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/proton-mail_${version}_amd64.deb";
+    sha256 =
+      {
+        x86_64-linux = srcHashes.x86_64-linux;
+        x86_64-darwin = srcHashes.universal-darwin;
+        aarch64-darwin = srcHashes.universal-darwin;
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  };
 
   sourceRoot = lib.optionalString stdenv.isDarwin ".";
 
@@ -42,18 +48,25 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux dpkg ++ lib.optional stdenv.isDarwin unzip;
 
   installPhase =
-    lib.optionalString stdenv.isLinux ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r usr/share/ $out/
-      cp -r usr/lib/proton-mail/resources/app.asar $out/share/
-      runHook postInstall
+    let
+      darwin = ''
+        mkdir -p $out/{Applications,bin}
+        cp -r "Proton Mail.app" $out/Applications/
+        makeWrapper $out/Applications/"Proton Mail.app"/Contents/MacOS/Proton\ Mail $out/bin/protonmail-desktop
+      '';
+      linux = ''
+        runHook preInstall
+        mkdir -p $out
+        cp -r usr/share/ $out/
+        cp -r usr/lib/proton-mail/resources/app.asar $out/share/
+      '';
+
+    in
     ''
-    + lib.optionalString stdenv.isDarwin ''
       runHook preInstall
-      mkdir -p $out/{Applications,bin}
-      cp -r "Proton Mail.app" $out/Applications/
-      makeWrapper $out/Applications/"Proton Mail.app"/Contents/MacOS/Proton\ Mail $out/bin/protonmail-desktop
+
+      ${if stdenv.isDarwin then darwin else linux}
+
       runHook postInstall
     '';
 
@@ -66,17 +79,23 @@ stdenv.mkDerivation rec {
       --inherit-argv0
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Desktop application for Mail and Calendar, made with Electron";
     homepage = "https://github.com/ProtonMail/inbox-desktop";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       rsniezek
       sebtm
       matteopacini
     ];
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     inherit mainProgram;
   };
 }

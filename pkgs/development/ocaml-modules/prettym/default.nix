@@ -42,6 +42,6 @@ buildDunePackage rec {
     description = "Simple bounded encoder to serialize human readable values and respect the 80-column constraint";
     license = lib.licenses.mit;
     homepage = "https://github.com/dinosaure/prettym";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

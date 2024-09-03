@@ -315,6 +315,7 @@ with lib.maintainers;
       leona
       osnyx
       ma27
+      laalsaas
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
@@ -504,10 +505,10 @@ with lib.maintainers;
     githubTeams = [ "k3s" ];
     members = [
       euank
+      frederictobiasc
       marcusramberg
       mic92
       rorosen
-      superherointj
       wrmilling
       yajo
     ];
@@ -749,7 +750,11 @@ with lib.maintainers;
   };
 
   openstack = {
-    members = [ SuperSandro2000 ];
+    members = [
+      SuperSandro2000
+      anthonyroussel
+      vinetos
+    ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";
   };
@@ -777,7 +782,11 @@ with lib.maintainers;
   };
 
   perl = {
-    members = [ sgo ];
+    members = [
+      sgo
+      marcusramberg
+      zakame
+    ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";
     enableFeatureFreezePing = true;
@@ -944,7 +953,6 @@ with lib.maintainers;
   stridtech = {
     # Verify additions by approval of an already existing member of the team
     members = [
-      superherointj
       ulrikstrid
     ];
     scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
@@ -1016,10 +1024,7 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [
-      AndersonTorres
-      figsoda
-    ];
+    members = [ figsoda ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;

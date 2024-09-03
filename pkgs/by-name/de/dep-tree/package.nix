@@ -32,7 +32,7 @@ let
     };
   };
   pname = "dep-tree";
-  version = "0.20.3";
+  version = "0.23.0";
 in
 buildGoModule {
   inherit pname version;
@@ -41,14 +41,29 @@ buildGoModule {
     owner = "gabotechs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-w0t6SF0Kqr+XAKPNJpDJGDTm2Tc6J9OzbXtRUNkqp2k=";
+    hash = "sha256-Vd6g9UE3XEFGjCK8tFfOphYcNx+zeBS9rBVz0MDLe1I=";
   };
 
-  vendorHash = "sha256-ZDADo1takCemPGYySLwPAODUF+mEJXsaxZn4WWmaUR8=";
+  vendorHash = "sha256-KoVOjZq+RrJ2gzLnANHPPtbEY1ztC0rIXWD9AXAxqMg=";
 
   preCheck = ''
     substituteInPlace internal/tui/tui_test.go \
       --replace-fail /tmp/dep-tree-tests ${linkFarm "dep-tree_testDeps-farm" testDeps}
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    # We do not set trimpath for tests, in case they reference test assets
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+
+    # checkFlags is not able to skip tests via pattern.
+    # possibly requires fixing in buildGoModule.
+    # For now, this is the new checkPhase
+    go test ./... -skip='TestRoot.*|TestFilesFromArgs.*'
+    # these tests were not feasibly fixable.
+    # a LARGE portion of the original source would need to be edited via patch for this to work.
+
+    runHook postCheck
   '';
 
   meta = {

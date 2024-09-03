@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
 , git
-, go
+, go_1_23
 , enumer
 , mockgen
 , nodejs
@@ -14,22 +14,22 @@
 , nixosTests
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "evcc";
-  version = "0.128.2";
+  version = "0.130.7";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-V/cFLvJ9SDOBkZF5hZkRMWEj5Ow2rCcNlwDUlFUJnbA=";
+    hash = "sha256-i5a6IKLLNKMDSUM64q8V0wo835mZomiW7ZptH6y+LDU=";
   };
 
-  vendorHash = "sha256-kjbFu82XnukB5b7ZNygtnZ3/3XFgEMao2FtwGHOTSOI=";
+  vendorHash = "sha256-wAcapU6OAhsuceJrCa+caYr+po+nkl0+4Gc0QrFTvVk=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-XG9nefBefF2gdDWA9IYBI2dv6Lig2LqGgOnTjyni0fM=";
+    hash = "sha256-60F6j87T77JEt3ej4FVTc8rnnpZSGzomrQp8VPWjv6Q=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildGoModule rec {
   overrideModAttrs = _: {
     nativeBuildInputs = [
       enumer
-      go
+      go_1_23
       git
       cacert
       mockgen
@@ -79,6 +79,7 @@ buildGoModule rec {
       "TestTemplates/elering"
       "TestTemplates/energinet"
       "TestTemplates/grünstromindex"
+      "TestTemplates/keba-modbus"
       "TestTemplates/pun"
       "TestTemplates/entsoe"
       "TestTemplates/ngeso"

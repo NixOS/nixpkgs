@@ -145,9 +145,11 @@ in
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
 ++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
   "14" = [ (fetchpatch {
+    # There are no upstream release tags in https://github.com/iains/gcc-14-branch.
+    # 04696df09633baf97cdbbdd6e9929b9d472161d3 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.2.0
     name = "gcc-14-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/82b5c1cd38826ab67ac7fc498a8fe74376a40f4a/gcc/gcc-14.1.0.diff";
-    sha256 = "sha256-jCY65l1DGdESNyzEmD8FFC/xMmqeqBIQF+BhT4uTBBU=";
+    url = "https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r0.diff";
+    hash = "sha256-GEUz7KdGzd2WJ0gjX3Uddq2y9bWKdZpT3E9uZ09qLs4=";
   }) ];
   "13" = [ (fetchpatch {
     name = "gcc-13-darwin-aarch64-support.patch";
@@ -156,8 +158,8 @@ in
   }) ];
   "12" = [ (fetchurl {
     name = "gcc-12-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
-    sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/1ed9eaea059f1677d27382c62f21462b476b37fe/gcc/gcc-12.4.0.diff";
+    sha256 = "sha256-wOjpT79lps4TKG5/E761odhLGCphBIkCbOPiQg/D1Fw=";
   }) ];
   "11" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
@@ -165,6 +167,20 @@ in
     url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
     hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
   }) ];
+  "10" = [ (fetchpatch {
+    # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
+    # d04fe55 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
+    url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...gcc-10-5Dr0-pre-0.diff";
+    hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
+  }) ];
+}.${majorVersion} or [])
+
+# Work around newer AvailabilityInternal.h when building older versions of GCC.
+++ optionals (stdenv.isDarwin) ({
+  "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
+  "8" = [ ../patches/8/AvailabilityInternal.h-fixincludes.patch ];
+  "7" = [ ../patches/7/AvailabilityInternal.h-fixincludes.patch ];
+  "6" = [ ../patches/6/AvailabilityInternal.h-fixincludes.patch ];
 }.${majorVersion} or [])
 
 
@@ -273,9 +289,9 @@ in
   ./6/gnat-glibc234.patch
 ]
 
-# The clang-based assembler used in darwin.cctools-llvm (LLVM >11) does not support piping input.
+# The clang-based assembler used in darwin.binutils (LLVM >11) does not support piping input.
 # Fortunately, it does not exhibit the problem GCC has with the cctools assembler.
-# This patch can be dropped should darwin.cctools-llvm ever implement support.
+# This patch can be dropped should darwin.binutils ever implement support.
 ++ optional (!atLeast7 && hostPlatform.isDarwin && lib.versionAtLeast (lib.getVersion stdenv.cc) "12") ./4.9/darwin-clang-as.patch
 
 # Building libstdc++ with flat namespaces results in trying to link CoreFoundation, which

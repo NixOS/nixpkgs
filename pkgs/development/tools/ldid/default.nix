@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, callPackage
 , fetchgit
 , libplist
 , libxml2

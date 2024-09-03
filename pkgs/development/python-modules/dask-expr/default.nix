@@ -3,12 +3,17 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
   versioneer,
-  wheel,
+
+  # dependencies
   dask,
   pandas,
   pyarrow,
+
+  # checks
   distributed,
   pytestCheckHook,
   xarray
@@ -16,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.7";
+  version = "1.1.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3wQhADDS05soZq+oy75eBXIK0JQhochrRmtIqykuvOA=";
+    hash = "sha256-D26b8HkcRqsMuzSTZdmDmS59dlAbj4F93kfY27UAhKw=";
   };
 
   postPatch = ''
@@ -36,7 +41,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     versioneer
-    wheel
   ];
 
   dependencies = [

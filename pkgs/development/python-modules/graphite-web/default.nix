@@ -17,6 +17,7 @@
   txamqp,
   urllib3,
   whisper,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -93,6 +94,10 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "graphite" ];
+
+  passthru.tests = {
+    inherit (nixosTests) graphite;
+  };
 
   meta = with lib; {
     description = "Enterprise scalable realtime graphing";

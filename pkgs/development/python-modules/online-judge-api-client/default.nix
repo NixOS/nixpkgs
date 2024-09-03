@@ -11,7 +11,6 @@
   markdown,
   python,
   requests,
-  substituteAll,
   toml,
 }:
 

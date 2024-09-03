@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scientific-python/lazy_loader";
     changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

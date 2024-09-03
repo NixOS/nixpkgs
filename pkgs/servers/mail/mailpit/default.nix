@@ -1,24 +1,30 @@
-{ lib
-, stdenv
-, buildGoModule
-, nodejs
-, python3
-, libtool
-, npmHooks
-, fetchFromGitHub
-, fetchNpmDeps
-, testers
-, mailpit
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  nodejs,
+  python3,
+  libtool,
+  npmHooks,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  testers,
+  mailpit,
+  nixosTests,
 }:
 
 let
-  version = "1.15.1";
+  source = import ./source.nix;
+
+  inherit (source)
+    version
+    vendorHash;
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = "sha256-5QEn4sEZgtoFrVonZsAtvzhEkxYGDEWwhJOxqwWQJTk=";
+    hash = source.hash;
   };
 
   # Separate derivation, because if we mix this in buildGoModule, the separate
@@ -30,7 +36,7 @@ let
 
     npmDeps = fetchNpmDeps {
       inherit src;
-      hash = "sha256-5F68ia2V8mw4iPAjSoz0b8z1lplWtAg98BgDXYOmMKs=";
+      hash = source.npmDepsHash;
     };
 
     env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
@@ -39,7 +45,12 @@ let
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
-    nativeBuildInputs = [ nodejs python3 libtool npmHooks.npmConfigHook ];
+    nativeBuildInputs = [
+      nodejs
+      python3
+      libtool
+      npmHooks.npmConfigHook
+    ];
 
     buildPhase = ''
       npm run package
@@ -54,21 +65,31 @@ in
 
 buildGoModule {
   pname = "mailpit";
-  inherit src version;
-
-  vendorHash = "sha256-e2mlOwGDU5NlKZSstHMdTidSfhNeeY6cBgtW+W9nwV8=";
+  inherit src version vendorHash;
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" "-X github.com/axllent/mailpit/config.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/axllent/mailpit/config.Version=${version}"
+  ];
 
   preBuild = ''
     cp -r ${ui} server/ui/dist
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = mailpit;
-    command = "mailpit version";
+  passthru.tests = {
+    inherit (nixosTests) mailpit;
+    version = testers.testVersion {
+      package = mailpit;
+      command = "mailpit version";
+    };
+  };
+
+  passthru.updateScript = {
+    supportedFeatures = [ "commit" ];
+    command = ./update.sh;
   };
 
   meta = with lib; {

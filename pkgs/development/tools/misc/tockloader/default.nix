@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/tock/tockloader";
     changelog = "https://github.com/tock/tockloader/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
 

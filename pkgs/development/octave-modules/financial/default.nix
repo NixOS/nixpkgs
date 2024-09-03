@@ -1,8 +1,6 @@
 { buildOctavePackage
 , lib
 , fetchurl
-, io
-, statistics
 }:
 
 buildOctavePackage rec {

@@ -1,10 +1,12 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.0.7";
+  version = "2.2.2";
   providers = {
     airplay = [
     ];
+    apple_music = [
+    ]; # missing pywidevine
     builtin = [
     ];
     chromecast = ps: with ps; [
@@ -29,8 +31,9 @@
     ]; # missing hass-client
     hass_players = [
     ];
-    jellyfin = [
-    ]; # missing jellyfin_apiclient_python
+    jellyfin = ps: with ps; [
+      aiojellyfin
+    ];
     musicbrainz = [
     ];
     opensubsonic = ps: with ps; [
@@ -48,6 +51,7 @@
       aioslimproto
     ];
     snapcast = ps: with ps; [
+      bidict
       snapcast
     ];
     sonos = ps: with ps; [
@@ -57,7 +61,10 @@
     ];
     soundcloud = [
     ]; # missing soundcloudpy
-    spotify = [
+    spotify = ps: with ps; [
+      pkce
+    ];
+    template_player_provider = [
     ];
     test = [
     ];
@@ -71,8 +78,8 @@
     ugp = [
     ];
     ytmusic = ps: with ps; [
-      pytube
+      yt-dlp
       ytmusicapi
-    ];
+    ]; # missing yt-dlp-youtube-accesstoken
   };
 }

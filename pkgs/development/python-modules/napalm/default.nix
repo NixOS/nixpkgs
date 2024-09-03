@@ -9,7 +9,6 @@
   cffi,
 
   # dependencies
-  future,
   jinja2,
   junos-eznc,
   lxml,

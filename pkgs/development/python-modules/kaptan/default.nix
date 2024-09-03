@@ -34,6 +34,6 @@ buildPythonPackage rec {
     mainProgram = "kaptan";
     homepage = "https://kaptan.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

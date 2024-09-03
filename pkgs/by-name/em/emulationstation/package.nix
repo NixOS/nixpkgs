@@ -1,31 +1,33 @@
-{ lib
-, SDL2
-, alsa-lib
-, boost
-, cmake
-, curl
-, fetchFromGitHub
-, freeimage
-, freetype
-, libGL
-, libGLU
-, libvlc
-, pkg-config
-, rapidjson
-, stdenv
+{
+  lib,
+  SDL2,
+  alsa-lib,
+  boost,
+  callPackage,
+  cmake,
+  curl,
+  freeimage,
+  freetype,
+  libGL,
+  libGLU,
+  libvlc,
+  pkg-config,
+  rapidjson,
+  stdenv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "emulationstation";
-  version = "2.11.2";
+let
+  sources = callPackage ./sources.nix { };
+in
+stdenv.mkDerivation {
+  inherit (sources.emulationstation) pname version src;
 
-  src = fetchFromGitHub {
-    owner = "RetroPie";
-    repo = "EmulationStation";
-    rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-J5h/578FVe4DXJx/AvpRnCIUpqBeFtmvFhUDYH5SErQ=";
-  };
+  postUnpack = ''
+    pushd $sourceRoot/external/pugixml
+    cp --verbose --archive ${sources.pugixml.src}/* .
+    chmod --recursive 744 .
+    popd
+  '';
 
   nativeBuildInputs = [
     SDL2
@@ -46,11 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
   ];
 
-  strictDeps = true;
+  cmakeFlags = [ (lib.cmakeBool "GL" true) ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "GL" true)
-  ];
+  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/emulationstation/
     cp -r ../resources $out/share/emulationstation/
 
-    runHook preInstall
+    runHook postInstall
   '';
 
   # es-core/src/resources/ResourceManager.cpp: resources are searched at the
@@ -70,12 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  passthru = {
+    inherit sources;
+  };
+
   meta = {
     homepage = "https://github.com/RetroPie/EmulationStation";
     description = "Flexible emulator front-end supporting keyboardless navigation and custom system themes (forked by RetroPie)";
     license = with lib.licenses; [ mit ];
     mainProgram = "emulationstation";
-    maintainers = with lib.maintainers; [ AndersonTorres edwtjo ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      edwtjo
+    ];
     platforms = lib.platforms.linux;
   };
-})
+}

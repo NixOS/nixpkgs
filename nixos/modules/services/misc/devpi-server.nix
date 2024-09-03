@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   cfg = config.services.devpi-server;
 
@@ -17,17 +16,17 @@ let
 in
 {
   options.services.devpi-server = {
-    enable = mkEnableOption "Devpi Server";
+    enable = lib.mkEnableOption "Devpi Server";
 
-    package = mkPackageOption pkgs "devpi-server" { };
+    package = lib.mkPackageOption pkgs "devpi-server" { };
 
-    primaryUrl = mkOption {
-      type = types.str;
+    primaryUrl = lib.mkOption {
+      type = lib.types.str;
       description = "Url for the primary node. Required option for replica nodes.";
     };
 
-    replica = mkOption {
-      type = types.bool;
+    replica = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Run node as a replica.
@@ -35,8 +34,8 @@ in
       '';
     };
 
-    secretFile = mkOption {
-      type = types.nullOr types.path;
+    secretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Path to a shared secret file used for synchronization,
@@ -44,24 +43,24 @@ in
       '';
     };
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = ''
         domain/ip address to listen on
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 3141;
       description = "The port on which Devpi Server will listen.";
     };
 
-    openFirewall = mkEnableOption "opening the default ports in the firewall for Devpi Server";
+    openFirewall = lib.mkEnableOption "opening the default ports in the firewall for Devpi Server";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.devpi-server = {
       enable = true;
@@ -74,7 +73,7 @@ in
       # have 0600 permissions.
       preStart =
         ''
-          ${optionalString (!isNull cfg.secretFile)
+          ${lib.optionalString (!isNull cfg.secretFile)
             "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"
           }
 
@@ -83,7 +82,7 @@ in
             exit 0
           fi
           ${cfg.package}/bin/devpi-init --serverdir ${serverDir} ''
-        + strings.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
+        + lib.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
 
       serviceConfig = {
         LoadCredential = lib.mkIf (! isNull cfg.secretFile) [
@@ -112,7 +111,7 @@ in
                   [ "--role=master" ]
               );
           in
-          "${cfg.package}/bin/devpi-server ${concatStringsSep " " args}";
+          "${cfg.package}/bin/devpi-server ${lib.concatStringsSep " " args}";
         DynamicUser = true;
         StateDirectory = stateDirName;
         RuntimeDirectory = stateDirName;
@@ -123,10 +122,10 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
 
-    meta.maintainers = [ cafkafk ];
+    meta.maintainers = [ lib.maintainers.cafkafk ];
   };
 }

@@ -1,22 +1,22 @@
 { lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null }:
 
-let recent = lib.versions.isGe "8.7" coq.coq-version; in
+let recent = lib.versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev"; in
 (mkCoqDerivation {
   pname = "QuickChick";
   owner = "QuickChick";
   inherit version;
-  defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
-      { cases = [ (range "8.15" "8.19") pred.true  ]; out = "2.0.2"; }
-      { cases = [ (range "8.13" "8.17") pred.true  ]; out = "1.6.5"; }
-      { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
-      { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
-      { cases = [ "8.11" pred.true  ]; out = "1.3.2"; }
-      { cases = [ "8.10" pred.true  ]; out = "1.2.1"; }
-      { cases = [ "8.9"  pred.true  ];  out = "1.1.0"; }
-      { cases = [ "8.8"  pred.true  ];  out = "20190311"; }
-      { cases = [ "8.7"  isLe "1.8" ];  out = "1.0.0"; }
-      { cases = [ "8.6"  pred.true  ];  out = "20171102"; }
-      { cases = [ "8.5"  pred.true  ];  out = "20170512"; }
+  defaultVersion = lib.switch [ coq.coq-version ssreflect.version ] [
+      { cases = [ (lib.versions.range "8.15" "8.19") lib.pred.true  ]; out = "2.0.2"; }
+      { cases = [ (lib.versions.range "8.13" "8.17") lib.pred.true  ]; out = "1.6.5"; }
+      { cases = [ "8.13" lib.pred.true           ]; out = "1.5.0"; }
+      { cases = [ "8.12" lib.pred.true           ]; out = "1.4.0"; }
+      { cases = [ "8.11" lib.pred.true           ]; out = "1.3.2"; }
+      { cases = [ "8.10" lib.pred.true           ]; out = "1.2.1"; }
+      { cases = [ "8.9"  lib.pred.true           ]; out = "1.1.0"; }
+      { cases = [ "8.8"  lib.pred.true           ]; out = "20190311"; }
+      { cases = [ "8.7"  lib.versions.isLe "1.8" ]; out = "1.0.0"; }
+      { cases = [ "8.6"  lib.pred.true           ]; out = "20171102"; }
+      { cases = [ "8.5"  lib.pred.true           ]; out = "20170512"; }
     ] null;
   release."2.0.2".sha256    = "sha256-xxKkwDRjB8nUiXNhein1Ppn0DP5FZ13J90xUPAnQBbs=";
   release."2.0.1".sha256    = "sha256-gJc+9Or6tbqE00920Il4pnEvokRoiADX6CxP/Q0QZaY=";
@@ -40,6 +40,9 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
   preConfigure = lib.optionalString recent
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
+  useDuneifVersion = v: lib.versions.isGe "2.1" v || v == "dev";
+  opam-name = "coq-quickchick";
+
   mlPlugin = true;
   nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
   propagatedBuildInputs = [ ssreflect ]
@@ -54,9 +57,11 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
   };
 }).overrideAttrs (o:
   let after_1_6 = lib.versions.isGe "1.6" o.version || o.version == "dev";
+      after_2_1 = lib.versions.isGe "2.1" o.version || o.version == "dev";
   in {
     nativeBuildInputs = o.nativeBuildInputs
-    ++ lib.optional after_1_6 coq.ocamlPackages.cppo;
+    ++ lib.optional after_1_6 coq.ocamlPackages.cppo
+    ++ lib.optional after_2_1 coq.ocamlPackages.menhir;
     propagatedBuildInputs = o.propagatedBuildInputs
     ++ lib.optionals after_1_6 (with coq.ocamlPackages; [ findlib zarith ]);
 })

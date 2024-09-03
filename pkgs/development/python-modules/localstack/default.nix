@@ -4,8 +4,10 @@
   fetchFromGitHub,
   apispec,
   boto3,
+  build,
   cachetools,
   click,
+  cryptography,
   localstack-client,
   localstack-ext,
   plux,
@@ -16,33 +18,31 @@
   requests,
   rich,
   semver,
+  setuptools,
   tailer,
 }:
 
 buildPythonPackage rec {
   pname = "localstack";
-  version = "3.5.0";
-  format = "setuptools";
+  version = "3.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sd5B4+pvUwNXfP3hsqBkUoHo06YyzUGCUHzc8f77Vx4=";
+    hash = "sha256-MAECVYO6+1JqSZN8PFvHcMWizeYBUnU+7o7l48uwpv4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "requests>=2.20.0,<2.26" "requests~=2.20" \
-      --replace "cachetools~=5.0.0" "cachetools~=5.0" \
-      --replace "boto3>=1.20,<1.25.0" "boto3~=1.20"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     apispec
     boto3
+    build
     cachetools
     click
+    cryptography
     localstack-client
     localstack-ext
     plux
@@ -56,19 +56,26 @@ buildPythonPackage rec {
     tailer
   ];
 
+  pythonRelaxDeps = [ "dill" ];
+
   pythonImportsCheck = [ "localstack" ];
 
   # Test suite requires boto, which has been removed from nixpkgs
   # Just do minimal test, buildPythonPackage maps checkPhase
   # to installCheckPhase, so we can test that entrypoint point works.
   checkPhase = ''
+    runHook preCheck
+
+    export HOME=$(mktemp -d)
     $out/bin/localstack --version
+
+    runHook postCheck
   '';
 
   meta = with lib; {
     description = "Fully functional local Cloud stack";
     homepage = "https://github.com/localstack/localstack";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

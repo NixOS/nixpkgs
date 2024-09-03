@@ -28,6 +28,7 @@ buildDotnetModule (args // {
     nugetDeps = { fetchNuGet }: [
       (fetchNuGet { pname = nugetName; inherit version; sha256 = nugetSha256; hash = nugetHash; })
     ] ++ (nugetDeps fetchNuGet);
+    installable = true;
   };
 
   dotnetGlobalTool = true;

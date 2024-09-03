@@ -41,7 +41,7 @@ let
     cmakeFlags = [ "-DBUILD_CPP_CL=OFF" ];
 
     meta = with lib; {
-      description = "Samples from the AMD APP SDK (with OpenCRun support) ";
+      description = "Samples from the AMD APP SDK (with OpenCRun support)";
       homepage    = "https://github.com/OpenCL/AMD_APP_samples";
       license     = licenses.bsd2;
       platforms   = platforms.linux;

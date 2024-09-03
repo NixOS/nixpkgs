@@ -1,4 +1,4 @@
-{ lib, fetchgit, stdenv, bitlbee, autoreconfHook, pkg-config, glib }:
+{ lib, fetchgit, stdenv, bitlbee, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "bitlbee-mastodon";

@@ -32,7 +32,7 @@ let
 in rec {
 
   nixos = {
-    inherit (nixos') channel manual options iso_minimal amazonImage dummy;
+    inherit (nixos') channel manual options iso_minimal dummy;
     tests = {
       inherit (nixos'.tests)
         acme
@@ -116,7 +116,6 @@ in rec {
       (map onSupported [
         "nixos.dummy"
         "nixos.iso_minimal"
-        "nixos.amazonImage"
         "nixos.manual"
         "nixos.tests.acme"
         "nixos.tests.boot.uefiCdrom"

@@ -1,12 +1,10 @@
 {
   lib,
-  async-timeout,
-  bash,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
-  langchain,
   langchain-core,
+  langchain-standard-tests,
   openai,
   tiktoken,
   lark,
@@ -21,11 +19,12 @@
   responses,
   syrupy,
   toml,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.1.17";
+  version = "0.1.22";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,23 +33,19 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-ELD1KXCVx3SmiJodagtOHgBGKdjRWiRVCCNYcL63eCY=";
+    hash = "sha256-5UAijSTfQ6nQxdZvKHl2o01wDW6+Jphf38V+dAs7Ffk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
   preConfigure = ''
-    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
-
     substituteInPlace pyproject.toml \
-      --replace-fail "path = \"../../standard-tests\"" "path = \"./langchain_standard_tests\"" \
       --replace-fail "--cov=langchain_openai" ""
   '';
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    langchain
     langchain-core
     openai
     tiktoken
@@ -58,6 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    langchain-standard-tests
     lark
     pandas
     pytest-asyncio
@@ -89,8 +85,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-openai==(.*)"
+    ];
   };
 
   meta = {

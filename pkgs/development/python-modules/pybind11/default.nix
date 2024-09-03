@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   ninja,
   setuptools,
@@ -51,28 +50,15 @@ let
 in
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.12.0";
+  version = "2.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
     rev = "v${version}";
-    hash = "sha256-DVkI5NxM5uME9m3PFYVpJOOa2j+yjL6AJn76fCTv2nE=";
+    hash = "sha256-sQUq39CmgsDEMfluKMrrnC5fio//pgExcyqJAE00UjU=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/pybind/pybind11/pull/5127
-      url = "https://github.com/pybind/pybind11/commit/540bef2d2c9fb54fa7c1474ee1af959ce90f2b32.patch";
-      hash = "sha256-0ZWlH/5kQ3An/tu6ulOXO2k32asATrr1mlI4nGjIqaI=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "timeout=300" ""
-  '';
 
   build-system = [
     cmake

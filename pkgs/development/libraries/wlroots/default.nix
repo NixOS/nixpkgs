@@ -15,7 +15,6 @@
 , mesa
 , xorg
 , libpng
-, ffmpeg_4
 , ffmpeg
 , hwdata
 , seatd
@@ -23,7 +22,9 @@
 , glslang
 , libliftoff
 , libdisplay-info
+, lcms2
 , nixosTests
+, testers
 
 , enableXWayland ? true
 , xwayland ? null
@@ -94,7 +95,12 @@ let
       '';
 
       # Test via TinyWL (the "minimum viable product" Wayland compositor based on wlroots):
-      passthru.tests.tinywl = nixosTests.tinywl;
+      passthru.tests = {
+        tinywl = nixosTests.tinywl;
+        pkg-config = testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+        };
+      };
 
       meta = {
         description = "Modular Wayland compositor library";
@@ -107,23 +113,16 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.linux;
         maintainers = with lib.maintainers; [ primeos synthetica rewine ];
+        pkgConfigModules = [
+          (if lib.versionOlder finalAttrs.version "0.18"
+           then "wlroots"
+           else "wlroots-${lib.versions.majorMinor finalAttrs.version}")
+        ];
       };
     });
 
 in
 rec {
-  wlroots_0_16 = generic {
-    version = "0.16.2";
-    hash = "sha256-JeDDYinio14BOl6CbzAPnJDOnrk4vgGNMN++rcy2ItQ=";
-    postPatch = ''
-      substituteInPlace backend/drm/meson.build \
-        --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
-    '';
-    extraBuildInputs = [
-      ffmpeg_4
-    ];
-  };
-
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
@@ -137,5 +136,19 @@ rec {
     ];
   };
 
-  wlroots = wlroots_0_17;
+  wlroots_0_18 = generic {
+    version = "0.18.0";
+    hash = "sha256-LiRnvu7qCbfSg+ONWVCtWwdzxxFZHfbgmy7zApCIW40=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
+    extraBuildInputs = [
+      ffmpeg
+      libliftoff
+      libdisplay-info
+      lcms2
+    ];
+  };
+
+  wlroots = wlroots_0_18;
 }

@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     Libsystem
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd solana \
       --bash <($out/bin/solana completion --shell bash) \
       --fish <($out/bin/solana completion --shell fish) \

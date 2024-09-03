@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
+{ fetchFromGitHub
 , fetchPypi
 , python3
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = pySelf: pySuper: {
       connexion = pySuper.connexion.overridePythonAttrs (o: rec {
         version = "2.14.2";

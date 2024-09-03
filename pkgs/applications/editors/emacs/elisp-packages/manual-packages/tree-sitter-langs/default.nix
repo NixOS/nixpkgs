@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, writeText
 , melpaStablePackages
 , runCommand
 , tree-sitter-grammars
@@ -44,6 +43,8 @@ melpaStablePackages.tree-sitter-langs.overrideAttrs(old: {
             done
           fi
         '') plugins);
+
+  ignoreCompilationError = false;
 
   passthru = old.passthru or {} // {
     inherit plugins;

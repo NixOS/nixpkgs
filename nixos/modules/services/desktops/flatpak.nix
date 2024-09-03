@@ -1,8 +1,5 @@
 # flatpak service.
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.flatpak;
 in {
@@ -14,13 +11,15 @@ in {
   ###### interface
   options = {
     services.flatpak = {
-      enable = mkEnableOption "flatpak";
+      enable = lib.mkEnableOption "flatpak";
+
+      package = lib.mkPackageOption pkgs "flatpak" { };
     };
   };
 
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       { assertion = (config.xdg.portal.enable == true);
@@ -28,16 +27,16 @@ in {
       }
     ];
 
-    environment.systemPackages = [ pkgs.flatpak ];
+    environment.systemPackages = [ cfg.package ];
 
     security.polkit.enable = true;
 
     fonts.fontDir.enable = true;
 
-    services.dbus.packages = [ pkgs.flatpak ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.flatpak ];
-    systemd.tmpfiles.packages = [ pkgs.flatpak ];
+    systemd.packages = [ cfg.package ];
+    systemd.tmpfiles.packages = [ cfg.package ];
 
     environment.profiles = [
       "$HOME/.local/share/flatpak/exports"

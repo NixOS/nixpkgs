@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xv";
-  version = "5.2.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "xv";
     rev = "v${version}";
-    sha256 = "sha256-fqkGfK8Z6CxJIFhqS56fGF3PNACQRGEtTPcBDZpvUpE=";
+    sha256 = "sha256-IFbR/1oksRkpJvvu+7TwLFtDujuAmV+sX8Njn6gpgBg=";
   };
 
   nativeBuildInputs = [ cmake ];

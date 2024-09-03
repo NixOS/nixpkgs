@@ -2,6 +2,7 @@
   lib,
   SDL2,
   cmake,
+  enet,
   extra-cmake-modules,
   fetchFromGitHub,
   libGL,
@@ -21,17 +22,18 @@ let
     qtbase
     qtmultimedia
     qtwayland
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "0.9.5-unstable-2024-07-14";
+  version = "0.9.5-unstable-2024-08-21";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "94ba7c159427c88b85806a4e099a44287681778c";
-    hash = "sha256-l38RgDWtDi8cVn0LL57F9pAT2bNmZIj6eo+1E+IJ7Lw=";
+    rev = "4f6498c99c5dcdb780371fe936d49e32df148e6e";
+    hash = "sha256-GfcPWWWAO9zQrqr2+CxNMaIxcfswZhDw1DFjrmpWZ2Q=";
   };
 
   nativeBuildInputs = [
@@ -40,38 +42,39 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    SDL2
-    extra-cmake-modules
-    libarchive
-    libslirp
-    libGL
-    qtbase
-    qtmultimedia
-    zstd
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland
-    qtwayland
-  ];
+  buildInputs =
+    [
+      SDL2
+      enet
+      extra-cmake-modules
+      libarchive
+      libslirp
+      libGL
+      qtbase
+      qtmultimedia
+      zstd
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      wayland
+      qtwayland
+    ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_QT6" true)
-  ];
+  cmakeFlags = [ (lib.cmakeBool "USE_QT6" true) ];
 
   strictDeps = true;
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
-  ];
-
-  installPhase = lib.optionalString stdenv.isDarwin ''
-    runHook preInstall
-    mkdir -p $out/Applications
-    cp -r melonDS.app $out/Applications/
-    runHook postInstall
- '';
+  qtWrapperArgs =
+    lib.optionals stdenv.isLinux [
+      "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpcap
+          wayland
+        ]
+      }"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+    ];
 
   passthru = {
     updateScript = unstableGitUpdater { };

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , python3Packages
 , expect

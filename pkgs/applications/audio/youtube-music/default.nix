@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.4.1";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HuV1jFSFvb/Ji150rVIvHrPLY3167W9/9xNnI81k9B8=";
+    hash = "sha256-6aAaIugho8yHohEHp0HVkmzIOfhpkNYts6BOKPp9Wbw=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-uN4rB/S/uoqR+qj7T/TGtU+3PRGagYVfx51nn6U8sdo=";
+    hash = "sha256-lxqBmtHkyk4mnM/AJQmpyCmvhW2e96vZBkgtoREjEXY=";
   };
 
   nativeBuildInputs = [ makeWrapper python3 nodejs pnpm.configHook ]
@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postBuild = lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
+    cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
   '' + ''
     pnpm build
     ./node_modules/.bin/electron-builder \
       --dir \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
   '';
 

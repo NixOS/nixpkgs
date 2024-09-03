@@ -77,6 +77,10 @@
         }).nixos.manual;
       };
 
+      devShells = forAllSystems (system: {
+        default = import ./shell.nix { inherit system; };
+      });
+
       # The "legacy" in `legacyPackages` doesn't imply that the packages exposed
       # through this attribute are "legacy" packages. Instead, `legacyPackages`
       # is used here as a substitute attribute name for `packages`. The problem

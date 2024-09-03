@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-iwhwiXrFrGfe1Wjc+t9Flpz6imvrD9YK8qnq3Coycqo=";
   };
 
-  outputs = [ "out" "dev" "info" ];
-  outputBin = "dev";
+  outputs = [ "bin" "lib" "dev" "info" "out" ];
 
   # The CPU Jitter random number generator must not be compiled with
   # optimizations and the optimize -O0 pragma only works for gcc.
@@ -58,15 +57,22 @@ stdenv.mkDerivation rec {
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postFixup = ''
     sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' "$dev/include/gcrypt.h"
+  ''
+  # The `libgcrypt-config` script references $dev and in the $dev output, the
+  # stdenv automagically puts the $bin output into propagatedBuildInputs. This
+  # would cause a cycle. This is a weird tool anyways, so let's stuff it in $dev
+  # instead.
+  + ''
+    moveToOutput bin/libgcrypt-config $dev
   '' + lib.optionalString enableCapabilities ''
-    sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $out/lib/libgcrypt.la
+    sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $lib/lib/libgcrypt.la
   '';
 
   # TODO: figure out why this is even necessary and why the missing dylib only crashes
   # random instead of every test
   preCheck = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/lib
-    cp src/.libs/libgcrypt.20.dylib $out/lib
+    mkdir -p $lib/lib
+    cp src/.libs/libgcrypt.20.dylib $lib/lib
   '';
 
   doCheck = true;
@@ -82,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

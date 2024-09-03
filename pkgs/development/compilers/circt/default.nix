@@ -18,12 +18,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.77.0";
+  version = "1.84.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    hash = "sha256-eiXyGwvObrhyhj7Nj9wIafmcaRYjZt0Qy4D3D+fEsGs=";
+    hash = "sha256-9GOn0wnFQ9JidLf5qpz2xG0lf+cCqKMvZnAy4JDCFu4=";
     fetchSubmodules = true;
   };
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     description = "Circuit IR compilers and tools";
     homepage = "https://circt.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sharzy pineapplehunter ];
+    maintainers = with lib.maintainers; [ sharzy pineapplehunter sequencer ];
     platforms = lib.platforms.all;
   };
 }

@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Powerful polling utility in Python";
     homepage = "https://github.com/justiniso/polling";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

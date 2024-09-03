@@ -143,7 +143,7 @@ in {
         description = let
           url = "https://nixos.org/manual/nixos/stable/index.html#module-services-taskserver";
         in ''
-          Whether to enable the Taskwarrior server.
+          Whether to enable the Taskwarrior 2 server.
 
           More instructions about NixOS in conjunction with Taskserver can be
           found [in the NixOS manual](${url}).
@@ -327,7 +327,7 @@ in {
           Configuration options to pass to Taskserver.
 
           The options here are the same as described in
-          {manpage}`taskdrc(5)`, but with one difference:
+          {manpage}`taskdrc(5)` from the `taskwarrior2` package, but with one difference:
 
           The `server` option is
           `server.listen` here, because the
@@ -449,7 +449,7 @@ in {
       };
 
       systemd.services.taskserver = {
-        description = "Taskwarrior Server";
+        description = "Taskwarrior 2 Server";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];

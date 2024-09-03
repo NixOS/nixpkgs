@@ -18,9 +18,9 @@ in
   meta.maintainers = with lib.maintainers; [ gador ];
 
   options.services.blendfarm = with lib.types; {
-    enable = lib.mkEnableOption "Blendfarm, a render farm management software for Blender.";
+    enable = lib.mkEnableOption "Blendfarm, a render farm management software for Blender";
     package = lib.mkPackageOption pkgs "blendfarm" { };
-    openFirewall = lib.mkEnableOption "Allow blendfarm network access through the firewall.";
+    openFirewall = lib.mkEnableOption "allowing blendfarm network access through the firewall";
 
     user = lib.mkOption {
       description = "User under which blendfarm runs.";

@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Diaoul/babelfish";
     description = "Module to work with countries and languages";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

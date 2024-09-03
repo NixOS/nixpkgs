@@ -197,8 +197,38 @@ let
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
+      crossSystem = stdenv.targetPlatform // {
         useLLVM = true;
+        linker = "lld";
+      };
+    };
+
+    pkgsArocc = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsArocc = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Aro C compiler.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useArocc = true;
+        linker = "lld";
+      };
+    };
+
+    pkgsZig = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsZig = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Zig toolchain.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useZig = true;
         linker = "lld";
       };
     };
@@ -292,10 +322,21 @@ let
           pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
+              "shadowstack"
+              "pacret"
               "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
+          glibc = super'.glibc.override rec {
+            enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
+            enableCETRuntimeDefault = enableCET != false;
+          };
+        } // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
+          # causes shadowstack disablement
+          pcre = super'.pcre.override { enableJit = false; };
+          pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
+          pcre16 = super'.pcre16.override { enableJit = false; };
         })
       ] ++ overlays;
     };

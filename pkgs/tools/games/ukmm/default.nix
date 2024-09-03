@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , cmake
@@ -6,24 +7,25 @@
 , wrapGAppsHook3
 , libglvnd
 , libxkbcommon
+, openssl
 , nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ukmm";
-  version = "0.12.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
-    repo = pname;
+    repo = "ukmm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YnF0gn2JihZKkDBwI6Odne2CW8k2trQJiPbxMrtI8Gg=";
+    hash = "sha256-NZN+T2N+N+oxrjBRvVbRWbB2KY5im9SN7gPHzfvovl8=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "egui-aesthetix-0.2.2" = "sha256-LtrMSnz5KWUrYCe50kgGU98WdPxWlo+U7FtRmxSIeI8=";
+      "egui-aesthetix-0.2.4" = "sha256-6Nt+nx1pAkuehXINRLp8xgiXmq1PzWgtu/hVbcDm5iA=";
       "junction-0.2.0" = "sha256-6+pPp5wG1NoIj16Z+OvO4Pvy0jnQibn/A9cTaHAEVq4=";
       "msbt-0.1.1" = "sha256-PtBs60xgYrwS7yPnRzXpExwYUD3azIaqObRnnJEL5dE=";
       "msyt-1.2.1" = "sha256-aw5whCoQBhO0u9Fx2rTO1sRuPdGnAAlmPWv5q8CbQcI=";
@@ -39,6 +41,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libglvnd
     libxkbcommon
+    openssl
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
@@ -79,6 +82,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     mainProgram = "ukmm";
   };
 }

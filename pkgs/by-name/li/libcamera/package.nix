@@ -19,18 +19,18 @@
 , withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
 , lttng-ust # withTracing
 , withQcam ? false
-, qt5 # withQcam
+, qt6 # withQcam
 , libtiff # withQcam
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-eCtOtdjpwn0S56ZyRVdG1QCBk1KGPh8YTXD50xev7Bc=";
+    hash = "sha256-vB7dxBDG0y8YvG/2vCgrhyBJmumGG66Vl7yZwprxj5c=";
   };
 
   outputs = [ "out" "dev" ];
@@ -68,12 +68,15 @@ stdenv.mkDerivation rec {
     # hotplugging
     systemd
 
+    # pycamera
+    python3Packages.pybind11
+
     # yamlparser
     libyaml
 
     gtest
   ] ++ lib.optionals withTracing [ lttng-ust ]
-    ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+    ++ lib.optionals withQcam [ libtiff qt6.qtbase qt6.qttools ];
 
   nativeBuildInputs = [
     meson
@@ -81,14 +84,13 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     python3Packages.jinja2
-    python3Packages.pybind11
     python3Packages.pyyaml
     python3Packages.ply
     python3Packages.sphinx
     graphviz
     doxygen
     openssl
-  ] ++ lib.optional withQcam qt5.wrapQtAppsHook;
+  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"

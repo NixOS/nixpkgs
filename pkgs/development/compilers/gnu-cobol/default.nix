@@ -4,6 +4,7 @@
 , autoconf269
 , automake
 , libtool
+, pkg-config
 # libs
 , cjson
 , db
@@ -15,19 +16,19 @@
 , texinfo
 , texliveBasic
 # test
-, writeText
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnu-cobol";
-  version = "3.1.2";
+  version = "3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucobol/${lib.versions.majorMinor version}/gnucobol-${version}.tar.xz";
-    sha256 = "0x15ybfm63g7c9340fc6712h9v59spnbyaz4rf85pmnp3zbhaw2r";
+    hash = "sha256-O7SK9GztR3n6z0H9wu5g5My4bqqZ0BCzZoUxXfOcLuI=";
   };
 
   nativeBuildInputs = [
+    pkg-config
     autoconf269
     automake
     libtool
@@ -51,13 +52,26 @@ stdenv.mkDerivation rec {
   # Skips a broken test
   postPatch = ''
     sed -i '/^AT_CHECK.*crud\.cob/i AT_SKIP_IF([true])' tests/testsuite.src/listings.at
+    # upstream reports the following tests as known failures
+    # test 843:
+    sed -i '14180i\AT_SKIP_IF([true])' tests/testsuite.src/run_misc.at
+    # test 875:
+    sed -i '2894s/^/AT_SKIP_IF([true])/' tests/testsuite.src/run_file.at
   '';
 
   preConfigure = ''
     autoconf
     aclocal
     automake
+  '' + lib.optionalString stdenv.isDarwin ''
+    # when building with nix on darwin, configure will use GNU strip,
+    # which fails due to using --strip-unneeded, which is not supported
+    substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
   '';
+
+  # error: call to undeclared function 'xmlCleanupParser'
+  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  env.CFLAGS = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration";
 
   enableParallelBuilding = true;
 
@@ -71,7 +85,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     # Run tests
-    make -j$NIX_BUILD_CORES check
+    TESTSUITEFLAGS="--jobs=$NIX_BUILD_CORES" make check
 
     # Sanity check
     message="Hello, COBOL!"
@@ -96,7 +110,7 @@ stdenv.mkDerivation rec {
     description = "Open-source COBOL compiler";
     homepage = "https://sourceforge.net/projects/gnucobol/";
     license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = with maintainers; [ ericsagnes lovesegfault ];
+    maintainers = with maintainers; [ ericsagnes lovesegfault techknowlogick ];
     platforms = platforms.all;
   };
 }

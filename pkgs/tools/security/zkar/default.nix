@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zkar";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "phith0n";
     repo = "zkar";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JPkxJpx2guTaEfTYhQsgZG+kXqHXgEiOrS9sk5vOjVc=";
+    hash = "sha256-F4bGGOZ6ftaSDbsPh3ML9qJoXmdSD6TGc7mt4HOuPkU=";
   };
 
-  vendorHash = "sha256-R+Pd3QklWqTuivUy7nRIzCmWSujgXpdfFoXAihGSflk=";
+  vendorHash = "sha256-Eyi22d6RkIsg6S5pHXOqn6kULQ/mLeoaxSxxJJkMgIQ=";
 
   ldflags = [ "-s" "-w" ];
 

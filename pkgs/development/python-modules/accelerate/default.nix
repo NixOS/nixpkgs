@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.31.0";
+  version = "0.33.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "accelerate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1iLTmSyZzOHGeAr2xBW4mebbq1FZdNfJb8blCtbSqsI=";
+    hash = "sha256-SYhAYz180jdOUhzbe0iUFBuGRv4n4PmgfCVOEOZKBGA=";
   };
 
   buildInputs = [ llvmPackages.openmp ];

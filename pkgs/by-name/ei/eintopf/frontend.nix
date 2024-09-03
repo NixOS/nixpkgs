@@ -1,9 +1,7 @@
-{ lib
-, stdenv
+{ stdenv
 , fetchYarnDeps
 , fixup-yarn-lock
 , yarn
-, fetchFromGitea
 , src
 , version
 , nodejs
@@ -17,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/backstage";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/backstage/yarn.lock";
     hash = "sha256-Z/Pkk/qCWwr99g11DjEgnisPfxOhfD8+OCn6otxJtfI=";
   };
 

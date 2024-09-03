@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # Fix django tests
   postPatch = ''
     substituteInPlace tests/test_project/settings.py \
-      --replace "USE_L10N = True" ""
+      --replace-fail "USE_L10N = True" ""
   '';
 
   patches = [

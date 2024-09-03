@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, makeWrapper
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , bash, curl, jemalloc, json_c, libuv, zlib, libyaml, libelf, libbpf
@@ -20,7 +20,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.45.4";
+  version = "1.46.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-g/wxKtpNsDw/ZaUokdip39enQHMysJE6pYGsApuL4po="
+      then "sha256-tFjczhJ7bIEUDZx3MxYBu4tGkJhoQn5V79D4sLV2o8U="
       # we delete the v2 GUI after fetching
-      else "sha256-Mkrmvdr19sWzFOkdpt46mcsbA3CNpXy4w8um95xaWlo=";
+      else "sha256-uW3jRiJjFIFSfmmavM3KVF985F8nMKa+lQAgNBZvKyE=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper go ninja ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper go ninja ]
+    ++ lib.optionals withCups [ cups.dev ];
   # bash is only used to rewrite shebangs
   buildInputs = [ bash curl jemalloc json_c libuv zlib libyaml ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
@@ -60,18 +61,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withSsl [ openssl ];
 
   patches = [
+    # Allow ndsudo to use non-hardcoded `PATH`
+    # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
+    #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
+    ./ndsudo-fix-path.patch
     # Allow building without non-free v2 dashboard.
-    (fetchpatch {
-      url = "https://github.com/netdata/netdata/pull/17240/commits/b108df72281633234b731b223d99ec99f1d36adf.patch";
-      hash = "sha256-tgsnbNY0pxFU3bz1J1qPaAeVsozsk2bpHV2mNy8A9is=";
-    })
-    # Allow for go.d plugins to access the right directory.
-    # Can be removed once > v1.45.4 is released
-    # https://github.com/netdata/netdata/pull/17661
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/netdata/netdata/pull/17661.patch";
-      sha256 = "sha256-j+mrwkibQio2KO8UnV7sxzCoHmkcsalHNzP+YvrRz74=";
-    })
+    ./dashboard-v2-removal.patch
   ];
 
   # Guard against unused buld-time development inputs in closure. Without
@@ -186,7 +181,7 @@ stdenv.mkDerivation rec {
 
       sourceRoot = "${src.name}/src/go/collectors/go.d.plugin";
 
-      vendorHash = "sha256-KO+xMk6fpZCYRyxxKrsGfOHJ2bwjBaSmkgz1jIUHaZs=";
+      vendorHash = "sha256-fK6pboXgJom77iakb+CJvNuweQjLIrpS7suWRNY/KM4=";
       doCheck = false;
       proxyVendor = true;
 

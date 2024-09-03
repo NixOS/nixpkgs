@@ -23,7 +23,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.binfmt.registrations.appimage = lib.mkIf cfg.binfmt (
+    boot.binfmt.registrations = lib.mkIf cfg.binfmt (
       let
         appimage_common = {
           wrapInterpreterInShell = false;

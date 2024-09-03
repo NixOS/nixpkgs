@@ -63,7 +63,7 @@ with lib;
     # Firefox for reading the manual.
     firefox
 
-    glxinfo
+    mesa-demos
   ];
 
 }

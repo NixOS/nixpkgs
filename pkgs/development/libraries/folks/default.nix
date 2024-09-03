@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddocs=true"
     "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
-    "-Dtests=${lib.boolToString (finalAttrs.doCheck && stdenv.isLinux)}"
+    "-Dtests=${lib.boolToString (finalAttrs.finalPackage.doCheck && stdenv.isLinux)}"
   ];
 
   # backends/eds/lib/libfolks-eds.so.26.0.0.p/edsf-persona-store.c:10697:4:

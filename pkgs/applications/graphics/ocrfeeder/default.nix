@@ -10,7 +10,6 @@
 , goocanvas2
 , gtkspell3
 , isocodes
-, gnome
 , python3
 , tesseract4
 , extraOcrEngines ? [] # other supported engines are: ocrad gocr cuneiform

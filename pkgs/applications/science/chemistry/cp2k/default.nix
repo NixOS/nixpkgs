@@ -10,6 +10,10 @@
 , libint
 , libvori
 , libxc
+, dftd4
+, mctc-lib
+, mstore
+, multicharge
 , mpi
 , gsl
 , scalapack
@@ -54,13 +58,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2024.1";
+  version = "2024.2";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-6PB6wjdTOa55dXV7QIsjxI77hhc95WFEjNePfupBUJQ=";
+    hash = "sha256-KXxqzapdPZggFlxX1rkNcxEYb2+aQIPFclFspxII7aE=";
     fetchSubmodules = true;
   };
 
@@ -80,6 +84,10 @@ stdenv.mkDerivation rec {
     libint
     libvori
     libxc
+    dftd4
+    mctc-lib
+    mstore
+    multicharge
     libxsmm
     mpi
     spglib
@@ -154,6 +162,7 @@ stdenv.mkDerivation rec {
                  -D__MPI_VERSION=3 -D__F2008 -D__LIBXSMM -D__SPGLIB \
                  -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"} \
                  -D__PLUMED2 -D__HDF5 -D__GSL -D__SIRIUS -D__LIBVDWXC -D__SPFFT -D__SPLA \
+                 -D__DFTD4 \
                  ${lib.strings.optionalString (gpuBackend == "cuda") "-D__OFFLOAD_CUDA -D__ACC -D__DBCSR_ACC -D__NO_OFFLOAD_PW"} \
                  ${lib.strings.optionalString (gpuBackend == "rocm") "-D__OFFLOAD_HIP -D__DBCSR_ACC -D__NO_OFFLOAD_PW"}
     CFLAGS    = -fopenmp
@@ -165,6 +174,7 @@ stdenv.mkDerivation rec {
                  -I${lib.getDev libint}/include  \
                  -I${lib.getDev sirius}/include/sirius \
                  -I${lib.getDev libxc}/include \
+                 -I${lib.getDev dftd4}/include/dftd4 \
                  -I${lib.getDev libxsmm}/include \
                  -I${lib.getDev hdf5-fortran}/include \
                  -fallow-argument-mismatch
@@ -176,6 +186,7 @@ stdenv.mkDerivation rec {
                  -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"} \
                  -lz -ldl ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
                  -lplumed -lhdf5_fortran -lhdf5_hl -lhdf5 -lgsl -lsirius -lspla -lspfft -lvdwxc \
+                 -ldftd4 -lmstore -lmulticharge -lmctc-lib \
                  ${lib.strings.optionalString (gpuBackend == "cuda") ''
                    -L${cudaPackages.cuda_cudart}/lib/stubs/ \
                    -lcudart -lnvrtc -lcuda -lcublas

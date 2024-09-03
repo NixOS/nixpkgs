@@ -11,7 +11,7 @@ afoul of the upstream version skew policy.
 
 ## Patch Release Support Lifecycle
 
-K3s is built on top of K8s and typically provides a similar release cadence and support window (simply by cherry-picking over k8s patches). As such, we assume k3s's support lifecycle is identical to upstream K8s. The upstream K8s release and support lifecycle, including maintenance and end-of-life dates for current releases, is documented [on their suppport site](https://kubernetes.io/releases/patch-releases/#support-period). A more tabular view of the current support timeline can also be found on [endoflife.date](https://endoflife.date/kubernetes).
+K3s is built on top of K8s and typically provides a similar release cadence and support window (simply by cherry-picking over k8s patches). As such, we assume k3s's support lifecycle is identical to upstream K8s. The upstream K8s release and support lifecycle, including maintenance and end-of-life dates for current releases, is documented [on their support site](https://kubernetes.io/releases/patch-releases/#support-period). A more tabular view of the current support timeline can also be found on [endoflife.date](https://endoflife.date/kubernetes).
 
 In short, a new Kubernetes version is released roughly every 4 months and each release is supported for a little over 1 year.
 

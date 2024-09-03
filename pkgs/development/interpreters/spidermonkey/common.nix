@@ -14,6 +14,9 @@
 , pkg-config
 , python3
 , python39
+, python311
+, rust-cbindgen
+, rustPlatform
 , rustc
 , which
 , zip
@@ -58,17 +61,21 @@ stdenv.mkDerivation (finalAttrs: rec {
     # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
     # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
     ./add-riscv64-support.patch
-  ] ++ lib.optionals (lib.versionAtLeast version "102") [
+  ] ++ lib.optionals (lib.versionAtLeast version "102" && lib.versionOlder version "128") [
     # use pkg-config at all systems
     ./always-check-for-pkg-config.patch
     ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
+  ] ++ lib.optionals (lib.versionAtLeast version "128") [
+    # rebased version of the above 2 patches
+    ./always-check-for-pkg-config-128.patch
+    ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot-128.patch
   ] ++ lib.optionals (lib.versionAtLeast version "91" && stdenv.hostPlatform.system == "i686-linux") [
     # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
     ./fix-float-i686.patch
   ] ++ lib.optionals (lib.versionAtLeast version "91" && lib.versionOlder version "102") [
     # Fix 91 compatibility with python311
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/mozjs91/raw/rawhide/f/0001-Python-Build-Use-r-instead-of-rU-file-read-modes.patch";
+      url = "https://src.fedoraproject.org/rpms/mozjs91/raw/e3729167646775e60a3d8c602c0412e04f206baf/f/0001-Python-Build-Use-r-instead-of-rU-file-read-modes.patch";
       hash = "sha256-WgDIBidB9XNQ/+HacK7jxWnjOF8PEUt5eB0+Aubtl48=";
     })
   ];
@@ -79,11 +86,23 @@ stdenv.mkDerivation (finalAttrs: rec {
     perl
     pkg-config
     # 78 requires python up to 3.9
-    (if lib.versionOlder version "91" then python39 else python3)
+    # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
+    # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
+    (
+      if lib.versionOlder version "91" then
+        python39
+      else if lib.versionOlder version "115" then
+        python311
+      else
+        python3
+    )
     rustc
     rustc.llvmPackages.llvm # for llvm-objdump
     which
     zip
+  ] ++ lib.optionals (lib.versionAtLeast version "128") [
+    rust-cbindgen
+    rustPlatform.bindgenHook
   ] ++ lib.optionals (lib.versionOlder version "91") [
     autoconf213
     yasm # to buid icu? seems weird
@@ -151,7 +170,9 @@ stdenv.mkDerivation (finalAttrs: rec {
                    "class JS_PUBLIC_API SharedArrayRawBufferRefs {"
   '';
 
-  preConfigure = lib.optionalString (lib.versionOlder version "91") ''
+  preConfigure = lib.optionalString (lib.versionAtLeast version "128") ''
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
+  '' + lib.optionalString (lib.versionOlder version "91") ''
     export CXXFLAGS="-fpermissive"
   '' + ''
     export LIBXUL_DIST=$out

@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://pylxd.readthedocs.io/";
     changelog = "https://github.com/canonical/pylxd/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

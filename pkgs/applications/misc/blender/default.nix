@@ -5,7 +5,7 @@
   OpenAL,
   OpenGL,
   SDL,
-  addOpenGLRunpath,
+  addDriverRunpath,
   alembic,
   blender,
   boost,
@@ -100,13 +100,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.2.0";
+  version = "4.2.1";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-STG4IuEhkdA+sDPIpCAkSflyd3rSUZ9ZCS9PdB4vyTY=";
+      hash = "sha256-+Y4JbzeK+30fO8WdEmvjOeQjm094ofsUhRFXs9mkcxI=";
     })
     (fetchgit {
       name = "assets";
@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.wrapPython
     ]
     ++ lib.optionals cudaSupport [
-      addOpenGLRunpath
+      addDriverRunpath
       cudaPackages.cuda_nvcc
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
@@ -344,7 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString cudaSupport ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
         isELF "$program" || continue
-        addOpenGLRunpath "$program"
+        addDriverRunpath "$program"
       done
     ''
     + lib.optionalString stdenv.isDarwin ''
@@ -428,7 +428,7 @@ stdenv.mkDerivation (finalAttrs: {
     # the current apple sdk is too old (currently 11_0) and fails to build "metal" on x86_64-darwin
     broken = stdenv.hostPlatform.system == "x86_64-darwin";
     maintainers = with lib.maintainers; [
-      goibhniu
+      amarshall
       veprbl
     ];
     mainProgram = "blender";

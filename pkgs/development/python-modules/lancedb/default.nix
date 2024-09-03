@@ -23,18 +23,19 @@
   polars,
   pytest-asyncio,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.9.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     rev = "refs/tags/python-v${version}";
-    hash = "sha256-RWmvqGm/Bekajb/fs/PQJ2fL0Vo1Mmy+x40PKaDmIEU=";
+    hash = "sha256-LDxq49aFxUmRAw8tQvFxnExtU0IKKqMbxIBuY95cBHU=";
   };
 
   # ratelimiter only support up to python310 and it has been removed from nixpkgs
@@ -110,9 +111,20 @@ buildPythonPackage rec {
     "test_s3.py"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "python-v(.*)"
+      "--generate-lockfile"
+      "--lockfile-metadata-path"
+      "python"
+    ];
+  };
+
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

@@ -12,7 +12,6 @@
   scipy,
   tensorflow,
   threadpoolctl,
-  pytest-xdist,
   pytestCheckHook,
 }:
 

@@ -6,7 +6,6 @@
   backendStdenv,
   fetchurl,
   lib,
-  lndir,
   markForCudatoolkitRootHook,
   flags,
   stdenv,

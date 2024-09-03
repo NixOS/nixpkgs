@@ -1,7 +1,6 @@
 { darwin
 , fetchFromGitHub
 , lib
-, pkg-config
 , rustPlatform
 , stdenv
 }:
@@ -15,16 +14,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.17";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W08R1ny4LyzWehnsWSMCRjCxmvV0k7ARVbmZ740hg8w=";
+    hash = "sha256-45zus+mNOiWWbuF50XpMwc1B6Uoy5E1kUQmtdGVc46g=";
   };
 
-  cargoHash = "sha256-kuKsBnmH3bPgwuJ1q49iHMNT47Djx9BKxcMBbJ3zqis=";
+  cargoHash = "sha256-54CRNSDWdqD582Vv6d8snYEJrpkQ2Cvp8sjgQ6BcvHY=";
 
   buildInputs = optionals isDarwin [
     SystemConfiguration

@@ -2,17 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  setuptools,
+  pytestCheckHook,
   mock,
   six,
   isPyPy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sure";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = isPyPy;
 
@@ -23,26 +23,34 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "rednose = 1" ""
+      --replace "rednose = 1" "" \
+      --replace-fail "--cov=sure" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     mock
     six
   ];
 
-  doCheck = pythonOlder "3.12"; # nose requires imp module
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ];
 
-  nativeCheckInputs = [ nose ];
+  disabledTestPaths = [
+    "tests/test_old_api.py" # require nose
+  ];
 
   pythonImportsCheck = [ "sure" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility belt for automated testing";
     mainProgram = "sure";
     homepage = "https://sure.readthedocs.io/";
     changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

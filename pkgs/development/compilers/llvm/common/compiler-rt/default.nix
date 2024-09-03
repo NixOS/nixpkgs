@@ -12,6 +12,7 @@
 , python3
 , xcbuild
 , libllvm
+, libcxx
 , linuxHeaders
 , libxcrypt
 
@@ -33,6 +34,9 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
+  # TODO: Make this account for GCC having libstdcxx, which will help
+  # use clean up the `cmakeFlags` rats nest below.
+  haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic && lib.versionAtLeast release_version "16";
   inherit (stdenv.hostPlatform) isMusl isAarch64;
 
@@ -46,7 +50,7 @@ let
       cp -r ${monorepoSrc}/${baseName} "$out"
     '' else src;
 
-  preConfigure = lib.optionalString (useLLVM && !haveLibc) ''
+  preConfigure = lib.optionalString (!haveLibc) ''
     cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
   '';
 in
@@ -82,23 +86,32 @@ stdenv.mkDerivation ({
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
     "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
-  ] ++ lib.optionals ((useLLVM || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13")) [
+  ] ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
+    "-DSANITIZER_CXX_ABI=libcxxabi"
+    "-DSANITIZER_CXX_ABI_LIBNAME=libcxxabi"
+    "-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON"
+  ] ++ lib.optionals ((!haveLibc || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13")) [
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-  ] ++ lib.optionals (useLLVM || bareMetal || isMusl || isDarwinStatic) [
+  ] ++ lib.optionals (useLLVM && haveLibc) [
+    "-DCOMPILER_RT_BUILD_SANITIZERS=ON"
+  ] ++ lib.optionals (!haveLibc || bareMetal || isMusl || isDarwinStatic) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+  ] ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
-  ] ++ lib.optionals (useLLVM || bareMetal) [
+  ] ++ lib.optionals (useLLVM && haveLibc) [
+    "-DCOMPILER_RT_BUILD_PROFILE=ON"
+  ] ++ lib.optionals (!haveLibc || bareMetal) [
      "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal || isDarwinStatic) [
+  ] ++ lib.optionals (!haveLibc || bareMetal || isDarwinStatic) [
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
-  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
+  ] ++ lib.optionals (!haveLibc || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals (useLLVM && !haveLibc) [
+  ] ++ lib.optionals (!haveLibc) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
@@ -133,7 +146,7 @@ stdenv.mkDerivation ({
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-  '' + lib.optionalString (useLLVM && !haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
+  '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
       --replace "<stdlib.h>" "<stddef.h>"
   '') + ''
@@ -149,7 +162,13 @@ stdenv.mkDerivation ({
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
       --replace "#include <assert.h>" ""
-  ''));
+  '')) + lib.optionalString (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14") ''
+    # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
+    # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
+    substituteInPlace ../libcxx/utils/merge_archives.py \
+      --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
+      --replace-fail "distutils.spawn." ""
+  '';
 
   # Hack around weird upsream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
@@ -185,8 +204,12 @@ stdenv.mkDerivation ({
     # "All of the code in the compiler-rt project is dual licensed under the MIT
     # license and the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
-    # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
-    # https://reviews.llvm.org/D43106#1019077
-    broken = stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang;
+    broken =
+      # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
+      # https://reviews.llvm.org/D43106#1019077
+      (stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang)
+      # emutls wants `<pthread.h>` which isn't avaiable (without exeprimental WASM threads proposal).
+      # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
+      || (stdenv.hostPlatform.isWasm && haveLibc);
   };
 } // (if lib.versionOlder release_version "16" then { inherit preConfigure; } else {}))

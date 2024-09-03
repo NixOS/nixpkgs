@@ -8,7 +8,7 @@ let
 in {
   meta = {
     # doc = ./bee.xml;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 
   ### interface

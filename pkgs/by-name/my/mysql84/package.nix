@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
 , icu, libedit, libevent, lz4, ncurses, openssl, protobuf_21, re2, readline, zlib, zstd, libfido2
-, darwin, numactl, libtirpc, rpcsvc-proto, curl
+, cctools, darwin, numactl, libtirpc, rpcsvc-proto, curl
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.1";
+  version = "8.4.2";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-20Hxl9cXDFTX7cDQyaJzDCJfSvBeztD2S+z5u2wRAT4=";
+    hash = "sha256-Vlenjchr8L8iJ+CwX43losRHqBahEv+ib6cAg7y+mBQ=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isLinux [
     numactl libtirpc
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools darwin.apple_sdk.frameworks.CoreServices darwin.developer_cmds darwin.DarwinTools
+    cctools darwin.apple_sdk.frameworks.CoreServices darwin.developer_cmds darwin.DarwinTools
   ];
 
   outputs = [ "out" "static" ];

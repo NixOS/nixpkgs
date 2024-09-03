@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     description = "Command-line tool to download manga from mangaplus";
     homepage = "https://github.com/hurlenko/mloader";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "mloader";
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
   nodejs,
-  bash,
   asar,
   unzip,
 }:

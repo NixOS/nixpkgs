@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hipstermojo/paperoni";
     changelog = "https://github.com/hipstermojo/paperoni/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

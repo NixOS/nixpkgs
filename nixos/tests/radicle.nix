@@ -66,7 +66,7 @@ in
       services.radicle = {
         enable = true;
         privateKeyFile = seed-ssh-keys.snakeOilEd25519PrivateKey;
-        publicKeyFile = seed-ssh-keys.snakeOilEd25519PublicKey;
+        publicKey = seed-ssh-keys.snakeOilEd25519PublicKey;
         node = {
           openFirewall = true;
         };

@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "6.338.2";
+  version = "7.349.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gE6yKnFvsOFh8bFYc7b+bS+zmdDU7jucr0HwhdDeFzU=";
+    hash = "sha256-mIjQvc7SRjE1Orb2BkHK+K1TcRQvzj2oUOCUT4DzIuA=";
   };
 
   nativeBuildInputs = [
@@ -53,14 +53,14 @@ stdenv.mkDerivation rec {
     fast-float
   ];
 
-  mesonFlags = with lib; [
-    (mesonBool "demos" false) # Don't build and install the demo programs
-    (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
-    (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-    (mesonEnable "vk-proc-addr" vulkanSupport)
-    (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-  ] ++ optionals stdenv.isDarwin [
-    (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
+  mesonFlags = [
+    (lib.mesonBool "demos" false) # Don't build and install the demo programs
+    (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+    (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+    (lib.mesonEnable "vk-proc-addr" vulkanSupport)
+    (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+  ] ++ lib.optionals stdenv.isDarwin [
+    (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   postPatch = ''
