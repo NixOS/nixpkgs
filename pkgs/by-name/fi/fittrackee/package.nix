@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchPypi
-, postgresql
-, postgresqlTestHook
+{
+  fetchFromGitHub,
+  fetchPypi,
+  lib,
+  postgresql,
+  postgresqlTestHook,
+  python3,
 }:
 let
   python = python3.override {
@@ -53,29 +54,32 @@ python.pkgs.buildPythonApplication rec {
     "pyopenssl"
   ];
 
-  dependencies = with python.pkgs; [
-    authlib
-    babel
-    click
-    dramatiq
-    flask
-    flask-bcrypt
-    flask-dramatiq
-    flask-limiter
-    flask-migrate
-    flask-sqlalchemy
-    gpxpy
-    gunicorn
-    humanize
-    psycopg2
-    pyjwt
-    pyopenssl
-    pytz
-    shortuuid
-    sqlalchemy
-    staticmap
-    ua-parser
-  ] ++ dramatiq.optional-dependencies.redis
+  dependencies =
+    with python.pkgs;
+    [
+      authlib
+      babel
+      click
+      dramatiq
+      flask
+      flask-bcrypt
+      flask-dramatiq
+      flask-limiter
+      flask-migrate
+      flask-sqlalchemy
+      gpxpy
+      gunicorn
+      humanize
+      psycopg2
+      pyjwt
+      pyopenssl
+      pytz
+      shortuuid
+      sqlalchemy
+      staticmap
+      ua-parser
+    ]
+    ++ dramatiq.optional-dependencies.redis
     ++ flask-limiter.optional-dependencies.redis;
 
   pythonImportsCheck = [ "fittrackee" ];
