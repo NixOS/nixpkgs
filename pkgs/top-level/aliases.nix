@@ -1308,6 +1308,7 @@ mapAliases ({
   redocly-cli = redocly; # Added 2024-04-14
   redpanda = redpanda-client; # Added 2023-10-14
   redpanda-server = throw "'redpanda-server' has been removed because it was broken for a long time"; # Added 2024-06-10
+  relibc = throw "relibc has been removed due to lack of maintenance"; # Added 2024-09-02
   replay-sorcery = throw "replay-sorcery has been removed as it is unmaintained upstream. Consider using gpu-screen-recorder or obs-studio instead."; # Added 2024-07-13
   restinio_0_6 = throw "restinio_0_6 has been removed from nixpkgs as it's not needed by downstream packages"; # Added 2024-07-04
   restya-board = throw "'restya-board' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-01-22

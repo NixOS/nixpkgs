@@ -59,14 +59,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.17.18"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.17.42"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-HxFtMFeGR6XAMsP5LM0tvJ/ECWVpveIhWRTKvf8uYA0=";
+    hash = "sha256-f6S206MQy0qyHIJTIKSHBKT+P0dVCiUn5pMp2tClSb0=";
   };
 
   patches = [
@@ -79,7 +79,7 @@ py.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'awscrt>=0.19.18,<=0.20.11' 'awscrt>=0.19.18' \
+      --replace-fail 'awscrt>=0.19.18,<=0.21.2' 'awscrt>=0.19.18' \
       --replace-fail 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
