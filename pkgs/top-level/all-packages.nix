@@ -523,8 +523,6 @@ with pkgs;
 
   conserver = callPackage ../tools/misc/conserver { };
 
-  containerlab = callPackage ../tools/networking/containerlab { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   confetty = callPackage ../applications/misc/confetty { };
