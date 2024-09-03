@@ -1,4 +1,4 @@
-{ resholve, lib, coreutils, direnv, nix, fetchFromGitHub }:
+{ resholve, lib, coreutils, direnv, fetchFromGitHub }:
 
 # resholve does not yet support `finalAttrs` call pattern hence `rec`
 # https://github.com/abathur/resholve/issues/107
@@ -28,7 +28,7 @@ resholve.mkDerivation rec {
     default = {
       scripts = [ "share/nix-direnv/direnvrc" ];
       interpreter = "none";
-      inputs = [ coreutils nix ];
+      inputs = [ coreutils ];
       fake = {
         builtin = [
           "PATH_add"
@@ -42,6 +42,10 @@ resholve.mkDerivation rec {
           # not really a function - this is in an else branch for macOS/homebrew that
           # cannot be reached when built with nix
           "shasum"
+          # Use the `nix` executable from the user's environment; the user
+          # might not have stable Nix installed and might be depending on
+          # features, settings etc. that stable Nix doesn't support.
+          "nix"
         ];
       };
       keep = {
@@ -50,7 +54,6 @@ resholve.mkDerivation rec {
       };
       execer = [
         "cannot:${direnv}/bin/direnv"
-        "cannot:${nix}/bin/nix"
       ];
     };
   };
