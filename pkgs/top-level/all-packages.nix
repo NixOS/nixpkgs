@@ -4029,11 +4029,11 @@ with pkgs;
 
   autorandr = callPackage ../tools/misc/autorandr { };
 
-  avahi = callPackage ../development/libraries/avahi (config.avahi or {});
+  avahi = callPackage ../development/libraries/avahi { };
 
-  avahi-compat = callPackage ../development/libraries/avahi ((config.avahi or {}) // {
+  avahi-compat = callPackage ../development/libraries/avahi {
     withLibdnssdCompat = true;
-  });
+  };
 
   avro-c = callPackage ../development/libraries/avro-c { };
 
