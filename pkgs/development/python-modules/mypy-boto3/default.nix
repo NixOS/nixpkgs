@@ -1355,8 +1355,8 @@ rec {
       "sha256-tH0BLxs8nnocJzB/cPtq/fBuak7LOzqfTVL4v6R2yAA=";
 
   mypy-boto3-sts =
-    buildMypyBoto3Package "sts" "1.34.0"
-      "sha256-s0fgozbWAWLdlAdNnRD2FPKwmkVcm0JBWFDVTWduIGc=";
+    buildMypyBoto3Package "sts" "1.35.0"
+      "sha256-YZWAwLz01/eYCMgyiniUoO6sVvlFQYM8WjKcvHCPdng=";
 
   mypy-boto3-support =
     buildMypyBoto3Package "support" "1.34.0"
