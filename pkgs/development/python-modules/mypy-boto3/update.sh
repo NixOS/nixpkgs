@@ -12,7 +12,6 @@ packages=(
   mypy-boto3-account
   mypy-boto3-acm
   mypy-boto3-acm-pca
-  # mypy-boto3-alexaforbusiness
   mypy-boto3-amp
   mypy-boto3-amplify
   mypy-boto3-amplifybackend
@@ -39,7 +38,6 @@ packages=(
   mypy-boto3-autoscaling-plans
   mypy-boto3-backup
   mypy-boto3-backup-gateway
-#  mypy-boto3-backupstorage
   mypy-boto3-batch
   mypy-boto3-billingconductor
   mypy-boto3-braket
@@ -140,7 +138,6 @@ packages=(
   mypy-boto3-frauddetector
   mypy-boto3-fsx
   mypy-boto3-gamelift
-#  mypy-boto3-gamesparks
   mypy-boto3-glacier
   mypy-boto3-globalaccelerator
   mypy-boto3-glue
@@ -151,7 +148,6 @@ packages=(
   mypy-boto3-guardduty
   mypy-boto3-health
   mypy-boto3-healthlake
-  mypy-boto3-honeycode
   mypy-boto3-iam
   mypy-boto3-identitystore
   mypy-boto3-imagebuilder
@@ -162,7 +158,6 @@ packages=(
   mypy-boto3-iot
   mypy-boto3-iot-data
   mypy-boto3-iot-jobs-data
-  mypy-boto3-iot-roborunner
   mypy-boto3-iot1click-devices
   mypy-boto3-iot1click-projects
   mypy-boto3-iotanalytics
@@ -210,7 +205,6 @@ packages=(
   mypy-boto3-lookoutvision
   mypy-boto3-m2
   mypy-boto3-machinelearning
-  #mypy-boto3-macie
   mypy-boto3-macie2
   mypy-boto3-managedblockchain
   mypy-boto3-managedblockchain-query

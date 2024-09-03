@@ -61,10 +61,6 @@ rec {
     buildMypyBoto3Package "acm-pca" "1.35.0"
       "sha256-YU4Djb4Z9//5WYvkSgv9vlv4oG8Da6dP/Oktpuff4q0=";
 
-  mypy-boto3-alexaforbusiness =
-    buildMypyBoto3Package "alexaforbusiness" "1.34.0"
-      "sha256-wrMSoM3F0HgajmM9X6P+3i6mqD55TWGVv8eJ7XqNjrw=";
-
   mypy-boto3-amp =
     buildMypyBoto3Package "amp" "1.35.0"
       "sha256-Pm/KyqcUUAQBZjQKaVhuL/9c+qfkgfeD51esgE+EgQw=";
@@ -168,10 +164,6 @@ rec {
   mypy-boto3-backup-gateway =
     buildMypyBoto3Package "backup-gateway" "1.35.0"
       "sha256-8IRkY4sMGkj2ZxZBM4n/7clzQHwuon8wmXIOAGa4nEI=";
-
-  mypy-boto3-backupstorage =
-    buildMypyBoto3Package "backupstorage" "1.34.0"
-      "sha256-Y8kjZ+ov8OsiJ8Sm1LlvP8YbgVc+AkLkbZIhOh4y7ZY=";
 
   mypy-boto3-batch =
     buildMypyBoto3Package "batch" "1.35.0"
@@ -573,10 +565,6 @@ rec {
     buildMypyBoto3Package "gamelift" "1.35.0"
       "sha256-GtxGMKCKkwIZHROvHXx5C17dWXSV5+v8kEEuPe6iUsU=";
 
-  mypy-boto3-gamesparks =
-    buildMypyBoto3Package "gamesparks" "1.28.36"
-      "sha256-6lQXNJ55FYvkFA14rgJGhRMjBHA3YrOybnsKNecX7So=";
-
   mypy-boto3-glacier =
     buildMypyBoto3Package "glacier" "1.35.0"
       "sha256-WpSdaAf/s2jPoGG4cLjeNKZz6kUSApTMVq4nnB1nkfI=";
@@ -617,10 +605,6 @@ rec {
     buildMypyBoto3Package "healthlake" "1.35.0"
       "sha256-Df0AUKZh6S4OdqGBUtEC4cnic9E06Frj0McQH+yQwFc=";
 
-  mypy-boto3-honeycode =
-    buildMypyBoto3Package "honeycode" "1.34.0"
-      "sha256-HNp/STFuMLoO4qyL0iaYeiPpnMV3uzNBNFUDgzrHt9s=";
-
   mypy-boto3-iam =
     buildMypyBoto3Package "iam" "1.35.0"
       "sha256-s3mgHDyhejZ8t6RgkF+c4at4MKmruMilbyil/xCHZX8=";
@@ -660,10 +644,6 @@ rec {
   mypy-boto3-iot-jobs-data =
     buildMypyBoto3Package "iot-jobs-data" "1.35.0"
       "sha256-pHVZNE6mAr/IJrM/jY8fiEt1o8hQOJ1aw+oKuKijpyU=";
-
-  mypy-boto3-iot-roborunner =
-    buildMypyBoto3Package "iot-roborunner" "1.34.0"
-      "sha256-TfhJHtE2zlEr80SGbxAZfK2+M/ad596fdwex+4GhBf8=";
 
   mypy-boto3-iot1click-devices =
     buildMypyBoto3Package "iot1click-devices" "1.35.0"
@@ -853,10 +833,6 @@ rec {
     buildMypyBoto3Package "machinelearning" "1.35.0"
       "sha256-TNj5R4DxrKdlOa5u7O9gNwkzMkLPP1mcxYyu3bbONgY=";
 
-  mypy-boto3-macie =
-    buildMypyBoto3Package "macie" "1.29.0"
-      "sha256-lFOPbIBrGuv9W83fsyzyI5fyOleXf4j3sCh9IM0gaQ4=";
-
   mypy-boto3-macie2 =
     buildMypyBoto3Package "macie2" "1.35.0"
       "sha256-0L8kIa+KYf4hQW7ErpCMSEcgkHmqS95vt0YaCFLk1BU=";
@@ -952,10 +928,6 @@ rec {
   mypy-boto3-migrationhubstrategy =
     buildMypyBoto3Package "migrationhubstrategy" "1.35.0"
       "sha256-uzkFo1wOgpLdpSI2ErtfRo0uTdY/XbYltubzg4kC5ro=";
-
-  mypy-boto3-mobile =
-    buildMypyBoto3Package "mobile" "1.34.0"
-      "sha256-fzP70K6S7KPi6GnEj92shU+Dr07ieqDkmrAUEBxMVdI=";
 
   mypy-boto3-mq =
     buildMypyBoto3Package "mq" "1.35.0"
