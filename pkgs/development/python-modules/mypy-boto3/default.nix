@@ -1183,8 +1183,8 @@ rec {
       "sha256-F0ixOVQ8zmCrspV3+a5QmuJdvc5NOV8WiWdepiIeW9E=";
 
   mypy-boto3-rum =
-    buildMypyBoto3Package "rum" "1.34.49"
-      "sha256-Mq2H+13cjxYRwFfxJpWTAb+W5bx+Vew+jl+zbreRIkQ=";
+    buildMypyBoto3Package "rum" "1.35.0"
+      "sha256-RwPNNFntNChLqbr86wd1bwp6OqWvs3oj3V+4X71J3Hw=";
 
   mypy-boto3-s3 =
     buildMypyBoto3Package "s3" "1.34.65"
