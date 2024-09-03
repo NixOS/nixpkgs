@@ -1075,8 +1075,8 @@ rec {
       "sha256-Z4xkVJGD8gPx3PpNQuiMg9JGEZvgP+ohtuHlwk0sHog=";
 
   mypy-boto3-polly =
-    buildMypyBoto3Package "polly" "1.34.43"
-      "sha256-rx5sW32N6H47fpy5yGvwlKKVKS/uIKOtLfsjoGoNPJg=";
+    buildMypyBoto3Package "polly" "1.35.7"
+      "sha256-aIKpT15gBmM2gkkSbmzs5pVvAIfessdzlQTspmvK+LQ=";
 
   mypy-boto3-pricing =
     buildMypyBoto3Package "pricing" "1.34.69"
