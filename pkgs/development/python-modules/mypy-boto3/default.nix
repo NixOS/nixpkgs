@@ -747,8 +747,8 @@ rec {
       "sha256-ZtixXownfAnqUfNY53sVGbDZTQ2Q+Hhzgs1Txuyn3gM=";
 
   mypy-boto3-kinesis =
-    buildMypyBoto3Package "kinesis" "1.34.0"
-      "sha256-9ATnW63Vl36fCXQbdpuIiIVL3UEcYxNEaGq4ie/ph0E=";
+    buildMypyBoto3Package "kinesis" "1.35.0"
+      "sha256-3mLfRa0u1TUcjau4iQrUsOVmukFOoUCQglJeNqYfkp8=";
 
   mypy-boto3-kinesis-video-archived-media =
     buildMypyBoto3Package "kinesis-video-archived-media" "1.34.10"
