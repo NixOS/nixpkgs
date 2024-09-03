@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
   version = "0.9.2";
   src = fetchFromGitHub {
+    hash = "sha256-bV5HauM0xmRI/9Pxp1cYLPLA8PbFvPER2y4mAMmgchs=";
     owner = "timbertson";
     repo = "gup";
-    rev = "version-0.9.2";
-    sha256 = "06vjl34h09ifvc8z3g65yvqc1wic31bsgwfkzx469iilwdm4fpkd";
+    rev = "version-${version}";
   };
   pname = "gup";
   nativeBuildInputs = [ python3 which pylint ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
         --set repo gup \
         --set type fetchFromGitHub \
         --set rev 'version-{version}' \
+        --nix-literal rev 'version-''${version}'\
         --modify-nix default.nix
     ''
   ];
