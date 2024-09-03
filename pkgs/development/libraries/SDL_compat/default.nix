@@ -5,17 +5,17 @@
 , pkg-config
 , SDL2
 , libiconv
-, Cocoa
-, autoSignDarwinBinariesHook
 , mesa
 , libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms
 , openglSupport ? libGLSupported
 , libGLU
+, darwin
 }:
 
 let
   inherit (lib) optionals makeLibraryPath;
-
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+  inherit (darwin) autoSignDarwinBinariesHook;
 in
 stdenv.mkDerivation rec {
   pname = "SDL_compat";
