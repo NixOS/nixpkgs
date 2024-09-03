@@ -2,6 +2,7 @@
   lib,
   atk,
   cairo,
+  callPackage,
   darwin,
   fetchFromGitHub,
   gdk-pixbuf,
@@ -84,9 +85,14 @@ let
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
     '';
 
-    passthru.tests.version = testers.testVersion {
-      package = self;
-      command = "czkawka_cli --version";
+    passthru = {
+      tests.version = testers.testVersion {
+        package = self;
+        command = "czkawka_cli --version";
+      };
+      wrapper = callPackage ./wrapper.nix {
+        czkawka = self;
+      };
     };
 
     meta = {
