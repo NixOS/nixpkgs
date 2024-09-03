@@ -68,12 +68,43 @@ rec {
       libcxx = pkgs.runCommand "${stdenvLibcxx.name}-${llvmLibcxxVersion}" {
         outputs = [ "out" "dev" ];
         isLLVM = true;
-      } ''
-        mkdir -p "$dev/nix-support"
-        ln -s '${stdenvLibcxx}' "$out"
-        echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
-        ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
-      '';
+      } (
+        ''
+          mkdir -p "$dev/nix-support"
+          ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
+        ''
+        + (
+          # Use `tapi` on Darwin to generate stubs with only the symbols from the older libc++ version
+          # while still linking to the newer one.
+          if stdenv.hostPlatform.isDarwin then
+            ''
+              mkdir -p "$out/lib"
+              for stdenvFile in '${stdenvLibcxx}'"/lib/"*; do
+                filename=$(basename "$stdenvFile")
+                llvmFile='${llvmLibcxx}'"/lib/$filename"
+                if isMachO "$stdenvFile"; then
+                  tbdFile=$out/lib/''${filename%.*}.tbd
+                  # Don’t run `tapi` on symlinks. Create updated symlinks pointing to the tbd instead.
+                  if [ -L "$stdenvFile" ]; then
+                    srcName=$(readlink "$stdenvFile")
+                    ln -s "''${srcName%.*}.tbd" "$tbdFile"
+                  else
+                    ${lib.getExe pkgs.pkgsBuildHost.libtapi} stubify "$llvmFile" --filetype=tbd-v4 -o "$tbdFile"
+                    substituteInPlace "$tbdFile" --replace-fail "$llvmFile" "$stdenvFile"
+                  fi
+                else
+                  ln -s "$file" "$out/lib/$filename"
+                fi
+              done
+              echo "$out" > "$dev/nix-support/propagated-build-inputs"
+            ''
+          else
+            ''
+              ln -s '${stdenvLibcxx}' "$out"
+              echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
+            ''
+        )
+      );
     in
     # Return the stdenv libc++ in case it’s the same version as the LLVM version. This can happen on Darwin
     # when `overrideLibcxx` is used with an LLVM stdenv version that matches the default LLVM version.
