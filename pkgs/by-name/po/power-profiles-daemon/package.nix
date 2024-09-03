@@ -24,6 +24,7 @@
   systemd,
   python3,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -124,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests = {
       nixos = nixosTests.power-profiles-daemon;
     };
