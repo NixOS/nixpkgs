@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   assertpy,
   buildPythonPackage,
   fetchFromGitHub,
@@ -9,18 +10,15 @@
   pytest-asyncio,
   pytest-mockservers,
   pytest-resource-path,
-  pytest-sugar,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  requests,
   time-machine,
-  types-requests,
 }:
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "4.0.0";
+  version = "4.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,17 +27,18 @@ buildPythonPackage rec {
     owner = "TomerFi";
     repo = "aioswitcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-a6Sl36X+r6mVqRAcO0C2f4CT/FDPF7r3VHnQp3328qo=";
+    hash = "sha256-QSnroxVHlfZd6QDaqUTMyoctiEsxWmGmFxzql1YIAD0=";
   };
 
   __darwinAllowLocalNetworking = true;
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "aiohttp" ];
+
   dependencies = [
+    aiohttp
     pycryptodome
-    requests
-    types-requests
   ];
 
   preCheck = ''
@@ -52,7 +51,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mockservers
     pytest-resource-path
-    pytest-sugar
     pytestCheckHook
     time-machine
   ];
