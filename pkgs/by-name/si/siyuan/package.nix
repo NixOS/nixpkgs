@@ -104,6 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
     # remove prebuilt pandoc archives
     rm -r pandoc
 
+    substituteInPlace electron-builder-darwin.yml \
+        --replace-fail 'provisioningProfile: "../../SiYuan.provisionprofile"' "" \
+        --replace-fail 'entitlements: "../../entitlements.mas.plist"' "" \
+        --replace-fail 'entitlementsInherit: "../../entitlements.mas.plist"' ""
+
     # link kernel into the correct starting place so that electron-builder can copy it to it's final location
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
