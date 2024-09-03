@@ -403,8 +403,8 @@ rec {
       "sha256-NuCFTZ3+3NSlXtaG3hJTP58CBevyt5+qjIK8BY/VMOA=";
 
   mypy-boto3-devops-guru =
-    buildMypyBoto3Package "devops-guru" "1.34.0"
-      "sha256-IxSTAjcJcGySV1Zzlxal23nZz7m1eaCDa8UX41+9l5o=";
+    buildMypyBoto3Package "devops-guru" "1.35.0"
+      "sha256-KOvVP0ttOXBxmDF05GPRNvr2fKUc6+qJz3Pw53oAI+o=";
 
   mypy-boto3-directconnect =
     buildMypyBoto3Package "directconnect" "1.34.0"
