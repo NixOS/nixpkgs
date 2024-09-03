@@ -339,8 +339,8 @@ rec {
       "sha256-pP0c6lk9l3seKkYBW9AjoaypkRWw4YwDgJjIpkwkLMA=";
 
   mypy-boto3-config =
-    buildMypyBoto3Package "config" "1.34.45"
-      "sha256-LN1CcIOj9cgzSNCvnUVwLRNPXlitHAlt+5jj6wu6i8E=";
+    buildMypyBoto3Package "config" "1.35.0"
+      "sha256-1pS2EkJapoNVi5lUEftaxbdoN4fd7XSFjWyLXH1noL0=";
 
   mypy-boto3-connect =
     buildMypyBoto3Package "connect" "1.34.82"
