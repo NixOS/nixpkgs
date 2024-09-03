@@ -843,8 +843,8 @@ rec {
       "sha256-0Tz/X8RIuLvbDRXmZ+g0aEOcO7Qyg7ZKDLW1bN4yfJA=";
 
   mypy-boto3-m2 =
-    buildMypyBoto3Package "m2" "1.34.0"
-      "sha256-ZF3ZViV0pN64OEc8aHuCRR0lnVyHOiTRfqVQGCmMMKE=";
+    buildMypyBoto3Package "m2" "1.35.0"
+      "sha256-rn9xCU8qtkR/zRzi5MM9dNInJOa30VrYRj2hBLN9Zao=";
 
   mypy-boto3-machinelearning =
     buildMypyBoto3Package "machinelearning" "1.34.0"
