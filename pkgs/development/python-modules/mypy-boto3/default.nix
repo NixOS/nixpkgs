@@ -947,8 +947,8 @@ rec {
       "sha256-TMOu+TzMU3qQn8upnPKYinhToe3cW5fKbxEXj0QGl7w=";
 
   mypy-boto3-migrationhubstrategy =
-    buildMypyBoto3Package "migrationhubstrategy" "1.34.0"
-      "sha256-N/NcnXF14SAs9F1ZwUYxc/5kp7iUWIFJisUfZxMStLU=";
+    buildMypyBoto3Package "migrationhubstrategy" "1.35.0"
+      "sha256-uzkFo1wOgpLdpSI2ErtfRo0uTdY/XbYltubzg4kC5ro=";
 
   mypy-boto3-mobile =
     buildMypyBoto3Package "mobile" "1.34.0"
