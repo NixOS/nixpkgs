@@ -12,17 +12,17 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "botan";
   version = "${baseVersion}.${revision}";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    name = "Botan-${version}.${sourceExtension}";
+    name = "Botan-${finalAttrs.version}.${sourceExtension}";
     urls = [
-       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
-       "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
+       "http://files.randombit.net/botan/v${baseVersion}/Botan-${finalAttrs.version}.${sourceExtension}"
+       "http://botan.randombit.net/releases/Botan-${finalAttrs.version}.${sourceExtension}"
     ];
     inherit hash;
   };
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
-}
+})
