@@ -1086,6 +1086,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+lsp-progress-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "lsp-progress.nvim";
+  version = "1.0.13-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lsp-progress.nvim-1.0.13-1.rockspec";
+    sha256 = "13h0kyrri0bvhkzvyngamsacx62n2dhb2j2gs495z4ghyh1p345i";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/linrongbin16/lsp-progress.nvim/archive/d5f4d28efe75ce636bfbe271eb45f39689765aab.zip";
+    sha256 = "0h63z55gwv36rahhha8vkbxb9n4f8psa265khz719i97j17x39rr";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://linrongbin16.github.io/lsp-progress.nvim/";
+    description = "A performant lsp progress status for Neovim.";
+    maintainers = with lib.maintainers; [ gepbird ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 lua-cjson = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
 buildLuarocksPackage {
   pname = "lua-cjson";
