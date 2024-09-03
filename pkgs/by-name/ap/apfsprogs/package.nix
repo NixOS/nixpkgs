@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   in ''
     substituteInPlace \
       apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile \
-      --replace \
+      --replace-fail \
         '$(shell git describe --always HEAD | tail -c 9)' \
         '${shortRev}'
   '';
