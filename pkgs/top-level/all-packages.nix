@@ -23447,9 +23447,9 @@ with pkgs;
 
   scope-lite = callPackage ../development/libraries/scope-lite { };
 
-  SDL_classic = callPackage ../development/libraries/SDL { };
+  SDL = SDL1;
 
-  SDL = SDL_classic;
+  SDL_classic = SDL1;
 
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
