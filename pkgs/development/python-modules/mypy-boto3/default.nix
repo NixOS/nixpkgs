@@ -1275,8 +1275,8 @@ rec {
       "sha256-avjVAYAQf5ad7CYweewSsbg0JmLnK3KhY2RabXdiqAY=";
 
   mypy-boto3-ses =
-    buildMypyBoto3Package "ses" "1.34.0"
-      "sha256-ieFDjZ8tTPM5wCRWFjNNUuDKOj8K4s4NH1SiJXxbnaQ=";
+    buildMypyBoto3Package "ses" "1.35.3"
+      "sha256-+TyI+ffXN0M9HVWA3iQfg3T/xF49wslYFx9MTxHCfYw=";
 
   mypy-boto3-sesv2 =
     buildMypyBoto3Package "sesv2" "1.34.56"
