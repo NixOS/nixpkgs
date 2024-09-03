@@ -8,6 +8,7 @@
 , openssl
 , stdenv
 , curl
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,8 +36,11 @@ rustPlatform.buildRustPackage rec {
     curl
   ];
 
-  # Tests require network access to a test server
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # The actual tests require network access to a test server, but we can run an install check
   doCheck = false;
+  doInstallCheck = true;
 
   postInstall = ''
     installManPage docs/manual/hurl.1 docs/manual/hurlfmt.1
