@@ -21,8 +21,9 @@
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , libunwind
-# darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-, withLibunwind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform libunwind
+, withLibunwind ?
+  lib.meta.availableOn stdenv.hostPlatform libunwind &&
+    lib.elem "libunwind" libunwind.meta.pkgConfigModules or []
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
