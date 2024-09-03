@@ -147,6 +147,8 @@ let
       dotnetUseAppHost = useAppHost;
       inherit useDotnetFromEnv;
 
+      inherit enableParallelBuilding;
+
       nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
         dotnetConfigureHook
         dotnetBuildHook
