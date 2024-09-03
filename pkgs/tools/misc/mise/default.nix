@@ -17,13 +17,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.8.13";
+  version = "2024.8.15";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-XarSfCjEwL1ps2Kwla0lLybpfjNUcIuvTD0kb5YiKgU=";
+    hash = "sha256-E4eS4wPExW4R7vb1lKBbxxwCzIcL3kut3U2c6n9cs3s=";
 
     # registry is not needed for compilation nor for tests.
     # contains files with the same name but different case, which cause problems with hash on darwin
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-F+CGCk1U+I0htfWw1ZTl02lBhzSxk19hM7VjTWM8T10=";
+  cargoHash = "sha256-oQbjR0nsyKQh232Ga5sPEfBd24ty0Om5vc742tVkCt4=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];

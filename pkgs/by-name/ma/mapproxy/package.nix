@@ -1,21 +1,29 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 with python3.pkgs;
 buildPythonApplication rec {
-  pname = "MapProxy";
-  version = "2.2.0";
-  src = fetchPypi {
-  inherit pname version;
-  hash = "sha256-2FEgfdo8i/R5lU0G514zJcaIRe8y60Vm0jHOBEaoEwI=";
+  pname = "mapproxy";
+  version = "3.0.1";
+
+  src = fetchFromGitHub {
+    owner = "mapproxy";
+    repo = "mapproxy";
+    rev = version;
+    hash = "sha256-74hUJIy1+DaKjUsCgd4+2MdMPGqqDUuHDrhBCFNn8Dk=";
   };
+
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
-  propagatedBuildInputs = [
+
+  dependencies = [
     boto3 # needed for caches service
+    future
+    jsonschema
     pillow
     pyyaml
     pyproj
@@ -23,6 +31,7 @@ buildPythonApplication rec {
     gdal
     lxml
     setuptools
+    werkzeug
   ];
   # Tests are disabled:
   # 1) Dependency list is huge.
@@ -32,10 +41,11 @@ buildPythonApplication rec {
   #    https://github.com/NixOS/nixpkgs/issues/33876
   #    https://github.com/NixOS/nixpkgs/pull/56480
   doCheck = false;
-  meta = with lib; {
-  description = "Open source proxy for geospatial data";
-  homepage = "https://mapproxy.org/";
-  license = licenses.asl20;
-  maintainers = with maintainers; [ rakesh4g ];
+
+  meta = {
+    description = "Open source proxy for geospatial data";
+    homepage = "https://mapproxy.org/";
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ rakesh4g ]);
   };
 }

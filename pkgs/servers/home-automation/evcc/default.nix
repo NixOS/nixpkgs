@@ -16,20 +16,20 @@
 
 buildGo123Module rec {
   pname = "evcc";
-  version = "0.130.6";
+  version = "0.130.7";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-8ThvDl/dxD2YO9Z+iVhq+JQmnL8M9RdWVfHykoRIERg=";
+    hash = "sha256-i5a6IKLLNKMDSUM64q8V0wo835mZomiW7ZptH6y+LDU=";
   };
 
-  vendorHash = "sha256-L04EQwA2HYLTtYZMP2K7ubuq8IqbqHNEF9W3UmM4pOg=";
+  vendorHash = "sha256-wAcapU6OAhsuceJrCa+caYr+po+nkl0+4Gc0QrFTvVk=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-8DfLh6RhBI6GeTSIvmXCZ8Yudt5TYnimUoAdbOYfWfw=";
+    hash = "sha256-60F6j87T77JEt3ej4FVTc8rnnpZSGzomrQp8VPWjv6Q=";
   };
 
   nativeBuildInputs = [
