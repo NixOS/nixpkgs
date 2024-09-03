@@ -139,8 +139,8 @@ rec {
       "sha256-q5NsdqNr0m34SVm+eBYVv2PlS18PaqBwMuzh6jttfFc=";
 
   mypy-boto3-arc-zonal-shift =
-    buildMypyBoto3Package "arc-zonal-shift" "1.34.0"
-      "sha256-FhQaiu0Sc4HkkaRuhtgvUBMOgj80DbIBzZLEbZB41Cs=";
+    buildMypyBoto3Package "arc-zonal-shift" "1.35.0"
+      "sha256-l5hKmbwel2Z5BvQbuKXRsfusKU28laF5mVDDPW+Ij0g=";
 
   mypy-boto3-athena =
     buildMypyBoto3Package "athena" "1.34.23"
