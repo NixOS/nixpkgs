@@ -164,10 +164,10 @@
   };
   baremetal-infrastructure = mkAzExtension rec {
     pname = "baremetal-infrastructure";
-    version = "2.0.1";
-    url = "https://github.com/Azure/azure-baremetalinfrastructure-cli-extension/releases/download/${version}/baremetal_infrastructure-2.0.1-py2.py3-none-any.whl";
-    sha256 = "ea127d64603c8a45774cdf9aa80c4c8b5839a42719971b296beb96105fe5ef2d";
-    description = "Additional commands for working with BareMetal instances";
+    version = "3.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/baremetal_infrastructure-${version}-py3-none-any.whl";
+    sha256 = "83ff3e4540f522a5f3578a923155715160e90a15a8d919a2e5569c08f1295a2f";
+    description = "Microsoft Azure Command-Line Tools BaremetalInfrastructure Extension";
   };
   bastion = mkAzExtension rec {
     pname = "bastion";
