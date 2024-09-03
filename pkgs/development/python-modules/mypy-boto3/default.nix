@@ -935,8 +935,8 @@ rec {
       "sha256-sbnfx714qwWSTOgf/ptxpV55wdTa47yfNgkOtu/BpDc=";
 
   mypy-boto3-migration-hub-refactor-spaces =
-    buildMypyBoto3Package "migration-hub-refactor-spaces" "1.34.0"
-      "sha256-T37s/ubwuU1zsKk8DmTFum6Ml3+WNZCJ+q8T6F75iUY=";
+    buildMypyBoto3Package "migration-hub-refactor-spaces" "1.35.0"
+      "sha256-HARwGwot9kfEvVJwk5c0sjeLEcq/jAhh+2kRBUDDdPw=";
 
   mypy-boto3-migrationhub-config =
     buildMypyBoto3Package "migrationhub-config" "1.34.0"
