@@ -171,23 +171,6 @@ in
                 The keys are the options and the values are the values to pass.
 
                 See: https://www.postgresql.org/docs/current/sql-createdatabase.html
-
-                [ WITH ] [ OWNER [=] user_name ]
-                      [ TEMPLATE [=] template ]
-                      [ ENCODING [=] encoding ]
-                      [ STRATEGY [=] strategy ]
-                      [ LOCALE [=] locale ]
-                      [ LC_COLLATE [=] lc_collate ]
-                      [ LC_CTYPE [=] lc_ctype ]
-                      [ ICU_LOCALE [=] icu_locale ]
-                      [ ICU_RULES [=] icu_rules ]
-                      [ LOCALE_PROVIDER [=] locale_provider ]
-                      [ COLLATION_VERSION = collation_version ]
-                      [ TABLESPACE [=] tablespace_name ]
-                      [ ALLOW_CONNECTIONS [=] allowconn ]
-                      [ CONNECTION LIMIT [=] connlimit ]
-                      [ IS_TEMPLATE [=] istemplate ]
-                      [ OID [=] oid ]
               '';
               example = {
                 template = "template0";
