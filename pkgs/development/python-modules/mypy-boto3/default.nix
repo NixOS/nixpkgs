@@ -359,8 +359,8 @@ rec {
       "sha256-lq4OWLz7+cycAuSr5dAoQ8aCbggAdLRv/dc7aUa/N7Y=";
 
   mypy-boto3-connectparticipant =
-    buildMypyBoto3Package "connectparticipant" "1.34.44"
-      "sha256-kP4ovwHfJoeRjSyfeL0M1U70aJoApMUUWOLFRpt6H+w=";
+    buildMypyBoto3Package "connectparticipant" "1.35.0"
+      "sha256-rYvtpy8Uac5YO4x/WSvUHz0aY8vYVf30gW1aLyYDbRM=";
 
   mypy-boto3-controltower =
     buildMypyBoto3Package "controltower" "1.34.42"
