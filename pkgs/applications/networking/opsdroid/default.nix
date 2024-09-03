@@ -21,8 +21,9 @@ python3Packages.buildPythonPackage rec {
     parse emoji puremagic yamale nbformat websockets pycron nbconvert
     aiohttp matrix-api-async aioredis aiosqlite arrow pyyaml motor regex
     mattermostdriver setuptools voluptuous ibm-watson tailer multidict
-    watchgod get-video-properties appdirs bitstring matrix-nio
-  ] ++ matrix-nio.optional-dependencies.e2e;
+    watchgod get-video-properties appdirs bitstring
+    (matrix-nio.override { withOlm = true; })
+  ];
 
   passthru.python = python3Packages.python;
 

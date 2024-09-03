@@ -61,7 +61,7 @@ let
     propagatedBuildInputs = with python.pkgs; [
       setuptools
       # requirements.txt
-      mautrix
+      (mautrix.override { withOlm = encryptionSupport; })
       aiohttp
       yarl
       sqlalchemy
