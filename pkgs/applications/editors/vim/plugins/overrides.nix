@@ -1004,6 +1004,11 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  lsp-progress-nvim = neovimUtils.buildNeovimPlugin {
+    luaAttr = "lsp-progress-nvim";
+    nvimRequireCheck = "lsp-progress";
+  };
+
   luasnip = super.luasnip.overrideAttrs {
     dependencies = with self; [ luaPackages.jsregexp ];
   };

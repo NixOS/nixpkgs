@@ -1,14 +1,16 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   cloudpickle,
-  fetchPypi,
   ipykernel,
   ipython,
   jupyter-client,
-  packaging,
-  pythonOlder,
   pyxdg,
   pyzmq,
   wurlitzer,
@@ -16,15 +18,14 @@
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "2.5.2";
+  version = "3.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "spyder_kernels";
-    inherit version;
-    hash = "sha256-cfJSkA4CsDlIIMxwSfie1yUkP2/M9kC3bdMpIDxBOWA=";
+  src = fetchFromGitHub {
+    owner = "spyder-ide";
+    repo = "spyder-kernels";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oyPgujvaj2tqouZKuMVDq3gxm0GNrKmeUWqUFUkEMB4=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +35,6 @@ buildPythonPackage rec {
     ipykernel
     ipython
     jupyter-client
-    packaging
     pyxdg
     pyzmq
     wurlitzer

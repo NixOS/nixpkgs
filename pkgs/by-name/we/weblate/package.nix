@@ -34,7 +34,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.7";
+  version = "5.7.1";
 
   pyproject = true;
 
@@ -46,8 +46,8 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    rev = "weblate-${version}";
-    sha256 = "sha256-h5+0lOMD+H0ehtZ0bngA9bI5va1I5KjZH9boaEtXJPo=";
+    rev = "refs/tags/weblate-${version}";
+    hash = "sha256-mVcVthOiUTTYGRIp6pcubMsHZW55P86ZCfeno6JjN4I=";
   };
 
   patches = [

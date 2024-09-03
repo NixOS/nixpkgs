@@ -4279,7 +4279,7 @@
     keys = [ { fingerprint = "2017 E152 BB81 5C16 955C  E612 45BC C1E2 709B 1788"; } ];
   };
   Cryolitia = {
-    name = "Beiyan Cryolitia";
+    name = "Cryolitia PukNgae";
     email = "Cryolitia@gmail.com";
     github = "Cryolitia";
     githubId = 23723294;
@@ -15249,6 +15249,12 @@
     github = "o0th";
     githubId = 22490354;
   };
+  oakenshield = {
+    email = "nix@thorin.theoakenshield.com";
+    github = "HritwikSinghal";
+    githubId = 29531474;
+    name = "Hritwik Singhal";
+  };
   oaksoaj = {
     email = "oaksoaj@riseup.net";
     name = "Oaksoaj";
@@ -20383,6 +20389,11 @@
     githubId = 156964;
     name = "Thomas Boerger";
   };
+  tbwanderer = {
+    github = "tbwanderer";
+    githubId = 125365236;
+    name = "Ice Layer";
+  };
   tcbravo = {
     email = "tomas.bravo@protonmail.ch";
     github = "tcbravo";
@@ -22599,6 +22610,12 @@
     github = "Xe";
     githubId = 529003;
     name = "Christine Dodrill";
+  };
+  xeals = {
+    email = "dev@xeal.me";
+    github = "xeals";
+    githubId = 21125058;
+    name = "xeals";
   };
   xeji = {
     email = "xeji@cat3.de";
