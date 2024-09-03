@@ -803,8 +803,8 @@ rec {
       "sha256-6YOZcO48ZnOIGWM2BqAIFuu3BEdsDu1y0j8T7hBzxqA=";
 
   mypy-boto3-lexv2-runtime =
-    buildMypyBoto3Package "lexv2-runtime" "1.34.0"
-      "sha256-V1OkUcwFYp8TVS2ASFjARJUrIKAx/9zcfQbQMngU5Uc=";
+    buildMypyBoto3Package "lexv2-runtime" "1.35.0"
+      "sha256-DXz53R1jyNNfcHzADr8U/jnhBrhlhrNA+C6Y8CD5dcU=";
 
   mypy-boto3-license-manager =
     buildMypyBoto3Package "license-manager" "1.34.0"
