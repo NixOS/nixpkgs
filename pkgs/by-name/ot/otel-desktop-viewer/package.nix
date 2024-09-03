@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , testers
+, stdenv
 , otel-desktop-viewer
 }:
 
