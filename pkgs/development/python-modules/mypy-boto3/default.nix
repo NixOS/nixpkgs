@@ -975,8 +975,8 @@ rec {
       "sha256-Epx+p5M+3x0plFaXdc8Rsz+p18ZnxbNlr4IhH5STvZM=";
 
   mypy-boto3-network-firewall =
-    buildMypyBoto3Package "network-firewall" "1.34.0"
-      "sha256-I861Vg32yZJjg9/6q2KmFhysk/ysLZAg2ukNlWMEpuY=";
+    buildMypyBoto3Package "network-firewall" "1.35.0"
+      "sha256-41zAgq4F07hIl7I6S+M7ngxdFOKjmUB3BFhncLel7ZI=";
 
   mypy-boto3-networkmanager =
     buildMypyBoto3Package "networkmanager" "1.34.0"
