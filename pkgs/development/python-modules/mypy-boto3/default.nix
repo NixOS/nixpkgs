@@ -51,8 +51,8 @@ rec {
       "sha256-NnLjEDyv4dYH/dKeCtka8P9K2V66844WLwynk1CqIbA=";
 
   mypy-boto3-acm =
-    buildMypyBoto3Package "acm" "1.34.0"
-      "sha256-SvDBi8A9414Hxb8twcM/6Y2OoUz+/LbZZJ86lu/zmmo=";
+    buildMypyBoto3Package "acm" "1.35.0"
+      "sha256-kdakfB1uRg5K+FZyeNSQxvBYj0+ztJrDTq4Dkh6dqAA=";
 
   mypy-boto3-acm-pca =
     buildMypyBoto3Package "acm-pca" "1.34.28"
