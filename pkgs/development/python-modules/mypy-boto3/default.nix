@@ -963,8 +963,8 @@ rec {
       "sha256-iYVnkwqOe0UMOqI1NcD58Ej3Bk84adPWC3yq7/+3x8I=";
 
   mypy-boto3-mwaa =
-    buildMypyBoto3Package "mwaa" "1.34.57"
-      "sha256-D0W/03zhllRLYGyXQ/XvMBlcsKuEb2MPr0hmyUVy5xc=";
+    buildMypyBoto3Package "mwaa" "1.35.0"
+      "sha256-J1tV2BTUW2Bu8ll+Yn0cJpUpMCCCkfqUEAnis/OJxrA=";
 
   mypy-boto3-neptune =
     buildMypyBoto3Package "neptune" "1.34.0"
