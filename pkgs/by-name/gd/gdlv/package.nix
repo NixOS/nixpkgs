@@ -10,24 +10,23 @@
 }:
 buildGoModule rec {
   pname = "gdlv";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "aarzilli";
     repo = "gdlv";
     rev = "v${version}";
-    hash = "sha256-OPsQOFwV6jIX4ZOVwJmpTeQUr/zkfkqCr86HmPhYarI=";
+    hash = "sha256-6NU7bhURdXM4EjVnsXVf9XFOUgHyVEI0kr15q9OnUTQ=";
   };
+
+  vendorHash = null;
+  subPackages = ".";
 
   preBuild =
     lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0")
       ''
         export MACOSX_DEPLOYMENT_TARGET=10.15
       '';
-
-  vendorHash = null;
-
-  subPackages = ".";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AppKit
