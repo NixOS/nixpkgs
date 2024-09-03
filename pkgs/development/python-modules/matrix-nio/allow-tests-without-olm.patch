@@ -1,0 +1,59 @@
+diff --git a/tests/async_client_test.py b/tests/async_client_test.py
+index 846c854a32..3a66af2baa 100644
+--- a/tests/async_client_test.py
++++ b/tests/async_client_test.py
+@@ -129,7 +129,10 @@
+ )
+ from nio.api import EventFormat, ResizingMethod, RoomPreset, RoomVisibility
+ from nio.client.async_client import connect_wrapper, on_request_chunk_sent
+-from nio.crypto import OlmDevice, Session, decrypt_attachment
++try:
++    from nio.crypto import OlmDevice, Session, decrypt_attachment
++except ImportError:
++    pass
+ 
+ TEST_ROOM_ID = "!testroom:example.org"
+ 
+diff --git a/tests/conftest.py b/tests/conftest.py
+index ae37ca1169..e5f791a31e 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -9,11 +9,17 @@
+     async_client_pair,
+     async_client_pair_same_user,
+ )
+-from olm import Account
++try:
++    from olm import Account
++except ImportError:
++    pass
+ 
+ from nio import Client, ClientConfig, HttpClient
+-from nio.crypto import Olm, OlmDevice
+-from nio.store import SqliteMemoryStore
++try:
++    from nio.crypto import Olm, OlmDevice
++    from nio.store import SqliteMemoryStore
++except ImportError:
++    pass
+ 
+ ALICE_ID = "@alice:example.org"
+ ALICE_DEVICE_ID = "JLAFKJWSCS"
+diff --git a/tests/helpers.py b/tests/helpers.py
+index 63445b605a..05096d1dc3 100644
+--- a/tests/helpers.py
++++ b/tests/helpers.py
+@@ -26,8 +26,11 @@
+     WindowUpdateFrame,
+ )
+ 
+-from nio.crypto import OlmAccount, OlmDevice
+-from nio.store import Ed25519Key
++try:
++    from nio.crypto import OlmAccount, OlmDevice
++    from nio.store import Ed25519Key
++except ImportError:
++    pass
+ 
+ SAMPLE_SETTINGS = {
+     SettingsFrame.HEADER_TABLE_SIZE: 4096,

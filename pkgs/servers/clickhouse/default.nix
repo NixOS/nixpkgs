@@ -74,6 +74,11 @@ in mkDerivation rec {
       revert = true;
       hash = "sha256-nbb/GV2qWEZ+BEfT6/9//yZf4VWdhOdJCI3PLeh6o0M=";
     })
+    (fetchpatch {
+      name = "CVE-2024-6873.patch";
+      url = "https://github.com/ClickHouse/ClickHouse/commit/d6edd8f64de74c4967078ffcd98af4361f0ad15e.patch";
+      hash = "sha256-8XwTghR4xGBcDl970hGvBLAGM6vqmo45OhR1Yk/FhTw=";
+    })
   ];
 
   strictDeps = true;
