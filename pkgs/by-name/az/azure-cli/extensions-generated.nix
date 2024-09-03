@@ -596,6 +596,13 @@
     sha256 = "41861d65b9d86e0b622986a4984ce7a611f87b92da578db8c0527ec74334f32c";
     description = "Microsoft Azure Command-Line Tools K8s-extension Extension";
   };
+  k8s-runtime = mkAzExtension rec {
+    pname = "k8s-runtime";
+    version = "1.0.3";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_runtime-${version}-py3-none-any.whl";
+    sha256 = "133dd153979c74d37aa25956ed8a9aa741c334929848cd67c26f268332759d40";
+    description = "Microsoft Azure Command-Line Tools K8sRuntime Extension";
+  };
   kusto = mkAzExtension rec {
     pname = "kusto";
     version = "0.5.0";
