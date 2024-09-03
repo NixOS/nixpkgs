@@ -119,8 +119,8 @@ rec {
       "sha256-PQcqaUxzDx91mwL55prFG2EFdQQw278ugQUAVhgzLX8=";
 
   mypy-boto3-applicationcostprofiler =
-    buildMypyBoto3Package "applicationcostprofiler" "1.34.0"
-      "sha256-ToSRJScC8711J5fkZj/TNmUrpiBNwTplGjvpu1gidys=";
+    buildMypyBoto3Package "applicationcostprofiler" "1.35.0"
+      "sha256-1ReFVDH1azvSYlTskq9WBsfjmW9tOvYvDOoH9Vq7X3U=";
 
   mypy-boto3-appmesh =
     buildMypyBoto3Package "appmesh" "1.34.0"
