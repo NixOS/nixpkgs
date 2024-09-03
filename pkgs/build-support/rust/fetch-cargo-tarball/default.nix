@@ -73,7 +73,7 @@ in stdenv.mkDerivation ({
 
     ${cargoUpdateHook}
 
-    # Override the `http.cainfo` option usually specified in `.cargo/config`.
+    # Override the `http.cainfo` option usually specified in `.cargo/config.toml`.
     export CARGO_HTTP_CAINFO=${cacert}/etc/ssl/certs/ca-bundle.crt
 
     if grep '^source = "git' Cargo.lock; then
@@ -96,7 +96,8 @@ in stdenv.mkDerivation ({
 
     # Packages with git dependencies generate non-default cargo configs, so
     # always install it rather than trying to write a standard default template.
-    install -D $CARGO_CONFIG $name/.cargo/config;
+    install -D $CARGO_CONFIG $name/.cargo/config.toml;
+    ln -s .cargo/config.toml .cargo/config
 
     runHook postBuild
   '';
