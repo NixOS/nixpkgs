@@ -375,8 +375,8 @@ rec {
       "sha256-j+L/GV/1l1OGQk1T6X4ieErbTkfAhHUl+zSTiSoo/QE=";
 
   mypy-boto3-databrew =
-    buildMypyBoto3Package "databrew" "1.34.0"
-      "sha256-DP1Cuyogrs/K6qM7fnbHWSTPcpjoy1m0XEsq1ONbhxM=";
+    buildMypyBoto3Package "databrew" "1.35.0"
+      "sha256-zzd0tw46A9NwxUJ+7tz3Xlb4RbVTY3v7szDG4/189Ng=";
 
   mypy-boto3-dataexchange =
     buildMypyBoto3Package "dataexchange" "1.34.0"
