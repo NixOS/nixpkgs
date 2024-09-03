@@ -571,6 +571,8 @@ with pkgs;
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
+  fetchSteam = callPackage ../build-support/fetchsteam { };
+
   fetchtorrent = callPackage ../build-support/fetchtorrent { };
 
   fetchsvn = if stdenv.buildPlatform != stdenv.hostPlatform
