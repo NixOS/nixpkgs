@@ -6,7 +6,8 @@ let
     concatMapStrings
     concatStringsSep
     const
-    elem
+    any
+    toLower
     filterAttrs
     isString
     literalExpression
@@ -155,7 +156,50 @@ in
       };
 
       ensureDatabases = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf (types.oneOf [types.str (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                Name of the database to ensure.
+              '';
+            };
+            withOptions = mkOption {
+              type = types.attrsOf types.str;
+              description = ''
+                The options to pass to the `CREATE DATABASE` statement.
+                The keys are the options and the values are the values to pass.
+
+                See: https://www.postgresql.org/docs/current/sql-createdatabase.html
+
+                [ WITH ] [ OWNER [=] user_name ]
+                      [ TEMPLATE [=] template ]
+                      [ ENCODING [=] encoding ]
+                      [ STRATEGY [=] strategy ]
+                      [ LOCALE [=] locale ]
+                      [ LC_COLLATE [=] lc_collate ]
+                      [ LC_CTYPE [=] lc_ctype ]
+                      [ ICU_LOCALE [=] icu_locale ]
+                      [ ICU_RULES [=] icu_rules ]
+                      [ LOCALE_PROVIDER [=] locale_provider ]
+                      [ COLLATION_VERSION = collation_version ]
+                      [ TABLESPACE [=] tablespace_name ]
+                      [ ALLOW_CONNECTIONS [=] allowconn ]
+                      [ CONNECTION LIMIT [=] connlimit ]
+                      [ IS_TEMPLATE [=] istemplate ]
+                      [ OID [=] oid ]
+              '';
+              example = {
+                template = "template0";
+                encoding = "UTF8";
+                locale = "en_US.UTF-8";
+                lc_collate = "en_US.UTF-8";
+                lc_ctype = "en_US.UTF-8";
+              };
+              default = {};
+            };
+          };
+        })]);
         default = [];
         description = ''
           Ensures that the specified databases exist.
@@ -166,6 +210,15 @@ in
         example = [
           "gitea"
           "nextcloud"
+          {
+            name = "matrix-synapse";
+            withOptions = {
+              owner = "matrix-synapse";
+              template = "template0";
+              encoding = "UTF8";
+              locale = "C";
+            };
+          }
         ];
       };
 
@@ -462,7 +515,12 @@ in
   config = mkIf cfg.enable {
 
     assertions = map ({ name, ensureDBOwnership, ... }: {
-      assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
+      assertion = ensureDBOwnership -> any (db:
+        if builtins.isString db then
+          db == name
+        else
+          db.name == name
+      ) cfg.ensureDatabases;
       message = ''
         For each database user defined with `services.postgresql.ensureUsers` and
         `ensureDBOwnership = true;`, a database with the same name must be defined
@@ -574,9 +632,25 @@ in
               rm -f "${cfg.dataDir}/.first_startup"
             fi
           '' + optionalString (cfg.ensureDatabases != []) ''
-            ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-            '') cfg.ensureDatabases}
+            ${concatMapStrings (database:
+              if builtins.isString database then
+                ''
+                  $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
+                ''
+              else
+                let
+                  name = database.name;
+                  options = lib.mapAttrsToList (k: v: "${k} = ${
+                    if toLower k == "owner" then "\\\"${v}\\\""
+                    else if toLower k == "template" then "${v}"
+                    else "'${v}'"
+                  }") database.withOptions;
+                  optionsStr = if builtins.length options > 0 then "WITH " + lib.concatStringsSep " " options else "";
+                in
+                ''
+                  $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${name}'" | grep -q 1 || $PSQL -tAc "CREATE DATABASE \"${name}\" ${optionsStr}"
+                ''
+            ) cfg.ensureDatabases}
           '' + ''
             ${
               concatMapStrings
