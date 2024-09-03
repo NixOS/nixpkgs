@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2024.06";
+  version = "2024.08";
 
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";
     rev = version;
-    hash = "sha256-y+xtJ4YbzPr1168tu+148Co7Ke/iC68aOQBwTINlp2Y=";
+    hash = "sha256-GlzQ0QR3rypnKMPIwxPsFGnVJEs4QcV+o3uWb5/H0/M=";
     fetchSubmodules = true;
   };
 
