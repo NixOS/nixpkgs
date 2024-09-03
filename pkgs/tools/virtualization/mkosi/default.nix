@@ -128,7 +128,10 @@ buildPythonApplication rec {
     changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
     license = licenses.lgpl21Only;
     mainProgram = "mkosi";
-    maintainers = with maintainers; [ malt3 ];
+    maintainers = with maintainers; [
+      malt3
+      msanft
+    ];
     platforms = platforms.linux;
     # `mkosi qemu` boot fails in the uefi shell, image isn't found.
     broken = withQemu;
