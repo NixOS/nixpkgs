@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # used by the build system
+    echo ${finalAttrs.version} > VERSION
     # Replace /usr paths with Nix store paths
     substituteInPlace Makefile \
       --replace-fail "/sbin" "/bin" \
@@ -60,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "LIBDIR=/lib"
-    "HWINFO_VERSION=${finalAttrs.version}"
   ];
 
   installFlags = [ "DESTDIR=$(out)" ];
