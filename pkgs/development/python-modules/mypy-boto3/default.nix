@@ -1087,8 +1087,8 @@ rec {
       "sha256-TdWk5wgJ8DVwLgTUGto9wrXaTdFZ4LNG2uxahFkYeKo=";
 
   mypy-boto3-proton =
-    buildMypyBoto3Package "proton" "1.34.0"
-      "sha256-wRBMw/7PWi0s9sJTfnDq3MXcbA5pKwogMDC3UZtLJoY=";
+    buildMypyBoto3Package "proton" "1.35.0"
+      "sha256-zhkzENeWyzHsJVqEHa1iJzikaC8zsz1Yu1Bud/zNp7A=";
 
   mypy-boto3-qldb =
     buildMypyBoto3Package "qldb" "1.34.49"
