@@ -9202,6 +9202,12 @@
     githubId = 10690970;
     name = "James Duff";
   };
+  jaekong = {
+    email = "hello@jtoda.one";
+    github = "jaekong";
+    githubId = 7546436;
+    name = "Jae Kong";
+  };
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
