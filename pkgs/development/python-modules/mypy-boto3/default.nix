@@ -663,8 +663,8 @@ rec {
       "sha256-TfhJHtE2zlEr80SGbxAZfK2+M/ad596fdwex+4GhBf8=";
 
   mypy-boto3-iot1click-devices =
-    buildMypyBoto3Package "iot1click-devices" "1.34.0"
-      "sha256-Zpv/kw541LoC3Z58eKGe7sK5qioWMGswQS0O+jvNZgY=";
+    buildMypyBoto3Package "iot1click-devices" "1.35.0"
+      "sha256-I6bQTR11cWwa9ifrBsU7biYN8T7AyNDg3DvHQ0tyzFI=";
 
   mypy-boto3-iot1click-projects =
     buildMypyBoto3Package "iot1click-projects" "1.34.0"
