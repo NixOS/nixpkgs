@@ -819,8 +819,8 @@ rec {
       "sha256-1xu8CxA0xJeHPjAkAr6+csVax9Kzuzc0DdZkTu7iVWI=";
 
   mypy-boto3-lightsail =
-    buildMypyBoto3Package "lightsail" "1.34.75"
-      "sha256-ICBUixptVS5sWBHgYms9GgrY2XQblTZkq3Qr614qZMc=";
+    buildMypyBoto3Package "lightsail" "1.35.0"
+      "sha256-+5GMpqC4EY+1atRrP0D+KweA7mvHSwZ9kKvrVDDP+HU=";
 
   mypy-boto3-location =
     buildMypyBoto3Package "location" "1.34.18"
