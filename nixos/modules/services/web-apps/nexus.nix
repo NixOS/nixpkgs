@@ -93,6 +93,22 @@ in
           for further information.
         '';
       };
+
+      jdkOpts = mkOption {
+        type = types.lines;
+        default = ''
+            --add-opens=java.base/java.util=ALL-UNNAMED
+            --add-opens=java.base/java.net=ALL-UNNAMED
+        '';
+        defaultText = literalExpression ''
+          '''
+            --add-opens=java.base/java.util=ALL-UNNAMED
+            --add-opens=java.base/java.net=ALL-UNNAMED
+          '''
+        '';
+
+        description = '' Options passed to JDK_JAVA_OPTIONS'';
+      };
     };
   };
 
@@ -118,6 +134,7 @@ in
 
         INSTALL4J_JAVA_HOME = cfg.jdkPackage;
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
+        JDK_JAVA_OPTIONS = cfg.jdkOpts;
       };
 
       preStart = ''
